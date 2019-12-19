@@ -14,7 +14,6 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IRawPeak;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.FirstDerivativePeakDetectorSettings;
@@ -32,9 +31,6 @@ import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons.IonMarkMode;
-import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
-import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.nmr.model.core.SpectrumMeasurement;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
@@ -51,23 +47,6 @@ import org.osgi.service.component.annotations.Component;
 @Component(service = {IMeasurementPeakDetector.class, Detector.class})
 public class FirstDerivativePeakDetector implements IMeasurementPeakDetector<FirstDerivativePeakDetectorSettings> {
 	
-	public static IMarkedIons buildFilterIons(PeakDetectorSettingsMSD peakDetectorSettings) {
-		IonMarkMode ionMarkMode;
-		switch(peakDetectorSettings.getFilterMode()) {
-			case EXCLUDE:
-				ionMarkMode = IonMarkMode.EXCLUDE;
-				break;
-			case INCLUDE:
-				ionMarkMode = IonMarkMode.INCLUDE;
-				break;
-			default:
-				throw new IllegalArgumentException("Unknown filter mode " + peakDetectorSettings.getFilterMode());
-		}
-		MarkedIons ions = new MarkedIons(ionMarkMode);
-		ions.addAll(peakDetectorSettings.getFilterIon().stream().map(e -> new MarkedIon(e.doubleValue())).collect(Collectors.toSet()));
-		return ions;
-	}
-
 	@Override
 	public String getName() {
 
@@ -94,7 +73,7 @@ public class FirstDerivativePeakDetector implements IMeasurementPeakDetector<Fir
 				} else {
 					configuration = globalConfiguration;
 				}
-				IMarkedIons ions = buildFilterIons(globalConfiguration);
+				IMarkedIons ions = PeakDetectorSettingsMSD.getFilterIons(globalConfiguration);
 				slopes = PeakDetectorMSD.getFirstDerivativeSlopes(new ChromatogramSelectionMSD((IChromatogramMSD)measurement), configuration.getMovingAverageWindowSize(), ions);
 			} else if(measurement instanceof IChromatogramCSD) {
 				if(globalConfiguration == null) {
