@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.IPeakDetectorMSD;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorSettingsMSD;
@@ -32,7 +33,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderiv
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.IFirstDerivativeDetectorSlopes;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
-import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalsModifier;
@@ -44,6 +44,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons.IonMarkMode;
+import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.PeakBuilderMSD;
 import org.eclipse.chemclipse.msd.model.xic.ITotalIonSignalExtractor;
@@ -132,9 +133,10 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 		if(noiseSegments != null) {
 			// TODO use noise segments to optimize detection
 		}
-		IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, peakDetectorSettings.getMovingAverageWindowSize(), new MarkedIons(IonMarkMode.EXCLUDE));
+		IMarkedIons ions = PeakDetectorSettingsMSD.getFilterIons(peakDetectorSettings);
+		IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, peakDetectorSettings.getMovingAverageWindowSize(), ions);
 		List<IRawPeak> rawPeaks = getRawPeaks(slopes, peakDetectorSettings.getThreshold(), monitor);
-		return extractPeaks(rawPeaks, chromatogramSelection.getChromatogram(), peakDetectorSettings);
+		return extractPeaks(rawPeaks, chromatogramSelection.getChromatogram(), peakDetectorSettings, ions);
 	}
 
 	/**
@@ -145,7 +147,7 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 	 * @param chromatogram
 	 * @return List<IChromatogramPeakCSD>
 	 */
-	private List<IChromatogramPeakMSD> extractPeaks(List<IRawPeak> rawPeaks, IChromatogramMSD chromatogram, PeakDetectorSettingsMSD peakDetectorSettings) {
+	private List<IChromatogramPeakMSD> extractPeaks(List<IRawPeak> rawPeaks, IChromatogramMSD chromatogram, PeakDetectorSettingsMSD peakDetectorSettings, IMarkedIons ions) {
 
 		List<IChromatogramPeakMSD> peaks = new ArrayList<>();
 		//
@@ -155,14 +157,13 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 			/*
 			 * Build the peak and add it.
 			 */
-			try {
 				scanRange = new ScanRange(rawPeak.getStartScan(), rawPeak.getStopScan());
 				/*
 				 * includeBackground
 				 * false: BV or VB
 				 * true: VV
 				 */
-				peak = PeakBuilderMSD.createPeak(chromatogram, scanRange, peakDetectorSettings.isIncludeBackground());
+				peak = PeakBuilderMSD.createPeak(chromatogram, scanRange, peakDetectorSettings.isIncludeBackground(), ions.getIonsNominal().stream().map(e -> e.intValue()).collect(Collectors.toSet()), ions.getMode());
 				/*
 				 * TODO Resolve, why this peak does throw an exception. When
 				 * detecting peaks in the chromatogram OP17760.D/DATA.MS a
@@ -179,11 +180,6 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 					peak.setDetectorDescription(DETECTOR_DESCRIPTION);
 					peaks.add(peak);
 				}
-			} catch(IllegalArgumentException e) {
-				logger.warn(e);
-			} catch(PeakException e) {
-				logger.warn(e);
-			}
 		}
 		//
 		return peaks;
