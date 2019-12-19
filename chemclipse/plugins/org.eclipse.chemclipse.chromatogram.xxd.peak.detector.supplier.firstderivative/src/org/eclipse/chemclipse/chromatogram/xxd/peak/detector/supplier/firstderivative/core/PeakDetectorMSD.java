@@ -133,7 +133,7 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 		if(noiseSegments != null) {
 			// TODO use noise segments to optimize detection
 		}
-		IMarkedIons ions = PeakDetectorSettingsMSD.getFilterIons(peakDetectorSettings);
+		IMarkedIons ions = FirstDerivativePeakDetector.buildFilterIons(peakDetectorSettings);
 		IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, peakDetectorSettings.getMovingAverageWindowSize(), ions);
 		List<IRawPeak> rawPeaks = getRawPeaks(slopes, peakDetectorSettings.getThreshold(), monitor);
 		return extractPeaks(rawPeaks, chromatogramSelection.getChromatogram(), peakDetectorSettings, ions);
@@ -157,6 +157,7 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 			/*
 			 * Build the peak and add it.
 			 */
+			try {
 				scanRange = new ScanRange(rawPeak.getStartScan(), rawPeak.getStopScan());
 				/*
 				 * includeBackground
@@ -180,6 +181,9 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 					peak.setDetectorDescription(DETECTOR_DESCRIPTION);
 					peaks.add(peak);
 				}
+			} catch(Exception e) {
+				logger.warn(e.getLocalizedMessage(),e);
+			}
 		}
 		//
 		return peaks;
