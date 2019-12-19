@@ -69,9 +69,6 @@ public class PeakBuilderMSD {
 		validateChromatogram(chromatogram);
 		validateScanRange(scanRange);
 		checkScanRange(chromatogram, scanRange);
-		if(includedIons.size() == 0) {
-			throw new PeakException("At least one included ion needs to be selected.");
-		}
 		//
 		ExtractedIonSignalExtractor extractor = new ExtractedIonSignalExtractor(chromatogram);
 		IExtractedIonSignals extractedIonSignals = extractor.getExtractedIonSignals(scanRange.getStartScan(), scanRange.getStopScan());
