@@ -9,8 +9,12 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Christoph Läubrich - add support for IonMarkMode
+ * Alexander Kerner - add constructor
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.support;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class MarkedIons extends AbstractMarkedIons implements IMarkedIons {
 
@@ -21,8 +25,15 @@ public class MarkedIons extends AbstractMarkedIons implements IMarkedIons {
 		this.mode = mode;
 	}
 
+	public MarkedIons(Collection<? extends Number> ionsList, IonMarkMode mode) {
+
+		super(ionsList);
+		this.mode = mode;
+	}
+
 	public MarkedIons(IonMarkMode mode) {
-		this(null, mode);
+
+		this(new ArrayList<>(), mode);
 	}
 
 	@Override
