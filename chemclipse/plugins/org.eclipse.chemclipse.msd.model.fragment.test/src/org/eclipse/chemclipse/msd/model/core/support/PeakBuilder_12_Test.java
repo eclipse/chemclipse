@@ -42,7 +42,7 @@ public class PeakBuilder_12_Test extends PeakBuilderTestCase {
 
 		super.setUp();
 		scanRange = new ScanRange(2, 16);
-		excludedExcludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+		excludedExcludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
 		excludedExcludedIons.add(new MarkedIon(43));
 		excludedExcludedIons.add(new MarkedIon(18));
 		excludedExcludedIons.add(new MarkedIon(28));

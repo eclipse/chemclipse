@@ -57,7 +57,7 @@ public class PeakBuilder_24_Test extends TestCase {
 			chromatogram.addScan(massSpectrum);
 		}
 		chromatogram.recalculateRetentionTimes();
-		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
 		excludedIons.add(new MarkedIon(34));
 		excludedIons.add(new MarkedIon(36));
 	}

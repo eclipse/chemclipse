@@ -91,7 +91,7 @@ public class PeakBuilder_28_Test extends TestCase {
 		/*
 		 * Excluded ions
 		 */
-		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
 	}
 
 	@Override
