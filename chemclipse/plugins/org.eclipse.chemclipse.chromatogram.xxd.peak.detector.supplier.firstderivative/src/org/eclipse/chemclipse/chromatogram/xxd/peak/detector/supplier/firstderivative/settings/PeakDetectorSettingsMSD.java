@@ -65,10 +65,10 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 		IonMarkMode ionMarkMode;
 		switch(peakDetectorSettings.getFilterMode()) {
 			case EXCLUDE:
-				ionMarkMode = IonMarkMode.EXCLUDE;
+				ionMarkMode = IonMarkMode.INCLUDE;
 				break;
 			case INCLUDE:
-				ionMarkMode = IonMarkMode.INCLUDE;
+				ionMarkMode = IonMarkMode.EXCLUDE;
 				break;
 			default:
 				throw new IllegalArgumentException("Unknown filter mode " + peakDetectorSettings.getFilterMode());
