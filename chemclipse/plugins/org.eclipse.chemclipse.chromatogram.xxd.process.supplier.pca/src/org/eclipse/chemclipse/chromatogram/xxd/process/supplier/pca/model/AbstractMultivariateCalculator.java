@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Lorenz Gerber - initial API and implementation
+ * Christoph Läubrich - fix pre-checks
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
@@ -30,23 +31,23 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 	private int sampleIndex;
 	private boolean computeSuccess;
 
-	public AbstractMultivariateCalculator(int numObs, int numVars, int numComps) throws MathIllegalArgumentException {
-		if(numComps > numObs) {
-			throw new MathIllegalArgumentException("Number of samples has to be equle or bigger than number of componets.");
+	public AbstractMultivariateCalculator(int numSamples, int numVars, int numComponents) throws MathIllegalArgumentException {
+		if(numComponents < numVars) {
+			throw new MathIllegalArgumentException("Number of components must be smaller than number of variables.");
 		}
 		if(numVars <= 0) {
-			throw new MathIllegalArgumentException("Number of variables has to be equle or bigger than one.");
+			throw new MathIllegalArgumentException("Number of variables must be larger than zero");
 		}
-		if(numObs <= 0) {
-			throw new MathIllegalArgumentException("Number of samples has to be equle or bigger than one.");
+		if(numSamples <= 0) {
+			throw new MathIllegalArgumentException("Number of samples must be larger than zero.");
 		}
-		if(numComps <= 0) {
-			throw new MathIllegalArgumentException("Number of samples has to be equle or bigger than one.");
+		if(numComponents <= 0) {
+			throw new MathIllegalArgumentException("Number of components must be larger than zero.");
 		}
-		sampleData = new DenseMatrix64F(numObs, numVars);
+		sampleData = new DenseMatrix64F(numSamples, numVars);
 		this.mean = new double[numVars];
 		sampleIndex = 0;
-		this.numComps = numComps;
+		this.numComps = numComponents;
 		computeSuccess = false;
 	}
 
