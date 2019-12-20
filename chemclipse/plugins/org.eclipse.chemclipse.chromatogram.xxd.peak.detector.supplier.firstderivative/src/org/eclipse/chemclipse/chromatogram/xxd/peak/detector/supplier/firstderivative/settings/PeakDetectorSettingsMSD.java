@@ -15,9 +15,11 @@ package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderi
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.AbstractPeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.peak.detector.core.FilterMode;
 import org.eclipse.chemclipse.chromatogram.peak.detector.model.Threshold;
@@ -118,7 +120,7 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 
 	public FilterMode getFilterMode() {
 
-		return filterMode;
+		return filterMode == null ? FilterMode.EXCLUDE : filterMode;
 	}
 
 	public void setFilterMode(FilterMode filterMode) {
@@ -142,6 +144,9 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 	}
 	static Collection<Number> parseIons(String filterIonsString) {
 
+		if(StringUtils.isBlank(filterIonsString)) {
+			return Collections.emptyList();
+		}
 		List<Number> ionNumbers = new ArrayList<>();
 		String[] split = filterIonsString.trim().split("[\\s.,;]+");
 		for(String s : split) {
