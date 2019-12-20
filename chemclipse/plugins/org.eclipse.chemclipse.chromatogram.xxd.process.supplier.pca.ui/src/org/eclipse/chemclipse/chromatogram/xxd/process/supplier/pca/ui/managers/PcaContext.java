@@ -94,6 +94,11 @@ public class PcaContext {
 		return visualization;
 	}
 
+	public SelectionManagerSamples getManagerSamples() {
+
+		return managerSamples;
+	}
+
 	public <V extends IVariableVisualization, S extends ISampleVisualization> IPcaResultsVisualization evaluatePca(ISamplesVisualization<V, S> samples, IPcaSettings settings, IPcaVisualization pcaVisualization, IProgressMonitor monitor, boolean setSelected) {
 
 		monitor.setTaskName("Evaluation");
