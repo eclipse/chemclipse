@@ -16,15 +16,22 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.AbstractPeakDetectorSettingsMSD;
+import org.eclipse.chemclipse.chromatogram.peak.detector.core.FilterMode;
 import org.eclipse.chemclipse.chromatogram.peak.detector.model.Threshold;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
+import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons.IonMarkMode;
+import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
+import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.chemclipse.support.settings.EnumSelectionRadioButtonsSettingProperty;
 import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
@@ -46,6 +53,27 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 	@JsonProperty(value = "Use Noise-Segments", defaultValue = "false")
 	@JsonPropertyDescription(value = "Whether to use Nois-Segments to decide where peaks should be detected, this can improve the sensitivity of the algorithm")
 	private boolean useNoiseSegments = false;
+	private FilterMode filterMode;
+	@JsonProperty(value = "m/z values to filter", defaultValue = "")
+	private String filterIonsString;
+	
+	@JsonIgnore
+	public static IMarkedIons getFilterIons(PeakDetectorSettingsMSD peakDetectorSettings) {
+		IonMarkMode ionMarkMode;
+		switch(peakDetectorSettings.getFilterMode()) {
+			case EXCLUDE:
+				ionMarkMode = IonMarkMode.EXCLUDE;
+				break;
+			case INCLUDE:
+				ionMarkMode = IonMarkMode.INCLUDE;
+				break;
+			default:
+				throw new IllegalArgumentException("Unknown filter mode " + peakDetectorSettings.getFilterMode());
+		}
+		MarkedIons ions = new MarkedIons(ionMarkMode);
+		ions.addAll(peakDetectorSettings.getFilterIon().stream().map(e -> new MarkedIon(e.doubleValue())).collect(Collectors.toSet()));
+		return ions;
+	}
 
 	public boolean isIncludeBackground() {
 
@@ -87,30 +115,30 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 		this.windowSize = windowSize;
 	}
 
-	// public FilterMode getFilterMode() {
-	//
-	// return filterMode;
-	// }
-	//
-	// public void setFilterMode(FilterMode filterMode) {
-	//
-	// this.filterMode = filterMode;
-	// }
-	//
-	// public String getFilterIonsString() {
-	//
-	// return filterIonsString;
-	// }
-	//
-	// public void setFilterIonsString(String filterIonsString) {
-	//
-	// this.filterIonsString = filterIonsString;
-	// }
-	//
-	// public Collection<Number> getFilterIon() {
-	//
-	// return parseIons(filterIonsString);
-	// }
+	public FilterMode getFilterMode() {
+
+		return filterMode;
+	}
+
+	public void setFilterMode(FilterMode filterMode) {
+
+		this.filterMode = filterMode;
+	}
+
+	public String getFilterIonsString() {
+
+		return filterIonsString;
+	}
+
+	public void setFilterIonsString(String filterIonsString) {
+
+		this.filterIonsString = filterIonsString;
+	}
+
+	public Collection<Number> getFilterIon() {
+
+		return parseIons(filterIonsString);
+	}
 	static Collection<Number> parseIons(String filterIonsString) {
 
 		List<Number> ionNumbers = new ArrayList<>();
@@ -119,7 +147,7 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 			try {
 				ionNumbers.add(new BigDecimal(s));
 			} catch(NumberFormatException e) {
-				logger.debug("Failed to parse valid input from " + s);
+				// invalid or empty string
 			}
 		}
 		return ionNumbers;
@@ -134,4 +162,6 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 
 		this.useNoiseSegments = useNoiseSegments;
 	}
+
+	
 }

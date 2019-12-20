@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Alexander Kerner - support m/z filtering
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.support;
 
@@ -32,6 +33,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons.IonMarkMode;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.PeakModelMSD;
@@ -46,6 +48,11 @@ import org.eclipse.chemclipse.numeric.equations.Equations;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 
 public class PeakBuilderMSD {
+	
+	@Deprecated
+	public static IChromatogramPeakMSD createPeak(IChromatogramMSD chromatogram, IScanRange scanRange, boolean includedBackground, Set<Integer> includedIons) throws PeakException {
+		return createPeak(chromatogram, scanRange, includedBackground, includedIons, IonMarkMode.INCLUDE);
+	}
 
 	/**
 	 * EXPERIMENTAL!
@@ -57,14 +64,11 @@ public class PeakBuilderMSD {
 	 * @return IChromatogramPeakMSD
 	 * @throws PeakException
 	 */
-	public static IChromatogramPeakMSD createPeak(IChromatogramMSD chromatogram, IScanRange scanRange, boolean includedBackground, Set<Integer> includedIons) throws PeakException {
+	public static IChromatogramPeakMSD createPeak(IChromatogramMSD chromatogram, IScanRange scanRange, boolean includedBackground, Set<Integer> includedIons, IonMarkMode filterMode) throws PeakException {
 
 		validateChromatogram(chromatogram);
 		validateScanRange(scanRange);
 		checkScanRange(chromatogram, scanRange);
-		if(includedIons.size() == 0) {
-			throw new PeakException("At least one included ion needs to be selected.");
-		}
 		//
 		ExtractedIonSignalExtractor extractor = new ExtractedIonSignalExtractor(chromatogram);
 		IExtractedIonSignals extractedIonSignals = extractor.getExtractedIonSignals(scanRange.getStartScan(), scanRange.getStopScan());
@@ -72,8 +76,19 @@ public class PeakBuilderMSD {
 			int start = extractedIonSignal.getStartIon();
 			int stop = extractedIonSignal.getStopIon();
 			for(int ion = start; ion <= stop; ion++) {
-				if(!includedIons.contains(ion)) {
-					extractedIonSignal.setAbundance(ion, 0, true);
+				switch(filterMode) {
+					case EXCLUDE:
+						if(includedIons.contains(ion)) {
+							extractedIonSignal.setAbundance(ion, 0, true);
+						}
+						break;
+					case INCLUDE:
+						if(!includedIons.contains(ion)) {
+							extractedIonSignal.setAbundance(ion, 0, true);
+						}
+						break;
+					default:
+						throw new IllegalArgumentException("Unknown filter mode " + filterMode);
 				}
 			}
 		}
