@@ -50,7 +50,7 @@ public class Chromatogram_15_Test extends TestCase {
 			chromatogram.addScan(supplierMassSpectrum);
 		}
 		// ------------------------------Scan 1-100
-		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.EXCLUDE);
+		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 		//
 		totalIonSignalExtractor = new TotalIonSignalExtractor(chromatogram);
 	}
