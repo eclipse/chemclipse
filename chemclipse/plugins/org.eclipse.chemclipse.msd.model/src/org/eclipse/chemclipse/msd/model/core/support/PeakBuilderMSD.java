@@ -37,8 +37,6 @@ import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons.IonMarkMode;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.PeakModelMSD;
-import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignalExtractor;
-import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
 import org.eclipse.chemclipse.msd.model.xic.ITotalIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.TotalIonSignalExtractor;
@@ -66,56 +64,57 @@ public class PeakBuilderMSD {
 	 */
 	public static IChromatogramPeakMSD createPeak(IChromatogramMSD chromatogram, IScanRange scanRange, boolean includedBackground, Set<Integer> includedIons, IonMarkMode filterMode) throws PeakException {
 
+		/*
+		 * Validate the given objects.
+		 */
 		validateChromatogram(chromatogram);
 		validateScanRange(scanRange);
 		checkScanRange(chromatogram, scanRange);
-		//
-		ExtractedIonSignalExtractor extractor = new ExtractedIonSignalExtractor(chromatogram);
-		IExtractedIonSignals extractedIonSignals = extractor.getExtractedIonSignals(scanRange.getStartScan(), scanRange.getStopScan());
-		for(IExtractedIonSignal extractedIonSignal : extractedIonSignals.getExtractedIonSignals()) {
-			int start = extractedIonSignal.getStartIon();
-			int stop = extractedIonSignal.getStopIon();
-			for(int ion = start; ion <= stop; ion++) {
-				switch(filterMode) {
-					case EXCLUDE:
-						if(includedIons.contains(ion)) {
-							extractedIonSignal.setAbundance(ion, 0, true);
-						}
-						break;
-					case INCLUDE:
-						if(!includedIons.contains(ion)) {
-							extractedIonSignal.setAbundance(ion, 0, true);
-						}
-						break;
-					default:
-						throw new IllegalArgumentException("Unknown filter mode " + filterMode);
-				}
-			}
-		}
-		//
-		ITotalScanSignals totalScanSignals = extractedIonSignals.getTotalIonSignals(scanRange);
-		ITotalScanSignal totalScanSignal = totalScanSignals.getTotalScanSignal(scanRange.getStartScan());
-		float startBackgroundAbundance = totalScanSignal.getTotalSignal();
-		totalScanSignal = totalScanSignals.getTotalScanSignal(scanRange.getStopScan());
-		float stopBackgroundAbundance = totalScanSignal.getTotalSignal();
-		//
+		ITotalScanSignal totalIonSignal;
 		IBackgroundAbundanceRange backgroundAbundanceRange;
+		/*
+		 * Get the total signals and determine the start and stop background
+		 * abundance.
+		 */
+		ITotalScanSignals totalIonSignals = getTotalIonSignals(chromatogram, scanRange, new MarkedIons(includedIons, filterMode));
+		/*
+		 * Retrieve the start and stop signals of the peak to calculate its
+		 * chromatogram and eventually peak internal background, if the start
+		 * abundance is higher than the stop abundance or vice versa.
+		 */
+		LinearEquation backgroundEquation;
+		float startBackgroundAbundance;
+		float stopBackgroundAbundance;
+		totalIonSignal = totalIonSignals.getTotalScanSignal(scanRange.getStartScan());
+		startBackgroundAbundance = totalIonSignal.getTotalSignal();
+		totalIonSignal = totalIonSignals.getTotalScanSignal(scanRange.getStopScan());
+		stopBackgroundAbundance = totalIonSignal.getTotalSignal();
+		/*
+		 * The abundance of base or startBackground/stopBackground (depends
+		 * which is the lower value) is the chromatogram background.<br/> Then a
+		 * peak included background could be calculated or not.<br/> This
+		 * background is not the background of the chromatogram. It's the
+		 * background of the peak.<br/> Think of, a peak could be skewed, means
+		 * it starts with an abundance of zero and stops with a higher
+		 * abundance.<br/> To include or exclude the background abundance in the
+		 * IPeakModel affects the calculation of its width at different heights.
+		 */
 		if(includedBackground) {
 			backgroundAbundanceRange = new BackgroundAbundanceRange(startBackgroundAbundance, stopBackgroundAbundance);
 		} else {
 			float base = Math.min(startBackgroundAbundance, stopBackgroundAbundance);
 			backgroundAbundanceRange = new BackgroundAbundanceRange(base, base);
 		}
-		LinearEquation backgroundEquation = getBackgroundEquation(totalScanSignals, scanRange, backgroundAbundanceRange);
-		//
-		ITotalScanSignals peakIntensityTotalIonSignals = adjustTotalIonSignals(totalScanSignals, backgroundEquation);
+		backgroundEquation = getBackgroundEquation(totalIonSignals, scanRange, backgroundAbundanceRange);
+		/*
+		 * Calculate the intensity values.
+		 */
+		ITotalScanSignals peakIntensityTotalIonSignals = adjustTotalIonSignals(totalIonSignals, backgroundEquation);
 		IPeakIntensityValues peakIntensityValues = getPeakIntensityValues(peakIntensityTotalIonSignals);
-		ITotalScanSignal totalScanSignalMax = totalScanSignals.getMaxTotalScanSignal();
-		int scanNumber = chromatogram.getScanNumber(totalScanSignalMax.getRetentionTime());
-		IScanMSD massSpectrum = extractedIonSignals.getScan(scanNumber);
-		massSpectrum.setRetentionTime(totalScanSignalMax.getRetentionTime());
-		IPeakMassSpectrum peakMassSpectrum = getPeakMassSpectrum(chromatogram, massSpectrum, backgroundEquation);
-		//
+		IPeakMassSpectrum peakMassSpectrum = getPeakMassSpectrum(chromatogram, totalIonSignals, backgroundEquation, new MarkedIons(includedIons, filterMode));
+		/*
+		 * Create the peak.
+		 */
 		IPeakModelMSD peakModel = new PeakModelMSD(peakMassSpectrum, peakIntensityValues, backgroundAbundanceRange.getStartBackgroundAbundance(), backgroundAbundanceRange.getStopBackgroundAbundance());
 		IChromatogramPeakMSD peak = new ChromatogramPeakMSD(peakModel, chromatogram);
 		return peak;

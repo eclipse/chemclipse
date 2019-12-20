@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Christoph Läubrich - make real abstract
+ * Alexander Kerner - add constructor
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.support;
 
@@ -34,6 +35,17 @@ public abstract class AbstractMarkedIons implements IMarkedIons {
 		if(ionsList != null) {
 			for(int ion : ionsList) {
 				markedIons.add(new MarkedIon(ion));
+			}
+		}
+	}
+
+	protected AbstractMarkedIons(Collection<? extends Number> ionsList) {
+
+	
+		markedIons = new HashSet<IMarkedIon>();
+		if(ionsList != null) {
+			for(Number ion : ionsList) {
+				markedIons.add(new MarkedIon(ion.intValue()));
 			}
 		}
 	}
