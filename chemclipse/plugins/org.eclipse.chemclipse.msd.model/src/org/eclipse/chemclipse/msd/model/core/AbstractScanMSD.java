@@ -53,7 +53,7 @@ import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
  * </ol>
  *
  * @author eselmeister
- * @author <a href="mailto:alexander.kerner@lablicate.com">Alexander Kerner</a> - Fix removal of ions
+ * @author <a href="mailto:alexander.kerner@openchrom.net">Alexander Kerner</a>
  * @author janosbinder
  * @see AbstractChromatogramMSD
  */
@@ -249,34 +249,6 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		return this;
 	}
 
-	/**
-	 * Removes all ions but given ones.
-	 * 
-	 * @param ions
-	 *            Ions to retain
-	 * @return {@code this}
-	 */
-	public AbstractScanMSD retainIons(Set<Integer> ions) {
-
-		if(ions == null) {
-			// TODO maybe log warning?
-			return this;
-		}
-		//
-		List<IIon> ionsToRemove = new ArrayList<IIon>();
-		/*
-		 * Get the list of ions for removal.
-		 */
-		for(IIon ion : ionsList) {
-			if(!ions.contains(AbstractIon.getIon(ion.getIon()))) {
-				ionsToRemove.add(ion);
-			}
-
-		}
-		removeIonsFromMassSpectrum(ionsToRemove);
-		return this;
-	}
-
 	@Override
 	public AbstractScanMSD removeIons(IMarkedIons markedIons) {
 
@@ -288,17 +260,24 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		Set<Integer> nominalIons = markedIons.getIonsNominal();
 		IonMarkMode mode = markedIons.getMode();
 		switch(mode) {
-			case EXCLUDE:
+			case INCLUDE:
 				/*
 				 * Remove all listed ions.
 				 */
 				removeIons(nominalIons);
 				break;
-			case INCLUDE:
+			case EXCLUDE:
 				/*
 				 * Remove all except the listed ions.
 				 */
-				retainIons(nominalIons);
+				Set<Integer> removeIons = new HashSet<>();
+				for(IIon ion : ionsList) {
+					int nominal = AbstractIon.getIon(ion.getIon());
+					if(!nominalIons.contains(nominal)) {
+						removeIons.add(nominal);
+					}
+				}
+				removeIons(removeIons);
 				break;
 			default:
 				/*
@@ -352,9 +331,9 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		Set<Integer> ionNominal = filterIons.getIonsNominal();
 		switch(filterIons.getMode()) {
 			case EXCLUDE:
-				return !ionNominal.contains(Integer.valueOf(AbstractIon.getIon(ion.getIon())));
+				return ionNominal.contains(AbstractIon.getIon(ion.getIon()));
 			case INCLUDE:
-				return ionNominal.contains(Integer.valueOf(AbstractIon.getIon(ion.getIon())));
+				return !ionNominal.contains(AbstractIon.getIon(ion.getIon()));
 			default:
 				return true;
 		}
