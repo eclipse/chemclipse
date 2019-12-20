@@ -32,7 +32,7 @@ public abstract class AbstractMultivariateCalculator implements IMultivariateCal
 	private boolean computeSuccess;
 
 	public AbstractMultivariateCalculator(int numSamples, int numVars, int numComponents) throws MathIllegalArgumentException {
-		if(numComponents < numVars) {
+		if(numComponents > numVars) {
 			throw new MathIllegalArgumentException("Number of components must be smaller than number of variables.");
 		}
 		if(numVars <= 0) {
