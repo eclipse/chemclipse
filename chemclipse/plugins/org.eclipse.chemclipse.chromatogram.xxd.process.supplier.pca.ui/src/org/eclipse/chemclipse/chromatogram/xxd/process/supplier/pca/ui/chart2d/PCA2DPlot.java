@@ -42,7 +42,6 @@ public abstract class PCA2DPlot extends ScatterChart {
 	private String yAxisTitle = "PC2";
 
 	public PCA2DPlot(Composite parent, String chartTitle) {
-
 		super(parent, SWT.None);
 		this.chartTitle = chartTitle;
 		initialize();
@@ -112,6 +111,7 @@ public abstract class PCA2DPlot extends ScatterChart {
 		chartSettings.setShowSeriesLabelMarker(true);
 		chartSettings.setColorSeriesLabelMarker(COLOR_BLACK);
 		chartSettings.setCreateMenu(true);
+		chartSettings.setEnableCompress(false);
 		//
 		setPrimaryAxisSet(chartSettings);
 		addSecondaryAxisSet(chartSettings);
