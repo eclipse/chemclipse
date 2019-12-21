@@ -55,7 +55,7 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 	@JsonProperty(value = "Use Noise-Segments", defaultValue = "false")
 	@JsonPropertyDescription(value = "Whether to use Nois-Segments to decide where peaks should be detected, this can improve the sensitivity of the algorithm")
 	private boolean useNoiseSegments = false;
-	@JsonProperty(value = "Filter Mode", defaultValue = "EXCLUDE")
+	@JsonProperty(value = "Filter Mode", defaultValue = "INCLUDE")
 	private FilterMode filterMode;
 	@JsonProperty(value = "m/z values to filter", defaultValue = "")
 	private String filterIonsString;
