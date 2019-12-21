@@ -151,12 +151,6 @@ public class DemoWelcomeTile implements TileDefinition {
 	}
 
 	@Override
-	public boolean isDefaultShow() {
-
-		return false;
-	}
-
-	@Override
 	public String getContext() {
 
 		return WelcomeView.WELCOME_MAIN_CONTEXT;
