@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
+ * Copyright (c) 2010, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -8,9 +8,11 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - adjust to simplified API, add generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IMassSpectrumIdentifierSettings;
@@ -18,6 +20,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.NoIdentifierAvailableException;
 import org.eclipse.chemclipse.model.identifier.IPeakIdentificationResult;
 import org.eclipse.chemclipse.model.identifier.core.Identifier;
+import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
@@ -57,16 +60,9 @@ public class MassSpectrumIdentifier {
 	 * @return {@link IPeakIdentificationResult}
 	 * @throws NoIdentifierAvailableException
 	 */
-	public static IProcessingInfo identify(IScanMSD massSpectrum, IMassSpectrumIdentifierSettings identifierSettings, String identifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IMassSpectra> identify(IScanMSD massSpectrum, IMassSpectrumIdentifierSettings identifierSettings, String identifierId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
-		IMassSpectrumIdentifier massSpectrumIdentifier = getMassSpectrumIdentifier(identifierId);
-		if(massSpectrumIdentifier != null) {
-			processingInfo = massSpectrumIdentifier.identify(massSpectrum, identifierSettings, monitor);
-		} else {
-			processingInfo = getNoIdentifierAvailableProcessingInfo();
-		}
-		return processingInfo;
+		return identify(Collections.singletonList(massSpectrum), identifierSettings, identifierId, monitor);
 	}
 
 	/**
@@ -78,16 +74,9 @@ public class MassSpectrumIdentifier {
 	 * @return {@link IPeakIdentificationResult}
 	 * @throws NoIdentifierAvailableException
 	 */
-	public static IProcessingInfo identify(IScanMSD massSpectrum, String identifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IMassSpectra> identify(IScanMSD massSpectrum, String identifierId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
-		IMassSpectrumIdentifier massSpectrumIdentifier = getMassSpectrumIdentifier(identifierId);
-		if(massSpectrumIdentifier != null) {
-			processingInfo = massSpectrumIdentifier.identify(massSpectrum, monitor);
-		} else {
-			processingInfo = getNoIdentifierAvailableProcessingInfo();
-		}
-		return processingInfo;
+		return identify(Collections.singletonList(massSpectrum), null, identifierId, monitor);
 	}
 
 	/**
@@ -100,9 +89,9 @@ public class MassSpectrumIdentifier {
 	 * @return {@link IMassSpectrumIdentificationResults}
 	 * @throws NoIdentifierAvailableException
 	 */
-	public static IProcessingInfo identify(List<IScanMSD> massSpectra, IMassSpectrumIdentifierSettings identifierSettings, String identifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IMassSpectra> identify(List<IScanMSD> massSpectra, IMassSpectrumIdentifierSettings identifierSettings, String identifierId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<IMassSpectra> processingInfo;
 		IMassSpectrumIdentifier massSpectrumIdentifier = getMassSpectrumIdentifier(identifierId);
 		if(massSpectrumIdentifier != null) {
 			processingInfo = massSpectrumIdentifier.identify(massSpectra, identifierSettings, monitor);
@@ -121,16 +110,9 @@ public class MassSpectrumIdentifier {
 	 * @return {@link IMassSpectrumIdentificationResults}
 	 * @throws NoIdentifierAvailableException
 	 */
-	public static IProcessingInfo identify(List<IScanMSD> massSpectra, String identifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IMassSpectra> identify(List<IScanMSD> massSpectra, String identifierId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
-		IMassSpectrumIdentifier massSpectrumIdentifier = getMassSpectrumIdentifier(identifierId);
-		if(massSpectrumIdentifier != null) {
-			processingInfo = massSpectrumIdentifier.identify(massSpectra, monitor);
-		} else {
-			processingInfo = getNoIdentifierAvailableProcessingInfo();
-		}
-		return processingInfo;
+		return identify(massSpectra, null, identifierId, monitor);
 	}
 
 	/**
@@ -201,9 +183,9 @@ public class MassSpectrumIdentifier {
 	}
 
 	// --------------------------------------------private methods
-	private static IProcessingInfo getNoIdentifierAvailableProcessingInfo() {
+	private static IProcessingInfo<IMassSpectra> getNoIdentifierAvailableProcessingInfo() {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<IMassSpectra> processingInfo = new ProcessingInfo<>();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "MassSpectrum Identifier", NO_IDENTIFIER_AVAILABLE);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;
