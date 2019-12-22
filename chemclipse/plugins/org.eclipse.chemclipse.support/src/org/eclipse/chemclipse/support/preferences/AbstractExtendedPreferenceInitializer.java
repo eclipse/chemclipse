@@ -13,15 +13,13 @@ package org.eclipse.chemclipse.support.preferences;
 
 import java.util.Map;
 
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.osgi.service.prefs.BackingStoreException;
 
 public abstract class AbstractExtendedPreferenceInitializer extends AbstractPreferenceInitializer {
 
-	private static final Logger logger = Logger.getLogger(AbstractExtendedPreferenceInitializer.class);
-	private IPreferenceSupplier preferenceSupplier;
+	private final IPreferenceSupplier preferenceSupplier;
 
 	/**
 	 * Set the appropriate preference supplier.
@@ -56,7 +54,7 @@ public abstract class AbstractExtendedPreferenceInitializer extends AbstractPref
 		try {
 			preferences.flush();
 		} catch(BackingStoreException e) {
-			logger.warn(e);
+			// can't flush then
 		}
 	}
 }

@@ -13,12 +13,13 @@ package org.eclipse.chemclipse.support.settings;
 
 import java.io.File;
 
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.logging.support.Settings;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ApplicationSettings {
 
-	private static final Logger logger = Logger.getLogger(ApplicationSettings.class);
+	private static final Logger logger = LoggerFactory.getLogger(ApplicationSettings.class);
 
 	/**
 	 * Returns a file object (directory) of the chemclipse settings folder.
@@ -30,7 +31,7 @@ public class ApplicationSettings {
 		/*
 		 * Create the directory if it not exists.
 		 */
-		File file = Settings.getSettingsDirectory();
+		File file = Settings.getSystemDirectory();
 		createDirectoryIfNotExists(file);
 		return file;
 	}

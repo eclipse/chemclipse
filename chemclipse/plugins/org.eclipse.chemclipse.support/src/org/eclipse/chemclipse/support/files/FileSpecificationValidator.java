@@ -13,11 +13,12 @@ package org.eclipse.chemclipse.support.files;
 
 import java.io.File;
 
-import org.eclipse.chemclipse.logging.core.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FileSpecificationValidator {
 
-	private static final Logger logger = Logger.getLogger(FileSpecificationValidator.class);
+	private static final Logger logger = LoggerFactory.getLogger(FileSpecificationValidator.class);
 
 	public File validate(File file, String directoryExtension) {
 

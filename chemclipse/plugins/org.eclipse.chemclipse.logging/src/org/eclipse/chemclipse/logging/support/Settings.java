@@ -49,7 +49,7 @@ public class Settings {
 	 * 
 	 * @return File
 	 */
-	public static final File getSettingsDirectory() {
+	public static final File getSystemDirectory() {
 
 		if(isRunInitialization()) {
 			initialize();
@@ -73,7 +73,16 @@ public class Settings {
 	 */
 	public static final File getSystemMethodDirectory() {
 
-		return new File(Settings.getSettingsDirectory(), "methods");
+		return new File(Settings.getSystemDirectory(), "methods");
+	}
+
+	/**
+	 * 
+	 * @return the system methods folder
+	 */
+	public static final File getSystemConfigDirectory() {
+
+		return new File(Settings.getSystemDirectory(), "configurations");
 	}
 
 	/**
@@ -216,10 +225,11 @@ public class Settings {
 		 * Print in the console.
 		 */
 		System.out.println("----------------------------------------------------------------------------------");
-		System.out.println("Product Initializiation: " + Settings.class.getName());
-		System.out.println("Workspace Path:          " + getWorkspaceDirectory());
-		System.out.println("Settings Path:           " + getSettingsDirectory());
-		System.out.println("System Method Path:      " + getSystemMethodDirectory());
+		System.out.println("Product Initializiation:   " + Settings.class.getName());
+		System.out.println("Workspace Path:            " + getWorkspaceDirectory());
+		System.out.println("System Path:               " + getSystemDirectory());
+		System.out.println("System Method Path:        " + getSystemMethodDirectory());
+		System.out.println("System Configuration Path: " + getSystemConfigDirectory());
 		System.out.println("----------------------------------------------------------------------------------");
 	}
 
