@@ -54,17 +54,14 @@ public class ConfigReader {
 
 		File directory = Settings.getSystemConfigDirectory();
 		if(directory.isDirectory()) {
-			File cmdirectory = new File(directory, "cm");
-			LOG.info("Reading static config files from " + cmdirectory.getAbsolutePath());
-			if(cmdirectory.exists()) {
-				for(File file : cmdirectory.listFiles(CFG_FILE_FILTER)) {
-					if(file.isFile()) {
-						readConfigFile(file, null);
-					} else if(file.isDirectory()) {
-						String fpid = file.getName();
-						for(File factoryFile : file.listFiles(CFG_FILE_FILTER)) {
-							readConfigFile(factoryFile, fpid);
-						}
+			LOG.info("Reading static config files from " + directory.getAbsolutePath());
+			for(File file : directory.listFiles(CFG_FILE_FILTER)) {
+				if(file.isFile()) {
+					readConfigFile(file, null);
+				} else if(file.isDirectory()) {
+					String fpid = file.getName();
+					for(File factoryFile : file.listFiles(CFG_FILE_FILTER)) {
+						readConfigFile(factoryFile, fpid);
 					}
 				}
 			}
