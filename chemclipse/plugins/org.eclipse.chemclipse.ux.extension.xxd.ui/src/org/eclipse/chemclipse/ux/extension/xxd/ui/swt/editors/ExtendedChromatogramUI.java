@@ -672,12 +672,12 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 	private void clearPeakAndScanLabels() {
 
-		removeIdentificationLabelMarker(peakLabelMarkerMap, SERIES_ID_PEAKS_NORMAL_ACTIVE);
-		removeIdentificationLabelMarker(peakLabelMarkerMap, SERIES_ID_PEAKS_NORMAL_INACTIVE);
-		removeIdentificationLabelMarker(peakLabelMarkerMap, SERIES_ID_PEAKS_ISTD_ACTIVE);
-		removeIdentificationLabelMarker(peakLabelMarkerMap, SERIES_ID_PEAKS_ISTD_INACTIVE);
-		removeIdentificationLabelMarker(scanLabelMarkerMap, SERIES_ID_IDENTIFIED_SCANS);
-		//
+		for(String key : peakLabelMarkerMap.keySet()) {
+			removeIdentificationLabelMarker(peakLabelMarkerMap, key);
+		}
+		for(String key : scanLabelMarkerMap.keySet()) {
+			removeIdentificationLabelMarker(scanLabelMarkerMap, key);
+		}
 		peakLabelMarkerMap.clear();
 		scanLabelMarkerMap.clear();
 	}
