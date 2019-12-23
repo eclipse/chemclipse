@@ -78,7 +78,7 @@ public interface TargetDisplaySettings {
 	int getRotation();
 
 	/**
-	 * Sets the roation angel of the labels in degree
+	 * Sets the rotation angel of the labels in degree
 	 * 
 	 * @param degree
 	 */

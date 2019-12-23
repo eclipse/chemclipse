@@ -124,6 +124,7 @@ public class TargetDisplaySettingsWizard {
 			other.setField(libraryField);
 			other.setShowPeakLabels(showPeakLabels);
 			other.setShowScanLables(showScanLables);
+			other.setRotation(rotation);
 			if(other instanceof WorkspaceTargetDisplaySettings) {
 				WorkspaceTargetDisplaySettings workspaceSettings = (WorkspaceTargetDisplaySettings)other;
 				workspaceSettings.updateVisible(visibleMap);
