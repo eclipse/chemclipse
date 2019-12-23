@@ -75,6 +75,15 @@ public interface TargetDisplaySettings {
 
 	void setShowScanLables(boolean showScanLables);
 
+	int getRotation();
+
+	/**
+	 * Sets the roation angel of the labels in degree
+	 * 
+	 * @param degree
+	 */
+	void setRotation(int degree);
+
 	LibraryField getField();
 
 	void setField(LibraryField libraryField);

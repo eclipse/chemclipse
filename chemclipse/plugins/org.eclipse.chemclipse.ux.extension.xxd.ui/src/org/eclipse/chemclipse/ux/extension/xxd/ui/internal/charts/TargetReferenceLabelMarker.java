@@ -48,6 +48,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 	private final List<TargetLabel> identifications = new ArrayList<>();
 	private boolean visible = true;
 	private final boolean showReferenceId;
+	private int rotation;
 
 	public TargetReferenceLabelMarker() {
 		this(false);
@@ -120,7 +121,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 				Point labelSize = gc.textExtent(label);
 				transform.identity();
 				transform.translate(x - labelSize.y / 2, y - 15);
-				transform.rotate(-90);
+				transform.rotate(-rotation);
 				gc.setTransform(transform);
 				if(reference.isActive) {
 					gc.setForeground(activeColor);
@@ -156,6 +157,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		identifications.clear();
 		Predicate<TargetReference> createVisibleFilter = ScanTargetReference.createVisibleFilter(settings);
 		if(settings != null) {
+			rotation = settings.getRotation();
 			Function<IIdentificationTarget, String> stringTransformer = settings.getField().stringTransformer();
 			for(ScanTargetReference reference : input) {
 				if(createVisibleFilter.test(reference)) {

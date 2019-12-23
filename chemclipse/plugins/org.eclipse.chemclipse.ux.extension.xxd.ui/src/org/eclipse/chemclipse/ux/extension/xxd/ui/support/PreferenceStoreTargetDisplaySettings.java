@@ -20,6 +20,7 @@ public class PreferenceStoreTargetDisplaySettings implements TargetDisplaySettin
 
 	private PreferenceStoreTargetDisplaySettings(IPreferenceStore preferenceStore) {
 		this.preferenceStore = preferenceStore;
+		preferenceStore.setDefault(PreferenceConstants.P_PEAK_LABELS_ROTATION, PreferenceConstants.DEF_PEAK_LABELS_ROTATION);
 	}
 
 	@Override
@@ -75,5 +76,17 @@ public class PreferenceStoreTargetDisplaySettings implements TargetDisplaySettin
 	public static TargetDisplaySettings getSettings(IPreferenceStore preferenceStore) {
 
 		return new PreferenceStoreTargetDisplaySettings(preferenceStore);
+	}
+
+	@Override
+	public int getRotation() {
+
+		return preferenceStore.getInt(PreferenceConstants.P_PEAK_LABELS_ROTATION);
+	}
+
+	@Override
+	public void setRotation(int degree) {
+
+		preferenceStore.setValue(PreferenceConstants.P_PEAK_LABELS_ROTATION, degree);
 	}
 }

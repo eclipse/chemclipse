@@ -191,4 +191,16 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
 			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, WorkspaceTargetDisplaySettings.class.getName(), "Flush WorkspaceTargetDisplaySettings failed!", e));
 		}
 	}
+
+	@Override
+	public void setRotation(int degree) {
+
+		node.putInt(PreferenceConstants.P_PEAK_LABELS_ROTATION, degree);
+	}
+
+	@Override
+	public int getRotation() {
+
+		return node.getInt(PreferenceConstants.P_PEAK_LABELS_ROTATION, PreferenceConstants.DEF_PEAK_LABELS_ROTATION);
+	}
 }

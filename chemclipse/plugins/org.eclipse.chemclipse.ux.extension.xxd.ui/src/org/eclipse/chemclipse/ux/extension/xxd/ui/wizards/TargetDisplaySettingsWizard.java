@@ -16,12 +16,14 @@ import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createColumn;
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createContainer;
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createLabelContainer;
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createTable;
+import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.fill;
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.gridData;
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.indentedContainer;
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.label;
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.maximize;
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.radiobutton;
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.separator;
+import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.span;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -67,6 +69,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Scale;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
@@ -74,7 +77,7 @@ import org.eclipse.swt.widgets.ToolBar;
 
 public class TargetDisplaySettingsWizard {
 
-	public static final int DEFAULT_WIDTH = 800;
+	public static final int DEFAULT_WIDTH = 1000;
 	public static final int DEFAULT_HEIGHT = 600;
 
 	public static boolean openWizard(Shell shell, Collection<? extends TargetReference> identifications, TargetDisplaySettingsWizardListener listener, WorkspaceTargetDisplaySettings currentSettings) {
@@ -106,12 +109,14 @@ public class TargetDisplaySettingsWizard {
 		private LibraryField libraryField;
 		private final Map<String, Boolean> visibleMap = new HashMap<>();
 		private final TargetDisplaySettings base;
+		private int rotation;
 
 		public WizardTargetDisplaySettings(TargetDisplaySettings base) {
 			this.base = base;
 			showPeakLabels = base.isShowPeakLabels();
 			showScanLables = base.isShowScanLables();
 			libraryField = base.getField();
+			rotation = base.getRotation();
 		}
 
 		public void copyTo(TargetDisplaySettings other) {
@@ -170,6 +175,18 @@ public class TargetDisplaySettingsWizard {
 		public void setVisible(TargetReference reference, boolean visible) {
 
 			visibleMap.put(reference.getID(), visible);
+		}
+
+		@Override
+		public void setRotation(int degree) {
+
+			rotation = degree;
+		}
+
+		@Override
+		public int getRotation() {
+
+			return rotation;
 		}
 	}
 
@@ -464,9 +481,12 @@ public class TargetDisplaySettingsWizard {
 		private final Button scanLabels;
 		private final Label fieldLabel;
 		private final ComboViewer comboViewer;
+		private final Label rotationLabel;
+		private final Scale scale;
 
 		public BaseTargetSettingEditor(Composite composite, TargetDisplaySettings editorSettings, TargetDisplaySettingsPage page) {
-			peakLabels = checkbox(composite, "Show Peak Labels", editorSettings.isShowPeakLabels());
+			Composite container = createLabelContainer(composite);
+			peakLabels = span(checkbox(container, "Show Peak Labels", editorSettings.isShowPeakLabels()), 2);
 			peakLabels.addSelectionListener(new SelectionListener() {
 
 				@Override
@@ -481,7 +501,7 @@ public class TargetDisplaySettingsWizard {
 
 				}
 			});
-			scanLabels = checkbox(composite, "Show Scan Labels", editorSettings.isShowScanLables());
+			scanLabels = span(checkbox(container, "Show Scan Labels", editorSettings.isShowScanLables()), 2);
 			scanLabels.addSelectionListener(new SelectionListener() {
 
 				@Override
@@ -496,7 +516,6 @@ public class TargetDisplaySettingsWizard {
 
 				}
 			});
-			Composite container = createLabelContainer(composite);
 			fieldLabel = label("Display Field", container);
 			comboViewer = new ComboViewer(container, SWT.READ_ONLY);
 			comboViewer.setContentProvider(ArrayContentProvider.getInstance());
@@ -511,6 +530,40 @@ public class TargetDisplaySettingsWizard {
 					page.notifyListener();
 				}
 			});
+			rotationLabel = label(getRotationText(editorSettings.getRotation()), container);
+			scale = fill(new Scale(container, SWT.HORIZONTAL));
+			scale.setMinimum(0);
+			scale.setMaximum(90);
+			scale.setIncrement(1);
+			scale.setSelection(editorSettings.getRotation());
+			scale.addSelectionListener(new SelectionListener() {
+
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+
+					int selection = scale.getSelection();
+					editorSettings.setRotation(selection);
+					rotationLabel.setText(getRotationText(selection));
+					page.notifyListener();
+				}
+
+				@Override
+				public void widgetDefaultSelected(SelectionEvent e) {
+
+				}
+			});
+		}
+
+		private String getRotationText(int value) {
+
+			StringBuilder sb = new StringBuilder();
+			sb.append("Rotation (");
+			if(value < 10) {
+				sb.append(' ');
+			}
+			sb.append(value);
+			sb.append("°)");
+			return sb.toString();
 		}
 
 		public void setEnabled(boolean enabled) {
@@ -518,7 +571,9 @@ public class TargetDisplaySettingsWizard {
 			peakLabels.setEnabled(enabled);
 			scanLabels.setEnabled(enabled);
 			fieldLabel.setEnabled(enabled);
+			rotationLabel.setEnabled(enabled);
 			comboViewer.getControl().setEnabled(enabled);
+			scale.setEnabled(enabled);
 		}
 	}
 }
