@@ -68,6 +68,9 @@ public interface ProcessSupplierContext {
 	static Predicate<IProcessSupplier<?>> createDataCategoryPredicate(DataCategory... categories) {
 
 		return supplier -> {
+			if(supplier == null) {
+				return false;
+			}
 			Set<DataCategory> supportedDataTypes = supplier.getSupportedDataTypes();
 			for(DataCategory dataCategory : categories) {
 				if(supportedDataTypes.contains(dataCategory)) {
