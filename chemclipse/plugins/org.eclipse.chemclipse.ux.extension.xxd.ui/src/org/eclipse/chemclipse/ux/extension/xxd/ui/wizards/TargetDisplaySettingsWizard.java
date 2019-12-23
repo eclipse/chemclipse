@@ -438,7 +438,7 @@ public class TargetDisplaySettingsWizard {
 				@Override
 				protected int computeWidth(Control control) {
 
-					return Math.max(super.computeWidth(control), DEFAULT_WIDTH - 50);
+					return Math.max(super.computeWidth(control), DEFAULT_WIDTH / 2);
 				}
 			});
 			return manager.createControl(parent);
