@@ -33,6 +33,7 @@ import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.graphics.Transform;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.swtchart.Chart;
@@ -44,6 +45,7 @@ import org.eclipse.swtchart.ISeries;
 
 public class TargetReferenceLabelMarker implements ICustomPaintListener {
 
+	private static final int OFFSET = 15;
 	private static final int NO_ALPHA = 255;
 	private final List<TargetLabel> identifications = new ArrayList<>();
 	private boolean visible = true;
@@ -101,7 +103,13 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 			Color inactiveColor = gc.getDevice().getSystemColor(SWT.COLOR_GRAY);
 			Color idColor = gc.getDevice().getSystemColor(SWT.COLOR_DARK_GRAY);
 			gc.setTransform(transform);
+			Rectangle clipping = gc.getClipping();
 			for(TargetLabel reference : identifications) {
+				int x = xAxis.getPixelCoordinate(reference.x);
+				int y = yAxis.getPixelCoordinate(reference.y);
+				if(!clipping.contains(x, y)) {
+					continue;
+				}
 				if(reference.isPeakLabel) {
 					if(peakFont == null) {
 						peakFont = createPeakFont(gc.getDevice());
@@ -116,22 +124,25 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 					gc.setFont(oldFont);
 				}
 				String label = reference.label;
-				float x = xAxis.getPixelCoordinate(reference.x);
-				float y = yAxis.getPixelCoordinate(reference.y);
 				Point labelSize = gc.textExtent(label);
+				int h = labelSize.y;
+				int w = labelSize.x;
+				int ch = -h / 2;
 				transform.identity();
-				transform.translate(x - labelSize.y / 2, y - 15);
+				transform.translate(x, y);
 				transform.rotate(-rotation);
 				gc.setTransform(transform);
+				// gc.drawRectangle(OFFSET, ch, w, h);
+				// gc.drawLine(0, 0, OFFSET, 0);
 				if(reference.isActive) {
 					gc.setForeground(activeColor);
 				} else {
 					gc.setForeground(inactiveColor);
 				}
-				gc.drawText(label, 0, 0, true);
+				gc.drawText(label, OFFSET, ch, true);
 				if(reference.id != null && reference.isActive) {
 					gc.setForeground(idColor);
-					gc.drawText(reference.id, labelSize.x + labelSize.y / 2, 0, true);
+					gc.drawText(reference.id, OFFSET + w + labelSize.y / 2, ch, true);
 				}
 			}
 		} finally {
