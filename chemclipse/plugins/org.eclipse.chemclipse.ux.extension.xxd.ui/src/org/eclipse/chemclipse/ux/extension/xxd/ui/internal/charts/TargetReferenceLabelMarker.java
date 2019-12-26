@@ -33,6 +33,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Path;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.graphics.Region;
@@ -48,7 +49,7 @@ import org.eclipse.swtchart.ISeries;
 public class TargetReferenceLabelMarker implements ICustomPaintListener {
 
 	private static final boolean DEBUG = false;
-	private static final int OFFSET = 15;
+	private final int offset;
 	private static final int NO_ALPHA = 255;
 	private final List<TargetLabel> identifications = new ArrayList<>();
 	private boolean visible = true;
@@ -56,16 +57,17 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 	private int rotation;
 	private int detectionDepth;
 
-	public TargetReferenceLabelMarker() {
-		this(false);
+	public TargetReferenceLabelMarker(int offset) {
+		this(false, offset);
 	}
 
-	public TargetReferenceLabelMarker(boolean showReferenceId) {
+	public TargetReferenceLabelMarker(boolean showReferenceId, int offset) {
 		this.showReferenceId = showReferenceId;
+		this.offset = offset;
 	}
 
-	public TargetReferenceLabelMarker(Collection<? extends ScanTargetReference> references, TargetDisplaySettings settings) {
-		this.showReferenceId = false;
+	public TargetReferenceLabelMarker(Collection<? extends ScanTargetReference> references, TargetDisplaySettings settings, int offset) {
+		this(false, offset);
 		setData(references, settings);
 	}
 
@@ -136,7 +138,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 				String label = reference.label;
 				int h = reference.bounds.height;
 				transform.identity();
-				transform.translate(x, y - OFFSET);
+				transform.translate(x, y - offset);
 				transform.rotate(-rotation);
 				transform.translate(0, -h / 2);
 				reference.bounds.setTransform(transform);
@@ -156,36 +158,25 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 							}
 							// first guess is to move the label up
 							transform.identity();
-							int yoffset = (int)Math.rint(2 * OFFSET + lastReference.bounds.getHeight(rotation) + (reference.bounds.getCy() - lastReference.bounds.getCy()));
-							transform.translate(Math.max(x, lastReference.bounds.getCx()) + OFFSET, y - yoffset);
+							int yoffset = (int)Math.rint(offset + lastReference.bounds.offsetY(reference.bounds) + (reference.bounds.getCy() - lastReference.bounds.getCy()));
+							transform.translate(Math.max(x, lastReference.bounds.getCx()) + offset, y - yoffset);
 							transform.rotate(-rotation);
 							transform.translate(0, -h / 2);
 							reference.bounds.setTransform(transform);
 							// check if the label is not cut of
-							if(!clipping.contains(reference.bounds.getTopX(), reference.bounds.getTopY())) {
+							if(!clipping.contains(Math.round(reference.bounds.getTopX()), Math.round(reference.bounds.getTopY()))) {
 								// then move it to the right... (might still be cut of but that is the default behavior of current charting)
 								if(DEBUG) {
 									System.out.println("label " + label + " overflows");
 								}
 								transform.identity();
-								int xoffset = (int)Math.rint(OFFSET + lastReference.bounds.getWidth(rotation));
-								transform.translate(lastReference.bounds.getCx() + xoffset, y - 2 * OFFSET);
+								int xoffset = (int)Math.rint(offset + lastReference.bounds.getWidth(rotation));
+								transform.translate(lastReference.bounds.getCx() + xoffset, y - 2 * offset);
 								transform.rotate(-rotation);
 								transform.translate(0, -h / 2);
 								reference.bounds.setTransform(transform);
 							}
-							// draw handle...
-							gc.setTransform(null);
-							int cx = reference.bounds.getCx();
-							int cy = reference.bounds.getCy();
-							int dx = (cx - x) / 2;
-							int dy = OFFSET / 2;
-							gc.setLineStyle(SWT.LINE_DASHDOT);
-							gc.drawLine(x, y, x + dx, y - dy);
-							gc.drawLine(x + dx, y - dy, cx - dx, cy + dy);
-							gc.drawLine(cx - dx, cy + dy, cx, cy);
-							int ow = 2;
-							gc.fillOval(x - ow, y - ow, ow * 2, ow * 2);
+							drawHandle(gc, reference, x, y, offset);
 						} else {
 							if(DEBUG) {
 								System.out.println("label " + label + " do not intersect with previous label " + lastReference.label);
@@ -210,7 +201,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 				gc.drawText(label, 0, 0, true);
 				if(reference.id != null && reference.isActive) {
 					gc.setForeground(idColor);
-					gc.drawText(reference.id, reference.bounds.width + OFFSET / 2, 0, true);
+					gc.drawText(reference.id, reference.bounds.width + offset / 2, 0, true);
 				}
 			}
 			for(TargetLabel reference : identifications) {
@@ -230,6 +221,25 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 			}
 			transform.dispose();
 		}
+	}
+
+	private static void drawHandle(GC gc, TargetLabel reference, int x, int y, int offset) {
+
+		gc.setTransform(null);
+		float cx = reference.bounds.getCx();
+		float cy = reference.bounds.getCy();
+		float dx = (cx - x) / 2;
+		float dy = offset / 2;
+		gc.setLineStyle(SWT.LINE_DASHDOT);
+		Path path = new Path(gc.getDevice());
+		path.moveTo(x, y);
+		path.lineTo(x + dx, y - dy);
+		path.lineTo(cx - dx, cy + dy);
+		path.lineTo(cx, cy);
+		gc.drawPath(path);
+		path.dispose();
+		int ow = 2;
+		gc.fillOval(x - ow, y - ow, ow * 2, ow * 2);
 	}
 
 	public Predicate<TargetReference> setData(Collection<? extends ScanTargetReference> identifications, TargetDisplaySettings settings) {
@@ -299,8 +309,6 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		private final int height;
 		private final GC gc;
 		private Region region;
-		private int x;
-		private int y;
 
 		public LabelBounds(GC gc, TargetLabel label) {
 			this.gc = gc;
@@ -332,20 +340,20 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		public void setTransform(Transform transform) {
 
 			// p0
-			pointArray[0] = x;
-			pointArray[1] = y;
+			pointArray[0] = 0;
+			pointArray[1] = 0;
 			// p1
-			pointArray[2] = x + width;
-			pointArray[3] = y;
+			pointArray[2] = width;
+			pointArray[3] = 0;
 			// p2
-			pointArray[4] = x + width;
-			pointArray[5] = y + height;
+			pointArray[4] = width;
+			pointArray[5] = height;
 			// p3
-			pointArray[6] = x;
-			pointArray[7] = y + height;
+			pointArray[6] = 0;
+			pointArray[7] = height;
 			// pc
-			pointArray[8] = x;
-			pointArray[9] = (y + height) / 2f;
+			pointArray[8] = 0;
+			pointArray[9] = height / 2f;
 			transform.transform(pointArray);
 			for(int i = 0; i < transformedPoints.length; i++) {
 				transformedPoints[i] = Math.round(pointArray[i]);
@@ -357,36 +365,60 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 			region.add(transformedPoints);
 		}
 
-		public double getHeight(int rotation) {
-
-			double rad = Math.toRadians(rotation);
-			return Math.cos(rad) * height + Math.sin(rad) * width;
-		}
-
 		public double getWidth(int rotation) {
 
 			double rad = Math.toRadians(rotation);
 			return Math.cos(rad) * width + Math.sin(rad) * height;
 		}
 
-		public int getCx() {
+		public float getCx() {
 
-			return transformedPoints[8];
+			return pointArray[8];
 		}
 
-		public int getCy() {
+		public float getCy() {
 
-			return transformedPoints[9];
+			return pointArray[9];
 		}
 
-		public int getTopX() {
+		public float getTopX() {
 
-			return transformedPoints[2];
+			return pointArray[2];
 		}
 
-		public int getTopY() {
+		public float getTopY() {
 
-			return transformedPoints[3];
+			return pointArray[3];
+		}
+
+		public float getBottomX() {
+
+			return pointArray[6];
+		}
+
+		public float getBottomY() {
+
+			return pointArray[7];
+		}
+
+		public float offsetY(LabelBounds other) {
+
+			float h;
+			if(other.getCx() > getTopX() || Float.compare(transformedPoints[0], transformedPoints[2]) == 0) {
+				h = getTopY();
+			} else {
+				float x = other.getBottomX();
+				float x1 = pointArray[0];
+				float y1 = pointArray[1];
+				float x2 = pointArray[2];
+				float y2 = pointArray[3];
+				float dx = x2 - x1;
+				h = Math.min(Math.max(((y2 - y1) / dx) * x + (x2 * y1 - x1 * y2) / dx, getTopY()), getBottomY());
+			}
+			if(DEBUG) {
+				System.out.println("h=" + h + ", by = " + getBottomY());
+			}
+			return getBottomY() - h;
 		}
 
 		public void paintBounds() {
@@ -404,6 +436,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 				paintPoint(2, SWT.COLOR_GREEN);
 				paintPoint(3, SWT.COLOR_GRAY);
 				paintPoint(4, SWT.COLOR_BLACK);
+				gc.setLineStyle(SWT.LINE_SOLID);
 				font.dispose();
 			} finally {
 				gc.setFont(old_font);
