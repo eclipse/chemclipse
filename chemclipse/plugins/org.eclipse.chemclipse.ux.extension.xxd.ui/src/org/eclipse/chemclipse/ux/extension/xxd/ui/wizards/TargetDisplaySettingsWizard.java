@@ -110,6 +110,7 @@ public class TargetDisplaySettingsWizard {
 		private final Map<String, Boolean> visibleMap = new HashMap<>();
 		private final TargetDisplaySettings base;
 		private int rotation;
+		private int depth;
 
 		public WizardTargetDisplaySettings(TargetDisplaySettings base) {
 			this.base = base;
@@ -117,6 +118,7 @@ public class TargetDisplaySettingsWizard {
 			showScanLables = base.isShowScanLables();
 			libraryField = base.getField();
 			rotation = base.getRotation();
+			depth = base.getCollisionDetectionDepth();
 		}
 
 		public void copyTo(TargetDisplaySettings other) {
@@ -125,6 +127,7 @@ public class TargetDisplaySettingsWizard {
 			other.setShowPeakLabels(showPeakLabels);
 			other.setShowScanLables(showScanLables);
 			other.setRotation(rotation);
+			other.setCollisionDetectionDepth(depth);
 			if(other instanceof WorkspaceTargetDisplaySettings) {
 				WorkspaceTargetDisplaySettings workspaceSettings = (WorkspaceTargetDisplaySettings)other;
 				workspaceSettings.updateVisible(visibleMap);
@@ -189,6 +192,18 @@ public class TargetDisplaySettingsWizard {
 
 			return rotation;
 		}
+
+		@Override
+		public int getCollisionDetectionDepth() {
+
+			return depth;
+		}
+
+		@Override
+		public void setCollisionDetectionDepth(int depth) {
+
+			this.depth = depth;
+		}
 	}
 
 	private static final class TargetDisplaySettingsPage extends WizardPage {
@@ -246,7 +261,7 @@ public class TargetDisplaySettingsWizard {
 					}
 				}
 			};
-			userEditor.comboViewer.addSelectionChangedListener(comboListener);
+			userEditor.fieldComboViewer.addSelectionChangedListener(comboListener);
 			SelectionListener buttonListener = new SelectionListener() {
 
 				@Override
@@ -481,9 +496,11 @@ public class TargetDisplaySettingsWizard {
 		private final Button peakLabels;
 		private final Button scanLabels;
 		private final Label fieldLabel;
-		private final ComboViewer comboViewer;
+		private final ComboViewer fieldComboViewer;
 		private final Label rotationLabel;
 		private final Scale scale;
+		private final Label collisionLabel;
+		private final ComboViewer collisionComboViewer;
 
 		public BaseTargetSettingEditor(Composite composite, TargetDisplaySettings editorSettings, TargetDisplaySettingsPage page) {
 			Composite container = createLabelContainer(composite);
@@ -518,16 +535,16 @@ public class TargetDisplaySettingsWizard {
 				}
 			});
 			fieldLabel = label("Display Field", container);
-			comboViewer = new ComboViewer(container, SWT.READ_ONLY);
-			comboViewer.setContentProvider(ArrayContentProvider.getInstance());
-			comboViewer.setInput(LibraryField.values());
-			comboViewer.setSelection(new StructuredSelection(editorSettings.getField()));
-			comboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+			fieldComboViewer = new ComboViewer(container, SWT.READ_ONLY);
+			fieldComboViewer.setContentProvider(ArrayContentProvider.getInstance());
+			fieldComboViewer.setInput(LibraryField.values());
+			fieldComboViewer.setSelection(new StructuredSelection(editorSettings.getField()));
+			fieldComboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
 				@Override
 				public void selectionChanged(SelectionChangedEvent event) {
 
-					editorSettings.setField((LibraryField)comboViewer.getStructuredSelection().getFirstElement());
+					editorSettings.setField((LibraryField)fieldComboViewer.getStructuredSelection().getFirstElement());
 					page.notifyListener();
 				}
 			});
@@ -553,6 +570,20 @@ public class TargetDisplaySettingsWizard {
 
 				}
 			});
+			collisionLabel = label("Collision Detection Depth", container);
+			collisionComboViewer = new ComboViewer(container);
+			collisionComboViewer.setContentProvider(ArrayContentProvider.getInstance());
+			collisionComboViewer.setInput(new Object[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+			collisionComboViewer.setSelection(new StructuredSelection(editorSettings.getCollisionDetectionDepth()));
+			collisionComboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+				@Override
+				public void selectionChanged(SelectionChangedEvent event) {
+
+					editorSettings.setCollisionDetectionDepth(((Integer)collisionComboViewer.getStructuredSelection().getFirstElement()));
+					page.notifyListener();
+				}
+			});
 		}
 
 		private String getRotationText(int value) {
@@ -563,7 +594,7 @@ public class TargetDisplaySettingsWizard {
 				sb.append(' ');
 			}
 			sb.append(value);
-			sb.append("°)");
+			sb.append("°)  ");
 			return sb.toString();
 		}
 
@@ -572,8 +603,10 @@ public class TargetDisplaySettingsWizard {
 			peakLabels.setEnabled(enabled);
 			scanLabels.setEnabled(enabled);
 			fieldLabel.setEnabled(enabled);
+			collisionLabel.setEnabled(enabled);
 			rotationLabel.setEnabled(enabled);
-			comboViewer.getControl().setEnabled(enabled);
+			fieldComboViewer.getControl().setEnabled(enabled);
+			collisionComboViewer.getControl().setEnabled(enabled);
 			scale.setEnabled(enabled);
 		}
 	}

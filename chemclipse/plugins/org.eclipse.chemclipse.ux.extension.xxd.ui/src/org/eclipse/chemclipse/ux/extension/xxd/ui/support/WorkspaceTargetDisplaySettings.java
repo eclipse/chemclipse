@@ -203,4 +203,16 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
 
 		return node.getInt(PreferenceConstants.P_PEAK_LABELS_ROTATION, PreferenceConstants.DEF_PEAK_LABELS_ROTATION);
 	}
+
+	@Override
+	public int getCollisionDetectionDepth() {
+
+		return node.getInt(PreferenceConstants.P_PEAK_LABELS_COLLISION_DETECTION_DEPTH, PreferenceConstants.DEF_PEAK_LABELS_COLLISION_DETECTION_DEPTH);
+	}
+
+	@Override
+	public void setCollisionDetectionDepth(int depth) {
+
+		node.putInt(PreferenceConstants.P_PEAK_LABELS_COLLISION_DETECTION_DEPTH, depth);
+	}
 }

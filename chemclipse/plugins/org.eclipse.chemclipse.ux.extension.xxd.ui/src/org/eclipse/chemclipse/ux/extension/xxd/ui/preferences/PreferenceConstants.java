@@ -348,6 +348,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String P_SHOW_CHROMATOGRAM_PEAK_LABELS = "showChromatogramPeakLabels";
 	public static final String P_PEAK_LABELS_ROTATION = "chromatogramPeakLabelsRotation";
 	public static final int DEF_PEAK_LABELS_ROTATION = 90;
+	public static final String P_PEAK_LABELS_COLLISION_DETECTION_DEPTH = "chromatogramPeakLabelsCollisionDetectionDepth";
+	public static final int DEF_PEAK_LABELS_COLLISION_DETECTION_DEPTH = 0;
 	public static final boolean DEF_SHOW_CHROMATOGRAM_PEAK_LABELS = true;
 	public static final String P_CHROMATOGRAM_PEAK_LABEL_FONT_NAME = "chromatogramPeakLabelFontName";
 	public static final String DEF_CHROMATOGRAM_PEAK_LABEL_FONT_NAME = "Tahoma";

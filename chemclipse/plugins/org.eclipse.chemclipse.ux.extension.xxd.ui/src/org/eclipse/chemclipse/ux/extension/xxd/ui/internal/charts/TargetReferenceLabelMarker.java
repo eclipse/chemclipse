@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -34,6 +35,7 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.graphics.Region;
 import org.eclipse.swt.graphics.Transform;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.swtchart.Chart;
@@ -45,12 +47,14 @@ import org.eclipse.swtchart.ISeries;
 
 public class TargetReferenceLabelMarker implements ICustomPaintListener {
 
+	private static final boolean DEBUG = false;
 	private static final int OFFSET = 15;
 	private static final int NO_ALPHA = 255;
 	private final List<TargetLabel> identifications = new ArrayList<>();
 	private boolean visible = true;
 	private final boolean showReferenceId;
 	private int rotation;
+	private int detectionDepth;
 
 	public TargetReferenceLabelMarker() {
 		this(false);
@@ -104,6 +108,11 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 			Color idColor = gc.getDevice().getSystemColor(SWT.COLOR_DARK_GRAY);
 			gc.setTransform(transform);
 			Rectangle clipping = gc.getClipping();
+			TargetLabel lastReference = null;
+			if(DEBUG) {
+				System.out.println("---------------------- start label rendering -----------------------------");
+			}
+			int collisions = 0;
 			for(TargetLabel reference : identifications) {
 				int x = xAxis.getPixelCoordinate(reference.x);
 				int y = yAxis.getPixelCoordinate(reference.y);
@@ -123,26 +132,91 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 				} else {
 					gc.setFont(oldFont);
 				}
+				reference.bounds = new LabelBounds(gc, reference);
 				String label = reference.label;
-				Point labelSize = gc.textExtent(label);
-				int h = labelSize.y;
-				int w = labelSize.x;
-				int ch = -h / 2;
+				int h = reference.bounds.height;
 				transform.identity();
-				transform.translate(x, y);
+				transform.translate(x, y - OFFSET);
 				transform.rotate(-rotation);
-				gc.setTransform(transform);
-				// gc.drawRectangle(OFFSET, ch, w, h);
-				// gc.drawLine(0, 0, OFFSET, 0);
+				transform.translate(0, -h / 2);
+				reference.bounds.setTransform(transform);
 				if(reference.isActive) {
 					gc.setForeground(activeColor);
+					gc.setBackground(activeColor);
 				} else {
 					gc.setForeground(inactiveColor);
+					gc.setBackground(inactiveColor);
 				}
-				gc.drawText(label, OFFSET, ch, true);
+				if(detectionDepth > 0) {
+					if(lastReference != null && lastReference.bounds != null) {
+						if(lastReference.bounds.getCx() > reference.bounds.getCx() || lastReference.bounds.intersects(reference.bounds)) {
+							collisions++;
+							if(DEBUG) {
+								System.out.println("label " + label + " intersects with previous label " + lastReference.label);
+							}
+							// first guess is to move the label up
+							transform.identity();
+							int yoffset = (int)Math.rint(2 * OFFSET + lastReference.bounds.getHeight(rotation) + (reference.bounds.getCy() - lastReference.bounds.getCy()));
+							transform.translate(Math.max(x, lastReference.bounds.getCx()) + OFFSET, y - yoffset);
+							transform.rotate(-rotation);
+							transform.translate(0, -h / 2);
+							reference.bounds.setTransform(transform);
+							// check if the label is not cut of
+							if(!clipping.contains(reference.bounds.getTopX(), reference.bounds.getTopY())) {
+								// then move it to the right... (might still be cut of but that is the default behavior of current charting)
+								if(DEBUG) {
+									System.out.println("label " + label + " overflows");
+								}
+								transform.identity();
+								int xoffset = (int)Math.rint(OFFSET + lastReference.bounds.getWidth(rotation));
+								transform.translate(lastReference.bounds.getCx() + xoffset, y - 2 * OFFSET);
+								transform.rotate(-rotation);
+								transform.translate(0, -h / 2);
+								reference.bounds.setTransform(transform);
+							}
+							// draw handle...
+							gc.setTransform(null);
+							int cx = reference.bounds.getCx();
+							int cy = reference.bounds.getCy();
+							int dx = (cx - x) / 2;
+							int dy = OFFSET / 2;
+							gc.setLineStyle(SWT.LINE_DASHDOT);
+							gc.drawLine(x, y, x + dx, y - dy);
+							gc.drawLine(x + dx, y - dy, cx - dx, cy + dy);
+							gc.drawLine(cx - dx, cy + dy, cx, cy);
+							int ow = 2;
+							gc.fillOval(x - ow, y - ow, ow * 2, ow * 2);
+						} else {
+							if(DEBUG) {
+								System.out.println("label " + label + " do not intersect with previous label " + lastReference.label);
+							}
+							collisions = 0;
+						}
+					}
+					if(DEBUG) {
+						reference.bounds.paintBounds();
+					}
+					if(collisions > detectionDepth) {
+						lastReference = null;
+						collisions = 0;
+					} else {
+						lastReference = reference;
+					}
+					if(DEBUG) {
+						System.out.println("Current collisions: " + collisions);
+					}
+				}
+				gc.setTransform(transform);
+				gc.drawText(label, 0, 0, true);
 				if(reference.id != null && reference.isActive) {
 					gc.setForeground(idColor);
-					gc.drawText(reference.id, OFFSET + w + labelSize.y / 2, ch, true);
+					gc.drawText(reference.id, reference.bounds.width + OFFSET / 2, 0, true);
+				}
+			}
+			for(TargetLabel reference : identifications) {
+				if(reference.bounds != null) {
+					reference.bounds.dispose();
+					reference.bounds = null;
 				}
 			}
 		} finally {
@@ -169,6 +243,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		Predicate<TargetReference> createVisibleFilter = ScanTargetReference.createVisibleFilter(settings);
 		if(settings != null) {
 			rotation = settings.getRotation();
+			detectionDepth = settings.getCollisionDetectionDepth();
 			Function<IIdentificationTarget, String> stringTransformer = settings.getField().stringTransformer();
 			for(ScanTargetReference reference : input) {
 				if(createVisibleFilter.test(reference)) {
@@ -188,11 +263,13 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 				}
 			}
 		}
+		Collections.sort(identifications, (o1, o2) -> Double.compare(o1.x, o2.x));
 		return createVisibleFilter;
 	}
 
 	private static final class TargetLabel {
 
+		// constant values
 		private final boolean isPeakLabel;
 		private final boolean isScanLabel;
 		private final String label;
@@ -200,6 +277,8 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		private final boolean isActive;
 		private final double x;
 		private final double y;
+		// cached values used for calculation
+		private LabelBounds bounds;
 
 		public TargetLabel(String label, String id, boolean isPeakLabel, boolean isScanLabel, boolean isActive, double x, double y) {
 			this.label = label;
@@ -209,6 +288,154 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 			this.isActive = isActive;
 			this.x = x;
 			this.y = y;
+		}
+	}
+
+	private final static class LabelBounds {
+
+		private final float[] pointArray = new float[10];
+		private final int[] transformedPoints = new int[10];
+		private final int width;
+		private final int height;
+		private final GC gc;
+		private Region region;
+		private int x;
+		private int y;
+
+		public LabelBounds(GC gc, TargetLabel label) {
+			this.gc = gc;
+			Point labelSize = gc.textExtent(label.label);
+			width = labelSize.x;
+			height = labelSize.y;
+		}
+
+		public boolean intersects(LabelBounds other) {
+
+			if(other != null && other.region != null) {
+				for(int i = 0; i < transformedPoints.length; i += 2) {
+					if(other.region.contains(transformedPoints[i], transformedPoints[i + 1]) || region.contains(other.transformedPoints[i], other.transformedPoints[i + 1])) {
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+
+		public void dispose() {
+
+			if(region != null) {
+				region.dispose();
+			}
+			region = null;
+		}
+
+		public void setTransform(Transform transform) {
+
+			// p0
+			pointArray[0] = x;
+			pointArray[1] = y;
+			// p1
+			pointArray[2] = x + width;
+			pointArray[3] = y;
+			// p2
+			pointArray[4] = x + width;
+			pointArray[5] = y + height;
+			// p3
+			pointArray[6] = x;
+			pointArray[7] = y + height;
+			// pc
+			pointArray[8] = x;
+			pointArray[9] = (y + height) / 2f;
+			transform.transform(pointArray);
+			for(int i = 0; i < transformedPoints.length; i++) {
+				transformedPoints[i] = Math.round(pointArray[i]);
+			}
+			if(region != null) {
+				region.dispose();
+			}
+			region = new Region(gc.getDevice());
+			region.add(transformedPoints);
+		}
+
+		public double getHeight(int rotation) {
+
+			double rad = Math.toRadians(rotation);
+			return Math.cos(rad) * height + Math.sin(rad) * width;
+		}
+
+		public double getWidth(int rotation) {
+
+			double rad = Math.toRadians(rotation);
+			return Math.cos(rad) * width + Math.sin(rad) * height;
+		}
+
+		public int getCx() {
+
+			return transformedPoints[8];
+		}
+
+		public int getCy() {
+
+			return transformedPoints[9];
+		}
+
+		public int getTopX() {
+
+			return transformedPoints[2];
+		}
+
+		public int getTopY() {
+
+			return transformedPoints[3];
+		}
+
+		public void paintBounds() {
+
+			gc.setTransform(null);
+			Color old_fg = gc.getForeground();
+			Font old_font = gc.getFont();
+			try {
+				Font font = new Font(gc.getDevice(), PreferenceConstants.DEF_CHROMATOGRAM_PEAK_LABEL_FONT_NAME, 8, PreferenceConstants.DEF_CHROMATOGRAM_PEAK_LABEL_FONT_STYLE);
+				gc.setFont(font);
+				gc.setLineStyle(SWT.LINE_DASH);
+				gc.drawPolygon(transformedPoints);
+				paintPoint(0, SWT.COLOR_BLUE);
+				paintPoint(1, SWT.COLOR_RED);
+				paintPoint(2, SWT.COLOR_GREEN);
+				paintPoint(3, SWT.COLOR_GRAY);
+				paintPoint(4, SWT.COLOR_BLACK);
+				font.dispose();
+			} finally {
+				gc.setFont(old_font);
+				gc.setForeground(old_fg);
+			}
+		}
+
+		private void paintPoint(int p, int color) {
+
+			int i = p * 2;
+			int x = transformedPoints[i];
+			int y = transformedPoints[i + 1];
+			int lw = 5;
+			gc.setForeground(gc.getDevice().getSystemColor(color));
+			String string;
+			if(p == 4) {
+				string = "pc";
+			} else {
+				string = "p" + p;
+			}
+			Point s = gc.stringExtent(string);
+			if(p == 0) {
+				gc.drawString(string, x - s.x - 5, y - s.y - 5, true);
+			} else if(p == 1) {
+				gc.drawString(string, x, y - s.y - 5, true);
+			} else if(p == 2) {
+				gc.drawString(string, x, y, true);
+			} else {
+				gc.drawString(string, x - s.x, y, true);
+			}
+			gc.drawLine(x + lw, y + lw, x - lw, y - lw);
+			gc.drawLine(x - lw, y + lw, x + lw, y - lw);
 		}
 	}
 

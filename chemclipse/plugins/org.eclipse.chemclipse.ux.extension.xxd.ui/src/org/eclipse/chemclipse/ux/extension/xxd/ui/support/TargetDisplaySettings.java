@@ -77,6 +77,10 @@ public interface TargetDisplaySettings {
 
 	int getRotation();
 
+	int getCollisionDetectionDepth();
+
+	void setCollisionDetectionDepth(int depth);
+
 	/**
 	 * Sets the rotation angel of the labels in degree
 	 * 
