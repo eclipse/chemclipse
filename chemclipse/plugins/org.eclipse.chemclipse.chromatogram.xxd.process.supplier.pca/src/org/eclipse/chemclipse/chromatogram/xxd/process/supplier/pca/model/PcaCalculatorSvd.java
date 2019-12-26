@@ -20,8 +20,10 @@ import org.ejml.ops.SingularOps;
 
 public class PcaCalculatorSvd extends AbstractMultivariateCalculator {
 
-	public PcaCalculatorSvd(int numObs, int numVars, int numComps) throws MathIllegalArgumentException {
+	public PcaCalculatorSvd(int numObs, int numVars, int numComps) throws MathIllegalArgumentException {	
 		super(numObs, numVars, numComps);
+		DenseMatrix64F emptyLoadings = new DenseMatrix64F(1,numVars);
+		setLoadings(emptyLoadings);
 	}
 
 	@Override
