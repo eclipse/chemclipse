@@ -49,6 +49,7 @@ import org.eclipse.swtchart.ISeries;
 public class TargetReferenceLabelMarker implements ICustomPaintListener {
 
 	private static final boolean DEBUG = false;
+	private static final boolean DEBUG_FENCES = false;
 	private final int offset;
 	private static final int NO_ALPHA = 255;
 	private final List<TargetLabel> identifications = new ArrayList<>();
@@ -158,20 +159,26 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 							}
 							// first guess is to move the label up
 							transform.identity();
-							int yoffset = (int)Math.rint(offset + lastReference.bounds.offsetY(reference.bounds) + (reference.bounds.getCy() - lastReference.bounds.getCy()));
+							float yoffset = lastReference.bounds.offsetY(reference.bounds);
 							transform.translate(Math.max(x, lastReference.bounds.getCx()) + offset, y - yoffset);
 							transform.rotate(-rotation);
 							transform.translate(0, -h / 2);
 							reference.bounds.setTransform(transform);
 							// check if the label is not cut of
 							if(!clipping.contains(Math.round(reference.bounds.getTopX()), Math.round(reference.bounds.getTopY()))) {
+								// reset values
+								transform.identity();
+								transform.translate(x, y - offset);
+								transform.rotate(-rotation);
+								transform.translate(0, -h / 2);
+								reference.bounds.setTransform(transform);
 								// then move it to the right... (might still be cut of but that is the default behavior of current charting)
 								if(DEBUG) {
 									System.out.println("label " + label + " overflows");
 								}
+								float xoffset = lastReference.bounds.offsetX(reference.bounds);
 								transform.identity();
-								int xoffset = (int)Math.rint(offset + lastReference.bounds.getWidth(rotation));
-								transform.translate(lastReference.bounds.getCx() + xoffset, y - 2 * offset);
+								transform.translate(x + xoffset, y - offset);
 								transform.rotate(-rotation);
 								transform.translate(0, -h / 2);
 								reference.bounds.setTransform(transform);
@@ -365,12 +372,6 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 			region.add(transformedPoints);
 		}
 
-		public double getWidth(int rotation) {
-
-			double rad = Math.toRadians(rotation);
-			return Math.cos(rad) * width + Math.sin(rad) * height;
-		}
-
 		public float getCx() {
 
 			return pointArray[8];
@@ -401,10 +402,46 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 			return pointArray[7];
 		}
 
+		public float getRightX() {
+
+			return pointArray[4];
+		}
+
+		public float getLeftX() {
+
+			return pointArray[0];
+		}
+
+		public float getLeftY() {
+
+			return pointArray[1];
+		}
+
+		public float offsetX(LabelBounds other) {
+
+			float w;
+			if(transformedPoints[1] == transformedPoints[3] || transformedPoints[0] == transformedPoints[2]) {
+				w = getRightX();
+			} else {
+				float x1 = pointArray[6];
+				float y1 = pointArray[7];
+				float x2 = pointArray[4];
+				float y2 = pointArray[5];
+				float dx = x2 - x1;
+				float m = (y2 - y1) / dx;
+				float b = (x2 * y1 - x1 * y2) / dx;
+				w = Math.min((other.getLeftY() - b) / m, getRightX());
+			}
+			if(DEBUG) {
+				System.out.println("w=" + w + " rx=" + getRightX() + ", olx=" + other.getLeftX());
+			}
+			return w - other.getLeftX();
+		}
+
 		public float offsetY(LabelBounds other) {
 
 			float h;
-			if(other.getCx() > getTopX() || Float.compare(transformedPoints[0], transformedPoints[2]) == 0) {
+			if(other.getCx() > getTopX() || transformedPoints[0] == transformedPoints[2]) {
 				h = getTopY();
 			} else {
 				float x = other.getBottomX();
@@ -413,12 +450,14 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 				float x2 = pointArray[2];
 				float y2 = pointArray[3];
 				float dx = x2 - x1;
-				h = Math.min(Math.max(((y2 - y1) / dx) * x + (x2 * y1 - x1 * y2) / dx, getTopY()), getBottomY());
+				float m = (y2 - y1) / dx;
+				float b = (x2 * y1 - x1 * y2) / dx;
+				h = Math.min(Math.max(m * x + b, getTopY()), getBottomY());
 			}
 			if(DEBUG) {
 				System.out.println("h=" + h + ", by = " + getBottomY());
 			}
-			return getBottomY() - h;
+			return getBottomY() - h + (other.getCy() - getCy());
 		}
 
 		public void paintBounds() {
@@ -437,6 +476,51 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 				paintPoint(3, SWT.COLOR_GRAY);
 				paintPoint(4, SWT.COLOR_BLACK);
 				gc.setLineStyle(SWT.LINE_SOLID);
+				if(DEBUG_FENCES) {
+					Path path = new Path(gc.getDevice());
+					int sx = transformedPoints[0] - 100;
+					for(int x = sx; x < transformedPoints[2] + 100; x += 10) {
+						float x1 = pointArray[4];
+						float y1 = pointArray[5];
+						float x2 = pointArray[6];
+						float y2 = pointArray[7];
+						float dx = x2 - x1;
+						float m = (y2 - y1) / dx;
+						float b = (x2 * y1 - x1 * y2) / dx;
+						float y = m * x + b;
+						System.out.println("f(" + x + ")=" + y);
+						if(sx == x) {
+							path.moveTo(x, y);
+						} else {
+							path.lineTo(x, y);
+						}
+						gc.drawLine(x, (int)y - 10, x, (int)y);
+					}
+					gc.drawPath(path);
+					path.dispose();
+				}
+				if(DEBUG_FENCES) {
+					Path path = new Path(gc.getDevice());
+					int sx = transformedPoints[0] - 100;
+					for(int x = sx; x < transformedPoints[2] + 100; x += 10) {
+						float x1 = pointArray[4];
+						float y1 = pointArray[5];
+						float x2 = pointArray[6];
+						float y2 = pointArray[7];
+						float dx = x2 - x1;
+						float m = (y2 - y1) / dx;
+						float b = (x2 * y1 - x1 * y2) / dx;
+						float h = Math.min(Math.max(m * x + b, getTopY()), getBottomY());
+						if(x == sx) {
+							path.moveTo(x, h);
+						} else {
+							path.lineTo(x, h);
+						}
+						gc.drawLine(x, (int)getBottomY(), x, (int)h);
+					}
+					gc.drawPath(path);
+					path.dispose();
+				}
 				font.dispose();
 			} finally {
 				gc.setFont(old_font);
