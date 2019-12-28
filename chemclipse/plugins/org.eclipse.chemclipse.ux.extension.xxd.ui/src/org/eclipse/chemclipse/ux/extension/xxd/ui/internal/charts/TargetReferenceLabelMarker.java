@@ -137,12 +137,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 				}
 				reference.bounds = new LabelBounds(gc, reference);
 				String label = reference.label;
-				int h = reference.bounds.height;
-				transform.identity();
-				transform.translate(x, y - offset);
-				transform.rotate(-rotation);
-				transform.translate(0, -h / 2);
-				reference.bounds.setTransform(transform);
+				setTransform(transform, x, y, reference);
 				if(reference.isActive) {
 					gc.setForeground(activeColor);
 					gc.setBackground(activeColor);
@@ -158,32 +153,22 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 								System.out.println("label " + label + " intersects with previous label " + lastReference.label);
 							}
 							// first guess is to move the label up
-							transform.identity();
 							float yoffset = lastReference.bounds.offsetY(reference.bounds);
-							transform.translate(Math.max(x, lastReference.bounds.getCx()) + offset, y - yoffset);
-							transform.rotate(-rotation);
-							transform.translate(0, -h / 2);
-							reference.bounds.setTransform(transform);
+							setTransform(transform, Math.max(x, lastReference.bounds.getCx()) + offset, y - yoffset - offset, reference);
 							// check if the label is not cut of
-							if(!clipping.contains(Math.round(reference.bounds.getTopX()), Math.round(reference.bounds.getTopY()))) {
+							if(clipping.contains(Math.round(reference.bounds.getTopX()), Math.round(reference.bounds.getTopY()))) {
+								drawHandle(gc, reference, x, y, true);
+							} else {
 								// reset values
-								transform.identity();
-								transform.translate(x, y - offset);
-								transform.rotate(-rotation);
-								transform.translate(0, -h / 2);
-								reference.bounds.setTransform(transform);
+								setTransform(transform, x, y, reference);
 								// then move it to the right... (might still be cut of but that is the default behavior of current charting)
 								if(DEBUG) {
 									System.out.println("label " + label + " overflows");
 								}
 								float xoffset = lastReference.bounds.offsetX(reference.bounds);
-								transform.identity();
-								transform.translate(x + xoffset, y - offset);
-								transform.rotate(-rotation);
-								transform.translate(0, -h / 2);
-								reference.bounds.setTransform(transform);
+								setTransform(transform, x + xoffset + offset, y, reference);
+								drawHandle(gc, reference, x, y, false);
 							}
-							drawHandle(gc, reference, x, y, offset);
 						} else {
 							if(DEBUG) {
 								System.out.println("label " + label + " do not intersect with previous label " + lastReference.label);
@@ -230,15 +215,33 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		}
 	}
 
-	private static void drawHandle(GC gc, TargetLabel reference, int x, int y, int offset) {
+	private int setTransform(Transform transform, float x, float y, TargetLabel reference) {
+
+		int h = reference.bounds.height;
+		transform.identity();
+		transform.translate(x, y - offset);
+		transform.rotate(-rotation);
+		transform.translate(0, -h / 2);
+		reference.bounds.setTransform(transform);
+		return h;
+	}
+
+	private void drawHandle(GC gc, TargetLabel reference, int x, int y, boolean upsideDown) {
 
 		gc.setTransform(null);
 		float cx = reference.bounds.getCx();
 		float cy = reference.bounds.getCy();
-		float dx = (cx - x) / 2;
-		float dy = offset / 2;
 		gc.setLineStyle(SWT.LINE_DASHDOT);
 		Path path = new Path(gc.getDevice());
+		float dx;
+		float dy;
+		if(upsideDown) {
+			dx = (cx - x) / 2;
+			dy = offset / 2;
+		} else {
+			dy = (y - cy) / 2;
+			dx = offset / 2;
+		}
 		path.moveTo(x, y);
 		path.lineTo(x + dx, y - dy);
 		path.lineTo(cx - dx, cy + dy);
