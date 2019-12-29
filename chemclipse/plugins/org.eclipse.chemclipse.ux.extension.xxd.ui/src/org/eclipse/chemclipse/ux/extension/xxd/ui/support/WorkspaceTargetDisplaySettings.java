@@ -45,27 +45,6 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
 		return systemSettings != null && node.getBoolean(KEY_SYSTEM_SETTINGS, true);
 	}
 
-	public void setUseSystemSettings(boolean useSystemSettings) {
-
-		node.putBoolean(KEY_SYSTEM_SETTINGS, useSystemSettings);
-	}
-
-	public TargetDisplaySettings getSystemSettings() {
-
-		return systemSettings;
-	}
-
-	public TargetDisplaySettings getUserSettings() {
-
-		if(systemSettings == null) {
-			return this;
-		}
-		if(userSettings == null) {
-			userSettings = new WorkspaceTargetDisplaySettings(node, null);
-		}
-		return userSettings;
-	}
-
 	@Override
 	public boolean isShowPeakLabels() {
 
@@ -97,6 +76,22 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
 		return LibraryField.NAME;
 	}
 
+	public TargetDisplaySettings getSystemSettings() {
+
+		return systemSettings;
+	}
+
+	public TargetDisplaySettings getUserSettings() {
+
+		if(systemSettings == null) {
+			return this;
+		}
+		if(userSettings == null) {
+			userSettings = new WorkspaceTargetDisplaySettings(node, null);
+		}
+		return userSettings;
+	}
+
 	@Override
 	public boolean isVisible(TargetReference reference) {
 
@@ -106,27 +101,40 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
 		return node.getBoolean(reference.getID(), true);
 	}
 
-	public static String getID(IIdentificationTarget target, LibraryField field) {
+	@Override
+	public int getRotation() {
 
-		if(target != null) {
-			StringBuilder sb = new StringBuilder("IdentificationTarget.");
-			sb.append(field.name());
-			sb.append(".");
-			sb.append(field.stringTransformer().apply(target));
-			ILibraryInformation information = target.getLibraryInformation();
-			if(information != null) {
-				sb.append("@");
-				sb.append(information.getRetentionTime());
-			}
-			return sb.toString().trim();
+		if(isUseSystemSettings()) {
+			return systemSettings.getRotation();
 		}
-		return null;
+		return node.getInt(PreferenceConstants.P_PEAK_LABELS_ROTATION, PreferenceConstants.DEF_PEAK_LABELS_ROTATION);
+	}
+
+	@Override
+	public int getCollisionDetectionDepth() {
+
+		if(isUseSystemSettings()) {
+			return systemSettings.getCollisionDetectionDepth();
+		}
+		return node.getInt(PreferenceConstants.P_PEAK_LABELS_COLLISION_DETECTION_DEPTH, PreferenceConstants.DEF_PEAK_LABELS_COLLISION_DETECTION_DEPTH);
+	}
+
+	@Override
+	public void setCollisionDetectionDepth(int depth) {
+
+		node.putInt(PreferenceConstants.P_PEAK_LABELS_COLLISION_DETECTION_DEPTH, depth);
 	}
 
 	@Override
 	public void setShowPeakLabels(boolean showPeakLabels) {
 
 		node.putBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_PEAK_LABELS, showPeakLabels);
+	}
+
+	@Override
+	public void setRotation(int degree) {
+
+		node.putInt(PreferenceConstants.P_PEAK_LABELS_ROTATION, degree);
 	}
 
 	@Override
@@ -139,6 +147,31 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
 	public void setField(LibraryField libraryField) {
 
 		node.put(PreferenceConstants.P_TARGET_LABEL_FIELD, libraryField.name());
+	}
+
+	public void setUseSystemSettings(boolean useSystemSettings) {
+
+		node.putBoolean(KEY_SYSTEM_SETTINGS, useSystemSettings);
+	}
+
+	public void updateVisible(Map<String, Boolean> visibleMap) {
+
+		for(Entry<String, Boolean> entry : visibleMap.entrySet()) {
+			if(entry.getValue()) {
+				node.remove(entry.getKey());
+			} else {
+				node.putBoolean(entry.getKey(), false);
+			}
+		}
+	}
+
+	public void flush() {
+
+		try {
+			node.flush();
+		} catch(BackingStoreException e) {
+			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, WorkspaceTargetDisplaySettings.class.getName(), "Flush WorkspaceTargetDisplaySettings failed!", e));
+		}
 	}
 
 	public static WorkspaceTargetDisplaySettings getWorkspaceSettings(File file, TargetDisplaySettings systemSettings) {
@@ -164,55 +197,28 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
 		return new WorkspaceTargetDisplaySettings(node, systemSettings);
 	}
 
+	public static String getID(IIdentificationTarget target, LibraryField field) {
+
+		if(target != null) {
+			StringBuilder sb = new StringBuilder("IdentificationTarget.");
+			sb.append(field.name());
+			sb.append(".");
+			sb.append(field.stringTransformer().apply(target));
+			ILibraryInformation information = target.getLibraryInformation();
+			if(information != null) {
+				sb.append("@");
+				sb.append(information.getRetentionTime());
+			}
+			return sb.toString().trim();
+		}
+		return null;
+	}
+
 	private static IEclipsePreferences getStorage() {
 
 		if(preferences == null) {
 			preferences = InstanceScope.INSTANCE.getNode(TargetDisplaySettings.class.getName());
 		}
 		return preferences;
-	}
-
-	public void updateVisible(Map<String, Boolean> visibleMap) {
-
-		for(Entry<String, Boolean> entry : visibleMap.entrySet()) {
-			if(entry.getValue()) {
-				node.remove(entry.getKey());
-			} else {
-				node.putBoolean(entry.getKey(), false);
-			}
-		}
-	}
-
-	public void flush() {
-
-		try {
-			node.flush();
-		} catch(BackingStoreException e) {
-			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, WorkspaceTargetDisplaySettings.class.getName(), "Flush WorkspaceTargetDisplaySettings failed!", e));
-		}
-	}
-
-	@Override
-	public void setRotation(int degree) {
-
-		node.putInt(PreferenceConstants.P_PEAK_LABELS_ROTATION, degree);
-	}
-
-	@Override
-	public int getRotation() {
-
-		return node.getInt(PreferenceConstants.P_PEAK_LABELS_ROTATION, PreferenceConstants.DEF_PEAK_LABELS_ROTATION);
-	}
-
-	@Override
-	public int getCollisionDetectionDepth() {
-
-		return node.getInt(PreferenceConstants.P_PEAK_LABELS_COLLISION_DETECTION_DEPTH, PreferenceConstants.DEF_PEAK_LABELS_COLLISION_DETECTION_DEPTH);
-	}
-
-	@Override
-	public void setCollisionDetectionDepth(int depth) {
-
-		node.putInt(PreferenceConstants.P_PEAK_LABELS_COLLISION_DETECTION_DEPTH, depth);
 	}
 }
