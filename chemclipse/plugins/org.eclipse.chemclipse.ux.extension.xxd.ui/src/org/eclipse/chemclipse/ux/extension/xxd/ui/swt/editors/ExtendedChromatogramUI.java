@@ -806,7 +806,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			removeIdentificationLabelMarker(peakLabelMarkerMap, seriesId);
 			if(displaySettings.isShowPeakLabels()) {
 				IPlotArea plotArea = chromatogramChart.getBaseChart().getPlotArea();
-				TargetReferenceLabelMarker peakLabelMarker = new TargetReferenceLabelMarker(ScanTargetReference.getPeakReferences(peaks), displaySettings, symbolSize);
+				TargetReferenceLabelMarker peakLabelMarker = new TargetReferenceLabelMarker(ScanTargetReference.getPeakReferences(peaks), displaySettings, symbolSize * 2);
 				plotArea.addCustomPaintListener(peakLabelMarker);
 				peakLabelMarkerMap.put(seriesId, peakLabelMarker);
 			}
@@ -827,7 +827,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			removeIdentificationLabelMarker(scanLabelMarkerMap, seriesId);
 			if(displaySettings.isShowScanLables()) {
 				IPlotArea plotArea = chromatogramChart.getBaseChart().getPlotArea();
-				TargetReferenceLabelMarker scanLabelMarker = new TargetReferenceLabelMarker(ScanTargetReference.getScanReferences(scans), displaySettings, symbolSize);
+				TargetReferenceLabelMarker scanLabelMarker = new TargetReferenceLabelMarker(ScanTargetReference.getScanReferences(scans), displaySettings, symbolSize * 2);
 				plotArea.addCustomPaintListener(scanLabelMarker);
 				scanLabelMarkerMap.put(seriesId, scanLabelMarker);
 			}
@@ -1235,7 +1235,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 							return o1.getScan().getRetentionTime() - o2.getScan().getRetentionTime();
 						}
 					});
-					TargetReferenceLabelMarker previewMarker = new TargetReferenceLabelMarker(true, PreferenceConstants.DEF_SYMBOL_SIZE);
+					TargetReferenceLabelMarker previewMarker = new TargetReferenceLabelMarker(true, PreferenceConstants.DEF_SYMBOL_SIZE * 2);
 					ChromatogramChart chart = getChromatogramChart();
 					chart.getBaseChart().getPlotArea().addCustomPaintListener(previewMarker);
 					TargetDisplaySettingsWizardListener listener = new TargetDisplaySettingsWizardListener() {
