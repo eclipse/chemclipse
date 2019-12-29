@@ -157,7 +157,7 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 				TargetDisplaySettings settings = PreferenceStoreTargetDisplaySettings.getSettings(preferenceStore);
 				if(settings.isShowPeakLabels()) {
 					IPlotArea plotArea = getBaseChart().getPlotArea();
-					TargetReferenceLabelMarker peakLabelMarker = new TargetReferenceLabelMarker(ScanTargetReference.getPeakReferences(peaks), settings, symbolSize);
+					TargetReferenceLabelMarker peakLabelMarker = new TargetReferenceLabelMarker(ScanTargetReference.getPeakReferences(peaks), settings, symbolSize * 2);
 					plotArea.addCustomPaintListener(peakLabelMarker);
 					peakLabelMarkerMap.put(seriesId, peakLabelMarker);
 				}
