@@ -34,7 +34,7 @@ public interface IChromatogramSelectionProcessSupplier<SettingType> extends IPro
 	 *            the monitor to use for reporting progress or <code>null</code> if no progress is desired
 	 * @return the processed {@link IChromatogramSelection}
 	 */
-	IChromatogramSelection<?, ?> apply(IChromatogramSelection<?, ?> chromatogramSelection, SettingType processSettings, ProcessExecutionContext context);
+	IChromatogramSelection<?, ?> apply(IChromatogramSelection<?, ?> chromatogramSelection, SettingType processSettings, ProcessExecutionContext context) throws InterruptedException;
 
 	static ProcessExecutionConsumer<IChromatogramSelection<?, ?>> createConsumer(IChromatogramSelection<?, ?> chromatogramSelection) {
 

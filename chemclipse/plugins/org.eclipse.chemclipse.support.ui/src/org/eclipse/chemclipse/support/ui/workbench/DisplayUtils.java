@@ -11,7 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.workbench;
 
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.e4.ui.di.UISynchronize;
+import org.eclipse.swt.SWTException;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
@@ -31,6 +37,53 @@ public class DisplayUtils {
 			display = getDisplay();
 		}
 		return display;
+	}
+
+	/**
+	 * Invokes the given action in the user interface thread either directly if the current thread is the user-interface-thread or synchronous if the current thread is an application-thread and returns the result to the caller. If the action throws an exception, it is wrapped in
+	 * 
+	 * @param action
+	 * @return
+	 * @throws InterruptedException
+	 * @throws ExecutionException
+	 */
+	public static <T> T executeInUserInterfaceThread(Callable<T> action) throws InterruptedException, ExecutionException {
+
+		return executeInUserInterfaceThread(new UISynchronize() {
+
+			@Override
+			public void syncExec(Runnable runnable) {
+
+				Display.getDefault().syncExec(runnable);
+			}
+
+			@Override
+			public void asyncExec(Runnable runnable) {
+
+				Display.getDefault().asyncExec(runnable);
+			}
+		}, action);
+	}
+
+	public static <T> T executeInUserInterfaceThread(UISynchronize ui, Callable<T> action) throws InterruptedException, ExecutionException {
+
+		if(Display.findDisplay(Thread.currentThread()) == null) {
+			// non ui thread!
+			FutureTask<T> task = new FutureTask<>(action);
+			try {
+				ui.syncExec(task);
+			} catch(SWTException e) {
+				throw new ExecutionException(e.getCause());
+			}
+			return task.get();
+		} else {
+			// ui thread
+			try {
+				return action.call();
+			} catch(Exception e) {
+				throw new ExecutionException(e);
+			}
+		}
 	}
 
 	public static Display getDisplay() {
