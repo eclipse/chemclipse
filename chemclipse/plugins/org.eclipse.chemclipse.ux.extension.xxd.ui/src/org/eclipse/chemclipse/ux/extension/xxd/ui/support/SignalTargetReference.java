@@ -18,34 +18,37 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.core.ISignal;
+import org.eclipse.chemclipse.model.core.ITargetSupplier;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 
-public class ScanTargetReference implements TargetReference {
+public class SignalTargetReference implements TargetReference {
 
 	public static final String TYPE_SCAN = "Scan";
 	public static final String TYPE_PEAK = "Peak";
 	private static final NumberFormat FORMAT = new DecimalFormat("0.00", new DecimalFormatSymbols(Locale.ENGLISH));
-	private final IScan scan;
+	private final ISignal signal;
 	private final String name;
 	private final String id;
 	private final String type;
+	private final ITargetSupplier supplier;
 
-	public ScanTargetReference(IScan scan, String type) {
-		this.scan = scan;
+	public <X extends ISignal & ITargetSupplier> SignalTargetReference(X item, String type, String name) {
+		this.signal = item;
+		this.supplier = item;
 		this.type = type;
-		name = FORMAT.format(scan.getRetentionTime() / (1000d * 60d));
-		id = type + "." + String.valueOf(scan.getRetentionTime());
+		this.name = name;
+		id = type + "." + name;
 	}
 
 	@Override
 	public Set<IIdentificationTarget> getTargets() {
 
-		return scan.getTargets();
+		return supplier.getTargets();
 	}
 
 	@Override
@@ -66,23 +69,30 @@ public class ScanTargetReference implements TargetReference {
 		return id;
 	}
 
-	public static List<ScanTargetReference> getScanReferences(List<? extends IScan> items) {
+	public ISignal getSignal() {
 
-		return getReferences(items, TYPE_SCAN, scan -> scan);
+		return signal;
 	}
 
-	public static List<ScanTargetReference> getPeakReferences(List<? extends IPeak> items) {
+	public static List<SignalTargetReference> getScanReferences(List<? extends IScan> items) {
 
-		return getReferences(items, TYPE_PEAK, peak -> peak.getPeakModel().getPeakMaximum());
-	}
-
-	public static <T> List<ScanTargetReference> getReferences(List<T> items, String type, Function<T, IScan> conversionFunction) {
-
-		List<ScanTargetReference> list = new ArrayList<>();
-		for(T item : items) {
-			IScan scan = conversionFunction.apply(item);
+		List<SignalTargetReference> list = new ArrayList<>();
+		for(IScan scan : items) {
 			if(scan != null && !scan.getTargets().isEmpty()) {
-				list.add(new ScanTargetReference(scan, type));
+				String name = FORMAT.format(scan.getRetentionTime() / (1000d * 60d));
+				list.add(new SignalTargetReference(scan, TYPE_SCAN, name));
+			}
+		}
+		return list;
+	}
+
+	public static List<SignalTargetReference> getPeakReferences(List<? extends IPeak> items) {
+
+		List<SignalTargetReference> list = new ArrayList<>();
+		for(IPeak peak : items) {
+			if(peak != null && !peak.getTargets().isEmpty()) {
+				String name = FORMAT.format(peak.getPeakModel().getRetentionTimeAtPeakMaximum() / (1000d * 60d));
+				list.add(new SignalTargetReference(peak, TYPE_PEAK, name));
 			}
 		}
 		return list;
@@ -108,10 +118,5 @@ public class ScanTargetReference implements TargetReference {
 				return true;
 			}
 		}.and(settings::isVisible);
-	}
-
-	public IScan getScan() {
-
-		return scan;
 	}
 }

@@ -91,7 +91,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChro
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.PreferenceStoreTargetDisplaySettings;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.ScanTargetReference;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.SignalTargetReference;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetDisplaySettings;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetReference;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.WorkspaceTargetDisplaySettings;
@@ -806,7 +806,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			removeIdentificationLabelMarker(peakLabelMarkerMap, seriesId);
 			if(displaySettings.isShowPeakLabels()) {
 				IPlotArea plotArea = chromatogramChart.getBaseChart().getPlotArea();
-				TargetReferenceLabelMarker peakLabelMarker = new TargetReferenceLabelMarker(ScanTargetReference.getPeakReferences(peaks), displaySettings, symbolSize * 2);
+				TargetReferenceLabelMarker peakLabelMarker = new TargetReferenceLabelMarker(SignalTargetReference.getPeakReferences(peaks), displaySettings, symbolSize * 2);
 				plotArea.addCustomPaintListener(peakLabelMarker);
 				peakLabelMarkerMap.put(seriesId, peakLabelMarker);
 			}
@@ -827,7 +827,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			removeIdentificationLabelMarker(scanLabelMarkerMap, seriesId);
 			if(displaySettings.isShowScanLables()) {
 				IPlotArea plotArea = chromatogramChart.getBaseChart().getPlotArea();
-				TargetReferenceLabelMarker scanLabelMarker = new TargetReferenceLabelMarker(ScanTargetReference.getScanReferences(scans), displaySettings, symbolSize * 2);
+				TargetReferenceLabelMarker scanLabelMarker = new TargetReferenceLabelMarker(SignalTargetReference.getScanReferences(scans), displaySettings, symbolSize * 2);
 				plotArea.addCustomPaintListener(scanLabelMarker);
 				scanLabelMarkerMap.put(seriesId, scanLabelMarker);
 			}
@@ -1224,15 +1224,15 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			public void runWithEvent(Event event) {
 
 				if(chromatogramSelection != null) {
-					List<ScanTargetReference> identifications = new ArrayList<>();
-					identifications.addAll(ScanTargetReference.getPeakReferences(chromatogramSelection.getChromatogram().getPeaks()));
-					identifications.addAll(ScanTargetReference.getScanReferences(ChromatogramDataSupport.getIdentifiedScans(chromatogramSelection.getChromatogram())));
-					Collections.sort(identifications, new Comparator<ScanTargetReference>() {
+					List<SignalTargetReference> identifications = new ArrayList<>();
+					identifications.addAll(SignalTargetReference.getPeakReferences(chromatogramSelection.getChromatogram().getPeaks()));
+					identifications.addAll(SignalTargetReference.getScanReferences(ChromatogramDataSupport.getIdentifiedScans(chromatogramSelection.getChromatogram())));
+					Collections.sort(identifications, new Comparator<SignalTargetReference>() {
 
 						@Override
-						public int compare(ScanTargetReference o1, ScanTargetReference o2) {
+						public int compare(SignalTargetReference o1, SignalTargetReference o2) {
 
-							return o1.getScan().getRetentionTime() - o2.getScan().getRetentionTime();
+							return o1.getName().compareToIgnoreCase(o2.getName());
 						}
 					});
 					TargetReferenceLabelMarker previewMarker = new TargetReferenceLabelMarker(true, PreferenceConstants.DEF_SYMBOL_SIZE * 2);
@@ -1267,9 +1267,9 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 							} else {
 								double minRT = Double.NaN;
 								double maxRT = Double.NaN;
-								for(ScanTargetReference scanTargetReference : identifications) {
+								for(SignalTargetReference scanTargetReference : identifications) {
 									if(settingsFilter.test(scanTargetReference) && (activeFilter == null || activeFilter.test(scanTargetReference))) {
-										double rt = scanTargetReference.getScan().getX();
+										double rt = scanTargetReference.getSignal().getX();
 										if(Double.isNaN(minRT) || rt < minRT) {
 											minRT = rt;
 										}

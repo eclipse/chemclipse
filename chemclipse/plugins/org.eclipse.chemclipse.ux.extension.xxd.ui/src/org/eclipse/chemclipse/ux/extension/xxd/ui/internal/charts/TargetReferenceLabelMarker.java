@@ -18,11 +18,11 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.ScanTargetReference;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.SignalTargetReference;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetDisplaySettings;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetReference;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedChromatogramUI;
@@ -67,7 +67,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		this.offset = offset;
 	}
 
-	public TargetReferenceLabelMarker(Collection<? extends ScanTargetReference> references, TargetDisplaySettings settings, int offset) {
+	public TargetReferenceLabelMarker(Collection<? extends SignalTargetReference> references, TargetDisplaySettings settings, int offset) {
 		this(false, offset);
 		setData(references, settings);
 	}
@@ -252,20 +252,20 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		gc.fillOval(x - ow, y - ow, ow * 2, ow * 2);
 	}
 
-	public Predicate<TargetReference> setData(Collection<? extends ScanTargetReference> identifications, TargetDisplaySettings settings) {
+	public Predicate<TargetReference> setData(Collection<? extends SignalTargetReference> identifications, TargetDisplaySettings settings) {
 
 		return setData(identifications, settings, always -> true);
 	}
 
-	public Predicate<TargetReference> setData(Collection<? extends ScanTargetReference> input, TargetDisplaySettings settings, Predicate<TargetReference> activeFilter) {
+	public Predicate<TargetReference> setData(Collection<? extends SignalTargetReference> input, TargetDisplaySettings settings, Predicate<TargetReference> activeFilter) {
 
 		identifications.clear();
-		Predicate<TargetReference> createVisibleFilter = ScanTargetReference.createVisibleFilter(settings);
+		Predicate<TargetReference> createVisibleFilter = SignalTargetReference.createVisibleFilter(settings);
 		if(settings != null) {
 			rotation = settings.getRotation();
 			detectionDepth = settings.getCollisionDetectionDepth();
 			Function<IIdentificationTarget, String> stringTransformer = settings.getField().stringTransformer();
-			for(ScanTargetReference reference : input) {
+			for(SignalTargetReference reference : input) {
 				if(createVisibleFilter.test(reference)) {
 					IIdentificationTarget target = reference.getBestTarget();
 					if(settings.isVisible(reference, target)) {
@@ -273,10 +273,10 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 						if(label == null || label.isEmpty()) {
 							continue;
 						}
-						boolean isPeakLabel = ScanTargetReference.TYPE_PEAK.equals(reference.getType());
-						boolean isScanLabel = ScanTargetReference.TYPE_SCAN.equals(reference.getType());
+						boolean isPeakLabel = SignalTargetReference.TYPE_PEAK.equals(reference.getType());
+						boolean isScanLabel = SignalTargetReference.TYPE_SCAN.equals(reference.getType());
 						boolean isActive = activeFilter == null || activeFilter.test(reference);
-						IScan scan = reference.getScan();
+						ISignal scan = reference.getSignal();
 						TargetLabel targetLabel = new TargetLabel(label, showReferenceId ? reference.getName() : null, isPeakLabel, isScanLabel, isActive, scan.getX(), scan.getY());
 						identifications.add(targetLabel);
 					}

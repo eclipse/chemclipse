@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - add the PeakPostion interface, extract Classifiable interface
+ * Christoph Läubrich - add the PeakPostion interface, extract Classifiable interface, implement ISignal
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.model.support.IIntegrationConstraints;
 
-public interface IPeak extends ITargetSupplier, PeakPosition, Classifiable {
+public interface IPeak extends ITargetSupplier, PeakPosition, Classifiable, ISignal {
 
 	/**
 	 * This comparator compares peaks based on the RT at the maximum of the intensity of the peak model
@@ -263,5 +263,18 @@ public interface IPeak extends ITargetSupplier, PeakPosition, Classifiable {
 
 		IPeakModel peakModel = getPeakModel();
 		return peakModel.getPeakMaximum().getScanNumber() - 1;
+	}
+
+	@Override
+	default double getX() {
+
+		return getPeakModel().getRetentionTimeAtPeakMaximum();
+	}
+
+	@Override
+	default double getY() {
+
+		IPeakModel peakModel = getPeakModel();
+		return peakModel.getPeakAbundance() + peakModel.getBackgroundAbundance();
 	}
 }
