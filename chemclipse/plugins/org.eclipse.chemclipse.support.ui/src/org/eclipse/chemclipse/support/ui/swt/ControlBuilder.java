@@ -80,6 +80,15 @@ public class ControlBuilder {
 		return createContainer(parent, columns, false);
 	}
 
+	public static Composite createDefault(Composite parent, int columns) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setBackgroundMode(SWT.INHERIT_FORCE);
+		GridLayout layout = new GridLayout(columns, false);
+		composite.setLayout(layout);
+		return fill(composite);
+	}
+
 	/**
 	 * Creates a checkbox with the given text and initial selection
 	 * 

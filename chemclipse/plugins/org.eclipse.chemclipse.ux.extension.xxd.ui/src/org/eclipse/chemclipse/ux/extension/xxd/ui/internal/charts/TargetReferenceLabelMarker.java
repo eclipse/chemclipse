@@ -268,18 +268,16 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 			for(SignalTargetReference reference : input) {
 				if(createVisibleFilter.test(reference)) {
 					IIdentificationTarget target = reference.getBestTarget();
-					if(settings.isVisible(reference, target)) {
-						String label = stringTransformer.apply(target);
-						if(label == null || label.isEmpty()) {
-							continue;
-						}
-						boolean isPeakLabel = SignalTargetReference.TYPE_PEAK.equals(reference.getType());
-						boolean isScanLabel = SignalTargetReference.TYPE_SCAN.equals(reference.getType());
-						boolean isActive = activeFilter == null || activeFilter.test(reference);
-						ISignal scan = reference.getSignal();
-						TargetLabel targetLabel = new TargetLabel(label, showReferenceId ? reference.getName() : null, isPeakLabel, isScanLabel, isActive, scan.getX(), scan.getY());
-						identifications.add(targetLabel);
+					String label = stringTransformer.apply(target);
+					if(label == null || label.isEmpty()) {
+						continue;
 					}
+					boolean isPeakLabel = SignalTargetReference.TYPE_PEAK.equals(reference.getType());
+					boolean isScanLabel = SignalTargetReference.TYPE_SCAN.equals(reference.getType());
+					boolean isActive = activeFilter == null || activeFilter.test(reference);
+					ISignal scan = reference.getSignal();
+					TargetLabel targetLabel = new TargetLabel(label, showReferenceId ? reference.getName() : null, isPeakLabel, isScanLabel, isActive, scan.getX(), scan.getY());
+					identifications.add(targetLabel);
 				}
 			}
 		}

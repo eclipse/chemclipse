@@ -103,7 +103,7 @@ public class SignalTargetReference implements TargetReference {
 		if(settings == null) {
 			return always -> true;
 		}
-		return new Predicate<TargetReference>() {
+		Predicate<TargetReference> typePredicate = new Predicate<TargetReference>() {
 
 			@Override
 			public boolean test(TargetReference reference) {
@@ -117,6 +117,11 @@ public class SignalTargetReference implements TargetReference {
 				}
 				return true;
 			}
-		}.and(settings::isVisible);
+		};
+		if(settings instanceof VisibilityTargetDisplaySettings) {
+			VisibilityTargetDisplaySettings visibility = (VisibilityTargetDisplaySettings)settings;
+			return typePredicate.and(visibility::isVisible);
+		}
+		return typePredicate;
 	}
 }

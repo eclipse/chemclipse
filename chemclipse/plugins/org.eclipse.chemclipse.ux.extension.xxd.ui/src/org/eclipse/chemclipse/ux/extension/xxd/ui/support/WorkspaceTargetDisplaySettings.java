@@ -13,8 +13,8 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.support;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
@@ -27,7 +27,7 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
-public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
+public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings, SelectableTargetDisplaySettings, VisibilityTargetDisplaySettings {
 
 	private static final String KEY_SYSTEM_SETTINGS = "useSystemSettings";
 	private static IEclipsePreferences preferences;
@@ -40,7 +40,7 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
 		this.systemSettings = systemSettings;
 	}
 
-	public boolean isUseSystemSettings() {
+	private boolean isUseSystemSettings() {
 
 		return systemSettings != null && node.getBoolean(KEY_SYSTEM_SETTINGS, true);
 	}
@@ -76,12 +76,12 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
 		return LibraryField.NAME;
 	}
 
-	public TargetDisplaySettings getSystemSettings() {
+	private TargetDisplaySettings getSystemSettings() {
 
 		return systemSettings;
 	}
 
-	public TargetDisplaySettings getUserSettings() {
+	private TargetDisplaySettings getUserSettings() {
 
 		if(systemSettings == null) {
 			return this;
@@ -96,7 +96,14 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
 	public boolean isVisible(TargetReference reference) {
 
 		if(isUseSystemSettings()) {
-			return systemSettings.isVisible(reference);
+			if(systemSettings instanceof VisibilityTargetDisplaySettings) {
+				return ((VisibilityTargetDisplaySettings)systemSettings).isVisible(reference);
+			} else {
+				return true;
+			}
+		}
+		if(reference == null) {
+			return false;
 		}
 		return node.getBoolean(reference.getID(), true);
 	}
@@ -149,19 +156,18 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
 		node.put(PreferenceConstants.P_TARGET_LABEL_FIELD, libraryField.name());
 	}
 
-	public void setUseSystemSettings(boolean useSystemSettings) {
+	private void setUseSystemSettings(boolean useSystemSettings) {
 
 		node.putBoolean(KEY_SYSTEM_SETTINGS, useSystemSettings);
 	}
 
-	public void updateVisible(Map<String, Boolean> visibleMap) {
+	@Override
+	public void setVisible(TargetReference reference, boolean visible) {
 
-		for(Entry<String, Boolean> entry : visibleMap.entrySet()) {
-			if(entry.getValue()) {
-				node.remove(entry.getKey());
-			} else {
-				node.putBoolean(entry.getKey(), false);
-			}
+		if(visible) {
+			node.remove(reference.getID());
+		} else {
+			node.putBoolean(reference.getID(), false);
 		}
 	}
 
@@ -220,5 +226,30 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
 			preferences = InstanceScope.INSTANCE.getNode(TargetDisplaySettings.class.getName());
 		}
 		return preferences;
+	}
+
+	@Override
+	public Map<String, TargetDisplaySettings> getSettings() {
+
+		LinkedHashMap<String, TargetDisplaySettings> map = new LinkedHashMap<>(2);
+		map.put("System Defaults", getSystemSettings());
+		map.put("Individual Settings", getUserSettings());
+		return map;
+	}
+
+	@Override
+	public boolean isSelectedSettings(TargetDisplaySettings settings) {
+
+		if(isUseSystemSettings()) {
+			return settings == getSystemSettings();
+		} else {
+			return settings == getUserSettings();
+		}
+	}
+
+	@Override
+	public void setSelectedSettings(TargetDisplaySettings settings) {
+
+		setUseSystemSettings(settings == getSystemSettings());
 	}
 }
