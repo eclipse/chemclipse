@@ -109,6 +109,14 @@ public class PeakDetectorCSD extends BasePeakDetector implements IPeakDetectorCS
 	 * @param chromatogramSelection
 	 * @throws ValueMustNotBeNullException
 	 */
+	public List<IChromatogramPeakCSD> detectPeaks(IChromatogramSelectionCSD chromatogramSelection, PeakDetectorSettingsCSD peakDetectorSettings, IProgressMonitor monitor) {
+
+		return detectPeaks(chromatogramSelection, peakDetectorSettings, null, monitor);
+	}
+
+	/**
+	 * Additionally, noise segments are used if not null.
+	 */
 	public List<IChromatogramPeakCSD> detectPeaks(IChromatogramSelectionCSD chromatogramSelection, PeakDetectorSettingsCSD peakDetectorSettings, List<NoiseSegment> noiseSegments, IProgressMonitor monitor) {
 
 		Threshold threshold = peakDetectorSettings.getThreshold();

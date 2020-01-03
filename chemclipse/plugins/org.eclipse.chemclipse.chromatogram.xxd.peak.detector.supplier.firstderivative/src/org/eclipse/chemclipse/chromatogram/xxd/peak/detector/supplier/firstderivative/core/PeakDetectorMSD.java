@@ -134,6 +134,9 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 		return detectPeaks(chromatogramSelection, peakDetectorSettings, null, monitor);
 	}
 
+	/**
+	 * Additionally, noise segments are used if not null.
+	 */
 	public List<IChromatogramPeakMSD> detectPeaks(IChromatogramSelectionMSD chromatogramSelection, PeakDetectorSettingsMSD peakDetectorSettings, List<NoiseSegment> noiseSegments, IProgressMonitor monitor) {
 
 		IMarkedIons ions = PeakDetectorSettingsMSD.getFilterIons(peakDetectorSettings);
