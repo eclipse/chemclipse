@@ -31,6 +31,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDat
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.TargetDisplaySettingsWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.TargetDisplaySettingsWizardListener;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swtchart.Range;
 import org.eclipse.swtchart.extensions.core.IExtendedChart;
@@ -38,12 +39,19 @@ import org.eclipse.swtchart.extensions.core.IScrollableChart;
 
 public class TargetLabelEditAction extends Action {
 
+	private static final boolean DEF_SHOW_PREVIEW = false;
+	private static final String P_SHOW_PREVIEW = "TargetLabelEditAction.showPreview";
 	private LabelChart labelChart;
+	private IPreferenceStore preferenceStore;
 
-	public TargetLabelEditAction(LabelChart labelChart) {
+	public TargetLabelEditAction(LabelChart labelChart, IPreferenceStore preferenceStore) {
 		super("Labels", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_LABELS, IApplicationImage.SIZE_16x16));
 		this.labelChart = labelChart;
+		this.preferenceStore = preferenceStore;
 		setToolTipText("Mange the labels to display in the chromatogram");
+		if(preferenceStore != null) {
+			preferenceStore.setDefault(P_SHOW_PREVIEW, DEF_SHOW_PREVIEW);
+		}
 	}
 
 	@Override
@@ -68,6 +76,7 @@ public class TargetLabelEditAction extends Action {
 			TargetDisplaySettingsWizardListener listener = new TargetDisplaySettingsWizardListener() {
 
 				boolean previewDisabled = true;
+				private boolean showPreview;
 
 				@Override
 				public String getIDLabel() {
@@ -112,6 +121,24 @@ public class TargetLabelEditAction extends Action {
 						chart.setRange(IExtendedChart.X_AXIS, new Range(Math.max(minRT - windowOffset, absStart), Math.min(absStop, maxRT + windowOffset)));
 					}
 					labelChart.redraw();
+				}
+
+				@Override
+				public boolean isShowPreview() {
+
+					if(preferenceStore != null) {
+						return preferenceStore.getBoolean(P_SHOW_PREVIEW);
+					}
+					return showPreview;
+				}
+
+				@Override
+				public void setShowPreview(boolean preview) {
+
+					if(preferenceStore != null) {
+						preferenceStore.setValue(P_SHOW_PREVIEW, preview);
+					}
+					this.showPreview = preview;
 				}
 			};
 			boolean settingsChanged = TargetDisplaySettingsWizard.openWizard(chart.getBaseChart().getShell(), identifications, listener, labelChart.getTargetSettings());

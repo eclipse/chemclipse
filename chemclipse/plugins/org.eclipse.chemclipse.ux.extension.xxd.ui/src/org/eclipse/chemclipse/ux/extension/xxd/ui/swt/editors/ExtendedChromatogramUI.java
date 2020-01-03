@@ -1253,7 +1253,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 				return ExtendedChromatogramUI.this.getChromatogramChart();
 			}
-		});
+		}, preferenceStore);
 	}
 
 	private IAction createToggleToolbarAction(String name, String tooltip, String image, String toolbar) {

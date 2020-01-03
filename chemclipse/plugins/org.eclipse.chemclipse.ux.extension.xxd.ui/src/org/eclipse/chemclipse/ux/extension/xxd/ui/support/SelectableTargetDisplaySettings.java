@@ -11,13 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.support;
 
+import java.util.Map;
+
 public interface SelectableTargetDisplaySettings extends TargetDisplaySettings {
 
-	boolean isUseSystemSettings();
+	Map<String, TargetDisplaySettings> getSettings();
 
-	TargetDisplaySettings getSystemSettings();
+	void setSelectedSettings(TargetDisplaySettings settings);
 
-	TargetDisplaySettings getUserSettings();
-
-	void setUseSystemSettings(boolean useSystemSettings);
+	boolean isSelectedSettings(TargetDisplaySettings settings);
 }

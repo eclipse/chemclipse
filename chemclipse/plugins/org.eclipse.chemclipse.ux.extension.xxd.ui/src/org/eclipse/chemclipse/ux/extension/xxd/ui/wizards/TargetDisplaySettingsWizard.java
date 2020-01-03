@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.wizards;
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.checkbox;
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createColumn;
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createContainer;
+import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createDefault;
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createLabelContainer;
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createTable;
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.fill;
@@ -23,12 +24,12 @@ import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.label;
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.maximize;
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.radiobutton;
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.separator;
-import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.span;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.function.Predicate;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -75,7 +76,6 @@ import org.eclipse.swt.widgets.Scale;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.ToolBar;
 
 public class TargetDisplaySettingsWizard {
 
@@ -90,13 +90,8 @@ public class TargetDisplaySettingsWizard {
 		wizardDialog.setMinimumPageSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		wizardDialog.setPageSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		if(wizardDialog.open() == Window.OK) {
-			if(page.useSystemSettings) {
-				currentSettings.setUseSystemSettings(true);
-				page.systemSettings.copyTo(currentSettings.getSystemSettings());
-			} else {
-				currentSettings.setUseSystemSettings(false);
-				page.userSettings.copyTo(currentSettings.getUserSettings());
-			}
+			currentSettings.setSelectedSettings(page.selectedSettings.base);
+			page.selectedSettings.copyTo(page.selectedSettings.base);
 			return true;
 		} else {
 			return false;
@@ -112,9 +107,14 @@ public class TargetDisplaySettingsWizard {
 		private final TargetDisplaySettings base;
 		private int rotation;
 		private int depth;
+		private String name;
+		private TargetDisplaySettingsWizardListener settingsListener;
+		public Predicate<TargetReference> predicate = always -> true;
 
-		public WizardTargetDisplaySettings(TargetDisplaySettings base) {
+		public WizardTargetDisplaySettings(TargetDisplaySettings base, String name, TargetDisplaySettingsWizardListener listener) {
 			this.base = base;
+			this.name = name;
+			this.settingsListener = listener;
 			showPeakLabels = base.isShowPeakLabels();
 			showScanLables = base.isShowScanLables();
 			libraryField = base.getField();
@@ -222,14 +222,10 @@ public class TargetDisplaySettingsWizard {
 
 	private static final class TargetDisplaySettingsPage extends WizardPage {
 
-		boolean useSystemSettings;
-		boolean showPreview;
-		final WizardTargetDisplaySettings systemSettings;
-		final WizardTargetDisplaySettings userSettings;
+		WizardTargetDisplaySettings selectedSettings;
+		final WizardTargetDisplaySettings[] wizardSettings;
 		private final Collection<? extends TargetReference> identifications;
-		private TableViewer listUI;
-		private final TargetDisplaySettingsWizardListener listener;
-		private Predicate<TargetReference> predicate;
+		private TargetDisplaySettingsWizardListener listener;
 
 		protected TargetDisplaySettingsPage(Collection<? extends TargetReference> identifications, SelectableTargetDisplaySettings currentSettings, TargetDisplaySettingsWizardListener listener) {
 			super(TargetDisplaySettingsPage.class.getName());
@@ -238,9 +234,16 @@ public class TargetDisplaySettingsWizard {
 			setImageDescriptor(ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_LABELS, IApplicationImage.SIZE_64x64));
 			setTitle("Manage target labels to display");
 			setDescription("Here you can select what target labels should be displayed in the chromatogram");
-			useSystemSettings = currentSettings.isUseSystemSettings();
-			systemSettings = new WizardTargetDisplaySettings(currentSettings.getSystemSettings());
-			userSettings = new WizardTargetDisplaySettings(currentSettings.getUserSettings());
+			Set<Entry<String, TargetDisplaySettings>> entrySet = currentSettings.getSettings().entrySet();
+			wizardSettings = new WizardTargetDisplaySettings[entrySet.size()];
+			int index = 0;
+			for(Entry<String, TargetDisplaySettings> entry : entrySet) {
+				wizardSettings[index] = new WizardTargetDisplaySettings(entry.getValue(), entry.getKey(), listener);
+				if(currentSettings.isSelectedSettings(entry.getValue())) {
+					selectedSettings = wizardSettings[index];
+				}
+				index++;
+			}
 		}
 
 		@Override
@@ -248,47 +251,25 @@ public class TargetDisplaySettingsWizard {
 
 			Composite composite = new Composite(parent, SWT.NONE);
 			composite.setLayout(new GridLayout());
-			Button systemButton = radiobutton(composite, "Use System Settings", useSystemSettings);
-			Composite systemContainer = indentedContainer(composite, 25);
-			Label infoLabel = label("Changes here affect the global defaults and apply if no individual settings are used", systemContainer);
-			BaseTargetSettingEditor systemEditor = new BaseTargetSettingEditor(systemContainer, systemSettings, this);
-			separator(composite);
-			Button userButton = radiobutton(composite, "Use Individual Settings", !useSystemSettings);
-			Composite userContainer = maximize(indentedContainer(composite, 25));
-			BaseTargetSettingEditor userEditor = new BaseTargetSettingEditor(userContainer, userSettings, this);
-			ToolBar toolbar = createToolbar(userContainer);
-			listUI = createTargetTable(userContainer);
-			listUI.setInput(identifications);
-			maximize(listUI.getControl());
-			ISelectionChangedListener comboListener = new ISelectionChangedListener() {
-
-				private LibraryField currentField;
-
-				@Override
-				public void selectionChanged(SelectionChangedEvent event) {
-
-					LibraryField field = userSettings.getField();
-					if(field != currentField && !useSystemSettings) {
-						currentField = field;
-						listUI.refresh();
-						notifyListener();
-					}
-				}
-			};
-			userEditor.fieldComboViewer.addSelectionChangedListener(comboListener);
+			Button[] radioButtons = new Button[wizardSettings.length];
+			TargetSettingEditor[] editors = new TargetSettingEditor[wizardSettings.length];
 			SelectionListener buttonListener = new SelectionListener() {
 
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 
-					useSystemSettings = systemButton.getSelection();
-					infoLabel.setEnabled(useSystemSettings);
-					systemEditor.setEnabled(useSystemSettings);
-					userEditor.setEnabled(!useSystemSettings);
-					comboListener.selectionChanged(null);
-					toolbar.setEnabled(!useSystemSettings);
-					listUI.getControl().setEnabled(!useSystemSettings);
-					notifyListener();
+					for(int i = 0; i < radioButtons.length; i++) {
+						Button radiobutton = radioButtons[i];
+						if(radiobutton.getSelection()) {
+							editors[i].setEnabled(true);
+							if(selectedSettings != wizardSettings[i]) {
+								selectedSettings = wizardSettings[i];
+								notifyListener();
+							}
+						} else {
+							editors[i].setEnabled(false);
+						}
+					}
 				}
 
 				@Override
@@ -296,17 +277,24 @@ public class TargetDisplaySettingsWizard {
 
 				}
 			};
-			systemButton.addSelectionListener(buttonListener);
-			userButton.addSelectionListener(buttonListener);
-			separator(composite);
+			for(int i = 0; i < radioButtons.length; i++) {
+				WizardTargetDisplaySettings settings = wizardSettings[i];
+				if(radioButtons.length > 1) {
+					radioButtons[i] = radiobutton(composite, "Use " + settings.name, settings == selectedSettings);
+					radioButtons[i].addSelectionListener(buttonListener);
+				}
+				editors[i] = new TargetSettingEditor(indentedContainer(composite, 25), settings, this, identifications);
+				separator(composite);
+			}
 			if(listener != null) {
-				Button previewCheckbox = checkbox(composite, "Show preview in editor", showPreview);
+				boolean preview = listener.isShowPreview();
+				Button previewCheckbox = checkbox(composite, "Show preview in editor", preview);
 				previewCheckbox.addSelectionListener(new SelectionListener() {
 
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 
-						showPreview = previewCheckbox.getSelection();
+						listener.setShowPreview(previewCheckbox.getSelection());
 						notifyListener();
 					}
 
@@ -315,6 +303,9 @@ public class TargetDisplaySettingsWizard {
 
 					}
 				});
+				if(preview) {
+					notifyListener();
+				}
 			}
 			buttonListener.widgetSelected(null);
 			setControl(composite);
@@ -323,19 +314,177 @@ public class TargetDisplaySettingsWizard {
 		private void notifyListener() {
 
 			if(listener != null) {
-				if(showPreview) {
-					if(useSystemSettings) {
-						listener.setPreviewSettings(systemSettings, t -> true);
-					} else {
-						listener.setPreviewSettings(userSettings, predicate);
-					}
+				if(listener.isShowPreview()) {
+					listener.setPreviewSettings(selectedSettings, selectedSettings.predicate);
 				} else {
 					listener.setPreviewSettings(null, t -> true);
 				}
 			}
 		}
 
-		private TableViewer createTargetTable(Composite parent) {
+		private static final class TargetSettingEditor {
+
+			private final Button peakLabels;
+			private final Button scanLabels;
+			private final Label fieldLabel;
+			private final ComboViewer fieldComboViewer;
+			private final Label rotationLabel;
+			private final Scale scale;
+			private final Label collisionLabel;
+			private final ComboViewer collisionComboViewer;
+			private TableViewer listUI;
+			private ToolBarManager toolbarManager;
+			private Collection<? extends TargetReference> identifications;
+
+			public TargetSettingEditor(Composite parent, WizardTargetDisplaySettings editorSettings, TargetDisplaySettingsPage page, Collection<? extends TargetReference> identifications) {
+				this.identifications = identifications;
+				Composite showLabelsContainer = createDefault(parent, 7);
+				peakLabels = checkbox(showLabelsContainer, "Show Peak Labels", editorSettings.isShowPeakLabels());
+				peakLabels.addSelectionListener(new SelectionListener() {
+
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+
+						editorSettings.setShowPeakLabels(peakLabels.getSelection());
+						page.notifyListener();
+					}
+
+					@Override
+					public void widgetDefaultSelected(SelectionEvent e) {
+
+					}
+				});
+				scanLabels = checkbox(showLabelsContainer, "Show Scan Labels", editorSettings.isShowScanLables());
+				scanLabels.addSelectionListener(new SelectionListener() {
+
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+
+						editorSettings.setShowScanLables(scanLabels.getSelection());
+						page.notifyListener();
+					}
+
+					@Override
+					public void widgetDefaultSelected(SelectionEvent e) {
+
+					}
+				});
+				// new Label(showLabelsContainer, SWT.SEPARATOR | SWT.VERTICAL);
+				new Label(showLabelsContainer, SWT.NONE).setText(" | ");
+				fieldLabel = label("Display Field", showLabelsContainer);
+				fieldComboViewer = new ComboViewer(showLabelsContainer, SWT.READ_ONLY);
+				fieldComboViewer.setContentProvider(ArrayContentProvider.getInstance());
+				fieldComboViewer.setInput(LibraryField.values());
+				fieldComboViewer.setSelection(new StructuredSelection(editorSettings.getField()));
+				fieldComboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+					@Override
+					public void selectionChanged(SelectionChangedEvent event) {
+
+						editorSettings.setField((LibraryField)fieldComboViewer.getStructuredSelection().getFirstElement());
+						page.notifyListener();
+					}
+				});
+				collisionLabel = label("Collision Detection Depth", showLabelsContainer);
+				collisionComboViewer = new ComboViewer(showLabelsContainer);
+				collisionComboViewer.setContentProvider(ArrayContentProvider.getInstance());
+				collisionComboViewer.setInput(new Object[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
+				collisionComboViewer.setSelection(new StructuredSelection(editorSettings.getCollisionDetectionDepth()));
+				collisionComboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+					@Override
+					public void selectionChanged(SelectionChangedEvent event) {
+
+						editorSettings.setCollisionDetectionDepth(((Integer)collisionComboViewer.getStructuredSelection().getFirstElement()));
+						page.notifyListener();
+					}
+				});
+				Composite container = createLabelContainer(parent);
+				rotationLabel = label(getRotationText(editorSettings.getRotation()), container);
+				scale = fill(new Scale(container, SWT.HORIZONTAL));
+				scale.setMinimum(0);
+				scale.setMaximum(90);
+				scale.setIncrement(1);
+				scale.setPageIncrement(15);
+				scale.setSelection(editorSettings.getRotation());
+				scale.addSelectionListener(new SelectionListener() {
+
+					@Override
+					public void widgetSelected(SelectionEvent e) {
+
+						int selection = scale.getSelection();
+						editorSettings.setRotation(selection);
+						rotationLabel.setText(getRotationText(selection));
+						page.notifyListener();
+					}
+
+					@Override
+					public void widgetDefaultSelected(SelectionEvent e) {
+
+					}
+				});
+				if(editorSettings.base instanceof VisibilityTargetDisplaySettings) {
+					maximize(parent);
+					toolbarManager = new ToolBarManager();
+					fill(toolbarManager.createControl(parent));
+					listUI = createTargetTable(parent, editorSettings, page::notifyListener);
+					maximize(listUI.getControl());
+					createToolbarActions(toolbarManager, listUI, editorSettings, page::notifyListener);
+					toolbarManager.update(true);
+					ISelectionChangedListener comboListener = new ISelectionChangedListener() {
+
+						private LibraryField currentField;
+
+						@Override
+						public void selectionChanged(SelectionChangedEvent event) {
+
+							LibraryField field = editorSettings.getField();
+							if(field != currentField && page.selectedSettings == editorSettings) {
+								currentField = field;
+								listUI.refresh();
+								page.notifyListener();
+							}
+						}
+					};
+					fieldComboViewer.addSelectionChangedListener(comboListener);
+				}
+			}
+
+			private String getRotationText(int value) {
+
+				StringBuilder sb = new StringBuilder();
+				sb.append("Rotation (");
+				if(value < 10) {
+					sb.append(' ');
+				}
+				sb.append(value);
+				sb.append("°)  ");
+				return sb.toString();
+			}
+
+			public void setEnabled(boolean enabled) {
+
+				peakLabels.setEnabled(enabled);
+				scanLabels.setEnabled(enabled);
+				fieldLabel.setEnabled(enabled);
+				collisionLabel.setEnabled(enabled);
+				rotationLabel.setEnabled(enabled);
+				fieldComboViewer.getControl().setEnabled(enabled);
+				collisionComboViewer.getControl().setEnabled(enabled);
+				scale.setEnabled(enabled);
+				if(listUI != null) {
+					if(enabled && listUI.getInput() == null) {
+						listUI.setInput(identifications);
+					}
+					listUI.getControl().setEnabled(enabled);
+				}
+				if(toolbarManager != null) {
+					toolbarManager.getControl().setEnabled(enabled);
+				}
+			}
+		}
+
+		private static TableViewer createTargetTable(Composite parent, WizardTargetDisplaySettings wizardSettings, Runnable updateListener) {
 
 			TableViewer tableViewer = createTable(parent, false);
 			createColumn(tableViewer, new SimpleColumnDefinition<>("", 18, new ColumnLabelProvider() {
@@ -351,7 +500,7 @@ public class TargetDisplaySettingsWizard {
 
 					if(element instanceof TargetReference) {
 						TargetReference identificationTarget = (TargetReference)element;
-						if(userSettings.isVisible(identificationTarget)) {
+						if(wizardSettings.isVisible(identificationTarget)) {
 							return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED, IApplicationImage.SIZE_16x16);
 						} else {
 							return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DESELECTED, IApplicationImage.SIZE_16x16);
@@ -366,15 +515,15 @@ public class TargetDisplaySettingsWizard {
 				@Override
 				protected void setValue(Object element, Object value) {
 
-					userSettings.setVisible((TargetReference)element, (Boolean)value);
-					listUI.refresh(element);
-					notifyListener();
+					wizardSettings.setVisible((TargetReference)element, (Boolean)value);
+					tableViewer.refresh(element);
+					updateListener.run();
 				}
 
 				@Override
 				protected Object getValue(Object element) {
 
-					return userSettings.isVisible((TargetReference)element);
+					return wizardSettings.isVisible((TargetReference)element);
 				}
 
 				@Override
@@ -389,7 +538,7 @@ public class TargetDisplaySettingsWizard {
 					return element instanceof TargetReference;
 				}
 			});
-			createColumn(tableViewer, new SimpleColumnDefinition<>(listener != null ? listener.getIDLabel() : "ID", 80, TargetReference::getName));
+			createColumn(tableViewer, new SimpleColumnDefinition<>(wizardSettings.settingsListener != null ? wizardSettings.settingsListener.getIDLabel() : "ID", 80, TargetReference::getName));
 			createColumn(tableViewer, new SimpleColumnDefinition<>("Type", 50, TargetReference::getType));
 			for(LibraryField field : LibraryField.values()) {
 				createColumn(tableViewer, new SimpleColumnDefinition<>(field.toString(), 100, new ColumnLabelProvider() {
@@ -407,221 +556,94 @@ public class TargetDisplaySettingsWizard {
 			}
 			return tableViewer;
 		}
-
-		private ToolBar createToolbar(Composite parent) {
-
-			ToolBarManager manager = new ToolBarManager();
-			manager.add(new Action("Enable All", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_SELECTED, IApplicationImage.SIZE_16x16)) {
-
-				@Override
-				public void run() {
-
-					for(TableItem item : listUI.getTable().getItems()) {
-						Object data = item.getData();
-						if(data instanceof TargetReference) {
-							TargetReference target = (TargetReference)data;
-							userSettings.setVisible(target, true);
-							listUI.refresh(target);
-							notifyListener();
-						}
-					}
-				}
-			});
-			manager.add(new Action("Disable All", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DESELECTED, IApplicationImage.SIZE_16x16)) {
-
-				@Override
-				public void run() {
-
-					for(TableItem item : listUI.getTable().getItems()) {
-						Object data = item.getData();
-						if(data instanceof TargetReference) {
-							TargetReference target = (TargetReference)data;
-							userSettings.setVisible(target, false);
-							listUI.refresh(target);
-							notifyListener();
-						}
-					}
-				}
-			});
-			manager.add(new Separator());
-			manager.add(new ControlContribution("searchbar") {
-
-				@Override
-				protected Control createControl(Composite parent) {
-
-					Composite container = createContainer(parent, 3);
-					Text text = ControlBuilder.fill(new Text(container, SWT.SEARCH | SWT.ICON_CANCEL | SWT.ICON_SEARCH));
-					gridData(text).horizontalIndent = 3;
-					text.addModifyListener(new ModifyListener() {
-
-						@Override
-						public void modifyText(ModifyEvent e) {
-
-							String filterText = text.getText();
-							updateFilter(filterText);
-						}
-					});
-					return container;
-				}
-
-				@Override
-				protected int computeWidth(Control control) {
-
-					return Math.max(super.computeWidth(control), DEFAULT_WIDTH / 2);
-				}
-			});
-			return manager.createControl(parent);
-		}
-
-		private void updateFilter(String text) {
-
-			if(text == null || text.isEmpty()) {
-				listUI.resetFilters();
-				predicate = null;
-			} else {
-				predicate = new Predicate<TargetReference>() {
-
-					@Override
-					public boolean test(TargetReference target) {
-
-						String label = userSettings.getField().stringTransformer().apply(target.getBestTarget());
-						return label != null && label.toLowerCase().contains(text.toLowerCase());
-					}
-				};
-				listUI.setFilters(new ViewerFilter() {
-
-					@Override
-					public boolean select(Viewer viewer, Object parentElement, Object element) {
-
-						if(element instanceof TargetReference) {
-							TargetReference target = (TargetReference)element;
-							return predicate.test(target);
-						}
-						return true;
-					}
-				});
-			}
-			notifyListener();
-		}
 	}
 
-	private static final class BaseTargetSettingEditor {
+	private static void createToolbarActions(ToolBarManager manager, TableViewer tableViewer, WizardTargetDisplaySettings wizardSettings, Runnable listener) {
 
-		private final Button peakLabels;
-		private final Button scanLabels;
-		private final Label fieldLabel;
-		private final ComboViewer fieldComboViewer;
-		private final Label rotationLabel;
-		private final Scale scale;
-		private final Label collisionLabel;
-		private final ComboViewer collisionComboViewer;
+		manager.add(new Action("Enable All", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_SELECTED, IApplicationImage.SIZE_16x16)) {
 
-		public BaseTargetSettingEditor(Composite composite, TargetDisplaySettings editorSettings, TargetDisplaySettingsPage page) {
-			Composite container = createLabelContainer(composite);
-			peakLabels = span(checkbox(container, "Show Peak Labels", editorSettings.isShowPeakLabels()), 2);
-			peakLabels.addSelectionListener(new SelectionListener() {
+			@Override
+			public void run() {
 
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-
-					editorSettings.setShowPeakLabels(peakLabels.getSelection());
-					page.notifyListener();
+				for(TableItem item : tableViewer.getTable().getItems()) {
+					Object data = item.getData();
+					if(data instanceof TargetReference) {
+						TargetReference target = (TargetReference)data;
+						wizardSettings.setVisible(target, true);
+						tableViewer.refresh(target);
+						listener.run();
+					}
 				}
-
-				@Override
-				public void widgetDefaultSelected(SelectionEvent e) {
-
-				}
-			});
-			scanLabels = span(checkbox(container, "Show Scan Labels", editorSettings.isShowScanLables()), 2);
-			scanLabels.addSelectionListener(new SelectionListener() {
-
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-
-					editorSettings.setShowScanLables(scanLabels.getSelection());
-					page.notifyListener();
-				}
-
-				@Override
-				public void widgetDefaultSelected(SelectionEvent e) {
-
-				}
-			});
-			fieldLabel = label("Display Field", container);
-			fieldComboViewer = new ComboViewer(container, SWT.READ_ONLY);
-			fieldComboViewer.setContentProvider(ArrayContentProvider.getInstance());
-			fieldComboViewer.setInput(LibraryField.values());
-			fieldComboViewer.setSelection(new StructuredSelection(editorSettings.getField()));
-			fieldComboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
-				@Override
-				public void selectionChanged(SelectionChangedEvent event) {
-
-					editorSettings.setField((LibraryField)fieldComboViewer.getStructuredSelection().getFirstElement());
-					page.notifyListener();
-				}
-			});
-			rotationLabel = label(getRotationText(editorSettings.getRotation()), container);
-			scale = fill(new Scale(container, SWT.HORIZONTAL));
-			scale.setMinimum(0);
-			scale.setMaximum(90);
-			scale.setIncrement(1);
-			scale.setSelection(editorSettings.getRotation());
-			scale.addSelectionListener(new SelectionListener() {
-
-				@Override
-				public void widgetSelected(SelectionEvent e) {
-
-					int selection = scale.getSelection();
-					editorSettings.setRotation(selection);
-					rotationLabel.setText(getRotationText(selection));
-					page.notifyListener();
-				}
-
-				@Override
-				public void widgetDefaultSelected(SelectionEvent e) {
-
-				}
-			});
-			collisionLabel = label("Collision Detection Depth", container);
-			collisionComboViewer = new ComboViewer(container);
-			collisionComboViewer.setContentProvider(ArrayContentProvider.getInstance());
-			collisionComboViewer.setInput(new Object[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10});
-			collisionComboViewer.setSelection(new StructuredSelection(editorSettings.getCollisionDetectionDepth()));
-			collisionComboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
-
-				@Override
-				public void selectionChanged(SelectionChangedEvent event) {
-
-					editorSettings.setCollisionDetectionDepth(((Integer)collisionComboViewer.getStructuredSelection().getFirstElement()));
-					page.notifyListener();
-				}
-			});
-		}
-
-		private String getRotationText(int value) {
-
-			StringBuilder sb = new StringBuilder();
-			sb.append("Rotation (");
-			if(value < 10) {
-				sb.append(' ');
 			}
-			sb.append(value);
-			sb.append("°)  ");
-			return sb.toString();
-		}
+		});
+		manager.add(new Action("Disable All", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DESELECTED, IApplicationImage.SIZE_16x16)) {
 
-		public void setEnabled(boolean enabled) {
+			@Override
+			public void run() {
 
-			peakLabels.setEnabled(enabled);
-			scanLabels.setEnabled(enabled);
-			fieldLabel.setEnabled(enabled);
-			collisionLabel.setEnabled(enabled);
-			rotationLabel.setEnabled(enabled);
-			fieldComboViewer.getControl().setEnabled(enabled);
-			collisionComboViewer.getControl().setEnabled(enabled);
-			scale.setEnabled(enabled);
-		}
+				for(TableItem item : tableViewer.getTable().getItems()) {
+					Object data = item.getData();
+					if(data instanceof TargetReference) {
+						TargetReference target = (TargetReference)data;
+						wizardSettings.setVisible(target, false);
+						tableViewer.refresh(target);
+						listener.run();
+					}
+				}
+			}
+		});
+		manager.add(new Separator());
+		manager.add(new ControlContribution("searchbar") {
+
+			@Override
+			protected Control createControl(Composite parent) {
+
+				Composite container = createContainer(parent, 3);
+				Text text = ControlBuilder.fill(new Text(container, SWT.SEARCH | SWT.ICON_CANCEL | SWT.ICON_SEARCH));
+				gridData(text).horizontalIndent = 3;
+				text.addModifyListener(new ModifyListener() {
+
+					@Override
+					public void modifyText(ModifyEvent e) {
+
+						String filterText = text.getText();
+						if(filterText == null || filterText.isEmpty()) {
+							tableViewer.resetFilters();
+							wizardSettings.predicate = always -> true;
+						} else {
+							wizardSettings.predicate = new Predicate<TargetReference>() {
+
+								@Override
+								public boolean test(TargetReference target) {
+
+									String label = wizardSettings.getField().stringTransformer().apply(target.getBestTarget());
+									return label != null && label.toLowerCase().contains(filterText.toLowerCase());
+								}
+							};
+							tableViewer.setFilters(new ViewerFilter() {
+
+								@Override
+								public boolean select(Viewer viewer, Object parentElement, Object element) {
+
+									if(element instanceof TargetReference) {
+										TargetReference target = (TargetReference)element;
+										return wizardSettings.predicate.test(target);
+									}
+									return true;
+								}
+							});
+						}
+						listener.run();
+					}
+				});
+				return container;
+			}
+
+			@Override
+			protected int computeWidth(Control control) {
+
+				return Math.max(super.computeWidth(control), DEFAULT_WIDTH / 2);
+			}
+		});
 	}
 }

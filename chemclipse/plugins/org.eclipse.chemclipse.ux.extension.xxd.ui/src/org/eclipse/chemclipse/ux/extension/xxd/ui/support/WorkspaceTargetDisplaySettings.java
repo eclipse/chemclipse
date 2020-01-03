@@ -13,6 +13,8 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.support;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
@@ -38,8 +40,7 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings, Se
 		this.systemSettings = systemSettings;
 	}
 
-	@Override
-	public boolean isUseSystemSettings() {
+	private boolean isUseSystemSettings() {
 
 		return systemSettings != null && node.getBoolean(KEY_SYSTEM_SETTINGS, true);
 	}
@@ -75,14 +76,12 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings, Se
 		return LibraryField.NAME;
 	}
 
-	@Override
-	public TargetDisplaySettings getSystemSettings() {
+	private TargetDisplaySettings getSystemSettings() {
 
 		return systemSettings;
 	}
 
-	@Override
-	public TargetDisplaySettings getUserSettings() {
+	private TargetDisplaySettings getUserSettings() {
 
 		if(systemSettings == null) {
 			return this;
@@ -157,8 +156,7 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings, Se
 		node.put(PreferenceConstants.P_TARGET_LABEL_FIELD, libraryField.name());
 	}
 
-	@Override
-	public void setUseSystemSettings(boolean useSystemSettings) {
+	private void setUseSystemSettings(boolean useSystemSettings) {
 
 		node.putBoolean(KEY_SYSTEM_SETTINGS, useSystemSettings);
 	}
@@ -228,5 +226,30 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings, Se
 			preferences = InstanceScope.INSTANCE.getNode(TargetDisplaySettings.class.getName());
 		}
 		return preferences;
+	}
+
+	@Override
+	public Map<String, TargetDisplaySettings> getSettings() {
+
+		LinkedHashMap<String, TargetDisplaySettings> map = new LinkedHashMap<>(2);
+		map.put("System Defaults", getSystemSettings());
+		map.put("Individual Settings", getUserSettings());
+		return map;
+	}
+
+	@Override
+	public boolean isSelectedSettings(TargetDisplaySettings settings) {
+
+		if(isUseSystemSettings()) {
+			return settings == getSystemSettings();
+		} else {
+			return settings == getUserSettings();
+		}
+	}
+
+	@Override
+	public void setSelectedSettings(TargetDisplaySettings settings) {
+
+		setUseSystemSettings(settings == getSystemSettings());
 	}
 }

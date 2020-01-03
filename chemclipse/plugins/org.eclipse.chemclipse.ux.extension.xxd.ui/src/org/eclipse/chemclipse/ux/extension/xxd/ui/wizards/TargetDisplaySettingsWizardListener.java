@@ -28,4 +28,8 @@ public interface TargetDisplaySettingsWizardListener {
 	 * @param viewerFilters
 	 */
 	void setPreviewSettings(TargetDisplaySettings settings, Predicate<TargetReference> filter);
+
+	boolean isShowPreview();
+
+	void setShowPreview(boolean preview);
 }
