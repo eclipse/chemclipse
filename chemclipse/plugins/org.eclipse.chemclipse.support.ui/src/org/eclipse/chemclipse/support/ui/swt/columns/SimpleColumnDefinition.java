@@ -39,7 +39,8 @@ public class SimpleColumnDefinition<DataType, ColumnType> implements ColumnDefin
 			@Override
 			public String getText(Object element) {
 
-				return extractor.apply((DataType)element);
+				String string = extractor.apply((DataType)element);
+				return string == null ? "" : string;
 			}
 		}, null, null);
 	}

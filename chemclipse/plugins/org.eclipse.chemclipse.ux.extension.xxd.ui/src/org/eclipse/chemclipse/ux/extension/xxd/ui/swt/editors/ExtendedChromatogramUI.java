@@ -22,12 +22,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -75,6 +73,8 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.Fonts;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.actions.TargetLabelEditAction;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.actions.TargetLabelEditAction.LabelChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.RetentionIndexUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
@@ -93,7 +93,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.PreferenceStoreTargetDisplaySettings;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.SignalTargetReference;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetDisplaySettings;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetReference;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.WorkspaceTargetDisplaySettings;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
@@ -102,8 +101,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanChartSuppor
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ChromatogramReferencesUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.HeatmapUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ToolbarConfig;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.TargetDisplaySettingsWizard;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.TargetDisplaySettingsWizardListener;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
@@ -133,7 +130,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtchart.IAxis.Position;
@@ -1214,93 +1210,50 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 	private IAction createLabelsAction() {
 
-		return new Action("Labels", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_LABELS, IApplicationImage.SIZE_16x16)) {
+		return new TargetLabelEditAction(new LabelChart() {
 
-			{
-				setToolTipText("Mange the labels to display in the chromatogram");
+			@Override
+			public void setChartMarkerVisible(boolean visible) {
+
+				for(TargetReferenceLabelMarker marker : scanLabelMarkerMap.values()) {
+					marker.setVisible(visible);
+				}
+				for(TargetReferenceLabelMarker marker : peakLabelMarkerMap.values()) {
+					marker.setVisible(visible);
+				}
 			}
 
 			@Override
-			public void runWithEvent(Event event) {
+			public void refresh() {
 
-				if(chromatogramSelection != null) {
-					List<SignalTargetReference> identifications = new ArrayList<>();
-					identifications.addAll(SignalTargetReference.getPeakReferences(chromatogramSelection.getChromatogram().getPeaks()));
-					identifications.addAll(SignalTargetReference.getScanReferences(ChromatogramDataSupport.getIdentifiedScans(chromatogramSelection.getChromatogram())));
-					Collections.sort(identifications, new Comparator<SignalTargetReference>() {
-
-						@Override
-						public int compare(SignalTargetReference o1, SignalTargetReference o2) {
-
-							return o1.getName().compareToIgnoreCase(o2.getName());
-						}
-					});
-					TargetReferenceLabelMarker previewMarker = new TargetReferenceLabelMarker(true, PreferenceConstants.DEF_SYMBOL_SIZE * 2);
-					ChromatogramChart chart = getChromatogramChart();
-					chart.getBaseChart().getPlotArea().addCustomPaintListener(previewMarker);
-					TargetDisplaySettingsWizardListener listener = new TargetDisplaySettingsWizardListener() {
-
-						boolean previewDisabled = true;
-
-						@Override
-						public String getIDLabel() {
-
-							return "RT";
-						}
-
-						@Override
-						public void setPreviewSettings(TargetDisplaySettings previewSettings, Predicate<TargetReference> activeFilter) {
-
-							if(previewSettings == null && previewDisabled) {
-								return;
-							}
-							previewDisabled = previewSettings == null;
-							for(TargetReferenceLabelMarker marker : scanLabelMarkerMap.values()) {
-								marker.setVisible(previewDisabled);
-							}
-							for(TargetReferenceLabelMarker marker : peakLabelMarkerMap.values()) {
-								marker.setVisible(previewDisabled);
-							}
-							Predicate<TargetReference> settingsFilter = previewMarker.setData(identifications, previewSettings, activeFilter);
-							if(previewDisabled) {
-								chart.setRange(IExtendedChart.X_AXIS, chromatogramSelection.getStartRetentionTime(), chromatogramSelection.getStopRetentionTime());
-							} else {
-								double minRT = Double.NaN;
-								double maxRT = Double.NaN;
-								for(SignalTargetReference scanTargetReference : identifications) {
-									if(settingsFilter.test(scanTargetReference) && (activeFilter == null || activeFilter.test(scanTargetReference))) {
-										double rt = scanTargetReference.getSignal().getX();
-										if(Double.isNaN(minRT) || rt < minRT) {
-											minRT = rt;
-										}
-										if(Double.isNaN(maxRT) || rt > maxRT) {
-											maxRT = rt;
-										}
-									}
-								}
-								int absStart = chromatogramSelection.getChromatogram().getStartRetentionTime();
-								if(Double.isNaN(minRT)) {
-									minRT = absStart;
-								}
-								int absStop = chromatogramSelection.getChromatogram().getStopRetentionTime();
-								if(Double.isNaN(maxRT)) {
-									maxRT = absStop;
-								}
-								long windowOffset = TimeUnit.MINUTES.toMillis(1);
-								chart.setRange(IExtendedChart.X_AXIS, Math.max(minRT - windowOffset, absStart), Math.min(absStop, maxRT + windowOffset));
-							}
-							chart.redraw();
-						}
-					};
-					boolean settingsChanged = TargetDisplaySettingsWizard.openWizard(chromatogramChart.getShell(), identifications, listener, getTargetSettings());
-					chart.getBaseChart().getPlotArea().removeCustomPaintListener(previewMarker);
-					listener.setPreviewSettings(null, null);
-					if(settingsChanged) {
-						updateChromatogram();
-					}
-				}
+				getTargetSettings().flush();
+				ExtendedChromatogramUI.this.updateChromatogram();
 			}
-		};
+
+			@Override
+			public void redraw() {
+
+				getChart().redraw();
+			}
+
+			@Override
+			public WorkspaceTargetDisplaySettings getTargetSettings() {
+
+				return ExtendedChromatogramUI.this.getTargetSettings();
+			}
+
+			@Override
+			public IChromatogramSelection<?, ?> getChromatogramSelection() {
+
+				return ExtendedChromatogramUI.this.getChromatogramSelection();
+			}
+
+			@Override
+			public ChromatogramChart getChart() {
+
+				return ExtendedChromatogramUI.this.getChromatogramChart();
+			}
+		});
 	}
 
 	private IAction createToggleToolbarAction(String name, String tooltip, String image, String toolbar) {

@@ -28,6 +28,7 @@ import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.span;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.Predicate;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -35,10 +36,11 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.swt.ControlBuilder;
 import org.eclipse.chemclipse.support.ui.swt.columns.SimpleColumnDefinition;
 import org.eclipse.chemclipse.support.ui.wizards.SinglePageWizard;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.SelectableTargetDisplaySettings;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetDisplaySettings;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetDisplaySettings.LibraryField;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetReference;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.WorkspaceTargetDisplaySettings;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.VisibilityTargetDisplaySettings;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ControlContribution;
 import org.eclipse.jface.action.Separator;
@@ -80,7 +82,7 @@ public class TargetDisplaySettingsWizard {
 	public static final int DEFAULT_WIDTH = 1000;
 	public static final int DEFAULT_HEIGHT = 600;
 
-	public static boolean openWizard(Shell shell, Collection<? extends TargetReference> identifications, TargetDisplaySettingsWizardListener listener, WorkspaceTargetDisplaySettings currentSettings) {
+	public static boolean openWizard(Shell shell, Collection<? extends TargetReference> identifications, TargetDisplaySettingsWizardListener listener, SelectableTargetDisplaySettings currentSettings) {
 
 		TargetDisplaySettingsPage page = new TargetDisplaySettingsPage(identifications, currentSettings, listener);
 		SinglePageWizard wizard = new SinglePageWizard("Target Label Settings", false, page);
@@ -95,19 +97,18 @@ public class TargetDisplaySettingsWizard {
 				currentSettings.setUseSystemSettings(false);
 				page.userSettings.copyTo(currentSettings.getUserSettings());
 			}
-			currentSettings.flush();
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	private static final class WizardTargetDisplaySettings implements TargetDisplaySettings {
+	private static final class WizardTargetDisplaySettings implements TargetDisplaySettings, VisibilityTargetDisplaySettings {
 
 		private boolean showPeakLabels;
 		private boolean showScanLables;
 		private LibraryField libraryField;
-		private final Map<String, Boolean> visibleMap = new HashMap<>();
+		private final Map<TargetReference, Boolean> visibleMap = new HashMap<>();
 		private final TargetDisplaySettings base;
 		private int rotation;
 		private int depth;
@@ -128,9 +129,11 @@ public class TargetDisplaySettingsWizard {
 			other.setShowScanLables(showScanLables);
 			other.setRotation(rotation);
 			other.setCollisionDetectionDepth(depth);
-			if(other instanceof WorkspaceTargetDisplaySettings) {
-				WorkspaceTargetDisplaySettings workspaceSettings = (WorkspaceTargetDisplaySettings)other;
-				workspaceSettings.updateVisible(visibleMap);
+			if(other instanceof VisibilityTargetDisplaySettings) {
+				VisibilityTargetDisplaySettings visibilityTargetDisplaySettings = (VisibilityTargetDisplaySettings)other;
+				for(Entry<TargetReference, Boolean> entry : visibleMap.entrySet()) {
+					visibilityTargetDisplaySettings.setVisible(entry.getKey(), entry.getValue());
+				}
 			}
 		}
 
@@ -173,12 +176,23 @@ public class TargetDisplaySettingsWizard {
 		@Override
 		public boolean isVisible(TargetReference reference) {
 
-			return visibleMap.computeIfAbsent(reference.getID(), t -> base.isVisible(reference));
+			if(reference == null) {
+				return false;
+			}
+			return visibleMap.computeIfAbsent(reference, t -> {
+				if(base instanceof VisibilityTargetDisplaySettings) {
+					VisibilityTargetDisplaySettings v = (VisibilityTargetDisplaySettings)base;
+					return v.isVisible(t);
+				} else {
+					return true;
+				}
+			});
 		}
 
+		@Override
 		public void setVisible(TargetReference reference, boolean visible) {
 
-			visibleMap.put(reference.getID(), visible);
+			visibleMap.put(reference, visible);
 		}
 
 		@Override
@@ -217,16 +231,16 @@ public class TargetDisplaySettingsWizard {
 		private final TargetDisplaySettingsWizardListener listener;
 		private Predicate<TargetReference> predicate;
 
-		protected TargetDisplaySettingsPage(Collection<? extends TargetReference> identifications, WorkspaceTargetDisplaySettings settings, TargetDisplaySettingsWizardListener listener) {
+		protected TargetDisplaySettingsPage(Collection<? extends TargetReference> identifications, SelectableTargetDisplaySettings currentSettings, TargetDisplaySettingsWizardListener listener) {
 			super(TargetDisplaySettingsPage.class.getName());
 			this.identifications = identifications;
 			this.listener = listener;
 			setImageDescriptor(ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_LABELS, IApplicationImage.SIZE_64x64));
 			setTitle("Manage target labels to display");
 			setDescription("Here you can select what target labels should be displayed in the chromatogram");
-			useSystemSettings = settings.isUseSystemSettings();
-			systemSettings = new WizardTargetDisplaySettings(settings.getSystemSettings());
-			userSettings = new WizardTargetDisplaySettings(settings.getUserSettings());
+			useSystemSettings = currentSettings.isUseSystemSettings();
+			systemSettings = new WizardTargetDisplaySettings(currentSettings.getSystemSettings());
+			userSettings = new WizardTargetDisplaySettings(currentSettings.getUserSettings());
 		}
 
 		@Override

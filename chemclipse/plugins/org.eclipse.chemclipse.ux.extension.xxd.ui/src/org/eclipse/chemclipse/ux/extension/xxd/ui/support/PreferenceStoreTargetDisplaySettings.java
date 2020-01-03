@@ -57,12 +57,6 @@ public class PreferenceStoreTargetDisplaySettings implements TargetDisplaySettin
 	}
 
 	@Override
-	public boolean isVisible(TargetReference reference) {
-
-		return true;
-	}
-
-	@Override
 	public void setShowPeakLabels(boolean showPeakLabels) {
 
 		preferenceStore.setValue(PreferenceConstants.P_SHOW_CHROMATOGRAM_PEAK_LABELS, showPeakLabels);
