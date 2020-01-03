@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.numeric.miscellaneous.Evaluation;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 
+@SuppressWarnings("rawtypes")
 public class BasePeakDetector extends AbstractPeakDetector {
 
 	protected static final float NORMALIZATION_BASE = 100000.0f;

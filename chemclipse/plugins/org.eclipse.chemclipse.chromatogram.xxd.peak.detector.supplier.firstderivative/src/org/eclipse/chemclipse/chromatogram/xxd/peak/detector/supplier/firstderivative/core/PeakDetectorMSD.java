@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.IPeakDetectorM
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.peak.detector.core.FilterMode;
 import org.eclipse.chemclipse.chromatogram.peak.detector.exceptions.ValueMustNotBeNullException;
+import org.eclipse.chemclipse.chromatogram.peak.detector.model.Threshold;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IRawPeak;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.NoiseChromatogramClassifier;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
@@ -63,6 +64,7 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 	//
 	private static final String DETECTOR_DESCRIPTION = "Peak Detector First Derivative";
 
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public IProcessingInfo detect(IChromatogramSelectionMSD chromatogramSelection, IPeakDetectorSettingsMSD detectorSettings, IProgressMonitor monitor) {
 
@@ -72,12 +74,16 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 				SubMonitor subMonitor = SubMonitor.convert(monitor, 100);
 				PeakDetectorSettingsMSD peakDetectorSettings = (PeakDetectorSettingsMSD)detectorSettings;
 				IChromatogramMSD chromatogram = chromatogramSelection.getChromatogram();
-				List<NoiseSegment> noiseSegments;
+				/*
+				 * Extract the noise segments.
+				 */
+				List<NoiseSegment> noiseSegments = null;
 				if(peakDetectorSettings.isUseNoiseSegments()) {
 					noiseSegments = NoiseChromatogramClassifier.getNoiseSegments(chromatogram, chromatogramSelection, false, subMonitor.split(10));
-				} else {
-					noiseSegments = null;
 				}
+				/*
+				 * Detect and add the peaks.
+				 */
 				List<IChromatogramPeakMSD> peaks = detectPeaks(chromatogramSelection, peakDetectorSettings, noiseSegments, subMonitor.split(90));
 				for(IChromatogramPeakMSD peak : peaks) {
 					chromatogram.addPeak(peak);
@@ -104,6 +110,7 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 	}
 
 	// TODO JUnit
+	@SuppressWarnings("rawtypes")
 	@Override
 	public IProcessingInfo detect(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
@@ -129,12 +136,62 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 
 	public List<IChromatogramPeakMSD> detectPeaks(IChromatogramSelectionMSD chromatogramSelection, PeakDetectorSettingsMSD peakDetectorSettings, List<NoiseSegment> noiseSegments, IProgressMonitor monitor) {
 
-		if(noiseSegments != null) {
-			// TODO use noise segments to optimize detection
-		}
 		IMarkedIons ions = PeakDetectorSettingsMSD.getFilterIons(peakDetectorSettings);
-		IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, peakDetectorSettings.getMovingAverageWindowSize(), ions);
-		List<IRawPeak> rawPeaks = getRawPeaks(slopes, peakDetectorSettings.getThreshold(), monitor);
+		Threshold threshold = peakDetectorSettings.getThreshold();
+		WindowSize windowSize = peakDetectorSettings.getMovingAverageWindowSize();
+		List<IRawPeak> rawPeaks = new ArrayList<>();
+		//
+		if(noiseSegments != null && noiseSegments.size() > 0) {
+			/*
+			 * Initial retention time range before running the detection using
+			 * noise segments.
+			 * | --- [S] --- [N] --- [E] --- |
+			 */
+			Iterator<NoiseSegment> iterator = noiseSegments.iterator();
+			int startRetentionTime = chromatogramSelection.getStartRetentionTime();
+			int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
+			NoiseSegment noiseSegment = iterator.hasNext() ? iterator.next() : null;
+			/*
+			 * Range from the start of the chromatogram selection to the first noise segment
+			 * | --- [S]
+			 */
+			if(noiseSegment != null) {
+				chromatogramSelection.setRangeRetentionTime(startRetentionTime, noiseSegment.getStartRetentionTime());
+				IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, windowSize, ions);
+				rawPeaks.addAll(getRawPeaks(slopes, threshold, monitor));
+			}
+			/*
+			 * Ranges between the noise segments
+			 * [S] --- [N] --- [E]
+			 */
+			while(iterator.hasNext()) {
+				int startRetentionTimeSegment = noiseSegment.getStopRetentionTime();
+				noiseSegment = iterator.next();
+				int stopRetentionTimeSegment = noiseSegment.getStartRetentionTime();
+				chromatogramSelection.setRangeRetentionTime(startRetentionTimeSegment, stopRetentionTimeSegment);
+				IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, windowSize, ions);
+				rawPeaks.addAll(getRawPeaks(slopes, threshold, monitor));
+			}
+			/*
+			 * Range from the last noise segment to the end of the chromatogram selection
+			 * [E] --- |
+			 */
+			if(noiseSegment != null) {
+				chromatogramSelection.setRangeRetentionTime(noiseSegment.getStopRetentionTime(), stopRetentionTime);
+				IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, windowSize, ions);
+				rawPeaks.addAll(getRawPeaks(slopes, threshold, monitor));
+			}
+			/*
+			 * Reset the retention time range to its initial values.
+			 */
+			chromatogramSelection.setRangeRetentionTime(startRetentionTime, stopRetentionTime);
+		} else {
+			/*
+			 * Default: no noise segments
+			 */
+			IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, windowSize, ions);
+			rawPeaks.addAll(getRawPeaks(slopes, threshold, monitor));
+		}
 		return extractPeaks(rawPeaks, chromatogramSelection.getChromatogram(), peakDetectorSettings, ions);
 	}
 
@@ -197,7 +254,7 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 	 */
 	public static IFirstDerivativeDetectorSlopes getFirstDerivativeSlopes(IChromatogramSelectionMSD chromatogramSelection, WindowSize movingAverageWindowSize, IMarkedIons filterIons) {
 
-		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogramMSD();
+		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogram();
 		try {
 			ITotalIonSignalExtractor totalIonSignalExtractor = new TotalIonSignalExtractor(chromatogram);
 			ITotalScanSignals signals = totalIonSignalExtractor.getTotalIonSignals(chromatogramSelection, filterIons);
@@ -231,8 +288,7 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 
 	static IMarkedIons getIonFilter(Collection<Number> filterIons, FilterMode mode) {
 
-		MarkedIons result = new MarkedIons(buildIons(filterIons), buildFilterMode(mode));
-		return result;
+		return new MarkedIons(buildIons(filterIons), buildFilterMode(mode));
 	}
 
 	private static int[] buildIons(Collection<Number> filterIons) {
