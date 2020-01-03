@@ -75,17 +75,20 @@ public interface TargetDisplaySettings {
 
 	void setShowScanLables(boolean showScanLables);
 
+	int getRotation();
+
+	int getCollisionDetectionDepth();
+
+	void setCollisionDetectionDepth(int depth);
+
+	/**
+	 * Sets the rotation angel of the labels in degree
+	 * 
+	 * @param degree
+	 */
+	void setRotation(int degree);
+
 	LibraryField getField();
 
 	void setField(LibraryField libraryField);
-
-	boolean isVisible(TargetReference reference);
-
-	default boolean isVisible(TargetReference reference, IIdentificationTarget target) {
-
-		if(target == null) {
-			return false;
-		}
-		return isVisible(reference) && reference.getTargets().contains(target);
-	}
 }

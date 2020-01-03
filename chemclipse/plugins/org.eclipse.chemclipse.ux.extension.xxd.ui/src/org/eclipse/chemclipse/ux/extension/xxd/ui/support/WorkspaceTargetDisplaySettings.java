@@ -13,8 +13,8 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.support;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
@@ -27,7 +27,7 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
-public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
+public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings, SelectableTargetDisplaySettings, VisibilityTargetDisplaySettings {
 
 	private static final String KEY_SYSTEM_SETTINGS = "useSystemSettings";
 	private static IEclipsePreferences preferences;
@@ -40,30 +40,9 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
 		this.systemSettings = systemSettings;
 	}
 
-	public boolean isUseSystemSettings() {
+	private boolean isUseSystemSettings() {
 
 		return systemSettings != null && node.getBoolean(KEY_SYSTEM_SETTINGS, true);
-	}
-
-	public void setUseSystemSettings(boolean useSystemSettings) {
-
-		node.putBoolean(KEY_SYSTEM_SETTINGS, useSystemSettings);
-	}
-
-	public TargetDisplaySettings getSystemSettings() {
-
-		return systemSettings;
-	}
-
-	public TargetDisplaySettings getUserSettings() {
-
-		if(systemSettings == null) {
-			return this;
-		}
-		if(userSettings == null) {
-			userSettings = new WorkspaceTargetDisplaySettings(node, null);
-		}
-		return userSettings;
 	}
 
 	@Override
@@ -97,36 +76,72 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
 		return LibraryField.NAME;
 	}
 
+	private TargetDisplaySettings getSystemSettings() {
+
+		return systemSettings;
+	}
+
+	private TargetDisplaySettings getUserSettings() {
+
+		if(systemSettings == null) {
+			return this;
+		}
+		if(userSettings == null) {
+			userSettings = new WorkspaceTargetDisplaySettings(node, null);
+		}
+		return userSettings;
+	}
+
 	@Override
 	public boolean isVisible(TargetReference reference) {
 
 		if(isUseSystemSettings()) {
-			return systemSettings.isVisible(reference);
+			if(systemSettings instanceof VisibilityTargetDisplaySettings) {
+				return ((VisibilityTargetDisplaySettings)systemSettings).isVisible(reference);
+			} else {
+				return true;
+			}
+		}
+		if(reference == null) {
+			return false;
 		}
 		return node.getBoolean(reference.getID(), true);
 	}
 
-	public static String getID(IIdentificationTarget target, LibraryField field) {
+	@Override
+	public int getRotation() {
 
-		if(target != null) {
-			StringBuilder sb = new StringBuilder("IdentificationTarget.");
-			sb.append(field.name());
-			sb.append(".");
-			sb.append(field.stringTransformer().apply(target));
-			ILibraryInformation information = target.getLibraryInformation();
-			if(information != null) {
-				sb.append("@");
-				sb.append(information.getRetentionTime());
-			}
-			return sb.toString().trim();
+		if(isUseSystemSettings()) {
+			return systemSettings.getRotation();
 		}
-		return null;
+		return node.getInt(PreferenceConstants.P_PEAK_LABELS_ROTATION, PreferenceConstants.DEF_PEAK_LABELS_ROTATION);
+	}
+
+	@Override
+	public int getCollisionDetectionDepth() {
+
+		if(isUseSystemSettings()) {
+			return systemSettings.getCollisionDetectionDepth();
+		}
+		return node.getInt(PreferenceConstants.P_PEAK_LABELS_COLLISION_DETECTION_DEPTH, PreferenceConstants.DEF_PEAK_LABELS_COLLISION_DETECTION_DEPTH);
+	}
+
+	@Override
+	public void setCollisionDetectionDepth(int depth) {
+
+		node.putInt(PreferenceConstants.P_PEAK_LABELS_COLLISION_DETECTION_DEPTH, depth);
 	}
 
 	@Override
 	public void setShowPeakLabels(boolean showPeakLabels) {
 
 		node.putBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_PEAK_LABELS, showPeakLabels);
+	}
+
+	@Override
+	public void setRotation(int degree) {
+
+		node.putInt(PreferenceConstants.P_PEAK_LABELS_ROTATION, degree);
 	}
 
 	@Override
@@ -139,6 +154,30 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
 	public void setField(LibraryField libraryField) {
 
 		node.put(PreferenceConstants.P_TARGET_LABEL_FIELD, libraryField.name());
+	}
+
+	private void setUseSystemSettings(boolean useSystemSettings) {
+
+		node.putBoolean(KEY_SYSTEM_SETTINGS, useSystemSettings);
+	}
+
+	@Override
+	public void setVisible(TargetReference reference, boolean visible) {
+
+		if(visible) {
+			node.remove(reference.getID());
+		} else {
+			node.putBoolean(reference.getID(), false);
+		}
+	}
+
+	public void flush() {
+
+		try {
+			node.flush();
+		} catch(BackingStoreException e) {
+			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, WorkspaceTargetDisplaySettings.class.getName(), "Flush WorkspaceTargetDisplaySettings failed!", e));
+		}
 	}
 
 	public static WorkspaceTargetDisplaySettings getWorkspaceSettings(File file, TargetDisplaySettings systemSettings) {
@@ -164,6 +203,23 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
 		return new WorkspaceTargetDisplaySettings(node, systemSettings);
 	}
 
+	public static String getID(IIdentificationTarget target, LibraryField field) {
+
+		if(target != null) {
+			StringBuilder sb = new StringBuilder("IdentificationTarget.");
+			sb.append(field.name());
+			sb.append(".");
+			sb.append(field.stringTransformer().apply(target));
+			ILibraryInformation information = target.getLibraryInformation();
+			if(information != null) {
+				sb.append("@");
+				sb.append(information.getRetentionTime());
+			}
+			return sb.toString().trim();
+		}
+		return null;
+	}
+
 	private static IEclipsePreferences getStorage() {
 
 		if(preferences == null) {
@@ -172,23 +228,28 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings {
 		return preferences;
 	}
 
-	public void updateVisible(Map<String, Boolean> visibleMap) {
+	@Override
+	public Map<String, TargetDisplaySettings> getSettings() {
 
-		for(Entry<String, Boolean> entry : visibleMap.entrySet()) {
-			if(entry.getValue()) {
-				node.remove(entry.getKey());
-			} else {
-				node.putBoolean(entry.getKey(), false);
-			}
+		LinkedHashMap<String, TargetDisplaySettings> map = new LinkedHashMap<>(2);
+		map.put("System Defaults", getSystemSettings());
+		map.put("Individual Settings", getUserSettings());
+		return map;
+	}
+
+	@Override
+	public boolean isSelectedSettings(TargetDisplaySettings settings) {
+
+		if(isUseSystemSettings()) {
+			return settings == getSystemSettings();
+		} else {
+			return settings == getUserSettings();
 		}
 	}
 
-	public void flush() {
+	@Override
+	public void setSelectedSettings(TargetDisplaySettings settings) {
 
-		try {
-			node.flush();
-		} catch(BackingStoreException e) {
-			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, WorkspaceTargetDisplaySettings.class.getName(), "Flush WorkspaceTargetDisplaySettings failed!", e));
-		}
+		setUseSystemSettings(settings == getSystemSettings());
 	}
 }

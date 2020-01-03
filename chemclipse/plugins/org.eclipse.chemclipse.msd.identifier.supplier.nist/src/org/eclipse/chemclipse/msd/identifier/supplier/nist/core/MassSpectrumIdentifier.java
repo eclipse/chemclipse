@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
+ * Copyright (c) 2010, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,11 +8,11 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - adjust to simplified API, add generics
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.identifier.supplier.nist.core;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.AbstractMassSpectrumIdentifier;
@@ -20,7 +20,6 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IMassSpectrum
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.core.support.Identifier;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.MassSpectrumIdentifierSettings;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.PeakIdentifierSettings;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -32,46 +31,25 @@ public class MassSpectrumIdentifier extends AbstractMassSpectrumIdentifier {
 	private static final String DESCRIPTION = "NIST-DB Identifier";
 
 	@Override
-	public IProcessingInfo identify(List<IScanMSD> massSpectrumList, IMassSpectrumIdentifierSettings identifierSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IMassSpectra> identify(List<IScanMSD> massSpectrumList, IMassSpectrumIdentifierSettings identifierSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<IMassSpectra> processingInfo = new ProcessingInfo<>();
+		MassSpectrumIdentifierSettings massSpectrumIdentifierSettings;
 		if(identifierSettings instanceof MassSpectrumIdentifierSettings) {
-			try {
-				MassSpectrumIdentifierSettings massSpectrumIdentifierSettings = (MassSpectrumIdentifierSettings)identifierSettings;
-				Identifier identifier = new Identifier();
-				IMassSpectra massSpectra = identifier.runMassSpectrumIdentification(massSpectrumList, massSpectrumIdentifierSettings, monitor);
-				processingInfo.setProcessingResult(massSpectra);
-			} catch(FileNotFoundException e) {
-				processingInfo.addErrorMessage(DESCRIPTION, "An I/O error ocurred.");
-			}
+			massSpectrumIdentifierSettings = (MassSpectrumIdentifierSettings)identifierSettings;
 		} else {
-			processingInfo.addErrorMessage(DESCRIPTION, "The settings are not of type: " + PeakIdentifierSettings.class);
+			massSpectrumIdentifierSettings = PreferenceSupplier.getMassSpectrumIdentifierSettings();
+		}
+		try {
+			Identifier identifier = new Identifier();
+			IMassSpectra massSpectra = identifier.runMassSpectrumIdentification(massSpectrumList, massSpectrumIdentifierSettings, monitor);
+			processingInfo.setProcessingResult(massSpectra);
+		} catch(FileNotFoundException e) {
+			processingInfo.addErrorMessage(DESCRIPTION, "An I/O error ocurred.");
 		}
 		/*
 		 * Run the identifier.
 		 */
 		return processingInfo;
-	}
-
-	@Override
-	public IProcessingInfo identify(IScanMSD massSpectrum, IMassSpectrumIdentifierSettings massSpectrumIdentifierSettings, IProgressMonitor monitor) {
-
-		List<IScanMSD> massSpectra = new ArrayList<IScanMSD>();
-		massSpectra.add(massSpectrum);
-		return identify(massSpectra, massSpectrumIdentifierSettings, monitor);
-	}
-
-	@Override
-	public IProcessingInfo identify(IScanMSD massSpectrum, IProgressMonitor monitor) {
-
-		MassSpectrumIdentifierSettings massSpectrumIdentifierSettings = PreferenceSupplier.getMassSpectrumIdentifierSettings();
-		return identify(massSpectrum, massSpectrumIdentifierSettings, monitor);
-	}
-
-	@Override
-	public IProcessingInfo identify(List<IScanMSD> massSpectra, IProgressMonitor monitor) {
-
-		MassSpectrumIdentifierSettings massSpectrumIdentifierSettings = PreferenceSupplier.getMassSpectrumIdentifierSettings();
-		return identify(massSpectra, massSpectrumIdentifierSettings, monitor);
 	}
 }

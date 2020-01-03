@@ -1,25 +1,23 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
+ * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.model.core;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.support;
 
-/**
- * An arbitrary signal, that can be displayed in a X/Y plot.
- */
-public interface ISignal {
+import java.util.Map;
 
-	double TOTAL_INTENSITY = 0.0d;
-	String TOTAL_INTENSITY_DESCRIPTION = "TIC";
+public interface SelectableTargetDisplaySettings extends TargetDisplaySettings {
 
-	public double getX();
+	Map<String, TargetDisplaySettings> getSettings();
 
-	public double getY();
+	void setSelectedSettings(TargetDisplaySettings settings);
+
+	boolean isSelectedSettings(TargetDisplaySettings settings);
 }

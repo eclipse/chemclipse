@@ -8,10 +8,10 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - adjust to simplified API, add generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.AbstractMassSpectrumIdentifier;
@@ -19,7 +19,6 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IMassSpectrum
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.internal.identifier.FileIdentifier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.internal.identifier.UnknownIdentifier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.MassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.MassSpectrumUnknownSettings;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -32,39 +31,16 @@ public class MassSpectrumIdentifierUnknown extends AbstractMassSpectrumIdentifie
 	@Override
 	public IProcessingInfo<IMassSpectra> identify(List<IScanMSD> massSpectraList, IMassSpectrumIdentifierSettings identifierSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo<IMassSpectra> processingInfo = new ProcessingInfo<>();
+		MassSpectrumUnknownSettings massSpectrumIdentifierSettings;
 		if(identifierSettings instanceof MassSpectrumUnknownSettings) {
-			MassSpectrumUnknownSettings massSpectrumIdentifierSettings = (MassSpectrumUnknownSettings)identifierSettings;
-			UnknownIdentifier unknownIdentifier = new UnknownIdentifier();
-			unknownIdentifier.runIdentification(massSpectraList, massSpectrumIdentifierSettings);
-			processingInfo.addInfoMessage(FileIdentifier.IDENTIFIER, "Mass spectra have been identified.");
+			massSpectrumIdentifierSettings = (MassSpectrumUnknownSettings)identifierSettings;
 		} else {
-			processingInfo.addErrorMessage(FileIdentifier.IDENTIFIER, "The settings are not of type: " + MassSpectrumIdentifierSettings.class);
+			massSpectrumIdentifierSettings = PreferenceSupplier.getMassSpectrumUnknownSettings();
 		}
+		IProcessingInfo<IMassSpectra> processingInfo = new ProcessingInfo<>();
+		UnknownIdentifier unknownIdentifier = new UnknownIdentifier();
+		unknownIdentifier.runIdentification(massSpectraList, massSpectrumIdentifierSettings);
+		processingInfo.addInfoMessage(FileIdentifier.IDENTIFIER, "Mass spectra have been identified.");
 		return processingInfo;
-	}
-
-	@Override
-	public IProcessingInfo<IMassSpectra> identify(IScanMSD massSpectrum, IMassSpectrumIdentifierSettings massSpectrumIdentifierSettings, IProgressMonitor monitor) {
-
-		List<IScanMSD> massSpectra = new ArrayList<IScanMSD>();
-		massSpectra.add(massSpectrum);
-		return identify(massSpectra, massSpectrumIdentifierSettings, monitor);
-	}
-
-	@Override
-	public IProcessingInfo<IMassSpectra> identify(IScanMSD massSpectrum, IProgressMonitor monitor) {
-
-		List<IScanMSD> massSpectra = new ArrayList<IScanMSD>();
-		massSpectra.add(massSpectrum);
-		MassSpectrumUnknownSettings settings = PreferenceSupplier.getMassSpectrumUnknownSettings();
-		return identify(massSpectra, settings, monitor);
-	}
-
-	@Override
-	public IProcessingInfo<IMassSpectra> identify(List<IScanMSD> massSpectra, IProgressMonitor monitor) {
-
-		MassSpectrumUnknownSettings settings = PreferenceSupplier.getMassSpectrumUnknownSettings();
-		return identify(massSpectra, settings, monitor);
 	}
 }

@@ -20,6 +20,7 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.AbstractPeakIdent
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifierSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.AlkaneIdentifier;
 import org.eclipse.chemclipse.model.identifier.IIdentificationResults;
+import org.eclipse.chemclipse.model.identifier.IPeakIdentificationResults;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
@@ -32,7 +33,10 @@ public class PeakIdentifier extends AbstractPeakIdentifierMSD<IIdentificationRes
 
 		AlkaneIdentifier alkaneIdentifier = new AlkaneIdentifier();
 		try {
-			return alkaneIdentifier.runPeakIdentification(peaks, monitor);
+			IProcessingInfo<IPeakIdentificationResults> result = alkaneIdentifier.runPeakIdentification(peaks, monitor);
+			ProcessingInfo<IIdentificationResults> info = new ProcessingInfo<>(result.getProcessingResult());
+			info.addMessages(result);
+			return info;
 		} catch(FileNotFoundException e) {
 			ProcessingInfo<IIdentificationResults> processingInfo = new ProcessingInfo<>();
 			processingInfo.addErrorMessage("Alkane Identifier", "Some has gone wrong.", e);

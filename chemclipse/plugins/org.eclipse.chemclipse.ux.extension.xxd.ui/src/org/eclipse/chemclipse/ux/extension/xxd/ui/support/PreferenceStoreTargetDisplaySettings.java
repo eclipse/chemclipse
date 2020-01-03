@@ -20,6 +20,8 @@ public class PreferenceStoreTargetDisplaySettings implements TargetDisplaySettin
 
 	private PreferenceStoreTargetDisplaySettings(IPreferenceStore preferenceStore) {
 		this.preferenceStore = preferenceStore;
+		preferenceStore.setDefault(PreferenceConstants.P_PEAK_LABELS_ROTATION, PreferenceConstants.DEF_PEAK_LABELS_ROTATION);
+		preferenceStore.setDefault(PreferenceConstants.P_PEAK_LABELS_COLLISION_DETECTION_DEPTH, PreferenceConstants.DEF_PEAK_LABELS_COLLISION_DETECTION_DEPTH);
 	}
 
 	@Override
@@ -55,12 +57,6 @@ public class PreferenceStoreTargetDisplaySettings implements TargetDisplaySettin
 	}
 
 	@Override
-	public boolean isVisible(TargetReference reference) {
-
-		return true;
-	}
-
-	@Override
 	public void setShowPeakLabels(boolean showPeakLabels) {
 
 		preferenceStore.setValue(PreferenceConstants.P_SHOW_CHROMATOGRAM_PEAK_LABELS, showPeakLabels);
@@ -75,5 +71,29 @@ public class PreferenceStoreTargetDisplaySettings implements TargetDisplaySettin
 	public static TargetDisplaySettings getSettings(IPreferenceStore preferenceStore) {
 
 		return new PreferenceStoreTargetDisplaySettings(preferenceStore);
+	}
+
+	@Override
+	public int getRotation() {
+
+		return preferenceStore.getInt(PreferenceConstants.P_PEAK_LABELS_ROTATION);
+	}
+
+	@Override
+	public void setRotation(int degree) {
+
+		preferenceStore.setValue(PreferenceConstants.P_PEAK_LABELS_ROTATION, degree);
+	}
+
+	@Override
+	public int getCollisionDetectionDepth() {
+
+		return preferenceStore.getInt(PreferenceConstants.P_PEAK_LABELS_COLLISION_DETECTION_DEPTH);
+	}
+
+	@Override
+	public void setCollisionDetectionDepth(int depth) {
+
+		preferenceStore.setValue(PreferenceConstants.P_PEAK_LABELS_COLLISION_DETECTION_DEPTH, depth);
 	}
 }

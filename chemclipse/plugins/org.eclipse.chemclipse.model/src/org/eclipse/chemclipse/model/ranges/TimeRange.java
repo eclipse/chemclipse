@@ -108,6 +108,9 @@ public class TimeRange {
 
 		if(start <= stop) {
 			this.start = start;
+			if(start >= center) {
+				updateCenter();
+			}
 		}
 	}
 
@@ -142,6 +145,9 @@ public class TimeRange {
 
 		if(stop >= start) {
 			this.stop = stop;
+			if(stop <= center) {
+				updateCenter();
+			}
 		}
 	}
 

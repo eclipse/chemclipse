@@ -14,18 +14,18 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
 import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -47,7 +47,9 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.DataCategory;
+import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.MessageProvider;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
@@ -55,6 +57,7 @@ import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier.SupplierType;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -62,6 +65,7 @@ import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EditorToolBar;
+import org.eclipse.chemclipse.support.ui.swt.ProcessorToolbar;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.IMethodListener;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
@@ -69,12 +73,15 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.Fonts;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.actions.TargetLabelEditAction;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.actions.TargetLabelEditAction.LabelChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.RetentionIndexUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorProcessTypeSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.TargetReferenceLabelMarker;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupportUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceInitializer;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
@@ -84,9 +91,8 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChro
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.PreferenceStoreTargetDisplaySettings;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.ScanTargetReference;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.SignalTargetReference;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetDisplaySettings;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetReference;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.WorkspaceTargetDisplaySettings;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
@@ -95,14 +101,11 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanChartSuppor
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ChromatogramReferencesUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.HeatmapUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ToolbarConfig;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.TargetDisplaySettingsWizard;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.TargetDisplaySettingsWizardListener;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.chemclipse.xxd.process.comparators.CategoryNameComparator;
-import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.action.Action;
@@ -127,7 +130,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtchart.IAxis.Position;
@@ -215,8 +217,9 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	//
 	private final IEventBroker eventBroker;
 	private MethodSupportUI methodSupportUI;
-	private DataCategory lastMenuDataType;
 	private WorkspaceTargetDisplaySettings targetDisplaySettings;
+	private Predicate<IProcessSupplier<?>> dataCategoryPredicate;
+	private ProcessorToolbar processorToolbar;
 
 	@Deprecated
 	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker) {
@@ -229,7 +232,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 	@Deprecated
 	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker, IPreferenceStore store) {
-		this(parent, style, eventBroker, new ProcessTypeSupport(), store);
+		this(parent, style, eventBroker, new org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport(), store);
 	}
 
 	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker, ProcessSupplierContext supplierContext, IPreferenceStore store) {
@@ -412,6 +415,18 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	private void setChromatogramSelectionInternal(IChromatogramSelection chromatogramSelection) {
 
 		if(this.chromatogramSelection != chromatogramSelection) {
+			DataCategory datatype = DataCategory.AUTO_DETECT;
+			if(chromatogramSelection != null) {
+				IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
+				if(chromatogram instanceof IChromatogramMSD) {
+					datatype = DataCategory.MSD;
+				} else if(chromatogram instanceof IChromatogramWSD) {
+					datatype = DataCategory.WSD;
+				} else if(chromatogram instanceof IChromatogramCSD) {
+					datatype = DataCategory.CSD;
+				}
+			}
+			dataCategoryPredicate = ProcessSupplierContext.createDataCategoryPredicate(datatype);
 			targetDisplaySettings = null;
 			this.chromatogramSelection = chromatogramSelection;
 			updateToolbar(toolbars.get(TOOLBAR_CHROMATOGRAM_ALIGNMENT), chromatogramSelection);
@@ -421,7 +436,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 				 * Adjust
 				 */
 				adjustAxisSettings();
-				updateMenu();
+				updateMenu(true);
 				updateChromatogram();
 				setSeparationColumnSelection();
 				retentionIndexUI.setInput(chromatogramSelection.getChromatogram().getSeparationColumnIndices());
@@ -429,6 +444,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 				retentionIndexUI.setInput(null);
 				updateChromatogram();
 			}
+			processorToolbar.update();
 			fireUpdate(getChromatogramChart().getDisplay());
 		}
 	}
@@ -553,58 +569,72 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 		if(processTypeSupport != null) {
 			/*
-			 * Type
+			 * Clean the Menu
 			 */
-			DataCategory datatype = DataCategory.AUTO_DETECT;
-			if(chromatogramSelection != null) {
-				IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
-				if(chromatogram instanceof IChromatogramMSD) {
-					datatype = DataCategory.MSD;
-				} else if(chromatogram instanceof IChromatogramWSD) {
-					datatype = DataCategory.WSD;
-				} else if(chromatogram instanceof IChromatogramCSD) {
-					datatype = DataCategory.CSD;
-				}
+			IChartSettings chartSettings = chromatogramChart.getChartSettings();
+			for(IChartMenuEntry cachedEntry : cachedMenuEntries) {
+				chartSettings.removeMenuEntry(cachedEntry);
 			}
-			if(force || datatype != lastMenuDataType) {
-				/*
-				 * Clean the Menu
-				 */
-				IChartSettings chartSettings = chromatogramChart.getChartSettings();
-				for(IChartMenuEntry cachedEntry : cachedMenuEntries) {
-					chartSettings.removeMenuEntry(cachedEntry);
-				}
-				cachedMenuEntries.clear();
-				/*
-				 * Dynamic Menu Items
-				 */
-				List<IProcessSupplier<?>> suplierList = new ArrayList<>(processTypeSupport.getSupplier(ProcessSupplierContext.createDataCategoryPredicate(datatype).and(new Predicate<IProcessSupplier>() {
-
-					@Override
-					public boolean test(IProcessSupplier supplier) {
-
-						if(supplier.getType() == SupplierType.STRUCTURAL) {
-							return false;
-						}
-						if(supplier.getTypeSupplier() instanceof EditorProcessTypeSupplier) {
-							return false;
-						}
-						return true;
-					}
-				})));
-				Collections.sort(suplierList, new CategoryNameComparator());
-				for(IProcessSupplier<?> supplier : suplierList) {
-					IChartMenuEntry cachedEntry = new ProcessorSupplierMenuEntry<>(() -> IChromatogramSelectionProcessSupplier.createConsumer(getChromatogramSelection()), this::processChromatogram, supplier, processTypeSupport);
-					cachedMenuEntries.add(cachedEntry);
-					chartSettings.addMenuEntry(cachedEntry);
-				}
-				/*
-				 * Apply the menu items.
-				 */
-				chromatogramChart.applySettings(chartSettings);
-				lastMenuDataType = datatype;
+			cachedMenuEntries.clear();
+			/*
+			 * Dynamic Menu Items
+			 */
+			List<IProcessSupplier<?>> suplierList = new ArrayList<>(processTypeSupport.getSupplier(this::isValidSupplier));
+			Collections.sort(suplierList, new CategoryNameComparator());
+			for(IProcessSupplier<?> supplier : suplierList) {
+				IChartMenuEntry cachedEntry = new ProcessorSupplierMenuEntry<>(supplier, processTypeSupport, this::executeSupplier);
+				cachedMenuEntries.add(cachedEntry);
+				chartSettings.addMenuEntry(cachedEntry);
 			}
+			/*
+			 * Apply the menu items.
+			 */
+			chromatogramChart.applySettings(chartSettings);
 		}
+	}
+
+	private <C> void executeSupplier(IProcessSupplier<C> processSupplier, ProcessSupplierContext processSupplierContext) {
+
+		Shell shell = getChromatogramChart().getShell();
+		try {
+			ProcessorPreferences<C> settings = SettingsWizard.getSettings(shell, SettingsWizard.getWorkspacePreferences(processSupplier));
+			if(settings == null) {
+				return;
+			}
+			processChromatogram(new IRunnableWithProgress() {
+
+				@Override
+				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+					DefaultProcessingResult<Object> msgs = new DefaultProcessingResult<>();
+					IProcessSupplier.applyProcessor(settings, IChromatogramSelectionProcessSupplier.createConsumer(getChromatogramSelection()), new ProcessExecutionContext(monitor, msgs, processSupplierContext));
+					updateResult(shell, msgs);
+				}
+			}, shell);
+		} catch(IOException e) {
+			DefaultProcessingResult<Object> result = new DefaultProcessingResult<>();
+			result.addErrorMessage(processSupplier.getName(), "can't process settings", e);
+			updateResult(shell, result);
+		}
+	}
+
+	@SuppressWarnings("deprecation")
+	public void updateResult(Shell shell, MessageProvider result) {
+
+		if(result != null) {
+			shell.getDisplay().asyncExec(() -> ProcessingInfoViewSupport.updateProcessingInfo(result, result.hasErrorMessages()));
+		}
+	}
+
+	private boolean isValidSupplier(IProcessSupplier<?> supplier) {
+
+		if(supplier.getType() == SupplierType.STRUCTURAL) {
+			return false;
+		}
+		if(supplier.getTypeSupplier() instanceof EditorProcessTypeSupplier) {
+			return false;
+		}
+		return dataCategoryPredicate != null && dataCategoryPredicate.test(supplier);
 	}
 
 	private void updateChromatogram() {
@@ -638,12 +668,12 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 	private void clearPeakAndScanLabels() {
 
-		removeIdentificationLabelMarker(peakLabelMarkerMap, SERIES_ID_PEAKS_NORMAL_ACTIVE);
-		removeIdentificationLabelMarker(peakLabelMarkerMap, SERIES_ID_PEAKS_NORMAL_INACTIVE);
-		removeIdentificationLabelMarker(peakLabelMarkerMap, SERIES_ID_PEAKS_ISTD_ACTIVE);
-		removeIdentificationLabelMarker(peakLabelMarkerMap, SERIES_ID_PEAKS_ISTD_INACTIVE);
-		removeIdentificationLabelMarker(scanLabelMarkerMap, SERIES_ID_IDENTIFIED_SCANS);
-		//
+		for(String key : peakLabelMarkerMap.keySet()) {
+			removeIdentificationLabelMarker(peakLabelMarkerMap, key);
+		}
+		for(String key : scanLabelMarkerMap.keySet()) {
+			removeIdentificationLabelMarker(scanLabelMarkerMap, key);
+		}
 		peakLabelMarkerMap.clear();
 		scanLabelMarkerMap.clear();
 	}
@@ -772,7 +802,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			removeIdentificationLabelMarker(peakLabelMarkerMap, seriesId);
 			if(displaySettings.isShowPeakLabels()) {
 				IPlotArea plotArea = chromatogramChart.getBaseChart().getPlotArea();
-				TargetReferenceLabelMarker peakLabelMarker = new TargetReferenceLabelMarker(ScanTargetReference.getPeakReferences(peaks), displaySettings);
+				TargetReferenceLabelMarker peakLabelMarker = new TargetReferenceLabelMarker(SignalTargetReference.getPeakReferences(peaks), displaySettings, symbolSize * 2);
 				plotArea.addCustomPaintListener(peakLabelMarker);
 				peakLabelMarkerMap.put(seriesId, peakLabelMarker);
 			}
@@ -793,7 +823,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			removeIdentificationLabelMarker(scanLabelMarkerMap, seriesId);
 			if(displaySettings.isShowScanLables()) {
 				IPlotArea plotArea = chromatogramChart.getBaseChart().getPlotArea();
-				TargetReferenceLabelMarker scanLabelMarker = new TargetReferenceLabelMarker(ScanTargetReference.getScanReferences(scans), displaySettings);
+				TargetReferenceLabelMarker scanLabelMarker = new TargetReferenceLabelMarker(SignalTargetReference.getScanReferences(scans), displaySettings, symbolSize * 2);
 				plotArea.addCustomPaintListener(scanLabelMarker);
 				scanLabelMarkerMap.put(seriesId, scanLabelMarker);
 			}
@@ -938,16 +968,18 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	private EditorToolBar createToolbarMain(Composite parent) {
 
 		EditorToolBar editorToolBar = new EditorToolBar(parent);
+		processorToolbar = new ProcessorToolbar(editorToolBar, processTypeSupport, this::isValidSupplier, this::executeSupplier);
 		editorToolBar.addAction(createLabelsAction());
-		editorToolBar.addAction(createToggleToolbarAction("Info", "Toggle the info toolbar.", IApplicationImage.IMAGE_INFO, TOOLBAR_INFO));
+		editorToolBar.addAction(createToggleToolbarAction("Info", "the info toolbar.", IApplicationImage.IMAGE_INFO, TOOLBAR_INFO));
 		editorToolBar.createCombo(this::initComboViewerSeparationColumn, true, 150);
 		chromatogramReferencesUI = new ChromatogramReferencesUI(editorToolBar, this::setChromatogramSelectionInternal);
-		editorToolBar.addAction(createToggleToolbarAction("Edit", "Toggle the edit toolbar.", IApplicationImage.IMAGE_EDIT, TOOLBAR_EDIT));
-		editorToolBar.addAction(createToggleToolbarAction("Alignment", "Toggle the chromatogram alignment toolbar.", IApplicationImage.IMAGE_ALIGN_CHROMATOGRAMS, TOOLBAR_CHROMATOGRAM_ALIGNMENT));
-		editorToolBar.addAction(createToggleToolbarAction("Methods", "Toggle the method toolbar.", IApplicationImage.IMAGE_METHOD, TOOLBAR_METHOD));
+		editorToolBar.addAction(createToggleToolbarAction("Edit", "the edit toolbar.", IApplicationImage.IMAGE_EDIT, TOOLBAR_EDIT));
+		editorToolBar.addAction(createToggleToolbarAction("Alignment", "the chromatogram alignment toolbar.", IApplicationImage.IMAGE_ALIGN_CHROMATOGRAMS, TOOLBAR_CHROMATOGRAM_ALIGNMENT));
+		editorToolBar.addAction(createToggleToolbarAction("Methods", "the method toolbar.", IApplicationImage.IMAGE_METHOD, TOOLBAR_METHOD));
 		//
 		createResetButton(editorToolBar);
 		editorToolBar.enableToolbarTextPage(preferenceStore, PREFERENCE_CHROMATOGRAM_UI_SHOW_TOOLBAR_TEXT);
+		processorToolbar.enablePreferencePage(preferenceStore, "ProcessorToolbar.Processors");
 		editorToolBar.addPreferencePages(new Supplier<Collection<? extends IPreferencePage>>() {
 
 			@Override
@@ -1006,7 +1038,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 				IChromatogramSelection selection = getChromatogramSelection();
 				ProcessEntryContainer.applyProcessEntries(processMethod, new ProcessExecutionContext(monitor, processingInfo, processTypeSupport), IChromatogramSelectionProcessSupplier.createConsumer(selection));
 				selection.update(false);
-				ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, processingInfo.hasErrorMessages());
+				updateResult(parent.getShell(), processingInfo);
 			}
 		});
 		toolbarMain.addPreferencePages(() -> Arrays.asList(methodSupportUI.getPreferencePages()), methodSupportUI::applySettings);
@@ -1178,89 +1210,50 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 	private IAction createLabelsAction() {
 
-		return new Action("Manage Labels", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_LABELS, IApplicationImage.SIZE_16x16)) {
+		return new TargetLabelEditAction(new LabelChart() {
 
 			@Override
-			public void runWithEvent(Event event) {
+			public void setChartMarkerVisible(boolean visible) {
 
-				if(chromatogramSelection != null) {
-					List<ScanTargetReference> identifications = new ArrayList<>();
-					identifications.addAll(ScanTargetReference.getPeakReferences(chromatogramSelection.getChromatogram().getPeaks()));
-					identifications.addAll(ScanTargetReference.getScanReferences(ChromatogramDataSupport.getIdentifiedScans(chromatogramSelection.getChromatogram())));
-					Collections.sort(identifications, new Comparator<ScanTargetReference>() {
-
-						@Override
-						public int compare(ScanTargetReference o1, ScanTargetReference o2) {
-
-							return o1.getScan().getRetentionTime() - o2.getScan().getRetentionTime();
-						}
-					});
-					TargetReferenceLabelMarker previewMarker = new TargetReferenceLabelMarker(true);
-					ChromatogramChart chart = getChromatogramChart();
-					chart.getBaseChart().getPlotArea().addCustomPaintListener(previewMarker);
-					TargetDisplaySettingsWizardListener listener = new TargetDisplaySettingsWizardListener() {
-
-						boolean previewDisabled = true;
-
-						@Override
-						public String getIDLabel() {
-
-							return "RT";
-						}
-
-						@Override
-						public void setPreviewSettings(TargetDisplaySettings previewSettings, Predicate<TargetReference> activeFilter) {
-
-							if(previewSettings == null && previewDisabled) {
-								return;
-							}
-							previewDisabled = previewSettings == null;
-							for(TargetReferenceLabelMarker marker : scanLabelMarkerMap.values()) {
-								marker.setVisible(previewDisabled);
-							}
-							for(TargetReferenceLabelMarker marker : peakLabelMarkerMap.values()) {
-								marker.setVisible(previewDisabled);
-							}
-							Predicate<TargetReference> settingsFilter = previewMarker.setData(identifications, previewSettings, activeFilter);
-							if(previewDisabled) {
-								chart.setRange(IExtendedChart.X_AXIS, chromatogramSelection.getStartRetentionTime(), chromatogramSelection.getStopRetentionTime());
-							} else {
-								double minRT = Double.NaN;
-								double maxRT = Double.NaN;
-								for(ScanTargetReference scanTargetReference : identifications) {
-									if(settingsFilter.test(scanTargetReference) && (activeFilter == null || activeFilter.test(scanTargetReference))) {
-										double rt = scanTargetReference.getScan().getX();
-										if(Double.isNaN(minRT) || rt < minRT) {
-											minRT = rt;
-										}
-										if(Double.isNaN(maxRT) || rt > maxRT) {
-											maxRT = rt;
-										}
-									}
-								}
-								int absStart = chromatogramSelection.getChromatogram().getStartRetentionTime();
-								if(Double.isNaN(minRT)) {
-									minRT = absStart;
-								}
-								int absStop = chromatogramSelection.getChromatogram().getStopRetentionTime();
-								if(Double.isNaN(maxRT)) {
-									maxRT = absStop;
-								}
-								long windowOffset = TimeUnit.MINUTES.toMillis(1);
-								chart.setRange(IExtendedChart.X_AXIS, Math.max(minRT - windowOffset, absStart), Math.min(absStop, maxRT + windowOffset));
-							}
-							chart.redraw();
-						}
-					};
-					boolean settingsChanged = TargetDisplaySettingsWizard.openWizard(chromatogramChart.getShell(), identifications, listener, getTargetSettings());
-					chart.getBaseChart().getPlotArea().removeCustomPaintListener(previewMarker);
-					listener.setPreviewSettings(null, null);
-					if(settingsChanged) {
-						updateChromatogram();
-					}
+				for(TargetReferenceLabelMarker marker : scanLabelMarkerMap.values()) {
+					marker.setVisible(visible);
+				}
+				for(TargetReferenceLabelMarker marker : peakLabelMarkerMap.values()) {
+					marker.setVisible(visible);
 				}
 			}
-		};
+
+			@Override
+			public void refresh() {
+
+				getTargetSettings().flush();
+				ExtendedChromatogramUI.this.updateChromatogram();
+			}
+
+			@Override
+			public void redraw() {
+
+				getChart().redraw();
+			}
+
+			@Override
+			public WorkspaceTargetDisplaySettings getTargetSettings() {
+
+				return ExtendedChromatogramUI.this.getTargetSettings();
+			}
+
+			@Override
+			public IChromatogramSelection<?, ?> getChromatogramSelection() {
+
+				return ExtendedChromatogramUI.this.getChromatogramSelection();
+			}
+
+			@Override
+			public ChromatogramChart getChart() {
+
+				return ExtendedChromatogramUI.this.getChromatogramChart();
+			}
+		}, preferenceStore);
 	}
 
 	private IAction createToggleToolbarAction(String name, String tooltip, String image, String toolbar) {
@@ -1285,9 +1278,9 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			private void updateText() {
 
 				if(isChecked()) {
-					setText("Hide " + name);
+					setToolTipText("Hide " + tooltip);
 				} else {
-					setText("Show " + name);
+					setToolTipText("Show " + tooltip);
 				}
 			}
 		};

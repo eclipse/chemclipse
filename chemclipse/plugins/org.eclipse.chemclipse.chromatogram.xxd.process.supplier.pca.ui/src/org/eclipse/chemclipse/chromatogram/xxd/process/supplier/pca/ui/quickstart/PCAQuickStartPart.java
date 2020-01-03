@@ -15,6 +15,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handlers.CreatePcaEvaluation;
 import org.eclipse.chemclipse.ux.extension.ui.swt.TaskTileContainer;
 import org.eclipse.chemclipse.ux.extension.ui.views.WelcomeViewExtensionHandler;
 import org.eclipse.e4.core.contexts.IEclipseContext;
@@ -37,6 +38,6 @@ public class PCAQuickStartPart {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		store.setDefault(WelcomeViewExtensionHandler.PREFERENCE_MAX_TILES, 8);
 		store.setDefault(WelcomeViewExtensionHandler.PREFERENCE_MIN_TILES, 2);
-		new WelcomeViewExtensionHandler(tileContainer, store, definition -> definition.matches("pca-quickstart"));
+		new WelcomeViewExtensionHandler(tileContainer, store, CreatePcaEvaluation.PCA_PERSPECTIVE);
 	}
 }

@@ -43,11 +43,7 @@ public interface TileDefinition {
 		return null;
 	}
 
-	/**
-	 * 
-	 * @return <code>true</code> if this tile should be shown by default, without explicitly activated or <code>false</code> if it is only shown if explicitly added by the user
-	 */
-	default boolean isDefaultShow() {
+	default boolean isDefaultShow(String subContext) {
 
 		return false;
 	}
@@ -61,13 +57,17 @@ public interface TileDefinition {
 	 */
 	default String getContext() {
 
+		String preferredPerspective = getPreferredPerspective();
+		if(preferredPerspective != null) {
+			return preferredPerspective;
+		}
 		return "";
 	}
 
 	default boolean matches(String subContext) {
 
-		if(subContext == null) {
-			return getContext() == null;
+		if(subContext == null || subContext.isEmpty()) {
+			return true;
 		}
 		String context = getContext();
 		if(context != null) {

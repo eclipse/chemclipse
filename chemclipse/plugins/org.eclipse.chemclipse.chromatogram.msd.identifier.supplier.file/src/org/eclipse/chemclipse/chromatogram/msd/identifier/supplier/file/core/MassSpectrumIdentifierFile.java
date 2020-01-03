@@ -8,12 +8,11 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - fix generics
+ * Christoph Läubrich - adjust to simplified API, add generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.AbstractMassSpectrumIdentifier;
@@ -33,43 +32,20 @@ public class MassSpectrumIdentifierFile extends AbstractMassSpectrumIdentifier {
 	public IProcessingInfo<IMassSpectra> identify(List<IScanMSD> massSpectraList, IMassSpectrumIdentifierSettings identifierSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo<IMassSpectra> processingInfo = new ProcessingInfo<>();
+		MassSpectrumIdentifierSettings massSpectrumIdentifierSettings;
 		if(identifierSettings instanceof MassSpectrumIdentifierSettings) {
-			try {
-				MassSpectrumIdentifierSettings massSpectrumIdentifierSettings = (MassSpectrumIdentifierSettings)identifierSettings;
-				FileIdentifier fileIdentifier = new FileIdentifier();
-				IMassSpectra massSpectra = fileIdentifier.runIdentification(massSpectraList, massSpectrumIdentifierSettings, monitor);
-				processingInfo.setProcessingResult(massSpectra);
-				processingInfo.addInfoMessage(FileIdentifier.IDENTIFIER, "Mass spectra have been identified.");
-			} catch(FileNotFoundException e) {
-				processingInfo.addErrorMessage(FileIdentifier.IDENTIFIER, "An I/O error ocurred.");
-			}
+			massSpectrumIdentifierSettings = (MassSpectrumIdentifierSettings)identifierSettings;
 		} else {
-			processingInfo.addErrorMessage(FileIdentifier.IDENTIFIER, "The settings are not of type: " + MassSpectrumIdentifierSettings.class);
+			massSpectrumIdentifierSettings = PreferenceSupplier.getMassSpectrumIdentifierSettings();
+		}
+		try {
+			FileIdentifier fileIdentifier = new FileIdentifier();
+			IMassSpectra massSpectra = fileIdentifier.runIdentification(massSpectraList, massSpectrumIdentifierSettings, monitor);
+			processingInfo.setProcessingResult(massSpectra);
+			processingInfo.addInfoMessage(FileIdentifier.IDENTIFIER, "Mass spectra have been identified.");
+		} catch(FileNotFoundException e) {
+			processingInfo.addErrorMessage(FileIdentifier.IDENTIFIER, "An I/O error ocurred.");
 		}
 		return processingInfo;
-	}
-
-	@Override
-	public IProcessingInfo<IMassSpectra> identify(IScanMSD massSpectrum, IMassSpectrumIdentifierSettings massSpectrumIdentifierSettings, IProgressMonitor monitor) {
-
-		List<IScanMSD> massSpectra = new ArrayList<IScanMSD>();
-		massSpectra.add(massSpectrum);
-		return identify(massSpectra, massSpectrumIdentifierSettings, monitor);
-	}
-
-	@Override
-	public IProcessingInfo<IMassSpectra> identify(IScanMSD massSpectrum, IProgressMonitor monitor) {
-
-		List<IScanMSD> massSpectra = new ArrayList<IScanMSD>();
-		massSpectra.add(massSpectrum);
-		MassSpectrumIdentifierSettings massSpectrumIdentifierSettings = PreferenceSupplier.getMassSpectrumIdentifierSettings();
-		return identify(massSpectra, massSpectrumIdentifierSettings, monitor);
-	}
-
-	@Override
-	public IProcessingInfo<IMassSpectra> identify(List<IScanMSD> massSpectra, IProgressMonitor monitor) {
-
-		MassSpectrumIdentifierSettings massSpectrumIdentifierSettings = PreferenceSupplier.getMassSpectrumIdentifierSettings();
-		return identify(massSpectra, massSpectrumIdentifierSettings, monitor);
 	}
 }

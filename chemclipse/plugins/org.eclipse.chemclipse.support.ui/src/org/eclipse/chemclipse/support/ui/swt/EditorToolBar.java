@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -33,6 +34,7 @@ import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.ControlContribution;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.action.SubContributionManager;
@@ -56,11 +58,9 @@ import org.eclipse.swt.widgets.ToolItem;
 
 public class EditorToolBar {
 
-	private static final String GROUP_SETTING = "group.setting";
-	private static final String GROUP_MAIN = "group.main";
-	//
+	private static final AtomicLong ID_SEQUENCE = new AtomicLong(System.currentTimeMillis());
 	private final IToolBarManager toolBarManager;
-	private final AbstractGroupMarker mainGroup;
+	private final AbstractGroupMarker group;
 	private final EditorToolBar parent;
 	private final ConfigSection config;
 	private final List<ActionContributionItem> actionContributions;
@@ -74,19 +74,18 @@ public class EditorToolBar {
 		this.parent = null;
 		actionContributions = new ArrayList<>();
 		ToolBarManager toolbarManagerSWT = new ToolBarManager(SWT.FLAT | SWT.WRAP);
-		mainGroup = new GroupMarker(GROUP_MAIN);
-		toolbarManagerSWT.add(mainGroup);
-		config = new ConfigSection(this);
+		group = null;
 		ToolBar toolBar = toolbarManagerSWT.createControl(parent);
 		toolBar.setLayoutData(new GridData(align, SWT.CENTER, true, false));
 		toolBarManager = toolbarManagerSWT;
+		config = new ConfigSection(this);
 	}
 
-	private EditorToolBar(IToolBarManager manager, EditorToolBar parent) {
+	private EditorToolBar(IToolBarManager manager, EditorToolBar parent, String groupName) {
 		toolBarManager = manager;
 		this.parent = parent;
 		this.config = null;
-		this.mainGroup = parent.mainGroup;
+		this.group = new GroupMarker(groupName);
 		this.actionContributions = parent.actionContributions;
 	}
 
@@ -119,7 +118,36 @@ public class EditorToolBar {
 
 	public void addAction(IAction action) {
 
-		toolBarManager.appendToGroup(mainGroup.getGroupName(), createContribution(action));
+		addContribution(createContribution(action), false);
+	}
+
+	private void addContribution(IContributionItem item, boolean prepend) {
+
+		if(group == null) {
+			if(config != null && config.toolbar != null) {
+				if(prepend) {
+					IContributionItem[] items = toolBarManager.getItems();
+					toolBarManager.insertBefore(items[0].getId(), item);
+				} else {
+					toolBarManager.insertBefore(config.toolbar.group.getId(), item);
+				}
+			} else {
+				if(prepend) {
+					IContributionItem[] items = toolBarManager.getItems();
+					if(items.length > 0) {
+						toolBarManager.insertBefore(items[0].getId(), item);
+						return;
+					}
+				}
+				toolBarManager.add(item);
+			}
+		} else {
+			if(prepend) {
+				toolBarManager.prependToGroup(group.getId(), item);
+			} else {
+				toolBarManager.appendToGroup(group.getId(), item);
+			}
+		}
 		update();
 	}
 
@@ -129,6 +157,7 @@ public class EditorToolBar {
 		if(isShowText()) {
 			contributionItem.setMode(ActionContributionItem.MODE_FORCE_TEXT);
 		}
+		contributionItem.setId("Action." + ID_SEQUENCE.incrementAndGet());
 		actionContributions.add(contributionItem);
 		return contributionItem;
 	}
@@ -182,8 +211,8 @@ public class EditorToolBar {
 				return width > 0 ? width : super.computeWidth(control);
 			}
 		};
-		toolBarManager.add(contribution);
-		update();
+		contribution.setId("Combo." + ID_SEQUENCE.incrementAndGet());
+		addContribution(contribution, false);
 	}
 
 	public void update() {
@@ -200,20 +229,29 @@ public class EditorToolBar {
 	 */
 	public EditorToolBar createChild() {
 
-		return createChildInternal(mainGroup.getGroupName() + "." + UUID.randomUUID());
+		return createChild(false);
 	}
 
-	private EditorToolBar createChildInternal(String groupName) {
+	public EditorToolBar createChild(boolean prepend) {
 
-		SubToolBarManager manager = new SubToolBarManager(toolBarManager);
-		EditorToolBar child = new EditorToolBar(manager, this);
-		child.addSeparator();
+		String baseName;
+		if(group == null) {
+			// This is the master toolbar
+			baseName = "master";
+		} else {
+			// this is a child
+			baseName = group.getId();
+		}
+		EditorToolBar child = new EditorToolBar(new SubToolBarManager(toolBarManager), this, baseName + "." + ID_SEQUENCE.incrementAndGet());
+		addContribution(child.group, prepend);
 		return child;
 	}
 
 	public void addSeparator() {
 
-		toolBarManager.add(new Separator());
+		Separator separator = new Separator();
+		separator.setId("Separator." + ID_SEQUENCE.incrementAndGet());
+		addContribution(separator, false);
 	}
 
 	/**
@@ -253,7 +291,7 @@ public class EditorToolBar {
 			};
 			boolean checked = updateShowTextByPreference(preferenceStore, key);
 			action.setChecked(checked);
-			config.getConfigChild().addAction(action);
+			config.getToolbar().addAction(action);
 			update();
 			return action;
 		}
@@ -319,20 +357,12 @@ public class EditorToolBar {
 	private static final class ConfigSection {
 
 		private final List<PreferencePageContainer> preferencePages = new ArrayList<>();
-		private EditorToolBar configChild;
-		private final EditorToolBar editorToolBar;
+		private EditorToolBar toolbar;
 		private IAction configAction;
+		private final EditorToolBar parent;
 
 		public ConfigSection(EditorToolBar editorToolBar) {
-			this.editorToolBar = editorToolBar;
-		}
-
-		private EditorToolBar getConfigChild() {
-
-			if(configChild == null) {
-				configChild = editorToolBar.createChildInternal(GROUP_SETTING);
-			}
-			return configChild;
+			this.parent = editorToolBar;
 		}
 
 		private void addPreferencePageContainer(PreferencePageContainer container) {
@@ -364,11 +394,18 @@ public class EditorToolBar {
 						}
 					}
 				};
-				EditorToolBar child = getConfigChild();
-				child.addAction(configAction);
-				child.setVisible(true);
+				getToolbar().addAction(configAction);
+				getToolbar().setVisible(true);
 			}
 			preferencePages.add(container);
+		}
+
+		public EditorToolBar getToolbar() {
+
+			if(toolbar == null) {
+				toolbar = parent.createChild(false);
+			}
+			return toolbar;
 		}
 	}
 

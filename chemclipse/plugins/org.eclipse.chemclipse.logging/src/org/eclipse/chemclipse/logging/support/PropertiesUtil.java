@@ -67,7 +67,7 @@ public class PropertiesUtil {
 	public static String getLogFilePath() {
 
 		StringBuilder builder = new StringBuilder();
-		builder.append(Settings.getSettingsDirectory());
+		builder.append(Settings.getSystemDirectory());
 		builder.append(File.separator);
 		builder.append(IDENTIFIER);
 		return builder.toString();

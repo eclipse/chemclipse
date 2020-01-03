@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
- * Christoph Läubrich - add method to check if target is valid
+ * Christoph Läubrich - add method to check if target is valid, ad generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl;
 
@@ -67,7 +67,7 @@ public class AlkaneIdentifier {
 	 * @return {@link IPeakIdentificationResults}
 	 * @throws FileNotFoundException
 	 */
-	public IProcessingInfo runPeakIdentification(List<? extends IPeakMSD> peaks, IProgressMonitor monitor) throws FileNotFoundException {
+	public IProcessingInfo<IPeakIdentificationResults> runPeakIdentification(List<? extends IPeakMSD> peaks, IProgressMonitor monitor) throws FileNotFoundException {
 
 		/*
 		 * Create the file identifier settings.
@@ -82,7 +82,7 @@ public class AlkaneIdentifier {
 		return peakIdentifier.identify(peaks, peakIdentifierSettings, monitor);
 	}
 
-	public IProcessingInfo runIdentification(List<IScanMSD> massSpectraList, IMassSpectrumIdentifierSettings fileIdentifierSettings, IProgressMonitor monitor) throws FileNotFoundException {
+	public IProcessingInfo<IMassSpectra> runIdentification(List<IScanMSD> massSpectraList, IMassSpectrumIdentifierSettings fileIdentifierSettings, IProgressMonitor monitor) throws FileNotFoundException {
 
 		/*
 		 * Create the file identifier settings.

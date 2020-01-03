@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -23,7 +23,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.AbstractPeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.peak.detector.core.FilterMode;
 import org.eclipse.chemclipse.chromatogram.peak.detector.model.Threshold;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons.IonMarkMode;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
@@ -39,7 +38,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 
-	private static final Logger logger = Logger.getLogger(PeakDetectorSettingsMSD.class);
 	@JsonProperty(value = "Threshold", defaultValue = "MEDIUM")
 	@EnumSelectionRadioButtonsSettingProperty
 	private Threshold threshold = Threshold.MEDIUM;
@@ -55,20 +53,21 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 	@JsonProperty(value = "Use Noise-Segments", defaultValue = "false")
 	@JsonPropertyDescription(value = "Whether to use Nois-Segments to decide where peaks should be detected, this can improve the sensitivity of the algorithm")
 	private boolean useNoiseSegments = false;
-	@JsonProperty(value = "Filter Mode", defaultValue = "EXCLUDE")
+	@JsonProperty(value = "Filter Mode", defaultValue = "INCLUDE")
 	private FilterMode filterMode;
 	@JsonProperty(value = "m/z values to filter", defaultValue = "")
 	private String filterIonsString;
-	
+
 	@JsonIgnore
 	public static IMarkedIons getFilterIons(PeakDetectorSettingsMSD peakDetectorSettings) {
+
 		IonMarkMode ionMarkMode;
 		switch(peakDetectorSettings.getFilterMode()) {
 			case EXCLUDE:
-				ionMarkMode = IonMarkMode.EXCLUDE;
+				ionMarkMode = IonMarkMode.INCLUDE;
 				break;
 			case INCLUDE:
-				ionMarkMode = IonMarkMode.INCLUDE;
+				ionMarkMode = IonMarkMode.EXCLUDE;
 				break;
 			default:
 				throw new IllegalArgumentException("Unknown filter mode " + peakDetectorSettings.getFilterMode());
@@ -142,6 +141,7 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 
 		return parseIons(filterIonsString);
 	}
+
 	static Collection<Number> parseIons(String filterIonsString) {
 
 		if(StringUtils.isBlank(filterIonsString)) {
@@ -168,6 +168,4 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 
 		this.useNoiseSegments = useNoiseSegments;
 	}
-
-	
 }

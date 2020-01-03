@@ -85,12 +85,6 @@ public class WelcomeView {
 		}
 
 		@Override
-		public boolean isDefaultShow() {
-
-			return false;
-		}
-
-		@Override
 		public String getContext() {
 
 			return WELCOME_MAIN_CONTEXT;
@@ -116,7 +110,7 @@ public class WelcomeView {
 		resizeTile(cols - 3, 1, tileContainer.addTaskTile(new Component(PERSPECTIVE_PCA, null, "PCA", "Used for principal component analysis")));
 		resizeTile(cols - 3, 1, tileContainer.addTaskTile(new Component(PERSPECTIVE_LOGGING, null, "Logging", "Have a look at the log files.")));
 		resizeTile(cols - 2, 1, tileContainer.addTaskTile(new DemoWelcomeTile()));
-		new WelcomeViewExtensionHandler(tileContainer, preferenceStore, definition -> true);
+		new WelcomeViewExtensionHandler(tileContainer, preferenceStore, "");
 	}
 
 	private void resizeTile(int horizontalSpan, int verticalSpan, TaskTile welcomeTile) {

@@ -138,6 +138,7 @@ public class LoadingPlot extends PCA2DPlot {
 		chartSettings.addHandledEventProcessor(new MouseMoveCursorEvent());
 		chartSettings.addHandledEventProcessor(new MouseUpEvent());
 		chartSettings.addHandledEventProcessor(new UndoRedoEvent());
+		chartSettings.setEnableCompress(false);
 		applySettings(chartSettings);
 		getBaseChart().addCustomRangeSelectionHandler(new ICustomSelectionHandler() {
 

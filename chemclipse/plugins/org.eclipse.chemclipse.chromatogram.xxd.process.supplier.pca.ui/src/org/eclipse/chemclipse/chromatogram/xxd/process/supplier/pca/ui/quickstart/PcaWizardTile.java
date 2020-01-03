@@ -71,4 +71,10 @@ public abstract class PcaWizardTile implements TileDefinition {
 
 		return CreatePcaEvaluation.PCA_PERSPECTIVE;
 	}
+
+	@Override
+	public String getContext() {
+
+		return "pca-quickstart-default-wizard";
+	}
 }

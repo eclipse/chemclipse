@@ -87,6 +87,7 @@ public class WelcomeViewExtensionHandler {
 	private int tiles;
 	private final IPreferenceStore preferenceStore;
 	private final Predicate<TileDefinition> definitionAcceptor;
+	private String subcontext;
 
 	/**
 	 * Constructs a {@link WelcomeViewExtensionHandler} with the given parameters
@@ -96,9 +97,14 @@ public class WelcomeViewExtensionHandler {
 	 * @param tileContainer
 	 *            the label provider to use for the selection dialog
 	 */
-	public WelcomeViewExtensionHandler(TaskTileContainer tileContainer, IPreferenceStore preferenceStore, Predicate<TileDefinition> definitionAcceptor) {
+	public WelcomeViewExtensionHandler(TaskTileContainer tileContainer, IPreferenceStore preferenceStore, String subcontext) {
+		this(tileContainer, preferenceStore, subcontext, tile -> tile.matches(subcontext));
+	}
+
+	private WelcomeViewExtensionHandler(TaskTileContainer tileContainer, IPreferenceStore preferenceStore, String subcontext, Predicate<TileDefinition> definitionAcceptor) {
 		this.tileContainer = tileContainer;
 		this.preferenceStore = preferenceStore;
+		this.subcontext = subcontext;
 		this.definitionAcceptor = definitionAcceptor;
 		this.minTiles = preferenceStore.getInt(PREFERENCE_MIN_TILES);
 		this.maxTiles = Math.max(minTiles, preferenceStore.getInt(PREFERENCE_MAX_TILES));
@@ -196,7 +202,7 @@ public class WelcomeViewExtensionHandler {
 			if(used.size() < maxTiles - 1) {
 				TileDefinition defaultExtension = iterator.next();
 				// fill space with ones defined as defaultShow
-				if(defaultExtension.isDefaultShow()) {
+				if(defaultExtension.isDefaultShow(subcontext)) {
 					// but only if the user has not previously explicitly removed this one!
 					if(!removedTiles.contains(getExtensionId(defaultExtension))) {
 						iterator.remove();
@@ -434,7 +440,7 @@ public class WelcomeViewExtensionHandler {
 		}
 
 		@Override
-		public boolean isDefaultShow() {
+		public boolean isDefaultShow(String subcontext) {
 
 			return Boolean.parseBoolean(element.getAttribute(ATTRIBUTE_DEFAULTSHOW));
 		}
@@ -500,10 +506,10 @@ public class WelcomeViewExtensionHandler {
 		}
 
 		@Override
-		public boolean isDefaultShow() {
+		public boolean isDefaultShow(String context) {
 
 			if(delegate != null) {
-				return delegate.isDefaultShow();
+				return delegate.isDefaultShow(context);
 			}
 			return false;
 		}

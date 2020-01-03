@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2019 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add icon shortcut
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.ui.icons.core;
 
@@ -55,6 +56,11 @@ public interface IApplicationImageProvider {
 	 * @return {@link ImageDescriptor}
 	 */
 	ImageDescriptor getImageDescriptor(String fileName, String size);
+
+	default ImageDescriptor getIcon(String fileName) {
+
+		return getImageDescriptor(fileName, SIZE_16x16);
+	}
 
 	/**
 	 * Returns the images as an input stream.

@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.support.settings.validation;
 
 import java.io.File;
 
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty.DialogType;
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
@@ -24,10 +23,8 @@ import org.eclipse.core.runtime.IStatus;
 
 public class InputValidator implements IValidator {
 
-	private static final Logger logger = Logger.getLogger(InputValidator.class);
-	//
 	private static final String ERROR = "Please enter a value.";
-	private InputValue inputValue;
+	private final InputValue inputValue;
 
 	public InputValidator(InputValue inputValue) {
 		this.inputValue = inputValue;

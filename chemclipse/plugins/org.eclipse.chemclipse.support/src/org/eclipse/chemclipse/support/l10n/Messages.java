@@ -14,17 +14,17 @@ package org.eclipse.chemclipse.support.l10n;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.preferences.SupportPreferences;
 import org.eclipse.core.runtime.FileLocator;
 import org.osgi.framework.Bundle;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Uses OSGI-INF/l10n/bundle%.properties
@@ -33,7 +33,7 @@ public class Messages {
 
 	public static final String NO_ENTRY = "n.a."; // $NON-NLS-1$
 	//
-	private static final Logger logger = Logger.getLogger(Messages.class);
+	private static final Logger logger = LoggerFactory.getLogger(Messages.class);
 	/*
 	 * Model: bundle.properties -> ISO-8859-1 : To enable a wide range of languages.
 	 * UI: bundle.properties -> ISO-8859-1 : Otherwise the *.e4xmi doesn't show the entries correctly.
@@ -147,10 +147,10 @@ public class Messages {
 				String pathname = url.toString().replace("file:", "");
 				File file = new File(pathname);
 				if(file.exists()) {
-					logger.info(file);
+					logger.trace("Parsing messages from file {}", file);
 					addMessages(file, checkKey);
 				} else {
-					logger.warn("File doesn't exists: " + file);
+					logger.warn("File doesn't exists: {}", file);
 				}
 			}
 		} catch(Exception e) {
@@ -209,10 +209,8 @@ public class Messages {
 			 * Close the readers.
 			 */
 			bufferedReader.close();
-		} catch(FileNotFoundException e) {
-			logger.warn(e);
 		} catch(IOException e) {
-			logger.warn(e);
+			logger.warn("reading file {} failed", file, e);
 		}
 	}
 }
