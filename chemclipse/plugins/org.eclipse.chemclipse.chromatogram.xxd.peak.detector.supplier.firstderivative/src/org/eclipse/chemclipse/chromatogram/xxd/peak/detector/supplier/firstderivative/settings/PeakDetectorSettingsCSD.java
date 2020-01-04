@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2019 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -36,6 +36,9 @@ public class PeakDetectorSettingsCSD extends AbstractPeakDetectorCSDSettings {
 	@JsonPropertyDescription(value = "Window Size: 3, 5, 7, ..., 45")
 	@EnumSelectionSettingProperty
 	private WindowSize windowSize = WindowSize.WIDTH_5;
+	@JsonProperty(value = "Use Noise-Segments", defaultValue = "false")
+	@JsonPropertyDescription(value = "Whether to use Nois-Segments to decide where peaks should be detected, this can improve the sensitivity of the algorithm")
+	private boolean useNoiseSegments = false;
 
 	public PeakDetectorSettingsCSD() {
 		windowSize = WindowSize.WIDTH_5;
@@ -81,5 +84,15 @@ public class PeakDetectorSettingsCSD extends AbstractPeakDetectorCSDSettings {
 	public void setMovingAverageWindowSize(WindowSize windowSize) {
 
 		this.windowSize = windowSize;
+	}
+
+	public boolean isUseNoiseSegments() {
+
+		return useNoiseSegments;
+	}
+
+	public void setUseNoiseSegments(boolean useNoiseSegments) {
+
+		this.useNoiseSegments = useNoiseSegments;
 	}
 }
