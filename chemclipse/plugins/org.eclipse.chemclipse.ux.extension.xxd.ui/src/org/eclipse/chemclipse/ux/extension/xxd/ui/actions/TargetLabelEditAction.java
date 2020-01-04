@@ -16,12 +16,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.TargetReferenceLabelMarker;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.SignalTargetReference;
@@ -32,7 +34,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.TargetDisplaySettingsW
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.TargetDisplaySettingsWizardListener;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swtchart.Range;
 import org.eclipse.swtchart.extensions.core.IExtendedChart;
 import org.eclipse.swtchart.extensions.core.IScrollableChart;
@@ -61,28 +62,39 @@ public class TargetLabelEditAction extends Action {
 	}
 
 	@Override
-	public void runWithEvent(Event event) {
+	public void run() {
 
 		IChromatogramSelection<?, ?> chromatogramSelection = labelChart.getChromatogramSelection();
 		if(chromatogramSelection != null) {
-			List<SignalTargetReference> identifications = new ArrayList<>();
-			identifications.addAll(SignalTargetReference.getPeakReferences(chromatogramSelection.getChromatogram().getPeaks()));
-			identifications.addAll(SignalTargetReference.getScanReferences(ChromatogramDataSupport.getIdentifiedScans(chromatogramSelection.getChromatogram())));
-			Collections.sort(identifications, new Comparator<SignalTargetReference>() {
+			List<SignalTargetReference> identifications;
+			try {
+				identifications = DisplayUtils.executeBusy(() -> {
+					List<SignalTargetReference> list = new ArrayList<>();
+					list.addAll(SignalTargetReference.getPeakReferences(chromatogramSelection.getChromatogram().getPeaks()));
+					list.addAll(SignalTargetReference.getScanReferences(ChromatogramDataSupport.getIdentifiedScans(chromatogramSelection.getChromatogram())));
+					Collections.sort(list, new Comparator<SignalTargetReference>() {
 
-				@Override
-				public int compare(SignalTargetReference o1, SignalTargetReference o2) {
+						@Override
+						public int compare(SignalTargetReference o1, SignalTargetReference o2) {
 
-					int compare = Double.compare(o1.getSignal().getX(), o2.getSignal().getX());
-					if(compare == 0) {
-						return o1.getName().compareToIgnoreCase(o2.getName());
-					} else {
-						return compare;
-					}
-				}
-			});
-			TargetReferenceLabelMarker previewMarker = new TargetReferenceLabelMarker(true, PreferenceConstants.DEF_SYMBOL_SIZE * 2);
+							int compare = Double.compare(o1.getSignal().getX(), o2.getSignal().getX());
+							if(compare == 0) {
+								return o1.getName().compareToIgnoreCase(o2.getName());
+							} else {
+								return compare;
+							}
+						}
+					});
+					return list;
+				});
+			} catch(InterruptedException e) {
+				Thread.currentThread().interrupt();
+				return;
+			} catch(ExecutionException e) {
+				throw new RuntimeException("can't get reference", e.getCause());
+			}
 			IScrollableChart chart = labelChart.getChart();
+			TargetReferenceLabelMarker previewMarker = new TargetReferenceLabelMarker(true, PreferenceConstants.DEF_SYMBOL_SIZE * 2);
 			chart.getBaseChart().getPlotArea().addCustomPaintListener(previewMarker);
 			TargetDisplaySettingsWizardListener listener = new TargetDisplaySettingsWizardListener() {
 

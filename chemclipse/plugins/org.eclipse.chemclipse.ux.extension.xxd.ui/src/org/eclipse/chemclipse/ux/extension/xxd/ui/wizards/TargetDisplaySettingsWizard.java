@@ -587,9 +587,9 @@ public class TargetDisplaySettingsWizard {
 						TargetReference target = (TargetReference)data;
 						wizardSettings.setVisible(target, true);
 						tableViewer.refresh(target);
-						listener.run();
 					}
 				}
+				listener.run();
 			}
 		});
 		manager.add(new Action("Disable All", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DESELECTED, IApplicationImage.SIZE_16x16)) {
@@ -603,9 +603,9 @@ public class TargetDisplaySettingsWizard {
 						TargetReference target = (TargetReference)data;
 						wizardSettings.setVisible(target, false);
 						tableViewer.refresh(target);
-						listener.run();
 					}
 				}
+				listener.run();
 			}
 		});
 		manager.add(new Separator());
