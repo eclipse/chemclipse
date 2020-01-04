@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,6 +26,7 @@ import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.radiobutton;
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.separator;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -82,15 +83,17 @@ public class TargetDisplaySettingsWizard {
 	public static final int DEFAULT_WIDTH = 1000;
 	public static final int DEFAULT_HEIGHT = 600;
 
-	public static boolean openWizard(Shell shell, Collection<? extends TargetReference> identifications, TargetDisplaySettingsWizardListener listener, SelectableTargetDisplaySettings currentSettings) {
+	public static boolean openWizard(Shell shell, Collection<? extends TargetReference> identifications, TargetDisplaySettingsWizardListener listener, TargetDisplaySettings settings) {
 
-		TargetDisplaySettingsPage page = new TargetDisplaySettingsPage(identifications, currentSettings, listener);
+		TargetDisplaySettingsPage page = new TargetDisplaySettingsPage(identifications, settings, listener);
 		SinglePageWizard wizard = new SinglePageWizard("Target Label Settings", false, page);
 		WizardDialog wizardDialog = new WizardDialog(shell, wizard);
 		wizardDialog.setMinimumPageSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		wizardDialog.setPageSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		if(wizardDialog.open() == Window.OK) {
-			currentSettings.setSelectedSettings(page.selectedSettings.base);
+			if(settings instanceof SelectableTargetDisplaySettings) {
+				((SelectableTargetDisplaySettings)settings).setSelectedSettings(page.selectedSettings.base);
+			}
 			page.selectedSettings.copyTo(page.selectedSettings.base);
 			return true;
 		} else {
@@ -227,19 +230,28 @@ public class TargetDisplaySettingsWizard {
 		private final Collection<? extends TargetReference> identifications;
 		private TargetDisplaySettingsWizardListener listener;
 
-		protected TargetDisplaySettingsPage(Collection<? extends TargetReference> identifications, SelectableTargetDisplaySettings currentSettings, TargetDisplaySettingsWizardListener listener) {
+		protected TargetDisplaySettingsPage(Collection<? extends TargetReference> identifications, TargetDisplaySettings settings, TargetDisplaySettingsWizardListener listener) {
 			super(TargetDisplaySettingsPage.class.getName());
 			this.identifications = identifications;
 			this.listener = listener;
 			setImageDescriptor(ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_LABELS, IApplicationImage.SIZE_64x64));
 			setTitle("Manage target labels to display");
 			setDescription("Here you can select what target labels should be displayed in the chromatogram");
-			Set<Entry<String, TargetDisplaySettings>> entrySet = currentSettings.getSettings().entrySet();
+			Set<Entry<String, TargetDisplaySettings>> entrySet;
+			if(settings instanceof SelectableTargetDisplaySettings) {
+				entrySet = ((SelectableTargetDisplaySettings)settings).getSettings().entrySet();
+			} else {
+				entrySet = Collections.singletonMap("Settings", settings).entrySet();
+			}
 			wizardSettings = new WizardTargetDisplaySettings[entrySet.size()];
 			int index = 0;
 			for(Entry<String, TargetDisplaySettings> entry : entrySet) {
 				wizardSettings[index] = new WizardTargetDisplaySettings(entry.getValue(), entry.getKey(), listener);
-				if(currentSettings.isSelectedSettings(entry.getValue())) {
+				if(settings instanceof SelectableTargetDisplaySettings) {
+					if(((SelectableTargetDisplaySettings)settings).isSelectedSettings(entry.getValue())) {
+						selectedSettings = wizardSettings[index];
+					}
+				} else {
 					selectedSettings = wizardSettings[index];
 				}
 				index++;
@@ -260,6 +272,10 @@ public class TargetDisplaySettingsWizard {
 
 					for(int i = 0; i < radioButtons.length; i++) {
 						Button radiobutton = radioButtons[i];
+						if(radiobutton == null) {
+							editors[i].setEnabled(true);
+							continue;
+						}
 						if(radiobutton.getSelection()) {
 							editors[i].setEnabled(true);
 							if(selectedSettings != wizardSettings[i]) {
@@ -286,6 +302,7 @@ public class TargetDisplaySettingsWizard {
 				editors[i] = new TargetSettingEditor(indentedContainer(composite, 25), settings, this, identifications);
 				separator(composite);
 			}
+			buttonListener.widgetSelected(null);
 			if(listener != null) {
 				boolean preview = listener.isShowPreview();
 				Button previewCheckbox = checkbox(composite, "Show preview in editor", preview);
@@ -307,7 +324,6 @@ public class TargetDisplaySettingsWizard {
 					notifyListener();
 				}
 			}
-			buttonListener.widgetSelected(null);
 			setControl(composite);
 		}
 

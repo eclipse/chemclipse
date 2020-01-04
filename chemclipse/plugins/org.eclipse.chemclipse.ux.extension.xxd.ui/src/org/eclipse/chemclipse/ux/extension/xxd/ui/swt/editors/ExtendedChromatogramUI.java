@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
- * Christoph Läubrich - propagate result of methods to the user
+ * Christoph Läubrich - propagate result of methods to the user, add label selection support
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
@@ -106,6 +106,7 @@ import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.chemclipse.xxd.process.comparators.CategoryNameComparator;
+import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.action.Action;
@@ -652,8 +653,12 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		}
 	}
 
-	private WorkspaceTargetDisplaySettings getTargetSettings() {
+	private TargetDisplaySettings getTargetSettings() {
 
+		TargetDisplaySettings displaySettings = Adapters.adapt(chromatogramSelection, TargetDisplaySettings.class);
+		if(displaySettings != null) {
+			return displaySettings;
+		}
 		if(targetDisplaySettings == null) {
 			File chromatogramFile;
 			if(chromatogramSelection != null) {
@@ -990,7 +995,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 				preferencePageChromatogram.setTitle("Chromatogram Settings");
 				IPreferencePage preferencePageChromatogramAxes = new PreferencePageChromatogramAxes();
 				preferencePageChromatogramAxes.setTitle("Chromatogram Axes");
-				IPreferencePage preferencePageChromatogramPeaks = new PreferencePageChromatogramPeaks();
+				IPreferencePage preferencePageChromatogramPeaks = new PreferencePageChromatogramPeaks(preferenceStore);
 				preferencePageChromatogramPeaks.setTitle("Chromatogram Peaks");
 				IPreferencePage preferencePageChromatogramScans = new PreferencePageChromatogramScans();
 				preferencePageChromatogramScans.setTitle("Chromatogram Scans");
@@ -1208,9 +1213,9 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		return button;
 	}
 
-	private IAction createLabelsAction() {
+	public TargetLabelEditAction createLabelsAction() {
 
-		return new TargetLabelEditAction(new LabelChart() {
+		TargetLabelEditAction action = new TargetLabelEditAction(new LabelChart() {
 
 			@Override
 			public void setChartMarkerVisible(boolean visible) {
@@ -1224,20 +1229,13 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			}
 
 			@Override
-			public void refresh() {
-
-				getTargetSettings().flush();
-				ExtendedChromatogramUI.this.updateChromatogram();
-			}
-
-			@Override
 			public void redraw() {
 
 				getChart().redraw();
 			}
 
 			@Override
-			public WorkspaceTargetDisplaySettings getTargetSettings() {
+			public TargetDisplaySettings getTargetSettings() {
 
 				return ExtendedChromatogramUI.this.getTargetSettings();
 			}
@@ -1254,6 +1252,14 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 				return ExtendedChromatogramUI.this.getChromatogramChart();
 			}
 		}, preferenceStore);
+		action.addChangeListener(() -> {
+			TargetDisplaySettings targetSettings = getTargetSettings();
+			if(targetSettings instanceof WorkspaceTargetDisplaySettings) {
+				((WorkspaceTargetDisplaySettings)targetSettings).flush();
+			}
+		});
+		action.addChangeListener(this::updateChromatogram);
+		return action;
 	}
 
 	private IAction createToggleToolbarAction(String name, String tooltip, String image, String toolbar) {

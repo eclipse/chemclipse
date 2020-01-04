@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
+ * Copyright (c) 2010, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - dispose internal label on dispose of the editor
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.preferences.fieldeditors;
 
@@ -69,5 +70,12 @@ public class LabelFieldEditor extends FieldEditor {
 	public int getNumberOfControls() {
 
 		return 1;
+	}
+
+	@Override
+	public void dispose() {
+
+		this.label.dispose();
+		super.dispose();
 	}
 }

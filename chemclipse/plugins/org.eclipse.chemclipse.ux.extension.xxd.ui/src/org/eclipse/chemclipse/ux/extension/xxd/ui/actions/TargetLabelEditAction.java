@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
@@ -23,7 +24,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.TargetReferenceLabelMarker;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.SelectableTargetDisplaySettings;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.SignalTargetReference;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetDisplaySettings;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetReference;
@@ -39,18 +39,24 @@ import org.eclipse.swtchart.extensions.core.IScrollableChart;
 
 public class TargetLabelEditAction extends Action {
 
-	private static final boolean DEF_SHOW_PREVIEW = false;
-	private static final String P_SHOW_PREVIEW = "TargetLabelEditAction.showPreview";
+	public static final boolean DEF_SHOW_PREVIEW = false;
+	public static final String P_SHOW_PREVIEW = "TargetLabelEditAction.showPreview";
 	private LabelChart labelChart;
 	private IPreferenceStore preferenceStore;
+	private List<Runnable> listeners = new CopyOnWriteArrayList<>();
 
 	public TargetLabelEditAction(LabelChart labelChart, IPreferenceStore preferenceStore) {
 		super("Labels", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_LABELS, IApplicationImage.SIZE_16x16));
 		this.labelChart = labelChart;
 		this.preferenceStore = preferenceStore;
 		setToolTipText("Mange the labels to display in the chromatogram");
+		setShowPreviewDefault(DEF_SHOW_PREVIEW);
+	}
+
+	public void setShowPreviewDefault(boolean previewDefaultValue) {
+
 		if(preferenceStore != null) {
-			preferenceStore.setDefault(P_SHOW_PREVIEW, DEF_SHOW_PREVIEW);
+			preferenceStore.setDefault(P_SHOW_PREVIEW, previewDefaultValue);
 		}
 	}
 
@@ -67,7 +73,12 @@ public class TargetLabelEditAction extends Action {
 				@Override
 				public int compare(SignalTargetReference o1, SignalTargetReference o2) {
 
-					return o1.getName().compareToIgnoreCase(o2.getName());
+					int compare = Double.compare(o1.getSignal().getX(), o2.getSignal().getX());
+					if(compare == 0) {
+						return o1.getName().compareToIgnoreCase(o2.getName());
+					} else {
+						return compare;
+					}
 				}
 			});
 			TargetReferenceLabelMarker previewMarker = new TargetReferenceLabelMarker(true, PreferenceConstants.DEF_SYMBOL_SIZE * 2);
@@ -145,9 +156,14 @@ public class TargetLabelEditAction extends Action {
 			chart.getBaseChart().getPlotArea().removeCustomPaintListener(previewMarker);
 			listener.setPreviewSettings(null, null);
 			if(settingsChanged) {
-				labelChart.refresh();
+				listeners.forEach(Runnable::run);
 			}
 		}
+	}
+
+	public void addChangeListener(Runnable listener) {
+
+		listeners.add(listener);
 	}
 
 	public static interface LabelChart {
@@ -155,16 +171,11 @@ public class TargetLabelEditAction extends Action {
 		IScrollableChart getChart();
 
 		/**
-		 * refresh the whole chart, taking changed settings into account
-		 */
-		void refresh();
-
-		/**
 		 * triggers a simple redraw action
 		 */
 		void redraw();
 
-		SelectableTargetDisplaySettings getTargetSettings();
+		TargetDisplaySettings getTargetSettings();
 
 		IChromatogramSelection<?, ?> getChromatogramSelection();
 

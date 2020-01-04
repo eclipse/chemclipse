@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
+ * Copyright (c) 2010, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - implementation
+ * Christoph Läubrich - getPenalty and Matchfactors should be accessed by getters and not direct field access
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
@@ -53,7 +54,7 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	@Override
 	public void clearPenalty() {
 
-		this.penalty = 0;
+		setPenalty(0);
 	}
 
 	@Override
@@ -95,13 +96,13 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	@Override
 	public final float getMatchFactor() {
 
-		return getAdjustedValue(getMatchFactorNotAdjusted(), penalty);
+		return getAdjustedValue(getMatchFactorNotAdjusted(), getPenalty());
 	}
 
 	@Override
 	public final float getMatchFactorDirect() {
 
-		return getAdjustedValue(getMatchFactorDirectNotAdjusted(), penalty);
+		return getAdjustedValue(getMatchFactorDirectNotAdjusted(), getPenalty());
 	}
 
 	@Override
@@ -119,13 +120,13 @@ public abstract class AbstractComparisonResult implements IComparisonResult {
 	@Override
 	public final float getReverseMatchFactor() {
 
-		return getAdjustedValue(getReverseMatchFactorNotAdjusted(), penalty);
+		return getAdjustedValue(getReverseMatchFactorNotAdjusted(), getPenalty());
 	}
 
 	@Override
 	public final float getReverseMatchFactorDirect() {
 
-		return getAdjustedValue(getReverseMatchFactorDirectNotAdjusted(), penalty);
+		return getAdjustedValue(getReverseMatchFactorDirectNotAdjusted(), getPenalty());
 	}
 
 	@Override
