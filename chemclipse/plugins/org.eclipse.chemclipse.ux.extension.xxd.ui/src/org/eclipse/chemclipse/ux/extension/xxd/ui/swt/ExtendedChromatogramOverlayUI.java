@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -31,6 +31,7 @@ import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -43,6 +44,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstant
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.AxisConfig.ChartAxis;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.core.support.MarkedWavelengths;
@@ -112,17 +114,17 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 	private Button buttonMirrorSeries;
 	private Label labelDataStatus;
 	//
-	private ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
-	private OverlayChartSupport overlayChartSupport = new OverlayChartSupport();
+	private final ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
+	private final OverlayChartSupport overlayChartSupport = new OverlayChartSupport();
 	private ControlDecoration controlDecoration;
-	private Set<String> mirroredSeries = new HashSet<>();
+	private final Set<String> mirroredSeries = new HashSet<>();
 	//
-	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	//
 	@SuppressWarnings("rawtypes")
-	private Map<IChromatogramSelection, List<String>> chromatogramSelections = new LinkedHashMap<>();
+	private final Map<IChromatogramSelection, List<String>> chromatogramSelections = new LinkedHashMap<>();
 	private Composite toolbarMain;
-	private int style;
+	private final int style;
 
 	public ExtendedChromatogramOverlayUI(Composite parent) {
 		this(parent, SWT.BORDER);
@@ -800,9 +802,9 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 			part.setCloseable(true);
 			part.setContributionURI("bundleclass://" + bundle + "/" + classPath);
 			//
-			MPartStack partStack = PartSupport.getPartStack(partStackId);
+			MPartStack partStack = PartSupport.getPartStack(partStackId, ModelSupportAddon.getModelService(), ModelSupportAddon.getApplication());
 			partStack.getChildren().add(part);
-			PartSupport.showPart(part);
+			PartSupport.showPart(part, ModelSupportAddon.getPartService());
 		}
 	}
 

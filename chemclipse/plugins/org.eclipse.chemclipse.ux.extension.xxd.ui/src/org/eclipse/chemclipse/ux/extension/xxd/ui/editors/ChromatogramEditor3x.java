@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - changes for PartSupport
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
 
@@ -18,6 +19,7 @@ import java.util.Map;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
+import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramEditor;
@@ -45,7 +47,7 @@ public class ChromatogramEditor3x extends EditorPart implements IChromatogramEdi
 	private static final String EDITOR_ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.editors.chromatogramEditor3x";
 	//
 	private ChromatogramEditor chromatogramEditor;
-	private final MPart part = PartSupport.get3xEditorPart(EDITOR_ID);
+	private final MPart part = PartSupport.get3xEditorPart(EDITOR_ID, ModelSupportAddon.getPartService(), ModelSupportAddon.getModelService(), ModelSupportAddon.getApplication());
 	private final MDirtyable dirtyable = new MDirtyable() {
 
 		private boolean value = false;
