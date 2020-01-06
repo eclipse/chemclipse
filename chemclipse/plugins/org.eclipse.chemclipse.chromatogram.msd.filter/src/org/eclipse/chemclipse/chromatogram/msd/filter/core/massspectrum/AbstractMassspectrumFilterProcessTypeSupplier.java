@@ -30,9 +30,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public abstract class AbstractMassspectrumFilterProcessTypeSupplier implements IProcessTypeSupplier {
 
-	private String category;
-	private String prefix;
-	private Function<IChromatogramSelection<?, ?>, List<IScanMSD>> extractionFunction;
+	private final String category;
+	private final String prefix;
+	private final Function<IChromatogramSelection<?, ?>, List<IScanMSD>> extractionFunction;
 
 	public AbstractMassspectrumFilterProcessTypeSupplier(String category, String prefix, Function<IChromatogramSelection<?, ?>, List<IScanMSD>> extractionFunction) {
 		this.category = category;
@@ -63,8 +63,8 @@ public abstract class AbstractMassspectrumFilterProcessTypeSupplier implements I
 
 	private static final class MassSpectrumFilterProcessorSupplier extends ChromatogramSelectionProcessorSupplier<IMassSpectrumFilterSettings> {
 
-		private IMassSpectrumFilterSupplier supplier;
-		private Function<IChromatogramSelection<?, ?>, List<IScanMSD>> extractionFunction;
+		private final IMassSpectrumFilterSupplier supplier;
+		private final Function<IChromatogramSelection<?, ?>, List<IScanMSD>> extractionFunction;
 
 		@SuppressWarnings("unchecked")
 		public MassSpectrumFilterProcessorSupplier(String prefix, IMassSpectrumFilterSupplier supplier, Function<IChromatogramSelection<?, ?>, List<IScanMSD>> extractionFunction, IProcessTypeSupplier parent) {

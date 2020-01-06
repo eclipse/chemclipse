@@ -20,6 +20,13 @@
             filterName="Low Pass Ion Filter"
             id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.low">
       </MassSpectrumFilterSupplier>
+      <MassSpectrumFilterSupplier
+            config="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.settings.CutOfMassSpectrumFilterSettings"
+            description="Removes ions which counts are below a given threshold"
+            filter="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.core.CutOfMassSpectrumFilter"
+            filterName="Min Ion Count"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.threshold">
+      </MassSpectrumFilterSupplier>
    </extension>   
    <extension
          point="org.eclipse.core.runtime.preferences">
