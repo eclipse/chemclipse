@@ -24,6 +24,7 @@
 	<modules>
 		<module>../org.eclipse.chemclipse.targetplatform</module>
 		<module>../../plugins</module>
+		<module>../../tests/org.eclipse.chemclipse.rcp.app.test</module>
 		<module>../../features</module>
 		<module>../../sites</module>
 		<module>../../products</module>
