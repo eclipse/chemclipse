@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - changes to partsupport
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.part.support;
 
@@ -120,7 +121,7 @@ public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport im
 						if(part.getElementId().equals(myPart.getElementId())) {
 							if(part.isCloseable()) {
 								if(!toBeRendered) {
-									PartSupport.setPartVisibility(part, false);
+									PartSupport.setPartVisibility(part, false, eventBroker);
 								}
 							}
 						}

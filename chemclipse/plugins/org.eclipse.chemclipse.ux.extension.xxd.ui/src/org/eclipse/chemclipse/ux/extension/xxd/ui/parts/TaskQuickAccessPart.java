@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2019 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - change to injection instead of static access
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
@@ -39,8 +40,12 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTask
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskSubtract;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTasks;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.workbench.modeling.EModelService;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -56,11 +61,19 @@ import org.eclipse.swt.widgets.Composite;
 
 public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
 
-	private IPreferenceStore preferenceStore;
+	private final IPreferenceStore preferenceStore;
+	private final EPartService partService;
+	private final EModelService modelService;
+	private final MApplication application;
+	private final IEventBroker eventBroker;
 
 	@Inject
-	public TaskQuickAccessPart(Composite parent, MPart part) {
+	public TaskQuickAccessPart(Composite parent, MPart part, EPartService partService, EModelService modelService, MApplication application, IEventBroker eventBroker) {
 		super(part);
+		this.partService = partService;
+		this.modelService = modelService;
+		this.application = application;
+		this.eventBroker = eventBroker;
 		preferenceStore = Activator.getDefault().getPreferenceStore();
 		initialize(parent);
 	}
@@ -124,9 +137,9 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 
 	private void showInitialViews() {
 
-		PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_TARGETS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_TARGETS));
-		PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_SCAN_CHART, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_CHART));
-		PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_SCAN_TABLE, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_TABLE));
+		PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_TARGETS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_TARGETS), partService, modelService, application, eventBroker);
+		PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_SCAN_CHART, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_CHART), partService, modelService, application, eventBroker);
+		PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_SCAN_TABLE, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_TABLE), partService, modelService, application, eventBroker);
 	}
 
 	private void createOverviewTask(Composite parent) {
@@ -143,10 +156,10 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_HEADER_DATA, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_HEADER_DATA));
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_OVERVIEW, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_CHROMATOGRAM_OVERVIEW));
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_MISCELLANEOUS_INFO, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_MISCELLANEOUS_INFO));
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_SCAN_INFO, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_CHROMATOGRAM_SCAN_INFO));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_HEADER_DATA, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_HEADER_DATA), partService, modelService, application, eventBroker);
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_OVERVIEW, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_CHROMATOGRAM_OVERVIEW), partService, modelService, application, eventBroker);
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_MISCELLANEOUS_INFO, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_MISCELLANEOUS_INFO), partService, modelService, application, eventBroker);
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_SCAN_INFO, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_CHROMATOGRAM_SCAN_INFO), partService, modelService, application, eventBroker);
 			}
 		});
 		//
@@ -168,10 +181,10 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_OVERLAY_CHROMATOGRAM, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_OVERLAY_CHROMATOGRAM_DEFAULT));
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_OVERLAY_NMR, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_OVERLAY_NMR));
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_OVERLAY_XIR, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_OVERLAY_XIR));
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_BASELINE, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_BASELINE));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_OVERLAY_CHROMATOGRAM, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_OVERLAY_CHROMATOGRAM_DEFAULT), partService, modelService, application, eventBroker);
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_OVERLAY_NMR, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_OVERLAY_NMR), partService, modelService, application, eventBroker);
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_OVERLAY_XIR, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_OVERLAY_XIR), partService, modelService, application, eventBroker);
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_BASELINE, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_BASELINE), partService, modelService, application, eventBroker);
 			}
 		});
 		//
@@ -192,9 +205,9 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_TARGETS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_TARGETS));
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_SCAN_CHART, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_CHART));
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_SCAN_TABLE, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_TABLE));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_TARGETS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_TARGETS), partService, modelService, application, eventBroker);
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_SCAN_CHART, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_CHART), partService, modelService, application, eventBroker);
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_SCAN_TABLE, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_TABLE), partService, modelService, application, eventBroker);
 			}
 		});
 		//
@@ -217,9 +230,9 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_PEAK_CHART, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_CHART));
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_PEAK_DETAILS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_DETAILS));
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_PEAK_DETECTOR, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_DETECTOR));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_PEAK_CHART, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_CHART), partService, modelService, application, eventBroker);
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_PEAK_DETAILS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_DETAILS), partService, modelService, application, eventBroker);
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_PEAK_DETECTOR, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_DETECTOR), partService, modelService, application, eventBroker);
 			}
 		});
 		//
@@ -242,7 +255,7 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_PEAK_SCAN_LIST, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_SCAN_LIST));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_PEAK_SCAN_LIST, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_SCAN_LIST), partService, modelService, application, eventBroker);
 			}
 		});
 		//
@@ -263,9 +276,9 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_PEAK_QUANTITATION_LIST, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_QUANTITATION_LIST));
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_QUANTITATION, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANTITATION));
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_INTEGRATION_AREA, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_INTEGRATION_AREA));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_PEAK_QUANTITATION_LIST, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_QUANTITATION_LIST), partService, modelService, application, eventBroker);
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_QUANTITATION, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANTITATION), partService, modelService, application, eventBroker);
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_INTEGRATION_AREA, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_INTEGRATION_AREA), partService, modelService, application, eventBroker);
 			}
 		});
 		//
@@ -288,8 +301,8 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_INTERNAL_STANDARDS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_INTERNAL_STANDARDS));
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_PEAK_QUANTITATION_REFERENCES, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_QUANTITATION_REFERENCES));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_INTERNAL_STANDARDS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_INTERNAL_STANDARDS), partService, modelService, application, eventBroker);
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_PEAK_QUANTITATION_REFERENCES, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PEAK_QUANTITATION_REFERENCES), partService, modelService, application, eventBroker);
 			}
 		});
 		//
@@ -311,11 +324,11 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_QUANT_PEAKS_LIST, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANT_PEAKS_LIST));
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_QUANT_PEAKS_CHART, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANT_PEAKS_CHART));
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_QUANT_SIGNALS_LIST, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANT_SIGNALS_LIST));
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_QUANT_RESPONSE_LIST, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANT_RESPONSE_LIST));
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_QUANT_RESPONSE_CHART, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANT_RESPONSE_CHART));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_QUANT_PEAKS_LIST, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANT_PEAKS_LIST), partService, modelService, application, eventBroker);
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_QUANT_PEAKS_CHART, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANT_PEAKS_CHART), partService, modelService, application, eventBroker);
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_QUANT_SIGNALS_LIST, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANT_SIGNALS_LIST), partService, modelService, application, eventBroker);
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_QUANT_RESPONSE_LIST, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANT_RESPONSE_LIST), partService, modelService, application, eventBroker);
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_QUANT_RESPONSE_CHART, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_QUANT_RESPONSE_CHART), partService, modelService, application, eventBroker);
 			}
 		});
 		//
@@ -340,7 +353,7 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_SUBTRACT_SCAN, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SUBTRACT_SCAN_PART));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_SUBTRACT_SCAN, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SUBTRACT_SCAN_PART), partService, modelService, application, eventBroker);
 			}
 		});
 		//
@@ -361,7 +374,7 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_COMBINED_SCAN, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_COMBINED_SCAN_PART));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_COMBINED_SCAN, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_COMBINED_SCAN_PART), partService, modelService, application, eventBroker);
 			}
 		});
 		//
@@ -382,7 +395,7 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_COMPARISON_SCAN, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_COMPARISON_SCAN_CHART));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_COMPARISON_SCAN, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_COMPARISON_SCAN_CHART), partService, modelService, application, eventBroker);
 			}
 		});
 		//
@@ -403,7 +416,7 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_MEASUREMENT_RESULTS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_MEASUREMENT_RESULTS));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_MEASUREMENT_RESULTS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_MEASUREMENT_RESULTS), partService, modelService, application, eventBroker);
 			}
 		});
 		//
@@ -424,7 +437,7 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_HEATMAP, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_CHROMATOGRAM_HEATMAP));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_HEATMAP, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_CHROMATOGRAM_HEATMAP), partService, modelService, application, eventBroker);
 			}
 		});
 		//
@@ -445,11 +458,11 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_PlATE_CHARTS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PLATE_CHARTS));
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_WELL_DATA, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_WELL_DATA));
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_WELL_CHART, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_WELL_CHART));
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_WELL_CHANNELS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_WELL_CHANNELS));
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_PlATE_DATA, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PLATE_DATA));
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_PlATE_CHARTS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PLATE_CHARTS), partService, modelService, application, eventBroker);
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_WELL_DATA, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_WELL_DATA), partService, modelService, application, eventBroker);
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_WELL_CHART, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_WELL_CHART), partService, modelService, application, eventBroker);
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_WELL_CHANNELS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_WELL_CHANNELS), partService, modelService, application, eventBroker);
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_PlATE_DATA, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_PLATE_DATA), partService, modelService, application, eventBroker);
 			}
 		});
 		//

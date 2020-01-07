@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,8 +25,9 @@ import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.model.core.ITargetSupplier;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.core.runtime.IAdaptable;
 
-public class SignalTargetReference implements TargetReference {
+public class SignalTargetReference implements TargetReference, IAdaptable {
 
 	public static final String TYPE_SCAN = "Scan";
 	public static final String TYPE_PEAK = "Peak";
@@ -123,5 +124,14 @@ public class SignalTargetReference implements TargetReference {
 			return typePredicate.and(visibility::isVisible);
 		}
 		return typePredicate;
+	}
+
+	@Override
+	public <T> T getAdapter(Class<T> adapter) {
+
+		if(adapter.isInstance(signal)) {
+			return adapter.cast(signal);
+		}
+		return null;
 	}
 }

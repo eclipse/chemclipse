@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,18 +8,16 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - remove references to ModelAddon
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.support;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.MUIElement;
@@ -38,7 +36,6 @@ import org.eclipse.swt.widgets.Control;
 
 public class PartSupport {
 
-	private static final Logger logger = Logger.getLogger(PartSupport.class);
 	//
 	public static final String PERSPECTIVE_DATA_ANALYSIS = "org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.main";
 	//
@@ -99,13 +96,8 @@ public class PartSupport {
 	//
 	private static Set<String> hiddenPartStacks = new HashSet<String>();
 	//
-	private static MApplication application = ModelSupportAddon.getApplication();
-	private static EModelService modelService = ModelSupportAddon.getModelService();
-	private static EPartService partService = ModelSupportAddon.getPartService();
-	//
 	private static Map<String, String> partMap = new HashMap<String, String>();
 	private static Map<String, Map<Boolean, Map<Button, Image>>> partImageMap = new HashMap<String, Map<Boolean, Map<Button, Image>>>();
-	private static IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
 	//
 	static {
 		hiddenPartStacks.add(PARTSTACK_LEFT_CENTER);
@@ -118,45 +110,22 @@ public class PartSupport {
 	 * The 3.x editorId is the id that is used in the plugin.xml
 	 * to declare the editor.
 	 * 
+	 * @param partService
+	 * 
 	 * @param partId
 	 * @return MPart
 	 */
-	public static MPart get3xEditorPart(String editorId) {
+	public static MPart get3xEditorPart(String editorId, EPartService partService, EModelService service, MApplication application) {
 
-		if(partService != null) {
-			try {
-				for(MPart mPart : partService.getParts()) {
-					if(is3xEditorPart(mPart, editorId)) {
-						return mPart;
-					}
-				}
-			} catch(Exception e) {
-				/*
-				 * Handle "Application does not have an active window"
-				 */
-				logger.warn(e);
-				logger.info("Try to find the 3x editor part alternatively.");
-				//
-				MApplication application = ModelSupportAddon.getApplication();
-				if(application != null) {
-					EModelService service = ModelSupportAddon.getModelService();
-					if(service != null) {
-						List<MPart> parts = service.findElements(application, null, MPart.class, null);
-						if(parts != null) {
-							for(MPart mPart : parts) {
-								if(is3xEditorPart(mPart, editorId)) {
-									return mPart;
-								}
-							}
-						}
-					}
-				}
+		for(MPart mPart : partService.getParts()) {
+			if(is3xEditorPart(mPart, editorId)) {
+				return mPart;
 			}
 		}
 		return null;
 	}
 
-	public static MPart getPart(String partId, String partStackId) {
+	public static MPart getPart(String partId, String partStackId, EPartService partService, EModelService modelService, MApplication application) {
 
 		MPart part = null;
 		MUIElement element = modelService.find(partId, application);
@@ -184,7 +153,7 @@ public class PartSupport {
 	 * @param partStackId
 	 * @return boolean
 	 */
-	public static boolean togglePartVisibility(MPart part, String partStackId) {
+	public static boolean togglePartVisibility(MPart part, String partStackId, EPartService partService) {
 
 		boolean isVisible = false;
 		if(part != null) {
@@ -212,7 +181,7 @@ public class PartSupport {
 		return false;
 	}
 
-	public static boolean isPartVisible(MPart part) {
+	public static boolean isPartVisible(MPart part, EPartService partService) {
 
 		if(part != null) {
 			if(partService.isPartVisible(part)) {
@@ -224,9 +193,9 @@ public class PartSupport {
 		return false;
 	}
 
-	public static boolean isPartVisible(String partId, String partStackId) {
+	public static boolean isPartVisible(String partId, String partStackId, EPartService partService, EModelService modelService, MApplication application) {
 
-		MPart part = getPart(partId, partStackId);
+		MPart part = getPart(partId, partStackId, partService, modelService, application);
 		if(part != null) {
 			if(partService.isPartVisible(part)) {
 				return true;
@@ -237,32 +206,32 @@ public class PartSupport {
 		return false;
 	}
 
-	public static void showPart(String partId, String partStackId) {
+	public static void showPart(String partId, String partStackId, EPartService partService, EModelService modelService, MApplication application) {
 
-		MPart part = getPart(partId, partStackId);
-		showPart(part);
+		MPart part = getPart(partId, partStackId, partService, modelService, application);
+		showPart(part, partService);
 	}
 
-	public static void showPart(MPart part) {
+	public static void showPart(MPart part, EPartService partService) {
 
 		if(part != null) {
 			partService.showPart(part, PartState.ACTIVATE);
 		}
 	}
 
-	public static void hidePart(MPart part) {
+	public static void hidePart(MPart part, EPartService partService) {
 
 		if(part != null) {
 			partService.hidePart(part);
 		}
 	}
 
-	public static MPartStack getPartStack(String partStackId) {
+	public static MPartStack getPartStack(String partStackId, EModelService modelService, MApplication application) {
 
 		return (MPartStack)modelService.find(partStackId, application);
 	}
 
-	public static void setAreaVisibility(String areaId, boolean visible) {
+	public static void setAreaVisibility(String areaId, boolean visible, EModelService modelService, MApplication application) {
 
 		MArea area = (MArea)modelService.find(areaId, application);
 		if(area != null) {
@@ -317,22 +286,24 @@ public class PartSupport {
 		parent.redraw();
 	}
 
-	public static void setPartVisibility(String partId, String partStackId, boolean visible) {
+	public static void setPartVisibility(String partId, String partStackId, boolean visible, EPartService partService, EModelService modelService, MApplication application, IEventBroker eventBroker) {
 
-		MPart part = getPart(partId, partStackId);
-		setPartVisibility(part, visible);
+		MPart part = getPart(partId, partStackId, partService, modelService, application);
+		setPartVisibility(part, visible, eventBroker);
 	}
 
-	public static void setPartVisibility(MPart part, boolean visible) {
+	public static void setPartVisibility(MPart part, boolean visible, IEventBroker eventBroker) {
 
 		if(part != null) {
 			part.setVisible(visible);
 			String partId = part.getElementId();
 			//
-			if(visible) {
-				eventBroker.post(IChemClipseEvents.TOPIC_TOGGLE_PART_VISIBILITY_TRUE, partId);
-			} else {
-				eventBroker.post(IChemClipseEvents.TOPIC_TOGGLE_PART_VISIBILITY_FALSE, partId);
+			if(eventBroker != null) {
+				if(visible) {
+					eventBroker.post(IChemClipseEvents.TOPIC_TOGGLE_PART_VISIBILITY_TRUE, partId);
+				} else {
+					eventBroker.post(IChemClipseEvents.TOPIC_TOGGLE_PART_VISIBILITY_FALSE, partId);
+				}
 			}
 		}
 	}
@@ -343,7 +314,7 @@ public class PartSupport {
 	 * @param partId
 	 * @param partStackId
 	 */
-	public static boolean togglePartVisibility(String partId, String partStackId) {
+	public static boolean togglePartVisibility(String partId, String partStackId, EPartService partService, EModelService modelService, MApplication application, IEventBroker eventBroker) {
 
 		boolean visible = false;
 		if(PartSupport.PARTSTACK_NONE.equals(partStackId)) {
@@ -352,7 +323,7 @@ public class PartSupport {
 			 */
 			String currentPartStackId = partMap.get(partId);
 			if(currentPartStackId != null) {
-				setPartVisibility(partId, currentPartStackId, false);
+				setPartVisibility(partId, currentPartStackId, false, partService, modelService, application, eventBroker);
 			}
 		} else {
 			/*
@@ -364,15 +335,15 @@ public class PartSupport {
 				/*
 				 * Initialize the part.
 				 */
-				setPartVisibility(partId, partStackId, false);
+				setPartVisibility(partId, partStackId, false, partService, modelService, application, eventBroker);
 			} else {
 				/*
 				 * Move the part to another part stack.
 				 */
 				if(!partStackId.equals(currentPartStackId)) {
-					MPart part = PartSupport.getPart(partId, currentPartStackId);
-					MPartStack defaultPartStack = PartSupport.getPartStack(currentPartStackId);
-					MPartStack partStack = PartSupport.getPartStack(partStackId);
+					MPart part = PartSupport.getPart(partId, currentPartStackId, partService, modelService, application);
+					MPartStack defaultPartStack = PartSupport.getPartStack(currentPartStackId, modelService, application);
+					MPartStack partStack = PartSupport.getPartStack(partStackId, modelService, application);
 					defaultPartStack.getChildren().remove(part);
 					partStack.getChildren().add(part);
 				}
@@ -383,13 +354,13 @@ public class PartSupport {
 			 * Activate them on demand.
 			 */
 			if(hiddenPartStacks.contains(partStackId)) {
-				setPartStackVisibility(partStackId, true);
+				setPartStackVisibility(partStackId, true, modelService, application);
 			}
 			/*
 			 * Toggle visibility.
 			 */
-			MPart part = getPart(partId, partStackId);
-			visible = togglePartVisibility(part, partStackId);
+			MPart part = getPart(partId, partStackId, partService, modelService, application);
+			visible = togglePartVisibility(part, partStackId, partService);
 			/*
 			 * Fire an event.
 			 * E.g. the icons in the toolbar "TaskQuickAccessPart.java" will be modified.
@@ -410,9 +381,9 @@ public class PartSupport {
 	 * @param partId
 	 * @param partStackId
 	 */
-	public static void setPartStackVisibility(String partStackId, boolean visible) {
+	public static void setPartStackVisibility(String partStackId, boolean visible, EModelService modelService, MApplication application) {
 
-		MPartStack partStack = getPartStack(partStackId);
+		MPartStack partStack = getPartStack(partStackId, modelService, application);
 		if(partStack != null) {
 			partStack.setVisible(visible);
 		}

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?pde version="3.8"?><target name="Chemclipse Target (Build)" sequenceNumber="523">
+<locations>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.gemini.jpa.feature.feature.group" version="1.2.0.M1"/>
+<repository location="http://download.eclipse.org/gemini/jpa/updates"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="javax.ws.rs" version="0.0.0"/>
+<unit id="org.apache.derby" version="0.0.0"/>
+<unit id="org.hamcrest.core" version="0.0.0"/>
+<unit id="org.apache.commons.csv" version="0.0.0"/>
+<unit id="org.apache.pdfbox.fontbox" version="0.0.0"/>
+<unit id="org.apache.httpcomponents.httpmime" version="0.0.0"/>
+<unit id="org.slf4j.api" version="0.0.0"/>
+<unit id="org.apache.commons.logging" version="0.0.0"/>
+<unit id="org.apache.commons.httpclient" version="0.0.0"/>
+<unit id="org.apache.pdfbox" version="0.0.0"/>
+<unit id="org.ejml.core" version="0.0.0"/>
+<unit id="org.apache.httpcomponents.httpcore-nio" version="0.0.0"/>
+<unit id="org.apache.log4j" version="0.0.0"/>
+<unit id="org.apache.xalan" version="0.0.0"/>
+<unit id="org.apache.commons.math3" version="0.0.0"/>
+<unit id="ch.qos.logback.core" version="0.0.0"/>
+<unit id="org.apache.commons.math" version="0.0.0"/>
+<unit id="org.apache.commons.lang3" version="0.0.0"/>
+<unit id="ch.qos.logback.classic" version="0.0.0"/>
+<unit id="org.apache.commons.io" version="0.0.0"/>
+<unit id="javassist" version="0.0.0"/>
+<unit id="org.apache.xmlgraphics" version="0.0.0"/>
+<unit id="org.apache.httpcomponents.httpclient" version="0.0.0"/>
+<unit id="org.apache.batik.dom" version="0.0.0"/>
+<unit id="org.ejml.denseC64" version="0.0.0"/>
+<unit id="org.apache.commons.cli" version="0.0.0"/>
+<unit id="org.apache.poi" version="0.0.0"/>
+<unit id="com.sun.jersey" version="0.0.0"/>
+<unit id="org.ejml.equation" version="0.0.0"/>
+<unit id="org.ejml.experimental" version="0.0.0"/>
+<unit id="com.fasterxml.jackson.core.jackson-core" version="0.0.0"/>
+<unit id="com.fasterxml.jackson.core.jackson-databind" version="0.0.0"/>
+<unit id="org.apache.xerces" version="0.0.0"/>
+<unit id="org.apache.batik.svggen" version="0.0.0"/>
+<unit id="org.json" version="0.0.0"/>
+<unit id="org.apache.poi.ooxml.schemas" version="0.0.0"/>
+<unit id="org.bouncycastle.bcpg" version="0.0.0"/>
+<unit id="org.codehaus.jackson.jaxrs" version="0.0.0"/>
+<unit id="ca.odell.glazedlists" version="0.0.0"/>
+<unit id="org.apache.poi.ooxml" version="0.0.0"/>
+<unit id="org.apache.commons.lang" version="0.0.0"/>
+<unit id="org.apache.httpcomponents.httpcore.nio" version="0.0.0"/>
+<unit id="org.apache.httpcomponents.httpclient" version="0.0.0"/>
+<unit id="org.hamcrest.library" version="0.0.0"/>
+<unit id="org.apache.httpcomponents.httpcore" version="0.0.0"/>
+<unit id="org.apache.pdfbox.xmpbox" version="0.0.0"/>
+<unit id="org.ejml.simple" version="0.0.0"/>
+<unit id="org.easymock" version="0.0.0"/>
+<unit id="org.ejml.dense64" version="0.0.0"/>
+<unit id="org.bouncycastle.bcprov" version="0.0.0"/>
+<unit id="org.apache.commons.net" version="0.0.0"/>
+<unit id="org.dom4j" version="0.0.0"/>
+<unit id="org.apache.batik.pdf" version="0.0.0"/>
+<unit id="com.google.gson" version="0.0.0"/>
+<unit id="org.apache.httpcomponents.httpasyncclient" version="0.0.0"/>
+<unit id="org.apache.pdfbox.preflight" version="0.0.0"/>
+<unit id="com.fasterxml.jackson.core.jackson-annotations" version="0.0.0"/>
+<unit id="org.codehaus.jackson.mapper" version="0.0.0"/>
+<unit id="org.apache.batik.css" version="0.0.0"/>
+<unit id="org.apache.httpcomponents.httpcore" version="0.0.0"/>
+<unit id="org.bouncycastle.bcpkix" version="0.0.0"/>
+<unit id="org.codehaus.jackson.core" version="0.0.0"/>
+<unit id="org.slf4j.binding.simple" version="0.0.0"/>
+<unit id="org.mockito" version="0.0.0"/>
+<repository location="https://download.eclipse.org/tools/orbit/downloads/drops/R20191126223242/repository"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.swtchart.feature.feature.group" version="0.0.0"/>
+<repository location="https://download.eclipse.org/swtchart/develop/repository/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.nebula.widgets.nattable.core.feature.feature.group" version="0.0.0"/>
+<unit id="org.eclipse.nebula.widgets.nattable.extension.glazedlists.feature.feature.group" version="0.0.0"/>
+<repository location="http://download.eclipse.org/nattable/releases/1.5.0/repository"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.persistence.sdk.feature.group" version="2.7.1.v20171221-bd47e8f"/>
+<repository location="http://download.eclipse.org/rt/eclipselink/updates/"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.nebula.feature.feature.group" version="0.0.0"/>
+<repository location="http://download.eclipse.org/nebula/releases/1.4.0"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.swtbot.feature.group" version="2.7.0.201806111355"/>
+<unit id="org.eclipse.equinox.sdk.feature.group" version="3.14.0.v20180518-2029"/>
+<unit id="org.eclipse.epp.mpc.feature.group" version="1.7.0.v20180613-1243"/>
+<unit id="org.eclipse.sdk.feature.group" version="4.8.0.v20180611-0826"/>
+<repository location="http://download.eclipse.org/releases/photon/"/>
+</location>
+</locations>
+</target>
