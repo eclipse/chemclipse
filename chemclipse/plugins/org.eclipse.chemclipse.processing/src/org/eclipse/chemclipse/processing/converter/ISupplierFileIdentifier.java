@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - support for new E4 launching API
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.converter;
 
@@ -47,7 +48,10 @@ public interface ISupplierFileIdentifier extends SupplierContext {
 	 * @return boolean
 	 */
 	@Deprecated
-	boolean isSupplierFile(File file);
+	default boolean isSupplierFile(File file) {
+
+		return !getSupplier(file).isEmpty();
+	}
 
 	/**
 	 * Get all matching suppliers for the given file the list might be ambiguous, then the only way might be to try out each supplier to convert the file

@@ -15,10 +15,11 @@ import org.eclipse.chemclipse.msd.converter.peak.IPeakSupplier;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.ui.editors.EditorDescriptor;
+import org.eclipse.chemclipse.ux.extension.ui.editors.SnippetEditorDescriptor;
 import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.jface.resource.ImageDescriptor;
 
-public class PeakSupplierAdapterFactory implements IAdapterFactory, EditorDescriptor {
+public class PeakSupplierAdapterFactory implements IAdapterFactory, SnippetEditorDescriptor {
 
 	@Override
 	public <T> T getAdapter(Object adaptableObject, Class<T> adapterType) {
@@ -38,14 +39,14 @@ public class PeakSupplierAdapterFactory implements IAdapterFactory, EditorDescri
 	}
 
 	@Override
-	public String getEditorId() {
-
-		return "org.eclipse.chemclipse.ux.extension.xxd.ui.inputpart.peaklisteditor";
-	}
-
-	@Override
 	public ImageDescriptor getImageDescriptor() {
 
 		return ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_PEAKS, IApplicationImage.SIZE_16x16);
+	}
+
+	@Override
+	public String getEditorSnippetId() {
+
+		return "org.eclipse.chemclipse.ux.extension.xxd.ui.inputpart.peaklisteditor";
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -47,12 +47,16 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.SequenceEditor;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 import org.eclipse.chemclipse.xir.converter.core.ScanConverterXIR;
 import org.eclipse.core.runtime.Adapters;
+import org.eclipse.e4.core.contexts.ContextInjectionFactory;
+import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
+import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 
 public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport implements ISupplierEditorSupport {
 
+	private static final Object NO_EXECUTE_METHOD = new Object();
 	private String type = "";
 	//
 	private String elementId = "";
@@ -248,21 +252,26 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 	@Override
 	public boolean openEditor(File file, ISupplier supplier) {
 
-		EditorDescriptor descriptor = Adapters.adapt(supplier, EditorDescriptor.class);
-		if(descriptor != null) {
-			OpenSnippetHandler.openSnippet(descriptor.getEditorId(), contextSupplier.get(), new BiFunction<IEclipseContext, MPart, Runnable>() {
-
-				@Override
-				public Runnable apply(IEclipseContext context, MPart part) {
-
-					part.setLabel(file.getName());
-					context.set(File.class, file);
-					context.set(DataType.class, dataType);
-					context.set(ISupplier.class, supplier);
-					return null;
+		IEclipseContext eclipseContext = contextSupplier.get();
+		IEclipseContext parameterContext = EclipseContextFactory.create();
+		try {
+			parameterContext.set(File.class, file);
+			parameterContext.set(ISupplier.class, supplier);
+			Object[] executables = {Adapters.adapt(supplier, EditorDescriptor.class), supplier};
+			for(Object executable : executables) {
+				if(executable == null) {
+					continue;
 				}
-			});
-			return true;
+				Object invoke = ContextInjectionFactory.invoke(executable, Execute.class, eclipseContext, parameterContext, NO_EXECUTE_METHOD);
+				if(NO_EXECUTE_METHOD != invoke) {
+					if(invoke instanceof Boolean) {
+						return ((Boolean)invoke).booleanValue();
+					}
+					return true;
+				}
+			}
+		} finally {
+			parameterContext.dispose();
 		}
 		return openEditor(file, false);
 	}
