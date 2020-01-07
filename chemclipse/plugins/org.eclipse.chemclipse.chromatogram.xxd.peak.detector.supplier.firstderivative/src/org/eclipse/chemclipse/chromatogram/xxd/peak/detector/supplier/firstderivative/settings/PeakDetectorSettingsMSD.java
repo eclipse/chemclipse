@@ -57,6 +57,8 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 	private FilterMode filterMode;
 	@JsonProperty(value = "m/z values to filter", defaultValue = "")
 	private String filterIonsString;
+	@JsonProperty(value = "Optimize Baseline (VV)", defaultValue = "false")
+	private boolean optimizeBaseline = false;
 
 	@JsonIgnore
 	public static IMarkedIons getFilterIons(PeakDetectorSettingsMSD peakDetectorSettings) {
@@ -167,5 +169,15 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 	public void setUseNoiseSegments(boolean useNoiseSegments) {
 
 		this.useNoiseSegments = useNoiseSegments;
+	}
+
+	public boolean isOptimizeBaseline() {
+
+		return optimizeBaseline;
+	}
+
+	public void setOptimizeBaseline(boolean optimizeBaseline) {
+
+		this.optimizeBaseline = optimizeBaseline;
 	}
 }

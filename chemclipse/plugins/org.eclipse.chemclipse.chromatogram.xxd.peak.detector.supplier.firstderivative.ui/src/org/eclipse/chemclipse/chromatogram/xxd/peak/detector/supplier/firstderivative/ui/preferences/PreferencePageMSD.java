@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -43,6 +43,8 @@ public class PreferencePageMSD extends FieldEditorPreferencePage implements IWor
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_INCLUDE_BACKGROUND_MSD, "Selected: Use VV - Deselected: Use BV or VB", getFieldEditorParent()));
 		addField(new FloatFieldEditor(PreferenceSupplier.P_MIN_SN_RATIO_MSD, "Minimum S/N ratio (0 = add all peaks)", 0.0f, Float.MAX_VALUE, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceSupplier.P_MOVING_AVERAGE_WINDOW_SIZE_MSD, "Moving average window size", WindowSize.getElements(), getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_NOISE_SEGMENTS_MSD, "Use Noise-Segments", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_OPTIMIZE_BASELINE_MSD, "Optimize Baseline (VV)", getFieldEditorParent()));
 	}
 
 	/*

@@ -38,7 +38,6 @@ import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalsModifier;
-import org.eclipse.chemclipse.model.support.IScanRange;
 import org.eclipse.chemclipse.model.support.NoiseSegment;
 import org.eclipse.chemclipse.model.support.ScanRange;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
@@ -188,14 +187,21 @@ public class PeakDetectorCSD extends BasePeakDetector implements IPeakDetectorCS
 	private List<IChromatogramPeakCSD> extractPeaks(List<IRawPeak> rawPeaks, IChromatogramCSD chromatogram, PeakDetectorSettingsCSD peakDetectorSettings) {
 
 		List<IChromatogramPeakCSD> peaks = new ArrayList<>();
+		boolean includeBackground = peakDetectorSettings.isIncludeBackground();
+		boolean optimizeBaseline = peakDetectorSettings.isOptimizeBaseline();
 		//
-		IScanRange scanRange = null;
 		for(IRawPeak rawPeak : rawPeaks) {
 			/*
 			 * Build the peak and add it.
 			 */
 			try {
-				scanRange = new ScanRange(rawPeak.getStartScan(), rawPeak.getStopScan());
+				/*
+				 * Optimize the scan range.
+				 */
+				ScanRange scanRange = new ScanRange(rawPeak.getStartScan(), rawPeak.getStopScan());
+				if(includeBackground && optimizeBaseline) {
+					scanRange = optimizeBaseline(chromatogram, scanRange.getStartScan(), rawPeak.getMaximumScan(), scanRange.getStopScan(), null);
+				}
 				/*
 				 * includeBackground
 				 * false: BV or VB
