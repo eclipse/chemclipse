@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -39,6 +39,11 @@ public class PathResolver_1_Test extends TestCase {
 				test = test.replace('\\', '/');
 				path = path.replace('\\', '/');
 			}
+			/*
+			 * Tests folder, but path resolver is located in plugins.
+			 * .../git/chemclipse/chemclipse/tests/org.eclipse.chemclipse.msd.converter.fragment.test/testData/files/import/EMPTY.D/DATA.MS
+			 */
+			path = path.replace("plugins", "tests");
 			assertEquals(path, test);
 		} catch(IOException e) {
 			assertTrue("IOException", false);
