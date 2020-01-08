@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - add NMR datatype
+ * Christoph Läubrich - add NMR datatype, remove obsolete constants
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
@@ -24,7 +24,7 @@ import org.eclipse.swtchart.extensions.linecharts.LineChart;
 
 public class PreferenceConstants extends ChartOptions {
 
-	public static String[][] PART_STACKS = new String[][]{//
+	public static final String[][] PART_STACKS = new String[][]{//
 			{"--", PartSupport.PARTSTACK_NONE}, //
 			{"Left Top", PartSupport.PARTSTACK_LEFT_TOP}, //
 			{"Left Center", PartSupport.PARTSTACK_LEFT_CENTER}, //
@@ -644,14 +644,6 @@ public class PreferenceConstants extends ChartOptions {
 	 */
 	public static final String P_SELECTED_METHOD_NAME = "selectedMethodName";
 	public static final String DEF_SELECTED_METHOD_NAME = "";
-	public static final String P_METHOD_PROCESSOR_SELECTION_CSD = "methodProcessorSelectionCSD";
-	public static final boolean DEF_METHOD_PROCESSOR_SELECTION_CSD = true;
-	public static final String P_METHOD_PROCESSOR_SELECTION_NMR = "methodProcessorSelectionNMR";
-	public static final boolean DEF_METHOD_PROCESSOR_SELECTION_NMR = true;
-	public static final String P_METHOD_PROCESSOR_SELECTION_MSD = "methodProcessorSelectionMSD";
-	public static final boolean DEF_METHOD_PROCESSOR_SELECTION_MSD = true;
-	public static final String P_METHOD_PROCESSOR_SELECTION_WSD = "methodProcessorSelectionWSD";
-	public static final boolean DEF_METHOD_PROCESSOR_SELECTION_WSD = true;
 	/*
 	 * Quanititation
 	 */

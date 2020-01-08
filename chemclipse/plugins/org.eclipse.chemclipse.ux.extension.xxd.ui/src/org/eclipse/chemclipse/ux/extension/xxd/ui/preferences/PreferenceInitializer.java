@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - add NMR datatype
+ * Christoph Läubrich - add NMR datatype, remove obsolete constants
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
@@ -231,10 +231,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		 * Methods
 		 */
 		store.setDefault(PreferenceConstants.P_SELECTED_METHOD_NAME, PreferenceConstants.DEF_SELECTED_METHOD_NAME);
-		store.setDefault(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_CSD, PreferenceConstants.DEF_METHOD_PROCESSOR_SELECTION_CSD);
-		store.setDefault(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_MSD, PreferenceConstants.DEF_METHOD_PROCESSOR_SELECTION_MSD);
-		store.setDefault(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_WSD, PreferenceConstants.DEF_METHOD_PROCESSOR_SELECTION_WSD);
-		store.setDefault(PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_NMR, PreferenceConstants.DEF_METHOD_PROCESSOR_SELECTION_NMR);
 		/*
 		 * Quantitation
 		 */
