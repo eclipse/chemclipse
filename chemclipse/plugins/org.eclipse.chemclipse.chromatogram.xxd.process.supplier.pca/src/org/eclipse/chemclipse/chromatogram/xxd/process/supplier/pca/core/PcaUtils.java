@@ -40,9 +40,9 @@ import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.model.statistics.ISampleData;
 import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
-import org.ejml.data.DenseMatrix64F;
-import org.ejml.factory.DecompositionFactory;
-import org.ejml.interfaces.decomposition.EigenDecomposition;
+import org.ejml.data.DMatrixRMaj;
+import org.ejml.dense.row.factory.DecompositionFactory_DDRM;
+import org.ejml.interfaces.decomposition.EigenDecomposition_F64;
 
 public class PcaUtils {
 
@@ -105,8 +105,8 @@ public class PcaUtils {
 	public static <V extends IVariable, S extends ISample> double[] getEigenValuesCovarianceMatrix(ISamples<V, S> samples) {
 
 		RealMatrix covarianceMatrix = getCovarianceMatrix(samples);
-		EigenDecomposition<DenseMatrix64F> eigenDecomposition = DecompositionFactory.eig(covarianceMatrix.getColumnDimension(), false, true);
-		eigenDecomposition.decompose(new DenseMatrix64F(covarianceMatrix.getData()));
+		EigenDecomposition_F64<DMatrixRMaj> eigenDecomposition = DecompositionFactory_DDRM.eig(covarianceMatrix.getColumnDimension(), false, true);
+		eigenDecomposition.decompose(new DMatrixRMaj(covarianceMatrix.getData()));
 		double[] eigenvalues = new double[eigenDecomposition.getNumberOfEigenvalues()];
 		for(int i = 0; i < eigenvalues.length; i++) {
 			eigenvalues[i] = eigenDecomposition.getEigenvalue(i).real;
