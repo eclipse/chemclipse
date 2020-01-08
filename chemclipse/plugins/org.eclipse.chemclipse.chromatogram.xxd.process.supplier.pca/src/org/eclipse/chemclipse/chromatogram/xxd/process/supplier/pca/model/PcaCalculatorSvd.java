@@ -12,17 +12,18 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.exception.MathIllegalArgumentException;
-import org.ejml.data.DenseMatrix64F;
-import org.ejml.factory.DecompositionFactory;
+import org.ejml.data.DMatrixRMaj;
+import org.ejml.dense.row.CommonOps_DDRM;
+import org.ejml.dense.row.SingularOps_DDRM;
+import org.ejml.dense.row.factory.DecompositionFactory_DDRM;
 import org.ejml.interfaces.decomposition.SingularValueDecomposition;
-import org.ejml.ops.CommonOps;
-import org.ejml.ops.SingularOps;
+
 
 public class PcaCalculatorSvd extends AbstractMultivariateCalculator {
 
 	public PcaCalculatorSvd(int numObs, int numVars, int numComps) throws MathIllegalArgumentException {	
 		super(numObs, numVars, numComps);
-		DenseMatrix64F emptyLoadings = new DenseMatrix64F(1,numVars);
+		DMatrixRMaj emptyLoadings = new DMatrixRMaj(1,numVars);
 		setLoadings(emptyLoadings);
 	}
 
@@ -36,11 +37,11 @@ public class PcaCalculatorSvd extends AbstractMultivariateCalculator {
 
 	private void computeLoadings() {
 
-		SingularValueDecomposition<DenseMatrix64F> svd = DecompositionFactory.svd(getSampleData().getNumRows(), getSampleData().getNumCols(), false, true, false);
+		SingularValueDecomposition<DMatrixRMaj> svd = DecompositionFactory_DDRM.svd(getSampleData().getNumRows(), getSampleData().getNumCols(), false, true, false);
 		svd.decompose(getSampleData());
 		setLoadings(svd.getV(null, true));
-		DenseMatrix64F W = svd.getW(null);
-		SingularOps.descendingOrder(null, false, W, getLoadings(), true);
+		DMatrixRMaj W = svd.getW(null);
+		SingularOps_DDRM.descendingOrder(null, false, W, getLoadings(), true);
 		getLoadings().reshape(getNumComps(), getMean().length, true);
 	}
 
@@ -50,15 +51,15 @@ public class PcaCalculatorSvd extends AbstractMultivariateCalculator {
 		for(int i = 0; i < getSampleData().getNumRows(); i++) {
 			System.arraycopy(getMean(), 0, concatMeans, i * getSampleData().getNumCols(), getSampleData().getNumCols());
 		}
-		DenseMatrix64F means = DenseMatrix64F.wrap(getSampleData().getNumRows(), getSampleData().getNumCols(), concatMeans);
-		// DenseMatrix64F sample = DenseMatrix64F.wrap(getSampleData().getNumRows(), getSampleData().getNumCols(), getSampleData().data);
-		DenseMatrix64F sample = getSampleData().copy();
-		DenseMatrix64F rotated = new DenseMatrix64F(getNumComps(), getSampleData().getNumRows());
-		CommonOps.subtract(sample, means, sample);
-		DenseMatrix64F loadings = new DenseMatrix64F(getLoadings());
-		CommonOps.transpose(sample);
-		CommonOps.mult(loadings, sample, rotated);
-		CommonOps.transpose(rotated);
+		DMatrixRMaj means = DMatrixRMaj.wrap(getSampleData().getNumRows(), getSampleData().getNumCols(), concatMeans);
+		// DMatrixRMaj sample = DMatrixRMaj.wrap(getSampleData().getNumRows(), getSampleData().getNumCols(), getSampleData().data);
+		DMatrixRMaj sample = getSampleData().copy();
+		DMatrixRMaj rotated = new DMatrixRMaj(getNumComps(), getSampleData().getNumRows());
+		CommonOps_DDRM.subtract(sample, means, sample);
+		DMatrixRMaj loadings = new DMatrixRMaj(getLoadings());
+		CommonOps_DDRM.transpose(sample);
+		CommonOps_DDRM.mult(loadings, sample, rotated);
+		CommonOps_DDRM.transpose(rotated);
 		setScores(rotated);
 	}
 }
