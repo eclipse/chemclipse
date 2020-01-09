@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -67,24 +67,26 @@ public class TimeRangeMarker extends AbstractBaseChartPaintListener implements I
 	private void plotMarker(GC gc, TimeRange timeRange) {
 
 		BaseChart baseChart = getBaseChart();
-		IAxis xAxis = baseChart.getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
-		IAxis yAxis = baseChart.getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
-		//
-		if(xAxis != null && yAxis != null) {
-			/*
-			 * Settings
-			 */
-			Range rangeX = xAxis.getRange();
-			IPlotArea plotArea = baseChart.getPlotArea();
-			Point rectangle = (plotArea instanceof Scrollable) ? ((Scrollable)plotArea).getSize() : plotArea.getSize();
-			/*
-			 * Print lines, rectangle and label
-			 */
-			int xStart = printLine(gc, rectangle, rangeX, timeRange.getStart(), Colors.DARK_GRAY, 1);
-			printLine(gc, rectangle, rangeX, timeRange.getCenter(), Colors.GRAY, 1);
-			int xStop = printLine(gc, rectangle, rangeX, timeRange.getStop(), Colors.DARK_GRAY, 1);
-			fillRectangle(gc, rectangle, xStart, xStop, Colors.GRAY);
-			printLabel(gc, rectangle, timeRange.getIdentifier(), xStop, Colors.DARK_GRAY);
+		if(baseChart.getSeriesSet().getSeries().length > 0) {
+			IAxis xAxis = baseChart.getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
+			IAxis yAxis = baseChart.getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
+			//
+			if(xAxis != null && yAxis != null) {
+				/*
+				 * Settings
+				 */
+				Range rangeX = xAxis.getRange();
+				IPlotArea plotArea = baseChart.getPlotArea();
+				Point rectangle = (plotArea instanceof Scrollable) ? ((Scrollable)plotArea).getSize() : plotArea.getSize();
+				/*
+				 * Print lines, rectangle and label
+				 */
+				int xStart = printLine(gc, rectangle, rangeX, timeRange.getStart(), Colors.DARK_GRAY, 1);
+				printLine(gc, rectangle, rangeX, timeRange.getCenter(), Colors.GRAY, 1);
+				int xStop = printLine(gc, rectangle, rangeX, timeRange.getStop(), Colors.DARK_GRAY, 1);
+				fillRectangle(gc, rectangle, xStart, xStop, Colors.GRAY);
+				printLabel(gc, rectangle, timeRange.getIdentifier(), xStop, Colors.DARK_GRAY);
+			}
 		}
 	}
 
