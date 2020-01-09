@@ -68,6 +68,9 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 	@JsonIgnore
 	public Collection<IMarkedIons> getFilterIons() {
 
+		if(filterIonsString == null || filterIonsString.isEmpty()) {
+			return Collections.singleton(new MarkedIons(IonMarkMode.INCLUDE));
+		}
 		IonMarkMode ionMarkMode;
 		switch(getFilterMode()) {
 			case EXCLUDE:
