@@ -139,63 +139,67 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 	 */
 	public List<IChromatogramPeakMSD> detectPeaks(IChromatogramSelectionMSD chromatogramSelection, PeakDetectorSettingsMSD peakDetectorSettings, List<NoiseSegment> noiseSegments, IProgressMonitor monitor) {
 
-		IMarkedIons ions = PeakDetectorSettingsMSD.getFilterIons(peakDetectorSettings);
-		Threshold threshold = peakDetectorSettings.getThreshold();
-		WindowSize windowSize = peakDetectorSettings.getMovingAverageWindowSize();
-		List<IRawPeak> rawPeaks = new ArrayList<>();
-		//
-		if(noiseSegments != null && noiseSegments.size() > 0) {
-			/*
-			 * Initial retention time range before running the detection using
-			 * noise segments.
-			 * | --- [S] --- [N] --- [E] --- |
-			 */
-			Iterator<NoiseSegment> iterator = noiseSegments.iterator();
-			int startRetentionTime = chromatogramSelection.getStartRetentionTime();
-			int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
-			NoiseSegment noiseSegment = iterator.hasNext() ? iterator.next() : null;
-			/*
-			 * Range from the start of the chromatogram selection to the first noise segment
-			 * | --- [S]
-			 */
-			if(noiseSegment != null) {
-				chromatogramSelection.setRangeRetentionTime(startRetentionTime, noiseSegment.getStartRetentionTime());
+		List<IChromatogramPeakMSD> extractPeaks = new ArrayList<>();
+		Collection<IMarkedIons> filterIons = peakDetectorSettings.getFilterIons();
+		for(IMarkedIons ions : filterIons) {
+			Threshold threshold = peakDetectorSettings.getThreshold();
+			WindowSize windowSize = peakDetectorSettings.getMovingAverageWindowSize();
+			List<IRawPeak> rawPeaks = new ArrayList<>();
+			//
+			if(noiseSegments != null && noiseSegments.size() > 0) {
+				/*
+				 * Initial retention time range before running the detection using
+				 * noise segments.
+				 * | --- [S] --- [N] --- [E] --- |
+				 */
+				Iterator<NoiseSegment> iterator = noiseSegments.iterator();
+				int startRetentionTime = chromatogramSelection.getStartRetentionTime();
+				int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
+				NoiseSegment noiseSegment = iterator.hasNext() ? iterator.next() : null;
+				/*
+				 * Range from the start of the chromatogram selection to the first noise segment
+				 * | --- [S]
+				 */
+				if(noiseSegment != null) {
+					chromatogramSelection.setRangeRetentionTime(startRetentionTime, noiseSegment.getStartRetentionTime());
+					IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, windowSize, ions);
+					rawPeaks.addAll(getRawPeaks(slopes, threshold, monitor));
+				}
+				/*
+				 * Ranges between the noise segments
+				 * [S] --- [N] --- [E]
+				 */
+				while(iterator.hasNext()) {
+					int startRetentionTimeSegment = noiseSegment.getStopRetentionTime();
+					noiseSegment = iterator.next();
+					int stopRetentionTimeSegment = noiseSegment.getStartRetentionTime();
+					chromatogramSelection.setRangeRetentionTime(startRetentionTimeSegment, stopRetentionTimeSegment);
+					IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, windowSize, ions);
+					rawPeaks.addAll(getRawPeaks(slopes, threshold, monitor));
+				}
+				/*
+				 * Range from the last noise segment to the end of the chromatogram selection
+				 * [E] --- |
+				 */
+				if(noiseSegment != null) {
+					chromatogramSelection.setRangeRetentionTime(noiseSegment.getStopRetentionTime(), stopRetentionTime);
+					IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, windowSize, ions);
+					rawPeaks.addAll(getRawPeaks(slopes, threshold, monitor));
+				}
+				/*
+				 * Reset the retention time range to its initial values.
+				 */
+				chromatogramSelection.setRangeRetentionTime(startRetentionTime, stopRetentionTime);
+			} else {
+				/*
+				 * Default: no noise segments
+				 */
 				IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, windowSize, ions);
 				rawPeaks.addAll(getRawPeaks(slopes, threshold, monitor));
 			}
-			/*
-			 * Ranges between the noise segments
-			 * [S] --- [N] --- [E]
-			 */
-			while(iterator.hasNext()) {
-				int startRetentionTimeSegment = noiseSegment.getStopRetentionTime();
-				noiseSegment = iterator.next();
-				int stopRetentionTimeSegment = noiseSegment.getStartRetentionTime();
-				chromatogramSelection.setRangeRetentionTime(startRetentionTimeSegment, stopRetentionTimeSegment);
-				IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, windowSize, ions);
-				rawPeaks.addAll(getRawPeaks(slopes, threshold, monitor));
-			}
-			/*
-			 * Range from the last noise segment to the end of the chromatogram selection
-			 * [E] --- |
-			 */
-			if(noiseSegment != null) {
-				chromatogramSelection.setRangeRetentionTime(noiseSegment.getStopRetentionTime(), stopRetentionTime);
-				IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, windowSize, ions);
-				rawPeaks.addAll(getRawPeaks(slopes, threshold, monitor));
-			}
-			/*
-			 * Reset the retention time range to its initial values.
-			 */
-			chromatogramSelection.setRangeRetentionTime(startRetentionTime, stopRetentionTime);
-		} else {
-			/*
-			 * Default: no noise segments
-			 */
-			IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, windowSize, ions);
-			rawPeaks.addAll(getRawPeaks(slopes, threshold, monitor));
+			extractPeaks.addAll(extractPeaks(rawPeaks, chromatogramSelection.getChromatogram(), peakDetectorSettings, ions));
 		}
-		return extractPeaks(rawPeaks, chromatogramSelection.getChromatogram(), peakDetectorSettings, ions);
+		return extractPeaks;
 	}
 
 	/**

@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Dr. Alexander Kerner - implementation
+ * Christoph Läubrich - add option to detect on individual traces
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings;
 
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -53,18 +55,21 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 	@JsonProperty(value = "Use Noise-Segments", defaultValue = "false")
 	@JsonPropertyDescription(value = "Whether to use Nois-Segments to decide where peaks should be detected, this can improve the sensitivity of the algorithm")
 	private boolean useNoiseSegments = false;
-	@JsonProperty(value = "Filter Mode", defaultValue = "EXCLUDE")
-	private FilterMode filterMode;
+	@JsonProperty(value = "Filter Mode", defaultValue = "INCLUDE")
+	private FilterMode filterMode = FilterMode.INCLUDE;
 	@JsonProperty(value = "m/z values to filter", defaultValue = "")
 	private String filterIonsString;
+	@JsonProperty(value = "Use Individual Traces", defaultValue = "false")
+	@JsonPropertyDescription("Uses each ion in the filter-list individualy to detect peaks")
+	private boolean useIndividualTraces = false;
 	@JsonProperty(value = "Optimize Baseline (VV)", defaultValue = "false")
 	private boolean optimizeBaseline = false;
 
 	@JsonIgnore
-	public static IMarkedIons getFilterIons(PeakDetectorSettingsMSD peakDetectorSettings) {
+	public Collection<IMarkedIons> getFilterIons() {
 
 		IonMarkMode ionMarkMode;
-		switch(peakDetectorSettings.getFilterMode()) {
+		switch(getFilterMode()) {
 			case EXCLUDE:
 				ionMarkMode = IonMarkMode.INCLUDE;
 				break;
@@ -72,11 +77,22 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 				ionMarkMode = IonMarkMode.EXCLUDE;
 				break;
 			default:
-				throw new IllegalArgumentException("Unknown filter mode " + peakDetectorSettings.getFilterMode());
+				throw new IllegalArgumentException("Unsupported filter mode " + getFilterMode());
 		}
-		MarkedIons ions = new MarkedIons(ionMarkMode);
-		ions.addAll(peakDetectorSettings.getFilterIon().stream().map(e -> new MarkedIon(e.doubleValue())).collect(Collectors.toSet()));
-		return ions;
+		Set<MarkedIon> ions = getFilterIon().stream().map(e -> new MarkedIon(e.doubleValue())).collect(Collectors.toSet());
+		if(isUseIndividualTraces()) {
+			List<IMarkedIons> list = new ArrayList<>();
+			for(MarkedIon ion : ions) {
+				MarkedIons ionlist = new MarkedIons(ionMarkMode);
+				ionlist.add(ion);
+				list.add(ionlist);
+			}
+			return list;
+		} else {
+			MarkedIons ionlist = new MarkedIons(ionMarkMode);
+			ionlist.addAll(ions);
+			return Collections.singleton(ionlist);
+		}
 	}
 
 	public boolean isIncludeBackground() {
@@ -179,5 +195,15 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 	public void setOptimizeBaseline(boolean optimizeBaseline) {
 
 		this.optimizeBaseline = optimizeBaseline;
+	}
+
+	public boolean isUseIndividualTraces() {
+
+		return useIndividualTraces;
+	}
+
+	public void setUseIndividualTraces(boolean useIndividualTraces) {
+
+		this.useIndividualTraces = useIndividualTraces;
 	}
 }
