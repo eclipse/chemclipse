@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  * 
@@ -17,7 +17,6 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IRawPeak;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.FirstDerivativePeakDetectorSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.FirstDerivativeDetectorSlopes;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.IFirstDerivativeDetectorSlope;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.IFirstDerivativeDetectorSlopes;
@@ -46,7 +45,7 @@ import org.osgi.service.component.annotations.Component;
 
 @Component(service = {IMeasurementPeakDetector.class, Detector.class})
 public class FirstDerivativePeakDetector implements IMeasurementPeakDetector<FirstDerivativePeakDetectorSettings> {
-	
+
 	@Override
 	public String getName() {
 
@@ -73,8 +72,8 @@ public class FirstDerivativePeakDetector implements IMeasurementPeakDetector<Fir
 				} else {
 					configuration = globalConfiguration;
 				}
-				IMarkedIons ions = PeakDetectorSettingsMSD.getFilterIons(globalConfiguration);
-				slopes = PeakDetectorMSD.getFirstDerivativeSlopes(new ChromatogramSelectionMSD((IChromatogramMSD)measurement), configuration.getMovingAverageWindowSize(), ions);
+				Collection<IMarkedIons> markedIons = globalConfiguration.getFilterIons();
+				slopes = PeakDetectorMSD.getFirstDerivativeSlopes(new ChromatogramSelectionMSD((IChromatogramMSD)measurement), configuration.getMovingAverageWindowSize(), markedIons.iterator().next());
 			} else if(measurement instanceof IChromatogramCSD) {
 				if(globalConfiguration == null) {
 					configuration = new FirstDerivativePeakDetectorSettings(DataType.CSD);
@@ -157,7 +156,6 @@ public class FirstDerivativePeakDetector implements IMeasurementPeakDetector<Fir
 		private double slope;
 
 		public SignalSlope(ISignal signal, ISignal signalNext) {
-
 			IPoint p1 = new Point(signal.getX(), signal.getY());
 			IPoint p2 = new Point(signalNext.getX(), signalNext.getY());
 			slope = Equations.calculateSlopeAbs(p1, p2);
@@ -187,6 +185,4 @@ public class FirstDerivativePeakDetector implements IMeasurementPeakDetector<Fir
 			return "";
 		}
 	}
-
-	
 }

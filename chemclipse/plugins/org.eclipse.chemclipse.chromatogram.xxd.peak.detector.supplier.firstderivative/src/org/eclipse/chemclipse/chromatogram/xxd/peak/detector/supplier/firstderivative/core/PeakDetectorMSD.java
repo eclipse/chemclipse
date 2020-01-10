@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.IPeakDetectorMSD;
@@ -37,7 +38,6 @@ import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalsModifier;
-import org.eclipse.chemclipse.model.support.IScanRange;
 import org.eclipse.chemclipse.model.support.NoiseSegment;
 import org.eclipse.chemclipse.model.support.ScanRange;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -139,63 +139,74 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 	 */
 	public List<IChromatogramPeakMSD> detectPeaks(IChromatogramSelectionMSD chromatogramSelection, PeakDetectorSettingsMSD peakDetectorSettings, List<NoiseSegment> noiseSegments, IProgressMonitor monitor) {
 
-		IMarkedIons ions = PeakDetectorSettingsMSD.getFilterIons(peakDetectorSettings);
-		Threshold threshold = peakDetectorSettings.getThreshold();
-		WindowSize windowSize = peakDetectorSettings.getMovingAverageWindowSize();
-		List<IRawPeak> rawPeaks = new ArrayList<>();
-		//
-		if(noiseSegments != null && noiseSegments.size() > 0) {
-			/*
-			 * Initial retention time range before running the detection using
-			 * noise segments.
-			 * | --- [S] --- [N] --- [E] --- |
-			 */
-			Iterator<NoiseSegment> iterator = noiseSegments.iterator();
-			int startRetentionTime = chromatogramSelection.getStartRetentionTime();
-			int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
-			NoiseSegment noiseSegment = iterator.hasNext() ? iterator.next() : null;
-			/*
-			 * Range from the start of the chromatogram selection to the first noise segment
-			 * | --- [S]
-			 */
-			if(noiseSegment != null) {
-				chromatogramSelection.setRangeRetentionTime(startRetentionTime, noiseSegment.getStartRetentionTime());
+		List<IChromatogramPeakMSD> extractPeaks = new ArrayList<>();
+		Collection<IMarkedIons> filterIons = peakDetectorSettings.getFilterIons();
+		for(IMarkedIons ions : filterIons) {
+			Threshold threshold = peakDetectorSettings.getThreshold();
+			WindowSize windowSize = peakDetectorSettings.getMovingAverageWindowSize();
+			List<IRawPeak> rawPeaks = new ArrayList<>();
+			//
+			if(noiseSegments != null && noiseSegments.size() > 0) {
+				/*
+				 * Initial retention time range before running the detection using
+				 * noise segments.
+				 * | --- [S] --- [N] --- [E] --- |
+				 */
+				Iterator<NoiseSegment> iterator = noiseSegments.iterator();
+				int startRetentionTime = chromatogramSelection.getStartRetentionTime();
+				int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
+				NoiseSegment noiseSegment = iterator.hasNext() ? iterator.next() : null;
+				/*
+				 * Range from the start of the chromatogram selection to the first noise segment
+				 * | --- [S]
+				 */
+				if(noiseSegment != null) {
+					chromatogramSelection.setRangeRetentionTime(startRetentionTime, noiseSegment.getStartRetentionTime());
+					IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, windowSize, ions);
+					rawPeaks.addAll(getRawPeaks(slopes, threshold, monitor));
+				}
+				/*
+				 * Ranges between the noise segments
+				 * [S] --- [N] --- [E]
+				 */
+				while(iterator.hasNext()) {
+					int startRetentionTimeSegment = noiseSegment.getStopRetentionTime();
+					noiseSegment = iterator.next();
+					int stopRetentionTimeSegment = noiseSegment.getStartRetentionTime();
+					chromatogramSelection.setRangeRetentionTime(startRetentionTimeSegment, stopRetentionTimeSegment);
+					IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, windowSize, ions);
+					rawPeaks.addAll(getRawPeaks(slopes, threshold, monitor));
+				}
+				/*
+				 * Range from the last noise segment to the end of the chromatogram selection
+				 * [E] --- |
+				 */
+				if(noiseSegment != null) {
+					chromatogramSelection.setRangeRetentionTime(noiseSegment.getStopRetentionTime(), stopRetentionTime);
+					IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, windowSize, ions);
+					rawPeaks.addAll(getRawPeaks(slopes, threshold, monitor));
+				}
+				/*
+				 * Reset the retention time range to its initial values.
+				 */
+				chromatogramSelection.setRangeRetentionTime(startRetentionTime, stopRetentionTime);
+			} else {
+				/*
+				 * Default: no noise segments
+				 */
 				IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, windowSize, ions);
 				rawPeaks.addAll(getRawPeaks(slopes, threshold, monitor));
 			}
-			/*
-			 * Ranges between the noise segments
-			 * [S] --- [N] --- [E]
-			 */
-			while(iterator.hasNext()) {
-				int startRetentionTimeSegment = noiseSegment.getStopRetentionTime();
-				noiseSegment = iterator.next();
-				int stopRetentionTimeSegment = noiseSegment.getStartRetentionTime();
-				chromatogramSelection.setRangeRetentionTime(startRetentionTimeSegment, stopRetentionTimeSegment);
-				IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, windowSize, ions);
-				rawPeaks.addAll(getRawPeaks(slopes, threshold, monitor));
+			List<IChromatogramPeakMSD> peaks = extractPeaks(rawPeaks, chromatogramSelection.getChromatogram(), peakDetectorSettings, ions);
+			if(peakDetectorSettings.isUseIndividualTraces()) {
+				String classifier = "Trace " + ions.getIonsNominal().iterator().next();
+				for(IChromatogramPeakMSD msd : peaks) {
+					msd.addClassifier(classifier);
+				}
 			}
-			/*
-			 * Range from the last noise segment to the end of the chromatogram selection
-			 * [E] --- |
-			 */
-			if(noiseSegment != null) {
-				chromatogramSelection.setRangeRetentionTime(noiseSegment.getStopRetentionTime(), stopRetentionTime);
-				IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, windowSize, ions);
-				rawPeaks.addAll(getRawPeaks(slopes, threshold, monitor));
-			}
-			/*
-			 * Reset the retention time range to its initial values.
-			 */
-			chromatogramSelection.setRangeRetentionTime(startRetentionTime, stopRetentionTime);
-		} else {
-			/*
-			 * Default: no noise segments
-			 */
-			IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, windowSize, ions);
-			rawPeaks.addAll(getRawPeaks(slopes, threshold, monitor));
+			extractPeaks.addAll(peaks);
 		}
-		return extractPeaks(rawPeaks, chromatogramSelection.getChromatogram(), peakDetectorSettings, ions);
+		return extractPeaks;
 	}
 
 	/**
@@ -209,30 +220,25 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 	private List<IChromatogramPeakMSD> extractPeaks(List<IRawPeak> rawPeaks, IChromatogramMSD chromatogram, PeakDetectorSettingsMSD peakDetectorSettings, IMarkedIons ions) {
 
 		List<IChromatogramPeakMSD> peaks = new ArrayList<>();
+		Set<Integer> traces = ions.getIonsNominal().stream().map(e -> e.intValue()).collect(Collectors.toSet());
+		boolean includeBackground = peakDetectorSettings.isIncludeBackground();
+		boolean optimizeBaseline = peakDetectorSettings.isOptimizeBaseline();
 		//
-		IChromatogramPeakMSD peak = null;
-		IScanRange scanRange = null;
 		for(IRawPeak rawPeak : rawPeaks) {
-			/*
-			 * Build the peak and add it.
-			 */
 			try {
-				scanRange = new ScanRange(rawPeak.getStartScan(), rawPeak.getStopScan());
+				/*
+				 * Optimize the scan range.
+				 */
+				ScanRange scanRange = new ScanRange(rawPeak.getStartScan(), rawPeak.getStopScan());
+				if(includeBackground && optimizeBaseline) {
+					scanRange = optimizeBaseline(chromatogram, scanRange.getStartScan(), rawPeak.getMaximumScan(), scanRange.getStopScan(), ions);
+				}
 				/*
 				 * includeBackground
 				 * false: BV or VB
 				 * true: VV
 				 */
-				peak = PeakBuilderMSD.createPeak(chromatogram, scanRange, peakDetectorSettings.isIncludeBackground(), ions.getIonsNominal().stream().map(e -> e.intValue()).collect(Collectors.toSet()), ions.getMode());
-				/*
-				 * TODO Resolve, why this peak does throw an exception. When
-				 * detecting peaks in the chromatogram OP17760.D/DATA.MS a
-				 * PeakException occurs:<br/> Threshold.OFF : peak number 191
-				 * ScanRange[startScan=4636,stopScan=4646]<br/> Threshold.LOW :
-				 * peak number 173 ScanRange[startScan=4636,stopScan=4646]<br/>
-				 * The first scan is the peak maximum, as it seems, so no
-				 * inflection point equation could be calculated.
-				 */
+				IChromatogramPeakMSD peak = PeakBuilderMSD.createPeak(chromatogram, scanRange, includeBackground, traces, ions.getMode());
 				if(isValidPeak(peak, peakDetectorSettings)) {
 					/*
 					 * Add the detector description.

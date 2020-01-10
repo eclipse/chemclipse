@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,10 +30,7 @@ import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.xxd.process.comparators.NameComparator;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -62,7 +59,7 @@ public class ProcessingWizardPage extends WizardPage {
 	private final List<Button> dataTypeSelections = new ArrayList<>();
 	private ProcessEntry processEntry;
 	private ProcessSupplierContext processContext;
-	private DataCategory[] dataCategories;
+	private final DataCategory[] dataCategories;
 
 	protected ProcessingWizardPage(Map<ProcessSupplierContext, String> contexts, DataCategory[] dataCategories) {
 		super("ProcessingWizardPage");
@@ -82,26 +79,7 @@ public class ProcessingWizardPage extends WizardPage {
 		if(dataCategories.length > 1) {
 			createLabel(composite, "Select the desired data types");
 			for(DataCategory dataType : dataCategories) {
-				Button button;
-				switch(dataType) {
-					case CSD:
-						button = createDataTypeCheckbox(composite, DataCategory.CSD, "CSD (FID, PPD, ...)", "Select the csd processor items", PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_CSD);
-						break;
-					case MSD:
-						button = createDataTypeCheckbox(composite, DataCategory.MSD, "MSD (Quadrupole, IonTrap, ...)", "Select the msd processor items", PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_MSD);
-						break;
-					case WSD:
-						button = createDataTypeCheckbox(composite, DataCategory.WSD, "WSD (UV/Vis, DAD, ...)", "Select the wsd processor items", PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_WSD);
-						break;
-					case NMR:
-						button = createDataTypeCheckbox(composite, DataCategory.NMR, "NMR (Spectrum)", "Select the NMR processor items", PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_NMR);
-						break;
-					case FID:
-						button = createDataTypeCheckbox(composite, DataCategory.FID, "NMR (FID Raw Data)", "Select the NMR processor items", PreferenceConstants.P_METHOD_PROCESSOR_SELECTION_NMR);
-						break;
-					default:
-						continue;
-				}
+				Button button = createDataTypeCheckbox(composite, dataType);
 				dataTypeSelections.add(button);
 				button.addSelectionListener(new SelectionListener() {
 
@@ -158,14 +136,13 @@ public class ProcessingWizardPage extends WizardPage {
 		});
 	}
 
-	private static Button createDataTypeCheckbox(Composite parent, DataCategory dataType, String text, String tooltip, String preferenceKey) {
+	private static Button createDataTypeCheckbox(Composite parent, DataCategory dataType) {
 
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		Button button = new Button(parent, SWT.CHECK);
 		button.setData(dataType);
-		button.setText(text);
-		button.setToolTipText(tooltip);
-		button.setSelection(preferenceStore.getBoolean(preferenceKey));
+		button.setText(dataType.getLabel());
+		button.setToolTipText("Select the " + dataType.name() + " processor items");
+		button.setSelection(true);
 		Color enabledColor = button.getForeground();
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -173,7 +150,6 @@ public class ProcessingWizardPage extends WizardPage {
 			public void widgetSelected(SelectionEvent e) {
 
 				boolean selection = button.getSelection();
-				preferenceStore.setValue(preferenceKey, selection);
 				if(selection) {
 					button.setForeground(enabledColor);
 				} else {

@@ -39,6 +39,8 @@ public class PeakDetectorSettingsCSD extends AbstractPeakDetectorCSDSettings {
 	@JsonProperty(value = "Use Noise-Segments", defaultValue = "false")
 	@JsonPropertyDescription(value = "Whether to use Nois-Segments to decide where peaks should be detected, this can improve the sensitivity of the algorithm")
 	private boolean useNoiseSegments = false;
+	@JsonProperty(value = "Optimize Baseline (VV)", defaultValue = "false")
+	private boolean optimizeBaseline = false;
 
 	public PeakDetectorSettingsCSD() {
 		windowSize = WindowSize.WIDTH_5;
@@ -94,5 +96,15 @@ public class PeakDetectorSettingsCSD extends AbstractPeakDetectorCSDSettings {
 	public void setUseNoiseSegments(boolean useNoiseSegments) {
 
 		this.useNoiseSegments = useNoiseSegments;
+	}
+
+	public boolean isOptimizeBaseline() {
+
+		return optimizeBaseline;
+	}
+
+	public void setOptimizeBaseline(boolean optimizeBaseline) {
+
+		this.optimizeBaseline = optimizeBaseline;
 	}
 }

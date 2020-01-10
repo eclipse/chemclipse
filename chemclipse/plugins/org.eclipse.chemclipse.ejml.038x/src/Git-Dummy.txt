@@ -1,0 +1,1 @@
+Otherwise, the src folder is not synchronized.

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.chemclipse.model.comparator.TimeRangeComparator;
 import org.eclipse.chemclipse.model.ranges.TimeRange;
 import org.eclipse.chemclipse.model.ranges.TimeRanges;
 import org.eclipse.chemclipse.model.updates.IUpdateListener;
@@ -75,6 +76,23 @@ public class TimeRangesUI extends Composite {
 	public void setUpdateListener(IUpdateListener updateListener) {
 
 		this.updateListener = updateListener;
+	}
+
+	public String[] getItems() {
+
+		return comboViewer.getCombo().getItems();
+	}
+
+	public void select(int index) {
+
+		if(index >= 0 && index < getItems().length) {
+			comboViewer.getCombo().select(index);
+			Object object = comboViewer.getStructuredSelection().getFirstElement();
+			if(object instanceof TimeRange) {
+				timeRange = (TimeRange)object;
+				updateTimeRange();
+			}
+		}
 	}
 
 	private void createControl() {
@@ -167,7 +185,7 @@ public class TimeRangesUI extends Composite {
 							updateInput();
 							comboViewer.getCombo().setText(timeRangeNew.getIdentifier());
 							timeRange = timeRangeNew;
-							updateTimeRange();
+							fireUpdate();
 						}
 					}
 				}
@@ -192,6 +210,7 @@ public class TimeRangesUI extends Composite {
 					if(object instanceof TimeRange) {
 						timeRanges.remove((TimeRange)object);
 						updateInput();
+						fireUpdate();
 					}
 				}
 			}
@@ -207,6 +226,7 @@ public class TimeRangesUI extends Composite {
 			 * Sort
 			 */
 			buttonAdd.setEnabled(true);
+			//
 			List<TimeRange> ranges = new ArrayList<>(timeRanges.values());
 			Collections.sort(ranges, new TimeRangeComparator());
 			//
@@ -215,12 +235,16 @@ public class TimeRangesUI extends Composite {
 			comboViewer.setInput(ranges);
 			//
 			if(combo.getItemCount() > 0) {
+				buttonDelete.setEnabled(true);
 				int index = (selectionIndex >= 0 && selectionIndex < combo.getItemCount()) ? selectionIndex : 0;
 				combo.select(index);
 				timeRange = ranges.get(index);
+			} else {
+				buttonDelete.setEnabled(false);
 			}
 		} else {
 			buttonAdd.setEnabled(false);
+			buttonDelete.setEnabled(false);
 			comboViewer.setInput(null);
 		}
 		//
@@ -238,6 +262,15 @@ public class TimeRangesUI extends Composite {
 	private void fireUpdate() {
 
 		if(updateListener != null) {
+			/*
+			 * The time spinner act independently.
+			 * If one range is modified, all other ranges
+			 * shall be updated.
+			 */
+			updateTimeRange();
+			/*
+			 * Inform all other listeners.
+			 */
 			getDisplay().asyncExec(new Runnable() {
 
 				@Override

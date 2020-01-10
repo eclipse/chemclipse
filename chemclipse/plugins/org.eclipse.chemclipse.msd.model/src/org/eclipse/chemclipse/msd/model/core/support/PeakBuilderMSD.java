@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -46,9 +46,10 @@ import org.eclipse.chemclipse.numeric.equations.Equations;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 
 public class PeakBuilderMSD {
-	
+
 	@Deprecated
 	public static IChromatogramPeakMSD createPeak(IChromatogramMSD chromatogram, IScanRange scanRange, boolean includedBackground, Set<Integer> includedIons) throws PeakException {
+
 		return createPeak(chromatogram, scanRange, includedBackground, includedIons, IonMarkMode.INCLUDE);
 	}
 
@@ -82,13 +83,10 @@ public class PeakBuilderMSD {
 		 * chromatogram and eventually peak internal background, if the start
 		 * abundance is higher than the stop abundance or vice versa.
 		 */
-		LinearEquation backgroundEquation;
-		float startBackgroundAbundance;
-		float stopBackgroundAbundance;
 		totalIonSignal = totalIonSignals.getTotalScanSignal(scanRange.getStartScan());
-		startBackgroundAbundance = totalIonSignal.getTotalSignal();
+		float startBackgroundAbundance = totalIonSignal.getTotalSignal();
 		totalIonSignal = totalIonSignals.getTotalScanSignal(scanRange.getStopScan());
-		stopBackgroundAbundance = totalIonSignal.getTotalSignal();
+		float stopBackgroundAbundance = totalIonSignal.getTotalSignal();
 		/*
 		 * The abundance of base or startBackground/stopBackground (depends
 		 * which is the lower value) is the chromatogram background.<br/> Then a
@@ -105,7 +103,7 @@ public class PeakBuilderMSD {
 			float base = Math.min(startBackgroundAbundance, stopBackgroundAbundance);
 			backgroundAbundanceRange = new BackgroundAbundanceRange(base, base);
 		}
-		backgroundEquation = getBackgroundEquation(totalIonSignals, scanRange, backgroundAbundanceRange);
+		LinearEquation backgroundEquation = getBackgroundEquation(totalIonSignals, scanRange, backgroundAbundanceRange);
 		/*
 		 * Calculate the intensity values.
 		 */

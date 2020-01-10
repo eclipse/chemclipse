@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,7 +25,7 @@ import org.osgi.service.component.annotations.Component;
 public class PeakMassspectrumFilterProcessTypeSupplier extends AbstractMassspectrumFilterProcessTypeSupplier {
 
 	public PeakMassspectrumFilterProcessTypeSupplier() {
-		super("Peak Massspectrum Filter", "mzfilter.msd.peak", new Function<IChromatogramSelection<?, ?>, List<IScanMSD>>() {
+		super("Peak Massspectrum Filter", "mzfilter.msd.peak.", new Function<IChromatogramSelection<?, ?>, List<IScanMSD>>() {
 
 			@Override
 			public List<IScanMSD> apply(IChromatogramSelection<?, ?> chromatogramSelection) {

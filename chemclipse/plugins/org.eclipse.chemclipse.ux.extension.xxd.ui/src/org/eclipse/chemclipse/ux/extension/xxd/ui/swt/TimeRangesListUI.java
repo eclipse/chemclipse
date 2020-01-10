@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -41,6 +41,11 @@ public class TimeRangesListUI extends ExtendedTableViewer {
 
 		listFilter.setSearchText(searchText, caseSensitive);
 		refresh();
+	}
+
+	public void setSortEnabled(boolean sortEnabled) {
+
+		setComparator((sortEnabled) ? tableComparator : null);
 	}
 
 	public void clear() {

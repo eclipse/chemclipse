@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2019 Lablicate GmbH.
+ * Copyright (c) 2010, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -38,6 +38,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final float DEF_MIN_SN_RATIO_MSD = 0.0f; // 0 = all peaks will be added
 	public static final String P_MOVING_AVERAGE_WINDOW_SIZE_MSD = "movingAverageWindowSizeMSD";
 	public static final String DEF_MOVING_AVERAGE_WINDOW_SIZE_MSD = WindowSize.WIDTH_3.name();
+	public static final String P_USE_NOISE_SEGMENTS_MSD = "useNoiseSegmentsMSD";
+	public static final boolean DEF_USE_NOISE_SEGMENTS_MSD = false;
+	public static final String P_OPTIMIZE_BASELINE_MSD = "optimizeBaselineMSD";
+	public static final boolean DEF_OPTIMIZE_BASELINE_MSD = false;
 	//
 	public static final String P_THRESHOLD_CSD = "thresholdCSD";
 	public static final String DEF_THRESHOLD_CSD = Threshold.MEDIUM.name();
@@ -47,6 +51,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final float DEF_MIN_SN_RATIO_CSD = 0.0f; // 0 = all peaks will be added
 	public static final String P_MOVING_AVERAGE_WINDOW_SIZE_CSD = "movingAverageWindowSizeCSD";
 	public static final String DEF_MOVING_AVERAGE_WINDOW_SIZE_CSD = WindowSize.WIDTH_3.name();
+	public static final String P_USE_NOISE_SEGMENTS_CSD = "useNoiseSegmentsCSD";
+	public static final boolean DEF_USE_NOISE_SEGMENTS_CSD = false;
+	public static final String P_OPTIMIZE_BASELINE_CSD = "optimizeBaselineCSD";
+	public static final boolean DEF_OPTIMIZE_BASELINE_CSD = false;
 	//
 	public static final String P_THRESHOLD_WSD = "thresholdWSD";
 	public static final String DEF_THRESHOLD_WSD = Threshold.MEDIUM.name();
@@ -88,11 +96,15 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_MIN_SN_RATIO_MSD, Float.toString(DEF_MIN_SN_RATIO_MSD));
 		defaultValues.put(P_MOVING_AVERAGE_WINDOW_SIZE_MSD, DEF_MOVING_AVERAGE_WINDOW_SIZE_MSD);
 		defaultValues.put(P_THRESHOLD_MSD, DEF_THRESHOLD_MSD);
+		defaultValues.put(P_USE_NOISE_SEGMENTS_MSD, Boolean.toString(DEF_USE_NOISE_SEGMENTS_MSD));
+		defaultValues.put(P_OPTIMIZE_BASELINE_MSD, Boolean.toString(DEF_OPTIMIZE_BASELINE_MSD));
 		//
 		defaultValues.put(P_INCLUDE_BACKGROUND_CSD, Boolean.toString(DEF_INCLUDE_BACKGROUND_CSD));
 		defaultValues.put(P_MIN_SN_RATIO_CSD, Float.toString(DEF_MIN_SN_RATIO_CSD));
 		defaultValues.put(P_MOVING_AVERAGE_WINDOW_SIZE_CSD, DEF_MOVING_AVERAGE_WINDOW_SIZE_CSD);
 		defaultValues.put(P_THRESHOLD_CSD, DEF_THRESHOLD_CSD);
+		defaultValues.put(P_USE_NOISE_SEGMENTS_CSD, Boolean.toString(DEF_USE_NOISE_SEGMENTS_CSD));
+		defaultValues.put(P_OPTIMIZE_BASELINE_CSD, Boolean.toString(DEF_OPTIMIZE_BASELINE_CSD));
 		//
 		defaultValues.put(P_INCLUDE_BACKGROUND_WSD, Boolean.toString(DEF_INCLUDE_BACKGROUND_WSD));
 		defaultValues.put(P_MIN_SN_RATIO_WSD, Float.toString(DEF_MIN_SN_RATIO_WSD));
@@ -116,6 +128,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		peakDetectorSettings.setIncludeBackground(preferences.getBoolean(P_INCLUDE_BACKGROUND_MSD, DEF_INCLUDE_BACKGROUND_MSD));
 		peakDetectorSettings.setMinimumSignalToNoiseRatio(preferences.getFloat(P_MIN_SN_RATIO_MSD, DEF_MIN_SN_RATIO_MSD));
 		peakDetectorSettings.setMovingAverageWindowSize(WindowSize.valueOf(WindowSize.getAdjustedSetting(preferences.get(P_MOVING_AVERAGE_WINDOW_SIZE_MSD, DEF_MOVING_AVERAGE_WINDOW_SIZE_MSD))));
+		peakDetectorSettings.setUseNoiseSegments(preferences.getBoolean(P_USE_NOISE_SEGMENTS_MSD, DEF_USE_NOISE_SEGMENTS_MSD));
+		peakDetectorSettings.setOptimizeBaseline(preferences.getBoolean(P_OPTIMIZE_BASELINE_MSD, DEF_OPTIMIZE_BASELINE_MSD));
 		return peakDetectorSettings;
 	}
 
@@ -127,6 +141,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		peakDetectorSettings.setIncludeBackground(preferences.getBoolean(P_INCLUDE_BACKGROUND_CSD, DEF_INCLUDE_BACKGROUND_CSD));
 		peakDetectorSettings.setMinimumSignalToNoiseRatio(preferences.getFloat(P_MIN_SN_RATIO_CSD, DEF_MIN_SN_RATIO_CSD));
 		peakDetectorSettings.setMovingAverageWindowSize(WindowSize.valueOf(WindowSize.getAdjustedSetting(preferences.get(P_MOVING_AVERAGE_WINDOW_SIZE_CSD, DEF_MOVING_AVERAGE_WINDOW_SIZE_CSD))));
+		peakDetectorSettings.setUseNoiseSegments(preferences.getBoolean(P_USE_NOISE_SEGMENTS_CSD, DEF_USE_NOISE_SEGMENTS_CSD));
+		peakDetectorSettings.setOptimizeBaseline(preferences.getBoolean(P_OPTIMIZE_BASELINE_CSD, DEF_OPTIMIZE_BASELINE_CSD));
 		return peakDetectorSettings;
 	}
 
