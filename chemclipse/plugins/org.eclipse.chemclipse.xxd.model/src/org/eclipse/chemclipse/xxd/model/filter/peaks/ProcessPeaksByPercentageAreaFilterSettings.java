@@ -13,62 +13,31 @@ package org.eclipse.chemclipse.xxd.model.filter.peaks;
 
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
-import org.eclipse.chemclipse.xxd.model.support.ProcessPeaksByAreaFilterAreaTypeSelection;
 import org.eclipse.chemclipse.xxd.model.support.ProcessPeaksByAreaFilterSelectionCriterion;
 import org.eclipse.chemclipse.xxd.model.support.ProcessPeaksByAreaFilterTreatmentOption;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class ProcessPeaksByAreaFilterSettings {
+public class ProcessPeaksByPercentageAreaFilterSettings {
 
-	@JsonProperty(value = "Minimum area [integrated]", defaultValue = "5000000.0")
-	@JsonPropertyDescription(value = "The minimum area value of a peak to be filtered accordingly.")
-	@DoubleSettingsProperty(minValue = 1.0d, maxValue = Double.MAX_VALUE)
-	private double minimumAreaValue = 5000000.0d;
-
-	@JsonProperty(value = "Maximum area [integrated]", defaultValue = "10000000.0")
-	@JsonPropertyDescription(value = "The maximum area value of a peak to be filtered accordingly.")
-	@DoubleSettingsProperty(minValue = 1.0d, maxValue = Double.MAX_VALUE)
-	private double maximumAreaValue = 10000000.0d;
-	
-	@JsonProperty(value = "Minimum area [%]", defaultValue = "1.0")
+	@JsonProperty(value = "Minimum area [%]:", defaultValue = "1.0")
 	@JsonPropertyDescription(value = "The minimum percentage area value of a peak to be filtered accordingly.")
 	@DoubleSettingsProperty(minValue = 0.0d, maxValue = 100.0d)
-	private double minimumPercentageAreaValue = 5000000.0d;
+	private double minimumPercentageAreaValue = 1.0d;
 
-	@JsonProperty(value = "Maximum area [%]", defaultValue = "10.0")
+	@JsonProperty(value = "Maximum area [%]:", defaultValue = "10.0")
 	@JsonPropertyDescription(value = "The maximum percentage area value of a peak to be filtered accordingly.")
 	@DoubleSettingsProperty(minValue = 0.0d, maxValue = 100.0d)
-	private double maximumPercentageAreaValue = 100.0d;
+	private double maximumPercentageAreaValue = 10.0d;
 
-	@JsonProperty(value = "Peak Area Selection", defaultValue = "INTEGRATED_AREA")
-	@EnumSelectionSettingProperty
-	private ProcessPeaksByAreaFilterAreaTypeSelection filterAreaTypeSelection = ProcessPeaksByAreaFilterAreaTypeSelection.INTEGRATED_AREA;
-
-	@JsonProperty(value = "Peak Treatment Option", defaultValue = "DISABLE_PEAK")
+	@JsonProperty(value = "Peak Treatment Option:", defaultValue = "DISABLE_PEAK")
 	@EnumSelectionSettingProperty
 	private ProcessPeaksByAreaFilterTreatmentOption filterTreatmentOption = ProcessPeaksByAreaFilterTreatmentOption.DISABLE_PEAK;
 
-	@JsonProperty(value = "Peak Selection Criterion", defaultValue = "AREA_LESS_THAN_MINIMUM")
+	@JsonProperty(value = "Peak Selection Criterion:", defaultValue = "AREA_LESS_THAN_MINIMUM")
 	@EnumSelectionSettingProperty
 	private ProcessPeaksByAreaFilterSelectionCriterion filterSelectionCriterion = ProcessPeaksByAreaFilterSelectionCriterion.AREA_LESS_THAN_MINIMUM;
-
-	public double getMinimumAreaValue() {
-		return minimumAreaValue;
-	}
-
-	public void setMinimumAreaValue(double minimumAreaValue) {
-		this.minimumAreaValue = minimumAreaValue;
-	}
-
-	public double getMaximumAreaValue() {
-		return maximumAreaValue;
-	}
-
-	public void setMaximumAreaValue(double maximumAreaValue) {
-		this.maximumAreaValue = maximumAreaValue;
-	}
 
 	public double getMinimumPercentageAreaValue() {
 		return minimumPercentageAreaValue;
@@ -84,14 +53,6 @@ public class ProcessPeaksByAreaFilterSettings {
 
 	public void setMaximumPercentageAreaValue(double maximumPercentageAreaValue) {
 		this.maximumPercentageAreaValue = maximumPercentageAreaValue;
-	}
-
-	public ProcessPeaksByAreaFilterAreaTypeSelection getFilterAreaTypeSelection() {
-		return filterAreaTypeSelection;
-	}
-
-	public void setFilterAreaTypeSelection(ProcessPeaksByAreaFilterAreaTypeSelection filterAreaTypeSelection) {
-		this.filterAreaTypeSelection = filterAreaTypeSelection;
 	}
 
 	public ProcessPeaksByAreaFilterTreatmentOption getFilterTreatmentOption() {
