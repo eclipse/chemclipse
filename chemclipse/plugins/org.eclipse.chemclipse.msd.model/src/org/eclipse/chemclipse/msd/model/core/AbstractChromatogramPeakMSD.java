@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - remove hashcode and equals
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
@@ -140,31 +141,6 @@ public abstract class AbstractChromatogramPeakMSD extends AbstractPeakMSD implem
 			}
 		}
 		return purity;
-	}
-
-	// ------------------------------------------IPeak
-	// TODO JUnit
-	@Override
-	public boolean equals(Object otherObject) {
-
-		if(this == otherObject) {
-			return true;
-		}
-		if(otherObject == null) {
-			return false;
-		}
-		if(getClass() != otherObject.getClass()) {
-			return false;
-		}
-		AbstractChromatogramPeakMSD other = (AbstractChromatogramPeakMSD)otherObject;
-		return getPeakModel().equals(other.getPeakModel()) && chromatogram == other.getChromatogram();
-	}
-
-	@Override
-	public int hashCode() {
-
-		// use the hashcode of the peakmodel and the identity hashcode of the chromatogram, so this is consistent with equals
-		return getPeakModel().hashCode() + System.identityHashCode(chromatogram);
 	}
 
 	@Override

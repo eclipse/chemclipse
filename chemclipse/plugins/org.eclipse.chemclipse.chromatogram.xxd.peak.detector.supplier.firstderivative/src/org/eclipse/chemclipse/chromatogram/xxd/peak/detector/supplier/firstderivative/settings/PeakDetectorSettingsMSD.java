@@ -68,6 +68,9 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 	@JsonIgnore
 	public Collection<IMarkedIons> getFilterIons() {
 
+		if(filterIonsString == null || filterIonsString.isEmpty()) {
+			return Collections.singleton(new MarkedIons(IonMarkMode.INCLUDE));
+		}
 		IonMarkMode ionMarkMode;
 		switch(getFilterMode()) {
 			case EXCLUDE:
@@ -79,7 +82,7 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 			default:
 				throw new IllegalArgumentException("Unsupported filter mode " + getFilterMode());
 		}
-		Set<MarkedIon> ions = getFilterIon().stream().map(e -> new MarkedIon(e.doubleValue())).collect(Collectors.toSet());
+		Set<MarkedIon> ions = parseIons(filterIonsString).stream().map(e -> new MarkedIon(e.doubleValue())).collect(Collectors.toSet());
 		if(isUseIndividualTraces()) {
 			List<IMarkedIons> list = new ArrayList<>();
 			for(MarkedIon ion : ions) {
@@ -153,11 +156,6 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 	public void setFilterIonsString(String filterIonsString) {
 
 		this.filterIonsString = filterIonsString;
-	}
-
-	public Collection<Number> getFilterIon() {
-
-		return parseIons(filterIonsString);
 	}
 
 	static Collection<Number> parseIons(String filterIonsString) {

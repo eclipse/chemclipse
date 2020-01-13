@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - remove equals
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
@@ -37,28 +38,6 @@ public abstract class AbstractPeakMSD extends AbstractPeak implements IPeakMSD {
 	public IPeakMassSpectrum getExtractedMassSpectrum() {
 
 		return peakModel.getPeakMassSpectrum();
-	}
-
-	@Override
-	public boolean equals(Object otherObject) {
-
-		if(this == otherObject) {
-			return true;
-		}
-		if(otherObject == null) {
-			return false;
-		}
-		if(getClass() != otherObject.getClass()) {
-			return false;
-		}
-		AbstractPeakMSD other = (AbstractPeakMSD)otherObject;
-		return peakModel.equals(other.getPeakModel());
-	}
-
-	@Override
-	public int hashCode() {
-
-		return 7 * peakModel.hashCode();
 	}
 
 	@Override

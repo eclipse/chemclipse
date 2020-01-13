@@ -197,7 +197,14 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 				IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, windowSize, ions);
 				rawPeaks.addAll(getRawPeaks(slopes, threshold, monitor));
 			}
-			extractPeaks.addAll(extractPeaks(rawPeaks, chromatogramSelection.getChromatogram(), peakDetectorSettings, ions));
+			List<IChromatogramPeakMSD> peaks = extractPeaks(rawPeaks, chromatogramSelection.getChromatogram(), peakDetectorSettings, ions);
+			if(peakDetectorSettings.isUseIndividualTraces()) {
+				String classifier = "Trace " + ions.getIonsNominal().iterator().next();
+				for(IChromatogramPeakMSD msd : peaks) {
+					msd.addClassifier(classifier);
+				}
+			}
+			extractPeaks.addAll(peaks);
 		}
 		return extractPeaks;
 	}
