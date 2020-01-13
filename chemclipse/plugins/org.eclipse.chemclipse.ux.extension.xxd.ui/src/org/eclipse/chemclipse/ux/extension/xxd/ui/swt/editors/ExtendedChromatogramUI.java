@@ -1166,7 +1166,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		chartSettings.setRangeSelectorDefaultAxisX(1); // Minutes
 		chartSettings.setRangeSelectorDefaultAxisY(1); // Relative Abundance
 		chartSettings.setShowRangeSelectorInitially(false);
-		IChartMenuEntry chartMenuEntry = chartSettings.getChartMenuEntry(ResetChartHandler.NAME);
+		IChartMenuEntry chartMenuEntry = chartSettings.getChartMenuEntry(new ResetChartHandler().getName());
 		chartSettings.removeMenuEntry(chartMenuEntry);
 		chartSettings.addMenuEntry(new ChromatogramResetHandler(this));
 		chartSettings.addHandledEventProcessor(new ScanSelectionHandler(this));
