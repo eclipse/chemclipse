@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -49,6 +49,7 @@ import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 public class ChromatogramPeakChart extends ChromatogramChart {
 
 	private static final String SERIES_ID_CHROMATOGRAM = "Chromatogram";
+	private static final String SERIES_ID_BASELINE = "Baseline";
 	private static final String SERIES_ID_PEAKS_NORMAL = "Peaks Normal";
 	private static final String SERIES_ID_PEAKS_SELECTED_MARKER = "Peaks Selected Marker";
 	private static final String SERIES_ID_PEAKS_SELECTED_SHAPE = "Peaks Selected Shape";
@@ -78,11 +79,13 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 
 		if(chromatogramSelection == null) {
 			deleteSeries(SERIES_ID_CHROMATOGRAM);
+			deleteSeries(SERIES_ID_BASELINE);
 			deleteSeries(SERIES_ID_PEAKS_NORMAL);
 		} else {
 			List<IPeak> peaks = chromatogramSelection.getChromatogram().getPeaks(chromatogramSelection);
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 			addChromatogramData(chromatogramSelection, lineSeriesDataList);
+			addBaselineData(chromatogramSelection, lineSeriesDataList);
 			addPeakData(peaks, lineSeriesDataList);
 			addLineSeriesData(lineSeriesDataList);
 		}
@@ -128,6 +131,21 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 		ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogramSelection, SERIES_ID_CHROMATOGRAM, DisplayType.TIC, color, false);
 		lineSeriesData.getSettings().setEnableArea(enableChromatogramArea);
 		lineSeriesDataList.add(lineSeriesData);
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void addBaselineData(IChromatogramSelection chromatogramSelection, List<ILineSeriesData> lineSeriesDataList) {
+
+		boolean showChromatogramBaseline = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_BASELINE);
+		//
+		if(chromatogramSelection != null && showChromatogramBaseline) {
+			Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_BASELINE));
+			boolean enableBaselineArea = preferenceStore.getBoolean(PreferenceConstants.P_ENABLE_BASELINE_AREA);
+			ILineSeriesData lineSeriesData = null;
+			lineSeriesData = chromatogramChartSupport.getLineSeriesDataBaseline(chromatogramSelection, SERIES_ID_BASELINE, DisplayType.TIC, color, false);
+			lineSeriesData.getSettings().setEnableArea(enableBaselineArea);
+			lineSeriesDataList.add(lineSeriesData);
+		}
 	}
 
 	private void addPeakData(List<IPeak> peaks, List<ILineSeriesData> lineSeriesDataList) {
