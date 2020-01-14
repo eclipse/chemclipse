@@ -418,6 +418,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final boolean DEF_CHROMATOGRAM_X_ZOOM_ONLY = false;
 	public static final String P_CHROMATOGRAM_Y_ZOOM_ONLY = "chromatogramYZoomOnly";
 	public static final boolean DEF_CHROMATOGRAM_Y_ZOOM_ONLY = false;
+	public static final String P_CHROMATOGRAM_FORCE_ZERO_MIN_Y_MSD = "chromatogramForceZeroMinYMSD";
+	public static final boolean DEF_CHROMATOGRAM_FORCE_ZERO_MIN_Y_MSD = false;
 	//
 	public static final String P_SHOW_X_AXIS_MILLISECONDS = "showXAxisMilliseconds";
 	public static final boolean DEF_SHOW_X_AXIS_MILLISECONDS = false;

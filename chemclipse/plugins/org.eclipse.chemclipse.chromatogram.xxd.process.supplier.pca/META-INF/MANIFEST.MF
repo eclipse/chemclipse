@@ -24,5 +24,6 @@ Export-Package: org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.cor
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences
 Import-Package: org.ejml.data;version="0.38.0",
+ org.ejml.dense.row;version="0.38.0",
  org.ejml.dense.row.factory;version="0.38.0",
  org.ejml.interfaces.decomposition;version="0.38.0"
