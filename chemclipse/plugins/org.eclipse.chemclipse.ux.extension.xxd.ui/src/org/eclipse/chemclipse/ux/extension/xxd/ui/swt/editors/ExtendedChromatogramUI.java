@@ -699,21 +699,26 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 		IChartSettings chartSettings = chromatogramChart.getChartSettings();
 		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
-		rangeRestriction.setForceZeroMinY(false);
 		/*
 		 * Add space on top to show labels correctly.
 		 */
 		double extendX = preferenceStore.getDouble(PreferenceConstants.P_CHROMATOGRAM_EXTEND_X);
 		rangeRestriction.setExtendMaxY(extendX);
-		/*
-		 * MSD has no negative intensity values, so setZeroY(true)
-		 */
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+			/*
+			 * MSD has no negative intensity values, so setZeroY(true)
+			 * Normally, the background is not displayed (cut-off).
+			 * setForceZeroMinY(true) shows all data from the 0 baseline.
+			 */
 			rangeRestriction.setZeroY(true);
-		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
+			rangeRestriction.setForceZeroMinY(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_FORCE_ZERO_MIN_Y_MSD));
+		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD || chromatogramSelection instanceof IChromatogramSelectionWSD) {
+			/*
+			 * CSD could contains negative scan intensities.
+			 * setForceZeroMinY(true) would display only 0 or positive scan intensities.
+			 */
 			rangeRestriction.setZeroY(false);
-		} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
-			rangeRestriction.setZeroY(false);
+			rangeRestriction.setForceZeroMinY(false);
 		}
 		/*
 		 * Zooming
