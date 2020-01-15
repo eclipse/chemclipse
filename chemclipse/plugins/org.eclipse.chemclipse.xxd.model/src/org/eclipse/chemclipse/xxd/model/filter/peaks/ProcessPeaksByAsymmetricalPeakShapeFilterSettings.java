@@ -37,27 +37,31 @@ public class ProcessPeaksByAsymmetricalPeakShapeFilterSettings {
 	// peak asymmetry factor (As) rating — As = 1.0-1.05 [excellent] - As = 1.2 [acceptable] - As >= 2 [unacceptable]
 	private double  peakAsymmetryFactor = 1.02d;
 
-	@JsonProperty(value = "Peak Treatment Option:", defaultValue = "DISABLE_PEAK")
+	@JsonProperty(value = "Peak Treatment Option:")
 	@EnumSelectionSettingProperty
 	private ProcessPeaksByAsymmetricalPeakShapeFilterTreatmentOption filterTreatmentOption = ProcessPeaksByAsymmetricalPeakShapeFilterTreatmentOption.DISABLE_PEAK;
 
-	@JsonProperty(value = "Peak Selection Criterion:", defaultValue = "TAILING_GREATER_THAN_LIMIT")
+	@JsonProperty(value = "Peak Selection Criterion:")
 	@EnumSelectionSettingProperty
 	private ProcessPeaksByAsymmetricalPeakShapeFilterSelectionCriterion filterSelectionCriterion = ProcessPeaksByAsymmetricalPeakShapeFilterSelectionCriterion.TAILING_GREATER_THAN_LIMIT;
 
 	public double getLeadingValue() {
+		
 		return leadingValue;
 	}
 
 	public void setLeadingValue(double leadingValue) {
+		
 		this.leadingValue = leadingValue;
 	}
 
 	public double getTailingValue() {
+		
 		return tailingValue;
 	}
 
 	public void setTailingValue(double tailingValue) {
+		
 		this.tailingValue = tailingValue;
 	}
 
@@ -66,22 +70,27 @@ public class ProcessPeaksByAsymmetricalPeakShapeFilterSettings {
 	}
 
 	public void setPeakAsymmetryFactor(double peakAsymmetryFactor) {
+		
 		this.peakAsymmetryFactor = peakAsymmetryFactor;
 	}
 
 	public ProcessPeaksByAsymmetricalPeakShapeFilterTreatmentOption getFilterTreatmentOption() {
+		
 		return filterTreatmentOption;
 	}
 
 	public void setFilterTreatmentOption(ProcessPeaksByAsymmetricalPeakShapeFilterTreatmentOption filterTreatmentOption) {
+		
 		this.filterTreatmentOption = filterTreatmentOption;
 	}
 
 	public ProcessPeaksByAsymmetricalPeakShapeFilterSelectionCriterion getFilterSelectionCriterion() {
+		
 		return filterSelectionCriterion;
 	}
 
 	public void setFilterSelectionCriterion(ProcessPeaksByAsymmetricalPeakShapeFilterSelectionCriterion filterSelectionCriterion) {
+		
 		this.filterSelectionCriterion = filterSelectionCriterion;
 	}
 }
