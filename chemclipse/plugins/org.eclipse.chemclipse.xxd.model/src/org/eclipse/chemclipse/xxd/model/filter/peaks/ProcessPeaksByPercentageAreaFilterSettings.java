@@ -31,43 +31,51 @@ public class ProcessPeaksByPercentageAreaFilterSettings {
 	@DoubleSettingsProperty(minValue = 0.0d, maxValue = 100.0d)
 	private double maximumPercentageAreaValue = 10.0d;
 
-	@JsonProperty(value = "Peak Treatment Option:", defaultValue = "DISABLE_PEAK")
+	@JsonProperty(value = "Peak Treatment Option:")
 	@EnumSelectionSettingProperty
 	private ProcessPeaksByAreaFilterTreatmentOption filterTreatmentOption = ProcessPeaksByAreaFilterTreatmentOption.DISABLE_PEAK;
 
-	@JsonProperty(value = "Peak Selection Criterion:", defaultValue = "AREA_LESS_THAN_MINIMUM")
+	@JsonProperty(value = "Peak Selection Criterion:")
 	@EnumSelectionSettingProperty
 	private ProcessPeaksByAreaFilterSelectionCriterion filterSelectionCriterion = ProcessPeaksByAreaFilterSelectionCriterion.AREA_LESS_THAN_MINIMUM;
 
 	public double getMinimumPercentageAreaValue() {
+		
 		return minimumPercentageAreaValue;
 	}
 
 	public void setMinimumPercentageAreaValue(double minimumPercentageAreaValue) {
+		
 		this.minimumPercentageAreaValue = minimumPercentageAreaValue;
 	}
 
 	public double getMaximumPercentageAreaValue() {
+		
 		return maximumPercentageAreaValue;
 	}
 
 	public void setMaximumPercentageAreaValue(double maximumPercentageAreaValue) {
+		
 		this.maximumPercentageAreaValue = maximumPercentageAreaValue;
 	}
 
 	public ProcessPeaksByAreaFilterTreatmentOption getFilterTreatmentOption() {
+		
 		return filterTreatmentOption;
 	}
 
 	public void setFilterTreatmentOption(ProcessPeaksByAreaFilterTreatmentOption filterTreatmentOption) {
+		
 		this.filterTreatmentOption = filterTreatmentOption;
 	}
 
 	public ProcessPeaksByAreaFilterSelectionCriterion getFilterSelectionCriterion() {
+		
 		return filterSelectionCriterion;
 	}
 
 	public void setFilterSelectionCriterion(ProcessPeaksByAreaFilterSelectionCriterion filterSelectionCriterion) {
+		
 		this.filterSelectionCriterion = filterSelectionCriterion;
 	}
 }
