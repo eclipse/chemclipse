@@ -66,7 +66,7 @@ public class ProcessPeaksByIntegratedAreaFilter implements IPeakFilter<ProcessPe
 		ProcessPeaksByAreaFilterUtils.parseLocalSettings(localSettings);
 
 		for(X peak : read) {
-			double compareAreaValue = ProcessPeaksByAreaFilterUtils.calculateIntegratedAreaCompareValue(peak, read);
+			double compareAreaValue = peak.getIntegratedArea();
 			ProcessPeaksByAreaFilterUtils.checkAreaAndFilterPeak(compareAreaValue, localSettings, listener, peak);
 			subMonitor.worked(1);
 		}

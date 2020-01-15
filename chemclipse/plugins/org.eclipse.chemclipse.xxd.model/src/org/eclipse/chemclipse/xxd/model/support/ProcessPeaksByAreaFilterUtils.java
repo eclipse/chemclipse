@@ -37,11 +37,6 @@ public class ProcessPeaksByAreaFilterUtils {
 		return new double[] {configuration.getMinimumPercentageAreaValue(), configuration.getMaximumPercentageAreaValue()};
 	}
 
-	public static <X extends IPeak> double calculateIntegratedAreaCompareValue(X peak, Collection<X> read) {
-
-		return peak.getIntegratedArea();
-	}
-
 	public static <X extends IPeak> double calculatePercentageAreaCompareValue(X peak, Collection<X> read) {
 
 		return (100 / calculateAreaSum(read)) * peak.getIntegratedArea();
@@ -59,11 +54,13 @@ public class ProcessPeaksByAreaFilterUtils {
 	public static void parseLocalSettings(ProcessPeaksByAreaFilterLocalSettings localSettings) {
 
 		if(localSettings.getPercentageAreaFilterSettings()!=null) {
-			localSettings.setAreaLimits(ProcessPeaksByAreaFilterUtils.getPercentageAreaLimits(localSettings.getPercentageAreaFilterSettings()));
+			localSettings.setLowerLimit(ProcessPeaksByAreaFilterUtils.getPercentageAreaLimits(localSettings.getPercentageAreaFilterSettings())[0]);
+			localSettings.setUpperLimit(ProcessPeaksByAreaFilterUtils.getPercentageAreaLimits(localSettings.getPercentageAreaFilterSettings())[1]);
 			localSettings.setSelectionCriterion(localSettings.getPercentageAreaFilterSettings().getFilterSelectionCriterion());
 			localSettings.setTreatmentOption(localSettings.getPercentageAreaFilterSettings().getFilterTreatmentOption());
 		} else {
-			localSettings.setAreaLimits(ProcessPeaksByAreaFilterUtils.getIntegratedAreaLimits(localSettings.getIntegratedAreaFilterSettings()));
+			localSettings.setLowerLimit(ProcessPeaksByAreaFilterUtils.getIntegratedAreaLimits(localSettings.getIntegratedAreaFilterSettings())[0]);
+			localSettings.setUpperLimit(ProcessPeaksByAreaFilterUtils.getIntegratedAreaLimits(localSettings.getIntegratedAreaFilterSettings())[1]);
 			localSettings.setSelectionCriterion(localSettings.getIntegratedAreaFilterSettings().getFilterSelectionCriterion());
 			localSettings.setTreatmentOption(localSettings.getIntegratedAreaFilterSettings().getFilterTreatmentOption());
 		}
@@ -73,17 +70,17 @@ public class ProcessPeaksByAreaFilterUtils {
 
 		switch (localSettings.getSelectionCriterion()) {
 		case AREA_LESS_THAN_MINIMUM:
-			if(Double.compare(area, localSettings.getAreaLimits()[0])<0) {
+			if(Double.compare(area, localSettings.getLowerLimit())<0) {
 				deleteOrDisablePeak(listener, localSettings, peak);
 			}
 			break;
 		case AREA_GREATER_THAN_MAXIMUM:
-			if(Double.compare(area, localSettings.getAreaLimits()[1])>0) {
+			if(Double.compare(area, localSettings.getUpperLimit())>0) {
 				deleteOrDisablePeak(listener, localSettings, peak);
 			}
 			break;
 		case AREA_NOT_WITHIN_RANGE:
-			if(Double.compare(area, localSettings.getAreaLimits()[0])<0 || Double.compare(area, localSettings.getAreaLimits()[1])>0) {
+			if(Double.compare(area, localSettings.getLowerLimit())<0 || Double.compare(area, localSettings.getUpperLimit())>0) {
 				deleteOrDisablePeak(listener, localSettings, peak);
 			}
 			break;

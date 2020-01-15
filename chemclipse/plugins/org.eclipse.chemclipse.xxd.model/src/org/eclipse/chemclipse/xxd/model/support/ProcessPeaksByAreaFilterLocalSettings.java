@@ -16,19 +16,28 @@ import org.eclipse.chemclipse.xxd.model.filter.peaks.ProcessPeaksByPercentageAre
 
 public class ProcessPeaksByAreaFilterLocalSettings {
 
-	private double[] areaLimits = new double[] {0.0, 0.0};
+	private double lowerLimit = 0.0d;
+	private double upperLimit = 0.0d;
 	private ProcessPeaksByAreaFilterSelectionCriterion selectionCriterion;
 	private ProcessPeaksByAreaFilterTreatmentOption treatmentOption;
 	//
 	private ProcessPeaksByIntegratedAreaFilterSettings integratedAreaFilterSettings;
 	private ProcessPeaksByPercentageAreaFilterSettings percentageAreaFilterSettings;
 
-	public double[] getAreaLimits() {
-		return areaLimits;
+	public double getLowerLimit() {
+		return lowerLimit;
 	}
 
-	public void setAreaLimits(double[] areaLimits) {
-		this.areaLimits = areaLimits;
+	public void setLowerLimit(double lowerLimit) {
+		this.lowerLimit = lowerLimit;
+	}
+
+	public double getUpperLimit() {
+		return upperLimit;
+	}
+
+	public void setUpperLimit(double upperLimit) {
+		this.upperLimit = upperLimit;
 	}
 
 	public ProcessPeaksByAreaFilterSelectionCriterion getSelectionCriterion() {
