@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,6 +17,9 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.exceptions.ValueMustNotBeNullException;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResults;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.TestPathHelper;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.processor.BackgroundIntegrator;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.processor.ChromatogramIntegrator;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.processor.PeakIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.PeakIntegrationSettings;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -24,9 +27,9 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class Integrator_1_ITest extends ChromatogramImportOCBTestCase {
 
-	private IChromatogramIntegrator chromatogramIntegrator;
-	private IBackgroundIntegrator backgroundIntegrator;
-	private IPeakIntegrator peakIntegrator;
+	private ChromatogramIntegrator chromatogramIntegrator;
+	private BackgroundIntegrator backgroundIntegrator;
+	private PeakIntegrator peakIntegrator;
 	private PeakIntegrationSettings peakIntegrationSettings;
 
 	@Override

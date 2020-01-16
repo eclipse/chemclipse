@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.core;
+package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.processor;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -60,9 +60,18 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * 
  * @author eselmeister
  */
-public class PeakIntegrator implements IPeakIntegrator {
+public class PeakIntegrator {
 
-	@Override
+	/*
+	 * The FirstDerivative seems to use a correction factor.
+	 * Otherwise, the peak areas are too high.
+	 */
+	private static final String DESCRIPTION = "Integrator Trapezoid";
+	// private static final String XIC = "XIC =";
+	// private static final String TIC = "TIC";
+	//
+	private static final double CORRECTION_FACTOR_TRAPEZOID = 100.0d; // ChemStation Factor
+
 	public IPeakIntegrationResult integrate(IPeak peak, PeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException {
 
 		validatePeak(peak);
@@ -76,7 +85,7 @@ public class PeakIntegrator implements IPeakIntegrator {
 		IBaselineSupport baselineSupport = peakIntegrationSettings.getBaselineSupport();
 		//
 		List<? extends IIntegrationEntry> integrationEntries = calculateIntegratedArea(peak, baselineSupport, peakIntegrationSettings.getSelectedIons(), includeBackground);
-		peak.setIntegratedArea(integrationEntries, IPeakIntegrator.DESCRIPTION);
+		peak.setIntegratedArea(integrationEntries, DESCRIPTION);
 		/*
 		 * Get the peak area if the peak should be reported.
 		 */
@@ -88,7 +97,6 @@ public class PeakIntegrator implements IPeakIntegrator {
 		return result;
 	}
 
-	@Override
 	public IPeakIntegrationResults integrate(List<? extends IPeak> peaks, PeakIntegrationSettings peakIntegrationSettings, IProgressMonitor monitor) throws ValueMustNotBeNullException {
 
 		validatePeakList(peaks);
@@ -369,7 +377,7 @@ public class PeakIntegrator implements IPeakIntegrator {
 		pbp1 = new Point(startRetentionTime, 0.0f);
 		pbp2 = new Point(stopRetentionTime, 0.0f);
 		segment = new Segment(pbp1, pbp2, psp1, psp2);
-		integratedArea = SegmentAreaCalculator.calculateSegmentArea(segment) / IPeakIntegrator.CORRECTION_FACTOR_TRAPEZOID;
+		integratedArea = SegmentAreaCalculator.calculateSegmentArea(segment) / CORRECTION_FACTOR_TRAPEZOID;
 		return integratedArea;
 	}
 
@@ -425,7 +433,7 @@ public class PeakIntegrator implements IPeakIntegrator {
 			pbp1 = new Point(startRetentionTime, peakModel.getBackgroundAbundance(startRetentionTime));
 			pbp2 = new Point(stopRetentionTime, peakModel.getBackgroundAbundance(stopRetentionTime));
 			segment = new Segment(cbp1, cbp2, pbp1, pbp2);
-			integratedArea = SegmentAreaCalculator.calculateSegmentArea(segment) / IPeakIntegrator.CORRECTION_FACTOR_TRAPEZOID;
+			integratedArea = SegmentAreaCalculator.calculateSegmentArea(segment) / CORRECTION_FACTOR_TRAPEZOID;
 		}
 		return integratedArea;
 	}
@@ -464,7 +472,7 @@ public class PeakIntegrator implements IPeakIntegrator {
 		Set<Integer> integratedIons = getIntegratedIons(selectedIons);
 		PeakIntegrationResult result = new PeakIntegrationResult();
 		result.setIntegratedArea(integratedArea);
-		result.setIntegratorType(IPeakIntegrator.DESCRIPTION);
+		result.setIntegratorType(DESCRIPTION);
 		result.setPeakType(peak.getPeakType().toString());
 		/*
 		 * Chromatogram Peak

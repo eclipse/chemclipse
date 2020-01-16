@@ -19,5 +19,6 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.core,
  org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.preferences,
+ org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.processor,
  org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings
 Bundle-Vendor: ChemClipse
