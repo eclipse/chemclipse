@@ -21,6 +21,7 @@ import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -68,6 +69,13 @@ public class TimeRanges {
 	public void remove(String identifier) {
 
 		timeRangeMap.remove(identifier);
+	}
+
+	public void remove(List<TimeRange> timeRanges) {
+
+		for(TimeRange timeRange : timeRanges) {
+			remove(timeRange);
+		}
 	}
 
 	public void remove(TimeRange timeRange) {
