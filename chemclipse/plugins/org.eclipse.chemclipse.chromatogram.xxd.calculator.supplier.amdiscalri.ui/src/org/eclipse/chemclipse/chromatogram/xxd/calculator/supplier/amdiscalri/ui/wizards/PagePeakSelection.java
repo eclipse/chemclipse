@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2019 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -294,11 +294,11 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 	@SuppressWarnings("rawtypes")
 	private void updateChromatogramChart(IChromatogramSelection chromatogramSelection) {
 
-		chromatogramPeakChart.update(chromatogramSelection);
+		chromatogramPeakChart.updateChromatogram(chromatogramSelection);
 	}
 
 	private void updateSelectedPeaksInChart(List<IPeak> selectedPeaks) {
 
-		chromatogramPeakChart.update(selectedPeaks);
+		chromatogramPeakChart.updatePeaks(selectedPeaks);
 	}
 }
