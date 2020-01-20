@@ -16,13 +16,14 @@ import com.fasterxml.jackson.annotation.JsonValue;
 public enum ProcessPeaksByValueFilterTreatmentOption {
 
 	/**
-	 * select "DISABLE_PEAK" to disable a peak if certain asymmetrical constraints are matched
+	 * select "DISABLE_PEAK" to disable a peak if certain area constraints are
+	 * matched
 	 *
 	 * @param DISABLE_PEAK
 	 */
 	DISABLE_PEAK("DISABLE PEAK if following criterion is matched"), //
 	/**
-	 * select "DELETE_PEAK" to delete a peak if certain asymmetrical constraints are matched
+	 * select "DELETE_PEAK" to delete a peak if certain area constraints are matched
 	 *
 	 * @param DELETE_PEAK
 	 */
