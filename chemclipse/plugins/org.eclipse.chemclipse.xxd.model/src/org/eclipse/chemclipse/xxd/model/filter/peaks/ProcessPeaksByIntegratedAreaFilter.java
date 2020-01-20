@@ -21,7 +21,7 @@ import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
 import org.eclipse.chemclipse.xxd.model.support.ProcessPeaksByAreaFilterLocalSettings;
-import org.eclipse.chemclipse.xxd.model.support.ProcessPeaksByAreaFilterUtils;
+import org.eclipse.chemclipse.xxd.model.support.ProcessPeakValueAccordingToSettings;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
@@ -63,12 +63,21 @@ public class ProcessPeaksByIntegratedAreaFilter implements IPeakFilter<ProcessPe
 		SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
 		ProcessPeaksByAreaFilterLocalSettings localSettings = new ProcessPeaksByAreaFilterLocalSettings();
 		localSettings.setIntegratedAreaFilterSettings(configuration);
-		ProcessPeaksByAreaFilterUtils.parseLocalSettings(localSettings);
+		parseLocalSettings(localSettings);
 
 		for(X peak : read) {
-			double compareAreaValue = peak.getIntegratedArea();
-			ProcessPeaksByAreaFilterUtils.checkAreaAndFilterPeak(compareAreaValue, localSettings, listener, peak);
+			ProcessPeakValueAccordingToSettings.applySelectedOptions(peak.getIntegratedArea(), localSettings, listener, peak);
 			subMonitor.worked(1);
 		}
 	}
+
+	private static <X extends IPeak> void parseLocalSettings(ProcessPeaksByAreaFilterLocalSettings localSettings) {
+
+		localSettings.setLowerLimit(localSettings.getIntegratedAreaFilterSettings().getMinimumAreaValue());
+		localSettings.setUpperLimit(localSettings.getIntegratedAreaFilterSettings().getMaximumAreaValue());
+		localSettings.setSelectionCriterion(localSettings.getIntegratedAreaFilterSettings().getFilterSelectionCriterion());
+		localSettings.setTreatmentOption(localSettings.getIntegratedAreaFilterSettings().getFilterTreatmentOption());
+	}
+	
+
 }

@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.xxd.model.support;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum ProcessPeaksByAreaFilterSelectionCriterion {
+public enum ProcessPeaksByValueFilterSelectionCriterion {
 
 	/**
 	 * select "AREA_LESS_THAN_MINIMUM" to select peak areas smaller than the defined
@@ -40,7 +40,7 @@ public enum ProcessPeaksByAreaFilterSelectionCriterion {
 	@JsonValue
 	private String filterSelectionCriterion;
 
-	private ProcessPeaksByAreaFilterSelectionCriterion(String filterSelectionCriterion){
+	private ProcessPeaksByValueFilterSelectionCriterion(String filterSelectionCriterion){
 
 		this.filterSelectionCriterion = filterSelectionCriterion;
 	}

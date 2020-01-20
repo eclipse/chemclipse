@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.xxd.model.support;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum ProcessPeaksByAreaFilterTreatmentOption {
+public enum ProcessPeaksByValueFilterTreatmentOption {
 
 	/**
 	 * select "DISABLE_PEAK" to disable a peak if certain area constraints are
@@ -32,7 +32,7 @@ public enum ProcessPeaksByAreaFilterTreatmentOption {
 	@JsonValue
 	private String filterTreatmentOption;
 
-	private ProcessPeaksByAreaFilterTreatmentOption(String filterTreatmentOption){
+	private ProcessPeaksByValueFilterTreatmentOption(String filterTreatmentOption){
 
 		this.filterTreatmentOption = filterTreatmentOption;
 	}

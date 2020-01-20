@@ -21,7 +21,7 @@ import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
 import org.eclipse.chemclipse.xxd.model.support.ProcessPeaksByAreaFilterLocalSettings;
-import org.eclipse.chemclipse.xxd.model.support.ProcessPeaksByAreaFilterUtils;
+import org.eclipse.chemclipse.xxd.model.support.ProcessPeakValueAccordingToSettings;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
@@ -63,12 +63,35 @@ public class ProcessPeaksByPercentageAreaFilter implements IPeakFilter<ProcessPe
 		SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
 		ProcessPeaksByAreaFilterLocalSettings localSettings = new ProcessPeaksByAreaFilterLocalSettings();
 		localSettings.setPercentageAreaFilterSettings(configuration);
-		ProcessPeaksByAreaFilterUtils.parseLocalSettings(localSettings);
+		parseLocalSettings(localSettings, read);
 
 		for(X peak : read) {
-			double compareAreaValue = ProcessPeaksByAreaFilterUtils.calculatePercentageAreaCompareValue(peak, read);
-			ProcessPeaksByAreaFilterUtils.checkAreaAndFilterPeak(compareAreaValue, localSettings, listener, peak);
+			double compareAreaValue = calculatePercentageAreaCompareValue(peak, localSettings);
+			ProcessPeakValueAccordingToSettings.applySelectedOptions(compareAreaValue, localSettings, listener, peak);
 			subMonitor.worked(1);
 		}
+	}
+
+	private static <X extends IPeak> void parseLocalSettings(ProcessPeaksByAreaFilterLocalSettings localSettings, Collection<X> read) {
+
+		localSettings.setLowerLimit(localSettings.getPercentageAreaFilterSettings().getMinimumPercentageAreaValue());
+		localSettings.setUpperLimit(localSettings.getPercentageAreaFilterSettings().getMaximumPercentageAreaValue());
+		localSettings.setSelectionCriterion(localSettings.getPercentageAreaFilterSettings().getFilterSelectionCriterion());
+		localSettings.setTreatmentOption(localSettings.getPercentageAreaFilterSettings().getFilterTreatmentOption());
+		localSettings.setAreaSum(calculateAreaSum(read));
+	}
+
+	private static <X extends IPeak> double calculateAreaSum(Collection<X> read) {
+
+		double areaSum = 0;
+		for(X peak : read) {
+			areaSum = areaSum + peak.getIntegratedArea();
+		}
+		return areaSum;
+	}
+
+	private static <X extends IPeak> double calculatePercentageAreaCompareValue(X peak, ProcessPeaksByAreaFilterLocalSettings localSettings) {
+
+		return (100 / localSettings.getAreaSum()) * peak.getIntegratedArea();
 	}
 }
