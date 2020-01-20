@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.xxd.model.support;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum ProcessPeaksByAsymmetricalPeakShapeFilterTreatmentOption {
+public enum ProcessPeaksByValueFilterTreatmentOption {
 
 	/**
 	 * select "DISABLE_PEAK" to disable a peak if certain asymmetrical constraints are matched
@@ -31,7 +31,7 @@ public enum ProcessPeaksByAsymmetricalPeakShapeFilterTreatmentOption {
 	@JsonValue
 	private String filterTreatmentOption;
 
-	private ProcessPeaksByAsymmetricalPeakShapeFilterTreatmentOption(String filterTreatmentOption){
+	private ProcessPeaksByValueFilterTreatmentOption(String filterTreatmentOption){
 
 		this.filterTreatmentOption = filterTreatmentOption;
 	}
