@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,11 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.core;
 
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.processor.BackgroundIntegrator;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 
 public class TrapezoidBackgroundIntegrator_1_Test extends SimpleChromatogramTestCase {
 
-	private IBackgroundIntegrator integrator;
+	private BackgroundIntegrator integrator;
 
 	@Override
 	protected void setUp() throws Exception {

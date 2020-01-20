@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2019 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.rcp.ui.icons.core;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
@@ -61,6 +62,15 @@ public interface IApplicationImageProvider {
 
 		return getImageDescriptor(fileName, SIZE_16x16);
 	}
+
+	/**
+	 * List all icons known to this provider
+	 * 
+	 * @param size
+	 *            the desired size
+	 * @return
+	 */
+	Collection<String> listImages(String size);
 
 	/**
 	 * Returns the images as an input stream.

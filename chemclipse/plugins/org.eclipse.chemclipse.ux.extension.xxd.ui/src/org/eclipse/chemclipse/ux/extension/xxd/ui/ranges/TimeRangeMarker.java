@@ -36,6 +36,7 @@ public class TimeRangeMarker extends AbstractBaseChartPaintListener implements I
 	//
 	private Set<TimeRange> timeRanges = new HashSet<>();
 	private Transform transform = new Transform(Display.getDefault());
+	private boolean plotCenterOnly = false;
 
 	public TimeRangeMarker(BaseChart baseChart) {
 		super(baseChart);
@@ -45,6 +46,16 @@ public class TimeRangeMarker extends AbstractBaseChartPaintListener implements I
 	public Set<TimeRange> getTimeRanges() {
 
 		return timeRanges;
+	}
+
+	public boolean isPlotCenterOnly() {
+
+		return plotCenterOnly;
+	}
+
+	public void setPlotCenterOnly(boolean plotCenterOnly) {
+
+		this.plotCenterOnly = plotCenterOnly;
 	}
 
 	@Override
@@ -78,14 +89,23 @@ public class TimeRangeMarker extends AbstractBaseChartPaintListener implements I
 				Range rangeX = xAxis.getRange();
 				IPlotArea plotArea = baseChart.getPlotArea();
 				Point rectangle = (plotArea instanceof Scrollable) ? ((Scrollable)plotArea).getSize() : plotArea.getSize();
-				/*
-				 * Print lines, rectangle and label
-				 */
-				int xStart = printLine(gc, rectangle, rangeX, timeRange.getStart(), Colors.DARK_GRAY, 1);
-				printLine(gc, rectangle, rangeX, timeRange.getCenter(), Colors.GRAY, 1);
-				int xStop = printLine(gc, rectangle, rangeX, timeRange.getStop(), Colors.DARK_GRAY, 1);
-				fillRectangle(gc, rectangle, xStart, xStop, Colors.GRAY);
-				printLabel(gc, rectangle, timeRange.getIdentifier(), xStop, Colors.DARK_GRAY);
+				//
+				if(plotCenterOnly) {
+					/*
+					 * Print center
+					 */
+					int xStop = printLine(gc, rectangle, rangeX, timeRange.getCenter(), Colors.DARK_GRAY, 1);
+					printLabel(gc, rectangle, timeRange.getIdentifier(), xStop, Colors.DARK_GRAY);
+				} else {
+					/*
+					 * Print lines, rectangle and label
+					 */
+					int xStart = printLine(gc, rectangle, rangeX, timeRange.getStart(), Colors.DARK_GRAY, 1);
+					printLine(gc, rectangle, rangeX, timeRange.getCenter(), Colors.GRAY, 1);
+					int xStop = printLine(gc, rectangle, rangeX, timeRange.getStop(), Colors.DARK_GRAY, 1);
+					fillRectangle(gc, rectangle, xStart, xStop, Colors.GRAY);
+					printLabel(gc, rectangle, timeRange.getIdentifier(), xStop, Colors.DARK_GRAY);
+				}
 			}
 		}
 	}

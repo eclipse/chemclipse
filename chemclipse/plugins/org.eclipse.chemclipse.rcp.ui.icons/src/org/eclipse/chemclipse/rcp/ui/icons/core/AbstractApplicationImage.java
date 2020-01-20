@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2019 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,6 +15,8 @@ package org.eclipse.chemclipse.rcp.ui.icons.core;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.MissingResourceException;
 
 import org.eclipse.core.runtime.FileLocator;
@@ -24,6 +26,7 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.graphics.Image;
 import org.osgi.framework.Bundle;
 
+@Deprecated
 public abstract class AbstractApplicationImage implements IApplicationImage {
 
 	private final Bundle bundle;
@@ -89,5 +92,11 @@ public abstract class AbstractApplicationImage implements IApplicationImage {
 	private static String getPath(String fileName, String size) {
 
 		return ICON_PATH + size + "/" + fileName;
+	}
+
+	@Override
+	public Collection<String> listImages(String size) {
+
+		return Collections.emptyList();
 	}
 }

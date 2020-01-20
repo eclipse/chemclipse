@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,10 +18,8 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.ChromatogramInt
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.ChromatogramIntegrationResults;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIntegrationResult;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIntegrationResults;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.core.BackgroundIntegrator;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.core.ChromatogramIntegrator;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.core.IBackgroundIntegrator;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.core.IChromatogramIntegrator;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.processor.BackgroundIntegrator;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.processor.ChromatogramIntegrator;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.ChromatogramIntegrationSettings;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
@@ -68,7 +66,7 @@ public class ChromatogramIntegratorSupport {
 	private List<IIntegrationEntry> calculateChromatogramIntegrationEntry(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
 		List<IIntegrationEntry> chromatogramIntegrationEntries = new ArrayList<IIntegrationEntry>();
-		IChromatogramIntegrator chromatogramIntegrator = new ChromatogramIntegrator();
+		ChromatogramIntegrator chromatogramIntegrator = new ChromatogramIntegrator();
 		double chromatogramArea = chromatogramIntegrator.integrate(chromatogramSelection);
 		/*
 		 * Create the MSD/FID entry.
@@ -91,7 +89,7 @@ public class ChromatogramIntegratorSupport {
 	private List<IIntegrationEntry> calculateBackgroundIntegrationEntry(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
 		List<IIntegrationEntry> backgroundIntegrationEntries = new ArrayList<IIntegrationEntry>();
-		IBackgroundIntegrator backgroundIntegrator = new BackgroundIntegrator();
+		BackgroundIntegrator backgroundIntegrator = new BackgroundIntegrator();
 		double backgroundArea = backgroundIntegrator.integrate(chromatogramSelection);
 		/*
 		 * Create the MSD/FID entry.
