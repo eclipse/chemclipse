@@ -51,4 +51,3 @@ Service-Component: OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.Remove
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.ProcessPeaksByIntegratedAreaFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.ProcessPeaksByPercentageAreaFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.ProcessPeaksByAsymmetricalPeakShapeFilter.xml
-Bundle-ActivationPolicy: lazy
