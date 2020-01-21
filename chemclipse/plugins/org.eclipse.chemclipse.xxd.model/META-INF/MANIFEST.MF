@@ -49,4 +49,5 @@ Service-Component: OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.Remove
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.DisableClassifiedPeaksFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.MinimumNumberOfIonsFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.ProcessPeaksByIntegratedAreaFilter.xml,
- OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.ProcessPeaksByPercentageAreaFilter.xml
+ OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.ProcessPeaksByPercentageAreaFilter.xml,
+ OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.ProcessPeaksByAsymmetricalPeakShapeFilter.xml
