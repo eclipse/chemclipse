@@ -48,6 +48,7 @@ Import-Package: org.osgi.service.component.annotations;version="1.2.0"
 Service-Component: OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.RemoveAllPeaksFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.DisableClassifiedPeaksFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.MinimumNumberOfIonsFilter.xml,
+ OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.ProcessPeaksByPeakWidthFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.ProcessPeaksByIntegratedAreaFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.ProcessPeaksByPercentageAreaFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.ProcessPeaksByAsymmetricalPeakShapeFilter.xml
