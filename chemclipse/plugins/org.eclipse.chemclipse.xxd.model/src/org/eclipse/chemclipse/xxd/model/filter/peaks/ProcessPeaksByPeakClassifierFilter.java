@@ -82,12 +82,12 @@ public class ProcessPeaksByPeakClassifierFilter implements IPeakFilter<ProcessPe
 		String matchClassification = configuration.getMatchClassification();
 		List<List<String>> matchList = new ArrayList<List<String>>();
 		if(!userDefinedMatchExpression.isEmpty()) {
-			parseExpressions(matchList, userDefinedMatchExpression);
+			matchList.add(parseExpressions(userDefinedMatchExpression));
 		} else {
 			throw new IllegalArgumentException("No match expressions defined!");
 		}
 		if(!matchClassification.isEmpty()) {
-			parseExpressions(matchList, matchClassification);
+			matchList.add(parseExpressions(matchClassification));
 		} else {
 			throw new IllegalArgumentException("No match classifications defined!");
 		}
@@ -101,7 +101,7 @@ public class ProcessPeaksByPeakClassifierFilter implements IPeakFilter<ProcessPe
 		return parsedUserDefinedValues;
 	}
 
-	private static void parseExpressions(List<List<String>> matchList, String userExpressions) {
+	private static List<String> parseExpressions(String userExpressions) {
 
 		List<String> expressionsList = new ArrayList<String>();
 		String[] tempExpressions = userExpressions.split(System.getProperty("line.separator"));
@@ -110,7 +110,7 @@ public class ProcessPeaksByPeakClassifierFilter implements IPeakFilter<ProcessPe
 				expressionsList.add(tempExpressions[i]);
 			}
 		}
-		matchList.add(expressionsList);
+		return expressionsList;
 	}
 
 	private static <X extends IPeak> void setPeakClassifier(ProcessPeaksByPeakClassifierFilterSettings configuration, LinkedHashMap<String, String> parsedUserDefinedValues, X peak) {
@@ -141,7 +141,7 @@ public class ProcessPeaksByPeakClassifierFilter implements IPeakFilter<ProcessPe
 
 		Pattern pattern = null;
 		if(configuration.isIgnoreUppercase()) { // UserDefinedMatchExpression
-			pattern = Pattern.compile(entry.getKey().toLowerCase());
+			pattern = Pattern.compile(entry.getKey(), Pattern.CASE_INSENSITIVE);
 		} else {
 			pattern = Pattern.compile(entry.getKey());
 		}
