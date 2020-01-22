@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,22 +17,8 @@ import org.eclipse.chemclipse.model.core.IChromatogramPeak;
 /**
  * This interface describes the most important functions that should be
  * available by an IPeak instance.
- *
- * @author eselmeister
  */
 public interface IChromatogramPeakMSD extends IPeakMSD, IChromatogramPeak {
-
-	/**
-	 * Returns the purity of the peak in comparison to the recorded scan at peak
-	 * maximum.<br/>
-	 * E.g.: If a scan has 30 ions and the corresponding peak at the
-	 * scan has only 15 of the ions recorded at the scan, the purity
-	 * would be 0.5 (50%).<br/>
-	 * The value that will be returned is in a range of 0 (0%) - 1 (100%).
-	 *
-	 * @return float
-	 */
-	float getPurity();
 
 	/**
 	 * Returns the chromatogram to which this peak belongs to.
@@ -49,14 +35,6 @@ public interface IChromatogramPeakMSD extends IPeakMSD, IChromatogramPeak {
 	 * @return {@link IScanMSD}
 	 */
 	IScanMSD getChromatogramMassSpectrum();
-
-	// ---------------------------------------------------------------------
-	/**
-	 * Returns the scan number of the peak maximum.
-	 *
-	 * @return int
-	 */
-	int getScanMax();
 
 	/**
 	 * Returns the width of the actual peak at its absolute baseline.<br/>

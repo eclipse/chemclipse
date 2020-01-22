@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,11 +16,6 @@ import org.eclipse.chemclipse.model.exceptions.PeakException;
 
 public abstract class AbstractChromatogramPeakWSD extends AbstractPeakWSD implements IChromatogramPeakWSD {
 
-	/**
-	 * Renew the UUID on change.
-	 */
-	private static final long serialVersionUID = -3116402776308177256L;
-	//
 	private IChromatogramWSD chromatogram;
 	private static final float INITIAL_SN_VALUE = -1.0f;
 	private float signalToNoiseRatio = INITIAL_SN_VALUE;

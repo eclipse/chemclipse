@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2019 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,13 +15,6 @@ package org.eclipse.chemclipse.csd.model.core;
 import org.eclipse.chemclipse.model.core.IChromatogramPeak;
 
 public interface IChromatogramPeakCSD extends IPeakCSD, IChromatogramPeak {
-
-	/**
-	 * Returns the scan number of the peak maximum.
-	 *
-	 * @return int
-	 */
-	int getScanMax();
 
 	/**
 	 * Returns the chromatogram to which this peak belongs to.

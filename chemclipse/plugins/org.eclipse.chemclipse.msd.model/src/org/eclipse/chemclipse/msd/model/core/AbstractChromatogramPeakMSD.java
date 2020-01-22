@@ -21,16 +21,9 @@ import org.eclipse.chemclipse.model.exceptions.PeakException;
  * for that you can't find a CAS number or something else for a peak.<br/>
  * Identification of peaks will be done separately. Instead of identification
  * the peak gives information about peak tailing, purity, background and so on.
- * 
- * @author eselmeister
  */
 public abstract class AbstractChromatogramPeakMSD extends AbstractPeakMSD implements IChromatogramPeakMSD {
 
-	/**
-	 * Renew the UUID on change.
-	 */
-	private static final long serialVersionUID = 7031247154782115765L;
-	//
 	private transient IChromatogramMSD chromatogram;
 	private static final float INITIAL_SN_VALUE = -1.0f;
 	private float signalToNoiseRatio = INITIAL_SN_VALUE;
@@ -59,7 +52,6 @@ public abstract class AbstractChromatogramPeakMSD extends AbstractPeakMSD implem
 		setModelDescription(modelDescription);
 	}
 
-	// ------------------------------------------IPeak
 	@Override
 	public IScanMSD getChromatogramMassSpectrum() {
 
