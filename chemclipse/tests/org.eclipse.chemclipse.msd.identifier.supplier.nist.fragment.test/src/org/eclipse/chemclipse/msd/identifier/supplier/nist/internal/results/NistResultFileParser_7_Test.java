@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -21,9 +21,9 @@ public class NistResultFileParser_7_Test extends TestCase {
 
 	private NistResultFileParser nistResultFileParser;
 	private File results;
-	private ICompounds compounds;
-	private ICompound compound;
-	private IHit hit;
+	private Compounds compounds;
+	private Compound compound;
+	private Hit hit;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -64,17 +64,17 @@ public class NistResultFileParser_7_Test extends TestCase {
 
 	public void testGetMF_1() {
 
-		assertEquals(92.1f, hit.getMF());
+		assertEquals(92.1f, hit.getMatchFactor());
 	}
 
 	public void testGetRMF_1() {
 
-		assertEquals(92.2f, hit.getRMF());
+		assertEquals(92.2f, hit.getReverseMatchFactor());
 	}
 
 	public void testGetProb_1() {
 
-		assertEquals(8.85f, hit.getProb());
+		assertEquals(8.85f, hit.getProbability());
 	}
 
 	public void testGetCAS_1() {
@@ -84,7 +84,7 @@ public class NistResultFileParser_7_Test extends TestCase {
 
 	public void testGetMw_1() {
 
-		assertEquals(540, hit.getMw());
+		assertEquals(540, hit.getMolecularWeight());
 	}
 
 	public void testGetLib_1() {
@@ -95,5 +95,10 @@ public class NistResultFileParser_7_Test extends TestCase {
 	public void testGetId_1() {
 
 		assertEquals(205524, hit.getId());
+	}
+
+	public void testGetRI_1() {
+
+		assertEquals(1829, hit.getRetentionIndex());
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,34 +14,37 @@ package org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Compounds implements ICompounds {
+public class Compounds {
 
-	private List<ICompound> compounds;
+	private List<Compound> compounds;
 
 	public Compounds() {
-		compounds = new ArrayList<ICompound>();
+		compounds = new ArrayList<Compound>();
 	}
 
-	@Override
-	public void add(ICompound compound) {
+	public void add(Compound compound) {
 
 		compounds.add(compound);
 	}
 
-	@Override
-	public void remove(ICompound compound) {
+	public void remove(Compound compound) {
 
 		compounds.remove(compound);
 	}
 
-	@Override
-	public List<ICompound> getCompounds() {
+	public List<Compound> getCompounds() {
 
 		return compounds;
 	}
 
-	@Override
-	public ICompound getCompound(int index) {
+	/**
+	 * Returns the compound at the given index. The index starts at 1. If no
+	 * compound is available, null will be returned.
+	 * 
+	 * @param index
+	 * @return Compound
+	 */
+	public Compound getCompound(int index) {
 
 		/*
 		 * The user index starts with 1.
@@ -54,7 +57,6 @@ public class Compounds implements ICompounds {
 		}
 	}
 
-	@Override
 	public int size() {
 
 		return compounds.size();

@@ -14,24 +14,22 @@ package org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Compound implements ICompound {
+public class Compound {
 
-	private List<IHit> hits;
+	private List<Hit> hits;
 	private String identifier;
 	private String compoundInLibraryFactor = "";
 
 	public Compound() {
-		hits = new ArrayList<IHit>();
+		hits = new ArrayList<Hit>();
 		identifier = "";
 	}
 
-	@Override
 	public String getIdentfier() {
 
 		return identifier;
 	}
 
-	@Override
 	public void setIdentifier(String identifier) {
 
 		if(identifier != null) {
@@ -39,13 +37,11 @@ public class Compound implements ICompound {
 		}
 	}
 
-	@Override
 	public String getCompoundInLibraryFactor() {
 
 		return compoundInLibraryFactor;
 	}
 
-	@Override
 	public void setCompoundInLibraryFactor(String compoundInLibraryFactor) {
 
 		if(compoundInLibraryFactor != null) {
@@ -53,26 +49,22 @@ public class Compound implements ICompound {
 		}
 	}
 
-	@Override
-	public void add(IHit hit) {
+	public void add(Hit hit) {
 
 		hits.add(hit);
 	}
 
-	@Override
-	public void remove(IHit hit) {
+	public void remove(Hit hit) {
 
 		hits.remove(hit);
 	}
 
-	@Override
-	public List<IHit> getHits() {
+	public List<Hit> getHits() {
 
 		return hits;
 	}
 
-	@Override
-	public IHit getHit(int index) {
+	public Hit getHit(int index) {
 
 		/*
 		 * The user index starts with 1.
@@ -85,13 +77,11 @@ public class Compound implements ICompound {
 		}
 	}
 
-	@Override
 	public int size() {
 
 		return hits.size();
 	}
 
-	// ------------------------------toString, hashCode, equals
 	@Override
 	public boolean equals(Object other) {
 
@@ -104,7 +94,7 @@ public class Compound implements ICompound {
 		if(this.getClass() != other.getClass()) {
 			return false;
 		}
-		ICompound otherCompound = (ICompound)other;
+		Compound otherCompound = (Compound)other;
 		return size() == otherCompound.size() && hashCode() == otherCompound.hashCode();
 	}
 
@@ -134,5 +124,4 @@ public class Compound implements ICompound {
 		builder.append("]");
 		return builder.toString();
 	}
-	// ------------------------------toString, hashCode, equals
 }

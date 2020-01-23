@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -84,7 +84,7 @@ public class LinuxWineSupport_DOSDEVICES_1_ITest extends TestCase {
 
 	public void testGetNistApplication_1() {
 
-		String result = nistApplicationPath + File.separator + "nistms$.exe";
+		String result = nistApplicationPath + File.separator + "nistms.exe";
 		assertEquals(result, runtimeSupport.getApplication());
 	}
 
@@ -96,7 +96,7 @@ public class LinuxWineSupport_DOSDEVICES_1_ITest extends TestCase {
 
 	public void testGetNistExecutable_1() {
 
-		String result = "nistms$.exe";
+		String result = "nistms.exe";
 		assertEquals(result, runtimeSupport.getApplicationExecutable());
 	}
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,8 +14,6 @@ package org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results;
 import java.io.File;
 
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.TestPathHelper;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.ICompounds;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.NistResultFileParser;
 
 import junit.framework.TestCase;
 
@@ -23,7 +21,7 @@ public class NistResultFileParser_1_Test extends TestCase {
 
 	private NistResultFileParser nistResultFileParser;
 	private File results;
-	private ICompounds compounds;
+	private Compounds compounds;
 
 	@Override
 	protected void setUp() throws Exception {

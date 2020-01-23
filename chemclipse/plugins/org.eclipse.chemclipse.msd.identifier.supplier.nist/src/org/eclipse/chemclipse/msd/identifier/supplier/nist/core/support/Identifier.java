@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -47,9 +47,9 @@ import org.eclipse.chemclipse.model.identifier.PeakLibraryInformation;
 import org.eclipse.chemclipse.model.implementation.IdentificationResult;
 import org.eclipse.chemclipse.model.implementation.IdentificationResults;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.ICompound;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.ICompounds;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.IHit;
+import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.Compound;
+import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.Compounds;
+import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.Hit;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.NistResultFileParser;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime.HLMFilenameFilter;
@@ -144,7 +144,7 @@ public class Identifier {
 					long maxProcessTime = (long)(massSpectrumIdentifierSettings.getTimeoutInMinutes() * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 					logger.info("Max Process time: " + maxProcessTime);
 					logger.info("Run Identification");
-					ICompounds compounds = runNistApplication(runtimeSupport, maxProcessTime, monitor);
+					Compounds compounds = runNistApplication(runtimeSupport, maxProcessTime, monitor);
 					logger.info("Assign Compounds");
 					identificationResults = assignMassSpectrumCompounds(compounds.getCompounds(), massSpectrumList, identificationResults, massSpectrumIdentifierSettings, identifierTable, monitor);
 				}
@@ -208,7 +208,7 @@ public class Identifier {
 					runtimeSupport.getNistSupport().setNumberOfUnknownEntriesToProcess(numberOfUnknownEntriesToProcess);
 					prepareFiles(runtimeSupport, massSpectra, monitor);
 					long maxProcessTime = (long)(peakIdentifierSettings.getTimeoutInMinutes() * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
-					ICompounds compounds = runNistApplication(runtimeSupport, maxProcessTime, monitor);
+					Compounds compounds = runNistApplication(runtimeSupport, maxProcessTime, monitor);
 					identificationResults = assignPeakCompounds(compounds, peaks, identificationResults, peakIdentifierSettings, identifierTable, processingInfo, monitor);
 				}
 			} catch(FileIsNotWriteableException e) {
@@ -500,7 +500,7 @@ public class Identifier {
 	 * @param monitor
 	 * @throws IOException
 	 */
-	private ICompounds runNistApplication(final IExtendedRuntimeSupport runtimeSupport, final long maxProcessTime, final IProgressMonitor monitor) throws IOException {
+	private Compounds runNistApplication(final IExtendedRuntimeSupport runtimeSupport, final long maxProcessTime, final IProgressMonitor monitor) throws IOException {
 
 		monitor.subTask("Start the NIST-DB application.");
 		runtimeSupport.executeRunCommand();
@@ -558,7 +558,7 @@ public class Identifier {
 	/**
 	 * Assign the compounds to the peaks.
 	 */
-	private IPeakIdentificationResults assignPeakCompounds(ICompounds compounds, List<? extends IPeakMSD> peaks, IPeakIdentificationResults identificationResults, PeakIdentifierSettings peakIdentifierSettings, Map<String, String> identifierTable, IProcessingInfo<?> processingInfo, IProgressMonitor monitor) {
+	private IPeakIdentificationResults assignPeakCompounds(Compounds compounds, List<? extends IPeakMSD> peaks, IPeakIdentificationResults identificationResults, PeakIdentifierSettings peakIdentifierSettings, Map<String, String> identifierTable, IProcessingInfo<?> processingInfo, IProgressMonitor monitor) {
 
 		monitor.subTask("Assign the identified peaks.");
 		/*
@@ -576,7 +576,7 @@ public class Identifier {
 	 * @param peakIdentifierSettings
 	 * @return {@link INistPeakIdentificationResults}
 	 */
-	public IPeakIdentificationResults getPeakIdentificationResults(ICompounds compounds, List<? extends IPeakMSD> peaks, PeakIdentifierSettings peakIdentifierSettings, Map<String, String> identifierTable, IProcessingInfo<?> processingInfo) {
+	public IPeakIdentificationResults getPeakIdentificationResults(Compounds compounds, List<? extends IPeakMSD> peaks, PeakIdentifierSettings peakIdentifierSettings, Map<String, String> identifierTable, IProcessingInfo<?> processingInfo) {
 
 		IPeakIdentificationResults identificationResults = new PeakIdentificationResults();
 		IPeakIdentificationResult identificationResult;
@@ -586,7 +586,7 @@ public class Identifier {
 		float minReverseMatchFactor = PreferenceSupplier.getMinReverseMatchFactor();
 		int numberOfTargets = peakIdentifierSettings.getNumberOfTargets();
 		//
-		for(ICompound compound : compounds.getCompounds()) {
+		for(Compound compound : compounds.getCompounds()) {
 			/*
 			 * Each compound has a specific identifier. If a peak couldn't be
 			 * identified, no result will be set.
@@ -667,9 +667,9 @@ public class Identifier {
 	 * @param index
 	 * @return {@link INistPeakIdentificationEntry}
 	 */
-	public IIdentificationTarget getPeakIdentificationEntry(ICompound compound, int index) {
+	public IIdentificationTarget getPeakIdentificationEntry(Compound compound, int index) {
 
-		IHit hit = compound.getHit(index);
+		Hit hit = compound.getHit(index);
 		//
 		IIdentificationTarget identificationEntry = null;
 		IPeakComparisonResult comparisonResult;
@@ -682,10 +682,11 @@ public class Identifier {
 		libraryInformation.setMiscellaneous(COMPOUND_IN_LIB_FACTOR + compound.getCompoundInLibraryFactor());
 		libraryInformation.setContributor(LIBRARY);
 		libraryInformation.setReferenceIdentifier(LIBRARY);
+		libraryInformation.setRetentionIndex(hit.getRetentionIndex());
 		/*
 		 * Get the match factor and reverse match factor values.
 		 */
-		comparisonResult = new PeakComparisonResult(hit.getMF(), hit.getRMF(), 0.0f, 0.0f, hit.getProb());
+		comparisonResult = new PeakComparisonResult(hit.getMatchFactor(), hit.getReverseMatchFactor(), 0.0f, 0.0f, hit.getProbability());
 		try {
 			identificationEntry = new NISTIdentificationTarget(libraryInformation, comparisonResult);
 		} catch(ReferenceMustNotBeNullException e) {
@@ -711,7 +712,7 @@ public class Identifier {
 	 * @param monitor
 	 * @return INistMassSpectrumIdentificationResults
 	 */
-	private IIdentificationResults assignMassSpectrumCompounds(List<ICompound> compounds, List<IScanMSD> massSpectra, IIdentificationResults identificationResults, MassSpectrumIdentifierSettings massSpectrumIdentifierSettings, Map<String, String> identifier, IProgressMonitor monitor) {
+	private IIdentificationResults assignMassSpectrumCompounds(List<Compound> compounds, List<IScanMSD> massSpectra, IIdentificationResults identificationResults, MassSpectrumIdentifierSettings massSpectrumIdentifierSettings, Map<String, String> identifier, IProgressMonitor monitor) {
 
 		/*
 		 * If the compounds and peaks are different, there must have gone
@@ -721,7 +722,7 @@ public class Identifier {
 			return identificationResults;
 		}
 		IScanMSD massSpectrum;
-		ICompound compound;
+		Compound compound;
 		IIdentificationResult identificationResult;
 		monitor.subTask("Assign the identified mass spectra.");
 		/*
@@ -752,7 +753,7 @@ public class Identifier {
 	 * @param massSpectrumIdentifierSettings
 	 * @return INistMassSpectrumIdentificationResult
 	 */
-	public IIdentificationResult getMassSpectrumIdentificationResult(IScanMSD massSpectrum, ICompound compound, MassSpectrumIdentifierSettings massSpectrumIdentifierSettings) {
+	public IIdentificationResult getMassSpectrumIdentificationResult(IScanMSD massSpectrum, Compound compound, MassSpectrumIdentifierSettings massSpectrumIdentifierSettings) {
 
 		int numberOfTargets = massSpectrumIdentifierSettings.getNumberOfTargets();
 		List<IIdentificationTarget> massSpectrumTargets = new ArrayList<>();
@@ -762,7 +763,7 @@ public class Identifier {
 			/*
 			 * The targets shall not be stored in the peak in all cases.
 			 */
-			IHit hit = compound.getHit(index);
+			Hit hit = compound.getHit(index);
 			IIdentificationTarget identificationEntry = getMassSpectrumIdentificationEntry(hit, compound);
 			if(massSpectrumIdentifierSettings.getStoreTargets()) {
 				massSpectrumTargets.add(identificationEntry);
@@ -787,7 +788,7 @@ public class Identifier {
 	 * @param hit
 	 * @return INistMassSpectrumIdentificationEntry
 	 */
-	public IIdentificationTarget getMassSpectrumIdentificationEntry(IHit hit, ICompound compound) {
+	public IIdentificationTarget getMassSpectrumIdentificationEntry(Hit hit, Compound compound) {
 
 		IIdentificationTarget identificationEntry = null;
 		ILibraryInformation libraryInformation;
@@ -801,10 +802,11 @@ public class Identifier {
 		libraryInformation.setMiscellaneous(COMPOUND_IN_LIB_FACTOR + compound.getCompoundInLibraryFactor());
 		libraryInformation.setContributor(LIBRARY);
 		libraryInformation.setReferenceIdentifier(LIBRARY);
+		libraryInformation.setRetentionIndex(hit.getRetentionIndex());
 		/*
 		 * Get the match factor and reverse match factor values.
 		 */
-		comparisonResult = new ComparisonResult(hit.getMF(), hit.getRMF(), 0.0f, 0.0f, hit.getProb());
+		comparisonResult = new ComparisonResult(hit.getMatchFactor(), hit.getReverseMatchFactor(), 0.0f, 0.0f, hit.getProbability());
 		try {
 			identificationEntry = new NISTIdentificationTarget(libraryInformation, comparisonResult);
 		} catch(ReferenceMustNotBeNullException e) {

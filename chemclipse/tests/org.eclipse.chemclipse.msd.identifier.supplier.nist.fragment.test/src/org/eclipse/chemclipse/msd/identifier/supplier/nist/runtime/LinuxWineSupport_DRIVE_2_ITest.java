@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -48,17 +48,6 @@ public class LinuxWineSupport_DRIVE_2_ITest extends TestCase {
 	public void testConstruct_2() {
 
 		String nistApp = "";
-		try {
-			runtimeSupport = new LinuxWineSupport(new File(nistApp).getParentFile(), INistSupport.PARAMETER);
-			assertNull(runtimeSupport);
-		} catch(FileNotFoundException e) {
-			assertTrue("A file not found exception should not occur here.", true);
-		}
-	}
-
-	public void testConstruct_3() {
-
-		String nistApp = null;
 		try {
 			runtimeSupport = new LinuxWineSupport(new File(nistApp).getParentFile(), INistSupport.PARAMETER);
 			assertNull(runtimeSupport);
