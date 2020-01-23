@@ -75,8 +75,11 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	public void update(IChromatogramSelection chromatogramSelection) {
+	public void updateChromatogram(IChromatogramSelection chromatogramSelection) {
 
+		clearSelectedPeakSeries();
+		clearPeakLabelMarker();
+		//
 		if(chromatogramSelection == null) {
 			deleteSeries(SERIES_ID_CHROMATOGRAM);
 			deleteSeries(SERIES_ID_BASELINE);
@@ -91,9 +94,10 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 		}
 	}
 
-	public void update(List<IPeak> selectedPeaks) {
+	public void updatePeaks(List<IPeak> selectedPeaks) {
 
 		clearSelectedPeakSeries();
+		//
 		if(selectedPeaks != null && selectedPeaks.size() > 0) {
 			int index = 1;
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
@@ -244,9 +248,28 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 
 	private void clearSelectedPeakSeries() {
 
+		/*
+		 * Clear the peak series.
+		 */
 		for(String id : selectedPeakIds) {
 			deleteSeries(id);
 		}
+		//
 		selectedPeakIds.clear();
+	}
+
+	private void clearPeakLabelMarker() {
+
+		/*
+		 * Clear the label marker.
+		 */
+		Set<String> seriesIds = peakLabelMarkerMap.keySet();
+		for(String seriesId : seriesIds) {
+			removeIdentificationLabelMarker(peakLabelMarkerMap, seriesId);
+		}
+		/*
+		 * Clear the maps.
+		 */
+		peakLabelMarkerMap.clear();
 	}
 }

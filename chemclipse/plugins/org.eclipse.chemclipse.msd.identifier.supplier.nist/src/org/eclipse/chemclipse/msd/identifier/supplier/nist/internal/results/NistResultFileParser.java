@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -34,6 +34,8 @@ public class NistResultFileParser {
 	private static final String CAS_PATTERN = "(CAS:\\s*)(.*?)(;)";
 	private static final String LIB_PATTERN = "(Mw:\\s*)(.*)(;\\s*Lib:.*<<)(.*)(>>;\\s*Id:\\s*)(.*)(\\.)";
 	//
+	private static final String DEFAULT_ID = "-1";
+	private static final String DEFAULT_RI = "0";
 	private static final String RI_MARKER = "; RI:";
 	//
 	private Pattern compoundPattern;
@@ -59,15 +61,14 @@ public class NistResultFileParser {
 	 * (NISTLOG.TXT).
 	 * 
 	 * @param resultFile
-	 * @return {@link ICompounds}
+	 * @return {@link Compounds}
 	 */
-	public ICompounds getCompounds(File results) {
+	public Compounds getCompounds(File results) {
 
 		String content = getResultFileContent(results);
 		return extractCompounds(content);
 	}
 
-	// -------------------------------------------private methods
 	/**
 	 * Get the content of the result file as a string. The lines are delimited
 	 * by the given DELIMITER ("\n").
@@ -111,12 +112,12 @@ public class NistResultFileParser {
 	 * Extracts the compounds.
 	 * 
 	 * @param input
-	 * @return {@link ICompounds}
+	 * @return {@link Compounds}
 	 */
-	private ICompounds extractCompounds(String input) {
+	private Compounds extractCompounds(String input) {
 
-		ICompounds compounds = new Compounds();
-		ICompound compound;
+		Compounds compounds = new Compounds();
+		Compound compound;
 		/*
 		 * Find the compounds.
 		 */
@@ -134,7 +135,7 @@ public class NistResultFileParser {
 		return compounds;
 	}
 
-	private void extractAndAddIdentifier(String input, ICompound compound) {
+	private void extractAndAddIdentifier(String input, Compound compound) {
 
 		/*
 		 * Find the hits.
@@ -146,7 +147,7 @@ public class NistResultFileParser {
 		}
 	}
 
-	private void extractAndAddInLibFactor(String input, ICompound compound) {
+	private void extractAndAddInLibFactor(String input, Compound compound) {
 
 		if(input != null) {
 			compound.setCompoundInLibraryFactor(input.replace("\n", ""));
@@ -159,9 +160,9 @@ public class NistResultFileParser {
 	 * @param input
 	 * @param compound
 	 */
-	private void extractAndAddHits(String input, ICompound compound) {
+	private void extractAndAddHits(String input, Compound compound) {
 
-		IHit hit;
+		Hit hit;
 		/*
 		 * Find the hits.
 		 */
@@ -178,9 +179,9 @@ public class NistResultFileParser {
 	 * @param content
 	 * @param compound
 	 */
-	private IHit extractHit(String input) {
+	private Hit extractHit(String input) {
 
-		IHit hit = new Hit();
+		Hit hit = new Hit();
 		addNameAndFormula(input, hit);
 		addMatchFactor(input, hit);
 		addCAS(input, hit);
@@ -194,7 +195,7 @@ public class NistResultFileParser {
 	 * @param input
 	 * @param hit
 	 */
-	private void addNameAndFormula(String input, IHit hit) {
+	private void addNameAndFormula(String input, Hit hit) {
 
 		Matcher matcher = nameFormulaPattern.matcher(input);
 		if(matcher.find()) {
@@ -209,13 +210,13 @@ public class NistResultFileParser {
 	 * @param input
 	 * @param hit
 	 */
-	private void addMatchFactor(String input, IHit hit) {
+	private void addMatchFactor(String input, Hit hit) {
 
 		Matcher matcher = matchFactorPattern.matcher(input);
 		if(matcher.find()) {
-			hit.setMF(Integer.valueOf(matcher.group(2)) / 10.0f); // cause it is 1000 based in the results file
-			hit.setRMF(Integer.valueOf(matcher.group(4)) / 10.0f); // cause it is 1000 based in the results file
-			hit.setProb(Float.valueOf(matcher.group(6)));
+			hit.setMatchFactor(Integer.valueOf(matcher.group(2)) / 10.0f); // cause it is 1000 based in the results file
+			hit.setReverseMatchFactor(Integer.valueOf(matcher.group(4)) / 10.0f); // cause it is 1000 based in the results file
+			hit.setProbability(Float.valueOf(matcher.group(6)));
 		}
 	}
 
@@ -225,7 +226,7 @@ public class NistResultFileParser {
 	 * @param input
 	 * @param hit
 	 */
-	private void addCAS(String input, IHit hit) {
+	private void addCAS(String input, Hit hit) {
 
 		Matcher matcher = casPattern.matcher(input);
 		if(matcher.find()) {
@@ -234,29 +235,45 @@ public class NistResultFileParser {
 	}
 
 	/**
-	 * Set the mw, lib and id.
+	 * Set the mw, lib, id and ri.
 	 * 
 	 * @param input
 	 * @param hit
 	 */
-	private void addLib(String input, IHit hit) {
+	private void addLib(String input, Hit hit) {
 
 		Matcher matcher = libPattern.matcher(input);
 		if(matcher.find()) {
-			hit.setMw(Integer.valueOf(matcher.group(2)));
+			hit.setMolecularWeight(Integer.valueOf(matcher.group(2)));
 			hit.setLib(matcher.group(4));
 			String value = matcher.group(6); // NIST17 -> "4178; RI: 0"
-			String id = "-1";
+			//
+			String id = DEFAULT_ID;
+			String ri = DEFAULT_RI;
+			//
 			if(value.contains(RI_MARKER)) {
 				String[] values = value.split(RI_MARKER);
-				if(values.length > 0) {
-					id = values[0].trim();
-				}
+				id = (values.length > 0) ? values[0].trim() : DEFAULT_ID;
+				ri = (values.length > 1) ? values[1].trim() : DEFAULT_RI;
 			} else {
 				id = value;
 			}
-			hit.setId(Integer.valueOf(id));
+			/*
+			 * ID
+			 */
+			try {
+				hit.setId(Integer.valueOf(id));
+			} catch(NumberFormatException e) {
+				logger.warn(e);
+			}
+			/*
+			 * RI
+			 */
+			try {
+				hit.setRetentionIndex(Integer.valueOf(ri));
+			} catch(NumberFormatException e) {
+				logger.warn(e);
+			}
 		}
 	}
-	// -------------------------------------------private methods
 }

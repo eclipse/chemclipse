@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -35,6 +35,12 @@ public class AbstractChromatogram_4_Test extends TestCase {
 
 	public void testAddRemovePeak() throws AbundanceLimitExceededException, IonLimitExceededException {
 
+		/*
+		 * We have removed the peak identity as it made several problems.
+		 * See:
+		 * https://github.com/eclipse/chemclipse/issues/216
+		 * https://github.com/eclipse/chemclipse/commit/b148ba3c64e043614a7fa6d803f2eda124b04016
+		 */
 		ChromatogramMSD chromatogram = new ChromatogramMSD();
 		chromatogram.addScan(createScanAt(0));
 		chromatogram.addScan(createScanAt(1000));
@@ -47,19 +53,19 @@ public class AbstractChromatogram_4_Test extends TestCase {
 		assertEquals("Peak was not added", 1, chromatogram.getNumberOfPeaks());
 		// now add a new peak with the same peakmodel
 		chromatogram.addPeak(createPeakForModel(chromatogram, model1));
-		assertEquals("Peak with same peak model was added again!", 1, chromatogram.getNumberOfPeaks());
+		assertEquals("Peak with same peak model was added again!", 2, chromatogram.getNumberOfPeaks()); // before 1
 		// add it with another model
 		chromatogram.addPeak(createPeakForModel(chromatogram, model2));
-		assertEquals("Peak with same rtmax but different model was not added!", 2, chromatogram.getNumberOfPeaks());
+		assertEquals("Peak with same rtmax but different model was not added!", 3, chromatogram.getNumberOfPeaks()); // before 2
 		// add peak with same model but different RT
 		chromatogram.addPeak(createPeakForModel(chromatogram, model3));
-		assertEquals("Peak with different rtmax but same model was not added!", 3, chromatogram.getNumberOfPeaks());
+		assertEquals("Peak with different rtmax but same model was not added!", 4, chromatogram.getNumberOfPeaks()); // before 3
 		// now remove one of the peaks
 		chromatogram.removePeak(createPeakForModel(chromatogram, model1));
-		assertEquals("Peak was not removed", 2, chromatogram.getNumberOfPeaks());
+		assertEquals("Peak was not removed", 4, chromatogram.getNumberOfPeaks()); // before 2
 		// remove it again should not matter...
 		chromatogram.removePeak(createPeakForModel(chromatogram, model1));
-		assertEquals("Peak was not removed", 2, chromatogram.getNumberOfPeaks());
+		assertEquals("Peak was not removed", 4, chromatogram.getNumberOfPeaks()); // befor 2
 	}
 
 	public void testGetPeaks() throws AbundanceLimitExceededException, IonLimitExceededException {

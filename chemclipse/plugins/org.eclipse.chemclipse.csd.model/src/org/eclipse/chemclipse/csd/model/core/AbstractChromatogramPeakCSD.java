@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,11 +15,6 @@ import org.eclipse.chemclipse.model.exceptions.PeakException;
 
 public abstract class AbstractChromatogramPeakCSD extends AbstractPeakCSD implements IChromatogramPeakCSD {
 
-	/**
-	 * Renew the UUID on change.
-	 */
-	private static final long serialVersionUID = -3212539952833570462L;
-	//
 	private IChromatogramCSD chromatogram;
 	private static final float INITIAL_SN_VALUE = -1.0f;
 	private float signalToNoiseRatio = INITIAL_SN_VALUE;

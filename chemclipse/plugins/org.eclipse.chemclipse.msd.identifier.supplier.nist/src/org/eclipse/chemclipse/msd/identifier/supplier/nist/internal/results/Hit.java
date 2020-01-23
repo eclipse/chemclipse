@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,25 +11,24 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results;
 
-public class Hit implements IHit {
+public class Hit {
 
 	private String name = "";
 	private String formula = "";
-	private float mf = 0.0f;
-	private float rmf = 0.0f;
-	private float prob = 0.0f;
+	private float matchFactor = 0.0f;
+	private float reverseMatchFactor = 0.0f;
+	private float probability = 0.0f;
 	private String cas = "";
-	private int mw = 0;
+	private int molecularWeight = 0;
 	private String lib = "";
 	private int id = 0;
+	private int retentionIndex = 0;
 
-	@Override
 	public String getName() {
 
 		return name;
 	}
 
-	@Override
 	public void setName(String name) {
 
 		if(name != null) {
@@ -37,13 +36,11 @@ public class Hit implements IHit {
 		}
 	}
 
-	@Override
 	public String getFormula() {
 
 		return formula;
 	}
 
-	@Override
 	public void setFormula(String formula) {
 
 		if(formula != null) {
@@ -51,49 +48,41 @@ public class Hit implements IHit {
 		}
 	}
 
-	@Override
-	public float getMF() {
+	public float getMatchFactor() {
 
-		return mf;
+		return matchFactor;
 	}
 
-	@Override
-	public void setMF(float mf) {
+	public void setMatchFactor(float matchFactor) {
 
-		this.mf = mf;
+		this.matchFactor = matchFactor;
 	}
 
-	@Override
-	public float getRMF() {
+	public float getReverseMatchFactor() {
 
-		return rmf;
+		return reverseMatchFactor;
 	}
 
-	@Override
-	public void setRMF(float rmf) {
+	public void setReverseMatchFactor(float reverseMatchFactor) {
 
-		this.rmf = rmf;
+		this.reverseMatchFactor = reverseMatchFactor;
 	}
 
-	@Override
-	public float getProb() {
+	public float getProbability() {
 
-		return prob;
+		return probability;
 	}
 
-	@Override
-	public void setProb(float prob) {
+	public void setProbability(float probability) {
 
-		this.prob = prob;
+		this.probability = probability;
 	}
 
-	@Override
 	public String getCAS() {
 
 		return cas;
 	}
 
-	@Override
 	public void setCAS(String cas) {
 
 		if(cas != null) {
@@ -101,25 +90,21 @@ public class Hit implements IHit {
 		}
 	}
 
-	@Override
-	public int getMw() {
+	public int getMolecularWeight() {
 
-		return mw;
+		return molecularWeight;
 	}
 
-	@Override
-	public void setMw(int mw) {
+	public void setMolecularWeight(int molecularWeight) {
 
-		this.mw = mw;
+		this.molecularWeight = molecularWeight;
 	}
 
-	@Override
 	public String getLib() {
 
 		return lib;
 	}
 
-	@Override
 	public void setLib(String lib) {
 
 		if(lib != null) {
@@ -127,20 +112,26 @@ public class Hit implements IHit {
 		}
 	}
 
-	@Override
 	public int getId() {
 
 		return id;
 	}
 
-	@Override
 	public void setId(int id) {
 
 		this.id = id;
 	}
 
-	// ------------------------------toString, hashCode, equals
-	@Override
+	public int getRetentionIndex() {
+
+		return retentionIndex;
+	}
+
+	public void setRetentionIndex(int retentionIndex) {
+
+		this.retentionIndex = retentionIndex;
+	}
+
 	public boolean equals(Object other) {
 
 		if(other == null) {
@@ -152,14 +143,14 @@ public class Hit implements IHit {
 		if(this.getClass() != other.getClass()) {
 			return false;
 		}
-		IHit otherHit = (Hit)other;
-		return getName().equals(otherHit.getName()) && getFormula().equals(otherHit.getFormula()) && getMF() == otherHit.getMF() && getRMF() == otherHit.getRMF() && getProb() == otherHit.getProb() && getCAS().equals(otherHit.getCAS()) && getMw() == otherHit.getMw();
+		Hit otherHit = (Hit)other;
+		return getName().equals(otherHit.getName()) && getFormula().equals(otherHit.getFormula()) && getMatchFactor() == otherHit.getMatchFactor() && getReverseMatchFactor() == otherHit.getReverseMatchFactor() && getProbability() == otherHit.getProbability() && getCAS().equals(otherHit.getCAS()) && getMolecularWeight() == otherHit.getMolecularWeight();
 	}
 
 	@Override
 	public int hashCode() {
 
-		return 7 * name.hashCode() + 11 * formula.hashCode() + 13 * Float.valueOf(mf).hashCode() + 17 * Float.valueOf(rmf).hashCode() + 13 * Float.valueOf(prob).hashCode() + 11 * cas.hashCode() + 7 * Integer.valueOf(mw).hashCode();
+		return 7 * name.hashCode() + 11 * formula.hashCode() + 13 * Float.valueOf(matchFactor).hashCode() + 17 * Float.valueOf(reverseMatchFactor).hashCode() + 13 * Float.valueOf(probability).hashCode() + 11 * cas.hashCode() + 7 * Integer.valueOf(molecularWeight).hashCode();
 	}
 
 	@Override
@@ -172,21 +163,22 @@ public class Hit implements IHit {
 		builder.append(",");
 		builder.append("formula=" + formula);
 		builder.append(",");
-		builder.append("mf=" + mf);
+		builder.append("mf=" + matchFactor);
 		builder.append(",");
-		builder.append("rmf=" + rmf);
+		builder.append("rmf=" + reverseMatchFactor);
 		builder.append(",");
-		builder.append("prob=" + prob);
+		builder.append("prob=" + probability);
 		builder.append(",");
 		builder.append("CAS=" + cas);
 		builder.append(",");
-		builder.append("mw=" + mw);
+		builder.append("mw=" + molecularWeight);
 		builder.append(",");
 		builder.append("lib=" + lib);
 		builder.append(",");
 		builder.append("id=" + id);
+		builder.append(",");
+		builder.append("ri=" + retentionIndex);
 		builder.append("]");
 		return builder.toString();
 	}
-	// ------------------------------toString, hashCode, equals
 }

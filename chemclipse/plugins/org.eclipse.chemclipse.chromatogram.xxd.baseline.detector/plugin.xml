@@ -2,5 +2,13 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension-point id="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.baselineDetectorSupplier" name="Chromatogram Baseline Detector Supplier" schema="schema/org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.baselineDetectorSupplier.exsd"/>
-
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.baselineDetectorSupplier">
+      <BaselineDetectorSupplier
+            baselineDetector="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.impl.BaselineDetector"
+            description="Find the lowest intensity and set it as the baseline."
+            detectorName="Baseline Detector (Lowest)"
+            id="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.impl.lowest">
+      </BaselineDetectorSupplier>
+   </extension>
 </plugin>

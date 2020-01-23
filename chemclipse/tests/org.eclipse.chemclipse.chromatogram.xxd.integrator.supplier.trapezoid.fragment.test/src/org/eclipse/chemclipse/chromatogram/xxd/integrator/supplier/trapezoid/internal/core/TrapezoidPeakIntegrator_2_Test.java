@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,16 +14,14 @@ package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.in
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.exceptions.ValueMustNotBeNullException;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.core.IPeakIntegrator;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.core.PeakIntegrator;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.processor.PeakIntegrator;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class TrapezoidPeakIntegrator_2_Test extends DefaultPeakTestCase {
 
-	private IPeakIntegrator integrator;
+	private PeakIntegrator integrator;
 
 	@Override
 	protected void setUp() throws Exception {

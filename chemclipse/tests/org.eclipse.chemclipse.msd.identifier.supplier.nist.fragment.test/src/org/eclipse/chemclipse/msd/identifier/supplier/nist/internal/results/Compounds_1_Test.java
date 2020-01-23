@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,20 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results;
 
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.Compound;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.Compounds;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.Hit;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.ICompound;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.ICompounds;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.IHit;
-
 import junit.framework.TestCase;
 
 public class Compounds_1_Test extends TestCase {
 
-	private ICompounds compounds;
-	private ICompound compound;
-	private IHit hit;
+	private Compounds compounds;
+	private Compound compound;
+	private Hit hit;
 
 	@Override
 	protected void setUp() throws Exception {

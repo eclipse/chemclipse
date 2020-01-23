@@ -42,7 +42,7 @@ public class TimeRange {
 	 * @param start
 	 * @param stop
 	 */
-	public TimeRange(String identifier, int start, int stop) {
+	public TimeRange(String identifier, int start, int stop) throws IllegalArgumentException {
 		this(identifier, start, calculateCenter(start, stop), stop);
 	}
 
@@ -54,12 +54,15 @@ public class TimeRange {
 	 * @param center
 	 * @param stop
 	 */
-	public TimeRange(String identifier, int start, int center, int stop) {
-		//
-		if(identifier != null) {
-			this.identifier = identifier;
+	public TimeRange(String identifier, int start, int center, int stop) throws IllegalArgumentException {
+		/*
+		 * Validity checks.
+		 */
+		if(start < 0 || center < 0 || stop < 0) {
+			throw new IllegalArgumentException("Start/Center/Stop must be >= 0.");
 		}
 		//
+		this.identifier = (identifier != null) ? identifier : "";
 		this.start = Math.min(start, stop);
 		this.stop = Math.max(start, stop);
 		updateCenter();
@@ -159,7 +162,15 @@ public class TimeRange {
 		int center = 0;
 		int delta = max - min;
 		if(delta != 0) {
+			/*
+			 * min < max
+			 */
 			center = delta / 2 + min;
+		} else {
+			/*
+			 * min == max
+			 */
+			center = min;
 		}
 		return center;
 	}

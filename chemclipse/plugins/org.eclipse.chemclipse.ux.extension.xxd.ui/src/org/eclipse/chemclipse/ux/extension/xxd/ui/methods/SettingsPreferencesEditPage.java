@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,8 +21,8 @@ import java.util.function.Supplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences.DialogBehavior;
-import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -147,7 +147,7 @@ public class SettingsPreferencesEditPage extends WizardPage {
 			}
 		});
 		edit.setEnabled(false);
-		edit.setImage(ApplicationImageFactory.getInstance().getImage(ApplicationImage.IMAGE_EDIT, ApplicationImage.SIZE_16x16));
+		edit.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 		ToolItem delete = new ToolItem(toolBar, SWT.PUSH);
 		delete.addSelectionListener(new SelectionListener() {
 
@@ -168,10 +168,10 @@ public class SettingsPreferencesEditPage extends WizardPage {
 		});
 		delete.setEnabled(false);
 		delete.setToolTipText("Removes the stored data for this processor and reset it to the defaults");
-		delete.setImage(ApplicationImageFactory.getInstance().getImage(ApplicationImage.IMAGE_DELETE, ApplicationImage.SIZE_16x16));
+		delete.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
 		ToolItem delete_all = new ToolItem(toolBar, SWT.PUSH);
 		delete_all.setToolTipText("Removes all stored data for this processor and reset it to the defaults");
-		delete_all.setImage(ApplicationImageFactory.getInstance().getImage(ApplicationImage.IMAGE_DELETE_ALL, ApplicationImage.SIZE_16x16));
+		delete_all.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImage.SIZE_16x16));
 		delete_all.addSelectionListener(new SelectionListener() {
 
 			@Override

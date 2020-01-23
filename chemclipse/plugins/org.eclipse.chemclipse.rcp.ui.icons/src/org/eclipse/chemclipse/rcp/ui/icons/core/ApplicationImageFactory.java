@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,12 +8,13 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - change to Activator.getDefault().getApplicationImage()
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.ui.icons.core;
 
-public class ApplicationImageFactory {
+import org.eclipse.chemclipse.rcp.ui.icons.Activator;
 
-	private static IApplicationImage applicationImage;
+public class ApplicationImageFactory {
 
 	private ApplicationImageFactory() {
 	}
@@ -25,9 +26,6 @@ public class ApplicationImageFactory {
 	 */
 	public static IApplicationImage getInstance() {
 
-		if(applicationImage == null) {
-			applicationImage = new ApplicationImage();
-		}
-		return applicationImage;
+		return Activator.getDefault().getApplicationImage();
 	}
 }

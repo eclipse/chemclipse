@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,12 +8,15 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - register IApplicationImageProvider
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.ui.icons;
 
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -28,6 +31,7 @@ public class Activator extends AbstractUIPlugin {
 	public static final String IMAGE_EMPTY = "icons/empty.png";
 	// The shared instance
 	private static Activator plugin;
+	private ApplicationImage applicationImage;
 
 	/**
 	 * The constructor
@@ -39,18 +43,24 @@ public class Activator extends AbstractUIPlugin {
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 
 		super.start(context);
 		plugin = this;
+		applicationImage = new ApplicationImage(context);
+		applicationImage.start();
+		context.registerService(IApplicationImageProvider.class, applicationImage, null);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 
+		applicationImage.stop();
 		plugin = null;
 		super.stop(context);
 	}
@@ -77,5 +87,10 @@ public class Activator extends AbstractUIPlugin {
 	public InputStream getIconInputStream(String icon) throws IOException {
 
 		return FileLocator.find(getBundle(), new Path(icon), null).openStream();
+	}
+
+	public ApplicationImage getApplicationImage() {
+
+		return applicationImage;
 	}
 }

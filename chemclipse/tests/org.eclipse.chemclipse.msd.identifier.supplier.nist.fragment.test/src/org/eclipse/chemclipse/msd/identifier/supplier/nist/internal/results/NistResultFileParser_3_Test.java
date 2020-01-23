@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,10 +14,6 @@ package org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results;
 import java.io.File;
 
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.TestPathHelper;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.ICompound;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.ICompounds;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.IHit;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results.NistResultFileParser;
 
 import junit.framework.TestCase;
 
@@ -25,9 +21,9 @@ public class NistResultFileParser_3_Test extends TestCase {
 
 	private NistResultFileParser nistResultFileParser;
 	private File results;
-	private ICompounds compounds;
-	private ICompound compound;
-	private IHit hit;
+	private Compounds compounds;
+	private Compound compound;
+	private Hit hit;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -63,17 +59,17 @@ public class NistResultFileParser_3_Test extends TestCase {
 
 	public void testGetMF_1() {
 
-		assertEquals(67.1f, hit.getMF());
+		assertEquals(67.1f, hit.getMatchFactor());
 	}
 
 	public void testGetRMF_1() {
 
-		assertEquals(68.6f, hit.getRMF());
+		assertEquals(68.6f, hit.getReverseMatchFactor());
 	}
 
 	public void testGetProb_1() {
 
-		assertEquals(45.98f, hit.getProb());
+		assertEquals(45.98f, hit.getProbability());
 	}
 
 	public void testGetCAS_1() {
@@ -83,7 +79,7 @@ public class NistResultFileParser_3_Test extends TestCase {
 
 	public void testGetMw_1() {
 
-		assertEquals(166, hit.getMw());
+		assertEquals(166, hit.getMolecularWeight());
 	}
 
 	public void testGetLib_1() {

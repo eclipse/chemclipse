@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2019 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - prefix images with bundle name
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.ui.icons.core;
 
@@ -16,353 +17,353 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	/*
 	 * Icons and Images
 	 */
-	String IMAGE_ADD = "add.gif";
-	String IMAGE_COPY = "copy.png";
-	String IMAGE_CANCEL = "cancel.gif";
-	String IMAGE_DELETE = "delete.gif";
-	String IMAGE_DELETE_ALL = "delete_all.png";;
-	String IMAGE_EXECUTE_ADD = "execute_add.gif";
-	String IMAGE_EDIT = "edit.gif";
-	String IMAGE_EDIT_DEFAULT = "editDefault.gif";
-	String IMAGE_EDIT_ACTIVE = "editActive.gif";
-	String IMAGE_EDIT_DISABLED = "edit_disabled.gif";
-	String IMAGE_EDIT_ENTRY = "edit_entry.gif";
-	String IMAGE_EDIT_SHIFT = "editShift.gif";
-	String IMAGE_EDIT_PROFILE = "editProfile.gif";
-	String IMAGE_CHROMATOGRAM_PROFILE = "chromatogramProfile.gif";
+	String IMAGE_ADD = "org.eclipse.chemclipse.rcp.ui.icons/add.gif";
+	String IMAGE_COPY = "org.eclipse.chemclipse.rcp.ui.icons/copy.png";
+	String IMAGE_CANCEL = "org.eclipse.chemclipse.rcp.ui.icons/cancel.gif";
+	String IMAGE_DELETE = "org.eclipse.chemclipse.rcp.ui.icons/delete.gif";
+	String IMAGE_DELETE_ALL = "org.eclipse.chemclipse.rcp.ui.icons/delete_all.png";;
+	String IMAGE_EXECUTE_ADD = "org.eclipse.chemclipse.rcp.ui.icons/execute_add.gif";
+	String IMAGE_EDIT = "org.eclipse.chemclipse.rcp.ui.icons/edit.gif";
+	String IMAGE_EDIT_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/editDefault.gif";
+	String IMAGE_EDIT_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/editActive.gif";
+	String IMAGE_EDIT_DISABLED = "org.eclipse.chemclipse.rcp.ui.icons/edit_disabled.gif";
+	String IMAGE_EDIT_ENTRY = "org.eclipse.chemclipse.rcp.ui.icons/edit_entry.gif";
+	String IMAGE_EDIT_SHIFT = "org.eclipse.chemclipse.rcp.ui.icons/editShift.gif";
+	String IMAGE_EDIT_PROFILE = "org.eclipse.chemclipse.rcp.ui.icons/editProfile.gif";
+	String IMAGE_CHROMATOGRAM_PROFILE = "org.eclipse.chemclipse.rcp.ui.icons/chromatogramProfile.gif";
 	//
-	String IMAGE_EMPTY = "empty.png";
-	String IMAGE_LOGO = "logo.png";
-	String IMAGE_ABOUT = "about.png";
+	String IMAGE_EMPTY = "org.eclipse.chemclipse.rcp.ui.icons/empty.png";
+	String IMAGE_LOGO = "org.eclipse.chemclipse.rcp.ui.icons/logo.png";
+	String IMAGE_ABOUT = "org.eclipse.chemclipse.rcp.ui.icons/about.png";
 	//
-	String IMAGE_DESELECTED = "deselected.gif";
-	String IMAGE_DESELECTED_INACTIVE = "deselected_inactive.gif";
-	String IMAGE_SELECTED = "selected.gif";
-	String IMAGE_CHECK_ALL = "checkAll.gif";
-	String IMAGE_UNCHECK_ALL = "uncheckAll.gif";
+	String IMAGE_DESELECTED = "org.eclipse.chemclipse.rcp.ui.icons/deselected.gif";
+	String IMAGE_DESELECTED_INACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/deselected_inactive.gif";
+	String IMAGE_SELECTED = "org.eclipse.chemclipse.rcp.ui.icons/selected.gif";
+	String IMAGE_CHECK_ALL = "org.eclipse.chemclipse.rcp.ui.icons/checkAll.gif";
+	String IMAGE_UNCHECK_ALL = "org.eclipse.chemclipse.rcp.ui.icons/uncheckAll.gif";
 	//
-	String IMAGE_SHRINK_CHROMATOGRAMS = "shrinkChromatograms.gif";
-	String IMAGE_ALIGN_CHROMATOGRAMS = "alignChromatograms.gif";
-	String IMAGE_STRETCH_CHROMATOGRAMS = "stretchChromatograms.gif";
-	String IMAGE_ADJUST_CHROMATOGRAMS = "adjustChromatograms.gif";
+	String IMAGE_SHRINK_CHROMATOGRAMS = "org.eclipse.chemclipse.rcp.ui.icons/shrinkChromatograms.gif";
+	String IMAGE_ALIGN_CHROMATOGRAMS = "org.eclipse.chemclipse.rcp.ui.icons/alignChromatograms.gif";
+	String IMAGE_STRETCH_CHROMATOGRAMS = "org.eclipse.chemclipse.rcp.ui.icons/stretchChromatograms.gif";
+	String IMAGE_ADJUST_CHROMATOGRAMS = "org.eclipse.chemclipse.rcp.ui.icons/adjustChromatograms.gif";
 	//
-	String IMAGE_CHROMATOGRAM = "chromatogram.gif";
-	String IMAGE_CHROMATOGRAM_MSD = "chromatogram-msd.gif";
-	String IMAGE_CHROMATOGRAM_CSD = "chromatogram-csd.gif";
-	String IMAGE_CHROMATOGRAM_WSD = "chromatogram-wsd.gif";
-	String IMAGE_SCAN_XIR = "scan-xir.gif"; // FTIR, NIR, ...
-	String IMAGE_SCAN_NMR = "scan-nmr.gif";
-	String IMAGE_SCAN_FID = "scan-fid.png";
+	String IMAGE_CHROMATOGRAM = "org.eclipse.chemclipse.rcp.ui.icons/chromatogram.gif";
+	String IMAGE_CHROMATOGRAM_MSD = "org.eclipse.chemclipse.rcp.ui.icons/chromatogram-msd.gif";
+	String IMAGE_CHROMATOGRAM_CSD = "org.eclipse.chemclipse.rcp.ui.icons/chromatogram-csd.gif";
+	String IMAGE_CHROMATOGRAM_WSD = "org.eclipse.chemclipse.rcp.ui.icons/chromatogram-wsd.gif";
+	String IMAGE_SCAN_XIR = "org.eclipse.chemclipse.rcp.ui.icons/scan-xir.gif"; // FTIR, NIR, ...
+	String IMAGE_SCAN_NMR = "org.eclipse.chemclipse.rcp.ui.icons/scan-nmr.gif";
+	String IMAGE_SCAN_FID = "org.eclipse.chemclipse.rcp.ui.icons/scan-fid.png";
 	//
-	String IMAGE_SAMPLE = "sample.gif";
-	String IMAGE_SAMPLE_QUALIFIER = "sample-qualifier.gif";
-	String IMAGE_SAMPLE_ISTD = "sample-istd.gif";
-	String IMAGE_SAMPLE_ISTD_QUALIFIER = "sample-istd-qualifier.gif";
-	String IMAGE_SAMPLE_QC = "sample-qc.gif";
-	String IMAGE_SAMPLE_QC_QUALIFIER = "sample-qc-qualifier.gif";
+	String IMAGE_SAMPLE = "org.eclipse.chemclipse.rcp.ui.icons/sample.gif";
+	String IMAGE_SAMPLE_QUALIFIER = "org.eclipse.chemclipse.rcp.ui.icons/sample-qualifier.gif";
+	String IMAGE_SAMPLE_ISTD = "org.eclipse.chemclipse.rcp.ui.icons/sample-istd.gif";
+	String IMAGE_SAMPLE_ISTD_QUALIFIER = "org.eclipse.chemclipse.rcp.ui.icons/sample-istd-qualifier.gif";
+	String IMAGE_SAMPLE_QC = "org.eclipse.chemclipse.rcp.ui.icons/sample-qc.gif";
+	String IMAGE_SAMPLE_QC_QUALIFIER = "org.eclipse.chemclipse.rcp.ui.icons/sample-qc-qualifier.gif";
 	//
-	String IMAGE_PREFERENCES = "preferences.gif";
-	String IMAGE_SETTINGS_PULL = "settings_pull.png";
-	String IMAGE_SETTINGS_PUSH = "settings_push.png";
-	String IMAGE_DRIVE = "drive.gif";
-	String IMAGE_CHROMATOGRAM_ZERO_SET = "chromatogramZeorSet.gif";
-	String IMAGE_FOLDER_OPENED = "folder_opened.gif";
-	String IMAGE_FOLDER_CLOSED = "folder_closed.gif";
-	String IMAGE_FILE = "file.gif";
-	String IMAGE_PEAK = "peak.gif";
-	String IMAGE_PEAKS = "peaks.gif";
-	String IMAGE_WARN = "warn.gif";
-	String IMAGE_INFO = "info.gif";
-	String IMAGE_QUESTION = "question.gif";
-	String IMAGE_MASS_SPECTRUM = "massSpectrum.gif";
-	String IMAGE_MASS_SPECTRUM_FILE = "massSpectrumFile.gif";
-	String IMAGE_MASS_SPECTRUM_DATABASE = "massSpectrumDatabase.gif";
-	String IMAGE_TARGETS = "targets.gif";
-	String IMAGE_CREATE_SNAPSHOT = "create_snapshot.png";
-	String IMAGE_PERSPECTIVES = "perspectives.gif";
-	String IMAGE_QUIT = "quit.gif";
-	String IMAGE_SAVE = "save.gif";
-	String IMAGE_SAVE_DISABLED = "save_disabled.gif";
-	String IMAGE_SAVE_AS = "saveas.gif";
-	String IMAGE_SAVE_AS_DISABLED = "saveas_disabled.gif";
-	String IMAGE_SAVEALL = "saveall.gif";
-	String IMAGE_SAVEALL_DISABLED = "saveall_disabled.gif";
-	String IMAGE_VIEW = "view.gif";
-	String IMAGE_ERROR = "error.gif";
-	String IMAGE_UNKNOWN = "unknown.gif";
-	String IMAGE_LOG = "log.gif";
-	String IMAGE_ION = "ion.gif";
-	String IMAGE_REPORT = "report.gif";
-	String IMAGE_CHROMATOGRAM_REPORT = "chromatogramReport.gif";
-	String IMAGE_CHROMATOGRAM_REPORT_ADD = "chromatogramReportAdd.gif";
-	String IMAGE_BATCHPROCESS = "batchprocess.gif";
-	String IMAGE_BATCHPROCESS_PEAKIDENT = "batchprocessPeakIdent.gif";
-	String IMAGE_CONFIGURE = "configure.gif";
-	String IMAGE_EXECUTE = "execute.gif";
-	String IMAGE_EXECUTE_WARNING = "execute_warning.png";
-	String IMAGE_EXECUTE_ERROR = "execute_error.png";
-	String IMAGE_EXECUTE_AUTO_UPDATE = "execute_auto_update.png";
-	String IMAGE_PEAK_MANUAL = "peak-manual.gif";
-	String IMAGE_PEAK_DETECTOR = "peakdetector.gif";
-	String IMAGE_PEAK_DETECTOR_DECONVOLUTION = "peakdetectorDeconvolution.gif";
-	String IMAGE_DECONVOLUTION = "deconvolution.gif";
-	String IMAGE_INTEGRATION_RESULTS = "integrationResults.gif";
-	String IMAGE_INTEGRATOR_SUMAREA = "sumareaIntegrator.gif";
-	String IMAGE_PEAK_INTEGRATOR_MAX = "peakIntegratorMax.gif";
-	String IMAGE_PEAK_INTEGRATOR = "peakIntegrator.gif";
-	String IMAGE_CHROMATOGRAM_INTEGRATOR = "chromatogramIntegrator.gif";
-	String IMAGE_DELETE_PEAK_INTEGRATIONS = "deletePeakIntegrations.gif";
-	String IMAGE_DELETE_CHROMATOGRAM_INTEGRATIONS = "deleteChromatogramIntegrations.gif";
-	String IMAGE_COMBINED_INTEGRATOR = "combinedIntegrator.gif";
+	String IMAGE_PREFERENCES = "org.eclipse.chemclipse.rcp.ui.icons/preferences.gif";
+	String IMAGE_SETTINGS_PULL = "org.eclipse.chemclipse.rcp.ui.icons/settings_pull.png";
+	String IMAGE_SETTINGS_PUSH = "org.eclipse.chemclipse.rcp.ui.icons/settings_push.png";
+	String IMAGE_DRIVE = "org.eclipse.chemclipse.rcp.ui.icons/drive.gif";
+	String IMAGE_CHROMATOGRAM_ZERO_SET = "org.eclipse.chemclipse.rcp.ui.icons/chromatogramZeorSet.gif";
+	String IMAGE_FOLDER_OPENED = "org.eclipse.chemclipse.rcp.ui.icons/folder_opened.gif";
+	String IMAGE_FOLDER_CLOSED = "org.eclipse.chemclipse.rcp.ui.icons/folder_closed.gif";
+	String IMAGE_FILE = "org.eclipse.chemclipse.rcp.ui.icons/file.gif";
+	String IMAGE_PEAK = "org.eclipse.chemclipse.rcp.ui.icons/peak.gif";
+	String IMAGE_PEAKS = "org.eclipse.chemclipse.rcp.ui.icons/peaks.gif";
+	String IMAGE_WARN = "org.eclipse.chemclipse.rcp.ui.icons/warn.gif";
+	String IMAGE_INFO = "org.eclipse.chemclipse.rcp.ui.icons/info.gif";
+	String IMAGE_QUESTION = "org.eclipse.chemclipse.rcp.ui.icons/question.gif";
+	String IMAGE_MASS_SPECTRUM = "org.eclipse.chemclipse.rcp.ui.icons/massSpectrum.gif";
+	String IMAGE_MASS_SPECTRUM_FILE = "org.eclipse.chemclipse.rcp.ui.icons/massSpectrumFile.gif";
+	String IMAGE_MASS_SPECTRUM_DATABASE = "org.eclipse.chemclipse.rcp.ui.icons/massSpectrumDatabase.gif";
+	String IMAGE_TARGETS = "org.eclipse.chemclipse.rcp.ui.icons/targets.gif";
+	String IMAGE_CREATE_SNAPSHOT = "org.eclipse.chemclipse.rcp.ui.icons/create_snapshot.png";
+	String IMAGE_PERSPECTIVES = "org.eclipse.chemclipse.rcp.ui.icons/perspectives.gif";
+	String IMAGE_QUIT = "org.eclipse.chemclipse.rcp.ui.icons/quit.gif";
+	String IMAGE_SAVE = "org.eclipse.chemclipse.rcp.ui.icons/save.gif";
+	String IMAGE_SAVE_DISABLED = "org.eclipse.chemclipse.rcp.ui.icons/save_disabled.gif";
+	String IMAGE_SAVE_AS = "org.eclipse.chemclipse.rcp.ui.icons/saveas.gif";
+	String IMAGE_SAVE_AS_DISABLED = "org.eclipse.chemclipse.rcp.ui.icons/saveas_disabled.gif";
+	String IMAGE_SAVEALL = "org.eclipse.chemclipse.rcp.ui.icons/saveall.gif";
+	String IMAGE_SAVEALL_DISABLED = "org.eclipse.chemclipse.rcp.ui.icons/saveall_disabled.gif";
+	String IMAGE_VIEW = "org.eclipse.chemclipse.rcp.ui.icons/view.gif";
+	String IMAGE_ERROR = "org.eclipse.chemclipse.rcp.ui.icons/error.gif";
+	String IMAGE_UNKNOWN = "org.eclipse.chemclipse.rcp.ui.icons/unknown.gif";
+	String IMAGE_LOG = "org.eclipse.chemclipse.rcp.ui.icons/log.gif";
+	String IMAGE_ION = "org.eclipse.chemclipse.rcp.ui.icons/ion.gif";
+	String IMAGE_REPORT = "org.eclipse.chemclipse.rcp.ui.icons/report.gif";
+	String IMAGE_CHROMATOGRAM_REPORT = "org.eclipse.chemclipse.rcp.ui.icons/chromatogramReport.gif";
+	String IMAGE_CHROMATOGRAM_REPORT_ADD = "org.eclipse.chemclipse.rcp.ui.icons/chromatogramReportAdd.gif";
+	String IMAGE_BATCHPROCESS = "org.eclipse.chemclipse.rcp.ui.icons/batchprocess.gif";
+	String IMAGE_BATCHPROCESS_PEAKIDENT = "org.eclipse.chemclipse.rcp.ui.icons/batchprocessPeakIdent.gif";
+	String IMAGE_CONFIGURE = "org.eclipse.chemclipse.rcp.ui.icons/configure.gif";
+	String IMAGE_EXECUTE = "org.eclipse.chemclipse.rcp.ui.icons/execute.gif";
+	String IMAGE_EXECUTE_WARNING = "org.eclipse.chemclipse.rcp.ui.icons/execute_warning.png";
+	String IMAGE_EXECUTE_ERROR = "org.eclipse.chemclipse.rcp.ui.icons/execute_error.png";
+	String IMAGE_EXECUTE_AUTO_UPDATE = "org.eclipse.chemclipse.rcp.ui.icons/execute_auto_update.png";
+	String IMAGE_PEAK_MANUAL = "org.eclipse.chemclipse.rcp.ui.icons/peak-manual.gif";
+	String IMAGE_PEAK_DETECTOR = "org.eclipse.chemclipse.rcp.ui.icons/peakdetector.gif";
+	String IMAGE_PEAK_DETECTOR_DECONVOLUTION = "org.eclipse.chemclipse.rcp.ui.icons/peakdetectorDeconvolution.gif";
+	String IMAGE_DECONVOLUTION = "org.eclipse.chemclipse.rcp.ui.icons/deconvolution.gif";
+	String IMAGE_INTEGRATION_RESULTS = "org.eclipse.chemclipse.rcp.ui.icons/integrationResults.gif";
+	String IMAGE_INTEGRATOR_SUMAREA = "org.eclipse.chemclipse.rcp.ui.icons/sumareaIntegrator.gif";
+	String IMAGE_PEAK_INTEGRATOR_MAX = "org.eclipse.chemclipse.rcp.ui.icons/peakIntegratorMax.gif";
+	String IMAGE_PEAK_INTEGRATOR = "org.eclipse.chemclipse.rcp.ui.icons/peakIntegrator.gif";
+	String IMAGE_CHROMATOGRAM_INTEGRATOR = "org.eclipse.chemclipse.rcp.ui.icons/chromatogramIntegrator.gif";
+	String IMAGE_DELETE_PEAK_INTEGRATIONS = "org.eclipse.chemclipse.rcp.ui.icons/deletePeakIntegrations.gif";
+	String IMAGE_DELETE_CHROMATOGRAM_INTEGRATIONS = "org.eclipse.chemclipse.rcp.ui.icons/deleteChromatogramIntegrations.gif";
+	String IMAGE_COMBINED_INTEGRATOR = "org.eclipse.chemclipse.rcp.ui.icons/combinedIntegrator.gif";
 	//
-	String IMAGE_CLASSIFIER = "classifier.gif";
-	String IMAGE_CLASSIFIER_WNC = "wnc.gif";
-	String IMAGE_CLASSIFIER_DW = "durbin_watson.gif";
+	String IMAGE_CLASSIFIER = "org.eclipse.chemclipse.rcp.ui.icons/classifier.gif";
+	String IMAGE_CLASSIFIER_WNC = "org.eclipse.chemclipse.rcp.ui.icons/wnc.gif";
+	String IMAGE_CLASSIFIER_DW = "org.eclipse.chemclipse.rcp.ui.icons/durbin_watson.gif";
 	//
-	String IMAGE_FILTER_BACKFOLDING = "backfolding.gif";
-	String IMAGE_FILTER_CODA = "coda.gif";
-	String IMAGE_FILTER_DENOISING = "denoising.gif";
-	String IMAGE_FILTER_IONREMOVER = "ionremover.gif";
-	String IMAGE_WORD_DOCUMENT = "word_document.gif";
-	String IMAGE_EXCEL_DOCUMENT = "excel_document.gif";
-	String IMAGE_BACKWARD = "backward.gif";
-	String IMAGE_FAST_BACKWARD = "fastbackward.gif";
-	String IMAGE_FORWARD = "forward.gif";
-	String IMAGE_FAST_FORWARD = "fastforward.gif";
-	String IMAGE_FILTER_SAVITZKY_GOLAY = "savitzkygolay.gif";
-	String IMAGE_CHROMATOGRAM_FILE_EXPLORER = "chromatogramFileExplorer.gif";
-	String IMAGE_MASS_SPECTRUM_FILE_EXPLORER = "massSpectrumFileExplorer.gif";
-	String IMAGE_MASS_SPECTRUM_LIBRARY = "massSpectrumLibrary.gif";
-	String IMAGE_MIRRORED_MASS_SPECTRUM = "mirroredMassSpectrum.gif";
-	String IMAGE_SHIFTED_MASS_SPECTRUM = "shiftedMassSpectrum.gif";
-	String IMAGE_IMPORT = "import.png";
-	String IMAGE_EXPORT = "export.png";
-	String IMAGE_GROOVY_EXECUTE = "groovy_execute.gif";
-	String IMAGE_GROOVY_CREATE = "groovy_create.gif";
-	String IMAGE_JYTHON_EXECUTE = "jython_execute.gif";
-	String IMAGE_JYTHON_CREATE = "jython_create.gif";
-	String IMAGE_BASELINE = "baseline.gif";
-	String IMAGE_BASELINE_SNIP = "baselineSnip.gif";
-	String IMAGE_BASELINE_DELETE = "baselineDelete.gif";
-	String IMAGE_FILTER_SNIP_SELECTED_PEAK = "snipMassSpectrumPeak.gif";
-	String IMAGE_FILTER_SNIP_ALL_PEAKS = "snipMassSpectrumPeaks.gif";
-	String IMAGE_FILTER_IONREMOVER_SELECTED_PEAK = "ionremoverMassSpectrumPeak.gif";
-	String IMAGE_FILTER_IONREMOVER_ALL_PEAKS = "ionremoverMassSpectrumPeaks.gif";
+	String IMAGE_FILTER_BACKFOLDING = "org.eclipse.chemclipse.rcp.ui.icons/backfolding.gif";
+	String IMAGE_FILTER_CODA = "org.eclipse.chemclipse.rcp.ui.icons/coda.gif";
+	String IMAGE_FILTER_DENOISING = "org.eclipse.chemclipse.rcp.ui.icons/denoising.gif";
+	String IMAGE_FILTER_IONREMOVER = "org.eclipse.chemclipse.rcp.ui.icons/ionremover.gif";
+	String IMAGE_WORD_DOCUMENT = "org.eclipse.chemclipse.rcp.ui.icons/word_document.gif";
+	String IMAGE_EXCEL_DOCUMENT = "org.eclipse.chemclipse.rcp.ui.icons/excel_document.gif";
+	String IMAGE_BACKWARD = "org.eclipse.chemclipse.rcp.ui.icons/backward.gif";
+	String IMAGE_FAST_BACKWARD = "org.eclipse.chemclipse.rcp.ui.icons/fastbackward.gif";
+	String IMAGE_FORWARD = "org.eclipse.chemclipse.rcp.ui.icons/forward.gif";
+	String IMAGE_FAST_FORWARD = "org.eclipse.chemclipse.rcp.ui.icons/fastforward.gif";
+	String IMAGE_FILTER_SAVITZKY_GOLAY = "org.eclipse.chemclipse.rcp.ui.icons/savitzkygolay.gif";
+	String IMAGE_CHROMATOGRAM_FILE_EXPLORER = "org.eclipse.chemclipse.rcp.ui.icons/chromatogramFileExplorer.gif";
+	String IMAGE_MASS_SPECTRUM_FILE_EXPLORER = "org.eclipse.chemclipse.rcp.ui.icons/massSpectrumFileExplorer.gif";
+	String IMAGE_MASS_SPECTRUM_LIBRARY = "org.eclipse.chemclipse.rcp.ui.icons/massSpectrumLibrary.gif";
+	String IMAGE_MIRRORED_MASS_SPECTRUM = "org.eclipse.chemclipse.rcp.ui.icons/mirroredMassSpectrum.gif";
+	String IMAGE_SHIFTED_MASS_SPECTRUM = "org.eclipse.chemclipse.rcp.ui.icons/shiftedMassSpectrum.gif";
+	String IMAGE_IMPORT = "org.eclipse.chemclipse.rcp.ui.icons/import.png";
+	String IMAGE_EXPORT = "org.eclipse.chemclipse.rcp.ui.icons/export.png";
+	String IMAGE_GROOVY_EXECUTE = "org.eclipse.chemclipse.rcp.ui.icons/groovy_execute.gif";
+	String IMAGE_GROOVY_CREATE = "org.eclipse.chemclipse.rcp.ui.icons/groovy_create.gif";
+	String IMAGE_JYTHON_EXECUTE = "org.eclipse.chemclipse.rcp.ui.icons/jython_execute.gif";
+	String IMAGE_JYTHON_CREATE = "org.eclipse.chemclipse.rcp.ui.icons/jython_create.gif";
+	String IMAGE_BASELINE = "org.eclipse.chemclipse.rcp.ui.icons/baseline.gif";
+	String IMAGE_BASELINE_SNIP = "org.eclipse.chemclipse.rcp.ui.icons/baselineSnip.gif";
+	String IMAGE_BASELINE_DELETE = "org.eclipse.chemclipse.rcp.ui.icons/baselineDelete.gif";
+	String IMAGE_FILTER_SNIP_SELECTED_PEAK = "org.eclipse.chemclipse.rcp.ui.icons/snipMassSpectrumPeak.gif";
+	String IMAGE_FILTER_SNIP_ALL_PEAKS = "org.eclipse.chemclipse.rcp.ui.icons/snipMassSpectrumPeaks.gif";
+	String IMAGE_FILTER_IONREMOVER_SELECTED_PEAK = "org.eclipse.chemclipse.rcp.ui.icons/ionremoverMassSpectrumPeak.gif";
+	String IMAGE_FILTER_IONREMOVER_ALL_PEAKS = "org.eclipse.chemclipse.rcp.ui.icons/ionremoverMassSpectrumPeaks.gif";
 	//
-	String IMAGE_QUANTITATION_RESULTS = "integrationResults.gif";
-	String IMAGE_QUANTIFY_SELECTED_PEAK = "quantifySelectedPeak.gif";
-	String IMAGE_QUANTIFY_ALL_PEAKS = "quantifyAllPeaks.gif";
-	String IMAGE_ADD_PEAK_TO_QUANTITATION_TABLE = "addPeakToQuantitationTable.gif";
-	String IMAGE_ADD_PEAKS_TO_QUANTITATION_TABLE = "addPeaksToQuantitationTable.gif";
+	String IMAGE_QUANTITATION_RESULTS = "org.eclipse.chemclipse.rcp.ui.icons/integrationResults.gif";
+	String IMAGE_QUANTIFY_SELECTED_PEAK = "org.eclipse.chemclipse.rcp.ui.icons/quantifySelectedPeak.gif";
+	String IMAGE_QUANTIFY_ALL_PEAKS = "org.eclipse.chemclipse.rcp.ui.icons/quantifyAllPeaks.gif";
+	String IMAGE_ADD_PEAK_TO_QUANTITATION_TABLE = "org.eclipse.chemclipse.rcp.ui.icons/addPeakToQuantitationTable.gif";
+	String IMAGE_ADD_PEAKS_TO_QUANTITATION_TABLE = "org.eclipse.chemclipse.rcp.ui.icons/addPeaksToQuantitationTable.gif";
 	//
-	String IMAGE_MANUAL_PEAK_IDENTIFIER = "peakIdentifierManual.gif";
-	String IMAGE_SUBTRACT_MASS_SPECTRUM = "subtractMassSpectrum.gif";
+	String IMAGE_MANUAL_PEAK_IDENTIFIER = "org.eclipse.chemclipse.rcp.ui.icons/peakIdentifierManual.gif";
+	String IMAGE_SUBTRACT_MASS_SPECTRUM = "org.eclipse.chemclipse.rcp.ui.icons/subtractMassSpectrum.gif";
 	//
-	String IMAGE_SUBTRACT_MASS_SPECTRUM_PEAK = "subtractMassSpectrumPeak.gif";
-	String IMAGE_SUBTRACT_MASS_SPECTRUM_PEAKS = "subtractMassSpectrumPeaks.gif";
-	String IMAGE_SUBTRACT_ADD_COMBINED_SCAN = "subtractFilterAddCombinedScan.gif";
-	String IMAGE_SUBTRACT_ADD_SELECTED_SCAN = "subtractFilterAddSelectedScan.gif";
-	String IMAGE_SUBTRACT_CLEAR_SESSION_MASS_SPECTRUM = "subtractFilterClearSessionMassSpectrum.gif";
-	String IMAGE_SUBTRACT_LOAD_SESSION_MASS_SPECTRUM = "subtractFilterLoadSessionMassSpectrum.gif";
-	String IMAGE_SUBTRACT_STORE_SESSION_MASS_SPECTRUM = "subtractFilterStoreSessionMassSpectrum.gif";
+	String IMAGE_SUBTRACT_MASS_SPECTRUM_PEAK = "org.eclipse.chemclipse.rcp.ui.icons/subtractMassSpectrumPeak.gif";
+	String IMAGE_SUBTRACT_MASS_SPECTRUM_PEAKS = "org.eclipse.chemclipse.rcp.ui.icons/subtractMassSpectrumPeaks.gif";
+	String IMAGE_SUBTRACT_ADD_COMBINED_SCAN = "org.eclipse.chemclipse.rcp.ui.icons/subtractFilterAddCombinedScan.gif";
+	String IMAGE_SUBTRACT_ADD_SELECTED_SCAN = "org.eclipse.chemclipse.rcp.ui.icons/subtractFilterAddSelectedScan.gif";
+	String IMAGE_SUBTRACT_CLEAR_SESSION_MASS_SPECTRUM = "org.eclipse.chemclipse.rcp.ui.icons/subtractFilterClearSessionMassSpectrum.gif";
+	String IMAGE_SUBTRACT_LOAD_SESSION_MASS_SPECTRUM = "org.eclipse.chemclipse.rcp.ui.icons/subtractFilterLoadSessionMassSpectrum.gif";
+	String IMAGE_SUBTRACT_STORE_SESSION_MASS_SPECTRUM = "org.eclipse.chemclipse.rcp.ui.icons/subtractFilterStoreSessionMassSpectrum.gif";
 	//
-	String IMAGE_SELECTED_SCAN = "selectedScan.gif";
-	String IMAGE_SELECTED_PEAK = "selectedPeak.gif";
+	String IMAGE_SELECTED_SCAN = "org.eclipse.chemclipse.rcp.ui.icons/selectedScan.gif";
+	String IMAGE_SELECTED_PEAK = "org.eclipse.chemclipse.rcp.ui.icons/selectedPeak.gif";
 	//
-	String IMAGE_IMPORT_CHROMATOGRAM_MSD = "importChromatogramMSD.gif";
-	String IMAGE_IMPORT_CHROMATOGRAM_CSD = "importChromatogramCSD.gif";
-	String IMAGE_IMPORT_CHROMATOGRAM_WSD = "importChromatogramWSD.gif";
+	String IMAGE_IMPORT_CHROMATOGRAM_MSD = "org.eclipse.chemclipse.rcp.ui.icons/importChromatogramMSD.gif";
+	String IMAGE_IMPORT_CHROMATOGRAM_CSD = "org.eclipse.chemclipse.rcp.ui.icons/importChromatogramCSD.gif";
+	String IMAGE_IMPORT_CHROMATOGRAM_WSD = "org.eclipse.chemclipse.rcp.ui.icons/importChromatogramWSD.gif";
 	//
-	String IMAGE_DATABASE = "database.gif";
-	String IMAGE_ION_TRANSITION = "ionTransition.gif";
+	String IMAGE_DATABASE = "org.eclipse.chemclipse.rcp.ui.icons/database.gif";
+	String IMAGE_ION_TRANSITION = "org.eclipse.chemclipse.rcp.ui.icons/ionTransition.gif";
 	//
-	String IMAGE_UPDATES = "updates.gif";
-	String IMAGE_MARKETPLACE = "marketplace.gif";
+	String IMAGE_UPDATES = "org.eclipse.chemclipse.rcp.ui.icons/updates.gif";
+	String IMAGE_MARKETPLACE = "org.eclipse.chemclipse.rcp.ui.icons/marketplace.gif";
 	//
-	String IMAGE_PCA = "pca.gif";
+	String IMAGE_PCA = "org.eclipse.chemclipse.rcp.ui.icons/pca.gif";
 	//
-	String IMAGE_CDK_PEAK = "cdkPeak.gif";
-	String IMAGE_CDK_PEAKS = "cdkPeaks.gif";
-	String IMAGE_CDK_DELETE = "cdkDelete.gif";
+	String IMAGE_CDK_PEAK = "org.eclipse.chemclipse.rcp.ui.icons/cdkPeak.gif";
+	String IMAGE_CDK_PEAKS = "org.eclipse.chemclipse.rcp.ui.icons/cdkPeaks.gif";
+	String IMAGE_CDK_DELETE = "org.eclipse.chemclipse.rcp.ui.icons/cdkDelete.gif";
 	//
-	String IMAGE_LOCK_OFFSET = "lockOffset.gif";
-	String IMAGE_UNLOCK_OFFSET = "unlockOffset.gif";
+	String IMAGE_LOCK_OFFSET = "org.eclipse.chemclipse.rcp.ui.icons/lockOffset.gif";
+	String IMAGE_UNLOCK_OFFSET = "org.eclipse.chemclipse.rcp.ui.icons/unlockOffset.gif";
 	//
-	String IMAGE_PIN_CHROMATOGRAM = "pinChromatogram.gif";
-	String IMAGE_UNPIN_CHROMATOGRAM = "unpinChromatogram.gif";
-	String IMAGE_PIN_MASS_SPECTRUM = "pinMassSpectrum.gif";
-	String IMAGE_UNPIN_MASS_SPECTRUM = "unpinMassSpectrum.gif";
-	String IMAGE_RETENION_INDEX = "retentionIndex.gif";
+	String IMAGE_PIN_CHROMATOGRAM = "org.eclipse.chemclipse.rcp.ui.icons/pinChromatogram.gif";
+	String IMAGE_UNPIN_CHROMATOGRAM = "org.eclipse.chemclipse.rcp.ui.icons/unpinChromatogram.gif";
+	String IMAGE_PIN_MASS_SPECTRUM = "org.eclipse.chemclipse.rcp.ui.icons/pinMassSpectrum.gif";
+	String IMAGE_UNPIN_MASS_SPECTRUM = "org.eclipse.chemclipse.rcp.ui.icons/unpinMassSpectrum.gif";
+	String IMAGE_RETENION_INDEX = "org.eclipse.chemclipse.rcp.ui.icons/retentionIndex.gif";
 	//
-	String IMAGE_IDENTIFY_PEAK = "identify_peak.gif";
-	String IMAGE_IDENTIFY_PEAKS = "identify_peaks.gif";
-	String IMAGE_IDENTIFY_MASS_SPECTRUM = "identify_massspectrum.gif";
+	String IMAGE_IDENTIFY_PEAK = "org.eclipse.chemclipse.rcp.ui.icons/identify_peak.gif";
+	String IMAGE_IDENTIFY_PEAKS = "org.eclipse.chemclipse.rcp.ui.icons/identify_peaks.gif";
+	String IMAGE_IDENTIFY_MASS_SPECTRUM = "org.eclipse.chemclipse.rcp.ui.icons/identify_massspectrum.gif";
 	//
-	String IMAGE_FILTER_MEAN_NORMALIZER = "normalizerMean.gif";
-	String IMAGE_FILTER_MEDIAN_NORMALIZER = "normalizerMedian.gif";
-	String IMAGE_FILTER_UNITSUM_NORMALIZER = "normalizerUnitSum.gif";
-	String IMAGE_FILTER_NORMALIZER = "normalizer.gif";
-	String IMAGE_FILTER_SCANREMOVER = "scanremover.gif";
+	String IMAGE_FILTER_MEAN_NORMALIZER = "org.eclipse.chemclipse.rcp.ui.icons/normalizerMean.gif";
+	String IMAGE_FILTER_MEDIAN_NORMALIZER = "org.eclipse.chemclipse.rcp.ui.icons/normalizerMedian.gif";
+	String IMAGE_FILTER_UNITSUM_NORMALIZER = "org.eclipse.chemclipse.rcp.ui.icons/normalizerUnitSum.gif";
+	String IMAGE_FILTER_NORMALIZER = "org.eclipse.chemclipse.rcp.ui.icons/normalizer.gif";
+	String IMAGE_FILTER_SCANREMOVER = "org.eclipse.chemclipse.rcp.ui.icons/scanremover.gif";
 	//
-	String IMAGE_CHROMATOGRAM_OVERLAY_SUBTRACT = "chromatogramOverlaySubtract.gif";
-	String IMAGE_CHROMATOGRAM_OVERLAY_MIRRORED = "chromatogramOverlayMirrored.gif";
-	String IMAGE_CHROMATOGRAM_OVERLAY = "chromatogramOverlay.gif";
+	String IMAGE_CHROMATOGRAM_OVERLAY_SUBTRACT = "org.eclipse.chemclipse.rcp.ui.icons/chromatogramOverlaySubtract.gif";
+	String IMAGE_CHROMATOGRAM_OVERLAY_MIRRORED = "org.eclipse.chemclipse.rcp.ui.icons/chromatogramOverlayMirrored.gif";
+	String IMAGE_CHROMATOGRAM_OVERLAY = "org.eclipse.chemclipse.rcp.ui.icons/chromatogramOverlay.gif";
 	//
-	String IMAGE_RESET = "reset.gif";
-	String IMAGE_OFFSET_LEFT = "offsetLeft.gif";
-	String IMAGE_OFFSET_LEFT_FAST = "offsetLeftFast.gif";
-	String IMAGE_OFFSET_RIGHT = "offsetRight.gif";
-	String IMAGE_OFFSET_RIGHT_FAST = "offsetRightFast.gif";
-	String IMAGE_OFFSET_UP = "offsetUp.gif";
-	String IMAGE_OFFSET_DOWN = "offsetDown.gif";
+	String IMAGE_RESET = "org.eclipse.chemclipse.rcp.ui.icons/reset.gif";
+	String IMAGE_OFFSET_LEFT = "org.eclipse.chemclipse.rcp.ui.icons/offsetLeft.gif";
+	String IMAGE_OFFSET_LEFT_FAST = "org.eclipse.chemclipse.rcp.ui.icons/offsetLeftFast.gif";
+	String IMAGE_OFFSET_RIGHT = "org.eclipse.chemclipse.rcp.ui.icons/offsetRight.gif";
+	String IMAGE_OFFSET_RIGHT_FAST = "org.eclipse.chemclipse.rcp.ui.icons/offsetRightFast.gif";
+	String IMAGE_OFFSET_UP = "org.eclipse.chemclipse.rcp.ui.icons/offsetUp.gif";
+	String IMAGE_OFFSET_DOWN = "org.eclipse.chemclipse.rcp.ui.icons/offsetDown.gif";
 	//
-	String IMAGE_NEXT = "next.gif";
-	String IMAGE_PREVIOUS = "previous.gif";
-	String IMAGE_NEXT_YELLOW = "nextYellow.gif";
-	String IMAGE_PREVIOUS_YELLOW = "previousYellow.gif";
+	String IMAGE_NEXT = "org.eclipse.chemclipse.rcp.ui.icons/next.gif";
+	String IMAGE_PREVIOUS = "org.eclipse.chemclipse.rcp.ui.icons/previous.gif";
+	String IMAGE_NEXT_YELLOW = "org.eclipse.chemclipse.rcp.ui.icons/nextYellow.gif";
+	String IMAGE_PREVIOUS_YELLOW = "org.eclipse.chemclipse.rcp.ui.icons/previousYellow.gif";
 	//
-	String IMAGE_SCRIPT_SHELL = "script_shell.png";
+	String IMAGE_SCRIPT_SHELL = "org.eclipse.chemclipse.rcp.ui.icons/script_shell.png";
 	//
-	String IMAGE_NIST_MASS_SPECTRUM = "nist_massSpectrum.gif";
-	String IMAGE_NIST_OPEN_MASS_SPECTRUM = "nist_open_massSpectrum.gif";
-	String IMAGE_NIST_OPEN_PEAK = "nist_open_peak.gif";
-	String IMAGE_NIST_OPEN_PEAKS = "nist_open_peaks.gif";
-	String IMAGE_NIST_OPEN = "nist_open.gif";
-	String IMAGE_NIST_PEAK = "nist_peak.gif";
-	String IMAGE_NIST_PEAKS = "nist_peaks.gif";
-	String IMAGE_NIST = "nist.gif";
+	String IMAGE_NIST_MASS_SPECTRUM = "org.eclipse.chemclipse.rcp.ui.icons/nist_massSpectrum.gif";
+	String IMAGE_NIST_OPEN_MASS_SPECTRUM = "org.eclipse.chemclipse.rcp.ui.icons/nist_open_massSpectrum.gif";
+	String IMAGE_NIST_OPEN_PEAK = "org.eclipse.chemclipse.rcp.ui.icons/nist_open_peak.gif";
+	String IMAGE_NIST_OPEN_PEAKS = "org.eclipse.chemclipse.rcp.ui.icons/nist_open_peaks.gif";
+	String IMAGE_NIST_OPEN = "org.eclipse.chemclipse.rcp.ui.icons/nist_open.gif";
+	String IMAGE_NIST_PEAK = "org.eclipse.chemclipse.rcp.ui.icons/nist_peak.gif";
+	String IMAGE_NIST_PEAKS = "org.eclipse.chemclipse.rcp.ui.icons/nist_peaks.gif";
+	String IMAGE_NIST = "org.eclipse.chemclipse.rcp.ui.icons/nist.gif";
 	//
-	String IMAGE_LIBRARY_DOCUMENT = "libraryDocument.gif";
-	String IMAGE_ORIGIN_DOCUMENT = "originDocument.gif";
-	String IMAGE_REFERENCE_PEAK = "referencePeak.gif";
-	String IMAGE_CHROMATOGRAM_DATABASE = "chromatogramDatabase.gif";
-	String IMAGE_CHROMATOGRAM_DATABASE_ADD = "chromatogramDatabaseAdd.gif";
-	String IMAGE_SUBSTANCE_HIT_RESULT = "substanceHitResult.gif";
-	String IMAGE_PLUS = "plus.gif";
-	String IMAGE_MINUS = "minus.gif";
+	String IMAGE_LIBRARY_DOCUMENT = "org.eclipse.chemclipse.rcp.ui.icons/libraryDocument.gif";
+	String IMAGE_ORIGIN_DOCUMENT = "org.eclipse.chemclipse.rcp.ui.icons/originDocument.gif";
+	String IMAGE_REFERENCE_PEAK = "org.eclipse.chemclipse.rcp.ui.icons/referencePeak.gif";
+	String IMAGE_CHROMATOGRAM_DATABASE = "org.eclipse.chemclipse.rcp.ui.icons/chromatogramDatabase.gif";
+	String IMAGE_CHROMATOGRAM_DATABASE_ADD = "org.eclipse.chemclipse.rcp.ui.icons/chromatogramDatabaseAdd.gif";
+	String IMAGE_SUBSTANCE_HIT_RESULT = "org.eclipse.chemclipse.rcp.ui.icons/substanceHitResult.gif";
+	String IMAGE_PLUS = "org.eclipse.chemclipse.rcp.ui.icons/plus.gif";
+	String IMAGE_MINUS = "org.eclipse.chemclipse.rcp.ui.icons/minus.gif";
 	//
-	String IMAGE_ARROW_DOWN_2 = "arrow_down_2.gif";
-	String IMAGE_ARROW_UP_2 = "arrow_up_2.gif";
+	String IMAGE_ARROW_DOWN_2 = "org.eclipse.chemclipse.rcp.ui.icons/arrow_down_2.gif";
+	String IMAGE_ARROW_UP_2 = "org.eclipse.chemclipse.rcp.ui.icons/arrow_up_2.gif";
 	//
-	String IMAGE_ARROW_DOWN = "arrow_down.gif";
-	String IMAGE_ARROW_UP = "arrow_up.gif";
-	String IMAGE_ARROW_EQUAL = "arrow_equal.gif";
+	String IMAGE_ARROW_DOWN = "org.eclipse.chemclipse.rcp.ui.icons/arrow_down.gif";
+	String IMAGE_ARROW_UP = "org.eclipse.chemclipse.rcp.ui.icons/arrow_up.gif";
+	String IMAGE_ARROW_EQUAL = "org.eclipse.chemclipse.rcp.ui.icons/arrow_equal.gif";
 	//
-	String IMAGE_ARROW_FORWARD = "arrowForward.gif";
-	String IMAGE_ARROW_BACKWARD = "arrowBackward.gif";
-	String IMAGE_EXCEL = "excel.gif";
-	String IMAGE_PDF = "pdf.gif";
-	String IMAGE_TXT = "txt.gif";
-	String IMAGE_CALCULATE = "calculate.gif";
-	String IMAGE_CHECK = "check.gif";
-	String IMAGE_SELECT_ROWS = "select-rows.gif";
-	String IMAGE_REMOVE = "remove.gif";
-	String IMAGE_STATUS_EMPTY = "status-empty.gif";
-	String IMAGE_STATUS_OK = "status-ok.gif";
-	String IMAGE_STATUS_WARN = "status-warn.gif";
-	String IMAGE_STATUS_ERROR = "status-error.gif";
+	String IMAGE_ARROW_FORWARD = "org.eclipse.chemclipse.rcp.ui.icons/arrowForward.gif";
+	String IMAGE_ARROW_BACKWARD = "org.eclipse.chemclipse.rcp.ui.icons/arrowBackward.gif";
+	String IMAGE_EXCEL = "org.eclipse.chemclipse.rcp.ui.icons/excel.gif";
+	String IMAGE_PDF = "org.eclipse.chemclipse.rcp.ui.icons/pdf.gif";
+	String IMAGE_TXT = "org.eclipse.chemclipse.rcp.ui.icons/txt.gif";
+	String IMAGE_CALCULATE = "org.eclipse.chemclipse.rcp.ui.icons/calculate.gif";
+	String IMAGE_CHECK = "org.eclipse.chemclipse.rcp.ui.icons/check.gif";
+	String IMAGE_SELECT_ROWS = "org.eclipse.chemclipse.rcp.ui.icons/select-rows.gif";
+	String IMAGE_REMOVE = "org.eclipse.chemclipse.rcp.ui.icons/remove.gif";
+	String IMAGE_STATUS_EMPTY = "org.eclipse.chemclipse.rcp.ui.icons/status-empty.gif";
+	String IMAGE_STATUS_OK = "org.eclipse.chemclipse.rcp.ui.icons/status-ok.gif";
+	String IMAGE_STATUS_WARN = "org.eclipse.chemclipse.rcp.ui.icons/status-warn.gif";
+	String IMAGE_STATUS_ERROR = "org.eclipse.chemclipse.rcp.ui.icons/status-error.gif";
 	//
-	String IMAGE_DETECTION_BOX_BOTH = "detectionBoxBoth.gif";
-	String IMAGE_DETECTION_BOX_LEFT = "detectionBoxLeft.gif";
-	String IMAGE_DETECTION_BOX_RIGHT = "detectionBoxRight.gif";
+	String IMAGE_DETECTION_BOX_BOTH = "org.eclipse.chemclipse.rcp.ui.icons/detectionBoxBoth.gif";
+	String IMAGE_DETECTION_BOX_LEFT = "org.eclipse.chemclipse.rcp.ui.icons/detectionBoxLeft.gif";
+	String IMAGE_DETECTION_BOX_RIGHT = "org.eclipse.chemclipse.rcp.ui.icons/detectionBoxRight.gif";
 	//
-	String IMAGE_DETECTION_TYPE_BASELINE = "detectionTypeBaseline.gif";
-	String IMAGE_DETECTION_TYPE_SCAN_BB = "detectionTypeScanBB.gif";
-	String IMAGE_DETECTION_TYPE_SCAN_BV = "detectionTypeScanBV.gif";
-	String IMAGE_DETECTION_TYPE_SCAN_VB = "detectionTypeScanVB.gif";
-	String IMAGE_DETECTION_TYPE_SCAN_VV = "detectionTypeScanVV.gif";
-	String IMAGE_DETECTION_TYPE_TANGENT = "detectionTypeTangent.gif";
-	String IMAGE_DETECTION_TYPE_PERPENDICULAR = "detectionTypePerpendicular.gif";
+	String IMAGE_DETECTION_TYPE_BASELINE = "org.eclipse.chemclipse.rcp.ui.icons/detectionTypeBaseline.gif";
+	String IMAGE_DETECTION_TYPE_SCAN_BB = "org.eclipse.chemclipse.rcp.ui.icons/detectionTypeScanBB.gif";
+	String IMAGE_DETECTION_TYPE_SCAN_BV = "org.eclipse.chemclipse.rcp.ui.icons/detectionTypeScanBV.gif";
+	String IMAGE_DETECTION_TYPE_SCAN_VB = "org.eclipse.chemclipse.rcp.ui.icons/detectionTypeScanVB.gif";
+	String IMAGE_DETECTION_TYPE_SCAN_VV = "org.eclipse.chemclipse.rcp.ui.icons/detectionTypeScanVV.gif";
+	String IMAGE_DETECTION_TYPE_TANGENT = "org.eclipse.chemclipse.rcp.ui.icons/detectionTypeTangent.gif";
+	String IMAGE_DETECTION_TYPE_PERPENDICULAR = "org.eclipse.chemclipse.rcp.ui.icons/detectionTypePerpendicular.gif";
 	//
-	String IMAGE_EXPAND_ALL = "expand_all.gif";
-	String IMAGE_COLLAPSE_ALL = "collapse_all.gif";
-	String IMAGE_SEARCH = "search.gif";
-	String IMAGE_EVALUATE = "evaluate.gif";
-	String IMAGE_EVALUATED = "evaluated.gif";
-	String IMAGE_VALIDATE = "validate.gif";
-	String IMAGE_SKIP = "skip.gif";
-	String IMAGE_SKIPPED = "skipped.gif";
-	String IMAGE_TAG = "tag.gif";
-	String IMAGE_SHIFT_Y = "shiftY.gif";
-	String IMAGE_SHIFT_XY = "shiftXY.gif";
-	String IMAGE_SHIFT_AUTO_MIRROR = "shiftAutoMirror.gif";
-	String IMAGE_SHIFT_MIRROR = "shiftMirror.gif";
-	String IMAGE_SCAN_RETENTION_TIME = "scanRetentionTime.gif";
-	String IMAGE_CHART_LEGEND_MARKER = "chartLegendMarker.gif";
-	String IMAGE_CHART_RANGE_SELECTOR = "chartRangeSelector.gif";
-	String IMAGE_SEQUENCE_LIST = "sequenceListDefault.gif";
-	String IMAGE_SEQUENCE_ADD = "sequenceAdd.gif";
+	String IMAGE_EXPAND_ALL = "org.eclipse.chemclipse.rcp.ui.icons/expand_all.gif";
+	String IMAGE_COLLAPSE_ALL = "org.eclipse.chemclipse.rcp.ui.icons/collapse_all.gif";
+	String IMAGE_SEARCH = "org.eclipse.chemclipse.rcp.ui.icons/search.gif";
+	String IMAGE_EVALUATE = "org.eclipse.chemclipse.rcp.ui.icons/evaluate.gif";
+	String IMAGE_EVALUATED = "org.eclipse.chemclipse.rcp.ui.icons/evaluated.gif";
+	String IMAGE_VALIDATE = "org.eclipse.chemclipse.rcp.ui.icons/validate.gif";
+	String IMAGE_SKIP = "org.eclipse.chemclipse.rcp.ui.icons/skip.gif";
+	String IMAGE_SKIPPED = "org.eclipse.chemclipse.rcp.ui.icons/skipped.gif";
+	String IMAGE_TAG = "org.eclipse.chemclipse.rcp.ui.icons/tag.gif";
+	String IMAGE_SHIFT_Y = "org.eclipse.chemclipse.rcp.ui.icons/shiftY.gif";
+	String IMAGE_SHIFT_XY = "org.eclipse.chemclipse.rcp.ui.icons/shiftXY.gif";
+	String IMAGE_SHIFT_AUTO_MIRROR = "org.eclipse.chemclipse.rcp.ui.icons/shiftAutoMirror.gif";
+	String IMAGE_SHIFT_MIRROR = "org.eclipse.chemclipse.rcp.ui.icons/shiftMirror.gif";
+	String IMAGE_SCAN_RETENTION_TIME = "org.eclipse.chemclipse.rcp.ui.icons/scanRetentionTime.gif";
+	String IMAGE_CHART_LEGEND_MARKER = "org.eclipse.chemclipse.rcp.ui.icons/chartLegendMarker.gif";
+	String IMAGE_CHART_RANGE_SELECTOR = "org.eclipse.chemclipse.rcp.ui.icons/chartRangeSelector.gif";
+	String IMAGE_SEQUENCE_LIST = "org.eclipse.chemclipse.rcp.ui.icons/sequenceListDefault.gif";
+	String IMAGE_SEQUENCE_ADD = "org.eclipse.chemclipse.rcp.ui.icons/sequenceAdd.gif";
 	/*
 	 * PICTOGRAM and Data Analysis Perspective
 	 */
-	String PICTOGRAM_DATA_ANALYSIS = "DataAnalysis.png";
-	String IMAGE_CHROMATOGRAM_OVERLAY_DEFAULT = "chromatogramOverlayDefault.gif";
-	String IMAGE_CHROMATOGRAM_OVERLAY_ACTIVE = "chromatogramOverlayActive.gif";
-	String IMAGE_CHROMATOGRAM_OVERVIEW_DEFAULT = "chromatogramOverviewDefault.gif";
-	String IMAGE_CHROMATOGRAM_OVERVIEW_ACTIVE = "chromatogramOverviewActive.gif";
-	String IMAGE_SELECTED_SCANS_DEFAULT = "selectedScansDefault.gif";
-	String IMAGE_SELECTED_SCANS_ACTIVE = "selectedScansActive.gif";
-	String IMAGE_SELECTED_PEAKS_DEFAULT = "selectedPeaksDefault.gif";
-	String IMAGE_SELECTED_PEAKS_ACTIVE = "selectedPeaksActive.gif";
-	String IMAGE_SUBTRACT_SCAN_DEFAULT = "subtractScanDefault.gif";
-	String IMAGE_SUBTRACT_SCAN_ACTIVE = "subtractScanActive.gif";
-	String IMAGE_COMBINED_SCAN_DEFAULT = "combinedScanDefault.gif";
-	String IMAGE_COMBINED_SCAN_ACTIVE = "combinedScanActive.gif";
-	String IMAGE_COMPARISON_SCAN_DEFAULT = "comparisonScanDefault.gif";
-	String IMAGE_COMPARISON_SCAN_ACTIVE = "comparisonScanActive.gif";
-	String IMAGE_QUANTITATION_DEFAULT = "quantitationDefault.gif";
-	String IMAGE_QUANTITATION_ACTIVE = "quantitationActive.gif";
-	String IMAGE_SCAN_PEAK_LIST_DEFAULT = "scanPeakListDefault.gif";
-	String IMAGE_SCAN_PEAK_LIST_ACTIVE = "scanPeakListActive.gif";
-	String IMAGE_HEATMAP_ACTIVE = "heatmapActive.gif";
-	String IMAGE_HEATMAP_DEFAULT = "heatmapDefault.gif";
-	String IMAGE_SEQUENCE_LIST_DEFAULT = "sequenceListDefault.gif";
-	String IMAGE_SEQUENCE_LIST_ACTIVE = "sequenceListActive.gif";
-	String IMAGE_PCR_ACTIVE = "pcrActive.gif";
-	String IMAGE_PCR_DEFAULT = "pcrDefault.gif";
-	String IMAGE_INTERNAL_STANDARDS_DEFAULT = "internalStandardsDefault.gif";
-	String IMAGE_INTERNAL_STANDARDS_ACTIVE = "internalStandardsActive.gif";
-	String IMAGE_EXTERNAL_STANDARDS_DEFAULT = "externalStandardsDefault.gif";
-	String IMAGE_EXTERNAL_STANDARDS_ACTIVE = "externalStandardsActive.gif";
-	String IMAGE_EDIT_ENTRY_DEFAULT = "editEntryDefault.gif";
-	String IMAGE_EDIT_ENTRY_ACTIVE = "editEntryActive.gif";
+	String PICTOGRAM_DATA_ANALYSIS = "org.eclipse.chemclipse.rcp.ui.icons/DataAnalysis.png";
+	String IMAGE_CHROMATOGRAM_OVERLAY_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/chromatogramOverlayDefault.gif";
+	String IMAGE_CHROMATOGRAM_OVERLAY_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/chromatogramOverlayActive.gif";
+	String IMAGE_CHROMATOGRAM_OVERVIEW_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/chromatogramOverviewDefault.gif";
+	String IMAGE_CHROMATOGRAM_OVERVIEW_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/chromatogramOverviewActive.gif";
+	String IMAGE_SELECTED_SCANS_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/selectedScansDefault.gif";
+	String IMAGE_SELECTED_SCANS_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/selectedScansActive.gif";
+	String IMAGE_SELECTED_PEAKS_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/selectedPeaksDefault.gif";
+	String IMAGE_SELECTED_PEAKS_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/selectedPeaksActive.gif";
+	String IMAGE_SUBTRACT_SCAN_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/subtractScanDefault.gif";
+	String IMAGE_SUBTRACT_SCAN_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/subtractScanActive.gif";
+	String IMAGE_COMBINED_SCAN_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/combinedScanDefault.gif";
+	String IMAGE_COMBINED_SCAN_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/combinedScanActive.gif";
+	String IMAGE_COMPARISON_SCAN_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/comparisonScanDefault.gif";
+	String IMAGE_COMPARISON_SCAN_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/comparisonScanActive.gif";
+	String IMAGE_QUANTITATION_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/quantitationDefault.gif";
+	String IMAGE_QUANTITATION_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/quantitationActive.gif";
+	String IMAGE_SCAN_PEAK_LIST_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/scanPeakListDefault.gif";
+	String IMAGE_SCAN_PEAK_LIST_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/scanPeakListActive.gif";
+	String IMAGE_HEATMAP_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/heatmapActive.gif";
+	String IMAGE_HEATMAP_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/heatmapDefault.gif";
+	String IMAGE_SEQUENCE_LIST_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/sequenceListDefault.gif";
+	String IMAGE_SEQUENCE_LIST_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/sequenceListActive.gif";
+	String IMAGE_PCR_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/pcrActive.gif";
+	String IMAGE_PCR_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/pcrDefault.gif";
+	String IMAGE_INTERNAL_STANDARDS_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/internalStandardsDefault.gif";
+	String IMAGE_INTERNAL_STANDARDS_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/internalStandardsActive.gif";
+	String IMAGE_EXTERNAL_STANDARDS_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/externalStandardsDefault.gif";
+	String IMAGE_EXTERNAL_STANDARDS_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/externalStandardsActive.gif";
+	String IMAGE_EDIT_ENTRY_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/editEntryDefault.gif";
+	String IMAGE_EDIT_ENTRY_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/editEntryActive.gif";
 	//
-	String IMAGE_PROCESS_CONTROL = "processControl.gif";
-	String IMAGE_START_PROCESSING = "startProcessing.gif";
-	String IMAGE_END_PROCESSING = "endProcessing.gif";
+	String IMAGE_PROCESS_CONTROL = "org.eclipse.chemclipse.rcp.ui.icons/processControl.gif";
+	String IMAGE_START_PROCESSING = "org.eclipse.chemclipse.rcp.ui.icons/startProcessing.gif";
+	String IMAGE_END_PROCESSING = "org.eclipse.chemclipse.rcp.ui.icons/endProcessing.gif";
 	//
-	String IMAGE_MEASUREMENT_RESULTS_DEFAULT = "measurementResultsDefault.gif";
-	String IMAGE_MEASUREMENT_RESULTS_ACTIVE = "measurementResultsActive.gif";
+	String IMAGE_MEASUREMENT_RESULTS_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/measurementResultsDefault.gif";
+	String IMAGE_MEASUREMENT_RESULTS_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/measurementResultsActive.gif";
 	//
-	String IMAGE_PLATE_PCR = "plate-pcr.gif";
-	String IMAGE_METHOD = "method.gif";
-	String IMAGE_METHOD_ADD = "methodAdd.gif";
-	String IMAGE_METHOD_EDIT = "methodEdit.gif";
-	String IMAGE_METHOD_DELETE = "methodDelete.gif";
+	String IMAGE_PLATE_PCR = "org.eclipse.chemclipse.rcp.ui.icons/plate-pcr.gif";
+	String IMAGE_METHOD = "org.eclipse.chemclipse.rcp.ui.icons/method.gif";
+	String IMAGE_METHOD_ADD = "org.eclipse.chemclipse.rcp.ui.icons/methodAdd.gif";
+	String IMAGE_METHOD_EDIT = "org.eclipse.chemclipse.rcp.ui.icons/methodEdit.gif";
+	String IMAGE_METHOD_DELETE = "org.eclipse.chemclipse.rcp.ui.icons/methodDelete.gif";
 	//
-	String IMAGE_EXECUTE_EXTENSION = "execute-extension.png";
-	String IMAGE_POPUP_MENU = "popup-menu.png";
+	String IMAGE_EXECUTE_EXTENSION = "org.eclipse.chemclipse.rcp.ui.icons/execute-extension.png";
+	String IMAGE_POPUP_MENU = "org.eclipse.chemclipse.rcp.ui.icons/popup-menu.png";
 	//
-	String IMAGE_AUTH = "auth.png";
-	String IMAGE_AUTH_LOCKED = "auth_locked.gif";
-	String IMAGE_AUTH_UNLOCKED = "auth_unlocked.gif";
+	String IMAGE_AUTH = "org.eclipse.chemclipse.rcp.ui.icons/auth.png";
+	String IMAGE_AUTH_LOCKED = "org.eclipse.chemclipse.rcp.ui.icons/auth_locked.gif";
+	String IMAGE_AUTH_UNLOCKED = "org.eclipse.chemclipse.rcp.ui.icons/auth_unlocked.gif";
 	//
-	String IMAGE_HEADER_DATA = "headerdata.gif";
-	String IMAGE_CHART_DATA_SHOW = "chartDataShow.png";
-	String IMAGE_CHART_DATA_HIDE = "chartDataHide.png";
+	String IMAGE_HEADER_DATA = "org.eclipse.chemclipse.rcp.ui.icons/headerdata.gif";
+	String IMAGE_CHART_DATA_SHOW = "org.eclipse.chemclipse.rcp.ui.icons/chartDataShow.png";
+	String IMAGE_CHART_DATA_HIDE = "org.eclipse.chemclipse.rcp.ui.icons/chartDataHide.png";
 	//
-	String IMAGE_PERSON_DEFAULT = "personDefault.gif";
-	String IMAGE_PERSON_ACTIVE = "personActive.gif";
+	String IMAGE_PERSON_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/personDefault.gif";
+	String IMAGE_PERSON_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/personActive.gif";
 	//
-	String IMAGE_FILE_ADD = "fileAdd.gif";
-	String IMAGE_FOLDER_ADD = "folderAdd.gif";
+	String IMAGE_FILE_ADD = "org.eclipse.chemclipse.rcp.ui.icons/fileAdd.gif";
+	String IMAGE_FOLDER_ADD = "org.eclipse.chemclipse.rcp.ui.icons/folderAdd.gif";
 	//
-	String IMAGE_CHROMATOGRAM_BLANK = "chromatogramBlank.gif";
-	String IMAGE_INTERPOLATE = "interpolate.png";
+	String IMAGE_CHROMATOGRAM_BLANK = "org.eclipse.chemclipse.rcp.ui.icons/chromatogramBlank.gif";
+	String IMAGE_INTERPOLATE = "org.eclipse.chemclipse.rcp.ui.icons/interpolate.png";
 	//
-	String IMAGE_OFFSET_DEFAULT = "offsetDefault.gif";
-	String IMAGE_OFFSET_ACTIVE = "offsetActive.gif";
+	String IMAGE_OFFSET_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/offsetDefault.gif";
+	String IMAGE_OFFSET_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/offsetActive.gif";
 	//
-	String IMAGE_MERGE = "merge.gif";
-	String IMAGE_LABELS = "labels.png";
+	String IMAGE_MERGE = "org.eclipse.chemclipse.rcp.ui.icons/merge.gif";
+	String IMAGE_LABELS = "org.eclipse.chemclipse.rcp.ui.icons/labels.png";
 }
