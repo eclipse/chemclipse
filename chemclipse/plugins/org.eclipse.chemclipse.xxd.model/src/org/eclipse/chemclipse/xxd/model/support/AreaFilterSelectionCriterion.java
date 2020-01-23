@@ -13,34 +13,32 @@ package org.eclipse.chemclipse.xxd.model.support;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum ProcessPeaksByValueFilterSelectionCriterion {
+public enum AreaFilterSelectionCriterion {
 
 	/**
-	 * select "AREA_LESS_THAN_MINIMUM" to select peak areas smaller than the defined
-	 * minimum
+	 * Select peak areas smaller than the defined minimum
 	 *
 	 * @param AREA_LESS_THAN_MINIMUM
 	 */
-	AREA_LESS_THAN_MINIMUM("Area is LESS THAN MINIMUM"), //
+	AREA_LESS_THAN_MINIMUM("Area < minimum"), //
 	/**
-	 * select "AREA_GREATER_THAN_MAXIMUM" to select peak areas greater than the
-	 * defined maximum
+	 * Select peak areas greater than the defined maximum
 	 *
 	 * @param AREA_GREATER_THAN_MAXIMUM
 	 */
-	AREA_GREATER_THAN_MAXIMUM("Area is GREATER THAN MAXIMUM"), //
+	AREA_GREATER_THAN_MAXIMUM("Area > maximum"), //
 	/**
-	 * select "AREA_NOT_WITHIN_RANGE" to select peak areas within a specified range,
-	 * e.g. greater than the defined minimum and smaller than the defined maximum
+	 * Select peak areas within a specified range, e.g. greater than the defined
+	 * minimum and smaller than the defined maximum
 	 *
 	 * @param AREA_NOT_WITHIN_RANGE
 	 */
-	AREA_NOT_WITHIN_RANGE("Area is NOT WITHIN RANGE, e.g. A<min AND A>max"); //	
+	AREA_NOT_WITHIN_RANGE("Area < minimum and > maximum"); //	
 
 	@JsonValue
 	private String filterSelectionCriterion;
 
-	private ProcessPeaksByValueFilterSelectionCriterion(String filterSelectionCriterion){
+	private AreaFilterSelectionCriterion(String filterSelectionCriterion){
 
 		this.filterSelectionCriterion = filterSelectionCriterion;
 	}

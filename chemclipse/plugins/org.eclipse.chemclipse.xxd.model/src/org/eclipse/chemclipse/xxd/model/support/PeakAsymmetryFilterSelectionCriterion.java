@@ -13,33 +13,32 @@ package org.eclipse.chemclipse.xxd.model.support;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum ProcessPeaksByValueFilterTreatmentOption {
+public enum PeakAsymmetryFilterSelectionCriterion {
 
 	/**
-	 * select "DISABLE_PEAK" to disable a peak if certain area constraints are
-	 * matched
+	 * Select peaks whose peak asymmetry factor is too small
 	 *
-	 * @param DISABLE_PEAK
+	 * @param PEAK_ASYMMETRY_FACTOR_TOO_LARGE
 	 */
-	DISABLE_PEAK("DISABLE PEAK if following criterion is matched"), //
+	ASYMMETRY_FACTOR_SMALLER_THAN_LIMIT("As < asym. factor"), //	
 	/**
-	 * select "DELETE_PEAK" to delete a peak if certain area constraints are matched
+	 * Select peaks whose peak asymmetry factor is too large
 	 *
-	 * @param DELETE_PEAK
+	 * @param PEAK_ASYMMETRY_FACTOR_TOO_LARGE
 	 */
-	DELETE_PEAK("DELETE PEAK if following criterion is matched"); //
+	ASYMMETRY_FACTOR_GREATER_THAN_LIMIT("As > asym. factor"); //	
 
 	@JsonValue
-	private String filterTreatmentOption;
+	private String filterSelectionCriterion;
 
-	private ProcessPeaksByValueFilterTreatmentOption(String filterTreatmentOption){
+	private PeakAsymmetryFilterSelectionCriterion(String filterSelectionCriterion){
 
-		this.filterTreatmentOption = filterTreatmentOption;
+		this.filterSelectionCriterion = filterSelectionCriterion;
 	}
 
 	@Override
 	public String toString() {
 
-		return filterTreatmentOption;
+		return filterSelectionCriterion;
 	}
 }

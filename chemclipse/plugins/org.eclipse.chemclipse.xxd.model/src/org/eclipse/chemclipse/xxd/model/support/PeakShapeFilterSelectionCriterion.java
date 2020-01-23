@@ -13,32 +13,31 @@ package org.eclipse.chemclipse.xxd.model.support;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum ProcessPeaksByAsymmetricalPeakShapeFilterSelectionCriterion {
+public enum PeakShapeFilterSelectionCriterion {
 
 	/**
-	 * select "LEADING_GREATER_THAN_LIMIT" to select peaks whose leading values are too large
+	 * Select peaks whose leading values are too small
 	 * 
-	 * @param LEADING_GREATER_THAN_LIMIT
+	 * @param LEADING_SMALLER_THAN_LIMIT
 	 */
-	LEADING_GREATER_THAN_LIMIT("Peak leading value is GREATER THAN LIMIT"), //
+	LEADING_SMALLER_THAN_LIMIT("Leading < limit"), //
 	/**
-	 * select "TAILING_GREATER_THAN_LIMIT" to select peaks whose tailing values are too large
+	 * Select peaks whose tailing values are too large
 	 *
 	 * @param TAILING_GREATER_THAN_LIMIT
 	 */
-	TAILING_GREATER_THAN_LIMIT("Peak tailing value is GREATER THAN LIMIT"), //
+	TAILING_GREATER_THAN_LIMIT("Tailing > limit"), //
 	/**
-	 * select "PEAK_ASYMMETRY_FACTOR_TOO_LARGE" to select peaks whose peak asymmetry factor
-	 * is too large
+	 * Select peaks whose values are within the defined range
 	 *
-	 * @param PEAK_ASYMMETRY_FACTOR_TOO_LARGE
+	 * @param TAILING_GREATER_THAN_LIMIT
 	 */
-	PEAK_ASYMMETRY_FACTOR_GREATER_THAN_LIMIT("Peak asymmetry factor is GREATER THAN LIMIT"); //	
-
+	VALUES_WITHIN_RANGE("values >= Leading and <= Tailing"); //
+	
 	@JsonValue
 	private String filterSelectionCriterion;
 
-	private ProcessPeaksByAsymmetricalPeakShapeFilterSelectionCriterion(String filterSelectionCriterion){
+	private PeakShapeFilterSelectionCriterion(String filterSelectionCriterion){
 
 		this.filterSelectionCriterion = filterSelectionCriterion;
 	}
