@@ -25,10 +25,6 @@ http://www.eclipse.org/legal/epl-v10.html
          id="org.eclipse.chemclipse.rcp.app.compilation.core.feature"
          version="0.0.0"/>
 
-   <includes
-         id="org.eclipse.babel.nls_eclipse_de"
-         version="0.0.0"/>
-
    <plugin
          id="org.eclipse.chemclipse.rcp.compilation.community.ui"
          download-size="0"
@@ -181,6 +177,30 @@ http://www.eclipse.org/legal/epl-v10.html
          download-size="0"
          install-size="0"
          version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.jface.databinding.nl_de"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.jface.nl_de"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.jface.text.nl_de"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
          unpack="false"/>
 
 </feature>
