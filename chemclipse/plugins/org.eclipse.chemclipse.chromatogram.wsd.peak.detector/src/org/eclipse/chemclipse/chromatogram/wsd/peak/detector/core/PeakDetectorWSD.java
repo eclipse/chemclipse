@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add settings support
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.wsd.peak.detector.core;
 
@@ -36,6 +37,7 @@ public class PeakDetectorWSD {
 	private static final String DESCRIPTION = "description";
 	private static final String PEAK_DETECTOR_NAME = "peakDetectorName";
 	private static final String PEAK_DETECTOR = "peakDetector";
+	private static final String PEAK_DETECTOR_SETTINGS = "peakDetectorSettings";
 	/*
 	 * Processing Info
 	 */
@@ -105,6 +107,16 @@ public class PeakDetectorWSD {
 			String description = element.getAttribute(DESCRIPTION);
 			String peakDetectorName = element.getAttribute(PEAK_DETECTOR_NAME);
 			supplier = new PeakDetectorWSDSupplier(id, description, peakDetectorName);
+			if(element.getAttribute(PEAK_DETECTOR_SETTINGS) != null) {
+				try {
+					IPeakDetectorSettingsWSD instance = (IPeakDetectorSettingsWSD)element.createExecutableExtension(PEAK_DETECTOR_SETTINGS);
+					supplier.setSettingsClass(instance.getClass());
+				} catch(CoreException e) {
+					logger.error(e.getLocalizedMessage(), e);
+					// settings class is optional, set null instead
+					supplier.setSettingsClass(null);
+				}
+			}
 			peakDetectorSupport.add(supplier);
 		}
 		return peakDetectorSupport;
