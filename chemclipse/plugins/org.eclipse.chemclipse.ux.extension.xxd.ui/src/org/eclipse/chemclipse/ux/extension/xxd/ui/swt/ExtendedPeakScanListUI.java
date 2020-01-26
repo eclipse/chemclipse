@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - update chromatogram selection after delete, allow updating of selection
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -102,20 +103,20 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 	private PeakScanListUI peakScanListUI;
 	private IChromatogramSelection chromatogramSelection;
 	//
-	private ListSupport listSupport = new ListSupport();
-	private TargetExtendedComparator comparator = new TargetExtendedComparator(SortOrder.DESC);
+	private final ListSupport listSupport = new ListSupport();
+	private final TargetExtendedComparator comparator = new TargetExtendedComparator(SortOrder.DESC);
 	//
-	private Map<String, Object> map = new HashMap<String, Object>();
+	private final Map<String, Object> map = new HashMap<String, Object>();
 	private Composite toolbarMain;
 	private Composite toolbarLabel;
 	private boolean showScans;
 	private boolean showPeaks;
 	protected boolean showScansInRange;
 	protected boolean showPeaksInRange;
-	private IPreferenceStore preferenceStore;
+	private final IPreferenceStore preferenceStore;
 	private boolean moveRetentionTimeOnPeakSelection;
 	protected InteractionMode interactionMode = InteractionMode.SOURCE;
-	private IEventBroker eventBroker;
+	private final IEventBroker eventBroker;
 
 	public ExtendedPeakScanListUI(Composite parent, IEventBroker eventBroker, IPreferenceStore preferenceStore) {
 		this.eventBroker = eventBroker;
@@ -161,7 +162,18 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 				buttonSave.setEnabled(true);
 			}
 			if(interactionMode == InteractionMode.SINK || interactionMode == InteractionMode.BIDIRECTIONAL) {
-				List<Object> selection = new ArrayList<>(2);
+				updateSelection();
+			}
+		}
+	}
+
+	public void updateSelection() {
+
+		InteractionMode oldMode = interactionMode;
+		try {
+			interactionMode = InteractionMode.NONE;
+			List<Object> selection = new ArrayList<>(2);
+			if(chromatogramSelection != null) {
 				if(showPeaks) {
 					IPeak selectedPeak = chromatogramSelection.getSelectedPeak();
 					if(selectedPeak != null) {
@@ -174,8 +186,10 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 						selection.add(selectedScan);
 					}
 				}
-				peakScanListUI.setSelection(new StructuredSelection(selection));
 			}
+			peakScanListUI.setSelection(new StructuredSelection(selection), true);
+		} finally {
+			interactionMode = oldMode;
 		}
 	}
 
@@ -475,6 +489,7 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 				IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
 				chromatogramWSD.removePeak((IChromatogramPeakWSD)peak);
 			}
+			chromatogramSelection.update(true);
 		}
 	}
 
@@ -818,6 +833,9 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 
 	private void updateLabel() {
 
+		if(labelChromatogramName.isDisposed() || labelChromatogramInfo.isDisposed()) {
+			return;
+		}
 		if(chromatogramSelection == null || chromatogramSelection.getChromatogram() == null) {
 			labelChromatogramName.setText(ChromatogramDataSupport.getChromatogramLabel(null));
 			labelChromatogramInfo.setText("");
