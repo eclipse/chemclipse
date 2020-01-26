@@ -41,6 +41,10 @@ public class PreferenceConstants extends ChartOptions {
 	public static final int MIN_FONT_SIZE = 1;
 	public static final int MAX_FONT_SIZE = 72;
 	public static final int DEF_FONT_SIZE = 11;
+	//
+	public static final int MIN_PEAK_TRACES = 1;
+	public static final int MAX_PEAK_TRACES = Integer.MAX_VALUE;
+	public static final int DEF_PEAK_TRACES = 5;
 	/*
 	 * General / Task Quick Access
 	 */
@@ -74,6 +78,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_STACK_POSITION_PEAK_DETAILS = PartSupport.PARTSTACK_BOTTOM_LEFT;
 	public static final String P_STACK_POSITION_PEAK_DETECTOR = "stackPositionPeakDetector";
 	public static final String DEF_STACK_POSITION_PEAK_DETECTOR = PartSupport.PARTSTACK_BOTTOM_CENTER;
+	public static final String P_STACK_POSITION_PEAK_TRACES = "stackPositionPeakTraces";
+	public static final String DEF_STACK_POSITION_PEAK_TRACES = PartSupport.PARTSTACK_RIGHT_TOP;
 	public static final String P_STACK_POSITION_PEAK_SCAN_LIST = "stackPositionPeakScanList";
 	public static final String DEF_STACK_POSITION_PEAK_SCAN_LIST = PartSupport.PARTSTACK_LEFT_TOP;
 	public static final String P_STACK_POSITION_PEAK_QUANTITATION_LIST = "stackPositionPeakQuantitationList";
@@ -145,6 +151,13 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_LINE_STYLE_DISPLAY_SWC_OVERLAY = LineStyle.SOLID.toString();
 	public static final String P_LINE_STYLE_DISPLAY_DEFAULT_OVERLAY = "lineStyleDisplayDefaultOverlay";
 	public static final String DEF_LINE_STYLE_DISPLAY_DEFAULT_OVERLAY = LineStyle.SOLID.toString();
+	/*
+	 * Peak Traces
+	 */
+	public static final String P_COLOR_SCHEME_PEAK_TRACES = "colorSchemePeakTraces";
+	public static final String DEF_COLOR_SCHEME_PEAK_TRACES = Colors.COLOR_SCHEME_PRINT;
+	public static final String P_MAX_DISPLAY_PEAK_TRACES = "maxDisplayPeakTraces";
+	public static final int DEF_MAX_DISPLAY_PEAK_TRACES = DEF_PEAK_TRACES;
 	//
 	public static final String P_CHROMATOGRAM_OVERLAY_IONS_SELECTION = "chromatogramOverlayIonsSelection";
 	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_SELECTION = OverlayChartSupport.SELECTED_IONS_USERS_CHOICE;

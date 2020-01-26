@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -62,6 +62,9 @@ public class ChromatogramChartSupport {
 
 	public static final String EDITOR_TAB = "_EditorTab#";
 	public static final String REFERENCE_MARKER = "_Reference#";
+	/*
+	 * TODO Derivate as enum
+	 */
 	public static final String DERIVATIVE_NONE = "--";
 	public static final String DERIVATIVE_FIRST = "1st";
 	public static final String DERIVATIVE_SECOND = "2nd";
@@ -207,6 +210,7 @@ public class ChromatogramChartSupport {
 		return getLineSeriesData(chromatogramSelection, seriesId, dataType, derivativeType, color, false, timeIntervalSelection);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?, ?> chromatogramSelection, String seriesId, DisplayType dataType, String derivativeType, Color color, IMarkedSignals<? extends IMarkedSignal> signals, boolean baseline) {
 
 		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
@@ -215,6 +219,7 @@ public class ChromatogramChartSupport {
 		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, dataType, derivativeType, color, signals, baseline);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, DisplayType dataType, String derivativeType, Color color, IMarkedSignals<? extends IMarkedSignal> signals, boolean baseline) {
 
 		int startScan = 1;

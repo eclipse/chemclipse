@@ -40,6 +40,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_PEAK_CHART, PreferenceConstants.DEF_STACK_POSITION_PEAK_CHART);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_PEAK_DETAILS, PreferenceConstants.DEF_STACK_POSITION_PEAK_DETAILS);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_PEAK_DETECTOR, PreferenceConstants.DEF_STACK_POSITION_PEAK_DETECTOR);
+		store.setDefault(PreferenceConstants.P_STACK_POSITION_PEAK_TRACES, PreferenceConstants.DEF_STACK_POSITION_PEAK_TRACES);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_PEAK_SCAN_LIST, PreferenceConstants.DEF_STACK_POSITION_PEAK_SCAN_LIST);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_PEAK_QUANTITATION_LIST, PreferenceConstants.DEF_STACK_POSITION_PEAK_QUANTITATION_LIST);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_SUBTRACT_SCAN_PART, PreferenceConstants.DEF_STACK_POSITION_SUBTRACT_SCAN_PART);
@@ -95,6 +96,11 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_OVERLAY_SHOW_AREA, PreferenceConstants.DEF_OVERLAY_SHOW_AREA);
 		store.setDefault(PreferenceConstants.P_OVERLAY_AUTOFOCUS_PROFILE_SETTINGS, PreferenceConstants.DEF_OVERLAY_AUTOFOCUS_PROFILE_SETTINGS);
 		store.setDefault(PreferenceConstants.P_OVERLAY_AUTOFOCUS_SHIFT_SETTINGS, PreferenceConstants.DEF_OVERLAY_AUTOFOCUS_SHIFT_SETTINGS);
+		/*
+		 * Peak Traces
+		 */
+		store.setDefault(PreferenceConstants.P_COLOR_SCHEME_PEAK_TRACES, PreferenceConstants.DEF_COLOR_SCHEME_PEAK_TRACES);
+		store.setDefault(PreferenceConstants.P_MAX_DISPLAY_PEAK_TRACES, PreferenceConstants.DEF_MAX_DISPLAY_PEAK_TRACES);
 		/*
 		 * Scans
 		 */
