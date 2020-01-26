@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - update chromatogram selection after delete
+ * Christoph Läubrich - update chromatogram selection after delete, allow updating of selection
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -162,7 +162,18 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 				buttonSave.setEnabled(true);
 			}
 			if(interactionMode == InteractionMode.SINK || interactionMode == InteractionMode.BIDIRECTIONAL) {
-				List<Object> selection = new ArrayList<>(2);
+				updateSelection();
+			}
+		}
+	}
+
+	public void updateSelection() {
+
+		InteractionMode oldMode = interactionMode;
+		try {
+			interactionMode = InteractionMode.NONE;
+			List<Object> selection = new ArrayList<>(2);
+			if(chromatogramSelection != null) {
 				if(showPeaks) {
 					IPeak selectedPeak = chromatogramSelection.getSelectedPeak();
 					if(selectedPeak != null) {
@@ -175,8 +186,10 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 						selection.add(selectedScan);
 					}
 				}
-				peakScanListUI.setSelection(new StructuredSelection(selection));
 			}
+			peakScanListUI.setSelection(new StructuredSelection(selection), true);
+		} finally {
+			interactionMode = oldMode;
 		}
 	}
 
