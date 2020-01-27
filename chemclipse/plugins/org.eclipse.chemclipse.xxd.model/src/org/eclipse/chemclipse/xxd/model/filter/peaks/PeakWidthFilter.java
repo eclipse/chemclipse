@@ -25,7 +25,7 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = { IPeakFilter.class, Filter.class, Processor.class })
-public class ProcessPeaksByPeakWidthFilter implements IPeakFilter<ProcessPeaksByPeakWidthFilterSettings> {
+public class PeakWidthFilter implements IPeakFilter<PeakWidthFilterSettings> {
 
 	@Override
 	public String getName() {
@@ -40,9 +40,9 @@ public class ProcessPeaksByPeakWidthFilter implements IPeakFilter<ProcessPeaksBy
 	}
 
 	@Override
-	public Class<ProcessPeaksByPeakWidthFilterSettings> getConfigClass() {
+	public Class<PeakWidthFilterSettings> getConfigClass() {
 
-		return ProcessPeaksByPeakWidthFilterSettings.class;
+		return PeakWidthFilterSettings.class;
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class ProcessPeaksByPeakWidthFilter implements IPeakFilter<ProcessPeaksBy
 	}
 
 	@Override
-	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, ProcessPeaksByPeakWidthFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
+	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, PeakWidthFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
 
 		Collection<X> read = listener.read();
 		if(configuration == null) {
@@ -66,7 +66,7 @@ public class ProcessPeaksByPeakWidthFilter implements IPeakFilter<ProcessPeaksBy
 		}
 	}
 
-	private static <X extends IPeak> void applySelectedOptions(ProcessPeaksByPeakWidthFilterSettings settings, CRUDListener<X, IPeakModel> listener, X peak) {
+	private static <X extends IPeak> void applySelectedOptions(PeakWidthFilterSettings settings, CRUDListener<X, IPeakModel> listener, X peak) {
 
 		switch (settings.getFilterSelectionCriterion()){
 		case WIDTH_SMALLER_THAN_LIMIT:
@@ -86,12 +86,12 @@ public class ProcessPeaksByPeakWidthFilter implements IPeakFilter<ProcessPeaksBy
 
 	private static Comparator<Integer> widthComparator = (v1, v2) -> Integer.compare(v1, v2);
 	
-	private static int getWidthInMilliseconds(ProcessPeaksByPeakWidthFilterSettings settings) {
+	private static int getWidthInMilliseconds(PeakWidthFilterSettings settings) {
 
 		return (int) (settings.getWidthValue() * 60000);
 	}
 
-	private static <X extends IPeak> void deleteOrDisablePeak(CRUDListener<X, IPeakModel> listener, ProcessPeaksByPeakWidthFilterSettings settings, X peak) {
+	private static <X extends IPeak> void deleteOrDisablePeak(CRUDListener<X, IPeakModel> listener, PeakWidthFilterSettings settings, X peak) {
 
 		switch (settings.getFilterTreatmentOption()) {
 		case DELETE_PEAK:
