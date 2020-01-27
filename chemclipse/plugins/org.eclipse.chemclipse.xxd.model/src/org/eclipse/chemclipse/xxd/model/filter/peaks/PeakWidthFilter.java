@@ -71,12 +71,12 @@ public class PeakWidthFilter implements IPeakFilter<PeakWidthFilterSettings> {
 		switch (settings.getFilterSelectionCriterion()){
 		case WIDTH_SMALLER_THAN_LIMIT:
 			if(Integer.compare(peak.getPeakModel().getWidthByInflectionPoints(), getWidthInMilliseconds(settings))<0) {
-				deleteOrDisablePeak(listener, settings, peak);
+				processPeak(listener, settings, peak);
 			}
 			break;
 		case WIDTH_GREATER_THAN_LIMIT:
 			if(Integer.compare(peak.getPeakModel().getWidthByInflectionPoints(), getWidthInMilliseconds(settings))>0) {
-				deleteOrDisablePeak(listener, settings, peak);
+				processPeak(listener, settings, peak);
 			}
 			break;
 		default:
@@ -89,7 +89,7 @@ public class PeakWidthFilter implements IPeakFilter<PeakWidthFilterSettings> {
 		return (int) (settings.getWidthValue() * 60000);
 	}
 
-	private static <X extends IPeak> void deleteOrDisablePeak(CRUDListener<X, IPeakModel> listener, PeakWidthFilterSettings settings, X peak) {
+	private static <X extends IPeak> void processPeak(CRUDListener<X, IPeakModel> listener, PeakWidthFilterSettings settings, X peak) {
 
 		switch (settings.getFilterTreatmentOption()) {
 		case DELETE_PEAK:

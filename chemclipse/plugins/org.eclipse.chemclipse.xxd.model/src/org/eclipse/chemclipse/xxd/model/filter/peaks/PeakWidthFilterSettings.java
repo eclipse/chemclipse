@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.xxd.model.filter.peaks;
 
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
-import org.eclipse.chemclipse.xxd.model.support.ProcessPeaksByPeakWidthFilterSelectionCriterion;
+import org.eclipse.chemclipse.xxd.model.support.PeakWidthSelectionCriterion;
 import org.eclipse.chemclipse.xxd.model.support.ProcessPeaksByValueFilterTreatmentOption;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -31,7 +31,7 @@ public class PeakWidthFilterSettings {
 
 	@JsonProperty(value = "Width Selection Criterion:")
 	@EnumSelectionSettingProperty
-	private ProcessPeaksByPeakWidthFilterSelectionCriterion filterSelectionCriterion = ProcessPeaksByPeakWidthFilterSelectionCriterion.WIDTH_GREATER_THAN_LIMIT;
+	private PeakWidthSelectionCriterion filterSelectionCriterion = PeakWidthSelectionCriterion.WIDTH_GREATER_THAN_LIMIT;
 
 	public double getWidthValue() {
 		
@@ -53,12 +53,12 @@ public class PeakWidthFilterSettings {
 		this.filterTreatmentOption = filterTreatmentOption;
 	}
 
-	public ProcessPeaksByPeakWidthFilterSelectionCriterion getFilterSelectionCriterion() {
+	public PeakWidthSelectionCriterion getFilterSelectionCriterion() {
 		
 		return filterSelectionCriterion;
 	}
 
-	public void setFilterSelectionCriterion(ProcessPeaksByPeakWidthFilterSelectionCriterion filterSelectionCriterion) {
+	public void setFilterSelectionCriterion(PeakWidthSelectionCriterion filterSelectionCriterion) {
 		
 		this.filterSelectionCriterion = filterSelectionCriterion;
 	}

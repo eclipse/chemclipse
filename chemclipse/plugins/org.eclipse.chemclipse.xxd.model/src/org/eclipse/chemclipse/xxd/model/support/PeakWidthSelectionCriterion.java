@@ -13,25 +13,25 @@ package org.eclipse.chemclipse.xxd.model.support;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum ProcessPeaksByPeakWidthFilterSelectionCriterion {
+public enum PeakWidthSelectionCriterion {
 
 	/**
-	 * select "WIDTH_SMALLER_THAN_LIMIT" to select peaks whose width is too small
+	 * Select peaks whose width is smaller than the limit
 	 * 
 	 * @param WIDTH_SMALLER_THAN_LIMIT
 	 */
-	WIDTH_SMALLER_THAN_LIMIT("Peak width value is SMALLER THAN LIMIT"), //
+	WIDTH_SMALLER_THAN_LIMIT("Width < limit"), //
 	/**
-	 * select "WIDTH_GREATER_THAN_LIMIT" to select peaks whose width is too large
+	 * Select peaks whose width is greater than the limit
 	 *
 	 * @param WIDTH_GREATER_THAN_LIMIT
 	 */
-	WIDTH_GREATER_THAN_LIMIT("Peak width value is GREATER THAN LIMIT"); //	
+	WIDTH_GREATER_THAN_LIMIT("Width > limit"); //	
 
 	@JsonValue
 	private String filterSelectionCriterion;
 
-	private ProcessPeaksByPeakWidthFilterSelectionCriterion(String filterSelectionCriterion){
+	private PeakWidthSelectionCriterion(String filterSelectionCriterion){
 
 		this.filterSelectionCriterion = filterSelectionCriterion;
 	}
