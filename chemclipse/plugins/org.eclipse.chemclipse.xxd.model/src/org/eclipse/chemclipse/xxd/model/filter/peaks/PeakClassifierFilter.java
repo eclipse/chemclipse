@@ -34,7 +34,7 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = { IPeakFilter.class, Filter.class, Processor.class })
-public class ProcessPeaksByPeakClassifierFilter implements IPeakFilter<ProcessPeaksByPeakClassifierFilterSettings> {
+public class PeakClassifierFilter implements IPeakFilter<PeakClassifierFilterSettings> {
 
 	@Override
 	public String getName() {
@@ -49,9 +49,9 @@ public class ProcessPeaksByPeakClassifierFilter implements IPeakFilter<ProcessPe
 	}
 
 	@Override
-	public Class<ProcessPeaksByPeakClassifierFilterSettings> getConfigClass() {
+	public Class<PeakClassifierFilterSettings> getConfigClass() {
 
-		return ProcessPeaksByPeakClassifierFilterSettings.class;
+		return PeakClassifierFilterSettings.class;
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class ProcessPeaksByPeakClassifierFilter implements IPeakFilter<ProcessPe
 	}
 
 	@Override
-	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, ProcessPeaksByPeakClassifierFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
+	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, PeakClassifierFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
 
 		Collection<X> read = listener.read();
 		if(configuration == null) {
@@ -76,7 +76,7 @@ public class ProcessPeaksByPeakClassifierFilter implements IPeakFilter<ProcessPe
 		}
 	}
 
-	private static LinkedHashMap<String, String> parseUserDefinedValuesAsMap(ProcessPeaksByPeakClassifierFilterSettings configuration) {
+	private static LinkedHashMap<String, String> parseUserDefinedValuesAsMap(PeakClassifierFilterSettings configuration) {
 
 		String userDefinedMatchExpression = configuration.getUserDefinedMatchExpression();
 		String matchClassification = configuration.getMatchClassification();
@@ -113,7 +113,7 @@ public class ProcessPeaksByPeakClassifierFilter implements IPeakFilter<ProcessPe
 		return expressionsList;
 	}
 
-	private static <X extends IPeak> void setPeakClassifier(ProcessPeaksByPeakClassifierFilterSettings configuration, LinkedHashMap<String, String> parsedUserDefinedValues, X peak) {
+	private static <X extends IPeak> void setPeakClassifier(PeakClassifierFilterSettings configuration, LinkedHashMap<String, String> parsedUserDefinedValues, X peak) {
 
 		peak.removeClassifier("");
 		String substanceName = extractSubstanceName(configuration, peak);
@@ -137,7 +137,7 @@ public class ProcessPeaksByPeakClassifierFilter implements IPeakFilter<ProcessPe
 		}
 	}
 
-	private static Pattern createPattern(ProcessPeaksByPeakClassifierFilterSettings configuration, Map.Entry<String, String> entry) {
+	private static Pattern createPattern(PeakClassifierFilterSettings configuration, Map.Entry<String, String> entry) {
 
 		Pattern pattern = null;
 		if(configuration.isIgnoreUppercase()) { // UserDefinedMatchExpression
@@ -148,7 +148,7 @@ public class ProcessPeaksByPeakClassifierFilter implements IPeakFilter<ProcessPe
 		return pattern;
 	}
 
-	private static <X extends IPeak> String extractSubstanceName(ProcessPeaksByPeakClassifierFilterSettings configuration, X peak) {
+	private static <X extends IPeak> String extractSubstanceName(PeakClassifierFilterSettings configuration, X peak) {
 
 		Set<IIdentificationTarget> targets = peak.getTargets();
 		IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(targets);
