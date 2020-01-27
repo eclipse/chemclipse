@@ -70,12 +70,12 @@ public class PeakWidthFilter implements IPeakFilter<PeakWidthFilterSettings> {
 
 		switch (settings.getFilterSelectionCriterion()){
 		case WIDTH_SMALLER_THAN_LIMIT:
-			if(widthComparator.compare(peak.getPeakModel().getWidthByInflectionPoints(), getWidthInMilliseconds(settings))<0) {
+			if(Integer.compare(peak.getPeakModel().getWidthByInflectionPoints(), getWidthInMilliseconds(settings))<0) {
 				deleteOrDisablePeak(listener, settings, peak);
 			}
 			break;
 		case WIDTH_GREATER_THAN_LIMIT:
-			if(widthComparator.compare(peak.getPeakModel().getWidthByInflectionPoints(), getWidthInMilliseconds(settings))>0) {
+			if(Integer.compare(peak.getPeakModel().getWidthByInflectionPoints(), getWidthInMilliseconds(settings))>0) {
 				deleteOrDisablePeak(listener, settings, peak);
 			}
 			break;
@@ -84,8 +84,6 @@ public class PeakWidthFilter implements IPeakFilter<PeakWidthFilterSettings> {
 		}
 	}
 
-	private static Comparator<Integer> widthComparator = (v1, v2) -> Integer.compare(v1, v2);
-	
 	private static int getWidthInMilliseconds(PeakWidthFilterSettings settings) {
 
 		return (int) (settings.getWidthValue() * 60000);
