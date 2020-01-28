@@ -63,23 +63,38 @@ public class PeakAsymmetryFilter implements IPeakFilter<PeakAsymmetryFilterSetti
 
 		for(X peak : read) {
 			applySelectedOptions(configuration, listener, peak);
-			checkForKeepOption(listener, configuration, peak);
 			subMonitor.worked(1);
 		}
 	}
 
-	private static <X extends IPeak> void applySelectedOptions(PeakAsymmetryFilterSettings settings, CRUDListener<X, IPeakModel> listener, X peak) {
+	private static <X extends IPeak> void applySelectedOptions(PeakAsymmetryFilterSettings configuration, CRUDListener<X, IPeakModel> listener, X peak) {
 
+		boolean keepFlag = false;
+		if(configuration.getFilterTreatmentOption()==ValueFilterTreatmentOption.KEEP_PEAK) {
+			keepFlag = true;
+		}
 		double  peakAsymmetryFactor = peak.getPeakModel().getTailing()/peak.getPeakModel().getLeading();
-		switch (settings.getFilterSelectionCriterion()){
-		case ASYMMETRY_FACTOR_GREATER_THAN_LIMIT:			
-			if(Double.compare(peakAsymmetryFactor, settings.getPeakAsymmetryFactor())>0) {
-				processPeak(listener, settings, peak);
+		switch (configuration.getFilterSelectionCriterion()){
+		case ASYMMETRY_FACTOR_GREATER_THAN_LIMIT:
+			if(keepFlag) {
+				if(Double.compare(peakAsymmetryFactor, configuration.getPeakAsymmetryFactor())<0) {
+					processPeak(listener, configuration, peak);
+				}
+			} else {
+				if(Double.compare(peakAsymmetryFactor, configuration.getPeakAsymmetryFactor())>0) {
+					processPeak(listener, configuration, peak);
+				}
 			}
 			break;
 		case ASYMMETRY_FACTOR_SMALLER_THAN_LIMIT:
-			if(Double.compare(peakAsymmetryFactor, settings.getPeakAsymmetryFactor())<0) {
-				processPeak(listener, settings, peak);
+			if(keepFlag) {
+				if(Double.compare(peakAsymmetryFactor, configuration.getPeakAsymmetryFactor())>0) {
+					processPeak(listener, configuration, peak);
+				}
+			} else {
+				if(Double.compare(peakAsymmetryFactor, configuration.getPeakAsymmetryFactor())<0) {
+					processPeak(listener, configuration, peak);
+				}
 			}
 			break;
 		default:
@@ -87,9 +102,9 @@ public class PeakAsymmetryFilter implements IPeakFilter<PeakAsymmetryFilterSetti
 		}
 	}
 
-	private static <X extends IPeak> void processPeak(CRUDListener<X, IPeakModel> listener, PeakAsymmetryFilterSettings settings, X peak) {
+	private static <X extends IPeak> void processPeak(CRUDListener<X, IPeakModel> listener, PeakAsymmetryFilterSettings configuration, X peak) {
 
-		switch (settings.getFilterTreatmentOption()) {
+		switch (configuration.getFilterTreatmentOption()) {
 		case ENABLE_PEAK:
 			peak.setActiveForAnalysis(true);
 			listener.updated(peak);
@@ -99,26 +114,11 @@ public class PeakAsymmetryFilter implements IPeakFilter<PeakAsymmetryFilterSetti
 			listener.updated(peak);
 			break;
 		case KEEP_PEAK:
-			peak.setActiveForAnalysis(false);
-			listener.updated(peak);
-			break;
 		case DELETE_PEAK:
 			listener.delete(peak);
 			break;
 		default:
 			throw new IllegalArgumentException("Unsupported Peak Filter Treatment Option!");
-		}
-	}
-
-	private static <X extends IPeak> void checkForKeepOption(CRUDListener<X, IPeakModel> listener, PeakAsymmetryFilterSettings configuration, X peak) {
-
-		if(configuration.getFilterTreatmentOption()==ValueFilterTreatmentOption.KEEP_PEAK) {
-			if(peak.isActiveForAnalysis()==true) {
-				listener.delete(peak);
-			} else {
-				peak.setActiveForAnalysis(true);
-				listener.updated(peak);
-			}
 		}
 	}
 }
