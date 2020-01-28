@@ -65,7 +65,6 @@ public class PercentageAreaFilter implements IPeakFilter<PercentageAreaFilterSet
 		for(X peak : read) {
 			double compareAreaValue = calculatePercentageAreaCompareValue(peak, areaSum);
 			applySelectedOptions(compareAreaValue, configuration, listener, peak);
-			checkForKeepOption(listener, configuration, peak);
 			subMonitor.worked(1);
 		}
 	}
@@ -84,27 +83,54 @@ public class PercentageAreaFilter implements IPeakFilter<PercentageAreaFilterSet
 		return (100 / areaSum) * peak.getIntegratedArea();
 	}
 
-	private static <X extends IPeak> void applySelectedOptions(double peakValue, PercentageAreaFilterSettings localSettings, CRUDListener<X, IPeakModel> listener, X peak) {
+	private static <X extends IPeak> void applySelectedOptions(double peakValue, PercentageAreaFilterSettings configuration, CRUDListener<X, IPeakModel> listener, X peak) {
 
-		switch (localSettings.getFilterSelectionCriterion()) {
+		boolean keepFlag = false;
+		if(configuration.getFilterTreatmentOption()==ValueFilterTreatmentOption.KEEP_PEAK) {
+			keepFlag = true;
+		}
+		switch (configuration.getFilterSelectionCriterion()) {
 		case AREA_LESS_THAN_MINIMUM:
-			if(Double.compare(peakValue, localSettings.getMinimumPercentageAreaValue())<0) {
-				processPeak(listener, localSettings, peak);
+			if(keepFlag) {
+				if(Double.compare(peakValue, configuration.getMinimumPercentageAreaValue())>0) {
+					processPeak(listener, configuration, peak);
+				}
+			} else {
+				if(Double.compare(peakValue, configuration.getMinimumPercentageAreaValue())<0) {
+					processPeak(listener, configuration, peak);
+				}
 			}
 			break;
 		case AREA_GREATER_THAN_MAXIMUM:
-			if(Double.compare(peakValue, localSettings.getMaximumPercentageAreaValue())>0) {
-				processPeak(listener, localSettings, peak);
+			if(keepFlag) {
+				if(Double.compare(peakValue, configuration.getMaximumPercentageAreaValue())<0) {
+					processPeak(listener, configuration, peak);
+				}
+			} else {
+				if(Double.compare(peakValue, configuration.getMaximumPercentageAreaValue())>0) {
+					processPeak(listener, configuration, peak);
+				}
 			}
 			break;
 		case AREA_NOT_WITHIN_RANGE:
-			if(Double.compare(peakValue, localSettings.getMinimumPercentageAreaValue())<0 || Double.compare(peakValue, localSettings.getMaximumPercentageAreaValue())>0) {
-				processPeak(listener, localSettings, peak);
+			if(keepFlag) {
+				if(!checkRange(peakValue, configuration)) {
+					processPeak(listener, configuration, peak);
+				}
+			} else {
+				if(checkRange(peakValue, configuration)) {
+					processPeak(listener, configuration, peak);
+				}
 			}
 			break;
 		default:
 			throw new IllegalArgumentException("Unsupported Peak Filter Selection Criterion!");
 		}
+	}
+
+	private static boolean checkRange(double peakValue, PercentageAreaFilterSettings configuration) {
+		
+		return Double.compare(peakValue, configuration.getMinimumPercentageAreaValue())<0 || Double.compare(peakValue, configuration.getMaximumPercentageAreaValue())>0;
 	}
 
 	private static <X extends IPeak> void processPeak(CRUDListener<X, IPeakModel> listener, PercentageAreaFilterSettings localSettings, X peak) {
@@ -119,26 +145,11 @@ public class PercentageAreaFilter implements IPeakFilter<PercentageAreaFilterSet
 			listener.updated(peak);
 			break;
 		case KEEP_PEAK:
-			peak.setActiveForAnalysis(false);
-			listener.updated(peak);
-			break;
 		case DELETE_PEAK:
 			listener.delete(peak);
 			break;
 		default:
 			throw new IllegalArgumentException("Unsupported Peak Filter Treatment Option!");
-		}
-	}
-
-	private static <X extends IPeak> void checkForKeepOption(CRUDListener<X, IPeakModel> listener, PercentageAreaFilterSettings configuration, X peak) {
-
-		if(configuration.getFilterTreatmentOption()==ValueFilterTreatmentOption.KEEP_PEAK) {
-			if(peak.isActiveForAnalysis()==true) {
-				listener.delete(peak);
-			} else {
-				peak.setActiveForAnalysis(true);
-				listener.updated(peak);
-			}
 		}
 	}
 }
