@@ -28,7 +28,7 @@ import org.osgi.service.component.annotations.Component;
 import com.google.common.collect.Range;
 
 @Component(service = {IPeakFilter.class, Filter.class, Processor.class})
-public class IntegratedAreaFilter implements IPeakFilter<IntegratedAreaFilterSettings> {
+public class AreaFilter implements IPeakFilter<AreaFilterSettings> {
 
 	private static BiPredicate<Double, Double> AREA_LESS_THAN_MINIMUM_COMPARATOR = (peakArea, areaSetting) -> (peakArea < areaSetting);
 	private static BiPredicate<Double, Double> AREA_GREATER_THAN_MAXIMUM_COMPARATOR = (peakArea, areaSetting) -> (peakArea > areaSetting);
@@ -61,19 +61,19 @@ public class IntegratedAreaFilter implements IPeakFilter<IntegratedAreaFilterSet
 	@Override
 	public String getName() {
 
-		return "Integrated Area Filter";
+		return "Peak Area Filter";
 	}
 
 	@Override
 	public String getDescription() {
 
-		return "Filter peaks by integrated area values";
+		return "Filter peaks by peak area values";
 	}
 
 	@Override
-	public Class<IntegratedAreaFilterSettings> getConfigClass() {
+	public Class<AreaFilterSettings> getConfigClass() {
 
-		return IntegratedAreaFilterSettings.class;
+		return AreaFilterSettings.class;
 	}
 
 	@Override
@@ -83,7 +83,7 @@ public class IntegratedAreaFilter implements IPeakFilter<IntegratedAreaFilterSet
 	}
 
 	@Override
-	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, IntegratedAreaFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
+	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, AreaFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
 
 		Collection<X> read = listener.read();
 		if(configuration == null) {
@@ -96,7 +96,7 @@ public class IntegratedAreaFilter implements IPeakFilter<IntegratedAreaFilterSet
 		}
 	}
 
-	private static AreaPredicate<?> getPredicate(IntegratedAreaFilterSettings configuration) {
+	private static AreaPredicate<?> getPredicate(AreaFilterSettings configuration) {
 
 		switch(configuration.getFilterSelectionCriterion()) {
 			case AREA_LESS_THAN_MINIMUM:
@@ -110,7 +110,7 @@ public class IntegratedAreaFilter implements IPeakFilter<IntegratedAreaFilterSet
 		}
 	}
 
-	private static <X extends IPeak> void processPeak(CRUDListener<X, IPeakModel> listener, IntegratedAreaFilterSettings configuration, X peak, AreaPredicate<?> predicate) {
+	private static <X extends IPeak> void processPeak(CRUDListener<X, IPeakModel> listener, AreaFilterSettings configuration, X peak, AreaPredicate<?> predicate) {
 
 		switch(configuration.getFilterTreatmentOption()) {
 			case ENABLE_PEAK:

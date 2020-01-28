@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.xxd.model.support.ValueFilterTreatmentOption;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class IntegratedAreaFilterSettings {
+public class AreaFilterSettings {
 
 	@JsonProperty(value = "Minimum area:")
 	@JsonPropertyDescription(value = "The minimum area value of a peak to be filtered accordingly.")
