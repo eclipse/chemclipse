@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.xxd.model.support;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum AreaFilterSelectionCriterion {
-
 	/**
 	 * Select peak areas smaller than the defined minimum
 	 *
@@ -33,12 +32,12 @@ public enum AreaFilterSelectionCriterion {
 	 *
 	 * @param AREA_NOT_WITHIN_RANGE
 	 */
-	AREA_NOT_WITHIN_RANGE("Area < minimum and > maximum"); //	
+	AREA_NOT_WITHIN_RANGE("Area < minimum or > maximum"); //
 
 	@JsonValue
 	private String filterSelectionCriterion;
 
-	private AreaFilterSelectionCriterion(String filterSelectionCriterion){
+	private AreaFilterSelectionCriterion(String filterSelectionCriterion) {
 
 		this.filterSelectionCriterion = filterSelectionCriterion;
 	}

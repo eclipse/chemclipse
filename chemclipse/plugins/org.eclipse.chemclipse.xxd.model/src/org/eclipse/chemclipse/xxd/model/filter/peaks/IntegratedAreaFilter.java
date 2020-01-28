@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.xxd.model.filter.peaks;
 
 import java.util.Collection;
+import java.util.function.BiPredicate;
 
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
@@ -20,13 +21,42 @@ import org.eclipse.chemclipse.processing.Processor;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
-import org.eclipse.chemclipse.xxd.model.support.ValueFilterTreatmentOption;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
-@Component(service = { IPeakFilter.class, Filter.class, Processor.class })
+import com.google.common.collect.Range;
+
+@Component(service = {IPeakFilter.class, Filter.class, Processor.class})
 public class IntegratedAreaFilter implements IPeakFilter<IntegratedAreaFilterSettings> {
+
+	private static BiPredicate<Double, Double> AREA_LESS_THAN_MINIMUM_COMPARATOR = (peakArea, areaSetting) -> (peakArea < areaSetting);
+	private static BiPredicate<Double, Double> AREA_GREATER_THAN_MAXIMUM_COMPARATOR = (peakArea, areaSetting) -> (peakArea > areaSetting);
+	private static BiPredicate<Double, Range<Double>> AREA_NOT_WITHIN_RANGE = (peakArea, areaSetting) -> (!areaSetting.contains(peakArea));
+
+	private static class AreaPredicate<T> {
+
+		private final BiPredicate<Double, T> predicate;
+		private final T areaSetting;
+
+		public AreaPredicate(BiPredicate<Double, T> predicate, T areaSetting) {
+
+			super();
+			this.predicate = predicate;
+			this.areaSetting = areaSetting;
+		}
+
+		public AreaPredicate<?> negate() {
+
+			return new AreaPredicate<T>(predicate.negate(), areaSetting);
+		}
+
+		public boolean test(double integratedArea) {
+
+			boolean result = predicate.test(integratedArea, areaSetting);
+			return result;
+		}
+	}
 
 	@Override
 	public String getName() {
@@ -60,80 +90,51 @@ public class IntegratedAreaFilter implements IPeakFilter<IntegratedAreaFilterSet
 			configuration = createConfiguration(read);
 		}
 		SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
-
 		for(X peak : read) {
-			applySelectedOptions(peak.getIntegratedArea(), configuration, listener, peak);
+			processPeak(listener, configuration, peak, getPredicate(configuration));
 			subMonitor.worked(1);
 		}
 	}
 
-	private static <X extends IPeak> void applySelectedOptions(double peakValue, IntegratedAreaFilterSettings configuration, CRUDListener<X, IPeakModel> listener, X peak) {
+	private static AreaPredicate<?> getPredicate(IntegratedAreaFilterSettings configuration) {
 
-		boolean keepFlag = false;
-		if(configuration.getFilterTreatmentOption()==ValueFilterTreatmentOption.KEEP_PEAK) {
-			keepFlag = true;
-		}
-		switch (configuration.getFilterSelectionCriterion()) {
-		case AREA_LESS_THAN_MINIMUM:
-			if(keepFlag) {
-				if(Double.compare(peakValue, configuration.getMinimumAreaValue())>0) {
-					processPeak(listener, configuration, peak);
-				}
-			} else {
-				if(Double.compare(peakValue, configuration.getMinimumAreaValue())<0) {
-					processPeak(listener, configuration, peak);
-				}
-			}
-			break;
-		case AREA_GREATER_THAN_MAXIMUM:
-			if(keepFlag) {
-				if(Double.compare(peakValue, configuration.getMaximumAreaValue())<0) {
-					processPeak(listener, configuration, peak);
-				}
-			} else {
-				if(Double.compare(peakValue, configuration.getMaximumAreaValue())>0) {
-					processPeak(listener, configuration, peak);
-				}
-			}
-			break;
-		case AREA_NOT_WITHIN_RANGE:
-			if(keepFlag) {
-				if(!checkRange(peakValue, configuration)) {
-					processPeak(listener, configuration, peak);
-				}
-			} else {
-				if(checkRange(peakValue, configuration)) {
-					processPeak(listener, configuration, peak);
-				}
-			}
-			break;
-		default:
-			throw new IllegalArgumentException("Unsupported Peak Filter Selection Criterion!");
+		switch(configuration.getFilterSelectionCriterion()) {
+			case AREA_LESS_THAN_MINIMUM:
+				return new AreaPredicate<>(AREA_LESS_THAN_MINIMUM_COMPARATOR, configuration.getMinimumAreaValue());
+			case AREA_GREATER_THAN_MAXIMUM:
+				return new AreaPredicate<>(AREA_GREATER_THAN_MAXIMUM_COMPARATOR, configuration.getMaximumAreaValue());
+			case AREA_NOT_WITHIN_RANGE:
+				return new AreaPredicate<>(AREA_NOT_WITHIN_RANGE, Range.closed(configuration.getMinimumAreaValue(), configuration.getMaximumAreaValue()));
+			default:
+				throw new IllegalArgumentException("Unsupported Peak Filter Selection Criterion!");
 		}
 	}
 
-	private static boolean checkRange(double peakValue, IntegratedAreaFilterSettings configuration) {
-		
-		return Double.compare(peakValue, configuration.getMinimumAreaValue())<0 || Double.compare(peakValue, configuration.getMaximumAreaValue())>0;
-	}
+	private static <X extends IPeak> void processPeak(CRUDListener<X, IPeakModel> listener, IntegratedAreaFilterSettings configuration, X peak, AreaPredicate<?> predicate) {
 
-	private static <X extends IPeak> void processPeak(CRUDListener<X, IPeakModel> listener, IntegratedAreaFilterSettings configuration, X peak) {
-
-		switch (configuration.getFilterTreatmentOption()) {
-		case ENABLE_PEAK:
-			peak.setActiveForAnalysis(true);
-			listener.updated(peak);
-			break;
-		case DEACTIVATE_PEAK:
-			peak.setActiveForAnalysis(false);
-			listener.updated(peak);
-			break;
-		case KEEP_PEAK:
-		case DELETE_PEAK:
-			listener.delete(peak);
-			break;
-		default:
-			throw new IllegalArgumentException("Unsupported Peak Filter Treatment Option!");
+		switch(configuration.getFilterTreatmentOption()) {
+			case ENABLE_PEAK:
+				if(predicate.test(peak.getIntegratedArea())) {
+					peak.setActiveForAnalysis(true);
+					listener.updated(peak);
+				}
+				break;
+			case DEACTIVATE_PEAK:
+				if(predicate.test(peak.getIntegratedArea())) {
+					peak.setActiveForAnalysis(false);
+					listener.updated(peak);
+				}
+				break;
+			case KEEP_PEAK:
+				if(predicate.negate().test(peak.getIntegratedArea()))
+					listener.delete(peak);
+				break;
+			case DELETE_PEAK:
+				if(predicate.test(peak.getIntegratedArea()))
+					listener.delete(peak);
+				break;
+			default:
+				throw new IllegalArgumentException("Unsupported Peak Filter Treatment Option!");
 		}
 	}
 }
