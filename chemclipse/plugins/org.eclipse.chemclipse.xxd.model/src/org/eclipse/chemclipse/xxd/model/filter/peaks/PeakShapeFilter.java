@@ -64,27 +64,48 @@ public class PeakShapeFilter implements IPeakFilter<PeakShapeFilterSettings> {
 
 		for(X peak : read) {
 			applySelectedOptions(configuration, listener, peak);
-			checkForKeepOption(listener, configuration, peak);
 			subMonitor.worked(1);
 		}
 	}
 
-	private static <X extends IPeak> void applySelectedOptions(PeakShapeFilterSettings settings, CRUDListener<X, IPeakModel> listener, X peak) {
+	private static <X extends IPeak> void applySelectedOptions(PeakShapeFilterSettings configuration, CRUDListener<X, IPeakModel> listener, X peak) {
 
-		switch (settings.getFilterSelectionCriterion()){
+		boolean keepFlag = false;
+		if(configuration.getFilterTreatmentOption()==ValueFilterTreatmentOption.KEEP_PEAK) {
+			keepFlag = true;
+		}
+		switch (configuration.getFilterSelectionCriterion()){
 		case LEADING_SMALLER_THAN_LIMIT:
-			if(Double.compare(peak.getPeakModel().getLeading(), settings.getLeadingValue())<0) {
-				processPeak(listener, settings, peak);
+			if(keepFlag) {
+				if(Double.compare(peak.getPeakModel().getLeading(), configuration.getLeadingValue())>0) {
+					processPeak(listener, configuration, peak);
+				}
+			} else {
+				if(Double.compare(peak.getPeakModel().getLeading(), configuration.getLeadingValue())<0) {
+					processPeak(listener, configuration, peak);
+				}
 			}
 			break;
 		case TAILING_GREATER_THAN_LIMIT:
-			if(Double.compare(peak.getPeakModel().getTailing(), settings.getTailingValue())>0) {
-				processPeak(listener, settings, peak);
+			if(keepFlag) {
+				if(Double.compare(peak.getPeakModel().getTailing(), configuration.getTailingValue())<0) {
+					processPeak(listener, configuration, peak);
+				}
+			} else {
+				if(Double.compare(peak.getPeakModel().getTailing(), configuration.getTailingValue())>0) {
+					processPeak(listener, configuration, peak);
+				}
 			}
 			break;
 		case VALUES_WITHIN_RANGE:
-			if(checkLeading(peak, settings) || checkTailing(peak, settings)) {
-				processPeak(listener, settings, peak);
+			if(keepFlag) {
+				if(!peakProfile(configuration, peak)) {
+					processPeak(listener, configuration, peak);
+				}
+			} else {
+				if(peakProfile(configuration, peak)) {
+					processPeak(listener, configuration, peak);
+				}
 			}
 			break;
 		default:
@@ -92,31 +113,36 @@ public class PeakShapeFilter implements IPeakFilter<PeakShapeFilterSettings> {
 		}
 	}
 
-	private static <X extends IPeak> boolean checkTailing(X peak, PeakShapeFilterSettings settings) {
+	private static <X extends IPeak> boolean peakProfile(PeakShapeFilterSettings configuration, X peak) {
+		
+		return checkLeading(peak, configuration) || checkTailing(peak, configuration);
+	}
+
+	private static <X extends IPeak> boolean checkTailing(X peak, PeakShapeFilterSettings configuration) {
 
 		BigDecimal peakTailing = new BigDecimal(peak.getPeakModel().getTailing());
-		BigDecimal settingTailing = new BigDecimal(settings.getTailingValue());
-		if(Double.compare(peak.getPeakModel().getTailing(), settings.getTailingValue())<0 || peakTailing.compareTo(settingTailing) == 0) {
+		BigDecimal settingTailing = new BigDecimal(configuration.getTailingValue());
+		if(peakTailing.compareTo(settingTailing)<0 || peakTailing.compareTo(settingTailing) == 0) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	private static <X extends IPeak> boolean checkLeading(X peak, PeakShapeFilterSettings settings) {
+	private static <X extends IPeak> boolean checkLeading(X peak, PeakShapeFilterSettings configuration) {
 
 		BigDecimal peakLeading = new BigDecimal(peak.getPeakModel().getLeading());
-		BigDecimal settingLeading = new BigDecimal(settings.getLeadingValue());
-		if(Double.compare(peak.getPeakModel().getLeading(), settings.getLeadingValue())>0 || peakLeading.compareTo(settingLeading) == 0) {
+		BigDecimal settingLeading = new BigDecimal(configuration.getLeadingValue());
+		if(peakLeading.compareTo(settingLeading)>0 || peakLeading.compareTo(settingLeading) == 0) {
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	private static <X extends IPeak> void processPeak(CRUDListener<X, IPeakModel> listener, PeakShapeFilterSettings settings, X peak) {
+	private static <X extends IPeak> void processPeak(CRUDListener<X, IPeakModel> listener, PeakShapeFilterSettings configuration, X peak) {
 
-		switch (settings.getFilterTreatmentOption()) {
+		switch (configuration.getFilterTreatmentOption()) {
 		case ENABLE_PEAK:
 			peak.setActiveForAnalysis(true);
 			listener.updated(peak);
@@ -126,26 +152,11 @@ public class PeakShapeFilter implements IPeakFilter<PeakShapeFilterSettings> {
 			listener.updated(peak);
 			break;
 		case KEEP_PEAK:
-			peak.setActiveForAnalysis(false);
-			listener.updated(peak);
-			break;
 		case DELETE_PEAK:
 			listener.delete(peak);
 			break;
 		default:
 			throw new IllegalArgumentException("Unsupported Peak Filter Treatment Option!");
-		}
-	}
-
-	private static <X extends IPeak> void checkForKeepOption(CRUDListener<X, IPeakModel> listener, PeakShapeFilterSettings configuration, X peak) {
-
-		if(configuration.getFilterTreatmentOption()==ValueFilterTreatmentOption.KEEP_PEAK) {
-			if(peak.isActiveForAnalysis()==true) {
-				listener.delete(peak);
-			} else {
-				peak.setActiveForAnalysis(true);
-				listener.updated(peak);
-			}
 		}
 	}
 }
