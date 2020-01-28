@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2019 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,19 +25,15 @@ import org.eclipse.chemclipse.model.selection.AbstractChromatogramSelection;
 
 public class ChromatogramSelectionCSD extends AbstractChromatogramSelection<IChromatogramPeakCSD, IChromatogramCSD> implements IChromatogramSelectionCSD {
 
-	private static final long serialVersionUID = -2614321209701949490L;
-	//
 	private IScanCSD selectedScan;
 	private IChromatogramPeakCSD selectedPeak;
 	private IScan identifiedScan;
 
 	public ChromatogramSelectionCSD(IChromatogramCSD chromatogram) throws ChromatogramIsNullException {
-
 		this(chromatogram, true);
 	}
 
 	public ChromatogramSelectionCSD(IChromatogramCSD chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
-
 		/*
 		 * Set all members to default values.<br/> This includes also to set a
 		 * valid scan and if exists a valid peak.
@@ -209,5 +205,11 @@ public class ChromatogramSelectionCSD extends AbstractChromatogramSelection<IChr
 	public void setSelectedIdentifiedScan(IScan identifiedScan) {
 
 		this.identifiedScan = identifiedScan;
+	}
+
+	@Override
+	public void removeSelectedIdentifiedScan() {
+
+		identifiedScan = null;
 	}
 }

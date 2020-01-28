@@ -40,8 +40,6 @@ import org.eclipse.chemclipse.msd.model.notifier.ChromatogramSelectionMSDUpdateN
  */
 public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChromatogramPeakMSD, IChromatogramMSD> implements IChromatogramSelectionMSD {
 
-	private static final long serialVersionUID = -7506022245739815452L;
-	//
 	private IVendorMassSpectrum selectedScan;
 	private IVendorMassSpectrum selectedIdentifiedScan;
 	private IChromatogramPeakMSD selectedPeak;
@@ -80,7 +78,6 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChr
 		reset(fireUpdate);
 	}
 
-	// ------------------------------------IChromatogramSelection
 	@Override
 	public void dispose() {
 
@@ -139,8 +136,6 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChr
 		return markedIonTransitions;
 	}
 
-	// ------------------------------------IChromatogramSelection
-	// ------------------------------------IChromatogramSelectionSetter
 	@Override
 	public void reset() {
 
@@ -304,5 +299,11 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChr
 		setSelectedIdentifiedScan(selectedIdentifiedScan, false);
 		setSelectedPeak(selectedPeak, false);
 		fireUpdateChange(forceReload);
+	}
+
+	@Override
+	public void removeSelectedIdentifiedScan() {
+
+		selectedIdentifiedScan = null;
 	}
 }

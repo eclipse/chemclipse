@@ -20,8 +20,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
-import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
-import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.IChromatogram;
@@ -30,7 +28,6 @@ import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
@@ -57,8 +54,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstant
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakScanListUIConfig.InteractionMode;
-import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
-import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -439,26 +434,37 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 		messageBox.setText("Delete Peak(s)/Scan Identification(s)");
 		messageBox.setMessage("Would you like to delete the selected peak(s)/scan identification(s)?");
 		if(messageBox.open() == SWT.YES) {
+			/*
+			 * Selected Items.
+			 */
 			Iterator iterator = peakScanListUI.getStructuredSelection().iterator();
+			List<IScan> scansToClear = new ArrayList<>();
+			List<IPeak> peaksToDelete = new ArrayList<>();
+			/*
+			 * Collect
+			 */
 			while(iterator.hasNext()) {
 				Object object = iterator.next();
 				if(object instanceof IPeak) {
-					deletePeak((IPeak)object);
+					peaksToDelete.add((IPeak)object);
 				} else if(object instanceof IScan) {
-					deleteScanIdentification((IScan)object);
+					scansToClear.add((IScan)object);
 				}
 			}
 			/*
+			 * Clear scan(s) / peak(s)
+			 */
+			deleteScanIdentifications(scansToClear);
+			deletePeaks(peaksToDelete);
+			/*
 			 * Send update.
 			 */
+			if(scansToClear.size() > 0 || peaksToDelete.size() > 0) {
+				if(chromatogramSelection != null) {
+					chromatogramSelection.update(true);
+				}
+			}
 			sendEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION, chromatogramSelection);
-		}
-	}
-
-	private void deleteScanIdentification(IScan scan) {
-
-		if(scan != null) {
-			scan.getTargets().clear();
 		}
 	}
 
@@ -475,21 +481,32 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 		updateChromatogramSelection();
 	}
 
-	private void deletePeak(IPeak peak) {
+	private void deleteScanIdentifications(List<IScan> scans) {
 
-		if(chromatogramSelection != null) {
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-			if(chromatogram instanceof IChromatogramMSD && peak instanceof IChromatogramPeakMSD) {
-				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
-				chromatogramMSD.removePeak((IChromatogramPeakMSD)peak);
-			} else if(chromatogram instanceof IChromatogramCSD && peak instanceof IChromatogramPeakCSD) {
-				IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
-				chromatogramCSD.removePeak((IChromatogramPeakCSD)peak);
-			} else if(chromatogram instanceof IChromatogramWSD) {
-				IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
-				chromatogramWSD.removePeak((IChromatogramPeakWSD)peak);
+		if(scans.size() > 0) {
+			/*
+			 * Remove the selected identified scan.
+			 */
+			if(chromatogramSelection != null) {
+				chromatogramSelection.removeSelectedIdentifiedScan();
 			}
-			chromatogramSelection.update(true);
+			/*
+			 * Clear the targets.
+			 */
+			for(IScan scan : scans) {
+				scan.getTargets().clear();
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private void deletePeaks(List<IPeak> peaks) {
+
+		if(peaks.size() > 0) {
+			if(chromatogramSelection != null) {
+				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+				chromatogram.removePeaks(peaks);
+			}
 		}
 	}
 
