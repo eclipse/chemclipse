@@ -32,7 +32,7 @@ public enum AreaFilterSelectionCriterion {
 	 *
 	 * @param AREA_NOT_WITHIN_RANGE
 	 */
-	AREA_NOT_WITHIN_RANGE("Area < minimum or > maximum"); //
+	AREA_NOT_WITHIN_RANGE("Area < minimum or Area > maximum"); //
 
 	@JsonValue
 	private String filterSelectionCriterion;
