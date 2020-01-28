@@ -13,18 +13,19 @@ package org.eclipse.chemclipse.xxd.model.support;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
+/**
+ *  Describes the criterion to select the peak asymmetry factor:
+ *  <li>{@link #ASYMMETRY_FACTOR_SMALLER_THAN_LIMIT}</li>
+ *  <li>{@link #ASYMMETRY_FACTOR_GREATER_THAN_LIMIT}</li>
+ */
 public enum PeakAsymmetryFilterSelectionCriterion {
 
 	/**
 	 * Select peaks whose peak asymmetry factor is too small
-	 *
-	 * @param PEAK_ASYMMETRY_FACTOR_TOO_LARGE
 	 */
 	ASYMMETRY_FACTOR_SMALLER_THAN_LIMIT("As < asym. factor"), //	
 	/**
 	 * Select peaks whose peak asymmetry factor is too large
-	 *
-	 * @param PEAK_ASYMMETRY_FACTOR_TOO_LARGE
 	 */
 	ASYMMETRY_FACTOR_GREATER_THAN_LIMIT("As > asym. factor"); //	
 

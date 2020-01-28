@@ -13,30 +13,30 @@ package org.eclipse.chemclipse.xxd.model.support;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
+/**
+ *  Describes how the filter will treat (e.g. process) the peak value with the
+ *  selected option:
+ *  <li>{@link #ENABLE_PEAK}</li>
+ *  <li>{@link #DEACTIVATE_PEAK}</li>
+ *  <li>{@link #KEEP_PEAK}</li>
+ *  <li>{@link #DELETE_PEAK}</li>
+ */
 public enum ValueFilterTreatmentOption {
 
 	/**
 	 * Select to enable a peak if certain constraints are matched
-	 *
-	 * @param DISABLE_PEAK
 	 */
 	ENABLE_PEAK("Enable peak"), //
 	/**
 	 * Select to deactivate a peak if certain constraints are matched
-	 *
-	 * @param DISABLE_PEAK
 	 */
 	DEACTIVATE_PEAK("Deactivate peak"), //
 	/**
 	 * Select to keep a peak if certain constraints are matched
-	 *
-	 * @param KEEP_PEAK
 	 */
 	KEEP_PEAK("Keep peak"), //
 	/**
 	 * Select to delete a peak if certain constraints are matched
-	 *
-	 * @param DELETE_PEAK
 	 */
 	DELETE_PEAK("Delete peak"); //
 

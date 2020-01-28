@@ -13,24 +13,25 @@ package org.eclipse.chemclipse.xxd.model.support;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
+/**
+ *  Describes the criterion to select the peak leading or tailing:
+ *  <li>{@link #LEADING_SMALLER_THAN_LIMIT}</li>
+ *  <li>{@link #TAILING_GREATER_THAN_LIMIT}</li>
+ *  <li>{@link #VALUES_WITHIN_RANGE}</li>
+ */
 public enum PeakShapeFilterSelectionCriterion {
 
 	/**
-	 * Select peaks whose leading values are too small
-	 * 
-	 * @param LEADING_SMALLER_THAN_LIMIT
+	 * Select peaks whose leading values smaller than the limit
 	 */
 	LEADING_SMALLER_THAN_LIMIT("Leading < limit"), //
 	/**
-	 * Select peaks whose tailing values are too large
-	 *
-	 * @param TAILING_GREATER_THAN_LIMIT
+	 * Select peaks whose tailing values are larger than the limit
 	 */
 	TAILING_GREATER_THAN_LIMIT("Tailing > limit"), //
 	/**
-	 * Select peaks whose values are within the defined range
-	 *
-	 * @param TAILING_GREATER_THAN_LIMIT
+	 * Select peaks whose values are within the defined range, e.g. greater or
+	 * equal to leading and smaller or equal to tailing
 	 */
 	VALUES_WITHIN_RANGE("values >= Leading and <= Tailing"); //
 	
