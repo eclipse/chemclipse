@@ -65,6 +65,10 @@ public class PeakTracesUI extends ScrollableChart {
 	private final ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
 	private final PeakChartSupport peakChartSupport = new PeakChartSupport();
 	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	//
+	private List<Integer> traces = new ArrayList<>();
+	private int selectedTrace = 0;
+	private IPeak peak = null;
 
 	public PeakTracesUI() {
 		super();
@@ -76,11 +80,29 @@ public class PeakTracesUI extends ScrollableChart {
 		modifyChart();
 	}
 
-	@SuppressWarnings("rawtypes")
+	public List<Integer> getTraces() {
+
+		return traces;
+	}
+
+	public void setSelectedTrace(int selectedTrace) {
+
+		this.selectedTrace = selectedTrace;
+	}
+
 	public void setInput(IPeak peak) {
+
+		this.peak = peak;
+		updateChart();
+	}
+
+	@SuppressWarnings("rawtypes")
+	public void updateChart() {
 
 		modifyChart(peak);
 		deleteSeries();
+		traces.clear();
+		//
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 		//
 		if(peak instanceof IChromatogramPeakMSD) {
@@ -95,11 +117,17 @@ public class PeakTracesUI extends ScrollableChart {
 			chromatogramSelection.setRangeRetentionTime(startRetentionTime, stopRetentionTime, false);
 			//
 			IColorScheme colors = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_PEAK_TRACES));
-			List<Integer> traces = extracTraces(massSpectrum);
+			extractTraces(massSpectrum);
+			//
 			for(Integer trace : traces) {
 				IMarkedIons markedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 				markedIons.add(trace);
-				lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(chromatogramSelection, Integer.toString(trace), DisplayType.SIC, ChromatogramChartSupport.DERIVATIVE_NONE, colors.getColor(), markedIons, false));
+				ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogramSelection, Integer.toString(trace), DisplayType.SIC, ChromatogramChartSupport.DERIVATIVE_NONE, colors.getColor(), markedIons, false);
+				ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
+				if(trace == selectedTrace) {
+					lineSeriesSettings.setLineWidth(2);
+				}
+				lineSeriesDataList.add(lineSeriesData);
 				colors.incrementColor();
 			}
 		} else if(peak != null) {
@@ -109,17 +137,16 @@ public class PeakTracesUI extends ScrollableChart {
 		addLineSeriesData(lineSeriesDataList);
 	}
 
-	private List<Integer> extracTraces(IScanMSD scanMSD) {
+	private void extractTraces(IScanMSD scanMSD) {
 
 		List<IIon> ions = new ArrayList<>(scanMSD.getIons());
 		Collections.sort(ions, (i1, i2) -> Float.compare(i2.getAbundance(), i1.getAbundance()));
-		List<Integer> traces = new ArrayList<>();
 		int maxDisplayTraces = preferenceStore.getInt(PreferenceConstants.P_MAX_DISPLAY_PEAK_TRACES);
 		//
 		exitloop:
 		for(IIon ion : ions) {
 			/*
-			 * Add
+			 * Add the trace.
 			 */
 			int trace = AbstractIon.getIon(ion.getIon());
 			if(!traces.contains(trace)) {
@@ -130,8 +157,10 @@ public class PeakTracesUI extends ScrollableChart {
 				break exitloop;
 			}
 		}
-		//
-		return traces;
+		/*
+		 * Sort the traces ascending.
+		 */
+		Collections.sort(traces);
 	}
 
 	private void modifyChart() {

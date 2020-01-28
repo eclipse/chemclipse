@@ -14,8 +14,11 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeakTraces;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakDataSupport;
@@ -24,6 +27,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -31,6 +36,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
@@ -39,6 +45,8 @@ public class ExtendedPeakTracesUI {
 
 	private Composite toolbarInfo;
 	private Label labelPeak;
+	private ComboViewer comboViewerTraces;
+	private Button buttonDeleteTrace;
 	private Button checkboxActive;
 	private PeakTracesUI peakTracesUI;
 	//
@@ -68,6 +76,7 @@ public class ExtendedPeakTracesUI {
 	private void updatePeak() {
 
 		peakTracesUI.setInput(peak);
+		updateComboTraces();
 	}
 
 	private void initialize(Composite parent) {
@@ -84,13 +93,13 @@ public class ExtendedPeakTracesUI {
 	private void createToolbarMain(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalAlignment = SWT.END;
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(5, false));
+		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		composite.setLayout(new GridLayout(7, false));
 		//
-		checkboxActive = createActiveAnalysisButton(composite);
 		createButtonToggleToolbarInfo(composite);
+		comboViewerTraces = createComboViewerTraces(composite);
+		buttonDeleteTrace = createButtonDeleteTrace(composite);
+		checkboxActive = createActiveAnalysisButton(composite);
 		createToggleChartSeriesLegendButton(composite);
 		createResetButton(composite);
 		createSettingsButton(composite);
@@ -133,11 +142,76 @@ public class ExtendedPeakTracesUI {
 		return button;
 	}
 
+	private ComboViewer createComboViewerTraces(Composite parent) {
+
+		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		Combo combo = comboViewer.getCombo();
+		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
+		comboViewer.setLabelProvider(new AbstractLabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+
+				if(element instanceof Integer) {
+					return "Trace " + Integer.toString((int)element);
+				}
+				return null;
+			}
+		});
+		//
+		combo.setToolTipText("Select a trace.");
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				Object object = comboViewer.getStructuredSelection().getFirstElement();
+				if(object instanceof Integer) {
+					int selectedTrace = (int)object;
+					buttonDeleteTrace.setEnabled(true);
+					peakTracesUI.setSelectedTrace(selectedTrace);
+					peakTracesUI.updateChart();
+				}
+			}
+		});
+		//
+		return comboViewer;
+	}
+
+	private Button createButtonDeleteTrace(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Delete the selected trace.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				Object object = comboViewerTraces.getStructuredSelection().getFirstElement();
+				if(object instanceof Integer) {
+					int selectedTrace = (int)object;
+					if(peak instanceof IPeakMSD) {
+						IPeakMSD peakMSD = (IPeakMSD)peak;
+						IScanMSD scanMSD = peakMSD.getPeakModel().getPeakMassSpectrum();
+						scanMSD.removeIon(selectedTrace);
+						peakTracesUI.updateChart();
+						updateComboTraces();
+					}
+				}
+			}
+		});
+		//
+		return button;
+	}
+
 	private Button createActiveAnalysisButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.CHECK);
 		button.setToolTipText("Toogle the active for analysis choice.");
-		button.setText("Active for Analysis");
+		button.setText("");
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -233,5 +307,11 @@ public class ExtendedPeakTracesUI {
 	private void applySettings() {
 
 		updatePeak();
+	}
+
+	private void updateComboTraces() {
+
+		comboViewerTraces.setInput(peakTracesUI.getTraces());
+		buttonDeleteTrace.setEnabled(false);
 	}
 }
