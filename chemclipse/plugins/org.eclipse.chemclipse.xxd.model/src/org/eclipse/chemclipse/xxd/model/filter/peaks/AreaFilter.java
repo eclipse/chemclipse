@@ -61,7 +61,7 @@ public class AreaFilter implements IPeakFilter<AreaFilterSettings> {
 	@Override
 	public String getName() {
 
-		return "Peak Area Filter";
+		return "Area Filter";
 	}
 
 	@Override
