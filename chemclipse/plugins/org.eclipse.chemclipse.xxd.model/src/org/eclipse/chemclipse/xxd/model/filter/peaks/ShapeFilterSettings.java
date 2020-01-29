@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.xxd.model.support.ValueFilterTreatmentOption;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class PeakShapeFilterSettings {
+public class ShapeFilterSettings {
 
 	@JsonProperty(value = "Leading:", defaultValue = "0.9")
 	@JsonPropertyDescription(value = "The leading value of a peak to be filtered accordingly.")

@@ -26,24 +26,24 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = { IPeakFilter.class, Filter.class, Processor.class })
-public class PeakAsymmetryFilter implements IPeakFilter<PeakAsymmetryFilterSettings> {
+public class AreaPercentFilter implements IPeakFilter<AreaPercentFilterSettings> {
 
 	@Override
 	public String getName() {
 
-		return "Peak Asymmetry Filter";
+		return "Area Percent Filter";
 	}
 
 	@Override
 	public String getDescription() {
 
-		return "Filter peaks by asymmetrical peak shape";
+		return "Filter peaks by percentage area values";
 	}
 
 	@Override
-	public Class<PeakAsymmetryFilterSettings> getConfigClass() {
+	public Class<AreaPercentFilterSettings> getConfigClass() {
 
-		return PeakAsymmetryFilterSettings.class;
+		return AreaPercentFilterSettings.class;
 	}
 
 	@Override
@@ -53,46 +53,72 @@ public class PeakAsymmetryFilter implements IPeakFilter<PeakAsymmetryFilterSetti
 	}
 
 	@Override
-	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, PeakAsymmetryFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
+	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, AreaPercentFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
 
 		Collection<X> read = listener.read();
 		if(configuration == null) {
 			configuration = createConfiguration(read);
 		}
 		SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
+		double areaSum = calculateAreaSum(read);
 
 		for(X peak : read) {
-			applySelectedOptions(configuration, listener, peak);
+			double compareAreaValue = calculatePercentageAreaCompareValue(peak, areaSum);
+			applySelectedOptions(compareAreaValue, configuration, listener, peak);
 			subMonitor.worked(1);
 		}
 	}
 
-	private static <X extends IPeak> void applySelectedOptions(PeakAsymmetryFilterSettings configuration, CRUDListener<X, IPeakModel> listener, X peak) {
+	private static <X extends IPeak> double calculateAreaSum(Collection<X> read) {
+
+		double areaSum = 0;
+		for(X peak : read) {
+			areaSum = areaSum + peak.getIntegratedArea();
+		}
+		return areaSum;
+	}
+
+	private static <X extends IPeak> double calculatePercentageAreaCompareValue(X peak, double areaSum) {
+
+		return (100 / areaSum) * peak.getIntegratedArea();
+	}
+
+	private static <X extends IPeak> void applySelectedOptions(double peakValue, AreaPercentFilterSettings configuration, CRUDListener<X, IPeakModel> listener, X peak) {
 
 		boolean keepFlag = false;
 		if(configuration.getFilterTreatmentOption()==ValueFilterTreatmentOption.KEEP_PEAK) {
 			keepFlag = true;
 		}
-		double  peakAsymmetryFactor = peak.getPeakModel().getTailing()/peak.getPeakModel().getLeading();
-		switch (configuration.getFilterSelectionCriterion()){
-		case ASYMMETRY_FACTOR_GREATER_THAN_LIMIT:
+		switch (configuration.getFilterSelectionCriterion()) {
+		case AREA_LESS_THAN_MINIMUM:
 			if(keepFlag) {
-				if(Double.compare(peakAsymmetryFactor, configuration.getPeakAsymmetryFactor())<0) {
+				if(Double.compare(peakValue, configuration.getMinimumPercentageAreaValue())>0) {
 					processPeak(listener, configuration, peak);
 				}
 			} else {
-				if(Double.compare(peakAsymmetryFactor, configuration.getPeakAsymmetryFactor())>0) {
+				if(Double.compare(peakValue, configuration.getMinimumPercentageAreaValue())<0) {
 					processPeak(listener, configuration, peak);
 				}
 			}
 			break;
-		case ASYMMETRY_FACTOR_SMALLER_THAN_LIMIT:
+		case AREA_GREATER_THAN_MAXIMUM:
 			if(keepFlag) {
-				if(Double.compare(peakAsymmetryFactor, configuration.getPeakAsymmetryFactor())>0) {
+				if(Double.compare(peakValue, configuration.getMaximumPercentageAreaValue())<0) {
 					processPeak(listener, configuration, peak);
 				}
 			} else {
-				if(Double.compare(peakAsymmetryFactor, configuration.getPeakAsymmetryFactor())<0) {
+				if(Double.compare(peakValue, configuration.getMaximumPercentageAreaValue())>0) {
+					processPeak(listener, configuration, peak);
+				}
+			}
+			break;
+		case AREA_NOT_WITHIN_RANGE:
+			if(keepFlag) {
+				if(!checkRange(peakValue, configuration)) {
+					processPeak(listener, configuration, peak);
+				}
+			} else {
+				if(checkRange(peakValue, configuration)) {
 					processPeak(listener, configuration, peak);
 				}
 			}
@@ -102,9 +128,14 @@ public class PeakAsymmetryFilter implements IPeakFilter<PeakAsymmetryFilterSetti
 		}
 	}
 
-	private static <X extends IPeak> void processPeak(CRUDListener<X, IPeakModel> listener, PeakAsymmetryFilterSettings configuration, X peak) {
+	private static boolean checkRange(double peakValue, AreaPercentFilterSettings configuration) {
+		
+		return Double.compare(peakValue, configuration.getMinimumPercentageAreaValue())<0 || Double.compare(peakValue, configuration.getMaximumPercentageAreaValue())>0;
+	}
 
-		switch (configuration.getFilterTreatmentOption()) {
+	private static <X extends IPeak> void processPeak(CRUDListener<X, IPeakModel> listener, AreaPercentFilterSettings localSettings, X peak) {
+
+		switch (localSettings.getFilterTreatmentOption()) {
 		case ENABLE_PEAK:
 			peak.setActiveForAnalysis(true);
 			listener.updated(peak);

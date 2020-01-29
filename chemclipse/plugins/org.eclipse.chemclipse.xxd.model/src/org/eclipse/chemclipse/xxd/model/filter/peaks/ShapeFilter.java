@@ -27,7 +27,7 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = { IPeakFilter.class, Filter.class, Processor.class })
-public class PeakShapeFilter implements IPeakFilter<PeakShapeFilterSettings> {
+public class ShapeFilter implements IPeakFilter<ShapeFilterSettings> {
 
 	@Override
 	public String getName() {
@@ -42,9 +42,9 @@ public class PeakShapeFilter implements IPeakFilter<PeakShapeFilterSettings> {
 	}
 
 	@Override
-	public Class<PeakShapeFilterSettings> getConfigClass() {
+	public Class<ShapeFilterSettings> getConfigClass() {
 
-		return PeakShapeFilterSettings.class;
+		return ShapeFilterSettings.class;
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class PeakShapeFilter implements IPeakFilter<PeakShapeFilterSettings> {
 	}
 
 	@Override
-	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, PeakShapeFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
+	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, ShapeFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
 
 		Collection<X> read = listener.read();
 		if(configuration == null) {
@@ -68,7 +68,7 @@ public class PeakShapeFilter implements IPeakFilter<PeakShapeFilterSettings> {
 		}
 	}
 
-	private static <X extends IPeak> void applySelectedOptions(PeakShapeFilterSettings configuration, CRUDListener<X, IPeakModel> listener, X peak) {
+	private static <X extends IPeak> void applySelectedOptions(ShapeFilterSettings configuration, CRUDListener<X, IPeakModel> listener, X peak) {
 
 		boolean keepFlag = false;
 		if(configuration.getFilterTreatmentOption()==ValueFilterTreatmentOption.KEEP_PEAK) {
@@ -113,12 +113,12 @@ public class PeakShapeFilter implements IPeakFilter<PeakShapeFilterSettings> {
 		}
 	}
 
-	private static <X extends IPeak> boolean peakProfile(PeakShapeFilterSettings configuration, X peak) {
+	private static <X extends IPeak> boolean peakProfile(ShapeFilterSettings configuration, X peak) {
 		
 		return checkLeading(peak, configuration) || checkTailing(peak, configuration);
 	}
 
-	private static <X extends IPeak> boolean checkTailing(X peak, PeakShapeFilterSettings configuration) {
+	private static <X extends IPeak> boolean checkTailing(X peak, ShapeFilterSettings configuration) {
 
 		BigDecimal peakTailing = new BigDecimal(peak.getPeakModel().getTailing());
 		BigDecimal settingTailing = new BigDecimal(configuration.getTailingValue());
@@ -129,7 +129,7 @@ public class PeakShapeFilter implements IPeakFilter<PeakShapeFilterSettings> {
 		}
 	}
 
-	private static <X extends IPeak> boolean checkLeading(X peak, PeakShapeFilterSettings configuration) {
+	private static <X extends IPeak> boolean checkLeading(X peak, ShapeFilterSettings configuration) {
 
 		BigDecimal peakLeading = new BigDecimal(peak.getPeakModel().getLeading());
 		BigDecimal settingLeading = new BigDecimal(configuration.getLeadingValue());
@@ -140,7 +140,7 @@ public class PeakShapeFilter implements IPeakFilter<PeakShapeFilterSettings> {
 		}
 	}
 
-	private static <X extends IPeak> void processPeak(CRUDListener<X, IPeakModel> listener, PeakShapeFilterSettings configuration, X peak) {
+	private static <X extends IPeak> void processPeak(CRUDListener<X, IPeakModel> listener, ShapeFilterSettings configuration, X peak) {
 
 		switch (configuration.getFilterTreatmentOption()) {
 		case ENABLE_PEAK:
