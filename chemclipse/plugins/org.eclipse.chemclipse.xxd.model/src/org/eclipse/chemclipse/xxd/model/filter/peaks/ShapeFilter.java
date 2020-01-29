@@ -32,7 +32,7 @@ public class ShapeFilter implements IPeakFilter<ShapeFilterSettings> {
 	@Override
 	public String getName() {
 
-		return "Peak Shape Filter";
+		return "Shape Filter";
 	}
 
 	@Override

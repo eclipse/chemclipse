@@ -31,13 +31,13 @@ public class AsymmetryFilter implements IPeakFilter<AsymmetryFilterSettings> {
 	@Override
 	public String getName() {
 
-		return "Peak Asymmetry Filter";
+		return "Asymmetry Filter";
 	}
 
 	@Override
 	public String getDescription() {
 
-		return "Filter peaks by asymmetrical peak shape";
+		return "Filter peaks by peak asymmetry factor (As)";
 	}
 
 	@Override
