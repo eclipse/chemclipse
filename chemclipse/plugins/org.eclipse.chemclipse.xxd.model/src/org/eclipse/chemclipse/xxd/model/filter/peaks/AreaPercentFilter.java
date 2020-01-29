@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.xxd.model.filter.peaks;
 
 import java.util.Collection;
+import java.util.function.BiPredicate;
 
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
@@ -20,13 +21,42 @@ import org.eclipse.chemclipse.processing.Processor;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
-import org.eclipse.chemclipse.xxd.model.support.ValueFilterTreatmentOption;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
+import com.google.common.collect.Range;
+
 @Component(service = { IPeakFilter.class, Filter.class, Processor.class })
 public class AreaPercentFilter implements IPeakFilter<AreaPercentFilterSettings> {
+
+	private static BiPredicate<Double, Double> AREA_LESS_THAN_MINIMUM_COMPARATOR = (peakArea, areaSetting) -> (peakArea < areaSetting);
+	private static BiPredicate<Double, Double> AREA_GREATER_THAN_MAXIMUM_COMPARATOR = (peakArea, areaSetting) -> (peakArea > areaSetting);
+	private static BiPredicate<Double, Range<Double>> AREA_NOT_WITHIN_RANGE = (peakArea, areaSetting) -> (!areaSetting.contains(peakArea));
+
+	private static class AreaPredicate<T> {
+
+		private final BiPredicate<Double, T> predicate;
+		private final T areaSetting;
+
+		public AreaPredicate(BiPredicate<Double, T> predicate, T areaSetting) {
+
+			super();
+			this.predicate = predicate;
+			this.areaSetting = areaSetting;
+		}
+
+		public AreaPredicate<?> negate() {
+
+			return new AreaPredicate<T>(predicate.negate(), areaSetting);
+		}
+
+		public boolean test(double areaPercent) {
+
+			boolean result = predicate.test(areaPercent, areaSetting);
+			return result;
+		}
+	}
 
 	@Override
 	public String getName() {
@@ -64,7 +94,7 @@ public class AreaPercentFilter implements IPeakFilter<AreaPercentFilterSettings>
 
 		for(X peak : read) {
 			double compareAreaValue = calculatePercentageAreaCompareValue(peak, areaSum);
-			applySelectedOptions(compareAreaValue, configuration, listener, peak);
+			processPeak(listener, configuration, peak, compareAreaValue, getPredicate(configuration));
 			subMonitor.worked(1);
 		}
 	}
@@ -83,70 +113,42 @@ public class AreaPercentFilter implements IPeakFilter<AreaPercentFilterSettings>
 		return (100 / areaSum) * peak.getIntegratedArea();
 	}
 
-	private static <X extends IPeak> void applySelectedOptions(double peakValue, AreaPercentFilterSettings configuration, CRUDListener<X, IPeakModel> listener, X peak) {
+	private static AreaPredicate<?> getPredicate(AreaPercentFilterSettings configuration) {
 
-		boolean keepFlag = false;
-		if(configuration.getFilterTreatmentOption()==ValueFilterTreatmentOption.KEEP_PEAK) {
-			keepFlag = true;
-		}
-		switch (configuration.getFilterSelectionCriterion()) {
+		switch(configuration.getFilterSelectionCriterion()) {
 		case AREA_LESS_THAN_MINIMUM:
-			if(keepFlag) {
-				if(Double.compare(peakValue, configuration.getMinimumPercentageAreaValue())>0) {
-					processPeak(listener, configuration, peak);
-				}
-			} else {
-				if(Double.compare(peakValue, configuration.getMinimumPercentageAreaValue())<0) {
-					processPeak(listener, configuration, peak);
-				}
-			}
-			break;
+			return new AreaPredicate<>(AREA_LESS_THAN_MINIMUM_COMPARATOR, configuration.getMinimumPercentageAreaValue());
 		case AREA_GREATER_THAN_MAXIMUM:
-			if(keepFlag) {
-				if(Double.compare(peakValue, configuration.getMaximumPercentageAreaValue())<0) {
-					processPeak(listener, configuration, peak);
-				}
-			} else {
-				if(Double.compare(peakValue, configuration.getMaximumPercentageAreaValue())>0) {
-					processPeak(listener, configuration, peak);
-				}
-			}
-			break;
+			return new AreaPredicate<>(AREA_GREATER_THAN_MAXIMUM_COMPARATOR, configuration.getMaximumPercentageAreaValue());
 		case AREA_NOT_WITHIN_RANGE:
-			if(keepFlag) {
-				if(!checkRange(peakValue, configuration)) {
-					processPeak(listener, configuration, peak);
-				}
-			} else {
-				if(checkRange(peakValue, configuration)) {
-					processPeak(listener, configuration, peak);
-				}
-			}
-			break;
+			return new AreaPredicate<>(AREA_NOT_WITHIN_RANGE, Range.closed(configuration.getMinimumPercentageAreaValue(), configuration.getMaximumPercentageAreaValue()));
 		default:
 			throw new IllegalArgumentException("Unsupported Peak Filter Selection Criterion!");
 		}
 	}
 
-	private static boolean checkRange(double peakValue, AreaPercentFilterSettings configuration) {
-		
-		return Double.compare(peakValue, configuration.getMinimumPercentageAreaValue())<0 || Double.compare(peakValue, configuration.getMaximumPercentageAreaValue())>0;
-	}
+	private static <X extends IPeak> void processPeak(CRUDListener<X, IPeakModel> listener, AreaPercentFilterSettings configuration, X peak, double compareAreaValue, AreaPredicate<?> predicate) {
 
-	private static <X extends IPeak> void processPeak(CRUDListener<X, IPeakModel> listener, AreaPercentFilterSettings localSettings, X peak) {
-
-		switch (localSettings.getFilterTreatmentOption()) {
+		switch(configuration.getFilterTreatmentOption()) {
 		case ENABLE_PEAK:
-			peak.setActiveForAnalysis(true);
-			listener.updated(peak);
+			if(predicate.test(compareAreaValue)) {
+				peak.setActiveForAnalysis(true);
+				listener.updated(peak);
+			}
 			break;
 		case DEACTIVATE_PEAK:
-			peak.setActiveForAnalysis(false);
-			listener.updated(peak);
+			if(predicate.test(compareAreaValue)) {
+				peak.setActiveForAnalysis(false);
+				listener.updated(peak);
+			}
 			break;
 		case KEEP_PEAK:
+			if(predicate.negate().test(compareAreaValue))
+				listener.delete(peak);
+			break;
 		case DELETE_PEAK:
-			listener.delete(peak);
+			if(predicate.test(compareAreaValue))
+				listener.delete(peak);
 			break;
 		default:
 			throw new IllegalArgumentException("Unsupported Peak Filter Treatment Option!");
