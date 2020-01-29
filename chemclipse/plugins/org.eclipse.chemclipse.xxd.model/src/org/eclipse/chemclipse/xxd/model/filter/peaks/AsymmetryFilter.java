@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.xxd.model.filter.peaks;
 
 import java.util.Collection;
+import java.util.function.BiPredicate;
 
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
@@ -20,7 +21,6 @@ import org.eclipse.chemclipse.processing.Processor;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
-import org.eclipse.chemclipse.xxd.model.support.ValueFilterTreatmentOption;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
@@ -28,6 +28,33 @@ import org.osgi.service.component.annotations.Component;
 @Component(service = { IPeakFilter.class, Filter.class, Processor.class })
 public class AsymmetryFilter implements IPeakFilter<AsymmetryFilterSettings> {
 
+	private static BiPredicate<Double, Double> ASYMMETRY_FACTOR_SMALLER_THAN_LIMIT_COMPARATOR = (factor, factorSetting) -> (factor < factorSetting);
+	private static BiPredicate<Double, Double> ASYMMETRY_FACTOR_GREATER_THAN_LIMIT_COMPARATOR = (factor, factorSetting) -> (factor > factorSetting);
+	
+	private static class FactorPredicate<T> {
+
+		private final BiPredicate<Double, T> predicate;
+		private final T factorSetting;
+
+		public FactorPredicate(BiPredicate<Double, T> predicate, T factorSetting) {
+
+			super();
+			this.predicate = predicate;
+			this.factorSetting = factorSetting;
+		}
+
+		public FactorPredicate<?> negate() {
+
+			return new FactorPredicate<T>(predicate.negate(), factorSetting);
+		}
+
+		public boolean test(double factor) {
+
+			boolean result = predicate.test(factor, factorSetting);
+			return result;
+		}
+	}
+	
 	@Override
 	public String getName() {
 
@@ -62,60 +89,46 @@ public class AsymmetryFilter implements IPeakFilter<AsymmetryFilterSettings> {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
 
 		for(X peak : read) {
-			applySelectedOptions(configuration, listener, peak);
+			processPeak(configuration, listener, peak, getPredicate(configuration));
 			subMonitor.worked(1);
 		}
 	}
 
-	private static <X extends IPeak> void applySelectedOptions(AsymmetryFilterSettings configuration, CRUDListener<X, IPeakModel> listener, X peak) {
+	private static FactorPredicate<?> getPredicate(AsymmetryFilterSettings configuration) {
 
-		boolean keepFlag = false;
-		if(configuration.getFilterTreatmentOption()==ValueFilterTreatmentOption.KEEP_PEAK) {
-			keepFlag = true;
-		}
-		double  peakAsymmetryFactor = peak.getPeakModel().getTailing()/peak.getPeakModel().getLeading();
-		switch (configuration.getFilterSelectionCriterion()){
-		case ASYMMETRY_FACTOR_GREATER_THAN_LIMIT:
-			if(keepFlag) {
-				if(Double.compare(peakAsymmetryFactor, configuration.getPeakAsymmetryFactor())<0) {
-					processPeak(listener, configuration, peak);
-				}
-			} else {
-				if(Double.compare(peakAsymmetryFactor, configuration.getPeakAsymmetryFactor())>0) {
-					processPeak(listener, configuration, peak);
-				}
-			}
-			break;
+		switch(configuration.getFilterSelectionCriterion()) {
 		case ASYMMETRY_FACTOR_SMALLER_THAN_LIMIT:
-			if(keepFlag) {
-				if(Double.compare(peakAsymmetryFactor, configuration.getPeakAsymmetryFactor())>0) {
-					processPeak(listener, configuration, peak);
-				}
-			} else {
-				if(Double.compare(peakAsymmetryFactor, configuration.getPeakAsymmetryFactor())<0) {
-					processPeak(listener, configuration, peak);
-				}
-			}
-			break;
+			return new FactorPredicate<>(ASYMMETRY_FACTOR_SMALLER_THAN_LIMIT_COMPARATOR, configuration.getPeakAsymmetryFactor());
+		case ASYMMETRY_FACTOR_GREATER_THAN_LIMIT:
+			return new FactorPredicate<>(ASYMMETRY_FACTOR_GREATER_THAN_LIMIT_COMPARATOR, configuration.getPeakAsymmetryFactor());
 		default:
 			throw new IllegalArgumentException("Unsupported Peak Filter Selection Criterion!");
 		}
 	}
 
-	private static <X extends IPeak> void processPeak(CRUDListener<X, IPeakModel> listener, AsymmetryFilterSettings configuration, X peak) {
+	private static <X extends IPeak> void processPeak(AsymmetryFilterSettings configuration, CRUDListener<X, IPeakModel> listener, X peak, FactorPredicate<?> predicate) {
 
-		switch (configuration.getFilterTreatmentOption()) {
+		double  peakAsymmetryFactor = peak.getPeakModel().getTailing()/peak.getPeakModel().getLeading();
+		switch(configuration.getFilterTreatmentOption()) {
 		case ENABLE_PEAK:
-			peak.setActiveForAnalysis(true);
-			listener.updated(peak);
+			if(predicate.test(peakAsymmetryFactor)) {
+				peak.setActiveForAnalysis(true);
+				listener.updated(peak);
+			}
 			break;
 		case DEACTIVATE_PEAK:
-			peak.setActiveForAnalysis(false);
-			listener.updated(peak);
+			if(predicate.test(peakAsymmetryFactor)) {
+				peak.setActiveForAnalysis(false);
+				listener.updated(peak);
+			}
 			break;
 		case KEEP_PEAK:
+			if(predicate.negate().test(peakAsymmetryFactor))
+				listener.delete(peak);
+			break;
 		case DELETE_PEAK:
-			listener.delete(peak);
+			if(predicate.test(peakAsymmetryFactor))
+				listener.delete(peak);
 			break;
 		default:
 			throw new IllegalArgumentException("Unsupported Peak Filter Treatment Option!");
