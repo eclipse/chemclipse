@@ -367,4 +367,5 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_MERGE = "org.eclipse.chemclipse.rcp.ui.icons/merge.gif";
 	String IMAGE_LABELS = "org.eclipse.chemclipse.rcp.ui.icons/labels.png";
 	String IMAGE_PEAK_TRACES = "org.eclipse.chemclipse.rcp.ui.icons/peakTraces.gif";
+	String IMAGE_COPY_CLIPBOARD = "org.eclipse.chemclipse.rcp.ui.icons/copy-clipboard.png";
 }

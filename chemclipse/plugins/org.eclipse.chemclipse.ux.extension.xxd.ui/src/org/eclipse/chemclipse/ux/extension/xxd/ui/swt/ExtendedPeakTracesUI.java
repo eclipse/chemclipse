@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.util.Iterator;
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -31,6 +34,9 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.Clipboard;
+import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -94,12 +100,13 @@ public class ExtendedPeakTracesUI {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		composite.setLayout(new GridLayout(7, false));
+		composite.setLayout(new GridLayout(8, false));
 		//
 		createButtonToggleToolbarInfo(composite);
 		comboViewerTraces = createComboViewerTraces(composite);
 		buttonDeleteTrace = createButtonDeleteTrace(composite);
 		checkboxActive = createActiveAnalysisButton(composite);
+		createButtonCopyTracesClipboard(composite);
 		createToggleChartSeriesLegendButton(composite);
 		createResetButton(composite);
 		createSettingsButton(composite);
@@ -201,6 +208,39 @@ public class ExtendedPeakTracesUI {
 						updateComboTraces();
 					}
 				}
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonCopyTracesClipboard(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Copy the traces to clipboard.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_COPY_CLIPBOARD, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				List<Integer> traces = peakTracesUI.getTraces();
+				Iterator<Integer> iterator = traces.iterator();
+				StringBuilder builder = new StringBuilder();
+				//
+				while(iterator.hasNext()) {
+					builder.append(iterator.next());
+					if(iterator.hasNext()) {
+						builder.append(" ");
+					}
+				}
+				//
+				TextTransfer textTransfer = TextTransfer.getInstance();
+				Object[] data = new Object[]{builder.toString()};
+				Transfer[] dataTypes = new Transfer[]{textTransfer};
+				Clipboard clipboard = new Clipboard(e.widget.getDisplay());
+				clipboard.setContents(data, dataTypes);
 			}
 		});
 		//
