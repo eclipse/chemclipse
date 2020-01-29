@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonValue;
  *  <li>{@link #AREA_NOT_WITHIN_RANGE}</li>
  */
 public enum AreaFilterSelectionCriterion {
-
 	/**
 	 * Select peak areas smaller than the defined minimum
 	 */
@@ -33,12 +32,12 @@ public enum AreaFilterSelectionCriterion {
 	 * Select peak areas within a specified range, e.g. greater than the defined
 	 * minimum and smaller than the defined maximum
 	 */
-	AREA_NOT_WITHIN_RANGE("Area < minimum and > maximum"); //	
+	AREA_NOT_WITHIN_RANGE("Area < minimum or Area > maximum"); //
 
 	@JsonValue
 	private String filterSelectionCriterion;
 
-	private AreaFilterSelectionCriterion(String filterSelectionCriterion){
+	private AreaFilterSelectionCriterion(String filterSelectionCriterion) {
 
 		this.filterSelectionCriterion = filterSelectionCriterion;
 	}
