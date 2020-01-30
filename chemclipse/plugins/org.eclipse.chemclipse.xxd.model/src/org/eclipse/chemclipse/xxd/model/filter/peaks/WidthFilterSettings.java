@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.xxd.model.support.ProcessPeaksByValueFilterTreatme
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class PeakWidthFilterSettings {
+public class WidthFilterSettings {
 
 	@JsonProperty(value = "Width value [min]:")
 	@JsonPropertyDescription(value = "The width value of a peak to be filtered accordingly.")
