@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - make this configureable
+ * Christoph Läubrich - make this configureable, null check for scan
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -210,11 +210,13 @@ public class ExtendedComparisonScanUI implements ConfigurableUI<ComparisonScanUI
 
 	private static IScanMSD copyScan(IScanMSD scan) {
 
-		try {
-			return scan.makeDeepCopy().normalize(NORMALIZATION_FACTOR);
-		} catch(CloneNotSupportedException e) {
-			return null;
+		if(scan != null) {
+			try {
+				return scan.makeDeepCopy().normalize(NORMALIZATION_FACTOR);
+			} catch(CloneNotSupportedException e) {
+			}
 		}
+		return null;
 	}
 
 	private void updateChart() {

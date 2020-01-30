@@ -83,4 +83,18 @@
             class="org.eclipse.chemclipse.msd.converter.supplier.csv.preferences.PreferenceInitializer">
       </initializer>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.msd.converter.peakSupplier">
+      <PeakSupplier
+            description="Export Peaks as in CSV Format"
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.csv.io.core.CSVPeakConverter"
+            fileExtension=".csv"
+            filterName="CSV Peak Export (*.csv)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.csv.PeakSupplierCSV"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.csv.io.core.CSVPeakConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.csv.io.core.CSVPeakConverter"
+            isExportable="true"
+            isImportable="true">
+      </PeakSupplier>
+   </extension>
 </plugin>
