@@ -34,7 +34,7 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = { IPeakFilter.class, Filter.class, Processor.class })
-public class PeakClassifierFilter implements IPeakFilter<PeakClassifierFilterSettings> {
+public class ClassifierFilter implements IPeakFilter<ClassifierFilterSettings> {
 
 	@Override
 	public String getName() {
@@ -49,9 +49,9 @@ public class PeakClassifierFilter implements IPeakFilter<PeakClassifierFilterSet
 	}
 
 	@Override
-	public Class<PeakClassifierFilterSettings> getConfigClass() {
+	public Class<ClassifierFilterSettings> getConfigClass() {
 
-		return PeakClassifierFilterSettings.class;
+		return ClassifierFilterSettings.class;
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class PeakClassifierFilter implements IPeakFilter<PeakClassifierFilterSet
 	}
 
 	@Override
-	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, PeakClassifierFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
+	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, ClassifierFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
 
 		Collection<X> read = listener.read();
 		if(configuration == null) {
@@ -76,27 +76,29 @@ public class PeakClassifierFilter implements IPeakFilter<PeakClassifierFilterSet
 		}
 	}
 
-	private static LinkedHashMap<String, String> parseUserDefinedValuesAsMap(PeakClassifierFilterSettings configuration) {
+	private static LinkedHashMap<String, String> parseUserDefinedValuesAsMap(ClassifierFilterSettings configuration) {
 
 		String userDefinedMatchExpression = configuration.getUserDefinedMatchExpression();
-		String matchClassification = configuration.getMatchClassification();
-		List<List<String>> matchList = new ArrayList<List<String>>();
+		
+		List<String> expressions = new ArrayList<String>();
 		if(!userDefinedMatchExpression.isEmpty()) {
-			matchList.add(parseExpressions(userDefinedMatchExpression));
+			expressions.addAll(parseExpressions(userDefinedMatchExpression));
 		} else {
 			throw new IllegalArgumentException("No match expressions defined!");
 		}
+		List<String> classifications = new ArrayList<String>();
+		String matchClassification = configuration.getMatchClassification();
 		if(!matchClassification.isEmpty()) {
-			matchList.add(parseExpressions(matchClassification));
+			classifications.addAll(parseExpressions(matchClassification));
 		} else {
 			throw new IllegalArgumentException("No match classifications defined!");
 		}
-		if(matchList.get(0).size() != matchList.get(1).size()) {
+		if(expressions.size() != classifications.size()) {
 			throw new IllegalArgumentException("The number of Expressions is not the same as the number of Classifications.");
 		}
 		LinkedHashMap<String, String> parsedUserDefinedValues = new LinkedHashMap<String, String>();
-		for(int i = 0; i < matchList.get(0).size(); i++) {
-			parsedUserDefinedValues.put(matchList.get(0).get(i),matchList.get(1).get(i));
+		for(int i = 0; i < expressions.size(); i++) {
+			parsedUserDefinedValues.put(expressions.get(i), classifications.get(i));
 		}
 		return parsedUserDefinedValues;
 	}
@@ -113,7 +115,7 @@ public class PeakClassifierFilter implements IPeakFilter<PeakClassifierFilterSet
 		return expressionsList;
 	}
 
-	private static <X extends IPeak> void setPeakClassifier(PeakClassifierFilterSettings configuration, LinkedHashMap<String, String> parsedUserDefinedValues, X peak) {
+	private static <X extends IPeak> void setPeakClassifier(ClassifierFilterSettings configuration, LinkedHashMap<String, String> parsedUserDefinedValues, X peak) {
 
 		peak.removeClassifier("");
 		String substanceName = extractSubstanceName(configuration, peak);
@@ -137,7 +139,7 @@ public class PeakClassifierFilter implements IPeakFilter<PeakClassifierFilterSet
 		}
 	}
 
-	private static Pattern createPattern(PeakClassifierFilterSettings configuration, Map.Entry<String, String> entry) {
+	private static Pattern createPattern(ClassifierFilterSettings configuration, Map.Entry<String, String> entry) {
 
 		Pattern pattern = null;
 		if(configuration.isIgnoreUppercase()) { // UserDefinedMatchExpression
@@ -148,7 +150,7 @@ public class PeakClassifierFilter implements IPeakFilter<PeakClassifierFilterSet
 		return pattern;
 	}
 
-	private static <X extends IPeak> String extractSubstanceName(PeakClassifierFilterSettings configuration, X peak) {
+	private static <X extends IPeak> String extractSubstanceName(ClassifierFilterSettings configuration, X peak) {
 
 		Set<IIdentificationTarget> targets = peak.getTargets();
 		IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(targets);

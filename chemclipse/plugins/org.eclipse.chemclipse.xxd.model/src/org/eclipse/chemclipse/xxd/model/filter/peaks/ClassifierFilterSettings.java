@@ -15,7 +15,7 @@ import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class PeakClassifierFilterSettings {
+public class ClassifierFilterSettings {
 
 	private final static String REGULAR_EXPRESSION = "([a-zA-Z0-9,'-\\{\\[\\]\\}\\(\\)\\s*]+{2,})";
 	private final static String USER_MATCH_EXPRESSION = "";
