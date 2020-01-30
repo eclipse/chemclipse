@@ -11,9 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.model.filter.peaks;
 
-import java.math.BigDecimal;
 import java.util.Collection;
-
+import java.util.function.BiPredicate;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.filter.IPeakFilter;
@@ -21,13 +20,79 @@ import org.eclipse.chemclipse.processing.Processor;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
-import org.eclipse.chemclipse.xxd.model.support.ValueFilterTreatmentOption;
+import org.eclipse.chemclipse.xxd.model.support.PeakShapeFilterSelectionCriterion;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
+import com.google.common.collect.Range;
+
 @Component(service = { IPeakFilter.class, Filter.class, Processor.class })
 public class ShapeFilter implements IPeakFilter<ShapeFilterSettings> {
+
+	private static BiPredicate<Double, Double> LEADING_SMALLER_THAN_LIMIT_COMPARATOR = (value, shapeSetting) -> (value < shapeSetting);
+	private static BiPredicate<Double, Double> TAILING_GREATER_THAN_LIMIT_COMPARATOR = (value, shapeSetting) -> (value > shapeSetting);
+	private static BiPredicate<RangeContainer, Range<Double>> VALUES_WITHIN_RANGE_COMPARATOR = (container, shapeSetting) -> (shapeSetting.contains(container.leading) && (shapeSetting.contains(container.tailing)));
+
+	private static class ShapePredicate<T> {
+
+		private final BiPredicate<Double, T> predicate;
+		private final T shapeSetting;
+
+		public ShapePredicate(BiPredicate<Double, T> predicate, T shapeSetting) {
+
+			super();
+			this.predicate = predicate;
+			this.shapeSetting = shapeSetting;
+		}
+
+		public ShapePredicate<?> negate() {
+
+			return new ShapePredicate<T>(predicate.negate(), shapeSetting);
+		}
+
+		public boolean test(double value) {
+
+			boolean result = predicate.test(value, shapeSetting);
+			return result;
+		}
+	}
+
+	private static class RangeContainer {
+
+		double leading;
+		double tailing;
+
+		public RangeContainer(double leading, double tailing) {
+			super();
+			this.leading = leading;
+			this.tailing = tailing;
+		}
+	}
+
+	private static class RangePredicate<T> {
+
+		private final BiPredicate<RangeContainer, T> predicate;
+		private final T shapeSetting;
+
+		public RangePredicate(BiPredicate<RangeContainer, T> predicate, T shapeSetting) {
+
+			super();
+			this.predicate = predicate;
+			this.shapeSetting = shapeSetting;
+		}
+
+		public RangePredicate<?> negate() {
+
+			return new RangePredicate<T>(predicate.negate(), shapeSetting);
+		}
+
+		public boolean test(RangeContainer values) {
+
+			boolean result = predicate.test(values, shapeSetting);
+			return result;
+		}
+	}
 
 	@Override
 	public String getName() {
@@ -38,7 +103,7 @@ public class ShapeFilter implements IPeakFilter<ShapeFilterSettings> {
 	@Override
 	public String getDescription() {
 
-		return "Filter peaks by leading and tailing)";
+		return "Filter peaks by leading and tailing";
 	}
 
 	@Override
@@ -63,97 +128,89 @@ public class ShapeFilter implements IPeakFilter<ShapeFilterSettings> {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
 
 		for(X peak : read) {
-			applySelectedOptions(configuration, listener, peak);
+			if(configuration.getFilterSelectionCriterion() == PeakShapeFilterSelectionCriterion.VALUES_WITHIN_RANGE) {
+				processPeakConsideringRange(configuration, listener, peak, getRangePredicate(configuration));
+			} else {
+				processPeak(configuration, listener, peak, getPredicate(configuration));
+			}
 			subMonitor.worked(1);
 		}
 	}
 
-	private static <X extends IPeak> void applySelectedOptions(ShapeFilterSettings configuration, CRUDListener<X, IPeakModel> listener, X peak) {
+	private static RangePredicate<?> getRangePredicate(ShapeFilterSettings configuration) {
 
-		boolean keepFlag = false;
-		if(configuration.getFilterTreatmentOption()==ValueFilterTreatmentOption.KEEP_PEAK) {
-			keepFlag = true;
-		}
-		switch (configuration.getFilterSelectionCriterion()){
+		return new RangePredicate<>(VALUES_WITHIN_RANGE_COMPARATOR, Range.closed(configuration.getLeadingValue(), configuration.getTailingValue()));
+	}
+
+	private static ShapePredicate<?> getPredicate(ShapeFilterSettings configuration) {
+
+		switch(configuration.getFilterSelectionCriterion()) {
 		case LEADING_SMALLER_THAN_LIMIT:
-			if(keepFlag) {
-				if(Double.compare(peak.getPeakModel().getLeading(), configuration.getLeadingValue())>0) {
-					processPeak(listener, configuration, peak);
-				}
-			} else {
-				if(Double.compare(peak.getPeakModel().getLeading(), configuration.getLeadingValue())<0) {
-					processPeak(listener, configuration, peak);
-				}
-			}
-			break;
+			return new ShapePredicate<>(LEADING_SMALLER_THAN_LIMIT_COMPARATOR, configuration.getLeadingValue());
 		case TAILING_GREATER_THAN_LIMIT:
-			if(keepFlag) {
-				if(Double.compare(peak.getPeakModel().getTailing(), configuration.getTailingValue())<0) {
-					processPeak(listener, configuration, peak);
-				}
-			} else {
-				if(Double.compare(peak.getPeakModel().getTailing(), configuration.getTailingValue())>0) {
-					processPeak(listener, configuration, peak);
-				}
-			}
-			break;
-		case VALUES_WITHIN_RANGE:
-			if(keepFlag) {
-				if(!peakProfile(configuration, peak)) {
-					processPeak(listener, configuration, peak);
-				}
-			} else {
-				if(peakProfile(configuration, peak)) {
-					processPeak(listener, configuration, peak);
-				}
-			}
-			break;
+			return new ShapePredicate<>(TAILING_GREATER_THAN_LIMIT_COMPARATOR, configuration.getTailingValue());
 		default:
 			throw new IllegalArgumentException("Unsupported Peak Filter Selection Criterion!");
 		}
 	}
 
-	private static <X extends IPeak> boolean peakProfile(ShapeFilterSettings configuration, X peak) {
-		
-		return checkLeading(peak, configuration) || checkTailing(peak, configuration);
-	}
+	private static <X extends IPeak> void processPeakConsideringRange(ShapeFilterSettings configuration, CRUDListener<X, IPeakModel> listener, X peak, RangePredicate<?> rangePredicate) {
 
-	private static <X extends IPeak> boolean checkTailing(X peak, ShapeFilterSettings configuration) {
-
-		BigDecimal peakTailing = new BigDecimal(peak.getPeakModel().getTailing());
-		BigDecimal settingTailing = new BigDecimal(configuration.getTailingValue());
-		if(peakTailing.compareTo(settingTailing)<0 || peakTailing.compareTo(settingTailing) == 0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	private static <X extends IPeak> boolean checkLeading(X peak, ShapeFilterSettings configuration) {
-
-		BigDecimal peakLeading = new BigDecimal(peak.getPeakModel().getLeading());
-		BigDecimal settingLeading = new BigDecimal(configuration.getLeadingValue());
-		if(peakLeading.compareTo(settingLeading)>0 || peakLeading.compareTo(settingLeading) == 0) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	private static <X extends IPeak> void processPeak(CRUDListener<X, IPeakModel> listener, ShapeFilterSettings configuration, X peak) {
-
-		switch (configuration.getFilterTreatmentOption()) {
+		RangeContainer container = new RangeContainer(peak.getPeakModel().getLeading(), peak.getPeakModel().getTailing());
+		switch(configuration.getFilterTreatmentOption()) {
 		case ENABLE_PEAK:
-			peak.setActiveForAnalysis(true);
-			listener.updated(peak);
+			if(rangePredicate.test(container)) {
+				peak.setActiveForAnalysis(true);
+				listener.updated(peak);
+			}
 			break;
 		case DEACTIVATE_PEAK:
-			peak.setActiveForAnalysis(false);
-			listener.updated(peak);
+			if(rangePredicate.test(container)) {
+				peak.setActiveForAnalysis(false);
+				listener.updated(peak);
+			}
 			break;
 		case KEEP_PEAK:
+			if(rangePredicate.negate().test(container))
+				listener.delete(peak);
+			break;
 		case DELETE_PEAK:
-			listener.delete(peak);
+			if(rangePredicate.test(container))
+				listener.delete(peak);
+			break;
+		default:
+			throw new IllegalArgumentException("Unsupported Peak Filter Treatment Option!");
+		}
+	}
+
+	private static <X extends IPeak> void processPeak(ShapeFilterSettings configuration, CRUDListener<X, IPeakModel> listener, X peak, ShapePredicate<?> predicate) {
+
+		double shapeValue = 0;
+		if(configuration.getFilterSelectionCriterion()==PeakShapeFilterSelectionCriterion.LEADING_SMALLER_THAN_LIMIT) {
+			shapeValue = peak.getPeakModel().getLeading();
+		} else {
+			shapeValue = peak.getPeakModel().getTailing();
+		}
+		switch(configuration.getFilterTreatmentOption()) {
+		case ENABLE_PEAK:
+			if(predicate.test(shapeValue)) {
+				peak.setActiveForAnalysis(true);
+				listener.updated(peak);
+			}
+			break;
+		case DEACTIVATE_PEAK:
+			if(predicate.test(shapeValue)) {
+				peak.setActiveForAnalysis(false);
+				listener.updated(peak);
+			}
+			break;
+		case KEEP_PEAK:
+			if(predicate.negate().test(shapeValue))
+				listener.delete(peak);
+			break;
+		case DELETE_PEAK:
+			if(predicate.test(shapeValue))
+				listener.delete(peak);
 			break;
 		default:
 			throw new IllegalArgumentException("Unsupported Peak Filter Treatment Option!");
