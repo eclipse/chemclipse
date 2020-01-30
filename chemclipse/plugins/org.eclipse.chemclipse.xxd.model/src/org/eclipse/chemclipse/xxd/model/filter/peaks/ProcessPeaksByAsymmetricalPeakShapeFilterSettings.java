@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.xxd.model.filter.peaks;
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
 import org.eclipse.chemclipse.xxd.model.support.ProcessPeaksByAsymmetricalPeakShapeFilterSelectionCriterion;
-import org.eclipse.chemclipse.xxd.model.support.ProcessPeaksByValueFilterTreatmentOption;
+import org.eclipse.chemclipse.xxd.model.support.ValueFilterTreatmentOption;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -39,7 +39,7 @@ public class ProcessPeaksByAsymmetricalPeakShapeFilterSettings {
 
 	@JsonProperty(value = "Peak Treatment Option:")
 	@EnumSelectionSettingProperty
-	private ProcessPeaksByValueFilterTreatmentOption filterTreatmentOption = ProcessPeaksByValueFilterTreatmentOption.DISABLE_PEAK;
+	private ValueFilterTreatmentOption filterTreatmentOption = ValueFilterTreatmentOption.DEACTIVATE_PEAK;
 
 	@JsonProperty(value = "Peak Selection Criterion:")
 	@EnumSelectionSettingProperty
@@ -74,12 +74,12 @@ public class ProcessPeaksByAsymmetricalPeakShapeFilterSettings {
 		this.peakAsymmetryFactor = peakAsymmetryFactor;
 	}
 
-	public ProcessPeaksByValueFilterTreatmentOption getFilterTreatmentOption() {
+	public ValueFilterTreatmentOption getFilterTreatmentOption() {
 		
 		return filterTreatmentOption;
 	}
 
-	public void setFilterTreatmentOption(ProcessPeaksByValueFilterTreatmentOption filterTreatmentOption) {
+	public void setFilterTreatmentOption(ValueFilterTreatmentOption filterTreatmentOption) {
 		
 		this.filterTreatmentOption = filterTreatmentOption;
 	}

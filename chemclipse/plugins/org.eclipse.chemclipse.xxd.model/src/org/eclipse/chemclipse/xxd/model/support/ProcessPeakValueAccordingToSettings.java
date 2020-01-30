@@ -24,7 +24,7 @@ public class ProcessPeakValueAccordingToSettings {
 	 * The selected filter criterion of type {@link ProcessPeaksByValueFilterSelectionCriterion}
 	 * can have the value of smaller than minimum, bigger than maximum or not within range.
 	 * <br>
-	 * The selected filter treatment option of type {@link ProcessPeaksByValueFilterTreatmentOption}
+	 * The selected filter treatment option of type {@link ValueFilterTreatmentOption}
 	 * defines if the peak(s) will be deleted or disabled.
 	 * <br><br>
 	 * Can be used to process following peak values:
@@ -70,7 +70,7 @@ public class ProcessPeakValueAccordingToSettings {
 		case DELETE_PEAK:
 			listener.delete(peak);
 			break;
-		case DISABLE_PEAK:
+		case DEACTIVATE_PEAK:
 			peak.setActiveForAnalysis(false);
 			listener.updated(peak);
 			break;

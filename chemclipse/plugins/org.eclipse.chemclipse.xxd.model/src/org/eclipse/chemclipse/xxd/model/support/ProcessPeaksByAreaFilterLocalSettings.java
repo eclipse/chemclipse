@@ -26,7 +26,7 @@ public class ProcessPeaksByAreaFilterLocalSettings {
 	private double lowerLimit = 0.0d;
 	private double upperLimit = 0.0d;
 	private ProcessPeaksByValueFilterSelectionCriterion selectionCriterion;
-	private ProcessPeaksByValueFilterTreatmentOption treatmentOption;
+	private ValueFilterTreatmentOption treatmentOption;
 	//
 	private ProcessPeaksByIntegratedAreaFilterSettings integratedAreaFilterSettings;
 	private ProcessPeaksByPercentageAreaFilterSettings percentageAreaFilterSettings;
@@ -77,11 +77,11 @@ public class ProcessPeaksByAreaFilterLocalSettings {
 		this.selectionCriterion = selectionCriterion;
 	}
 
-	public ProcessPeaksByValueFilterTreatmentOption getTreatmentOption() {
+	public ValueFilterTreatmentOption getTreatmentOption() {
 		return treatmentOption;
 	}
 
-	public void setTreatmentOption(ProcessPeaksByValueFilterTreatmentOption treatmentOption) {
+	public void setTreatmentOption(ValueFilterTreatmentOption treatmentOption) {
 		this.treatmentOption = treatmentOption;
 	}
 

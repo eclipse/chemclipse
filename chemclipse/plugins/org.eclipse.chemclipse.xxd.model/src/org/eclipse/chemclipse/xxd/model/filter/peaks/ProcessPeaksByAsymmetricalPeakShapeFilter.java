@@ -96,7 +96,7 @@ public class ProcessPeaksByAsymmetricalPeakShapeFilter implements IPeakFilter<Pr
 		case DELETE_PEAK:
 			listener.delete(peak);
 			break;
-		case DISABLE_PEAK:
+		case DEACTIVATE_PEAK:
 			peak.setActiveForAnalysis(false);
 			listener.updated(peak);
 			break;

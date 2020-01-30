@@ -12,7 +12,8 @@
 package org.eclipse.chemclipse.xxd.model.filter.peaks;
 
 import java.util.Collection;
-import java.util.Comparator;
+import java.util.function.BiPredicate;
+
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.filter.IPeakFilter;
@@ -27,16 +28,43 @@ import org.osgi.service.component.annotations.Component;
 @Component(service = { IPeakFilter.class, Filter.class, Processor.class })
 public class WidthFilter implements IPeakFilter<WidthFilterSettings> {
 
+	private static BiPredicate<Integer, Integer> WIDTH_SMALLER_THAN_LIMIT_COMPARATOR = (width, widthSetting) -> (width < widthSetting);
+	private static BiPredicate<Integer, Integer> WIDTH_GREATER_THAN_LIMIT_COMPARATOR = (width, widthSetting) -> (width > widthSetting);
+
+	private static class WidthPredicate<T> {
+
+		private final BiPredicate<Integer, T> predicate;
+		private final T widthSetting;
+
+		public WidthPredicate(BiPredicate<Integer, T> predicate, T widthSetting) {
+
+			super();
+			this.predicate = predicate;
+			this.widthSetting = widthSetting;
+		}
+
+		public WidthPredicate<?> negate() {
+
+			return new WidthPredicate<T>(predicate.negate(), widthSetting);
+		}
+
+		public boolean test(int width) {
+
+			boolean result = predicate.test(width, widthSetting);
+			return result;
+		}
+	}
+
 	@Override
 	public String getName() {
 
-		return "Peak Width Filter";
+		return "Width Filter";
 	}
 
 	@Override
 	public String getDescription() {
 
-		return "Filter peaks by peak Width";
+		return "Filter peaks by peak width";
 	}
 
 	@Override
@@ -61,43 +89,46 @@ public class WidthFilter implements IPeakFilter<WidthFilterSettings> {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
 
 		for(X peak : read) {
-			applySelectedOptions(configuration, listener, peak);
+			processPeak(configuration, listener, peak, getPredicate(configuration));
 			subMonitor.worked(1);
 		}
 	}
+	
+	private static WidthPredicate<?> getPredicate(WidthFilterSettings configuration) {
 
-	private static <X extends IPeak> void applySelectedOptions(WidthFilterSettings settings, CRUDListener<X, IPeakModel> listener, X peak) {
-
-		switch (settings.getFilterSelectionCriterion()){
+		switch(configuration.getFilterSelectionCriterion()) {
 		case WIDTH_SMALLER_THAN_LIMIT:
-			if(Integer.compare(peak.getPeakModel().getWidthByInflectionPoints(), getWidthInMilliseconds(settings))<0) {
-				processPeak(listener, settings, peak);
-			}
-			break;
+			return new WidthPredicate<>(WIDTH_SMALLER_THAN_LIMIT_COMPARATOR, (int) (configuration.getWidthValue() * 60000));
 		case WIDTH_GREATER_THAN_LIMIT:
-			if(Integer.compare(peak.getPeakModel().getWidthByInflectionPoints(), getWidthInMilliseconds(settings))>0) {
-				processPeak(listener, settings, peak);
-			}
-			break;
+			return new WidthPredicate<>(WIDTH_GREATER_THAN_LIMIT_COMPARATOR, (int) (configuration.getWidthValue() * 60000));
 		default:
 			throw new IllegalArgumentException("Unsupported Peak Filter Selection Criterion!");
 		}
 	}
 
-	private static int getWidthInMilliseconds(WidthFilterSettings settings) {
+	private static <X extends IPeak> void processPeak(WidthFilterSettings configuration, CRUDListener<X, IPeakModel> listener, X peak, WidthPredicate<?> predicate) {
 
-		return (int) (settings.getWidthValue() * 60000);
-	}
-
-	private static <X extends IPeak> void processPeak(CRUDListener<X, IPeakModel> listener, WidthFilterSettings settings, X peak) {
-
-		switch (settings.getFilterTreatmentOption()) {
-		case DELETE_PEAK:
-			listener.delete(peak);
+		int width = peak.getPeakModel().getWidthByInflectionPoints();
+		switch(configuration.getFilterTreatmentOption()) {
+		case ENABLE_PEAK:
+			if(predicate.test(width)) {
+				peak.setActiveForAnalysis(true);
+				listener.updated(peak);
+			}
 			break;
-		case DISABLE_PEAK:
-			peak.setActiveForAnalysis(false);
-			listener.updated(peak);
+		case DEACTIVATE_PEAK:
+			if(predicate.test(width)) {
+				peak.setActiveForAnalysis(false);
+				listener.updated(peak);
+			}
+			break;
+		case KEEP_PEAK:
+			if(predicate.negate().test(width))
+				listener.delete(peak);
+			break;
+		case DELETE_PEAK:
+			if(predicate.test(width))
+				listener.delete(peak);
 			break;
 		default:
 			throw new IllegalArgumentException("Unsupported Peak Filter Treatment Option!");
