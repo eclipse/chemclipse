@@ -8,7 +8,7 @@
  *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - support for configuration
+ * Christoph Läubrich - support for configuration, zoom lock
  * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
@@ -75,7 +75,9 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swtchart.IAxisSet;
 import org.eclipse.swtchart.ISeries;
+import org.eclipse.swtchart.Range;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.IAxisScaleConverter;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
@@ -125,6 +127,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 	private final Map<IChromatogramSelection, List<String>> chromatogramSelections = new LinkedHashMap<>();
 	private Composite toolbarMain;
 	private final int style;
+	private boolean lockZoom = false;
 
 	public ExtendedChromatogramOverlayUI(Composite parent) {
 		this(parent, SWT.BORDER);
@@ -954,6 +957,9 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 	private void refreshUpdateOverlayChart() {
 
 		if(chromatogramSelections.size() > 0) {
+			IAxisSet axisSet = chromatogramChart.getBaseChart().getAxisSet();
+			Range xrange = axisSet.getXAxis(BaseChart.ID_PRIMARY_X_AXIS).getRange();
+			Range yrange = axisSet.getYAxis(BaseChart.ID_PRIMARY_Y_AXIS).getRange();
 			Set<String> availableSeriesIds = new HashSet<>();
 			BaseChart baseChart = chromatogramChart.getBaseChart();
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
@@ -1200,6 +1206,10 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 			//
 			modifyDataStatusLabel();
 			chromatogramChart.adjustRange(true);
+			if(lockZoom) {
+				chromatogramChart.setRange(IExtendedChart.X_AXIS, xrange);
+				chromatogramChart.setRange(IExtendedChart.Y_AXIS, yrange);
+			}
 		}
 	}
 
@@ -1432,5 +1442,10 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 				}
 			}
 		};
+	}
+
+	public void setZoomLocked(boolean lockZoom) {
+
+		this.lockZoom = lockZoom;
 	}
 }
