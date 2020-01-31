@@ -12,11 +12,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.EnumSet;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
 import javax.inject.Inject;
@@ -37,11 +34,15 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.LibraryServiceRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChartConfigSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.AxisConfig.ChartAxis;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -151,7 +152,7 @@ public class ExtendedComparisonScanUI implements ConfigurableUI<ComparisonScanUI
 		}
 	}
 
-	public Future<Void> update(IScanMSD unknownMassSpectrum, IIdentificationTarget identificationTarget, ExecutorService executor) {
+	public void update(IScanMSD unknownMassSpectrum, IIdentificationTarget identificationTarget) {
 
 		if(displayOption.equals(OPTION_LIBRARY_SEARCH)) {
 			scan1 = copyScan(unknownMassSpectrum);
@@ -174,38 +175,25 @@ public class ExtendedComparisonScanUI implements ConfigurableUI<ComparisonScanUI
 					});
 				}
 			});
-			if(runnable.requireProgressMonitor()) {
-				return executor.submit(() -> {
-					AtomicReference<Exception> exception = new AtomicReference<>();
-					Display.getDefault().syncExec(new Runnable() {
-
-						@Override
-						public void run() {
-
-							ProgressMonitorDialog monitor = new ProgressMonitorDialog(scanChartUI.getShell());
-							try {
-								monitor.run(Display.getCurrent() != null, true, runnable);
-							} catch(InvocationTargetException e) {
-								exception.set(e);
-							} catch(InterruptedException e) {
-								Thread.currentThread().interrupt();
-							}
-						}
+			try {
+				if(runnable.requireProgressMonitor()) {
+					DisplayUtils.executeInUserInterfaceThread(() -> {
+						ProgressMonitorDialog monitor = new ProgressMonitorDialog(scanChartUI.getShell());
+						monitor.run(true, true, runnable);
+						return null;
 					});
-					Exception thrown = exception.get();
-					if(thrown != null) {
-						throw thrown;
-					}
-					return null;
-				});
-			} else {
-				return executor.submit(() -> {
-					runnable.run(new NullProgressMonitor());
-					return null;
-				});
+				} else {
+					DisplayUtils.executeBusy(() -> {
+						runnable.run(new NullProgressMonitor());
+						return null;
+					});
+				}
+			} catch(InterruptedException e) {
+				Thread.currentThread().interrupt();
+			} catch(ExecutionException e) {
+				Activator.getDefault().getLog().log(new Status(IStatus.ERROR, getClass().getName(), "Update scan failed", e));
 			}
 		}
-		return executor.submit(() -> null);
 	}
 
 	private static IScanMSD copyScan(IScanMSD scan) {
