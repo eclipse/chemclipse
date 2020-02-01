@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - adjust to API
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
@@ -430,7 +431,7 @@ public class ExtendedSequenceListUI {
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePageSequences()));
 				preferenceManager.addToRoot(new PreferenceNode("2", new PreferencePageMethods()));
-				preferenceManager.addToRoot(new PreferenceNode("3", new PreferencePageChromatogram()));
+				preferenceManager.addToRoot(new PreferenceNode("3", new PreferencePageChromatogram(Activator.getDefault().getPreferenceStore())));
 				//
 				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
 				preferenceDialog.create();

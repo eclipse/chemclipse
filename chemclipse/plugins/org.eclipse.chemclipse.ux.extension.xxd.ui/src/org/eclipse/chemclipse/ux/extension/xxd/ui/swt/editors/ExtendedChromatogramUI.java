@@ -1011,13 +1011,13 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			public Collection<? extends IPreferencePage> get() {
 
 				IPreferencePage processorsPage = new PreferencePageProcessors(processTypeSupport);
-				IPreferencePage preferencePageChromatogram = new PreferencePageChromatogram();
+				IPreferencePage preferencePageChromatogram = new PreferencePageChromatogram(preferenceStore);
 				preferencePageChromatogram.setTitle("Chromatogram Settings");
-				IPreferencePage preferencePageChromatogramAxes = new PreferencePageChromatogramAxes();
+				IPreferencePage preferencePageChromatogramAxes = new PreferencePageChromatogramAxes(preferenceStore);
 				preferencePageChromatogramAxes.setTitle("Chromatogram Axes");
 				IPreferencePage preferencePageChromatogramPeaks = new PreferencePageChromatogramPeaks(preferenceStore);
 				preferencePageChromatogramPeaks.setTitle("Chromatogram Peaks");
-				IPreferencePage preferencePageChromatogramScans = new PreferencePageChromatogramScans();
+				IPreferencePage preferencePageChromatogramScans = new PreferencePageChromatogramScans(preferenceStore);
 				preferencePageChromatogramScans.setTitle("Chromatogram Scans");
 				IPreferencePage preferencePageSWT = new PreferencePageSWT();
 				preferencePageSWT.setTitle("Settings (SWT)");
