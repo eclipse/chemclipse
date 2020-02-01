@@ -65,6 +65,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 	public TargetReferenceLabelMarker(boolean showReferenceId, int offset, IPreferenceStore preferenceStore) {
 		this.showReferenceId = showReferenceId;
 		this.offset = offset;
+		this.preferenceStore = preferenceStore;
 	}
 
 	public TargetReferenceLabelMarker(Collection<? extends SignalTargetReference> references, TargetDisplaySettings settings, int offset, IPreferenceStore preferenceStore) {
