@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2019 Lablicate GmbH.
+ * Copyright (c) 2015, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - init DataUpdateSupport on first access
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui;
 
@@ -47,19 +48,19 @@ public class Activator extends AbstractUIPlugin {
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void start(BundleContext context) throws Exception {
 
 		super.start(context);
 		plugin = this;
 		initializePreferenceStoreSubtract(PreferenceSupplier.INSTANCE());
-		dataUpdateSupport = new DataUpdateSupport(getEventBroker());
-		initialize(dataUpdateSupport);
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext context) throws Exception {
 
 		plugin = null;
@@ -90,6 +91,10 @@ public class Activator extends AbstractUIPlugin {
 
 	public DataUpdateSupport getDataUpdateSupport() {
 
+		if(dataUpdateSupport == null) {
+			dataUpdateSupport = new DataUpdateSupport(getEventBroker());
+			initialize(dataUpdateSupport);
+		}
 		return dataUpdateSupport;
 	}
 
