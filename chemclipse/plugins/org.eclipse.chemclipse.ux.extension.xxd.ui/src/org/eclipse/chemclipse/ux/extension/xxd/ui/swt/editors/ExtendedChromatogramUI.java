@@ -154,8 +154,8 @@ import org.eclipse.swtchart.extensions.menu.ResetChartHandler;
 @SuppressWarnings("rawtypes")
 public class ExtendedChromatogramUI implements ToolbarConfig {
 
-	// this is a private preference
-	private static final String PREFERENCE_CHROMATOGRAM_UI_SHOW_TOOLBAR_TEXT = "ChromatogramUI.showToolbarText";
+	public static final String PREFERENCE_SHOW_TOOLBAR_TEXT = "ChromatogramUI.showToolbarText";
+	public static final String PREFERENCE_SHOW_LABELS_AT_TIC = "ChromatogramUI.showLabelsAtTic";
 	private static final Logger logger = Logger.getLogger(ExtendedChromatogramUI.class);
 	//
 	protected static final String TYPE_GENERIC = "TYPE_GENERIC";
@@ -811,8 +811,23 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			 */
 			removeIdentificationLabelMarker(peakLabelMarkerMap, seriesId);
 			if(displaySettings.isShowPeakLabels()) {
+				IChromatogramSelection selection = getChromatogramSelection();
 				IPlotArea plotArea = chromatogramChart.getBaseChart().getPlotArea();
-				TargetReferenceLabelMarker peakLabelMarker = new TargetReferenceLabelMarker(SignalTargetReference.getPeakReferences(peaks), displaySettings, symbolSize * 2);
+				boolean showAtTic = preferenceStore != null && preferenceStore.getBoolean(PREFERENCE_SHOW_LABELS_AT_TIC);
+				List<SignalTargetReference> peakReferences;
+				if(showAtTic) {
+					peakReferences = SignalTargetReference.getPeakReferences(peaks, peak -> {
+						if(selection != null) {
+							IChromatogram chromatogram = selection.getChromatogram();
+							int scanNumber = chromatogram.getScanNumber(peak.getPeakModel().getRetentionTimeAtPeakMaximum());
+							return chromatogram.getScan(scanNumber);
+						}
+						return null;
+					});
+				} else {
+					peakReferences = SignalTargetReference.getPeakReferences(peaks);
+				}
+				TargetReferenceLabelMarker peakLabelMarker = new TargetReferenceLabelMarker(peakReferences, displaySettings, symbolSize * 2);
 				plotArea.addCustomPaintListener(peakLabelMarker);
 				peakLabelMarkerMap.put(seriesId, peakLabelMarker);
 			}
@@ -988,7 +1003,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		editorToolBar.addAction(createToggleToolbarAction("Methods", "the method toolbar.", IApplicationImage.IMAGE_METHOD, TOOLBAR_METHOD));
 		//
 		createResetButton(editorToolBar);
-		editorToolBar.enableToolbarTextPage(preferenceStore, PREFERENCE_CHROMATOGRAM_UI_SHOW_TOOLBAR_TEXT);
+		editorToolBar.enableToolbarTextPage(preferenceStore, PREFERENCE_SHOW_TOOLBAR_TEXT);
 		processorToolbar.enablePreferencePage(preferenceStore, "ProcessorToolbar.Processors");
 		editorToolBar.addPreferencePages(new Supplier<Collection<? extends IPreferencePage>>() {
 
@@ -1512,6 +1527,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		// we delegate here to PreferenceInitializer
 		PreferenceInitializer.initializeChromatogramDefaults(preferenceStore);
 		// and set our private preference also
-		preferenceStore.setDefault(PREFERENCE_CHROMATOGRAM_UI_SHOW_TOOLBAR_TEXT, true);
+		preferenceStore.setDefault(PREFERENCE_SHOW_TOOLBAR_TEXT, true);
+		preferenceStore.setDefault(PREFERENCE_SHOW_LABELS_AT_TIC, false);
 	}
 }
