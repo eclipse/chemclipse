@@ -20,7 +20,6 @@ import java.util.function.Predicate;
 
 import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.SignalTargetReference;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetDisplaySettings;
@@ -57,18 +56,19 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 	private final boolean showReferenceId;
 	private int rotation;
 	private int detectionDepth;
+	private IPreferenceStore preferenceStore;
 
-	public TargetReferenceLabelMarker(int offset) {
-		this(false, offset);
+	public TargetReferenceLabelMarker(int offset, IPreferenceStore preferenceStore) {
+		this(false, offset, preferenceStore);
 	}
 
-	public TargetReferenceLabelMarker(boolean showReferenceId, int offset) {
+	public TargetReferenceLabelMarker(boolean showReferenceId, int offset, IPreferenceStore preferenceStore) {
 		this.showReferenceId = showReferenceId;
 		this.offset = offset;
 	}
 
-	public TargetReferenceLabelMarker(Collection<? extends SignalTargetReference> references, TargetDisplaySettings settings, int offset) {
-		this(false, offset);
+	public TargetReferenceLabelMarker(Collection<? extends SignalTargetReference> references, TargetDisplaySettings settings, int offset, IPreferenceStore preferenceStore) {
+		this(false, offset, preferenceStore);
 		setData(references, settings);
 	}
 
@@ -124,12 +124,12 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 				}
 				if(reference.isPeakLabel) {
 					if(peakFont == null) {
-						peakFont = createPeakFont(gc.getDevice());
+						peakFont = createPeakFont(preferenceStore, gc.getDevice());
 					}
 					gc.setFont(peakFont);
 				} else if(reference.isScanLabel) {
 					if(scanFont == null) {
-						scanFont = createScanFont(gc.getDevice());
+						scanFont = createScanFont(preferenceStore, gc.getDevice());
 					}
 					gc.setFont(scanFont);
 				} else {
@@ -557,18 +557,16 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		}
 	}
 
-	public static Font createPeakFont(Device device) {
+	public static Font createPeakFont(IPreferenceStore preferenceStore, Device device) {
 
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		String name = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_NAME);
 		int height = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE);
 		int style = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_STYLE);
 		return new Font(device, name, height, style);
 	}
 
-	public static Font createScanFont(Device device) {
+	public static Font createScanFont(IPreferenceStore preferenceStore, Device device) {
 
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		String name = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_NAME);
 		int height = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_SIZE);
 		int style = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE);

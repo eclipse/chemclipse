@@ -827,7 +827,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 				} else {
 					peakReferences = SignalTargetReference.getPeakReferences(peaks);
 				}
-				TargetReferenceLabelMarker peakLabelMarker = new TargetReferenceLabelMarker(peakReferences, displaySettings, symbolSize * 2);
+				TargetReferenceLabelMarker peakLabelMarker = new TargetReferenceLabelMarker(peakReferences, displaySettings, symbolSize * 2, preferenceStore);
 				plotArea.addCustomPaintListener(peakLabelMarker);
 				peakLabelMarkerMap.put(seriesId, peakLabelMarker);
 			}
@@ -848,7 +848,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			removeIdentificationLabelMarker(scanLabelMarkerMap, seriesId);
 			if(displaySettings.isShowScanLables()) {
 				IPlotArea plotArea = chromatogramChart.getBaseChart().getPlotArea();
-				TargetReferenceLabelMarker scanLabelMarker = new TargetReferenceLabelMarker(SignalTargetReference.getScanReferences(scans), displaySettings, symbolSize * 2);
+				TargetReferenceLabelMarker scanLabelMarker = new TargetReferenceLabelMarker(SignalTargetReference.getScanReferences(scans), displaySettings, symbolSize * 2, preferenceStore);
 				plotArea.addCustomPaintListener(scanLabelMarker);
 				scanLabelMarkerMap.put(seriesId, scanLabelMarker);
 			}
