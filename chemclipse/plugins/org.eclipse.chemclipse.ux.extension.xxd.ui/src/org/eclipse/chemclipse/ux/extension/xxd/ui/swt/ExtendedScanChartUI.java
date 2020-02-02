@@ -487,8 +487,8 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 					 * Update all listeners
 					 */
 					IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-					boolean autofocuSubtractScanPart = preferenceStore.getBoolean(PreferenceConstants.P_AUTOFOCUS_SUBTRACT_SCAN_PART);
-					if(autofocuSubtractScanPart) {
+					boolean autofocusSubtractScanPart = preferenceStore.getBoolean(PreferenceConstants.P_AUTOFOCUS_SUBTRACT_SCAN_PART);
+					if(autofocusSubtractScanPart) {
 						/*
 						 * Subtract scan part
 						 */
