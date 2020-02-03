@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - adding delete type
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
@@ -39,7 +40,8 @@ public enum PeakType {
 	PB("perpendicular" + " - " + "baseline"), //
 	VP("valey" + " - " + "perpendicular"), //
 	BP("baseline" + " - " + "perpendicular"), //
-	DD("deconvoluted" + " - " + "deconvoluted");
+	DD("deconvoluted" + " - " + "deconvoluted"), //
+	DELETED("this peak was deleted");
 
 	private String description = "";
 

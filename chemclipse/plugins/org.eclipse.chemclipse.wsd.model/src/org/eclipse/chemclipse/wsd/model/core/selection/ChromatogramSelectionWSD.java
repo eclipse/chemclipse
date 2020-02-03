@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2019 Dr. Philip Wenig, Matthias Mailänder.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,8 +27,6 @@ import org.eclipse.chemclipse.wsd.model.notifier.ChromatogramSelectionWSDUpdateN
 @SuppressWarnings("rawtypes")
 public class ChromatogramSelectionWSD extends AbstractChromatogramSelection<IChromatogramPeakWSD, IChromatogramWSD> implements IChromatogramSelectionWSD {
 
-	private static final long serialVersionUID = 6548761643931077446L;
-	//
 	private IScanWSD selectedScan;
 	private IChromatogramPeakWSD selectedPeak;
 	private IMarkedWavelengths selectedWavelengths;
@@ -206,5 +204,11 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection<IChr
 	public void setSelectedIdentifiedScan(IScan identifiedScan) {
 
 		this.identifiedScan = identifiedScan;
+	}
+
+	@Override
+	public void removeSelectedIdentifiedScan() {
+
+		// No seleted and identifed scan available yet.
 	}
 }

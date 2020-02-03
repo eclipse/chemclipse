@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="Chemclipse Target (Build)" sequenceNumber="516">
+<?pde version="3.8"?><target name="Chemclipse Target (Build)" sequenceNumber="518">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.gemini.jpa.feature.feature.group" version="1.2.0.M1"/>
@@ -128,6 +128,10 @@
 <unit id="org.slf4j.binding.simple" version="0.0.0"/>
 <unit id="org.mockito" version="0.0.0"/>
 <repository location="https://download.eclipse.org/tools/orbit/downloads/drops/R20191126223242/repository"/>
+</location>
+<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.babel.nls_eclipse_de.feature.group" version="0.0.0"/>
+<repository location="https://update.openchrom.net/repositories/babel/neon/"/>
 </location>
 </locations>
 </target>

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,10 +19,6 @@ import org.eclipse.chemclipse.numeric.core.Point;
 
 public abstract class AbstractChromatogramSelection<T extends IChromatogramPeak, C extends IChromatogram<T>> implements IChromatogramSelection<T, C> {
 
-	/**
-	 * Renew this UUID on change.
-	 */
-	private static final long serialVersionUID = -4663012287216101211L;
 	private C chromatogram;
 	private int startRetentionTime;
 	private int stopRetentionTime;
@@ -36,12 +32,10 @@ public abstract class AbstractChromatogramSelection<T extends IChromatogramPeak,
 	private Point offset;
 
 	public AbstractChromatogramSelection(C chromatogram) throws ChromatogramIsNullException {
-
 		this(chromatogram, true);
 	}
 
 	public AbstractChromatogramSelection(C chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
-
 		/*
 		 * Check
 		 */

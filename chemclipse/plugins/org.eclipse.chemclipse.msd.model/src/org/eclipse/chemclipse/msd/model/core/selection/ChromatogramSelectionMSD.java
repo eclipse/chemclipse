@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
+ * Christoph Läubrich - reset selected peak in case of deletion
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.selection;
 
@@ -16,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.core.PeakType;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.selection.AbstractChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -38,8 +40,6 @@ import org.eclipse.chemclipse.msd.model.notifier.ChromatogramSelectionMSDUpdateN
  */
 public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChromatogramPeakMSD, IChromatogramMSD> implements IChromatogramSelectionMSD {
 
-	private static final long serialVersionUID = -7506022245739815452L;
-	//
 	private IVendorMassSpectrum selectedScan;
 	private IVendorMassSpectrum selectedIdentifiedScan;
 	private IChromatogramPeakMSD selectedPeak;
@@ -78,7 +78,6 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChr
 		reset(fireUpdate);
 	}
 
-	// ------------------------------------IChromatogramSelection
 	@Override
 	public void dispose() {
 
@@ -137,8 +136,6 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChr
 		return markedIonTransitions;
 	}
 
-	// ------------------------------------IChromatogramSelection
-	// ------------------------------------IChromatogramSelectionSetter
 	@Override
 	public void reset() {
 
@@ -294,10 +291,19 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChr
 	@Override
 	public void update(boolean forceReload) {
 
+		if(selectedPeak != null && selectedPeak.getPeakType() == PeakType.DELETED) {
+			selectedPeak = null;
+		}
 		super.update(forceReload);
 		setSelectedScan(selectedScan, false);
 		setSelectedIdentifiedScan(selectedIdentifiedScan, false);
 		setSelectedPeak(selectedPeak, false);
 		fireUpdateChange(forceReload);
+	}
+
+	@Override
+	public void removeSelectedIdentifiedScan() {
+
+		selectedIdentifiedScan = null;
 	}
 }
