@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.eclipse.chemclipse.xxd.model.filter.peaks.ProcessPeaksByIntegratedAreaFilter">
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.eclipse.chemclipse.xxd.model.filter.peaks.AreaFilter">
    <service>
       <provide interface="org.eclipse.chemclipse.model.filter.IPeakFilter"/>
       <provide interface="org.eclipse.chemclipse.processing.filter.Filter"/>
       <provide interface="org.eclipse.chemclipse.processing.Processor"/>
    </service>
-   <implementation class="org.eclipse.chemclipse.xxd.model.filter.peaks.ProcessPeaksByIntegratedAreaFilter"/>
+   <implementation class="org.eclipse.chemclipse.xxd.model.filter.peaks.AreaFilter"/>
 </scr:component>
