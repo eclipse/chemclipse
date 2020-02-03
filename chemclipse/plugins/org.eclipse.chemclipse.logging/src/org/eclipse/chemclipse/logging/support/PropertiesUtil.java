@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - configure log level for org.apache.http
  *******************************************************************************/
 package org.eclipse.chemclipse.logging.support;
 
@@ -36,6 +37,8 @@ public class PropertiesUtil {
 		properties.setProperty("log4j.appender.ChemClipseConsoleAppender", "org.apache.log4j.ConsoleAppender");
 		properties.setProperty("log4j.appender.ChemClipseConsoleAppender.target", "System.out");
 		properties.setProperty("log4j.appender.ChemClipseConsoleAppender.layout", "org.apache.log4j.PatternLayout");
+		// configure lower log-level for certain libraries
+		properties.setProperty("log4j.logger.org.apache.http", "INFO");
 		// properties.setProperty("log4j.appender.ChemClipseConsoleAppender.layout.ConversionPattern",
 		// "%d{ISO8601} %-5p [%t] %c{3}:%L %m%n");
 		properties.setProperty("log4j.appender.ChemClipseConsoleAppender.layout.ConversionPattern", "%-5p %t %C{2}.%M (%F:%L) %m%n");
