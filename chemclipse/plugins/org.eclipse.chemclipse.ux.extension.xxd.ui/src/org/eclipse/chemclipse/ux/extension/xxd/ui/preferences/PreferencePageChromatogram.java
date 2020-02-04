@@ -13,13 +13,13 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.DoubleFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.FileFieldEditor;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
@@ -27,13 +27,14 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class PreferencePageChromatogram extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	public PreferencePageChromatogram() {
+	public PreferencePageChromatogram(IPreferenceStore preferenceStore) {
 		super(GRID);
-		setPreferenceStore(Activator.getDefault().getPreferenceStore());
+		setPreferenceStore(preferenceStore);
 		setTitle("Chromatogram");
 		setDescription("");
 	}
 
+	@Override
 	public void createFieldEditors() {
 
 		addField(new BooleanFieldEditor(PreferenceConstants.P_LEGACY_UPDATE_CHROMATOGRAM_MODUS, "Legacy Chromatogram Update Modus", getFieldEditorParent()));
@@ -74,6 +75,7 @@ public class PreferencePageChromatogram extends FieldEditorPreferencePage implem
 		addField(integerFieldEditor);
 	}
 
+	@Override
 	public void init(IWorkbench workbench) {
 
 	}

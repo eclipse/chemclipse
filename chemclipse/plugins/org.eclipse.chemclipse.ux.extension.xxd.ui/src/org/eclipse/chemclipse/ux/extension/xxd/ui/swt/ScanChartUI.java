@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -380,6 +380,13 @@ public class ScanChartUI extends ScrollableChart {
 				if(massSpectrum.getMassSpectrumType() == 1) {
 					usedSignalType = SignalType.PROFILE;
 				}
+			} else if(scan instanceof IScanWSD) {
+				IScanWSD scanWSD = (IScanWSD)scan;
+				if(scanWSD.getNumberOfScanSignals() > 1) {
+					usedSignalType = SignalType.PROFILE;
+				} else {
+					usedSignalType = SignalType.CENTROID;
+				}
 			}
 		} else {
 			usedSignalType = signalType;
@@ -462,6 +469,9 @@ public class ScanChartUI extends ScrollableChart {
 		rangeRestriction.setExtendMinY(0.0d);
 		rangeRestriction.setExtendMaxY(0.25d);
 		//
+		rangeRestriction.setForceZeroMinY(false);
+		rangeRestriction.setZeroY(true);
+		//
 		LabelPaintListener labelPaintListener = labelPaintListenerX;
 		//
 		switch(dataType) {
@@ -479,10 +489,12 @@ public class ScanChartUI extends ScrollableChart {
 				rangeRestriction.setExtendTypeX(RangeRestriction.ExtendType.RELATIVE);
 				rangeRestriction.setExtendMinX(0.1d);
 				rangeRestriction.setExtendMaxX(0.1d);
+				rangeRestriction.setZeroY(false);
 				setDataTypeCSD(chartSettings);
 				break;
 			case WSD:
 				setDataTypeWSD(chartSettings);
+				rangeRestriction.setZeroY(false);
 				break;
 			default:
 				setDataTypeMSD(chartSettings);

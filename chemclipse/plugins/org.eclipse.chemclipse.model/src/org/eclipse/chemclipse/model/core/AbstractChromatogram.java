@@ -91,7 +91,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	/*
 	 * Store all scans in this list.<br/>
 	 */
-	private List<IScan> scans = new ArrayList<>();
+	private final List<IScan> scans = new ArrayList<>();
 	/*
 	 * Some vendors store several chromatograms in one file.
 	 */
@@ -999,6 +999,9 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	@Override
 	public void removeAllPeaks() {
 
+		for(T p : getPeaks()) {
+			p.setPeakType(PeakType.DELETED);
+		}
 		peaks.removeAllPeaks();
 	}
 
@@ -1020,12 +1023,16 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	public void removePeak(T peak) {
 
 		peaks.removePeak(peak);
+		peak.setPeakType(PeakType.DELETED);
 	}
 
 	@Override
 	public void removePeaks(List<T> peaksToDelete) {
 
 		peaks.removePeaks(peaksToDelete);
+		for(T p : peaksToDelete) {
+			p.setPeakType(PeakType.DELETED);
+		}
 	}
 
 	@Override

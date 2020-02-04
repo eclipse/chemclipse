@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -89,11 +90,20 @@ public class SignalTargetReference implements TargetReference, IAdaptable {
 
 	public static List<SignalTargetReference> getPeakReferences(List<? extends IPeak> items) {
 
+		return getPeakReferences(items, null);
+	}
+
+	public static List<SignalTargetReference> getPeakReferences(List<? extends IPeak> items, Function<? super IPeak, IScan> ticProvider) {
+
 		List<SignalTargetReference> list = new ArrayList<>();
 		for(IPeak peak : items) {
 			if(peak != null && !peak.getTargets().isEmpty()) {
 				String name = FORMAT.format(peak.getPeakModel().getRetentionTimeAtPeakMaximum() / (1000d * 60d));
-				list.add(new SignalTargetReference(peak, TYPE_PEAK, name));
+				if(ticProvider == null) {
+					list.add(new SignalTargetReference(peak, TYPE_PEAK, name));
+				} else {
+					list.add(new TICSignalTargetReference(peak, ticProvider.apply(peak), TYPE_PEAK, name));
+				}
 			}
 		}
 		return list;
@@ -133,5 +143,37 @@ public class SignalTargetReference implements TargetReference, IAdaptable {
 			return adapter.cast(signal);
 		}
 		return null;
+	}
+
+	private static final class TICSignalTargetReference extends SignalTargetReference {
+
+		private IScan tic;
+
+		public TICSignalTargetReference(IPeak peak, IScan tic, String type, String name) {
+			super(peak, type, name);
+			this.tic = tic;
+		}
+
+		@Override
+		public ISignal getSignal() {
+
+			if(tic != null) {
+				return tic;
+			} else {
+				return super.getSignal();
+			}
+		}
+
+		@Override
+		public <T> T getAdapter(Class<T> adapter) {
+
+			T t = super.getAdapter(adapter);
+			if(t == null) {
+				if(adapter.isInstance(tic)) {
+					return adapter.cast(tic);
+				}
+			}
+			return t;
+		}
 	}
 }

@@ -72,6 +72,19 @@ public class DisplayUtils {
 		return executeInUserInterfaceThread(DEFAULT_DISPLAY, action);
 	}
 
+	public static void executeInUserInterfaceThread(Runnable action) throws InterruptedException, ExecutionException {
+
+		executeInUserInterfaceThread(DEFAULT_DISPLAY, new Callable<Void>() {
+
+			@Override
+			public Void call() throws Exception {
+
+				action.run();
+				return null;
+			}
+		});
+	}
+
 	public static <T> T executeInUserInterfaceThread(UISynchronize ui, Callable<T> action) throws InterruptedException, ExecutionException {
 
 		if(Display.findDisplay(Thread.currentThread()) == null) {
@@ -104,6 +117,19 @@ public class DisplayUtils {
 	public static <T> T executeBusy(Callable<T> action) throws InterruptedException, ExecutionException {
 
 		return executeBusy(DEFAULT_DISPLAY, action);
+	}
+
+	public static void executeBusy(Runnable action) throws InterruptedException, ExecutionException {
+
+		executeBusy(new Callable<Void>() {
+
+			@Override
+			public Void call() throws Exception {
+
+				action.run();
+				return null;
+			}
+		});
 	}
 
 	public static <T> T executeBusy(UISynchronize ui, Callable<T> action) throws InterruptedException, ExecutionException {

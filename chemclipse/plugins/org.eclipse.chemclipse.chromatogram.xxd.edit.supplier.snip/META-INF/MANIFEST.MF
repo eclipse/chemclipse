@@ -19,5 +19,6 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.calculator,
+ org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.core,
  org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.preferences,
  org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings

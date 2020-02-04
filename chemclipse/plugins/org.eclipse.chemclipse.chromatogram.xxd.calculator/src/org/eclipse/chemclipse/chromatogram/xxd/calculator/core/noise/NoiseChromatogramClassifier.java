@@ -68,6 +68,9 @@ public class NoiseChromatogramClassifier extends AbstractChromatogramClassifier 
 
 		SubMonitor subMonitor = SubMonitor.convert(monitor, 100);
 		INoiseCalculator noiseCalculator = settings.getNoiseCalculator();
+		if(noiseCalculator == null) {
+			throw new IllegalArgumentException("noise calculator with id " + settings.getNoiseCalculatorId() + " not found");
+		}
 		SegmentWidth segmentWidth = settings.getSegmentWidth();
 		do {
 			ChromatogramSegmentation segmentation = new ChromatogramSegmentation(chromatogram, segmentWidth);

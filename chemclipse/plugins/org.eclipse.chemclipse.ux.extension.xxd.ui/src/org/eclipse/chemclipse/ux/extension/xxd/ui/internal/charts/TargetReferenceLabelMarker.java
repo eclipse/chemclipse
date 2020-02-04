@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -20,7 +21,6 @@ import java.util.function.Predicate;
 
 import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.SignalTargetReference;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetDisplaySettings;
@@ -57,18 +57,20 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 	private final boolean showReferenceId;
 	private int rotation;
 	private int detectionDepth;
+	private IPreferenceStore preferenceStore;
 
-	public TargetReferenceLabelMarker(int offset) {
-		this(false, offset);
+	public TargetReferenceLabelMarker(int offset, IPreferenceStore preferenceStore) {
+		this(false, offset, preferenceStore);
 	}
 
-	public TargetReferenceLabelMarker(boolean showReferenceId, int offset) {
+	public TargetReferenceLabelMarker(boolean showReferenceId, int offset, IPreferenceStore preferenceStore) {
 		this.showReferenceId = showReferenceId;
 		this.offset = offset;
+		this.preferenceStore = preferenceStore;
 	}
 
-	public TargetReferenceLabelMarker(Collection<? extends SignalTargetReference> references, TargetDisplaySettings settings, int offset) {
-		this(false, offset);
+	public TargetReferenceLabelMarker(Collection<? extends SignalTargetReference> references, TargetDisplaySettings settings, int offset, IPreferenceStore preferenceStore) {
+		this(false, offset, preferenceStore);
 		setData(references, settings);
 	}
 
@@ -101,19 +103,23 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 	private void paintLabels(GC gc, IAxis xAxis, IAxis yAxis) {
 
 		Transform transform = new Transform(gc.getDevice());
+		Transform oldTransform = new Transform(gc.getDevice());
+		gc.getTransform(oldTransform);
 		Font peakFont = null;
 		Font scanFont = null;
 		Font oldFont = gc.getFont();
 		gc.setAlpha(NO_ALPHA);
+		float[] identityMatrix = new float[6];
+		oldTransform.getElements(identityMatrix);
 		try {
 			Color activeColor = gc.getDevice().getSystemColor(SWT.COLOR_BLACK);
 			Color inactiveColor = gc.getDevice().getSystemColor(SWT.COLOR_GRAY);
 			Color idColor = gc.getDevice().getSystemColor(SWT.COLOR_DARK_GRAY);
-			gc.setTransform(transform);
 			Rectangle clipping = gc.getClipping();
 			TargetLabel lastReference = null;
 			if(DEBUG) {
 				System.out.println("---------------------- start label rendering -----------------------------");
+				System.out.println("identityMatrix: "+Arrays.toString(identityMatrix));
 			}
 			int collisions = 0;
 			for(TargetLabel reference : identifications) {
@@ -124,12 +130,12 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 				}
 				if(reference.isPeakLabel) {
 					if(peakFont == null) {
-						peakFont = createPeakFont(gc.getDevice());
+						peakFont = createPeakFont(preferenceStore, gc.getDevice());
 					}
 					gc.setFont(peakFont);
 				} else if(reference.isScanLabel) {
 					if(scanFont == null) {
-						scanFont = createScanFont(gc.getDevice());
+						scanFont = createScanFont(preferenceStore, gc.getDevice());
 					}
 					gc.setFont(scanFont);
 				} else {
@@ -137,7 +143,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 				}
 				reference.bounds = new LabelBounds(gc, reference);
 				String label = reference.label;
-				setTransform(transform, x, y, reference);
+				setTransform(transform, x, y, reference, identityMatrix);
 				if(reference.isActive) {
 					gc.setForeground(activeColor);
 					gc.setBackground(activeColor);
@@ -154,20 +160,22 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 							}
 							// first guess is to move the label up
 							float yoffset = lastReference.bounds.offsetY(reference.bounds);
-							setTransform(transform, Math.max(x, lastReference.bounds.getCx()) + offset, y - yoffset - offset, reference);
+							setTransform(transform, Math.max(x, lastReference.bounds.getCx()) + offset - identityMatrix[4], y - yoffset - offset, reference, identityMatrix);
 							// check if the label is not cut of
 							if(clipping.contains(Math.round(reference.bounds.getTopX()), Math.round(reference.bounds.getTopY()))) {
-								drawHandle(gc, reference, x, y, true);
+								gc.setTransform(oldTransform);
+								drawHandle(gc, reference, x, y, true, identityMatrix);
 							} else {
 								// reset values
-								setTransform(transform, x, y, reference);
+								setTransform(transform, x, y, reference, identityMatrix);
 								// then move it to the right... (might still be cut of but that is the default behavior of current charting)
 								if(DEBUG) {
 									System.out.println("label " + label + " overflows");
 								}
 								float xoffset = lastReference.bounds.offsetX(reference.bounds);
-								setTransform(transform, x + xoffset + offset, y, reference);
-								drawHandle(gc, reference, x, y, false);
+								setTransform(transform, x + xoffset + offset, y, reference, identityMatrix);
+								gc.setTransform(oldTransform);
+								drawHandle(gc, reference, x, y, false, identityMatrix);
 							}
 						} else {
 							if(DEBUG) {
@@ -203,7 +211,8 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 				}
 			}
 		} finally {
-			gc.setTransform(null);
+			gc.setTransform(oldTransform);
+			oldTransform.dispose();
 			gc.setFont(oldFont);
 			if(peakFont != null) {
 				peakFont.dispose();
@@ -215,10 +224,10 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		}
 	}
 
-	private int setTransform(Transform transform, float x, float y, TargetLabel reference) {
+	private int setTransform(Transform transform, float x, float y, TargetLabel reference, float[] identityMatrix) {
 
 		int h = reference.bounds.height;
-		transform.identity();
+		transform.setElements(identityMatrix[0], identityMatrix[1], identityMatrix[2], identityMatrix[3], identityMatrix[4], identityMatrix[5]);
 		transform.translate(x, y - offset);
 		transform.rotate(-rotation);
 		transform.translate(0, -h / 2);
@@ -226,11 +235,10 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		return h;
 	}
 
-	private void drawHandle(GC gc, TargetLabel reference, int x, int y, boolean upsideDown) {
+	private void drawHandle(GC gc, TargetLabel reference, int x, int y, boolean upsideDown, float[] identityMatrix) {
 
-		gc.setTransform(null);
-		float cx = reference.bounds.getCx();
-		float cy = reference.bounds.getCy();
+		float cx = reference.bounds.getCx() - identityMatrix[4];
+		float cy = reference.bounds.getCy() - identityMatrix[5] + offset;
 		gc.setLineStyle(SWT.LINE_DASHDOT);
 		Path path = new Path(gc.getDevice());
 		float dx;
@@ -250,6 +258,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		path.dispose();
 		int ow = 2;
 		gc.fillOval(x - ow, y - ow, ow * 2, ow * 2);
+		gc.fillOval((int)(cx - ow), (int)(cy - ow), ow * 2, ow * 2);
 	}
 
 	public Predicate<TargetReference> setData(Collection<? extends SignalTargetReference> identifications, TargetDisplaySettings settings) {
@@ -557,21 +566,23 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		}
 	}
 
-	public static Font createPeakFont(Device device) {
+	public static Font createPeakFont(IPreferenceStore preferenceStore, Device device) {
 
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		String name = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_NAME);
 		int height = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE);
 		int style = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_STYLE);
-		return new Font(device, name, height, style);
+		Point dpi = device.getDPI();
+		int pointHeight = height * 72 / dpi.y;
+		return new Font(device, name, pointHeight, style);
 	}
 
-	public static Font createScanFont(Device device) {
+	public static Font createScanFont(IPreferenceStore preferenceStore, Device device) {
 
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		String name = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_NAME);
 		int height = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_SIZE);
 		int style = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE);
-		return new Font(device, name, height, style);
+		Point dpi = device.getDPI();
+		int pointHeight = height * 72 / dpi.y;
+		return new Font(device, name, pointHeight, style);
 	}
 }

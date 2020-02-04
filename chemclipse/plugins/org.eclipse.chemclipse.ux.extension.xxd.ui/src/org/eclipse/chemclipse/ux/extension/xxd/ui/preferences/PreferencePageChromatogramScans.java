@@ -14,11 +14,11 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpinnerFieldEditor;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swtchart.extensions.preferences.PreferenceSupport;
 import org.eclipse.ui.IWorkbench;
@@ -26,13 +26,14 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class PreferencePageChromatogramScans extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	public PreferencePageChromatogramScans() {
+	public PreferencePageChromatogramScans(IPreferenceStore preferenceStore) {
 		super(GRID);
-		setPreferenceStore(Activator.getDefault().getPreferenceStore());
+		setPreferenceStore(preferenceStore);
 		setTitle("Chromatogram Scans");
 		setDescription("");
 	}
 
+	@Override
 	public void createFieldEditors() {
 
 		addField(new LabelFieldEditor("Selected Scan", getFieldEditorParent()));
@@ -55,6 +56,7 @@ public class PreferencePageChromatogramScans extends FieldEditorPreferencePage i
 		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_IDENTIFIED_SCAN_MARKER_TYPE, "Marker Type (Identified):", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
 	}
 
+	@Override
 	public void init(IWorkbench workbench) {
 
 	}

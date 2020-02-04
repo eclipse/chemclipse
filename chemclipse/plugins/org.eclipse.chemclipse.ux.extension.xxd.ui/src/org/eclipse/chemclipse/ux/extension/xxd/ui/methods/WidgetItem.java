@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - support file selection, refactor for new settings model, use validators
+ * Christoph Läubrich - support file selection, refactor for new settings model, use validators, support for longs
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
@@ -128,7 +128,12 @@ public class WidgetItem {
 				Text text = (Text)control;
 				String textValue = text.getText().trim();
 				//
-				if(rawType == int.class || rawType == Integer.class) {
+				if(rawType == long.class || rawType == Long.class) {
+					if(textValue.isEmpty()) {
+						return 0;
+					}
+					return Long.parseLong(textValue);
+				} else if(rawType == int.class || rawType == Integer.class) {
 					if(textValue.isEmpty()) {
 						return 0;
 					}
@@ -185,7 +190,9 @@ public class WidgetItem {
 				ComboViewer viewer = createGenericCombo(parent, inputValue.getComboSupplier());
 				return viewer.getControl();
 			}
-			if(rawType == int.class || rawType == Integer.class) {
+			if(rawType == long.class || rawType == Long.class) {
+				return createTextWidgetNormal(parent);
+			} else if(rawType == int.class || rawType == Integer.class) {
 				return createTextWidgetNormal(parent);
 			} else if(rawType == float.class || rawType == Float.class) {
 				return createTextWidgetNormal(parent);

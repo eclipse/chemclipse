@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2019 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -29,10 +29,6 @@ import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
  */
 public class ChromatogramSelection<T extends IChromatogramPeak, C extends IChromatogram<T>> extends AbstractChromatogramSelection<T, C> implements IChromatogramSelection<T, C> {
 
-	/**
-	 * Renew this UUID on change.
-	 */
-	private static final long serialVersionUID = -1530240422469646381L;
 	private static final Logger logger = Logger.getLogger(ChromatogramSelection.class);
 
 	public ChromatogramSelection(C chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
@@ -109,5 +105,11 @@ public class ChromatogramSelection<T extends IChromatogramPeak, C extends IChrom
 	public void setSelectedIdentifiedScan(IScan identifiedScan) {
 
 		logger.warn("Bad boy - setSelectedIdentifiedScan: don't use the ChromatogramSelection implementation");
+	}
+
+	@Override
+	public void removeSelectedIdentifiedScan() {
+
+		logger.warn("Bad boy - removeSelectedIdentifiedScan: don't use the ChromatogramSelection implementation");
 	}
 }
