@@ -87,9 +87,9 @@ public class WidthFilter implements IPeakFilter<WidthFilterSettings> {
 			configuration = createConfiguration(read);
 		}
 		SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
-
+		WidthPredicate<?> predicate = getPredicate(configuration);
 		for(X peak : read) {
-			processPeak(configuration, listener, peak, getPredicate(configuration));
+			processPeak(configuration, listener, peak, predicate);
 			subMonitor.worked(1);
 		}
 	}
