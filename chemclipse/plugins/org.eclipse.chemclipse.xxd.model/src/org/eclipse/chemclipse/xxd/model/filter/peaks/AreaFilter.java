@@ -90,8 +90,10 @@ public class AreaFilter implements IPeakFilter<AreaFilterSettings> {
 			configuration = createConfiguration(read);
 		}
 		SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
+		AreaPredicate<?> predicate = getPredicate(configuration);
 		for(X peak : read) {
-			processPeak(listener, configuration, peak, getPredicate(configuration));
+			//processPeak(listener, configuration, peak, getPredicate(configuration));
+			processPeak(listener, configuration, peak, predicate);
 			subMonitor.worked(1);
 		}
 	}

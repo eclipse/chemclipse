@@ -91,10 +91,10 @@ public class AreaPercentFilter implements IPeakFilter<AreaPercentFilterSettings>
 		}
 		SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
 		double areaSum = calculateAreaSum(read);
-
+		AreaPredicate<?> predicate = getPredicate(configuration);
 		for(X peak : read) {
 			double compareAreaValue = calculatePercentageAreaCompareValue(peak, areaSum);
-			processPeak(listener, configuration, peak, compareAreaValue, getPredicate(configuration));
+			processPeak(listener, configuration, peak, compareAreaValue, predicate);
 			subMonitor.worked(1);
 		}
 	}

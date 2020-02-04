@@ -87,9 +87,9 @@ public class AsymmetryFilter implements IPeakFilter<AsymmetryFilterSettings> {
 			configuration = createConfiguration(read);
 		}
 		SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
-
+		FactorPredicate<?> predicate = getPredicate(configuration);
 		for(X peak : read) {
-			processPeak(configuration, listener, peak, getPredicate(configuration));
+			processPeak(configuration, listener, peak, predicate);
 			subMonitor.worked(1);
 		}
 	}
