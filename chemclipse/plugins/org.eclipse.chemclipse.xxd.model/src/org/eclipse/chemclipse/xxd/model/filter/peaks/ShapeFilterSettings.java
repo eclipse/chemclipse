@@ -13,8 +13,8 @@ package org.eclipse.chemclipse.xxd.model.filter.peaks;
 
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
-import org.eclipse.chemclipse.xxd.model.support.PeakShapeFilterSelectionCriterion;
-import org.eclipse.chemclipse.xxd.model.support.ValueFilterTreatmentOption;
+import org.eclipse.chemclipse.xxd.model.support.ShapeSelection;
+import org.eclipse.chemclipse.xxd.model.support.TreatmentOption;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -33,11 +33,11 @@ public class ShapeFilterSettings {
 
 	@JsonProperty(value = "Peak Treatment Option:")
 	@EnumSelectionSettingProperty
-	private ValueFilterTreatmentOption filterTreatmentOption = ValueFilterTreatmentOption.DEACTIVATE_PEAK;
+	private TreatmentOption filterTreatmentOption = TreatmentOption.DEACTIVATE_PEAK;
 
 	@JsonProperty(value = "Peak Selection Criterion:")
 	@EnumSelectionSettingProperty
-	private PeakShapeFilterSelectionCriterion filterSelectionCriterion = PeakShapeFilterSelectionCriterion.TAILING_GREATER_THAN_LIMIT;
+	private ShapeSelection filterSelectionCriterion = ShapeSelection.TAILING_GREATER_THAN_LIMIT;
 
 	public double getLeadingValue() {
 
@@ -59,22 +59,22 @@ public class ShapeFilterSettings {
 		this.tailingValue = tailingValue;
 	}
 
-	public ValueFilterTreatmentOption getFilterTreatmentOption() {
+	public TreatmentOption getFilterTreatmentOption() {
 
 		return filterTreatmentOption;
 	}
 
-	public void setFilterTreatmentOption(ValueFilterTreatmentOption filterTreatmentOption) {
+	public void setFilterTreatmentOption(TreatmentOption filterTreatmentOption) {
 
 		this.filterTreatmentOption = filterTreatmentOption;
 	}
 
-	public PeakShapeFilterSelectionCriterion getFilterSelectionCriterion() {
+	public ShapeSelection getFilterSelectionCriterion() {
 
 		return filterSelectionCriterion;
 	}
 
-	public void setFilterSelectionCriterion(PeakShapeFilterSelectionCriterion filterSelectionCriterion) {
+	public void setFilterSelectionCriterion(ShapeSelection filterSelectionCriterion) {
 
 		this.filterSelectionCriterion = filterSelectionCriterion;
 	}
