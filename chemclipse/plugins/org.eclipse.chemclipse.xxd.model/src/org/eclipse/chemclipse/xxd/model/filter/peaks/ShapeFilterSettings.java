@@ -13,84 +13,69 @@ package org.eclipse.chemclipse.xxd.model.filter.peaks;
 
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
-import org.eclipse.chemclipse.xxd.model.support.ProcessPeaksByAsymmetricalPeakShapeFilterSelectionCriterion;
-import org.eclipse.chemclipse.xxd.model.support.ProcessPeaksByValueFilterTreatmentOption;
+import org.eclipse.chemclipse.xxd.model.support.PeakShapeFilterSelectionCriterion;
+import org.eclipse.chemclipse.xxd.model.support.ValueFilterTreatmentOption;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class ProcessPeaksByAsymmetricalPeakShapeFilterSettings {
+public class ShapeFilterSettings {
 
-	@JsonProperty(value = "Leading value:", defaultValue = "0.9")
+	@JsonProperty(value = "Leading:", defaultValue = "0.9")
 	@JsonPropertyDescription(value = "The leading value of a peak to be filtered accordingly.")
 	@DoubleSettingsProperty(minValue = 0.0d, maxValue = 100.0d)
 	private double leadingValue = 0.9d;
 
-	@JsonProperty(value = "Tailing value:", defaultValue = "0.9")
+	@JsonProperty(value = "Tailing:", defaultValue = "0.9")
 	@JsonPropertyDescription(value = "The tailing value of a peak to be filtered accordingly.")
 	@DoubleSettingsProperty(minValue = 0.0d, maxValue = 100.0d)
 	private double tailingValue = 0.9d;
 
-	@JsonProperty(value = "Peak asymmetry factor:", defaultValue = "1.02")
-	@JsonPropertyDescription(value = "The peak asymmetry factor of a peak to be filtered accordingly.")
-	@DoubleSettingsProperty(minValue = 0.0d, maxValue = 10.0d)
-	// peak asymmetry factor (As) rating — As = 1.0-1.05 [excellent] - As = 1.2 [acceptable] - As >= 2 [unacceptable]
-	private double  peakAsymmetryFactor = 1.02d;
-
 	@JsonProperty(value = "Peak Treatment Option:")
 	@EnumSelectionSettingProperty
-	private ProcessPeaksByValueFilterTreatmentOption filterTreatmentOption = ProcessPeaksByValueFilterTreatmentOption.DISABLE_PEAK;
+	private ValueFilterTreatmentOption filterTreatmentOption = ValueFilterTreatmentOption.DEACTIVATE_PEAK;
 
 	@JsonProperty(value = "Peak Selection Criterion:")
 	@EnumSelectionSettingProperty
-	private ProcessPeaksByAsymmetricalPeakShapeFilterSelectionCriterion filterSelectionCriterion = ProcessPeaksByAsymmetricalPeakShapeFilterSelectionCriterion.TAILING_GREATER_THAN_LIMIT;
+	private PeakShapeFilterSelectionCriterion filterSelectionCriterion = PeakShapeFilterSelectionCriterion.TAILING_GREATER_THAN_LIMIT;
 
 	public double getLeadingValue() {
-		
+
 		return leadingValue;
 	}
 
 	public void setLeadingValue(double leadingValue) {
-		
+
 		this.leadingValue = leadingValue;
 	}
 
 	public double getTailingValue() {
-		
+
 		return tailingValue;
 	}
 
 	public void setTailingValue(double tailingValue) {
-		
+
 		this.tailingValue = tailingValue;
 	}
 
-	public double getPeakAsymmetryFactor() {
-		return peakAsymmetryFactor;
-	}
+	public ValueFilterTreatmentOption getFilterTreatmentOption() {
 
-	public void setPeakAsymmetryFactor(double peakAsymmetryFactor) {
-		
-		this.peakAsymmetryFactor = peakAsymmetryFactor;
-	}
-
-	public ProcessPeaksByValueFilterTreatmentOption getFilterTreatmentOption() {
-		
 		return filterTreatmentOption;
 	}
 
-	public void setFilterTreatmentOption(ProcessPeaksByValueFilterTreatmentOption filterTreatmentOption) {
-		
+	public void setFilterTreatmentOption(ValueFilterTreatmentOption filterTreatmentOption) {
+
 		this.filterTreatmentOption = filterTreatmentOption;
 	}
 
-	public ProcessPeaksByAsymmetricalPeakShapeFilterSelectionCriterion getFilterSelectionCriterion() {
-		
+	public PeakShapeFilterSelectionCriterion getFilterSelectionCriterion() {
+
 		return filterSelectionCriterion;
 	}
 
-	public void setFilterSelectionCriterion(ProcessPeaksByAsymmetricalPeakShapeFilterSelectionCriterion filterSelectionCriterion) {
-		
+	public void setFilterSelectionCriterion(PeakShapeFilterSelectionCriterion filterSelectionCriterion) {
+
 		this.filterSelectionCriterion = filterSelectionCriterion;
 	}
 }
