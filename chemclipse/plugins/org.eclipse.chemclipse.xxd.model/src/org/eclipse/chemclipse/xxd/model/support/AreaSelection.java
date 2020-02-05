@@ -14,31 +14,30 @@ package org.eclipse.chemclipse.xxd.model.support;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- *  Describes the criterion to select the peak leading or tailing:
- *  <li>{@link #LEADING_SMALLER_THAN_LIMIT}</li>
- *  <li>{@link #TAILING_GREATER_THAN_LIMIT}</li>
- *  <li>{@link #VALUES_WITHIN_RANGE}</li>
+ *  Describes the criterion to select the peak area:
+ *  <li>{@link #AREA_LESS_THAN_MINIMUM}</li>
+ *  <li>{@link #AREA_GREATER_THAN_MAXIMUM}</li>
+ *  <li>{@link #AREA_NOT_WITHIN_RANGE}</li>
  */
-public enum PeakShapeFilterSelectionCriterion {
+public enum AreaSelection {
+	/**
+	 * Select peak areas smaller than the defined minimum
+	 */
+	AREA_LESS_THAN_MINIMUM("Area < minimum"), //
+	/**
+	 * Select peak areas greater than the defined maximum
+	 */
+	AREA_GREATER_THAN_MAXIMUM("Area > maximum"), //
+	/**
+	 * Select peak areas within a specified range, e.g. greater than the defined
+	 * minimum and smaller than the defined maximum
+	 */
+	AREA_NOT_WITHIN_RANGE("Area < minimum or Area > maximum"); //
 
-	/**
-	 * Select peaks whose leading values smaller than the limit
-	 */
-	LEADING_SMALLER_THAN_LIMIT("Leading < limit"), //
-	/**
-	 * Select peaks whose tailing values are larger than the limit
-	 */
-	TAILING_GREATER_THAN_LIMIT("Tailing > limit"), //
-	/**
-	 * Select peaks whose values are within the defined range, e.g. greater or
-	 * equal to leading and smaller or equal to tailing
-	 */
-	VALUES_WITHIN_RANGE("values >= Leading and <= Tailing"); //
-	
 	@JsonValue
 	private String filterSelectionCriterion;
 
-	private PeakShapeFilterSelectionCriterion(String filterSelectionCriterion){
+	private AreaSelection(String filterSelectionCriterion) {
 
 		this.filterSelectionCriterion = filterSelectionCriterion;
 	}

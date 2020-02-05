@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  *  <li>{@link #ASYMMETRY_FACTOR_SMALLER_THAN_LIMIT}</li>
  *  <li>{@link #ASYMMETRY_FACTOR_GREATER_THAN_LIMIT}</li>
  */
-public enum PeakAsymmetryFilterSelectionCriterion {
+public enum AsymmetrySelection {
 
 	/**
 	 * Select peaks whose peak asymmetry factor is too small
@@ -32,7 +32,7 @@ public enum PeakAsymmetryFilterSelectionCriterion {
 	@JsonValue
 	private String filterSelectionCriterion;
 
-	private PeakAsymmetryFilterSelectionCriterion(String filterSelectionCriterion){
+	private AsymmetrySelection(String filterSelectionCriterion){
 
 		this.filterSelectionCriterion = filterSelectionCriterion;
 	}
