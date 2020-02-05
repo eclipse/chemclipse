@@ -53,4 +53,5 @@ Service-Component: OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.Remove
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.AsymmetryFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.ShapeFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.AreaPercentFilter.xml,
+ OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.WidthFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.SignalToNoisePeakFilter.xml
