@@ -13,54 +13,38 @@ package org.eclipse.chemclipse.xxd.model.filter.peaks;
 
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
-import org.eclipse.chemclipse.xxd.model.support.PeakShapeFilterSelectionCriterion;
+import org.eclipse.chemclipse.xxd.model.support.PeakWidthSelectionCriterion;
 import org.eclipse.chemclipse.xxd.model.support.ValueFilterTreatmentOption;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class ShapeFilterSettings {
+public class WidthFilterSettings {
 
-	@JsonProperty(value = "Leading:", defaultValue = "0.9")
-	@JsonPropertyDescription(value = "The leading value of a peak to be filtered accordingly.")
+	@JsonProperty(value = "Width value [min]:")
+	@JsonPropertyDescription(value = "The width value of a peak to be filtered accordingly.")
 	@DoubleSettingsProperty(minValue = 0.0d, maxValue = 100.0d)
-	private double leadingValue = 0.9d;
-
-	@JsonProperty(value = "Tailing:", defaultValue = "0.9")
-	@JsonPropertyDescription(value = "The tailing value of a peak to be filtered accordingly.")
-	@DoubleSettingsProperty(minValue = 0.0d, maxValue = 100.0d)
-	private double tailingValue = 0.9d;
+	private double widthValue = 0.0d;
 
 	@JsonProperty(value = "Peak Treatment Option:")
 	@EnumSelectionSettingProperty
 	private ValueFilterTreatmentOption filterTreatmentOption = ValueFilterTreatmentOption.DEACTIVATE_PEAK;
 
-	@JsonProperty(value = "Peak Selection Criterion:")
+	@JsonProperty(value = "Width Selection Criterion:")
 	@EnumSelectionSettingProperty
-	private PeakShapeFilterSelectionCriterion filterSelectionCriterion = PeakShapeFilterSelectionCriterion.TAILING_GREATER_THAN_LIMIT;
+	private PeakWidthSelectionCriterion filterSelectionCriterion = PeakWidthSelectionCriterion.WIDTH_GREATER_THAN_LIMIT;
 
-	public double getLeadingValue() {
-
-		return leadingValue;
+	public double getWidthValue() {
+		
+		return widthValue;
 	}
 
-	public void setLeadingValue(double leadingValue) {
-
-		this.leadingValue = leadingValue;
-	}
-
-	public double getTailingValue() {
-
-		return tailingValue;
-	}
-
-	public void setTailingValue(double tailingValue) {
-
-		this.tailingValue = tailingValue;
+	public void setWidthValue(double widthValue) {
+		
+		this.widthValue = widthValue;
 	}
 
 	public ValueFilterTreatmentOption getFilterTreatmentOption() {
-
+		
 		return filterTreatmentOption;
 	}
 
@@ -69,13 +53,13 @@ public class ShapeFilterSettings {
 		this.filterTreatmentOption = filterTreatmentOption;
 	}
 
-	public PeakShapeFilterSelectionCriterion getFilterSelectionCriterion() {
-
+	public PeakWidthSelectionCriterion getFilterSelectionCriterion() {
+		
 		return filterSelectionCriterion;
 	}
 
-	public void setFilterSelectionCriterion(PeakShapeFilterSelectionCriterion filterSelectionCriterion) {
-
+	public void setFilterSelectionCriterion(PeakWidthSelectionCriterion filterSelectionCriterion) {
+		
 		this.filterSelectionCriterion = filterSelectionCriterion;
 	}
 }
