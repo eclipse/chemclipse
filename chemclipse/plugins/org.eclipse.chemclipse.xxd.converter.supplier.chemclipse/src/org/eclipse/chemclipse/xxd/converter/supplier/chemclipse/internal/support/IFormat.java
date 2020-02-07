@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add new format
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support;
 
@@ -24,7 +25,7 @@ public interface IFormat {
 	/*
 	 * Chromatogram (*.ocb)
 	 */
-	int CHROMATOGRAM_COMPRESSION_LEVEL = 0; // 0 - 9 => 0 no compression
+	int CHROMATOGRAM_COMPRESSION_LEVEL = 9; // 0 - 9 => 0 no compression
 	int CHROMATOGRAM_COMPRESSION_TYPE = ZipOutputStream.DEFLATED;
 	//
 	String CHROMATOGRAM_VERSION_0701 = "0.7.0.1"; // Version 0.7.0, Release 1 (Nernst)
@@ -43,7 +44,8 @@ public interface IFormat {
 	String CHROMATOGRAM_VERSION_1007 = "1.0.0.7"; // Version 1.0.0, Release 7
 	String CHROMATOGRAM_VERSION_1100 = "1.1.0.0"; // Version 1.1.0, Release 1 (Diels)
 	String CHROMATOGRAM_VERSION_1300 = "1.3.0.0"; // Version 1.3.0, Release 1 (Dalton)
-	String CHROMATOGRAM_VERSION_LATEST = CHROMATOGRAM_VERSION_1300;
+	String CHROMATOGRAM_VERSION_1301 = "1.3.0.1";
+	String CHROMATOGRAM_VERSION_LATEST = CHROMATOGRAM_VERSION_1301;
 	/*
 	 * Method (*.ocm)
 	 */

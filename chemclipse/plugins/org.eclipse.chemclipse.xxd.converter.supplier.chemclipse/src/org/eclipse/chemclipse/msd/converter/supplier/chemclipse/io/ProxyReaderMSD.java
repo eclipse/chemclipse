@@ -45,6 +45,9 @@ public class ProxyReaderMSD {
 			scanReaderProxy = new ReaderProxy_1100();
 		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1300)) {
 			scanReaderProxy = new ReaderProxy_1300();
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1301)) {
+			// no changes
+			scanReaderProxy = new ReaderProxy_1300();
 		}
 		//
 		if(scanReaderProxy != null) {
