@@ -529,6 +529,9 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		ProgressMonitorDialog monitor = new ProgressMonitorDialog(shell);
 		try {
 			monitor.run(true, true, runnable);
+			if(chromatogramSelection != null) {
+				chromatogramSelection.getChromatogram().setDirty(true);
+			}
 			updateChromatogram();
 			updateSelection();
 			chromatogramReferencesUI.update();

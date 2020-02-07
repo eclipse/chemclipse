@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
+ * Christoph Läubrich - add support for name editing, improve classifier support
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -101,9 +102,11 @@ public class PeakScanListUI extends ExtendedTableViewer {
 		for(int i = 0; i < tableViewerColumns.size(); i++) {
 			TableViewerColumn tableViewerColumn = tableViewerColumns.get(i);
 			String label = tableViewerColumn.getColumn().getText();
-			if(label.equals(PeakScanListLabelProvider.ACTIVE_FOR_ANALYSIS)) {
+			if(PeakScanListLabelProvider.ACTIVE_FOR_ANALYSIS.equals(label)) {
 				tableViewerColumn.setEditingSupport(new PeakScanListEditingSupport(this, label));
-			} else if(label.equals(PeakScanListLabelProvider.CLASSIFIER)) {
+			} else if(PeakScanListLabelProvider.CLASSIFIER.equals(label)) {
+				tableViewerColumn.setEditingSupport(new PeakScanListEditingSupport(this, label));
+			} else if(PeakScanListLabelProvider.NAME.equals(label)) {
 				tableViewerColumn.setEditingSupport(new PeakScanListEditingSupport(this, label));
 			}
 		}

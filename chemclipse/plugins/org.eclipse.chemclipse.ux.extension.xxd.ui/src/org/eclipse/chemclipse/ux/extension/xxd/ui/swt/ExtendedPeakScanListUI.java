@@ -112,6 +112,7 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 	private boolean moveRetentionTimeOnPeakSelection;
 	protected InteractionMode interactionMode = InteractionMode.SOURCE;
 	private final IEventBroker eventBroker;
+	private int currentModCount;
 
 	public ExtendedPeakScanListUI(Composite parent, IEventBroker eventBroker, IPreferenceStore preferenceStore) {
 		this.eventBroker = eventBroker;
@@ -138,8 +139,10 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 
 	public void updateChromatogramSelection(IChromatogramSelection chromatogramSelection) {
 
-		this.chromatogramSelection = chromatogramSelection;
-		updateChromatogramSelection();
+		if(this.chromatogramSelection != chromatogramSelection || (chromatogramSelection != null && chromatogramSelection.getChromatogram().getModCount() != currentModCount)) {
+			this.chromatogramSelection = chromatogramSelection;
+			updateChromatogramSelection();
+		}
 	}
 
 	public void updateChromatogramSelection() {
@@ -150,7 +153,9 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 		//
 		if(chromatogramSelection == null) {
 			peakScanListUI.clear();
+			currentModCount = -1;
 		} else {
+			currentModCount = chromatogramSelection.getChromatogram().getModCount();
 			peakScanListUI.setInput(chromatogramSelection, showPeaks, showPeaksInRange, showScans, showScansInRange);
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			if(chromatogram instanceof IChromatogramMSD) {
