@@ -72,7 +72,11 @@ public class PeakScanListEditingSupport extends EditingSupport {
 				case PeakScanListLabelProvider.CLASSIFIER:
 					return peak;
 				case PeakScanListLabelProvider.NAME:
-					return peak.getName();
+					String name = peak.getName();
+					if(name == null) {
+						return "";
+					}
+					return name;
 			}
 		}
 		return false;

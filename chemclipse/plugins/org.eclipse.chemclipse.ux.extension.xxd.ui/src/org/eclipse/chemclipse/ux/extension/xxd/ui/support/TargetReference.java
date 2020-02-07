@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,8 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.support;
 
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.ITargetSupplier;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetDisplaySettings.LibraryField;
+import org.eclipse.core.runtime.Adapters;
 
 public interface TargetReference extends ITargetSupplier {
 
@@ -41,5 +44,24 @@ public interface TargetReference extends ITargetSupplier {
 	default IIdentificationTarget getBestTarget() {
 
 		return IIdentificationTarget.getBestIdentificationTarget(getTargets());
+	}
+
+	default String getTargetLabel(LibraryField libraryField) {
+
+		if(libraryField == LibraryField.NAME) {
+			IPeak peak = Adapters.adapt(this, IPeak.class);
+			if(peak != null) {
+				String name = peak.getName();
+				if(name != null) {
+					return name;
+				}
+				return name;
+			}
+		}
+		IIdentificationTarget bestTarget = getBestTarget();
+		if(bestTarget != null) {
+			return libraryField.stringTransformer().apply(bestTarget);
+		}
+		return null;
 	}
 }

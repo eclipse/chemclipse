@@ -97,7 +97,8 @@ public class SignalTargetReference implements TargetReference, IAdaptable {
 
 		List<SignalTargetReference> list = new ArrayList<>();
 		for(IPeak peak : items) {
-			if(peak != null && !peak.getTargets().isEmpty()) {
+			Set<IIdentificationTarget> targets = peak.getTargets();
+			if(peak != null && (targets.size() > 0 || peak.getName() != null) || peak.getClassifier().size()>0) {
 				String name = FORMAT.format(peak.getPeakModel().getRetentionTimeAtPeakMaximum() / (1000d * 60d));
 				if(ticProvider == null) {
 					list.add(new SignalTargetReference(peak, TYPE_PEAK, name));
@@ -147,7 +148,7 @@ public class SignalTargetReference implements TargetReference, IAdaptable {
 
 	private static final class TICSignalTargetReference extends SignalTargetReference {
 
-		private IScan tic;
+		private final IScan tic;
 
 		public TICSignalTargetReference(IPeak peak, IScan tic, String type, String name) {
 			super(peak, type, name);

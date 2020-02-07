@@ -16,14 +16,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.eclipse.chemclipse.model.core.ISignal;
-import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.SignalTargetReference;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetDisplaySettings;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetDisplaySettings.LibraryField;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetReference;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedChromatogramUI;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -57,7 +56,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 	private final boolean showReferenceId;
 	private int rotation;
 	private int detectionDepth;
-	private IPreferenceStore preferenceStore;
+	private final IPreferenceStore preferenceStore;
 
 	public TargetReferenceLabelMarker(int offset, IPreferenceStore preferenceStore) {
 		this(false, offset, preferenceStore);
@@ -119,7 +118,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 			TargetLabel lastReference = null;
 			if(DEBUG) {
 				System.out.println("---------------------- start label rendering -----------------------------");
-				System.out.println("identityMatrix: "+Arrays.toString(identityMatrix));
+				System.out.println("identityMatrix: " + Arrays.toString(identityMatrix));
 			}
 			int collisions = 0;
 			for(TargetLabel reference : identifications) {
@@ -273,11 +272,10 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		if(settings != null) {
 			rotation = settings.getRotation();
 			detectionDepth = settings.getCollisionDetectionDepth();
-			Function<IIdentificationTarget, String> stringTransformer = settings.getField().stringTransformer();
+			LibraryField field = settings.getField();
 			for(SignalTargetReference reference : input) {
 				if(createVisibleFilter.test(reference)) {
-					IIdentificationTarget target = reference.getBestTarget();
-					String label = stringTransformer.apply(target);
+					String label = reference.getTargetLabel(field);
 					if(label == null || label.isEmpty()) {
 						continue;
 					}

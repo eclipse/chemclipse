@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - copy constrcutor
  *******************************************************************************/
 package org.eclipse.chemclipse.model.support;
 
@@ -18,6 +19,10 @@ public class RetentionTimeRange implements IRetentionTimeRange {
 
 	private int startRetentionTime;
 	private int stopRetentionTime;
+
+	public RetentionTimeRange(IRetentionTimeRange range) {
+		this(range.getStartRetentionTime(), range.getStopRetentionTime());
+	}
 
 	/**
 	 * Creates a new retention time range.
@@ -41,11 +46,13 @@ public class RetentionTimeRange implements IRetentionTimeRange {
 		}
 	}
 
+	@Override
 	public int getStartRetentionTime() {
 
 		return startRetentionTime;
 	}
 
+	@Override
 	public int getStopRetentionTime() {
 
 		return stopRetentionTime;
