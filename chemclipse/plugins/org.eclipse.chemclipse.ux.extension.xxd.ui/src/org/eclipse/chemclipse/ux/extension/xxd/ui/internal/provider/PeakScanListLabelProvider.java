@@ -13,11 +13,12 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import java.text.DecimalFormat;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
-import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.AbstractPeak;
+import org.eclipse.chemclipse.model.core.Classifiable;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
@@ -29,7 +30,6 @@ import org.eclipse.chemclipse.model.identifier.IPeakComparisonResult;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -56,7 +56,6 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider i
 	public static final String SCAN = "SCAN";
 	//
 	private double chromatogramPeakArea = 0.0d;
-	private final TargetExtendedComparator comparator = new TargetExtendedComparator(SortOrder.DESC);
 	//
 	public static final String[] TITLES = { //
 			ACTIVE_FOR_ANALYSIS, //
@@ -293,7 +292,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider i
 				if(peakName != null) {
 					return peakName;
 				}
-				ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(peak.getTargets(), comparator);
+				ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(peak.getTargets());
 				if(libraryInformation != null) {
 					return libraryInformation.getName();
 				}
@@ -310,9 +309,17 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider i
 			case 17:
 				text = (peak.getInternalStandards().size() > 0) ? "ISTD" : "";
 				break;
-			case 18:
-				text = String.join(", ", peak.getClassifier());
-				break;
+			case 18: {
+				ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(peak.getTargets());
+				if(libraryInformation != null) {
+					Set<String> set = new LinkedHashSet<>();
+					set.addAll(peak.getClassifier());
+					set.addAll(libraryInformation.getClassifier());
+					return Classifiable.asString(set);
+				} else {
+					return Classifiable.asString(peak);
+				}
+			}
 		}
 		//
 		return text;
@@ -362,7 +369,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider i
 				text = "--";
 				break;
 			case 15:
-				ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(scan.getTargets(), comparator);
+				ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(scan.getTargets());
 				if(libraryInformation != null) {
 					text = libraryInformation.getName();
 				}

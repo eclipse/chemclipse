@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,4 +20,17 @@ public interface Classifiable {
 	void addClassifier(String classifier);
 
 	void removeClassifier(String classifier);
+
+	static String asString(Classifiable classifiable) {
+
+		return asString(classifiable.getClassifier());
+	}
+
+	static String asString(Iterable<? extends CharSequence> classifier) {
+
+		if(classifier != null) {
+			return String.join(", ", classifier);
+		}
+		return "";
+	}
 }
