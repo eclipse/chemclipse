@@ -13,8 +13,8 @@ package org.eclipse.chemclipse.xxd.model.filter.peaks;
 
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
-import org.eclipse.chemclipse.xxd.model.support.PeakAsymmetryFilterSelectionCriterion;
-import org.eclipse.chemclipse.xxd.model.support.ValueFilterTreatmentOption;
+import org.eclipse.chemclipse.xxd.model.support.AsymmetrySelection;
+import org.eclipse.chemclipse.xxd.model.support.TreatmentOption;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -29,11 +29,11 @@ public class AsymmetryFilterSettings {
 
 	@JsonProperty(value = "Peak Treatment Option:")
 	@EnumSelectionSettingProperty
-	private ValueFilterTreatmentOption filterTreatmentOption = ValueFilterTreatmentOption.DEACTIVATE_PEAK;
+	private TreatmentOption filterTreatmentOption = TreatmentOption.DEACTIVATE_PEAK;
 
 	@JsonProperty(value = "Peak Selection Criterion:")
 	@EnumSelectionSettingProperty
-	private PeakAsymmetryFilterSelectionCriterion filterSelectionCriterion = PeakAsymmetryFilterSelectionCriterion.ASYMMETRY_FACTOR_GREATER_THAN_LIMIT;
+	private AsymmetrySelection filterSelectionCriterion = AsymmetrySelection.ASYMMETRY_FACTOR_GREATER_THAN_LIMIT;
 
 	public double getPeakAsymmetryFactor() {
 		return peakAsymmetryFactor;
@@ -44,22 +44,22 @@ public class AsymmetryFilterSettings {
 		this.peakAsymmetryFactor = peakAsymmetryFactor;
 	}
 
-	public ValueFilterTreatmentOption getFilterTreatmentOption() {
+	public TreatmentOption getFilterTreatmentOption() {
 
 		return filterTreatmentOption;
 	}
 
-	public void setFilterTreatmentOption(ValueFilterTreatmentOption filterTreatmentOption) {
+	public void setFilterTreatmentOption(TreatmentOption filterTreatmentOption) {
 
 		this.filterTreatmentOption = filterTreatmentOption;
 	}
 
-	public PeakAsymmetryFilterSelectionCriterion getFilterSelectionCriterion() {
+	public AsymmetrySelection getFilterSelectionCriterion() {
 
 		return filterSelectionCriterion;
 	}
 
-	public void setFilterSelectionCriterion(PeakAsymmetryFilterSelectionCriterion filterSelectionCriterion) {
+	public void setFilterSelectionCriterion(AsymmetrySelection filterSelectionCriterion) {
 
 		this.filterSelectionCriterion = filterSelectionCriterion;
 	}
