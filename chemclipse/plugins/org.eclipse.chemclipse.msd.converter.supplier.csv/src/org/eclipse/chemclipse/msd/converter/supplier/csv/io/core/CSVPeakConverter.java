@@ -57,6 +57,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConverter, IMagicNumberMatcher {
 
+	private static final String HEADER_NAME = "Name";
 	private static final String HEADER_AREA = "Area";
 	private static final String HEADER_RRT = "RRT (min)";
 	private static final String HEADER_RI = "RI";
@@ -68,7 +69,7 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 	private static final Pattern SEPERATOR_VALUE_PATTERN = Pattern.compile(String.valueOf(SEPERATOR_VALUE), Pattern.LITERAL);
 	private static final Pattern SEPERATOR_RECORD_PATTERN = Pattern.compile(String.valueOf(SEPERATOR_RECORD), Pattern.LITERAL);
 	private static final String NAME = "CSV Peak Export";
-	private static final String[] HEADERS = {"Name", HEADER_RT, HEADER_RRT, HEADER_RI, HEADER_AREA, "S/N", "CAS", HEADER_MZ, HEADER_INTENSITIES};
+	private static final String[] HEADERS = {HEADER_NAME, HEADER_RT, HEADER_RRT, HEADER_RI, HEADER_AREA, "S/N", "CAS", HEADER_MZ, HEADER_INTENSITIES};
 	private static final DecimalFormat NUMBER_FORMAT = new DecimalFormat("0.000");
 
 	// export
@@ -88,7 +89,11 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 					IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets());
 					IPeakModelMSD peakModel = peak.getPeakModel();
 					// Name
-					csv.print(getLibInfo(target, ILibraryInformation::getName));
+					String peakName = peak.getName();
+					if(peakName == null) {
+						peakName = getLibInfo(target, ILibraryInformation::getName);
+					}
+					csv.print(peakName);
 					// RT
 					csv.print(nf.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
 					// RRT
@@ -180,6 +185,7 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 					maximum.setRelativeRetentionTime((int)(nf.parse(record.get(HEADER_RRT)).doubleValue() * IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
 					maximum.setRetentionIndex(nf.parse(record.get(HEADER_RI)).floatValue());
 					PeakMSD peakMSD = new PeakMSD(peakModel);
+					peakMSD.setName(record.get(HEADER_NAME));
 					peakMSD.addAllIntegrationEntries(new IntegrationEntry(nf.parse(record.get(HEADER_AREA)).doubleValue()));
 					result.addPeak(peakMSD);
 				}
