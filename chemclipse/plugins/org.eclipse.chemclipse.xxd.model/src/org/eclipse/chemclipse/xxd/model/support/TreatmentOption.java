@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
  *  <li>{@link #KEEP_PEAK}</li>
  *  <li>{@link #DELETE_PEAK}</li>
  */
-public enum ValueFilterTreatmentOption {
+public enum TreatmentOption {
 
 	/**
 	 * Select to enable a peak if certain constraints are matched
@@ -43,7 +43,7 @@ public enum ValueFilterTreatmentOption {
 	@JsonValue
 	private String filterTreatmentOption;
 
-	private ValueFilterTreatmentOption(String filterTreatmentOption){
+	private TreatmentOption(String filterTreatmentOption){
 
 		this.filterTreatmentOption = filterTreatmentOption;
 	}
