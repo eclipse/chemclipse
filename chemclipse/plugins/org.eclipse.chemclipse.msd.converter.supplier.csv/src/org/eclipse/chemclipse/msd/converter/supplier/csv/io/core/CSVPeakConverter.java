@@ -212,7 +212,7 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 				nf = (NumberFormat)NUMBER_FORMAT.clone();
 			}
 			for(CSVRecord record : parser) {
-				PeakModelMSD peakModel = new PeakModelMSD(parseMassSpectrum(HEADER_MZ), parseIntensityValues(record.get(HEADER_INTENSITIES)));
+				PeakModelMSD peakModel = new PeakModelMSD(parseMassSpectrum(record.get(HEADER_MZ)), parseIntensityValues(record.get(HEADER_INTENSITIES)));
 				IScan maximum = peakModel.getPeakMaximum();
 				maximum.setRetentionTime((int)(nf.parse(record.get(HEADER_RT)).doubleValue() * IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
 				maximum.setRelativeRetentionTime((int)(nf.parse(record.get(HEADER_RRT)).doubleValue() * IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
@@ -231,7 +231,7 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 		PeakMassSpectrum massSpectrum = new PeakMassSpectrum();
 		SEPERATOR_RECORD_PATTERN.splitAsStream(headerMz).spliterator().forEachRemaining(record -> {
 			String[] values = SEPERATOR_VALUE_PATTERN.split(record, 2);
-			double ion = Integer.parseInt(values[0]);
+			double ion = Double.parseDouble(values[0]);
 			float intensity = Float.parseFloat(values[1]);
 			try {
 				massSpectrum.addIon(new Ion(ion, intensity));
