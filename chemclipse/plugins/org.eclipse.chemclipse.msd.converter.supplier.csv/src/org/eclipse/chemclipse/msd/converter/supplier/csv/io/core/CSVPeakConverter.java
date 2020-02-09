@@ -16,10 +16,12 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -64,6 +66,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConverter, IMagicNumberMatcher {
 
+	public static final Charset CHARSET = StandardCharsets.UTF_8;
 	private static final String HEADER_NAME = "Name";
 	private static final String HEADER_AREA = "Area";
 	private static final String HEADER_RRT = "RRT (min)";
@@ -85,7 +88,7 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 
 		try {
 			try (FileOutputStream stream = new FileOutputStream(file, append)) {
-				writePeaks(peaks, stream, !append);
+				writePeaks(peaks, new OutputStreamWriter(stream, CHARSET), !append);
 			}
 		} catch(IOException e) {
 			ProcessingInfo<Object> error = new ProcessingInfo<>();
@@ -143,7 +146,7 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 
 		try {
 			try (FileInputStream stream = new FileInputStream(file)) {
-				return new ProcessingInfo<>(readPeaks(stream));
+				return new ProcessingInfo<>(readPeaks(new InputStreamReader(stream, CHARSET)));
 			}
 		} catch(ParseException | IOException e) {
 			ProcessingInfo<IPeaks<?>> error = new ProcessingInfo<>();
@@ -152,9 +155,9 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 		}
 	}
 
-	public static void writePeaks(IPeaks<? extends IPeakMSD> peaks, OutputStream stream, boolean writeHeader) throws IOException {
+	public static void writePeaks(IPeaks<? extends IPeakMSD> peaks, Writer writer, boolean writeHeader) throws IOException {
 
-		try (CSVPrinter csv = new CSVPrinter(new OutputStreamWriter(stream), CSVFormat.EXCEL.withNullString("").withQuoteMode(QuoteMode.ALL))) {
+		try (CSVPrinter csv = new CSVPrinter(writer, CSVFormat.EXCEL.withNullString("").withQuoteMode(QuoteMode.ALL))) {
 			if(writeHeader) {
 				csv.printRecord(Arrays.asList(HEADERS));
 			}
@@ -196,10 +199,10 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 		}
 	}
 
-	public static IPeaks<IPeak> readPeaks(InputStream stream) throws IOException, ParseException {
+	public static IPeaks<IPeak> readPeaks(Reader reader) throws IOException, ParseException {
 
 		Peaks result = new Peaks();
-		try (CSVParser parser = new CSVParser(new InputStreamReader(stream), CSVFormat.EXCEL.withHeader(HEADERS).withSkipHeaderRecord())) {
+		try (CSVParser parser = new CSVParser(reader, CSVFormat.EXCEL.withHeader(HEADERS).withSkipHeaderRecord())) {
 			NumberFormat nf;
 			synchronized(NUMBER_FORMAT) {
 				nf = (NumberFormat)NUMBER_FORMAT.clone();
