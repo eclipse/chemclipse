@@ -23,10 +23,12 @@ import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 
@@ -81,7 +83,7 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 	private static final Pattern SEPERATOR_RECORD_PATTERN = Pattern.compile(String.valueOf(SEPERATOR_RECORD), Pattern.LITERAL);
 	private static final String NAME = "CSV Peak Export";
 	private static final String[] HEADERS = {HEADER_NAME, HEADER_RT, HEADER_RRT, HEADER_RI, HEADER_AREA, "S/N", "CAS", HEADER_MZ, HEADER_INTENSITIES};
-	private static final DecimalFormat NUMBER_FORMAT = new DecimalFormat("0.000");
+	private static final DecimalFormat NUMBER_FORMAT = new DecimalFormat("0.000", DecimalFormatSymbols.getInstance(Locale.ENGLISH));
 
 	// export
 	@Override
