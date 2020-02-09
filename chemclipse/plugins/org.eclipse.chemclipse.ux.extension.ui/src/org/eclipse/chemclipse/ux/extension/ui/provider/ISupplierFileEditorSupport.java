@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - migrate from InputPart to Part
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.provider;
 
@@ -80,7 +81,7 @@ public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 		/*
 		 * Create the input part and prepare it.
 		 */
-		MPart part = MBasicFactory.INSTANCE.createInputPart();
+		MPart part = MBasicFactory.INSTANCE.createPart();
 		part.getTags().add(EPartService.REMOVE_ON_HIDE_TAG);
 		part.setElementId(elementId);
 		part.setContributionURI(contributionURI);
