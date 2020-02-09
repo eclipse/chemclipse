@@ -31,12 +31,15 @@ public class PeakExportSettings {
 	@FileSettingProperty(onlyDirectory = true)
 	private File exportFolder;
 	@JsonProperty(value = "Filename", defaultValue = VARIABLE_CHROMATOGRAM_NAME + VARIABLE_EXTENSION)
-	private final String filenamePattern = VARIABLE_CHROMATOGRAM_NAME + VARIABLE_EXTENSION;
+	private String filenamePattern = VARIABLE_CHROMATOGRAM_NAME + VARIABLE_EXTENSION;
 
 	@JsonIgnore
 	public File getExportFileName(String extension, IChromatogram<?> chromatogram) {
 
-		return new File(getExportFolder(), getFilenamePattern().replace(ChromatogramExportSettings.VARIABLE_CHROMATOGRAM_NAME, chromatogram.getName()).replace(ChromatogramExportSettings.VARIABLE_EXTENSION, extension));
+		File folder = getExportFolder();
+		String pattern = getFilenamePattern();
+		String replaced = pattern.replace(ChromatogramExportSettings.VARIABLE_CHROMATOGRAM_NAME, chromatogram.getName()).replace(ChromatogramExportSettings.VARIABLE_EXTENSION, extension);
+		return new File(folder, replaced);
 	}
 
 	public File getExportFolder() {
@@ -52,5 +55,10 @@ public class PeakExportSettings {
 	public String getFilenamePattern() {
 
 		return filenamePattern;
+	}
+
+	public void setFilenamePattern(String filenamePattern) {
+
+		this.filenamePattern = filenamePattern;
 	}
 }
