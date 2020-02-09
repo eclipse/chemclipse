@@ -36,6 +36,7 @@ import org.apache.commons.csv.QuoteMode;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IChromatogramPeak;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -195,7 +196,7 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 		}
 	}
 
-	public static IPeaks<?> readPeaks(InputStream stream) throws IOException, ParseException {
+	public static IPeaks<IPeak> readPeaks(InputStream stream) throws IOException, ParseException {
 
 		Peaks result = new Peaks();
 		try (CSVParser parser = new CSVParser(new InputStreamReader(stream), CSVFormat.EXCEL.withHeader(HEADERS).withSkipHeaderRecord())) {
