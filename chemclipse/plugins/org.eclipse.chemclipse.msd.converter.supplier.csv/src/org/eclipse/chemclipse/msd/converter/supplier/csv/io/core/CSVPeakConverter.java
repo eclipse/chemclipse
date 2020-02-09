@@ -40,6 +40,7 @@ import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IChromatogramPeak;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
+import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
@@ -155,7 +156,7 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 		}
 	}
 
-	public static void writePeaks(IPeaks<? extends IPeakMSD> peaks, Writer writer, boolean writeHeader) throws IOException {
+	public static void writePeaks(IPeaks<? extends IPeak> peaks, Writer writer, boolean writeHeader) throws IOException {
 
 		try (CSVPrinter csv = new CSVPrinter(writer, CSVFormat.EXCEL.withNullString("").withQuoteMode(QuoteMode.ALL))) {
 			if(writeHeader) {
@@ -165,9 +166,9 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 			synchronized(NUMBER_FORMAT) {
 				nf = (NumberFormat)NUMBER_FORMAT.clone();
 			}
-			for(IPeakMSD peak : peaks.getPeaks()) {
+			for(IPeak peak : peaks.getPeaks()) {
 				IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets());
-				IPeakModelMSD peakModel = peak.getPeakModel();
+				IPeakModel peakModel = peak.getPeakModel();
 				// Name
 				String peakName = peak.getName();
 				if(peakName == null) {
@@ -190,10 +191,13 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 				}
 				// CAS
 				csv.print(getLibInfo(target, ILibraryInformation::getCasNumber));
-				// mass spectrum
-				csv.print(writeMassSpectrum(peak.getPeakModel().getPeakMassSpectrum()));
-				// intensities
-				csv.print(writeIntensities(peak.getPeakModel()));
+				if(peak instanceof IPeakMSD) {
+					IPeakMSD msd = (IPeakMSD)peak;
+					// mass spectrum
+					csv.print(writeMassSpectrum(msd.getPeakModel().getPeakMassSpectrum()));
+					// intensities
+					csv.print(writeIntensities(msd.getPeakModel()));
+				}
 				csv.println();
 			}
 		}
