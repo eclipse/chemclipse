@@ -28,7 +28,6 @@ import org.eclipse.e4.ui.model.application.ui.MElementContainer;
 import org.eclipse.e4.ui.model.application.ui.MSnippetContainer;
 import org.eclipse.e4.ui.model.application.ui.MUIElement;
 import org.eclipse.e4.ui.model.application.ui.basic.MCompositePart;
-import org.eclipse.e4.ui.model.application.ui.basic.MInputPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.model.application.ui.basic.MStackElement;
@@ -44,12 +43,11 @@ import org.osgi.service.event.EventHandler;
 /**
  * This Handler allows to open a E4 Snippet as an editor, the command must be called with a the {@link OpenSnippetHandler#SNIPPT_PARAMETER} to identify the snippet.
  * It also contains a static {@link OpenSnippetHandler#openSnippet(String, EPartService, MApplication, EModelService)} method to open snippet programmatically.
- * Even though any snippet can be handled by this method, only MParts can be really opened! If you you use a Snippet that is not a {@link MPart}, {@link MInputPart} or {@link MCompositePart} you must take further actions to make it visible
+ * Even though any snippet can be handled by this method, only MParts can be really opened! If you you use a Snippet that is not a {@link MPart}, or {@link MCompositePart} you must take further actions to make it visible
  * 
  * @author Christoph Läubrich
  *
  */
-@SuppressWarnings("deprecation")
 public class OpenSnippetHandler {
 
 	private static final String SNIPPT_PARAMETER = "org.eclipse.chemclipse.rcp.app.ui.commandparameter.opensnippet.snippetid";
