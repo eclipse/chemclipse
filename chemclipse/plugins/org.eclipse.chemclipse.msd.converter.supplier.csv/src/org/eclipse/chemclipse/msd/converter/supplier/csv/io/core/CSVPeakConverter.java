@@ -12,9 +12,14 @@
 package org.eclipse.chemclipse.msd.converter.supplier.csv.io.core;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.ParseException;
@@ -27,6 +32,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
+import org.apache.commons.csv.QuoteMode;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IChromatogramPeak;
@@ -77,45 +83,8 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 	public IProcessingInfo<?> convert(File file, IPeaks<? extends IPeakMSD> peaks, boolean append, IProgressMonitor monitor) {
 
 		try {
-			try (CSVPrinter csv = new CSVPrinter(new FileWriter(file, append), CSVFormat.EXCEL.withNullString(""))) {
-				if(!append) {
-					csv.printRecord(Arrays.asList(HEADERS));
-				}
-				NumberFormat nf;
-				synchronized(NUMBER_FORMAT) {
-					nf = (NumberFormat)NUMBER_FORMAT.clone();
-				}
-				for(IPeakMSD peak : peaks.getPeaks()) {
-					IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets());
-					IPeakModelMSD peakModel = peak.getPeakModel();
-					// Name
-					String peakName = peak.getName();
-					if(peakName == null) {
-						peakName = getLibInfo(target, ILibraryInformation::getName);
-					}
-					csv.print(peakName);
-					// RT
-					csv.print(nf.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
-					// RRT
-					csv.print(nf.format(peakModel.getPeakMaximum().getRelativeRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
-					// RI
-					csv.print(nf.format(peakModel.getPeakMaximum().getRetentionIndex()));
-					// Area
-					csv.print(nf.format(peak.getIntegratedArea()));
-					// S/N
-					if(peak instanceof IChromatogramPeak) {
-						csv.print(nf.format(((IChromatogramPeak)peak).getSignalToNoiseRatio()));
-					} else {
-						csv.print("-");
-					}
-					// CAS
-					csv.print(getLibInfo(target, ILibraryInformation::getCasNumber));
-					// mass spectrum
-					csv.print(writeMassSpectrum(peak.getPeakModel().getPeakMassSpectrum()));
-					// intensities
-					csv.print(writeIntensities(peak.getPeakModel()));
-					csv.println();
-				}
+			try (FileOutputStream stream = new FileOutputStream(file, append)) {
+				writePeaks(peaks, stream, !append);
 			}
 		} catch(IOException e) {
 			ProcessingInfo<Object> error = new ProcessingInfo<>();
@@ -125,7 +94,7 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 		return new ProcessingInfo<>(file);
 	}
 
-	private StringBuilder writeIntensities(IPeakModelMSD peakModel) {
+	private static StringBuilder writeIntensities(IPeakModelMSD peakModel) {
 
 		StringBuilder sb = new StringBuilder();
 		if(peakModel != null) {
@@ -158,7 +127,7 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 		return sb;
 	}
 
-	private <R> R getLibInfo(IIdentificationTarget target, Function<ILibraryInformation, R> fkt) {
+	private static <R> R getLibInfo(IIdentificationTarget target, Function<ILibraryInformation, R> fkt) {
 
 		if(target != null) {
 			ILibraryInformation information = target.getLibraryInformation();
@@ -172,25 +141,9 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 	public IProcessingInfo<IPeaks<?>> convert(File file, IProgressMonitor monitor) {
 
 		try {
-			Peaks result = new Peaks();
-			try (CSVParser parser = new CSVParser(new FileReader(file), CSVFormat.EXCEL.withHeader(HEADERS).withSkipHeaderRecord())) {
-				NumberFormat nf;
-				synchronized(NUMBER_FORMAT) {
-					nf = (NumberFormat)NUMBER_FORMAT.clone();
-				}
-				for(CSVRecord record : parser) {
-					PeakModelMSD peakModel = new PeakModelMSD(parseMassSpectrum(HEADER_MZ), parseIntensityValues(record.get(HEADER_INTENSITIES)));
-					IScan maximum = peakModel.getPeakMaximum();
-					maximum.setRetentionTime((int)(nf.parse(record.get(HEADER_RT)).doubleValue() * IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
-					maximum.setRelativeRetentionTime((int)(nf.parse(record.get(HEADER_RRT)).doubleValue() * IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
-					maximum.setRetentionIndex(nf.parse(record.get(HEADER_RI)).floatValue());
-					PeakMSD peakMSD = new PeakMSD(peakModel);
-					peakMSD.setName(record.get(HEADER_NAME));
-					peakMSD.addAllIntegrationEntries(new IntegrationEntry(nf.parse(record.get(HEADER_AREA)).doubleValue()));
-					result.addPeak(peakMSD);
-				}
+			try (FileInputStream stream = new FileInputStream(file)) {
+				return new ProcessingInfo<>(readPeaks(stream));
 			}
-			return new ProcessingInfo<>(result);
 		} catch(ParseException | IOException e) {
 			ProcessingInfo<IPeaks<?>> error = new ProcessingInfo<>();
 			error.addErrorMessage(NAME, "Import failed", e);
@@ -198,7 +151,74 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 		}
 	}
 
-	private IPeakMassSpectrum parseMassSpectrum(String headerMz) {
+	public static void writePeaks(IPeaks<? extends IPeakMSD> peaks, OutputStream stream, boolean writeHeader) throws IOException {
+
+		try (CSVPrinter csv = new CSVPrinter(new OutputStreamWriter(stream), CSVFormat.EXCEL.withNullString("").withQuoteMode(QuoteMode.ALL))) {
+			if(writeHeader) {
+				csv.printRecord(Arrays.asList(HEADERS));
+			}
+			NumberFormat nf;
+			synchronized(NUMBER_FORMAT) {
+				nf = (NumberFormat)NUMBER_FORMAT.clone();
+			}
+			for(IPeakMSD peak : peaks.getPeaks()) {
+				IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets());
+				IPeakModelMSD peakModel = peak.getPeakModel();
+				// Name
+				String peakName = peak.getName();
+				if(peakName == null) {
+					peakName = getLibInfo(target, ILibraryInformation::getName);
+				}
+				csv.print(peakName);
+				// RT
+				csv.print(nf.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
+				// RRT
+				csv.print(nf.format(peakModel.getPeakMaximum().getRelativeRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
+				// RI
+				csv.print(nf.format(peakModel.getPeakMaximum().getRetentionIndex()));
+				// Area
+				csv.print(nf.format(peak.getIntegratedArea()));
+				// S/N
+				if(peak instanceof IChromatogramPeak) {
+					csv.print(nf.format(((IChromatogramPeak)peak).getSignalToNoiseRatio()));
+				} else {
+					csv.print("-");
+				}
+				// CAS
+				csv.print(getLibInfo(target, ILibraryInformation::getCasNumber));
+				// mass spectrum
+				csv.print(writeMassSpectrum(peak.getPeakModel().getPeakMassSpectrum()));
+				// intensities
+				csv.print(writeIntensities(peak.getPeakModel()));
+				csv.println();
+			}
+		}
+	}
+
+	public static IPeaks<?> readPeaks(InputStream stream) throws IOException, ParseException {
+
+		Peaks result = new Peaks();
+		try (CSVParser parser = new CSVParser(new InputStreamReader(stream), CSVFormat.EXCEL.withHeader(HEADERS).withSkipHeaderRecord())) {
+			NumberFormat nf;
+			synchronized(NUMBER_FORMAT) {
+				nf = (NumberFormat)NUMBER_FORMAT.clone();
+			}
+			for(CSVRecord record : parser) {
+				PeakModelMSD peakModel = new PeakModelMSD(parseMassSpectrum(HEADER_MZ), parseIntensityValues(record.get(HEADER_INTENSITIES)));
+				IScan maximum = peakModel.getPeakMaximum();
+				maximum.setRetentionTime((int)(nf.parse(record.get(HEADER_RT)).doubleValue() * IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
+				maximum.setRelativeRetentionTime((int)(nf.parse(record.get(HEADER_RRT)).doubleValue() * IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
+				maximum.setRetentionIndex(nf.parse(record.get(HEADER_RI)).floatValue());
+				PeakMSD peakMSD = new PeakMSD(peakModel);
+				peakMSD.setName(record.get(HEADER_NAME));
+				peakMSD.addAllIntegrationEntries(new IntegrationEntry(nf.parse(record.get(HEADER_AREA)).doubleValue()));
+				result.addPeak(peakMSD);
+			}
+		}
+		return result;
+	}
+
+	private static IPeakMassSpectrum parseMassSpectrum(String headerMz) {
 
 		PeakMassSpectrum massSpectrum = new PeakMassSpectrum();
 		SEPERATOR_RECORD_PATTERN.splitAsStream(headerMz).spliterator().forEachRemaining(record -> {
@@ -215,7 +235,7 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 		return massSpectrum;
 	}
 
-	private IPeakIntensityValues parseIntensityValues(String headerIntensity) {
+	private static IPeakIntensityValues parseIntensityValues(String headerIntensity) {
 
 		PeakIntensityValues intensityValues = new PeakIntensityValues(Float.MAX_VALUE);
 		SEPERATOR_RECORD_PATTERN.splitAsStream(headerIntensity).spliterator().forEachRemaining(record -> {
