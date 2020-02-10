@@ -22,6 +22,7 @@ Export-Package: org.eclipse.chemclipse.msd.model.core,
  org.eclipse.chemclipse.msd.model.core.comparator,
  org.eclipse.chemclipse.msd.model.core.selection,
  org.eclipse.chemclipse.msd.model.core.support,
+ org.eclipse.chemclipse.msd.model.detector,
  org.eclipse.chemclipse.msd.model.exceptions,
  org.eclipse.chemclipse.msd.model.implementation,
  org.eclipse.chemclipse.msd.model.noise,
@@ -33,5 +34,6 @@ Export-Package: org.eclipse.chemclipse.msd.model.core,
  org.eclipse.chemclipse.msd.model.xic
 Import-Package: javax.annotation;version="[1.0.0,2.0.0)",
  org.apache.commons.math3.analysis.function,
- org.apache.commons.math3.stat.inference
+ org.apache.commons.math3.stat.inference,
+ org.eclipse.chemclipse.processing.detector;version="1.0.0"
 Automatic-Module-Name: org.eclipse.chemclipse.msd.model
