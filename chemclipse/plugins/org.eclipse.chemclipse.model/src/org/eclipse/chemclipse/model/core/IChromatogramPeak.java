@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Alexander Kerner - initial API and implementation
+ * Christoph Läubrich - add getter for chromatogram
  *
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
@@ -42,4 +43,6 @@ public interface IChromatogramPeak extends IPeak {
 
 		return 1.0f;
 	}
+
+	IChromatogram<?> getChromatogram();
 }

@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - use getScans() everywhere to access the scan datastructure
+ * Christoph Läubrich - use getScans() everywhere to access the scan datastructure, modcount support
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
@@ -112,6 +112,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	 */
 	private final PeakRTMap<T> peaks = new PeakRTMap<T>();
 	private final Set<IIdentificationTarget> identificationTargets = new HashSet<>();
+	private int modCount;
 
 	/**
 	 * Constructs a normal chromatogram.
@@ -1051,6 +1052,28 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	public Set<IIdentificationTarget> getTargets() {
 
 		return identificationTargets;
+	}
+
+	@Override
+	public int getModCount() {
+
+		return modCount;
+	}
+
+	@Override
+	public boolean isDirty() {
+
+		return modCount != 0;
+	}
+
+	@Override
+	public void setDirty(boolean dirty) {
+
+		if(dirty) {
+			modCount++;
+		} else {
+			modCount = 0;
+		}
 	}
 
 	@SuppressWarnings("rawtypes")

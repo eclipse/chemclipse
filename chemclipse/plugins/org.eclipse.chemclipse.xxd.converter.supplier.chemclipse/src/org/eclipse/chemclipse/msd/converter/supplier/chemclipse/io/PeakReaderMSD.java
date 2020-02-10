@@ -85,6 +85,9 @@ public class PeakReaderMSD implements IPeakReader {
 			peakReader = new PeakReader_1100();
 		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1300)) {
 			peakReader = new PeakReader_1300();
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1301)) {
+			// no changes...
+			peakReader = new PeakReader_1300();
 		}
 		//
 		if(peakReader != null) {

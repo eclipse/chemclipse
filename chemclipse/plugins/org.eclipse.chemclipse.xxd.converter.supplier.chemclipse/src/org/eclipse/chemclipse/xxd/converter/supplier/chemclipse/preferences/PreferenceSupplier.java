@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - new format
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences;
 
@@ -163,8 +164,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		elements[4][0] = IFormat.CHROMATOGRAM_VERSION_1100 + " (Diels)";
 		elements[4][1] = IFormat.CHROMATOGRAM_VERSION_1100;
 		//
-		elements[5][0] = IFormat.CHROMATOGRAM_VERSION_1300 + " (Dalton)";
-		elements[5][1] = IFormat.CHROMATOGRAM_VERSION_1300;
+		elements[5][0] = IFormat.CHROMATOGRAM_VERSION_1301 + " (Dalton)";
+		elements[5][1] = IFormat.CHROMATOGRAM_VERSION_1301;
 		//
 		return elements;
 	}

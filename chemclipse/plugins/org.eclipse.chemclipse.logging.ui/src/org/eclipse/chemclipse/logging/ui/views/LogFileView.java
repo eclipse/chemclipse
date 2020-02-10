@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - migrate from InputPart to Part
  *******************************************************************************/
 package org.eclipse.chemclipse.logging.ui.views;
 
@@ -48,10 +49,11 @@ public class LogFileView {
 	private EModelService modelService;
 	@Inject
 	private MApplication application;
-	private TableViewer tableViewer;
+	private final TableViewer tableViewer;
 
 	@Inject
 	public LogFileView(Composite parent) {
+
 		/*
 		 * Show the log files.
 		 */
@@ -77,7 +79,7 @@ public class LogFileView {
 					/*
 					 * Create the input part and prepare it.
 					 */
-					MPart part = MBasicFactory.INSTANCE.createInputPart();
+					MPart part = MBasicFactory.INSTANCE.createPart();
 					part.setElementId(LogFileEditor.ID);
 					part.setContributionURI(LogFileEditor.CONTRIBUTION_URI);
 					part.setObject(file.getAbsolutePath());

@@ -13,8 +13,8 @@ package org.eclipse.chemclipse.xxd.model.filter.peaks;
 
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
-import org.eclipse.chemclipse.xxd.model.support.AreaFilterSelectionCriterion;
-import org.eclipse.chemclipse.xxd.model.support.ValueFilterTreatmentOption;
+import org.eclipse.chemclipse.xxd.model.support.AreaSelection;
+import org.eclipse.chemclipse.xxd.model.support.TreatmentOption;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -33,11 +33,11 @@ public class AreaPercentFilterSettings {
 
 	@JsonProperty(value = "Peak Treatment Option:")
 	@EnumSelectionSettingProperty
-	private ValueFilterTreatmentOption filterTreatmentOption = ValueFilterTreatmentOption.DEACTIVATE_PEAK;
+	private TreatmentOption filterTreatmentOption = TreatmentOption.DEACTIVATE_PEAK;
 
 	@JsonProperty(value = "Peak Selection Criterion:")
 	@EnumSelectionSettingProperty
-	private AreaFilterSelectionCriterion filterSelectionCriterion = AreaFilterSelectionCriterion.AREA_LESS_THAN_MINIMUM;
+	private AreaSelection filterSelectionCriterion = AreaSelection.AREA_LESS_THAN_MINIMUM;
 
 	public double getMinimumPercentageAreaValue() {
 		
@@ -59,22 +59,22 @@ public class AreaPercentFilterSettings {
 		this.maximumPercentageAreaValue = maximumPercentageAreaValue;
 	}
 
-	public ValueFilterTreatmentOption getFilterTreatmentOption() {
+	public TreatmentOption getFilterTreatmentOption() {
 		
 		return filterTreatmentOption;
 	}
 
-	public void setFilterTreatmentOption(ValueFilterTreatmentOption filterTreatmentOption) {
+	public void setFilterTreatmentOption(TreatmentOption filterTreatmentOption) {
 		
 		this.filterTreatmentOption = filterTreatmentOption;
 	}
 
-	public AreaFilterSelectionCriterion getFilterSelectionCriterion() {
+	public AreaSelection getFilterSelectionCriterion() {
 		
 		return filterSelectionCriterion;
 	}
 
-	public void setFilterSelectionCriterion(AreaFilterSelectionCriterion filterSelectionCriterion) {
+	public void setFilterSelectionCriterion(AreaSelection filterSelectionCriterion) {
 		
 		this.filterSelectionCriterion = filterSelectionCriterion;
 	}

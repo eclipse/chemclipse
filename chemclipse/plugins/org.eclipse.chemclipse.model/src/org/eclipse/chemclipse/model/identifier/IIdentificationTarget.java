@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
+ * Copyright (c) 2010, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add default delegate methods
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
@@ -53,6 +54,11 @@ public interface IIdentificationTarget extends ITarget {
 			}
 		}
 		return identificationTarget;
+	}
+
+	static ILibraryInformation getBestLibraryInformation(Set<IIdentificationTarget> targets) {
+
+		return getBestLibraryInformation(targets, DEFAULT_COMPARATOR);
 	}
 
 	/**

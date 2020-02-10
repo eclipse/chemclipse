@@ -91,6 +91,11 @@ public interface IPeaks<T extends IPeak> {
 		return getPeaks().size();
 	}
 
+	default boolean isEmpty() {
+
+		return getPeaks().size() == 0;
+	}
+
 	static <X extends IPeak> IPeaks<X> singelton(X peak) {
 
 		return new IPeaks<X>() {

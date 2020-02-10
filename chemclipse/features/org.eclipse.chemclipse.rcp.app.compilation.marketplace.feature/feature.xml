@@ -47,7 +47,7 @@ http://www.eclipse.org/legal/epl-v10.html
          id="org.apache.httpcomponents.httpclient"
          download-size="0"
          install-size="0"
-         version="4.3.6.v201511171540"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
@@ -68,7 +68,7 @@ http://www.eclipse.org/legal/epl-v10.html
          id="org.apache.httpcomponents.httpcore"
          download-size="0"
          install-size="0"
-         version="4.3.3.v201411290715"
+         version="0.0.0"
          unpack="false"/>
 
 </feature>
