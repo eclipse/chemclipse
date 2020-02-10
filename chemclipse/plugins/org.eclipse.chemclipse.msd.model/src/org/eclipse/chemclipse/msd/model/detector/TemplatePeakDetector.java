@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.detector.Detector;
 import org.eclipse.chemclipse.processing.detector.DetectorCategory;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 
 /**
  * 
@@ -30,7 +31,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
  */
 public interface TemplatePeakDetector<ConfigType> extends Detector<ConfigType> {
 
-	<TPT extends TemplatePeak> Map<TPT, IPeakModel> detectPeaks(IChromatogram<?> chromatogram, Collection<TPT> templates, ConfigType configuration, MessageConsumer messages, IProgressMonitor progressMonitor);
+	<TPT extends TemplatePeak> Map<TPT, IPeakModel> detectPeaks(IChromatogram<?> chromatogram, Collection<TPT> templates, ConfigType configuration, MessageConsumer messages, IProgressMonitor progressMonitor) throws OperationCanceledException, InterruptedException;
 
 	@Override
 	default DetectorCategory getDetectorCategory() {
