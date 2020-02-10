@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2019 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - add the PeakPostion interface, extract Classifiable interface, implement ISignal
+ * Christoph Läubrich - add the PeakPostion interface, extract Classifiable interface, implement ISignal, add getName
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
@@ -16,6 +16,8 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.model.support.IIntegrationConstraints;
@@ -243,6 +245,26 @@ public interface IPeak extends ITargetSupplier, PeakPosition, Classifiable, ISig
 	void addQuantitationReferences(List<String> quantitationReferences);
 
 	void removeQuantitationReference(String quantitationReference);
+
+	/**
+	 * Returns the name of a peak that might be used to identify the peak to the user e.g. in plots or lists
+	 * 
+	 * @return the name of the peak or <code>null</code> if none is available
+	 */
+	default String getName() {
+
+		IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(getTargets());
+		if(target != null) {
+			ILibraryInformation libraryInformation = target.getLibraryInformation();
+			if(libraryInformation != null) {
+				String name = libraryInformation.getName();
+				if(name != null && !name.isEmpty()) {
+					return name;
+				}
+			}
+		}
+		return null;
+	}
 
 	@Override
 	default int getPeakEnd() {

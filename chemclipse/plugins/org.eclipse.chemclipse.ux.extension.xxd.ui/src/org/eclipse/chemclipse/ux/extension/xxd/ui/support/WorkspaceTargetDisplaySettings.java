@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,8 +16,6 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
-import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.core.runtime.IStatus;
@@ -201,23 +199,6 @@ public class WorkspaceTargetDisplaySettings implements TargetDisplaySettings, Se
 			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, WorkspaceTargetDisplaySettings.class.getName(), "Sync WorkspaceTargetDisplaySettings failed!", e));
 		}
 		return new WorkspaceTargetDisplaySettings(node, systemSettings);
-	}
-
-	public static String getID(IIdentificationTarget target, LibraryField field) {
-
-		if(target != null) {
-			StringBuilder sb = new StringBuilder("IdentificationTarget.");
-			sb.append(field.name());
-			sb.append(".");
-			sb.append(field.stringTransformer().apply(target));
-			ILibraryInformation information = target.getLibraryInformation();
-			if(information != null) {
-				sb.append("@");
-				sb.append(information.getRetentionTime());
-			}
-			return sb.toString().trim();
-		}
-		return null;
 	}
 
 	private static IEclipsePreferences getStorage() {

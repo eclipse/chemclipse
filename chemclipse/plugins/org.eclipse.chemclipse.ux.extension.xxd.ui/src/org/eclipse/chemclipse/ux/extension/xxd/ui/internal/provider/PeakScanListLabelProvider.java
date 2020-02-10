@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,15 +8,17 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - adjust to new API
+ * Christoph Läubrich - add support for name editing, improve classifier support
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import java.text.DecimalFormat;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
-import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
+import org.eclipse.chemclipse.model.core.AbstractPeak;
+import org.eclipse.chemclipse.model.core.Classifiable;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
@@ -28,18 +30,24 @@ import org.eclipse.chemclipse.model.identifier.IPeakComparisonResult;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.resource.FontDescriptor;
+import org.eclipse.jface.viewers.ColumnViewer;
+import org.eclipse.jface.viewers.ITableFontProvider;
+import org.eclipse.jface.viewers.ViewerColumn;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 
-public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
+public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider implements ITableFontProvider {
 
+	public static final String NAME = "Name";
 	public static final String ACTIVE_FOR_ANALYSIS = "Active for Analysis";
 	public static final String RT = "RT";
 	public static final String CLASSIFIER = "Classifier";
@@ -48,7 +56,6 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 	public static final String SCAN = "SCAN";
 	//
 	private double chromatogramPeakArea = 0.0d;
-	private final TargetExtendedComparator comparator = new TargetExtendedComparator(SortOrder.DESC);
 	//
 	public static final String[] TITLES = { //
 			ACTIVE_FOR_ANALYSIS, //
@@ -66,7 +73,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 			"Tailing", //
 			"Model Description", //
 			"Suggested Components", //
-			"Name", //
+			NAME, //
 			"Area Percent", //
 			"Quantifier", //
 			CLASSIFIER //
@@ -93,6 +100,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 			100, //
 			100 //
 	};
+	private Font italicFont;
 
 	public void setChromatogramPeakArea(double chromatogramPeakArea) {
 
@@ -116,6 +124,35 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 			}
 		}
 		return super.getBackground(element);
+	}
+
+	@Override
+	public Font getFont(Object element, int columnIndex) {
+
+		if(columnIndex == 15 && element instanceof AbstractPeak) {
+			AbstractPeak abstractPeak = (AbstractPeak)element;
+			if(abstractPeak.isNameSet()) {
+				return italicFont;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	protected void initialize(ColumnViewer viewer, ViewerColumn column) {
+
+		super.initialize(viewer, column);
+		Font defaultFont = viewer.getControl().getFont();
+		italicFont = FontDescriptor.createFrom(defaultFont).setStyle(SWT.ITALIC).createFont(defaultFont.getDevice());
+	}
+
+	@Override
+	public void dispose(ColumnViewer viewer, ViewerColumn column) {
+
+		if(italicFont != null) {
+			italicFont.dispose();
+		}
+		super.dispose(viewer, column);
 	}
 
 	@Override
@@ -250,11 +287,16 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 			case 14:
 				text = Integer.toString(peak.getSuggestedNumberOfComponents());
 				break;
-			case 15:
-				ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(peak.getTargets(), comparator);
-				if(libraryInformation != null) {
-					text = libraryInformation.getName();
+			case 15: {
+				String peakName = peak.getName();
+				if(peakName != null) {
+					return peakName;
 				}
+				ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(peak.getTargets());
+				if(libraryInformation != null) {
+					return libraryInformation.getName();
+				}
+			}
 				break;
 			case 16:
 				if(chromatogramPeakArea > 0) {
@@ -267,9 +309,17 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 			case 17:
 				text = (peak.getInternalStandards().size() > 0) ? "ISTD" : "";
 				break;
-			case 18:
-				text = peak.getClassifier().toString();
-				break;
+			case 18: {
+				ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(peak.getTargets());
+				if(libraryInformation != null) {
+					Set<String> set = new LinkedHashSet<>();
+					set.addAll(peak.getClassifier());
+					set.addAll(libraryInformation.getClassifier());
+					return Classifiable.asString(set);
+				} else {
+					return Classifiable.asString(peak);
+				}
+			}
 		}
 		//
 		return text;
@@ -319,7 +369,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 				text = "--";
 				break;
 			case 15:
-				ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(scan.getTargets(), comparator);
+				ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(scan.getTargets());
 				if(libraryInformation != null) {
 					text = libraryInformation.getName();
 				}

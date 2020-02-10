@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.support.RetentionTimeRange;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -112,6 +113,8 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 	private boolean moveRetentionTimeOnPeakSelection;
 	protected InteractionMode interactionMode = InteractionMode.SOURCE;
 	private final IEventBroker eventBroker;
+	private int currentModCount;
+	private RetentionTimeRange lastRange;
 
 	public ExtendedPeakScanListUI(Composite parent, IEventBroker eventBroker, IPreferenceStore preferenceStore) {
 		this.eventBroker = eventBroker;
@@ -138,8 +141,24 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 
 	public void updateChromatogramSelection(IChromatogramSelection chromatogramSelection) {
 
-		this.chromatogramSelection = chromatogramSelection;
-		updateChromatogramSelection();
+		if(hasChanged(chromatogramSelection)) {
+			this.chromatogramSelection = chromatogramSelection;
+			updateChromatogramSelection();
+		}
+	}
+
+	private boolean hasChanged(IChromatogramSelection chromatogramSelection) {
+
+		boolean referenceChanged = this.chromatogramSelection != chromatogramSelection;
+		if(!referenceChanged && chromatogramSelection != null) {
+			if(chromatogramSelection.getChromatogram().getModCount() != currentModCount) {
+				return true;
+			}
+			if(lastRange != null && !lastRange.contentEquals(chromatogramSelection)) {
+				return true;
+			}
+		}
+		return referenceChanged;
 	}
 
 	public void updateChromatogramSelection() {
@@ -150,7 +169,10 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 		//
 		if(chromatogramSelection == null) {
 			peakScanListUI.clear();
+			currentModCount = -1;
 		} else {
+			currentModCount = chromatogramSelection.getChromatogram().getModCount();
+			lastRange = new RetentionTimeRange(chromatogramSelection);
 			peakScanListUI.setInput(chromatogramSelection, showPeaks, showPeaksInRange, showScans, showScansInRange);
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			if(chromatogram instanceof IChromatogramMSD) {

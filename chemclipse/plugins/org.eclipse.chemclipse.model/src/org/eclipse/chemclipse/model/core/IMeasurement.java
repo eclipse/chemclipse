@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add default file / dirty methods
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
@@ -34,5 +35,15 @@ public interface IMeasurement extends IMeasurementInfo, IMeasurementResultSuppor
 	default File getFile() {
 
 		return null;
+	}
+
+	default boolean isDirty() {
+
+		return false;
+	}
+
+	default int getModCount() {
+
+		return 0;
 	}
 }

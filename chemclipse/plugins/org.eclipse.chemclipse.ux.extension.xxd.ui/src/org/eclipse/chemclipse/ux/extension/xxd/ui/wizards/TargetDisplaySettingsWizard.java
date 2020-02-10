@@ -110,8 +110,8 @@ public class TargetDisplaySettingsWizard {
 		private final TargetDisplaySettings base;
 		private int rotation;
 		private int depth;
-		private String name;
-		private TargetDisplaySettingsWizardListener settingsListener;
+		private final String name;
+		private final TargetDisplaySettingsWizardListener settingsListener;
 		public Predicate<TargetReference> predicate = always -> true;
 
 		public WizardTargetDisplaySettings(TargetDisplaySettings base, String name, TargetDisplaySettingsWizardListener listener) {
@@ -228,7 +228,7 @@ public class TargetDisplaySettingsWizard {
 		WizardTargetDisplaySettings selectedSettings;
 		final WizardTargetDisplaySettings[] wizardSettings;
 		private final Collection<? extends TargetReference> identifications;
-		private TargetDisplaySettingsWizardListener listener;
+		private final TargetDisplaySettingsWizardListener listener;
 
 		protected TargetDisplaySettingsPage(Collection<? extends TargetReference> identifications, TargetDisplaySettings settings, TargetDisplaySettingsWizardListener listener) {
 			super(TargetDisplaySettingsPage.class.getName());
@@ -350,7 +350,7 @@ public class TargetDisplaySettingsWizard {
 			private final ComboViewer collisionComboViewer;
 			private TableViewer listUI;
 			private ToolBarManager toolbarManager;
-			private Collection<? extends TargetReference> identifications;
+			private final Collection<? extends TargetReference> identifications;
 
 			public TargetSettingEditor(Composite parent, WizardTargetDisplaySettings editorSettings, TargetDisplaySettingsPage page, Collection<? extends TargetReference> identifications) {
 				this.identifications = identifications;
@@ -564,7 +564,7 @@ public class TargetDisplaySettingsWizard {
 
 						if(element instanceof TargetReference) {
 							TargetReference reference = (TargetReference)element;
-							return field.stringTransformer().apply(reference.getBestTarget());
+							return reference.getTargetLabel(field);
 						}
 						return "";
 					}
@@ -632,7 +632,7 @@ public class TargetDisplaySettingsWizard {
 								@Override
 								public boolean test(TargetReference target) {
 
-									String label = wizardSettings.getField().stringTransformer().apply(target.getBestTarget());
+									String label = target.getTargetLabel(wizardSettings.getField());
 									return label != null && label.toLowerCase().contains(filterText.toLowerCase());
 								}
 							};

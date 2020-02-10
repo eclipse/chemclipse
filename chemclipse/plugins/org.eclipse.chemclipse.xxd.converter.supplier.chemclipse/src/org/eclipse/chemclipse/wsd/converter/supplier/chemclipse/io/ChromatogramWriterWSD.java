@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Michael Chang.
+ * Copyright (c) 2015, 2020 Michael Chang.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +9,7 @@
  * Contributors:
  * Michael Chang - initial API and implementation
  * Philip Wenig - improvements
+ * Christoph Läubrich - update latest version
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.io;
 
@@ -23,7 +24,7 @@ import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.internal.io.Chro
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.internal.io.ChromatogramWriter_1006;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.internal.io.ChromatogramWriter_1007;
 import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.internal.io.ChromatogramWriter_1100;
-import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.internal.io.ChromatogramWriter_1300;
+import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.internal.io.ChromatogramWriter_1301;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
@@ -62,7 +63,7 @@ public class ChromatogramWriterWSD extends AbstractChromatogramWriter implements
 		} else if(versionSave.equals(IFormat.CHROMATOGRAM_VERSION_1100)) {
 			chromatogramWriter = new ChromatogramWriter_1100();
 		} else {
-			chromatogramWriter = new ChromatogramWriter_1300();
+			chromatogramWriter = new ChromatogramWriter_1301();
 		}
 		//
 		return chromatogramWriter;

@@ -22,4 +22,5 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.msd.converter.supplier.csv.core,
+ org.eclipse.chemclipse.msd.converter.supplier.csv.io.core,
  org.eclipse.chemclipse.msd.converter.supplier.csv.preferences

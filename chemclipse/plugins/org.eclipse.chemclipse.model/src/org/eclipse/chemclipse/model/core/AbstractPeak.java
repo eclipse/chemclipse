@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2019 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - adjust API
+ * Christoph Läubrich - adjust API, add support for name
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
@@ -43,6 +43,7 @@ public abstract class AbstractPeak implements IPeak {
 	private final List<IInternalStandard> internalStandards = new ArrayList<IInternalStandard>();
 	private final List<String> quantitationReferences = new ArrayList<String>(); // Used to quantify against certain ISTDs or ESTDs
 	private final Set<String> classifier = new LinkedHashSet<>();
+	private String name;
 
 	@Override
 	public String getModelDescription() {
@@ -332,12 +333,37 @@ public abstract class AbstractPeak implements IPeak {
 	@Override
 	public void addClassifier(String classifier) {
 
-		this.classifier.add(classifier);
+		if(classifier != null && !classifier.trim().isEmpty()) {
+			this.classifier.add(classifier.trim());
+		}
 	}
 
 	@Override
 	public void removeClassifier(String classifier) {
 
 		this.classifier.remove(classifier);
+	}
+
+	public void setName(String name) {
+
+		if(name != null && name.trim().isEmpty()) {
+			this.name = null;
+		} else {
+			this.name = name;
+		}
+	}
+
+	public boolean isNameSet() {
+
+		return name != null;
+	}
+
+	@Override
+	public String getName() {
+
+		if(isNameSet()) {
+			return name;
+		}
+		return IPeak.super.getName();
 	}
 }

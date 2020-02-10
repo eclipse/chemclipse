@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - add new version
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io;
 
@@ -40,6 +41,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.Chro
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.ChromatogramReader_1007;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.ChromatogramReader_1100;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.ChromatogramReader_1300;
+import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.ChromatogramReader_1301;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.IVendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.IVendorScan;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.VendorChromatogram;
@@ -202,6 +204,8 @@ public class ChromatogramReaderMSD extends AbstractChromatogramMSDReader impleme
 			chromatogramReader = new ChromatogramReader_1100();
 		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1300)) {
 			chromatogramReader = new ChromatogramReader_1300();
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1301)) {
+			chromatogramReader = new ChromatogramReader_1301();
 		}
 		//
 		return chromatogramReader;

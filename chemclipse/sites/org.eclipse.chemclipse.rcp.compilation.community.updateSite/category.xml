@@ -6,16 +6,16 @@
    <feature url="features/org.eclipse.chemclipse.rcp.compilation.community.feature_0.8.0.qualifier.jar" id="org.eclipse.chemclipse.rcp.compilation.community.feature" version="0.8.0.qualifier">
       <category name="org.eclipse.chemclipse.chemclipse"/>
    </feature>
-   <feature url="features/org.eclipse.equinox.sdk_3.12.0.v20170209-1843.jar" id="org.eclipse.equinox.sdk" version="3.12.0.v20170209-1843">
-      <category name="org.eclipse.chemclipse.chemclipse.libraries"/>
-   </feature>
    <feature url="features/org.eclipse.gemini.jpa.feature_1.2.0.M1.jar" id="org.eclipse.gemini.jpa.feature" version="1.2.0.M1">
       <category name="org.eclipse.chemclipse.chemclipse.libraries"/>
    </feature>
-   <feature url="features/org.eclipse.persistence.sdk_2.7.1.v20171221-bd47e8f.jar" id="org.eclipse.persistence.sdk" version="2.7.1.v20171221-bd47e8f">
+   <feature url="features/org.eclipse.equinox.executable_3.8.0.v20180518-2029.jar" id="org.eclipse.equinox.executable" version="3.8.0.v20180518-2029">
       <category name="org.eclipse.chemclipse.chemclipse.libraries"/>
    </feature>
-   <feature url="features/org.eclipse.equinox.executable_3.6.300.v20161122-1740.jar" id="org.eclipse.equinox.executable" version="3.6.300.v20161122-1740">
+   <feature url="features/org.eclipse.equinox.sdk_3.14.0.v20180518-2029.jar" id="org.eclipse.equinox.sdk" version="3.14.0.v20180518-2029">
+      <category name="org.eclipse.chemclipse.chemclipse.libraries"/>
+   </feature>
+   <feature url="features/org.eclipse.persistence.sdk_2.7.6.v20200131-b7c997804f.jar" id="org.eclipse.persistence.sdk" version="2.7.6.v20200131-b7c997804f">
       <category name="org.eclipse.chemclipse.chemclipse.libraries"/>
    </feature>
    <category-def name="org.eclipse.chemclipse.chemclipse" label="Chemclipse">

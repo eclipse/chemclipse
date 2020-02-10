@@ -29,6 +29,7 @@
 -Dosgi.instance.area=@user.home/ChemClipse/0.8.x
 -Dosgi.user.area=@user.home/.chemclipse/0.8.x
 -XX:-UseGCOverheadLimit
+--add-modules=ALL-SYSTEM
       </vmArgs>
       <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
       </vmArgsMac>
@@ -40,7 +41,6 @@
       location="org.eclipse.chemclipse.rcp.compilation.community.ui" />
    <launcher name="chemclipse">
       <linux icon="icons/linux/Icon.xpm"/>
-      <solaris/>
       <win useIco="false">
          <bmp
             winSmallHigh="icons/windows/16x16-32.bmp"
