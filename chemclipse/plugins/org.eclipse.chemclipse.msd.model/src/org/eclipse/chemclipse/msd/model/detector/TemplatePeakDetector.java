@@ -17,8 +17,10 @@ import java.util.Map;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.PeakType;
+import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.detector.Detector;
 import org.eclipse.chemclipse.processing.detector.DetectorCategory;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * 
@@ -28,7 +30,7 @@ import org.eclipse.chemclipse.processing.detector.DetectorCategory;
  */
 public interface TemplatePeakDetector<ConfigType> extends Detector<ConfigType> {
 
-	<TPT extends TemplatePeak> Map<TPT, IPeakModel> detectPeaks(IChromatogram<?> chromatogram, Collection<TPT> templates, ConfigType configuration);
+	<TPT extends TemplatePeak> Map<TPT, IPeakModel> detectPeaks(IChromatogram<?> chromatogram, Collection<TPT> templates, ConfigType configuration, MessageConsumer messages, IProgressMonitor progressMonitor);
 
 	@Override
 	default DetectorCategory getDetectorCategory() {
