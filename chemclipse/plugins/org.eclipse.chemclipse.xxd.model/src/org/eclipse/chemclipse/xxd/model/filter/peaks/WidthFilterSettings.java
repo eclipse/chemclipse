@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.xxd.model.filter.peaks;
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
 import org.eclipse.chemclipse.xxd.model.support.PeakWidthSelectionCriterion;
-import org.eclipse.chemclipse.xxd.model.support.ValueFilterTreatmentOption;
+import org.eclipse.chemclipse.xxd.model.support.TreatmentOption;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
@@ -27,7 +27,7 @@ public class WidthFilterSettings {
 
 	@JsonProperty(value = "Peak Treatment Option:")
 	@EnumSelectionSettingProperty
-	private ValueFilterTreatmentOption filterTreatmentOption = ValueFilterTreatmentOption.DEACTIVATE_PEAK;
+	private TreatmentOption filterTreatmentOption = TreatmentOption.DEACTIVATE_PEAK;
 
 	@JsonProperty(value = "Width Selection Criterion:")
 	@EnumSelectionSettingProperty
@@ -43,12 +43,12 @@ public class WidthFilterSettings {
 		this.widthValue = widthValue;
 	}
 
-	public ValueFilterTreatmentOption getFilterTreatmentOption() {
+	public TreatmentOption getFilterTreatmentOption() {
 		
 		return filterTreatmentOption;
 	}
 
-	public void setFilterTreatmentOption(ValueFilterTreatmentOption filterTreatmentOption) {
+	public void setFilterTreatmentOption(TreatmentOption filterTreatmentOption) {
 		
 		this.filterTreatmentOption = filterTreatmentOption;
 	}
