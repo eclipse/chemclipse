@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - use getScans() everywhere to access the scan datastructure, modcount support
+ * Christoph Läubrich - use getScans() everywhere to access the scan datastructure, modcount support, analysis segment support
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -41,6 +43,8 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
+import org.eclipse.chemclipse.model.support.IAnalysisSegment;
+import org.eclipse.chemclipse.model.support.IScanRange;
 import org.eclipse.chemclipse.model.updates.IChromatogramUpdateListener;
 import org.eclipse.chemclipse.model.versioning.IVersionManagement;
 import org.eclipse.chemclipse.model.versioning.VersionManagement;
@@ -62,6 +66,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	private File file = null; // The file object of the chromatogram.
 	private int scanDelay = 4500;
 	private int scanInterval = 1000; // 1000ms = 1 scan per second
+	private final List<ChromatogramAnalysisSegment> analysisSegments = new ArrayList<>();
 	/*
 	 * This flag marks whether the chromatogram has been
 	 * set to unload modus. It is used e.g. when loading
@@ -119,6 +124,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	 * Several initialization will be performed.
 	 */
 	public AbstractChromatogram() {
+
 		updateSupport = new ArrayList<IChromatogramUpdateListener>(5);
 		versionManagement = new VersionManagement();
 		editHistory = new EditHistory();
@@ -1074,6 +1080,28 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		} else {
 			modCount = 0;
 		}
+	}
+
+	@Override
+	public List<IAnalysisSegment> getAnalysisSegments() {
+
+		return Collections.unmodifiableList(analysisSegments);
+	}
+
+	@Override
+	public void defineAnalysisSegment(IScanRange range, Collection<? extends IAnalysisSegment> childs) {
+
+		analysisSegments.add(new ChromatogramAnalysisSegment(range, this, childs));
+	}
+
+	@Override
+	public void removeAnalysisSegment(IAnalysisSegment segment) {
+
+	}
+
+	@Override
+	public void updateAnalysisSegment(IAnalysisSegment segment, IScanRange range) {
+
 	}
 
 	@SuppressWarnings("rawtypes")

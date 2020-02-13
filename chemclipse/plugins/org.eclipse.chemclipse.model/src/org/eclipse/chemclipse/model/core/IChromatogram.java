@@ -8,21 +8,25 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - allow chromatogram to be marked as dirty
+ * Christoph Läubrich - allow chromatogram to be marked as dirty, support for analysis segments
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
 import java.io.File;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.baseline.IChromatogramBaseline;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
+import org.eclipse.chemclipse.model.support.IAnalysisSegment;
+import org.eclipse.chemclipse.model.support.IScanRange;
 import org.eclipse.chemclipse.model.updates.IUpdater;
 import org.eclipse.chemclipse.model.versioning.IChromatogramVersioning;
 import org.eclipse.chemclipse.support.history.ISupplierEditHistory;
 import org.eclipse.core.runtime.IAdaptable;
 
-public interface IChromatogram<T extends IPeak> extends IMeasurement, IChromatogramOverview, IAdaptable, IChromatogramPeaks<T>, IChromatogramVersioning, ISupplierEditHistory, IChromatogramBaseline, IUpdater, IChromatogramIntegrationSupport, IChromatogramProcessorSupport, ITargetSupplier {
+public interface IChromatogram<T extends IPeak> extends SegmentedMeasurement, IMeasurement, IChromatogramOverview, IAdaptable, IChromatogramPeaks<T>, IChromatogramVersioning, ISupplierEditHistory, IChromatogramBaseline, IUpdater, IChromatogramIntegrationSupport, IChromatogramProcessorSupport, ITargetSupplier {
 
 	String DEFAULT_CHROMATOGRAM_NAME = "Chromatogram";
 	int MIN_SCANDELAY = 0;
@@ -216,4 +220,23 @@ public interface IChromatogram<T extends IPeak> extends IMeasurement, IChromatog
 	}
 
 	void setDirty(boolean dirty);
+
+	default void defineAnalysisSegment(IScanRange range) {
+
+		defineAnalysisSegment(range, Collections.emptyList());
+	}
+
+	void defineAnalysisSegment(IScanRange range, Collection<? extends IAnalysisSegment> childs);
+
+	void removeAnalysisSegment(IAnalysisSegment segment);
+
+	void updateAnalysisSegment(IAnalysisSegment segment, IScanRange range);
+
+	default void clearAnalysisSegments() {
+
+		IAnalysisSegment[] segments = getAnalysisSegments().toArray(new IAnalysisSegment[0]);
+		for(IAnalysisSegment segment : segments) {
+			removeAnalysisSegment(segment);
+		}
+	}
 }
