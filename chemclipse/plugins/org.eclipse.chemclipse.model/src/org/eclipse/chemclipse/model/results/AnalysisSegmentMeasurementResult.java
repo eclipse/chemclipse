@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.results;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Observable;
 
@@ -49,18 +47,7 @@ public abstract class AnalysisSegmentMeasurementResult<T extends IAnalysisSegmen
 	 */
 	public List<T> getSegments(IScanRange range, boolean includeBorders) {
 
-		List<T> list = new ArrayList<>();
-		for(T segment : getResult()) {
-			if(range.containsScan(segment.getStartScan())) {
-				if(includeBorders || segment.getStopScan() <= range.getStopScan()) {
-					list.add(segment);
-				}
-			} else if(includeBorders && range.containsScan(segment.getStopScan())) {
-				list.add(segment);
-			}
-		}
-		Collections.sort(list, (o1, o2) -> o1.getStartScan() - o2.getStartScan());
-		return list;
+		return IAnalysisSegment.getSegments(range, includeBorders, getResult());
 	}
 
 	public T getSelection() {
