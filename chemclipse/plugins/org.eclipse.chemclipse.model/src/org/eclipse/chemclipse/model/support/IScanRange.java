@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.support;
 
+import org.eclipse.chemclipse.model.core.IScan;
+
 /**
  * @author eselmeister
  */
@@ -66,6 +68,11 @@ public interface IScanRange {
 			return true;
 		}
 		return getStopScan() == other.getStopScan() && getStartScan() == other.getStartScan();
+	}
+
+	default boolean containsScan(IScan scan) {
+
+		return containsScan(scan.getScanNumber());
 	}
 
 	default boolean containsScan(int scan) {

@@ -21,11 +21,22 @@ public class AnalysisSegmentColorScheme {
 		SEGMENT_EVEN, SEGMENT_ODD, LINE, SELECTION;
 	}
 
+	/**
+	 * neutral brown
+	 */
+	public static final AnalysisSegmentColorScheme CHROMATOGRAM = new AnalysisSegmentColorScheme(new RGB(200, 190, 183), new RGB(227, 222, 219), new RGB(172, 157, 147), new RGB(145, 124, 111));
+	/**
+	 * green sceme
+	 */
 	public static final AnalysisSegmentColorScheme ANALYSIS = new AnalysisSegmentColorScheme(new RGB(215, 244, 227), new RGB(175, 233, 198), new RGB(135, 222, 170), new RGB(95, 211, 141));
+	/**
+	 * pink sceme
+	 */
 	public static final AnalysisSegmentColorScheme NOISE = new AnalysisSegmentColorScheme(new RGB(246, 213, 255), new RGB(238, 170, 255), new RGB(229, 128, 255), new RGB(170, 0, 212));
 	private final RGB[] rgb;
 
 	private AnalysisSegmentColorScheme(RGB... colours) {
+
 		this.rgb = colours;
 	}
 
@@ -39,6 +50,7 @@ public class AnalysisSegmentColorScheme {
 		private final Color[] colors;
 
 		public AnalysisSegmentColors(GC gc) {
+
 			colors = new Color[rgb.length];
 			for(int i = 0; i < rgb.length; i++) {
 				colors[i] = new Color(gc.getDevice(), rgb[i]);

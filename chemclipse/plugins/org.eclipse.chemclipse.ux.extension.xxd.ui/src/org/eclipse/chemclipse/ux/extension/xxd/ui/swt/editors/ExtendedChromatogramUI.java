@@ -1187,7 +1187,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		 */
 		BaseChart baseChart = chromatogramChart.getBaseChart();
 		baseChart.addCustomRangeSelectionHandler(new ChromatogramSelectionHandler(this));
-		AnalysisSegmentPaintListener<IAnalysisSegment> listener = new AnalysisSegmentPaintListener<IAnalysisSegment>(AnalysisSegmentColorScheme.ANALYSIS, new Supplier<Collection<IAnalysisSegment>>() {
+		AnalysisSegmentPaintListener<IAnalysisSegment> listener = new AnalysisSegmentPaintListener<IAnalysisSegment>(AnalysisSegmentColorScheme.CHROMATOGRAM, new Supplier<Collection<IAnalysisSegment>>() {
 
 			@Override
 			public Collection<IAnalysisSegment> get() {
