@@ -42,6 +42,7 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSupplier;
+import org.eclipse.chemclipse.model.support.IAnalysisSegment;
 import org.eclipse.chemclipse.model.updates.IChromatogramSelectionUpdateListener;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -89,6 +90,8 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChro
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramPeaks;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessors;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.segments.AnalysisSegmentColorScheme;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.segments.AnalysisSegmentPaintListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.PreferenceStoreTargetDisplaySettings;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.SignalTargetReference;
@@ -224,19 +227,23 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 	@Deprecated
 	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker) {
+
 		this(parent, style, eventBroker, Activator.getDefault().getPreferenceStore());
 	}
 
 	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker, ProcessSupplierContext supplierContext) {
+
 		this(parent, style, eventBroker, supplierContext, Activator.getDefault().getPreferenceStore());
 	}
 
 	@Deprecated
 	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker, IPreferenceStore store) {
+
 		this(parent, style, eventBroker, new org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport(), store);
 	}
 
 	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker, ProcessSupplierContext supplierContext, IPreferenceStore store) {
+
 		this.eventBroker = eventBroker;
 		processTypeSupport = supplierContext;
 		preferenceStore = store;
@@ -1180,6 +1187,21 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		 */
 		BaseChart baseChart = chromatogramChart.getBaseChart();
 		baseChart.addCustomRangeSelectionHandler(new ChromatogramSelectionHandler(this));
+		AnalysisSegmentPaintListener<IAnalysisSegment> listener = new AnalysisSegmentPaintListener<IAnalysisSegment>(AnalysisSegmentColorScheme.ANALYSIS, new Supplier<Collection<IAnalysisSegment>>() {
+
+			@Override
+			public Collection<IAnalysisSegment> get() {
+
+				if(chromatogramSelection != null) {
+					return chromatogramSelection.getChromatogram().getAnalysisSegments();
+				}
+				return Collections.emptyList();
+			}
+		}, always -> false);
+		listener.setPaintArea(true);
+		listener.setPaintLines(true);
+		listener.setAlpha(50);
+		baseChart.getPlotArea().addCustomPaintListener(listener);
 		/*
 		 * Chart Settings
 		 */

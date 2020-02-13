@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -36,8 +36,12 @@ public class AnalysisSegmentPaintListener<X extends IAnalysisSegment> implements
 	private final AnalysisSegmentColorScheme colorScheme;
 	private final Supplier<Collection<X>> segmentSupplier;
 	private final Predicate<X> selectionCheck;
+	private boolean paintArea = true;
+	private boolean paintLines = false;
+	private int alpha = ALPHA;
 
 	public AnalysisSegmentPaintListener(AnalysisSegmentColorScheme colorScheme, Supplier<Collection<X>> segmentSupplier, Predicate<X> selectionCheck) {
+
 		this.colorScheme = colorScheme;
 		this.segmentSupplier = segmentSupplier;
 		this.selectionCheck = selectionCheck;
@@ -63,22 +67,30 @@ public class AnalysisSegmentPaintListener<X extends IAnalysisSegment> implements
 				gc.setForeground(colors.get(Type.LINE));
 				for(X segment : segmentSupplier.get()) {
 					int x1 = xAxis.getPixelCoordinate(segment.getStartRetentionTime());
-					int x2 = xAxis.getPixelCoordinate(segment.getStopRetentionTime()) - x1;
+					int x2 = xAxis.getPixelCoordinate(segment.getStopRetentionTime());
 					boolean isSelected = selectionCheck.test(segment);
 					if(isSelected) {
 						gc.setBackground(colors.get(Type.SELECTION));
-						gc.setAlpha(ALPHA + 50);
+						gc.setAlpha(alpha + 50);
 					} else if(alternate) {
 						gc.setBackground(colors.get(Type.SEGMENT_ODD));
-						gc.setAlpha(ALPHA);
+						gc.setAlpha(alpha);
 					} else {
 						gc.setBackground(colors.get(Type.SEGMENT_EVEN));
-						gc.setAlpha(ALPHA);
+						gc.setAlpha(alpha);
 					}
-					gc.fillRectangle(x1, y, x2, height);
-					gc.setAlpha(255);
+					if(paintArea || isSelected) {
+						gc.fillRectangle(x1, y, x2 - x1, height);
+					}
 					if(isSelected) {
-						gc.drawLine(x1, 0, x1, height);
+						gc.setAlpha(255);
+					} else {
+						gc.setAlpha(alpha + 50);
+					}
+					if(paintLines || isSelected) {
+						if(isSelected && paintArea) {
+							gc.drawLine(x1, 0, x1, height);
+						}
 						gc.drawLine(x2, 0, x2, height);
 					}
 					alternate = !alternate;
@@ -92,5 +104,20 @@ public class AnalysisSegmentPaintListener<X extends IAnalysisSegment> implements
 	public boolean drawBehindSeries() {
 
 		return true;
+	}
+
+	public void setPaintArea(boolean paintArea) {
+
+		this.paintArea = paintArea;
+	}
+
+	public void setPaintLines(boolean paintLines) {
+
+		this.paintLines = paintLines;
+	}
+
+	public void setAlpha(int alpha) {
+
+		this.alpha = alpha;
 	}
 }
