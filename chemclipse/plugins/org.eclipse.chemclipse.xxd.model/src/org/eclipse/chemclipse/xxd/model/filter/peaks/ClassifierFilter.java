@@ -16,7 +16,6 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -33,19 +32,19 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
-@Component(service = { IPeakFilter.class, Filter.class, Processor.class })
+@Component(service = {IPeakFilter.class, Filter.class, Processor.class})
 public class ClassifierFilter implements IPeakFilter<ClassifierFilterSettings> {
 
 	@Override
 	public String getName() {
 
-		return "Peak Classifier Filter";
+		return "Peak Classifier";
 	}
 
 	@Override
 	public String getDescription() {
 
-		return "Filter peaks and add peak classifier (e.g. for whole name or parts of the name.)";
+		return "Filter peaks and add peak classifier (e.g. for the whole name or parts of the name).";
 	}
 
 	@Override
@@ -69,7 +68,6 @@ public class ClassifierFilter implements IPeakFilter<ClassifierFilterSettings> {
 		}
 		SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
 		LinkedHashMap<String, String> parsedUserDefinedValues = parseUserDefinedValuesAsMap(configuration);
-
 		for(X peak : read) {
 			setPeakClassifier(configuration, parsedUserDefinedValues, peak);
 			subMonitor.worked(1);
@@ -79,7 +77,6 @@ public class ClassifierFilter implements IPeakFilter<ClassifierFilterSettings> {
 	private static LinkedHashMap<String, String> parseUserDefinedValuesAsMap(ClassifierFilterSettings configuration) {
 
 		String userDefinedMatchExpression = configuration.getUserDefinedMatchExpression();
-		
 		List<String> expressions = new ArrayList<String>();
 		if(!userDefinedMatchExpression.isEmpty()) {
 			expressions.addAll(parseExpressions(userDefinedMatchExpression));
@@ -118,22 +115,27 @@ public class ClassifierFilter implements IPeakFilter<ClassifierFilterSettings> {
 	private static <X extends IPeak> void setPeakClassifier(ClassifierFilterSettings configuration, LinkedHashMap<String, String> parsedUserDefinedValues, X peak) {
 
 		peak.removeClassifier("");
-		String substanceName = extractSubstanceName(configuration, peak);
-		for(Map.Entry<String, String> entry : parsedUserDefinedValues.entrySet()) {
-			Pattern pattern = createPattern(configuration, entry);
-			Matcher matcher = pattern.matcher(substanceName);
-			/*
-			 * UserDefinedMatchClassification for the cases when
-			 * 1) the occurrence of the regular expression is found in identified name or
-			 * 2) the whole text is found in identified name
-			 */
-			if(configuration.isWildcardSearch()) {
-				if(matcher.find()) {
-					peak.addClassifier(entry.getValue());
-				}
-			} else {
-				if(matcher.matches()) {
-					peak.addClassifier(entry.getValue());
+		//
+		for(IIdentificationTarget target : peak.getTargets()) {
+			String substanceName = extractSubstanceName(configuration, target);
+			if(substanceName != null) {
+				for(Map.Entry<String, String> entry : parsedUserDefinedValues.entrySet()) {
+					Pattern pattern = createPattern(configuration, entry);
+					Matcher matcher = pattern.matcher(substanceName);
+					/*
+					 * UserDefinedMatchClassification for the cases when
+					 * 1) the occurrence of the regular expression is found in identified name or
+					 * 2) the whole text is found in identified name
+					 */
+					if(configuration.isWildcardSearch()) {
+						if(matcher.find()) {
+							peak.addClassifier(entry.getValue());
+						}
+					} else {
+						if(matcher.matches()) {
+							peak.addClassifier(entry.getValue());
+						}
+					}
 				}
 			}
 		}
@@ -142,7 +144,10 @@ public class ClassifierFilter implements IPeakFilter<ClassifierFilterSettings> {
 	private static Pattern createPattern(ClassifierFilterSettings configuration, Map.Entry<String, String> entry) {
 
 		Pattern pattern = null;
-		if(configuration.isIgnoreUppercase()) { // UserDefinedMatchExpression
+		/*
+		 * UserDefinedMatchExpression
+		 */
+		if(configuration.isIgnoreUppercase()) {
 			pattern = Pattern.compile(entry.getKey(), Pattern.CASE_INSENSITIVE);
 		} else {
 			pattern = Pattern.compile(entry.getKey());
@@ -150,22 +155,22 @@ public class ClassifierFilter implements IPeakFilter<ClassifierFilterSettings> {
 		return pattern;
 	}
 
-	private static <X extends IPeak> String extractSubstanceName(ClassifierFilterSettings configuration, X peak) {
+	/*
+	 * Could return null.
+	 */
+	private static String extractSubstanceName(ClassifierFilterSettings configuration, IIdentificationTarget identificationTarget) {
 
-		Set<IIdentificationTarget> targets = peak.getTargets();
-		IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(targets);
-		ILibraryInformation information = null;
-		if(target != null) {
-			information = target.getLibraryInformation();
-		}
-		if(information != null) {
-			if(configuration.isIgnoreUppercase()) {
-				return information.getName().toLowerCase();
-			} else {
-				return information.getName();
+		if(identificationTarget != null) {
+			ILibraryInformation libraryInformation = identificationTarget.getLibraryInformation();
+			if(libraryInformation != null) {
+				if(configuration.isIgnoreUppercase()) {
+					return libraryInformation.getName().toLowerCase();
+				} else {
+					return libraryInformation.getName();
+				}
 			}
-		} else {
-			return "Name not found!";
 		}
+		//
+		return null;
 	}
 }
