@@ -18,7 +18,6 @@
             filterSettings="org.eclipse.chemclipse.chromatogram.filter.impl.settings.ScanTargetsToPeakSettings"
             id="org.eclipse.chemclipse.chromatogram.filter.scanTargetsToPeakTransfer">
       </ChromatogramFilterSupplier>
-      
       <ChromatogramFilterSupplier
             description="This filter transfers peak identification targets to peaks in all listed reference chromatograms."
             filter="org.eclipse.chemclipse.chromatogram.filter.impl.PeakTargetsToReferencesFilter"
