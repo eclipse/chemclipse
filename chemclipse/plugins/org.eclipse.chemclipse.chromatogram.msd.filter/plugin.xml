@@ -9,7 +9,7 @@
       <ChromatogramFilterSupplier
             description="This filter adjusts threshold transitions. Some systems drop to record low intensity m/z values."
             filter="org.eclipse.chemclipse.chromatogram.msd.filter.impl.ChromatogramFilterAdjust"
-            filterName="Adjust Threshold Transitions (Experimental)"
+            filterName="Adjust Threshold Transitions"
             filterSettings="org.eclipse.chemclipse.chromatogram.msd.filter.impl.settings.FilterSettingsAdjust"
             id="org.eclipse.chemclipse.chromatogram.msd.filter.adjustThresholdTransitions">
       </ChromatogramFilterSupplier>
