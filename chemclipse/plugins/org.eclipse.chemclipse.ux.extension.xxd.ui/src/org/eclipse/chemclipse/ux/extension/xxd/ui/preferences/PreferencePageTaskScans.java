@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -31,6 +31,7 @@ public class PreferencePageTaskScans extends FieldEditorPreferencePage implement
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_TARGETS, "Targets:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_SCAN_CHART, "Scan Chart:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_SCAN_TABLE, "Scan Table:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_SCAN_BROWSE, "Scan Browse:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

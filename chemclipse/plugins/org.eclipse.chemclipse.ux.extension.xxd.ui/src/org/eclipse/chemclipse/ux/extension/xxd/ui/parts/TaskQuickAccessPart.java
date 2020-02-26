@@ -140,6 +140,7 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 		PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_TARGETS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_TARGETS), partService, modelService, application, eventBroker);
 		PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_SCAN_CHART, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_CHART), partService, modelService, application, eventBroker);
 		PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_SCAN_TABLE, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_TABLE), partService, modelService, application, eventBroker);
+		PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_SCAN_BROWSE, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_BROWSE), partService, modelService, application, eventBroker);
 	}
 
 	private void createOverviewTask(Composite parent) {
@@ -208,12 +209,14 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_TARGETS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_TARGETS), partService, modelService, application, eventBroker);
 				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_SCAN_CHART, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_CHART), partService, modelService, application, eventBroker);
 				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_SCAN_TABLE, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_TABLE), partService, modelService, application, eventBroker);
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_SCAN_BROWSE, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_BROWSE), partService, modelService, application, eventBroker);
 			}
 		});
 		//
 		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_TARGETS, button, imageActive, imageDefault);
 		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_SCAN_CHART, button, imageActive, imageDefault);
 		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_SCAN_TABLE, button, imageActive, imageDefault);
+		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_SCAN_BROWSE, button, imageActive, imageDefault);
 	}
 
 	private void createPeaksTask(Composite parent) {
