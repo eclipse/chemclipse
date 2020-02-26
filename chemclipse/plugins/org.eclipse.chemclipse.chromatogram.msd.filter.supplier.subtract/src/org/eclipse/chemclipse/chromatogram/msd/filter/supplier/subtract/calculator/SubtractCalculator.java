@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.internal.calculator;
+package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.calculator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -154,10 +154,8 @@ public class SubtractCalculator {
 		 */
 		for(IScanMSD targetMassSpectrum : massSpectra) {
 			adjustIntensityValues(targetMassSpectrum, subtractMassSpectrumMap, useNominalMasses, useNormalize);
-			/*
-			 * Delete the peak area. It needs to be recalculated.
-			 */
 			massSpectrum.getTargets().clear();
+			// TODO Delete peak area ..., but we don't know if this MS is a scan or a peak.
 		}
 	}
 

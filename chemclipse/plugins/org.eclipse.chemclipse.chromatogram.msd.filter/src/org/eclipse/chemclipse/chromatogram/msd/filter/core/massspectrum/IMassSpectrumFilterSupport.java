@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.core.massspectrum;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.exceptions.NoMassSpectrumFilterSupplierAvailableException;
@@ -53,4 +54,6 @@ public interface IMassSpectrumFilterSupport {
 	 * @throws NoMassSpectrumFilterSupplierAvailableException
 	 */
 	String[] getFilterNames() throws NoMassSpectrumFilterSupplierAvailableException;
+
+	Collection<IMassSpectrumFilterSupplier> getSuppliers();
 }

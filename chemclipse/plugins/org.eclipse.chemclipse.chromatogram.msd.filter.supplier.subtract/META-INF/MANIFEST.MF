@@ -16,6 +16,7 @@ Require-Bundle: org.eclipse.core.runtime,
  com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.7.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Export-Package: org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.core,
+Export-Package: org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.calculator,
+ org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.core,
  org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.preferences,
  org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -39,6 +39,29 @@ public class EditorUpdateSupport {
 
 	private static final Logger logger = Logger.getLogger(EditorUpdateSupport.class);
 	private EPartService partService = ModelSupportAddon.getPartService();
+
+	@SuppressWarnings("rawtypes")
+	public IChromatogramSelection getActiveEditorSelection() {
+
+		if(partService != null) {
+			try {
+				Collection<MPart> parts = partService.getParts();
+				if(parts != null) {
+					for(MPart part : parts) {
+						if(part.isVisible()) {
+							Object object = part.getObject();
+							if(object instanceof IChromatogramEditor) {
+								return ((IChromatogramEditor)object).getChromatogramSelection();
+							}
+						}
+					}
+				}
+			} catch(Exception e) {
+				logger.warn(e);
+			}
+		}
+		return null;
+	}
 
 	@SuppressWarnings("rawtypes")
 	public List<IChromatogramSelection> getChromatogramSelections() {

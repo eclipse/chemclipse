@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2019 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.core.massspectrum.Abstract
 import org.eclipse.chemclipse.chromatogram.msd.filter.result.IMassSpectrumFilterResult;
 import org.eclipse.chemclipse.chromatogram.msd.filter.result.MassSpectrumFilterResult;
 import org.eclipse.chemclipse.chromatogram.msd.filter.settings.IMassSpectrumFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.internal.calculator.SubtractCalculator;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.calculator.SubtractCalculator;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.MassSpectrumFilterSettings;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;

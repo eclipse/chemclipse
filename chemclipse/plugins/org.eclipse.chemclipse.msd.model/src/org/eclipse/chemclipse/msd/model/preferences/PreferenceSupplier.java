@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2019 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -133,6 +133,20 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return preferences.get(P_SUBTRACT_MASS_SPECTRUM, DEF_SUBTRACT_MASS_SPECTRUM);
 	}
 
+	public static String getMassSpectrum(IScanMSD massSpectrum) {
+
+		StringBuilder builder = new StringBuilder();
+		if(massSpectrum != null) {
+			for(IIon ion : massSpectrum.getIons()) {
+				builder.append(ion.getIon());
+				builder.append(DELIMITER_ION_ABUNDANCE);
+				builder.append(ion.getAbundance());
+				builder.append(DELIMITER_IONS);
+			}
+		}
+		return builder.toString();
+	}
+
 	public static IScanMSD getMassSpectrum(String value) {
 
 		if(value != null && !value.isEmpty()) {
@@ -168,22 +182,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getMassSpectrum(value);
 	}
 
-	private static void setSubtractMassSpectrum(IScanMSD subtractMassSpectrum) {
+	private static void setSubtractMassSpectrum(IScanMSD massSpectrum) {
 
-		/*
-		 * If the mass spectrum is null, clear the stored ms.
-		 */
-		String value = "";
-		if(subtractMassSpectrum != null) {
-			StringBuilder builder = new StringBuilder();
-			for(IIon ion : subtractMassSpectrum.getIons()) {
-				builder.append(ion.getIon());
-				builder.append(DELIMITER_ION_ABUNDANCE);
-				builder.append(ion.getAbundance());
-				builder.append(DELIMITER_IONS);
-			}
-			value = builder.toString();
-		}
+		String value = getMassSpectrum(massSpectrum);
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		preferences.put(P_SUBTRACT_MASS_SPECTRUM, value);
 	}

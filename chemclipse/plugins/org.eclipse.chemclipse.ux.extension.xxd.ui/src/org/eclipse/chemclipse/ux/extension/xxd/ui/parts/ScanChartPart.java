@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,13 +24,11 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EnhancedUpdateSup
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedScanChartUI;
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.widgets.Composite;
 
 public class ScanChartPart extends EnhancedUpdateSupport implements IUpdateSupport {
 
-	private static final String KEY_LABEL = ScanChartPart.class.getName() + ".label";
 	private ExtendedScanChartUI extendedScanChartUI;
 	private final IEventBroker eventBroker;
 
@@ -43,36 +41,7 @@ public class ScanChartPart extends EnhancedUpdateSupport implements IUpdateSuppo
 	@Override
 	public void createControl(Composite parent) {
 
-		// as only EditorParts have a visual dirtyflag we emulate the "dirty" state here for our part
-		extendedScanChartUI = new ExtendedScanChartUI(parent, eventBroker, new MDirtyable() {
-
-			private boolean dirty;
-
-			@Override
-			public void setDirty(boolean value) {
-
-				if(this.dirty != value) {
-					MPart part = getPart();
-					if(value) {
-						String label = part.getLabel();
-						part.getTransientData().put(KEY_LABEL, label);
-						part.setLabel("*" + label);
-					} else {
-						String label = (String)part.getTransientData().get(KEY_LABEL);
-						if(label != null) {
-							part.setLabel(label);
-						}
-					}
-					this.dirty = value;
-				}
-			}
-
-			@Override
-			public boolean isDirty() {
-
-				return dirty;
-			}
-		});
+		extendedScanChartUI = new ExtendedScanChartUI(parent, eventBroker);
 	}
 
 	@Override

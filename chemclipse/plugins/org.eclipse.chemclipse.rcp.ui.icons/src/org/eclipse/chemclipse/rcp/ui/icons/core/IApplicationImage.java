@@ -369,4 +369,5 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_PEAK_TRACES = "org.eclipse.chemclipse.rcp.ui.icons/peakTraces.gif";
 	String IMAGE_COPY_CLIPBOARD = "org.eclipse.chemclipse.rcp.ui.icons/copy-clipboard.png";
 	String IMAGE_ZOOM_LOCKED = "org.eclipse.chemclipse.rcp.ui.icons/zoomLocked.png";
+	String IMAGE_TYPES = "org.eclipse.chemclipse.rcp.ui.icons/types.png";
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,20 +12,15 @@
 package org.eclipse.chemclipse.chromatogram.msd.filter.core.massspectrum;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.exceptions.NoMassSpectrumFilterSupplierAvailableException;
 
 public class MassSpectrumFilterSupport implements IMassSpectrumFilterSupport {
 
-	private List<IMassSpectrumFilterSupplier> suppliers;
-
-	/**
-	 * Creates a new suppliers list.
-	 */
-	public MassSpectrumFilterSupport() {
-		suppliers = new ArrayList<IMassSpectrumFilterSupplier>();
-	}
+	private List<IMassSpectrumFilterSupplier> suppliers = new ArrayList<IMassSpectrumFilterSupplier>();
 
 	/**
 	 * Adds a {@link IMassSpectrumFilterSupplier} to the {@link IMassSpectrumFilterSupport}.
@@ -109,6 +104,12 @@ public class MassSpectrumFilterSupport implements IMassSpectrumFilterSupport {
 		} else {
 			return filterSupplier;
 		}
+	}
+
+	@Override
+	public Collection<IMassSpectrumFilterSupplier> getSuppliers() {
+
+		return Collections.unmodifiableList(suppliers);
 	}
 
 	private void areMassSpectrumFiltersStored() throws NoMassSpectrumFilterSupplierAvailableException {
