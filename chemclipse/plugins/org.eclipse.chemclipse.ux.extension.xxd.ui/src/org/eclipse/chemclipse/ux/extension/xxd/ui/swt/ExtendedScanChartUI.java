@@ -14,19 +14,10 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createContainer;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.EnumSet;
-import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.msd.filter.core.massspectrum.IMassSpectrumFilterSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.filter.core.massspectrum.IMassSpectrumFilterSupport;
-import org.eclipse.chemclipse.chromatogram.msd.filter.core.massspectrum.MassSpectrumFilter;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.calculator.SubtractCalculator;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.MassSpectrumFilterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.IMassSpectrumIdentifierSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.IMassSpectrumIdentifierSupport;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.MassSpectrumIdentifier;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -39,10 +30,10 @@ import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.MassSpectrumIdentifierRunnable;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.IUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChartConfigSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.SignalType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EditorUpdateSupport;
@@ -50,21 +41,18 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.parts.ScanChartPart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.AxisConfig.ChartAxis;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.SubtractScanWizard;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -73,6 +61,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
 public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
@@ -83,7 +72,7 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 	//
 	private Composite toolbarMain;
 	private Composite toolbarInfo;
-	private Composite toolbarIdentify;
+	private Composite toolbarEdit;
 	private Composite toolbarTypes;
 	//
 	private CLabel labelEdit;
@@ -99,10 +88,8 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 	private Combo comboSignalType;
 	//
 	private Button buttonSubstractOption;
-	private ComboViewer comboViewerFilter;
-	private Button buttonRunFilter;
-	private ComboViewer comboViewerIdentifier;
-	private Button buttonRunIdentifier;
+	private ScanFilterUI scanFilterUI;
+	private ScanIdentifierUI scanIdentifierUI;
 	//
 	private IScan scan;
 	//
@@ -125,7 +112,13 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 	public void update(IScan scan) {
 
 		if(editModus) {
+			/*
+			 * Locked if edit modus is active.
+			 */
 			if(subtractModus) {
+				/*
+				 * Subtract
+				 */
 				if(this.scan instanceof IScanMSD) {
 					IScanMSD scanSource = (IScanMSD)this.scan;
 					if(scan instanceof IScanMSD) {
@@ -136,8 +129,11 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 						 */
 						IScanMSD scanSubtract = (IScanMSD)scan;
 						subtractScanMSD(scanSource, scanSubtract);
-						subtractModus = false;
-						updateScan(scan);
+						if(!PreferenceSupplier.isEnableMultiSubtract()) {
+							subtractModus = false;
+						}
+						fireUpdateChromatogramSelection(DisplayUtils.getDisplay(), scanSource);
+						updateScan(scanSource);
 					}
 				}
 			}
@@ -146,9 +142,62 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 		}
 	}
 
+	@Override
+	public ScanChartUIConfig getConfig() {
+
+		return new ScanChartUIConfig() {
+
+			ChartConfigSupport axisSupport = new ChartConfigSupport(scanChartUI, EnumSet.of(ChartAxis.PRIMARY_X, ChartAxis.PRIMARY_Y, ChartAxis.SECONDARY_Y));
+
+			@Override
+			public void setToolbarVisible(boolean visible) {
+
+				PartSupport.setCompositeVisibility(toolbarMain, visible);
+			}
+
+			@Override
+			public boolean isToolbarVisible() {
+
+				return toolbarMain.isVisible();
+			}
+
+			@Override
+			public boolean hasToolbarInfo() {
+
+				return true;
+			}
+
+			@Override
+			public void setToolbarInfoVisible(boolean visible) {
+
+				PartSupport.setCompositeVisibility(toolbarInfo, visible);
+			}
+
+			@Override
+			public void setAxisLabelVisible(ChartAxis axis, boolean visible) {
+
+				axisSupport.setAxisLabelVisible(axis, visible);
+			}
+
+			@Override
+			public void setAxisVisible(ChartAxis axis, boolean visible) {
+
+				axisSupport.setAxisVisible(axis, visible);
+			}
+
+			@Override
+			public boolean hasAxis(ChartAxis axis) {
+
+				return axisSupport.hasAxis(axis);
+			};
+		};
+	}
+
 	private void updateScan(IScan scan) {
 
 		this.scan = scan;
+		scanFilterUI.setInput(scan);
+		scanIdentifierUI.setInput(scan);
 		labelScan.setText(scanDataSupport.getScanLabel(scan));
 		setDetectorSignalType(scan);
 		updateScanChart(scan);
@@ -158,14 +207,9 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 
 	private void updateScanChart(IScan scan) {
 
-		if(scan instanceof IScanMSD) {
-			IScanMSD scanMSD = (IScanMSD)scan;
-			IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
-			if(optimizedMassSpectrum != null) {
-				scanChartUI.setInput(optimizedMassSpectrum);
-			} else {
-				scanChartUI.setInput(scanMSD);
-			}
+		IScanMSD optimizedMassSpectrum = getOptimizedScanMSD();
+		if(optimizedMassSpectrum != null) {
+			scanChartUI.setInput(optimizedMassSpectrum);
 		} else {
 			scanChartUI.setInput(scan);
 		}
@@ -179,22 +223,12 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 		toolbarMain = createToolbarMain(container);
 		toolbarInfo = createToolbarInfo(container);
 		toolbarTypes = createToolbarTypes(container);
-		toolbarIdentify = createToolbarIdentify(container);
+		toolbarEdit = createToolbarEdit(container);
 		scanChartUI = createScanChart(container);
 		//
 		PartSupport.setCompositeVisibility(toolbarInfo, true);
 		PartSupport.setCompositeVisibility(toolbarTypes, false);
-		PartSupport.setCompositeVisibility(toolbarIdentify, false);
-		/*
-		 * Filter Supplier
-		 */
-		IMassSpectrumFilterSupport massSpectrumFilterSupport = MassSpectrumFilter.getMassSpectrumFilterSupport();
-		comboViewerFilter.setInput(massSpectrumFilterSupport.getSuppliers());
-		/*
-		 * Identifier Supplier
-		 */
-		IMassSpectrumIdentifierSupport massSpectrumIdentifierSupport = MassSpectrumIdentifier.getMassSpectrumIdentifierSupport();
-		comboViewerIdentifier.setInput(massSpectrumIdentifierSupport.getSuppliers());
+		PartSupport.setCompositeVisibility(toolbarEdit, false);
 		//
 		updateButtons();
 	}
@@ -205,9 +239,9 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		composite.setLayout(new GridLayout(10, false));
 		//
-		labelEdit = createInfoLabel(composite);
-		labelSubtract = createInfoLabel(composite);
-		labelOptimized = createInfoLabel(composite);
+		labelEdit = createInfoLabelEdit(composite);
+		labelSubtract = createInfoLabelSubtract(composite);
+		labelOptimized = createInfoLabelOptimized(composite);
 		createButtonToggleToolbarInfo(composite);
 		createButtonToggleToolbarTypes(composite);
 		createButtonToggleToolbarIdentify(composite);
@@ -217,6 +251,55 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 		createSettingsButton(composite);
 		//
 		return composite;
+	}
+
+	private CLabel createInfoLabelEdit(Composite parent) {
+
+		CLabel label = createInfoLabel(parent);
+		label.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+
+				if(!"".equals(label.getText())) {
+					toggleEditToolbar();
+				}
+			}
+		});
+		return label;
+	}
+
+	private CLabel createInfoLabelSubtract(Composite parent) {
+
+		CLabel label = createInfoLabel(parent);
+		label.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+
+				if(!"".equals(label.getText())) {
+					subtractModus = false;
+					updateInfoLabels();
+				}
+			}
+		});
+		return label;
+	}
+
+	private CLabel createInfoLabelOptimized(Composite parent) {
+
+		CLabel label = createInfoLabel(parent);
+		label.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+
+				if(!"".equals(label.getText())) {
+					deleteOptimizedScan(e.widget.getDisplay());
+				}
+			}
+		});
+		return label;
 	}
 
 	private CLabel createInfoLabel(Composite parent) {
@@ -241,17 +324,15 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 		return composite;
 	}
 
-	private Composite createToolbarIdentify(Composite parent) {
+	private Composite createToolbarEdit(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		composite.setLayout(new GridLayout(5, false));
+		composite.setLayout(new GridLayout(3, false));
 		//
 		buttonSubstractOption = createButtonSubtractOption(composite);
-		comboViewerFilter = createFilterComboViewer(composite);
-		buttonRunFilter = createScanFilterButton(composite);
-		comboViewerIdentifier = createIdentifierComboViewer(composite);
-		buttonRunIdentifier = createRunIdentifierButton(composite);
+		scanFilterUI = createScanFilterUI(composite);
+		scanIdentifierUI = createScanIdentifierUI(composite);
 		//
 		return composite;
 	}
@@ -267,11 +348,60 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				subtractModus = !subtractModus;
+				if(subtractModus) {
+					/*
+					 * Disable the subtract modus manually.
+					 */
+					subtractModus = false;
+				} else {
+					/*
+					 * Enable the subtract modus.
+					 */
+					if(PreferenceSupplier.isShowSubtractDialog()) {
+						SubtractScanWizard.openWizard(e.display.getActiveShell());
+					}
+					subtractModus = true;
+				}
+				//
 				updateInfoLabels();
 			}
 		});
 		return button;
+	}
+
+	private ScanFilterUI createScanFilterUI(Composite parent) {
+
+		ScanFilterUI scanFilterUI = new ScanFilterUI(parent, SWT.NONE);
+		scanFilterUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		scanFilterUI.setUpdateListener(new IUpdateListener() {
+
+			@Override
+			public void update() {
+
+				updateScan(scan);
+			}
+		});
+		return scanFilterUI;
+	}
+
+	private ScanIdentifierUI createScanIdentifierUI(Composite parent) {
+
+		ScanIdentifierUI scanIdentifierUI = new ScanIdentifierUI(parent, SWT.NONE);
+		scanIdentifierUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		scanIdentifierUI.setUpdateListener(new IUpdateListener() {
+
+			@Override
+			public void update() {
+
+				subtractModus = false;
+				toggleEditToolbar();
+				updateScan(scan);
+				Display display = DisplayUtils.getDisplay();
+				fireUpdateScan(display, scan);
+				fireUpdateChromatogramSelection(display, null);
+			}
+		});
+		return scanIdentifierUI;
 	}
 
 	private void subtractScanMSD(IScanMSD scanSource, IScanMSD scanSubtract) {
@@ -296,183 +426,11 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 				scanSource.setOptimizedMassSpectrum(optimizedMassSpectrum);
 			}
 			//
-			List<IScanMSD> massSpectra = new ArrayList<>();
-			massSpectra.add(optimizedMassSpectrum);
 			SubtractCalculator subtractCalculator = new SubtractCalculator();
-			subtractCalculator.subtractMassSpectra(massSpectra, settings);
+			subtractCalculator.subtractMassSpectrum(optimizedMassSpectrum, settings);
 		} catch(CloneNotSupportedException e) {
 			logger.warn(e);
 		}
-	}
-
-	private ComboViewer createFilterComboViewer(Composite parent) {
-
-		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
-		Combo combo = comboViewer.getCombo();
-		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
-		comboViewer.setLabelProvider(new AbstractLabelProvider() {
-
-			@Override
-			public String getText(Object element) {
-
-				if(element instanceof IMassSpectrumFilterSupplier) {
-					IMassSpectrumFilterSupplier supplier = (IMassSpectrumFilterSupplier)element;
-					return supplier.getFilterName();
-				}
-				return null;
-			}
-		});
-		//
-		combo.setToolTipText("Select a scan filter.");
-		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
-		return comboViewer;
-	}
-
-	private Button createScanFilterButton(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setText("");
-		button.setToolTipText("Filter the currently selected scan.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				/*
-				 * Filter
-				 */
-				Object object = comboViewerFilter.getStructuredSelection().getFirstElement();
-				if(object instanceof IMassSpectrumFilterSupplier) {
-					IMassSpectrumFilterSupplier supplier = (IMassSpectrumFilterSupplier)object;
-					if(scan instanceof IScanMSD) {
-						/*
-						 * Get or create an optimized scan.
-						 */
-						IScanMSD scanMSD = (IScanMSD)scan;
-						IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
-						if(optimizedMassSpectrum == null) {
-							try {
-								optimizedMassSpectrum = scanMSD.makeDeepCopy();
-								scanMSD.setOptimizedMassSpectrum(optimizedMassSpectrum);
-							} catch(CloneNotSupportedException e1) {
-								logger.warn(e1);
-							}
-						}
-						//
-						if(optimizedMassSpectrum != null) {
-							/*
-							 * Clear all identification results and
-							 * then run apply the filter.
-							 */
-							optimizedMassSpectrum.getTargets().clear();
-							MassSpectrumFilter.applyFilter(optimizedMassSpectrum, supplier.getId(), new NullProgressMonitor());
-							updateScan(scan);
-						}
-					}
-				}
-			}
-		});
-		return button;
-	}
-
-	private ComboViewer createIdentifierComboViewer(Composite parent) {
-
-		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
-		Combo combo = comboViewer.getCombo();
-		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
-		comboViewer.setLabelProvider(new AbstractLabelProvider() {
-
-			@Override
-			public String getText(Object element) {
-
-				if(element instanceof IMassSpectrumIdentifierSupplier) {
-					IMassSpectrumIdentifierSupplier supplier = (IMassSpectrumIdentifierSupplier)element;
-					return supplier.getIdentifierName();
-				}
-				return null;
-			}
-		});
-		//
-		combo.setToolTipText("Select a scan identifier.");
-		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
-		return comboViewer;
-	}
-
-	private Button createRunIdentifierButton(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setText("");
-		button.setToolTipText("Identify the currently selected scan.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				if(scan instanceof IScanMSD) {
-					IScanMSD scanMSD = (IScanMSD)scan;
-					IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
-					IScanMSD massSpectrum;
-					//
-					if(optimizedMassSpectrum != null) {
-						massSpectrum = optimizedMassSpectrum;
-					} else {
-						massSpectrum = scanMSD;
-					}
-					/*
-					 * Identification
-					 */
-					Object object = comboViewerIdentifier.getStructuredSelection().getFirstElement();
-					if(object instanceof IMassSpectrumIdentifierSupplier) {
-						IMassSpectrumIdentifierSupplier supplier = (IMassSpectrumIdentifierSupplier)object;
-						IRunnableWithProgress runnable = new MassSpectrumIdentifierRunnable(massSpectrum, supplier.getId());
-						ProgressMonitorDialog monitor = new ProgressMonitorDialog(e.display.getActiveShell());
-						try {
-							monitor.run(true, true, runnable);
-							/*
-							 * Update the scan
-							 */
-							e.display.asyncExec(new Runnable() {
-
-								@Override
-								public void run() {
-
-									if(eventBroker != null) {
-										eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, massSpectrum);
-									}
-								}
-							});
-							/*
-							 * Update the active chromatogram
-							 */
-							e.display.asyncExec(new Runnable() {
-
-								@Override
-								public void run() {
-
-									if(eventBroker != null) {
-										EditorUpdateSupport editorUpdateSupport = new EditorUpdateSupport();
-										@SuppressWarnings("rawtypes")
-										IChromatogramSelection chromatogramSelection = editorUpdateSupport.getActiveEditorSelection();
-										if(chromatogramSelection != null) {
-											chromatogramSelection.update(false);
-										}
-									}
-								}
-							});
-						} catch(InvocationTargetException e1) {
-							logger.warn(e1);
-						} catch(InterruptedException e1) {
-							logger.warn(e1);
-						}
-					}
-				}
-			}
-		});
-		return button;
 	}
 
 	private Combo createDataType(Composite parent) {
@@ -562,7 +520,7 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 	private Button createButtonToggleToolbarIdentify(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle identify toolbar.");
+		button.setToolTipText("Toggle the edit toolbar.");
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IDENTIFY_MASS_SPECTRUM, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -570,19 +528,18 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				boolean visible = PartSupport.toggleCompositeVisibility(toolbarIdentify);
-				if(visible) {
-					editModus = true;
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IDENTIFY_MASS_SPECTRUM, IApplicationImage.SIZE_16x16));
-				} else {
-					editModus = false;
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IDENTIFY_MASS_SPECTRUM, IApplicationImage.SIZE_16x16));
-				}
-				updateInfoLabels();
+				toggleEditToolbar();
 			}
 		});
 		//
 		return button;
+	}
+
+	private void toggleEditToolbar() {
+
+		boolean visible = PartSupport.toggleCompositeVisibility(toolbarEdit);
+		editModus = visible;
+		updateInfoLabels();
 	}
 
 	private void updateInfoLabels() {
@@ -599,14 +556,20 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 
 	private boolean isOptimizedScan() {
 
+		IScanMSD optimizedMassSpectrum = getOptimizedScanMSD();
+		return optimizedMassSpectrum != null;
+	}
+
+	private IScanMSD getOptimizedScanMSD() {
+
 		if(scan instanceof IScanMSD) {
 			IScanMSD scanMSD = (IScanMSD)scan;
 			IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
 			if(optimizedMassSpectrum != null) {
-				return true;
+				return optimizedMassSpectrum;
 			}
 		}
-		return false;
+		return null;
 	}
 
 	private void updateLabel(CLabel label, String message) {
@@ -623,13 +586,10 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 
 		boolean enabled = isMassSpectrum();
 		buttonSaveScan.setEnabled(isMassSpectrum());
-		buttonDeleteOptimized.setEnabled(isOptimizedScan() ? true : false);
-		//
+		buttonDeleteOptimized.setEnabled(enabled && isOptimizedScan() ? true : false);
 		buttonSubstractOption.setEnabled(enabled);
-		comboViewerFilter.getCombo().setEnabled(enabled);
-		buttonRunFilter.setEnabled(enabled);
-		comboViewerIdentifier.getCombo().setEnabled(enabled);
-		buttonRunIdentifier.setEnabled(enabled);
+		scanFilterUI.setEnabled(enabled);
+		scanIdentifierUI.setEnabled(enabled);
 	}
 
 	private void createResetButton(Composite parent) {
@@ -643,6 +603,9 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				editModus = false;
+				PartSupport.setCompositeVisibility(toolbarEdit, false);
+				subtractModus = false;
 				updateScan(scan);
 			}
 		});
@@ -714,16 +677,21 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(scan instanceof IScanMSD) {
-					if(MessageDialog.openQuestion(e.widget.getDisplay().getActiveShell(), "Optimized Scan", "Would you like to delete the optimized scan?")) {
-						IScanMSD scanMSD = (IScanMSD)scan;
-						scanMSD.setOptimizedMassSpectrum(null);
-						updateScan(scan);
-					}
-				}
+				deleteOptimizedScan(e.widget.getDisplay());
 			}
 		});
 		return button;
+	}
+
+	private void deleteOptimizedScan(Display display) {
+
+		if(scan instanceof IScanMSD) {
+			if(MessageDialog.openQuestion(display.getActiveShell(), "Optimized Scan", "Would you like to delete the optimized scan?")) {
+				IScanMSD scanMSD = (IScanMSD)scan;
+				scanMSD.setOptimizedMassSpectrum(null);
+				updateScan(scan);
+			}
+		}
 	}
 
 	private Composite createToolbarInfo(Composite parent) {
@@ -784,54 +752,46 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 		combo.select(index);
 	}
 
-	@Override
-	public ScanChartUIConfig getConfig() {
+	private void fireUpdateScan(Display display, IScan scan) {
 
-		return new ScanChartUIConfig() {
-
-			ChartConfigSupport axisSupport = new ChartConfigSupport(scanChartUI, EnumSet.of(ChartAxis.PRIMARY_X, ChartAxis.PRIMARY_Y, ChartAxis.SECONDARY_Y));
+		display.asyncExec(new Runnable() {
 
 			@Override
-			public void setToolbarVisible(boolean visible) {
+			public void run() {
 
-				PartSupport.setCompositeVisibility(toolbarMain, visible);
+				if(eventBroker != null) {
+					eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scan);
+				}
 			}
+		});
+	}
+
+	private void fireUpdateChromatogramSelection(Display display, IScan scan) {
+
+		display.asyncExec(new Runnable() {
 
 			@Override
-			public boolean isToolbarVisible() {
+			public void run() {
 
-				return toolbarMain.isVisible();
+				if(eventBroker != null) {
+					EditorUpdateSupport editorUpdateSupport = new EditorUpdateSupport();
+					@SuppressWarnings("rawtypes")
+					IChromatogramSelection chromatogramSelection = editorUpdateSupport.getActiveEditorSelection();
+					if(chromatogramSelection != null) {
+						if(scan != null) {
+							/*
+							 * We assume that the subtraction takes place in the same
+							 * chromatogram. It could happen, that one scan is selected
+							 * and set to edit modus and afterwards another chromatogram
+							 * is selected. This could lead to misleading behavior.
+							 * But it's unclear how to solve it hear.
+							 */
+							chromatogramSelection.setSelectedScan(scan);
+						}
+						chromatogramSelection.update(false);
+					}
+				}
 			}
-
-			@Override
-			public boolean hasToolbarInfo() {
-
-				return true;
-			}
-
-			@Override
-			public void setToolbarInfoVisible(boolean visible) {
-
-				PartSupport.setCompositeVisibility(toolbarInfo, visible);
-			}
-
-			@Override
-			public void setAxisLabelVisible(ChartAxis axis, boolean visible) {
-
-				axisSupport.setAxisLabelVisible(axis, visible);
-			}
-
-			@Override
-			public void setAxisVisible(ChartAxis axis, boolean visible) {
-
-				axisSupport.setAxisVisible(axis, visible);
-			}
-
-			@Override
-			public boolean hasAxis(ChartAxis axis) {
-
-				return axisSupport.hasAxis(axis);
-			};
-		};
+		});
 	}
 }

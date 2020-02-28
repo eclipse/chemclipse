@@ -130,6 +130,13 @@ public class SubtractCalculator {
 		}
 	}
 
+	public void subtractMassSpectrum(IScanMSD massSpectrum, MassSpectrumFilterSettings massSpectrumFilterSettings) {
+
+		List<IScanMSD> massSpectra = new ArrayList<>();
+		massSpectra.add(massSpectrum);
+		subtractMassSpectra(massSpectra, massSpectrumFilterSettings);
+	}
+
 	public void subtractMassSpectra(List<IScanMSD> massSpectra, MassSpectrumFilterSettings massSpectrumFilterSettings) {
 
 		/*

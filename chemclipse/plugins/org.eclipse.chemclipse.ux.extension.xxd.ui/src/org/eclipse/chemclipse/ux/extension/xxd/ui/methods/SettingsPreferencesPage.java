@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -116,7 +116,7 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 		} else {
 			Button buttonDontAskAgain = new Button(composite, SWT.CHECK);
 			buttonDontAskAgain.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, true, false));
-			buttonDontAskAgain.setText("Remeber my decision and don't ask again");
+			buttonDontAskAgain.setText("Remember my decision and don't ask again");
 			buttonDontAskAgain.addSelectionListener(new SelectionListener() {
 
 				@Override

@@ -37,6 +37,7 @@ public interface IApplicationImageProvider {
 	String SIZE_48x48 = "48x48";
 	String SIZE_64x64 = "64x64";
 	String SIZE_75x66 = "75x66";
+	String SIZE_128x68 = "128x68";
 	String SIZE_128x128 = "128x128";
 	String SIZE_250x300 = "250x330"; // About
 

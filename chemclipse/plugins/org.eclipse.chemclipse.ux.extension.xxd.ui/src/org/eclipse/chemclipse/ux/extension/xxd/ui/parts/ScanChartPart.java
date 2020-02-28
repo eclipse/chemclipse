@@ -23,25 +23,22 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EnhancedUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedScanChartUI;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.widgets.Composite;
 
 public class ScanChartPart extends EnhancedUpdateSupport implements IUpdateSupport {
 
 	private ExtendedScanChartUI extendedScanChartUI;
-	private final IEventBroker eventBroker;
 
 	@Inject
-	public ScanChartPart(Composite parent, MPart part, IEventBroker eventBroker) {
+	public ScanChartPart(Composite parent, MPart part) {
 		super(parent, Activator.getDefault().getDataUpdateSupport(), IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, part);
-		this.eventBroker = eventBroker;
 	}
 
 	@Override
 	public void createControl(Composite parent) {
 
-		extendedScanChartUI = new ExtendedScanChartUI(parent, eventBroker);
+		extendedScanChartUI = new ExtendedScanChartUI(parent, Activator.getDefault().getEventBroker());
 	}
 
 	@Override

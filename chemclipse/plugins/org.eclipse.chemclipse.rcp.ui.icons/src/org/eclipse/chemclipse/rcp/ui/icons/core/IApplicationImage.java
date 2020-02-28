@@ -14,6 +14,8 @@ package org.eclipse.chemclipse.rcp.ui.icons.core;
 
 public interface IApplicationImage extends IApplicationImageProvider {
 
+	String PICTOGRAM_SUBTRACT_SCAN_ONE = "org.eclipse.chemclipse.rcp.ui.icons/subtractScanOne.png";
+	String PICTOGRAM_SUBTRACT_SCAN_MANY = "org.eclipse.chemclipse.rcp.ui.icons/subtractScanMany.png";
 	/*
 	 * Icons and Images
 	 */
