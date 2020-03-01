@@ -14,16 +14,24 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createContainer;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumSet;
+import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.calculator.SubtractCalculator;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.settings.MassSpectrumFilterSettings;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.msd.model.core.AbstractIon;
+import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
@@ -33,24 +41,31 @@ import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.IUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChartConfigSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.SignalType;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EditorUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.parts.ScanChartPart;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.AxisConfig.ChartAxis;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.SubtractScanWizard;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.dnd.Clipboard;
+import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -67,8 +82,11 @@ import org.eclipse.swt.widgets.Label;
 public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 
 	private static final Logger logger = Logger.getLogger(ScanChartPart.class);
-	//
-	private final IEventBroker eventBroker; // Could be null
+	/*
+	 * The event broker should be set, but it
+	 * could be null if no events shall be fired.
+	 */
+	private final IEventBroker eventBroker;
 	//
 	private Composite toolbarMain;
 	private Composite toolbarInfo;
@@ -80,20 +98,23 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 	private CLabel labelOptimized;
 	//
 	private Label labelScan;
-	private Button buttonSaveScan;
+	private Button buttonEdit;
+	private Button buttonCopyTraces;
+	private Button buttonSave;
 	private Button buttonDeleteOptimized;
 	private ScanChartUI scanChartUI;
 	//
 	private Combo comboDataType;
 	private Combo comboSignalType;
 	//
-	private Button buttonSubstractOption;
+	private Button buttonSubtractOption;
 	private ScanFilterUI scanFilterUI;
 	private ScanIdentifierUI scanIdentifierUI;
 	//
 	private IScan scan;
 	//
 	private final ScanDataSupport scanDataSupport = new ScanDataSupport();
+	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	//
 	private boolean editModus = false;
 	private boolean subtractModus = false;
@@ -102,44 +123,6 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 	public ExtendedScanChartUI(Composite parent, IEventBroker eventBroker) {
 		this.eventBroker = eventBroker;
 		initialize(parent);
-	}
-
-	/**
-	 * Getting the updates from the system.
-	 * 
-	 * @param scan
-	 */
-	public void update(IScan scan) {
-
-		if(editModus) {
-			/*
-			 * Locked if edit modus is active.
-			 */
-			if(subtractModus) {
-				/*
-				 * Subtract
-				 */
-				if(this.scan instanceof IScanMSD) {
-					IScanMSD scanSource = (IScanMSD)this.scan;
-					if(scan instanceof IScanMSD) {
-						/*
-						 * Just subtract a mass spectrum once.
-						 * Otherwise, following updates would lead
-						 * to subsequent subtractions.
-						 */
-						IScanMSD scanSubtract = (IScanMSD)scan;
-						subtractScanMSD(scanSource, scanSubtract);
-						if(!PreferenceSupplier.isEnableMultiSubtract()) {
-							subtractModus = false;
-						}
-						fireUpdateChromatogramSelection(DisplayUtils.getDisplay(), scanSource);
-						updateScan(scanSource);
-					}
-				}
-			}
-		} else {
-			updateScan(scan);
-		}
 	}
 
 	@Override
@@ -193,6 +176,57 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 		};
 	}
 
+	public void update(IScan scan) {
+
+		this.update(scan, DisplayUtils.getDisplay());
+	}
+
+	/**
+	 * Getting the updates from the system.
+	 * 
+	 * @param scan
+	 */
+	private void update(IScan scan, Display display) {
+
+		if(editModus) {
+			/*
+			 * Locked if edit modus is active.
+			 */
+			if(subtractModus) {
+				/*
+				 * Subtract
+				 */
+				if(this.scan instanceof IScanMSD) {
+					IScanMSD scanSource = (IScanMSD)this.scan;
+					if(scan instanceof IScanMSD) {
+						/*
+						 * Just subtract a mass spectrum once.
+						 * Otherwise, following updates would lead
+						 * to subsequent subtractions.
+						 */
+						IScanMSD scanSubtract = (IScanMSD)scan;
+						subtractScanMSD(scanSource, scanSubtract);
+						if(!preferenceStore.getBoolean(PreferenceConstants.P_ENABLE_MULTI_SUBTRACT)) {
+							setSubtractModus(display, false, false);
+							updateInfoLabels();
+						}
+						fireUpdateChromatogramSelection(display, scanSource);
+						updateScan(scanSource);
+					}
+				}
+			} else {
+				/*
+				 * Updates are disabled in "Edit Modus".
+				 * Scan updates are fired regularly in the platform. We don't want to show a recurring
+				 * dialog here, that the edit modus is activated. Maybe, it could be display once.
+				 */
+				// MessageDialog.openInformation(display, "Edit Modus", "To retrieve updates, please disable the edit modus.");
+			}
+		} else {
+			updateScan(scan);
+		}
+	}
+
 	private void updateScan(IScan scan) {
 
 		this.scan = scan;
@@ -237,16 +271,17 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		composite.setLayout(new GridLayout(10, false));
+		composite.setLayout(new GridLayout(11, false));
 		//
 		labelEdit = createInfoLabelEdit(composite);
 		labelSubtract = createInfoLabelSubtract(composite);
 		labelOptimized = createInfoLabelOptimized(composite);
 		createButtonToggleToolbarInfo(composite);
 		createButtonToggleToolbarTypes(composite);
-		createButtonToggleToolbarIdentify(composite);
+		buttonEdit = createButtonToggleToolbarEdit(composite);
+		buttonCopyTraces = createButtonCopyTracesClipboard(composite);
 		createResetButton(composite);
-		buttonSaveScan = createSaveButton(composite);
+		buttonSave = createSaveButton(composite);
 		buttonDeleteOptimized = createDeleteOptimizedButton(composite);
 		createSettingsButton(composite);
 		//
@@ -262,7 +297,8 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 			public void mouseDoubleClick(MouseEvent e) {
 
 				if(!"".equals(label.getText())) {
-					toggleEditToolbar();
+					setEditToolbarStatus(false);
+					updateInfoLabels();
 				}
 			}
 		});
@@ -278,7 +314,7 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 			public void mouseDoubleClick(MouseEvent e) {
 
 				if(!"".equals(label.getText())) {
-					subtractModus = false;
+					setSubtractModus(e.display, false, false);
 					updateInfoLabels();
 				}
 			}
@@ -330,7 +366,7 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		composite.setLayout(new GridLayout(3, false));
 		//
-		buttonSubstractOption = createButtonSubtractOption(composite);
+		buttonSubtractOption = createButtonSubtractOption(composite);
 		scanFilterUI = createScanFilterUI(composite);
 		scanIdentifierUI = createScanIdentifierUI(composite);
 		//
@@ -342,31 +378,32 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Enable/Disable the interactive subtract option.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SUBTRACT_ADD_SELECTED_SCAN, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SUBTRACT_SCAN_DEFAULT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(subtractModus) {
-					/*
-					 * Disable the subtract modus manually.
-					 */
-					subtractModus = false;
-				} else {
-					/*
-					 * Enable the subtract modus.
-					 */
-					if(PreferenceSupplier.isShowSubtractDialog()) {
-						SubtractScanWizard.openWizard(e.display.getActiveShell());
-					}
-					subtractModus = true;
-				}
-				//
+				setSubtractModus(e.display, !subtractModus, true);
 				updateInfoLabels();
 			}
 		});
 		return button;
+	}
+
+	private void setSubtractModus(Display display, boolean subtractModus, boolean showDialog) {
+
+		this.subtractModus = subtractModus;
+		String fileName = this.subtractModus ? IApplicationImage.IMAGE_SUBTRACT_SCAN_ACTIVE : IApplicationImage.IMAGE_SUBTRACT_SCAN_DEFAULT;
+		buttonSubtractOption.setImage(ApplicationImageFactory.getInstance().getImage(fileName, IApplicationImage.SIZE_16x16));
+		//
+		if(this.subtractModus && showDialog) {
+			if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SUBTRACT_DIALOG)) {
+				if(display != null) {
+					SubtractScanWizard.openWizard(display.getActiveShell());
+				}
+			}
+		}
 	}
 
 	private ScanFilterUI createScanFilterUI(Composite parent) {
@@ -393,10 +430,15 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 			@Override
 			public void update() {
 
-				subtractModus = false;
-				toggleEditToolbar();
+				Display display = scanIdentifierUI.getDisplay();
+				//
+				if(preferenceStore.getBoolean(PreferenceConstants.P_LEAVE_EDIT_AFTER_IDENTIFICATION)) {
+					setEditToolbarStatus(false);
+					setSubtractModus(display, false, false);
+					updateInfoLabels();
+				}
+				//
 				updateScan(scan);
-				Display display = DisplayUtils.getDisplay();
 				fireUpdateScan(display, scan);
 				fireUpdateChromatogramSelection(display, null);
 			}
@@ -517,29 +559,40 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 		return button;
 	}
 
-	private Button createButtonToggleToolbarIdentify(Composite parent) {
+	private Button createButtonToggleToolbarEdit(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Toggle the edit toolbar.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IDENTIFY_MASS_SPECTRUM, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DEFAULT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				toggleEditToolbar();
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarEdit);
+				setEditToolbarStatus(visible);
+				updateInfoLabels();
 			}
 		});
 		//
 		return button;
 	}
 
-	private void toggleEditToolbar() {
+	private void setEditToolbarStatus(boolean visible) {
 
-		boolean visible = PartSupport.toggleCompositeVisibility(toolbarEdit);
+		if(!visible) {
+			boolean toolbarIsVisible = toolbarEdit.isVisible();
+			if(toolbarIsVisible) {
+				PartSupport.toggleCompositeVisibility(toolbarEdit);
+			}
+		}
+		/*
+		 * Set the edit modus and button icon.
+		 */
 		editModus = visible;
-		updateInfoLabels();
+		String fileName = visible ? IApplicationImage.IMAGE_EDIT_ACTIVE : IApplicationImage.IMAGE_EDIT_DEFAULT;
+		buttonEdit.setImage(ApplicationImageFactory.getInstance().getImage(fileName, IApplicationImage.SIZE_16x16));
 	}
 
 	private void updateInfoLabels() {
@@ -560,10 +613,18 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 		return optimizedMassSpectrum != null;
 	}
 
-	private IScanMSD getOptimizedScanMSD() {
+	private IScanMSD getScanMSD() {
 
 		if(scan instanceof IScanMSD) {
-			IScanMSD scanMSD = (IScanMSD)scan;
+			return (IScanMSD)scan;
+		}
+		return null;
+	}
+
+	private IScanMSD getOptimizedScanMSD() {
+
+		IScanMSD scanMSD = getScanMSD();
+		if(scanMSD != null) {
 			IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
 			if(optimizedMassSpectrum != null) {
 				return optimizedMassSpectrum;
@@ -585,11 +646,78 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 	private void updateButtons() {
 
 		boolean enabled = isMassSpectrum();
-		buttonSaveScan.setEnabled(isMassSpectrum());
+		buttonCopyTraces.setEnabled(enabled);
+		buttonSave.setEnabled(enabled);
 		buttonDeleteOptimized.setEnabled(enabled && isOptimizedScan() ? true : false);
-		buttonSubstractOption.setEnabled(enabled);
+		buttonSubtractOption.setEnabled(enabled);
 		scanFilterUI.setEnabled(enabled);
 		scanIdentifierUI.setEnabled(enabled);
+	}
+
+	private Button createButtonCopyTracesClipboard(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Copy the traces to clipboard.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_COPY_CLIPBOARD, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				List<Integer> traces = extractTraces();
+				Iterator<Integer> iterator = traces.iterator();
+				StringBuilder builder = new StringBuilder();
+				//
+				while(iterator.hasNext()) {
+					builder.append(iterator.next());
+					if(iterator.hasNext()) {
+						builder.append(" ");
+					}
+				}
+				//
+				TextTransfer textTransfer = TextTransfer.getInstance();
+				Object[] data = new Object[]{builder.toString()};
+				Transfer[] dataTypes = new Transfer[]{textTransfer};
+				Clipboard clipboard = new Clipboard(e.widget.getDisplay());
+				clipboard.setContents(data, dataTypes);
+			}
+		});
+		//
+		return button;
+	}
+
+	private List<Integer> extractTraces() {
+
+		List<Integer> traces = new ArrayList<>();
+		//
+		IScanMSD scanMSD = getScanMSD();
+		if(scanMSD != null) {
+			IScanMSD massSpectrum = scanMSD.getOptimizedMassSpectrum() != null ? scanMSD.getOptimizedMassSpectrum() : scanMSD;
+			List<IIon> ions = new ArrayList<>(massSpectrum.getIons());
+			Collections.sort(ions, (i1, i2) -> Float.compare(i2.getAbundance(), i1.getAbundance()));
+			int maxDisplayTraces = preferenceStore.getInt(PreferenceConstants.P_MAX_DISPLAY_SCAN_TRACES);
+			//
+			exitloop:
+			for(IIon ion : ions) {
+				/*
+				 * Add the trace.
+				 */
+				int trace = AbstractIon.getIon(ion.getIon());
+				if(!traces.contains(trace)) {
+					traces.add(trace);
+				}
+				//
+				if(traces.size() >= maxDisplayTraces) {
+					break exitloop;
+				}
+			}
+		}
+		/*
+		 * Sort the traces ascending.
+		 */
+		Collections.sort(traces);
+		return traces;
 	}
 
 	private void createResetButton(Composite parent) {
@@ -603,9 +731,9 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				editModus = false;
-				PartSupport.setCompositeVisibility(toolbarEdit, false);
-				subtractModus = false;
+				setEditToolbarStatus(false);
+				setSubtractModus(e.display, false, false);
+				updateInfoLabels();
 				updateScan(scan);
 			}
 		});
@@ -770,25 +898,42 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 
 		display.asyncExec(new Runnable() {
 
+			@SuppressWarnings({"unchecked", "rawtypes"})
 			@Override
 			public void run() {
 
 				if(eventBroker != null) {
-					EditorUpdateSupport editorUpdateSupport = new EditorUpdateSupport();
-					@SuppressWarnings("rawtypes")
-					IChromatogramSelection chromatogramSelection = editorUpdateSupport.getActiveEditorSelection();
-					if(chromatogramSelection != null) {
-						if(scan != null) {
-							/*
-							 * We assume that the subtraction takes place in the same
-							 * chromatogram. It could happen, that one scan is selected
-							 * and set to edit modus and afterwards another chromatogram
-							 * is selected. This could lead to misleading behavior.
-							 * But it's unclear how to solve it hear.
-							 */
-							chromatogramSelection.setSelectedScan(scan);
+					DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
+					List<Object> objects = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION);
+					if(objects != null && objects.size() > 0) {
+						Object object = objects.get(0);
+						if(object instanceof IChromatogramSelection) {
+							IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
+							if(chromatogramSelection != null) {
+								if(scan != null) {
+									/*
+									 * We assume that the subtraction takes place in the same
+									 * chromatogram. It could happen, that one scan is selected
+									 * and set to edit modus and afterwards another chromatogram
+									 * is selected. This could lead to misleading behavior.
+									 * But it's unclear how to solve it hear. This is currently
+									 * the best way to prevent unwanted behavior. The scan chart shows
+									 * data from scans and peaks.
+									 */
+									IChromatogram<IPeak> chromatogram = chromatogramSelection.getChromatogram();
+									int retentionTime = scan.getRetentionTime();
+									int scanNumber = chromatogram.getScanNumber(retentionTime);
+									IScan scanReference = chromatogram.getScan(scanNumber);
+									if(scan == scanReference) {
+										chromatogramSelection.setSelectedScan(scan);
+									}
+								}
+								/*
+								 * Update the chromatogram
+								 */
+								chromatogramSelection.update(false);
+							}
 						}
-						chromatogramSelection.update(false);
 					}
 				}
 			}

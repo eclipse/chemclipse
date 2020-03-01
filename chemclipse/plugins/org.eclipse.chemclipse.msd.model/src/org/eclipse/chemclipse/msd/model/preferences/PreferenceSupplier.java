@@ -41,11 +41,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	//
 	private static final String DELIMITER_ION_ABUNDANCE = ":";
 	private static final String DELIMITER_IONS = ";";
-	//
-	public static final String P_SHOW_SUBTRACT_DIALOG = "showSubtractDialog";
-	public static final boolean DEF_SHOW_SUBTRACT_DIALOG = true;
-	public static final String P_ENABLE_MULTI_SUBTRACT = "enableMultiSubtract";
-	public static final boolean DEF_ENABLE_MULTI_SUBTRACT = false;
 	/*
 	 * It is the mass spectrum that is used only by the session.
 	 */
@@ -80,8 +75,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_SUBTRACT_MASS_SPECTRUM, DEF_SUBTRACT_MASS_SPECTRUM);
 		defaultValues.put(P_USE_NOMINAL_MZ, Boolean.toString(DEF_USE_NOMINAL_MZ));
 		defaultValues.put(P_USE_NORMALIZED_SCAN, Boolean.toString(DEF_USE_NORMALIZED_SCAN));
-		defaultValues.put(P_SHOW_SUBTRACT_DIALOG, Boolean.toString(DEF_SHOW_SUBTRACT_DIALOG));
-		defaultValues.put(P_ENABLE_MULTI_SUBTRACT, Boolean.toString(DEF_ENABLE_MULTI_SUBTRACT));
 		return defaultValues;
 	}
 
@@ -113,7 +106,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	}
 
 	/**
-	 * Sets the session mass spectrum, wich is used by the filter.
+	 * Sets the session mass spectrum, which is used by the filter.
 	 * 
 	 * @param normalizedMassSpectrum
 	 */
@@ -124,48 +117,22 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static boolean isUseNominalMZ() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_USE_NOMINAL_MZ, DEF_USE_NOMINAL_MZ);
+		return getBoolean(P_USE_NOMINAL_MZ, DEF_USE_NOMINAL_MZ);
+	}
+
+	public static void setUseNominalMZ(boolean useNominalMZ) {
+
+		setBoolean(P_USE_NOMINAL_MZ, useNominalMZ);
 	}
 
 	public static boolean isUseNormalizedScan() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_USE_NORMALIZED_SCAN, DEF_USE_NORMALIZED_SCAN);
+		return getBoolean(P_USE_NORMALIZED_SCAN, DEF_USE_NORMALIZED_SCAN);
 	}
 
-	public static boolean isShowSubtractDialog() {
+	public static void setUseNormalizedScan(boolean useNormalizedScan) {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_SHOW_SUBTRACT_DIALOG, DEF_SHOW_SUBTRACT_DIALOG);
-	}
-
-	public static void setShowSubtractDialog(boolean showSubtractDialog) {
-
-		try {
-			IEclipsePreferences preferences = INSTANCE().getPreferences();
-			preferences.putBoolean(P_SHOW_SUBTRACT_DIALOG, showSubtractDialog);
-			preferences.flush();
-		} catch(Exception e) {
-			logger.warn(e);
-		}
-	}
-
-	public static boolean isEnableMultiSubtract() {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_ENABLE_MULTI_SUBTRACT, DEF_ENABLE_MULTI_SUBTRACT);
-	}
-
-	public static void setEnableMultiSubtract(boolean enableMultiSubtract) {
-
-		try {
-			IEclipsePreferences preferences = INSTANCE().getPreferences();
-			preferences.putBoolean(P_ENABLE_MULTI_SUBTRACT, enableMultiSubtract);
-			preferences.flush();
-		} catch(Exception e) {
-			logger.warn(e);
-		}
+		setBoolean(P_USE_NORMALIZED_SCAN, useNormalizedScan);
 	}
 
 	public static String getSessionSubtractMassSpectrumAsString() {
@@ -228,5 +195,22 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		String value = getMassSpectrum(massSpectrum);
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		preferences.put(P_SUBTRACT_MASS_SPECTRUM, value);
+	}
+
+	private static boolean getBoolean(String key, boolean def) {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getBoolean(key, def);
+	}
+
+	private static void setBoolean(String key, boolean value) {
+
+		try {
+			IEclipsePreferences preferences = INSTANCE().getPreferences();
+			preferences.putBoolean(key, value);
+			preferences.flush();
+		} catch(Exception e) {
+			logger.warn(e);
+		}
 	}
 }

@@ -33,8 +33,6 @@ public class PreferencePageSubtract extends FieldEditorPreferencePage implements
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_NOMINAL_MZ, "Use nominal m/z", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_NORMALIZED_SCAN, "Use normalized scan", getFieldEditorParent()));
 		addField(new TextFieldEditor(PreferenceSupplier.P_SUBTRACT_MASS_SPECTRUM, "Subtract mass spectrum", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceSupplier.P_ENABLE_MULTI_SUBTRACT, "Enable multi subtract modus", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_SUBTRACT_DIALOG, "Show subtract scan preferences dialog", getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

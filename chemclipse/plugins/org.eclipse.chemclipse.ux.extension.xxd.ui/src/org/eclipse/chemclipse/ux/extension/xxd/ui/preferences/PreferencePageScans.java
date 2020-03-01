@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -44,6 +44,12 @@ public class PreferencePageScans extends FieldEditorPreferencePage implements IW
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SCAN_LABEL_MODULO_INTENSITIES, "Add additional intensity labels", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_AUTOFOCUS_SUBTRACT_SCAN_PART, "Autofocus subtract scan part", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SCAN_CHART_ENABLE_COMPRESS, "Enable Compress", getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_ENABLE_MULTI_SUBTRACT, "Enable multi subtract modus", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_LEAVE_EDIT_AFTER_IDENTIFICATION, "Leave edit after identification", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_SUBTRACT_DIALOG, "Show subtract scan preferences dialog", getFieldEditorParent()));
+		addField(new SpinnerFieldEditor(PreferenceConstants.P_MAX_DISPLAY_SCAN_TRACES, "Copy Traces", PreferenceConstants.MIN_TRACES, PreferenceConstants.MAX_TRACES, getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

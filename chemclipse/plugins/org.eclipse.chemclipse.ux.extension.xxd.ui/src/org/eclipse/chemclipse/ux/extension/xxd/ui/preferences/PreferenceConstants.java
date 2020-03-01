@@ -42,9 +42,10 @@ public class PreferenceConstants extends ChartOptions {
 	public static final int MAX_FONT_SIZE = 72;
 	public static final int DEF_FONT_SIZE = 11;
 	//
-	public static final int MIN_PEAK_TRACES = 1;
-	public static final int MAX_PEAK_TRACES = Integer.MAX_VALUE;
+	public static final int MIN_TRACES = 1;
+	public static final int MAX_TRACES = Integer.MAX_VALUE;
 	public static final int DEF_PEAK_TRACES = 5;
+	public static final int DEF_SCAN_TRACES = 5;
 	/*
 	 * General / Task Quick Access
 	 */
@@ -223,6 +224,14 @@ public class PreferenceConstants extends ChartOptions {
 	public static final boolean DEF_AUTOFOCUS_SUBTRACT_SCAN_PART = true;
 	public static final String P_SCAN_CHART_ENABLE_COMPRESS = "scanChartEnableCompress";
 	public static final boolean DEF_SCAN_CHART_ENABLE_COMPRESS = false;
+	public static final String P_MAX_DISPLAY_SCAN_TRACES = "maxDisplayScanTraces";
+	public static final int DEF_MAX_DISPLAY_SCAN_TRACES = DEF_SCAN_TRACES;
+	public static final String P_ENABLE_MULTI_SUBTRACT = "enableMultiSubtract";
+	public static final boolean DEF_ENABLE_MULTI_SUBTRACT = false;
+	public static final String P_SHOW_SUBTRACT_DIALOG = "showSubtractDialog";
+	public static final boolean DEF_SHOW_SUBTRACT_DIALOG = true;
+	public static final String P_LEAVE_EDIT_AFTER_IDENTIFICATION = "leaveEditAfterIdentification";
+	public static final boolean DEF_LEAVE_EDIT_AFTER_IDENTIFICATION = true;
 	/*
 	 * Peaks
 	 */

@@ -31,7 +31,7 @@ public class PreferencePagePeakTraces extends FieldEditorPreferencePage implemen
 	public void createFieldEditors() {
 
 		addField(new ComboFieldEditor(PreferenceConstants.P_COLOR_SCHEME_PEAK_TRACES, "Color Scheme", Colors.getAvailableColorSchemes(), getFieldEditorParent()));
-		addField(new SpinnerFieldEditor(PreferenceConstants.P_MAX_DISPLAY_PEAK_TRACES, "Display Traces", PreferenceConstants.MIN_PEAK_TRACES, PreferenceConstants.MAX_PEAK_TRACES, getFieldEditorParent()));
+		addField(new SpinnerFieldEditor(PreferenceConstants.P_MAX_DISPLAY_PEAK_TRACES, "Display Traces", PreferenceConstants.MIN_TRACES, PreferenceConstants.MAX_TRACES, getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {
