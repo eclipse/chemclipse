@@ -102,6 +102,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		 */
 		store.setDefault(PreferenceConstants.P_COLOR_SCHEME_PEAK_TRACES, PreferenceConstants.DEF_COLOR_SCHEME_PEAK_TRACES);
 		store.setDefault(PreferenceConstants.P_MAX_DISPLAY_PEAK_TRACES, PreferenceConstants.DEF_MAX_DISPLAY_PEAK_TRACES);
+		store.setDefault(PreferenceConstants.P_PEAK_TRACES_OFFSET_RETENTION_TIME, PreferenceConstants.DEF_PEAK_TRACES_OFFSET_RETENTION_TIME);
 		/*
 		 * Scans
 		 */

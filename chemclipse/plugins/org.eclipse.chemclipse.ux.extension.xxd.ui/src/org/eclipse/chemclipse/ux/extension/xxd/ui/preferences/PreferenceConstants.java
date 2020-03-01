@@ -46,6 +46,10 @@ public class PreferenceConstants extends ChartOptions {
 	public static final int MAX_TRACES = Integer.MAX_VALUE;
 	public static final int DEF_PEAK_TRACES = 5;
 	public static final int DEF_SCAN_TRACES = 5;
+	//
+	public static final int MIN_OFFSET_RETENTION_TIME = 0;
+	public static final int MAX_OFFSET_RETENTION_TIME = 10000; // 10 seconds
+	public static final int DEF_OFFSET_RETENTION_TIME = 0;
 	/*
 	 * General / Task Quick Access
 	 */
@@ -161,6 +165,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_COLOR_SCHEME_PEAK_TRACES = Colors.COLOR_SCHEME_PRINT;
 	public static final String P_MAX_DISPLAY_PEAK_TRACES = "maxDisplayPeakTraces";
 	public static final int DEF_MAX_DISPLAY_PEAK_TRACES = DEF_PEAK_TRACES;
+	public static final String P_PEAK_TRACES_OFFSET_RETENTION_TIME = "peakTracesOffsetRetentionTime";
+	public static final int DEF_PEAK_TRACES_OFFSET_RETENTION_TIME = DEF_OFFSET_RETENTION_TIME;
 	//
 	public static final String P_CHROMATOGRAM_OVERLAY_IONS_SELECTION = "chromatogramOverlayIonsSelection";
 	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_SELECTION = OverlayChartSupport.SELECTED_IONS_USERS_CHOICE;

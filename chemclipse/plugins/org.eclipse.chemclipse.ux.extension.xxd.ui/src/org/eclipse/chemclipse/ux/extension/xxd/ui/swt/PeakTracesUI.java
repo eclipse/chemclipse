@@ -36,6 +36,7 @@ import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.listener.PeakTracesOffsetListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
@@ -46,6 +47,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swtchart.IAxis.Position;
 import org.eclipse.swtchart.ILineSeries;
+import org.eclipse.swtchart.IPlotArea;
 import org.eclipse.swtchart.extensions.axisconverter.MillisecondsToMinuteConverter;
 import org.eclipse.swtchart.extensions.axisconverter.PercentageConverter;
 import org.eclipse.swtchart.extensions.core.BaseChart;
@@ -69,6 +71,8 @@ public class PeakTracesUI extends ScrollableChart {
 	private List<Integer> traces = new ArrayList<>();
 	private int selectedTrace = 0;
 	private IPeak peak = null;
+	//
+	private PeakTracesOffsetListener peakTracesOffsetListener = new PeakTracesOffsetListener(this.getBaseChart());
 
 	public PeakTracesUI() {
 		super();
@@ -102,6 +106,7 @@ public class PeakTracesUI extends ScrollableChart {
 		modifyChart(peak);
 		deleteSeries();
 		traces.clear();
+		peakTracesOffsetListener.setOffsetRetentionTime(0);
 		//
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 		//
@@ -110,8 +115,11 @@ public class PeakTracesUI extends ScrollableChart {
 			IChromatogramMSD chromatogram = chromatogramPeak.getChromatogram();
 			IPeakModelMSD peakModel = chromatogramPeak.getPeakModel();
 			//
-			int startRetentionTime = peakModel.getStartRetentionTime();
-			int stopRetentionTime = peakModel.getStopRetentionTime();
+			int offsetRetentionTime = preferenceStore.getInt(PreferenceConstants.P_PEAK_TRACES_OFFSET_RETENTION_TIME);
+			peakTracesOffsetListener.setOffsetRetentionTime(offsetRetentionTime);
+			//
+			int startRetentionTime = peakModel.getStartRetentionTime() - offsetRetentionTime;
+			int stopRetentionTime = peakModel.getStopRetentionTime() + offsetRetentionTime;
 			IPeakMassSpectrum massSpectrum = peakModel.getPeakMassSpectrum();
 			IChromatogramSelection chromatogramSelection = new ChromatogramSelection<>(chromatogram);
 			chromatogramSelection.setRangeRetentionTime(startRetentionTime, stopRetentionTime, false);
@@ -176,6 +184,10 @@ public class PeakTracesUI extends ScrollableChart {
 		rangeRestriction.setExtendTypeY(RangeRestriction.ExtendType.RELATIVE);
 		rangeRestriction.setExtendMinY(0.0d);
 		rangeRestriction.setExtendMaxY(0.1d);
+		//
+		BaseChart baseChart = getBaseChart();
+		IPlotArea plotArea = baseChart.getPlotArea();
+		plotArea.addCustomPaintListener(peakTracesOffsetListener);
 		//
 		applySettings(chartSettings);
 	}
