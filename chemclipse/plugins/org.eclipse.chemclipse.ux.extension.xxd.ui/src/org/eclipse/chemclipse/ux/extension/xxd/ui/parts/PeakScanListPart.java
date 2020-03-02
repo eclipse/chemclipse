@@ -25,7 +25,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedPeakScanListUI;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.di.annotations.Optional;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.menu.MDirectToolItem;
@@ -37,14 +36,22 @@ public class PeakScanListPart extends EnhancedUpdateSupport implements IUpdateSu
 	private boolean linkWithEditor = true;
 
 	@Inject
-	public PeakScanListPart(Composite parent, MPart part, IEventBroker eventBroker) {
+	public PeakScanListPart(Composite parent, MPart part) {
 		super(parent, Activator.getDefault().getDataUpdateSupport(), IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION, part);
 	}
 
-	@Override
-	public void createControl(Composite parent) {
+	public static final class LinkWithEditorHandler {
 
-		extendedPeakScanListUI = new ExtendedPeakScanListUI(parent, Activator.getDefault().getEventBroker(), Activator.getDefault().getPreferenceStore());
+		@Execute
+		void execute(MPart part, MDirectToolItem toolItem) {
+
+			Object object = part.getObject();
+			if(object instanceof PeakScanListPart) {
+				PeakScanListPart listPart = (PeakScanListPart)object;
+				listPart.linkWithEditor = toolItem.isSelected();
+				listPart.updatePeakSelection(null);
+			}
+		}
 	}
 
 	@Inject
@@ -54,6 +61,12 @@ public class PeakScanListPart extends EnhancedUpdateSupport implements IUpdateSu
 		if(linkWithEditor) {
 			extendedPeakScanListUI.updateSelection();
 		}
+	}
+
+	@Override
+	public void createControl(Composite parent) {
+
+		extendedPeakScanListUI = new ExtendedPeakScanListUI(parent, Activator.getDefault().getEventBroker(), Activator.getDefault().getPreferenceStore());
 	}
 
 	@Override
@@ -98,19 +111,5 @@ public class PeakScanListPart extends EnhancedUpdateSupport implements IUpdateSu
 			return true;
 		}
 		return false;
-	}
-
-	public static final class LinkWithEditorHandler {
-
-		@Execute
-		void execute(MPart part, MDirectToolItem toolItem) {
-
-			Object object = part.getObject();
-			if(object instanceof PeakScanListPart) {
-				PeakScanListPart listPart = (PeakScanListPart)object;
-				listPart.linkWithEditor = toolItem.isSelected();
-				listPart.updatePeakSelection(null);
-			}
-		}
 	}
 }

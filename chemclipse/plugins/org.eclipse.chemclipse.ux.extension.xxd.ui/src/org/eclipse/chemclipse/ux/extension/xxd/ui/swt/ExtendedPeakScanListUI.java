@@ -42,7 +42,6 @@ import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.IColumnMoveListener;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
@@ -75,9 +74,9 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swtchart.extensions.core.IKeyboardSupport;
@@ -88,6 +87,10 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 	private static final Logger logger = Logger.getLogger(ExtendedPeakScanListUI.class);
 	//
 	private static final String MENU_CATEGORY = "Peaks/Scans";
+	private final ListSupport listSupport = new ListSupport();
+	private final TargetExtendedComparator comparator = new TargetExtendedComparator(SortOrder.DESC);
+	private final IPreferenceStore preferenceStore;
+	private final IEventBroker eventBroker;
 	//
 	private Composite toolbarInfoTop;
 	private Composite toolbarInfoBottom;
@@ -99,20 +102,14 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 	private PeakScanListUI peakScanListUI;
 	private IChromatogramSelection chromatogramSelection;
 	//
-	private final ListSupport listSupport = new ListSupport();
-	private final TargetExtendedComparator comparator = new TargetExtendedComparator(SortOrder.DESC);
-	//
-	private final Map<String, Object> map = new HashMap<String, Object>();
 	private Composite toolbarMain;
 	private Composite toolbarLabel;
 	private boolean showScans;
 	private boolean showPeaks;
-	protected boolean showScansInRange;
-	protected boolean showPeaksInRange;
-	private final IPreferenceStore preferenceStore;
+	private boolean showScansInRange;
+	private boolean showPeaksInRange;
 	private boolean moveRetentionTimeOnPeakSelection;
-	protected InteractionMode interactionMode = InteractionMode.SOURCE;
-	private final IEventBroker eventBroker;
+	private InteractionMode interactionMode = InteractionMode.SOURCE;
 	private int currentModCount;
 	private RetentionTimeRange lastRange;
 
@@ -283,7 +280,7 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				propagateSelection();
+				propagateSelection(e.display);
 			}
 		});
 		/*
@@ -304,21 +301,21 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 		/*
 		 * Add the delete targets support.
 		 */
-		Shell shell = listUI.getTable().getShell();
+		Display display = listUI.getTable().getDisplay();
 		ITableSettings tableSettings = listUI.getTableSettings();
 		//
-		addDeleteMenuEntry(shell, tableSettings);
+		addDeleteMenuEntry(display, tableSettings);
 		addVerifyTargetsMenuEntry(tableSettings);
 		addUnverifyTargetsMenuEntry(tableSettings);
-		modifyInternalStandardsMenuEntry(shell, tableSettings);
+		modifyInternalStandardsMenuEntry(display, tableSettings);
 		//
-		addKeyEventProcessors(shell, tableSettings);
+		addKeyEventProcessors(display, tableSettings);
 		listUI.applySettings(tableSettings);
 		//
 		return listUI;
 	}
 
-	private void addDeleteMenuEntry(Shell shell, ITableSettings tableSettings) {
+	private void addDeleteMenuEntry(Display display, ITableSettings tableSettings) {
 
 		tableSettings.addMenuEntry(new ITableMenuEntry() {
 
@@ -337,7 +334,7 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 			@Override
 			public void execute(ExtendedTableViewer extendedTableViewer) {
 
-				deletePeaksOrIdentifications(shell);
+				deletePeaksOrIdentifications(display);
 			}
 		});
 	}
@@ -390,7 +387,7 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 		});
 	}
 
-	private void modifyInternalStandardsMenuEntry(Shell shell, ITableSettings tableSettings) {
+	private void modifyInternalStandardsMenuEntry(Display display, ITableSettings tableSettings) {
 
 		tableSettings.addMenuEntry(new ITableMenuEntry() {
 
@@ -409,12 +406,12 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 			@Override
 			public void execute(ExtendedTableViewer extendedTableViewer) {
 
-				modifyInternalStandards(shell);
+				modifyInternalStandards(display);
 			}
 		});
 	}
 
-	private void addKeyEventProcessors(Shell shell, ITableSettings tableSettings) {
+	private void addKeyEventProcessors(Display display, ITableSettings tableSettings) {
 
 		tableSettings.addKeyEventProcessor(new IKeyEventProcessor() {
 
@@ -425,7 +422,7 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 					/*
 					 * DEL
 					 */
-					deletePeaksOrIdentifications(shell);
+					deletePeaksOrIdentifications(display);
 				} else if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_I && (e.stateMask & SWT.CTRL) == SWT.CTRL) {
 					if((e.stateMask & SWT.ALT) == SWT.ALT) {
 						/*
@@ -442,17 +439,17 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 					/*
 					 * CTRL + s
 					 */
-					modifyInternalStandards(shell);
+					modifyInternalStandards(display);
 				} else {
-					propagateSelection();
+					propagateSelection(display);
 				}
 			}
 		});
 	}
 
-	private void deletePeaksOrIdentifications(Shell shell) {
+	private void deletePeaksOrIdentifications(Display display) {
 
-		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		MessageBox messageBox = new MessageBox(display.getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText("Delete Peak(s)/Scan Identification(s)");
 		messageBox.setMessage("Would you like to delete the selected peak(s)/scan identification(s)?");
 		if(messageBox.open() == SWT.YES) {
@@ -486,7 +483,9 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 					chromatogramSelection.update(true);
 				}
 			}
-			sendEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION, chromatogramSelection);
+			//
+			sendEvent(display, IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION, chromatogramSelection);
+			updateChromatogramSelection();
 		}
 	}
 
@@ -532,9 +531,9 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 		}
 	}
 
-	private void modifyInternalStandards(Shell shell) {
+	private void modifyInternalStandards(Display display) {
 
-		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		MessageBox messageBox = new MessageBox(display.getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText("Internal Standard (ISTD)");
 		messageBox.setMessage("Would you like to modify the ISTD(s)?");
 		if(messageBox.open() == SWT.YES) {
@@ -544,7 +543,7 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 				if(object instanceof IPeak) {
 					IPeak peak = (IPeak)object;
 					if(peak.getIntegratedArea() > 0) {
-						InternalStandardDialog dialog = new InternalStandardDialog(shell, peak);
+						InternalStandardDialog dialog = new InternalStandardDialog(display.getActiveShell(), peak);
 						if(IDialogConstants.OK_ID == dialog.open()) {
 							logger.info("Successfully modified ISTDs.");
 						}
@@ -554,11 +553,12 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 			/*
 			 * Send update.
 			 */
-			sendEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION, chromatogramSelection);
+			sendEvent(display, IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION, chromatogramSelection);
 		}
 	}
 
-	private void propagateSelection() {
+	@SuppressWarnings("unchecked")
+	private void propagateSelection(Display display) {
 
 		if(interactionMode != InteractionMode.SOURCE && interactionMode != InteractionMode.BIDIRECTIONAL) {
 			return;
@@ -581,42 +581,19 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 						ChromatogramDataSupport.adjustChromatogramSelection(peak, chromatogramSelection);
 					}
 					//
-					DisplayUtils.getDisplay().asyncExec(new Runnable() {
-
-						@SuppressWarnings("unchecked")
-						@Override
-						public void run() {
-
-							chromatogramSelection.setSelectedPeak(peak);
-							sendEvent(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
-						}
-					});
-					//
-					DisplayUtils.getDisplay().asyncExec(new Runnable() {
-
-						@Override
-						public void run() {
-
-							sendEvent(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
-						}
-					});
+					chromatogramSelection.setSelectedPeak(peak);
+					sendEvent(display, IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
+					sendEvent(display, IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
 					//
 					if(peak instanceof IPeakMSD) {
+						/*
+						 * Send the mass spectrum update, e.g. used by the comparison part.
+						 */
 						IPeakMSD peakMSD = (IPeakMSD)peak;
-						DisplayUtils.getDisplay().asyncExec(new Runnable() {
-
-							@Override
-							public void run() {
-
-								/*
-								 * Send the mass spectrum update, e.g. used by the comparison part.
-								 */
-								map.clear();
-								map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN, peakMSD.getExtractedMassSpectrum());
-								map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY, target);
-								sendEvent(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
-							}
-						});
+						Map<String, Object> map = new HashMap<String, Object>();
+						map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN, peakMSD.getExtractedMassSpectrum());
+						map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY, target);
+						sendEvent(display, IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
 					}
 				} else if(object instanceof IScan) {
 					/*
@@ -625,51 +602,38 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 					IScan scan = (IScan)object;
 					IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(scan.getTargets(), comparator);
 					//
-					DisplayUtils.getDisplay().asyncExec(new Runnable() {
-
-						@Override
-						public void run() {
-
-							chromatogramSelection.setSelectedIdentifiedScan(scan);
-							sendEvent(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scan);
-						}
-					});
-					//
-					DisplayUtils.getDisplay().asyncExec(new Runnable() {
-
-						@Override
-						public void run() {
-
-							sendEvent(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
-						}
-					});
+					chromatogramSelection.setSelectedIdentifiedScan(scan);
+					sendEvent(display, IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scan);
+					sendEvent(display, IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
 					//
 					if(scan instanceof IScanMSD) {
+						/*
+						 * Send the identification target update to let e.g. the molecule renderer react on an update.
+						 */
 						IScanMSD scanMSD = (IScanMSD)scan;
-						DisplayUtils.getDisplay().asyncExec(new Runnable() {
-
-							@Override
-							public void run() {
-
-								/*
-								 * Send the identification target update to let e.g. the molecule renderer react on an update.
-								 */
-								map.clear();
-								map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN, scanMSD);
-								map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY, target);
-								sendEvent(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
-							}
-						});
+						Map<String, Object> map = new HashMap<String, Object>();
+						map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN, scanMSD);
+						map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY, target);
+						sendEvent(display, IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
 					}
 				}
 			}
 		}
 	}
 
-	protected void sendEvent(String topic, Object data) {
+	private void sendEvent(Display display, String topic, Object data) {
 
-		if(eventBroker != null) {
-			eventBroker.send(topic, data);
+		if(display != null) {
+			if(eventBroker != null) {
+				display.asyncExec(new Runnable() {
+
+					@Override
+					public void run() {
+
+						eventBroker.send(topic, data);
+					}
+				});
+			}
 		}
 	}
 
@@ -803,7 +767,7 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 						}
 						//
 						if(peaks.size() > 0) {
-							DatabaseFileSupport.savePeaks(DisplayUtils.getShell(), peaks, chromatogram.getName());
+							DatabaseFileSupport.savePeaks(e.display.getActiveShell(), peaks, chromatogram.getName());
 						}
 						/*
 						 * Scans
@@ -823,7 +787,7 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 						}
 						//
 						if(massSpectra.size() > 0) {
-							DatabaseFileSupport.saveMassSpectra(DisplayUtils.getShell(), massSpectra, chromatogram.getName());
+							DatabaseFileSupport.saveMassSpectra(e.display.getActiveShell(), massSpectra, chromatogram.getName());
 						}
 					}
 				} catch(NoConverterAvailableException e1) {
