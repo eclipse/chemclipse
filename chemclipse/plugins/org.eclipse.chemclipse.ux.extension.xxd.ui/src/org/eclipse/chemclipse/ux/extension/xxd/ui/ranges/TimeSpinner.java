@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,44 +15,59 @@ import java.text.DecimalFormat;
 
 import org.eclipse.chemclipse.model.ranges.TimeRange;
 import org.eclipse.chemclipse.model.updates.IUpdateListener;
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.text.ValueFormat;
-import org.eclipse.chemclipse.swt.ui.support.Colors;
+import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TimeRangesLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.MouseAdapter;
-import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.events.MouseTrackAdapter;
-import org.eclipse.swt.events.PaintEvent;
-import org.eclipse.swt.events.PaintListener;
-import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 public class TimeSpinner extends Composite {
 
-	private static final String LABEL_RETENTION_TIME_MINUTES = "Retention Time (Minutes)";
 	private static final int STEP_RETENTION_TIME = 1000; // milliseconds
 	//
+	private Label label;
+	private Label spacer;
 	private Text text;
 	private TimeRange.Marker marker;
 	private TimeRange timeRange = null;
 	private IUpdateListener updateListener = null;
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
+	IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public TimeSpinner(Composite parent, int style, TimeRange.Marker marker) {
 		super(parent, style);
 		this.marker = marker;
 		createControl();
-		updateTooltip();
+		/*
+		 * Update the descriptions based on the selected marker.
+		 */
+		updateDescriptions();
+	}
+
+	@Override
+	public void update() {
+
+		super.update();
+		updateLabel();
 	}
 
 	public void setUpdateListener(IUpdateListener updateListener) {
@@ -74,23 +89,46 @@ public class TimeSpinner extends Composite {
 
 	private void createControl() {
 
-		GridLayout gridLayout = new GridLayout(2, false);
+		GridLayout gridLayout = new GridLayout(3, false);
 		gridLayout.marginWidth = 0;
 		gridLayout.marginLeft = 0;
 		gridLayout.marginRight = 0;
 		setLayout(gridLayout);
 		//
+		label = createInfo(this);
+		spacer = createSpacer(this);
+		//
 		text = createText(this);
-		createSpinner(this, true, 5);
-		createSpinner(this, false, -5);
+		createButtonModify(this, false);
+		createButtonModify(this, true);
+		//
+		updateLabel();
+	}
+
+	private Label createInfo(Composite parent) {
+
+		Label label = new Label(parent, SWT.NONE);
+		label.setText(""); // Will be set dynamically.
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalAlignment = SWT.CENTER;
+		label.setLayoutData(gridData);
+		return label;
+	}
+
+	private Label createSpacer(Composite parent) {
+
+		Label label = new Label(parent, SWT.NONE);
+		label.setText("");
+		GridData gridData = new GridData();
+		gridData.horizontalSpan = 2;
+		label.setLayoutData(gridData);
+		return label;
 	}
 
 	private Text createText(Composite parent) {
 
 		Text text = new Text(parent, SWT.BORDER);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.verticalSpan = 2;
-		text.setLayoutData(gridData);
+		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		text.setText("");
 		//
 		ControlDecoration controlDecoration = new ControlDecoration(text, SWT.LEFT | SWT.TOP);
@@ -115,57 +153,16 @@ public class TimeSpinner extends Composite {
 		return text;
 	}
 
-	private void createSpinner(Composite parent, boolean increase, int verticalIndent) {
+	private Button createButtonModify(Composite parent, boolean increase) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData();
-		gridData.widthHint = 14;
-		gridData.heightHint = 9;
-		gridData.verticalIndent = verticalIndent;
-		composite.setLayoutData(gridData);
-		//
-		composite.addPaintListener(new PaintListener() {
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText((increase ? "Increase" : "Decrease") + " the current time [min].");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(increase ? IApplicationImage.IMAGE_VALUE_INCREASE : IApplicationImage.IMAGE_VALUE_DECREASE, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
-			public void paintControl(PaintEvent event) {
-
-				Rectangle bounds = composite.getBounds();
-				int width = bounds.width;
-				int height = bounds.height;
-				int border = 1;
-				//
-				GC gc = event.gc;
-				gc.setForeground(Colors.GRAY);
-				gc.drawRoundRectangle(border, border, width - 2 * border, height - 2 * border, 2, 2);
-				//
-				gc.setBackground(Colors.DARK_GRAY);
-				if(increase) {
-					gc.fillPolygon(new int[]{width / 2, border, width - border, height - border, border, height - border});
-				} else {
-					gc.fillPolygon(new int[]{border, border, width - border, border, width / 2, height - border});
-				}
-			}
-		});
-		//
-		composite.addMouseTrackListener(new MouseTrackAdapter() {
-
-			@Override
-			public void mouseEnter(MouseEvent e) {
-
-				composite.setBackground(Colors.GRAY);
-			}
-
-			@Override
-			public void mouseExit(MouseEvent e) {
-
-				composite.setBackground(null);
-			}
-		});
-		//
-		composite.addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mouseUp(MouseEvent e) {
+			public void widgetSelected(SelectionEvent e) {
 
 				if(timeRange != null) {
 					updateRetentionTime(increase);
@@ -173,18 +170,7 @@ public class TimeSpinner extends Composite {
 				}
 			}
 		});
-		//
-		composite.addKeyListener(new KeyAdapter() {
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-
-				if(timeRange != null && isEnterPressed(e)) {
-					updateRetentionTime(increase);
-					fireUpdate();
-				}
-			}
-		});
+		return button;
 	}
 
 	private boolean validate(IValidator validator, ControlDecoration controlDecoration, Text text) {
@@ -255,22 +241,27 @@ public class TimeSpinner extends Composite {
 		text.setText(extractRetentionTime());
 	}
 
-	private void updateTooltip() {
+	private void updateDescriptions() {
 
 		assert (marker != null);
 		assert (text != null);
 		//
+		String description = "";
+		//
 		switch(marker) {
 			case START:
-				text.setToolTipText("Start " + LABEL_RETENTION_TIME_MINUTES);
+				description = TimeRangesLabelProvider.START;
 				break;
 			case CENTER:
-				text.setToolTipText("Center " + LABEL_RETENTION_TIME_MINUTES);
+				description = TimeRangesLabelProvider.CENTER;
 				break;
 			case STOP:
-				text.setToolTipText("Stop " + LABEL_RETENTION_TIME_MINUTES);
+				description = TimeRangesLabelProvider.STOP;
 				break;
 		}
+		//
+		label.setText(description);
+		text.setToolTipText(description);
 	}
 
 	private String extractRetentionTime() {
@@ -306,5 +297,12 @@ public class TimeSpinner extends Composite {
 	private String getRetentionTimeMinutes(int milliseconds) {
 
 		return decimalFormat.format(milliseconds / TimeRange.MINUTE_FACTOR);
+	}
+
+	private void updateLabel() {
+
+		boolean visible = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_TIME_RANGE_SPINNER_LABEL);
+		PartSupport.setControlVisibility(label, visible);
+		PartSupport.setControlVisibility(spacer, visible);
 	}
 }

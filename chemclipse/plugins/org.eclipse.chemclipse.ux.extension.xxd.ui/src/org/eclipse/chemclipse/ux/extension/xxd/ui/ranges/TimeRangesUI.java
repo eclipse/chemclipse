@@ -22,12 +22,18 @@ import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.TimeRangeInputValidator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTimeRanges;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.preference.PreferenceDialog;
+import org.eclipse.jface.preference.PreferenceManager;
+import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -36,6 +42,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 
 public class TimeRangesUI extends Composite {
 
@@ -45,6 +52,7 @@ public class TimeRangesUI extends Composite {
 	private TimeSpinner timeSpinnerStop;
 	private Button buttonAdd;
 	private Button buttonDelete;
+	private Button buttonSettings;
 	/*
 	 * TimeRanges is the object, that contains a map of ranges.
 	 * TimeRange is the currently selected time range.
@@ -63,6 +71,7 @@ public class TimeRangesUI extends Composite {
 
 		this.timeRanges = timeRanges;
 		updateInput();
+		updateLabels();
 	}
 
 	/**
@@ -70,7 +79,9 @@ public class TimeRangesUI extends Composite {
 	 */
 	public void update() {
 
+		super.update();
 		updateTimeRange();
+		updateLabels();
 	}
 
 	public void setUpdateListener(IUpdateListener updateListener) {
@@ -97,7 +108,7 @@ public class TimeRangesUI extends Composite {
 
 	private void createControl() {
 
-		GridLayout gridLayout = new GridLayout(7, false);
+		GridLayout gridLayout = new GridLayout(8, false);
 		gridLayout.marginWidth = 0;
 		gridLayout.marginLeft = 0;
 		gridLayout.marginRight = 0;
@@ -107,8 +118,10 @@ public class TimeRangesUI extends Composite {
 		timeSpinnerStart = createSpinner(this, TimeRange.Marker.START);
 		timeSpinnerCenter = createSpinner(this, TimeRange.Marker.CENTER);
 		timeSpinnerStop = createSpinner(this, TimeRange.Marker.STOP);
+		createSeparator(this);
 		buttonAdd = createButtonAdd(this);
 		buttonDelete = createButtonDelete(this);
+		buttonSettings = createButtonSettings(this);
 	}
 
 	private ComboViewer createComboViewer(Composite composite) {
@@ -132,7 +145,9 @@ public class TimeRangesUI extends Composite {
 		 * Select the item.
 		 */
 		combo.setToolTipText("Select a time range.");
-		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.widthHint = 150;
+		combo.setLayoutData(gridData);
 		combo.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -194,6 +209,14 @@ public class TimeRangesUI extends Composite {
 		return button;
 	}
 
+	private Label createSeparator(Composite parent) {
+
+		Label label = new Label(parent, SWT.NONE);
+		label.setText("|");
+		label.setForeground(Colors.GRAY);
+		return label;
+	}
+
 	private Button createButtonDelete(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
@@ -216,6 +239,62 @@ public class TimeRangesUI extends Composite {
 			}
 		});
 		return button;
+	}
+
+	private Button createButtonSettings(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Settings");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				PreferenceManager preferenceManager = new PreferenceManager();
+				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePageTimeRanges()));
+				//
+				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
+				preferenceDialog.create();
+				preferenceDialog.setMessage("Settings");
+				if(preferenceDialog.open() == Window.OK) {
+					try {
+						applySettings();
+					} catch(Exception e1) {
+						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
+					}
+				}
+			}
+		});
+		return button;
+	}
+
+	private void applySettings() {
+
+		updateLabels();
+	}
+
+	private void updateLabels() {
+
+		timeSpinnerStart.update();
+		timeSpinnerCenter.update();
+		timeSpinnerStop.update();
+		/*
+		 * Layout the outer composites to
+		 * enable more space for the labels.
+		 */
+		Composite parent = getParent();
+		if(parent != null) {
+			if(getParent() != null) {
+				parent = getParent();
+			}
+		}
+		//
+		if(parent != null) {
+			parent.layout(true);
+			parent.redraw();
+		}
 	}
 
 	private void updateInput() {
@@ -257,6 +336,7 @@ public class TimeRangesUI extends Composite {
 		timeSpinnerCenter.update(timeRange);
 		timeSpinnerStop.update(timeRange);
 		buttonDelete.setEnabled(timeRange != null);
+		buttonSettings.setEnabled(true);
 	}
 
 	private void fireUpdate() {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,9 +23,9 @@ import org.eclipse.swt.graphics.Image;
 public class TimeRangesLabelProvider extends AbstractChemClipseLabelProvider {
 
 	public static final String IDENTIFIER = "Identifier";
-	public static final String START = "Start (Minutes)";
-	public static final String CENTER = "Center (Minutes)";
-	public static final String STOP = "Stop (Minutes)";
+	public static final String START = "Start Time [min]";
+	public static final String CENTER = "Center Time [min]";
+	public static final String STOP = "Stop Time [min]";
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
 	//
@@ -37,9 +37,9 @@ public class TimeRangesLabelProvider extends AbstractChemClipseLabelProvider {
 	};
 	public static final int[] BOUNDS = { //
 			200, //
-			100, //
-			100, //
-			100 //
+			130, //
+			130, //
+			130 //
 	};
 
 	@Override

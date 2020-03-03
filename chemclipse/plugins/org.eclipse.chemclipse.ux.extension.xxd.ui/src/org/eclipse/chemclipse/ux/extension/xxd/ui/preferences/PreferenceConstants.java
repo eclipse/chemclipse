@@ -685,4 +685,9 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_PCR_DEFAULT_COLOR = "192,192,192";
 	public static final String P_PCR_COLOR_CODES = "pcrColorCodes";
 	public static final String DEF_PCR_COLOR_CODES = "";
+	/*
+	 * Time Ranges
+	 */
+	public static final String P_SHOW_TIME_RANGE_SPINNER_LABEL = "showTimeRangeSpinnerLabel";
+	public static final boolean DEF_SHOW_TIME_RANGE_SPINNER_LABEL = false;
 }
