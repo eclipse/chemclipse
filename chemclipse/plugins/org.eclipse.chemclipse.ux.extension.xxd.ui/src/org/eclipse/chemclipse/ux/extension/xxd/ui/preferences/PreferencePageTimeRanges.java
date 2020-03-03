@@ -28,7 +28,7 @@ public class PreferencePageTimeRanges extends FieldEditorPreferencePage implemen
 
 	public void createFieldEditors() {
 
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_TIME_RANGE_SPINNER_LABEL, "Show the time range label(s):", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_TIME_RANGE_SPINNER_LABEL, "Show the time range label(s)", getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {
