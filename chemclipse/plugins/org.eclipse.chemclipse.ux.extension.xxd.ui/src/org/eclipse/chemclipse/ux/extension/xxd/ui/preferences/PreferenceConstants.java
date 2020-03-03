@@ -672,11 +672,6 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String P_SEQUENCE_EXPLORER_PATH_DIALOG_FOLDER = "sequenceExplorerPathDialogFolder";
 	public static final String DEF_SEQUENCE_EXPLORER_PATH_DIALOG_FOLDER = "";
 	/*
-	 * Methods
-	 */
-	public static final String P_SELECTED_METHOD_NAME = "selectedMethodName";
-	public static final String DEF_SELECTED_METHOD_NAME = "";
-	/*
 	 * Quanititation
 	 */
 	public static final String P_USE_QUANTITATION_REFERENCE_LIST = "useQuantitationReferenceList";

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -11,9 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.ui.preferences;
 
+import org.eclipse.chemclipse.converter.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.converter.ui.Activator;
-
+import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -28,6 +30,11 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	@Override
 	protected void createFieldEditors() {
 
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_LIST_PATH_IMPORT, "List Import Folder", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_LIST_PATH_EXPORT, "List Export Folder", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_EXPORT_FOLDER, "Chromatogram Export Folder", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_METHOD_EXPLORER_PATH_ROOT_FOLDER, "Method(s) Folder", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceSupplier.P_SELECTED_METHOD_NAME, "Method Name", getFieldEditorParent()));
 	}
 
 	@Override

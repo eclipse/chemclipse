@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -50,9 +50,9 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.MethodListLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.TableConfigSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.ProcessingWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMethods;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ConfigurableUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.MethodUIConfig;
 import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePageReportExport;
@@ -717,7 +717,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 				Iterator<?> selection = listUI.getStructuredSelection().iterator();
 				while(selection.hasNext()) {
 					Object object = selection.next();
-					ListProcessEntryContainer container = getContainer(object);
+					ListProcessEntryContainer container = MethodSupport.getContainer(object);
 					if(container != null) {
 						List<IProcessEntry> entries = container.getEntries();
 						int index = entries.indexOf(object);
@@ -747,7 +747,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 
 				if(MessageDialog.openQuestion(toolBar.getShell(), "Delete Process Method(s)", "Would you like to delete the selected processor(s)?")) {
 					for(Object object : listUI.getStructuredSelection().toArray()) {
-						ListProcessEntryContainer container = getContainer(object);
+						ListProcessEntryContainer container = MethodSupport.getContainer(object);
 						if(container != null) {
 							container.removeProcessEntry((IProcessEntry)object);
 						}
@@ -774,7 +774,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 				Iterator<?> iterator = selection.iterator();
 				while(iterator.hasNext()) {
 					Object object = iterator.next();
-					ListProcessEntryContainer container = getContainer(object);
+					ListProcessEntryContainer container = MethodSupport.getContainer(object);
 					if(container != null) {
 						List<IProcessEntry> entries = container.getEntries();
 						int index = entries.indexOf(object);
@@ -805,7 +805,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 				Iterator<?> iterator = selection.iterator();
 				while(iterator.hasNext()) {
 					Object object = iterator.next();
-					ListProcessEntryContainer container = getContainer(object);
+					ListProcessEntryContainer container = MethodSupport.getContainer(object);
 					if(container != null) {
 						List<IProcessEntry> entries = container.getEntries();
 						int index = entries.indexOf(object);
@@ -897,7 +897,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		Iterator<?> iterator = selection.iterator();
 		while(iterator.hasNext() && writeable) {
 			Object object = iterator.next();
-			ListProcessEntryContainer container = getContainer(object);
+			ListProcessEntryContainer container = MethodSupport.getContainer(object);
 			if(container == null) {
 				writeable = false;
 			}
@@ -922,26 +922,6 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		if(modificationHandler != null) {
 			modificationHandler.setDirty(dirty);
 		}
-	}
-
-	/**
-	 * 
-	 * @param object
-	 * @return the {@link ListProcessEntryContainer} for this object if available and not read-only, <code>null</code> otherwise
-	 */
-	private static final ListProcessEntryContainer getContainer(Object object) {
-
-		if(object instanceof IProcessEntry) {
-			IProcessEntry processEntry = (IProcessEntry)object;
-			ProcessEntryContainer parent = processEntry.getParent();
-			if(parent instanceof ListProcessEntryContainer) {
-				ListProcessEntryContainer container = (ListProcessEntryContainer)parent;
-				if(!container.isReadOnly()) {
-					return container;
-				}
-			}
-		}
-		return null;
 	}
 
 	@Override
@@ -986,10 +966,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 
 				IPreferencePage preferencePageProcessing = new PreferencePageReportExport();
 				preferencePageProcessing.setTitle("Processing");
-				//
-				IPreferencePage preferencePageMethods = new PreferencePageMethods();
-				preferencePageMethods.setTitle("Methods");
-				return new IPreferencePage[]{preferencePageProcessing, preferencePageMethods};
+				return new IPreferencePage[]{preferencePageProcessing};
 			}
 
 			@Override

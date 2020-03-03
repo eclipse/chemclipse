@@ -342,6 +342,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_METHOD_ADD = "org.eclipse.chemclipse.rcp.ui.icons/methodAdd.gif";
 	String IMAGE_METHOD_EDIT = "org.eclipse.chemclipse.rcp.ui.icons/methodEdit.gif";
 	String IMAGE_METHOD_DELETE = "org.eclipse.chemclipse.rcp.ui.icons/methodDelete.gif";
+	String IMAGE_METHOD_COPY = "org.eclipse.chemclipse.rcp.ui.icons/methodCopy.gif";
 	//
 	String IMAGE_EXECUTE_EXTENSION = "org.eclipse.chemclipse.rcp.ui.icons/execute-extension.png";
 	String IMAGE_POPUP_MENU = "org.eclipse.chemclipse.rcp.ui.icons/popup-menu.png";

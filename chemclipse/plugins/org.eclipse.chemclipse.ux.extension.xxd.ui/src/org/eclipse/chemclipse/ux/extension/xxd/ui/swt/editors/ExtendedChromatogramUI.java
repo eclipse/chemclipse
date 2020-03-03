@@ -1058,7 +1058,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 	private Composite createToolbarMethod(Composite parent) {
 
-		methodSupportUI = new MethodSupportUI(parent, SWT.NONE, false);
+		methodSupportUI = new MethodSupportUI(parent, SWT.NONE);
 		methodSupportUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		methodSupportUI.setMethodListener(new IMethodListener() {
 

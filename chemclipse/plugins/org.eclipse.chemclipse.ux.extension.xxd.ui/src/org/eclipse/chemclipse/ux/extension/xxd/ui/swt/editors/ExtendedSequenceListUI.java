@@ -40,7 +40,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupportUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMethods;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSequences;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.ChromatogramTypeSupportUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.SequenceListUI;
@@ -430,8 +429,7 @@ public class ExtendedSequenceListUI {
 
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePageSequences()));
-				preferenceManager.addToRoot(new PreferenceNode("2", new PreferencePageMethods()));
-				preferenceManager.addToRoot(new PreferenceNode("3", new PreferencePageChromatogram(Activator.getDefault().getPreferenceStore())));
+				preferenceManager.addToRoot(new PreferenceNode("2", new PreferencePageChromatogram(Activator.getDefault().getPreferenceStore())));
 				//
 				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
 				preferenceDialog.create();

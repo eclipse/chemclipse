@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -305,12 +305,19 @@ public class MethodConverter {
 
 	public static File getUserMethodDirectory() {
 
-		String settings = PreferenceSupplier.getSettings(PreferenceSupplier.P_METHOD_EXPLORER_PATH_ROOT_FOLDER, PreferenceSupplier.DEF_METHOD_EXPLORER_PATH_ROOT_FOLDER);
-		return new File(settings);
+		return new File(PreferenceSupplier.getSettings(PreferenceSupplier.P_METHOD_EXPLORER_PATH_ROOT_FOLDER, PreferenceSupplier.DEF_METHOD_EXPLORER_PATH_ROOT_FOLDER));
 	}
 
 	public static void setUserMethodDirectory(File file) {
 
-		PreferenceSupplier.setSettings(PreferenceSupplier.P_METHOD_EXPLORER_PATH_ROOT_FOLDER, file.getAbsolutePath());
+		if(file != null) {
+			String directory;
+			if(file.isDirectory()) {
+				directory = file.getAbsolutePath();
+			} else {
+				directory = file.getParent();
+			}
+			PreferenceSupplier.setSettings(PreferenceSupplier.P_METHOD_EXPLORER_PATH_ROOT_FOLDER, directory);
+		}
 	}
 }

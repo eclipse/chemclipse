@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -34,6 +34,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String DEF_CHROMATOGRAM_EXPORT_FOLDER = "";
 	public static final String P_METHOD_EXPLORER_PATH_ROOT_FOLDER = "methodExplorerPathRootFolder";
 	public static final String DEF_METHOD_EXPLORER_PATH_ROOT_FOLDER = "";
+	public static final String P_SELECTED_METHOD_NAME = "selectedMethodName";
+	public static final String DEF_SELECTED_METHOD_NAME = "";
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -65,6 +67,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
 		defaultValues.put(P_CHROMATOGRAM_EXPORT_FOLDER, DEF_CHROMATOGRAM_EXPORT_FOLDER);
 		defaultValues.put(P_METHOD_EXPLORER_PATH_ROOT_FOLDER, DEF_METHOD_EXPLORER_PATH_ROOT_FOLDER);
+		defaultValues.put(P_SELECTED_METHOD_NAME, DEF_SELECTED_METHOD_NAME);
 		return defaultValues;
 	}
 
@@ -100,25 +103,37 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		setSettings(P_LIST_PATH_EXPORT, filterPath);
 	}
 
-	private static String getFilterPath(String key, String def) {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.get(key, def);
-	}
-
 	public static String getChromatogramExportFolder() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.get(P_CHROMATOGRAM_EXPORT_FOLDER, DEF_CHROMATOGRAM_EXPORT_FOLDER);
 	}
 
-	public static void setSettings(String key, String value) {
+	public static String getSelectedMethodName() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		preferences.put(key, value);
+		return preferences.get(P_SELECTED_METHOD_NAME, DEF_SELECTED_METHOD_NAME);
+	}
+
+	public static void setSelectedMethodName(String methodName) {
+
+		setSettings(P_SELECTED_METHOD_NAME, methodName);
+	}
+
+	public static void setSettings(String key, String value) {
+
 		try {
+			IEclipsePreferences preferences = INSTANCE().getPreferences();
+			preferences.put(key, value);
 			preferences.flush();
 		} catch(BackingStoreException e) {
+			logger.warn(e);
 		}
+	}
+
+	private static String getFilterPath(String key, String def) {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.get(key, def);
 	}
 }
