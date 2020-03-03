@@ -8,7 +8,9 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.converter;bundle-version="0.8.0",
  org.eclipse.chemclipse.processing;bundle-version="0.8.0",
  org.eclipse.chemclipse.logging;bundle-version="0.8.0",
- org.eclipse.chemclipse.xir.model;bundle-version="0.8.0"
+ org.eclipse.chemclipse.xir.model;bundle-version="0.8.0",
+ org.eclipse.chemclipse.support;bundle-version="0.8.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Export-Package: org.eclipse.chemclipse.xir.converter.core
+Export-Package: org.eclipse.chemclipse.xir.converter.core,
+ org.eclipse.chemclipse.xir.converter.preferences
