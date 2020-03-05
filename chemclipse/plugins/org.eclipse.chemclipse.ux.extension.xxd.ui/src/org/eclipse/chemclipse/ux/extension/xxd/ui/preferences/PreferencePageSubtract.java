@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
 import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpinnerFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.TextFieldEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.jface.preference.BooleanFieldEditor;
@@ -33,6 +34,7 @@ public class PreferencePageSubtract extends FieldEditorPreferencePage implements
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_NOMINAL_MZ, "Use nominal m/z", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_NORMALIZED_SCAN, "Use normalized scan", getFieldEditorParent()));
 		addField(new TextFieldEditor(PreferenceSupplier.P_SUBTRACT_MASS_SPECTRUM, "Subtract mass spectrum", getFieldEditorParent()));
+		addField(new SpinnerFieldEditor(PreferenceSupplier.P_COPY_TRACES_CLIPBOARD, "Copy Traces", PreferenceSupplier.MIN_TRACES, PreferenceSupplier.MAX_TRACES, getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

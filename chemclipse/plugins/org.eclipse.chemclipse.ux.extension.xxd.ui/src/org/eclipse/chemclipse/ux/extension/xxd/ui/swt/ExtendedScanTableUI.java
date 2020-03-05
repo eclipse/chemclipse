@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -31,16 +31,15 @@ import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuCategories;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.parts.ScanTablePart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
@@ -58,6 +57,7 @@ import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -68,6 +68,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 
 public class ExtendedScanTableUI {
@@ -81,7 +82,6 @@ public class ExtendedScanTableUI {
 	private Button buttonSaveScan;
 	private Button buttonOptimizedScan;
 	private Button buttonToggleToolbarEdit;
-	private Button buttonToggleEditModus;
 	//
 	private Label labelX;
 	private Text textX;
@@ -102,6 +102,7 @@ public class ExtendedScanTableUI {
 	private boolean fireUpdate = true;
 	//
 	private ScanDataSupport scanDataSupport = new ScanDataSupport();
+	private EditListener editListener = null;
 
 	private class DeleteMenuEntry implements ITableMenuEntry {
 
@@ -155,6 +156,16 @@ public class ExtendedScanTableUI {
 		updateObject();
 	}
 
+	public boolean isVisible() {
+
+		return scanTableUI.getTable().isVisible();
+	}
+
+	public void addEditListener(EditListener editListener) {
+
+		this.editListener = editListener;
+	}
+
 	/**
 	 * By default, an update is fired when modifying the scan.
 	 * If this value is set to false, no update will be fired.
@@ -188,9 +199,6 @@ public class ExtendedScanTableUI {
 		if(enabled == false) {
 			PartSupport.setCompositeVisibility(toolbarEdit, false);
 		}
-		//
-		buttonToggleEditModus.setEnabled(enabled);
-		PartSupport.setControlVisibility(buttonToggleEditModus, enabled);
 		//
 		scanTableUI.setEditEnabled(enabled);
 		ITableSettings tableSettings = scanTableUI.getTableSettings();
@@ -295,11 +303,10 @@ public class ExtendedScanTableUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(8, false));
+		composite.setLayout(new GridLayout(7, false));
 		//
 		createButtonToggleToolbarInfo(composite);
 		buttonToggleToolbarEdit = createButtonToggleToolbarEdit(composite);
-		buttonToggleEditModus = createButtonToggleEditModus(composite);
 		createButtonToggleToolbarSearch(composite);
 		createResetButton(composite);
 		buttonSaveScan = createSaveButton(composite);
@@ -348,28 +355,6 @@ public class ExtendedScanTableUI {
 				} else {
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DEFAULT, IApplicationImage.SIZE_16x16));
 				}
-			}
-		});
-		//
-		return button;
-	}
-
-	private Button createButtonToggleEditModus(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Enable/disable to edit the table.");
-		button.setText("");
-		button.setLayoutData(new GridData()); // GridData is needed to show/hide the control, see: enableEditModus(boolean enabled)
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ENTRY_DEFAULT, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				boolean editEnabled = !scanTableUI.isEditEnabled();
-				scanTableUI.setEditEnabled(editEnabled);
-				button.setImage(ApplicationImageFactory.getInstance().getImage((editEnabled) ? IApplicationImage.IMAGE_EDIT_ENTRY_ACTIVE : IApplicationImage.IMAGE_EDIT_ENTRY_DEFAULT, IApplicationImage.SIZE_16x16));
-				updateObject();
 			}
 		});
 		//
@@ -440,7 +425,7 @@ public class ExtendedScanTableUI {
 						}
 						//
 						if(massSpectrum != null) {
-							DatabaseFileSupport.saveMassSpectrum(DisplayUtils.getShell(), massSpectrum, "Scan" + massSpectrum.getScanNumber());
+							DatabaseFileSupport.saveMassSpectrum(e.display.getActiveShell(), massSpectrum, "Scan" + massSpectrum.getScanNumber());
 						}
 					}
 				} catch(NoConverterAvailableException e1) {
@@ -595,6 +580,7 @@ public class ExtendedScanTableUI {
 
 				if(object != null) {
 					addSignal(e.display.getActiveShell());
+					fireEditEvent();
 				} else {
 					MessageDialog.openError(e.display.getActiveShell(), "Add Signal", "Please load a scan first.");
 				}
@@ -614,6 +600,7 @@ public class ExtendedScanTableUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				deleteSignals(e.display.getActiveShell());
+				fireEditEvent();
 			}
 		});
 	}
@@ -622,6 +609,27 @@ public class ExtendedScanTableUI {
 
 		scanTableUI = new ScanTableUI(parent, SWT.VIRTUAL | SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		scanTableUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		//
+		Table table = scanTableUI.getTable();
+		table.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				super.widgetSelected(e);
+				fireEditEvent();
+			}
+		});
+		//
+		table.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+				super.keyReleased(e);
+				fireEditEvent();
+			}
+		});
 	}
 
 	private void applySettings() {
@@ -758,12 +766,21 @@ public class ExtendedScanTableUI {
 		 * Fire an update.
 		 */
 		if(fireUpdate) {
-			IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-			if(object instanceof IScan) {
-				eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, object);
-			} else if(object instanceof IPeak) {
-				eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, object);
+			IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+			if(eventBroker != null) {
+				if(object instanceof IScan) {
+					eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, object);
+				} else if(object instanceof IPeak) {
+					eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, object);
+				}
 			}
+		}
+	}
+
+	private void fireEditEvent() {
+
+		if(editListener != null) {
+			editListener.modify();
 		}
 	}
 }

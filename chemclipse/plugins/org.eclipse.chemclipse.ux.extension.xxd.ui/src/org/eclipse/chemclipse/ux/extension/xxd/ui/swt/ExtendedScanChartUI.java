@@ -14,10 +14,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createContainer;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.EnumSet;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.calculator.SubtractCalculator;
@@ -30,8 +27,6 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.types.DataType;
-import org.eclipse.chemclipse.msd.model.core.AbstractIon;
-import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
@@ -665,19 +660,11 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				List<Integer> traces = extractTraces();
-				Iterator<Integer> iterator = traces.iterator();
-				StringBuilder builder = new StringBuilder();
-				//
-				while(iterator.hasNext()) {
-					builder.append(iterator.next());
-					if(iterator.hasNext()) {
-						builder.append(" ");
-					}
-				}
-				//
+				IScanMSD scanMSD = getScanMSD();
+				int maxCopyTraces = preferenceStore.getInt(PreferenceConstants.P_MAX_COPY_SCAN_TRACES);
+				String traces = scanDataSupport.extractTracesText(scanMSD, maxCopyTraces);
 				TextTransfer textTransfer = TextTransfer.getInstance();
-				Object[] data = new Object[]{builder.toString()};
+				Object[] data = new Object[]{traces};
 				Transfer[] dataTypes = new Transfer[]{textTransfer};
 				Clipboard clipboard = new Clipboard(e.widget.getDisplay());
 				clipboard.setContents(data, dataTypes);
@@ -685,39 +672,6 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 		});
 		//
 		return button;
-	}
-
-	private List<Integer> extractTraces() {
-
-		List<Integer> traces = new ArrayList<>();
-		//
-		IScanMSD scanMSD = getScanMSD();
-		if(scanMSD != null) {
-			IScanMSD massSpectrum = scanMSD.getOptimizedMassSpectrum() != null ? scanMSD.getOptimizedMassSpectrum() : scanMSD;
-			List<IIon> ions = new ArrayList<>(massSpectrum.getIons());
-			Collections.sort(ions, (i1, i2) -> Float.compare(i2.getAbundance(), i1.getAbundance()));
-			int maxDisplayTraces = preferenceStore.getInt(PreferenceConstants.P_MAX_DISPLAY_SCAN_TRACES);
-			//
-			exitloop:
-			for(IIon ion : ions) {
-				/*
-				 * Add the trace.
-				 */
-				int trace = AbstractIon.getIon(ion.getIon());
-				if(!traces.contains(trace)) {
-					traces.add(trace);
-				}
-				//
-				if(traces.size() >= maxDisplayTraces) {
-					break exitloop;
-				}
-			}
-		}
-		/*
-		 * Sort the traces ascending.
-		 */
-		Collections.sort(traces);
-		return traces;
 	}
 
 	private void createResetButton(Composite parent) {

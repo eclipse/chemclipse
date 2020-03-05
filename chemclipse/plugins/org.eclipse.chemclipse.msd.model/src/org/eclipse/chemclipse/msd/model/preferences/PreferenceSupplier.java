@@ -32,12 +32,17 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	private static final Logger logger = Logger.getLogger(PreferenceSupplier.class);
 	//
+	public static final int MIN_TRACES = 1;
+	public static final int MAX_TRACES = Integer.MAX_VALUE;
+	//
 	public static final String P_SUBTRACT_MASS_SPECTRUM = "subtractMassSpectrum";
 	public static final String DEF_SUBTRACT_MASS_SPECTRUM = "18:200;28:1000;32:500";
 	public static final String P_USE_NOMINAL_MZ = "useNominalMZ";
 	public static final boolean DEF_USE_NOMINAL_MZ = true;
 	public static final String P_USE_NORMALIZED_SCAN = "useNormalizedScan";
 	public static final boolean DEF_USE_NORMALIZED_SCAN = true;
+	public static final String P_COPY_TRACES_CLIPBOARD = "copyTracesClipboard";
+	public static final int DEF_COPY_TRACES_CLIPBOARD = 5;
 	//
 	private static final String DELIMITER_ION_ABUNDANCE = ":";
 	private static final String DELIMITER_IONS = ";";
@@ -75,6 +80,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_SUBTRACT_MASS_SPECTRUM, DEF_SUBTRACT_MASS_SPECTRUM);
 		defaultValues.put(P_USE_NOMINAL_MZ, Boolean.toString(DEF_USE_NOMINAL_MZ));
 		defaultValues.put(P_USE_NORMALIZED_SCAN, Boolean.toString(DEF_USE_NORMALIZED_SCAN));
+		defaultValues.put(P_COPY_TRACES_CLIPBOARD, Integer.toString(DEF_COPY_TRACES_CLIPBOARD));
 		return defaultValues;
 	}
 
@@ -86,8 +92,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static void loadSessionSubtractMassSpectrum() {
 
-		IScanMSD massSpectrum = getSubtractMassSpectrum();
-		setSessionSubtractMassSpectrum(massSpectrum);
+		IScanMSD subtractMassSpectrum = getSubtractMassSpectrum();
+		setSessionSubtractMassSpectrum(subtractMassSpectrum);
 	}
 
 	public static void storeSessionSubtractMassSpectrum() {
@@ -108,11 +114,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	/**
 	 * Sets the session mass spectrum, which is used by the filter.
 	 * 
-	 * @param normalizedMassSpectrum
+	 * @param subtractMassSpectrum
 	 */
-	public static void setSessionSubtractMassSpectrum(IScanMSD normalizedMassSpectrum) {
+	public static void setSessionSubtractMassSpectrum(IScanMSD subtractMassSpectrum) {
 
-		sessionSubtractMassSpectrum = normalizedMassSpectrum;
+		sessionSubtractMassSpectrum = subtractMassSpectrum;
 	}
 
 	public static boolean isUseNominalMZ() {
@@ -183,6 +189,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return null;
 	}
 
+	public static int getMaxCopyTraces() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getInt(P_COPY_TRACES_CLIPBOARD, DEF_COPY_TRACES_CLIPBOARD);
+	}
+
 	private static IScanMSD getSubtractMassSpectrum() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
@@ -192,9 +204,14 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	private static void setSubtractMassSpectrum(IScanMSD massSpectrum) {
 
-		String value = getMassSpectrum(massSpectrum);
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		preferences.put(P_SUBTRACT_MASS_SPECTRUM, value);
+		try {
+			String value = getMassSpectrum(massSpectrum);
+			IEclipsePreferences preferences = INSTANCE().getPreferences();
+			preferences.put(P_SUBTRACT_MASS_SPECTRUM, value);
+			preferences.flush();
+		} catch(Exception e) {
+			logger.warn(e);
+		}
 	}
 
 	private static boolean getBoolean(String key, boolean def) {

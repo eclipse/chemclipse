@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,26 +24,29 @@ import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.Clipboard;
+import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
@@ -53,14 +56,11 @@ public class ExtendedSubtractScanUI {
 	private static final Logger logger = Logger.getLogger(ExtendedScanChartUI.class);
 	//
 	private TabFolder tabFolder;
-	private static final int INDEX_CHART = 0;
-	private static final int INDEX_TABLE = 1;
-	//
 	private ScanChartUI scanChartUI;
 	private ExtendedScanTableUI extendedScanTableUI;
 	//
-	private IScanMSD scanMSD;
-	private IChromatogramSelectionMSD chromatogramSelectionMSD;
+	private IScanMSD scanMSD = null;
+	private IChromatogramSelectionMSD chromatogramSelectionMSD = null;
 
 	@Inject
 	public ExtendedSubtractScanUI(Composite parent) {
@@ -70,7 +70,7 @@ public class ExtendedSubtractScanUI {
 	@Focus
 	public void setFocus() {
 
-		updateScan();
+		updateScanData(scanMSD);
 	}
 
 	public void update(Object object) {
@@ -80,12 +80,8 @@ public class ExtendedSubtractScanUI {
 		} else if(object instanceof IScanMSD) {
 			scanMSD = (IScanMSD)object;
 		}
-		updateScan();
-	}
-
-	private void updateScan() {
-
-		updateScanData();
+		//
+		updateScanData(scanMSD);
 	}
 
 	private void initialize(Composite parent) {
@@ -94,6 +90,8 @@ public class ExtendedSubtractScanUI {
 		//
 		createToolbarMain(parent);
 		createScanTabFolderSection(parent);
+		//
+		loadSessionMassSpectrum(parent.getDisplay());
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -102,13 +100,12 @@ public class ExtendedSubtractScanUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(7, false));
+		composite.setLayout(new GridLayout(6, false));
 		//
 		createAddSelectedScanButton(composite);
 		createAddCombinedScanButton(composite);
 		createClearSessionButton(composite);
-		createLoadSessionButton(composite);
-		createStoreSessionButton(composite);
+		createButtonCopyTracesClipboard(composite);
 		createSaveButton(composite);
 		createSettingsButton(composite);
 	}
@@ -127,7 +124,7 @@ public class ExtendedSubtractScanUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				updateScanData();
+				updateScanData(scanMSD);
 			}
 		});
 		//
@@ -159,6 +156,15 @@ public class ExtendedSubtractScanUI {
 		extendedScanTableUI = new ExtendedScanTableUI(composite);
 		extendedScanTableUI.forceEnableEditModus(true);
 		extendedScanTableUI.setFireUpdate(false);
+		//
+		extendedScanTableUI.addEditListener(new EditListener() {
+
+			@Override
+			public void modify() {
+
+				saveSessionMassSpectrum(null, scanMSD);
+			}
+		});
 	}
 
 	private void createAddSelectedScanButton(Composite parent) {
@@ -178,10 +184,8 @@ public class ExtendedSubtractScanUI {
 					IScanMSD massSpectrum1 = PreferenceSupplier.getSessionSubtractMassSpectrum();
 					IVendorMassSpectrum massSpectrum2 = chromatogramSelectionMSD.getSelectedScan();
 					boolean useNormalize = org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNormalizedScan();
-					IScanMSD normalizedMassSpectrum = FilterSupport.getCombinedMassSpectrum(massSpectrum1, massSpectrum2, null, useNormalize);
-					PreferenceSupplier.setSessionSubtractMassSpectrum(normalizedMassSpectrum);
-					IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-					eventBroker.send(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, true);
+					IScanMSD subtractMassSpectrum = FilterSupport.getCombinedMassSpectrum(massSpectrum1, massSpectrum2, null, useNormalize);
+					saveSessionMassSpectrum(e.display, subtractMassSpectrum);
 				}
 			}
 		});
@@ -201,10 +205,8 @@ public class ExtendedSubtractScanUI {
 					boolean useNormalize = org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNormalizedScan();
 					IScanMSD massSpectrum1 = PreferenceSupplier.getSessionSubtractMassSpectrum();
 					IScanMSD massSpectrum2 = FilterSupport.getCombinedMassSpectrum(chromatogramSelectionMSD, null, useNormalize);
-					IScanMSD normalizedMassSpectrum = FilterSupport.getCombinedMassSpectrum(massSpectrum1, massSpectrum2, null, useNormalize);
-					PreferenceSupplier.setSessionSubtractMassSpectrum(normalizedMassSpectrum);
-					IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-					eventBroker.send(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, true);
+					IScanMSD subtractMassSpectrum = FilterSupport.getCombinedMassSpectrum(massSpectrum1, massSpectrum2, null, useNormalize);
+					saveSessionMassSpectrum(e.display, subtractMassSpectrum);
 				}
 			}
 		});
@@ -220,58 +222,42 @@ public class ExtendedSubtractScanUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				MessageBox messageBox = new MessageBox(DisplayUtils.getShell(button), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+				MessageBox messageBox = new MessageBox(e.display.getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 				messageBox.setText("Clear Session");
 				messageBox.setMessage("Would you like to clear the session subtract scan?");
 				if(messageBox.open() == SWT.YES) {
 					//
 					scanMSD = null;
-					updateScan();
-					//
-					PreferenceSupplier.setSessionSubtractMassSpectrum(null);
-					IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-					eventBroker.send(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, true);
+					updateScanData(scanMSD);
+					saveSessionMassSpectrum(e.display, null);
 				}
 			}
 		});
 	}
 
-	private void createLoadSessionButton(Composite parent) {
+	private Button createButtonCopyTracesClipboard(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Load the session spectrum.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SUBTRACT_LOAD_SESSION_MASS_SPECTRUM, IApplicationImage.SIZE_16x16));
+		button.setToolTipText("Copy the traces to clipboard.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_COPY_CLIPBOARD, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				MessageBox messageBox = new MessageBox(DisplayUtils.getShell(button), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-				messageBox.setText("Load Session");
-				messageBox.setMessage("Would you like to load the session subtract scan?");
-				if(messageBox.open() == SWT.YES) {
-					PreferenceSupplier.loadSessionSubtractMassSpectrum();
-					IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-					eventBroker.send(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, true);
-				}
+				ScanDataSupport scanDataSupport = new ScanDataSupport();
+				int maxCopyTraces = PreferenceSupplier.getMaxCopyTraces();
+				String traces = scanDataSupport.extractTracesText(scanMSD, maxCopyTraces);
+				TextTransfer textTransfer = TextTransfer.getInstance();
+				Object[] data = new Object[]{traces};
+				Transfer[] dataTypes = new Transfer[]{textTransfer};
+				Clipboard clipboard = new Clipboard(e.widget.getDisplay());
+				clipboard.setContents(data, dataTypes);
 			}
 		});
-	}
-
-	private void createStoreSessionButton(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Store the session spectrum.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SUBTRACT_STORE_SESSION_MASS_SPECTRUM, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				PreferenceSupplier.storeSessionSubtractMassSpectrum();
-				MessageDialog.openInformation(DisplayUtils.getShell(), "Session", "The session subtract scan has been stored successfully.");
-			}
-		});
+		//
+		return button;
 	}
 
 	private Button createSaveButton(Composite parent) {
@@ -286,7 +272,7 @@ public class ExtendedSubtractScanUI {
 
 				try {
 					if(scanMSD != null) {
-						DatabaseFileSupport.saveMassSpectrum(DisplayUtils.getShell(button), scanMSD, "SubtractMS");
+						DatabaseFileSupport.saveMassSpectrum(e.display.getActiveShell(), scanMSD, "SubtractMS");
 					}
 				} catch(NoConverterAvailableException e1) {
 					logger.warn(e1);
@@ -307,16 +293,11 @@ public class ExtendedSubtractScanUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IPreferencePage preferencePageScans = new PreferencePageScans();
-				preferencePageScans.setTitle("Scan Settings");
-				IPreferencePage preferencePageSubtract = new PreferencePageSubtract();
-				preferencePageSubtract.setTitle("Subtract Settings");
-				//
 				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageScans));
-				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageSubtract));
+				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePageScans()));
+				preferenceManager.addToRoot(new PreferenceNode("2", new PreferencePageSubtract()));
 				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(DisplayUtils.getShell(button), preferenceManager);
+				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
 				preferenceDialog.create();
 				preferenceDialog.setMessage("Settings");
 				if(preferenceDialog.open() == Window.OK) {
@@ -332,20 +313,64 @@ public class ExtendedSubtractScanUI {
 
 	private void applySettings() {
 
-		updateScan();
+		updateScanData(scanMSD);
 	}
 
-	private void updateScanData() {
+	private void updateScanData(IScanMSD scanMSD) {
 
 		if(tabFolder != null && scanChartUI != null) {
-			switch(tabFolder.getSelectionIndex()) {
-				case INDEX_CHART:
-					scanChartUI.setInput(scanMSD);
-					break;
-				case INDEX_TABLE:
-					extendedScanTableUI.update(scanMSD);
-					break;
+			/*
+			 * Chart
+			 */
+			if(scanMSD == null) {
+				scanChartUI.deleteSeries();
+				scanChartUI.getBaseChart().redraw();
+			} else {
+				scanChartUI.setInput(scanMSD);
 			}
+			/*
+			 * Table
+			 */
+			if(extendedScanTableUI.isVisible()) {
+				extendedScanTableUI.update(scanMSD);
+			}
+		}
+	}
+
+	private void loadSessionMassSpectrum(Display display) {
+
+		PreferenceSupplier.loadSessionSubtractMassSpectrum();
+		fireUpdateEvent(display);
+	}
+
+	/**
+	 * If the display is set to null, no event is fired.
+	 * 
+	 * @param display
+	 * @param scanMSD
+	 */
+	private void saveSessionMassSpectrum(Display display, IScanMSD scanMSD) {
+
+		PreferenceSupplier.setSessionSubtractMassSpectrum(scanMSD);
+		PreferenceSupplier.storeSessionSubtractMassSpectrum();
+		//
+		if(display != null) {
+			fireUpdateEvent(display);
+		}
+	}
+
+	private void fireUpdateEvent(Display display) {
+
+		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+		if(eventBroker != null) {
+			display.asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+
+					eventBroker.send(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, true);
+				}
+			});
 		}
 	}
 }

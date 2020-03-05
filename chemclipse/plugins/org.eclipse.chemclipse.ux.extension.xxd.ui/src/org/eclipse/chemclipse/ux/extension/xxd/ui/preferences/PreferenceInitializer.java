@@ -115,7 +115,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_SCAN_LABEL_MODULO_INTENSITIES, PreferenceConstants.DEF_SCAN_LABEL_MODULO_INTENSITIES);
 		store.setDefault(PreferenceConstants.P_AUTOFOCUS_SUBTRACT_SCAN_PART, PreferenceConstants.DEF_AUTOFOCUS_SUBTRACT_SCAN_PART);
 		store.setDefault(PreferenceConstants.P_SCAN_CHART_ENABLE_COMPRESS, PreferenceConstants.DEF_SCAN_CHART_ENABLE_COMPRESS);
-		store.setDefault(PreferenceConstants.P_MAX_DISPLAY_SCAN_TRACES, PreferenceConstants.DEF_MAX_DISPLAY_SCAN_TRACES);
+		store.setDefault(PreferenceConstants.P_MAX_COPY_SCAN_TRACES, PreferenceConstants.DEF_MAX_COPY_SCAN_TRACES);
 		store.setDefault(PreferenceConstants.P_SHOW_SUBTRACT_DIALOG, PreferenceConstants.DEF_SHOW_SUBTRACT_DIALOG);
 		store.setDefault(PreferenceConstants.P_ENABLE_MULTI_SUBTRACT, PreferenceConstants.DEF_ENABLE_MULTI_SUBTRACT);
 		store.setDefault(PreferenceConstants.P_LEAVE_EDIT_AFTER_IDENTIFICATION, PreferenceConstants.DEF_LEAVE_EDIT_AFTER_IDENTIFICATION);

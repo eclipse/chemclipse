@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,11 +12,17 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.msd.model.core.AbstractIon;
+import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
@@ -38,6 +44,52 @@ public class ScanDataSupport {
 	public static final String[] SIGNAL_TYPES_WSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString(), SignalType.PROFILE.toString()};
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0##");
+
+	public String extractTracesText(IScanMSD scanMSD, int maxCopyTraces) {
+
+		List<Integer> traces = extractTracesList(scanMSD, maxCopyTraces);
+		Iterator<Integer> iterator = traces.iterator();
+		StringBuilder builder = new StringBuilder();
+		//
+		while(iterator.hasNext()) {
+			builder.append(iterator.next());
+			if(iterator.hasNext()) {
+				builder.append(" ");
+			}
+		}
+		//
+		return builder.toString();
+	}
+
+	public List<Integer> extractTracesList(IScanMSD scanMSD, int maxCopyTraces) {
+
+		List<Integer> traces = new ArrayList<>();
+		if(scanMSD != null) {
+			IScanMSD massSpectrum = scanMSD.getOptimizedMassSpectrum() != null ? scanMSD.getOptimizedMassSpectrum() : scanMSD;
+			List<IIon> ions = new ArrayList<>(massSpectrum.getIons());
+			Collections.sort(ions, (i1, i2) -> Float.compare(i2.getAbundance(), i1.getAbundance()));
+			//
+			exitloop:
+			for(IIon ion : ions) {
+				/*
+				 * Add the trace.
+				 */
+				int trace = AbstractIon.getIon(ion.getIon());
+				if(!traces.contains(trace)) {
+					traces.add(trace);
+				}
+				//
+				if(traces.size() >= maxCopyTraces) {
+					break exitloop;
+				}
+			}
+		}
+		/*
+		 * Sort the traces ascending.
+		 */
+		Collections.sort(traces);
+		return traces;
+	}
 
 	public String getRetentionTime(IScan scan) {
 

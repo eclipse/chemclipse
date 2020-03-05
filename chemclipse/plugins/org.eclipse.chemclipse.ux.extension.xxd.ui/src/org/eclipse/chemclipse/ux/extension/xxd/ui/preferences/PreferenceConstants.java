@@ -230,8 +230,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final boolean DEF_AUTOFOCUS_SUBTRACT_SCAN_PART = true;
 	public static final String P_SCAN_CHART_ENABLE_COMPRESS = "scanChartEnableCompress";
 	public static final boolean DEF_SCAN_CHART_ENABLE_COMPRESS = false;
-	public static final String P_MAX_DISPLAY_SCAN_TRACES = "maxDisplayScanTraces";
-	public static final int DEF_MAX_DISPLAY_SCAN_TRACES = DEF_SCAN_TRACES;
+	public static final String P_MAX_COPY_SCAN_TRACES = "maxCopyScanTraces";
+	public static final int DEF_MAX_COPY_SCAN_TRACES = DEF_SCAN_TRACES;
 	public static final String P_ENABLE_MULTI_SUBTRACT = "enableMultiSubtract";
 	public static final boolean DEF_ENABLE_MULTI_SUBTRACT = false;
 	public static final String P_SHOW_SUBTRACT_DIALOG = "showSubtractDialog";

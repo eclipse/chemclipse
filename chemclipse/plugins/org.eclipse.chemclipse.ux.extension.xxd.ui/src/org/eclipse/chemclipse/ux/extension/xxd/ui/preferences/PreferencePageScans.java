@@ -49,7 +49,7 @@ public class PreferencePageScans extends FieldEditorPreferencePage implements IW
 		addField(new BooleanFieldEditor(PreferenceConstants.P_ENABLE_MULTI_SUBTRACT, "Enable multi subtract modus", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_LEAVE_EDIT_AFTER_IDENTIFICATION, "Leave edit after identification", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_SUBTRACT_DIALOG, "Show subtract scan preferences dialog", getFieldEditorParent()));
-		addField(new SpinnerFieldEditor(PreferenceConstants.P_MAX_DISPLAY_SCAN_TRACES, "Copy Traces", PreferenceConstants.MIN_TRACES, PreferenceConstants.MAX_TRACES, getFieldEditorParent()));
+		addField(new SpinnerFieldEditor(PreferenceConstants.P_MAX_COPY_SCAN_TRACES, "Copy Traces", PreferenceConstants.MIN_TRACES, PreferenceConstants.MAX_TRACES, getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {
