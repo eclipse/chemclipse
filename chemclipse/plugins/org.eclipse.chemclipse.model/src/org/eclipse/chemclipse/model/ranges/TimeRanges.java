@@ -18,7 +18,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -171,9 +173,14 @@ public class TimeRanges {
 
 	public boolean exportItems(File file) {
 
-		try {
-			PrintWriter printWriter = new PrintWriter(file);
-			Iterator<TimeRange> iterator = values().iterator();
+		try (PrintWriter printWriter = new PrintWriter(file)) {
+			/*
+			 * Sort the items.
+			 */
+			List<TimeRange> timeRanges = new ArrayList<>(values());
+			Collections.sort(timeRanges, (r1, r2) -> Integer.compare(r1.getStart(), r2.getStart()));
+			//
+			Iterator<TimeRange> iterator = timeRanges.iterator();
 			while(iterator.hasNext()) {
 				StringBuilder builder = new StringBuilder();
 				TimeRange template = iterator.next();
@@ -181,7 +188,6 @@ public class TimeRanges {
 				printWriter.println(builder.toString());
 			}
 			printWriter.flush();
-			printWriter.close();
 			return true;
 		} catch(FileNotFoundException e) {
 			logger.warn(e);

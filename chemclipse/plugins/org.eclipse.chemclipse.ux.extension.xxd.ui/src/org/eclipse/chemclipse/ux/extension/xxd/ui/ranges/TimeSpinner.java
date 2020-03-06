@@ -46,6 +46,9 @@ public class TimeSpinner extends Composite {
 	private Label label;
 	private Label spacer;
 	private Text text;
+	private Button buttonDecrease;
+	private Button buttonIncrease;
+	//
 	private TimeRange.Marker marker;
 	private TimeRange timeRange = null;
 	private IUpdateListener updateListener = null;
@@ -78,13 +81,12 @@ public class TimeSpinner extends Composite {
 	public void update(TimeRange timeRange) {
 
 		this.timeRange = timeRange;
-		if(timeRange != null) {
-			text.setEnabled(true);
-			text.setText(extractRetentionTime());
-		} else {
-			text.setEnabled(false);
-			text.setText("");
-		}
+		boolean enabled = timeRange != null;
+		//
+		text.setEnabled(enabled);
+		text.setText(enabled ? extractRetentionTime() : "");
+		buttonDecrease.setEnabled(enabled);
+		buttonIncrease.setEnabled(enabled);
 	}
 
 	private void createControl() {
@@ -99,8 +101,8 @@ public class TimeSpinner extends Composite {
 		spacer = createSpacer(this);
 		//
 		text = createText(this);
-		createButtonModify(this, false);
-		createButtonModify(this, true);
+		buttonDecrease = createButtonModify(this, false);
+		buttonIncrease = createButtonModify(this, true);
 		//
 		updateLabel();
 	}
