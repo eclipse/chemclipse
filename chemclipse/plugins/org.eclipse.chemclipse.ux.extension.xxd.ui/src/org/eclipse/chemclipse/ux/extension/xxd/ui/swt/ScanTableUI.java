@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -243,7 +243,7 @@ public class ScanTableUI extends ExtendedTableViewer {
 		for(int i = 0; i < tableViewerColumns.size(); i++) {
 			TableViewerColumn tableViewerColumn = tableViewerColumns.get(i);
 			String label = tableViewerColumn.getColumn().getText();
-			if(label.equals(ScanLabelProvider.ABUNDANCE)) {
+			if(label.equals(ScanLabelProvider.INTENSITY)) {
 				tableViewerColumn.setEditingSupport(new ScanSignalEditingSupport(this, label));
 			}
 		}

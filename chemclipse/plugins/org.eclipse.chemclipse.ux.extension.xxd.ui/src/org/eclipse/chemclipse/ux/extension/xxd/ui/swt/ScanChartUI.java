@@ -12,12 +12,10 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
@@ -37,34 +35,28 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.BarSeriesYComp
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.SignalType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanChartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swtchart.IAxis.Position;
 import org.eclipse.swtchart.IBarSeries;
 import org.eclipse.swtchart.IBarSeries.BarWidthStyle;
 import org.eclipse.swtchart.ICustomPaintListener;
 import org.eclipse.swtchart.ILineSeries;
 import org.eclipse.swtchart.IPlotArea;
 import org.eclipse.swtchart.ISeries;
-import org.eclipse.swtchart.extensions.axisconverter.MillisecondsToMinuteConverter;
-import org.eclipse.swtchart.extensions.axisconverter.PercentageConverter;
 import org.eclipse.swtchart.extensions.barcharts.IBarSeriesData;
 import org.eclipse.swtchart.extensions.barcharts.IBarSeriesSettings;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.IAxisSettings;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
-import org.eclipse.swtchart.extensions.core.IPrimaryAxisSettings;
-import org.eclipse.swtchart.extensions.core.ISecondaryAxisSettings;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
 import org.eclipse.swtchart.extensions.core.RangeRestriction;
 import org.eclipse.swtchart.extensions.core.ScrollableChart;
-import org.eclipse.swtchart.extensions.core.SecondaryAxisSettings;
 import org.eclipse.swtchart.extensions.customcharts.MassSpectrumChart.LabelOption;
 import org.eclipse.swtchart.extensions.exceptions.SeriesException;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
@@ -96,6 +88,8 @@ public class ScanChartUI extends ScrollableChart {
 	private DecimalFormat decimalFormatLowIntensity = ValueFormat.getDecimalFormatEnglish("0.0000");
 	private ScanChartSupport scanChartSupport = new ScanChartSupport();
 	private Font font = DisplayUtils.getDisplay().getSystemFont();
+	//
+	private ScanDataSupport scanDataSupport = new ScanDataSupport();
 
 	private class LabelPaintListener implements ICustomPaintListener {
 
@@ -476,13 +470,13 @@ public class ScanChartUI extends ScrollableChart {
 		//
 		switch(dataType) {
 			case MSD_NOMINAL:
-				setDataTypeMSD(chartSettings);
+				scanDataSupport.setDataTypeMSD(chartSettings);
 				break;
 			case MSD_TANDEM:
-				setDataTypeMSD(chartSettings);
+				scanDataSupport.setDataTypeMSD(chartSettings);
 				break;
 			case MSD_HIGHRES:
-				setDataTypeMSD(chartSettings);
+				scanDataSupport.setDataTypeMSD(chartSettings);
 				break;
 			case CSD:
 				labelPaintListener = labelPaintListenerY;
@@ -490,14 +484,14 @@ public class ScanChartUI extends ScrollableChart {
 				rangeRestriction.setExtendMinX(0.1d);
 				rangeRestriction.setExtendMaxX(0.1d);
 				rangeRestriction.setZeroY(false);
-				setDataTypeCSD(chartSettings);
+				scanDataSupport.setDataTypeCSD(chartSettings);
 				break;
 			case WSD:
-				setDataTypeWSD(chartSettings);
+				scanDataSupport.setDataTypeWSD(chartSettings);
 				rangeRestriction.setZeroY(false);
 				break;
 			default:
-				setDataTypeMSD(chartSettings);
+				scanDataSupport.setDataTypeMSD(chartSettings);
 				break;
 		}
 		//
@@ -505,6 +499,7 @@ public class ScanChartUI extends ScrollableChart {
 		addSeriesLabelMarker(labelPaintListener);
 	}
 
+	@SuppressWarnings("rawtypes")
 	private void addBarSeriesData(List<IBarSeriesData> barSeriesDataList) {
 
 		/*
@@ -543,6 +538,7 @@ public class ScanChartUI extends ScrollableChart {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	private void addLineSeriesData(List<ILineSeriesData> lineSeriesDataList) {
 
 		/*
@@ -570,66 +566,6 @@ public class ScanChartUI extends ScrollableChart {
 			adjustRange(true);
 			baseChart.redraw();
 		}
-	}
-
-	private void setDataTypeMSD(IChartSettings chartSettings) {
-
-		setPrimaryAxisSet(chartSettings, "m/z", true, "Intensity");
-		clearSecondaryAxes(chartSettings);
-		addSecondaryAxisY(chartSettings, "Intensity [%]");
-	}
-
-	private void setDataTypeCSD(IChartSettings chartSettings) {
-
-		setPrimaryAxisSet(chartSettings, "Retention Time [ms]", false, "Current");
-		clearSecondaryAxes(chartSettings);
-		addSecondaryAxisX(chartSettings, "Minutes");
-		addSecondaryAxisY(chartSettings, "Current [%]");
-	}
-
-	private void setDataTypeWSD(IChartSettings chartSettings) {
-
-		setPrimaryAxisSet(chartSettings, "wavelength [nm]", true, "Intensity");
-		clearSecondaryAxes(chartSettings);
-		addSecondaryAxisY(chartSettings, "Intensity [%]");
-	}
-
-	private void clearSecondaryAxes(IChartSettings chartSettings) {
-
-		chartSettings.getSecondaryAxisSettingsListX().clear();
-		chartSettings.getSecondaryAxisSettingsListY().clear();
-	}
-
-	private void setPrimaryAxisSet(IChartSettings chartSettings, String xAxisTitle, boolean xAxisVisible, String yAxisTitle) {
-
-		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
-		primaryAxisSettingsX.setTitle(xAxisTitle);
-		primaryAxisSettingsX.setDecimalFormat(new DecimalFormat(("0.0##"), new DecimalFormatSymbols(Locale.ENGLISH)));
-		primaryAxisSettingsX.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-		primaryAxisSettingsX.setVisible(xAxisVisible);
-		//
-		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
-		primaryAxisSettingsY.setTitle(yAxisTitle);
-		primaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.0#E0"), new DecimalFormatSymbols(Locale.ENGLISH)));
-		primaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-	}
-
-	private void addSecondaryAxisX(IChartSettings chartSettings, String xAxisTitle) {
-
-		ISecondaryAxisSettings secondaryAxisSettingsX = new SecondaryAxisSettings(xAxisTitle, new MillisecondsToMinuteConverter());
-		secondaryAxisSettingsX.setPosition(Position.Primary);
-		secondaryAxisSettingsX.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
-		secondaryAxisSettingsX.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-		chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX);
-	}
-
-	private void addSecondaryAxisY(IChartSettings chartSettings, String yAxisTitle) {
-
-		ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings(yAxisTitle, new PercentageConverter(SWT.VERTICAL, true));
-		secondaryAxisSettingsY.setPosition(Position.Secondary);
-		secondaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
-		secondaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-		chartSettings.getSecondaryAxisSettingsListY().add(secondaryAxisSettingsY);
 	}
 
 	private void addSeriesLabelMarker(LabelPaintListener labelPaintListener) {
@@ -691,6 +627,7 @@ public class ScanChartUI extends ScrollableChart {
 		return label;
 	}
 
+	@SuppressWarnings({"rawtypes", "deprecation"})
 	private List<BarSeriesValue> getBarSeriesValuesList() {
 
 		List<BarSeriesValue> barSeriesIons = new ArrayList<BarSeriesValue>();

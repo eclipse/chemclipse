@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,6 +21,8 @@ import org.eclipse.chemclipse.msd.model.core.IIonTransition;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -29,17 +31,26 @@ import org.eclipse.swt.graphics.Image;
 public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabelProvider {
 
 	public static final String NO_VALUE = "n.a.";
-	public static final String ABUNDANCE = "abundance";
 	//
-	public static final String[] TITLES_MSD_NOMINAL = {"m/z", ABUNDANCE};
+	public static final String INTENSITY = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_TITLE_Y_AXIS_INTENSITY);
+	public static final String ION = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_TITLE_X_AXIS_MZ);
+	public static final String WAVELENGTH = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_TITLE_X_AXIS_WAVELENGTH);
+	public static final String MINUTES = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_TITLE_X_AXIS_MINUTES);
+	public static final String PARENT_ION = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_TITLE_X_AXIS_PARENT_MZ);
+	public static final String PARENT_RESOLUTION = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_TITLE_X_AXIS_PARENT_RESOLUTION);
+	public static final String DAUGHTER_ION = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_TITLE_X_AXIS_DAUGHTER_MZ);
+	public static final String DAUGHTER_RESOLUTION = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_TITLE_X_AXIS_DAUGHTER_RESOLUTION);
+	public static final String COLLISION_ENERGY = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_TITLE_X_AXIS_COLLISION_ENERGY);
+	//
+	public static final String[] TITLES_MSD_NOMINAL = {ION, INTENSITY};
 	public static final int[] BOUNDS_MSD_NOMINAL = {150, 150};
-	public static final String[] TITLES_MSD_TANDEM = {"m/z", ABUNDANCE, "parent m/z", "parent resolution", "daughter m/z", "daughter resolution", "collision energy"};
+	public static final String[] TITLES_MSD_TANDEM = {ION, INTENSITY, PARENT_ION, PARENT_RESOLUTION, DAUGHTER_ION, DAUGHTER_RESOLUTION, COLLISION_ENERGY};
 	public static final int[] BOUNDS_MSD_TANDEM = {100, 100, 120, 120, 120, 120, 120};
-	public static final String[] TITLES_MSD_HIGHRES = {"m/z", ABUNDANCE};
+	public static final String[] TITLES_MSD_HIGHRES = {ION, INTENSITY};
 	public static final int[] BOUNDS_MSD_HIGHRES = {150, 150};
-	public static final String[] TITLES_CSD = {"retention time (minutes)", ABUNDANCE};
+	public static final String[] TITLES_CSD = {MINUTES, INTENSITY};
 	public static final int[] BOUNDS_CSD = {150, 150};
-	public static final String[] TITLES_WSD = {"wavelength", ABUNDANCE};
+	public static final String[] TITLES_WSD = {WAVELENGTH, INTENSITY};
 	public static final int[] BOUNDS_WSD = {150, 150};
 	public static final String[] TITLES_EMPTY = {NO_VALUE};
 	public static final int[] BOUNDS_EMPTY = {150};

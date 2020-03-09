@@ -22,11 +22,17 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EditorUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.preference.PreferenceDialog;
+import org.eclipse.jface.preference.PreferenceManager;
+import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -95,11 +101,12 @@ public class ExtendedScanBrowseUI {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(3, false));
+		composite.setLayout(new GridLayout(4, false));
 		//
 		buttonPreviousScan = createPreviousReferenceScanButton(composite);
 		comboChromatograms = createReferenceCombo(composite);
 		buttonNextScan = createNextReferenceScanButton(composite);
+		createSettingsButton(composite);
 		//
 		return composite;
 	}
@@ -168,6 +175,34 @@ public class ExtendedScanBrowseUI {
 			}
 		});
 		return button;
+	}
+
+	private void createSettingsButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Open the Settings");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				PreferenceManager preferenceManager = new PreferenceManager();
+				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePageScans()));
+				//
+				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
+				preferenceDialog.create();
+				preferenceDialog.setMessage("Settings");
+				if(preferenceDialog.open() == Window.OK) {
+					try {
+						// Update the chart.
+					} catch(Exception e1) {
+						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the chart settings.");
+					}
+				}
+			}
+		});
 	}
 
 	private Composite createToolbarInfo(Composite parent) {

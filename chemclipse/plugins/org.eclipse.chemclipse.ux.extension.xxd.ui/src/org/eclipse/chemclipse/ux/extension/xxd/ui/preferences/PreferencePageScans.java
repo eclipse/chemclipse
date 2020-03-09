@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpinnerFieldEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -33,6 +34,17 @@ public class PreferencePageScans extends FieldEditorPreferencePage implements IW
 
 	public void createFieldEditors() {
 
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("When changing the label fields, a restart is required.", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_TITLE_X_AXIS_MZ, "Ion [m/z]:", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_TITLE_X_AXIS_PARENT_MZ, "Parent Ion [m/z]:", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_TITLE_X_AXIS_PARENT_RESOLUTION, "Parent Resolution:", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_TITLE_X_AXIS_DAUGHTER_MZ, "Daughter Ion [m/z]:", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_TITLE_X_AXIS_DAUGHTER_RESOLUTION, "Daughter Resolution:", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_TITLE_X_AXIS_COLLISION_ENERGY, "Collision Energy [eV]:", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_TITLE_X_AXIS_WAVELENGTH, "Wavelength [nm]:", getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.P_SCAN_LABEL_FONT_NAME, "Font Name:", getFieldEditorParent()));
 		addField(new SpinnerFieldEditor(PreferenceConstants.P_SCAN_LABEL_FONT_SIZE, "Font Size:", PreferenceConstants.MIN_FONT_SIZE, PreferenceConstants.MAX_FONT_SIZE, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_SCAN_LABEL_FONT_STYLE, "Font Style:", PreferenceConstants.FONT_STYLES, getFieldEditorParent()));

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -45,7 +45,7 @@ public class ScanSignalEditingSupport extends EditingSupport {
 	@Override
 	protected boolean canEdit(Object element) {
 
-		if(column.equals(ScanLabelProvider.ABUNDANCE)) {
+		if(column.equals(ScanLabelProvider.INTENSITY)) {
 			return tableViewer.isEditEnabled();
 		}
 		return false;
@@ -55,7 +55,7 @@ public class ScanSignalEditingSupport extends EditingSupport {
 	protected Object getValue(Object element) {
 
 		boolean editIsEnabled = tableViewer.isEditEnabled();
-		if(editIsEnabled && column.equals(ScanLabelProvider.ABUNDANCE)) {
+		if(editIsEnabled && column.equals(ScanLabelProvider.INTENSITY)) {
 			if(element instanceof IIon) {
 				IIon ion = (IIon)element;
 				return Float.toString(ion.getAbundance());
@@ -73,7 +73,7 @@ public class ScanSignalEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 
-		if(column.equals(ScanLabelProvider.ABUNDANCE)) {
+		if(column.equals(ScanLabelProvider.INTENSITY)) {
 			float abundance = parseValue(value);
 			if(abundance > 0.0f) {
 				if(element instanceof IIon) {

@@ -39,14 +39,12 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.LibraryServ
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChartConfigSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.AxisConfig.ChartAxis;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
@@ -648,11 +646,8 @@ public class ExtendedComparisonScanUI implements ConfigurableUI<ComparisonScanUI
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IPreferencePage preferencePageScans = new PreferencePageScans();
-				preferencePageScans.setTitle("Scan Settings");
-				//
 				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageScans));
+				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePageScans()));
 				//
 				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
 				preferenceDialog.create();

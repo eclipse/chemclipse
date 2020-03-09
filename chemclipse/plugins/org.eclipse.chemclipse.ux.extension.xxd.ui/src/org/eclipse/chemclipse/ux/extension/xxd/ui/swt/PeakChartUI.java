@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,37 +11,27 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakChartSupport;
 import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swtchart.IAxis.Position;
 import org.eclipse.swtchart.ILineSeries;
-import org.eclipse.swtchart.extensions.axisconverter.MillisecondsToMinuteConverter;
-import org.eclipse.swtchart.extensions.axisconverter.PercentageConverter;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
-import org.eclipse.swtchart.extensions.core.IPrimaryAxisSettings;
-import org.eclipse.swtchart.extensions.core.ISecondaryAxisSettings;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
 import org.eclipse.swtchart.extensions.core.RangeRestriction;
 import org.eclipse.swtchart.extensions.core.ScrollableChart;
-import org.eclipse.swtchart.extensions.core.SecondaryAxisSettings;
 import org.eclipse.swtchart.extensions.exceptions.SeriesException;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
@@ -57,6 +47,7 @@ public class PeakChartUI extends ScrollableChart {
 	private static final float HEIGHT_0 = 0.0f;
 	//
 	private PeakChartSupport peakChartSupport = new PeakChartSupport();
+	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public PeakChartUI() {
 		super();
@@ -108,6 +99,19 @@ public class PeakChartUI extends ScrollableChart {
 			}
 			addLineSeriesData(lineSeriesDataList);
 		}
+	}
+
+	public void setDataType(IChartSettings chartSettings) {
+
+		String titleX = preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_MILLISECONDS);
+		String titleX1 = preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_MINUTES);
+		String titleY = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_INTENSITY);
+		String titleY1 = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_RELATIVE_INTENSITY);
+		//
+		ChartSupport.setPrimaryAxisSet(chartSettings, titleX, false, titleY);
+		ChartSupport.clearSecondaryAxes(chartSettings);
+		ChartSupport.addSecondaryAxisX(chartSettings, titleX1);
+		ChartSupport.addSecondaryAxisY(chartSettings, titleY1);
 	}
 
 	private List<ILineSeriesData> getPeakSeriesData(IPeak peak, boolean mirrored, String postfix) {
@@ -197,78 +201,17 @@ public class PeakChartUI extends ScrollableChart {
 		IChartSettings chartSettings = getChartSettings();
 		//
 		if(peak instanceof IPeakMSD) {
-			setDataTypeMSD(chartSettings);
+			setDataType(chartSettings);
 		} else if(peak instanceof IPeakCSD) {
-			setDataTypeCSD(chartSettings);
+			setDataType(chartSettings);
 		} else if(peak instanceof IPeakWSD) {
-			setDataTypeWSD(chartSettings);
+			setDataType(chartSettings);
 		}
 		//
 		applySettings(chartSettings);
 	}
 
-	private void setDataTypeMSD(IChartSettings chartSettings) {
-
-		setPrimaryAxisSet(chartSettings, "Retention Time [ms]", false, "Intensity");
-		clearSecondaryAxes(chartSettings);
-		addSecondaryAxisX(chartSettings, "Minutes");
-		addSecondaryAxisY(chartSettings, "Intensity [%]");
-	}
-
-	private void setDataTypeCSD(IChartSettings chartSettings) {
-
-		setPrimaryAxisSet(chartSettings, "Retention Time [ms]", false, "Current");
-		clearSecondaryAxes(chartSettings);
-		addSecondaryAxisX(chartSettings, "Minutes");
-		addSecondaryAxisY(chartSettings, "Current [%]");
-	}
-
-	private void setDataTypeWSD(IChartSettings chartSettings) {
-
-		setPrimaryAxisSet(chartSettings, "Retention Time [ms]", false, "Intensity");
-		clearSecondaryAxes(chartSettings);
-		addSecondaryAxisX(chartSettings, "Minutes");
-		addSecondaryAxisY(chartSettings, "Intensity [%]");
-	}
-
-	private void clearSecondaryAxes(IChartSettings chartSettings) {
-
-		chartSettings.getSecondaryAxisSettingsListX().clear();
-		chartSettings.getSecondaryAxisSettingsListY().clear();
-	}
-
-	private void setPrimaryAxisSet(IChartSettings chartSettings, String xAxisTitle, boolean xAxisVisible, String yAxisTitle) {
-
-		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
-		primaryAxisSettingsX.setTitle(xAxisTitle);
-		primaryAxisSettingsX.setDecimalFormat(new DecimalFormat(("0.0##"), new DecimalFormatSymbols(Locale.ENGLISH)));
-		primaryAxisSettingsX.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-		primaryAxisSettingsX.setVisible(xAxisVisible);
-		//
-		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
-		primaryAxisSettingsY.setTitle(yAxisTitle);
-		primaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.0#E0"), new DecimalFormatSymbols(Locale.ENGLISH)));
-		primaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-	}
-
-	private void addSecondaryAxisX(IChartSettings chartSettings, String xAxisTitle) {
-
-		ISecondaryAxisSettings secondaryAxisSettingsX = new SecondaryAxisSettings(xAxisTitle, new MillisecondsToMinuteConverter());
-		secondaryAxisSettingsX.setPosition(Position.Primary);
-		secondaryAxisSettingsX.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
-		secondaryAxisSettingsX.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-		chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX);
-	}
-
-	private void addSecondaryAxisY(IChartSettings chartSettings, String yAxisTitle) {
-
-		ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings(yAxisTitle, new PercentageConverter(SWT.VERTICAL, true));
-		secondaryAxisSettingsY.setPosition(Position.Secondary);
-		secondaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
-		secondaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-		chartSettings.getSecondaryAxisSettingsListY().add(secondaryAxisSettingsY);
-	}
-
+	@SuppressWarnings("rawtypes")
 	private void addLineSeriesData(List<ILineSeriesData> lineSeriesDataList) {
 
 		/*

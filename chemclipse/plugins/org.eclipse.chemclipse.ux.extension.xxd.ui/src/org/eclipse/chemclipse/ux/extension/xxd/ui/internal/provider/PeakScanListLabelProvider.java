@@ -49,7 +49,22 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider i
 
 	public static final String NAME = "Name";
 	public static final String ACTIVE_FOR_ANALYSIS = "Active for Analysis";
-	public static final String RT = "RT";
+	public static final String TYPE = "Type";
+	public static final String RETENTION_TIME = "RT [min]";
+	public static final String RELATIVE_RETENTION_TIME = "RRT [min]";
+	public static final String RETENTION_INDEX = "RI";
+	public static final String AREA_TOTAL = "Area";
+	public static final String START_RETENTION_TIME = "Start RT [min]";
+	public static final String STOP_RETENTION_TIME = "Stop RT [min]";
+	public static final String WIDTH = "Width";
+	public static final String SCAN_NUMBER_AT_PEAK_MAX = "Scan# at Peak Maximum";
+	public static final String SIGNAL_TO_NOISE = "S/N";
+	public static final String LEADING = "Leading";
+	public static final String TAILING = "Tailing";
+	public static final String MODEL_DESCRIPTION = "Model Description";
+	public static final String SUGGESTED_COMPONENTS = "Suggested Components";
+	public static final String AREA_PERCENT = "Area [%]";
+	public static final String QUANTIFIER = "Quantifier";
 	public static final String CLASSIFIER = "Classifier";
 	//
 	public static final String PEAK = "PEAK";
@@ -59,23 +74,23 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider i
 	//
 	public static final String[] TITLES = { //
 			ACTIVE_FOR_ANALYSIS, //
-			"Type", //
-			"RT (min)", //
-			"RRT (min)", //
-			"RI", //
-			"Area", //
-			"Start RT", //
-			"Stop RT", //
-			"Width", //
-			"Scan# at Peak Maximum", //
-			"S/N", //
-			"Leading", //
-			"Tailing", //
-			"Model Description", //
-			"Suggested Components", //
+			TYPE, //
+			RETENTION_TIME, //
+			RELATIVE_RETENTION_TIME, //
+			RETENTION_INDEX, //
+			AREA_TOTAL, //
+			START_RETENTION_TIME, //
+			STOP_RETENTION_TIME, //
+			WIDTH, //
+			SCAN_NUMBER_AT_PEAK_MAX, //
+			SIGNAL_TO_NOISE, //
+			LEADING, //
+			TAILING, //
+			MODEL_DESCRIPTION, //
+			SUGGESTED_COMPONENTS, //
 			NAME, //
-			"Area Percent", //
-			"Quantifier", //
+			AREA_PERCENT, //
+			QUANTIFIER, //
 			CLASSIFIER //
 	};
 	//

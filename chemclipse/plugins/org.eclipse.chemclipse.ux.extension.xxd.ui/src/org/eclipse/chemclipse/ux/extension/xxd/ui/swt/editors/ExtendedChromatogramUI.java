@@ -166,7 +166,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	protected static final String TYPE_CSD = "TYPE_CSD";
 	protected static final String TYPE_WSD = "TYPE_WSD";
 	//
-	private static final String TITLE_X_AXIS_SCANS = "Scans (approx.)";
+	private String titleScans = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_TITLE_X_AXIS_SCANS);
 	private static final String LABEL_SCAN_NUMBER = "Scan Number";
 	//
 	public static final String SERIES_ID_CHROMATOGRAM = "Chromatogram";
@@ -1479,14 +1479,15 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			if(chromatogram != null) {
 				IChartSettings chartSettings = chromatogramChart.getChartSettings();
-				ISecondaryAxisSettings axisSettings = chartSupport.getSecondaryAxisSettingsX(TITLE_X_AXIS_SCANS, chartSettings);
+				ISecondaryAxisSettings axisSettings = chartSupport.getSecondaryAxisSettingsX(titleScans, chartSettings);
+				String title = preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_SCANS);
 				//
 				if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_SCANS)) {
 					if(axisSettings == null) {
 						try {
 							int scanDelay = chromatogram.getScanDelay();
 							int scanInterval = chromatogram.getScanInterval();
-							ISecondaryAxisSettings secondaryAxisSettingsX = new SecondaryAxisSettings(TITLE_X_AXIS_SCANS, new MillisecondsToScanNumberConverter(scanDelay, scanInterval));
+							ISecondaryAxisSettings secondaryAxisSettingsX = new SecondaryAxisSettings(title, new MillisecondsToScanNumberConverter(scanDelay, scanInterval));
 							secondaryAxisSettingsX.setTitleVisible(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_TITLE_SCANS));
 							setScanAxisSettings(secondaryAxisSettingsX);
 							chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX);
@@ -1494,6 +1495,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 							logger.warn(e);
 						}
 					} else {
+						axisSettings.setTitle(title);
 						setScanAxisSettings(axisSettings);
 					}
 				} else {
@@ -1501,10 +1503,15 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 					 * Remove
 					 */
 					if(axisSettings != null) {
+						axisSettings.setTitle(title);
 						chartSettings.getSecondaryAxisSettingsListX().remove(axisSettings);
 					}
 				}
+				/*
+				 * Update the title to retrieve the correct axis.
+				 */
 				chromatogramChart.applySettings(chartSettings);
+				titleScans = title;
 			}
 		}
 	}

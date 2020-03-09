@@ -238,6 +238,21 @@ public class PreferenceConstants extends ChartOptions {
 	public static final boolean DEF_SHOW_SUBTRACT_DIALOG = true;
 	public static final String P_LEAVE_EDIT_AFTER_IDENTIFICATION = "leaveEditAfterIdentification";
 	public static final boolean DEF_LEAVE_EDIT_AFTER_IDENTIFICATION = true;
+	//
+	public static final String P_TITLE_X_AXIS_MZ = "titleXAxisMZ";
+	public static final String DEF_TITLE_X_AXIS_MZ = "Ion [m/z]";
+	public static final String P_TITLE_X_AXIS_PARENT_MZ = "titleXAxisParentMZ";
+	public static final String DEF_TITLE_X_AXIS_PARENT_MZ = "Parent Ion [m/z]";
+	public static final String P_TITLE_X_AXIS_PARENT_RESOLUTION = "titleXAxisParentResolution";
+	public static final String DEF_TITLE_X_AXIS_PARENT_RESOLUTION = "Parent Resolution";
+	public static final String P_TITLE_X_AXIS_DAUGHTER_MZ = "titleXAxisDaughterMZ";
+	public static final String DEF_TITLE_X_AXIS_DAUGHTER_MZ = "Daughther Ion [m/z]";
+	public static final String P_TITLE_X_AXIS_DAUGHTER_RESOLUTION = "titleXAxisDaughterResolution";
+	public static final String DEF_TITLE_X_AXIS_DAUGHTER_RESOLUTION = "Daughter Resolution";
+	public static final String P_TITLE_X_AXIS_COLLISION_ENERGY = "titleXAxisCollisionEnergy";
+	public static final String DEF_TITLE_X_AXIS_COLLISION_ENERGY = "Collision Energy [eV]";
+	public static final String P_TITLE_X_AXIS_WAVELENGTH = "titleXAxisWavelength";
+	public static final String DEF_TITLE_X_AXIS_WAVELENGTH = "Wavelength [nm]";
 	/*
 	 * Peaks
 	 */
@@ -451,6 +466,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String P_CHROMATOGRAM_FORCE_ZERO_MIN_Y_MSD = "chromatogramForceZeroMinYMSD";
 	public static final boolean DEF_CHROMATOGRAM_FORCE_ZERO_MIN_Y_MSD = false;
 	//
+	public static final String P_TITLE_X_AXIS_MILLISECONDS = "titleXAxisMilliseconds";
+	public static final String DEF_TITLE_X_AXIS_MILLISECONDS = "Time [ms]";
 	public static final String P_SHOW_X_AXIS_MILLISECONDS = "showXAxisMilliseconds";
 	public static final boolean DEF_SHOW_X_AXIS_MILLISECONDS = false;
 	public static final String P_POSITION_X_AXIS_MILLISECONDS = "positionXAxisMilliseconds";
@@ -469,6 +486,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String P_SHOW_X_AXIS_TITLE_MILLISECONDS = "showXAxisTitleMilliseconds";
 	public static final boolean DEF_SHOW_X_AXIS_TITLE_MILLISECONDS = true;
 	//
+	public static final String P_TITLE_X_AXIS_SECONDS = "titleXAxisSeconds";
+	public static final String DEF_TITLE_X_AXIS_SECONDS = "Time [s]";
 	public static final String P_SHOW_X_AXIS_SECONDS = "showXAxisSeconds";
 	public static final boolean DEF_SHOW_X_AXIS_SECONDS = false;
 	public static final String P_POSITION_X_AXIS_SECONDS = "positionXAxisSeconds";
@@ -487,6 +506,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String P_SHOW_X_AXIS_TITLE_SECONDS = "showXAxisTitleSeconds";
 	public static final boolean DEF_SHOW_X_AXIS_TITLE_SECONDS = true;
 	//
+	public static final String P_TITLE_X_AXIS_MINUTES = "titleXAxisMinutes";
+	public static final String DEF_TITLE_X_AXIS_MINUTES = "Time [min]";
 	public static final String P_SHOW_X_AXIS_MINUTES = "showXAxisMinutes";
 	public static final boolean DEF_SHOW_X_AXIS_MINUTES = true;
 	public static final String P_POSITION_X_AXIS_MINUTES = "positionXAxisMinutes";
@@ -505,6 +526,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String P_SHOW_X_AXIS_TITLE_MINUTES = "showXAxisTitleMinutes";
 	public static final boolean DEF_SHOW_X_AXIS_TITLE_MINUTES = true;
 	//
+	public static final String P_TITLE_X_AXIS_SCANS = "titleXAxisScans";
+	public static final String DEF_TITLE_X_AXIS_SCANS = "Scan";
 	public static final String P_SHOW_X_AXIS_SCANS = "showXAxisScans";
 	public static final boolean DEF_SHOW_X_AXIS_SCANS = false;
 	public static final String P_POSITION_X_AXIS_SCANS = "positionXAxisScans";
@@ -523,6 +546,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String P_SHOW_X_AXIS_TITLE_SCANS = "showXAxisTitleScans";
 	public static final boolean DEF_SHOW_X_AXIS_TITLE_SCANS = true;
 	//
+	public static final String P_TITLE_Y_AXIS_INTENSITY = "titleYAxisIntensity";
+	public static final String DEF_TITLE_Y_AXIS_INTENSITY = "Intensity [counts]";
 	public static final String P_SHOW_Y_AXIS_INTENSITY = "showYAxisIntensity";
 	public static final boolean DEF_SHOW_Y_AXIS_INTENSITY = true;
 	public static final String P_POSITION_Y_AXIS_INTENSITY = "positionYAxisIntensity";
@@ -541,6 +566,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String P_SHOW_Y_AXIS_TITLE_INTENSITY = "showYAxisTitleIntensity";
 	public static final boolean DEF_SHOW_Y_AXIS_TITLE_INTENSITY = true;
 	//
+	public static final String P_TITLE_Y_AXIS_RELATIVE_INTENSITY = "titleYAxisRelativeIntensity";
+	public static final String DEF_TITLE_Y_AXIS_RELATIVE_INTENSITY = "Intensity [%]";
 	public static final String P_SHOW_Y_AXIS_RELATIVE_INTENSITY = "showYAxisRelativeIntensity";
 	public static final boolean DEF_SHOW_Y_AXIS_RELATIVE_INTENSITY = true;
 	public static final String P_POSITION_Y_AXIS_RELATIVE_INTENSITY = "positionYAxisRelativeIntensity";

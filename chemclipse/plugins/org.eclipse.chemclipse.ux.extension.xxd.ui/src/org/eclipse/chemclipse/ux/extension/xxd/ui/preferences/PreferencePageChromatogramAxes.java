@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -37,6 +37,7 @@ public class PreferencePageChromatogramAxes extends FieldEditorPreferencePage im
 
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Milliseconds (X Axis)", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_TITLE_X_AXIS_MILLISECONDS, "Title:", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_MILLISECONDS, "Show ", getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_X_AXIS_MILLISECONDS, "Position:", PreferenceConstants.POSITIONS, getFieldEditorParent()));
 		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_X_AXIS_MILLISECONDS, "Color:", getFieldEditorParent()));
@@ -49,6 +50,7 @@ public class PreferencePageChromatogramAxes extends FieldEditorPreferencePage im
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Seconds (X Axis)", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_TITLE_X_AXIS_SECONDS, "Title:", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_SECONDS, "Show", getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_X_AXIS_SECONDS, "Position:", PreferenceConstants.POSITIONS, getFieldEditorParent()));
 		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_X_AXIS_SECONDS, "Color:", getFieldEditorParent()));
@@ -61,6 +63,7 @@ public class PreferencePageChromatogramAxes extends FieldEditorPreferencePage im
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Minutes (X Axis)", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_TITLE_X_AXIS_MINUTES, "Title:", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_MINUTES, "Show", getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_X_AXIS_MINUTES, "Position:", PreferenceConstants.POSITIONS, getFieldEditorParent()));
 		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_X_AXIS_MINUTES, "Color:", getFieldEditorParent()));
@@ -73,6 +76,7 @@ public class PreferencePageChromatogramAxes extends FieldEditorPreferencePage im
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Scans (X Axis)", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_TITLE_X_AXIS_SCANS, "Title:", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_SCANS, "Show", getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_X_AXIS_SCANS, "Position:", PreferenceConstants.POSITIONS, getFieldEditorParent()));
 		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_X_AXIS_SCANS, "Color:", getFieldEditorParent()));
@@ -85,6 +89,7 @@ public class PreferencePageChromatogramAxes extends FieldEditorPreferencePage im
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Intensity (Y Axis)", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_TITLE_Y_AXIS_INTENSITY, "Title:", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_Y_AXIS_INTENSITY, "Show", getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_Y_AXIS_INTENSITY, "Position:", PreferenceConstants.POSITIONS, getFieldEditorParent()));
 		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_Y_AXIS_INTENSITY, "Color:", getFieldEditorParent()));
@@ -97,6 +102,7 @@ public class PreferencePageChromatogramAxes extends FieldEditorPreferencePage im
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Intensity% (Y Axis)", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_TITLE_Y_AXIS_RELATIVE_INTENSITY, "Title:", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_INTENSITY, "Show", getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_Y_AXIS_RELATIVE_INTENSITY, "Position:", PreferenceConstants.POSITIONS, getFieldEditorParent()));
 		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_Y_AXIS_RELATIVE_INTENSITY, "Color:", getFieldEditorParent()));

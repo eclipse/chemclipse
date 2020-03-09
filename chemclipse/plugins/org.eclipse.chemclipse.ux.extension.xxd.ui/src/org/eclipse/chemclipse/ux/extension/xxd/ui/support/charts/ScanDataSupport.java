@@ -29,7 +29,11 @@ import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.SignalType;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.swtchart.extensions.core.IChartSettings;
 
 public class ScanDataSupport {
 
@@ -44,6 +48,7 @@ public class ScanDataSupport {
 	public static final String[] SIGNAL_TYPES_WSD = new String[]{SignalType.AUTO_DETECT.toString(), SignalType.CENTROID.toString(), SignalType.PROFILE.toString()};
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0##");
+	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public String extractTracesText(IScanMSD scanMSD, int maxCopyTraces) {
 
@@ -211,5 +216,40 @@ public class ScanDataSupport {
 		}
 		//
 		return containsOptimizedScan;
+	}
+
+	public void setDataTypeMSD(IChartSettings chartSettings) {
+
+		String titleX = preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_MZ);
+		String titleY = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_INTENSITY);
+		String titleY1 = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_RELATIVE_INTENSITY);
+		//
+		ChartSupport.setPrimaryAxisSet(chartSettings, titleX, true, titleY);
+		ChartSupport.clearSecondaryAxes(chartSettings);
+		ChartSupport.addSecondaryAxisY(chartSettings, titleY1);
+	}
+
+	public void setDataTypeCSD(IChartSettings chartSettings) {
+
+		String titleX = preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_MILLISECONDS);
+		String titleX1 = preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_MINUTES);
+		String titleY = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_INTENSITY);
+		String titleY1 = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_RELATIVE_INTENSITY);
+		//
+		ChartSupport.setPrimaryAxisSet(chartSettings, titleX, false, titleY);
+		ChartSupport.clearSecondaryAxes(chartSettings);
+		ChartSupport.addSecondaryAxisX(chartSettings, titleX1);
+		ChartSupport.addSecondaryAxisY(chartSettings, titleY1);
+	}
+
+	public void setDataTypeWSD(IChartSettings chartSettings) {
+
+		String titleX = preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_WAVELENGTH);
+		String titleY = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_INTENSITY);
+		String titleY1 = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_RELATIVE_INTENSITY);
+		//
+		ChartSupport.setPrimaryAxisSet(chartSettings, titleX, true, titleY);
+		ChartSupport.clearSecondaryAxes(chartSettings);
+		ChartSupport.addSecondaryAxisY(chartSettings, titleY1);
 	}
 }
