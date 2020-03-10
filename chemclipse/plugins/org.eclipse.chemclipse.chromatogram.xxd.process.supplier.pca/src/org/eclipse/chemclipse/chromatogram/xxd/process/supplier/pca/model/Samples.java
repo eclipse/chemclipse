@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,53 +13,55 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
 import java.util.Collection;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PreprocessingSettings;
 import org.eclipse.chemclipse.model.statistics.AbstractSamples;
 import org.eclipse.chemclipse.model.statistics.RetentionTime;
 
-public class Samples extends AbstractSamples<RetentionTime, Sample> implements IDataPreprocessing, IVariablesFiltration, IDefaultPcaSettings {
+public class Samples extends AbstractSamples<RetentionTime, Sample> implements ISamplesPCA<RetentionTime, Sample> {
 
-	private PcaFiltrationData pcaFiltrationData;
-	private PcaPreprocessingData pcaPreprocessingData;
-	private IPcaSettings pcaSettings;
+	private IAnalysisSettings analysisSettings = new AnalysisSettings();
+	private FilterSettings filterSettings = new FilterSettings();
+	private PreprocessingSettings preprocessingSettings = new PreprocessingSettings();
 
 	public Samples(Collection<IDataInputEntry> dataInputEntries) {
-
 		super();
 		dataInputEntries.forEach(d -> getSampleList().add(new Sample(d)));
 	}
 
 	@Override
-	public PcaFiltrationData getPcaFiltrationData() {
+	public IAnalysisSettings getAnalysisSettings() {
 
-		return pcaFiltrationData;
+		return analysisSettings;
 	}
 
 	@Override
-	public PcaPreprocessingData getPcaPreprocessingData() {
+	public void setAnalysisSettings(IAnalysisSettings analysisSettings) {
 
-		return pcaPreprocessingData;
-	}
-
-	public void setPcaFiltrationData(PcaFiltrationData pcaFiltrationData) {
-
-		this.pcaFiltrationData = pcaFiltrationData;
-	}
-
-	public void setPcaPreprocessingData(PcaPreprocessingData pcaPreprocessingData) {
-
-		this.pcaPreprocessingData = pcaPreprocessingData;
-	}
-
-	public void setDefaultPcaSettings(IPcaSettings pcaSettings) {
-
-		this.pcaSettings = pcaSettings;
+		this.analysisSettings = analysisSettings;
 	}
 
 	@Override
-	public IPcaSettings getDefaultPcaSettings() {
+	public FilterSettings getFilterSettings() {
 
-		return pcaSettings;
+		return filterSettings;
+	}
+
+	@Override
+	public void setFilterSettings(FilterSettings filterSettings) {
+
+		this.filterSettings = filterSettings;
+	}
+
+	@Override
+	public PreprocessingSettings getPreprocessingSettings() {
+
+		return preprocessingSettings;
+	}
+
+	@Override
+	public void setPreprocessingSettings(PreprocessingSettings preprocessingSettings) {
+
+		this.preprocessingSettings = preprocessingSettings;
 	}
 }

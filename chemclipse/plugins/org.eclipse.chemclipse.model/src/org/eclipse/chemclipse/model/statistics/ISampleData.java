@@ -24,5 +24,5 @@ public interface ISampleData<T> {
 
 	void setModifiedData(double normalizedData);
 
-    T getData2();
+	T getData2();
 }

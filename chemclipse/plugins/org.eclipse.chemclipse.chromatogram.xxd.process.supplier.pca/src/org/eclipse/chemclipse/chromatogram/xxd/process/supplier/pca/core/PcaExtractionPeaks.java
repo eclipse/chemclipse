@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +9,7 @@
  * Contributors:
  * Jan Holy - initial API and implementation
  * Alexander Kerner - Generics
+ * Philip Wenig - improvements
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core;
 
@@ -19,33 +20,39 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class PcaExtractionPeaks implements IDataExtraction {
+public class PcaExtractionPeaks implements IExtractionData {
 
-	private final List<IDataInputEntry> dataInputEntriesAll;
+	private static final Logger logger = Logger.getLogger(PcaExtractionPeaks.class);
+	//
+	private final List<IDataInputEntry> dataInputEntries;
 	private final int retentionTimeWindow;
 
-	public PcaExtractionPeaks(List<IDataInputEntry> dataInputEntriesAll, int retentionTimeWindow) {
+	public PcaExtractionPeaks(List<IDataInputEntry> dataInputEntries, int retentionTimeWindow) {
 		this.retentionTimeWindow = retentionTimeWindow;
-		this.dataInputEntriesAll = dataInputEntriesAll;
+		this.dataInputEntries = dataInputEntries;
 	}
 
-	private Map<IDataInputEntry, IPeaks<?>> extractPeaks(List<IDataInputEntry> peakinpitFiles, IProgressMonitor monitor) {
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	private Map<IDataInputEntry, IPeaks<?>> extractPeaks(List<IDataInputEntry> peakInputFiles, IProgressMonitor monitor) {
 
 		Map<IDataInputEntry, IPeaks<?>> peakMap = new LinkedHashMap<>();
-		for(IDataInputEntry peakFile : peakinpitFiles) {
+		for(IDataInputEntry peakFile : peakInputFiles) {
 			try {
-				/*
-				 * Try to catch exceptions if wrong files have been selected.
-				 */
 				IProcessingInfo<IPeaks> processingInfo = PeakConverterMSD.convert(new File(peakFile.getInputFile()), monitor);
 				IPeaks<?> peaks = processingInfo.getProcessingResult();
-				peakMap.put(peakFile, peaks);
+				if(!peaks.isEmpty()) {
+					peakMap.put(peakFile, peaks);
+				} else {
+					logger.warn("No peaks contained in file: " + peakFile);
+				}
 			} catch(Exception e) {
+				logger.warn(e);
 			}
 		}
 		return peakMap;
@@ -54,12 +61,8 @@ public class PcaExtractionPeaks implements IDataExtraction {
 	@Override
 	public Samples process(IProgressMonitor monitor) {
 
-		/*
-		 * Initialize PCA Results
-		 */
 		PeakExtractionSupport peakExtractionSupport = new PeakExtractionSupport(retentionTimeWindow);
-		Map<IDataInputEntry, IPeaks<?>> peakMap = extractPeaks(dataInputEntriesAll, monitor);
-		Samples samples = peakExtractionSupport.extractPeakData(peakMap, monitor);
-		return samples;
+		Map<IDataInputEntry, IPeaks<?>> peakMap = extractPeaks(dataInputEntries, monitor);
+		return peakExtractionSupport.extractPeakData(peakMap, monitor);
 	}
 }

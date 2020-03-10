@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 jan.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.model.statistics.ISampleData;
 import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 
-public class MedianValuesReplacer extends AbstractDataModificator {
+public class MedianValuesReplacer extends AbstractDataModificator implements IReplacer {
 
 	@Override
 	public String getDescription() {
@@ -33,6 +33,7 @@ public class MedianValuesReplacer extends AbstractDataModificator {
 		return "Median Value Setter";
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public <V extends IVariable, S extends ISample> void process(ISamples<V, S> samples) {
 

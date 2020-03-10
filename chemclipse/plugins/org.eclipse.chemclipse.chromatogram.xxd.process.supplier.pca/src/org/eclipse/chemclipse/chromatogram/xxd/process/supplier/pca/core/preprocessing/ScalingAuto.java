@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,25 +18,25 @@ import org.eclipse.chemclipse.model.statistics.ISampleData;
 import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 
-public class ScalingAuto extends AbstaractScaling {
+public class ScalingAuto extends AbstractScaling {
 
 	public ScalingAuto(int centeringType) {
-
 		super(centeringType);
 	}
 
 	@Override
 	public String getDescription() {
 
-		return "";
+		return "Auto Scaling";
 	}
 
 	@Override
 	public String getName() {
 
-		return "AutoScaling";
+		return "Auto Scaling";
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public <V extends IVariable, S extends ISample> void process(ISamples<V, S> samples) {
 

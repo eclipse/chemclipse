@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,7 +21,6 @@ import org.eclipse.chemclipse.model.statistics.ISampleData;
 public abstract class AbstractCentering extends AbstractDataModificator implements ICentering {
 
 	public AbstractCentering() {
-
 		super();
 	}
 
@@ -30,9 +29,9 @@ public abstract class AbstractCentering extends AbstractDataModificator implemen
 		boolean onlySelected = isOnlySelected();
 		DoubleStream selectedData = list.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(position)).mapToDouble(d -> getData(d));
 		switch(type) {
-			case CENTERING_MEAN:
+			case MEAN:
 				return selectedData.summaryStatistics().getAverage();
-			case CENTERING_MEADIAN:
+			case MEDIAN:
 				List<Double> data = selectedData.sorted().boxed().collect(Collectors.toList());
 				int lenght = data.size();
 				if(lenght == 0) {
@@ -52,6 +51,7 @@ public abstract class AbstractCentering extends AbstractDataModificator implemen
 		return Math.sqrt(Math.abs(getVariance(samples, position, type)));
 	}
 
+	@SuppressWarnings("rawtypes")
 	protected <S extends ISample> double getVariance(List<S> samples, int position, int type) {
 
 		boolean onlySelected = isOnlySelected();

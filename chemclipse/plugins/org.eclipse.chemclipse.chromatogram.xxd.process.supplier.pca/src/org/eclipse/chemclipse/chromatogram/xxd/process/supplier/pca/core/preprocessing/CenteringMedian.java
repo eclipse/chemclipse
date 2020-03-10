@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,7 +23,7 @@ public class CenteringMedian extends AbstractCentering {
 	@Override
 	public String getDescription() {
 
-		return "";
+		return "Median Centering";
 	}
 
 	@Override
@@ -32,6 +32,7 @@ public class CenteringMedian extends AbstractCentering {
 		return "Median Centering";
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public <V extends IVariable, S extends ISample> void process(ISamples<V, S> samples) {
 
@@ -40,7 +41,7 @@ public class CenteringMedian extends AbstractCentering {
 			if(skipVariable(samples, i)) {
 				continue;
 			}
-			final double value = getCenteringValue(samples.getSampleList(), i, CENTERING_MEADIAN);
+			final double value = getCenteringValue(samples.getSampleList(), i, MEDIAN);
 			final int j = i;
 			samples.getSampleList().stream().forEach(s -> {
 				ISampleData data = s.getSampleData().get(j);
@@ -52,6 +53,6 @@ public class CenteringMedian extends AbstractCentering {
 	@Override
 	public int getCenteringType() {
 
-		return CENTERING_MEADIAN;
+		return MEDIAN;
 	}
 }

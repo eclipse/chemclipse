@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,17 +18,16 @@ import org.eclipse.chemclipse.model.statistics.ISampleData;
 import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 
-public class ScalingVast extends AbstaractScaling {
+public class ScalingVast extends AbstractScaling {
 
 	public ScalingVast(int centeringType) {
-
 		super(centeringType);
 	}
 
 	@Override
 	public String getDescription() {
 
-		return "";
+		return "Vast Scaling";
 	}
 
 	@Override
@@ -37,6 +36,7 @@ public class ScalingVast extends AbstaractScaling {
 		return "Vast Scaling";
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public <V extends IVariable, S extends ISample> void process(ISamples<V, S> samples) {
 

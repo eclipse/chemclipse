@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,17 +18,16 @@ import org.eclipse.chemclipse.model.statistics.ISampleData;
 import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 
-public class ScalingLevel extends AbstaractScaling {
+public class ScalingLevel extends AbstractScaling {
 
 	public ScalingLevel(int centeringType) {
-
 		super(centeringType);
 	}
 
 	@Override
 	public String getDescription() {
 
-		return "";
+		return "Level Scaling";
 	}
 
 	@Override
@@ -37,6 +36,7 @@ public class ScalingLevel extends AbstaractScaling {
 		return "Level Scaling";
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public <V extends IVariable, S extends ISample> void process(ISamples<V, S> samples) {
 

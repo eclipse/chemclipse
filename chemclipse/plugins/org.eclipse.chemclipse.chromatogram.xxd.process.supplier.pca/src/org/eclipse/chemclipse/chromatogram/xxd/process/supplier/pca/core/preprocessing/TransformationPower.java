@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,7 +23,7 @@ public class TransformationPower extends AbstractDataModificator implements ITra
 	@Override
 	public String getDescription() {
 
-		return "";
+		return "Power Transformation";
 	}
 
 	@Override
@@ -32,6 +32,7 @@ public class TransformationPower extends AbstractDataModificator implements ITra
 		return "Power Transformation";
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public <V extends IVariable, S extends ISample> void process(ISamples<V, S> samples) {
 

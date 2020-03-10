@@ -14,21 +14,19 @@ package org.eclipse.chemclipse.model.statistics;
 public class SampleData<T> implements ISampleData<T> {
 
 	private double data;
-    private T data2;
+	private T data2;
 	private double normalizedData;
 
 	public SampleData() {
-
 		this.data = Double.NaN;
 		this.normalizedData = Double.NaN;
-	this.data2 = null;
+		this.data2 = null;
 	}
 
-    public SampleData(double data, T data2) {
-
+	public SampleData(double data, T data2) {
 		this();
 		this.data = data;
-	this.data2 = data2;
+		this.data2 = data2;
 		this.normalizedData = data;
 	}
 
@@ -38,10 +36,11 @@ public class SampleData<T> implements ISampleData<T> {
 		return data;
 	}
 
-    @Override
-    public T getData2() {
-	return data2;
-    }
+	@Override
+	public T getData2() {
+
+		return data2;
+	}
 
 	@Override
 	public double getModifiedData() {
