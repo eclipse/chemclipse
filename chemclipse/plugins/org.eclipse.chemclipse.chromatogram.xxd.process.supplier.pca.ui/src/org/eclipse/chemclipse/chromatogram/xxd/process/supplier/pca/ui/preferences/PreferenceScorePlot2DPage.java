@@ -25,7 +25,8 @@ public class PreferenceScorePlot2DPage extends FieldEditorPreferencePage impleme
 	public PreferenceScorePlot2DPage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Score Plot 2D Preferences");
+		setTitle("Score Plot");
+		setDescription("");
 	}
 
 	@Override

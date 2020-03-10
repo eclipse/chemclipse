@@ -40,7 +40,7 @@ public class CenteringMean extends AbstractCentering {
 			if(skipVariable(samples, i)) {
 				continue;
 			}
-			final double value = getCenteringValue(samples.getSampleList(), i, CENTERING_MEAN);
+			final double value = getCenteringValue(samples.getSampleList(), i, MEAN);
 			final int j = i;
 			samples.getSampleList().stream().forEach(s -> {
 				ISampleData data = s.getSampleData().get(j);
@@ -52,6 +52,6 @@ public class CenteringMean extends AbstractCentering {
 	@Override
 	public int getCenteringType() {
 
-		return CENTERING_MEAN;
+		return MEAN;
 	}
 }

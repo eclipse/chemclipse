@@ -22,20 +22,19 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaEvaluation;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PreprocessingSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.AnalysisSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataPreprocessing;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDefaultPcaSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaSettingsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISampleVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISamplesVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.PcaResultsVisualization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.PcaSettingsVisualization;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
@@ -48,8 +47,8 @@ import javafx.collections.ObservableList;
 
 public class PcaContext {
 
-	private Map<ISamples<? extends IVariable, ? extends ISample>, PcaPreprocessingData> preprocessings = new HashMap<>();
-	private Map<ISamples<? extends IVariable, ? extends ISample>, IPcaSettingsVisualization> settings = new HashMap<>();
+	private Map<ISamples<? extends IVariable, ? extends ISample>, PreprocessingSettings> preprocessings = new HashMap<>();
+	private Map<ISamples<? extends IVariable, ? extends ISample>, IAnalysisSettings> settings = new HashMap<>();
 	private Set<PcaContextListener> listeners = new LinkedHashSet<>();
 	// pca selection
 	private Map<ISamples<? extends IVariable, ? extends ISample>, IPcaResultsVisualization> pcaResults = new HashMap<>();
@@ -99,7 +98,7 @@ public class PcaContext {
 		return managerSamples;
 	}
 
-	public <V extends IVariableVisualization, S extends ISampleVisualization> IPcaResultsVisualization evaluatePca(ISamplesVisualization<V, S> samples, IPcaSettings settings, IPcaVisualization pcaVisualization, IProgressMonitor monitor, boolean setSelected) {
+	public <V extends IVariableVisualization, S extends ISampleVisualization> IPcaResultsVisualization evaluatePca(ISamplesVisualization<V, S> samples, IAnalysisSettings settings, IPcaVisualization pcaVisualization, IProgressMonitor monitor, boolean setSelected) {
 
 		monitor.setTaskName("Evaluation");
 		// remove all current result
@@ -107,7 +106,8 @@ public class PcaContext {
 			pcaResults.remove(samples);
 		}
 		PcaEvaluation pcaEvaluation = new PcaEvaluation();
-		PcaResults results = pcaEvaluation.process(samples, settings, monitor);
+		PcaResults results = null;
+		// PcaResults results = pcaEvaluation.process(samples, settings, monitor);
 		IPcaResultsVisualization pcaResultsVisualization = new PcaResultsVisualization<>(results, pcaVisualization);
 		pcaResultsVisualization.getPcaResultList().forEach(r -> {
 			Optional<S> sample = samples.getSampleList().stream().filter(s -> r.getSample() == s).findAny();
@@ -132,37 +132,37 @@ public class PcaContext {
 		return pcaResultsVisualization;
 	}
 
-	public PcaPreprocessingData getPreprocessingData(ISamples<? extends IVariable, ? extends ISample> samples) {
+	public PreprocessingSettings getPreprocessingSettings(ISamples<? extends IVariable, ? extends ISample> samples) {
 
 		synchronized(preprocessings) {
 			if(samples instanceof IDataPreprocessing) {
 				IDataPreprocessing dataPreprocessing = (IDataPreprocessing)samples;
-				return dataPreprocessing.getPcaPreprocessingData();
+				return dataPreprocessing.getPreprocessingSettings();
 			} else {
 				if(preprocessings.containsKey(samples)) {
 					return preprocessings.get(samples);
 				} else {
-					PcaPreprocessingData pcaPreprocessingData = new PcaPreprocessingData();
-					preprocessings.put(samples, pcaPreprocessingData);
-					return pcaPreprocessingData;
+					PreprocessingSettings preprocessingSettings = new PreprocessingSettings();
+					preprocessings.put(samples, preprocessingSettings);
+					return preprocessingSettings;
 				}
 			}
 		}
 	}
 
-	public IPcaSettingsVisualization getPcaSettings(ISamples<? extends IVariable, ? extends ISample> samples) {
+	public IAnalysisSettings getPcaSettings(ISamples<? extends IVariable, ? extends ISample> samples) {
 
 		synchronized(settings) {
 			if(settings.containsKey(samples)) {
 				return settings.get(samples);
 			} else {
-				IPcaSettings pcaSettings;
+				IAnalysisSettings analysisSettings;
 				if(samples instanceof IDefaultPcaSettings) {
-					pcaSettings = ((IDefaultPcaSettings)samples).getDefaultPcaSettings();
+					analysisSettings = ((IDefaultPcaSettings)samples).getDefaultPcaSettings();
 				} else {
-					pcaSettings = PreferenceSupplier.getPcaSettings();
+					analysisSettings = PreferenceSupplier.getPcaSettings();
 				}
-				IPcaSettingsVisualization s = new PcaSettingsVisualization(pcaSettings);
+				IAnalysisSettings s = new AnalysisSettings(analysisSettings);
 				settings.put(samples, s);
 				return s;
 			}

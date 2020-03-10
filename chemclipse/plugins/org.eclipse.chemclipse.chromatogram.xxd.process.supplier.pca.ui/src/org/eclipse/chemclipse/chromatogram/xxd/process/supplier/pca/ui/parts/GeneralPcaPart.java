@@ -16,8 +16,9 @@ import java.util.function.Consumer;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.AnalysisSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaSettingsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISampleVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISamplesVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableVisualization;
@@ -28,16 +29,16 @@ import javafx.collections.ListChangeListener;
 public abstract class GeneralPcaPart {
 
 	private ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> actualSamples;
-	private IPcaSettingsVisualization pcaSettingsVisualization;
+	private IAnalysisSettings analysisSettings = new AnalysisSettings();
 	private ListChangeListener<ISample> sampleChangeListener = e -> samplesHasBeenUpdated();;
 	private ListChangeListener<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> samplesChangeListener = e -> settingsHasBeenChanged();;
 	private ListChangeListener<IVariableVisualization> variableChangeListener = e -> variablesHasBeenUpdated();;
-	private Consumer<IPcaSettingsVisualization> updateSettings = e -> settingsHasBeenChanged();
+	private Consumer<IAnalysisSettings> updateSettings = e -> settingsHasBeenChanged();
 	@Inject
 	@org.eclipse.e4.core.di.annotations.Optional
 	private SelectionManagerSamples managerSamples;
 
-	protected void inicializeHandler() {
+	protected void initializeHandler() {
 
 		samplesChangeListener = new ListChangeListener<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>>() {
 
@@ -47,17 +48,17 @@ public abstract class GeneralPcaPart {
 				if(actualSamples != null) {
 					actualSamples.getSampleList().removeListener(sampleChangeListener);
 					actualSamples.getVariables().removeListener(variableChangeListener);
-					pcaSettingsVisualization.removeListener(updateSettings);
+					// analysisSettings.removeListener(updateSettings);
 				}
 				if(!c.getList().isEmpty()) {
 					ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> samples = c.getList().get(0);
 					actualSamples = samples;
-					pcaSettingsVisualization = getSelectionManagerSamples().getPcaSettings(samples);
-					pcaSettingsVisualization.addListener(updateSettings);
+					analysisSettings = getSelectionManagerSamples().getPcaSettings(samples);
+					// analysisSettings.addListener(updateSettings);
 					actualSamples.getVariables().addListener(variableChangeListener);
 					samples.getSampleList().addListener(sampleChangeListener);
 				} else {
-					pcaSettingsVisualization = null;
+					analysisSettings = null;
 					actualSamples = null;
 				}
 				samplesHasBeenSet();
@@ -86,8 +87,8 @@ public abstract class GeneralPcaPart {
 			actualSamples = getSelectionManagerSamples().getSelection().get(0);
 			actualSamples.getSampleList().addListener(sampleChangeListener);
 			actualSamples.getVariables().addListener(variableChangeListener);
-			pcaSettingsVisualization = getSelectionManagerSamples().getPcaSettings(actualSamples);
-			pcaSettingsVisualization.addListener(updateSettings);
+			analysisSettings = getSelectionManagerSamples().getPcaSettings(actualSamples);
+			// analysisSettings.addListener(updateSettings);
 			samplesHasBeenSet();
 		}
 	}
@@ -105,9 +106,9 @@ public abstract class GeneralPcaPart {
 		return actualSamples;
 	}
 
-	public IPcaSettingsVisualization getPcaSettingsVisualization() {
+	public IAnalysisSettings getPcaSettings() {
 
-		return pcaSettingsVisualization;
+		return analysisSettings;
 	}
 
 	@PreDestroy
@@ -117,9 +118,9 @@ public abstract class GeneralPcaPart {
 		if(actualSamples != null) {
 			actualSamples.getSampleList().removeListener(sampleChangeListener);
 			actualSamples.getVariables().removeListener(variableChangeListener);
-			pcaSettingsVisualization.removeListener(updateSettings);
+			// analysisSettings.removeListener(updateSettings);
 			actualSamples = null;
-			pcaSettingsVisualization = null;
+			analysisSettings = null;
 		}
 	}
 

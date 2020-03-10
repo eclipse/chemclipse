@@ -23,13 +23,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.exception.MathIllegalArgumentException;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Algorithm;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.CalculatorNIPALS;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.CalculatorOPLS;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.CalculatorSVD;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IMultivariateCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.OplsCalculatorNipals;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaCalculatorNipals;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaCalculatorSvd;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamplesPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
 import org.eclipse.chemclipse.model.statistics.ISample;
@@ -40,7 +42,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PcaEvaluation {
 
-	private <V extends IVariable, S extends ISample> Map<ISample, double[]> extractData(ISamples<V, S> samples, String algorithm, IPcaSettings settings, boolean[] isSelectedVariable) {
+	private <V extends IVariable, S extends ISample> Map<ISample, double[]> extractData(ISamples<V, S> samples, Algorithm algorithm, IAnalysisSettings settings, boolean[] isSelectedVariable) {
 
 		Map<ISample, double[]> selectedSamples = new HashMap<>();
 		List<? extends IVariable> retentionTimes = samples.getVariables();
@@ -86,14 +88,16 @@ public class PcaEvaluation {
 				selectedSamples.put(sample, selectedSampleData);
 			}
 		}
-		if(algorithm.equals(IPcaSettings.OPLS_ALGO_NIPALS)) {
+		//
+		if(algorithm.equals(Algorithm.OPLS)) {
 			Map<ISample, double[]> groupSelected = selectedSamples.entrySet().stream().filter(e -> groups.contains(e.getKey().getGroupName())).collect(Collectors.toMap(e -> e.getKey(), e -> e.getValue()));
 			return groupSelected;
 		}
+		//
 		return selectedSamples;
 	}
 
-	private <V extends IVariable, S extends ISample> boolean[] selectedVariables(ISamples<V, S> samples, IPcaSettings settings) {
+	private <V extends IVariable, S extends ISample> boolean[] selectedVariables(ISamples<V, S> samples, IAnalysisSettings settings) {
 
 		List<? extends IVariable> retentionTimes = samples.getVariables();
 		boolean[] isSelectedVariable = new boolean[retentionTimes.size()];
@@ -170,19 +174,19 @@ public class PcaEvaluation {
 	 * @return PrincipalComponentAnalysis
 	 * @throws Exception
 	 */
-	private IMultivariateCalculator setupPCA(Map<ISample, double[]> pcaPeakMap, int sampleSize, int numberOfPrincipalComponents, String pcaAlgorithm) throws MathIllegalArgumentException {
+	private IMultivariateCalculator setupPCA(Map<ISample, double[]> pcaPeakMap, int sampleSize, int numberOfPrincipalComponents, Algorithm algorithm) throws MathIllegalArgumentException {
 
 		/*
 		 * Initialize the PCA analysis.
 		 */
 		int numSamples = pcaPeakMap.size();
 		IMultivariateCalculator principalComponentAnalysis = null;
-		if(pcaAlgorithm.equals(IPcaSettings.PCA_ALGO_NIPALS)) {
-			principalComponentAnalysis = new PcaCalculatorNipals(numSamples, sampleSize, numberOfPrincipalComponents);
-		} else if(pcaAlgorithm.equals(IPcaSettings.PCA_ALGO_SVD)) {
-			principalComponentAnalysis = new PcaCalculatorSvd(numSamples, sampleSize, numberOfPrincipalComponents);
-		} else if(pcaAlgorithm.equals(IPcaSettings.OPLS_ALGO_NIPALS)) {
-			principalComponentAnalysis = new OplsCalculatorNipals(numSamples, sampleSize, numberOfPrincipalComponents);
+		if(algorithm.equals(Algorithm.NIPALS)) {
+			principalComponentAnalysis = new CalculatorNIPALS(numSamples, sampleSize, numberOfPrincipalComponents);
+		} else if(algorithm.equals(Algorithm.SVD)) {
+			principalComponentAnalysis = new CalculatorSVD(numSamples, sampleSize, numberOfPrincipalComponents);
+		} else if(algorithm.equals(Algorithm.OPLS)) {
+			principalComponentAnalysis = new CalculatorOPLS(numSamples, sampleSize, numberOfPrincipalComponents);
 		}
 		/*
 		 * Add the samples.
@@ -190,23 +194,26 @@ public class PcaEvaluation {
 		for(Map.Entry<ISample, double[]> entry : pcaPeakMap.entrySet()) {
 			principalComponentAnalysis.addObservation(entry.getValue(), entry.getKey(), entry.getKey().getGroupName());
 		}
+		//
 		return principalComponentAnalysis;
 	}
 
-	public <V extends IVariable, S extends ISample> PcaResults process(ISamples<V, S> samples, IPcaSettings settings, IProgressMonitor monitor) throws MathIllegalArgumentException {
+	public <V extends IVariable, S extends ISample> PcaResults process(ISamplesPCA<V, S> samples, IProgressMonitor monitor) throws MathIllegalArgumentException {
 
 		monitor.subTask("Run PCA");
+		//
+		IAnalysisSettings settings = samples.getAnalysisSettings();
 		int numberOfPrincipalComponents = settings.getNumberOfPrincipalComponents();
-		String pcaAlgorithm = settings.getPcaAlgorithm();
+		Algorithm algorithm = settings.getAlgorithm();
 		PcaResults pcaResults = new PcaResults(settings);
 		boolean[] isSelectedVariables = selectedVariables(samples, settings);
-		Map<ISample, double[]> extractData = extractData(samples, pcaAlgorithm, settings, isSelectedVariables);
+		Map<ISample, double[]> extractData = extractData(samples, algorithm, settings, isSelectedVariables);
 		setRetentionTime(pcaResults, samples, isSelectedVariables);
 		int numVars = getNumSampleVars(extractData);
 		/*
 		 * Prepare PCA Calculation
 		 */
-		IMultivariateCalculator principalComponentAnalysis = setupPCA(extractData, numVars, numberOfPrincipalComponents, pcaAlgorithm);
+		IMultivariateCalculator principalComponentAnalysis = setupPCA(extractData, numVars, numberOfPrincipalComponents, algorithm);
 		/*
 		 * Compute PCA
 		 */
@@ -217,6 +224,7 @@ public class PcaEvaluation {
 		if(!principalComponentAnalysis.getComputeStatus()) {
 			return null;
 		}
+		//
 		List<double[]> loadingVectors = getLoadingVectors(principalComponentAnalysis, numberOfPrincipalComponents);
 		double[] explainedVariances = this.getExplainedVariances(principalComponentAnalysis, numberOfPrincipalComponents);
 		double[] cumulativeExplainedVariances = this.getCumulativeExplainedVariances(explainedVariances);
@@ -224,6 +232,7 @@ public class PcaEvaluation {
 		pcaResults.setExplainedVariances(explainedVariances);
 		pcaResults.setCumulativeExplainedVariances(cumulativeExplainedVariances);
 		setEigenSpaceAndErrorValues(principalComponentAnalysis, extractData, pcaResults);
+		//
 		return pcaResults;
 	}
 

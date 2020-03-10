@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.model.statistics.ISampleData;
 import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 
-public class ScalingPareto extends AbstaractScaling {
+public class ScalingPareto extends AbstractScaling {
 
 	public ScalingPareto(int centeringType) {
 

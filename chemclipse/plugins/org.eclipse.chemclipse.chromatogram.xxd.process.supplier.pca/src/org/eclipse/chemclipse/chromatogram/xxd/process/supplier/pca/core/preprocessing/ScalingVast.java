@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.model.statistics.ISampleData;
 import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 
-public class ScalingVast extends AbstaractScaling {
+public class ScalingVast extends AbstractScaling {
 
 	public ScalingVast(int centeringType) {
 

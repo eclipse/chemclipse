@@ -15,7 +15,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 
 import javafx.collections.FXCollections;
@@ -66,7 +66,7 @@ public class PcaResultsVisualization<R extends IPcaResult, V extends IVariableVi
 	}
 
 	@Override
-	public IPcaSettings getPcaSettings() {
+	public IAnalysisSettings getPcaSettings() {
 
 		return delegator.getPcaSettings();
 	}

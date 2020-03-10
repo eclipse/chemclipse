@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.model.statistics.ISampleData;
 import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 
-public class ScalingAuto extends AbstaractScaling {
+public class ScalingAuto extends AbstractScaling {
 
 	public ScalingAuto(int centeringType) {
 

@@ -30,9 +30,9 @@ public abstract class AbstractCentering extends AbstractDataModificator implemen
 		boolean onlySelected = isOnlySelected();
 		DoubleStream selectedData = list.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(position)).mapToDouble(d -> getData(d));
 		switch(type) {
-			case CENTERING_MEAN:
+			case MEAN:
 				return selectedData.summaryStatistics().getAverage();
-			case CENTERING_MEADIAN:
+			case MEDIAN:
 				List<Double> data = selectedData.sorted().boxed().collect(Collectors.toList());
 				int lenght = data.size();
 				if(lenght == 0) {

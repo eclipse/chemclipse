@@ -27,7 +27,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class PcaExtractionScans implements IDataExtraction {
+public class PcaExtractionScans implements IExtractionData {
 
 	private List<IDataInputEntry> dataInputEntriesAll;
 	private ExtractionType extractionType;

@@ -24,28 +24,27 @@ import org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class PcaExtractionPeaks implements IDataExtraction {
+public class PcaExtractionPeaks implements IExtractionData {
 
-	private final List<IDataInputEntry> dataInputEntriesAll;
+	private final List<IDataInputEntry> dataInputEntries;
 	private final int retentionTimeWindow;
 
 	public PcaExtractionPeaks(List<IDataInputEntry> dataInputEntriesAll, int retentionTimeWindow) {
 		this.retentionTimeWindow = retentionTimeWindow;
-		this.dataInputEntriesAll = dataInputEntriesAll;
+		this.dataInputEntries = dataInputEntriesAll;
 	}
 
-	private Map<IDataInputEntry, IPeaks<?>> extractPeaks(List<IDataInputEntry> peakinpitFiles, IProgressMonitor monitor) {
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	private Map<IDataInputEntry, IPeaks<?>> extractPeaks(List<IDataInputEntry> peakInputFiles, IProgressMonitor monitor) {
 
 		Map<IDataInputEntry, IPeaks<?>> peakMap = new LinkedHashMap<>();
-		for(IDataInputEntry peakFile : peakinpitFiles) {
+		for(IDataInputEntry peakFile : peakInputFiles) {
 			try {
-				/*
-				 * Try to catch exceptions if wrong files have been selected.
-				 */
 				IProcessingInfo<IPeaks> processingInfo = PeakConverterMSD.convert(new File(peakFile.getInputFile()), monitor);
 				IPeaks<?> peaks = processingInfo.getProcessingResult();
 				peakMap.put(peakFile, peaks);
 			} catch(Exception e) {
+				//
 			}
 		}
 		return peakMap;
@@ -54,12 +53,8 @@ public class PcaExtractionPeaks implements IDataExtraction {
 	@Override
 	public Samples process(IProgressMonitor monitor) {
 
-		/*
-		 * Initialize PCA Results
-		 */
 		PeakExtractionSupport peakExtractionSupport = new PeakExtractionSupport(retentionTimeWindow);
-		Map<IDataInputEntry, IPeaks<?>> peakMap = extractPeaks(dataInputEntriesAll, monitor);
-		Samples samples = peakExtractionSupport.extractPeakData(peakMap, monitor);
-		return samples;
+		Map<IDataInputEntry, IPeaks<?>> peakMap = extractPeaks(dataInputEntries, monitor);
+		return peakExtractionSupport.extractPeakData(peakMap, monitor);
 	}
 }

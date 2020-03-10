@@ -21,22 +21,19 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IDataExtraction;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.PcaInputRunnable;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IExtractionData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PreprocessingSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.BatchProcessWizardDialog;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.IPcaInputWizard;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.PcaChromatogramsMSDInputWizard;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.PcaPeaksInputWizard;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.IInputWizard;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.PeaksInputWizard;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.ScansInputWizard;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.Coloring;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISampleVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISamplesVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableVisualization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.SamplesVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.utility.PcaColorGroup;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -186,7 +183,7 @@ public class PCAEditorController {
 	void handlerLoadPeaks(ActionEvent event) {
 
 		try {
-			openWizardPcaInput(new PcaPeaksInputWizard());
+			openWizardPcaInput(new PeaksInputWizard());
 		} catch(InvocationTargetException | InterruptedException e) {
 		}
 	}
@@ -195,7 +192,7 @@ public class PCAEditorController {
 	void handlerLoadScans(ActionEvent event) {
 
 		try {
-			openWizardPcaInput(new PcaChromatogramsMSDInputWizard());
+			openWizardPcaInput(new ScansInputWizard());
 		} catch(InvocationTargetException | InterruptedException e) {
 		}
 	}
@@ -294,26 +291,26 @@ public class PCAEditorController {
 		updateNumerSeletedSamples();
 	}
 
-	private int openWizardPcaInput(IPcaInputWizard wizard) throws InvocationTargetException, InterruptedException {
+	private int openWizardPcaInput(IInputWizard wizard) throws InvocationTargetException, InterruptedException {
 
 		BatchProcessWizardDialog wizardDialog = new BatchProcessWizardDialog(Display.getDefault().getActiveShell(), wizard);
 		int status = wizardDialog.open();
 		if(status == Window.OK) {
-			PcaFiltrationData pcaFiltrationData = wizard.getPcaFiltrationData();
-			PcaPreprocessingData pcaPreprocessingData = wizard.getPcaPreprocessingData();
-			IDataExtraction pcaExtractionData = wizard.getPcaExtractionData();
+			FilterSettings filterSettings = wizard.getFilterSettings();
+			PreprocessingSettings preprocessingSettings = wizard.getPreprocessingSettings();
+			IExtractionData pcaExtractionData = wizard.getExtractionData();
 			/*
 			 * Run the process.
 			 */
-			PcaInputRunnable runnable = new PcaInputRunnable(pcaExtractionData, pcaFiltrationData, pcaPreprocessingData);
+			// RunnablePCA runnable = new RunnablePCA(pcaExtractionData, filterSettings, preprocessingSettings);
 			ProgressMonitorDialog monitor = new ProgressMonitorDialog(Display.getCurrent().getActiveShell());
 			/*
 			 * Calculate the results and show the score plot page.
 			 */
-			monitor.run(true, true, runnable);
-			Samples samples = runnable.getSamples();
-			samples.setDefaultPcaSettings(wizard.getPcaSettingsVisualization());
-			setSamples(new SamplesVisualization(samples));
+			// monitor.run(true, true, runnable);
+			// Samples samples = runnable.getSamples();
+			// samples.setDefaultPcaSettings(wizard.getAnalysisSettings());
+			// setSamples(new SamplesVisualization(samples));
 		}
 		return status;
 	}

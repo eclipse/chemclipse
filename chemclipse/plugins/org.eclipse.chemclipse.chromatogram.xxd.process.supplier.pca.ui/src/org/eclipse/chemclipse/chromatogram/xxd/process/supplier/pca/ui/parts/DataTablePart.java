@@ -52,14 +52,14 @@ public class DataTablePart extends GeneralPcaPart {
 		changeSelectedSample = () -> {
 			ISamples<? extends IVariableVisualization, ? extends ISampleVisualization> samples = getSamples();
 			if(samples != null) {
-				peakListIntensityTable.update(getSamples(), getPcaSettingsVisualization());
+				peakListIntensityTable.update(getSamples(), getPcaSettings());
 			} else {
 				peakListIntensityTable.clearTable();
 			}
 		};
 		getSelectionManagerSamples().getSelectionManagerVariable().getSelection().addListener(actualVariableChangeListener);
 		createComposite(composite);
-		inicializeHandler();
+		initializeHandler();
 	}
 
 	public void createComposite(Composite parent) {

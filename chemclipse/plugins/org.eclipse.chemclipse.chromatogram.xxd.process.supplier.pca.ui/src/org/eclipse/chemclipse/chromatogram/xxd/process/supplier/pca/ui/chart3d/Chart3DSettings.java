@@ -117,10 +117,10 @@ public class Chart3DSettings {
 
 	public static void setSettings(Chart3DSettings settings, IPcaResultsVisualization pcaResults) {
 
-		IPcaVisualization pcaSettings = pcaResults.getPcaVisualization();
-		int pcX = pcaSettings.getPcX() - 1;
-		int pcY = pcaSettings.getPcY() - 1;
-		int pcZ = pcaSettings.getPcZ() - 1;
+		IPcaVisualization analysisSettings = pcaResults.getPcaVisualization();
+		int pcX = analysisSettings.getPcX() - 1;
+		int pcY = analysisSettings.getPcY() - 1;
+		int pcZ = analysisSettings.getPcZ() - 1;
 		settings.setPcX(pcX);
 		settings.setPcY(pcY);
 		settings.setPcZ(pcZ);

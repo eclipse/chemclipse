@@ -11,11 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PreprocessingSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataPreprocessing;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDefaultPcaSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariablesFiltration;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
 
@@ -29,7 +29,6 @@ public class SamplesVisualization extends AbstractSamplesVisualization<Retention
 	private ObservableList<SampleVisualization> samplesVisualization;
 
 	public SamplesVisualization(Samples samples) {
-
 		super(samples);
 		this.samples = samples;
 		samplesVisualization = FXCollections.observableArrayList(ISampleVisualization.extractor());
@@ -39,15 +38,15 @@ public class SamplesVisualization extends AbstractSamplesVisualization<Retention
 	}
 
 	@Override
-	public PcaFiltrationData getPcaFiltrationData() {
+	public FilterSettings getFilterSettings() {
 
-		return samples.getPcaFiltrationData();
+		return samples.getFilterSettings();
 	}
 
 	@Override
-	public PcaPreprocessingData getPcaPreprocessingData() {
+	public PreprocessingSettings getPreprocessingSettings() {
 
-		return samples.getPcaPreprocessingData();
+		return samples.getPreprocessingSettings();
 	}
 
 	@Override
@@ -63,8 +62,8 @@ public class SamplesVisualization extends AbstractSamplesVisualization<Retention
 	}
 
 	@Override
-	public IPcaSettings getDefaultPcaSettings() {
+	public IAnalysisSettings getDefaultPcaSettings() {
 
-		return samples.getDefaultPcaSettings();
+		return samples.getAnalysisSettings();
 	}
 }

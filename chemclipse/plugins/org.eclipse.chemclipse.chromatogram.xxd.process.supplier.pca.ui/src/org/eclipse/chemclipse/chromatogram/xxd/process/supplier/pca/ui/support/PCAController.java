@@ -11,19 +11,19 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support;
 
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaPreprocessingData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PreprocessingSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.exception.MathIllegalArgumentException;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Algorithm;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.AnalysisSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaSettingsVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISampleVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISamplesVisualization;
@@ -34,6 +34,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.preference.IPreferencePage;
@@ -41,7 +42,12 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
@@ -62,10 +68,9 @@ public class PCAController {
 	private static final Logger logger = Logger.getLogger(PCAController.class);
 	private EvaluationState evaluationState = EvaluationState.OK;
 	private Spinner numerPrincipalComponents;
-	private Combo pcaAlgo;
 	private Optional<IPcaResultsVisualization> pcaResults;
-	private IPcaSettingsVisualization pcaSettingsVisualization;
-	private PcaPreprocessingData pcaPreprocessingData;
+	private IAnalysisSettings analysisSettings = new AnalysisSettings();
+	private PreprocessingSettings preprocessingSettings;
 	private Spinner pcx;
 	private Spinner pcy;
 	private Spinner pcz;
@@ -74,10 +79,11 @@ public class PCAController {
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private Button autoReevaluate;
 	private AtomicBoolean evaluateRun = new AtomicBoolean(false);
+	//
 	private Runnable autoreevaluete = () -> {
 		boolean start = evaluateRun.compareAndSet(false, true);
 		if(samples.isPresent() && start) {
-			PcaPreprocessingData preprocessingData = getSelectionManagerSamples().getPreprocessingData(samples.get());
+			PreprocessingSettings preprocessingData = getSelectionManagerSamples().getPreprocessingSettings(samples.get());
 			preprocessingData.process(samples.get(), new NullProgressMonitor());
 			if(autoReevaluate.getSelection()) {
 				evaluatePCA();
@@ -97,12 +103,12 @@ public class PCAController {
 			Display.getDefault().timerExec(100, autoreevaluete);
 		}
 	};
-	private Consumer<IPcaSettingsVisualization> changeSettings = (p) -> {
+	private Consumer<IAnalysisSettings> changeSettings = (p) -> {
 		if(!evaluateRun.get()) {
 			Display.getDefault().timerExec(100, autoreevaluete);
 		}
 	};
-	private Consumer<PcaPreprocessingData> changePreprocessing = (p) -> {
+	private Consumer<PreprocessingSettings> changePreprocessing = (p) -> {
 		if(!evaluateRun.get()) {
 			Display.getDefault().timerExec(100, autoreevaluete);
 		}
@@ -110,7 +116,6 @@ public class PCAController {
 	private SelectionManagerSamples selectionManagerSamples;
 
 	public PCAController(Composite parent, Object layoutData) {
-
 		samples = Optional.empty();
 		pcaResults = Optional.empty();
 		Composite composite = new Composite(parent, SWT.NONE);
@@ -129,23 +134,14 @@ public class PCAController {
 		numerPrincipalComponents.setSelection(maxPC);
 		numerPrincipalComponents.setMaximum(PreferenceSupplier.MAX_NUMBER_OF_COMPONENTS);
 		numerPrincipalComponents.addListener(SWT.Selection, e -> {
-			if(pcaSettingsVisualization != null) {
-				pcaSettingsVisualization.setNumberOfPrincipalComponents(numerPrincipalComponents.getSelection());
+			if(analysisSettings != null) {
+				analysisSettings.setNumberOfPrincipalComponents(numerPrincipalComponents.getSelection());
 			}
 		});
 		// Selection PCA calculation algorithm
 		label = new Label(composite, SWT.None);
 		label.setText("Algorithm:");
-		pcaAlgo = new Combo(composite, SWT.READ_ONLY | SWT.BORDER);
-		pcaAlgo.setBounds(50, 50, 150, 65);
-		String items[] = {IPcaSettings.PCA_ALGO_SVD, IPcaSettings.PCA_ALGO_NIPALS, IPcaSettings.OPLS_ALGO_NIPALS};
-		pcaAlgo.setItems(items);
-		pcaAlgo.select(Arrays.asList(items).indexOf(preferenceStore.getString(PreferenceSupplier.P_ALGORITHM_TYPE)));
-		pcaAlgo.addListener(SWT.Selection, e -> {
-			if(pcaSettingsVisualization != null) {
-				pcaSettingsVisualization.setPcaAlgorithm(pcaAlgo.getText());
-			}
-		});
+		createComboViewerAlgorithm(composite);
 		// Selection Principal Component for X-axis
 		label = new Label(composite, SWT.None);
 		label.setText("PCX:");
@@ -193,6 +189,43 @@ public class PCAController {
 			}
 		});
 		setOk(true);
+	}
+
+	private ComboViewer createComboViewerAlgorithm(Composite parent) {
+
+		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
+		comboViewer.setInput(new Object[]{Algorithm.SVD, Algorithm.NIPALS, Algorithm.OPLS});
+		comboViewer.setLabelProvider(new AbstractLabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+
+				if(element instanceof Algorithm) {
+					return ((Algorithm)element).getName();
+				}
+				return null;
+			}
+		});
+		//
+		Combo combo = comboViewer.getCombo();
+		combo.setToolTipText("PCA Algorithm");
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				Object object = comboViewer.getStructuredSelection().getFirstElement();
+				if(object instanceof Algorithm) {
+					if(analysisSettings != null) {
+						analysisSettings.setAlgorithm((Algorithm)object);
+					}
+				}
+			}
+		});
+		//
+		return comboViewer;
 	}
 
 	public void openSettingsDialog(Display display) {
@@ -260,7 +293,7 @@ public class PCAController {
 								el.add(s);
 							}
 							IPcaVisualization pcaVisualization = new PcaVisualization(pcX, pcY, pcZ);
-							final IPcaResultsVisualization results = getSelectionManagerSamples().evaluatePca(s, pcaSettingsVisualization.makeDeepCopy(), pcaVisualization, progressMonitor, true);
+							final IPcaResultsVisualization results = getSelectionManagerSamples().evaluatePca(s, analysisSettings.makeDeepCopy(), pcaVisualization, progressMonitor, true);
 							pcaResults = Optional.of(results);
 							setOk(true);
 						} catch(MathIllegalArgumentException e) {
@@ -303,18 +336,18 @@ public class PCAController {
 			ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> samplesVisualizationOld = this.samples.get();
 			samplesVisualizationOld.getSampleList().removeListener(reevaluationSamplesChangeListener);
 			samplesVisualizationOld.getVariables().removeListener(reevaluationRetentionTimeChangeListener);
-			this.pcaSettingsVisualization.removeListener(changeSettings);
-			this.pcaPreprocessingData.removeListener(changePreprocessing);
+			// this.analysisSettings.removeListener(changeSettings);
+			// this.preprocessingSettings.removeListener(changePreprocessing);
 		}
 		this.samples = Optional.of(samples);
 		if(this.samples.isPresent()) {
 			ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> samplesVisualizationNew = this.samples.get();
 			samplesVisualizationNew.getSampleList().addListener(reevaluationSamplesChangeListener);
 			samplesVisualizationNew.getVariables().addListener(reevaluationRetentionTimeChangeListener);
-			this.pcaSettingsVisualization = getSelectionManagerSamples().getPcaSettings(this.samples.get());
-			this.pcaSettingsVisualization.addListener(changeSettings);
-			this.pcaPreprocessingData = getSelectionManagerSamples().getPreprocessingData(this.samples.get());
-			this.pcaPreprocessingData.addListener(changePreprocessing);
+			this.analysisSettings = getSelectionManagerSamples().getPcaSettings(this.samples.get());
+			// this.analysisSettings.addListener(changeSettings);
+			this.preprocessingSettings = getSelectionManagerSamples().getPreprocessingSettings(this.samples.get());
+			// this.preprocessingSettings.addListener(changePreprocessing);
 		}
 		Display.getDefault().timerExec(100, autoreevaluete);
 	}

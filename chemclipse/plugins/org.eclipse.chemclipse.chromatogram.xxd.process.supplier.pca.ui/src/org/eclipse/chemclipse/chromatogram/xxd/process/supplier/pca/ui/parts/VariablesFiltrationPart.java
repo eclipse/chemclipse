@@ -18,7 +18,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaFiltrationData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.FilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariablesFiltration;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISampleVisualization;
@@ -41,7 +41,7 @@ import javafx.collections.ListChangeListener;
 
 public class VariablesFiltrationPart {
 
-	private static Map<ISamples<? extends IVariable, ? extends ISample>, PcaFiltrationData> filters;
+	private static Map<ISamples<? extends IVariable, ? extends ISample>, FilterSettings> filters;
 	private ListChangeListener<ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> actualSelectionLisnter;
 	private Label countSelectedRow;
 	@Inject
@@ -86,7 +86,7 @@ public class VariablesFiltrationPart {
 			@Override
 			public void onChanged(ListChangeListener.Change<? extends ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization>> c) {
 
-				PcaFiltrationData pcaFiltrationData = new PcaFiltrationData();
+				FilterSettings filterSettings = new FilterSettings();
 				if(samples != null) {
 					samples.getVariables().removeListener(changeVariablesChangeListener);
 				}
@@ -94,13 +94,13 @@ public class VariablesFiltrationPart {
 					samples = c.getList().get(0);
 					samples.getVariables().addListener(changeVariablesChangeListener);
 					filtersTable.setSamples(samples);
-					pcaFiltrationData = getPcaFiltrationData(c.getList().get(0));
+					filterSettings = getPcaFiltrationData(c.getList().get(0));
 				} else {
 					samples = null;
 				}
-				final PcaFiltrationData filtrationData = pcaFiltrationData;
+				final FilterSettings filtrationData = filterSettings;
 				display.syncExec(() -> {
-					filtersTable.setPcaFiltrationData(filtrationData);
+					filtersTable.setFilterSettings(filtrationData);
 					filtersTable.update();
 					updateLabelTotalSelection();
 				});
@@ -168,7 +168,7 @@ public class VariablesFiltrationPart {
 		if(!getSelectionManagerSamples().getSelection().isEmpty()) {
 			samples = getSelectionManagerSamples().getSelection().get(0);
 			samples.getVariables().addListener(changeVariablesChangeListener);
-			filtersTable.setPcaFiltrationData(getPcaFiltrationData(samples));
+			filtersTable.setFilterSettings(getPcaFiltrationData(samples));
 			filtersTable.setSamples(samples);
 			filtersTable.update();
 		}
@@ -176,18 +176,18 @@ public class VariablesFiltrationPart {
 		getSelectionManagerSamples().getSelection().addListener(actualSelectionLisnter);
 	}
 
-	private PcaFiltrationData getPcaFiltrationData(ISamples<? extends IVariable, ? extends ISample> samples) {
+	private FilterSettings getPcaFiltrationData(ISamples<? extends IVariable, ? extends ISample> samples) {
 
 		if(samples instanceof IVariablesFiltration) {
 			IVariablesFiltration variablesFiltration = (IVariablesFiltration)samples;
-			return variablesFiltration.getPcaFiltrationData();
+			return variablesFiltration.getFilterSettings();
 		} else {
 			if(filters.containsKey(samples)) {
 				return filters.get(samples);
 			} else {
-				PcaFiltrationData pcaFiltrationData = new PcaFiltrationData();
-				filters.put(samples, pcaFiltrationData);
-				return pcaFiltrationData;
+				FilterSettings filterSettings = new FilterSettings();
+				filters.put(samples, filterSettings);
+				return filterSettings;
 			}
 		}
 	}

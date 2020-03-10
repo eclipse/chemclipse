@@ -25,7 +25,8 @@ public class PreferenceLoadingPlot2DPage extends FieldEditorPreferencePage imple
 	public PreferenceLoadingPlot2DPage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Loading Plot 2D Preferences");
+		setTitle("Loading Plot");
+		setDescription("");
 	}
 
 	@Override

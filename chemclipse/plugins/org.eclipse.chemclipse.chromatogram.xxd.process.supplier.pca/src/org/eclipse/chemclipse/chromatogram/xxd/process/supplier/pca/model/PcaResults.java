@@ -24,11 +24,11 @@ public class PcaResults implements IPcaResults<IPcaResult, IVariable> {
 	private List<IVariable> extractedVariables;
 	private List<IPcaResult> pcaResultList;
 	//
-	private IPcaSettings pcaSettings;
+	private IAnalysisSettings analysisSettings;
 
-	public PcaResults(IPcaSettings pcaSettings) {
+	public PcaResults(IAnalysisSettings analysisSettings) {
 
-		this.pcaSettings = pcaSettings;
+		this.analysisSettings = analysisSettings;
 		extractedVariables = new ArrayList<>();
 		pcaResultList = new ArrayList<>();
 	}
@@ -52,9 +52,9 @@ public class PcaResults implements IPcaResults<IPcaResult, IVariable> {
 	}
 
 	@Override
-	public IPcaSettings getPcaSettings() {
+	public IAnalysisSettings getPcaSettings() {
 
-		return pcaSettings;
+		return analysisSettings;
 	}
 
 	@Override

@@ -21,7 +21,7 @@ import java.util.SortedMap;
 import java.util.function.BiFunction;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.export.ExportData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.export.ExportDataSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
@@ -410,9 +410,9 @@ public class PeakListNatTable {
 		natTable.refresh();
 	}
 
-	public void update(ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> samples, IPcaSettings pcaSettings) {
+	public void update(ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> samples, IAnalysisSettings analysisSettings) {
 
-		tableData.update(samples, pcaSettings);
+		tableData.update(samples, analysisSettings);
 		sortModel.update();
 		natTable.addConfiguration(new PcaResulRegistryConfiguration(dataProvider));
 		natTable.configure();

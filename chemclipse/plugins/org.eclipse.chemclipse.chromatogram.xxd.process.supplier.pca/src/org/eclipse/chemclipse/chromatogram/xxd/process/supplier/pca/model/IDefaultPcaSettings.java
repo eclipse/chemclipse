@@ -13,5 +13,5 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
 public interface IDefaultPcaSettings {
 
-	IPcaSettings getDefaultPcaSettings();
+	IAnalysisSettings getDefaultPcaSettings();
 }

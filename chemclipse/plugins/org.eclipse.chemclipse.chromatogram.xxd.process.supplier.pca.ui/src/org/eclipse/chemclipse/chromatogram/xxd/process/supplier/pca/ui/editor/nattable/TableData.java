@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISampleVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISamplesVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableVisualization;
@@ -32,7 +32,6 @@ public class TableData {
 	private boolean[] modifiableRowList;
 
 	public TableData() {
-
 	}
 
 	public void clear() {
@@ -68,7 +67,7 @@ public class TableData {
 		return variables;
 	}
 
-	public void update(ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> isamples, IPcaSettings pcaSettings) {
+	public void update(ISamplesVisualization<? extends IVariableVisualization, ? extends ISampleVisualization> isamples, IAnalysisSettings analysisSettings) {
 
 		/*
 		 * remove old data
@@ -90,7 +89,7 @@ public class TableData {
 		variables.forEach(v -> colors.add(v.getColor()));
 		modifiableRowList = new boolean[variables.size()];
 		for(int i = 0; i < modifiableRowList.length; i++) {
-			if(pcaSettings.isRemoveUselessVariables()) {
+			if(analysisSettings.isRemoveUselessVariables()) {
 				modifiableRowList[i] = isamples.selectVariable(i);
 			} else {
 				modifiableRowList[i] = true;

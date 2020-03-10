@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,7 +22,6 @@ import org.eclipse.chemclipse.model.statistics.IVariable;
 public class Normalization1Norm extends AbstractDataModificator implements INormalization {
 
 	public Normalization1Norm() {
-
 		super();
 	}
 
@@ -35,7 +34,7 @@ public class Normalization1Norm extends AbstractDataModificator implements INorm
 	@Override
 	public String getName() {
 
-		return "Normalization 1-norm";
+		return "Normalization 1-Norm";
 	}
 
 	@Override
@@ -44,7 +43,7 @@ public class Normalization1Norm extends AbstractDataModificator implements INorm
 		for(ISample sample : samples.getSampleList()) {
 			if(sample.isSelected() || !isOnlySelected()) {
 				List<? extends ISampleData> sampleData = sample.getSampleData();
-				System.out.println(sample.getName());
+				// System.out.println(sample.getName());
 				double sum = IntStream.range(0, sampleData.size()).filter(i -> !sampleData.get(i).isEmpty()).filter(i -> !skipVariable(samples, i))//
 						.mapToDouble(i -> Math.abs(getData(sampleData.get(i)))).sum();
 				IntStream.range(0, sampleData.size()).filter(i -> !sampleData.get(i).isEmpty()).filter(i -> !skipVariable(samples, i))//

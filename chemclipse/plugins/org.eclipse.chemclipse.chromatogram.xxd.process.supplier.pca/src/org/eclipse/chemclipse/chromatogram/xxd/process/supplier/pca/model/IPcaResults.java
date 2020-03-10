@@ -25,7 +25,7 @@ public interface IPcaResults<R extends IPcaResult, V extends IVariable> {
 
 	List<R> getPcaResultList();
 
-	IPcaSettings getPcaSettings();
+	IAnalysisSettings getPcaSettings();
 
 	void setLoadingVectors(List<double[]> loadingVectors);
 

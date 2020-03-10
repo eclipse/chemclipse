@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,14 +18,10 @@ import org.eclipse.chemclipse.model.statistics.IVariable;
 
 public abstract class AbstractDataModificator extends AbstractPreprocessing implements IDataModificator {
 
-	private boolean modifyOnlySelectedVariable;
-	private boolean removeUselessVariables;
+	private boolean modifyOnlySelectedVariable = false;
+	private boolean removeUselessVariables = true;
 
-	public AbstractDataModificator() {
-
-		this.modifyOnlySelectedVariable = false;
-	}
-
+	@SuppressWarnings("rawtypes")
 	protected double getData(ISampleData data) {
 
 		return data.getModifiedData();
@@ -38,9 +34,9 @@ public abstract class AbstractDataModificator extends AbstractPreprocessing impl
 	}
 
 	@Override
-	public void setModifyOnlySelectedVariable(boolean b) {
+	public void setModifyOnlySelectedVariable(boolean modifyOnlySelectedVariable) {
 
-		this.modifyOnlySelectedVariable = b;
+		this.modifyOnlySelectedVariable = modifyOnlySelectedVariable;
 	}
 
 	@Override
@@ -50,16 +46,13 @@ public abstract class AbstractDataModificator extends AbstractPreprocessing impl
 	}
 
 	@Override
-	public void setRemoveUselessVariables(boolean b) {
+	public void setRemoveUselessVariables(boolean removeUselessVariables) {
 
-		this.removeUselessVariables = b;
+		this.removeUselessVariables = removeUselessVariables;
 	}
 
 	protected <V extends IVariable, S extends ISample> boolean skipVariable(ISamples<V, S> samples, int order) {
 
-		boolean b = (modifyOnlySelectedVariable && !samples.getVariables().get(order).isSelected()) || //
-				(modifyOnlySelectedVariable && removeUselessVariables && !samples.selectVariable(order));
-		// System.out.println(order + " - " + b);
-		return b;
+		return (modifyOnlySelectedVariable && !samples.getVariables().get(order).isSelected()) || (modifyOnlySelectedVariable && removeUselessVariables && !samples.selectVariable(order));
 	}
 }
