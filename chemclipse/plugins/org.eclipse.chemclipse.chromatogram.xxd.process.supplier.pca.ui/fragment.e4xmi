@@ -19,7 +19,7 @@
         <children xsi:type="menu:HandledToolItem" xmi:id="_qWAxUBvNEem34qUTPfw8kg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handledtoolitem.settings" label="Settings" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/configure.gif" command="_sEV7YBvNEem34qUTPfw8kg"/>
       </toolbar>
     </elements>
-    <elements xsi:type="basic:Part" xmi:id="_pUF1wPRuEeeapKw7g2Cagg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.part.pca2dscoreplot" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.ScorePlot2DPart" label="2D Score Plot" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/scoreplot2D.png">
+    <elements xsi:type="basic:Part" xmi:id="_pUF1wPRuEeeapKw7g2Cagg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.part.pca2dscoreplot" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.ScorePlotPart" label="Score Plot 2D" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/scoreplot2D.png">
       <toolbar xmi:id="_6LV20BvDEem34qUTPfw8kg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.toolbar.0">
         <children xsi:type="menu:HandledToolItem" xmi:id="_61lGoBvDEem34qUTPfw8kg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handledtoolitem.settings" label="Settings" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/configure.gif" command="_g1QtcBvFEem34qUTPfw8kg"/>
       </toolbar>

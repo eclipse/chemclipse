@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +12,12 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
+import org.eclipse.e4.core.contexts.EclipseContextFactory;
+import org.eclipse.e4.core.contexts.IEclipseContext;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -20,8 +25,12 @@ import org.osgi.framework.BundleContext;
  */
 public class Activator extends AbstractActivatorUI {
 
-	// The shared instance
+	public static final String TOPIC_PCA_RESULTS_LOAD = "pca/results/load";
+	public static final String TOPIC_PCA_RESULTS_CLEAR = "pca/results/clear";
+	public static final String PROPERTY_PCA_RESULTS = IEventBroker.DATA;
+	//
 	private static Activator plugin;
+	private DataUpdateSupport dataUpdateSupport;
 
 	/**
 	 * Returns the shared instance
@@ -49,6 +58,8 @@ public class Activator extends AbstractActivatorUI {
 		super.start(context);
 		plugin = this;
 		initializePreferenceStore(PreferenceSupplier.INSTANCE());
+		dataUpdateSupport = new DataUpdateSupport(getEventBroker());
+		initialize(dataUpdateSupport);
 	}
 
 	/*
@@ -60,5 +71,27 @@ public class Activator extends AbstractActivatorUI {
 
 		plugin = null;
 		super.stop(context);
+	}
+
+	public IEventBroker getEventBroker() {
+
+		BundleContext bundleContext = getBundle().getBundleContext();
+		IEclipseContext eclipseContext = EclipseContextFactory.getServiceContext(bundleContext);
+		eclipseContext.set(Logger.class, null);
+		return eclipseContext.get(IEventBroker.class);
+	}
+
+	public DataUpdateSupport getDataUpdateSupport() {
+
+		if(dataUpdateSupport == null) {
+			dataUpdateSupport = new DataUpdateSupport(getEventBroker());
+			initialize(dataUpdateSupport);
+		}
+		return dataUpdateSupport;
+	}
+
+	private void initialize(DataUpdateSupport dataUpdateSupport) {
+
+		dataUpdateSupport.subscribe(TOPIC_PCA_RESULTS_LOAD, PROPERTY_PCA_RESULTS);
 	}
 }

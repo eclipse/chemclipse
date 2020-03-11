@@ -15,8 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.utility.SeriesConverter;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.swt.SWT;
@@ -36,9 +35,9 @@ import org.eclipse.swtchart.extensions.events.ResetSeriesEvent;
 import org.eclipse.swtchart.extensions.events.UndoRedoEvent;
 import org.eclipse.swtchart.extensions.events.ZoomEvent;
 
-import javafx.collections.ObservableList;
-
 public class ScorePlot extends PCA2DPlot {
+
+	private final Map<String, IPcaResult> extractedResults = new HashMap<>();
 
 	private class SelectActualSeriesEvent extends AbstractHandledEventProcessor implements IHandledEventProcessor {
 
@@ -66,12 +65,7 @@ public class ScorePlot extends PCA2DPlot {
 			String selectedSeriesId = baseChart.getSelectedseriesId(event);
 			if(!selectedSeriesId.equals("")) {
 				ISample sample = extractedResults.get(selectedSeriesId).getSample();
-				ObservableList<ISample> selection = selectionManagerSample.getSelection();
-				if(!selection.contains(sample)) {
-					selection.setAll(sample);
-				} else {
-					selection.remove(sample);
-				}
+				// TODO Remove Sample
 			}
 		}
 	}
@@ -111,12 +105,9 @@ public class ScorePlot extends PCA2DPlot {
 		}
 	}
 
-	private final Map<String, IPcaResult> extractedResults = new HashMap<>();
-	private SelectionManagerSample selectionManagerSample;
-
-	public ScorePlot(Composite parent, SelectionManagerSample selectionManagerSample) {
+	public ScorePlot(Composite parent) {
 		super(parent, "Score Plot");
-		this.selectionManagerSample = selectionManagerSample;
+		//
 		IChartSettings chartSettings = getChartSettings();
 		chartSettings.clearHandledEventProcessors();
 		chartSettings.addHandledEventProcessor(new SelectSeriesEvent());
@@ -132,21 +123,21 @@ public class ScorePlot extends PCA2DPlot {
 		applySettings(chartSettings);
 	}
 
-	public Map<String, IPcaResult> getExtractedResults() {
+	public void setInput(PcaResults pcaResults) {
 
-		return extractedResults;
+		if(pcaResults != null) {
+			update(pcaResults);
+		}
 	}
 
-	public void update(IPcaResultsVisualization pcaResults) {
+	public void update(PcaResults pcaResults) {
 
 		deleteSeries();
-		addSeriesData(SeriesConverter.sampleToSeries(pcaResults, pcaResults.getPcaVisualization().getPcX(), pcaResults.getPcaVisualization().getPcY(), extractedResults));
-		extractedResults.entrySet().forEach(e -> {
-			if(selectionManagerSample.getSelection().contains(e.getValue().getSample())) {
-				getBaseChart().selectSeries(e.getKey());
-			}
-		});
-		update(pcaResults.getPcaVisualization().getPcX(), pcaResults.getPcaVisualization().getPcY());
+		// TODO from Score Plot chart menu toolbar
+		int pcX = 1;
+		int pcY = 2;
+		addSeriesData(SeriesConverter.sampleToSeries(pcaResults, pcX, pcY, extractedResults));
+		update(pcX, pcY);
 		redraw();
 	}
 }

@@ -11,14 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts;
 
-import java.util.Map.Entry;
 import java.util.function.Consumer;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.ScorePlot;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
@@ -64,7 +62,7 @@ public class ScorePlot2DPart {
 		if(partHasBeenDestroy)
 			return;
 		if(pcaResults != null) {
-			scorePlot.update(pcaResults);
+			// scorePlot.update(pcaResults);
 		}
 	};
 	@Inject
@@ -91,11 +89,11 @@ public class ScorePlot2DPart {
 						return;
 					scorePlot.getBaseChart().resetSeriesSettings();
 					if(!c.getList().isEmpty()) {
-						for(Entry<String, IPcaResult> entry : scorePlot.getExtractedResults().entrySet()) {
-							if(c.getList().contains(entry.getValue().getSample())) {
-								scorePlot.getBaseChart().selectSeries(entry.getKey());
-							}
-						}
+						// for(Entry<String, IPcaResult> entry : scorePlot.getExtractedResults().entrySet()) {
+						// if(c.getList().contains(entry.getValue().getSample())) {
+						// scorePlot.getBaseChart().selectSeries(entry.getKey());
+						// }
+						// }
 					}
 				});
 			}
@@ -122,7 +120,7 @@ public class ScorePlot2DPart {
 						oldValue.getPcaVisualization().removeChangeListener(settingUpdateListener);
 					}
 					if(newValue != null) {
-						scorePlot.update(newValue);
+						// scorePlot.update(newValue);
 						newValue.getPcaResultList().addListener(selectionChangeListener);
 						newValue.getPcaVisualization().addChangeListener(settingUpdateListener);
 					} else {
@@ -143,12 +141,12 @@ public class ScorePlot2DPart {
 		Composite scorePlotComposite = new Composite(composite, SWT.None);
 		scorePlotComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		scorePlotComposite.setLayout(new FillLayout());
-		scorePlot = new ScorePlot(scorePlotComposite, getSelectionManagerSample());
+		// scorePlot = new ScorePlot(scorePlotComposite, getSelectionManagerSample());
 		ReadOnlyObjectProperty<IPcaResultsVisualization> pcaresults = getSelectionManagerSamples().getActualSelectedPcaResults();
 		pcaresults.addListener(pcaResultChangeLisnter);
 		this.pcaResults = pcaresults.get();
 		if(this.pcaResults != null) {
-			scorePlot.update(pcaresults.getValue());
+			// scorePlot.update(pcaresults.getValue());
 			this.pcaResults.getPcaResultList().addListener(selectionChangeListener);
 			this.pcaResults.getPcaVisualization().addChangeListener(settingUpdateListener);
 		}
@@ -172,7 +170,7 @@ public class ScorePlot2DPart {
 					if(partHasBeenDestroy)
 						return;
 					if(pcaResults != null) {
-						scorePlot.update(pcaResults);
+						// scorePlot.update(pcaResults);
 					}
 				}
 			}

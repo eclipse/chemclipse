@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnaly
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamplesPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferenceLoadingPlot2DPage;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferenceScorePlot2DPage;
@@ -29,6 +30,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
@@ -344,11 +346,11 @@ public class AnalysisEditorUI extends Composite {
 			if(samples != null) {
 				try {
 					PcaEvaluation pcaEvaluation = new PcaEvaluation();
-					PcaResults results = pcaEvaluation.process(samples, new NullProgressMonitor());
-					System.out.println("RESULTS");
-					System.out.println(results.getExplainedVariances());
-					System.out.println(results.getCumulativeExplainedVariances());
-					System.out.println(results.getPcaResultList().get(0));
+					PcaResults pcaResults = pcaEvaluation.process(samples, new NullProgressMonitor());
+					IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+					if(eventBroker != null) {
+						eventBroker.send(Activator.TOPIC_PCA_RESULTS_LOAD, pcaResults);
+					}
 				} catch(MathIllegalArgumentException e) {
 					logger.error(e.getLocalizedMessage(), e);
 				} catch(Exception e) {
