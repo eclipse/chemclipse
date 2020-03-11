@@ -58,7 +58,7 @@ public class PreprocessingSettingsUI extends Composite {
 	private Button checkBoxSelect;
 	//
 	private Object[] normalizeInput = new Object[]{"--", new Normalization1Norm(), new Normalization2Norm(), new NormalizationInfNorm()};
-	private Object[] replacerInput = new Object[]{"--", new MeanValuesReplacer(), new MedianValuesReplacer(), new SmallValuesReplacer()};
+	private Object[] replacerInput = new Object[]{new MeanValuesReplacer(), new MedianValuesReplacer(), new SmallValuesReplacer()};
 	private Object[] transformationInput = new Object[]{"--", new TransformationLOG10(), new TransformationPower()};
 	private Object[] centeringInput = new Object[]{"--", new CenteringMean(), new CenteringMedian()};
 	private Object[] scaleInputEmpty = new Object[]{"--"};
@@ -136,6 +136,7 @@ public class PreprocessingSettingsUI extends Composite {
 
 		ComboViewer comboViewer = createComboViewer(parent, replacerInput, "Replacement");
 		Combo combo = comboViewer.getCombo();
+		combo.select(0);
 		combo.addSelectionListener(new SelectionAdapter() {
 
 			@Override

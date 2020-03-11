@@ -16,6 +16,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preproc
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.INormalization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.IReplacer;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.ITransformation;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.MeanValuesReplacer;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
@@ -26,11 +27,14 @@ public class PreprocessingSettings implements IDataModification {
 	private ICentering centering = null;
 	private INormalization normalization = null;
 	private ITransformation transformation = null;
-	private IReplacer replacer = null;
+	/*
+	 * Replace must be set.
+	 */
+	private IReplacer replacer = new MeanValuesReplacer();
 	//
-	private boolean modifyOnlySelectedVariable = false;
 	private boolean onlySelected = false;
-	private boolean removeUselessVariables = false;
+	private boolean removeUselessVariables = true;
+	private boolean modifyOnlySelectedVariable = false;
 
 	@Override
 	public boolean availableModification() {
