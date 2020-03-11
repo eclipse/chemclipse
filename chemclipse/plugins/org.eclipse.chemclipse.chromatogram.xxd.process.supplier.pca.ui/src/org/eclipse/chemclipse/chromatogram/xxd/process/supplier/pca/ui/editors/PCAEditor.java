@@ -10,7 +10,7 @@
  * Jan Holy - initial API and implementation
  * Dr. Philip Wenig - get rid of JavaFX
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts;
+package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;

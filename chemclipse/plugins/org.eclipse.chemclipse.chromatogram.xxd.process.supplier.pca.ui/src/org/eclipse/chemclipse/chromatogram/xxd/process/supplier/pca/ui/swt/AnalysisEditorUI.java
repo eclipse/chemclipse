@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -45,13 +46,19 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.swt.widgets.Table;
 
 public class AnalysisEditorUI extends Composite {
 
 	private static final Logger logger = Logger.getLogger(AnalysisEditorUI.class);
 	//
 	private ISamplesPCA<IVariable, ISample> samples = null;
+	//
 	private SamplesListUI sampleListUI;
+	private PreprocessingSettingsUI preprocessingSettingsUI;
+	private FilterSettingsUI filterSettingsUI;
 
 	public AnalysisEditorUI(Composite parent, int style) {
 		super(parent, style);
@@ -73,7 +80,7 @@ public class AnalysisEditorUI extends Composite {
 		setLayout(new GridLayout(1, true));
 		//
 		createToolbarMain(this);
-		sampleListUI = createSampleListUI(this);
+		createDataTab(this);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -82,16 +89,16 @@ public class AnalysisEditorUI extends Composite {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(12, false));
+		composite.setLayout(new GridLayout(6, false));
 		//
 		createLabel(composite, "Number of PCs:");
-		createSpinnerPCS(composite);
-		createLabel(composite, "PCX:");
-		createSpinnerPCX(composite);
-		createLabel(composite, "PCY:");
-		createSpinnerPCY(composite);
-		createLabel(composite, "PCZ:");
-		createSpinnerPCZ(composite);
+		createSpinnerPrincipleComponents(composite);
+		// createLabel(composite, "PCX:");
+		// createSpinnerPCX(composite);
+		// createLabel(composite, "PCY:");
+		// createSpinnerPCY(composite);
+		// createLabel(composite, "PCZ:");
+		// createSpinnerPCZ(composite);
 		createLabel(composite, "Algorithm:");
 		createComboViewerAlgorithm(composite);
 		createButtonRun(composite);
@@ -105,7 +112,7 @@ public class AnalysisEditorUI extends Composite {
 		return label;
 	}
 
-	private Spinner createSpinnerPCS(Composite parent) {
+	private Spinner createSpinnerPrincipleComponents(Composite parent) {
 
 		Spinner spinner = new Spinner(parent, SWT.BORDER);
 		spinner.setToolTipText("Number of Principal Components");
@@ -276,16 +283,59 @@ public class AnalysisEditorUI extends Composite {
 		});
 	}
 
+	private TabFolder createDataTab(Composite parent) {
+
+		TabFolder tabFolder = new TabFolder(parent, SWT.TOP);
+		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
+		tabFolder.setBackground(Colors.WHITE);
+		//
+		sampleListUI = createSampleListUI(tabFolder);
+		preprocessingSettingsUI = createPreprocessingUI(tabFolder);
+		filterSettingsUI = createFilterUI(tabFolder);
+		//
+		return tabFolder;
+	}
+
+	private SamplesListUI createSampleListUI(TabFolder tabFolder) {
+
+		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
+		tabItem.setText("Sample List");
+		//
+		SamplesListUI sampleListUI = new SamplesListUI(tabFolder, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.FULL_SELECTION);
+		Table table = sampleListUI.getTable();
+		table.setLayoutData(new GridData(GridData.FILL_BOTH));
+		//
+		tabItem.setControl(table);
+		return sampleListUI;
+	}
+
+	private PreprocessingSettingsUI createPreprocessingUI(TabFolder tabFolder) {
+
+		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
+		tabItem.setText("Preprocessing");
+		//
+		PreprocessingSettingsUI preprocessingSettingsUI = new PreprocessingSettingsUI(tabFolder, SWT.NONE);
+		preprocessingSettingsUI.setLayoutData(new GridData(GridData.FILL_BOTH));
+		//
+		tabItem.setControl(preprocessingSettingsUI);
+		return preprocessingSettingsUI;
+	}
+
+	private FilterSettingsUI createFilterUI(TabFolder tabFolder) {
+
+		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
+		tabItem.setText("Filter");
+		//
+		FilterSettingsUI filterSettingsUI = new FilterSettingsUI(tabFolder, SWT.NONE);
+		filterSettingsUI.setLayoutData(new GridData(GridData.FILL_BOTH));
+		//
+		tabItem.setControl(filterSettingsUI);
+		return filterSettingsUI;
+	}
+
 	private void applySettings() {
 
 		// TODO
-	}
-
-	private SamplesListUI createSampleListUI(Composite parent) {
-
-		SamplesListUI sampleListUI = new SamplesListUI(parent, SWT.BORDER);
-		sampleListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
-		return sampleListUI;
 	}
 
 	private void runCalculation() {

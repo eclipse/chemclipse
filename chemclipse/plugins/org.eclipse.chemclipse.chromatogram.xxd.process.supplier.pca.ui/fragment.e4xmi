@@ -61,7 +61,7 @@
       <children xsi:type="basic:PartSashContainer" xmi:id="_r9aKseclEem5MISSB9DEbQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.compositepart.editor.partsashcontainer.main" containerData="">
         <children xsi:type="basic:PartSashContainer" xmi:id="_r9aKsuclEem5MISSB9DEbQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.compositepart.editor.partsashcontainer.upper" horizontal="true">
           <children xsi:type="basic:PartStack" xmi:id="_r9aKs-clEem5MISSB9DEbQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.compositepart.editor.partsashcontainer.upper.partstack.data">
-            <children xsi:type="basic:Part" xmi:id="_r9aKteclEem5MISSB9DEbQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.part.data.comp" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.PCAEditor" label="Data" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/pca.gif">
+            <children xsi:type="basic:Part" xmi:id="_r9aKteclEem5MISSB9DEbQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.part.data.comp" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.PCAEditor" label="Data" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/pca.gif">
               <toolbar xmi:id="_r9aKtuclEem5MISSB9DEbQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.toolbar.3">
                 <children xsi:type="menu:HandledToolItem" xmi:id="_r9aKt-clEem5MISSB9DEbQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handledtoolitem.setings.comp" label="Setings" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/check.gif"/>
               </toolbar>
@@ -94,7 +94,7 @@
         </children>
       </children>
     </elements>
-    <elements xsi:type="basic:Part" xmi:id="_XRsCMOcoEem5MISSB9DEbQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.part.pcaeditor" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.PCAEditor" label="PCA Editor" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/pcaeditor.png">
+    <elements xsi:type="basic:Part" xmi:id="_XRsCMOcoEem5MISSB9DEbQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.part.pcaeditor" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editors.PCAEditor" label="PCA Editor" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/pcaeditor.png">
       <toolbar xmi:id="_efQcIOcoEem5MISSB9DEbQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.toolbar.4"/>
     </elements>
   </fragments>

@@ -16,8 +16,8 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Algorithm;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.AnalysisSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -41,7 +41,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final boolean DEF_REMOVE_USELESS_VARIABLES = true;
 	//
 	public static final String P_NUMBER_OF_COMPONENTS = "numberOfComponents";
-	public static final int MIN_NUMBER_OF_COMPONENTS = 1;
+	public static final int MIN_NUMBER_OF_COMPONENTS = 2;
 	public static final int MAX_NUMBER_OF_COMPONENTS = 1000;
 	public static final int DEF_NUMBER_OF_COMPONENTS = 3;
 	//
