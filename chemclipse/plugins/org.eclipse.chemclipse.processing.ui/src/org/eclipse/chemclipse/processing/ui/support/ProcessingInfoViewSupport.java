@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -41,14 +41,16 @@ public class ProcessingInfoViewSupport {
 	private final static String TITLE = "An error/some errors occured.";
 	private final static String MESSAGE = "Please check the 'Feedback' view.";
 	@Inject
-	IEclipseContext eclipseContext;
+	private IEclipseContext eclipseContext;
 	@Inject
-	DynamicProcessingInfoUpdateNotifier infoUpdateNotifier;
+	private DynamicProcessingInfoUpdateNotifier infoUpdateNotifier;
 	@Inject
-	UISynchronize uiSynchronize;
+	private UISynchronize uiSynchronize;
 	@Inject
-	PartSupport partSupport;
+	private PartSupport partSupport;
+	//
 	private static final ProcessingInfoViewSupport INSTANCE = new ProcessingInfoViewSupport();
+	//
 	static {
 		INSTANCE.eclipseContext = EclipseContextFactory.getServiceContext(Activator.getDefault().getBundle().getBundleContext());
 		INSTANCE.infoUpdateNotifier = ContextInjectionFactory.make(DynamicProcessingInfoUpdateNotifier.class, INSTANCE.eclipseContext);
@@ -145,7 +147,6 @@ public class ProcessingInfoViewSupport {
 	 * 
 	 * @param processingInfo
 	 */
-	@Deprecated
 	public static void updateProcessingInfo(final MessageProvider processingInfo) {
 
 		if(processingInfo == null) {
@@ -160,7 +161,6 @@ public class ProcessingInfoViewSupport {
 	 * 
 	 * @param processingInfo
 	 */
-	@Deprecated
 	public static void updateProcessingInfo(final MessageProvider processingInfo, final boolean focusProcessingInfoView) {
 
 		if(processingInfo == null) {
@@ -170,7 +170,6 @@ public class ProcessingInfoViewSupport {
 		updateProcessingInfo(display, processingInfo, focusProcessingInfoView);
 	}
 
-	@Deprecated
 	public static void updateProcessingInfo(final Display display, final MessageProvider processingInfo, final boolean focusProcessingInfoView) {
 
 		INSTANCE.update(processingInfo, focusProcessingInfoView);
