@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2019 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,7 +24,11 @@ import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 
 /**
- * @deprecated Using this class is unsave due to ist static nature and can lead to unexpected "Application does not have active window", use E4DI instead, maybe with helperclasses {@link PartSupport} and {@link PerspectiveSupport} injected.
+ * @deprecated Using this class is unsave because the Eclipse-Application-Model consists of different {@link IEclipseContext}s each of it attached to different item (e.g. parts) with one active one.
+ *             Due to the static nature of this class this can lead to unexpected "Application does not have active window" if the current active one (e.g a dialog context), does not correspond to required assumption
+ *             (main window has focus), see https://bugs.eclipse.org/bugs/show_bug.cgi?id=502544 for more details.
+ *             To avoid this, one can use proper E4-DI instead to get a particular service or any of the creatable helper-classes {@link PartSupport} and {@link PerspectiveSupport} injected, if no E4-Injection is taking place,
+ *             the class/method should get the appropriate service from the caller instead of using this class.
  *
  */
 @Deprecated
