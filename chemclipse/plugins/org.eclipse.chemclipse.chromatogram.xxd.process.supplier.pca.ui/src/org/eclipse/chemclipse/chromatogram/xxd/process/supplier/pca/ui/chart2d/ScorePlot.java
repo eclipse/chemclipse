@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - getting rid of JavaFX
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d;
 
@@ -15,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.utility.SeriesConverter;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.swt.SWT;
@@ -65,7 +66,7 @@ public class ScorePlot extends PCA2DPlot {
 			String selectedSeriesId = baseChart.getSelectedseriesId(event);
 			if(!selectedSeriesId.equals("")) {
 				ISample sample = extractedResults.get(selectedSeriesId).getSample();
-				// TODO Remove Sample
+				System.out.println(sample);
 			}
 		}
 	}
@@ -123,14 +124,16 @@ public class ScorePlot extends PCA2DPlot {
 		applySettings(chartSettings);
 	}
 
-	public void setInput(PcaResults pcaResults) {
+	@SuppressWarnings("rawtypes")
+	public void setInput(IPcaResults pcaResults) {
 
 		if(pcaResults != null) {
 			update(pcaResults);
 		}
 	}
 
-	public void update(PcaResults pcaResults) {
+	@SuppressWarnings("rawtypes")
+	public void update(IPcaResults pcaResults) {
 
 		deleteSeries();
 		// TODO from Score Plot chart menu toolbar

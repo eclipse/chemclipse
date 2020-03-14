@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - getting rid of JavaFX
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d;
 
@@ -15,14 +16,10 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultVisualization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.utility.PcaColorGroup;
-import org.eclipse.chemclipse.model.statistics.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 
-import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.scene.Group;
@@ -35,11 +32,15 @@ import javafx.scene.shape.Sphere;
 
 public class Chart3DScatter {
 
+	private static EventType<UpdateSelectionEvent> SELECTION_UPDATE = new EventType<>("SELECTION_UPDATE");
+	private final List<IPcaResult> pcaResultList = new ArrayList<>();
+	final private NumberFormat format = ValueFormat.getNumberFormatEnglish();
+	private final Group mainGroup = new Group();
+	private double radius;
+	private Chart3DSettings settings;
+
 	private class UpdateSelectionEvent extends Event {
 
-		/**
-		 *
-		 */
 		private static final long serialVersionUID = -2717902232561677870L;
 
 		public UpdateSelectionEvent() {
@@ -47,43 +48,26 @@ public class Chart3DScatter {
 		}
 	}
 
-	private static EventType<UpdateSelectionEvent> SELECTION_UPDATE = new EventType<>("SELECTION_UPDATE");
-	private final List<IPcaResultVisualization> data = new ArrayList<>();
-	final private NumberFormat format = ValueFormat.getNumberFormatEnglish();
-	private final Group mainGroup = new Group();
-	private double radius;
-	private Chart3DSettings settings;
-	private SelectionManagerSample selectionManagerSample;
-
 	public Chart3DScatter(Chart3DSettings settings) {
 		this.settings = settings;
 		this.radius = 15;
-		data.clear();
+		pcaResultList.clear();
 		update();
 	}
 
-	public Chart3DScatter(Chart3DSettings settings, IPcaResultsVisualization pcaResults, SelectionManagerSample selectionManagerSample) {
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	public Chart3DScatter(Chart3DSettings settings, IPcaResults pcaResults) {
 		this(settings);
-		this.selectionManagerSample = selectionManagerSample;
-		data.clear();
-		for(IPcaResultVisualization pcaResult : pcaResults.getPcaResultList()) {
-			data.add(pcaResult);
+		pcaResultList.clear();
+		if(pcaResults != null) {
+			pcaResultList.addAll(pcaResults.getPcaResultList());
 		}
 		update();
 	}
 
-	private Color getColor(IPcaResultVisualization data) {
+	private Color getColor(IPcaResult data) {
 
-		Color color = PcaColorGroup.getSampleColorFX(data);
-		if(selectionManagerSample.getSelection().contains(data.getSample())) {
-			return PcaColorGroup.getActualSelectedColor(color);
-		} else {
-			if(data.getSample().isSelected()) {
-				return color;
-			} else {
-				return PcaColorGroup.getUnselectedColor(color);
-			}
-		}
+		return new Color(1.0d, 0.0d, 0.0d, 1.0d);
 	}
 
 	public Group getScarter() {
@@ -99,7 +83,7 @@ public class Chart3DScatter {
 		double shiftX = settings.getShiftX() * sX;
 		double shiftY = settings.getShiftY() * sY;
 		double shiftZ = settings.getShiftZ() * sZ;
-		for(IPcaResultVisualization d : data) {
+		for(IPcaResult d : pcaResultList) {
 			String name = d.getName();
 			/*
 			 * create sphere
@@ -168,12 +152,7 @@ public class Chart3DScatter {
 						if(e.isControlDown()) {
 							d.getSample().setSelected(!d.getSample().isSelected());
 						} else {
-							ObservableList<ISample> selection = selectionManagerSample.getSelection();
-							if(!selection.contains(d.getSample())) {
-								selection.setAll(d.getSample());
-							} else {
-								selection.remove(d.getSample());
-							}
+							//
 						}
 					}
 				}

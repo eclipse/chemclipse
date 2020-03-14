@@ -15,31 +15,32 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.ScorePlot;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d.ScorePlot3d;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EnhancedUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IUpdateSupport;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.widgets.Composite;
 
-public class ScorePlotPart extends EnhancedUpdateSupport implements IUpdateSupport {
+public class ScorePlotThreeDPart extends EnhancedUpdateSupport implements IUpdateSupport {
 
 	private static final String TOPIC = Activator.TOPIC_PCA_RESULTS_LOAD;
 	//
-	private ScorePlot scorePlot;
+	private ScorePlot3d scorePlot;
 
 	@Inject
-	public ScorePlotPart(Composite parent, MPart part) {
+	public ScorePlotThreeDPart(Composite parent, MPart part) {
 		super(parent, Activator.getDefault().getDataUpdateSupport(), TOPIC, part);
 	}
 
 	@Override
 	public void createControl(Composite parent) {
 
-		scorePlot = new ScorePlot(parent);
+		scorePlot = new ScorePlot3d(parent, null);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void updateSelection(List<Object> objects, String topic) {
 
@@ -51,8 +52,8 @@ public class ScorePlotPart extends EnhancedUpdateSupport implements IUpdateSuppo
 				scorePlot.setInput(null);
 			} else {
 				Object object = objects.get(0);
-				if(object instanceof PcaResults) {
-					scorePlot.setInput((PcaResults)object);
+				if(object instanceof IPcaResults) {
+					scorePlot.setInput((IPcaResults)object);
 				}
 			}
 		}

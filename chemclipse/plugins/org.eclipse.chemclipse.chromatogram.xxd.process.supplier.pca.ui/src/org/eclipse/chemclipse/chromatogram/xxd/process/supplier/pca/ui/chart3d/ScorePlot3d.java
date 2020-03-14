@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,11 +8,11 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - getting rid of JavaFX
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSample;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
@@ -41,10 +41,8 @@ public class ScorePlot3d {
 	private final double rotateModifier = 10;
 	private Chart3DScatter scatter;
 	private Chart3DSettings settings;
-	private SelectionManagerSample selectionManager;
 
-	public ScorePlot3d(Composite parent, Object dataLayout, SelectionManagerSample selectionManager) {
-		this.selectionManager = selectionManager;
+	public ScorePlot3d(Composite parent, Object dataLayout) {
 		/*
 		 * JavaFX init
 		 */
@@ -181,14 +179,14 @@ public class ScorePlot3d {
 		createScene();
 	}
 
-	public void update(IPcaResultsVisualization pcaResults) {
+	@SuppressWarnings("rawtypes")
+	public void setInput(IPcaResults pcaResults) {
 
 		Chart3DSettings.setSettings(settings, pcaResults);
 		Chart3DSettings.setAxes2(settings, 800);
 		axes = new Axes(settings);
 		axes.buildAxes();
-		scatter = new Chart3DScatter(settings, pcaResults, selectionManager);
-		createScene();
+		scatter = new Chart3DScatter(settings, pcaResults);
 		createScene();
 	}
 

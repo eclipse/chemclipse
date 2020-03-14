@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,14 +8,16 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - getting rid of JavaFX
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 
 import javafx.scene.paint.Color;
 
@@ -115,24 +117,34 @@ public class Chart3DSettings {
 		return new double[]{maxAxis, minAxis, lineSpacing};
 	}
 
-	public static void setSettings(Chart3DSettings settings, IPcaResultsVisualization pcaResults) {
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	public static void setSettings(Chart3DSettings settings, IPcaResults pcaResults) {
 
-		IPcaVisualization analysisSettings = pcaResults.getPcaVisualization();
-		int pcX = analysisSettings.getPcX() - 1;
-		int pcY = analysisSettings.getPcY() - 1;
-		int pcZ = analysisSettings.getPcZ() - 1;
+		int pcX = 0;
+		int pcY = 1;
+		int pcZ = 2;
 		settings.setPcX(pcX);
 		settings.setPcY(pcY);
 		settings.setPcZ(pcZ);
 		/*
 		 * set min and max
 		 */
-		settings.minX = pcaResults.getPcaResultList().stream().min((d1, d2) -> Double.compare(d1.getScoreVector()[pcX], d2.getScoreVector()[pcX])).get().getScoreVector()[pcX];
-		settings.minY = pcaResults.getPcaResultList().stream().min((d1, d2) -> Double.compare(d1.getScoreVector()[pcY], d2.getScoreVector()[pcY])).get().getScoreVector()[pcY];
-		settings.minZ = pcaResults.getPcaResultList().stream().min((d1, d2) -> Double.compare(d1.getScoreVector()[pcZ], d2.getScoreVector()[pcZ])).get().getScoreVector()[pcZ];
-		settings.maxX = pcaResults.getPcaResultList().stream().max((d1, d2) -> Double.compare(d1.getScoreVector()[pcX], d2.getScoreVector()[pcX])).get().getScoreVector()[pcX];
-		settings.maxY = pcaResults.getPcaResultList().stream().max((d1, d2) -> Double.compare(d1.getScoreVector()[pcY], d2.getScoreVector()[pcY])).get().getScoreVector()[pcY];
-		settings.maxZ = pcaResults.getPcaResultList().stream().max((d1, d2) -> Double.compare(d1.getScoreVector()[pcZ], d2.getScoreVector()[pcZ])).get().getScoreVector()[pcZ];
+		if(pcaResults != null) {
+			List<? extends IPcaResult> pcaResultList = pcaResults.getPcaResultList();
+			settings.minX = pcaResultList.stream().min((d1, d2) -> Double.compare(d1.getScoreVector()[pcX], d2.getScoreVector()[pcX])).get().getScoreVector()[pcX];
+			settings.minY = pcaResultList.stream().min((d1, d2) -> Double.compare(d1.getScoreVector()[pcY], d2.getScoreVector()[pcY])).get().getScoreVector()[pcY];
+			settings.minZ = pcaResultList.stream().min((d1, d2) -> Double.compare(d1.getScoreVector()[pcZ], d2.getScoreVector()[pcZ])).get().getScoreVector()[pcZ];
+			settings.maxX = pcaResultList.stream().max((d1, d2) -> Double.compare(d1.getScoreVector()[pcX], d2.getScoreVector()[pcX])).get().getScoreVector()[pcX];
+			settings.maxY = pcaResultList.stream().max((d1, d2) -> Double.compare(d1.getScoreVector()[pcY], d2.getScoreVector()[pcY])).get().getScoreVector()[pcY];
+			settings.maxZ = pcaResultList.stream().max((d1, d2) -> Double.compare(d1.getScoreVector()[pcZ], d2.getScoreVector()[pcZ])).get().getScoreVector()[pcZ];
+		} else {
+			settings.minX = 0.0d;
+			settings.minY = 0.0d;
+			settings.minZ = 0.0d;
+			settings.maxX = 0.0d;
+			settings.maxY = 0.0d;
+			settings.maxZ = 0.0d;
+		}
 	}
 
 	private double axisMaxX;

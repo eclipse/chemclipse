@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - getting rid of JavaFX
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts;
 
@@ -55,7 +56,7 @@ public class ScorePlot3DPart {
 				Display.getDefault().syncExec(() -> {
 					if(partHasBeenDestroy)
 						return;
-					scorePlot3d.update(pcaResults);
+					// scorePlot3d.update(pcaResults);
 				});
 			}
 		};
@@ -97,7 +98,7 @@ public class ScorePlot3DPart {
 						oldValue.getPcaVisualization().removeChangeListener(settingUpdateListener);
 					}
 					if(newValue != null) {
-						scorePlot3d.update(newValue);
+						// scorePlot3d.update(newValue);
 						pcaResults.getPcaResultList().addListener(selectionChangeListener);
 						pcaResults.getPcaVisualization().addChangeListener(settingUpdateListener);
 					} else {
@@ -114,12 +115,12 @@ public class ScorePlot3DPart {
 		partHasBeenDestroy = false;
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new FillLayout());
-		scorePlot3d = new ScorePlot3d(composite, null, getSelectionManagerSamples().getSelectionManagerSample());
+		scorePlot3d = new ScorePlot3d(composite, null);
 		ReadOnlyObjectProperty<IPcaResultsVisualization> pcaresults = getSelectionManagerSamples().getActualSelectedPcaResults();
 		pcaresults.addListener(pcaResultChangeLisnter);
 		this.pcaResults = pcaresults.get();
 		if(this.pcaResults != null) {
-			scorePlot3d.update(pcaresults.getValue());
+			// scorePlot3d.update(pcaresults.getValue());
 			this.pcaResults.getPcaResultList().addListener(selectionChangeListener);
 			this.pcaResults.getPcaVisualization().addChangeListener(settingUpdateListener);
 		}

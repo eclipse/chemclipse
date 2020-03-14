@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Dr. Philip Wenig - getting rid of JavaFX
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.utility;
 
@@ -18,7 +19,7 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
@@ -113,7 +114,8 @@ public class SeriesConverter {
 		return scatterSeriesDataList;
 	}
 
-	public static List<IScatterSeriesData> sampleToSeries(PcaResults pcaResults, int pcX, int pcY, Map<String, IPcaResult> extractedPcaResults) {
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	public static List<IScatterSeriesData> sampleToSeries(IPcaResults pcaResults, int pcX, int pcY, Map<String, IPcaResult> extractedPcaResults) {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<IScatterSeriesData>();
