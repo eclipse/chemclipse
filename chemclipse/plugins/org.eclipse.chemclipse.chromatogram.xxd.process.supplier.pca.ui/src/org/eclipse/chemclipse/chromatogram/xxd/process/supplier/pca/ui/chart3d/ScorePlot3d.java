@@ -19,19 +19,16 @@ import org.eclipse.swt.widgets.Composite;
 
 import javafx.embed.swt.FXCanvas;
 import javafx.event.EventHandler;
-import javafx.geometry.Pos;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
-import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.scene.transform.Rotate;
 
 public class ScorePlot3d {
@@ -84,10 +81,6 @@ public class ScorePlot3d {
 		 * built header
 		 */
 		BorderPane borderPane = new BorderPane();
-		Label label = new Label("PCA Score plot");
-		label.setAlignment(Pos.CENTER);
-		label.setFont(new Font("Arial", 20));
-		borderPane.setCenter(label);
 		/*
 		 * build central subscene, which contains chart
 		 */

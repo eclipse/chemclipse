@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - getting rid of JavaFX
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d;
 
@@ -17,8 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerVariable;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.utility.SeriesConverter;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.swt.SWT;
@@ -44,9 +45,13 @@ import org.eclipse.swtchart.extensions.events.UndoRedoEvent;
 import org.eclipse.swtchart.extensions.events.ZoomEvent;
 import org.eclipse.swtchart.extensions.scattercharts.IScatterSeriesData;
 
-import javafx.collections.ObservableList;
+public class LoadingsPlot extends PCA2DPlot {
 
-public class LoadingPlot extends PCA2DPlot {
+	public static final int LABELS_DESCRIPTION = 2;
+	public static final int LABELS_RETENTION_TIME_MINUTES = 1;
+	private final Set<String> actualSelection = new HashSet<>();
+	private final Map<String, IVariable> extractedValues = new HashMap<>();
+	private int labelsType = LABELS_RETENTION_TIME_MINUTES;
 
 	private class SelectActualSeriesEvent extends AbstractHandledEventProcessor implements IHandledEventProcessor {
 
@@ -74,12 +79,7 @@ public class LoadingPlot extends PCA2DPlot {
 			String selectedSeriesId = baseChart.getSelectedseriesId(event);
 			if(!selectedSeriesId.equals("")) {
 				IVariable variable = extractedValues.get(selectedSeriesId);
-				ObservableList<IVariable> selection = selectionManagerVariable.getSelection();
-				if(!selection.contains(variable)) {
-					selection.setAll(variable);
-				} else {
-					selection.remove(variable);
-				}
+				//
 			}
 		}
 	}
@@ -115,16 +115,9 @@ public class LoadingPlot extends PCA2DPlot {
 		}
 	}
 
-	final public static int LABELS_DESCRIPTION = 2;
-	final public static int LABELS_RETENTION_TIME_MINUTES = 1;
-	final private Set<String> actualSelection = new HashSet<>();
-	final private Map<String, IVariable> extractedValues = new HashMap<>();
-	private int labelsType = LABELS_RETENTION_TIME_MINUTES;
-	private SelectionManagerVariable selectionManagerVariable;
-
-	public LoadingPlot(Composite parent, SelectionManagerVariable selectionManagerVariable) {
+	public LoadingsPlot(Composite parent) {
 		super(parent, "Loading Plot");
-		this.selectionManagerVariable = selectionManagerVariable;
+		//
 		IChartSettings chartSettings = getChartSettings();
 		chartSettings.clearHandledEventProcessors();
 		chartSettings.addHandledEventProcessor(new SelectSeriesEvent());
@@ -172,10 +165,12 @@ public class LoadingPlot extends PCA2DPlot {
 		}
 	}
 
-	public void update(IPcaResultsVisualization pcaResults) {
+	public void setInput(IPcaResults<? extends IPcaResult, ? extends IVariable> pcaResults) {
 
-		int pcX = pcaResults.getPcaVisualization().getPcX();
-		int pcY = pcaResults.getPcaVisualization().getPcY();
+		// TODO
+		int pcX = 1;
+		int pcY = 2;
+		//
 		List<IScatterSeriesData> series;
 		if(labelsType == LABELS_RETENTION_TIME_MINUTES) {
 			series = SeriesConverter.basisVectorsToSeries(pcaResults, pcX, pcY, extractedValues);
@@ -185,11 +180,6 @@ public class LoadingPlot extends PCA2DPlot {
 		deleteSeries();
 		addSeriesData(series);
 		update(pcX, pcY);
-		extractedValues.entrySet().forEach(e -> {
-			if(selectionManagerVariable.getSelection().contains(e.getValue())) {
-				getBaseChart().selectSeries(e.getKey());
-			}
-		});
 		updateSelection();
 	}
 

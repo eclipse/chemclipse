@@ -22,8 +22,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaRe
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableVisualization;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
@@ -38,13 +36,14 @@ import org.eclipse.swtchart.extensions.scattercharts.ScatterSeriesData;
 
 public class SeriesConverter {
 
-	public static List<IScatterSeriesData> basisVectorsToSeries(IPcaResultsVisualization pcaResults, int pcX, int pcY, Map<String, IVariable> extractedValues) {
+	public static List<IScatterSeriesData> basisVectorsToSeries(IPcaResults<? extends IPcaResult, ? extends IVariable> pcaResults, int pcX, int pcY, Map<String, IVariable> extractedValues) {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<>();
-		List<IVariableVisualization> variables = pcaResults.getExtractedVariables();
+		List<? extends IVariable> variables = pcaResults.getExtractedVariables();
+		//
 		for(int i = 0; i < variables.size(); i++) {
-			IVariableVisualization variable = variables.get(i);
+			IVariable variable = variables.get(i);
 			String name = variables.get(i).getValue();
 			extractedValues.put(name, variables.get(i));
 			double x = 0;
@@ -57,7 +56,7 @@ public class SeriesConverter {
 			ISeriesData seriesData = new SeriesData(new double[]{x}, new double[]{y}, name);
 			IScatterSeriesData scatterSeriesData = new ScatterSeriesData(seriesData);
 			IScatterSeriesSettings scatterSeriesSettings = scatterSeriesData.getSettings();
-			Color color = PcaColorGroup.getSampleColorSWT(variable);
+			Color color = Colors.RED;
 			if(variable.isSelected()) {
 				scatterSeriesSettings.setSymbolColor(color);
 			} else {
@@ -73,13 +72,14 @@ public class SeriesConverter {
 		return scatterSeriesDataList;
 	}
 
-	public static List<IScatterSeriesData> basisVectorsToSeriesDescription(IPcaResultsVisualization pcaResults, int pcX, int pcY, Map<String, IVariable> extractedValues) {
+	public static List<IScatterSeriesData> basisVectorsToSeriesDescription(IPcaResults<? extends IPcaResult, ? extends IVariable> pcaResults, int pcX, int pcY, Map<String, IVariable> extractedValues) {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<>();
-		List<IVariableVisualization> variables = pcaResults.getExtractedVariables();
+		List<? extends IVariable> variables = pcaResults.getExtractedVariables();
+		//
 		for(int i = 0; i < variables.size(); i++) {
-			IVariableVisualization variable = variables.get(i);
+			IVariable variable = variables.get(i);
 			String description = variable.getDescription();
 			String name = null;
 			if(description == null || description.isEmpty()) {
@@ -98,7 +98,7 @@ public class SeriesConverter {
 			ISeriesData seriesData = new SeriesData(new double[]{x}, new double[]{y}, name);
 			IScatterSeriesData scatterSeriesData = new ScatterSeriesData(seriesData);
 			IScatterSeriesSettings scatterSeriesSettings = scatterSeriesData.getSettings();
-			Color color = PcaColorGroup.getSampleColorSWT(variable);
+			Color color = Colors.RED;
 			if(variable.isSelected()) {
 				scatterSeriesSettings.setSymbolColor(color);
 			} else {

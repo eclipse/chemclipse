@@ -19,13 +19,11 @@ import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swtchart.IAxis;
 import org.eclipse.swtchart.IBarSeries.BarWidthStyle;
 import org.eclipse.swtchart.extensions.barcharts.BarChart;
 import org.eclipse.swtchart.extensions.barcharts.BarSeriesData;
 import org.eclipse.swtchart.extensions.barcharts.IBarSeriesData;
 import org.eclipse.swtchart.extensions.barcharts.IBarSeriesSettings;
-import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.IPrimaryAxisSettings;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
@@ -64,15 +62,12 @@ public class ExplainedVarianceChart extends BarChart {
 		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
 		rangeRestriction.setZeroX(false);
 		rangeRestriction.setZeroY(false);
-		rangeRestriction.setRestrictZoom(false);
-		rangeRestriction.setExtendTypeX(RangeRestriction.ExtendType.RELATIVE);
-		rangeRestriction.setExtendTypeY(RangeRestriction.ExtendType.RELATIVE);
-		rangeRestriction.setExtend(0.25d);
+		rangeRestriction.setForceZeroMinY(true);
+		rangeRestriction.setRestrictZoom(true);
 		//
 		chartSettings.setShowAxisZeroMarker(true);
 		chartSettings.setColorAxisZeroMarker(Colors.BLACK);
-		chartSettings.setShowSeriesLabelMarker(true);
-		chartSettings.setColorSeriesLabelMarker(Colors.BLACK);
+		chartSettings.setShowSeriesLabelMarker(false);
 		chartSettings.setCreateMenu(true);
 		chartSettings.setEnableCompress(false);
 		//
@@ -99,8 +94,13 @@ public class ExplainedVarianceChart extends BarChart {
 
 		deleteSeries();
 		if(pcaResults != null) {
-			IAxis axisX = getBaseChart().getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
-			axisX.setCategorySeries(getCategories(pcaResults));
+			//
+			IChartSettings chartSettings = getChartSettings();
+			IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
+			primaryAxisSettingsX.setEnableCategory(true);
+			primaryAxisSettingsX.setCategorySeries(getCategories(pcaResults));
+			applySettings(chartSettings);
+			//
 			List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
 			ISeriesData seriesData = getSeries(pcaResults);
 			IBarSeriesData barSeriesData = new BarSeriesData(seriesData);
@@ -121,7 +121,7 @@ public class ExplainedVarianceChart extends BarChart {
 		String[] categories = new String[size];
 		//
 		for(int i = 0; i < size; i++) {
-			categories[i] = "PC" + i + 1;
+			categories[i] = "PC" + (i + 1);
 		}
 		//
 		return categories;
