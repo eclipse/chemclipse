@@ -349,6 +349,7 @@ public class AnalysisEditorUI extends Composite {
 					PcaResults pcaResults = pcaEvaluation.process(samples, new NullProgressMonitor());
 					IEventBroker eventBroker = Activator.getDefault().getEventBroker();
 					if(eventBroker != null) {
+						eventBroker.send(Activator.TOPIC_PCA_SAMPLES_LOAD, samples);
 						eventBroker.send(Activator.TOPIC_PCA_RESULTS_LOAD, pcaResults);
 					}
 				} catch(MathIllegalArgumentException e) {

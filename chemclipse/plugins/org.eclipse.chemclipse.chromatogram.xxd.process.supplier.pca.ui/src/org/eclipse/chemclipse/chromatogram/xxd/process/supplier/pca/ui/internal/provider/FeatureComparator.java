@@ -17,7 +17,7 @@ import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
 import org.eclipse.jface.viewers.Viewer;
 
-public class SamplesComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
+public class FeatureComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
 
 	@Override
 	public int compare(Viewer viewer, Object e1, Object e2) {
@@ -29,13 +29,10 @@ public class SamplesComparator extends AbstractRecordTableComparator implements 
 			//
 			switch(getPropertyIndex()) {
 				case 0:
-					sortOrder = Boolean.compare(sample2.isSelected(), sample1.isSelected());
-					break;
-				case 1:
 					sortOrder = sample2.getName().compareTo(sample1.getName());
 					break;
-				case 2:
-					sortOrder = sample2.getGroupName().compareTo(sample1.getGroupName());
+				case 1:
+					sortOrder = 0;
 					break;
 			}
 		}

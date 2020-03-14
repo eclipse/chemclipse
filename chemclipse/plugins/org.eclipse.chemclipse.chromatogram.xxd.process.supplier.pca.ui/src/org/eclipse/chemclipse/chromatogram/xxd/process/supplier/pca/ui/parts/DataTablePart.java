@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,96 +8,65 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - get rid of JavaFX
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+import java.util.List;
+
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.PeakListNatTable;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.ISampleVisualization;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableVisualization;
-import org.eclipse.chemclipse.model.statistics.ISamples;
-import org.eclipse.chemclipse.model.statistics.IVariable;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamplesPCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt.FeatureListUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EnhancedUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IUpdateSupport;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 
-import javafx.collections.ListChangeListener;
+public class DataTablePart extends EnhancedUpdateSupport implements IUpdateSupport {
 
-public class DataTablePart extends GeneralPcaPart {
-
-	private Runnable changeData;
-	private Runnable changeSelectedSample;
-	private PeakListNatTable peakListIntensityTable;
-	private ListChangeListener<IVariable> actualVariableChangeListener = e -> {
-		if(!e.getList().isEmpty()) {
-			peakListIntensityTable.selectRow(e.getList().get(0));
-		}
-	};
-	private Composite composite;
+	private static final String TOPIC = Activator.TOPIC_PCA_SAMPLES_LOAD;
+	//
+	private FeatureListUI featureListUI;
 
 	@Inject
-	public DataTablePart() {
-		super();
+	public DataTablePart(Composite parent, MPart part) {
+		super(parent, Activator.getDefault().getDataUpdateSupport(), TOPIC, part);
 	}
 
-	@PostConstruct
-	public void postContruct(Composite composite) {
+	@Override
+	public void createControl(Composite parent) {
 
-		this.composite = composite;
-		changeData = () -> peakListIntensityTable.refreshTable();
-		changeSelectedSample = () -> {
-			ISamples<? extends IVariableVisualization, ? extends ISampleVisualization> samples = getSamples();
-			if(samples != null) {
-				peakListIntensityTable.update(getSamples(), getPcaSettings());
+		featureListUI = new FeatureListUI(parent, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.FULL_SELECTION);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public void updateSelection(List<Object> objects, String topic) {
+
+		/*
+		 * 0 => because only one property was used to register the event.
+		 */
+		if(objects.size() == 1) {
+			if(isUnloadEvent(topic)) {
+				featureListUI.setInput(null);
 			} else {
-				peakListIntensityTable.clearTable();
+				Object object = objects.get(0);
+				if(object instanceof ISamplesPCA) {
+					ISamplesPCA samples = (ISamplesPCA)object;
+					featureListUI.setInput(samples.getSampleList());
+				}
 			}
-		};
-		getSelectionManagerSamples().getSelectionManagerVariable().getSelection().addListener(actualVariableChangeListener);
-		createComposite(composite);
-		initializeHandler();
+		}
 	}
 
-	public void createComposite(Composite parent) {
+	private boolean isUnloadEvent(String topic) {
 
-		Composite composite = new Composite(parent, SWT.None);
-		composite.setLayout(new FillLayout());
-		peakListIntensityTable = new PeakListNatTable(composite, null, getSelectionManagerSamples());
-	}
-
-	@PreDestroy
-	private void preDestroy() {
-
-		getSelectionManagerSamples().getSelectionManagerVariable().getSelection().removeListener(actualVariableChangeListener);
-		Display.getDefault().timerExec(-1, changeSelectedSample);
-		Display.getDefault().timerExec(-1, changeData);
-	}
-
-	@Override
-	protected void variablesHasBeenUpdated() {
-
-		composite.getDisplay().timerExec(100, changeData);
-	}
-
-	@Override
-	protected void samplesHasBeenUpdated() {
-
-		composite.getDisplay().timerExec(100, changeSelectedSample);
-	}
-
-	@Override
-	protected void samplesHasBeenSet() {
-
-		composite.getDisplay().timerExec(100, changeSelectedSample);
-	}
-
-	@Override
-	protected void settingsHasBeenChanged() {
-
-		composite.getDisplay().timerExec(100, changeData);
+		if(topic.equals(Activator.TOPIC_PCA_SAMPLES_CLEAR)) {
+			return true;
+		}
+		return false;
 	}
 }

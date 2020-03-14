@@ -25,6 +25,10 @@ import org.osgi.framework.BundleContext;
  */
 public class Activator extends AbstractActivatorUI {
 
+	public static final String TOPIC_PCA_SAMPLES_LOAD = "pca/samples/load";
+	public static final String TOPIC_PCA_SAMPLES_CLEAR = "pca/samples/clear";
+	public static final String PROPERTY_PCA_SAMPLES = IEventBroker.DATA;
+	//
 	public static final String TOPIC_PCA_RESULTS_LOAD = "pca/results/load";
 	public static final String TOPIC_PCA_RESULTS_CLEAR = "pca/results/clear";
 	public static final String PROPERTY_PCA_RESULTS = IEventBroker.DATA;
@@ -92,6 +96,7 @@ public class Activator extends AbstractActivatorUI {
 
 	private void initialize(DataUpdateSupport dataUpdateSupport) {
 
+		dataUpdateSupport.subscribe(TOPIC_PCA_SAMPLES_LOAD, PROPERTY_PCA_SAMPLES);
 		dataUpdateSupport.subscribe(TOPIC_PCA_RESULTS_LOAD, PROPERTY_PCA_RESULTS);
 	}
 }
