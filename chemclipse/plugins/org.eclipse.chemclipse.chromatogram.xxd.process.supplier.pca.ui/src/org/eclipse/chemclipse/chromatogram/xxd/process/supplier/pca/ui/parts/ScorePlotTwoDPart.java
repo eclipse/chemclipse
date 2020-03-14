@@ -15,7 +15,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.ScorePlot;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EnhancedUpdateSupport;
@@ -40,6 +40,7 @@ public class ScorePlotTwoDPart extends EnhancedUpdateSupport implements IUpdateS
 		scorePlot = new ScorePlot(parent);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void updateSelection(List<Object> objects, String topic) {
 
@@ -51,8 +52,8 @@ public class ScorePlotTwoDPart extends EnhancedUpdateSupport implements IUpdateS
 				scorePlot.setInput(null);
 			} else {
 				Object object = objects.get(0);
-				if(object instanceof PcaResults) {
-					scorePlot.setInput((PcaResults)object);
+				if(object instanceof IPcaResults) {
+					scorePlot.setInput((IPcaResults)object);
 				}
 			}
 		}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,120 +8,64 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - getting rid of JavaFX
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+import java.util.List;
+
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.barchart.ErrorResidueBarChart;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
-import org.eclipse.chemclipse.model.statistics.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.barchart.ErrorResidueChart;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EnhancedUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IUpdateSupport;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ListChangeListener;
+public class ErrorResiduePart extends EnhancedUpdateSupport implements IUpdateSupport {
 
-public class ErrorResiduePart {
+	private static final String TOPIC = Activator.TOPIC_PCA_RESULTS_LOAD;
+	//
+	private ErrorResidueChart errorResidueChart;
 
-	private ListChangeListener<ISample> actualSelectionChangeListener;
-	private ErrorResidueBarChart errorResidueChart;
-	private ChangeListener<IPcaResultsVisualization> pcaResultChangeLisnter;
-	private IPcaResultsVisualization pcaResults;
-	private ListChangeListener<IPcaResult> selectionChangeListener;
-	private boolean partHasBeenDestroy;
 	@Inject
-	@org.eclipse.e4.core.di.annotations.Optional
-	private SelectionManagerSamples managerSamples;
-
-	public ErrorResiduePart() {
-		selectionChangeListener = new ListChangeListener<IPcaResult>() {
-
-			@Override
-			public void onChanged(javafx.collections.ListChangeListener.Change<? extends IPcaResult> c) {
-
-				Display.getDefault().asyncExec(() -> {
-					if(partHasBeenDestroy)
-						return;
-					errorResidueChart.updateSelection();
-				});
-			}
-		};
-		pcaResultChangeLisnter = new ChangeListener<IPcaResultsVisualization>() {
-
-			@Override
-			public void changed(ObservableValue<? extends IPcaResultsVisualization> observable, IPcaResultsVisualization oldValue, IPcaResultsVisualization newValue) {
-
-				Display.getDefault().asyncExec(() -> {
-					if(partHasBeenDestroy)
-						return;
-					pcaResults = newValue;
-					if(oldValue != null) {
-						oldValue.getPcaResultList().removeListener(selectionChangeListener);
-					}
-					if(newValue != null) {
-						newValue.getPcaResultList().addListener(selectionChangeListener);
-						errorResidueChart.update(newValue);
-					} else {
-						errorResidueChart.removeData();
-					}
-				});
-			}
-		};
-		actualSelectionChangeListener = new ListChangeListener<ISample>() {
-
-			@Override
-			public void onChanged(javafx.collections.ListChangeListener.Change<? extends ISample> c) {
-
-				Display.getDefault().asyncExec(() -> {
-					if(partHasBeenDestroy)
-						return;
-					errorResidueChart.updateSelection();
-				});
-			}
-		};
+	public ErrorResiduePart(Composite parent, MPart part) {
+		super(parent, Activator.getDefault().getDataUpdateSupport(), TOPIC, part);
 	}
 
-	@PostConstruct
-	public void createComposite(Composite parent) {
+	@Override
+	public void createControl(Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.None);
-		composite.setLayout(new FillLayout());
-		errorResidueChart = new ErrorResidueBarChart(composite, null, getSelectionManagerSamples().getSelectionManagerSample());
-		ReadOnlyObjectProperty<IPcaResultsVisualization> pcaresults = getSelectionManagerSamples().getActualSelectedPcaResults();
-		pcaresults.addListener(pcaResultChangeLisnter);
-		pcaResults = pcaresults.get();
-		if(pcaResults != null) {
-			errorResidueChart.update(pcaresults.getValue());
-			pcaResults.getPcaResultList().addListener(selectionChangeListener);
-		}
-		getSelectionManagerSamples().getSelectionManagerSample().getSelection().addListener(actualSelectionChangeListener);
+		errorResidueChart = new ErrorResidueChart(parent, SWT.NONE);
 	}
 
-	@PreDestroy
-	public void preDestroy() {
+	@SuppressWarnings("rawtypes")
+	@Override
+	public void updateSelection(List<Object> objects, String topic) {
 
-		partHasBeenDestroy = true;
-		getSelectionManagerSamples().getSelectionManagerSample().getSelection().removeListener(actualSelectionChangeListener);
-		getSelectionManagerSamples().getActualSelectedPcaResults().removeListener(pcaResultChangeLisnter);
-		if(pcaResults != null) {
-			pcaResults.getPcaResultList().removeListener(selectionChangeListener);
+		/*
+		 * 0 => because only one property was used to register the event.
+		 */
+		if(objects.size() == 1) {
+			if(isUnloadEvent(topic)) {
+				errorResidueChart.setInput(null);
+			} else {
+				Object object = objects.get(0);
+				if(object instanceof IPcaResults) {
+					errorResidueChart.setInput((IPcaResults)object);
+				}
+			}
 		}
 	}
 
-	private SelectionManagerSamples getSelectionManagerSamples() {
+	private boolean isUnloadEvent(String topic) {
 
-		if(managerSamples != null) {
-			return managerSamples;
+		if(topic.equals(Activator.TOPIC_PCA_RESULTS_CLEAR)) {
+			return true;
 		}
-		return SelectionManagerSamples.getInstance();
+		return false;
 	}
 }
