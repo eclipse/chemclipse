@@ -42,7 +42,6 @@ public class DataTablePart extends EnhancedUpdateSupport implements IUpdateSuppo
 		featureListUI = new FeatureListUI(parent, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.FULL_SELECTION);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public void updateSelection(List<Object> objects, String topic) {
 

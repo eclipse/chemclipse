@@ -40,9 +40,8 @@ public class FeatureListUI extends ExtendedTableViewer {
 		if(evaluationPCA != null) {
 			ISamplesPCA<? extends IVariable, ? extends ISample> samples = evaluationPCA.getSamples();
 			if(samples != null) {
+				// TODO create Feature Matrix
 				super.setInput(samples.getSampleList());
-			} else {
-				super.setInput(null);
 			}
 		} else {
 			super.setInput(null);
