@@ -16,8 +16,8 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultPCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultsPCA;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 
 import javafx.event.Event;
@@ -30,14 +30,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.Sphere;
 
-public class Chart3DScatter {
+public class ScorePlot3DScatter {
 
 	private static EventType<UpdateSelectionEvent> SELECTION_UPDATE = new EventType<>("SELECTION_UPDATE");
-	private final List<IPcaResult> pcaResultList = new ArrayList<>();
+	private final List<IResultPCA> pcaResultList = new ArrayList<>();
 	final private NumberFormat format = ValueFormat.getNumberFormatEnglish();
 	private final Group mainGroup = new Group();
 	private double radius;
-	private Chart3DSettings settings;
+	private ScorePlot3DSettings settings;
 
 	private class UpdateSelectionEvent extends Event {
 
@@ -48,7 +48,7 @@ public class Chart3DScatter {
 		}
 	}
 
-	public Chart3DScatter(Chart3DSettings settings) {
+	public ScorePlot3DScatter(ScorePlot3DSettings settings) {
 		this.settings = settings;
 		this.radius = 15;
 		pcaResultList.clear();
@@ -56,16 +56,16 @@ public class Chart3DScatter {
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	public Chart3DScatter(Chart3DSettings settings, IPcaResults pcaResults) {
+	public ScorePlot3DScatter(ScorePlot3DSettings settings, IResultsPCA resultsPCA) {
 		this(settings);
 		pcaResultList.clear();
-		if(pcaResults != null) {
-			pcaResultList.addAll(pcaResults.getPcaResultList());
+		if(resultsPCA != null) {
+			pcaResultList.addAll(resultsPCA.getPcaResultList());
 		}
 		update();
 	}
 
-	private Color getColor(IPcaResult data) {
+	private Color getColor(IResultPCA data) {
 
 		return new Color(1.0d, 0.0d, 0.0d, 1.0d);
 	}
@@ -83,7 +83,7 @@ public class Chart3DScatter {
 		double shiftX = settings.getShiftX() * sX;
 		double shiftY = settings.getShiftY() * sY;
 		double shiftZ = settings.getShiftZ() * sZ;
-		for(IPcaResult d : pcaResultList) {
+		for(IResultPCA d : pcaResultList) {
 			String name = d.getName();
 			/*
 			 * create sphere

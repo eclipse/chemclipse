@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Lorenz Gerber - initial API and implementation
+ * Philip Wenig - get rid of JavaFX
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.barchart;
 
@@ -21,7 +22,7 @@ import java.util.ListIterator;
 import java.util.Locale;
 import java.util.Optional;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultsPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableVisualization;
 import org.eclipse.swt.SWT;
@@ -55,7 +56,7 @@ public class ExplainedVarianceBarChart {
 	private final List<IPcaResultVisualization> data = new ArrayList<>();
 	private final List<Double> data2 = new ArrayList<>();
 	private FXCanvas fxCanvas;
-	private Optional<IPcaResults<IPcaResultVisualization, IVariableVisualization>> pcaResults = Optional.empty();
+	private Optional<IResultsPCA<IPcaResultVisualization, IVariableVisualization>> pcaResults = Optional.empty();
 
 	public ExplainedVarianceBarChart(Composite parent, Object layoutData) {
 		/*
@@ -218,7 +219,7 @@ public class ExplainedVarianceBarChart {
 		createScene();
 	}
 
-	public void update(IPcaResults<IPcaResultVisualization, IVariableVisualization> pcaResults) {
+	public void update(IResultsPCA<IPcaResultVisualization, IVariableVisualization> pcaResults) {
 
 		/*
 		 * update data

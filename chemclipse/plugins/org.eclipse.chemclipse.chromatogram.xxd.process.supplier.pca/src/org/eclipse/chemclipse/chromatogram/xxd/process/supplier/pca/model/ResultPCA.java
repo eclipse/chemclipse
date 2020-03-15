@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
 import org.eclipse.chemclipse.model.statistics.ISample;
 
-public class PcaResult implements IPcaResult {
+public class ResultPCA implements IResultPCA {
 
 	private double[] scoreVector;
 	private double errorMemberShip;
@@ -24,8 +24,7 @@ public class PcaResult implements IPcaResult {
 	private ISample sample;
 	private double[] sampleData;
 
-	public PcaResult(ISample sample) {
-
+	public ResultPCA(ISample sample) {
 		this.isDisplayed = true;
 		this.sample = sample;
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - improvements
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d;
 
@@ -17,12 +18,11 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
+import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtchart.IAxis.Position;
 import org.eclipse.swtchart.extensions.axisconverter.PassThroughConverter;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
@@ -32,35 +32,31 @@ import org.eclipse.swtchart.extensions.core.RangeRestriction;
 import org.eclipse.swtchart.extensions.core.SecondaryAxisSettings;
 import org.eclipse.swtchart.extensions.scattercharts.ScatterChart;
 
-public abstract class PCA2DPlot extends ScatterChart {
+public abstract class AbtractPlotPCA extends ScatterChart {
 
-	private Color COLOR_BLACK = Display.getDefault().getSystemColor(SWT.COLOR_BLACK);
 	private DecimalFormat decimalFormat = new DecimalFormat(("0.00E0"), new DecimalFormatSymbols(Locale.ENGLISH));
-	//
-	private String chartTitle = "";
-	private String xAxisTitle = "PC1";
-	private String yAxisTitle = "PC2";
+	private String title = "";
 
-	public PCA2DPlot(Composite parent, String chartTitle) {
-		super(parent, SWT.None);
-		this.chartTitle = chartTitle;
+	public AbtractPlotPCA(Composite parent, int style, String title) {
+		super(parent, style);
+		this.title = title;
 		initialize();
 	}
 
 	private void addSecondaryAxisSet(IChartSettings chartSettings) {
 
-		ISecondaryAxisSettings secondaryAxisSettingsX = new SecondaryAxisSettings(xAxisTitle, new PassThroughConverter());
+		ISecondaryAxisSettings secondaryAxisSettingsX = new SecondaryAxisSettings("PC1", new PassThroughConverter());
 		secondaryAxisSettingsX.setTitle("");
 		secondaryAxisSettingsX.setPosition(Position.Secondary);
 		secondaryAxisSettingsX.setDecimalFormat(decimalFormat);
-		secondaryAxisSettingsX.setColor(COLOR_BLACK);
+		secondaryAxisSettingsX.setColor(Colors.BLACK);
 		chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX);
 		//
-		ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings(yAxisTitle, new PassThroughConverter());
+		ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings("PC2", new PassThroughConverter());
 		secondaryAxisSettingsY.setTitle("");
 		secondaryAxisSettingsY.setPosition(Position.Secondary);
 		secondaryAxisSettingsY.setDecimalFormat(decimalFormat);
-		secondaryAxisSettingsY.setColor(COLOR_BLACK);
+		secondaryAxisSettingsY.setColor(Colors.BLACK);
 		chartSettings.getSecondaryAxisSettingsListY().add(secondaryAxisSettingsY);
 	}
 
@@ -93,23 +89,25 @@ public abstract class PCA2DPlot extends ScatterChart {
 	private void initialize() {
 
 		IChartSettings chartSettings = getChartSettings();
-		chartSettings.setTitle(chartTitle);
+		chartSettings.setTitle(title);
 		chartSettings.setTitleVisible(true);
-		chartSettings.setTitleColor(COLOR_BLACK);
+		chartSettings.setTitleColor(Colors.BLACK);
 		chartSettings.setOrientation(SWT.HORIZONTAL);
 		chartSettings.setHorizontalSliderVisible(false);
 		chartSettings.setVerticalSliderVisible(false);
+		//
 		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
 		rangeRestriction.setZeroX(false);
 		rangeRestriction.setZeroY(false);
-		rangeRestriction.setRestrictZoom(false);
+		rangeRestriction.setRestrictZoom(true);
 		rangeRestriction.setExtendTypeX(RangeRestriction.ExtendType.RELATIVE);
 		rangeRestriction.setExtendTypeY(RangeRestriction.ExtendType.RELATIVE);
 		rangeRestriction.setExtend(0.25d);
+		//
 		chartSettings.setShowAxisZeroMarker(true);
-		chartSettings.setColorAxisZeroMarker(COLOR_BLACK);
+		chartSettings.setColorAxisZeroMarker(Colors.BLACK);
 		chartSettings.setShowSeriesLabelMarker(true);
-		chartSettings.setColorSeriesLabelMarker(COLOR_BLACK);
+		chartSettings.setColorSeriesLabelMarker(Colors.BLACK);
 		chartSettings.setCreateMenu(true);
 		chartSettings.setEnableCompress(false);
 		//
@@ -131,14 +129,14 @@ public abstract class PCA2DPlot extends ScatterChart {
 	private void setPrimaryAxisSet(IChartSettings chartSettings) {
 
 		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
-		primaryAxisSettingsX.setTitle(xAxisTitle);
+		primaryAxisSettingsX.setTitle("PC1");
 		primaryAxisSettingsX.setDecimalFormat(decimalFormat);
-		primaryAxisSettingsX.setColor(COLOR_BLACK);
+		primaryAxisSettingsX.setColor(Colors.BLACK);
 		//
 		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
-		primaryAxisSettingsY.setTitle(yAxisTitle);
+		primaryAxisSettingsY.setTitle("PC2");
 		primaryAxisSettingsY.setDecimalFormat(decimalFormat);
-		primaryAxisSettingsY.setColor(COLOR_BLACK);
+		primaryAxisSettingsY.setColor(Colors.BLACK);
 	}
 
 	protected void update(int pcX, int pcY) {

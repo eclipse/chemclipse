@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - get rid of JavaFX
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d;
 
@@ -33,7 +34,7 @@ import javafx.scene.text.Font;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 
-public class Axes extends Group {
+public class ScorePlot3DAxes extends Group {
 
 	final private PhongMaterial cornMaterial = new PhongMaterial();
 	private NumberFormat format;
@@ -41,7 +42,7 @@ public class Axes extends Group {
 	private double lableDistance;
 	private double lableDistanceNameAxis;
 	final private PhongMaterial planeMaterial = new PhongMaterial();
-	private Chart3DSettings settings;
+	private ScorePlot3DSettings settings;
 	private double tickLenght;
 	private double widthCorn;
 	double sX = 1;
@@ -56,7 +57,7 @@ public class Axes extends Group {
 	private Font labelAxisFont = new Font("Arial", 50);
 	//
 
-	public Axes(Chart3DSettings settings) {
+	public ScorePlot3DAxes(ScorePlot3DSettings settings) {
 		this.settings = settings;
 		double absMaximum = Arrays.stream(new double[]{settings.getMinX(), settings.getMaxX(), settings.getMinY(), settings.getMaxY(), settings.getMinZ(), settings.getMaxZ()}).map(d -> Math.abs(d)).max().getAsDouble();
 		double numberDigits = Math.floor(Math.log10(absMaximum));

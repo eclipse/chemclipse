@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +9,7 @@
  * Contributors:
  * Jan Holy - initial API and implementation
  * Lorenz Gerber - PCA adapter, algorithm
+ * Philip Wenig - get rid of JavaFX
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core;
 
@@ -29,18 +30,18 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Calcul
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.CalculatorSVD;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IMultivariateCalculator;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultPCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultsPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamplesPCA;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResult;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ResultPCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ResultsPCA;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.model.statistics.ISampleData;
 import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class PcaEvaluation {
+public class ProcessorPCA {
 
 	private <V extends IVariable, S extends ISample> Map<ISample, double[]> extractData(ISamples<V, S> samples, Algorithm algorithm, IAnalysisSettings settings, boolean[] isSelectedVariable) {
 
@@ -198,14 +199,14 @@ public class PcaEvaluation {
 		return principalComponentAnalysis;
 	}
 
-	public <V extends IVariable, S extends ISample> PcaResults process(ISamplesPCA<V, S> samples, IProgressMonitor monitor) throws MathIllegalArgumentException {
+	public <V extends IVariable, S extends ISample> ResultsPCA process(ISamplesPCA<V, S> samples, IProgressMonitor monitor) throws MathIllegalArgumentException {
 
 		monitor.subTask("Run PCA");
 		//
 		IAnalysisSettings settings = samples.getAnalysisSettings();
 		int numberOfPrincipalComponents = settings.getNumberOfPrincipalComponents();
 		Algorithm algorithm = settings.getAlgorithm();
-		PcaResults pcaResults = new PcaResults(settings);
+		ResultsPCA pcaResults = new ResultsPCA(settings);
 		boolean[] isSelectedVariables = selectedVariables(samples, settings);
 		Map<ISample, double[]> extractData = extractData(samples, algorithm, settings, isSelectedVariables);
 		setRetentionTime(pcaResults, samples, isSelectedVariables);
@@ -236,18 +237,18 @@ public class PcaEvaluation {
 		return pcaResults;
 	}
 
-	private void setEigenSpaceAndErrorValues(IMultivariateCalculator principalComponentAnalysis, Map<ISample, double[]> pcaPeakMap, IPcaResults pcaResults) {
+	private void setEigenSpaceAndErrorValues(IMultivariateCalculator principalComponentAnalysis, Map<ISample, double[]> pcaPeakMap, IResultsPCA pcaResults) {
 
 		/*
 		 * Set the eigen space and error membership values.
 		 */
-		List<IPcaResult> resultsList = new ArrayList<>();
+		List<IResultPCA> resultsList = new ArrayList<>();
 		for(Entry<ISample, double[]> entry : pcaPeakMap.entrySet()) {
 			double[] sampleData = entry.getValue();
 			double[] scoreVector = null;
 			ISample sample = entry.getKey();
 			double errorMemberShip = Double.NaN;
-			IPcaResult pcaResult = new PcaResult(sample);
+			IResultPCA pcaResult = new ResultPCA(sample);
 			pcaResult.setName(sample.getName());
 			pcaResult.setGroupName(sample.getGroupName());
 			pcaResult.setScoreVector(principalComponentAnalysis.getScoreVector(sample));
@@ -259,7 +260,7 @@ public class PcaEvaluation {
 		pcaResults.getPcaResultList().addAll(resultsList);
 	}
 
-	private void setRetentionTime(IPcaResults pcaResults, ISamples<? extends IVariable, ? extends ISample> samples, boolean[] isSelectedVariables) {
+	private void setRetentionTime(IResultsPCA pcaResults, ISamples<? extends IVariable, ? extends ISample> samples, boolean[] isSelectedVariables) {
 
 		pcaResults.getExtractedVariables().clear();
 		for(int i = 0; i < samples.getVariables().size(); i++) {

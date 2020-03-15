@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,10 +8,11 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - get rid of JavaFX
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultPCA;
 import org.eclipse.chemclipse.model.statistics.ISample;
 
 import javafx.beans.property.IntegerProperty;
@@ -20,11 +21,10 @@ import javafx.beans.property.SimpleIntegerProperty;
 public class PcaResultVisualization implements IPcaResultVisualization {
 
 	private IntegerProperty color;
-	private IPcaResult delegator;
+	private IResultPCA delegator;
 	private ISampleVisualization sampleVisualization;
 
-	public PcaResultVisualization(IPcaResult dataModel) {
-
+	public PcaResultVisualization(IResultPCA dataModel) {
 		super();
 		this.color = new SimpleIntegerProperty();
 		this.delegator = dataModel;

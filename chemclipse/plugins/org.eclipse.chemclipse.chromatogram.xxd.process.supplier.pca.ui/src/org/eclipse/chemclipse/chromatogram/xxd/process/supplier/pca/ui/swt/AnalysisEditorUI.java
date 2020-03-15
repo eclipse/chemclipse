@@ -11,12 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaEvaluation;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.ProcessorPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.exception.MathIllegalArgumentException;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Algorithm;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamplesPCA;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ResultsPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferenceLoadingPlot2DPage;
@@ -56,7 +57,7 @@ public class AnalysisEditorUI extends Composite {
 
 	private static final Logger logger = Logger.getLogger(AnalysisEditorUI.class);
 	//
-	private ISamplesPCA<IVariable, ISample> samples = null;
+	private ISamplesPCA<? extends IVariable, ? extends ISample> samples = null;
 	//
 	private SamplesListUI sampleListUI;
 	private PreprocessingSettingsUI preprocessingSettingsUI;
@@ -95,12 +96,6 @@ public class AnalysisEditorUI extends Composite {
 		//
 		createLabel(composite, "Number of PCs:");
 		createSpinnerPrincipleComponents(composite);
-		// createLabel(composite, "PCX:");
-		// createSpinnerPCX(composite);
-		// createLabel(composite, "PCY:");
-		// createSpinnerPCY(composite);
-		// createLabel(composite, "PCZ:");
-		// createSpinnerPCZ(composite);
 		createLabel(composite, "Algorithm:");
 		createComboViewerAlgorithm(composite);
 		createButtonRun(composite);
@@ -133,63 +128,6 @@ public class AnalysisEditorUI extends Composite {
 						analysisSettings.setNumberOfPrincipalComponents(spinner.getSelection());
 					}
 				}
-			}
-		});
-		//
-		return spinner;
-	}
-
-	private Spinner createSpinnerPCX(Composite parent) {
-
-		Spinner spinner = new Spinner(parent, SWT.BORDER);
-		spinner.setToolTipText("PC (X)");
-		spinner.setMinimum(1);
-		spinner.setIncrement(1);
-		spinner.setSelection(1);
-		spinner.setMaximum(PreferenceSupplier.getNumberOfComponents());
-		spinner.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-			}
-		});
-		//
-		return spinner;
-	}
-
-	private Spinner createSpinnerPCY(Composite parent) {
-
-		Spinner spinner = new Spinner(parent, SWT.BORDER);
-		spinner.setToolTipText("PC (Y)");
-		spinner.setMinimum(1);
-		spinner.setIncrement(1);
-		spinner.setSelection(1);
-		spinner.setMaximum(PreferenceSupplier.getNumberOfComponents());
-		spinner.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-			}
-		});
-		//
-		return spinner;
-	}
-
-	private Spinner createSpinnerPCZ(Composite parent) {
-
-		Spinner spinner = new Spinner(parent, SWT.BORDER);
-		spinner.setToolTipText("PC (Z)");
-		spinner.setMinimum(1);
-		spinner.setIncrement(1);
-		spinner.setSelection(1);
-		spinner.setMaximum(PreferenceSupplier.getNumberOfComponents());
-		spinner.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
 			}
 		});
 		//
@@ -345,12 +283,12 @@ public class AnalysisEditorUI extends Composite {
 		synchronized(this) {
 			if(samples != null) {
 				try {
-					PcaEvaluation pcaEvaluation = new PcaEvaluation();
-					PcaResults pcaResults = pcaEvaluation.process(samples, new NullProgressMonitor());
+					ProcessorPCA processorPCA = new ProcessorPCA();
+					ResultsPCA results = processorPCA.process(samples, new NullProgressMonitor());
+					EvaluationPCA evaluationPCA = new EvaluationPCA(samples, results);
 					IEventBroker eventBroker = Activator.getDefault().getEventBroker();
 					if(eventBroker != null) {
-						eventBroker.send(Activator.TOPIC_PCA_SAMPLES_LOAD, samples);
-						eventBroker.send(Activator.TOPIC_PCA_RESULTS_LOAD, pcaResults);
+						eventBroker.send(Activator.TOPIC_PCA_EVALUATION_LOAD, evaluationPCA);
 					}
 				} catch(MathIllegalArgumentException e) {
 					logger.error(e.getLocalizedMessage(), e);

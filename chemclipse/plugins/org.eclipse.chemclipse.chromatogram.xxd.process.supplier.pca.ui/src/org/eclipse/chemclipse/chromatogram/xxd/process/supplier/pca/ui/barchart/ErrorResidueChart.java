@@ -14,8 +14,9 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.barchart
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultPCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultsPCA;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.swt.SWT;
@@ -44,9 +45,14 @@ public class ErrorResidueChart extends BarChart {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public void setInput(IPcaResults pcaResults) {
+	public void setInput(EvaluationPCA evaluationPCA) {
 
-		updateChart(pcaResults);
+		if(evaluationPCA != null) {
+			IResultsPCA resultsPCA = evaluationPCA.getResults();
+			updateChart(resultsPCA);
+		} else {
+			updateChart(null);
+		}
 	}
 
 	private void initialize() {
@@ -91,7 +97,7 @@ public class ErrorResidueChart extends BarChart {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void updateChart(IPcaResults pcaResults) {
+	private void updateChart(IResultsPCA pcaResults) {
 
 		deleteSeries();
 		if(pcaResults != null) {
@@ -116,14 +122,14 @@ public class ErrorResidueChart extends BarChart {
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	private String[] getCategories(IPcaResults pcaResults) {
+	private String[] getCategories(IResultsPCA pcaResults) {
 
-		List<IPcaResult> pcaResultList = pcaResults.getPcaResultList();
+		List<IResultPCA> pcaResultList = pcaResults.getPcaResultList();
 		int size = pcaResultList.size();
 		String[] categories = new String[size];
 		//
 		for(int i = 0; i < size; i++) {
-			IPcaResult pcaResult = pcaResultList.get(i);
+			IResultPCA pcaResult = pcaResultList.get(i);
 			categories[i] = pcaResult.getSample().getName();
 		}
 		//
@@ -131,15 +137,15 @@ public class ErrorResidueChart extends BarChart {
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	private ISeriesData getSeries(IPcaResults pcaResults) {
+	private ISeriesData getSeries(IResultsPCA pcaResults) {
 
-		List<IPcaResult> pcaResultList = pcaResults.getPcaResultList();
+		List<IResultPCA> pcaResultList = pcaResults.getPcaResultList();
 		int size = pcaResultList.size();
 		double[] xSeries = new double[size];
 		double[] ySeries = new double[size];
 		//
 		for(int i = 0; i < size; i++) {
-			IPcaResult pcaResult = pcaResultList.get(i);
+			IResultPCA pcaResult = pcaResultList.get(i);
 			xSeries[i] = i;
 			ySeries[i] = pcaResult.getErrorMemberShip();
 		}

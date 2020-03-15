@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,8 +18,8 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultPCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultsPCA;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 
 public class ResultExport {
@@ -31,7 +31,7 @@ public class ResultExport {
 		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 	}
 
-	public void exportToTextFile(File file, IPcaResults<?, ?> pcaResults, List<IDataInputEntry> dataInputEntries) throws FileNotFoundException {
+	public void exportToTextFile(File file, IResultsPCA<?, ?> pcaResults, List<IDataInputEntry> dataInputEntries) throws FileNotFoundException {
 
 		PrintWriter printWriter = new PrintWriter(file);
 		if(pcaResults != null) {
@@ -76,7 +76,7 @@ public class ResultExport {
 			/*
 			 * Data
 			 */
-			for(IPcaResult pcaResult : pcaResults.getPcaResultList()) {
+			for(IResultPCA pcaResult : pcaResults.getPcaResultList()) {
 				String name = pcaResult.getName();
 				printWriter.print(name);
 				printWriter.print(TAB);
@@ -100,7 +100,7 @@ public class ResultExport {
 			}
 			printWriter.println("");
 			//
-			for(IPcaResult pcaResult : pcaResults.getPcaResultList()) {
+			for(IResultPCA pcaResult : pcaResults.getPcaResultList()) {
 				/*
 				 * Print the PCs
 				 */

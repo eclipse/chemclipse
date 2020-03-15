@@ -10,19 +10,11 @@
  * Jan Holy - initial API and implementation
  * Philip Wenig - get rid of JavaFX
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model;
+package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultsPCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.FilterSettings;
 
-import javafx.collections.ObservableList;
+public interface IFilterVariables {
 
-public interface IPcaResultsVisualization extends IResultsPCA<IPcaResultVisualization, IVariableVisualization> {
-
-	IPcaVisualization getPcaVisualization();
-
-	@Override
-	ObservableList<IVariableVisualization> getExtractedVariables();
-
-	@Override
-	ObservableList<IPcaResultVisualization> getPcaResultList();
+	FilterSettings getFilterSettings();
 }

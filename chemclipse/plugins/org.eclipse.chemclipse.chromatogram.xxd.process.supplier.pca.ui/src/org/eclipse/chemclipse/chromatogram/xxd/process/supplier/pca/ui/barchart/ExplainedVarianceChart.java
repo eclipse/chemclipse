@@ -14,7 +14,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.barchart
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultsPCA;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.swt.SWT;
@@ -43,9 +44,14 @@ public class ExplainedVarianceChart extends BarChart {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public void setInput(IPcaResults pcaResults) {
+	public void setInput(EvaluationPCA evaluationPCA) {
 
-		updateChart(pcaResults);
+		if(evaluationPCA != null) {
+			IResultsPCA resultsPCA = evaluationPCA.getResults();
+			updateChart(resultsPCA);
+		} else {
+			updateChart(null);
+		}
 	}
 
 	private void initialize() {
@@ -90,19 +96,19 @@ public class ExplainedVarianceChart extends BarChart {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void updateChart(IPcaResults pcaResults) {
+	private void updateChart(IResultsPCA resultsPCA) {
 
 		deleteSeries();
-		if(pcaResults != null) {
+		if(resultsPCA != null) {
 			//
 			IChartSettings chartSettings = getChartSettings();
 			IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
 			primaryAxisSettingsX.setEnableCategory(true);
-			primaryAxisSettingsX.setCategorySeries(getCategories(pcaResults));
+			primaryAxisSettingsX.setCategorySeries(getCategories(resultsPCA));
 			applySettings(chartSettings);
 			//
 			List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
-			ISeriesData seriesData = getSeries(pcaResults);
+			ISeriesData seriesData = getSeries(resultsPCA);
 			IBarSeriesData barSeriesData = new BarSeriesData(seriesData);
 			IBarSeriesSettings settings = barSeriesData.getSettings();
 			settings.setBarColor(Colors.RED);
@@ -115,7 +121,7 @@ public class ExplainedVarianceChart extends BarChart {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private String[] getCategories(IPcaResults pcaResults) {
+	private String[] getCategories(IResultsPCA pcaResults) {
 
 		int size = pcaResults.getCumulativeExplainedVariances().length;
 		String[] categories = new String[size];
@@ -128,7 +134,7 @@ public class ExplainedVarianceChart extends BarChart {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private ISeriesData getSeries(IPcaResults pcaResults) {
+	private ISeriesData getSeries(IResultsPCA pcaResults) {
 
 		double[] ySeries = pcaResults.getCumulativeExplainedVariances();
 		double[] xSeries = new double[ySeries.length];

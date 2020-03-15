@@ -16,7 +16,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamplesPCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt.FeatureListUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EnhancedUpdateSupport;
@@ -27,7 +27,7 @@ import org.eclipse.swt.widgets.Composite;
 
 public class DataTablePart extends EnhancedUpdateSupport implements IUpdateSupport {
 
-	private static final String TOPIC = Activator.TOPIC_PCA_SAMPLES_LOAD;
+	private static final String TOPIC = Activator.TOPIC_PCA_EVALUATION_LOAD;
 	//
 	private FeatureListUI featureListUI;
 
@@ -54,9 +54,8 @@ public class DataTablePart extends EnhancedUpdateSupport implements IUpdateSuppo
 				featureListUI.setInput(null);
 			} else {
 				Object object = objects.get(0);
-				if(object instanceof ISamplesPCA) {
-					ISamplesPCA samples = (ISamplesPCA)object;
-					featureListUI.setInput(samples.getSampleList());
+				if(object instanceof EvaluationPCA) {
+					featureListUI.setInput((EvaluationPCA)object);
 				}
 			}
 		}
@@ -64,7 +63,7 @@ public class DataTablePart extends EnhancedUpdateSupport implements IUpdateSuppo
 
 	private boolean isUnloadEvent(String topic) {
 
-		if(topic.equals(Activator.TOPIC_PCA_SAMPLES_CLEAR)) {
+		if(topic.equals(Activator.TOPIC_PCA_EVALUATION_CLEAR)) {
 			return true;
 		}
 		return false;

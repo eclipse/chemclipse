@@ -12,7 +12,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultsPCA;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
@@ -31,24 +32,24 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Rotate;
 
-public class ScorePlot3d {
+public class ScorePlot3D {
 
-	private Axes axes;
+	private ScorePlot3DAxes axes;
 	private FXCanvas fxCanvas;
 	private final double rotateModifier = 10;
-	private Chart3DScatter scatter;
-	private Chart3DSettings settings;
+	private ScorePlot3DScatter scatter;
+	private ScorePlot3DSettings settings;
 
-	public ScorePlot3d(Composite parent, Object dataLayout) {
+	public ScorePlot3D(Composite parent, Object dataLayout) {
 		/*
 		 * JavaFX init
 		 */
 		fxCanvas = new FXCanvas(parent, SWT.None);
 		fxCanvas.setLayoutData(dataLayout);
-		settings = new Chart3DSettings(800);
-		axes = new Axes(settings);
+		settings = new ScorePlot3DSettings(800);
+		axes = new ScorePlot3DAxes(settings);
 		axes.buildAxes();
-		scatter = new Chart3DScatter(settings);
+		scatter = new ScorePlot3DScatter(settings);
 		/*
 		 * update scene after resize
 		 */
@@ -167,20 +168,23 @@ public class ScorePlot3d {
 
 	public void removeData() {
 
-		scatter = new Chart3DScatter(settings);
+		scatter = new ScorePlot3DScatter(settings);
 		createScene();
 		createScene();
 	}
 
 	@SuppressWarnings("rawtypes")
-	public void setInput(IPcaResults pcaResults) {
+	public void setInput(EvaluationPCA evaluationPCA) {
 
-		Chart3DSettings.setSettings(settings, pcaResults);
-		Chart3DSettings.setAxes2(settings, 800);
-		axes = new Axes(settings);
-		axes.buildAxes();
-		scatter = new Chart3DScatter(settings, pcaResults);
-		createScene();
+		if(evaluationPCA != null) {
+			IResultsPCA resultsPCA = evaluationPCA.getResults();
+			ScorePlot3DSettings.setSettings(settings, resultsPCA);
+			ScorePlot3DSettings.setAxesEnhanced(settings, 800);
+			axes = new ScorePlot3DAxes(settings);
+			axes.buildAxes();
+			scatter = new ScorePlot3DScatter(settings, resultsPCA);
+			createScene();
+		}
 	}
 
 	public void updateSelection() {

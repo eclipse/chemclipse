@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - get rid of JavaFX
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.barchart;
 
@@ -22,8 +23,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultPCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultsPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultVisualization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IVariableVisualization;
@@ -75,12 +76,11 @@ public class ErrorResidueBarChart {
 	// private int displayData;
 	private FXCanvas fxCanvas;
 	// private final Map<String, Color> groupColor = new HashMap<>();
-	private Optional<IPcaResults<IPcaResultVisualization, IVariableVisualization>> pcaResults = Optional.empty();
+	private Optional<IResultsPCA<IPcaResultVisualization, IVariableVisualization>> pcaResults = Optional.empty();
 	private int sortType;
 	private SelectionManagerSample selectionManagerSample;
 
 	public ErrorResidueBarChart(Composite parent, Object layoutData, SelectionManagerSample selectionManagerSample) {
-
 		this.selectionManagerSample = selectionManagerSample;
 		/*
 		 * JavaFX init
@@ -331,10 +331,10 @@ public class ErrorResidueBarChart {
 		ObservableList<XYChart.Data<String, Number>> data = series.getData();
 		switch(sortType) {
 			case SORT_BY_GROUP_NAME:
-				Collections.sort(data, (arg0, arg1) -> -Double.compare(((IPcaResult)arg0.getExtraValue()).getErrorMemberShip(), ((IPcaResult)arg1.getExtraValue()).getErrorMemberShip()));
+				Collections.sort(data, (arg0, arg1) -> -Double.compare(((IResultPCA)arg0.getExtraValue()).getErrorMemberShip(), ((IResultPCA)arg1.getExtraValue()).getErrorMemberShip()));
 				Comparator<XYChart.Data<String, Number>> comparator = (arg0, arg1) -> {
-					String name0 = ((IPcaResult)arg0.getExtraValue()).getGroupName();
-					String name1 = ((IPcaResult)arg1.getExtraValue()).getGroupName();
+					String name0 = ((IResultPCA)arg0.getExtraValue()).getGroupName();
+					String name1 = ((IResultPCA)arg1.getExtraValue()).getGroupName();
 					if(name0 == null && name1 == null) {
 						return 0;
 					}
@@ -349,17 +349,17 @@ public class ErrorResidueBarChart {
 				Collections.sort(data, comparator);
 				break;
 			case SORT_BY_ERROR_RESIDUES:
-				Collections.sort(data, (arg0, arg1) -> -Double.compare(((IPcaResult)arg0.getExtraValue()).getErrorMemberShip(), ((IPcaResult)arg1.getExtraValue()).getErrorMemberShip()));
+				Collections.sort(data, (arg0, arg1) -> -Double.compare(((IResultPCA)arg0.getExtraValue()).getErrorMemberShip(), ((IResultPCA)arg1.getExtraValue()).getErrorMemberShip()));
 				break;
 			case SORT_BY_NAME:
-				Collections.sort(data, (arg0, arg1) -> ((IPcaResult)arg0.getExtraValue()).getName().compareTo(((IPcaResult)arg1.getExtraValue()).getName()));
+				Collections.sort(data, (arg0, arg1) -> ((IResultPCA)arg0.getExtraValue()).getName().compareTo(((IResultPCA)arg1.getExtraValue()).getName()));
 				break;
 			default:
 				break;
 		}
 	}
 
-	public void update(IPcaResults<IPcaResultVisualization, IVariableVisualization> pcaResults) {
+	public void update(IResultsPCA<IPcaResultVisualization, IVariableVisualization> pcaResults) {
 
 		/*
 		 * update data

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - get rid of JavaFX
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core;
 
@@ -29,8 +30,8 @@ import java.util.stream.Collectors;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.stat.correlation.Covariance;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultPCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultsPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Sample;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
@@ -117,12 +118,12 @@ public class PcaUtils {
 	/**
 	 * 
 	 * @param pcaResults
-	 * @return all groupName {@link IPcaResult#getGroupName()}
+	 * @return all groupName {@link IResultPCA#getGroupName()}
 	 */
-	public static Set<String> getGroupNames(IPcaResults<?, ?> pcaResults) {
+	public static Set<String> getGroupNames(IResultsPCA<?, ?> pcaResults) {
 
 		Set<String> groupNames = new HashSet<>();
-		for(IPcaResult pcaResult : pcaResults.getPcaResultList()) {
+		for(IResultPCA pcaResult : pcaResults.getPcaResultList()) {
 			String groupName = pcaResult.getGroupName();
 			groupNames.add(groupName);
 		}
@@ -132,12 +133,12 @@ public class PcaUtils {
 	/**
 	 * 
 	 * @param pcaResults
-	 * @return all groupName {@link IPcaResult#getGroupName()}
+	 * @return all groupName {@link IResultPCA#getGroupName()}
 	 */
-	public static Set<String> getGroupNames(List<IPcaResult> pcaResults) {
+	public static Set<String> getGroupNames(List<IResultPCA> pcaResults) {
 
 		Set<String> groupNames = new HashSet<>();
-		for(IPcaResult pcaResult : pcaResults) {
+		for(IResultPCA pcaResult : pcaResults) {
 			String groupName = pcaResult.getGroupName();
 			groupNames.add(groupName);
 		}
@@ -270,9 +271,9 @@ public class PcaUtils {
 	 * 
 	 * @param pcaResults
 	 */
-	public static void sortPcaResultsByGroup(List<IPcaResult> pcaResults) {
+	public static void sortPcaResultsByGroup(List<IResultPCA> pcaResults) {
 
-		Comparator<IPcaResult> comparator = (arg0, arg1) -> {
+		Comparator<IResultPCA> comparator = (arg0, arg1) -> {
 			String name0 = arg0.getGroupName();
 			String name1 = arg1.getGroupName();
 			if(name0 == null && name1 == null) {
@@ -293,9 +294,9 @@ public class PcaUtils {
 	 * 
 	 * @param samples
 	 */
-	public static void sortPcaResultsByName(List<IPcaResult> samples) {
+	public static void sortPcaResultsByName(List<IResultPCA> samples) {
 
-		Comparator<IPcaResult> comparator = (arg0, arg1) -> {
+		Comparator<IResultPCA> comparator = (arg0, arg1) -> {
 			return arg0.getName().compareTo(arg1.getName());
 		};
 		Collections.sort(samples, comparator);
@@ -306,14 +307,14 @@ public class PcaUtils {
 	 * @param pcaResults
 	 * @param inverse
 	 */
-	public static void sortPcaResultsListByErrorMemberShip(List<IPcaResult> pcaResults, boolean inverse) {
+	public static void sortPcaResultsListByErrorMemberShip(List<IResultPCA> pcaResults, boolean inverse) {
 
 		int i = 1;
 		if(inverse) {
 			i = -1;
 		}
 		final int inv = i;
-		Comparator<IPcaResult> comparator = (arg0, arg1) -> {
+		Comparator<IResultPCA> comparator = (arg0, arg1) -> {
 			return inv * Double.compare(arg0.getErrorMemberShip(), arg1.getErrorMemberShip());
 		};
 		Collections.sort(pcaResults, comparator);

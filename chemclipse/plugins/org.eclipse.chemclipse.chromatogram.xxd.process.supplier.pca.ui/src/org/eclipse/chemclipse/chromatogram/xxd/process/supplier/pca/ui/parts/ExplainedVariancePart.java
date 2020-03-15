@@ -16,7 +16,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.barchart.ExplainedVarianceChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EnhancedUpdateSupport;
@@ -27,7 +27,7 @@ import org.eclipse.swt.widgets.Composite;
 
 public class ExplainedVariancePart extends EnhancedUpdateSupport implements IUpdateSupport {
 
-	private static final String TOPIC = Activator.TOPIC_PCA_RESULTS_LOAD;
+	private static final String TOPIC = Activator.TOPIC_PCA_EVALUATION_LOAD;
 	//
 	private ExplainedVarianceChart explainedVarianceChart;
 
@@ -42,7 +42,6 @@ public class ExplainedVariancePart extends EnhancedUpdateSupport implements IUpd
 		explainedVarianceChart = new ExplainedVarianceChart(parent, SWT.NONE);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public void updateSelection(List<Object> objects, String topic) {
 
@@ -54,8 +53,8 @@ public class ExplainedVariancePart extends EnhancedUpdateSupport implements IUpd
 				explainedVarianceChart.setInput(null);
 			} else {
 				Object object = objects.get(0);
-				if(object instanceof IPcaResults) {
-					explainedVarianceChart.setInput((IPcaResults)object);
+				if(object instanceof EvaluationPCA) {
+					explainedVarianceChart.setInput((EvaluationPCA)object);
 				}
 			}
 		}
@@ -63,7 +62,7 @@ public class ExplainedVariancePart extends EnhancedUpdateSupport implements IUpd
 
 	private boolean isUnloadEvent(String topic) {
 
-		if(topic.equals(Activator.TOPIC_PCA_RESULTS_CLEAR)) {
+		if(topic.equals(Activator.TOPIC_PCA_EVALUATION_CLEAR)) {
 			return true;
 		}
 		return false;

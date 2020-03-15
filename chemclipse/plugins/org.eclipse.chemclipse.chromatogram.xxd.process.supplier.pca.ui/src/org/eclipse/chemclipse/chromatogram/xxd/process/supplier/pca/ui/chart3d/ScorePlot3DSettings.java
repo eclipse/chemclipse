@@ -16,14 +16,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultPCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultsPCA;
 
 import javafx.scene.paint.Color;
 
-public class Chart3DSettings {
+public class ScorePlot3DSettings {
 
-	public static void setAxes2(Chart3DSettings settings, int scale) {
+	public static void setAxesEnhanced(ScorePlot3DSettings settings, int scale) {
 
 		int numberLines = settings.getMaxNumberLine();
 		double[] X = setAxes(settings.minX, settings.maxX, numberLines);
@@ -41,7 +41,7 @@ public class Chart3DSettings {
 		setScale(settings, scale);
 	}
 
-	public static void setAxes(Chart3DSettings settings, int scale) {
+	public static void setAxes(ScorePlot3DSettings settings, int scale) {
 
 		int numberLines = settings.getMaxNumberLine();
 		double[] X = setAxesSquared(settings.minX, settings.maxX, numberLines);
@@ -59,7 +59,7 @@ public class Chart3DSettings {
 		setScale(settings, scale);
 	}
 
-	private static void setScale(Chart3DSettings settings, int point) {
+	private static void setScale(ScorePlot3DSettings settings, int point) {
 
 		double maxDisX = Math.abs(settings.axisMaxX - settings.axisMinX);
 		double maxDisY = Math.abs(settings.axisMaxY - settings.axisMinY);
@@ -118,7 +118,7 @@ public class Chart3DSettings {
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	public static void setSettings(Chart3DSettings settings, IPcaResults pcaResults) {
+	public static void setSettings(ScorePlot3DSettings settings, IResultsPCA resultsPCA) {
 
 		int pcX = 0;
 		int pcY = 1;
@@ -129,8 +129,8 @@ public class Chart3DSettings {
 		/*
 		 * set min and max
 		 */
-		if(pcaResults != null) {
-			List<? extends IPcaResult> pcaResultList = pcaResults.getPcaResultList();
+		if(resultsPCA != null) {
+			List<? extends IResultPCA> pcaResultList = resultsPCA.getPcaResultList();
 			settings.minX = pcaResultList.stream().min((d1, d2) -> Double.compare(d1.getScoreVector()[pcX], d2.getScoreVector()[pcX])).get().getScoreVector()[pcX];
 			settings.minY = pcaResultList.stream().min((d1, d2) -> Double.compare(d1.getScoreVector()[pcY], d2.getScoreVector()[pcY])).get().getScoreVector()[pcY];
 			settings.minZ = pcaResultList.stream().min((d1, d2) -> Double.compare(d1.getScoreVector()[pcZ], d2.getScoreVector()[pcZ])).get().getScoreVector()[pcZ];
@@ -174,7 +174,7 @@ public class Chart3DSettings {
 	private double shiftY;
 	private double shiftZ;
 
-	public Chart3DSettings(int scale) {
+	public ScorePlot3DSettings(int scale) {
 		maxX = 100;
 		maxY = 100;
 		maxZ = 100;

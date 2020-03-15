@@ -12,195 +12,53 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultPCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultsPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.utility.SeriesConverter;
 import org.eclipse.chemclipse.model.statistics.IVariable;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
-import org.eclipse.swtchart.ISeries;
-import org.eclipse.swtchart.extensions.core.BaseChart;
-import org.eclipse.swtchart.extensions.core.IChartSettings;
-import org.eclipse.swtchart.extensions.core.ICustomSelectionHandler;
-import org.eclipse.swtchart.extensions.core.IMouseSupport;
-import org.eclipse.swtchart.extensions.events.AbstractHandledEventProcessor;
-import org.eclipse.swtchart.extensions.events.IHandledEventProcessor;
-import org.eclipse.swtchart.extensions.events.MouseDownEvent;
-import org.eclipse.swtchart.extensions.events.MouseMoveCursorEvent;
-import org.eclipse.swtchart.extensions.events.MouseMoveSelectionEvent;
-import org.eclipse.swtchart.extensions.events.MouseMoveShiftEvent;
-import org.eclipse.swtchart.extensions.events.MouseUpEvent;
-import org.eclipse.swtchart.extensions.events.ResetSeriesEvent;
-import org.eclipse.swtchart.extensions.events.SelectDataPointEvent;
-import org.eclipse.swtchart.extensions.events.UndoRedoEvent;
-import org.eclipse.swtchart.extensions.events.ZoomEvent;
 import org.eclipse.swtchart.extensions.scattercharts.IScatterSeriesData;
 
-public class LoadingsPlot extends PCA2DPlot {
+public class LoadingsPlot extends AbtractPlotPCA {
 
-	public static final int LABELS_DESCRIPTION = 2;
-	public static final int LABELS_RETENTION_TIME_MINUTES = 1;
-	private final Set<String> actualSelection = new HashSet<>();
-	private final Map<String, IVariable> extractedValues = new HashMap<>();
-	private int labelsType = LABELS_RETENTION_TIME_MINUTES;
+	public static final int LABEL_RETENTION_TIME_MINUTES = 1;
+	public static final int LABEL_DESCRIPTION = 2;
+	//
+	private int labelType = LABEL_RETENTION_TIME_MINUTES;
 
-	private class SelectActualSeriesEvent extends AbstractHandledEventProcessor implements IHandledEventProcessor {
-
-		@Override
-		public int getButton() {
-
-			return IMouseSupport.MOUSE_BUTTON_LEFT;
-		}
-
-		@Override
-		public int getEvent() {
-
-			return IMouseSupport.EVENT_MOUSE_DOUBLE_CLICK;
-		}
-
-		@Override
-		public int getStateMask() {
-
-			return SWT.NONE;
-		}
-
-		@Override
-		public void handleEvent(BaseChart baseChart, Event event) {
-
-			String selectedSeriesId = baseChart.getSelectedseriesId(event);
-			if(!selectedSeriesId.equals("")) {
-				IVariable variable = extractedValues.get(selectedSeriesId);
-				//
-			}
-		}
-	}
-
-	private class SelectSeriesEvent extends AbstractHandledEventProcessor implements IHandledEventProcessor {
-
-		@Override
-		public int getButton() {
-
-			return IMouseSupport.MOUSE_BUTTON_LEFT;
-		}
-
-		@Override
-		public int getEvent() {
-
-			return IMouseSupport.EVENT_MOUSE_DOUBLE_CLICK;
-		}
-
-		@Override
-		public int getStateMask() {
-
-			return SWT.CTRL;
-		}
-
-		@Override
-		public void handleEvent(BaseChart baseChart, Event event) {
-
-			String selectedSeriesId = baseChart.getSelectedseriesId(event);
-			if(!selectedSeriesId.equals("")) {
-				IVariable variable = extractedValues.get(selectedSeriesId);
-				variable.setSelected(!variable.isSelected());
-			}
-		}
-	}
-
-	public LoadingsPlot(Composite parent) {
-		super(parent, "Loading Plot");
-		//
-		IChartSettings chartSettings = getChartSettings();
-		chartSettings.clearHandledEventProcessors();
-		chartSettings.addHandledEventProcessor(new SelectSeriesEvent());
-		chartSettings.addHandledEventProcessor(new SelectActualSeriesEvent());
-		chartSettings.addHandledEventProcessor(new ResetSeriesEvent());
-		chartSettings.addHandledEventProcessor(new SelectDataPointEvent());
-		chartSettings.addHandledEventProcessor(new ZoomEvent());
-		chartSettings.addHandledEventProcessor(new MouseDownEvent());
-		chartSettings.addHandledEventProcessor(new MouseMoveSelectionEvent());
-		chartSettings.addHandledEventProcessor(new MouseMoveShiftEvent());
-		chartSettings.addHandledEventProcessor(new MouseMoveCursorEvent());
-		chartSettings.addHandledEventProcessor(new MouseUpEvent());
-		chartSettings.addHandledEventProcessor(new UndoRedoEvent());
-		chartSettings.setEnableCompress(false);
-		applySettings(chartSettings);
-		getBaseChart().addCustomRangeSelectionHandler(new ICustomSelectionHandler() {
-
-			@Override
-			public void handleUserSelection(Event event) {
-
-				updateSelection();
-			}
-		});
-	}
-
-	public Set<String> getActualSelection() {
-
-		return actualSelection;
-	}
-
-	public Map<String, IVariable> getExtractedValues() {
-
-		return extractedValues;
+	public LoadingsPlot(Composite parent, int style) {
+		super(parent, style, "Loadings Plot");
 	}
 
 	public int getLabelsType() {
 
-		return labelsType;
+		return labelType;
 	}
 
 	public void setLabelsType(int labelsType) {
 
-		if(labelsType == LABELS_DESCRIPTION || labelsType == LABELS_RETENTION_TIME_MINUTES) {
-			this.labelsType = labelsType;
+		if(labelsType == LABEL_DESCRIPTION || labelsType == LABEL_RETENTION_TIME_MINUTES) {
+			this.labelType = labelsType;
 		}
 	}
 
-	public void setInput(IPcaResults<? extends IPcaResult, ? extends IVariable> pcaResults) {
+	public void setInput(IResultsPCA<? extends IResultPCA, ? extends IVariable> pcaResults) {
 
 		// TODO
 		int pcX = 1;
 		int pcY = 2;
 		//
 		List<IScatterSeriesData> series;
-		if(labelsType == LABELS_RETENTION_TIME_MINUTES) {
-			series = SeriesConverter.basisVectorsToSeries(pcaResults, pcX, pcY, extractedValues);
+		if(labelType == LABEL_RETENTION_TIME_MINUTES) {
+			series = SeriesConverter.basisVectorsToSeries(pcaResults, pcX, pcY);
 		} else {
-			series = SeriesConverter.basisVectorsToSeriesDescription(pcaResults, pcX, pcY, extractedValues);
+			series = SeriesConverter.basisVectorsToSeriesDescription(pcaResults, pcX, pcY);
 		}
+		//
 		deleteSeries();
 		addSeriesData(series);
 		update(pcX, pcY);
-		updateSelection();
-	}
-
-	private void updateSelection() {
-
-		BaseChart baseChart = getBaseChart();
-		Rectangle plotAreaBounds = baseChart.getPlotArea().getBounds();
-		ISeries[] series = baseChart.getSeriesSet().getSeries();
-		//
-		actualSelection.clear();
-		for(ISeries scatterSeries : series) {
-			if(scatterSeries != null) {
-				int size = scatterSeries.getXSeries().length;
-				String id = scatterSeries.getId();
-				for(int i = 0; i < size; i++) {
-					Point point = scatterSeries.getPixelCoordinates(i);
-					if(isPointVisible(point, plotAreaBounds)) {
-						actualSelection.add(id);
-					}
-				}
-			}
-		}
 	}
 }

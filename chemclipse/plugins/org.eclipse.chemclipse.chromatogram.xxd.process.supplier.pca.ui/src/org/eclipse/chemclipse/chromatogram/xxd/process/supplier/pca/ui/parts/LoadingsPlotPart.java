@@ -15,19 +15,20 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.LoadingsPlot;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt.ExtendedLoadingsPlot;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EnhancedUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IUpdateSupport;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 public class LoadingsPlotPart extends EnhancedUpdateSupport implements IUpdateSupport {
 
-	private static final String TOPIC = Activator.TOPIC_PCA_RESULTS_LOAD;
+	private static final String TOPIC = Activator.TOPIC_PCA_EVALUATION_LOAD;
 	//
-	private LoadingsPlot scorePlot;
+	private ExtendedLoadingsPlot plot;
 
 	@Inject
 	public LoadingsPlotPart(Composite parent, MPart part) {
@@ -37,10 +38,9 @@ public class LoadingsPlotPart extends EnhancedUpdateSupport implements IUpdateSu
 	@Override
 	public void createControl(Composite parent) {
 
-		scorePlot = new LoadingsPlot(parent);
+		plot = new ExtendedLoadingsPlot(parent, SWT.NONE);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public void updateSelection(List<Object> objects, String topic) {
 
@@ -49,11 +49,11 @@ public class LoadingsPlotPart extends EnhancedUpdateSupport implements IUpdateSu
 		 */
 		if(objects.size() == 1) {
 			if(isUnloadEvent(topic)) {
-				scorePlot.setInput(null);
+				plot.setInput(null);
 			} else {
 				Object object = objects.get(0);
-				if(object instanceof IPcaResults) {
-					scorePlot.setInput((IPcaResults)object);
+				if(object instanceof EvaluationPCA) {
+					plot.setInput((EvaluationPCA)object);
 				}
 			}
 		}
@@ -61,7 +61,7 @@ public class LoadingsPlotPart extends EnhancedUpdateSupport implements IUpdateSu
 
 	private boolean isUnloadEvent(String topic) {
 
-		if(topic.equals(Activator.TOPIC_PCA_RESULTS_CLEAR)) {
+		if(topic.equals(Activator.TOPIC_PCA_EVALUATION_CLEAR)) {
 			return true;
 		}
 		return false;

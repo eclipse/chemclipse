@@ -11,8 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamplesPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.provider.FeatureComparator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.provider.FeatureLabelProvider;
+import org.eclipse.chemclipse.model.statistics.ISample;
+import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -29,6 +33,20 @@ public class FeatureListUI extends ExtendedTableViewer {
 	public FeatureListUI(Composite parent, int style) {
 		super(parent, style);
 		createColumns();
+	}
+
+	public void setInput(EvaluationPCA evaluationPCA) {
+
+		if(evaluationPCA != null) {
+			ISamplesPCA<? extends IVariable, ? extends ISample> samples = evaluationPCA.getSamples();
+			if(samples != null) {
+				super.setInput(samples.getSampleList());
+			} else {
+				super.setInput(null);
+			}
+		} else {
+			super.setInput(null);
+		}
 	}
 
 	private void createColumns() {

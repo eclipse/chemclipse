@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,18 +16,17 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.statistics.IVariable;
 
-public class PcaResults implements IPcaResults<IPcaResult, IVariable> {
+public class ResultsPCA implements IResultsPCA<IResultPCA, IVariable> {
 
 	private List<double[]> loadingVectors;
 	private double[] explainedVariances;
 	private double[] cumulativeExplainedVariances;
 	private List<IVariable> extractedVariables;
-	private List<IPcaResult> pcaResultList;
+	private List<IResultPCA> pcaResultList;
 	//
 	private IAnalysisSettings analysisSettings;
 
-	public PcaResults(IAnalysisSettings analysisSettings) {
-
+	public ResultsPCA(IAnalysisSettings analysisSettings) {
 		this.analysisSettings = analysisSettings;
 		extractedVariables = new ArrayList<>();
 		pcaResultList = new ArrayList<>();
@@ -46,7 +45,7 @@ public class PcaResults implements IPcaResults<IPcaResult, IVariable> {
 	}
 
 	@Override
-	public List<IPcaResult> getPcaResultList() {
+	public List<IResultPCA> getPcaResultList() {
 
 		return pcaResultList;
 	}

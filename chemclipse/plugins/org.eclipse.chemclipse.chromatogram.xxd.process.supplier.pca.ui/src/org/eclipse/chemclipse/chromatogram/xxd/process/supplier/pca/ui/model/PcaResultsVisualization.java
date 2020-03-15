@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,28 +8,28 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - get rid of JavaFX
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model;
 
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultPCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultsPCA;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class PcaResultsVisualization<R extends IPcaResult, V extends IVariableVisualization> implements IPcaResultsVisualization {
+public class PcaResultsVisualization<R extends IResultPCA, V extends IVariableVisualization> implements IPcaResultsVisualization {
 
-	private IPcaResults<IPcaResult, IVariable> delegator;
+	private IResultsPCA<IResultPCA, IVariable> delegator;
 	private ObservableList<IPcaResultVisualization> pcaResultsVisualization;
 	private IPcaVisualization pcaVisualization;
 	private ObservableList<IVariableVisualization> variablesExtractedVisalization;
 
-	public PcaResultsVisualization(IPcaResults<IPcaResult, IVariable> modelData, IPcaVisualization pcaVisualization) {
-
+	public PcaResultsVisualization(IResultsPCA<IResultPCA, IVariable> modelData, IPcaVisualization pcaVisualization) {
 		super();
 		this.delegator = modelData;
 		this.pcaVisualization = pcaVisualization;

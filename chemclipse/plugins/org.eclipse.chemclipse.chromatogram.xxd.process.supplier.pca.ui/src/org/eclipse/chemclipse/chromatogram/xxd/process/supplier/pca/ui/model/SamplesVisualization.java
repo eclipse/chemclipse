@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - get rid of JavaFX
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model;
 
@@ -16,13 +17,13 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.Preproc
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataPreprocessing;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDefaultPcaSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IVariablesFiltration;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IFilterVariables;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
-public class SamplesVisualization extends AbstractSamplesVisualization<RetentionTimeVisualization, SampleVisualization> implements IDataPreprocessing, IVariablesFiltration, IDefaultPcaSettings {
+public class SamplesVisualization extends AbstractSamplesVisualization<RetentionTimeVisualization, SampleVisualization> implements IDataPreprocessing, IFilterVariables, IDefaultPcaSettings {
 
 	private ObservableList<RetentionTimeVisualization> retentionsTimeVisualization;
 	private Samples samples;

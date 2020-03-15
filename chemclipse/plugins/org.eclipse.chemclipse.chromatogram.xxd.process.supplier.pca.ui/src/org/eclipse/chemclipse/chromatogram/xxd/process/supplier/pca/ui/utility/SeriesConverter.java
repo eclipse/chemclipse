@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResults;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultPCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultsPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.model.statistics.IVariable;
@@ -36,7 +36,7 @@ import org.eclipse.swtchart.extensions.scattercharts.ScatterSeriesData;
 
 public class SeriesConverter {
 
-	public static List<IScatterSeriesData> basisVectorsToSeries(IPcaResults<? extends IPcaResult, ? extends IVariable> pcaResults, int pcX, int pcY, Map<String, IVariable> extractedValues) {
+	public static List<IScatterSeriesData> basisVectorsToSeries(IResultsPCA<? extends IResultPCA, ? extends IVariable> pcaResults, int pcX, int pcY) {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<>();
@@ -45,7 +45,7 @@ public class SeriesConverter {
 		for(int i = 0; i < variables.size(); i++) {
 			IVariable variable = variables.get(i);
 			String name = variables.get(i).getValue();
-			extractedValues.put(name, variables.get(i));
+			//
 			double x = 0;
 			if(pcX != 0) {
 				x = pcaResults.getLoadingVectors().get(pcX - 1)[i];
@@ -72,7 +72,7 @@ public class SeriesConverter {
 		return scatterSeriesDataList;
 	}
 
-	public static List<IScatterSeriesData> basisVectorsToSeriesDescription(IPcaResults<? extends IPcaResult, ? extends IVariable> pcaResults, int pcX, int pcY, Map<String, IVariable> extractedValues) {
+	public static List<IScatterSeriesData> basisVectorsToSeriesDescription(IResultsPCA<? extends IResultPCA, ? extends IVariable> pcaResults, int pcX, int pcY) {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<>();
@@ -87,7 +87,7 @@ public class SeriesConverter {
 			} else {
 				name = description;
 			}
-			extractedValues.put(name, variables.get(i));
+			//
 			double x = 0;
 			if(pcX != 0) {
 				x = pcaResults.getLoadingVectors().get(pcX - 1)[i];
@@ -115,17 +115,17 @@ public class SeriesConverter {
 	}
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	public static List<IScatterSeriesData> sampleToSeries(IPcaResults pcaResults, int pcX, int pcY, Map<String, IPcaResult> extractedPcaResults) {
+	public static List<IScatterSeriesData> sampleToSeries(IResultsPCA pcaResults, int pcX, int pcY, Map<String, IResultPCA> extractedPcaResults) {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<IScatterSeriesData>();
 		PcaUtils.getGroupNames(pcaResults);
 		extractedPcaResults.clear();
 		//
-		List<IPcaResult> resultList = pcaResults.getPcaResultList();
+		List<IResultPCA> resultList = pcaResults.getPcaResultList();
 		IColorScheme colorScheme = Colors.getColorScheme(Colors.COLOR_SCHEME_PRINT);
 		Map<String, Color> colors = new HashMap<>();
-		for(IPcaResult pcaResult : resultList) {
+		for(IResultPCA pcaResult : resultList) {
 			String groupName = pcaResult.getGroupName();
 			Color color = colors.get(groupName);
 			if(color == null) {
@@ -135,7 +135,7 @@ public class SeriesConverter {
 		}
 		//
 		for(int i = 0; i < pcaResults.getPcaResultList().size(); i++) {
-			IPcaResult pcaResult = resultList.get(i);
+			IResultPCA pcaResult = resultList.get(i);
 			/*
 			 * Create the series.
 			 */
