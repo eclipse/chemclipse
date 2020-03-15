@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.FeatureDataMatrix;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamplesPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.provider.FeatureComparator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.provider.FeatureLabelProvider;
@@ -40,8 +41,8 @@ public class FeatureListUI extends ExtendedTableViewer {
 		if(evaluationPCA != null) {
 			ISamplesPCA<? extends IVariable, ? extends ISample> samples = evaluationPCA.getSamples();
 			if(samples != null) {
-				// TODO create Feature Matrix
-				super.setInput(samples.getSampleList());
+				FeatureDataMatrix featureDataMatrix = new FeatureDataMatrix(samples);
+				super.setInput(featureDataMatrix.getFeatures());
 			}
 		} else {
 			super.setInput(null);

@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Christoph Läubrich - remove ModelAddon dependency
+ * Philip Wenig - get rid of JavaFX
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handlers;
 
@@ -19,7 +20,6 @@ import javax.inject.Named;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamplesPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
 import org.eclipse.chemclipse.rcp.app.ui.handlers.OpenSnippetHandler;
 import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
 import org.eclipse.e4.core.contexts.IEclipseContext;
@@ -31,7 +31,6 @@ import org.eclipse.e4.ui.services.IServiceConstants;
 
 public class CreatePcaEvaluation {
 
-	private static final String COMPOSITE_EDITOR_ID = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.compositepart.editor";
 	private static final String EDITOR_ID = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.part.pcaeditor";
 	public static final String PCA_PERSPECTIVE = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.perspective";
 	public static final String PCA_EDITOR_STACK = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.stackId.pcaeditorStack";
@@ -42,20 +41,6 @@ public class CreatePcaEvaluation {
 		switchPespective();
 		OpenSnippetHandler.openSnippet(EDITOR_ID, context, PCA_EDITOR_STACK, (eclipseContext, part) -> {
 			eclipseContext.set(ISamplesPCA.class, samples);
-			if(title != null) {
-				part.setLabel(title);
-			}
-			return null;
-		});
-	}
-
-	public static void createCompositePart(Samples samples, IEclipseContext context, String title) {
-
-		OpenSnippetHandler.openCompositeSnippet(COMPOSITE_EDITOR_ID, context, (eclipseContext, part) -> {
-			SelectionManagerSamples managerSamples = new SelectionManagerSamples();
-			// eclipseContext.set(PcaContext.class, new PcaContext(samples, managerSamples)); // TODO
-			eclipseContext.set(SelectionManagerSamples.class, managerSamples);
-			eclipseContext.set(Samples.class, samples);
 			if(title != null) {
 				part.setLabel(title);
 			}

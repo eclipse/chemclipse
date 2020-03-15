@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - get rid of JavaFX
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
@@ -26,7 +27,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 
 public abstract class DataInputPageWizard extends WizardPage {
 
@@ -34,7 +34,6 @@ public abstract class DataInputPageWizard extends WizardPage {
 	private Label countFiles;
 	private List<IDataInputEntry> dataInputEntries;
 	private InputFilesTable inputFilesTable;
-	private Text textGroupName;
 
 	public DataInputPageWizard(String pageName) {
 		super(pageName);
@@ -69,11 +68,8 @@ public abstract class DataInputPageWizard extends WizardPage {
 		 */
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.heightHint = 30;
-		Label label = new Label(composite, SWT.NONE);
-		label.setText("Set group name (optional)");
-		textGroupName = new Text(composite, SWT.BORDER);
-		textGroupName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		label = new Label(composite, SWT.None);
+		//
+		Label label = new Label(composite, SWT.None);
 		label.setText(" Select input files ");
 		gridData = new GridData(GridData.FILL_BOTH);
 		gridData.heightHint = 400;
@@ -97,11 +93,6 @@ public abstract class DataInputPageWizard extends WizardPage {
 		});
 		button.setText("Remove");
 		setControl(composite);
-	}
-
-	protected String getGroupName() {
-
-		return textGroupName.getText();
 	}
 
 	public List<IDataInputEntry> getUniqueDataInputEnties() {

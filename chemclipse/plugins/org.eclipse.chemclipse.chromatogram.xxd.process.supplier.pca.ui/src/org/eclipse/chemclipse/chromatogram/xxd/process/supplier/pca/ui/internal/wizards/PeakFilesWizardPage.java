@@ -9,6 +9,7 @@
  * Contributors:
  * Jan Holy - initial API and implementation
  * Christoph Läubrich - change to new Wizard API
+ * Philip Wenig - get rid of JavaFX
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
@@ -40,12 +41,7 @@ public class PeakFilesWizardPage extends DataInputPageWizard {
 		inputWizardSettings.setDescription("This wizard lets you select several peak input files.");
 		List<IDataInputEntry> dataInputEntries = new ArrayList<>();
 		for(File file : InputEntriesWizard.openWizard(getShell(), inputWizardSettings).keySet()) {
-			IDataInputEntry dataInputEntry = new DataInputEntry(file.getAbsolutePath());
-			String groupName = getGroupName().trim();
-			if(!groupName.isEmpty()) {
-				dataInputEntry.setGroupName(groupName);
-			}
-			dataInputEntries.add(dataInputEntry);
+			dataInputEntries.add(new DataInputEntry(file.getAbsolutePath()));
 		}
 		addInputFiles(dataInputEntries);
 		update();

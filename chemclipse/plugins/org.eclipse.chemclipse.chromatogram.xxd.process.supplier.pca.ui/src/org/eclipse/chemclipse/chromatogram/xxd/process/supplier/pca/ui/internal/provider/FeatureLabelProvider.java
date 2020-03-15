@@ -13,8 +13,9 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal
 
 import java.util.List;
 
-import org.eclipse.chemclipse.model.statistics.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Feature;
 import org.eclipse.chemclipse.model.statistics.ISampleData;
+import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
@@ -22,17 +23,23 @@ import org.eclipse.swt.graphics.Image;
 
 public class FeatureLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String SAMPLE_NAME = "Sample Name";
-	public static final String DATA = "Data";
+	public static final String VALUE = "Value"; // e.g. Retention Time
+	public static final String USE = "Use";
+	public static final String CLASSIFICATION = "Classification";
+	public static final String DATA = "Data"; // Flexible, e.g. Chromatogram Name
 	//
 	public static String[] TITLES = {//
-			SAMPLE_NAME, //
+			VALUE, //
+			USE, //
+			CLASSIFICATION, //
 			DATA //
 	};
 	//
 	public static int[] BOUNDS = {//
-			300, //
-			300 //
+			100, //
+			30, //
+			200, //
+			100 //
 	};
 
 	@Override
@@ -45,19 +52,25 @@ public class FeatureLabelProvider extends AbstractChemClipseLabelProvider {
 	}
 
 	@Override
-	@SuppressWarnings("rawtypes")
 	public String getColumnText(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof ISample) {
-			ISample sample = (ISample)element;
+		if(element instanceof Feature) {
+			Feature feature = (Feature)element;
+			IVariable variable = feature.getVariable();
 			//
 			switch(columnIndex) {
 				case 0:
-					text = sample.getName();
+					text = variable.getValue();
 					break;
 				case 1:
-					List<? extends ISampleData> sampleData = sample.getSampleData();
+					text = Boolean.toString(variable.isSelected());
+					break;
+				case 2:
+					text = variable.getClassification();
+					break;
+				case 3:
+					List<ISampleData<?>> sampleData = feature.getSampleData();
 					if(sampleData.size() > 0) {
 						text = Double.toString(sampleData.get(0).getData());
 					} else {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +9,7 @@
  * Contributors:
  * Jan Holy - initial API and implementation
  * Christoph Läubrich - change to new Wizard API
+ * Philip Wenig - get rid of JavaFX
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
@@ -40,12 +41,7 @@ public class ScanFilesWizardPage extends DataInputPageWizard {
 		inputWizardSettings.setDescription("This wizard lets you select several chormatogram MSD input files.");
 		List<IDataInputEntry> dataInputEntries = new ArrayList<>();
 		for(File file : InputEntriesWizard.openWizard(getShell(), inputWizardSettings).keySet()) {
-			IDataInputEntry dataInputEntry = new DataInputEntry(file.getAbsolutePath());
-			String groupName = getGroupName().trim();
-			if(!groupName.isEmpty()) {
-				dataInputEntry.setGroupName(groupName);
-			}
-			dataInputEntries.add(dataInputEntry);
+			dataInputEntries.add(new DataInputEntry(file.getAbsolutePath()));
 		}
 		addInputFiles(dataInputEntries);
 		update();

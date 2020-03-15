@@ -24,17 +24,13 @@ import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.swt.widgets.Composite;
 
-public class PCADataExplorerView {
+public class DataExplorerPart {
 
 	private DataExplorerUI dataExplorerUI;
 	@Inject
 	private IEventBroker broker;
 	@Inject
-	IEclipseContext context;
-
-	@Inject
-	public PCADataExplorerView() {
-	}
+	private IEclipseContext context;
 
 	@PostConstruct
 	public void postConstruct(Composite parent) {

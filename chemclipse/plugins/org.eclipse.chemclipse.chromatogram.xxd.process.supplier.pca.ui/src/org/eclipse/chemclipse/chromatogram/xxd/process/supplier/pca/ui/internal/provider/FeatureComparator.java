@@ -11,8 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.provider;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Sample;
-import org.eclipse.chemclipse.model.statistics.ISample;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Feature;
+import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
 import org.eclipse.jface.viewers.Viewer;
@@ -23,16 +23,27 @@ public class FeatureComparator extends AbstractRecordTableComparator implements 
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof ISample && e2 instanceof ISample) {
-			Sample sample1 = (Sample)e1;
-			Sample sample2 = (Sample)e2;
+		if(e1 instanceof Feature && e2 instanceof Feature) {
+			Feature feature1 = (Feature)e1;
+			IVariable variable1 = feature1.getVariable();
+			Feature feature2 = (Feature)e2;
+			IVariable variable2 = feature2.getVariable();
 			//
 			switch(getPropertyIndex()) {
 				case 0:
-					sortOrder = sample2.getName().compareTo(sample1.getName());
+					try {
+						double value1 = Double.parseDouble(variable1.getValue());
+						double value2 = Double.parseDouble(variable2.getValue());
+						sortOrder = Double.compare(value2, value1);
+					} catch(Exception e) {
+						sortOrder = variable2.getValue().compareTo(variable1.getValue());
+					}
 					break;
 				case 1:
-					sortOrder = 0;
+					sortOrder = Boolean.compare(variable2.isSelected(), variable1.isSelected());
+					break;
+				case 2:
+					sortOrder = variable2.getClassification().compareTo(variable1.getClassification());
 					break;
 			}
 		}
