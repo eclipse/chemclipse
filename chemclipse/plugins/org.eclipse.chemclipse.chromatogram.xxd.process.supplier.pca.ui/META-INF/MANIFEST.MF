@@ -6,17 +6,14 @@ Bundle-Version: 0.8.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator
 Bundle-Vendor: ChemClipse
 Export-Package: org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.barchart,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handlers,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.utility
+ org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca;bundle-version="0.8.0",

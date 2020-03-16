@@ -16,7 +16,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultsPCA;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.utility.SeriesConverter;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.SeriesConverter;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swtchart.extensions.scattercharts.IScatterSeriesData;

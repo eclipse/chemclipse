@@ -10,7 +10,7 @@
  * Jan Holy - initial API and implementation
  * Dr. Philip Wenig - getting rid of JavaFX
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.utility;
+package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -56,16 +56,16 @@ public class SeriesConverter {
 			ISeriesData seriesData = new SeriesData(new double[]{x}, new double[]{y}, name);
 			IScatterSeriesData scatterSeriesData = new ScatterSeriesData(seriesData);
 			IScatterSeriesSettings scatterSeriesSettings = scatterSeriesData.getSettings();
-			Color color = Colors.RED;
+			//
 			if(variable.isSelected()) {
-				scatterSeriesSettings.setSymbolColor(color);
+				scatterSeriesSettings.setSymbolColor(Colors.RED);
 			} else {
-				scatterSeriesSettings.setSymbolColor(PcaColorGroup.getUnselectedColor(color));
+				scatterSeriesSettings.setSymbolColor(Colors.GRAY);
 			}
 			scatterSeriesSettings.setSymbolType(PlotSymbolType.valueOf(preferenceStore.getString(PreferenceSupplier.P_LOADING_PLOT_2D_SYMBOL_TYPE)));
 			scatterSeriesSettings.setSymbolSize(preferenceStore.getInt(PreferenceSupplier.P_LOADING_PLOT_2D_SYMBOL_SIZE));
 			IScatterSeriesSettings scatterSeriesSettingsHighlight = (IScatterSeriesSettings)scatterSeriesSettings.getSeriesSettingsHighlight();
-			scatterSeriesSettingsHighlight.setSymbolColor(PcaColorGroup.getActualSelectedColor(color));
+			scatterSeriesSettingsHighlight.setSymbolColor(Colors.RED);
 			scatterSeriesSettingsHighlight.setSymbolSize(preferenceStore.getInt(PreferenceSupplier.P_LOADING_PLOT_2D_SYMBOL_SIZE) + 2);
 			scatterSeriesDataList.add(scatterSeriesData);
 		}
@@ -98,16 +98,16 @@ public class SeriesConverter {
 			ISeriesData seriesData = new SeriesData(new double[]{x}, new double[]{y}, name);
 			IScatterSeriesData scatterSeriesData = new ScatterSeriesData(seriesData);
 			IScatterSeriesSettings scatterSeriesSettings = scatterSeriesData.getSettings();
-			Color color = Colors.RED;
+			//
 			if(variable.isSelected()) {
-				scatterSeriesSettings.setSymbolColor(color);
+				scatterSeriesSettings.setSymbolColor(Colors.RED);
 			} else {
-				scatterSeriesSettings.setSymbolColor(PcaColorGroup.getUnselectedColor(color));
+				scatterSeriesSettings.setSymbolColor(Colors.GRAY);
 			}
 			scatterSeriesSettings.setSymbolType(PlotSymbolType.valueOf(preferenceStore.getString(PreferenceSupplier.P_LOADING_PLOT_2D_SYMBOL_TYPE)));
 			scatterSeriesSettings.setSymbolSize(preferenceStore.getInt(PreferenceSupplier.P_LOADING_PLOT_2D_SYMBOL_SIZE));
 			IScatterSeriesSettings scatterSeriesSettingsHighlight = (IScatterSeriesSettings)scatterSeriesSettings.getSeriesSettingsHighlight();
-			scatterSeriesSettingsHighlight.setSymbolColor(PcaColorGroup.getActualSelectedColor(color));
+			scatterSeriesSettingsHighlight.setSymbolColor(Colors.RED);
 			scatterSeriesSettingsHighlight.setSymbolSize(preferenceStore.getInt(PreferenceSupplier.P_LOADING_PLOT_2D_SYMBOL_SIZE) + 2);
 			scatterSeriesDataList.add(scatterSeriesData);
 		}
@@ -164,10 +164,10 @@ public class SeriesConverter {
 			if(pcaResult.getSample().isSelected()) {
 				scatterSeriesSettings.setSymbolColor(color);
 			} else {
-				scatterSeriesSettings.setSymbolColor(PcaColorGroup.getUnselectedColor(color));
+				scatterSeriesSettings.setSymbolColor(Colors.GRAY);
 			}
 			IScatterSeriesSettings scatterSeriesSettingsHighlight = (IScatterSeriesSettings)scatterSeriesSettings.getSeriesSettingsHighlight();
-			scatterSeriesSettingsHighlight.setSymbolColor(PcaColorGroup.getActualSelectedColor(color));
+			scatterSeriesSettingsHighlight.setSymbolColor(Colors.RED);
 			scatterSeriesDataList.add(scatterSeriesData);
 		}
 		return scatterSeriesDataList;
