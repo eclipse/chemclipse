@@ -9,7 +9,7 @@
  * Contributors:
  * Lorenz Gerber - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
+package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.algorithms;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.OptionalDouble;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.exception.MathIllegalArgumentException;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.AbstractMultivariateCalculator;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.CommonOps_DDRM;
 

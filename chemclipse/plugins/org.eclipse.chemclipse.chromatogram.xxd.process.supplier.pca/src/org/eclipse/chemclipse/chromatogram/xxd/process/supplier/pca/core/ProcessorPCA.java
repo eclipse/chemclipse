@@ -23,11 +23,11 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.algorithms.CalculatorNIPALS;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.algorithms.CalculatorOPLS;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.algorithms.CalculatorSVD;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.exception.MathIllegalArgumentException;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Algorithm;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.CalculatorNIPALS;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.CalculatorOPLS;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.CalculatorSVD;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IMultivariateCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultPCA;

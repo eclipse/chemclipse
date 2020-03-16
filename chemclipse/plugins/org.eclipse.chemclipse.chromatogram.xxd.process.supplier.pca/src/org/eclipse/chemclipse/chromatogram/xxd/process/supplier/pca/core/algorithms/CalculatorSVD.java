@@ -9,9 +9,10 @@
  * Contributors:
  * Lorenz Gerber - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
+package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.algorithms;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.exception.MathIllegalArgumentException;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.AbstractMultivariateCalculator;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.CommonOps_DDRM;
 import org.ejml.dense.row.SingularOps_DDRM;
