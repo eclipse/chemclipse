@@ -25,14 +25,14 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class DataTablePart extends EnhancedUpdateSupport implements IUpdateSupport {
+public class FeatureTablePart extends EnhancedUpdateSupport implements IUpdateSupport {
 
 	private static final String TOPIC = Activator.TOPIC_PCA_EVALUATION_LOAD;
 	//
 	private FeatureListUI featureListUI;
 
 	@Inject
-	public DataTablePart(Composite parent, MPart part) {
+	public FeatureTablePart(Composite parent, MPart part) {
 		super(parent, Activator.getDefault().getDataUpdateSupport(), TOPIC, part);
 	}
 

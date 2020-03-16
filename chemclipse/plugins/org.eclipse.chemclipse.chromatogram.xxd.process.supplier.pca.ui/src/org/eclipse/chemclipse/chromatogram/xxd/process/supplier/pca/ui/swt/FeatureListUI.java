@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.FeatureDataMatrix;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamplesPCA;
@@ -33,25 +36,80 @@ public class FeatureListUI extends ExtendedTableViewer {
 
 	public FeatureListUI(Composite parent, int style) {
 		super(parent, style);
-		createColumns();
+		createColumnsDefault();
 	}
 
 	public void setInput(EvaluationPCA evaluationPCA) {
 
+		boolean createDefault = true;
 		if(evaluationPCA != null) {
 			ISamplesPCA<? extends IVariable, ? extends ISample> samples = evaluationPCA.getSamples();
 			if(samples != null) {
+				createDefault = false;
 				FeatureDataMatrix featureDataMatrix = new FeatureDataMatrix(samples);
+				createColumnsSpecific(featureDataMatrix);
 				super.setInput(featureDataMatrix.getFeatures());
 			}
-		} else {
+		}
+		//
+		if(createDefault) {
 			super.setInput(null);
+			createColumnsDefault();
 		}
 	}
 
-	private void createColumns() {
+	private void createColumnsDefault() {
 
-		createColumns(TITLES, BOUNDS);
+		createColumns(TITLES, BOUNDS, labelProvider, comparator);
+	}
+
+	private void createColumnsSpecific(FeatureDataMatrix featureDataMatrix) {
+
+		/*
+		 * Labels and bounds
+		 */
+		String variableName = featureDataMatrix.getVariableName();
+		List<String> sampleNames = featureDataMatrix.getSampleNames();
+		//
+		List<String> titleList = new ArrayList<>();
+		List<Integer> boundList = new ArrayList<>();
+		/*
+		 * Standards Labels
+		 */
+		for(int i = 0; i < TITLES.length; i++) {
+			/*
+			 * Replace the variable name.
+			 */
+			String title = TITLES[i];
+			if(FeatureLabelProvider.VARIABLE.equals(title)) {
+				title = variableName;
+			}
+			//
+			titleList.add(title);
+			boundList.add(BOUNDS[i]);
+		}
+		/*
+		 * Sample labels
+		 */
+		for(String sampleName : sampleNames) {
+			titleList.add(sampleName);
+			boundList.add(FeatureLabelProvider.BOUND_SAMPLE);
+		}
+		//
+		String[] titles = titleList.toArray(new String[titleList.size()]);
+		int size = boundList.size();
+		int[] bounds = new int[size];
+		for(int i = 0; i < size; i++) {
+			bounds[i] = boundList.get(i);
+		}
+		//
+		super.setInput(null);
+		createColumns(titles, bounds, labelProvider, comparator);
+	}
+
+	private void createColumns(String[] titles, int[] bounds, ITableLabelProvider labelProvider, ViewerComparator comparator) {
+
+		createColumns(titles, bounds);
 		setLabelProvider(labelProvider);
 		setContentProvider(new ListContentProvider());
 		setComparator(comparator);

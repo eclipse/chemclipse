@@ -65,6 +65,17 @@ public class FeatureDataMatrix {
 		}
 	}
 
+	public String getVariableName() {
+
+		for(Feature feature : features) {
+			String name = feature.getVariable().getType();
+			if(!"".equals(name)) {
+				return name;
+			}
+		}
+		return "--";
+	}
+
 	public List<String> getSampleNames() {
 
 		return Collections.unmodifiableList(sampleNames);

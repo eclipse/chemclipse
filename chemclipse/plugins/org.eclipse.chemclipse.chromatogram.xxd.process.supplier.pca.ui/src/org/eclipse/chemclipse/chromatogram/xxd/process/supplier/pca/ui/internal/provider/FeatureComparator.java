@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.provider;
 
+import java.util.List;
+
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Feature;
+import org.eclipse.chemclipse.model.statistics.ISampleData;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
@@ -29,7 +32,8 @@ public class FeatureComparator extends AbstractRecordTableComparator implements 
 			Feature feature2 = (Feature)e2;
 			IVariable variable2 = feature2.getVariable();
 			//
-			switch(getPropertyIndex()) {
+			int columnIndex = getPropertyIndex();
+			switch(columnIndex) {
 				case 0:
 					try {
 						double value1 = Double.parseDouble(variable1.getValue());
@@ -44,6 +48,17 @@ public class FeatureComparator extends AbstractRecordTableComparator implements 
 					break;
 				case 2:
 					sortOrder = variable2.getClassification().compareTo(variable1.getClassification());
+					break;
+				default:
+					int index = columnIndex - 3;
+					List<ISampleData<?>> sampleData1 = feature1.getSampleData();
+					List<ISampleData<?>> sampleData2 = feature2.getSampleData();
+					//
+					if(sampleData1.size() > index && sampleData2.size() > index) {
+						sortOrder = Double.compare(sampleData2.get(index).getData(), sampleData1.get(index).getData());
+					} else {
+						sortOrder = 0;
+					}
 					break;
 			}
 		}

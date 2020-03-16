@@ -23,23 +23,22 @@ import org.eclipse.swt.graphics.Image;
 
 public class FeatureLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String VALUE = "Value"; // e.g. Retention Time
+	public static final String VARIABLE = "Variable"; // e.g. Retention Time
 	public static final String USE = "Use";
 	public static final String CLASSIFICATION = "Classification";
-	public static final String DATA = "Data"; // Flexible, e.g. Chromatogram Name
+	//
+	public static final int BOUND_SAMPLE = 100;
 	//
 	public static String[] TITLES = {//
-			VALUE, //
+			VARIABLE, //
 			USE, //
-			CLASSIFICATION, //
-			DATA //
+			CLASSIFICATION //
 	};
 	//
 	public static int[] BOUNDS = {//
 			100, //
 			30, //
-			200, //
-			100 //
+			200 //
 	};
 
 	@Override
@@ -69,10 +68,11 @@ public class FeatureLabelProvider extends AbstractChemClipseLabelProvider {
 				case 2:
 					text = variable.getClassification();
 					break;
-				case 3:
+				default:
+					int index = columnIndex - 3;
 					List<ISampleData<?>> sampleData = feature.getSampleData();
-					if(sampleData.size() > 0) {
-						text = Double.toString(sampleData.get(0).getData());
+					if(sampleData.size() > index) {
+						text = Double.toString(sampleData.get(index).getData());
 					} else {
 						text = "--";
 					}
