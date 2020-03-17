@@ -106,7 +106,7 @@ public class PreprocessingSettingsUI extends Composite {
 
 		Label label = new Label(parent, SWT.NONE);
 		label.setText(text);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gridData = new GridData();
 		gridData.horizontalSpan = horizontalSpan;
 		label.setLayoutData(gridData);
 	}
@@ -259,7 +259,7 @@ public class PreprocessingSettingsUI extends Composite {
 		button.setText("Remove variables, which contain less than two values.");
 		button.setToolTipText("Remove Variables");
 		//
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gridData = new GridData();
 		gridData.horizontalSpan = 3;
 		button.setLayoutData(gridData);
 		//
@@ -281,7 +281,7 @@ public class PreprocessingSettingsUI extends Composite {
 		button.setText("Use only selected variables for data processing.");
 		button.setToolTipText("Selected Variables");
 		//
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		GridData gridData = new GridData();
 		gridData.horizontalSpan = 3;
 		button.setLayoutData(gridData);
 		//

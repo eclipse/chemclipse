@@ -18,21 +18,20 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IExtrac
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaExtractionScans;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PreprocessingSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.ScansExtractionSupport.ExtractionType;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.AnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.jface.wizard.Wizard;
 
 public class ScansInputWizard extends Wizard implements IInputWizard {
 
-	private IAnalysisSettings analysisSettings = new AnalysisSettings();
-	//
 	private ScanSettingsWizardPage scanSettingsWizardPage = new ScanSettingsWizardPage();
 	private ScanFilesWizardPage scanFilesWizardPage = new ScanFilesWizardPage();
 	private GroupNamesWizardPage groupNamesWizardPage = new GroupNamesWizardPage();
 	private PreprocessingWizardPage preprocessingWizardPage = new PreprocessingWizardPage();
 	private FilterWizardPage filterWizardPage = new FilterWizardPage();
-	//
+	/*
+	 * Will be created when finishing the report.
+	 */
 	private PcaExtractionScans pcaExtractionData;
 
 	@Override
@@ -60,7 +59,7 @@ public class ScansInputWizard extends Wizard implements IInputWizard {
 	@Override
 	public IAnalysisSettings getAnalysisSettings() {
 
-		return analysisSettings;
+		return scanSettingsWizardPage.getAnalysisSettings();
 	}
 
 	@Override

@@ -39,8 +39,8 @@ public class PeaksInputWizard extends Wizard implements IInputWizard {
 		addPage(peakSettingsWizardPage);
 		addPage(peakFilesWizardPage);
 		addPage(groupNamesWizardPage);
-		addPage(preprocessingWizardPage); // TODO
-		addPage(filterWizardPage); // TODO
+		addPage(preprocessingWizardPage);
+		addPage(filterWizardPage);
 	}
 
 	@Override

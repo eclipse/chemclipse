@@ -66,9 +66,6 @@ public abstract class DataInputPageWizard extends WizardPage {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, true));
-		GridData gridData = new GridData(GridData.FILL_BOTH);
-		gridData.widthHint = convertHorizontalDLUsToPixels(IDialogConstants.MINIMUM_MESSAGE_AREA_WIDTH);
-		composite.setLayoutData(gridData);
 		//
 		inputFilesTable = createInputFilesTable(composite);
 		countFiles = createLabel(composite, FILES + "0");
@@ -98,6 +95,7 @@ public abstract class DataInputPageWizard extends WizardPage {
 	private InputFilesTable createInputFilesTable(Composite parent) {
 
 		GridData gridData = new GridData(GridData.FILL_BOTH);
+		gridData.widthHint = convertHorizontalDLUsToPixels(IDialogConstants.MINIMUM_MESSAGE_AREA_WIDTH);
 		gridData.heightHint = 300;
 		inputFilesTable = new InputFilesTable(parent, gridData);
 		inputFilesTable.setDataInputEntries(dataInputEntries);
@@ -128,7 +126,7 @@ public abstract class DataInputPageWizard extends WizardPage {
 	private Button createButtonAdd(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Add input file(s).");
+		button.setToolTipText("Add new file(s).");
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -146,7 +144,7 @@ public abstract class DataInputPageWizard extends WizardPage {
 	private Button createButtonRemove(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Remove input file(s).");
+		button.setToolTipText("Remove selected file(s).");
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -165,7 +163,7 @@ public abstract class DataInputPageWizard extends WizardPage {
 	private Button createButtonRemoveAll(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Remove all input file(s).");
+		button.setToolTipText("Remove all file(s).");
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {

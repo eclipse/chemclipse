@@ -39,10 +39,12 @@ public class ScanFilesWizardPage extends DataInputPageWizard {
 		InputWizardSettings inputWizardSettings = InputWizardSettings.create(Activator.getDefault().getPreferenceStore(), PreferenceSupplier.N_INPUT_FILE, DataType.MSD);
 		inputWizardSettings.setTitle("Chromatogram MSD Input Files");
 		inputWizardSettings.setDescription("This wizard lets you select several chormatogram MSD input files.");
+		//
 		List<IDataInputEntry> dataInputEntries = new ArrayList<>();
 		for(File file : InputEntriesWizard.openWizard(getShell(), inputWizardSettings).keySet()) {
 			dataInputEntries.add(new DataInputEntry(file.getAbsolutePath()));
 		}
+		//
 		addInputFiles(dataInputEntries);
 		update();
 	}

@@ -39,10 +39,12 @@ public class PeakFilesWizardPage extends DataInputPageWizard {
 		InputWizardSettings inputWizardSettings = InputWizardSettings.create(Activator.getDefault().getPreferenceStore(), PreferenceSupplier.N_INPUT_FILE, DataType.MSD);
 		inputWizardSettings.setTitle("Peak Input Files");
 		inputWizardSettings.setDescription("This wizard lets you select several peak input files.");
+		//
 		List<IDataInputEntry> dataInputEntries = new ArrayList<>();
 		for(File file : InputEntriesWizard.openWizard(getShell(), inputWizardSettings).keySet()) {
 			dataInputEntries.add(new DataInputEntry(file.getAbsolutePath()));
 		}
+		//
 		addInputFiles(dataInputEntries);
 		update();
 	}

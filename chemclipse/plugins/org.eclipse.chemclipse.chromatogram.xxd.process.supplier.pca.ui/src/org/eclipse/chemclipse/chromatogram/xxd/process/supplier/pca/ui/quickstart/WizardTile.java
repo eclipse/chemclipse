@@ -38,11 +38,16 @@ import org.eclipse.swt.widgets.Shell;
 
 public abstract class WizardTile implements TileDefinition {
 
+	public static final int DEFAULT_WIDTH = 500;
+	public static final int DEFAULT_HEIGHT = 600;
+
 	@Execute
 	public void execute(@Named(IServiceConstants.ACTIVE_SHELL) Shell shell, MApplication application, EModelService modelService, EPartService partService, IEclipseContext context) throws InvocationTargetException, InterruptedException {
 
 		IInputWizard wizard = createWizard();
 		BatchProcessWizardDialog wizardDialog = new BatchProcessWizardDialog(shell, wizard);
+		wizardDialog.setMinimumPageSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+		//
 		int status = wizardDialog.open();
 		if(status == Window.OK) {
 			/*

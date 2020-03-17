@@ -26,7 +26,6 @@ import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.jface.databinding.swt.WidgetProperties;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.wizard.WizardPage;
@@ -63,9 +62,6 @@ public class PeakSettingsWizardPage extends WizardPage {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(2, false));
-		GridData gridData = new GridData(GridData.FILL_BOTH);
-		gridData.widthHint = convertHorizontalDLUsToPixels(IDialogConstants.MINIMUM_MESSAGE_AREA_WIDTH);
-		composite.setLayoutData(gridData);
 		//
 		WizardPageSupport.create(this, dataBindingContext);
 		//
@@ -91,7 +87,7 @@ public class PeakSettingsWizardPage extends WizardPage {
 
 	private Label createLabel(Composite parent, String text) {
 
-		Label label = new Label(parent, SWT.None);
+		Label label = new Label(parent, SWT.NONE);
 		label.setText(text);
 		return label;
 	}

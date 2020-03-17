@@ -35,14 +35,16 @@ import org.eclipse.swt.widgets.Text;
 
 public class GroupNamesWizardPage extends WizardPage {
 
-	private Button caseSensitive;
 	private final int CONTAINS_STRING = 0;
-	private final int ENDS_WITH_STRING = 2;
-	private InputFilesTable inputFilesTable;
-	private final int REGEXP = 3;
-	private int selectNames;
 	private final int STARTS_WITH_STRING = 1;
+	private final int ENDS_WITH_STRING = 2;
+	private final int REGEXP = 3;
+	//
+	private int selectNames = CONTAINS_STRING;
+	//
+	private InputFilesTable inputFilesTable;
 	private Text textGroupName;
+	private Button caseSensitive;
 	private Text textSelectNames;
 
 	public GroupNamesWizardPage() {
@@ -56,15 +58,12 @@ public class GroupNamesWizardPage extends WizardPage {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, true));
-		GridData gridData = new GridData(GridData.FILL_BOTH);
-		gridData.widthHint = convertHorizontalDLUsToPixels(IDialogConstants.MINIMUM_MESSAGE_AREA_WIDTH);
-		composite.setLayoutData(gridData);
 		/*
 		 * Select the process entry.
 		 */
 		createLabel(composite, "Group Name");
 		textGroupName = createText(composite);
-		createLabel(composite, "String or Regexp, which match with names");
+		createLabel(composite, "String or regular expression to match the group name(s)");
 		textSelectNames = createText(composite);
 		createOptionGroup(composite);
 		inputFilesTable = createInputFilesTable(composite);
@@ -106,28 +105,18 @@ public class GroupNamesWizardPage extends WizardPage {
 		group.setLayout(new GridLayout(1, false));
 		group.setText("Settings");
 		//
-		caseSensitive = new Button(group, SWT.CHECK);
-		caseSensitive.setText("Case Sensitive");
-		Button button = new Button(group, SWT.RADIO);
-		button.setText("Contains string");
-		button.addListener(SWT.Selection, e -> selectNames = CONTAINS_STRING);
-		selectNames = CONTAINS_STRING;
-		button.setSelection(true);
-		button = new Button(group, SWT.RADIO);
-		button.setText("Starts with string");
-		button.addListener(SWT.Selection, e -> selectNames = STARTS_WITH_STRING);
-		button = new Button(group, SWT.RADIO);
-		button.setText("Ends with string");
-		button.addListener(SWT.Selection, e -> selectNames = ENDS_WITH_STRING);
-		button = new Button(group, SWT.RADIO);
-		button.setText("Regexp");
-		button.addListener(SWT.Selection, e -> selectNames = REGEXP);
+		caseSensitive = createCheckBox(group, "Case Sensitive");
+		createRadioButton(group, "Contains String", true, CONTAINS_STRING);
+		createRadioButton(group, "Starts with String", false, STARTS_WITH_STRING);
+		createRadioButton(group, "Ends with String", false, ENDS_WITH_STRING);
+		createRadioButton(group, "Regular Expression", false, REGEXP);
 	}
 
 	private InputFilesTable createInputFilesTable(Composite parent) {
 
 		GridData gridData = new GridData(GridData.FILL_BOTH);
-		gridData.heightHint = 500;
+		gridData.widthHint = convertHorizontalDLUsToPixels(IDialogConstants.MINIMUM_MESSAGE_AREA_WIDTH);
+		gridData.heightHint = 300;
 		inputFilesTable = new InputFilesTable(parent, gridData);
 		IInputWizard inputWizard = (IInputWizard)getWizard();
 		inputFilesTable.setDataInputEntries(inputWizard.getDataInputEntries());
@@ -158,6 +147,30 @@ public class GroupNamesWizardPage extends WizardPage {
 			public void widgetSelected(SelectionEvent e) {
 
 				updateGroupNames();
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createCheckBox(Composite parent, String text) {
+
+		Button button = new Button(parent, SWT.CHECK);
+		button.setText(text);
+		return button;
+	}
+
+	private Button createRadioButton(Composite parent, String text, boolean selected, int option) {
+
+		Button button = new Button(parent, SWT.RADIO);
+		button.setText(text);
+		button.setSelection(selected);
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				selectNames = option;
 			}
 		});
 		//
@@ -225,7 +238,7 @@ public class GroupNamesWizardPage extends WizardPage {
 		String groupName = textGroupName.getText().trim();
 		final String setGroupName = groupName.isEmpty() ? null : groupName;
 		filterInput.forEach(i -> i.setGroupName(setGroupName));
-		inputFilesTable.update();
+		update();
 	}
 
 	private void resetGroupNames() {
@@ -234,6 +247,11 @@ public class GroupNamesWizardPage extends WizardPage {
 		for(IDataInputEntry dataInputEntry : inputWizard.getDataInputEntries()) {
 			dataInputEntry.setGroupName("");
 		}
+		update();
+	}
+
+	private void update() {
+
 		inputFilesTable.update();
 	}
 }
