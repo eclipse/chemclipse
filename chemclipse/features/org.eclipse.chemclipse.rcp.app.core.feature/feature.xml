@@ -89,10 +89,6 @@ http://www.eclipse.org/legal/epl-v10.html
          id="org.eclipse.swtchart.feature"
          version="0.0.0"/>
 
-   <includes
-         id="org.eclipse.epp.mpc"
-         version="0.0.0"/>
-
    <plugin
          id="com.ibm.icu"
          download-size="0"
