@@ -17,21 +17,20 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.FilterS
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IExtractionData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaExtractionPeaks;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PreprocessingSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.AnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.jface.wizard.Wizard;
 
 public class PeaksInputWizard extends Wizard implements IInputWizard {
 
-	private IAnalysisSettings analysisSettings = new AnalysisSettings();
-	//
 	private PeakSettingsWizardPage peakSettingsWizardPage = new PeakSettingsWizardPage();
 	private PeakFilesWizardPage peakFilesWizardPage = new PeakFilesWizardPage();
 	private GroupNamesWizardPage groupNamesWizardPage = new GroupNamesWizardPage();
 	private PreprocessingWizardPage preprocessingWizardPage = new PreprocessingWizardPage();
 	private FilterWizardPage filterWizardPage = new FilterWizardPage();
-	//
+	/*
+	 * Will be created when finishing the report.
+	 */
 	private PcaExtractionPeaks pcaExtractionData;
 
 	@Override
@@ -40,8 +39,8 @@ public class PeaksInputWizard extends Wizard implements IInputWizard {
 		addPage(peakSettingsWizardPage);
 		addPage(peakFilesWizardPage);
 		addPage(groupNamesWizardPage);
-		addPage(preprocessingWizardPage);
-		addPage(filterWizardPage);
+		addPage(preprocessingWizardPage); // TODO
+		addPage(filterWizardPage); // TODO
 	}
 
 	@Override
@@ -59,7 +58,7 @@ public class PeaksInputWizard extends Wizard implements IInputWizard {
 	@Override
 	public IAnalysisSettings getAnalysisSettings() {
 
-		return analysisSettings;
+		return peakSettingsWizardPage.getAnalysisSettings();
 	}
 
 	@Override

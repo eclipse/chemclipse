@@ -43,6 +43,45 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ProcessorPCA {
 
+	public <V extends IVariable, S extends ISample> ResultsPCA process(ISamplesPCA<V, S> samples, IProgressMonitor monitor) throws MathIllegalArgumentException {
+
+		monitor.subTask("Run PCA");
+		//
+		IAnalysisSettings settings = samples.getAnalysisSettings();
+		int numberOfPrincipalComponents = settings.getNumberOfPrincipalComponents();
+		Algorithm algorithm = settings.getAlgorithm();
+		ResultsPCA pcaResults = new ResultsPCA(settings);
+		boolean[] isSelectedVariables = selectedVariables(samples, settings);
+		Map<ISample, double[]> extractData = extractData(samples, algorithm, settings, isSelectedVariables);
+		setRetentionTime(pcaResults, samples, isSelectedVariables);
+		int numVars = getNumSampleVars(extractData);
+		/*
+		 * Prepare PCA Calculation
+		 */
+		IMultivariateCalculator principalComponentAnalysis = setupPCA(extractData, numVars, numberOfPrincipalComponents, algorithm);
+		/*
+		 * Compute PCA
+		 */
+		principalComponentAnalysis.compute();
+		/*
+		 * Collect PCA results
+		 */
+		if(!principalComponentAnalysis.getComputeStatus()) {
+			return null;
+		}
+		//
+		List<double[]> loadingVectors = getLoadingVectors(principalComponentAnalysis, numberOfPrincipalComponents);
+		double[] explainedVariances = this.getExplainedVariances(principalComponentAnalysis, numberOfPrincipalComponents);
+		double[] cumulativeExplainedVariances = this.getCumulativeExplainedVariances(explainedVariances);
+		pcaResults.setLoadingVectors(loadingVectors);
+		pcaResults.setExplainedVariances(explainedVariances);
+		pcaResults.setCumulativeExplainedVariances(cumulativeExplainedVariances);
+		setEigenSpaceAndErrorValues(principalComponentAnalysis, extractData, pcaResults);
+		//
+		return pcaResults;
+	}
+
+	@SuppressWarnings("rawtypes")
 	private <V extends IVariable, S extends ISample> Map<ISample, double[]> extractData(ISamples<V, S> samples, Algorithm algorithm, IAnalysisSettings settings, boolean[] isSelectedVariable) {
 
 		Map<ISample, double[]> selectedSamples = new HashMap<>();
@@ -199,45 +238,7 @@ public class ProcessorPCA {
 		return principalComponentAnalysis;
 	}
 
-	public <V extends IVariable, S extends ISample> ResultsPCA process(ISamplesPCA<V, S> samples, IProgressMonitor monitor) throws MathIllegalArgumentException {
-
-		monitor.subTask("Run PCA");
-		//
-		IAnalysisSettings settings = samples.getAnalysisSettings();
-		int numberOfPrincipalComponents = settings.getNumberOfPrincipalComponents();
-		Algorithm algorithm = settings.getAlgorithm();
-		ResultsPCA pcaResults = new ResultsPCA(settings);
-		boolean[] isSelectedVariables = selectedVariables(samples, settings);
-		Map<ISample, double[]> extractData = extractData(samples, algorithm, settings, isSelectedVariables);
-		setRetentionTime(pcaResults, samples, isSelectedVariables);
-		int numVars = getNumSampleVars(extractData);
-		/*
-		 * Prepare PCA Calculation
-		 */
-		IMultivariateCalculator principalComponentAnalysis = setupPCA(extractData, numVars, numberOfPrincipalComponents, algorithm);
-		/*
-		 * Compute PCA
-		 */
-		principalComponentAnalysis.compute();
-		/*
-		 * Collect PCA results
-		 */
-		if(!principalComponentAnalysis.getComputeStatus()) {
-			return null;
-		}
-		//
-		List<double[]> loadingVectors = getLoadingVectors(principalComponentAnalysis, numberOfPrincipalComponents);
-		double[] explainedVariances = this.getExplainedVariances(principalComponentAnalysis, numberOfPrincipalComponents);
-		double[] cumulativeExplainedVariances = this.getCumulativeExplainedVariances(explainedVariances);
-		pcaResults.setLoadingVectors(loadingVectors);
-		pcaResults.setExplainedVariances(explainedVariances);
-		pcaResults.setCumulativeExplainedVariances(cumulativeExplainedVariances);
-		setEigenSpaceAndErrorValues(principalComponentAnalysis, extractData, pcaResults);
-		//
-		return pcaResults;
-	}
-
-	private void setEigenSpaceAndErrorValues(IMultivariateCalculator principalComponentAnalysis, Map<ISample, double[]> pcaPeakMap, IResultsPCA pcaResults) {
+	private void setEigenSpaceAndErrorValues(IMultivariateCalculator principalComponentAnalysis, Map<ISample, double[]> pcaPeakMap, IResultsPCA<IResultPCA, IVariable> pcaResults) {
 
 		/*
 		 * Set the eigen space and error membership values.
@@ -245,9 +246,7 @@ public class ProcessorPCA {
 		List<IResultPCA> resultsList = new ArrayList<>();
 		for(Entry<ISample, double[]> entry : pcaPeakMap.entrySet()) {
 			double[] sampleData = entry.getValue();
-			double[] scoreVector = null;
 			ISample sample = entry.getKey();
-			double errorMemberShip = Double.NaN;
 			IResultPCA pcaResult = new ResultPCA(sample);
 			pcaResult.setName(sample.getName());
 			pcaResult.setGroupName(sample.getGroupName());
@@ -260,7 +259,7 @@ public class ProcessorPCA {
 		pcaResults.getPcaResultList().addAll(resultsList);
 	}
 
-	private void setRetentionTime(IResultsPCA pcaResults, ISamples<? extends IVariable, ? extends ISample> samples, boolean[] isSelectedVariables) {
+	private void setRetentionTime(IResultsPCA<IResultPCA, IVariable> pcaResults, ISamples<? extends IVariable, ? extends ISample> samples, boolean[] isSelectedVariables) {
 
 		pcaResults.getExtractedVariables().clear();
 		for(int i = 0; i < samples.getVariables().size(); i++) {

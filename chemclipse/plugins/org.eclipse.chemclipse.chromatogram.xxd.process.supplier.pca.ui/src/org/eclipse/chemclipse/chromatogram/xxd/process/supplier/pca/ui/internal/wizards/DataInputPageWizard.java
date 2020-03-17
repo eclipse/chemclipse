@@ -19,9 +19,13 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.InputFilesTable;
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -31,17 +35,16 @@ import org.eclipse.swt.widgets.Label;
 public abstract class DataInputPageWizard extends WizardPage {
 
 	private static final String FILES = "Input Files: ";
-	private Label countFiles;
-	private List<IDataInputEntry> dataInputEntries;
+	//
+	private List<IDataInputEntry> dataInputEntries = new ArrayList<>();
+	//
 	private InputFilesTable inputFilesTable;
+	private Label countFiles;
 
 	public DataInputPageWizard(String pageName) {
 		super(pageName);
-		dataInputEntries = new ArrayList<>();
 		setPageComplete(false);
 	}
-
-	abstract protected void addFiles();
 
 	public void addInputFiles(List<IDataInputEntry> addInput) {
 
@@ -53,56 +56,25 @@ public abstract class DataInputPageWizard extends WizardPage {
 		update();
 	}
 
-	@Override
-	public void createControl(Composite parent) {
-
-		GridLayout gridLayout;
-		GridData gridData;
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout());
-		gridLayout = new GridLayout();
-		gridLayout.numColumns = 1;
-		composite.setLayout(gridLayout);
-		/*
-		 * Select the process entry.
-		 */
-		gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.heightHint = 30;
-		//
-		Label label = new Label(composite, SWT.None);
-		label.setText(" Select input files ");
-		gridData = new GridData(GridData.FILL_BOTH);
-		gridData.heightHint = 400;
-		gridData.widthHint = 100;
-		gridData.verticalSpan = 5;
-		inputFilesTable = new InputFilesTable(composite, gridData);
-		inputFilesTable.setDataInputEntries(dataInputEntries);
-		countFiles = new Label(composite, SWT.NONE);
-		countFiles.setText(FILES + "0");
-		gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL);
-		countFiles.setLayoutData(gridData);
-		Composite compositeButtonTable = new Composite(composite, SWT.NONE);
-		compositeButtonTable.setLayout(new FillLayout());
-		Button button = new Button(compositeButtonTable, SWT.PUSH);
-		button.addListener(SWT.Selection, (event) -> addFiles());
-		button.setText("Add");
-		button = new Button(compositeButtonTable, SWT.PUSH);
-		button.addListener(SWT.Selection, (event) -> {
-			inputFilesTable.removeSelection();
-			update();
-		});
-		button.setText("Remove");
-		setControl(composite);
-	}
-
 	public List<IDataInputEntry> getUniqueDataInputEnties() {
 
 		return dataInputEntries;
 	}
 
-	private void redrawCountFiles() {
+	@Override
+	public void createControl(Composite parent) {
 
-		countFiles.setText(FILES + Integer.toString(dataInputEntries.size()));
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayout(new GridLayout(1, true));
+		GridData gridData = new GridData(GridData.FILL_BOTH);
+		gridData.widthHint = convertHorizontalDLUsToPixels(IDialogConstants.MINIMUM_MESSAGE_AREA_WIDTH);
+		composite.setLayoutData(gridData);
+		//
+		inputFilesTable = createInputFilesTable(composite);
+		countFiles = createLabel(composite, FILES + "0");
+		createToolbarBottom(composite);
+		//
+		setControl(composite);
 	}
 
 	@Override
@@ -114,10 +86,103 @@ public abstract class DataInputPageWizard extends WizardPage {
 		super.setVisible(visible);
 	}
 
+	protected abstract void addFiles();
+
 	protected void update() {
 
 		inputFilesTable.update();
 		redrawCountFiles();
 		setPageComplete(!dataInputEntries.isEmpty());
+	}
+
+	private InputFilesTable createInputFilesTable(Composite parent) {
+
+		GridData gridData = new GridData(GridData.FILL_BOTH);
+		gridData.heightHint = 300;
+		inputFilesTable = new InputFilesTable(parent, gridData);
+		inputFilesTable.setDataInputEntries(dataInputEntries);
+		return inputFilesTable;
+	}
+
+	private Label createLabel(Composite parent, String text) {
+
+		Label label = new Label(parent, SWT.NONE);
+		label.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+		label.setText(text);
+		return label;
+	}
+
+	private void createToolbarBottom(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalAlignment = SWT.END;
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(3, false));
+		//
+		createButtonAdd(composite);
+		createButtonRemove(composite);
+		createButtonRemoveAll(composite);
+	}
+
+	private Button createButtonAdd(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Add input file(s).");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				addFiles();
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonRemove(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Remove input file(s).");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				inputFilesTable.removeSelection();
+				update();
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonRemoveAll(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Remove all input file(s).");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				dataInputEntries.clear();
+				update();
+			}
+		});
+		//
+		return button;
+	}
+
+	private void redrawCountFiles() {
+
+		countFiles.setText(FILES + Integer.toString(dataInputEntries.size()));
 	}
 }

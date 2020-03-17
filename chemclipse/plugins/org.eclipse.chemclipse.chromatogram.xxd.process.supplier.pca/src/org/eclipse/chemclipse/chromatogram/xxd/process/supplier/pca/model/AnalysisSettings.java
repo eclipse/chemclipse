@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 public class AnalysisSettings implements IAnalysisSettings {
 
 	private int numberOfPrincipalComponents = 3;
-	private Algorithm algorithm = Algorithm.SVD;
+	private Algorithm algorithm = Algorithm.NIPALS;
 	private boolean removeUselessVariables = true;
 
 	public AnalysisSettings() {

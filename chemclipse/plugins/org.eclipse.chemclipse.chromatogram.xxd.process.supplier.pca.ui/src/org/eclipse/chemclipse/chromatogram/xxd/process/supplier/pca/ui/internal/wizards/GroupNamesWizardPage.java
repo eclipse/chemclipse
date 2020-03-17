@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - improvements UI
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
@@ -17,8 +18,13 @@ import java.util.regex.Pattern;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.InputFilesTable;
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -48,30 +54,58 @@ public class GroupNamesWizardPage extends WizardPage {
 	@Override
 	public void createControl(Composite parent) {
 
-		GridLayout gridLayout;
-		GridData gridData;
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout());
-		gridLayout = new GridLayout();
-		gridLayout.numColumns = 1;
-		composite.setLayout(gridLayout);
+		composite.setLayout(new GridLayout(1, true));
+		GridData gridData = new GridData(GridData.FILL_BOTH);
+		gridData.widthHint = convertHorizontalDLUsToPixels(IDialogConstants.MINIMUM_MESSAGE_AREA_WIDTH);
+		composite.setLayoutData(gridData);
 		/*
 		 * Select the process entry.
 		 */
-		gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.heightHint = 30;
-		Label label = new Label(composite, SWT.NONE);
-		label.setText("Group Name");
-		textGroupName = new Text(composite, SWT.BORDER);
-		textGroupName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		label = new Label(composite, SWT.NONE);
-		label.setText("String or Regexp, which match with names");
-		textSelectNames = new Text(composite, SWT.BORDER);
-		textSelectNames.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		Group group = new Group(composite, SWT.NONE);
+		createLabel(composite, "Group Name");
+		textGroupName = createText(composite);
+		createLabel(composite, "String or Regexp, which match with names");
+		textSelectNames = createText(composite);
+		createOptionGroup(composite);
+		inputFilesTable = createInputFilesTable(composite);
+		createToolbarBottom(composite);
+		//
+		setControl(composite);
+	}
+
+	@Override
+	public void setVisible(boolean visible) {
+
+		if(visible) {
+			IInputWizard inputWizard = (IInputWizard)getWizard();
+			inputFilesTable.setDataInputEntries(inputWizard.getDataInputEntries());
+			inputFilesTable.update();
+		}
+		super.setVisible(visible);
+	}
+
+	private Label createLabel(Composite parent, String text) {
+
+		Label label = new Label(parent, SWT.NONE);
+		label.setLayoutData(new GridData(GridData.HORIZONTAL_ALIGN_FILL));
+		label.setText(text);
+		return label;
+	}
+
+	private Text createText(Composite parent) {
+
+		Text text = new Text(parent, SWT.BORDER);
+		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		return text;
+	}
+
+	private void createOptionGroup(Composite parent) {
+
+		Group group = new Group(parent, SWT.NONE);
 		group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		group.setLayout(new GridLayout(1, false));
 		group.setText("Settings");
+		//
 		caseSensitive = new Button(group, SWT.CHECK);
 		caseSensitive.setText("Case Sensitive");
 		Button button = new Button(group, SWT.RADIO);
@@ -88,28 +122,64 @@ public class GroupNamesWizardPage extends WizardPage {
 		button = new Button(group, SWT.RADIO);
 		button.setText("Regexp");
 		button.addListener(SWT.Selection, e -> selectNames = REGEXP);
-		button = new Button(composite, SWT.PUSH);
-		button.setText("Set Group names");
-		button.addListener(SWT.Selection, e -> updateGroupNames());
-		gridData = new GridData(GridData.FILL_BOTH);
-		gridData.heightHint = 400;
-		gridData.widthHint = 100;
-		gridData.verticalSpan = 5;
-		inputFilesTable = new InputFilesTable(composite, gridData);
-		IInputWizard inputWizard = (IInputWizard)getWizard();
-		inputFilesTable.setDataInputEntries(inputWizard.getDataInputEntries());
-		setControl(composite);
 	}
 
-	@Override
-	public void setVisible(boolean visible) {
+	private InputFilesTable createInputFilesTable(Composite parent) {
 
-		if(visible) {
-			IInputWizard inputWizard = (IInputWizard)getWizard();
-			inputFilesTable.setDataInputEntries(inputWizard.getDataInputEntries());
-			inputFilesTable.update();
-		}
-		super.setVisible(visible);
+		GridData gridData = new GridData(GridData.FILL_BOTH);
+		gridData.heightHint = 500;
+		inputFilesTable = new InputFilesTable(parent, gridData);
+		IInputWizard inputWizard = (IInputWizard)getWizard();
+		inputFilesTable.setDataInputEntries(inputWizard.getDataInputEntries());
+		return inputFilesTable;
+	}
+
+	private void createToolbarBottom(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalAlignment = SWT.END;
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(2, false));
+		//
+		createButtonProcess(composite);
+		createButtonReset(composite);
+	}
+
+	private Button createButtonProcess(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Set the group name(s)");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				updateGroupNames();
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonReset(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Reset the group name(s)");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				resetGroupNames();
+			}
+		});
+		//
+		return button;
 	}
 
 	private void updateGroupNames() {
@@ -118,40 +188,52 @@ public class GroupNamesWizardPage extends WizardPage {
 		if(s.isEmpty()) {
 			return;
 		}
-		List<IDataInputEntry> filterInpfilteruts = new ArrayList<>();
+		//
+		List<IDataInputEntry> filterInput = new ArrayList<>();
 		IInputWizard inputWizard = (IInputWizard)getWizard();
+		//
 		switch(selectNames) {
 			case CONTAINS_STRING:
 				if(!caseSensitive.getSelection()) {
-					inputWizard.getDataInputEntries().stream().filter(i -> i.getName().toLowerCase().contains(s.toLowerCase())).forEach(filterInpfilteruts::add);
+					inputWizard.getDataInputEntries().stream().filter(i -> i.getName().toLowerCase().contains(s.toLowerCase())).forEach(filterInput::add);
 				} else {
-					inputWizard.getDataInputEntries().stream().filter(i -> i.getName().contains(s)).forEach(filterInpfilteruts::add);
+					inputWizard.getDataInputEntries().stream().filter(i -> i.getName().contains(s)).forEach(filterInput::add);
 				}
 				break;
 			case STARTS_WITH_STRING:
 				if(!caseSensitive.getSelection()) {
-					inputWizard.getDataInputEntries().stream().filter(i -> i.getName().toLowerCase().startsWith(s.toLowerCase())).forEach(filterInpfilteruts::add);
+					inputWizard.getDataInputEntries().stream().filter(i -> i.getName().toLowerCase().startsWith(s.toLowerCase())).forEach(filterInput::add);
 				} else {
-					inputWizard.getDataInputEntries().stream().filter(i -> i.getName().startsWith(s)).forEach(filterInpfilteruts::add);
+					inputWizard.getDataInputEntries().stream().filter(i -> i.getName().startsWith(s)).forEach(filterInput::add);
 				}
 				break;
 			case ENDS_WITH_STRING:
 				if(!caseSensitive.getSelection()) {
-					inputWizard.getDataInputEntries().stream().filter(i -> i.getName().toLowerCase().endsWith(s.toLowerCase())).forEach(filterInpfilteruts::add);
+					inputWizard.getDataInputEntries().stream().filter(i -> i.getName().toLowerCase().endsWith(s.toLowerCase())).forEach(filterInput::add);
 				} else {
-					inputWizard.getDataInputEntries().stream().filter(i -> i.getName().endsWith(s)).forEach(filterInpfilteruts::add);
+					inputWizard.getDataInputEntries().stream().filter(i -> i.getName().endsWith(s)).forEach(filterInput::add);
 				}
 				break;
 			case REGEXP:
 				Pattern p = Pattern.compile(s);
-				inputWizard.getDataInputEntries().stream().filter(i -> p.matcher(i.getName()).find()).forEach(filterInpfilteruts::add);
+				inputWizard.getDataInputEntries().stream().filter(i -> p.matcher(i.getName()).find()).forEach(filterInput::add);
 				break;
 			default:
 				break;
 		}
+		//
 		String groupName = textGroupName.getText().trim();
 		final String setGroupName = groupName.isEmpty() ? null : groupName;
-		filterInpfilteruts.forEach(i -> i.setGroupName(setGroupName));
+		filterInput.forEach(i -> i.setGroupName(setGroupName));
+		inputFilesTable.update();
+	}
+
+	private void resetGroupNames() {
+
+		IInputWizard inputWizard = (IInputWizard)getWizard();
+		for(IDataInputEntry dataInputEntry : inputWizard.getDataInputEntries()) {
+			dataInputEntry.setGroupName("");
+		}
 		inputFilesTable.update();
 	}
 }

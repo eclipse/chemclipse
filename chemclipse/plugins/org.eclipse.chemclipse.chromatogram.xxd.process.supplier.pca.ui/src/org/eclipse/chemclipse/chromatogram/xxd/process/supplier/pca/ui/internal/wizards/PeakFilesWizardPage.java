@@ -30,7 +30,7 @@ public class PeakFilesWizardPage extends DataInputPageWizard {
 	public PeakFilesWizardPage() {
 		super("Peak File(s) Input");
 		setTitle("Peak File(s) Input");
-		setDescription("This wizard lets you select peak input files and set bulk group name.");
+		setDescription("This wizard lets you select peak input files.");
 	}
 
 	@Override
