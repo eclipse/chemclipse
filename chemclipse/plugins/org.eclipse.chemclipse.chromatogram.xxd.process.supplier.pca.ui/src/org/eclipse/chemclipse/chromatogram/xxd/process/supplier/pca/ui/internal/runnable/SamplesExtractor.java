@@ -22,7 +22,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Sample
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
-public class RunnablePCA implements IRunnableWithProgress {
+public class SamplesExtractor implements IRunnableWithProgress {
 
 	private IExtractionData extractionData;
 	private IAnalysisSettings analysisSettings;
@@ -31,7 +31,7 @@ public class RunnablePCA implements IRunnableWithProgress {
 	//
 	private Samples samples = null;
 
-	public RunnablePCA(IExtractionData extractionData, IAnalysisSettings analysisSettings, FilterSettings filterSettings, PreprocessingSettings preprocessingSettings) {
+	public SamplesExtractor(IExtractionData extractionData, IAnalysisSettings analysisSettings, FilterSettings filterSettings, PreprocessingSettings preprocessingSettings) {
 		this.extractionData = extractionData;
 		this.analysisSettings = analysisSettings;
 		this.filterSettings = filterSettings;

@@ -26,4 +26,9 @@ public enum Algorithm {
 
 		return name;
 	}
+
+	public static Algorithm[] getAlgorithms() {
+
+		return new Algorithm[]{Algorithm.SVD, Algorithm.NIPALS, Algorithm.OPLS};
+	}
 }

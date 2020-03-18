@@ -89,7 +89,7 @@ public class PreprocessingSettingsUI extends Composite {
 		createControl();
 	}
 
-	public void update(PreprocessingSettings preprocessingSettings) {
+	public void setInput(PreprocessingSettings preprocessingSettings) {
 
 		this.preprocessingSettings = preprocessingSettings;
 		updateWidgets();
@@ -127,8 +127,18 @@ public class PreprocessingSettingsUI extends Composite {
 		checkBoxRemove = createCheckBoxRemoveVariables(this);
 		checkBoxSelect = createCheckBoxSelectVariables(this);
 		//
-		labelFormula = createLabel(this, "Formula:");
+		labelFormula = createLabelFormula(this);
 		canvasFormula = createCanvas(this);
+	}
+
+	private Label createLabelFormula(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayout(new GridLayout(1, true));
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 3;
+		composite.setLayoutData(gridData);
+		return createLabel(composite, "Formula:");
 	}
 
 	private Label createLabel(Composite parent, String text) {
@@ -403,20 +413,28 @@ public class PreprocessingSettingsUI extends Composite {
 			selectComboItem(comboViewerTransformation, transformationInput, preprocessingSettings.getTransformation());
 			//
 			ICentering centering = preprocessingSettings.getCentering();
+			//
 			if(centering != null) {
 				switch(centering.getCenteringType()) {
 					case 1:
+						comboViewerCentering.getCombo().select(1);
+						comboViewerScaling.setInput(scalingInputMean);
+						comboViewerScaling.getCombo().setEnabled(true);
 						selectComboItem(comboViewerScaling, scalingInputMean, centering);
 						break;
 					case 2:
+						comboViewerCentering.getCombo().select(2);
+						comboViewerScaling.setInput(scalingInputMedian);
+						comboViewerScaling.getCombo().setEnabled(true);
 						selectComboItem(comboViewerScaling, scalingInputMedian, centering);
 						break;
 					default:
 						comboViewerCentering.getCombo().select(0);
+						comboViewerScaling.setInput(scaleInputEmpty);
+						comboViewerScaling.getCombo().select(0);
+						comboViewerScaling.getCombo().setEnabled(false);
 						break;
 				}
-			} else {
-				comboViewerCentering.getCombo().select(0);
 			}
 			//
 			checkBoxRemove.setSelection(preprocessingSettings.isRemoveUselessVariables());

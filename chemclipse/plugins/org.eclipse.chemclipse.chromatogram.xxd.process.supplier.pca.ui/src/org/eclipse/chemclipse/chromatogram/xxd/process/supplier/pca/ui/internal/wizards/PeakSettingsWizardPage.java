@@ -47,7 +47,7 @@ public class PeakSettingsWizardPage extends WizardPage {
 	private DataBindingContext dataBindingContext = new DataBindingContext();
 	private IObservableValue<Double> retentionTimeWindow = new WritableValue<>();
 	//
-	private Algorithm[] algorithms = new Algorithm[]{Algorithm.SVD, Algorithm.NIPALS, Algorithm.OPLS};
+	private Algorithm[] algorithms = Algorithm.getAlgorithms();
 
 	public PeakSettingsWizardPage() {
 		super("Main Properties");
@@ -176,12 +176,12 @@ public class PeakSettingsWizardPage extends WizardPage {
 			}
 		});
 		//
-		combo.select(getSelectedAlgorithmIndex(comboViewer));
+		combo.select(getSelectedAlgorithmIndex());
 		//
 		return comboViewer;
 	}
 
-	private int getSelectedAlgorithmIndex(ComboViewer comboViewer) {
+	private int getSelectedAlgorithmIndex() {
 
 		for(int i = 0; i < algorithms.length; i++) {
 			Algorithm algorithm = algorithms[i];

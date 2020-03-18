@@ -40,43 +40,53 @@ import org.eclipse.chemclipse.model.statistics.ISampleData;
 import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 
 public class ProcessorPCA {
 
 	public <V extends IVariable, S extends ISample> ResultsPCA process(ISamplesPCA<V, S> samples, IProgressMonitor monitor) throws MathIllegalArgumentException {
 
-		monitor.subTask("Run PCA");
-		//
+		SubMonitor subMonitor = SubMonitor.convert(monitor, "Run PCA", 100);
 		IAnalysisSettings settings = samples.getAnalysisSettings();
-		int numberOfPrincipalComponents = settings.getNumberOfPrincipalComponents();
-		Algorithm algorithm = settings.getAlgorithm();
 		ResultsPCA pcaResults = new ResultsPCA(settings);
-		boolean[] isSelectedVariables = selectedVariables(samples, settings);
-		Map<ISample, double[]> extractData = extractData(samples, algorithm, settings, isSelectedVariables);
-		setRetentionTime(pcaResults, samples, isSelectedVariables);
-		int numVars = getNumSampleVars(extractData);
-		/*
-		 * Prepare PCA Calculation
-		 */
-		IMultivariateCalculator principalComponentAnalysis = setupPCA(extractData, numVars, numberOfPrincipalComponents, algorithm);
-		/*
-		 * Compute PCA
-		 */
-		principalComponentAnalysis.compute();
-		/*
-		 * Collect PCA results
-		 */
-		if(!principalComponentAnalysis.getComputeStatus()) {
-			return null;
-		}
 		//
-		List<double[]> loadingVectors = getLoadingVectors(principalComponentAnalysis, numberOfPrincipalComponents);
-		double[] explainedVariances = this.getExplainedVariances(principalComponentAnalysis, numberOfPrincipalComponents);
-		double[] cumulativeExplainedVariances = this.getCumulativeExplainedVariances(explainedVariances);
-		pcaResults.setLoadingVectors(loadingVectors);
-		pcaResults.setExplainedVariances(explainedVariances);
-		pcaResults.setCumulativeExplainedVariances(cumulativeExplainedVariances);
-		setEigenSpaceAndErrorValues(principalComponentAnalysis, extractData, pcaResults);
+		try {
+			int numberOfPrincipalComponents = settings.getNumberOfPrincipalComponents();
+			Algorithm algorithm = settings.getAlgorithm();
+			boolean[] isSelectedVariables = selectedVariables(samples, settings);
+			Map<ISample, double[]> extractData = extractData(samples, algorithm, settings, isSelectedVariables);
+			setRetentionTime(pcaResults, samples, isSelectedVariables);
+			int numVars = getNumSampleVars(extractData);
+			subMonitor.worked(20);
+			/*
+			 * Prepare PCA Calculation
+			 */
+			IMultivariateCalculator principalComponentAnalysis = setupPCA(extractData, numVars, numberOfPrincipalComponents, algorithm);
+			subMonitor.worked(20);
+			/*
+			 * Compute PCA
+			 */
+			principalComponentAnalysis.compute();
+			subMonitor.worked(20);
+			/*
+			 * Collect PCA results
+			 */
+			if(!principalComponentAnalysis.getComputeStatus()) {
+				return null;
+			}
+			subMonitor.worked(20);
+			//
+			List<double[]> loadingVectors = getLoadingVectors(principalComponentAnalysis, numberOfPrincipalComponents);
+			double[] explainedVariances = this.getExplainedVariances(principalComponentAnalysis, numberOfPrincipalComponents);
+			double[] cumulativeExplainedVariances = this.getCumulativeExplainedVariances(explainedVariances);
+			pcaResults.setLoadingVectors(loadingVectors);
+			pcaResults.setExplainedVariances(explainedVariances);
+			pcaResults.setCumulativeExplainedVariances(cumulativeExplainedVariances);
+			setEigenSpaceAndErrorValues(principalComponentAnalysis, extractData, pcaResults);
+			subMonitor.worked(20);
+		} finally {
+			SubMonitor.done(subMonitor);
+		}
 		//
 		return pcaResults;
 	}

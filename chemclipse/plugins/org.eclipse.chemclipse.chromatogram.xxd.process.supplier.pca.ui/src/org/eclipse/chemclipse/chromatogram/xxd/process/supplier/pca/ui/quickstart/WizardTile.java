@@ -21,7 +21,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.Preproc
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamplesPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handlers.CreatePcaEvaluation;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.RunnablePCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.SamplesExtractor;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.BatchProcessWizardDialog;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.IInputWizard;
 import org.eclipse.chemclipse.ux.extension.ui.definitions.TileDefinition;
@@ -60,7 +60,7 @@ public abstract class WizardTile implements TileDefinition {
 			/*
 			 * Run the process.
 			 */
-			RunnablePCA runnable = new RunnablePCA(extractionData, analysisSettings, filterSettings, preprocessingSettings);
+			SamplesExtractor runnable = new SamplesExtractor(extractionData, analysisSettings, filterSettings, preprocessingSettings);
 			ProgressMonitorDialog monitor = new ProgressMonitorDialog(shell);
 			monitor.run(true, true, runnable);
 			/*

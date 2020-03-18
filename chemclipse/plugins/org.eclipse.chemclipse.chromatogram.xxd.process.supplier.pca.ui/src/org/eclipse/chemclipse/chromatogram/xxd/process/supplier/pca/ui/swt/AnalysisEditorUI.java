@@ -11,15 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.ProcessorPCA;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.exception.MathIllegalArgumentException;
+import java.lang.reflect.InvocationTargetException;
+
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Algorithm;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamplesPCA;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ResultsPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.CalculationExecutor;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferenceLoadingPlot2DPage;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferenceScorePlot2DPage;
@@ -29,10 +29,13 @@ import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
+import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
-import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
@@ -47,7 +50,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
@@ -59,9 +64,14 @@ public class AnalysisEditorUI extends Composite {
 	//
 	private ISamplesPCA<? extends IVariable, ? extends ISample> samples = null;
 	//
+	private Composite toolbarSearch;
+	private Spinner spinnerPCs;
+	private ComboViewer comboViewerAlgorithm;
 	private SamplesListUI sampleListUI;
 	private PreprocessingSettingsUI preprocessingSettingsUI;
 	private FilterSettingsUI filterSettingsUI;
+	//
+	private Algorithm[] algorithms = Algorithm.getAlgorithms();
 
 	public AnalysisEditorUI(Composite parent, int style) {
 		super(parent, style);
@@ -73,9 +83,17 @@ public class AnalysisEditorUI extends Composite {
 		this.samples = samples;
 		if(samples != null) {
 			sampleListUI.setInput(samples.getSampleList());
+			updateWidgets(samples.getAnalysisSettings());
+			preprocessingSettingsUI.setInput(samples.getPreprocessingSettings());
+			filterSettingsUI.setInput(samples.getFilterSettings());
 		} else {
 			sampleListUI.setInput(null);
+			updateWidgets(null);
+			preprocessingSettingsUI.setInput(null);
+			filterSettingsUI.setInput(null);
 		}
+		//
+		// runCalculation(getShell());
 	}
 
 	private void createControl() {
@@ -83,7 +101,10 @@ public class AnalysisEditorUI extends Composite {
 		setLayout(new GridLayout(1, true));
 		//
 		createToolbarMain(this);
+		toolbarSearch = createToolbarSearch(this);
 		createDataTab(this);
+		//
+		PartSupport.setCompositeVisibility(toolbarSearch, false);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -92,14 +113,38 @@ public class AnalysisEditorUI extends Composite {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(6, false));
+		composite.setLayout(new GridLayout(7, false));
 		//
+		createButtonToggleToolbarSearch(composite);
 		createLabel(composite, "Number of PCs:");
-		createSpinnerPrincipleComponents(composite);
+		spinnerPCs = createSpinnerPrincipleComponents(composite);
 		createLabel(composite, "Algorithm:");
-		createComboViewerAlgorithm(composite);
+		comboViewerAlgorithm = createComboViewerAlgorithm(composite);
 		createButtonRun(composite);
 		createSettingsButton(composite);
+	}
+
+	private Button createButtonToggleToolbarSearch(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle search toolbar.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarSearch);
+				if(visible) {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
+				} else {
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
+				}
+			}
+		});
+		//
+		return button;
 	}
 
 	private Label createLabel(Composite parent, String text) {
@@ -138,7 +183,7 @@ public class AnalysisEditorUI extends Composite {
 
 		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
-		comboViewer.setInput(new Object[]{Algorithm.SVD, Algorithm.NIPALS, Algorithm.OPLS});
+		comboViewer.setInput(algorithms);
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {
 
 			@Override
@@ -186,7 +231,7 @@ public class AnalysisEditorUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				runCalculation();
+				runCalculation(e.display.getActiveShell());
 			}
 		});
 		//
@@ -221,6 +266,22 @@ public class AnalysisEditorUI extends Composite {
 				}
 			}
 		});
+	}
+
+	private Composite createToolbarSearch(Composite parent) {
+
+		SearchSupportUI searchSupportUI = new SearchSupportUI(parent, SWT.NONE);
+		searchSupportUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		searchSupportUI.setSearchListener(new ISearchListener() {
+
+			@Override
+			public void performSearch(String searchText, boolean caseSensitive) {
+
+				sampleListUI.setSearchText(searchText, caseSensitive);
+			}
+		});
+		//
+		return searchSupportUI;
 	}
 
 	private TabFolder createDataTab(Composite parent) {
@@ -275,27 +336,67 @@ public class AnalysisEditorUI extends Composite {
 
 	private void applySettings() {
 
-		// TODO
+		// runCalculation();
 	}
 
-	private void runCalculation() {
+	private void runCalculation(Shell shell) {
 
 		synchronized(this) {
-			if(samples != null) {
+			if(shell != null) {
 				try {
-					ProcessorPCA processorPCA = new ProcessorPCA();
-					ResultsPCA results = processorPCA.process(samples, new NullProgressMonitor());
-					EvaluationPCA evaluationPCA = new EvaluationPCA(samples, results);
+					/*
+					 * Check
+					 */
+					final EvaluationPCA evaluationPCA;
+					if(samples != null) {
+						CalculationExecutor runnable = new CalculationExecutor(samples);
+						ProgressMonitorDialog monitor = new ProgressMonitorDialog(shell);
+						monitor.run(true, true, runnable);
+						evaluationPCA = runnable.getEvaluationPCA();
+					} else {
+						evaluationPCA = null;
+					}
+					/*
+					 * Send the update event.
+					 */
 					IEventBroker eventBroker = Activator.getDefault().getEventBroker();
 					if(eventBroker != null) {
-						eventBroker.send(Activator.TOPIC_PCA_EVALUATION_LOAD, evaluationPCA);
+						Display.getDefault().asyncExec(new Runnable() {
+
+							@Override
+							public void run() {
+
+								if(evaluationPCA != null) {
+									eventBroker.send(Activator.TOPIC_PCA_EVALUATION_LOAD, evaluationPCA);
+								} else {
+									eventBroker.send(Activator.TOPIC_PCA_EVALUATION_CLEAR, new Object());
+								}
+							}
+						});
 					}
-				} catch(MathIllegalArgumentException e) {
-					logger.error(e.getLocalizedMessage(), e);
-				} catch(Exception e) {
-					logger.error(e.getLocalizedMessage(), e);
+				} catch(InvocationTargetException | InterruptedException e) {
+					logger.warn(e);
 				}
 			}
 		}
+	}
+
+	private void updateWidgets(IAnalysisSettings analysisSettings) {
+
+		if(analysisSettings != null) {
+			spinnerPCs.setSelection(analysisSettings.getNumberOfPrincipalComponents());
+			comboViewerAlgorithm.getCombo().select(getSelectedAlgorithmIndex(analysisSettings));
+		}
+	}
+
+	private int getSelectedAlgorithmIndex(IAnalysisSettings analysisSettings) {
+
+		for(int i = 0; i < algorithms.length; i++) {
+			Algorithm algorithm = algorithms[i];
+			if(algorithm.equals(analysisSettings.getAlgorithm())) {
+				return i;
+			}
+		}
+		return -1;
 	}
 }

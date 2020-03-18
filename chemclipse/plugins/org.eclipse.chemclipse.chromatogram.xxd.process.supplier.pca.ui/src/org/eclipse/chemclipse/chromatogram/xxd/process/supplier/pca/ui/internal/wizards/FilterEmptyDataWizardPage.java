@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,13 +27,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
+@SuppressWarnings("unchecked")
 public class FilterEmptyDataWizardPage extends WizardPage implements IFilterWizardPage {
 
 	final private DataBindingContext dbc = new DataBindingContext();
 	private IObservableValue<DataTypeProcessing> dataTypeFiltration;
 
 	protected FilterEmptyDataWizardPage(EmptyDataFilter emptyDataFilter) {
-
 		super("Empty data filter");
 		setTitle("Empty Data Filter");
 		setDescription("Select rows, which contain just not-empty data");

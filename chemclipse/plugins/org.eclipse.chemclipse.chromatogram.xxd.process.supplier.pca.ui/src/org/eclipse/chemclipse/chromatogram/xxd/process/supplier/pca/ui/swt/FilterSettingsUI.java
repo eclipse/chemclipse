@@ -33,7 +33,7 @@ public class FilterSettingsUI extends Composite {
 		createControl();
 	}
 
-	public void update(FilterSettings filterSettings) {
+	public void setInput(FilterSettings filterSettings) {
 
 		this.filterSettings = filterSettings;
 		updateWidgets();

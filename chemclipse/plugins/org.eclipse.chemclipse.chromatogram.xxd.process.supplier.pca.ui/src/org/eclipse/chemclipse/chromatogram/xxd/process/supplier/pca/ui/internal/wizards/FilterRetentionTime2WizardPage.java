@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,11 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.RetentionTime2Filter;
 import org.eclipse.chemclipse.model.statistics.IVariable;
@@ -36,7 +34,6 @@ import org.eclipse.swt.widgets.TableColumn;
 
 public class FilterRetentionTime2WizardPage extends WizardPage implements IFilterWizardPage {
 
-	private NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
 	private RetentionTime2Filter retentionTimeFilter;
 	private TableViewer tableViewer;
 	private List<IVariable> variables;
