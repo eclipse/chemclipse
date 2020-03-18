@@ -28,7 +28,7 @@ public class NormalizationInfNorm extends AbstractDataModificator implements INo
 	@Override
 	public String getDescription() {
 
-		return "";
+		return "Normalization Inf-Norm";
 	}
 
 	@Override
@@ -37,6 +37,7 @@ public class NormalizationInfNorm extends AbstractDataModificator implements INo
 		return "Normalization Inf-Norm";
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public <V extends IVariable, S extends ISample> void process(ISamples<V, S> samples) {
 

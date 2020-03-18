@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,7 +21,6 @@ import org.eclipse.chemclipse.model.statistics.ISampleData;
 public abstract class AbstractCentering extends AbstractDataModificator implements ICentering {
 
 	public AbstractCentering() {
-
 		super();
 	}
 
@@ -52,6 +51,7 @@ public abstract class AbstractCentering extends AbstractDataModificator implemen
 		return Math.sqrt(Math.abs(getVariance(samples, position, type)));
 	}
 
+	@SuppressWarnings("rawtypes")
 	protected <S extends ISample> double getVariance(List<S> samples, int position, int type) {
 
 		boolean onlySelected = isOnlySelected();

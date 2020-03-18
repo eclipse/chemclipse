@@ -33,6 +33,7 @@ public class MedianValuesReplacer extends AbstractDataModificator implements IRe
 		return "Median Value Setter";
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public <V extends IVariable, S extends ISample> void process(ISamples<V, S> samples) {
 

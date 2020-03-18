@@ -28,7 +28,7 @@ public class Normalization2Norm extends AbstractDataModificator implements INorm
 	@Override
 	public String getDescription() {
 
-		return "";
+		return "Normalization 2-Norm";
 	}
 
 	@Override
@@ -37,6 +37,7 @@ public class Normalization2Norm extends AbstractDataModificator implements INorm
 		return "Normalization 2-Norm";
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public <V extends IVariable, S extends ISample> void process(ISamples<V, S> samples) {
 

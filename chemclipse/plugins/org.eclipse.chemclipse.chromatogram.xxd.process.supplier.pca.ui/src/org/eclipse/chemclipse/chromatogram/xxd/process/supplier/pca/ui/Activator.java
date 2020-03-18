@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
@@ -25,6 +28,23 @@ import org.osgi.framework.BundleContext;
  */
 public class Activator extends AbstractActivatorUI {
 
+	public static final String ICON_CENTER_MEAN = "ICON_CENTER_MEAN"; // $NON-NLS-1$
+	public static final String ICON_CENTER_MEDIAN = "ICON_CENTER_MEDIAN"; // $NON-NLS-1$
+	public static final String ICON_DEVIATION = "ICON_DEVIATION"; // $NON-NLS-1$
+	public static final String ICON_NORM_CENTER = "ICON_NORM_CENTER"; // $NON-NLS-1$
+	public static final String ICON_NORM_SCALE_AUTO = "ICON_NORM_SCALE_AUTO"; // $NON-NLS-1$
+	public static final String ICON_NORM_SCALE_LEVEL = "ICON_NORM_SCALE_LEVEL"; // $NON-NLS-1$
+	public static final String ICON_NORM_SCALE_MAX2 = "ICON_NORM_SCALE_MAX2"; // $NON-NLS-1$
+	public static final String ICON_NORM_SCALE_MAX = "ICON_NORM_SCALE_MAX"; // $NON-NLS-1$
+	public static final String ICON_NORM_SCALE_PARETO = "ICON_NORM_SCALE_PARETO"; // $NON-NLS-1$
+	public static final String ICON_NORM_SCALE_RANGE2 = "ICON_NORM_SCALE_RANGE2"; // $NON-NLS-1$
+	public static final String ICON_NORM_SCALE_RANGE = "ICON_NORM_SCALE_RANGE"; // $NON-NLS-1$
+	public static final String ICON_NORM_SCALE_VAST = "ICON_NORM_SCALE_VAST"; // $NON-NLS-1$
+	public static final String ICON_NORM_TRANS = "ICON_NORM_TRANS"; // $NON-NLS-1$
+	public static final String ICON_NORM_TRANS_LOG = "ICON_NORM_TRANS_LOG"; // $NON-NLS-1$
+	public static final String ICON_NORM_TRANS_NONE = "ICON_NORM_TRANS_NONE"; // $NON-NLS-1$
+	public static final String ICON_NORM_TRANS_POWER = "ICON_NORM_TRANS_POWER"; // $NON-NLS-1$
+	//
 	public static final String TOPIC_PCA_EVALUATION_LOAD = "pca/evaluation/load";
 	public static final String TOPIC_PCA_EVALUATION_CLEAR = "pca/evaluation/clear";
 	public static final String PROPERTY_PCA_EVALUATION = IEventBroker.DATA;
@@ -58,6 +78,7 @@ public class Activator extends AbstractActivatorUI {
 		super.start(context);
 		plugin = this;
 		initializePreferenceStore(PreferenceSupplier.INSTANCE());
+		initializeImageRegistry(getImageHashMap());
 		dataUpdateSupport = new DataUpdateSupport(getEventBroker());
 		initialize(dataUpdateSupport);
 	}
@@ -79,6 +100,30 @@ public class Activator extends AbstractActivatorUI {
 		IEclipseContext eclipseContext = EclipseContextFactory.getServiceContext(bundleContext);
 		eclipseContext.set(Logger.class, null);
 		return eclipseContext.get(IEventBroker.class);
+	}
+
+	private Map<String, String> getImageHashMap() {
+
+		Map<String, String> imageHashMap = new HashMap<String, String>();
+		//
+		imageHashMap.put(ICON_CENTER_MEAN, "icons/center_mean.jpg"); // $NON-NLS-1$
+		imageHashMap.put(ICON_CENTER_MEDIAN, "icons/center_median.jpg"); // $NON-NLS-1$
+		imageHashMap.put(ICON_DEVIATION, "icons/deviation.jpg"); // $NON-NLS-1$
+		imageHashMap.put(ICON_NORM_CENTER, "icons/norm_center.jpg"); // $NON-NLS-1$
+		imageHashMap.put(ICON_NORM_SCALE_AUTO, "icons/norm_scal_auto.jpg"); // $NON-NLS-1$
+		imageHashMap.put(ICON_NORM_SCALE_LEVEL, "icons/norm_scal_level.jpg"); // $NON-NLS-1$
+		imageHashMap.put(ICON_NORM_SCALE_MAX2, "icons/norm_scal_max2.jpg"); // $NON-NLS-1$
+		imageHashMap.put(ICON_NORM_SCALE_MAX, "icons/norm_scal_max.jpg"); // $NON-NLS-1$
+		imageHashMap.put(ICON_NORM_SCALE_PARETO, "icons/norm_scal_pareto.jpg"); // $NON-NLS-1$
+		imageHashMap.put(ICON_NORM_SCALE_RANGE2, "icons/norm_scal_range2.jpg"); // $NON-NLS-1$
+		imageHashMap.put(ICON_NORM_SCALE_RANGE, "icons/norm_scal_range.jpg"); // $NON-NLS-1$
+		imageHashMap.put(ICON_NORM_SCALE_VAST, "icons/norm_scal_vast.jpg"); // $NON-NLS-1$
+		imageHashMap.put(ICON_NORM_TRANS, "icons/norm_trans.jpg"); // $NON-NLS-1$
+		imageHashMap.put(ICON_NORM_TRANS_LOG, "icons/trans_log.jpg"); // $NON-NLS-1$
+		imageHashMap.put(ICON_NORM_TRANS_NONE, "icons/trans_none.jpg"); // $NON-NLS-1$
+		imageHashMap.put(ICON_NORM_TRANS_POWER, "icons/trans_power.jpg"); // $NON-NLS-1$
+		//
+		return imageHashMap;
 	}
 
 	public DataUpdateSupport getDataUpdateSupport() {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,14 +21,19 @@ import org.eclipse.chemclipse.model.statistics.IVariable;
 public class ScalingRange extends AbstractScaling {
 
 	public ScalingRange(int centeringType) {
-
 		super(centeringType);
 	}
 
 	@Override
 	public String getDescription() {
 
-		return "";
+		return "Range scaling";
+	}
+
+	@Override
+	public String getName() {
+
+		return "Range scaling";
 	}
 
 	private <S extends ISample> double getMax(List<S> samples, int index) {
@@ -43,12 +48,7 @@ public class ScalingRange extends AbstractScaling {
 		return samples.stream().filter(s -> s.isSelected() || !onlySelected).map(s -> s.getSampleData().get(index)).mapToDouble(s -> getData(s)).summaryStatistics().getMin();
 	}
 
-	@Override
-	public String getName() {
-
-		return "Range scaling";
-	}
-
+	@SuppressWarnings("rawtypes")
 	@Override
 	public <V extends IVariable, S extends ISample> void process(ISamples<V, S> samples) {
 

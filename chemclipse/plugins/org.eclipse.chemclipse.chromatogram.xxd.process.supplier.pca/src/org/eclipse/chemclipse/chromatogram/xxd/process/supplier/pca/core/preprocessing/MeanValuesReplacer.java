@@ -32,6 +32,7 @@ public class MeanValuesReplacer extends AbstractDataModificator implements IRepl
 		return "Mean Value Setter";
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public <V extends IVariable, S extends ISample> void process(ISamples<V, S> samples) {
 
