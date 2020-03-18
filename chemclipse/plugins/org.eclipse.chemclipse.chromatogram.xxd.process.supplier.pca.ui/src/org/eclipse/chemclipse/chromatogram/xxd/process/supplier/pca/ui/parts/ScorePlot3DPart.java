@@ -18,41 +18,50 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d.ScorePlot3D;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EnhancedUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateListener;
+import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.widgets.Composite;
 
-public class ScorePlot3DPart extends EnhancedUpdateSupport implements IUpdateSupport {
+public class ScorePlot3DPart {
 
 	private static final String TOPIC = Activator.TOPIC_PCA_EVALUATION_LOAD;
-	//
-	private ScorePlot3D scorePlot;
+	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
+	private ScorePlot3D plot;
+	private IDataUpdateListener updateListener = new IDataUpdateListener() {
+
+		@Override
+		public void update(String topic, List<Object> objects) {
+
+			updateSelection(objects, topic);
+		}
+	};
 
 	@Inject
 	public ScorePlot3DPart(Composite parent, MPart part) {
-		super(parent, Activator.getDefault().getDataUpdateSupport(), TOPIC, part);
+		plot = new ScorePlot3D(parent, null);
+		dataUpdateSupport.add(updateListener);
 	}
 
-	@Override
-	public void createControl(Composite parent) {
+	@Focus
+	public void setFocus() {
 
-		scorePlot = new ScorePlot3D(parent, null);
+		updateSelection(dataUpdateSupport.getUpdates(TOPIC), TOPIC);
 	}
 
-	@Override
-	public void updateSelection(List<Object> objects, String topic) {
+	private void updateSelection(List<Object> objects, String topic) {
 
 		/*
 		 * 0 => because only one property was used to register the event.
 		 */
 		if(objects.size() == 1) {
 			if(isUnloadEvent(topic)) {
-				scorePlot.setInput(null);
+				plot.setInput(null);
 			} else {
 				Object object = objects.get(0);
 				if(object instanceof EvaluationPCA) {
-					scorePlot.setInput((EvaluationPCA)object);
+					plot.setInput((EvaluationPCA)object);
 				}
 			}
 		}

@@ -100,30 +100,34 @@ public class FiltersTable extends Composite {
 		update();
 	}
 
-	public void setFilterSettings(FilterSettings filterSettings) {
+	public void setInput(FilterSettings filterSettings) {
 
 		this.filterSettings = filterSettings;
+		update();
 	}
 
 	@Override
 	public void update() {
 
-		List<IFilter> filters = filterSettings.getFilters();
 		table.removeAll();
 		table.clearAll();
 		//
-		for(int i = 0; i < filters.size(); i++) {
-			TableItem tableItem = new TableItem(table, SWT.NONE);
-			IFilter filter = filters.get(i);
-			tableItem.setText(0, filter.getName());
-			tableItem.setText(1, filter.getDataTypeProcessing().toString());
-			tableItem.setText(2, filter.getDescription());
-			tableItem.setText(3, filter.getSelectionResult());
-			tableItem.setData(filter);
-		}
-		for(int i = 0; i < table.getColumns().length; i++) {
-			table.getColumn(i).pack();
-			table.getColumn(i).setWidth(table.getColumn(i).getWidth() + 20);
+		if(filterSettings != null) {
+			List<IFilter> filters = filterSettings.getFilters();
+			for(int i = 0; i < filters.size(); i++) {
+				TableItem tableItem = new TableItem(table, SWT.NONE);
+				IFilter filter = filters.get(i);
+				tableItem.setText(0, filter.getName());
+				tableItem.setText(1, filter.getDataTypeProcessing().toString());
+				tableItem.setText(2, filter.getDescription());
+				tableItem.setText(3, filter.getSelectionResult());
+				tableItem.setData(filter);
+			}
+			//
+			for(int i = 0; i < table.getColumns().length; i++) {
+				table.getColumn(i).pack();
+				table.getColumn(i).setWidth(table.getColumn(i).getWidth() + 20);
+			}
 		}
 	}
 

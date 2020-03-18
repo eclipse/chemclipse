@@ -93,7 +93,7 @@ public class AnalysisEditorUI extends Composite {
 			filterSettingsUI.setInput(null);
 		}
 		//
-		// runCalculation(getShell());
+		runCalculation(getDisplay());
 	}
 
 	private void createControl() {
@@ -231,7 +231,7 @@ public class AnalysisEditorUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				runCalculation(e.display.getActiveShell());
+				runCalculation(e.display);
 			}
 		});
 		//
@@ -336,43 +336,24 @@ public class AnalysisEditorUI extends Composite {
 
 	private void applySettings() {
 
-		// runCalculation();
+		runCalculation(getDisplay());
 	}
 
-	private void runCalculation(Shell shell) {
+	private void runCalculation(Display display) {
 
-		synchronized(this) {
+		if(display != null) {
+			Shell shell = display.getActiveShell();
 			if(shell != null) {
 				try {
 					/*
 					 * Check
 					 */
-					final EvaluationPCA evaluationPCA;
 					if(samples != null) {
 						CalculationExecutor runnable = new CalculationExecutor(samples);
 						ProgressMonitorDialog monitor = new ProgressMonitorDialog(shell);
 						monitor.run(true, true, runnable);
-						evaluationPCA = runnable.getEvaluationPCA();
-					} else {
-						evaluationPCA = null;
-					}
-					/*
-					 * Send the update event.
-					 */
-					IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-					if(eventBroker != null) {
-						Display.getDefault().asyncExec(new Runnable() {
-
-							@Override
-							public void run() {
-
-								if(evaluationPCA != null) {
-									eventBroker.send(Activator.TOPIC_PCA_EVALUATION_LOAD, evaluationPCA);
-								} else {
-									eventBroker.send(Activator.TOPIC_PCA_EVALUATION_CLEAR, new Object());
-								}
-							}
-						});
+						EvaluationPCA evaluationPCA = runnable.getEvaluationPCA();
+						fireUpdate(display, evaluationPCA);
 					}
 				} catch(InvocationTargetException | InterruptedException e) {
 					logger.warn(e);
@@ -398,5 +379,24 @@ public class AnalysisEditorUI extends Composite {
 			}
 		}
 		return -1;
+	}
+
+	private void fireUpdate(Display display, EvaluationPCA evaluationPCA) {
+
+		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+		if(eventBroker != null) {
+			display.asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+
+					if(evaluationPCA != null) {
+						eventBroker.send(Activator.TOPIC_PCA_EVALUATION_LOAD, evaluationPCA);
+					} else {
+						eventBroker.send(Activator.TOPIC_PCA_EVALUATION_CLEAR, new Object());
+					}
+				}
+			});
+		}
 	}
 }

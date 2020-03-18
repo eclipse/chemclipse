@@ -19,42 +19,58 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.ExplainedVarianceChart;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EnhancedUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateListener;
+import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class ExplainedVariancePart extends EnhancedUpdateSupport implements IUpdateSupport {
+public class ExplainedVariancePart {
 
 	private static final String TOPIC = Activator.TOPIC_PCA_EVALUATION_LOAD;
-	//
-	private ExplainedVarianceChart explainedVarianceChart;
+	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
+	private ExplainedVarianceChart chart;
+	private IDataUpdateListener updateListener = new IDataUpdateListener() {
+
+		@Override
+		public void update(String topic, List<Object> objects) {
+
+			updateSelection(objects, topic);
+		}
+	};
 
 	@Inject
 	public ExplainedVariancePart(Composite parent, MPart part) {
-		super(parent, Activator.getDefault().getDataUpdateSupport(), TOPIC, part);
+		chart = new ExplainedVarianceChart(parent, SWT.NONE);
+		dataUpdateSupport.add(updateListener);
+	}
+
+	@Focus
+	public void setFocus() {
+
+		updateSelection(dataUpdateSupport.getUpdates(TOPIC), TOPIC);
 	}
 
 	@Override
-	public void createControl(Composite parent) {
+	protected void finalize() throws Throwable {
 
-		explainedVarianceChart = new ExplainedVarianceChart(parent, SWT.NONE);
+		dataUpdateSupport.remove(updateListener);
+		super.finalize();
 	}
 
-	@Override
-	public void updateSelection(List<Object> objects, String topic) {
+	private void updateSelection(List<Object> objects, String topic) {
 
 		/*
 		 * 0 => because only one property was used to register the event.
 		 */
 		if(objects.size() == 1) {
 			if(isUnloadEvent(topic)) {
-				explainedVarianceChart.setInput(null);
+				chart.setInput(null);
 			} else {
 				Object object = objects.get(0);
 				if(object instanceof EvaluationPCA) {
-					explainedVarianceChart.setInput((EvaluationPCA)object);
+					chart.setInput((EvaluationPCA)object);
 				}
 			}
 		}

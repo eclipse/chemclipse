@@ -19,42 +19,58 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt.FeatureListUI;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EnhancedUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateListener;
+import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class FeatureTablePart extends EnhancedUpdateSupport implements IUpdateSupport {
+public class FeatureTablePart {
 
 	private static final String TOPIC = Activator.TOPIC_PCA_EVALUATION_LOAD;
-	//
-	private FeatureListUI featureListUI;
+	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
+	private FeatureListUI list;
+	private IDataUpdateListener updateListener = new IDataUpdateListener() {
+
+		@Override
+		public void update(String topic, List<Object> objects) {
+
+			updateSelection(objects, topic);
+		}
+	};
 
 	@Inject
 	public FeatureTablePart(Composite parent, MPart part) {
-		super(parent, Activator.getDefault().getDataUpdateSupport(), TOPIC, part);
+		list = new FeatureListUI(parent, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.FULL_SELECTION);
+		dataUpdateSupport.add(updateListener);
+	}
+
+	@Focus
+	public void setFocus() {
+
+		updateSelection(dataUpdateSupport.getUpdates(TOPIC), TOPIC);
 	}
 
 	@Override
-	public void createControl(Composite parent) {
+	protected void finalize() throws Throwable {
 
-		featureListUI = new FeatureListUI(parent, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.FULL_SELECTION);
+		dataUpdateSupport.remove(updateListener);
+		super.finalize();
 	}
 
-	@Override
-	public void updateSelection(List<Object> objects, String topic) {
+	private void updateSelection(List<Object> objects, String topic) {
 
 		/*
 		 * 0 => because only one property was used to register the event.
 		 */
 		if(objects.size() == 1) {
 			if(isUnloadEvent(topic)) {
-				featureListUI.setInput(null);
+				list.setInput(null);
 			} else {
 				Object object = objects.get(0);
 				if(object instanceof EvaluationPCA) {
-					featureListUI.setInput((EvaluationPCA)object);
+					list.setInput((EvaluationPCA)object);
 				}
 			}
 		}

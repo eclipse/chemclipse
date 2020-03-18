@@ -54,16 +54,14 @@ public class FilterSettingsUI extends Composite {
 
 	private void updateWidgets() {
 
-		if(filterSettings != null) {
-			filtersTable.setFilterSettings(filterSettings);
-		}
+		filtersTable.setInput(filterSettings);
 	}
 
 	private FiltersTable createFiltersTable(Composite parent) {
 
 		FiltersTable filtersTable = new FiltersTable(parent, SWT.NONE);
 		filtersTable.setLayoutData(new GridData(GridData.FILL_BOTH));
-		filtersTable.setFilterSettings(filterSettings);
+		filtersTable.setInput(filterSettings);
 		return filtersTable;
 	}
 

@@ -18,31 +18,47 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.ScorePlot;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EnhancedUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateListener;
+import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class ScorePlot2DPart extends EnhancedUpdateSupport implements IUpdateSupport {
+public class ScorePlot2DPart {
 
 	private static final String TOPIC = Activator.TOPIC_PCA_EVALUATION_LOAD;
-	//
+	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
 	private ScorePlot plot;
+	private IDataUpdateListener updateListener = new IDataUpdateListener() {
+
+		@Override
+		public void update(String topic, List<Object> objects) {
+
+			updateSelection(objects, topic);
+		}
+	};
 
 	@Inject
 	public ScorePlot2DPart(Composite parent, MPart part) {
-		super(parent, Activator.getDefault().getDataUpdateSupport(), TOPIC, part);
-	}
-
-	@Override
-	public void createControl(Composite parent) {
-
 		plot = new ScorePlot(parent, SWT.NONE);
+		dataUpdateSupport.add(updateListener);
+	}
+
+	@Focus
+	public void setFocus() {
+
+		updateSelection(dataUpdateSupport.getUpdates(TOPIC), TOPIC);
 	}
 
 	@Override
-	public void updateSelection(List<Object> objects, String topic) {
+	protected void finalize() throws Throwable {
+
+		dataUpdateSupport.remove(updateListener);
+		super.finalize();
+	}
+
+	private void updateSelection(List<Object> objects, String topic) {
 
 		/*
 		 * 0 => because only one property was used to register the event.
