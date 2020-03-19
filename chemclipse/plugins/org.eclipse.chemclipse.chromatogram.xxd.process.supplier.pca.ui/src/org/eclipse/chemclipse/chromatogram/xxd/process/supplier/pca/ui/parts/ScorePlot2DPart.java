@@ -17,7 +17,7 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.ScorePlot;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt.ExtendedScorePlot;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateListener;
 import org.eclipse.e4.ui.di.Focus;
@@ -28,8 +28,11 @@ import org.eclipse.swt.widgets.Composite;
 public class ScorePlot2DPart {
 
 	private static final String TOPIC = Activator.TOPIC_PCA_EVALUATION_LOAD;
+	//
+	private Composite parent;
 	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
-	private ScorePlot plot;
+	private ExtendedScorePlot plot;
+	//
 	private IDataUpdateListener updateListener = new IDataUpdateListener() {
 
 		@Override
@@ -41,7 +44,8 @@ public class ScorePlot2DPart {
 
 	@Inject
 	public ScorePlot2DPart(Composite parent, MPart part) {
-		plot = new ScorePlot(parent, SWT.NONE);
+		plot = new ExtendedScorePlot(parent, SWT.NONE);
+		this.parent = parent;
 		dataUpdateSupport.add(updateListener);
 	}
 
@@ -63,13 +67,15 @@ public class ScorePlot2DPart {
 		/*
 		 * 0 => because only one property was used to register the event.
 		 */
-		if(objects.size() == 1) {
-			if(isUnloadEvent(topic)) {
-				plot.setInput(null);
-			} else {
-				Object object = objects.get(0);
-				if(object instanceof EvaluationPCA) {
-					plot.setInput((EvaluationPCA)object);
+		if(isVisible()) {
+			if(objects.size() == 1) {
+				if(isUnloadEvent(topic)) {
+					plot.setInput(null);
+				} else {
+					Object object = objects.get(0);
+					if(object instanceof EvaluationPCA) {
+						plot.setInput((EvaluationPCA)object);
+					}
 				}
 			}
 		}
@@ -81,5 +87,10 @@ public class ScorePlot2DPart {
 			return true;
 		}
 		return false;
+	}
+
+	private boolean isVisible() {
+
+		return (parent != null && parent.isVisible());
 	}
 }

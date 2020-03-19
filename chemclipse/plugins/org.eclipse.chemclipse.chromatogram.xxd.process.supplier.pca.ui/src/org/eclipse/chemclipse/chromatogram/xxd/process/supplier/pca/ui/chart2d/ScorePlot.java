@@ -30,23 +30,14 @@ public class ScorePlot extends AbtractPlotPCA {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public void setInput(EvaluationPCA evaluationPCA) {
-
-		if(evaluationPCA != null) {
-			IResultsPCA resultsPCA = evaluationPCA.getResults();
-			update(resultsPCA);
-		}
-	}
-
-	@SuppressWarnings("rawtypes")
-	public void update(IResultsPCA pcaResults) {
+	public void setInput(EvaluationPCA evaluationPCA, int pcX, int pcY) {
 
 		deleteSeries();
-		// TODO from Score Plot chart menu toolbar
-		int pcX = 1;
-		int pcY = 2;
-		addSeriesData(SeriesConverter.sampleToSeries(pcaResults, pcX, pcY, extractedResults));
-		update(pcX, pcY);
+		if(evaluationPCA != null) {
+			IResultsPCA resultsPCA = evaluationPCA.getResults();
+			addSeriesData(SeriesConverter.sampleToSeries(resultsPCA, pcX, pcY, extractedResults));
+			update(pcX, pcY);
+		}
 		redraw();
 	}
 }

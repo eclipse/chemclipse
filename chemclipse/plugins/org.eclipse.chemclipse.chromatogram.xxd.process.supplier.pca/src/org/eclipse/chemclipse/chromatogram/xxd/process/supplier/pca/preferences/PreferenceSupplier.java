@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -45,8 +45,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final int MAX_NUMBER_OF_COMPONENTS = 1000;
 	public static final int DEF_NUMBER_OF_COMPONENTS = 3;
 	//
-	public static final String P_AUTO_REEVALUATE = "autoReevaluate";
-	public static final boolean DEF_AUTO_REEVALUATE = false;
 	public static final String P_RETENTION_TIME_WINDOW_PEAKS = "retentionTimeWindowPeaks";
 	public static final double DEF_RETENTION_TIME_WINDOW_PEAKS = 0.1;
 	// Score Plot general Settings
@@ -63,6 +61,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final int MAX_LOADING_PLOT_2D_SYMBOL_SIZE = 100;
 	public static final String P_LOADING_PLOT_2D_SYMBOL_TYPE = "loadingPlot2dSymbolType";
 	public static final String DEF_LOADING_PLOT_2D_SYMBOL_TYPE = "CIRCLE";
+	//
+	public static final String P_COLOR_SCHEME = "colorScheme";
+	public static final String DEF_COLOR_SCHEME = "Print";
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -94,12 +95,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_ALGORITHM_TYPE, DEF_ALGORITHM_TYPE);
 		defaultValues.put(P_REMOVE_USELESS_VARIABLES, Boolean.toString(DEF_REMOVE_USELESS_VARIABLES));
 		defaultValues.put(P_NUMBER_OF_COMPONENTS, Integer.toString(DEF_NUMBER_OF_COMPONENTS));
-		defaultValues.put(P_AUTO_REEVALUATE, Boolean.toString(DEF_AUTO_REEVALUATE));
 		defaultValues.put(P_RETENTION_TIME_WINDOW_PEAKS, Double.toString(DEF_RETENTION_TIME_WINDOW_PEAKS));
 		defaultValues.put(P_SCORE_PLOT_2D_SYMBOL_SIZE, Integer.toString(DEF_SCORE_PLOT_2D_SYMBOL_SIZE));
 		defaultValues.put(P_SCORE_PLOT_2D_SYMBOL_TYPE, DEF_SCORE_PLOT_2D_SYMBOL_TYPE);
 		defaultValues.put(P_LOADING_PLOT_2D_SYMBOL_SIZE, Integer.toString(DEF_LOADING_PLOT_2D_SYMBOL_SIZE));
 		defaultValues.put(P_LOADING_PLOT_2D_SYMBOL_TYPE, DEF_LOADING_PLOT_2D_SYMBOL_TYPE);
+		defaultValues.put(P_COLOR_SCHEME, DEF_COLOR_SCHEME);
 		return defaultValues;
 	}
 
@@ -123,5 +124,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.getInt(P_NUMBER_OF_COMPONENTS, DEF_NUMBER_OF_COMPONENTS);
+	}
+
+	public static String getColorScheme() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.get(P_COLOR_SCHEME, DEF_COLOR_SCHEME);
 	}
 }

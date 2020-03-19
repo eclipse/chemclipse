@@ -13,7 +13,6 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +23,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
-import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
@@ -121,18 +119,11 @@ public class SeriesConverter {
 		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<IScatterSeriesData>();
 		PcaUtils.getGroupNames(pcaResults);
 		extractedPcaResults.clear();
-		//
+		/*
+		 * Group Colors
+		 */
 		List<IResultPCA> resultList = pcaResults.getPcaResultList();
-		IColorScheme colorScheme = Colors.getColorScheme(Colors.COLOR_SCHEME_PRINT);
-		Map<String, Color> colors = new HashMap<>();
-		for(IResultPCA pcaResult : resultList) {
-			String groupName = pcaResult.getGroupName();
-			Color color = colors.get(groupName);
-			if(color == null) {
-				colors.put(groupName, colorScheme.getColor());
-				colorScheme.incrementColor();
-			}
-		}
+		Map<String, Color> colorMap = ColorSupport.getGroupNameColorMap(resultList);
 		//
 		for(int i = 0; i < pcaResults.getPcaResultList().size(); i++) {
 			IResultPCA pcaResult = resultList.get(i);
@@ -160,7 +151,7 @@ public class SeriesConverter {
 			IScatterSeriesSettings scatterSeriesSettings = scatterSeriesData.getSettings();
 			scatterSeriesSettings.setSymbolType(PlotSymbolType.valueOf(preferenceStore.getString(PreferenceSupplier.P_SCORE_PLOT_2D_SYMBOL_TYPE)));
 			scatterSeriesSettings.setSymbolSize(preferenceStore.getInt(PreferenceSupplier.P_SCORE_PLOT_2D_SYMBOL_SIZE));
-			Color color = colors.get(pcaResult.getGroupName());
+			Color color = colorMap.get(pcaResult.getGroupName());
 			if(pcaResult.getSample().isSelected()) {
 				scatterSeriesSettings.setSymbolColor(color);
 			} else {
