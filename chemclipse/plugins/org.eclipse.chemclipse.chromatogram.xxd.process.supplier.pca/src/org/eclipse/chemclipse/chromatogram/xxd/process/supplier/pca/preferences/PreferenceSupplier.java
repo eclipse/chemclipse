@@ -25,14 +25,16 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
-	// Nodes
 	public static final String N_INPUT_FILE = "INPUT_FILE";
-	// General settings
+	/*
+	 * General settings
+	 */
 	public static final String[][] ALGORITHM_TYPES = new String[][]{//
 			{Algorithm.SVD.toString(), Algorithm.SVD.toString()}, //
 			{Algorithm.NIPALS.toString(), Algorithm.NIPALS.toString()}, //
 			{Algorithm.OPLS.toString(), Algorithm.OPLS.toString()}//
 	};
+	//
 	public static final String P_FILES_PATH_IMPORT_CHROMATOGRAMS = "filePathImportChromatograms";
 	public static final String DEF_FILES_PATH_IMPORT_CHROMATOGRAMS = "";
 	public static final String P_ALGORITHM_TYPE = "algorithmType";
@@ -41,7 +43,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final boolean DEF_REMOVE_USELESS_VARIABLES = true;
 	//
 	public static final String P_NUMBER_OF_COMPONENTS = "numberOfComponents";
-	public static final int MIN_NUMBER_OF_COMPONENTS = 2;
+	public static final int MIN_NUMBER_OF_COMPONENTS = 3;
 	public static final int MAX_NUMBER_OF_COMPONENTS = 1000;
 	public static final int DEF_NUMBER_OF_COMPONENTS = 3;
 	//

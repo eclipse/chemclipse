@@ -44,21 +44,19 @@ public class LoadingsPlot extends AbtractPlotPCA {
 		}
 	}
 
-	public void setInput(IResultsPCA<? extends IResultPCA, ? extends IVariable> pcaResults) {
+	public void setInput(IResultsPCA<? extends IResultPCA, ? extends IVariable> pcaResults, int pcX, int pcY) {
 
-		// TODO
-		int pcX = 1;
-		int pcY = 2;
-		//
-		List<IScatterSeriesData> series;
-		if(labelType == LABEL_RETENTION_TIME_MINUTES) {
-			series = SeriesConverter.basisVectorsToSeries(pcaResults, pcX, pcY);
-		} else {
-			series = SeriesConverter.basisVectorsToSeriesDescription(pcaResults, pcX, pcY);
-		}
-		//
 		deleteSeries();
-		addSeriesData(series);
-		update(pcX, pcY);
+		if(pcaResults != null) {
+			List<IScatterSeriesData> series;
+			if(labelType == LABEL_RETENTION_TIME_MINUTES) {
+				series = SeriesConverter.basisVectorsToSeries(pcaResults, pcX, pcY);
+			} else {
+				series = SeriesConverter.basisVectorsToSeriesDescription(pcaResults, pcX, pcY);
+			}
+			addSeriesData(series);
+			update(pcX, pcY);
+		}
+		redraw();
 	}
 }

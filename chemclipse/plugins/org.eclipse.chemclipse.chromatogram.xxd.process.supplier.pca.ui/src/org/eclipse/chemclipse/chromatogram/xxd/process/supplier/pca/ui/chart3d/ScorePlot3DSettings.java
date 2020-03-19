@@ -23,130 +23,6 @@ import javafx.scene.paint.Color;
 
 public class ScorePlot3DSettings {
 
-	public static void setAxesEnhanced(ScorePlot3DSettings settings, int scale) {
-
-		int numberLines = settings.getMaxNumberLine();
-		double[] X = setAxes(settings.minX, settings.maxX, numberLines);
-		double[] Y = setAxes(settings.minY, settings.maxY, numberLines);
-		double[] Z = setAxes(settings.minZ, settings.maxZ, numberLines);
-		settings.axisMaxX = X[0];
-		settings.axisMaxY = Y[0];
-		settings.axisMaxZ = Z[0];
-		settings.axisMinX = X[1];
-		settings.axisMinY = Y[1];
-		settings.axisMinZ = Z[1];
-		settings.lineSpacingX = X[2];
-		settings.lineSpacingY = Y[2];
-		settings.lineSpacingZ = Z[2];
-		setScale(settings, scale);
-	}
-
-	public static void setAxes(ScorePlot3DSettings settings, int scale) {
-
-		int numberLines = settings.getMaxNumberLine();
-		double[] X = setAxesSquared(settings.minX, settings.maxX, numberLines);
-		double[] Y = setAxesSquared(settings.minY, settings.maxY, numberLines);
-		double[] Z = setAxesSquared(settings.minZ, settings.maxZ, numberLines);
-		settings.axisMaxX = X[0];
-		settings.axisMaxY = Y[0];
-		settings.axisMaxZ = Z[0];
-		settings.axisMinX = X[1];
-		settings.axisMinY = Y[1];
-		settings.axisMinZ = Z[1];
-		settings.lineSpacingX = X[2];
-		settings.lineSpacingY = Y[2];
-		settings.lineSpacingZ = Z[2];
-		setScale(settings, scale);
-	}
-
-	private static void setScale(ScorePlot3DSettings settings, int point) {
-
-		double maxDisX = Math.abs(settings.axisMaxX - settings.axisMinX);
-		double maxDisY = Math.abs(settings.axisMaxY - settings.axisMinY);
-		double maxDisZ = Math.abs(settings.axisMaxZ - settings.axisMinZ);
-		settings.scaleX = point / maxDisX;
-		settings.scaleY = point / maxDisY;
-		settings.scaleZ = point / maxDisZ;
-		settings.shiftX = getShift(settings.axisMinX, settings.axisMaxX);
-		settings.shiftY = getShift(settings.axisMinY, settings.axisMaxY);
-		settings.shiftZ = getShift(settings.axisMinZ, settings.axisMaxZ);
-	}
-
-	private static double getShift(double x, double y) {
-
-		double min = Math.min(x, y);
-		double max = Math.max(x, y);
-		if(min > 0) {
-			return -(min + (max - min) / 2);
-		} else if(max < 0) {
-			return (-max + (-min + max) / 2);
-		} else {
-			if(-min < max) {
-				return -(max + min) / 2;
-			} else {
-				return -(max + min) / 2;
-			}
-		}
-	}
-
-	private static double[] setAxesSquared(double x, double y, int numberLines) {
-
-		double absMax = Math.max(Math.abs(x), Math.abs(y));
-		double numberDigits = Math.floor(Math.log10(absMax));
-		double round = Math.pow(10, numberDigits);
-		double lineSpacing = (((Math.round(absMax / round) * round) / numberLines));
-		double maxAxis = Math.ceil(absMax / lineSpacing) * lineSpacing;
-		double minAxis = Math.floor(-absMax / lineSpacing) * lineSpacing;
-		return new double[]{maxAxis, minAxis, lineSpacing};
-	}
-
-	private static double[] setAxes(double x, double y, int numberLines) {
-
-		double max = Math.max(x, y);
-		double min = Math.min(x, y);
-		double absMax = Math.abs(x - y);
-		double numberDigits = Math.floor(Math.log10(absMax));
-		double round = Math.pow(10, numberDigits);
-		double lineSpacing = (((Math.round(absMax / round) * round) / numberLines));
-		double maxAxis = Math.ceil(max / (2 * lineSpacing)) * 2 * lineSpacing;
-		double minAxis = Math.floor(min / (2 * lineSpacing)) * 2 * lineSpacing;
-		if((maxAxis - max) < (lineSpacing / 2) || (min - minAxis) < (lineSpacing / 2)) {
-			maxAxis = maxAxis + lineSpacing;
-			minAxis = minAxis - lineSpacing;
-		}
-		return new double[]{maxAxis, minAxis, lineSpacing};
-	}
-
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	public static void setSettings(ScorePlot3DSettings settings, IResultsPCA resultsPCA) {
-
-		int pcX = 0;
-		int pcY = 1;
-		int pcZ = 2;
-		settings.setPcX(pcX);
-		settings.setPcY(pcY);
-		settings.setPcZ(pcZ);
-		/*
-		 * set min and max
-		 */
-		if(resultsPCA != null) {
-			List<? extends IResultPCA> pcaResultList = resultsPCA.getPcaResultList();
-			settings.minX = pcaResultList.stream().min((d1, d2) -> Double.compare(d1.getScoreVector()[pcX], d2.getScoreVector()[pcX])).get().getScoreVector()[pcX];
-			settings.minY = pcaResultList.stream().min((d1, d2) -> Double.compare(d1.getScoreVector()[pcY], d2.getScoreVector()[pcY])).get().getScoreVector()[pcY];
-			settings.minZ = pcaResultList.stream().min((d1, d2) -> Double.compare(d1.getScoreVector()[pcZ], d2.getScoreVector()[pcZ])).get().getScoreVector()[pcZ];
-			settings.maxX = pcaResultList.stream().max((d1, d2) -> Double.compare(d1.getScoreVector()[pcX], d2.getScoreVector()[pcX])).get().getScoreVector()[pcX];
-			settings.maxY = pcaResultList.stream().max((d1, d2) -> Double.compare(d1.getScoreVector()[pcY], d2.getScoreVector()[pcY])).get().getScoreVector()[pcY];
-			settings.maxZ = pcaResultList.stream().max((d1, d2) -> Double.compare(d1.getScoreVector()[pcZ], d2.getScoreVector()[pcZ])).get().getScoreVector()[pcZ];
-		} else {
-			settings.minX = 0.0d;
-			settings.minY = 0.0d;
-			settings.minZ = 0.0d;
-			settings.maxX = 0.0d;
-			settings.maxY = 0.0d;
-			settings.maxZ = 0.0d;
-		}
-	}
-
 	private double axisMaxX;
 	private double axisMaxY;
 	private double axisMaxZ;
@@ -187,10 +63,70 @@ public class ScorePlot3DSettings {
 		setAxes(this, scale);
 	}
 
-	private String createAxisLabel(int componentNumber) {
+	public static void setAxesEnhanced(ScorePlot3DSettings settings, int scale) {
 
-		componentNumber++;
-		return "PC " + componentNumber;
+		int numberLines = settings.getMaxNumberLine();
+		double[] X = setAxes(settings.minX, settings.maxX, numberLines);
+		double[] Y = setAxes(settings.minY, settings.maxY, numberLines);
+		double[] Z = setAxes(settings.minZ, settings.maxZ, numberLines);
+		settings.axisMaxX = X[0];
+		settings.axisMaxY = Y[0];
+		settings.axisMaxZ = Z[0];
+		settings.axisMinX = X[1];
+		settings.axisMinY = Y[1];
+		settings.axisMinZ = Z[1];
+		settings.lineSpacingX = X[2];
+		settings.lineSpacingY = Y[2];
+		settings.lineSpacingZ = Z[2];
+		setScale(settings, scale);
+	}
+
+	public static void setAxes(ScorePlot3DSettings settings, int scale) {
+
+		int numberLines = settings.getMaxNumberLine();
+		double[] X = setAxesSquared(settings.minX, settings.maxX, numberLines);
+		double[] Y = setAxesSquared(settings.minY, settings.maxY, numberLines);
+		double[] Z = setAxesSquared(settings.minZ, settings.maxZ, numberLines);
+		settings.axisMaxX = X[0];
+		settings.axisMaxY = Y[0];
+		settings.axisMaxZ = Z[0];
+		settings.axisMinX = X[1];
+		settings.axisMinY = Y[1];
+		settings.axisMinZ = Z[1];
+		settings.lineSpacingX = X[2];
+		settings.lineSpacingY = Y[2];
+		settings.lineSpacingZ = Z[2];
+		setScale(settings, scale);
+	}
+
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	public static void setSettings(ScorePlot3DSettings settings, IResultsPCA resultsPCA) {
+
+		int pcX = 0;
+		int pcY = 1;
+		int pcZ = 2;
+		settings.setPcX(pcX);
+		settings.setPcY(pcY);
+		settings.setPcZ(pcZ);
+		/*
+		 * set min and max
+		 */
+		if(resultsPCA != null) {
+			List<? extends IResultPCA> pcaResultList = resultsPCA.getPcaResultList();
+			settings.minX = pcaResultList.stream().min((d1, d2) -> Double.compare(d1.getScoreVector()[pcX], d2.getScoreVector()[pcX])).get().getScoreVector()[pcX];
+			settings.minY = pcaResultList.stream().min((d1, d2) -> Double.compare(d1.getScoreVector()[pcY], d2.getScoreVector()[pcY])).get().getScoreVector()[pcY];
+			settings.minZ = pcaResultList.stream().min((d1, d2) -> Double.compare(d1.getScoreVector()[pcZ], d2.getScoreVector()[pcZ])).get().getScoreVector()[pcZ];
+			settings.maxX = pcaResultList.stream().max((d1, d2) -> Double.compare(d1.getScoreVector()[pcX], d2.getScoreVector()[pcX])).get().getScoreVector()[pcX];
+			settings.maxY = pcaResultList.stream().max((d1, d2) -> Double.compare(d1.getScoreVector()[pcY], d2.getScoreVector()[pcY])).get().getScoreVector()[pcY];
+			settings.maxZ = pcaResultList.stream().max((d1, d2) -> Double.compare(d1.getScoreVector()[pcZ], d2.getScoreVector()[pcZ])).get().getScoreVector()[pcZ];
+		} else {
+			settings.minX = 0.0d;
+			settings.minY = 0.0d;
+			settings.minZ = 0.0d;
+			settings.maxX = 0.0d;
+			settings.maxY = 0.0d;
+			settings.maxZ = 0.0d;
+		}
 	}
 
 	public double getAxisMaxX() {
@@ -371,5 +307,69 @@ public class ScorePlot3DSettings {
 	public void setPcZ(int pcZ) {
 
 		this.pcZ = pcZ;
+	}
+
+	private static void setScale(ScorePlot3DSettings settings, int point) {
+
+		double maxDisX = Math.abs(settings.axisMaxX - settings.axisMinX);
+		double maxDisY = Math.abs(settings.axisMaxY - settings.axisMinY);
+		double maxDisZ = Math.abs(settings.axisMaxZ - settings.axisMinZ);
+		settings.scaleX = point / maxDisX;
+		settings.scaleY = point / maxDisY;
+		settings.scaleZ = point / maxDisZ;
+		settings.shiftX = getShift(settings.axisMinX, settings.axisMaxX);
+		settings.shiftY = getShift(settings.axisMinY, settings.axisMaxY);
+		settings.shiftZ = getShift(settings.axisMinZ, settings.axisMaxZ);
+	}
+
+	private static double getShift(double x, double y) {
+
+		double min = Math.min(x, y);
+		double max = Math.max(x, y);
+		if(min > 0) {
+			return -(min + (max - min) / 2);
+		} else if(max < 0) {
+			return (-max + (-min + max) / 2);
+		} else {
+			if(-min < max) {
+				return -(max + min) / 2;
+			} else {
+				return -(max + min) / 2;
+			}
+		}
+	}
+
+	private static double[] setAxesSquared(double x, double y, int numberLines) {
+
+		double absMax = Math.max(Math.abs(x), Math.abs(y));
+		double numberDigits = Math.floor(Math.log10(absMax));
+		double round = Math.pow(10, numberDigits);
+		double lineSpacing = (((Math.round(absMax / round) * round) / numberLines));
+		double maxAxis = Math.ceil(absMax / lineSpacing) * lineSpacing;
+		double minAxis = Math.floor(-absMax / lineSpacing) * lineSpacing;
+		return new double[]{maxAxis, minAxis, lineSpacing};
+	}
+
+	private static double[] setAxes(double x, double y, int numberLines) {
+
+		double max = Math.max(x, y);
+		double min = Math.min(x, y);
+		double absMax = Math.abs(x - y);
+		double numberDigits = Math.floor(Math.log10(absMax));
+		double round = Math.pow(10, numberDigits);
+		double lineSpacing = (((Math.round(absMax / round) * round) / numberLines));
+		double maxAxis = Math.ceil(max / (2 * lineSpacing)) * 2 * lineSpacing;
+		double minAxis = Math.floor(min / (2 * lineSpacing)) * 2 * lineSpacing;
+		if((maxAxis - max) < (lineSpacing / 2) || (min - minAxis) < (lineSpacing / 2)) {
+			maxAxis = maxAxis + lineSpacing;
+			minAxis = minAxis - lineSpacing;
+		}
+		return new double[]{maxAxis, minAxis, lineSpacing};
+	}
+
+	private String createAxisLabel(int componentNumber) {
+
+		componentNumber++;
+		return "PC " + componentNumber;
 	}
 }

@@ -15,9 +15,11 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultsPCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.ColorSupport;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 
 import javafx.event.Event;
@@ -59,20 +61,24 @@ public class ScorePlot3DScatter {
 	public ScorePlot3DScatter(ScorePlot3DSettings settings, IResultsPCA resultsPCA) {
 		this(settings);
 		pcaResultList.clear();
+		//
 		if(resultsPCA != null) {
 			pcaResultList.addAll(resultsPCA.getPcaResultList());
 		}
+		//
 		update();
-	}
-
-	private Color getColor(IResultPCA data) {
-
-		return new Color(1.0d, 0.0d, 0.0d, 1.0d);
 	}
 
 	public Group getScarter() {
 
 		return mainGroup;
+	}
+
+	public void updateSelection() {
+
+		for(Node node : mainGroup.getChildren()) {
+			node.fireEvent(new UpdateSelectionEvent());
+		}
 	}
 
 	private void update() {
@@ -83,15 +89,21 @@ public class ScorePlot3DScatter {
 		double shiftX = settings.getShiftX() * sX;
 		double shiftY = settings.getShiftY() * sY;
 		double shiftZ = settings.getShiftZ() * sZ;
-		for(IResultPCA d : pcaResultList) {
-			String name = d.getName();
+		//
+		for(IResultPCA resultPCA : pcaResultList) {
+			/*
+			 * Colors
+			 */
+			Map<String, Color> colorMap = ColorSupport.getGroupNameColorMapFX(pcaResultList);
+			String name = resultPCA.getName();
+			String groupName = resultPCA.getGroupName();
 			/*
 			 * create sphere
 			 */
 			Sphere sphere = new Sphere();
-			double pcX = d.getScoreVector()[settings.getPcX()];
-			double pcY = d.getScoreVector()[settings.getPcY()];
-			double pcZ = d.getScoreVector()[settings.getPcZ()];
+			double pcX = resultPCA.getScoreVector()[settings.getPcX()];
+			double pcY = resultPCA.getScoreVector()[settings.getPcY()];
+			double pcZ = resultPCA.getScoreVector()[settings.getPcZ()];
 			sphere.setTranslateX(pcX * sX + shiftX);
 			sphere.setTranslateY(pcY * sY + shiftY);
 			sphere.setTranslateZ(pcZ * sZ + shiftZ);
@@ -100,9 +112,9 @@ public class ScorePlot3DScatter {
 			 * set material
 			 */
 			PhongMaterial material = new PhongMaterial();
-			Color c = getColor(d);
-			material.setDiffuseColor(c);
-			material.setSpecularColor(c);
+			Color color = colorMap.get(groupName);
+			material.setDiffuseColor(color);
+			material.setSpecularColor(color);
 			sphere.setMaterial(material);
 			/*
 			 * add tooltip
@@ -137,20 +149,20 @@ public class ScorePlot3DScatter {
 			 * highlight sphere with mouse entered event
 			 */
 			sphere.setOnMouseEntered(e -> {
-				Color darkerColor = getColor(d).darker();
+				Color darkerColor = colorMap.get(groupName).darker();
 				material.setDiffuseColor(darkerColor);
 				material.setSpecularColor(darkerColor);
 			});
 			sphere.setOnMouseExited(e -> {
-				material.setDiffuseColor(getColor(d));
-				material.setSpecularColor(getColor(d));
+				material.setDiffuseColor(colorMap.get(groupName));
+				material.setSpecularColor(colorMap.get(groupName));
 				t.hide();
 			});
 			sphere.setOnMouseClicked(e -> {
 				if(e.getButton().equals(MouseButton.PRIMARY)) {
 					if(e.getClickCount() == 2) {
 						if(e.isControlDown()) {
-							d.getSample().setSelected(!d.getSample().isSelected());
+							resultPCA.getSample().setSelected(!resultPCA.getSample().isSelected());
 						} else {
 							//
 						}
@@ -158,19 +170,12 @@ public class ScorePlot3DScatter {
 				}
 			});
 			sphere.addEventFilter(SELECTION_UPDATE, event -> {
-				material.setDiffuseColor(getColor(d));
-				material.setSpecularColor(getColor(d));
-				sphere.setVisible(d.isDisplayed());
+				material.setDiffuseColor(colorMap.get(groupName));
+				material.setSpecularColor(colorMap.get(groupName));
+				sphere.setVisible(resultPCA.isDisplayed());
 			});
 			mainGroup.getChildren().addAll(sphere);
 		}
 		updateSelection();
-	}
-
-	public void updateSelection() {
-
-		for(Node node : mainGroup.getChildren()) {
-			node.fireEvent(new UpdateSelectionEvent());
-		}
 	}
 }

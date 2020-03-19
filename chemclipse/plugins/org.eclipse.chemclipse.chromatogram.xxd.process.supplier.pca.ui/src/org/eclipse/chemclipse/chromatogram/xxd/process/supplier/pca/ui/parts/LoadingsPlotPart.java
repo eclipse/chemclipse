@@ -28,8 +28,11 @@ import org.eclipse.swt.widgets.Composite;
 public class LoadingsPlotPart {
 
 	private static final String TOPIC = Activator.TOPIC_PCA_EVALUATION_LOAD;
+	//
+	private Composite parent;
 	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
 	private ExtendedLoadingsPlot plot;
+	//
 	private IDataUpdateListener updateListener = new IDataUpdateListener() {
 
 		@Override
@@ -42,6 +45,7 @@ public class LoadingsPlotPart {
 	@Inject
 	public LoadingsPlotPart(Composite parent, MPart part) {
 		plot = new ExtendedLoadingsPlot(parent, SWT.NONE);
+		this.parent = parent;
 		dataUpdateSupport.add(updateListener);
 	}
 
@@ -63,13 +67,15 @@ public class LoadingsPlotPart {
 		/*
 		 * 0 => because only one property was used to register the event.
 		 */
-		if(objects.size() == 1) {
-			if(isUnloadEvent(topic)) {
-				plot.setInput(null);
-			} else {
-				Object object = objects.get(0);
-				if(object instanceof EvaluationPCA) {
-					plot.setInput((EvaluationPCA)object);
+		if(isVisible()) {
+			if(objects.size() == 1) {
+				if(isUnloadEvent(topic)) {
+					plot.setInput(null);
+				} else {
+					Object object = objects.get(0);
+					if(object instanceof EvaluationPCA) {
+						plot.setInput((EvaluationPCA)object);
+					}
 				}
 			}
 		}
@@ -81,5 +87,10 @@ public class LoadingsPlotPart {
 			return true;
 		}
 		return false;
+	}
+
+	private boolean isVisible() {
+
+		return (parent != null && parent.isVisible());
 	}
 }

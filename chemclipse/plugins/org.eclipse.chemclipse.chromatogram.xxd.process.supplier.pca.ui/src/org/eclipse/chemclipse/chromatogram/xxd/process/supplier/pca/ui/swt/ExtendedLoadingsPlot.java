@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultsPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
@@ -38,6 +39,10 @@ import org.eclipse.swt.widgets.Spinner;
 public class ExtendedLoadingsPlot extends Composite {
 
 	private LoadingsPlot plot;
+	private Spinner spinnerX;
+	private Spinner spinnerY;
+	//
+	private EvaluationPCA evaluationPCA = null;
 
 	public ExtendedLoadingsPlot(Composite parent, int style) {
 		super(parent, style);
@@ -46,21 +51,14 @@ public class ExtendedLoadingsPlot extends Composite {
 
 	public void setInput(EvaluationPCA evaluationPCA) {
 
-		if(evaluationPCA != null) {
-			IResultsPCA<? extends IResultPCA, ? extends IVariable> resultsPCA = evaluationPCA.getResults();
-			plot.setInput(resultsPCA);
-		} else {
-			plot.setInput(null);
-		}
+		this.evaluationPCA = evaluationPCA;
+		updateWidgets();
+		updatePlot();
 	}
 
 	private void createControl() {
 
-		GridLayout gridLayout = new GridLayout(1, true);
-		gridLayout.marginWidth = 0;
-		gridLayout.marginLeft = 0;
-		gridLayout.marginRight = 0;
-		setLayout(gridLayout);
+		setLayout(new GridLayout(1, true));
 		//
 		createToolbarMain(this);
 		plot = createPlot(this);
@@ -72,14 +70,12 @@ public class ExtendedLoadingsPlot extends Composite {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(7, false));
+		composite.setLayout(new GridLayout(5, false));
 		//
 		createLabel(composite, "PCX:");
-		createSpinnerPCX(composite);
+		spinnerX = createSpinnerPCX(composite);
 		createLabel(composite, "PCY:");
-		createSpinnerPCY(composite);
-		createLabel(composite, "PCZ:");
-		createSpinnerPCZ(composite);
+		spinnerY = createSpinnerPCY(composite);
 		createSettingsButton(composite);
 	}
 
@@ -110,6 +106,7 @@ public class ExtendedLoadingsPlot extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				updatePlot();
 			}
 		});
 		//
@@ -122,32 +119,14 @@ public class ExtendedLoadingsPlot extends Composite {
 		spinner.setToolTipText("PC (Y)");
 		spinner.setMinimum(1);
 		spinner.setIncrement(1);
-		spinner.setSelection(1);
+		spinner.setSelection(2);
 		spinner.setMaximum(PreferenceSupplier.getNumberOfComponents());
 		spinner.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-			}
-		});
-		//
-		return spinner;
-	}
-
-	private Spinner createSpinnerPCZ(Composite parent) {
-
-		Spinner spinner = new Spinner(parent, SWT.BORDER);
-		spinner.setToolTipText("PC (Z)");
-		spinner.setMinimum(1);
-		spinner.setIncrement(1);
-		spinner.setSelection(1);
-		spinner.setMaximum(PreferenceSupplier.getNumberOfComponents());
-		spinner.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
+				updatePlot();
 			}
 		});
 		//
@@ -184,6 +163,40 @@ public class ExtendedLoadingsPlot extends Composite {
 
 	private void applySettings() {
 
+		updatePlot();
+	}
+
+	private void updateWidgets() {
+
+		if(evaluationPCA != null) {
+			IAnalysisSettings analysisSettings = evaluationPCA.getSamples().getAnalysisSettings();
+			int numberOfPrincipalComponents = analysisSettings.getNumberOfPrincipalComponents();
+			//
+			int selectionX = spinnerX.getSelection();
+			spinnerX.setSelection(selectionX <= numberOfPrincipalComponents ? selectionX : 1);
+			spinnerX.setMaximum(numberOfPrincipalComponents);
+			//
+			int selectionY = spinnerY.getSelection();
+			spinnerY.setSelection(selectionY <= numberOfPrincipalComponents ? selectionY : 1);
+			spinnerY.setMaximum(numberOfPrincipalComponents);
+		} else {
+			spinnerX.setSelection(1);
+			spinnerX.setMaximum(PreferenceSupplier.getNumberOfComponents());
+			spinnerY.setSelection(1);
+			spinnerY.setMaximum(PreferenceSupplier.getNumberOfComponents());
+		}
+	}
+
+	private void updatePlot() {
+
+		int pcX = spinnerX.getSelection();
+		int pcY = spinnerY.getSelection();
 		//
+		if(evaluationPCA != null) {
+			IResultsPCA<? extends IResultPCA, ? extends IVariable> resultsPCA = evaluationPCA.getResults();
+			plot.setInput(resultsPCA, pcX, pcY);
+		} else {
+			plot.setInput(null, pcX, pcY);
+		}
 	}
 }

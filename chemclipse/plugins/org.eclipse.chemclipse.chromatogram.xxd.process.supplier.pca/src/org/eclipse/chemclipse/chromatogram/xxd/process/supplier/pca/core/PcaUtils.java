@@ -31,7 +31,6 @@ import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.stat.correlation.Covariance;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultPCA;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultsPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Sample;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
@@ -54,6 +53,7 @@ public class PcaUtils {
 	 * @param samples
 	 * @return map where is key name of sample and value are sample data
 	 */
+	@SuppressWarnings("rawtypes")
 	public static <V extends IVariable, S extends ISample> Map<String, double[]> extractData(ISamples<V, S> samples) {
 
 		Map<String, double[]> selectedSamples = new HashMap<>();
@@ -113,21 +113,6 @@ public class PcaUtils {
 			eigenvalues[i] = eigenDecomposition.getEigenvalue(i).real;
 		}
 		return eigenvalues;
-	}
-
-	/**
-	 * 
-	 * @param pcaResults
-	 * @return all groupName {@link IResultPCA#getGroupName()}
-	 */
-	public static Set<String> getGroupNames(IResultsPCA<?, ?> pcaResults) {
-
-		Set<String> groupNames = new HashSet<>();
-		for(IResultPCA pcaResult : pcaResults.getPcaResultList()) {
-			String groupName = pcaResult.getGroupName();
-			groupNames.add(groupName);
-		}
-		return groupNames;
 	}
 
 	/**

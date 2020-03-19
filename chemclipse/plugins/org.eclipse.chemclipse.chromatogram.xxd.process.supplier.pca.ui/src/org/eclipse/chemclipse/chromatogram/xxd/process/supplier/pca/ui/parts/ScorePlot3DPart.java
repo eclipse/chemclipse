@@ -27,8 +27,11 @@ import org.eclipse.swt.widgets.Composite;
 public class ScorePlot3DPart {
 
 	private static final String TOPIC = Activator.TOPIC_PCA_EVALUATION_LOAD;
+	//
+	private Composite parent;
 	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
 	private ScorePlot3D plot;
+	//
 	private IDataUpdateListener updateListener = new IDataUpdateListener() {
 
 		@Override
@@ -41,6 +44,7 @@ public class ScorePlot3DPart {
 	@Inject
 	public ScorePlot3DPart(Composite parent, MPart part) {
 		plot = new ScorePlot3D(parent, null);
+		this.parent = parent;
 		dataUpdateSupport.add(updateListener);
 	}
 
@@ -55,13 +59,15 @@ public class ScorePlot3DPart {
 		/*
 		 * 0 => because only one property was used to register the event.
 		 */
-		if(objects.size() == 1) {
-			if(isUnloadEvent(topic)) {
-				plot.setInput(null);
-			} else {
-				Object object = objects.get(0);
-				if(object instanceof EvaluationPCA) {
-					plot.setInput((EvaluationPCA)object);
+		if(isVisible()) {
+			if(objects.size() == 1) {
+				if(isUnloadEvent(topic)) {
+					plot.setInput(null);
+				} else {
+					Object object = objects.get(0);
+					if(object instanceof EvaluationPCA) {
+						plot.setInput((EvaluationPCA)object);
+					}
 				}
 			}
 		}
@@ -73,5 +79,10 @@ public class ScorePlot3DPart {
 			return true;
 		}
 		return false;
+	}
+
+	private boolean isVisible() {
+
+		return (parent != null && parent.isVisible());
 	}
 }

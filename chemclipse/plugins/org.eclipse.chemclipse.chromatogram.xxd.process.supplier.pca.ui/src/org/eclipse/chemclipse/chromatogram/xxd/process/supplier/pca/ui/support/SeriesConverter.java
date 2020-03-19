@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaUtils;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultsPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
@@ -54,12 +53,7 @@ public class SeriesConverter {
 			ISeriesData seriesData = new SeriesData(new double[]{x}, new double[]{y}, name);
 			IScatterSeriesData scatterSeriesData = new ScatterSeriesData(seriesData);
 			IScatterSeriesSettings scatterSeriesSettings = scatterSeriesData.getSettings();
-			//
-			if(variable.isSelected()) {
-				scatterSeriesSettings.setSymbolColor(Colors.RED);
-			} else {
-				scatterSeriesSettings.setSymbolColor(Colors.GRAY);
-			}
+			scatterSeriesSettings.setSymbolColor(variable.isSelected() ? Colors.RED : Colors.GRAY);
 			scatterSeriesSettings.setSymbolType(PlotSymbolType.valueOf(preferenceStore.getString(PreferenceSupplier.P_LOADING_PLOT_2D_SYMBOL_TYPE)));
 			scatterSeriesSettings.setSymbolSize(preferenceStore.getInt(PreferenceSupplier.P_LOADING_PLOT_2D_SYMBOL_SIZE));
 			IScatterSeriesSettings scatterSeriesSettingsHighlight = (IScatterSeriesSettings)scatterSeriesSettings.getSeriesSettingsHighlight();
@@ -113,19 +107,18 @@ public class SeriesConverter {
 	}
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	public static List<IScatterSeriesData> sampleToSeries(IResultsPCA pcaResults, int pcX, int pcY, Map<String, IResultPCA> extractedPcaResults) {
+	public static List<IScatterSeriesData> sampleToSeries(IResultsPCA resultsPCA, int pcX, int pcY, Map<String, IResultPCA> extractedPcaResults) {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		List<IScatterSeriesData> scatterSeriesDataList = new ArrayList<IScatterSeriesData>();
-		PcaUtils.getGroupNames(pcaResults);
 		extractedPcaResults.clear();
 		/*
 		 * Group Colors
 		 */
-		List<IResultPCA> resultList = pcaResults.getPcaResultList();
+		List<IResultPCA> resultList = resultsPCA.getPcaResultList();
 		Map<String, Color> colorMap = ColorSupport.getGroupNameColorMap(resultList);
 		//
-		for(int i = 0; i < pcaResults.getPcaResultList().size(); i++) {
+		for(int i = 0; i < resultsPCA.getPcaResultList().size(); i++) {
 			IResultPCA pcaResult = resultList.get(i);
 			/*
 			 * Create the series.

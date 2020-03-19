@@ -55,11 +55,7 @@ public class ExtendedScorePlot extends Composite {
 
 	private void createControl() {
 
-		GridLayout gridLayout = new GridLayout(1, true);
-		gridLayout.marginWidth = 0;
-		gridLayout.marginLeft = 0;
-		gridLayout.marginRight = 0;
-		setLayout(gridLayout);
+		setLayout(new GridLayout(1, true));
 		//
 		createToolbarMain(this);
 		plot = createPlot(this);
@@ -120,7 +116,7 @@ public class ExtendedScorePlot extends Composite {
 		spinner.setToolTipText("PC (Y)");
 		spinner.setMinimum(1);
 		spinner.setIncrement(1);
-		spinner.setSelection(1);
+		spinner.setSelection(2);
 		spinner.setMaximum(PreferenceSupplier.getNumberOfComponents());
 		spinner.addSelectionListener(new SelectionAdapter() {
 
