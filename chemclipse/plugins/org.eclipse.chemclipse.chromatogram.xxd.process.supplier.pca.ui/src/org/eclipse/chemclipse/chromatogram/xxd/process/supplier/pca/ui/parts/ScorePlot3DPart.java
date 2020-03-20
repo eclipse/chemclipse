@@ -17,11 +17,12 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d.ScorePlot3D;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt.ExtendedScorePlot3D;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateListener;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 public class ScorePlot3DPart {
@@ -30,7 +31,7 @@ public class ScorePlot3DPart {
 	//
 	private Composite parent;
 	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
-	private ScorePlot3D plot;
+	private ExtendedScorePlot3D plot;
 	//
 	private IDataUpdateListener updateListener = new IDataUpdateListener() {
 
@@ -43,7 +44,7 @@ public class ScorePlot3DPart {
 
 	@Inject
 	public ScorePlot3DPart(Composite parent, MPart part) {
-		plot = new ScorePlot3D(parent, null);
+		plot = new ExtendedScorePlot3D(parent, SWT.NONE);
 		this.parent = parent;
 		dataUpdateSupport.add(updateListener);
 	}

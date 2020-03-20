@@ -20,6 +20,7 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -27,6 +28,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PcaExtractionPeaks implements IExtractionData {
 
+	private static final Logger logger = Logger.getLogger(PcaExtractionPeaks.class);
+	//
 	private final List<IDataInputEntry> dataInputEntries;
 	private final int retentionTimeWindow;
 
@@ -43,9 +46,13 @@ public class PcaExtractionPeaks implements IExtractionData {
 			try {
 				IProcessingInfo<IPeaks> processingInfo = PeakConverterMSD.convert(new File(peakFile.getInputFile()), monitor);
 				IPeaks<?> peaks = processingInfo.getProcessingResult();
-				peakMap.put(peakFile, peaks);
+				if(!peaks.isEmpty()) {
+					peakMap.put(peakFile, peaks);
+				} else {
+					logger.warn("No peaks contained in file: " + peakFile);
+				}
 			} catch(Exception e) {
-				//
+				logger.warn(e);
 			}
 		}
 		return peakMap;

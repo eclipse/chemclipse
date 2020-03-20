@@ -66,8 +66,8 @@ public class GroupNamesWizardPage extends WizardPage {
 		createLabel(composite, "String or regular expression to match the group name(s)");
 		textSelectNames = createText(composite);
 		createOptionGroup(composite);
+		createToolbar(composite);
 		inputFilesTable = createInputFilesTable(composite);
-		createToolbarBottom(composite);
 		//
 		setControl(composite);
 	}
@@ -123,12 +123,10 @@ public class GroupNamesWizardPage extends WizardPage {
 		return inputFilesTable;
 	}
 
-	private void createToolbarBottom(Composite parent) {
+	private void createToolbar(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalAlignment = SWT.END;
-		composite.setLayoutData(gridData);
+		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		composite.setLayout(new GridLayout(2, false));
 		//
 		createButtonProcess(composite);
@@ -139,8 +137,9 @@ public class GroupNamesWizardPage extends WizardPage {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Set the group name(s)");
-		button.setText("");
+		button.setText("Set the group name(s)");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
+		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override

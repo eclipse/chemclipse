@@ -13,8 +13,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.ScorePlot;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d.ScorePlot3D;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d.ScorePlot3DSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -30,18 +30,15 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Spinner;
 
-public class ExtendedScorePlot extends Composite {
+public class ExtendedScorePlot3D extends Composite {
 
-	private ScorePlot plot;
-	private Spinner spinnerX;
-	private Spinner spinnerY;
+	private ScorePlot3D plot;
+	private PrincipalComponentUI principalComponentUI;
 	//
 	private EvaluationPCA evaluationPCA = null;
 
-	public ExtendedScorePlot(Composite parent, int style) {
+	public ExtendedScorePlot3D(Composite parent, int style) {
 		super(parent, style);
 		createControl();
 	}
@@ -50,7 +47,7 @@ public class ExtendedScorePlot extends Composite {
 
 		this.evaluationPCA = evaluationPCA;
 		updateWidgets();
-		updatePlot();
+		applySettings();
 	}
 
 	private void createControl() {
@@ -67,67 +64,31 @@ public class ExtendedScorePlot extends Composite {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(5, false));
+		composite.setLayout(new GridLayout(2, false));
 		//
-		createLabel(composite, "PCX:");
-		spinnerX = createSpinnerPCX(composite);
-		createLabel(composite, "PCY:");
-		spinnerY = createSpinnerPCY(composite);
+		principalComponentUI = createPrincipalComponentUI(composite);
 		createSettingsButton(composite);
 	}
 
-	private ScorePlot createPlot(Composite parent) {
+	private ScorePlot3D createPlot(Composite parent) {
 
-		ScorePlot plot = new ScorePlot(parent, SWT.NONE);
-		plot.setLayoutData(new GridData(GridData.FILL_BOTH));
+		ScorePlot3D plot = new ScorePlot3D(parent, SWT.BORDER);
 		return plot;
 	}
 
-	private Label createLabel(Composite parent, String text) {
+	private PrincipalComponentUI createPrincipalComponentUI(Composite parent) {
 
-		Label label = new Label(parent, SWT.NONE);
-		label.setText(text);
-		return label;
-	}
-
-	private Spinner createSpinnerPCX(Composite parent) {
-
-		Spinner spinner = new Spinner(parent, SWT.BORDER);
-		spinner.setToolTipText("PC (X)");
-		spinner.setMinimum(1);
-		spinner.setIncrement(1);
-		spinner.setSelection(1);
-		spinner.setMaximum(PreferenceSupplier.getNumberOfComponents());
-		spinner.addSelectionListener(new SelectionAdapter() {
+		PrincipalComponentUI principalComponentUI = new PrincipalComponentUI(parent, SWT.NONE);
+		principalComponentUI.setSelectionListener(new ISelectionListenerPCs() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void update(int pcX, int pcY, int pcZ) {
 
-				updatePlot();
+				updatePlot(pcX, pcY, pcZ);
 			}
 		});
 		//
-		return spinner;
-	}
-
-	private Spinner createSpinnerPCY(Composite parent) {
-
-		Spinner spinner = new Spinner(parent, SWT.BORDER);
-		spinner.setToolTipText("PC (Y)");
-		spinner.setMinimum(1);
-		spinner.setIncrement(1);
-		spinner.setSelection(2);
-		spinner.setMaximum(PreferenceSupplier.getNumberOfComponents());
-		spinner.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				updatePlot();
-			}
-		});
-		//
-		return spinner;
+		return principalComponentUI;
 	}
 
 	private void createSettingsButton(Composite parent) {
@@ -160,39 +121,32 @@ public class ExtendedScorePlot extends Composite {
 
 	private void applySettings() {
 
-		updatePlot();
+		int pcX = principalComponentUI.getPCX();
+		int pcY = principalComponentUI.getPCY();
+		int pcZ = principalComponentUI.getPCZ();
+		updatePlot(pcX, pcY, pcZ);
 	}
 
 	private void updateWidgets() {
 
 		if(evaluationPCA != null) {
 			IAnalysisSettings analysisSettings = evaluationPCA.getSamples().getAnalysisSettings();
-			int numberOfPrincipalComponents = analysisSettings.getNumberOfPrincipalComponents();
-			//
-			int selectionX = spinnerX.getSelection();
-			spinnerX.setSelection(selectionX <= numberOfPrincipalComponents ? selectionX : 1);
-			spinnerX.setMaximum(numberOfPrincipalComponents);
-			//
-			int selectionY = spinnerY.getSelection();
-			spinnerY.setSelection(selectionY <= numberOfPrincipalComponents ? selectionY : 1);
-			spinnerY.setMaximum(numberOfPrincipalComponents);
+			principalComponentUI.setInput(analysisSettings);
 		} else {
-			spinnerX.setSelection(1);
-			spinnerX.setMaximum(PreferenceSupplier.getNumberOfComponents());
-			spinnerY.setSelection(1);
-			spinnerY.setMaximum(PreferenceSupplier.getNumberOfComponents());
+			principalComponentUI.setInput(null);
 		}
 	}
 
-	private void updatePlot() {
+	private void updatePlot(int pcX, int pcY, int pcZ) {
 
-		int pcX = spinnerX.getSelection();
-		int pcY = spinnerY.getSelection();
-		//
 		if(evaluationPCA != null) {
-			plot.setInput(evaluationPCA, pcX, pcY);
+			ScorePlot3DSettings settings = plot.getSettings();
+			settings.setPcX(pcX);
+			settings.setPcX(pcY);
+			settings.setPcX(pcZ);
+			plot.setInput(evaluationPCA);
 		} else {
-			plot.setInput(null, pcX, pcY);
+			plot.setInput(null);
 		}
 	}
 }

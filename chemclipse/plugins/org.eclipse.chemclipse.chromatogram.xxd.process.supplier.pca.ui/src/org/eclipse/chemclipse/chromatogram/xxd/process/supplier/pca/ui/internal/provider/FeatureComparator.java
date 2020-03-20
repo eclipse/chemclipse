@@ -49,8 +49,11 @@ public class FeatureComparator extends AbstractRecordTableComparator implements 
 				case 2:
 					sortOrder = variable2.getClassification().compareTo(variable1.getClassification());
 					break;
+				case 3:
+					sortOrder = variable2.getDescription().compareTo(variable1.getDescription());
+					break;
 				default:
-					int index = columnIndex - 3;
+					int index = columnIndex - 4;
 					List<ISampleData<?>> sampleData1 = feature1.getSampleData();
 					List<ISampleData<?>> sampleData2 = feature2.getSampleData();
 					//

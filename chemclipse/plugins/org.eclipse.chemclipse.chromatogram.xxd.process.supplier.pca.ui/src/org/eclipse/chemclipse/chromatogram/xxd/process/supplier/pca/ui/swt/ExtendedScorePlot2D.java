@@ -13,11 +13,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultPCA;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultsPCA;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.LoadingsPlot;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.ScorePlot;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePage;
-import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -33,14 +30,14 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
-public class ExtendedLoadingsPlot extends Composite {
+public class ExtendedScorePlot2D extends Composite {
 
-	private LoadingsPlot plot;
+	private ScorePlot plot;
 	private PrincipalComponentUI principalComponentUI;
 	//
 	private EvaluationPCA evaluationPCA = null;
 
-	public ExtendedLoadingsPlot(Composite parent, int style) {
+	public ExtendedScorePlot2D(Composite parent, int style) {
 		super(parent, style);
 		createControl();
 	}
@@ -72,9 +69,9 @@ public class ExtendedLoadingsPlot extends Composite {
 		createSettingsButton(composite);
 	}
 
-	private LoadingsPlot createPlot(Composite parent) {
+	private ScorePlot createPlot(Composite parent) {
 
-		LoadingsPlot plot = new LoadingsPlot(parent, SWT.BORDER);
+		ScorePlot plot = new ScorePlot(parent, SWT.BORDER);
 		plot.setLayoutData(new GridData(GridData.FILL_BOTH));
 		return plot;
 	}
@@ -142,8 +139,7 @@ public class ExtendedLoadingsPlot extends Composite {
 	private void updatePlot(int pcX, int pcY) {
 
 		if(evaluationPCA != null) {
-			IResultsPCA<? extends IResultPCA, ? extends IVariable> resultsPCA = evaluationPCA.getResults();
-			plot.setInput(resultsPCA, pcX, pcY);
+			plot.setInput(evaluationPCA, pcX, pcY);
 		} else {
 			plot.setInput(null, pcX, pcY);
 		}

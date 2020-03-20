@@ -40,12 +40,12 @@ public class ScorePlot3D {
 	private ScorePlot3DScatter scatter;
 	private ScorePlot3DSettings settings;
 
-	public ScorePlot3D(Composite parent, Object dataLayout) {
+	public ScorePlot3D(Composite parent, int style) {
 		/*
 		 * JavaFX init
 		 */
-		fxCanvas = new FXCanvas(parent, SWT.None);
-		fxCanvas.setLayoutData(dataLayout);
+		fxCanvas = new FXCanvas(parent, style);
+		fxCanvas.setLayoutData(null);
 		settings = new ScorePlot3DSettings(800);
 		axes = new ScorePlot3DAxes(settings);
 		axes.buildAxes();
@@ -55,6 +55,38 @@ public class ScorePlot3D {
 		 */
 		parent.addListener(SWT.Resize, (event) -> createScene());
 		createScene();
+	}
+
+	public void removeData() {
+
+		scatter = new ScorePlot3DScatter(settings);
+		createScene();
+		createScene();
+	}
+
+	@SuppressWarnings("rawtypes")
+	public void setInput(EvaluationPCA evaluationPCA) {
+
+		if(evaluationPCA != null) {
+			IResultsPCA resultsPCA = evaluationPCA.getResults();
+			ScorePlot3DSettings.setSettings(settings, resultsPCA);
+			ScorePlot3DSettings.setAxesEnhanced(settings, 800);
+			axes = new ScorePlot3DAxes(settings);
+			axes.buildAxes();
+			scatter = new ScorePlot3DScatter(settings, resultsPCA);
+			createScene();
+		}
+	}
+
+	public void updateSelection() {
+
+		scatter.updateSelection();
+		fxCanvas.redraw();
+	}
+
+	public ScorePlot3DSettings getSettings() {
+
+		return settings;
 	}
 
 	private void createScene() {
@@ -164,32 +196,5 @@ public class ScorePlot3D {
 				}
 			}
 		});
-	}
-
-	public void removeData() {
-
-		scatter = new ScorePlot3DScatter(settings);
-		createScene();
-		createScene();
-	}
-
-	@SuppressWarnings("rawtypes")
-	public void setInput(EvaluationPCA evaluationPCA) {
-
-		if(evaluationPCA != null) {
-			IResultsPCA resultsPCA = evaluationPCA.getResults();
-			ScorePlot3DSettings.setSettings(settings, resultsPCA);
-			ScorePlot3DSettings.setAxesEnhanced(settings, 800);
-			axes = new ScorePlot3DAxes(settings);
-			axes.buildAxes();
-			scatter = new ScorePlot3DScatter(settings, resultsPCA);
-			createScene();
-		}
-	}
-
-	public void updateSelection() {
-
-		scatter.updateSelection();
-		fxCanvas.redraw();
 	}
 }

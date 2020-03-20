@@ -18,25 +18,37 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Evalua
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.FeatureDataMatrix;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamplesPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.provider.FeatureComparator;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.provider.FeatureEditingSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.provider.FeatureLabelProvider;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.provider.FeatureListFilter;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerComparator;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
 
 public class FeatureListUI extends ExtendedTableViewer {
 
 	private static final String[] TITLES = FeatureLabelProvider.TITLES;
 	private static final int[] BOUNDS = FeatureLabelProvider.BOUNDS;
+	//
 	private final ITableLabelProvider labelProvider = new FeatureLabelProvider();
 	private final ViewerComparator comparator = new FeatureComparator();
+	private final FeatureListFilter listFilter = new FeatureListFilter();
 
 	public FeatureListUI(Composite parent, int style) {
 		super(parent, style);
 		createColumnsDefault();
+	}
+
+	public void setSearchText(String searchText, boolean caseSensitive) {
+
+		listFilter.setSearchText(searchText, caseSensitive);
+		refresh();
 	}
 
 	public void setInput(EvaluationPCA evaluationPCA) {
@@ -113,5 +125,31 @@ public class FeatureListUI extends ExtendedTableViewer {
 		setLabelProvider(labelProvider);
 		setContentProvider(new ListContentProvider());
 		setComparator(comparator);
+		setFilters(new ViewerFilter[]{listFilter});
+		setEditingSupport();
+	}
+
+	private void setEditingSupport() {
+
+		List<TableViewerColumn> tableViewerColumns = getTableViewerColumns();
+		for(int i = 0; i < tableViewerColumns.size(); i++) {
+			TableViewerColumn tableViewerColumn = tableViewerColumns.get(i);
+			String label = tableViewerColumn.getColumn().getText();
+			if(isEditable(label)) {
+				tableViewerColumn.setEditingSupport(new FeatureEditingSupport(this, label));
+			}
+		}
+	}
+
+	private boolean isEditable(String label) {
+
+		if(FeatureLabelProvider.USE.equals(label)) {
+			return true;
+		} else if(FeatureLabelProvider.CLASSIFICATION.equals(label)) {
+			return true;
+		} else if(FeatureLabelProvider.DESCRIPTION.equals(label)) {
+			return true;
+		}
+		return false;
 	}
 }

@@ -34,9 +34,10 @@ import javafx.scene.shape.Sphere;
 
 public class ScorePlot3DScatter {
 
+	private static final NumberFormat FORMAT = ValueFormat.getNumberFormatEnglish();
+	//
 	private static EventType<UpdateSelectionEvent> SELECTION_UPDATE = new EventType<>("SELECTION_UPDATE");
 	private final List<IResultPCA> pcaResultList = new ArrayList<>();
-	final private NumberFormat format = ValueFormat.getNumberFormatEnglish();
 	private final Group mainGroup = new Group();
 	private double radius;
 	private ScorePlot3DSettings settings;
@@ -126,21 +127,21 @@ public class ScorePlot3DScatter {
 			if(!labelX.isEmpty()) {
 				sb.append(labelX);
 				sb.append(" = ");
-				sb.append(format.format(pcX));
+				sb.append(FORMAT.format(pcX));
 				sb.append("; ");
 			}
 			String labelY = this.settings.getLabelAxisY();
 			if(!labelY.isEmpty()) {
 				sb.append(labelY);
 				sb.append(" = ");
-				sb.append(format.format(pcY));
+				sb.append(FORMAT.format(pcY));
 				sb.append("; ");
 			}
 			String labelZ = this.settings.getLabelAxisZ();
 			if(!labelZ.isEmpty()) {
 				sb.append(labelZ);
 				sb.append(" = ");
-				sb.append(format.format(pcZ));
+				sb.append(FORMAT.format(pcZ));
 				sb.append("; ");
 			}
 			Tooltip t = new Tooltip(sb.toString());

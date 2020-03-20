@@ -18,7 +18,7 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt.FeatureListUI;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt.ExtendedFeatureList;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateListener;
 import org.eclipse.e4.ui.di.Focus;
@@ -29,8 +29,11 @@ import org.eclipse.swt.widgets.Composite;
 public class FeatureTablePart {
 
 	private static final String TOPIC = Activator.TOPIC_PCA_EVALUATION_LOAD;
+	//
+	private Composite parent;
 	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
-	private FeatureListUI list;
+	private ExtendedFeatureList list;
+	//
 	private IDataUpdateListener updateListener = new IDataUpdateListener() {
 
 		@Override
@@ -42,7 +45,8 @@ public class FeatureTablePart {
 
 	@Inject
 	public FeatureTablePart(Composite parent, MPart part) {
-		list = new FeatureListUI(parent, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.FULL_SELECTION);
+		list = new ExtendedFeatureList(parent, SWT.NONE);
+		this.parent = parent;
 		dataUpdateSupport.add(updateListener);
 	}
 
@@ -64,13 +68,15 @@ public class FeatureTablePart {
 		/*
 		 * 0 => because only one property was used to register the event.
 		 */
-		if(objects.size() == 1) {
-			if(isUnloadEvent(topic)) {
-				list.setInput(null);
-			} else {
-				Object object = objects.get(0);
-				if(object instanceof EvaluationPCA) {
-					list.setInput((EvaluationPCA)object);
+		if(isVisible()) {
+			if(objects.size() == 1) {
+				if(isUnloadEvent(topic)) {
+					list.setInput(null);
+				} else {
+					Object object = objects.get(0);
+					if(object instanceof EvaluationPCA) {
+						list.setInput((EvaluationPCA)object);
+					}
 				}
 			}
 		}
@@ -82,5 +88,10 @@ public class FeatureTablePart {
 			return true;
 		}
 		return false;
+	}
+
+	private boolean isVisible() {
+
+		return (parent != null && parent.isVisible());
 	}
 }

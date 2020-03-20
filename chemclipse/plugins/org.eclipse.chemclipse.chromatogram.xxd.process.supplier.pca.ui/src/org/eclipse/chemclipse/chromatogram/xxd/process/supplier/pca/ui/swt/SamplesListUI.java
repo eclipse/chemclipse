@@ -29,6 +29,7 @@ public class SamplesListUI extends ExtendedTableViewer {
 
 	private static final String[] TITLES = SamplesLabelProvider.TITLES;
 	private static final int[] BOUNDS = SamplesLabelProvider.BOUNDS;
+	//
 	private final ITableLabelProvider labelProvider = new SamplesLabelProvider();
 	private final ViewerComparator comparator = new SamplesComparator();
 	private final SamplesListFilter listFilter = new SamplesListFilter();

@@ -17,7 +17,7 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt.ExtendedScorePlot;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt.ExtendedScorePlot2D;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateListener;
 import org.eclipse.e4.ui.di.Focus;
@@ -31,7 +31,7 @@ public class ScorePlot2DPart {
 	//
 	private Composite parent;
 	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
-	private ExtendedScorePlot plot;
+	private ExtendedScorePlot2D plot;
 	//
 	private IDataUpdateListener updateListener = new IDataUpdateListener() {
 
@@ -44,7 +44,7 @@ public class ScorePlot2DPart {
 
 	@Inject
 	public ScorePlot2DPart(Composite parent, MPart part) {
-		plot = new ExtendedScorePlot(parent, SWT.NONE);
+		plot = new ExtendedScorePlot2D(parent, SWT.NONE);
 		this.parent = parent;
 		dataUpdateSupport.add(updateListener);
 	}
