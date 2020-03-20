@@ -15,6 +15,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Evalua
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.ScorePlot;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePage;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePageScorePlot;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -104,6 +105,7 @@ public class ExtendedScorePlot2D extends Composite {
 
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePage()));
+				preferenceManager.addToRoot(new PreferenceNode("2", new PreferencePageScorePlot()));
 				//
 				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
 				preferenceDialog.create();

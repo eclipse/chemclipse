@@ -19,12 +19,12 @@ import org.eclipse.swtchart.extensions.preferences.PreferenceSupport;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-public class PreferenceScorePlot2DPage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class PreferencePageLoadingPlot extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	public PreferenceScorePlot2DPage() {
+	public PreferencePageLoadingPlot() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setTitle("Score Plot");
+		setTitle("Loading Plot");
 		setDescription("");
 	}
 
@@ -36,7 +36,7 @@ public class PreferenceScorePlot2DPage extends FieldEditorPreferencePage impleme
 	@Override
 	protected void createFieldEditors() {
 
-		addField(new ComboFieldEditor(PreferenceSupplier.P_SCORE_PLOT_2D_SYMBOL_TYPE, "Symbol type:", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
-		addField(new org.eclipse.chemclipse.support.ui.preferences.fieldeditors.IntegerFieldEditor(PreferenceSupplier.P_SCORE_PLOT_2D_SYMBOL_SIZE, "Symbol size", PreferenceSupplier.MIN_SCORE_PLOT_2D_SYMBOL_SIZE, PreferenceSupplier.MAX_SCORE_PLOT_2D_SYMBOL_SIZE, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_LOADING_PLOT_2D_SYMBOL_TYPE, "Symbol type:", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
+		addField(new org.eclipse.chemclipse.support.ui.preferences.fieldeditors.IntegerFieldEditor(PreferenceSupplier.P_LOADING_PLOT_2D_SYMBOL_SIZE, "Symbol size", PreferenceSupplier.MIN_LOADING_PLOT_2D_SYMBOL_SIZE, PreferenceSupplier.MAX_LOADING_PLOT_2D_SYMBOL_SIZE, getFieldEditorParent()));
 	}
 }

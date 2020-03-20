@@ -17,6 +17,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResul
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultsPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.LoadingsPlot;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePage;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePageLoadingPlot;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -107,6 +108,7 @@ public class ExtendedLoadingsPlot extends Composite {
 
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePage()));
+				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePageLoadingPlot()));
 				//
 				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
 				preferenceDialog.create();

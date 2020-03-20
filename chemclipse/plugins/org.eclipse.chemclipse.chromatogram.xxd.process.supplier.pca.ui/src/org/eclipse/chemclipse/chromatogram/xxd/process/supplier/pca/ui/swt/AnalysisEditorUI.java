@@ -20,9 +20,9 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampl
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.CalculationExecutor;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferenceLoadingPlot2DPage;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePageLoadingPlot;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePage;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferenceScorePlot2DPage;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePageScorePlot;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.model.statistics.IVariable;
@@ -251,8 +251,8 @@ public class AnalysisEditorUI extends Composite {
 
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePage()));
-				preferenceManager.addToRoot(new PreferenceNode("2", new PreferenceScorePlot2DPage()));
-				preferenceManager.addToRoot(new PreferenceNode("3", new PreferenceLoadingPlot2DPage()));
+				preferenceManager.addToRoot(new PreferenceNode("2", new PreferencePageScorePlot()));
+				preferenceManager.addToRoot(new PreferenceNode("3", new PreferencePageLoadingPlot()));
 				//
 				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
 				preferenceDialog.create();
