@@ -17,13 +17,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IIonBounds;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 
-public class ExtractedMatrix implements IExtractedMatrix {
+public class ExtractedMatrix {
 	
 	private IChromatogramSelectionMSD selection;
 	private List<IScanMSD> scans;
@@ -31,25 +32,27 @@ public class ExtractedMatrix implements IExtractedMatrix {
 	private int numberOfIons;
 	private int startIon;
 	private int stopIon;
-	private float[] signal;
-	private boolean highRes = false;
+	private float[][] signal;
 	
 	public ExtractedMatrix(IChromatogramSelectionMSD chromatogramSelection) {
 		this.selection = chromatogramSelection;
 		this.numberOfScans = selection.getStopScan() - selection.getStartScan() - 1;
 		this.scans = extractScans();
 		if(checkHighRes( 10)) {
-			highRes = true;
-			System.out.println("This is highres MS Data and should be binned first");
+			throw new IllegalArgumentException();
 		} else {
 			this.startIon = getMinMz();
 			this.stopIon = getMaxMz();
 			this.numberOfIons = this.stopIon - this.startIon + 1;
-			signal = new float[numberOfScans * (this.stopIon - this.startIon + 1)];
+			signal = new float[numberOfScans][this.numberOfIons];
+			List<IIon> currentIons;
+			int numberIonsCurrentScan;
 			try {
-				for(int i = 0; i < numberOfScans; i++) {
-					for(int j = 0; j < scans.get(i).getIons().size(); j++) {
-						signal[ ((int) Math.round(scans.get(i).getIons().get(j).getIon() - this.startIon)) * numberOfScans + i    ] =  scans.get(i).getIons().get(j).getAbundance();
+				for(int scanIndex = 0; scanIndex < numberOfScans; scanIndex++) {
+					currentIons = scans.get(scanIndex).getIons();
+					numberIonsCurrentScan = currentIons.size(); 
+					for(int j = 0; j < numberIonsCurrentScan; j++) {
+						signal[ ((int) Math.round(currentIons.get(j).getIon() - this.startIon))] [j] =  currentIons.get(j).getAbundance();
 					}
 				}
 			} catch (Exception e) {
@@ -59,25 +62,21 @@ public class ExtractedMatrix implements IExtractedMatrix {
 	}
 	
 	private Boolean checkHighRes( int limit ) {
-		boolean moreIonsThanFullMz = false;
 		Iterator<IScanMSD> iterator = scans.iterator();
 		IIonBounds bounds;
 		double rangeAbs;
 		IScanMSD currentScan;
 		
-		while(moreIonsThanFullMz == false) {
+		while(iterator.hasNext()) {
 			currentScan = iterator.next();
 			bounds = currentScan.getIonBounds();
 			rangeAbs = bounds.getHighestIon().getIon() - bounds.getLowestIon().getIon();
 			if(rangeAbs + limit < currentScan.getIons().size()) {
-				moreIonsThanFullMz = true;
-			}
-			if(!iterator.hasNext()) {
-				break;
+				return (true);
 			}
 		}
 		
-		return moreIonsThanFullMz;
+		return false;
 	}
 	
 	private List<IScanMSD> extractScans() {
@@ -92,8 +91,8 @@ public class ExtractedMatrix implements IExtractedMatrix {
 				.stream() //
 				.filter(s -> s instanceof IScanMSD) //
 				.map(IScanMSD.class::cast) //
-				.filter(s -> s.getRetentionTime() > startRT) //
-				.filter(s -> s.getRetentionTime() < stopRT) //
+				.filter(s -> s.getRetentionTime() >= startRT) //
+				.filter(s -> s.getRetentionTime() <= stopRT) //
 				.collect(Collectors.toList()); //
 		return (scans);
 	}
@@ -105,7 +104,7 @@ public class ExtractedMatrix implements IExtractedMatrix {
 				.min(Comparator.comparing(IIon::getIon)) //
 				.get() //
 				.getIon();
-		int minMz = (int)Math.round(min);
+		int minMz = AbstractIon.getIon(min);
 		return (minMz);
 	}
 	
@@ -116,72 +115,49 @@ public class ExtractedMatrix implements IExtractedMatrix {
 				.max(Comparator.comparing(IIon::getIon)) //
 				.get() //
 				.getIon();
-		int maxMz = (int)Math.round(max);
+		int maxMz = AbstractIon.getIon(max);
 		return (maxMz);
 	}
 
-	@Override
-	public float[] getMatrix() {
-		if(highRes == true) {
-			return null;			
-		}
+	public float[][] getMatrix() {
 		return this.signal;
 	}
 
-	@Override
 	public int getNumberOfScans() {
-		if(highRes == true) {
-			return 0;			
-		}
 		return this.numberOfScans;
 	}
 
-	@Override
 	public int getNumberOfIons() {
-		if(highRes == true) {
-			return 0;			
-		}
 		return this.numberOfIons;
 	}
 
-	@Override
-	public void updateSignal(float[] signal, int numberOfScans, int nubmerOfIons ) {
+	public void updateSignal(float[][] signal, int numberOfScans, int nubmerOfIons ) {
 		
 		IScanMSD currentScan;
 		IIon currentIon;
 		
-		if(highRes != true) {
-			try {
-				for(int i = 1; i <= numberOfScans; i++) {
-					currentScan = (IScanMSD) selection.getChromatogram().getScan(i);
-					currentScan.removeAllIons();
-					for(int j = startIon; j < stopIon; j++) {
-						if(signal[(j - startIon) * numberOfScans + (i-1)] != 0.0) {
-							currentIon = new Ion(j, signal[(j - startIon) * numberOfScans + (i - 1)] ); 
-							currentScan.addIon(currentIon);
-						}		
-					}
+		try {
+			for(int i = 1; i <= numberOfScans; i++) {
+				currentScan = (IScanMSD) selection.getChromatogram().getScan(i);
+				currentScan.removeAllIons();
+				for(int j = startIon; j < stopIon; j++) {
+					if(signal[i-1][j-startIon] != 0.0) {
+						currentIon = new Ion(j, signal[i - 1][j - startIon] ); 
+						currentScan.addIon(currentIon);
+					}		
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}			
-		}
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}			
 	}
 
-	@Override
 	public int[] getScanNumbers() {
-		if(highRes == true) {
-			return null;			
-		}
 		int[] scanNumbers = scans.stream().mapToInt(scan -> scan.getScanNumber()).toArray();
 		return scanNumbers;
 	}
 
-	@Override
 	public int[] getRetentionTimes() {
-		if(highRes == true) {
-			return null;			
-		}
 		int[] retentionTimes = scans.stream().mapToInt(scan -> scan.getRetentionTime()).toArray();
 		return retentionTimes;
 	}
