@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,22 +22,22 @@ import org.eclipse.chemclipse.model.statistics.IVariable;
 public class NormalizationInfNorm extends AbstractDataModificator implements INormalization {
 
 	public NormalizationInfNorm() {
-
 		super();
 	}
 
 	@Override
 	public String getDescription() {
 
-		return "";
+		return "Normalization Inf-Norm";
 	}
 
 	@Override
 	public String getName() {
 
-		return "Normalization 2-norm";
+		return "Normalization Inf-Norm";
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public <V extends IVariable, S extends ISample> void process(ISamples<V, S> samples) {
 

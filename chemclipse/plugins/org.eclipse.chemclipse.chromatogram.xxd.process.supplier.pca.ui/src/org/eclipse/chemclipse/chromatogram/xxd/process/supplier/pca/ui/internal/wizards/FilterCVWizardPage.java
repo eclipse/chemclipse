@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -33,6 +33,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+@SuppressWarnings("unchecked")
 public class FilterCVWizardPage extends WizardPage implements IFilterWizardPage {
 
 	final private DataBindingContext dbc = new DataBindingContext();
@@ -40,7 +41,6 @@ public class FilterCVWizardPage extends WizardPage implements IFilterWizardPage 
 	private IObservableValue<DataTypeProcessing> dataTypeFiltration;
 
 	protected FilterCVWizardPage(CVFilter cvFilter) {
-
 		super("CV filter");
 		setTitle("Coefficient of Variation Filter for Noise Reduction");
 		setDescription("CV filter works just with selected samples, which are in group (contains group name)");

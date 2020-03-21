@@ -6,22 +6,14 @@ Bundle-Version: 0.8.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator
 Bundle-Vendor: ChemClipse
 Export-Package: org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.barchart,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.editor.nattable.export,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handlers,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts.controllers,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.utility,
- org.eclipse.chemclipse.ux.fx.ui
+ org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca;bundle-version="0.8.0",
@@ -50,12 +42,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.chemclipse.ux.extension.msd.ui;bundle-version="0.8.0",
  org.eclipse.chemclipse.model;bundle-version="0.8.0",
  org.eclipse.swtchart;bundle-version="0.8.0",
- org.apache.poi;bundle-version="3.9.0",
- org.apache.poi.ooxml;bundle-version="3.9.0",
- org.apache.poi.ooxml.schemas;bundle-version="3.9.0",
  org.eclipse.swtchart.extensions;bundle-version="0.8.0",
  org.eclipse.chemclipse.support.ui;bundle-version="0.8.0",
- org.eclipse.nebula.widgets.nattable.core;bundle-version="1.5.0",
  org.eclipse.chemclipse.swt.ui;bundle-version="0.8.0",
  org.eclipse.core.databinding.observable;bundle-version="1.6.0",
  org.eclipse.core.databinding;bundle-version="1.6.0",
@@ -72,5 +60,5 @@ Import-Package: javax.annotation;version="1.0.0";resolution:=optional,
  javax.inject;version="1.0.0",
  org.osgi.service.component.annotations;version="1.2.0"
 Bundle-ActivationPolicy: lazy
-Service-Component: OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.quickstart.PcaScanTileDefinition.xml,
- OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.quickstart.PcaPeakTileDefinition.xml
+Service-Component: OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.quickstart.PeakTileDefinition.xml,
+ OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.quickstart.ScanTileDefinition.xml

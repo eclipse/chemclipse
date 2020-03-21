@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,8 +15,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PcaSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Algorithm;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.AnalysisSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -24,28 +25,30 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
-	// Nodes
 	public static final String N_INPUT_FILE = "INPUT_FILE";
-	// General settings
+	/*
+	 * General settings
+	 */
 	public static final String[][] ALGORITHM_TYPES = new String[][]{//
-			{IPcaSettings.PCA_ALGO_SVD, IPcaSettings.PCA_ALGO_SVD}, //
-			{IPcaSettings.PCA_ALGO_NIPALS, IPcaSettings.PCA_ALGO_NIPALS}, //
-			{IPcaSettings.OPLS_ALGO_NIPALS, IPcaSettings.OPLS_ALGO_NIPALS}//
+			{Algorithm.SVD.toString(), Algorithm.SVD.toString()}, //
+			{Algorithm.NIPALS.toString(), Algorithm.NIPALS.toString()}, //
+			{Algorithm.OPLS.toString(), Algorithm.OPLS.toString()}//
 	};
+	//
 	public static final String P_FILES_PATH_IMPORT_CHROMATOGRAMS = "filePathImportChromatograms";
 	public static final String DEF_FILES_PATH_IMPORT_CHROMATOGRAMS = "";
 	public static final String P_ALGORITHM_TYPE = "algorithmType";
-	public static final String DEF_ALGORITHM_TYPE = IPcaSettings.PCA_ALGO_SVD;
-	public static final String P_NUMBER_OF_COMPONENTS = "numberOfComponents";
-	public static final int MIN_NUMBER_OF_COMPONENTS = 1;
-	public static final int MAX_NUMBER_OF_COMPONENTS = 1000;
-	public static final int DEF_NUMBER_OF_COMPONENTS = 3;
-	public static final String P_AUTO_REEVALUATE = "autoReevaluate";
-	public static final boolean DEF_AUTO_REEVALUATE = false;
-	public static final String P_RETENTION_TIME_WINDOW_PEAKS = "retentionTimeWindowPeaks";
-	public static final double DEF_RETENTION_TIME_WINDOW_PEAKS = 0.1;
+	public static final String DEF_ALGORITHM_TYPE = Algorithm.SVD.toString();
 	public static final String P_REMOVE_USELESS_VARIABLES = "removeUselessVariables";
 	public static final boolean DEF_REMOVE_USELESS_VARIABLES = true;
+	//
+	public static final String P_NUMBER_OF_COMPONENTS = "numberOfComponents";
+	public static final int MIN_NUMBER_OF_COMPONENTS = 3;
+	public static final int MAX_NUMBER_OF_COMPONENTS = 1000;
+	public static final int DEF_NUMBER_OF_COMPONENTS = 3;
+	//
+	public static final String P_RETENTION_TIME_WINDOW_PEAKS = "retentionTimeWindowPeaks";
+	public static final double DEF_RETENTION_TIME_WINDOW_PEAKS = 0.1;
 	// Score Plot general Settings
 	public static final String P_SCORE_PLOT_2D_SYMBOL_SIZE = "scorePlot2dSymbolSize";
 	public static final int DEF_SCORE_PLOT_2D_SYMBOL_SIZE = 6;
@@ -60,6 +63,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final int MAX_LOADING_PLOT_2D_SYMBOL_SIZE = 100;
 	public static final String P_LOADING_PLOT_2D_SYMBOL_TYPE = "loadingPlot2dSymbolType";
 	public static final String DEF_LOADING_PLOT_2D_SYMBOL_TYPE = "CIRCLE";
+	//
+	public static final String P_COLOR_SCHEME = "colorScheme";
+	public static final String DEF_COLOR_SCHEME = "Print";
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -89,29 +95,42 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		Map<String, String> defaultValues = new HashMap<String, String>();
 		defaultValues.put(P_FILES_PATH_IMPORT_CHROMATOGRAMS, DEF_FILES_PATH_IMPORT_CHROMATOGRAMS);
 		defaultValues.put(P_ALGORITHM_TYPE, DEF_ALGORITHM_TYPE);
+		defaultValues.put(P_REMOVE_USELESS_VARIABLES, Boolean.toString(DEF_REMOVE_USELESS_VARIABLES));
 		defaultValues.put(P_NUMBER_OF_COMPONENTS, Integer.toString(DEF_NUMBER_OF_COMPONENTS));
-		defaultValues.put(P_AUTO_REEVALUATE, Boolean.toString(DEF_AUTO_REEVALUATE));
 		defaultValues.put(P_RETENTION_TIME_WINDOW_PEAKS, Double.toString(DEF_RETENTION_TIME_WINDOW_PEAKS));
 		defaultValues.put(P_SCORE_PLOT_2D_SYMBOL_SIZE, Integer.toString(DEF_SCORE_PLOT_2D_SYMBOL_SIZE));
 		defaultValues.put(P_SCORE_PLOT_2D_SYMBOL_TYPE, DEF_SCORE_PLOT_2D_SYMBOL_TYPE);
 		defaultValues.put(P_LOADING_PLOT_2D_SYMBOL_SIZE, Integer.toString(DEF_LOADING_PLOT_2D_SYMBOL_SIZE));
 		defaultValues.put(P_LOADING_PLOT_2D_SYMBOL_TYPE, DEF_LOADING_PLOT_2D_SYMBOL_TYPE);
+		defaultValues.put(P_COLOR_SCHEME, DEF_COLOR_SCHEME);
 		return defaultValues;
 	}
 
-	public static IPcaSettings getPcaSettings() {
+	public static IAnalysisSettings getPcaSettings() {
 
-		IPcaSettings pcaSettings = new PcaSettings();
+		IAnalysisSettings analysisSettings = new AnalysisSettings();
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		pcaSettings.setNumberOfPrincipalComponents(preferences.getInt(P_NUMBER_OF_COMPONENTS, DEF_NUMBER_OF_COMPONENTS));
-		pcaSettings.setPcaAlgorithm(preferences.get(P_ALGORITHM_TYPE, DEF_ALGORITHM_TYPE));
-		pcaSettings.setRemoveUselessVariables(preferences.getBoolean(P_REMOVE_USELESS_VARIABLES, DEF_REMOVE_USELESS_VARIABLES));
-		return pcaSettings;
+		analysisSettings.setNumberOfPrincipalComponents(preferences.getInt(P_NUMBER_OF_COMPONENTS, DEF_NUMBER_OF_COMPONENTS));
+		analysisSettings.setAlgorithm(Algorithm.valueOf(preferences.get(P_ALGORITHM_TYPE, DEF_ALGORITHM_TYPE)));
+		analysisSettings.setRemoveUselessVariables(preferences.getBoolean(P_REMOVE_USELESS_VARIABLES, DEF_REMOVE_USELESS_VARIABLES));
+		return analysisSettings;
 	}
 
 	@Override
 	public IEclipsePreferences getPreferences() {
 
 		return getScopeContext().getNode(getPreferenceNode());
+	}
+
+	public static int getNumberOfComponents() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getInt(P_NUMBER_OF_COMPONENTS, DEF_NUMBER_OF_COMPONENTS);
+	}
+
+	public static String getColorScheme() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.get(P_COLOR_SCHEME, DEF_COLOR_SCHEME);
 	}
 }

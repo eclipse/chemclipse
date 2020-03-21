@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -34,6 +34,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+@SuppressWarnings("unchecked")
 public class FilterAbundanceWizardPage extends WizardPage implements IFilterWizardPage {
 
 	final private DataBindingContext dbc = new DataBindingContext();
@@ -43,7 +44,6 @@ public class FilterAbundanceWizardPage extends WizardPage implements IFilterWiza
 	private IObservableValue<DataTypeProcessing> dataTypeFiltration;
 
 	protected FilterAbundanceWizardPage(AbundanceFilter abundanceFilter) {
-
 		super("Abundance Filter");
 		setTitle("Abundance Filter");
 		observableLimitType = PojoProperties.value(AbundanceFilter.class, "limitType", Integer.class).observe(abundanceFilter);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,104 +8,90 @@
  * 
  * Contributors:
  * Lorenz Gerber - initial API and implementation
+ * Philip Wenig - getting rid of JavaFX
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+import java.util.List;
+
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IPcaResult;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.barchart.ExplainedVarianceBarChart;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.managers.SelectionManagerSamples;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.model.IPcaResultsVisualization;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.ExplainedVarianceChart;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateListener;
+import org.eclipse.e4.ui.di.Focus;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.ListChangeListener;
 
 public class ExplainedVariancePart {
 
-	private ExplainedVarianceBarChart explainedVarianceChart;
-	private ChangeListener<IPcaResultsVisualization> pcaResultChangeLisnter;
-	private IPcaResultsVisualization pcaResults;
-	private ListChangeListener<IPcaResult> selectionChangeListener;
-	private boolean partHasBeenDestroy;
+	private static final String TOPIC = Activator.TOPIC_PCA_EVALUATION_LOAD;
+	//
+	private Composite parent;
+	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
+	private ExplainedVarianceChart chart;
+	//
+	private IDataUpdateListener updateListener = new IDataUpdateListener() {
+
+		@Override
+		public void update(String topic, List<Object> objects) {
+
+			updateSelection(objects, topic);
+		}
+	};
+
 	@Inject
-	@org.eclipse.e4.core.di.annotations.Optional
-	private SelectionManagerSamples managerSamples;
+	public ExplainedVariancePart(Composite parent, MPart part) {
+		chart = new ExplainedVarianceChart(parent, SWT.NONE);
+		this.parent = parent;
+		dataUpdateSupport.add(updateListener);
+	}
 
-	public ExplainedVariancePart() {
-		selectionChangeListener = new ListChangeListener<IPcaResult>() {
+	@Focus
+	public void setFocus() {
 
-			@Override
-			public void onChanged(javafx.collections.ListChangeListener.Change<? extends IPcaResult> c) {
+		updateSelection(dataUpdateSupport.getUpdates(TOPIC), TOPIC);
+	}
 
-				Display.getDefault().asyncExec(() -> {
-					if(partHasBeenDestroy)
-						return;
-					explainedVarianceChart.updateSelection();
-				});
-			}
-		};
-		pcaResultChangeLisnter = new ChangeListener<IPcaResultsVisualization>() {
+	@Override
+	protected void finalize() throws Throwable {
 
-			@Override
-			public void changed(ObservableValue<? extends IPcaResultsVisualization> observable, IPcaResultsVisualization oldValue, IPcaResultsVisualization newValue) {
+		dataUpdateSupport.remove(updateListener);
+		super.finalize();
+	}
 
-				Display.getDefault().asyncExec(() -> {
-					if(partHasBeenDestroy)
-						return;
-					pcaResults = newValue;
-					if(oldValue != null) {
-						oldValue.getPcaResultList().removeListener(selectionChangeListener);
+	private void updateSelection(List<Object> objects, String topic) {
+
+		/*
+		 * 0 => because only one property was used to register the event.
+		 */
+		if(isVisible()) {
+			if(objects.size() == 1) {
+				if(isUnloadEvent(topic)) {
+					chart.setInput(null);
+				} else {
+					Object object = objects.get(0);
+					if(object instanceof EvaluationPCA) {
+						chart.setInput((EvaluationPCA)object);
 					}
-					if(newValue != null) {
-						newValue.getPcaResultList().addListener(selectionChangeListener);
-						explainedVarianceChart.update(newValue);
-					} else {
-						explainedVarianceChart.removeData();
-					}
-				});
+				}
 			}
-		};
-	}
-
-	@PostConstruct
-	public void createComposite(Composite parent) {
-
-		Composite composite = new Composite(parent, SWT.None);
-		composite.setLayout(new FillLayout());
-		explainedVarianceChart = new ExplainedVarianceBarChart(composite, null);
-		ReadOnlyObjectProperty<IPcaResultsVisualization> pcaresults = getSelectionManagerSamples().getActualSelectedPcaResults();
-		pcaresults.addListener(pcaResultChangeLisnter);
-		pcaResults = pcaresults.get();
-		if(pcaResults != null) {
-			explainedVarianceChart.update(pcaresults.getValue());
-			pcaResults.getPcaResultList().addListener(selectionChangeListener);
 		}
 	}
 
-	private SelectionManagerSamples getSelectionManagerSamples() {
+	private boolean isUnloadEvent(String topic) {
 
-		if(managerSamples != null) {
-			return managerSamples;
+		if(topic.equals(Activator.TOPIC_PCA_EVALUATION_CLEAR)) {
+			return true;
 		}
-		return SelectionManagerSamples.getInstance();
+		return false;
 	}
 
-	@PreDestroy
-	public void preDestroy() {
+	private boolean isVisible() {
 
-		partHasBeenDestroy = true;
-		getSelectionManagerSamples().getActualSelectedPcaResults().removeListener(pcaResultChangeLisnter);
-		if(pcaResults != null) {
-			pcaResults.getPcaResultList().removeListener(selectionChangeListener);
-		}
+		return (parent != null && parent.isVisible());
 	}
 }

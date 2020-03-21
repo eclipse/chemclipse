@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * lgerber - initial API and implementation
+ * Lorenz Gerber - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing;
 
@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.model.statistics.ISampleData;
 import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 
-public class SmallValuesReplacer extends AbstractDataModificator {
+public class SmallValuesReplacer extends AbstractDataModificator implements IReplacer {
 
 	@Override
 	public String getDescription() {
@@ -33,6 +33,7 @@ public class SmallValuesReplacer extends AbstractDataModificator {
 		return "Small Random Value Setter";
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public <V extends IVariable, S extends ISample> void process(ISamples<V, S> samples) {
 

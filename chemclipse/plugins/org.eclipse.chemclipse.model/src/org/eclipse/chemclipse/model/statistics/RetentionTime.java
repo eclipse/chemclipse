@@ -20,6 +20,9 @@ import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 
 public class RetentionTime extends AbstractVariable implements IRetentionTime {
 
+	private NumberFormat nf = NumberFormat.getInstance(Locale.US);
+	private int retentionTime;
+
 	public static List<RetentionTime> create(List<Integer> retentionTimes) {
 
 		List<RetentionTime> retentionTimesList = new ArrayList<>();
@@ -29,11 +32,7 @@ public class RetentionTime extends AbstractVariable implements IRetentionTime {
 		return retentionTimesList;
 	}
 
-	private NumberFormat nf = NumberFormat.getInstance(Locale.US);
-	private int retentionTime;
-
 	public RetentionTime(int retentioTime) {
-
 		super();
 		this.retentionTime = retentioTime;
 		setValue(convertValue());
@@ -42,7 +41,6 @@ public class RetentionTime extends AbstractVariable implements IRetentionTime {
 	}
 
 	public RetentionTime(int retentionTime, String description) {
-
 		this(retentionTime);
 		setDescription(description);
 	}
