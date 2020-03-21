@@ -19,7 +19,6 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultsPCA;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.ColorSupport;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 
 import javafx.event.Event;
@@ -95,7 +94,7 @@ public class ScorePlot3DScatter {
 			/*
 			 * Colors
 			 */
-			Map<String, Color> colorMap = ColorSupport.getGroupNameColorMapFX(pcaResultList);
+			Map<String, Color> colorMap = ColorSupportFX.getGroupNameColorMap(pcaResultList);
 			String name = resultPCA.getName();
 			String groupName = resultPCA.getGroupName();
 			/*
