@@ -15,7 +15,7 @@ public class ExtractedMatrix_2_Test extends TestCase {
 	private IVendorMassSpectrum supplierMassSpectrum;
 	private IScanIon defaultIon;
 	private IChromatogramMSD chromatogram;
-	private float[] signalArray;
+	private float[][] signalMatrix;
 	
 	@Override
 	protected void setUp() throws Exception {
@@ -41,9 +41,12 @@ public class ExtractedMatrix_2_Test extends TestCase {
 			chromatogram.addScan(supplierMassSpectrum);
 		}
 		
-		signalArray = new float[60];
-		for(int i = 0; i < 10 * 6; i++ ) {
-			signalArray[i] = 10.1f;
+		signalMatrix = new float[10][6];
+		for(int i = 0; i < 10; i++ ) {
+			for(int j = 0; j < 6 ; j++ ) {
+				signalMatrix[i][j] = 10.1f;
+			}
+			
 		}
 		
 		
@@ -72,7 +75,7 @@ public class ExtractedMatrix_2_Test extends TestCase {
 		try {
 			ChromatogramSelectionMSD selection = new ChromatogramSelectionMSD(chromatogram);
 			ExtractedMatrix extracted = new ExtractedMatrix(selection);
-			extracted.updateSignal(signalArray, 10, 6);
+			extracted.updateSignal(signalMatrix, 10, 6);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

@@ -36,7 +36,7 @@ public class ExtractedMatrix {
 	
 	public ExtractedMatrix(IChromatogramSelectionMSD chromatogramSelection) {
 		this.selection = chromatogramSelection;
-		this.numberOfScans = selection.getStopScan() - selection.getStartScan() - 1;
+		this.numberOfScans = selection.getStopScan() - selection.getStartScan() + 1;
 		this.scans = extractScans();
 		if(checkHighRes( 10)) {
 			throw new IllegalArgumentException();
@@ -52,7 +52,7 @@ public class ExtractedMatrix {
 					currentIons = scans.get(scanIndex).getIons();
 					numberIonsCurrentScan = currentIons.size(); 
 					for(int j = 0; j < numberIonsCurrentScan; j++) {
-						signal[ ((int) Math.round(currentIons.get(j).getIon() - this.startIon))] [j] =  currentIons.get(j).getAbundance();
+						signal[ scanIndex ] [((int) Math.round(currentIons.get(j).getIon() - this.startIon))] =  currentIons.get(j).getAbundance();
 					}
 				}
 			} catch (Exception e) {
