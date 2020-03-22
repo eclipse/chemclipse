@@ -47,31 +47,24 @@ public class ExtractedMatrix {
 			signal = new float[numberOfScans][this.numberOfIons];
 			List<IIon> currentIons;
 			int numberIonsCurrentScan;
-			try {
-				for(int scanIndex = 0; scanIndex < numberOfScans; scanIndex++) {
-					currentIons = scans.get(scanIndex).getIons();
-					numberIonsCurrentScan = currentIons.size(); 
-					for(int j = 0; j < numberIonsCurrentScan; j++) {
-						signal[ scanIndex ] [((int) Math.round(currentIons.get(j).getIon() - this.startIon))] =  currentIons.get(j).getAbundance();
-					}
+			for(int scanIndex = 0; scanIndex < numberOfScans; scanIndex++) {
+				currentIons = scans.get(scanIndex).getIons();
+				numberIonsCurrentScan = currentIons.size(); 
+				for(int j = 0; j < numberIonsCurrentScan; j++) {
+					signal[ scanIndex ] [((int) Math.round(currentIons.get(j).getIon() - this.startIon))] =  currentIons.get(j).getAbundance();
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
 		}
 	}
 	
 	private Boolean checkHighRes( int limit ) {
-		Iterator<IScanMSD> iterator = scans.iterator();
 		IIonBounds bounds;
 		double rangeAbs;
-		IScanMSD currentScan;
 		
-		while(iterator.hasNext()) {
-			currentScan = iterator.next();
-			bounds = currentScan.getIonBounds();
+		for(IScanMSD scan: scans) {
+			bounds = scan.getIonBounds();
 			rangeAbs = bounds.getHighestIon().getIon() - bounds.getLowestIon().getIon();
-			if(rangeAbs + limit < currentScan.getIons().size()) {
+			if(rangeAbs + limit < scan.getIons().size()) {
 				return (true);
 			}
 		}
@@ -148,7 +141,7 @@ public class ExtractedMatrix {
 				}
 			}
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException("Updating the Signal failed:", e);
 		}			
 	}
 
