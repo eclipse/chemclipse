@@ -8,12 +8,16 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - improvements
  *******************************************************************************/
 package org.eclipse.chemclipse.model.statistics;
 
 public interface IRetentionTime extends IVariable {
 
-	String TYPE = "Retention time (min)";
+	/*
+	 * Retention time in minutes
+	 */
+	String TYPE = "Retention Time [min]";
 
 	int getRetentionTime();
 

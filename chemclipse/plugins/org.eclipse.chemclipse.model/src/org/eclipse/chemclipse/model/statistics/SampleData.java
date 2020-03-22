@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,25 +8,26 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - improvements
  *******************************************************************************/
 package org.eclipse.chemclipse.model.statistics;
 
 public class SampleData<T> implements ISampleData<T> {
 
 	private double data;
-	private T data2;
+	private T dataObject;
 	private double normalizedData;
 
 	public SampleData() {
 		this.data = Double.NaN;
 		this.normalizedData = Double.NaN;
-		this.data2 = null;
+		this.dataObject = null;
 	}
 
 	public SampleData(double data, T data2) {
 		this();
 		this.data = data;
-		this.data2 = data2;
+		this.dataObject = data2;
 		this.normalizedData = data;
 	}
 
@@ -37,9 +38,9 @@ public class SampleData<T> implements ISampleData<T> {
 	}
 
 	@Override
-	public T getData2() {
+	public T getDataObject() {
 
-		return data2;
+		return dataObject;
 	}
 
 	@Override

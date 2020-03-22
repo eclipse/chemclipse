@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,12 +8,14 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - improvements
  *******************************************************************************/
 package org.eclipse.chemclipse.model.statistics;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("rawtypes")
 public abstract class AbstractSample<D extends ISampleData> implements ISample {
 
 	private String groupName;
@@ -22,7 +24,6 @@ public abstract class AbstractSample<D extends ISampleData> implements ISample {
 	private boolean selected;
 
 	public AbstractSample(String name) {
-
 		this.name = name;
 		sampleData = new ArrayList<>();
 		selected = true;
