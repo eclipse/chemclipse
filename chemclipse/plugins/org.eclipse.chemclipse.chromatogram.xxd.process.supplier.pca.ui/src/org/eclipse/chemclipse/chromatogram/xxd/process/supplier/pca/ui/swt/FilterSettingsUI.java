@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.FiltersTable;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -25,7 +26,7 @@ import org.eclipse.swt.widgets.Composite;
 
 public class FilterSettingsUI extends Composite {
 
-	private FilterSettings filterSettings = new FilterSettings();
+	private IFilterSettings filterSettings = new FilterSettings();
 	private FiltersTable filtersTable;
 
 	public FilterSettingsUI(Composite parent, int style) {
@@ -33,13 +34,13 @@ public class FilterSettingsUI extends Composite {
 		createControl();
 	}
 
-	public void setInput(FilterSettings filterSettings) {
+	public void setInput(IFilterSettings filterSettings) {
 
 		this.filterSettings = filterSettings;
 		updateWidgets();
 	}
 
-	public FilterSettings getFilterSettings() {
+	public IFilterSettings getFilterSettings() {
 
 		return filterSettings;
 	}

@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IPreprocessingSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PreprocessingSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.CenteringMean;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.CenteringMedian;
@@ -63,7 +64,7 @@ public class PreprocessingSettingsUI extends Composite {
 	private static final String LABEL_CENTER = "Center Data:";
 	private static final String LABEL_SCALE = "Scale Data:";
 	//
-	private PreprocessingSettings preprocessingSettings = new PreprocessingSettings();
+	private IPreprocessingSettings preprocessingSettings = new PreprocessingSettings();
 	//
 	private ComboViewer comboViewerNormalize;
 	private ComboViewer comboViewerReplacer;
@@ -89,13 +90,13 @@ public class PreprocessingSettingsUI extends Composite {
 		createControl();
 	}
 
-	public void setInput(PreprocessingSettings preprocessingSettings) {
+	public void setInput(IPreprocessingSettings preprocessingSettings) {
 
 		this.preprocessingSettings = preprocessingSettings;
 		updateWidgets();
 	}
 
-	public PreprocessingSettings getPreprocessingSettings() {
+	public IPreprocessingSettings getPreprocessingSettings() {
 
 		return preprocessingSettings;
 	}

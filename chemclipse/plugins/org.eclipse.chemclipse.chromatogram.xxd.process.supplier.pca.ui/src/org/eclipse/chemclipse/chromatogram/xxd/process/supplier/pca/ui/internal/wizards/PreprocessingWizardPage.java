@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PreprocessingSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IPreprocessingSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt.PreprocessingSettingsUI;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -35,7 +35,7 @@ public class PreprocessingWizardPage extends WizardPage {
 		setControl(preprocessingSettingsUI);
 	}
 
-	public PreprocessingSettings getPreprocessingSettings() {
+	public IPreprocessingSettings getPreprocessingSettings() {
 
 		return preprocessingSettingsUI.getPreprocessingSettings();
 	}

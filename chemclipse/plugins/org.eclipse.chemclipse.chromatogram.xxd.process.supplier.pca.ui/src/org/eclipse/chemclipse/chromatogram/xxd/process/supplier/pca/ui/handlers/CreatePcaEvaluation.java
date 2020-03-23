@@ -13,21 +13,23 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handlers;
 
-import java.util.ArrayList;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamplesPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
 import org.eclipse.chemclipse.rcp.app.ui.handlers.OpenSnippetHandler;
-import org.eclipse.chemclipse.rcp.app.ui.handlers.PerspectiveSwitchHandler;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.UIEventTopic;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.model.application.MApplication;
+import org.eclipse.e4.ui.model.application.ui.MUIElement;
+import org.eclipse.e4.ui.model.application.ui.advanced.MPerspective;
 import org.eclipse.e4.ui.services.IServiceConstants;
+import org.eclipse.e4.ui.workbench.modeling.EModelService;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Shell;
 
 public class CreatePcaEvaluation {
 
@@ -38,7 +40,6 @@ public class CreatePcaEvaluation {
 
 	public static void createPart(ISamplesPCA<?, ?> samples, IEclipseContext context, String title) {
 
-		switchPespective();
 		OpenSnippetHandler.openSnippet(EDITOR_ID, context, PCA_EDITOR_STACK, (eclipseContext, part) -> {
 			eclipseContext.set(ISamplesPCA.class, samples);
 			if(title != null) {
@@ -56,15 +57,23 @@ public class CreatePcaEvaluation {
 	}
 
 	@Execute
-	public void execute(@Named(IServiceConstants.ACTIVE_PART) MPart part, IEclipseContext context) {
+	public void execute(@Named(IServiceConstants.ACTIVE_SHELL) Shell shell, MApplication application, EModelService service) {
 
-		switchPespective();
-	}
-
-	private static void switchPespective() {
-
-		if(!PerspectiveSwitchHandler.isActivePerspective(PCA_PERSPECTIVE)) {
-			PerspectiveSwitchHandler.focusPerspectiveAndView(PCA_PERSPECTIVE, new ArrayList<>());
+		if(application != null && service != null) {
+			/*
+			 * Why is element sometimes null?
+			 */
+			MUIElement element = service.find(PCA_PERSPECTIVE, application);
+			if(element != null) {
+				MPerspective perspective = service.getPerspectiveFor(element);
+				if(perspective != null) {
+					if(!perspective.isOnTop()) {
+						if(shell != null) {
+							MessageDialog.openInformation(shell, "PCA", "Please navigate to the PCA perspective to start an analysis.");
+						}
+					}
+				}
+			}
 		}
 	}
 }

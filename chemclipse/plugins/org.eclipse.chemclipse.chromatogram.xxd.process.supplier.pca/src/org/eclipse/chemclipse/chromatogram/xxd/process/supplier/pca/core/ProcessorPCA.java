@@ -46,15 +46,30 @@ public class ProcessorPCA {
 
 	public <V extends IVariable, S extends ISample> ResultsPCA process(ISamplesPCA<V, S> samples, IProgressMonitor monitor) throws MathIllegalArgumentException {
 
-		SubMonitor subMonitor = SubMonitor.convert(monitor, "Run PCA", 100);
-		IAnalysisSettings settings = samples.getAnalysisSettings();
-		ResultsPCA pcaResults = new ResultsPCA(settings);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, "Run PCA", 140);
+		IAnalysisSettings analysisSettings = samples.getAnalysisSettings();
+		ResultsPCA pcaResults = new ResultsPCA(analysisSettings);
 		//
 		try {
-			int numberOfPrincipalComponents = settings.getNumberOfPrincipalComponents();
-			Algorithm algorithm = settings.getAlgorithm();
-			boolean[] isSelectedVariables = selectedVariables(samples, settings);
-			Map<ISample, double[]> extractData = extractData(samples, algorithm, settings, isSelectedVariables);
+			/*
+			 * Preprocessing
+			 */
+			IPreprocessingSettings preprocessingSettings = analysisSettings.getPreprocessingSettings();
+			preprocessingSettings.process(samples, monitor);
+			subMonitor.worked(20);
+			/*
+			 * Filtering
+			 */
+			IFilterSettings filterSettings = analysisSettings.getFilterSettings();
+			filterSettings.process(samples, monitor);
+			subMonitor.worked(20);
+			/*
+			 * Variable Extraction
+			 */
+			int numberOfPrincipalComponents = analysisSettings.getNumberOfPrincipalComponents();
+			Algorithm algorithm = analysisSettings.getAlgorithm();
+			boolean[] isSelectedVariables = selectedVariables(samples, analysisSettings);
+			Map<ISample, double[]> extractData = extractData(samples, algorithm, analysisSettings, isSelectedVariables);
 			setRetentionTime(pcaResults, samples, isSelectedVariables);
 			int numVars = getNumSampleVars(extractData);
 			subMonitor.worked(20);

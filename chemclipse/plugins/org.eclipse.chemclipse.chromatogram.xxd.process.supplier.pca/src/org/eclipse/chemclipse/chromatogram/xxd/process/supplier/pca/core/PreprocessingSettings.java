@@ -22,7 +22,7 @@ import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class PreprocessingSettings implements IDataModification {
+public class PreprocessingSettings implements IPreprocessingSettings {
 
 	private ICentering centering = null;
 	private INormalization normalization = null;
@@ -36,77 +36,108 @@ public class PreprocessingSettings implements IDataModification {
 	private boolean removeUselessVariables = true;
 	private boolean modifyOnlySelectedVariable = false;
 
+	public PreprocessingSettings() {
+	}
+
+	public PreprocessingSettings(IPreprocessingSettings preprocessingSettings) {
+		setCentering(preprocessingSettings.getCentering());
+		setNormalization(preprocessingSettings.getNormalization());
+		setTransformation(preprocessingSettings.getTransformation());
+		setReplacer(preprocessingSettings.getReplacer());
+		this.onlySelected = preprocessingSettings.isOnlySelected();
+		this.removeUselessVariables = preprocessingSettings.isRemoveUselessVariables();
+		this.modifyOnlySelectedVariable = preprocessingSettings.isModifyOnlySelectedVariable();
+	}
+
 	@Override
 	public boolean availableModification() {
 
 		return normalization != null || transformation != null || centering != null;
 	}
 
+	@Override
 	public ICentering getCentering() {
 
 		return centering;
 	}
 
+	@Override
 	public void setCentering(ICentering centering) {
 
 		this.centering = centering;
 	}
 
+	@Override
 	public INormalization getNormalization() {
 
 		return normalization;
 	}
 
+	@Override
 	public void setNormalization(INormalization normalization) {
 
 		this.normalization = normalization;
 	}
 
+	@Override
 	public ITransformation getTransformation() {
 
 		return transformation;
 	}
 
+	@Override
 	public void setTransformation(ITransformation transformation) {
 
 		this.transformation = transformation;
 	}
 
+	@Override
 	public IReplacer getReplacer() {
 
 		return replacer;
 	}
 
+	@Override
 	public void setReplacer(IReplacer replacer) {
 
-		this.replacer = replacer;
+		if(replacer != null) {
+			this.replacer = replacer;
+		} else {
+			this.replacer = new MeanValuesReplacer();
+		}
 	}
 
+	@Override
 	public boolean isModifyOnlySelectedVariable() {
 
 		return modifyOnlySelectedVariable;
 	}
 
+	@Override
 	public void setModifyOnlySelectedVariable(boolean modifyOnlySelectedVariable) {
 
 		this.modifyOnlySelectedVariable = modifyOnlySelectedVariable;
 	}
 
+	@Override
 	public boolean isOnlySelected() {
 
 		return onlySelected;
 	}
 
+	@Override
 	public void setOnlySelected(boolean onlySelected) {
 
 		this.onlySelected = onlySelected;
 	}
 
+	@Override
 	public boolean isRemoveUselessVariables() {
 
 		return removeUselessVariables;
 	}
 
+	@Override
 	public void setRemoveUselessVariables(boolean removeUselessVariables) {
 
 		this.removeUselessVariables = removeUselessVariables;

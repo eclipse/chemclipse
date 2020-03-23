@@ -15,9 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import javax.inject.Named;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.FilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IExtractionData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PreprocessingSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamplesPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handlers.CreatePcaEvaluation;
@@ -54,13 +52,13 @@ public abstract class WizardTile implements TileDefinition {
 			 * Settings
 			 */
 			IAnalysisSettings analysisSettings = wizard.getAnalysisSettings();
-			PreprocessingSettings preprocessingSettings = wizard.getPreprocessingSettings();
-			FilterSettings filterSettings = wizard.getFilterSettings();
+			analysisSettings.setPreprocessingSettings(wizard.getPreprocessingSettings());
+			analysisSettings.setFilterSettings(wizard.getFilterSettings());
 			IExtractionData extractionData = wizard.getExtractionData();
 			/*
 			 * Run the process.
 			 */
-			SamplesExtractor runnable = new SamplesExtractor(extractionData, analysisSettings, filterSettings, preprocessingSettings);
+			SamplesExtractor runnable = new SamplesExtractor(extractionData, analysisSettings);
 			ProgressMonitorDialog monitor = new ProgressMonitorDialog(shell);
 			monitor.run(true, true, runnable);
 			/*

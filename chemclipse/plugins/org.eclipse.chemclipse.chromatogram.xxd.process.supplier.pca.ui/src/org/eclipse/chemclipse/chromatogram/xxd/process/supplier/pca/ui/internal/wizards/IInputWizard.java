@@ -13,9 +13,9 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal
 
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.FilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IExtractionData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PreprocessingSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IPreprocessingSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.jface.wizard.IWizard;
@@ -26,9 +26,9 @@ public interface IInputWizard extends IWizard {
 
 	IExtractionData getExtractionData();
 
-	FilterSettings getFilterSettings();
+	IFilterSettings getFilterSettings();
 
-	PreprocessingSettings getPreprocessingSettings();
+	IPreprocessingSettings getPreprocessingSettings();
 
 	IAnalysisSettings getAnalysisSettings();
 }

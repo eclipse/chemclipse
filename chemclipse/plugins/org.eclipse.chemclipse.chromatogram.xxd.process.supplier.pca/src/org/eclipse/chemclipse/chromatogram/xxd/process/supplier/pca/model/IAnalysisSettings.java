@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IPreprocessingSettings;
+
 public interface IAnalysisSettings {
 
 	void setNumberOfPrincipalComponents(int numberOfPrincipalComponents);
@@ -25,5 +28,11 @@ public interface IAnalysisSettings {
 
 	void setRemoveUselessVariables(boolean removeUselessVariables);
 
-	IAnalysisSettings makeDeepCopy();
+	void setFilterSettings(IFilterSettings filterSettings);
+
+	IFilterSettings getFilterSettings();
+
+	void setPreprocessingSettings(IPreprocessingSettings preprocessingSettings);
+
+	IPreprocessingSettings getPreprocessingSettings();
 }

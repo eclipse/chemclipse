@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt.FilterSettingsUI;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -35,7 +35,7 @@ public class FilterWizardPage extends WizardPage {
 		setControl(filterSettingsUI);
 	}
 
-	public FilterSettings getFilterSettings() {
+	public IFilterSettings getFilterSettings() {
 
 		return filterSettingsUI.getFilterSettings();
 	}

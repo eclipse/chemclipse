@@ -14,9 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal
 
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.FilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IExtractionData;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PreprocessingSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -26,16 +24,12 @@ public class SamplesExtractor implements IRunnableWithProgress {
 
 	private IExtractionData extractionData;
 	private IAnalysisSettings analysisSettings;
-	private FilterSettings filterSettings;
-	private PreprocessingSettings preprocessingSettings;
 	//
 	private Samples samples = null;
 
-	public SamplesExtractor(IExtractionData extractionData, IAnalysisSettings analysisSettings, FilterSettings filterSettings, PreprocessingSettings preprocessingSettings) {
+	public SamplesExtractor(IExtractionData extractionData, IAnalysisSettings analysisSettings) {
 		this.extractionData = extractionData;
 		this.analysisSettings = analysisSettings;
-		this.filterSettings = filterSettings;
-		this.preprocessingSettings = preprocessingSettings;
 	}
 
 	public Samples getSamples() {
@@ -46,17 +40,7 @@ public class SamplesExtractor implements IRunnableWithProgress {
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-		/*
-		 * Extract the samples and process the data
-		 */
 		samples = extractionData.process(monitor);
-		preprocessingSettings.process(samples, monitor);
-		filterSettings.process(samples, monitor);
-		/*
-		 * Store the settings
-		 */
 		samples.setAnalysisSettings(analysisSettings);
-		samples.setPreprocessingSettings(preprocessingSettings);
-		samples.setFilterSettings(filterSettings);
 	}
 }

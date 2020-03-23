@@ -13,10 +13,10 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal
 
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.FilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IExtractionData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IPreprocessingSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaExtractionScans;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PreprocessingSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.ScansExtractionSupport.ExtractionType;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
@@ -63,13 +63,13 @@ public class ScansInputWizard extends Wizard implements IInputWizard {
 	}
 
 	@Override
-	public PreprocessingSettings getPreprocessingSettings() {
+	public IPreprocessingSettings getPreprocessingSettings() {
 
 		return preprocessingWizardPage.getPreprocessingSettings();
 	}
 
 	@Override
-	public FilterSettings getFilterSettings() {
+	public IFilterSettings getFilterSettings() {
 
 		return filterWizardPage.getFilterSettings();
 	}

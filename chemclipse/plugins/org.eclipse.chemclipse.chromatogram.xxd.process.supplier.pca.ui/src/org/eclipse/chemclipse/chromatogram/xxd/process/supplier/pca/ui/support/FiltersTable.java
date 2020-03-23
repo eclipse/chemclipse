@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.IFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.BatchProcessWizardDialog;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards.FilterWizard;
@@ -31,7 +32,7 @@ import org.eclipse.swt.widgets.TableItem;
 
 public class FiltersTable extends Composite {
 
-	private FilterSettings filterSettings = new FilterSettings();
+	private IFilterSettings filterSettings = new FilterSettings();
 	private Table table;
 
 	public FiltersTable(Composite parent, int style) {
@@ -39,7 +40,7 @@ public class FiltersTable extends Composite {
 		createControl();
 	}
 
-	public FilterSettings getFilterSettings() {
+	public IFilterSettings getFilterSettings() {
 
 		return filterSettings;
 	}
@@ -100,7 +101,7 @@ public class FiltersTable extends Composite {
 		update();
 	}
 
-	public void setInput(FilterSettings filterSettings) {
+	public void setInput(IFilterSettings filterSettings) {
 
 		this.filterSettings = filterSettings;
 		update();

@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt;
 
-import java.lang.reflect.InvocationTargetException;
-
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Algorithm;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
@@ -20,8 +18,8 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISampl
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.CalculationExecutor;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePageLoadingPlot;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePage;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePageLoadingPlot;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePageScorePlot;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.statistics.ISample;
@@ -33,6 +31,7 @@ import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -63,6 +62,7 @@ public class AnalysisEditorUI extends Composite {
 	private static final Logger logger = Logger.getLogger(AnalysisEditorUI.class);
 	//
 	private ISamplesPCA<? extends IVariable, ? extends ISample> samples = null;
+	private EvaluationPCA evaluationPCA = null;
 	//
 	private Composite toolbarSearch;
 	private Spinner spinnerPCs;
@@ -78,22 +78,25 @@ public class AnalysisEditorUI extends Composite {
 		createControl();
 	}
 
+	@Override
+	public boolean setFocus() {
+
+		fireUpdate(this.getDisplay(), evaluationPCA);
+		return super.setFocus();
+	}
+
 	public void setInput(ISamplesPCA<IVariable, ISample> samples) {
 
 		this.samples = samples;
 		if(samples != null) {
 			sampleListUI.setInput(samples.getSampleList());
 			updateWidgets(samples.getAnalysisSettings());
-			preprocessingSettingsUI.setInput(samples.getPreprocessingSettings());
-			filterSettingsUI.setInput(samples.getFilterSettings());
 		} else {
 			sampleListUI.setInput(null);
 			updateWidgets(null);
-			preprocessingSettingsUI.setInput(null);
-			filterSettingsUI.setInput(null);
 		}
 		//
-		runCalculation(getDisplay());
+		runCalculation(this.getDisplay());
 	}
 
 	private void createControl() {
@@ -336,28 +339,26 @@ public class AnalysisEditorUI extends Composite {
 
 	private void applySettings() {
 
-		runCalculation(getDisplay());
+		runCalculation(this.getDisplay());
 	}
 
 	private void runCalculation(Display display) {
 
 		if(display != null) {
-			Shell shell = display.getActiveShell();
-			if(shell != null) {
-				try {
-					/*
-					 * Check
-					 */
-					if(samples != null) {
-						CalculationExecutor runnable = new CalculationExecutor(samples);
+			try {
+				if(samples != null) {
+					CalculationExecutor runnable = new CalculationExecutor(samples);
+					Shell shell = display.getActiveShell();
+					if(shell != null) {
 						ProgressMonitorDialog monitor = new ProgressMonitorDialog(shell);
 						monitor.run(true, true, runnable);
-						EvaluationPCA evaluationPCA = runnable.getEvaluationPCA();
-						fireUpdate(display, evaluationPCA);
+					} else {
+						runnable.run(new NullProgressMonitor());
 					}
-				} catch(InvocationTargetException | InterruptedException e) {
-					logger.warn(e);
+					evaluationPCA = runnable.getEvaluationPCA();
 				}
+			} catch(Exception e) {
+				logger.warn(e);
 			}
 		}
 	}
@@ -365,8 +366,13 @@ public class AnalysisEditorUI extends Composite {
 	private void updateWidgets(IAnalysisSettings analysisSettings) {
 
 		if(analysisSettings != null) {
+			preprocessingSettingsUI.setInput(analysisSettings.getPreprocessingSettings());
+			filterSettingsUI.setInput(analysisSettings.getFilterSettings());
 			spinnerPCs.setSelection(analysisSettings.getNumberOfPrincipalComponents());
 			comboViewerAlgorithm.getCombo().select(getSelectedAlgorithmIndex(analysisSettings));
+		} else {
+			preprocessingSettingsUI.setInput(null);
+			filterSettingsUI.setInput(null);
 		}
 	}
 

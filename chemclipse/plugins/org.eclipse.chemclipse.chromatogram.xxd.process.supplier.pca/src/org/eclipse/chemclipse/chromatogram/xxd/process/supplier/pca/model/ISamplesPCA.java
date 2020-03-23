@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.FilterSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PreprocessingSettings;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
@@ -22,12 +20,4 @@ public interface ISamplesPCA<V extends IVariable, S extends ISample> extends ISa
 	IAnalysisSettings getAnalysisSettings();
 
 	void setAnalysisSettings(IAnalysisSettings analysisSettings);
-
-	FilterSettings getFilterSettings();
-
-	void setFilterSettings(FilterSettings filterSettings);
-
-	PreprocessingSettings getPreprocessingSettings();
-
-	void setPreprocessingSettings(PreprocessingSettings preprocessingSettings);
 }

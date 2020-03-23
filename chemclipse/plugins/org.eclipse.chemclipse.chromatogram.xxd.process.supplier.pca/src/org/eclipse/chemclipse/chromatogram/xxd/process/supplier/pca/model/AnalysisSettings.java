@@ -11,11 +11,19 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IPreprocessingSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PreprocessingSettings;
+
 public class AnalysisSettings implements IAnalysisSettings {
 
 	private int numberOfPrincipalComponents = 3;
 	private Algorithm algorithm = Algorithm.NIPALS;
 	private boolean removeUselessVariables = true;
+	//
+	private IPreprocessingSettings preprocessingSettings = new PreprocessingSettings();
+	private IFilterSettings filterSettings = new FilterSettings();
 
 	public AnalysisSettings() {
 	}
@@ -24,6 +32,9 @@ public class AnalysisSettings implements IAnalysisSettings {
 		this.numberOfPrincipalComponents = analysisSettings.getNumberOfPrincipalComponents();
 		this.algorithm = analysisSettings.getAlgorithm();
 		this.removeUselessVariables = analysisSettings.isRemoveUselessVariables();
+		//
+		this.preprocessingSettings = new PreprocessingSettings(analysisSettings.getPreprocessingSettings());
+		this.filterSettings = new FilterSettings(analysisSettings.getFilterSettings());
 	}
 
 	@Override
@@ -60,13 +71,23 @@ public class AnalysisSettings implements IAnalysisSettings {
 		this.removeUselessVariables = removeUselessVariables;
 	}
 
-	@Override
-	public AnalysisSettings makeDeepCopy() {
+	public IPreprocessingSettings getPreprocessingSettings() {
 
-		AnalysisSettings analysisSettings = new AnalysisSettings();
-		analysisSettings.setNumberOfPrincipalComponents(this.numberOfPrincipalComponents);
-		analysisSettings.setAlgorithm(this.algorithm);
-		analysisSettings.setRemoveUselessVariables(this.removeUselessVariables);
-		return analysisSettings;
+		return preprocessingSettings;
+	}
+
+	public void setPreprocessingSettings(IPreprocessingSettings preprocessingSettings) {
+
+		this.preprocessingSettings = preprocessingSettings;
+	}
+
+	public IFilterSettings getFilterSettings() {
+
+		return filterSettings;
+	}
+
+	public void setFilterSettings(IFilterSettings filterSettings) {
+
+		this.filterSettings = filterSettings;
 	}
 }

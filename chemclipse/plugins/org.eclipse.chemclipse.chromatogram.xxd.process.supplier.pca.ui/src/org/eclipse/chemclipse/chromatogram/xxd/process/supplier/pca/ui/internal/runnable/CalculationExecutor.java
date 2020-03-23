@@ -22,7 +22,6 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
 public class CalculationExecutor implements IRunnableWithProgress {
@@ -42,12 +41,12 @@ public class CalculationExecutor implements IRunnableWithProgress {
 	}
 
 	@Override
-	public void run(IProgressMonitor arg0) throws InvocationTargetException, InterruptedException {
+	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		if(samples != null) {
 			try {
 				ProcessorPCA processorPCA = new ProcessorPCA();
-				ResultsPCA results = processorPCA.process(samples, new NullProgressMonitor());
+				ResultsPCA results = processorPCA.process(samples, monitor);
 				evaluationPCA = new EvaluationPCA(samples, results);
 			} catch(MathIllegalArgumentException e) {
 				logger.error(e.getLocalizedMessage(), e);

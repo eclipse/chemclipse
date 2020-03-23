@@ -20,11 +20,22 @@ import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class FilterSettings implements IDataModification {
+public class FilterSettings implements IFilterSettings {
 
 	private List<IFilter> filters = new ArrayList<>();
 	private boolean onlySelected = true;
 	private boolean resetSelectedRetentionTimes = true;
+
+	public FilterSettings() {
+	}
+
+	public FilterSettings(IFilterSettings filterSettings) {
+		for(IFilter filter : filterSettings.getFilters()) {
+			this.filters.add(filter);
+		}
+		this.onlySelected = filterSettings.isOnlySelected();
+		this.resetSelectedRetentionTimes = filterSettings.isResetSelectedRetentionTimes();
+	}
 
 	@Override
 	public boolean availableModification() {
@@ -32,6 +43,7 @@ public class FilterSettings implements IDataModification {
 		return !filters.isEmpty();
 	}
 
+	@Override
 	public List<IFilter> getFilters() {
 
 		return filters;
@@ -43,9 +55,16 @@ public class FilterSettings implements IDataModification {
 		return onlySelected;
 	}
 
+	@Override
 	public boolean isResetSelectedRetentionTimes() {
 
 		return resetSelectedRetentionTimes;
+	}
+
+	@Override
+	public void setResetSelectedRetentionTimes(boolean resetSelectedRetentionTimes) {
+
+		this.resetSelectedRetentionTimes = resetSelectedRetentionTimes;
 	}
 
 	@Override
@@ -53,7 +72,7 @@ public class FilterSettings implements IDataModification {
 
 		List<V> variables = samples.getVariables();
 		if(resetSelectedRetentionTimes) {
-			setSelectAllRow(samples, true);
+			setSelect(samples, true);
 		}
 		if(filters != null && !filters.isEmpty()) {
 			for(int i = 0; i < filters.size(); i++) {
@@ -72,12 +91,7 @@ public class FilterSettings implements IDataModification {
 		this.onlySelected = onlySelected;
 	}
 
-	public void setResetSelectedRetentionTimes(boolean resetSelectedRetentionTimes) {
-
-		this.resetSelectedRetentionTimes = resetSelectedRetentionTimes;
-	}
-
-	private <V extends IVariable, S extends ISample> void setSelectAllRow(ISamples<V, S> samples, boolean selection) {
+	private <V extends IVariable, S extends ISample> void setSelect(ISamples<V, S> samples, boolean selection) {
 
 		List<V> variables = samples.getVariables();
 		for(int i = 0; i < variables.size(); i++) {

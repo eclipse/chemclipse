@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.provider;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Sample;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
@@ -24,8 +23,8 @@ public class SamplesComparator extends AbstractRecordTableComparator implements 
 
 		int sortOrder = 0;
 		if(e1 instanceof ISample && e2 instanceof ISample) {
-			Sample sample1 = (Sample)e1;
-			Sample sample2 = (Sample)e2;
+			ISample sample1 = (ISample)e1;
+			ISample sample2 = (ISample)e2;
 			//
 			switch(getPropertyIndex()) {
 				case 0:
