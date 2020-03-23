@@ -13,7 +13,8 @@ Export-Package: org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support
+ org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support,
+ org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca;bundle-version="0.8.0",

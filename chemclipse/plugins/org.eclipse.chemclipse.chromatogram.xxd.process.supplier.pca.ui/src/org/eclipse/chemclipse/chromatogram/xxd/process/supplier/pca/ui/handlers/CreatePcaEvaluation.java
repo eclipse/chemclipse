@@ -13,16 +13,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handlers;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamplesPCA;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
 import org.eclipse.chemclipse.rcp.app.ui.handlers.OpenSnippetHandler;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Execute;
-import org.eclipse.e4.core.di.annotations.Optional;
-import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.MUIElement;
 import org.eclipse.e4.ui.model.application.ui.advanced.MPerspective;
@@ -33,10 +29,10 @@ import org.eclipse.swt.widgets.Shell;
 
 public class CreatePcaEvaluation {
 
-	private static final String EDITOR_ID = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.part.pcaeditor";
 	public static final String PCA_PERSPECTIVE = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.perspective";
 	public static final String PCA_EDITOR_STACK = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.stackId.pcaeditorStack";
-	public static final String PCA_CREATE_NEW_EDITOR = "CREATE_NEW_EDITOR";
+	//
+	private static final String EDITOR_ID = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.part.pcaeditor";
 
 	public static void createPart(ISamplesPCA<?, ?> samples, IEclipseContext context, String title) {
 
@@ -47,13 +43,6 @@ public class CreatePcaEvaluation {
 			}
 			return null;
 		});
-	}
-
-	@Inject
-	@Optional
-	public void createNewEditor(@UIEventTopic(PCA_CREATE_NEW_EDITOR) Samples samples, IEclipseContext context) {
-
-		createPart(samples, context, null);
 	}
 
 	@Execute
