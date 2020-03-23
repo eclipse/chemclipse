@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,6 +28,7 @@ public class DatabaseExportConverter extends AbstractQuantDBExportConverter impl
 
 	private static final Logger logger = Logger.getLogger(DatabaseExportConverter.class);
 
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public IProcessingInfo convert(File file, IQuantitationDatabase quantitationDatabase, IProgressMonitor monitor) {
 

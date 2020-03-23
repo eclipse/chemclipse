@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -63,6 +63,7 @@ public class PeakReader_0701 extends AbstractZipReader implements IPeakReader {
 
 	private static final Logger logger = Logger.getLogger(PeakReader_0701.class);
 
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public IProcessingInfo read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
@@ -77,6 +78,7 @@ public class PeakReader_0701 extends AbstractZipReader implements IPeakReader {
 		return processingInfo;
 	}
 
+	@SuppressWarnings("rawtypes")
 	private IPeaks readPeaksFromZipFile(ZipFile zipFile, IProgressMonitor monitor) throws IOException {
 
 		IPeaks peaks = new Peaks();

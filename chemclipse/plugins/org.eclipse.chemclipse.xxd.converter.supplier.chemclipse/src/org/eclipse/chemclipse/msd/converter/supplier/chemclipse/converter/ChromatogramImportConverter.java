@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -58,6 +58,7 @@ public class ChromatogramImportConverter extends AbstractChromatogramImportConve
 		}
 	}
 
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public IProcessingInfo convertOverview(File file, IProgressMonitor monitor) {
 

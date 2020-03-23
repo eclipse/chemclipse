@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.Chro
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.ChromatogramWriter_1006;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.ChromatogramWriter_1007;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.ChromatogramWriter_1100;
+import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.ChromatogramWriter_1300;
 import org.eclipse.chemclipse.csd.converter.supplier.chemclipse.internal.io.ChromatogramWriter_1301;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
@@ -73,6 +74,8 @@ public class ChromatogramWriterCSD extends AbstractChromatogramWriter implements
 			chromatogramWriter = new ChromatogramWriter_1007();
 		} else if(versionSave.equals(IFormat.CHROMATOGRAM_VERSION_1100)) {
 			chromatogramWriter = new ChromatogramWriter_1100();
+		} else if(versionSave.equals(IFormat.CHROMATOGRAM_VERSION_1300)) {
+			chromatogramWriter = new ChromatogramWriter_1300();
 		} else {
 			chromatogramWriter = new ChromatogramWriter_1301();
 		}

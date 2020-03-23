@@ -469,9 +469,14 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 		//
 		List<IInternalStandard> internalStandards = readInternalStandards(dataInputStream);
 		peak.addInternalStandards(internalStandards);
+		/*
+		 * Peak Name
+		 */
 		String currentName = peak.getName();
 		if(currentName == null || !currentName.equals(peakName)) {
-			// restore the user custom name
+			/*
+			 * Restore the user custom name
+			 */
 			peak.setName(peakName);
 		}
 		//

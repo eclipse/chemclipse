@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2019 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,6 +24,7 @@ import junit.framework.TestCase;
 
 public class PeakReaderMSDTestCase extends TestCase {
 
+	@SuppressWarnings("rawtypes")
 	protected IPeaks peaks;
 	protected String pathImport;
 	protected File fileImport;
@@ -36,7 +37,7 @@ public class PeakReaderMSDTestCase extends TestCase {
 		fileImport = new File(this.pathImport);
 		IProcessingInfo<IPeaks<?>> processingInfo = PeakConverterMSD.convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
 		try {
-			peaks = processingInfo.getProcessingResult(IPeaks.class);
+			peaks = processingInfo.getProcessingResult();
 		} catch(TypeCastException e) {
 			peaks = null;
 		}

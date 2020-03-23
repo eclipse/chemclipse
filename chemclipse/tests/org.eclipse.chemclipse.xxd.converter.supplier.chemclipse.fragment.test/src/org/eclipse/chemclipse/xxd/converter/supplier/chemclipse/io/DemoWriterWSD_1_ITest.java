@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -38,6 +38,7 @@ public class DemoWriterWSD_1_ITest extends TestCase {
 		//
 	}
 
+	@SuppressWarnings({"rawtypes", "unchecked", "deprecation"})
 	@Ignore
 	public void testReader_1() throws Exception {
 

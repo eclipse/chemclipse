@@ -146,7 +146,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static String[][] getChromatogramVersions() {
 
 		// TODO optimize the version handling!
-		int versions = 6;
+		int versions = 7;
 		String[][] elements = new String[versions][2];
 		//
 		elements[0][0] = IFormat.CHROMATOGRAM_VERSION_0701 + " (Nernst)";
@@ -164,8 +164,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		elements[4][0] = IFormat.CHROMATOGRAM_VERSION_1100 + " (Diels)";
 		elements[4][1] = IFormat.CHROMATOGRAM_VERSION_1100;
 		//
-		elements[5][0] = IFormat.CHROMATOGRAM_VERSION_1301 + " (Dalton)";
-		elements[5][1] = IFormat.CHROMATOGRAM_VERSION_1301;
+		elements[5][0] = IFormat.CHROMATOGRAM_VERSION_1300 + " (Dalton v1)";
+		elements[5][1] = IFormat.CHROMATOGRAM_VERSION_1300;
+		//
+		elements[6][0] = IFormat.CHROMATOGRAM_VERSION_1301 + " (Dalton v2)";
+		elements[6][1] = IFormat.CHROMATOGRAM_VERSION_1301;
 		//
 		return elements;
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -97,7 +97,6 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		zipOutputStream.close();
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public void writeChromatogram(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
 
@@ -302,6 +301,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		zipOutputStream.closeEntry();
 	}
 
+	@SuppressWarnings("deprecation")
 	private void writeChromatogramBaseline(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramMSD chromatogram) throws IOException {
 
 		ZipEntry zipEntry;
@@ -522,8 +522,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		writeString(dataOutputStream, peak.getModelDescription()); // Model Description
 		writeString(dataOutputStream, peak.getPeakType().toString()); // Peak Type
 		dataOutputStream.writeInt(peak.getSuggestedNumberOfComponents()); // Suggest Number Of Components
-		// TODO in newer formats we should store them in a more generic way, but for backward compatibility we can't do much here atm
-		writeString(dataOutputStream, joinString(peak.getClassifier()));
+		writeString(dataOutputStream, joinString(peak.getClassifier())); // > 1.3.0.0 changed -> it's a collection
 		//
 		dataOutputStream.writeFloat(peakModel.getBackgroundAbundance(peakModel.getStartRetentionTime())); // Start Background Abundance
 		dataOutputStream.writeFloat(peakModel.getBackgroundAbundance(peakModel.getStopRetentionTime())); // Stop Background Abundance
@@ -612,20 +611,6 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		}
 	}
 
-	private String joinString(Collection<String> classifier) {
-
-		StringBuilder sb = new StringBuilder();
-		if(classifier != null) {
-			for(String c : classifier) {
-				if(sb.length() > 0) {
-					sb.append(CLASSIFIER_DELIMITER);
-				}
-				sb.append(c);
-			}
-		}
-		return sb.toString();
-	}
-
 	private void writeIdentificationEntry(DataOutputStream dataOutputStream, IIdentificationTarget identificationEntry) throws IOException {
 
 		ILibraryInformation libraryInformation = identificationEntry.getLibraryInformation();
@@ -689,7 +674,6 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		zipOutputStream.closeEntry();
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void writeChromatogramReferenceInfo(ZipOutputStream zipOutputStream, String directoryPrefix, List<IChromatogram<?>> referencedChromatograms, IProgressMonitor monitor) throws IOException {
 
 		ZipEntry zipEntryType = new ZipEntry(directoryPrefix + IFormat.FILE_REFERENCE_INFO);
@@ -765,5 +749,19 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 
 		dataOutputStream.writeInt(value.length()); // Value Length
 		dataOutputStream.writeChars(value); // Value
+	}
+
+	private String joinString(Collection<String> classifier) {
+
+		StringBuilder sb = new StringBuilder();
+		if(classifier != null) {
+			for(String c : classifier) {
+				if(sb.length() > 0) {
+					sb.append(CLASSIFIER_DELIMITER);
+				}
+				sb.append(c);
+			}
+		}
+		return sb.toString();
 	}
 }

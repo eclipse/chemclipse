@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -37,11 +37,16 @@ public class Activator implements BundleActivator {
 		System.out.println("\tPeak Quantitation References");
 		System.out.println("\tBaseline Model Changes");
 		//
+		logger.info("-------------------------------------------------");
 		logger.info("Ensure backward and forward compatibility!");
+		logger.info("-------------------------------------------------");
 		logger.info("*.ocb - measurement data container");
 		logger.info("*.ocm - process method container");
 		logger.info("*.ocq - quanititation table container");
 		logger.info("*.ocs - sequence data container");
+		logger.info("-------------------------------------------------");
+		logger.info("--- CHANGES MUST BE APPROVED BY PHILIP WENIG ---");
+		logger.info("-------------------------------------------------");
 	}
 
 	/*

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2019 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -174,6 +174,7 @@ public class ChromatogramWriter_0903 extends AbstractChromatogramWriter implemen
 		zipOutputStream.closeEntry();
 	}
 
+	@SuppressWarnings("deprecation")
 	private void writeChromatogramBaseline(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws IOException {
 
 		ZipEntry zipEntry;
