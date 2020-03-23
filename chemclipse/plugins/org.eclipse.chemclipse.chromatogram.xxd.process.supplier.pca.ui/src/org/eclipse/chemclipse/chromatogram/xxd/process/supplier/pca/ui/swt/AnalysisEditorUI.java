@@ -114,14 +114,13 @@ public class AnalysisEditorUI extends Composite {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(8, false));
+		composite.setLayout(new GridLayout(7, false));
 		//
 		createButtonToggleToolbarSearch(composite);
 		createLabel(composite, "Number of PCs:");
 		spinnerPCs = createSpinnerPrincipleComponents(composite);
 		createLabel(composite, "Algorithm:");
 		comboViewerAlgorithm = createComboViewerAlgorithm(composite);
-		createButtonAddSamples(composite);
 		createButtonRun(composite);
 		createSettingsButton(composite);
 	}
@@ -220,25 +219,6 @@ public class AnalysisEditorUI extends Composite {
 		//
 		combo.select(0);
 		return comboViewer;
-	}
-
-	private Button createButtonAddSamples(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Add samples to the current PCA analysis.");
-		button.setText("");
-		button.setEnabled(false); // TODO Find a smart way to add samples and recalculate the variables
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				// TODO Implement
-			}
-		});
-		//
-		return button;
 	}
 
 	private Button createButtonRun(Composite parent) {
