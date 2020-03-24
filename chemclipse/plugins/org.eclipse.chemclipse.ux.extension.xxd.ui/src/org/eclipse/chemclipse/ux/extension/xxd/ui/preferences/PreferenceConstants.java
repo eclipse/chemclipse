@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlayChartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTraceUtil;
 import org.eclipse.swt.SWT;
 import org.eclipse.swtchart.IAxis.Position;
 import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
@@ -136,28 +136,10 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_OVERLAY_CHART_COMPRESSION_TYPE = LineChart.COMPRESSION_MEDIUM;
 	public static final String P_SHOW_REFERENCED_CHROMATOGRAMS = "showReferencedChromatograms";
 	public static final boolean DEF_SHOW_REFERENCED_CHROMATOGRAMS = true;
-	public static final String P_COLOR_SCHEME_DISPLAY_NORMAL_OVERLAY = "colorSchemeDisplayNormalOverlay";
-	public static final String DEF_COLOR_SCHEME_DISPLAY_NORMAL_OVERLAY = Colors.COLOR_SCHEME_RED;
-	public static final String P_COLOR_SCHEME_DISPLAY_SIC_OVERLAY = "colorSchemeDisplaySICOverlay";
-	public static final String DEF_COLOR_SCHEME_DISPLAY_SIC_OVERLAY = Colors.COLOR_SCHEME_HIGH_CONTRAST;
-	public static final String P_COLOR_SCHEME_DISPLAY_SWC_OVERLAY = "colorSchemeDisplaySWCOverlay";
-	public static final String DEF_COLOR_SCHEME_DISPLAY_SWC_OVERLAY = Colors.COLOR_SCHEME_HIGH_CONTRAST;
-	public static final String P_LINE_STYLE_DISPLAY_TIC_OVERLAY = "lineStyleDisplayTICOverlay";
-	public static final String DEF_LINE_STYLE_DISPLAY_TIC_OVERLAY = LineStyle.SOLID.toString();
-	public static final String P_LINE_STYLE_DISPLAY_BPC_OVERLAY = "lineStyleDisplayBPCOverlay";
-	public static final String DEF_LINE_STYLE_DISPLAY_BPC_OVERLAY = LineStyle.SOLID.toString();
-	public static final String P_LINE_STYLE_DISPLAY_XIC_OVERLAY = "lineStyleDisplayXICOverlay";
-	public static final String DEF_LINE_STYLE_DISPLAY_XIC_OVERLAY = LineStyle.SOLID.toString();
-	public static final String P_LINE_STYLE_DISPLAY_SIC_OVERLAY = "lineStyleDisplaySICOverlay";
-	public static final String DEF_LINE_STYLE_DISPLAY_SIC_OVERLAY = LineStyle.SOLID.toString();
-	public static final String P_LINE_STYLE_DISPLAY_TSC_OVERLAY = "lineStyleDisplayTSCOverlay";
-	public static final String DEF_LINE_STYLE_DISPLAY_TSC_OVERLAY = LineStyle.SOLID.toString();
-	public static final String P_LINE_STYLE_DISPLAY_XWC_OVERLAY = "lineStyleDisplayXWCOverlay";
-	public static final String DEF_LINE_STYLE_DISPLAY_XWC_OVERLAY = LineStyle.SOLID.toString();
-	public static final String P_LINE_STYLE_DISPLAY_SWC_OVERLAY = "lineStyleDisplaySWCOverlay";
-	public static final String DEF_LINE_STYLE_DISPLAY_SWC_OVERLAY = LineStyle.SOLID.toString();
-	public static final String P_LINE_STYLE_DISPLAY_DEFAULT_OVERLAY = "lineStyleDisplayDefaultOverlay";
-	public static final String DEF_LINE_STYLE_DISPLAY_DEFAULT_OVERLAY = LineStyle.SOLID.toString();
+	public static final String P_COLOR_SCHEME_DISPLAY_OVERLAY = "colorSchemeDisplayOverlay";
+	public static final String DEF_COLOR_SCHEME_DISPLAY_OVERLAY = Colors.COLOR_SCHEME_PRINT;
+	public static final String P_LINE_STYLE_DISPLAY_OVERLAY = "lineStyleDisplayOverlay";
+	public static final String DEF_LINE_STYLE_DISPLAY_OVERLAY = LineStyle.SOLID.toString();
 	/*
 	 * Peak Traces
 	 */
@@ -167,23 +149,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final int DEF_MAX_DISPLAY_PEAK_TRACES = DEF_PEAK_TRACES;
 	public static final String P_PEAK_TRACES_OFFSET_RETENTION_TIME = "peakTracesOffsetRetentionTime";
 	public static final int DEF_PEAK_TRACES_OFFSET_RETENTION_TIME = DEF_OFFSET_RETENTION_TIME;
-	//
-	public static final String P_CHROMATOGRAM_OVERLAY_IONS_SELECTION = "chromatogramOverlayIonsSelection";
-	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_SELECTION = OverlayChartSupport.SELECTED_IONS_USERS_CHOICE;
-	public static final String P_CHROMATOGRAM_OVERLAY_IONS_USERS_CHOICE = "chromatogramOverlayIonsUsersChoice";
-	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_USERS_CHOICE = "18 28 32 84 207";
-	public static final String P_CHROMATOGRAM_OVERLAY_WAVELENGTHS_USERS_CHOICE = "chromatogramOverlayWavelengthsUsersChoice";
-	public static final String DEF_CHROMATOGRAM_OVERLAY_WAVELENGTHS_USERS_CHOICE = "237";
-	public static final String P_CHROMATOGRAM_OVERLAY_IONS_HYDROCARBONS = "chromatogramOverlayIonsHydrocarbons";
-	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_HYDROCARBONS = "57 71 85";
-	public static final String P_CHROMATOGRAM_OVERLAY_IONS_FATTY_ACIDS = "chromatogramOverlayIonsFattyAcids";
-	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_FATTY_ACIDS = "74 84";
-	public static final String P_CHROMATOGRAM_OVERLAY_IONS_FAME = "chromatogramOverlayIonsFAME";
-	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_FAME = "79 81";
-	public static final String P_CHROMATOGRAM_OVERLAY_IONS_SOLVENT_TAILING = "chromatogramOverlayIonsSolventTailing";
-	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_SOLVENT_TAILING = "84";
-	public static final String P_CHROMATOGRAM_OVERLAY_IONS_COLUMN_BLEED = "chromatogramOverlayIonsColumnBleed";
-	public static final String DEF_CHROMATOGRAM_OVERLAY_IONS_COLUMN_BLEED = "207";
+	public static final String P_CHROMATOGRAM_OVERLAY_NAMED_TRACES = "chromatogramOverlayNamedTraces";
+	public static final String DEF_CHROMATOGRAM_OVERLAY_NAMED_TRACES = NamedTraceUtil.getDefaultTraces();
 	//
 	public static final String P_OVERLAY_SHIFT_X = "overlayShiftX";
 	public static final double DEF_OVERLAY_SHIFT_X = 0.0d;
@@ -358,8 +325,16 @@ public class PreferenceConstants extends ChartOptions {
 	public static final boolean DEF_PROPAGATE_TARGET_ON_UPDATE = false;
 	public static final String P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER = "targetTemplateLibraryImportFolder";
 	public static final String DEF_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER = "";
+	/*
+	 * Time Ranges
+	 */
 	public static final String P_TIME_RANGE_TEMPLATE_FOLDER = "timeRangeTemplateFolder";
 	public static final String DEF_TIME_RANGE_TEMPLATE_FOLDER = "";
+	/*
+	 * Named Traces
+	 */
+	public static final String P_NAMED_TRACES_TEMPLATE_FOLDER = "namedTracesTemplateFolder";
+	public static final String DEF_NAMED_TRACES_TEMPLATE_FOLDER = "";
 	/*
 	 * Chromatogram
 	 */

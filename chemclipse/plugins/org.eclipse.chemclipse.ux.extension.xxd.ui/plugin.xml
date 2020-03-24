@@ -208,7 +208,19 @@
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSequences"
             id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageSequences"
             name="Sequences">
-      </page>                                                                              
+      </page>
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTimeRanges"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTimeRanges"
+            name="Time Range(s)">
+      </page>  
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageNamedTraces"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageNamedTraces"
+            name="Named Trace(s)">
+      </page>                                                                             
    </extension> 
    <extension
          point="org.eclipse.ui.editors">  

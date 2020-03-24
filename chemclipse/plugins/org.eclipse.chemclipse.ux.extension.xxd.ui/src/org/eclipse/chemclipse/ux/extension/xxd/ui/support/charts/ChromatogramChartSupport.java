@@ -70,28 +70,14 @@ public class ChromatogramChartSupport {
 	public static final String DERIVATIVE_SECOND = "2nd";
 	public static final String DERIVATIVE_THIRD = "3rd";
 	//
-	private IColorScheme colorSchemeNormal;
-	private Map<String, Color> usedColorsNormal;
-	private IColorScheme colorSchemeSIC;
-	private Map<String, Color> usedColorsSIC;
-	private IColorScheme colorSchemeSWC;
-	private Map<String, Color> usedColorsSWC;
-	//
-	private LineStyle lineStyleTIC;
-	private LineStyle lineStyleBPC;
-	private LineStyle lineStyleXIC;
-	private LineStyle lineStyleSIC;
-	private LineStyle lineStyleTSC;
-	private LineStyle lineStyleSWC;
-	private LineStyle lineStyleAWC;
-	private LineStyle lineStyleDefault;
+	private IColorScheme colorScheme;
+	private Map<String, Color> usedColors;
+	private LineStyle lineStyle;
 	//
 	private boolean showArea = false;
 
 	public ChromatogramChartSupport() {
-		usedColorsNormal = new HashMap<>();
-		usedColorsSIC = new HashMap<>();
-		usedColorsSWC = new HashMap<>();
+		usedColors = new HashMap<>();
 		loadUserSettings();
 	}
 
@@ -99,17 +85,8 @@ public class ChromatogramChartSupport {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		//
-		colorSchemeNormal = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_NORMAL_OVERLAY));
-		colorSchemeSIC = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_SIC_OVERLAY));
-		colorSchemeSWC = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_SWC_OVERLAY));
-		lineStyleTIC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_TIC_OVERLAY));
-		lineStyleBPC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_BPC_OVERLAY));
-		lineStyleXIC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_XIC_OVERLAY));
-		lineStyleSIC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_SIC_OVERLAY));
-		lineStyleTSC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_TSC_OVERLAY));
-		lineStyleSWC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_SWC_OVERLAY));
-		lineStyleAWC = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_XWC_OVERLAY));
-		lineStyleDefault = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_DEFAULT_OVERLAY));
+		colorScheme = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_OVERLAY));
+		lineStyle = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_OVERLAY));
 		showArea = preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_SHOW_AREA);
 		//
 		resetColorMaps();
@@ -117,37 +94,11 @@ public class ChromatogramChartSupport {
 
 	public Color getSeriesColor(String seriesId, DisplayType dataType) {
 
-		Color color;
-		if(DisplayType.SIC.equals(dataType)) {
-			/*
-			 * SIC
-			 */
-			color = usedColorsSIC.get(seriesId);
-			if(color == null) {
-				color = colorSchemeSIC.getColor();
-				colorSchemeSIC.incrementColor();
-				usedColorsSIC.put(seriesId, color);
-			}
-		} else if(DisplayType.SWC.equals(dataType)) {
-			/*
-			 * SIC
-			 */
-			color = usedColorsSWC.get(seriesId);
-			if(color == null) {
-				color = colorSchemeSWC.getColor();
-				colorSchemeSWC.incrementColor();
-				usedColorsSWC.put(seriesId, color);
-			}
-		} else {
-			/*
-			 * Normal
-			 */
-			color = usedColorsNormal.get(seriesId);
-			if(color == null) {
-				color = colorSchemeNormal.getColor();
-				colorSchemeNormal.incrementColor();
-				usedColorsNormal.put(seriesId, color);
-			}
+		Color color = usedColors.get(seriesId);
+		if(color == null) {
+			color = colorScheme.getColor();
+			colorScheme.incrementColor();
+			usedColors.put(seriesId, color);
 		}
 		return color;
 	}
@@ -195,6 +146,7 @@ public class ChromatogramChartSupport {
 		return getLineSeriesData(chromatogram, seriesId, dataType, derivativeType, color, signals, true);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, DisplayType dataType, Color color, IMarkedSignals<? extends IMarkedSignal> signals) {
 
 		return getLineSeriesData(chromatogram, seriesId, dataType, DERIVATIVE_NONE, color, signals, false);
@@ -422,6 +374,7 @@ public class ChromatogramChartSupport {
 		return getLineSeriesData(chromatogramSelection, seriesId, dataType, DERIVATIVE_NONE, color, baseline, timeIntervalSelection);
 	}
 
+	@SuppressWarnings("unused")
 	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?, ?> chromatogramSelection, String seriesId, DisplayType dataType, String derivativeType, Color color, boolean baseline, boolean timeIntervalSelection) {
 
 		/*
@@ -559,24 +512,6 @@ public class ChromatogramChartSupport {
 
 	private LineStyle getLineStyle(DisplayType dataType) {
 
-		LineStyle lineStyle;
-		if(dataType.equals(DisplayType.TIC)) {
-			lineStyle = lineStyleTIC;
-		} else if(dataType.equals(DisplayType.BPC)) {
-			lineStyle = lineStyleBPC;
-		} else if(dataType.equals(DisplayType.XIC)) {
-			lineStyle = lineStyleXIC;
-		} else if(dataType.equals(DisplayType.SIC)) {
-			lineStyle = lineStyleSIC;
-		} else if(dataType.equals(DisplayType.TSC)) {
-			lineStyle = lineStyleTSC;
-		} else if(dataType.equals(DisplayType.SWC)) {
-			lineStyle = lineStyleSWC;
-		} else if(dataType.equals(DisplayType.XWC)) {
-			lineStyle = lineStyleAWC;
-		} else {
-			lineStyle = lineStyleDefault;
-		}
 		return lineStyle;
 	}
 
@@ -612,11 +547,7 @@ public class ChromatogramChartSupport {
 
 	private void resetColorMaps() {
 
-		colorSchemeNormal.reset();
-		usedColorsNormal.clear();
-		colorSchemeSIC.reset();
-		usedColorsSIC.clear();
-		colorSchemeSWC.reset();
-		usedColorsSWC.clear();
+		colorScheme.reset();
+		usedColors.clear();
 	}
 }

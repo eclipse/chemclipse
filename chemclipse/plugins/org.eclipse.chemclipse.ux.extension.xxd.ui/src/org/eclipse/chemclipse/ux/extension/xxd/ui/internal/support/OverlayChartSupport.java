@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,33 +26,15 @@ public class OverlayChartSupport {
 	public static final String OVERLAY_STOP_MARKER = ")";
 	public static final String DELIMITER_SIGNAL_DERIVATIVE = ",";
 	//
-	public static final String SELECTED_IONS_USERS_CHOICE = "Users Choice";
-	public static final String SELECTED_IONS_HYDROCARBONS = "Hydrocarbons";
-	public static final String SELECTED_IONS_FATTY_ACIDS = "Fatty Acids";
-	public static final String SELECTED_IONS_FAME = "FAME";
-	public static final String SELECTED_IONS_SOLVENT_TAILING = "Solvent Tailing";
-	public static final String SELECTED_IONS_COLUMN_BLEED = "Column Bleed";
-	//
-	public static String[][] SELECTED_IONS_CHOICES = new String[][]{//
-			{"Users Choice", SELECTED_IONS_USERS_CHOICE}, //
-			{"Hydrocarbons", SELECTED_IONS_HYDROCARBONS}, //
-			{"Fatty Acids", SELECTED_IONS_FATTY_ACIDS}, //
-			{"FAME", SELECTED_IONS_FAME}, //
-			{"Solvent Tailing", SELECTED_IONS_SOLVENT_TAILING}, //
-			{"Column Bleed", SELECTED_IONS_COLUMN_BLEED}//
-	};
-	//
 	public static final String DISPLAY_MODUS_NORMAL = "Normal";
 	public static final String DISPLAY_MODUS_MIRRORED = "Mirrored";
 	//
 	private String[] overlayTypes;
 	private String[] derivativeTypes;
-	private String[] selectedIons;
 	private String[] displayModi;
 	//
 
 	public OverlayChartSupport() {
-
 		initialize();
 	}
 
@@ -64,11 +46,6 @@ public class OverlayChartSupport {
 	public String[] getDerivativeTypes() {
 
 		return derivativeTypes;
-	}
-
-	public String[] getSelectedIons() {
-
-		return selectedIons;
 	}
 
 	public String[] getDisplayModi() {
@@ -96,14 +73,6 @@ public class OverlayChartSupport {
 				ChromatogramChartSupport.DERIVATIVE_FIRST, //
 				ChromatogramChartSupport.DERIVATIVE_SECOND, //
 				ChromatogramChartSupport.DERIVATIVE_THIRD};
-		//
-		selectedIons = new String[]{//
-				SELECTED_IONS_USERS_CHOICE, //
-				SELECTED_IONS_HYDROCARBONS, //
-				SELECTED_IONS_FATTY_ACIDS, //
-				SELECTED_IONS_FAME, //
-				SELECTED_IONS_SOLVENT_TAILING, //
-				SELECTED_IONS_COLUMN_BLEED};
 		//
 		displayModi = new String[]{//
 				DISPLAY_MODUS_NORMAL, //

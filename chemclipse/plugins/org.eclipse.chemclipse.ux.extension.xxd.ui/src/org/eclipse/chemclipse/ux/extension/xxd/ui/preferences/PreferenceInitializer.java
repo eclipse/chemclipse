@@ -68,26 +68,9 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		 */
 		store.setDefault(PreferenceConstants.P_OVERLAY_CHART_COMPRESSION_TYPE, PreferenceConstants.DEF_OVERLAY_CHART_COMPRESSION_TYPE);
 		store.setDefault(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS, PreferenceConstants.DEF_SHOW_REFERENCED_CHROMATOGRAMS);
-		store.setDefault(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_NORMAL_OVERLAY, PreferenceConstants.DEF_COLOR_SCHEME_DISPLAY_NORMAL_OVERLAY);
-		store.setDefault(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_SIC_OVERLAY, PreferenceConstants.DEF_COLOR_SCHEME_DISPLAY_SIC_OVERLAY);
-		store.setDefault(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_SWC_OVERLAY, PreferenceConstants.DEF_COLOR_SCHEME_DISPLAY_SWC_OVERLAY);
-		store.setDefault(PreferenceConstants.P_LINE_STYLE_DISPLAY_TIC_OVERLAY, PreferenceConstants.DEF_LINE_STYLE_DISPLAY_TIC_OVERLAY);
-		store.setDefault(PreferenceConstants.P_LINE_STYLE_DISPLAY_BPC_OVERLAY, PreferenceConstants.DEF_LINE_STYLE_DISPLAY_BPC_OVERLAY);
-		store.setDefault(PreferenceConstants.P_LINE_STYLE_DISPLAY_XIC_OVERLAY, PreferenceConstants.DEF_LINE_STYLE_DISPLAY_XIC_OVERLAY);
-		store.setDefault(PreferenceConstants.P_LINE_STYLE_DISPLAY_SIC_OVERLAY, PreferenceConstants.DEF_LINE_STYLE_DISPLAY_SIC_OVERLAY);
-		store.setDefault(PreferenceConstants.P_LINE_STYLE_DISPLAY_TSC_OVERLAY, PreferenceConstants.DEF_LINE_STYLE_DISPLAY_TSC_OVERLAY);
-		store.setDefault(PreferenceConstants.P_LINE_STYLE_DISPLAY_XWC_OVERLAY, PreferenceConstants.DEF_LINE_STYLE_DISPLAY_XWC_OVERLAY);
-		store.setDefault(PreferenceConstants.P_LINE_STYLE_DISPLAY_SWC_OVERLAY, PreferenceConstants.DEF_LINE_STYLE_DISPLAY_SWC_OVERLAY);
-		store.setDefault(PreferenceConstants.P_LINE_STYLE_DISPLAY_DEFAULT_OVERLAY, PreferenceConstants.DEF_LINE_STYLE_DISPLAY_DEFAULT_OVERLAY);
-		//
-		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_SELECTION, PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_IONS_SELECTION);
-		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_USERS_CHOICE, PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_IONS_USERS_CHOICE);
-		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_WAVELENGTHS_USERS_CHOICE, PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_WAVELENGTHS_USERS_CHOICE);
-		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_HYDROCARBONS, PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_IONS_HYDROCARBONS);
-		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_FATTY_ACIDS, PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_IONS_FATTY_ACIDS);
-		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_FAME, PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_IONS_FAME);
-		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_SOLVENT_TAILING, PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_IONS_SOLVENT_TAILING);
-		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_IONS_COLUMN_BLEED, PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_IONS_COLUMN_BLEED);
+		store.setDefault(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_OVERLAY, PreferenceConstants.DEF_COLOR_SCHEME_DISPLAY_OVERLAY);
+		store.setDefault(PreferenceConstants.P_LINE_STYLE_DISPLAY_OVERLAY, PreferenceConstants.DEF_LINE_STYLE_DISPLAY_OVERLAY);
+		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_NAMED_TRACES, PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_NAMED_TRACES);
 		//
 		store.setDefault(PreferenceConstants.P_OVERLAY_SHIFT_X, PreferenceConstants.DEF_OVERLAY_SHIFT_X);
 		store.setDefault(PreferenceConstants.P_INDEX_SHIFT_X, PreferenceConstants.DEF_INDEX_SHIFT_X);
@@ -186,7 +169,15 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_TARGET_LIST, PreferenceConstants.DEF_TARGET_LIST);
 		store.setDefault(PreferenceConstants.P_PROPAGATE_TARGET_ON_UPDATE, PreferenceConstants.DEF_PROPAGATE_TARGET_ON_UPDATE);
 		store.setDefault(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER, PreferenceConstants.DEF_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER);
+		/*
+		 * Time Ranges
+		 */
 		store.setDefault(PreferenceConstants.P_TIME_RANGE_TEMPLATE_FOLDER, PreferenceConstants.DEF_TIME_RANGE_TEMPLATE_FOLDER);
+		/*
+		 * Named Traces
+		 */
+		store.setDefault(PreferenceConstants.P_NAMED_TRACES_TEMPLATE_FOLDER, PreferenceConstants.DEF_NAMED_TRACES_TEMPLATE_FOLDER);
+		//
 		initializeChromatogramDefaults(store);
 		/*
 		 * Calibration Chart
