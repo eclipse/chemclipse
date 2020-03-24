@@ -47,13 +47,14 @@ public class ScanTableUI extends ExtendedTableViewer {
 	private Map<DataType, IContentProvider> contentProviderMap;
 	//
 	private ScanSignalListFilter scanSignalListFilter;
+	private IScan scan = null;
 
 	public ScanTableUI(Composite parent, int style) {
 		super(parent, style);
 		labelProviderMap = new HashMap<DataType, ITableLabelProvider>();
 		viewerComparatorMap = new HashMap<DataType, ViewerComparator>();
 		contentProviderMap = new HashMap<DataType, IContentProvider>();
-		setLabelAndContentProviders(DataType.MSD_NOMINAL);
+		setLabelAndContentProviders(DataType.MSD_NOMINAL, 0.0f);
 	}
 
 	public void setSearchText(String searchText, boolean caseSensitive) {
@@ -62,24 +63,35 @@ public class ScanTableUI extends ExtendedTableViewer {
 		refresh();
 	}
 
+	/**
+	 * Use this method, e.g. when the scan has been edited and the table
+	 * needs to be reloaded.
+	 */
+	public void updateScan() {
+
+		setInput(scan);
+	}
+
 	public void setInput(IScan scan) {
 
+		this.scan = scan;
 		if(scan instanceof IScanMSD) {
 			/*
 			 * MSD
 			 */
+			super.setInput(null); // Can only enable the hash look up before input has been set
 			IScanMSD scanMSD = (IScanMSD)scan;
 			List<IIon> ions = scanMSD.getIons();
 			int size = ions.size();
-			super.setInput(null); // Can only enable the hash look up before input has been set
+			float totalIntensity = scanMSD.getTotalSignal();
 			//
 			if(scanMSD.isTandemMS()) {
-				setLabelAndContentProviders(DataType.MSD_TANDEM);
+				setLabelAndContentProviders(DataType.MSD_TANDEM, totalIntensity);
 			} else {
 				if(scanMSD.isHighResolutionMS()) {
-					setLabelAndContentProviders(DataType.MSD_HIGHRES);
+					setLabelAndContentProviders(DataType.MSD_HIGHRES, totalIntensity);
 				} else {
-					setLabelAndContentProviders(DataType.MSD_NOMINAL);
+					setLabelAndContentProviders(DataType.MSD_NOMINAL, totalIntensity);
 				}
 			}
 			//
@@ -90,8 +102,8 @@ public class ScanTableUI extends ExtendedTableViewer {
 			 * CSD
 			 */
 			super.setInput(null);
-			setLabelAndContentProviders(DataType.CSD);
 			IScanCSD scanCSD = (IScanCSD)scan;
+			setLabelAndContentProviders(DataType.CSD, scanCSD.getTotalSignal());
 			List<IScanCSD> list = new ArrayList<IScanCSD>();
 			list.add(scanCSD);
 			super.setInput(list);
@@ -100,8 +112,8 @@ public class ScanTableUI extends ExtendedTableViewer {
 			 * WSD
 			 */
 			super.setInput(null);
-			setLabelAndContentProviders(DataType.WSD);
 			IScanWSD scanWSD = (IScanWSD)scan;
+			setLabelAndContentProviders(DataType.WSD, scanWSD.getTotalSignal());
 			super.setInput(scanWSD.getScanSignals());
 		} else {
 			getTable().removeAll();
@@ -109,7 +121,7 @@ public class ScanTableUI extends ExtendedTableViewer {
 		}
 	}
 
-	private void setLabelAndContentProviders(DataType dataType) {
+	private void setLabelAndContentProviders(DataType dataType, float totalIntensity) {
 
 		String[] titles = getTitles(dataType);
 		int[] bounds = getBounds(dataType);
@@ -117,6 +129,13 @@ public class ScanTableUI extends ExtendedTableViewer {
 		//
 		ITableLabelProvider labelProvider = getTableLabelProvider(dataType);
 		setLabelProvider(labelProvider);
+		/*
+		 * Relative Intensity [%] calculation
+		 */
+		if(labelProvider instanceof ScanLabelProvider) {
+			ScanLabelProvider scanLabelProvider = (ScanLabelProvider)labelProvider;
+			scanLabelProvider.setTotalIntensity(totalIntensity);
+		}
 		//
 		IContentProvider contentProvider = getContentProvider(dataType);
 		if(useVirtualTableSettings(dataType)) {

@@ -580,6 +580,7 @@ public class ExtendedScanTableUI {
 
 				if(object != null) {
 					addSignal(e.display.getActiveShell());
+					scanTableUI.updateScan();
 					fireEditEvent();
 				} else {
 					MessageDialog.openError(e.display.getActiveShell(), "Add Signal", "Please load a scan first.");
@@ -600,6 +601,7 @@ public class ExtendedScanTableUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				deleteSignals(e.display.getActiveShell());
+				scanTableUI.updateScan();
 				fireEditEvent();
 			}
 		});

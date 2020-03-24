@@ -16,6 +16,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ScanTableUI;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
@@ -80,18 +81,29 @@ public class ScanSignalEditingSupport extends EditingSupport {
 					IIon ion = (IIon)element;
 					try {
 						ion.setAbundance(abundance);
+						updateTable();
 					} catch(AbundanceLimitExceededException e) {
 						logger.warn(e);
 					}
 				} else if(element instanceof IScanSignalWSD) {
 					IScanSignalWSD scanSignalWSD = (IScanSignalWSD)element;
 					scanSignalWSD.setAbundance(abundance);
+					updateTable();
 				} else if(element instanceof IScanCSD) {
-					// IScanCSD scanCSD = (IScanCSD)element;
+					/*
+					 * IScanCSD scanCSD = (IScanCSD)element;
+					 */
 					logger.info("It's not possible to edit the CSD scan total signal at the moment.");
 				}
 			}
-			tableViewer.refresh();
+		}
+	}
+
+	private void updateTable() {
+
+		if(tableViewer instanceof ScanTableUI) {
+			ScanTableUI scanTableUI = (ScanTableUI)tableViewer;
+			scanTableUI.updateScan();
 		}
 	}
 

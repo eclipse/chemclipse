@@ -35,6 +35,11 @@ public class PreferencePageScans extends FieldEditorPreferencePage implements IW
 	public void createFieldEditors() {
 
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("General chromatogram and scan axis titles.", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_TITLE_Y_AXIS_INTENSITY, "Intensity:", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_TITLE_Y_AXIS_RELATIVE_INTENSITY, "Relative Intensity:", getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("When changing the label fields, a restart is required.", getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.P_TITLE_X_AXIS_MZ, "Ion [m/z]:", getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.P_TITLE_X_AXIS_PARENT_MZ, "Parent Ion [m/z]:", getFieldEditorParent()));

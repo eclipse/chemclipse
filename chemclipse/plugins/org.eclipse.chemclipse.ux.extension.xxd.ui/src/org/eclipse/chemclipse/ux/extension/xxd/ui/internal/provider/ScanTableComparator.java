@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -62,10 +62,13 @@ public class ScanTableComparator extends AbstractRecordTableComparator implement
 			IIon ion2 = (IIon)e2;
 			//
 			switch(getPropertyIndex()) {
-				case 0: // m/z
+				case 0:
 					sortOrder = Double.compare(ion2.getIon(), ion1.getIon());
 					break;
-				case 1: // abundance
+				case 1:
+					sortOrder = Float.compare(ion2.getAbundance(), ion1.getAbundance());
+					break;
+				case 2: // rel. abundance == abundance
 					sortOrder = Float.compare(ion2.getAbundance(), ion1.getAbundance());
 					break;
 				default:
@@ -88,25 +91,28 @@ public class ScanTableComparator extends AbstractRecordTableComparator implement
 			IIonTransition ionTransition2 = ion2.getIonTransition();
 			//
 			switch(getPropertyIndex()) {
-				case 0: // m/z
+				case 0:
 					sortOrder = Double.compare(ion2.getIon(), ion1.getIon());
 					break;
-				case 1: // abundance
+				case 1:
 					sortOrder = Float.compare(ion2.getAbundance(), ion1.getAbundance());
 					break;
-				case 2: // parent m/z
+				case 2: // rel. abundance == abundance
+					sortOrder = Float.compare(ion2.getAbundance(), ion1.getAbundance());
+					break;
+				case 3: // parent m/z
 					sortOrder = (ionTransition1 == null || ionTransition2 == null) ? 0 : Integer.compare(ionTransition2.getQ1Ion(), ionTransition1.getQ1Ion());
 					break;
-				case 3: // parent resolution
+				case 4: // parent resolution
 					sortOrder = (ionTransition1 == null || ionTransition2 == null) ? 0 : Double.compare(ionTransition2.getQ1Resolution(), ionTransition1.getQ1Resolution());
 					break;
-				case 4: // daughter m/z
+				case 5: // daughter m/z
 					sortOrder = (ionTransition1 == null || ionTransition2 == null) ? 0 : Double.compare(ionTransition2.getQ3Ion(), ionTransition1.getQ3Ion());
 					break;
-				case 5: // daughter resolution
+				case 6: // daughter resolution
 					sortOrder = (ionTransition1 == null || ionTransition2 == null) ? 0 : Double.compare(ionTransition2.getQ3Resolution(), ionTransition1.getQ3Resolution());
 					break;
-				case 6: // collision energy
+				case 7: // collision energy
 					sortOrder = (ionTransition1 == null || ionTransition2 == null) ? 0 : Double.compare(ionTransition2.getCollisionEnergy(), ionTransition1.getCollisionEnergy());
 					break;
 				default:
@@ -127,10 +133,13 @@ public class ScanTableComparator extends AbstractRecordTableComparator implement
 			IIon ion2 = (IIon)e2;
 			//
 			switch(getPropertyIndex()) {
-				case 0: // m/z
+				case 0:
 					sortOrder = Double.compare(ion2.getIon(), ion1.getIon());
 					break;
-				case 1: // abundance
+				case 1:
+					sortOrder = Float.compare(ion2.getAbundance(), ion1.getAbundance());
+					break;
+				case 2: // rel. abundance == abundance
 					sortOrder = Float.compare(ion2.getAbundance(), ion1.getAbundance());
 					break;
 				default:
@@ -151,10 +160,13 @@ public class ScanTableComparator extends AbstractRecordTableComparator implement
 			IScanCSD scanCSD2 = (IScanCSD)e2;
 			//
 			switch(getPropertyIndex()) {
-				case 0: // retention time
+				case 0:
 					sortOrder = Integer.compare(scanCSD2.getRetentionTime(), scanCSD1.getRetentionTime());
 					break;
-				case 1: // abundance
+				case 1:
+					sortOrder = Float.compare(scanCSD2.getTotalSignal(), scanCSD1.getTotalSignal());
+					break;
+				case 2: // rel. abundance == abundance
 					sortOrder = Float.compare(scanCSD2.getTotalSignal(), scanCSD1.getTotalSignal());
 					break;
 				default:
@@ -175,10 +187,13 @@ public class ScanTableComparator extends AbstractRecordTableComparator implement
 			IScanSignalWSD scanSignalWSD2 = (IScanSignalWSD)e2;
 			//
 			switch(getPropertyIndex()) {
-				case 0: // m/z
+				case 0:
 					sortOrder = Double.compare(scanSignalWSD2.getWavelength(), scanSignalWSD1.getWavelength());
 					break;
-				case 1: // abundance
+				case 1:
+					sortOrder = Float.compare(scanSignalWSD2.getAbundance(), scanSignalWSD1.getAbundance());
+					break;
+				case 2: // rel. abundance == abundance
 					sortOrder = Float.compare(scanSignalWSD2.getAbundance(), scanSignalWSD1.getAbundance());
 					break;
 				default:
