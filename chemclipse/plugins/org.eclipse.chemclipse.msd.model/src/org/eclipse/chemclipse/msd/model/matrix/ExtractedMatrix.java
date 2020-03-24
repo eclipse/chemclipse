@@ -11,11 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.matrix;
 
-
-import java.util.Comparator;
-import java.util.Iterator;
+import java.util.DoubleSummaryStatistics;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IIon;
@@ -39,19 +38,18 @@ public class ExtractedMatrix {
 		this.numberOfScans = selection.getStopScan() - selection.getStartScan() + 1;
 		this.scans = extractScans();
 		if(checkHighRes( 10)) {
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("HighRes MSD is currently not suported");
 		} else {
-			this.startIon = getMinMz();
-			this.stopIon = getMaxMz();
+			int[] minMaxMz = getMinMaxMz();
+			this.startIon = minMaxMz[0];
+			this.stopIon = minMaxMz[1];
 			this.numberOfIons = this.stopIon - this.startIon + 1;
 			signal = new float[numberOfScans][this.numberOfIons];
 			List<IIon> currentIons;
-			int numberIonsCurrentScan;
 			for(int scanIndex = 0; scanIndex < numberOfScans; scanIndex++) {
 				currentIons = scans.get(scanIndex).getIons();
-				numberIonsCurrentScan = currentIons.size(); 
-				for(int j = 0; j < numberIonsCurrentScan; j++) {
-					signal[ scanIndex ] [((int) Math.round(currentIons.get(j).getIon() - this.startIon))] =  currentIons.get(j).getAbundance();
+				for(IIon ion: currentIons) {
+					signal[ scanIndex ] [((int) Math.round(ion.getIon() - this.startIon))] =  ion.getAbundance();
 				}
 			}
 		}
@@ -90,26 +88,18 @@ public class ExtractedMatrix {
 		return (scans);
 	}
 	
-	private int getMinMz() {
+	private int[] getMinMaxMz() {
+		
+		int[] minMaxMz = new int[2];
 
-		double min = scans.stream() //
+		Stream<Double> s = scans.stream() //
 				.flatMap(scan -> scan.getIons().stream()) //
-				.min(Comparator.comparing(IIon::getIon)) //
-				.get() //
-				.getIon();
-		int minMz = AbstractIon.getIon(min);
-		return (minMz);
-	}
-	
-	private int getMaxMz() {
-
-		double max = scans.stream() //
-				.flatMap(scan -> scan.getIons().stream()) //
-				.max(Comparator.comparing(IIon::getIon)) //
-				.get() //
-				.getIon();
-		int maxMz = AbstractIon.getIon(max);
-		return (maxMz);
+				.map(x -> (Double) x.getIon());
+		DoubleSummaryStatistics d = s.collect(Collectors.summarizingDouble(value -> value));
+		
+		minMaxMz[0] = AbstractIon.getIon(d.getMin());
+		minMaxMz[1] = AbstractIon.getIon(d.getMax());
+		return (minMaxMz); 
 	}
 
 	public float[][] getMatrix() {
