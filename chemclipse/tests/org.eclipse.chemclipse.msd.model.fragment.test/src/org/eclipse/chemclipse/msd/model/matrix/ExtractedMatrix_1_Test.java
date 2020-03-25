@@ -1,27 +1,32 @@
+/*******************************************************************************
+ * Copyright (c) 2020 Lablicate GmbH.
+ * 
+ * All rights reserved.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ * Lorenz Gerber - initial API and implementation
+ *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.matrix;
 
-
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanIon;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.ScanIon;
-import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
-import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignalExtractor;
-import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
 
 import junit.framework.TestCase;
 
 public class ExtractedMatrix_1_Test extends TestCase {
-	
+
 	private IVendorMassSpectrum supplierMassSpectrum;
 	private IScanIon defaultIon;
 	private IChromatogramMSD chromatogram;
-	
+
 	@Override
 	protected void setUp() throws Exception {
 
@@ -48,19 +53,17 @@ public class ExtractedMatrix_1_Test extends TestCase {
 	protected void tearDown() throws Exception {
 
 		chromatogram = null;
-
 		super.tearDown();
 	}
-	
+
 	public void testConstructor_1() {
 
 		try {
 			ChromatogramSelectionMSD selection = new ChromatogramSelectionMSD(chromatogram);
 			ExtractedMatrix extracted = new ExtractedMatrix(selection);
-			assertNotNull(extracted);	
+			assertNotNull(extracted);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
 	}
-
 }
