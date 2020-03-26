@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.impl;
 
-
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
@@ -26,12 +25,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 @SuppressWarnings("rawtypes")
 public class ChromatogramFilterZeroValueRemoval extends AbstractChromatogramFilterMSD {
-	
+
 	private static final Logger logger = Logger.getLogger(ChromatogramFilterZeroValueRemoval.class);
 
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
-		
+
 		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
 		if(!processingInfo.hasErrorMessages()) {
 			if(chromatogramFilterSettings instanceof FilterSettingsAdjust) {
@@ -40,31 +39,28 @@ public class ChromatogramFilterZeroValueRemoval extends AbstractChromatogramFilt
 				 */
 				// FilterSettingsAdjust filterSettings = (FilterSettingsAdjust)chromatogramFilterSettings;
 				if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-					IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
+					IChromatogramSelectionMSD chromatogramSelectionMSD = chromatogramSelection;
 					ExtractedMatrix extract = new ExtractedMatrix(chromatogramSelectionMSD);
 					float[][] matrix = extract.getMatrix();
 					int numberIons = extract.getNumberOfIons();
 					int numberScans = extract.getNumberOfScans();
-					
 					for(int ionIndex = 0; ionIndex < numberIons; ionIndex++) {
 						int startIndex = 0;
-						
 						// pre-loop to prevent iteration from first scan
 						for(int scanIndex = 0; scanIndex < numberScans; scanIndex++) {
 							if(matrix[scanIndex][ionIndex] != 0.0) {
 								startIndex = scanIndex;
 								break;
-							}	
+							}
 						}
-						
-						// main loop 
+						// main loop
 						for(int scanIndex = startIndex; scanIndex < numberScans; scanIndex++) {
 							if(matrix[scanIndex][ionIndex] == 0.0) {
 							} else {
 								if(scanIndex == startIndex + 1) {
 									startIndex = scanIndex;
 								} else {
-									matrix = linearInterpolation(matrix, startIndex, scanIndex, ionIndex ); 
+									matrix = linearInterpolation(matrix, startIndex, scanIndex, ionIndex);
 									startIndex = scanIndex;
 								}
 							}
@@ -79,17 +75,16 @@ public class ChromatogramFilterZeroValueRemoval extends AbstractChromatogramFilt
 		//
 		return processingInfo;
 	}
-	
-	float[][] linearInterpolation(float[][] matrix, int startColumn, int stopColumn, int row ){
-		
+
+	private float[][] linearInterpolation(float[][] matrix, int startColumn, int stopColumn, int row) {
+
 		float startSignal = matrix[startColumn][row];
 		float stopSignal = matrix[stopColumn][row];
-		for(int index = 1; index < (stopColumn - startColumn); index++ ) {
+		for(int index = 1; index < (stopColumn - startColumn); index++) {
 			matrix[startColumn + index][row] = (stopSignal - startSignal) / (stopColumn - startColumn) * index + startSignal;
 		}
 		return (matrix);
 	}
-	
 
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
@@ -97,7 +92,4 @@ public class ChromatogramFilterZeroValueRemoval extends AbstractChromatogramFilt
 		FilterSettingsAdjust filterSettings = PreferenceSupplier.getFilterSettingsAdjust();
 		return applyFilter(chromatogramSelection, filterSettings, monitor);
 	}
-	
 }
-
-
