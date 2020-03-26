@@ -81,7 +81,7 @@ public class ExtractedMatrix_2_Test extends TestCase {
 		try {
 			ChromatogramSelectionMSD selection = new ChromatogramSelectionMSD(chromatogram);
 			ExtractedMatrix extracted = new ExtractedMatrix(selection);
-			extracted.updateSignal(signalMatrix);
+			extracted.updateSignal();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

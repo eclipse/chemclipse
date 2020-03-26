@@ -42,8 +42,8 @@ public class ChromatogramFilterZeroValueRemoval extends AbstractChromatogramFilt
 					IChromatogramSelectionMSD chromatogramSelectionMSD = chromatogramSelection;
 					ExtractedMatrix extract = new ExtractedMatrix(chromatogramSelectionMSD);
 					float[][] matrix = extract.getMatrix();
-					int numberIons = extract.getNumberOfIons();
-					int numberScans = extract.getNumberOfScans();
+					int numberIons = matrix[0].length;
+					int numberScans = matrix.length;
 					for(int ionIndex = 0; ionIndex < numberIons; ionIndex++) {
 						int startIndex = 0;
 						// pre-loop to prevent iteration from first scan
@@ -66,7 +66,7 @@ public class ChromatogramFilterZeroValueRemoval extends AbstractChromatogramFilt
 							}
 						}
 					}
-					extract.updateSignal(matrix);
+					extract.updateSignal();
 				}
 				//
 				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "Chromatogram Filter Adjust applied"));

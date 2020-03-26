@@ -27,8 +27,6 @@ public class ExtractedMatrix {
 
 	private IChromatogramSelectionMSD selection;
 	private List<IScanMSD> scans;
-	private int numberOfScans;
-	private int numberOfIons;
 	private int startIon;
 	private int stopIon;
 	private float[][] signal;
@@ -36,7 +34,6 @@ public class ExtractedMatrix {
 	public ExtractedMatrix(IChromatogramSelectionMSD chromatogramSelection) {
 
 		this.selection = chromatogramSelection;
-		this.numberOfScans = selection.getStopScan() - selection.getStartScan() + 1;
 		this.scans = extractScans();
 		if(checkHighRes(10)) {
 			throw new IllegalArgumentException("HighRes MSD is currently not suported");
@@ -44,8 +41,9 @@ public class ExtractedMatrix {
 			int[] minMaxMz = getMinMaxMz();
 			this.startIon = minMaxMz[0];
 			this.stopIon = minMaxMz[1];
-			this.numberOfIons = this.stopIon - this.startIon + 1;
-			signal = new float[numberOfScans][this.numberOfIons];
+			int numberOfScans = selection.getStopScan() - selection.getStartScan() + 1;
+			int numberOfIons = this.stopIon - this.startIon + 1;
+			signal = new float[numberOfScans][numberOfIons];
 			List<IIon> currentIons;
 			for(int scanIndex = 0; scanIndex < numberOfScans; scanIndex++) {
 				currentIons = scans.get(scanIndex).getIons();
@@ -100,27 +98,23 @@ public class ExtractedMatrix {
 		return (minMaxMz);
 	}
 
+	/**
+	 * Returns the scans/ions array
+	 * Scans along rows, ions along columns
+	 * 
+	 * @return data array scans x ions.
+	 */
 	public float[][] getMatrix() {
 
 		return this.signal;
 	}
 
-	public int getNumberOfScans() {
-
-		return this.numberOfScans;
-	}
-
-	public int getNumberOfIons() {
-
-		return this.numberOfIons;
-	}
-
-	public void updateSignal(float[][] signal) {
+	public void updateSignal() {
 
 		IScanMSD currentScan;
 		IIon currentIon;
 		try {
-			for(int i = 1; i <= numberOfScans; i++) {
+			for(int i = 1; i <= signal.length; i++) {
 				currentScan = (IScanMSD)selection.getChromatogram().getScan(i);
 				currentScan.removeAllIons();
 				for(int j = startIon; j < stopIon; j++) {
