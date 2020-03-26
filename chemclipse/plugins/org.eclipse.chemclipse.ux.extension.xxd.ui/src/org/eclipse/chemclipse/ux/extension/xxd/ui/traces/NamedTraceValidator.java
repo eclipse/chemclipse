@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.traces;
 
 import org.eclipse.chemclipse.support.util.NamedTraceListUtil;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.TraceValidator;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
@@ -19,6 +20,8 @@ import org.eclipse.core.runtime.IStatus;
 public class NamedTraceValidator implements IValidator {
 
 	private static final String ERROR = "Please enter a correct identifier.";
+	//
+	private TraceValidator traceValidator = new TraceValidator();
 	//
 	private String identifier = "";
 	private String traces = "";
@@ -32,12 +35,20 @@ public class NamedTraceValidator implements IValidator {
 			message = ERROR;
 		} else {
 			if(value instanceof String) {
-				String[] values = value.toString().split(NamedTraceListUtil.SEPARATOR_ENTRY);
+				String[] values = value.toString().trim().split("\\" + NamedTraceListUtil.SEPARATOR_ENTRY);
 				String identifier = values.length > 0 ? values[0].trim() : "";
 				String traces = values.length > 1 ? values[1].trim() : "";
 				//
-				if("".equals(identifier) || "".equals(traces)) {
+				if("".equals(identifier)) {
 					message = ERROR;
+				} else {
+					this.identifier = identifier;
+					IStatus status = traceValidator.validate(traces);
+					if(status.isOK()) {
+						this.traces = traces;
+					} else {
+						message = status.getMessage();
+					}
 				}
 			} else {
 				message = ERROR;

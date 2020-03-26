@@ -39,8 +39,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChartConfigSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlayChartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.IonsValidator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.WavelengthValidator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.TraceValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageNamedTraces;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay;
@@ -153,10 +152,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 		namedTracesUI = createNamedTraces(parent);
 		toolbarShift = createToolbarShift(parent);
 		createOverlayChart(parent);
-		/*
-		 * Hide both toolbars initially.
-		 * Enable/disable widgets.
-		 */
+		//
 		PartSupport.setCompositeVisibility(namedTracesUI, false);
 		PartSupport.setCompositeVisibility(toolbarShift, false);
 		//
@@ -757,13 +753,18 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 
 	private void applyOverlaySettings() {
 
-		namedTracesUI.setInput(new NamedTraces(preferenceStore.getString(PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_NAMED_TRACES)));
+		updateNamedTraces();
 		chromatogramChartSupport.loadUserSettings();
 		chromatogramChart.deleteSeries();
 		mirroredSeries.clear();
 		refreshUpdateOverlayChart();
 		modifyWidgetStatus();
 		modifyDataStatusLabel();
+	}
+
+	private void updateNamedTraces() {
+
+		namedTracesUI.setInput(new NamedTraces(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_NAMED_TRACES)));
 	}
 
 	private void createOverlayChart(Composite parent) {
@@ -1073,28 +1074,18 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 		List<Number> traceList = new ArrayList<>();
 		NamedTrace namedTrace = namedTracesUI.getNamedTrace();
 		if(namedTrace != null) {
-			String traces = namedTrace.getTraces();
-			if(isNominal) {
-				/*
-				 * m/z
-				 */
-				IonsValidator ionsValidator = new IonsValidator();
-				IStatus status = ionsValidator.validate(traces);
-				if(status.isOK()) {
-					for(int ion : ionsValidator.getIons()) {
-						traceList.add(ion);
+			TraceValidator traceValidator = new TraceValidator();
+			IStatus status = traceValidator.validate(namedTrace.getTraces());
+			if(status.isOK()) {
+				List<Double> traces = traceValidator.getTraces();
+				if(isNominal) {
+					Set<Integer> tracesInt = new HashSet<>();
+					for(double trace : traces) {
+						tracesInt.add(Math.round((float)trace));
 					}
-				}
-			} else {
-				/*
-				 * wavelength
-				 */
-				WavelengthValidator wavelengthValidator = new WavelengthValidator();
-				IStatus status = wavelengthValidator.validate(traces);
-				if(status.isOK()) {
-					for(double wavelength : wavelengthValidator.getWavelengths()) {
-						traceList.add(wavelength);
-					}
+					traceList.addAll(tracesInt);
+				} else {
+					traceList.addAll(traces);
 				}
 			}
 		}

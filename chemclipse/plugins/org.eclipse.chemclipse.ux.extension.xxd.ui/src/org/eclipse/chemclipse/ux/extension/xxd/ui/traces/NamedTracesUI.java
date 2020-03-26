@@ -20,16 +20,16 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.NamedTraceInputValidator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageNamedTraces;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.TraceValidator;
+import org.eclipse.core.databinding.validation.IValidator;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.preference.PreferenceDialog;
-import org.eclipse.jface.preference.PreferenceManager;
-import org.eclipse.jface.preference.PreferenceNode;
+import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -44,11 +44,12 @@ import org.eclipse.swt.widgets.Text;
 
 public class NamedTracesUI extends Composite {
 
+	private static final String TOOLTIP_TEXT = "Enter/modify the traces.";
+	//
 	private ComboViewer comboViewer;
 	private Text textTraces;
 	private Button buttonAdd;
 	private Button buttonDelete;
-	private Button buttonSettings;
 	//
 	private NamedTraces namedTraces = null;
 	private NamedTrace namedTrace = null;
@@ -63,7 +64,7 @@ public class NamedTracesUI extends Composite {
 	public void setInput(NamedTraces namedTraces) {
 
 		this.namedTraces = namedTraces;
-		updateInput();
+		updateInput(null);
 	}
 
 	public void update() {
@@ -116,13 +117,16 @@ public class NamedTracesUI extends Composite {
 
 	private void createControl() {
 
-		setLayout(new GridLayout(5, false));
+		GridLayout gridLayout = new GridLayout(4, false);
+		// gridLayout.marginWidth = 0;
+		// gridLayout.marginLeft = 0;
+		// gridLayout.marginRight = 0;
+		setLayout(gridLayout);
 		//
 		comboViewer = createComboViewer(this);
 		textTraces = createText(this);
 		buttonAdd = createButtonAdd(this);
 		buttonDelete = createButtonDelete(this);
-		buttonSettings = createButtonSettings(this);
 	}
 
 	private ComboViewer createComboViewer(Composite composite) {
@@ -170,18 +174,27 @@ public class NamedTracesUI extends Composite {
 
 		Text text = new Text(parent, SWT.BORDER);
 		text.setText("");
+		text.setToolTipText(TOOLTIP_TEXT);
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		TraceValidator traceValidator = new TraceValidator();
+		ControlDecoration controlDecoration = new ControlDecoration(text, SWT.LEFT | SWT.TOP);
+		//
 		text.addModifyListener(new ModifyListener() {
 
 			@Override
 			public void modifyText(ModifyEvent event) {
 
 				if(namedTrace != null) {
-					namedTrace.setTraces(text.getText().trim());
-					fireUpdate();
+					if(validate(traceValidator, controlDecoration, text)) {
+						namedTrace.setTraces(traceValidator.getTracesAsString());
+						fireUpdate();
+					}
 				}
 			}
 		});
+		//
+		//
 		return text;
 	}
 
@@ -204,7 +217,7 @@ public class NamedTracesUI extends Composite {
 						if(namedTraceNew != null) {
 							namedTraces.add(namedTraceNew);
 							namedTrace = namedTraceNew;
-							updateInput();
+							updateInput(namedTrace.getIdentifier());
 							fireUpdate();
 						}
 					}
@@ -228,8 +241,9 @@ public class NamedTracesUI extends Composite {
 				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Named Trace", "Would you like to delete the selected named trace?")) {
 					Object object = comboViewer.getStructuredSelection().getFirstElement();
 					if(object instanceof NamedTrace) {
+						namedTrace = null;
 						namedTraces.remove((NamedTrace)object);
-						updateInput();
+						updateInput(null);
 						fireUpdate();
 					}
 				}
@@ -238,63 +252,53 @@ public class NamedTracesUI extends Composite {
 		return button;
 	}
 
-	private Button createButtonSettings(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setText("");
-		button.setToolTipText("Settings");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePageNamedTraces()));
-				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
-				preferenceDialog.create();
-				preferenceDialog.setMessage("Settings");
-				if(preferenceDialog.open() == Window.OK) {
-					try {
-						applySettings();
-					} catch(Exception e1) {
-						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
-					}
-				}
-			}
-		});
-		return button;
-	}
-
-	private void applySettings() {
-
-		//
-	}
-
-	private void updateInput() {
+	private void updateInput(String identifier) {
 
 		namedTrace = null;
 		if(namedTraces != null) {
-			//
-			buttonAdd.setEnabled(true);
-			//
+			/*
+			 * Sort the traces by identifier.
+			 */
 			List<NamedTrace> traces = new ArrayList<>(namedTraces.values());
 			Collections.sort(traces, (t1, t2) -> t1.getIdentifier().compareTo(t2.getIdentifier()));
-			//
+			/*
+			 * Populate the combo viewer
+			 */
 			Combo combo = comboViewer.getCombo();
 			int selectionIndex = combo.getSelectionIndex();
 			comboViewer.setInput(traces);
-			//
-			if(combo.getItemCount() > 0) {
-				buttonDelete.setEnabled(true);
-				int index = (selectionIndex >= 0 && selectionIndex < combo.getItemCount()) ? selectionIndex : 0;
-				combo.select(index);
-				namedTrace = traces.get(index);
-			} else {
-				buttonDelete.setEnabled(false);
+			int itemCount = combo.getItemCount();
+			/*
+			 * Set the last selection if possible.
+			 */
+			if(itemCount > 0) {
+				int index = -1;
+				if(identifier == null) {
+					index = (selectionIndex >= 0 && selectionIndex < itemCount) ? selectionIndex : 0;
+				} else {
+					exitloop:
+					for(int i = 0; i < traces.size(); i++) {
+						if(identifier.equals(traces.get(i).getIdentifier())) {
+							index = i;
+							break exitloop;
+						}
+					}
+				}
+				/*
+				 * Set the selected item.
+				 */
+				if(index >= 0 && index < itemCount) {
+					combo.select(index);
+					namedTrace = traces.get(index);
+				}
 			}
+			//
+			buttonAdd.setEnabled(true);
+			buttonDelete.setEnabled(itemCount > 0);
 		} else {
+			/*
+			 * Settings
+			 */
 			buttonAdd.setEnabled(false);
 			buttonDelete.setEnabled(false);
 			comboViewer.setInput(null);
@@ -307,7 +311,22 @@ public class NamedTracesUI extends Composite {
 
 		textTraces.setText(namedTrace != null ? namedTrace.getTraces() : "");
 		buttonDelete.setEnabled(namedTrace != null);
-		buttonSettings.setEnabled(true);
+	}
+
+	private boolean validate(IValidator validator, ControlDecoration controlDecoration, Text text) {
+
+		IStatus status = validator.validate(text.getText().trim());
+		if(status.isOK()) {
+			controlDecoration.hide();
+			text.setToolTipText(TOOLTIP_TEXT);
+			return true;
+		} else {
+			controlDecoration.setImage(FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_CONTENT_PROPOSAL).getImage());
+			controlDecoration.showHoverText(status.getMessage());
+			controlDecoration.show();
+			text.setToolTipText(status.getMessage());
+			return false;
+		}
 	}
 
 	private void fireUpdate() {

@@ -19,6 +19,7 @@ public class NamedTraceListUtil {
 
 	public static final String SEPARATOR_TOKEN = ";";
 	public static final String SEPARATOR_ENTRY = "|";
+	public static final String SEPARATOR_TRACE = " ";
 
 	public String createList(String[] items) {
 

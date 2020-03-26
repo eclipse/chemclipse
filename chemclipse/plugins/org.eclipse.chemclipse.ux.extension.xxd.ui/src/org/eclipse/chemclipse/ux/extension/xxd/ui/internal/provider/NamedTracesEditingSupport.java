@@ -12,7 +12,9 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.TraceValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTrace;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -22,6 +24,8 @@ public class NamedTracesEditingSupport extends EditingSupport {
 	private CellEditor cellEditor;
 	private ExtendedTableViewer tableViewer;
 	private String column;
+	//
+	private TraceValidator traceValidator = new TraceValidator();
 
 	public NamedTracesEditingSupport(ExtendedTableViewer tableViewer, String column) {
 		super(tableViewer);
@@ -62,7 +66,10 @@ public class NamedTracesEditingSupport extends EditingSupport {
 			NamedTrace namedTrace = (NamedTrace)element;
 			switch(column) {
 				case NamedTracesLabelProvider.TRACES:
-					namedTrace.setTraces(value.toString().trim());
+					IStatus status = traceValidator.validate(value);
+					if(status.isOK()) {
+						namedTrace.setTraces(traceValidator.getTracesAsString());
+					}
 					break;
 			}
 			tableViewer.refresh();
