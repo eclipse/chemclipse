@@ -77,7 +77,7 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 		dfCSD = ValueFormat.getDecimalFormatEnglish("0.0000");
 		dfWSD = ValueFormat.getDecimalFormatEnglish("0.0");
 		dfIntensity = ValueFormat.getDecimalFormatEnglish("0.0###");
-		dfRelativeIntensity = ValueFormat.getDecimalFormatEnglish("0.000");
+		dfRelativeIntensity = ValueFormat.getDecimalFormatEnglish("0.0000");
 	}
 
 	public void setTotalIntensity(float totalIntensity) {

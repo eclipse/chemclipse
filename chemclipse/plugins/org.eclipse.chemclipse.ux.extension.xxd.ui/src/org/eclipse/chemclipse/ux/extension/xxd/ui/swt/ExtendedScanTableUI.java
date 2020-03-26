@@ -75,8 +75,10 @@ public class ExtendedScanTableUI {
 
 	private static final Logger logger = Logger.getLogger(ScanTablePart.class);
 	//
-	private Label labelInfo;
-	private Composite toolbarInfo;
+	private Composite toolbarInfoTop;
+	private Label labelInfoTop;
+	private Composite toolbarInfoBottom;
+	private Label labelInfoBottom;
 	private Composite toolbarEdit;
 	private Composite toolbarSearch;
 	private Button buttonSaveScan;
@@ -214,36 +216,22 @@ public class ExtendedScanTableUI {
 
 	private void updateObject() {
 
-		IScan scan = null;
-		boolean isLibraryMassSpectrum = false;
-		//
-		if(object instanceof IScan) {
-			scan = (IScan)object;
-			isLibraryMassSpectrum = (scan instanceof ILibraryMassSpectrum);
-			//
-			if(forceEnableEditModus || isLibraryMassSpectrum) {
-				enableEditModus(true);
-			} else {
-				enableEditModus(false);
-			}
-		} else if(object instanceof IPeak) {
-			IPeak peak = (IPeak)object;
-			scan = peak.getPeakModel().getPeakMaximum();
-		}
-		/*
-		 * Label
-		 */
-		if(forceEnableEditModus || isLibraryMassSpectrum) {
-			String editInformation = scanTableUI.isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
-			labelInfo.setText(scanDataSupport.getScanLabel(scan) + " - " + editInformation);
-		} else {
-			labelInfo.setText(scanDataSupport.getScanLabel(scan));
-		}
-		//
+		IScan scan = getScan();
+		boolean isLibraryMassSpectrum = enableEditModus();
+		setInfoTop(scan, isLibraryMassSpectrum);
+		setInfoBottom(scan);
 		scanTableUI.setInput(scan);
+		modifyEditFields();
 		/*
-		 * Fields
+		 * Optimized Scan
 		 */
+		optimizedMassSpectrum = null;
+		buttonOptimizedScan.setEnabled(scanDataSupport.containsOptimizedScan(scan));
+		buttonSaveScan.setEnabled(isSaveEnabled());
+	}
+
+	private void modifyEditFields() {
+
 		List<TableViewerColumn> tableViewerColumns = scanTableUI.getTableViewerColumns();
 		if(tableViewerColumns.size() >= 2) {
 			/*
@@ -259,12 +247,59 @@ public class ExtendedScanTableUI {
 			//
 			toolbarEdit.layout(true);
 		}
-		/*
-		 * Optimized Scan
-		 */
-		optimizedMassSpectrum = null;
-		buttonOptimizedScan.setEnabled(scanDataSupport.containsOptimizedScan(scan));
-		buttonSaveScan.setEnabled(isSaveEnabled());
+	}
+
+	private boolean enableEditModus() {
+
+		boolean isLibraryMassSpectrum = false;
+		enableEditModus(false);
+		//
+		if(object instanceof IScan) {
+			isLibraryMassSpectrum = (object instanceof ILibraryMassSpectrum);
+			if(forceEnableEditModus || isLibraryMassSpectrum) {
+				enableEditModus(true);
+			}
+		}
+		return isLibraryMassSpectrum;
+	}
+
+	private IScan getScan() {
+
+		IScan scan = null;
+		if(object instanceof IScan) {
+			scan = (IScan)object;
+		} else if(object instanceof IPeak) {
+			IPeak peak = (IPeak)object;
+			scan = peak.getPeakModel().getPeakMaximum();
+		}
+		return scan;
+	}
+
+	private void setInfoTop(IScan scan, boolean isLibraryMassSpectrum) {
+
+		if(forceEnableEditModus || isLibraryMassSpectrum) {
+			String editInformation = scanTableUI.isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
+			labelInfoTop.setText(scanDataSupport.getScanLabel(scan) + " - " + editInformation);
+		} else {
+			labelInfoTop.setText(scanDataSupport.getScanLabel(scan));
+		}
+	}
+
+	private void setInfoBottom(IScan scan) {
+
+		String signals;
+		if(scan instanceof IScanCSD) {
+			signals = "1";
+		} else if(scan instanceof IScanMSD) {
+			IScanMSD scanMSD = (IScanMSD)scan;
+			signals = Integer.toString(scanMSD.getNumberOfIons());
+		} else if(scan instanceof IScanWSD) {
+			IScanWSD scanWSD = (IScanWSD)scan;
+			signals = Integer.toString(scanWSD.getNumberOfScanSignals());
+		} else {
+			signals = "--";
+		}
+		labelInfoBottom.setText("Signals: " + signals);
 	}
 
 	private boolean isSaveEnabled() {
@@ -285,14 +320,16 @@ public class ExtendedScanTableUI {
 		deleteKeyEventProcessor = new DeleteKeyEventProcessor();
 		//
 		createToolbarMain(parent);
-		toolbarInfo = createToolbarInfo(parent);
+		toolbarInfoTop = createToolbarInfoTop(parent);
 		toolbarEdit = createToolbarEdit(parent);
 		toolbarSearch = createToolbarSearch(parent);
 		createTable(parent);
+		toolbarInfoBottom = createToolbarInfoBottom(parent);
 		//
-		PartSupport.setCompositeVisibility(toolbarInfo, true);
+		PartSupport.setCompositeVisibility(toolbarInfoTop, true);
 		PartSupport.setCompositeVisibility(toolbarEdit, false);
 		PartSupport.setCompositeVisibility(toolbarSearch, false);
+		PartSupport.setCompositeVisibility(toolbarInfoBottom, true);
 		//
 		enableEditModus(false); // Disable the edit modus by default.
 	}
@@ -325,7 +362,9 @@ public class ExtendedScanTableUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				boolean visible = PartSupport.toggleCompositeVisibility(toolbarInfo);
+				boolean visible = PartSupport.toggleCompositeVisibility(toolbarInfoTop);
+				PartSupport.toggleCompositeVisibility(toolbarInfoBottom);
+				//
 				if(visible) {
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
 				} else {
@@ -451,7 +490,8 @@ public class ExtendedScanTableUI {
 					optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
 					if(optimizedMassSpectrum != null) {
 						scanTableUI.setInput(optimizedMassSpectrum);
-						labelInfo.setText(scanDataSupport.getScanLabel(optimizedMassSpectrum));
+						labelInfoTop.setText(scanDataSupport.getScanLabel(optimizedMassSpectrum));
+						labelInfoBottom.setText("Signals: " + optimizedMassSpectrum.getNumberOfIons());
 						button.setEnabled(false);
 					}
 				}
@@ -490,16 +530,30 @@ public class ExtendedScanTableUI {
 		});
 	}
 
-	private Composite createToolbarInfo(Composite parent) {
+	private Composite createToolbarInfoTop(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(1, false));
 		//
-		labelInfo = new Label(composite, SWT.NONE);
-		labelInfo.setText("");
-		labelInfo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		labelInfoTop = new Label(composite, SWT.NONE);
+		labelInfoTop.setText("");
+		labelInfoTop.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		return composite;
+	}
+
+	private Composite createToolbarInfoBottom(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(1, false));
+		//
+		labelInfoBottom = new Label(composite, SWT.NONE);
+		labelInfoBottom.setText("");
+		labelInfoBottom.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		return composite;
 	}

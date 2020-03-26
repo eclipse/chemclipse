@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.model.types;
 import org.eclipse.chemclipse.processing.DataCategory;
 
 public enum DataType {
+	NONE, // Used e.g. as an initial value for the Scan Table
 	AUTO_DETECT, // Auto-Detect
 	MSD_NOMINAL, // Quadrupole, Ion Trap
 	MSD_TANDEM, // MS/MS
@@ -27,8 +28,7 @@ public enum DataType {
 	PCR, // Polymerase Chain Reaction
 	SEQ, // Sequences
 	MTH, // Methods
-	QDB // Quantitation Databases
-	;
+	QDB; // Quantitation Databases
 
 	public static DataType fromDataCategory(DataCategory category) {
 

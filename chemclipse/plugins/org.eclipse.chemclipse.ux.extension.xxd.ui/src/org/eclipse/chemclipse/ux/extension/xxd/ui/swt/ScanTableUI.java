@@ -54,7 +54,7 @@ public class ScanTableUI extends ExtendedTableViewer {
 		labelProviderMap = new HashMap<DataType, ITableLabelProvider>();
 		viewerComparatorMap = new HashMap<DataType, ViewerComparator>();
 		contentProviderMap = new HashMap<DataType, IContentProvider>();
-		setLabelAndContentProviders(DataType.MSD_NOMINAL, 0.0f);
+		setLabelAndContentProviders(DataType.MSD_NOMINAL);
 	}
 
 	public void setSearchText(String searchText, boolean caseSensitive) {
@@ -83,18 +83,17 @@ public class ScanTableUI extends ExtendedTableViewer {
 			IScanMSD scanMSD = (IScanMSD)scan;
 			List<IIon> ions = scanMSD.getIons();
 			int size = ions.size();
-			float totalIntensity = scanMSD.getTotalSignal();
 			//
+			DataType dataType = DataType.MSD_NOMINAL;
 			if(scanMSD.isTandemMS()) {
-				setLabelAndContentProviders(DataType.MSD_TANDEM, totalIntensity);
+				dataType = DataType.MSD_TANDEM;
 			} else {
 				if(scanMSD.isHighResolutionMS()) {
-					setLabelAndContentProviders(DataType.MSD_HIGHRES, totalIntensity);
-				} else {
-					setLabelAndContentProviders(DataType.MSD_NOMINAL, totalIntensity);
+					dataType = DataType.MSD_HIGHRES;
 				}
 			}
 			//
+			setLabelAndContentProviders(dataType);
 			super.setInput(ions);
 			setItemCount(size);
 		} else if(scan instanceof IScanCSD) {
@@ -103,7 +102,7 @@ public class ScanTableUI extends ExtendedTableViewer {
 			 */
 			super.setInput(null);
 			IScanCSD scanCSD = (IScanCSD)scan;
-			setLabelAndContentProviders(DataType.CSD, scanCSD.getTotalSignal());
+			setLabelAndContentProviders(DataType.CSD);
 			List<IScanCSD> list = new ArrayList<IScanCSD>();
 			list.add(scanCSD);
 			super.setInput(list);
@@ -113,7 +112,7 @@ public class ScanTableUI extends ExtendedTableViewer {
 			 */
 			super.setInput(null);
 			IScanWSD scanWSD = (IScanWSD)scan;
-			setLabelAndContentProviders(DataType.WSD, scanWSD.getTotalSignal());
+			setLabelAndContentProviders(DataType.WSD);
 			super.setInput(scanWSD.getScanSignals());
 		} else {
 			getTable().removeAll();
@@ -121,24 +120,30 @@ public class ScanTableUI extends ExtendedTableViewer {
 		}
 	}
 
-	private void setLabelAndContentProviders(DataType dataType, float totalIntensity) {
+	private void setLabelAndContentProviders(DataType dataType) {
 
+		/*
+		 * Reset
+		 */
+		setComparator(null);
+		setLabelProvider(getTableLabelProvider(DataType.NONE));
+		//
 		String[] titles = getTitles(dataType);
 		int[] bounds = getBounds(dataType);
 		createColumns(titles, bounds);
-		//
-		ITableLabelProvider labelProvider = getTableLabelProvider(dataType);
-		setLabelProvider(labelProvider);
 		/*
 		 * Relative Intensity [%] calculation
 		 */
+		ITableLabelProvider labelProvider = getTableLabelProvider(dataType);
+		setLabelProvider(labelProvider);
 		if(labelProvider instanceof ScanLabelProvider) {
 			ScanLabelProvider scanLabelProvider = (ScanLabelProvider)labelProvider;
+			float totalIntensity = (scan != null) ? scan.getTotalSignal() : 0.0f;
 			scanLabelProvider.setTotalIntensity(totalIntensity);
 		}
 		//
 		IContentProvider contentProvider = getContentProvider(dataType);
-		if(useVirtualTableSettings(dataType)) {
+		if(useVirtualTableSettings(scan, dataType)) {
 			/*
 			 * Lazy (Virtual)
 			 */
@@ -236,7 +241,7 @@ public class ScanTableUI extends ExtendedTableViewer {
 
 		IContentProvider contentProvider = contentProviderMap.get(dataType);
 		if(contentProvider == null) {
-			if(useVirtualTableSettings(dataType)) {
+			if(useVirtualTableSettings(scan, dataType)) {
 				contentProvider = new IonListContentProviderLazy(this);
 			} else {
 				contentProvider = new ListContentProvider();
@@ -246,9 +251,22 @@ public class ScanTableUI extends ExtendedTableViewer {
 		return contentProvider;
 	}
 
-	private boolean useVirtualTableSettings(DataType dataType) {
+	private boolean useVirtualTableSettings(IScan scan, DataType dataType) {
 
-		return dataType.equals(DataType.MSD_HIGHRES) && isVirtualTable();
+		if(isVirtualTable()) {
+			if(scan != null) {
+				if(scan instanceof IScanMSD) {
+					if(dataType.equals(DataType.MSD_HIGHRES)) {
+						IScanMSD scanMSD = (IScanMSD)scan;
+						int numberIons = scanMSD.getNumberOfIons();
+						if(numberIons > 5000) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	private boolean isVirtualTable() {
