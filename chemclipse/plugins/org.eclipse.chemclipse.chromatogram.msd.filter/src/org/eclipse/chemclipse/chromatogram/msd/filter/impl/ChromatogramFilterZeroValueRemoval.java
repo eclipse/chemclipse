@@ -66,7 +66,7 @@ public class ChromatogramFilterZeroValueRemoval extends AbstractChromatogramFilt
 							}
 						}
 					}
-					extract.updateSignal(matrix, numberScans, numberIons);
+					extract.updateSignal(matrix);
 				}
 				//
 				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "Chromatogram Filter Adjust applied"));
