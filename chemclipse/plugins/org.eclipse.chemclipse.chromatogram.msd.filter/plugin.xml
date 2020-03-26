@@ -15,6 +15,16 @@
       </ChromatogramFilterSupplier>
    </extension>
    <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.filter.chromatogramFilterSupplier">
+      <ChromatogramFilterSupplier
+            description="This filter removes and interpolates zero values in each ion channel."
+            filter="org.eclipse.chemclipse.chromatogram.msd.filter.impl.ChromatogramFilterZeroValueRemoval"
+            filterName="Remove Zero Values in Ion Channels"
+            filterSettings="org.eclipse.chemclipse.chromatogram.msd.filter.impl.settings.FilterSettingsAdjust"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.removeZeroValues">
+      </ChromatogramFilterSupplier>
+   </extension>
+   <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
             class="org.eclipse.chemclipse.chromatogram.msd.filter.impl.preferences.PreferenceInitializer">
