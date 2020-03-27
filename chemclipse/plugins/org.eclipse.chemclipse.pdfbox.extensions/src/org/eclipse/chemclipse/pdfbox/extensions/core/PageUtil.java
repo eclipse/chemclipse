@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -108,6 +108,54 @@ public class PageUtil {
 	}
 
 	/**
+	 * Returns the x position (pt) - page base: 0,0 left bottom
+	 * 
+	 * @param x
+	 * @return float
+	 */
+	public float getPositionBaseX(float x) {
+
+		return pageBaseConverter.getPositionX(getPageWidthPt(), unitConverter.convertToPt(x));
+	}
+
+	/**
+	 * Returns the y position (pt) - page base: 0,0 left bottom
+	 * 
+	 * @param y
+	 * @return float
+	 */
+	public float getPositionBaseY(float y) {
+
+		return pageBaseConverter.getPositionY(getPageHeightPt(), unitConverter.convertToPt(y));
+	}
+
+	/**
+	 * Calculates the text width, given in the used unit for this page.
+	 * 
+	 * @param font
+	 * @param fontSize
+	 * @param text
+	 * @return
+	 * @throws IOException
+	 */
+	public float calculateTextWidth(PDFont font, float fontSize, String text) throws IOException {
+
+		return unitConverter.convertFromPt(calculateTextWidthPt(font, fontSize, text));
+	}
+
+	/**
+	 * Calculates the text height, given in the used unit for this page.
+	 * 
+	 * @param font
+	 * @param fontSize
+	 * @return float
+	 */
+	public float calculateTextHeight(PDFont font, float fontSize) {
+
+		return unitConverter.convertFromPt(calculateTextHeightPt(font, fontSize));
+	}
+
+	/**
 	 * Print the text and returns the height in the given unit.
 	 * 
 	 * @param textElement
@@ -171,10 +219,10 @@ public class PageUtil {
 	public void printLine(LineElement lineElement) throws IOException {
 
 		float width = unitConverter.convertToPt(lineElement.getLineWidth());
-		float x0 = getPositionX(unitConverter.convertToPt(lineElement.getX()));
-		float y0 = getPositionY(unitConverter.convertToPt(lineElement.getY()));
-		float x1 = getPositionX(unitConverter.convertToPt(lineElement.getX1()));
-		float y1 = getPositionY(unitConverter.convertToPt(lineElement.getY1()));
+		float x0 = getPositionBaseX(lineElement.getX());
+		float y0 = getPositionBaseY(lineElement.getY());
+		float x1 = getPositionBaseX(lineElement.getX1());
+		float y1 = getPositionBaseY(lineElement.getY1());
 		//
 		contentStream.setStrokingColor(lineElement.getColor());
 		contentStream.setLineWidth(width);
@@ -192,8 +240,8 @@ public class PageUtil {
 	public void printBox(BoxElement boxElement) throws IOException {
 
 		Color color = boxElement.getColor();
-		float x = getPositionX(unitConverter.convertToPt(boxElement.getX()));
-		float y = getPositionY(unitConverter.convertToPt(boxElement.getY() + boxElement.getHeight()));
+		float x = getPositionBaseX(boxElement.getX());
+		float y = getPositionBaseY(boxElement.getY() + boxElement.getHeight());
 		float width = unitConverter.convertToPt(boxElement.getWidth());
 		float height = unitConverter.convertToPt(boxElement.getHeight());
 		//
@@ -256,7 +304,7 @@ public class PageUtil {
 			 * Width
 			 */
 			float widthTable = unitConverter.convertToPt(tableElement.getX() + pdTable.getWidth());
-			float widthPage = getPageWidth();
+			float widthPage = getPageWidthPt();
 			if(widthTable > widthPage) {
 				logger.warn("The table width (" + widthTable + ")is larger then the page width (" + widthPage + ").");
 			}
@@ -264,7 +312,7 @@ public class PageUtil {
 			 * Height
 			 */
 			float heightTable = unitConverter.convertToPt((pdTable.getStopIndex() - pdTable.getStartIndex() + 1 + pdTable.getNumberHeaderRows()) * tableElement.getColumnHeight() + tableElement.getY());
-			float heightPage = getPageHeight();
+			float heightPage = getPageHeightPt();
 			if(heightTable > heightPage) {
 				logger.warn("The table height (" + heightTable + ")is larger then the page height (" + heightPage + ").");
 			}
@@ -278,7 +326,7 @@ public class PageUtil {
 	 * 
 	 * @return float
 	 */
-	private float getPageHeight() {
+	private float getPageHeightPt() {
 
 		PDRectangle rectangle = page.getMediaBox();
 		return (landscape) ? rectangle.getWidth() : rectangle.getHeight();
@@ -289,7 +337,7 @@ public class PageUtil {
 	 * 
 	 * @return float
 	 */
-	private float getPageWidth() {
+	private float getPageWidthPt() {
 
 		PDRectangle rectangle = page.getMediaBox();
 		return (landscape) ? rectangle.getHeight() : rectangle.getWidth();
@@ -302,7 +350,7 @@ public class PageUtil {
 	 * @param fontSize
 	 * @return float
 	 */
-	private float calculateTextHeight(PDFont font, float fontSize) {
+	private float calculateTextHeightPt(PDFont font, float fontSize) {
 
 		PDRectangle rectangle = font.getFontDescriptor().getFontBoundingBox();
 		return (rectangle.getHeight() / 1000.0f * fontSize * 0.68f);
@@ -317,31 +365,9 @@ public class PageUtil {
 	 * @return float
 	 * @throws IOException
 	 */
-	private float calculateTextWidth(PDFont font, float fontSize, String text) throws IOException {
+	private float calculateTextWidthPt(PDFont font, float fontSize, String text) throws IOException {
 
 		return (font.getStringWidth(text) / 1000.0f * fontSize);
-	}
-
-	/**
-	 * X (pt) - 0,0 left bottom
-	 * 
-	 * @param x
-	 * @return float
-	 */
-	private float getPositionX(float x) {
-
-		return pageBaseConverter.getPositionX(getPageWidth(), x);
-	}
-
-	/**
-	 * Y (pt) - 0,0 left bottom
-	 * 
-	 * @param y
-	 * @return float
-	 */
-	private float getPositionY(float y) {
-
-		return pageBaseConverter.getPositionY(getPageHeight(), y);
 	}
 
 	/**
@@ -446,15 +472,15 @@ public class PageUtil {
 		ReferenceX referenceX = referenceElement.getReferenceX();
 		switch(referenceX) {
 			case LEFT:
-				x = getPositionX(unitConverter.convertToPt(referenceElement.getX()));
+				x = getPositionBaseX(referenceElement.getX());
 				break;
 			case RIGHT:
-				x = getPositionX(unitConverter.convertToPt(referenceElement.getX())) + maxWidth - elementWidth;
+				x = getPositionBaseX(referenceElement.getX()) + maxWidth - elementWidth;
 				break;
 			default:
 				logger.warn("Option not supported: " + referenceX);
 				logger.warn("Option selected instead: " + ReferenceX.LEFT);
-				x = getPositionX(unitConverter.convertToPt(referenceElement.getX()));
+				x = getPositionBaseX(referenceElement.getX());
 				break;
 		}
 		return x;
@@ -474,18 +500,18 @@ public class PageUtil {
 		ReferenceY referenceY = referenceElement.getReferenceY();
 		switch(referenceY) {
 			case TOP:
-				y = getPositionY(unitConverter.convertToPt(referenceElement.getY())) - elementHeight;
+				y = getPositionBaseY(referenceElement.getY()) - elementHeight;
 				break;
 			case CENTER:
-				y = getPositionY(unitConverter.convertToPt(referenceElement.getY())) - elementHeight / 2.0f;
+				y = getPositionBaseY(referenceElement.getY()) - elementHeight / 2.0f;
 				break;
 			case BOTTOM:
-				y = getPositionY(unitConverter.convertToPt(referenceElement.getY()));
+				y = getPositionBaseY(referenceElement.getY());
 				break;
 			default:
 				logger.warn("Option not supported: " + referenceY);
 				logger.warn("Option selected instead: " + ReferenceY.BOTTOM);
-				y = getPositionY(unitConverter.convertToPt(referenceElement.getY()));
+				y = getPositionBaseY(referenceElement.getY());
 				break;
 		}
 		return y;
@@ -505,8 +531,8 @@ public class PageUtil {
 		Color color = textElement.getColor();
 		String text = textElement.getText();
 		float maxWidth = unitConverter.convertToPt(textElement.getMaxWidth());
-		float textWidth = calculateTextWidth(font, fontSize, text);
-		float textHeight = calculateTextHeight(font, fontSize);
+		float textWidth = calculateTextWidthPt(font, fontSize, text);
+		float textHeight = calculateTextHeightPt(font, fontSize);
 		float x = calculateX(textElement, textWidth, maxWidth);
 		float y = calculateY(textElement, textHeight);
 		//
@@ -527,8 +553,8 @@ public class PageUtil {
 		Color color = textElement.getColor();
 		String text = textElement.getText();
 		float maxWidth = unitConverter.convertToPt(textElement.getMaxWidth());
-		float textWidth = calculateTextWidth(font, fontSize, text);
-		float textHeight = calculateTextHeight(font, fontSize);
+		float textWidth = calculateTextWidthPt(font, fontSize, text);
+		float textHeight = calculateTextHeightPt(font, fontSize);
 		float x = unitConverter.convertToPt(textElement.getX());
 		float y = calculateY(textElement, textHeight);
 		//
@@ -565,9 +591,9 @@ public class PageUtil {
 		Color color = textElement.getColor();
 		String text = textElement.getText();
 		float maxWidth = unitConverter.convertToPt(textElement.getMaxWidth());
-		float textWidth = calculateTextWidth(font, fontSize, text);
+		float textWidth = calculateTextWidthPt(font, fontSize, text);
 		float minHeight = unitConverter.convertToPt(textElement.getMinHeight());
-		float textHeight = calculateTextHeight(font, fontSize);
+		float textHeight = calculateTextHeightPt(font, fontSize);
 		float x = unitConverter.convertToPt(textElement.getX());
 		float y = calculateY(textElement, textHeight);
 		//
@@ -602,7 +628,7 @@ public class PageUtil {
 		contentStream.showText(text);
 		contentStream.endText();
 		//
-		return calculateTextHeight(font, fontSize);
+		return calculateTextHeightPt(font, fontSize);
 	}
 
 	/**
@@ -683,8 +709,8 @@ public class PageUtil {
 				String text = cell.getText();
 				PDFont font = cell.getFont();
 				float fontSize = cell.getFontSize();
-				float textWidth = calculateTextWidth(font, fontSize, text);
-				float textHeight = calculateTextHeight(font, fontSize);
+				float textWidth = calculateTextWidthPt(font, fontSize, text);
+				float textHeight = calculateTextHeightPt(font, fontSize);
 				List<String> parts = cutStringMultiLine(text, textWidth, unitConverter.convertToPt(cell.getMaxWidth()));
 				//
 				float cellHeight = 0.0f;
