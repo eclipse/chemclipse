@@ -22,6 +22,8 @@ import junit.framework.TestCase;
 public class PageUtil_1_Test extends TestCase {
 
 	private PDDocument document;
+	private PDRectangle paperSize = PDRectangle.A4;
+	private boolean landscape = false;
 	private PageUtil pageUtilPT;
 	private PageUtil pageUtilMM;
 
@@ -30,8 +32,8 @@ public class PageUtil_1_Test extends TestCase {
 
 		super.setUp();
 		document = new PDDocument();
-		pageUtilPT = new PageUtil(document, new PageSettings(PDRectangle.A4, PageBase.BOTTOM_LEFT, Unit.PT, false));
-		pageUtilMM = new PageUtil(document, new PageSettings(PDRectangle.A4, PageBase.TOP_LEFT, Unit.MM, false));
+		pageUtilPT = new PageUtil(document, new PageSettings(paperSize, PageBase.BOTTOM_LEFT, Unit.PT, landscape));
+		pageUtilMM = new PageUtil(document, new PageSettings(paperSize, PageBase.TOP_LEFT, Unit.MM, landscape));
 	}
 
 	@Override
@@ -62,6 +64,11 @@ public class PageUtil_1_Test extends TestCase {
 	public void test4() {
 
 		assertEquals(841.89105f, pageUtilPT.getPositionBaseY(841.89105f));
-		assertEquals(-0.0012817383f, pageUtilMM.getPositionBaseY(297.0f)); // rounding uncertainty
+		/*
+		 * DIN A4 (210x297 mm)
+		 * PDRectangle.A4 (841.8898 pt -> 296.999559028 mm)
+		 * That's why the value is not exactly 0.
+		 */
+		assertEquals(-0.0012817383f, pageUtilMM.getPositionBaseY(297.0f));
 	}
 }
