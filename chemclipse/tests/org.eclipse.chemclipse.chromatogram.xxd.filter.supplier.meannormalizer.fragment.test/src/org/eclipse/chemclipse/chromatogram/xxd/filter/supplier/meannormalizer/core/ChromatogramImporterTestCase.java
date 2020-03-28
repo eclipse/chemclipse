@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,20 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.meannormalizer.core;
 
-import java.io.File;
-
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.meannormalizer.TestPathHelper;
-import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
 public class ChromatogramImporterTestCase extends TestCase {
 
-	private final static String EXTENSION_POINT_ID = "net.openchrom.msd.converter.supplier.agilent.hp";
 	protected IChromatogramMSD chromatogram;
 	protected IChromatogramSelectionMSD chromatogramSelection;
 
@@ -35,10 +28,10 @@ public class ChromatogramImporterTestCase extends TestCase {
 		/*
 		 * Import
 		 */
-		File fileImport = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_CHROMATOGRAM_1));
-		org.eclipse.chemclipse.processing.core.IProcessingInfo<IChromatogramMSD> processingInfo = ChromatogramConverterMSD.getInstance().convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
-		chromatogram = processingInfo.getProcessingResult();
-		chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
+		// File fileImport = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_CHROMATOGRAM_1));
+		// org.eclipse.chemclipse.processing.core.IProcessingInfo<IChromatogramMSD> processingInfo = ChromatogramConverterMSD.getInstance().convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
+		// chromatogram = processingInfo.getProcessingResult();
+		// chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
 	}
 
 	@Override
