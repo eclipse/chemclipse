@@ -42,6 +42,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final int DEF_WIDTH = 7;
 	public static final int STEP_WIDTH = 1;
 	//
+	public static final String P_PER_ION_CALCULATION = "perIonCalculation";
+	public static final boolean DEF_PER_ION_CALCULATION = true;
+	//
 	private static IPreferenceSupplier preferenceSupplier;
 
 	public static IPreferenceSupplier INSTANCE() {
@@ -94,6 +97,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		MassSpectrumFilterSettings settings = new MassSpectrumFilterSettings();
 		settings.setOrder(getOrder());
 		settings.setWidth(getWidth());
+		settings.setPerIonCalculation(getPerIonCalculation());
 		return settings;
 	}
 
@@ -113,5 +117,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.getInt(P_WIDTH, DEF_WIDTH);
+	}
+	
+	public static boolean getPerIonCalculation() {
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getBoolean(P_PER_ION_CALCULATION, DEF_PER_ION_CALCULATION);
 	}
 }

@@ -17,6 +17,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class ChromatogramFilterSettings extends AbstractChromatogramFilterSettings {
 
@@ -28,6 +29,9 @@ public class ChromatogramFilterSettings extends AbstractChromatogramFilterSettin
 	@JsonProperty(value = "Width", defaultValue = "5")
 	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_WIDTH, maxValue = PreferenceSupplier.MAX_WIDTH)
 	private int width = 5;
+	@JsonProperty(value = "Apply Filter individual to all ion channels", defaultValue = "false")
+	@JsonPropertyDescription(value = "Per Ion Filter Calculation.")
+	private boolean perIonCalculation = false;
 
 	public int getDerivative() {
 
@@ -59,5 +63,15 @@ public class ChromatogramFilterSettings extends AbstractChromatogramFilterSettin
 	public void setWidth(int width) {
 
 		this.width = width;
+	}
+	
+	public boolean getPerIonCalculation() {
+
+		return this.perIonCalculation;
+	}
+
+	public void setPerIonCalculation(boolean perIonCalculation) {
+
+		this.perIonCalculation = perIonCalculation;
 	}
 }
