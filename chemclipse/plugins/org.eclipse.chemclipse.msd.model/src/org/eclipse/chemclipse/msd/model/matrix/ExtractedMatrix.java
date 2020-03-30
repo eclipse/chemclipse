@@ -29,7 +29,7 @@ public class ExtractedMatrix {
 	private List<IScanMSD> scans;
 	private int startIon;
 	private int stopIon;
-	private float[][] signal;
+	private double[][] signal;
 
 	public ExtractedMatrix(IChromatogramSelectionMSD chromatogramSelection) {
 
@@ -43,7 +43,7 @@ public class ExtractedMatrix {
 			this.stopIon = minMaxMz[1];
 			int numberOfScans = selection.getStopScan() - selection.getStartScan() + 1;
 			int numberOfIons = this.stopIon - this.startIon + 1;
-			signal = new float[numberOfScans][numberOfIons];
+			signal = new double[numberOfScans][numberOfIons];
 			List<IIon> currentIons;
 			for(int scanIndex = 0; scanIndex < numberOfScans; scanIndex++) {
 				currentIons = scans.get(scanIndex).getIons();
@@ -104,7 +104,7 @@ public class ExtractedMatrix {
 	 * 
 	 * @return data array scans x ions.
 	 */
-	public float[][] getMatrix() {
+	public double[][] getMatrix() {
 
 		return this.signal;
 	}
@@ -119,7 +119,7 @@ public class ExtractedMatrix {
 				currentScan.removeAllIons();
 				for(int j = startIon; j < stopIon; j++) {
 					if(signal[i - 1][j - startIon] != 0.0) {
-						currentIon = new Ion(j, signal[i - 1][j - startIon]);
+						currentIon = new Ion(j, (float)signal[i - 1][j - startIon]);
 						currentScan.addIon(currentIon);
 					}
 				}
