@@ -388,8 +388,22 @@ public class SavitzkyGolayProcessor {
 	}
 	
 	public IChromatogramFilterResult apply(ExtractedMatrix extractedMatrix, ChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
+		double[][] matrix = extractedMatrix.getMatrix();
+		double[] ionSignal = new double[matrix.length];
+		for(int i = 0; i < matrix[0].length; i++) {
+			for(int j = 0; j < matrix.length; j++) {
+				ionSignal[j] = matrix[j][i];
+			}
+			ionSignal = smooth(ionSignal, filterSettings, monitor);
+			for(int j = 0; j < matrix.length; j++) {
+				if(ionSignal[j] < 0.0) {
+					ionSignal[j] = 0.0;
+				}
+				matrix[j][i] = ionSignal[j];
+			}
+		}
 		
-		
+		extractedMatrix.updateSignal();
 		return new ChromatogramFilterResult(ResultStatus.OK, "The Savitzky-Golay filter has been applied successfully.");
 	}
 	

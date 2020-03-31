@@ -36,7 +36,7 @@ public class ChromatogramFilter extends AbstractChromatogramSignalFilter {
 	public IChromatogramFilterResult process(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
 
 		IChromatogramMSD chromatogramMSD = chromatogramSelection.getChromatogramMSD();
-		MassSpectrumFilterSettings settings = (MassSpectrumFilterSettings) filterSettings;
+		ChromatogramFilterSettings settings = (ChromatogramFilterSettings) filterSettings;
 		/*
 		 * 1. step - export signal from chromatogram
 		 */
@@ -44,7 +44,7 @@ public class ChromatogramFilter extends AbstractChromatogramSignalFilter {
 		IChromatogramFilterResult chromatogramFilterResult;
 		
 		
-		if(settings.isPerIonCalculation() == true) {
+		if(settings.getPerIonCalculation() == true) {
 			ExtractedMatrix extractedMatrix = new ExtractedMatrix(chromatogramSelection);
 			chromatogramFilterResult = filterProcess(extractedMatrix, filterSettings, monitor);
 		} else {
