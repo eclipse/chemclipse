@@ -29,6 +29,7 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
+import org.eclipse.chemclipse.msd.model.matrix.ExtractedMatrix;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 @SuppressWarnings("rawtypes")
@@ -385,4 +386,11 @@ public class SavitzkyGolayProcessor {
 		}
 		return new ChromatogramFilterResult(ResultStatus.OK, "The Savitzky-Golay filter has been applied successfully.");
 	}
+	
+	public IChromatogramFilterResult apply(ExtractedMatrix extractedMatrix, ChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
+		
+		
+		return new ChromatogramFilterResult(ResultStatus.OK, "The Savitzky-Golay filter has been applied successfully.");
+	}
+	
 }
