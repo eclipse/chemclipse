@@ -41,7 +41,7 @@ public class ChromatogramFilterZeroValueRemoval extends AbstractChromatogramFilt
 				if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
 					IChromatogramSelectionMSD chromatogramSelectionMSD = chromatogramSelection;
 					ExtractedMatrix extract = new ExtractedMatrix(chromatogramSelectionMSD);
-					float[][] matrix = extract.getMatrix();
+					double[][] matrix = extract.getMatrix();
 					int numberIons = matrix[0].length;
 					int numberScans = matrix.length;
 					for(int ionIndex = 0; ionIndex < numberIons; ionIndex++) {
@@ -76,10 +76,10 @@ public class ChromatogramFilterZeroValueRemoval extends AbstractChromatogramFilt
 		return processingInfo;
 	}
 
-	private float[][] linearInterpolation(float[][] matrix, int startColumn, int stopColumn, int row) {
+	private double[][] linearInterpolation(double[][] matrix, int startColumn, int stopColumn, int row) {
 
-		float startSignal = matrix[startColumn][row];
-		float stopSignal = matrix[stopColumn][row];
+		double startSignal = matrix[startColumn][row];
+		double stopSignal = matrix[stopColumn][row];
 		for(int index = 1; index < (stopColumn - startColumn); index++) {
 			matrix[startColumn + index][row] = (stopSignal - startSignal) / (stopColumn - startColumn) * index + startSignal;
 		}
