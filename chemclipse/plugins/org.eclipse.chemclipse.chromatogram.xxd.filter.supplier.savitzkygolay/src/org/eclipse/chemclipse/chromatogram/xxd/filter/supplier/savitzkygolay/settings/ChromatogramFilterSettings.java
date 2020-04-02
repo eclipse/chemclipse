@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Lorenz Gerber - Ion-wise savitzky-golay on msd data
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings;
 
@@ -29,7 +30,7 @@ public class ChromatogramFilterSettings extends AbstractChromatogramFilterSettin
 	@JsonProperty(value = "Width", defaultValue = "5")
 	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_WIDTH, maxValue = PreferenceSupplier.MAX_WIDTH)
 	private int width = 5;
-	@JsonProperty(value = "Apply Filter individual to all ion channels", defaultValue = "false")
+	@JsonProperty(value = "Filter individual ion channels", defaultValue = "false")
 	@JsonPropertyDescription(value = "Per Ion Filter Calculation.")
 	private boolean perIonCalculation = false;
 

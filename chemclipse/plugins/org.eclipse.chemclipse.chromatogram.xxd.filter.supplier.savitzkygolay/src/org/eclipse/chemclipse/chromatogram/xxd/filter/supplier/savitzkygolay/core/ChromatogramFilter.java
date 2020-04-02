@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,19 +8,20 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Lorenz Gerber - Ion-wise msd chromatogram filter
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.core;
 
 import java.util.Iterator;
 
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.AbstractChromatogramSignalFilter;
+import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.processor.SavitzkyGolayProcessor;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ChromatogramFilterSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.MassSpectrumFilterSettings;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
@@ -82,8 +83,8 @@ public class ChromatogramFilter extends AbstractChromatogramSignalFilter {
 	@Override
 	protected IChromatogramFilterResult applyFilter(ITotalScanSignals totalSignals, IChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
 
-		SavitzkyGolayProcessor processor = new SavitzkyGolayProcessor();
-		return processor.apply(totalSignals, (ChromatogramFilterSettings)filterSettings, monitor);
+		//SavitzkyGolayProcessor processor = new SavitzkyGolayProcessor();
+		return SavitzkyGolayProcessor.apply(totalSignals, (ChromatogramFilterSettings)filterSettings, monitor);
 	}
 
 	@Override
@@ -95,8 +96,11 @@ public class ChromatogramFilter extends AbstractChromatogramSignalFilter {
 	
 	protected IChromatogramFilterResult applyFilter(ExtractedMatrix extractedMatrix, IChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
 
-		SavitzkyGolayProcessor processor = new SavitzkyGolayProcessor();
-		return processor.apply(extractedMatrix, (ChromatogramFilterSettings)filterSettings, monitor);
+		//SavitzkyGolayProcessor processor = new SavitzkyGolayProcessor();
+		double[][] matrix = extractedMatrix.getMatrix();
+		SavitzkyGolayProcessor.apply(matrix, (ChromatogramFilterSettings)filterSettings, monitor);
+		extractedMatrix.updateSignal();
+		return new ChromatogramFilterResult(ResultStatus.OK, "The Savitzky-Golay filter has been applied successfully.");
 	}
 
 	protected IChromatogramFilterResult applyFilter(ExtractedMatrix extractedMatrix, IProgressMonitor monitor) {

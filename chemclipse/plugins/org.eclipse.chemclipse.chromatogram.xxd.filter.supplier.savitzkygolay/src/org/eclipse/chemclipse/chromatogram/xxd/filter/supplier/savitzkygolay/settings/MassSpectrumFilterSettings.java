@@ -30,9 +30,6 @@ public class MassSpectrumFilterSettings extends AbstractMassSpectrumFilterSettin
 	@JsonProperty(value = "Width", defaultValue = "5")
 	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_WIDTH, maxValue = PreferenceSupplier.MAX_WIDTH)
 	private int width = 5;
-	@JsonProperty(value = "Apply Filter individual to all ion channels", defaultValue = "false")
-	@JsonPropertyDescription(value = "Per Ion Filter Calculation.")
-	private boolean perIonCalculation = false;
 
 	public int getDerivative() {
 
@@ -64,16 +61,6 @@ public class MassSpectrumFilterSettings extends AbstractMassSpectrumFilterSettin
 	public void setWidth(int width) {
 
 		this.width = width;
-	}
-	
-	public boolean isPerIonCalculation() {
-
-		return perIonCalculation;
-	}
-
-	public void setPerIonCalculation(boolean perIonCalculation) {
-
-		this.perIonCalculation = perIonCalculation;
 	}
 	
 }
