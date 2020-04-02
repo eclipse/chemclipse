@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class MassSpectrumFilterSettings extends AbstractMassSpectrumFilterSettings {
 
@@ -61,4 +62,5 @@ public class MassSpectrumFilterSettings extends AbstractMassSpectrumFilterSettin
 
 		this.width = width;
 	}
+	
 }
