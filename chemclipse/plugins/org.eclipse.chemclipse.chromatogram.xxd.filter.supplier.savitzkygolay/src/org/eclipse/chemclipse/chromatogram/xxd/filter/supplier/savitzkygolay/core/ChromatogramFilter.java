@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2015, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -32,25 +32,21 @@ import org.eclipse.chemclipse.msd.model.matrix.ExtractedMatrix;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramFilter extends AbstractChromatogramSignalFilter {
-	
+
 	@Override
 	public IChromatogramFilterResult process(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
 
-		IChromatogramMSD chromatogramMSD = chromatogramSelection.getChromatogramMSD();
-		ChromatogramFilterSettings settings = (ChromatogramFilterSettings) filterSettings;
+		IChromatogramMSD chromatogramMSD = chromatogramSelection.getChromatogram();
+		ChromatogramFilterSettings settings = (ChromatogramFilterSettings)filterSettings;
 		/*
 		 * 1. step - export signal from chromatogram
 		 */
-		
 		IChromatogramFilterResult chromatogramFilterResult;
-		
-		
 		if(settings.getPerIonCalculation() == true) {
 			ExtractedMatrix extractedMatrix = new ExtractedMatrix(chromatogramSelection);
 			chromatogramFilterResult = filterProcess(extractedMatrix, filterSettings, monitor);
 		} else {
 			TotalScanSignalExtractor totalScanSignalExtractor = new TotalScanSignalExtractor(chromatogramMSD);
-			
 			/*
 			 * here is different between CSD and MSD, in case msd is check if value are negative
 			 */
@@ -74,16 +70,15 @@ public class ChromatogramFilter extends AbstractChromatogramSignalFilter {
 					ITotalScanSignal totalscanSignal = totalSignals.getTotalScanSignal(scan);
 					scanMSD.adjustTotalSignal(totalscanSignal.getTotalSignal());
 				}
-			}	
+			}
 		}
-		
 		return chromatogramFilterResult;
 	}
 
 	@Override
 	protected IChromatogramFilterResult applyFilter(ITotalScanSignals totalSignals, IChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
 
-		//SavitzkyGolayProcessor processor = new SavitzkyGolayProcessor();
+		// SavitzkyGolayProcessor processor = new SavitzkyGolayProcessor();
 		return SavitzkyGolayProcessor.apply(totalSignals, (ChromatogramFilterSettings)filterSettings, monitor);
 	}
 
@@ -93,10 +88,10 @@ public class ChromatogramFilter extends AbstractChromatogramSignalFilter {
 		ChromatogramFilterSettings chromatogramFilterSettings = PreferenceSupplier.getFilterSettings();
 		return applyFilter(totalSignals, chromatogramFilterSettings, monitor);
 	}
-	
+
 	protected IChromatogramFilterResult applyFilter(ExtractedMatrix extractedMatrix, IChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
 
-		//SavitzkyGolayProcessor processor = new SavitzkyGolayProcessor();
+		// SavitzkyGolayProcessor processor = new SavitzkyGolayProcessor();
 		double[][] matrix = extractedMatrix.getMatrix();
 		SavitzkyGolayProcessor.apply(matrix, (ChromatogramFilterSettings)filterSettings, monitor);
 		extractedMatrix.updateSignal();
@@ -108,8 +103,7 @@ public class ChromatogramFilter extends AbstractChromatogramSignalFilter {
 		ChromatogramFilterSettings chromatogramFilterSettings = PreferenceSupplier.getFilterSettings();
 		return applyFilter(extractedMatrix, chromatogramFilterSettings, monitor);
 	}
-	 
-	
+
 	@Override
 	public IChromatogramFilterResult filterProcess(ITotalScanSignals totalScanSignals, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
@@ -119,13 +113,13 @@ public class ChromatogramFilter extends AbstractChromatogramSignalFilter {
 			return applyFilter(totalScanSignals, chromatogramFilterSettings, monitor);
 		}
 	}
-	
+
 	private IChromatogramFilterResult filterProcess(ExtractedMatrix extractedMatrix, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+
 		if(chromatogramFilterSettings == null) {
 			return applyFilter(extractedMatrix, monitor);
 		} else {
 			return applyFilter(extractedMatrix, chromatogramFilterSettings, monitor);
 		}
 	}
-	
 }

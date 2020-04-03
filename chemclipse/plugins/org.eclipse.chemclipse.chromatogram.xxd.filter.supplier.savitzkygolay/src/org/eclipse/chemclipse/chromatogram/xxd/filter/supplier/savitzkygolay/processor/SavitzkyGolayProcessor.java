@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2015, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -386,9 +386,9 @@ public class SavitzkyGolayProcessor {
 		}
 		return new ChromatogramFilterResult(ResultStatus.OK, "The Savitzky-Golay filter has been applied successfully.");
 	}
-	
+
 	public static void apply(double[][] matrix, ChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
-		
+
 		double[] ionSignal = new double[matrix.length];
 		for(int i = 0; i < matrix[0].length; i++) {
 			for(int j = 0; j < matrix.length; j++) {
@@ -403,5 +403,4 @@ public class SavitzkyGolayProcessor {
 			}
 		}
 	}
-	
 }

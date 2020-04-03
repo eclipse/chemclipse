@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -86,10 +86,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static ChromatogramFilterSettings getFilterSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		ChromatogramFilterSettings filterSettings = new ChromatogramFilterSettings();
-		filterSettings.setOrder(preferences.getInt(P_ORDER, DEF_ORDER));
-		filterSettings.setWidth(preferences.getInt(P_WIDTH, DEF_WIDTH));
-		return filterSettings;
+		ChromatogramFilterSettings settings = new ChromatogramFilterSettings();
+		settings.setOrder(preferences.getInt(P_ORDER, DEF_ORDER));
+		settings.setWidth(preferences.getInt(P_WIDTH, DEF_WIDTH));
+		settings.setPerIonCalculation(getPerIonCalculation());
+		return settings;
 	}
 
 	public static MassSpectrumFilterSettings getMassSpectrumFilterSettings() {
@@ -97,7 +98,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		MassSpectrumFilterSettings settings = new MassSpectrumFilterSettings();
 		settings.setOrder(getOrder());
 		settings.setWidth(getWidth());
-		settings.setPerIonCalculation(getPerIonCalculation());
 		return settings;
 	}
 
@@ -118,8 +118,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.getInt(P_WIDTH, DEF_WIDTH);
 	}
-	
+
 	public static boolean getPerIonCalculation() {
+
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.getBoolean(P_PER_ION_CALCULATION, DEF_PER_ION_CALCULATION);
 	}
