@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -27,10 +27,11 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 	private static final String DESCRIPTION = "ZeroSet";
 	private static final String FILTER_ID = "org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset";
 
-	public FilterModifier(IChromatogramSelection chromatogramSelection) {
+	public FilterModifier(@SuppressWarnings("rawtypes") IChromatogramSelection chromatogramSelection) {
 		super(chromatogramSelection);
 	}
 
+	@SuppressWarnings({"deprecation", "rawtypes"})
 	@Override
 	public void execute(IProgressMonitor monitor) {
 

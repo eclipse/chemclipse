@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,15 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.ui;
 
-import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends AbstractUIPlugin {
+public class Activator extends AbstractActivatorUI {
 
-	// The shared instance
 	private static Activator plugin;
 
 	/**
@@ -35,6 +35,7 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 
 		super.start(context);
+		initializePreferenceStore(PreferenceSupplier.INSTANCE());
 		plugin = this;
 	}
 

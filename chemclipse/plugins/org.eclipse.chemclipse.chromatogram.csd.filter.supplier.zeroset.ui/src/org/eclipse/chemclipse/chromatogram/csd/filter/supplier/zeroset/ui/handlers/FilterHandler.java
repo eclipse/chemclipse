@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -33,6 +33,7 @@ import org.osgi.service.event.EventHandler;
 public class FilterHandler implements EventHandler {
 
 	private static final Logger logger = Logger.getLogger(FilterHandler.class);
+	@SuppressWarnings("rawtypes")
 	private static IChromatogramSelection chromatogramSelection;
 
 	@Execute
@@ -64,6 +65,7 @@ public class FilterHandler implements EventHandler {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void handleEvent(Event event) {
 
