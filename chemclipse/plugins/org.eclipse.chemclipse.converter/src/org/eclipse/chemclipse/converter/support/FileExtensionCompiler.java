@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,8 +17,6 @@ import java.util.List;
 /**
  * This class helps to compile a file extensions string.<br/>
  * E.g. "*.ionXML;*.ionxml;*.IonXML"
- * 
- * @author Dr. Philip Wenig
  */
 public class FileExtensionCompiler {
 
@@ -73,7 +71,6 @@ public class FileExtensionCompiler {
 		return builder.toString();
 	}
 
-	// ---------------------------------------------------------private methods
 	private void addExtension(String extension) {
 
 		/*
@@ -83,5 +80,4 @@ public class FileExtensionCompiler {
 			extensions.add(extension);
 		}
 	}
-	// ---------------------------------------------------------private methods
 }

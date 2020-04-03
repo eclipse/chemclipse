@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,40 +18,44 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.model.IdentifierFile;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.swt.IdentifierFileListUI;
+import org.eclipse.chemclipse.converter.support.FileExtensionCompiler;
+import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
+import org.eclipse.chemclipse.msd.converter.database.DatabaseConverterSupport;
+import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Widget;
 
 public class IdentifierTableEditor extends FieldEditor {
 
-	private IdentifierFileListUI identifierFileListUI;
 	private Composite compositeButtons;
-	private Button buttonAdd;
+	private Button buttonAddFile;
+	private Button buttonAddDirectory;
 	private Button buttonRemove;
-	private Button buttonClear;
-	private SelectionListener selectionListener;
+	private Button buttonRemoveAll;
 	//
-	private String[] filterExtensions;
-	private String[] filterNames;
+	private String[] fileExtensions = new String[]{};
+	private String[] fileNames = new String[]{};
 	//
+	private IdentifierFileListUI identifierFileListUI;
 	private IdentifierFileListUtil identifierFileListUtil = new IdentifierFileListUtil();
 
 	public IdentifierTableEditor(String name, String labelText, Composite parent) {
 		init(name, labelText);
 		createControl(parent);
+		initializeFileExtensions();
 	}
 
 	@Override
@@ -59,9 +63,10 @@ public class IdentifierTableEditor extends FieldEditor {
 
 		super.setEnabled(enabled, parent);
 		getTableControl(parent).getTable().setEnabled(enabled);
-		buttonAdd.setEnabled(enabled);
+		buttonAddFile.setEnabled(enabled);
+		buttonAddDirectory.setEnabled(enabled);
 		buttonRemove.setEnabled(enabled);
-		buttonClear.setEnabled(enabled);
+		buttonRemoveAll.setEnabled(enabled);
 	}
 
 	@Override
@@ -76,12 +81,6 @@ public class IdentifierTableEditor extends FieldEditor {
 	public int getNumberOfControls() {
 
 		return 2;
-	}
-
-	public void setFilterExtensionsAndNames(String[] filterExtensions, String[] filterNames) {
-
-		this.filterExtensions = filterExtensions;
-		this.filterNames = filterNames;
 	}
 
 	protected IdentifierFileListUI getListUI() {
@@ -105,7 +104,7 @@ public class IdentifierTableEditor extends FieldEditor {
 			if(storedContent == null || "".equals(storedContent)) {
 				identifierFileListUI.setInput(null);
 			} else {
-				identifierFileListUI.setInput(getCalibrationFiles(storedContent));
+				identifierFileListUI.setInput(getDatabaseFiles(storedContent));
 			}
 		}
 	}
@@ -118,7 +117,7 @@ public class IdentifierTableEditor extends FieldEditor {
 			if(storedContent == null || "".equals(storedContent)) {
 				identifierFileListUI.setInput(null);
 			} else {
-				identifierFileListUI.setInput(getCalibrationFiles(storedContent));
+				identifierFileListUI.setInput(getDatabaseFiles(storedContent));
 			}
 		}
 	}
@@ -154,25 +153,98 @@ public class IdentifierTableEditor extends FieldEditor {
 		gridDataControl.horizontalSpan = numColumns;
 		control.setLayoutData(gridDataControl);
 		//
-		GridData gridDataTable = new GridData(GridData.FILL_BOTH);
-		gridDataTable.verticalAlignment = GridData.FILL;
-		gridDataTable.horizontalAlignment = GridData.FILL;
-		gridDataTable.horizontalSpan = numColumns - 1;
-		gridDataTable.grabExcessHorizontalSpace = true;
-		identifierFileListUI = getTableControl(parent);
-		identifierFileListUI.getTable().setLayoutData(gridDataTable);
+		identifierFileListUI = createDataSection(parent);
+		compositeButtons = createButtonSection(parent);
+	}
+
+	private IdentifierFileListUI createDataSection(Composite parent) {
+
+		IdentifierFileListUI identifierFileListUI = getTableControl(parent);
+		GridData gridData = new GridData(GridData.FILL_BOTH);
+		gridData.verticalAlignment = GridData.FILL;
+		gridData.horizontalAlignment = GridData.FILL;
+		gridData.grabExcessHorizontalSpace = true;
+		identifierFileListUI.getTable().setLayoutData(gridData);
 		//
-		GridData gridDataButtons = new GridData();
-		gridDataButtons.verticalAlignment = GridData.BEGINNING;
-		compositeButtons = getButtonControl(parent);
-		compositeButtons.setLayoutData(gridDataButtons);
+		return identifierFileListUI;
+	}
+
+	private Composite createButtonSection(Composite parent) {
+
+		Composite composite = getButtonControl(parent);
+		GridData gridData = new GridData();
+		gridData.verticalAlignment = GridData.BEGINNING;
+		composite.setLayoutData(gridData);
+		//
+		return composite;
 	}
 
 	private void createButtons(Composite composite) {
 
-		buttonAdd = createButton(composite, "Add", "Add a new identifier file."); //$NON-NLS-1$
-		buttonRemove = createButton(composite, "Remove", "Remove the selected identifier file."); //$NON-NLS-1$
-		buttonClear = createButton(composite, "Clear", "Remove all identifier files."); //$NON-NLS-1$
+		buttonAddFile = createButtonAddFile(composite, "Add DB (File)", "Add a new database."); //$NON-NLS-1$
+		buttonAddDirectory = createButtonAddDirectory(composite, "Add DB (Directory)", "Add a new database."); //$NON-NLS-1$
+		buttonRemove = createButtonRemove(composite, "Remove", "Remove the selected database(s)."); //$NON-NLS-1$
+		buttonRemoveAll = createButtonRemoveAll(composite, "Remove All", "Remove all database(s)."); //$NON-NLS-1$
+	}
+
+	private Button createButtonAddFile(Composite parent, String text, String tooltip) {
+
+		Button button = createButton(parent, text, tooltip);
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				addFileDB(e.display.getActiveShell());
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonAddDirectory(Composite parent, String text, String tooltip) {
+
+		Button button = createButton(parent, text, tooltip);
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				addDirectoryDB(e.display.getActiveShell());
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonRemove(Composite parent, String text, String tooltip) {
+
+		Button button = createButton(parent, text, tooltip);
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				remove();
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonRemoveAll(Composite parent, String text, String tooltip) {
+
+		Button button = createButton(parent, text, tooltip);
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				removeAll();
+			}
+		});
+		//
+		return button;
 	}
 
 	private Button createButton(Composite parent, String text, String tooltip) {
@@ -185,57 +257,49 @@ public class IdentifierTableEditor extends FieldEditor {
 		int widthHint = convertHorizontalDLUsToPixels(button, IDialogConstants.BUTTON_WIDTH);
 		data.widthHint = Math.max(widthHint, button.computeSize(SWT.DEFAULT, SWT.DEFAULT, true).x);
 		button.setLayoutData(data);
-		button.addSelectionListener(getSelectionListener());
+		//
 		return button;
 	}
 
-	private SelectionListener getSelectionListener() {
-
-		if(selectionListener == null) {
-			selectionListener = new SelectionAdapter() {
-
-				@Override
-				public void widgetSelected(SelectionEvent event) {
-
-					Widget widget = event.widget;
-					if(widget == buttonAdd) {
-						addPressed(buttonAdd.getDisplay().getActiveShell());
-					} else if(widget == buttonRemove) {
-						removePressed();
-					} else if(widget == buttonClear) {
-						clearPressed();
-					} else if(widget == identifierFileListUI.getTable()) {
-						selectionChanged();
-					}
-				}
-			};
-		}
-		return selectionListener;
-	}
-
-	private void addPressed(Shell shell) {
+	private void addFileDB(Shell shell) {
 
 		setPresentsDefaultValue(false);
-		IdentifierFile calibrationFile = selectCalibrationFile(shell);
-		if(calibrationFile != null) {
-			identifierFileListUI.add(calibrationFile);
+		IdentifierFile databaseFile = selectDatabaseFile(shell);
+		if(databaseFile != null) {
+			identifierFileListUI.add(databaseFile);
 			selectionChanged();
 		}
 	}
 
-	private void removePressed() {
+	private void addDirectoryDB(Shell shell) {
+
+		setPresentsDefaultValue(false);
+		IdentifierFile databaseFile = selectDatabaseDirectory(shell);
+		if(databaseFile != null) {
+			identifierFileListUI.add(databaseFile);
+			selectionChanged();
+		}
+	}
+
+	private void remove() {
 
 		setPresentsDefaultValue(false);
 		Table table = identifierFileListUI.getTable();
-		int index = table.getSelectionIndex();
-		if(index >= 0) {
-			table.remove(index);
-			table.select(index >= table.getItemCount() ? index - 1 : index);
-			selectionChanged();
+		int[] indices = table.getSelectionIndices();
+		//
+		int offset = 0;
+		for(int index : indices) {
+			index -= offset;
+			if(index >= 0) {
+				table.remove(index);
+				offset++;
+			}
 		}
+		//
+		selectionChanged();
 	}
 
-	private void clearPressed() {
+	private void removeAll() {
 
 		setPresentsDefaultValue(false);
 		identifierFileListUI.getTable().removeAll();
@@ -245,39 +309,61 @@ public class IdentifierTableEditor extends FieldEditor {
 
 		int index = identifierFileListUI.getTable().getSelectionIndex();
 		buttonRemove.setEnabled(index >= 0);
-		buttonClear.setEnabled(index >= 0);
+		buttonRemoveAll.setEnabled(index >= 0);
 	}
 
-	private IdentifierFile selectCalibrationFile(Shell shell) {
+	private IdentifierFile selectDatabaseFile(Shell shell) {
 
 		IdentifierFile identifierFile = null;
 		//
 		FileDialog fileDialog = new FileDialog(shell, SWT.OPEN);
-		fileDialog.setText("Select New Identifier File");
+		fileDialog.setText("Select a Database");
 		fileDialog.setFilterPath(PreferenceSupplier.getFilterPathIdentifierFiles());
-		//
-		if(filterExtensions != null && filterNames != null) {
-			fileDialog.setFilterExtensions(filterExtensions);
-			fileDialog.setFilterNames(filterNames);
-		}
+		fileDialog.setFilterExtensions(fileExtensions);
+		fileDialog.setFilterNames(fileNames);
 		//
 		String filterPath = fileDialog.open();
 		if(filterPath != null) {
 			File file = new File(filterPath);
 			PreferenceSupplier.setFilterPathIdentifierFiles(file.getParentFile().getAbsolutePath());
-			identifierFile = new IdentifierFile(file);
-			/*
-			 * Check that file and column not exists already.
-			 */
-			TableItem[] tableItems = identifierFileListUI.getTable().getItems();
-			exitloop:
-			for(TableItem tableItem : tableItems) {
-				Object object = tableItem.getData();
-				if(object instanceof IdentifierFile) {
-					if(((IdentifierFile)object).equals(identifierFile)) {
-						identifierFile = null;
-						break exitloop;
-					}
+			identifierFile = addIdentifier(file);
+		}
+		//
+		return identifierFile;
+	}
+
+	private IdentifierFile selectDatabaseDirectory(Shell shell) {
+
+		IdentifierFile identifierFile = null;
+		//
+		DirectoryDialog directoryDialog = new DirectoryDialog(shell, SWT.OPEN);
+		directoryDialog.setText("Select a Database");
+		directoryDialog.setFilterPath(PreferenceSupplier.getFilterPathIdentifierFiles());
+		//
+		String filterPath = directoryDialog.open();
+		if(filterPath != null) {
+			File file = new File(filterPath);
+			PreferenceSupplier.setFilterPathIdentifierFiles(file.getAbsolutePath());
+			identifierFile = addIdentifier(file);
+		}
+		//
+		return identifierFile;
+	}
+
+	private IdentifierFile addIdentifier(File file) {
+
+		IdentifierFile identifierFile = new IdentifierFile(file);
+		/*
+		 * Don't databases files twice.
+		 */
+		TableItem[] tableItems = identifierFileListUI.getTable().getItems();
+		exitloop:
+		for(TableItem tableItem : tableItems) {
+			Object object = tableItem.getData();
+			if(object instanceof IdentifierFile) {
+				if(((IdentifierFile)object).equals(identifierFile)) {
+					identifierFile = null;
+					break exitloop;
 				}
 			}
 		}
@@ -285,7 +371,7 @@ public class IdentifierTableEditor extends FieldEditor {
 		return identifierFile;
 	}
 
-	private List<IdentifierFile> getCalibrationFiles(String storedContent) {
+	private List<IdentifierFile> getDatabaseFiles(String storedContent) {
 
 		String[] files = identifierFileListUtil.parseString(storedContent);
 		List<IdentifierFile> identifierFiles = new ArrayList<>();
@@ -308,9 +394,9 @@ public class IdentifierTableEditor extends FieldEditor {
 			//
 			createButtons(compositeButtons);
 			compositeButtons.addDisposeListener(event -> {
-				buttonAdd = null;
+				buttonAddFile = null;
 				buttonRemove = null;
-				buttonClear = null;
+				buttonRemoveAll = null;
 				compositeButtons = null;
 			});
 		} else {
@@ -324,11 +410,49 @@ public class IdentifierTableEditor extends FieldEditor {
 	private IdentifierFileListUI getTableControl(Composite parent) {
 
 		if(identifierFileListUI == null) {
-			identifierFileListUI = new IdentifierFileListUI(parent, SWT.BORDER | SWT.SINGLE | SWT.V_SCROLL | SWT.H_SCROLL);
-			identifierFileListUI.getTable().addSelectionListener(getSelectionListener());
+			identifierFileListUI = new IdentifierFileListUI(parent, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+			Table table = identifierFileListUI.getTable();
+			table.addSelectionListener(new SelectionAdapter() {
+
+				@Override
+				public void widgetSelected(SelectionEvent e) {
+
+					selectionChanged();
+				}
+			});
 		} else {
 			checkParent(identifierFileListUI.getTable(), parent);
 		}
+		//
 		return identifierFileListUI;
+	}
+
+	private void initializeFileExtensions() {
+
+		DatabaseConverterSupport databaseConverterSupport = DatabaseConverter.getDatabaseConverterSupport();
+		List<String> extensions = new ArrayList<>();
+		List<String> names = new ArrayList<>();
+		/*
+		 * Defaults
+		 */
+		extensions.add("*.*");
+		names.add("All Files (*.*)");
+		/*
+		 * Extensions
+		 */
+		List<ISupplier> suppliers = databaseConverterSupport.getSupplier();
+		for(ISupplier supplier : suppliers) {
+			if(supplier.isImportable()) {
+				String directory = supplier.getDirectoryExtension();
+				if(directory == null || "".equals(directory)) {
+					FileExtensionCompiler fileExtensionCompiler = new FileExtensionCompiler(supplier.getFileExtension(), true);
+					extensions.add(fileExtensionCompiler.getCompiledFileExtension());
+					names.add(supplier.getFilterName());
+				}
+			}
+		}
+		//
+		this.fileExtensions = extensions.toArray(new String[extensions.size()]);
+		this.fileNames = names.toArray(new String[names.size()]);
 	}
 }

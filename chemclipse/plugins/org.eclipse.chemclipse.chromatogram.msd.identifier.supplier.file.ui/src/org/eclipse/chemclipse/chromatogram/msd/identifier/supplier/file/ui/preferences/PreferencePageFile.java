@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2019 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,11 +16,7 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSe
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.ui.editors.IdentifierTableEditor;
-import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
-import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
-import org.eclipse.chemclipse.msd.converter.database.DatabaseConverterSupport;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.DoubleFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.FloatFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
@@ -32,17 +28,16 @@ import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class PreferencePageFile extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	private static final Logger logger = Logger.getLogger(PreferencePageFile.class);
-
 	public PreferencePageFile() {
-		super(FLAT);
+		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("File Identifier Settings.");
+		setDescription("File Identifier");
 	}
 
 	/**
@@ -57,16 +52,7 @@ public class PreferencePageFile extends FieldEditorPreferencePage implements IWo
 		 * Display all available import converter.
 		 */
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		IdentifierTableEditor identifierTableEditor = new IdentifierTableEditor(PreferenceSupplier.P_MASS_SPECTRA_FILES, "Load mass spectrum libraries", getFieldEditorParent());
-		DatabaseConverterSupport databaseConverterSupport = DatabaseConverter.getDatabaseConverterSupport();
-		try {
-			String[] extensions = databaseConverterSupport.getFilterExtensions();
-			String[] names = databaseConverterSupport.getFilterNames();
-			identifierTableEditor.setFilterExtensionsAndNames(extensions, names);
-		} catch(NoConverterAvailableException e) {
-			logger.warn(e);
-		}
-		addField(identifierTableEditor);
+		addField(createDatabaseFieldEditor(getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_PRE_OPTIMIZATION, "Use search pre-optimization", getFieldEditorParent()));
@@ -92,6 +78,11 @@ public class PreferencePageFile extends FieldEditorPreferencePage implements IWo
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Used locations for library files", getFieldEditorParent()));
 		addField(new DirectoryFieldEditor(PreferenceSupplier.P_FILTER_PATH_IDENTIFIER_FILES, "Path Identifier Files:", getFieldEditorParent()));
+	}
+
+	private IdentifierTableEditor createDatabaseFieldEditor(Composite parent) {
+
+		return new IdentifierTableEditor(PreferenceSupplier.P_MASS_SPECTRA_FILES, "Mass Spectrum Libraries", parent);
 	}
 
 	/*
