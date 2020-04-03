@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.filter.chromatogramFilterSupplier">
+      <ChromatogramFilterSupplier
+            description="This filters inverts the chromatogram."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.invert.core.ChromatogramFilter"
+            filterName="Invert"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.invert.settings.FilterSettings"
+            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.invert">
+      </ChromatogramFilterSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.invert.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+
+</plugin>
