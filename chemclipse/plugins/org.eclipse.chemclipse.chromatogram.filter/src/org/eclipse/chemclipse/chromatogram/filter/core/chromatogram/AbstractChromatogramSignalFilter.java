@@ -109,7 +109,7 @@ public abstract class AbstractChromatogramSignalFilter extends AbstractChromatog
 		return chromatogramFilterResult;
 	}
 
-	private IChromatogramFilterResult process(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	public IChromatogramFilterResult process(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
 		IChromatogramMSD chromatogramMSD = chromatogramSelection.getChromatogramMSD();
 		/*
@@ -181,7 +181,7 @@ public abstract class AbstractChromatogramSignalFilter extends AbstractChromatog
 		return chromatogramFilterResultFinal;
 	}
 
-	private IChromatogramFilterResult filterProcess(ITotalScanSignals totalScanSignals, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	public IChromatogramFilterResult filterProcess(ITotalScanSignals totalScanSignals, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
 		if(chromatogramFilterSettings == null) {
 			return applyFilter(totalScanSignals, monitor);

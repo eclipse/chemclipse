@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Lorenz Gerber - Ion-wise msd chromatogram filter
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.processor;
 
@@ -35,7 +36,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class SavitzkyGolayProcessor {
 
 	@SuppressWarnings("unchecked")
-	public IChromatogramFilterResult smooth(IChromatogramSelection chromatogramSelection, boolean validatePositive, ChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
+	public static IChromatogramFilterResult smooth(IChromatogramSelection chromatogramSelection, boolean validatePositive, ChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
 
 		IChromatogramFilterResult chromatogramFilterResult;
 		try {
@@ -75,12 +76,12 @@ public class SavitzkyGolayProcessor {
 		return chromatogramFilterResult;
 	}
 
-	public double[] smooth(double[] ticValues, int derivative, int order, int width, IProgressMonitor monitor) {
+	public static double[] smooth(double[] ticValues, int derivative, int order, int width, IProgressMonitor monitor) {
 
 		return smoothValues(ticValues, derivative, order, width);
 	}
 
-	public double[] smooth(ITotalScanSignals totalScanSignals, int derivative, int order, int width, IProgressMonitor monitor) {
+	public static double[] smooth(ITotalScanSignals totalScanSignals, int derivative, int order, int width, IProgressMonitor monitor) {
 
 		int size = totalScanSignals.size();
 		double[] ticValues = new double[size];
@@ -92,7 +93,7 @@ public class SavitzkyGolayProcessor {
 		return smoothValues(ticValues, derivative, order, width);
 	}
 
-	public double[] smooth(double[] ticValues, ChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
+	public static double[] smooth(double[] ticValues, ChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
 
 		int derivative = filterSettings.getDerivative();
 		int order = filterSettings.getOrder();
@@ -100,7 +101,7 @@ public class SavitzkyGolayProcessor {
 		return smoothValues(ticValues, derivative, order, width);
 	}
 
-	public double[] smooth(ITotalScanSignals totalScanSignals, ChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
+	public static double[] smooth(ITotalScanSignals totalScanSignals, ChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
 
 		int size = totalScanSignals.size();
 		double[] ticValues = new double[size];
@@ -115,7 +116,7 @@ public class SavitzkyGolayProcessor {
 		return smoothValues(ticValues, derivative, order, width);
 	}
 
-	private double[] smoothValues(double[] ticValues, int derivative, int order, int width) {
+	private static double[] smoothValues(double[] ticValues, int derivative, int order, int width) {
 
 		int p = calculateP(width);
 		//
@@ -155,7 +156,7 @@ public class SavitzkyGolayProcessor {
 		return newTicValues;
 	}
 
-	private void processStart(int p, int order, int derivative, int width, RealMatrix x, double[] ticValues, double[] newTicValues, double[][] startStopWeights) {
+	private static void processStart(int p, int order, int derivative, int width, RealMatrix x, double[] ticValues, double[] newTicValues, double[][] startStopWeights) {
 
 		double[][] uStart = new double[p][order - derivative + 1]; // rows, columns
 		for(int i = 0; i < p; i++) {
@@ -182,7 +183,7 @@ public class SavitzkyGolayProcessor {
 		}
 	}
 
-	private void processMiddle(int p, double[] ticValues, double[] newTicValues, double[] middleWeights, double[] coefficients) {
+	private static void processMiddle(int p, double[] ticValues, double[] newTicValues, double[] middleWeights, double[] coefficients) {
 
 		for(int i = p; i < ticValues.length - p; i++) {
 			double newTic = 0;
@@ -195,7 +196,7 @@ public class SavitzkyGolayProcessor {
 		}
 	}
 
-	private void processEnd(int p, int order, int derivative, int width, RealMatrix x, double[] ticValues, double[] newTicValues, double[][] startStopWeights) {
+	private static void processEnd(int p, int order, int derivative, int width, RealMatrix x, double[] ticValues, double[] newTicValues, double[][] startStopWeights) {
 
 		double[][] uEnd = new double[p][order - derivative + 1]; // rows, columns
 		for(int i = p + 1, k = 0; i < x.getRowDimension(); i++, k++) {
@@ -222,7 +223,7 @@ public class SavitzkyGolayProcessor {
 		}
 	}
 
-	private double[][] getWeights(int width, int order, int derivative) {
+	private static double[][] getWeights(int width, int order, int derivative) {
 
 		RealMatrix x = getX(width, order);
 		RealMatrix dm = MatrixUtils.createRealIdentityMatrix(width);
@@ -248,7 +249,7 @@ public class SavitzkyGolayProcessor {
 		return weights;
 	}
 
-	private RealMatrix getX(int width, int order) {
+	private static RealMatrix getX(int width, int order) {
 
 		int rows = width;
 		int columns = 1 + order;
@@ -258,12 +259,12 @@ public class SavitzkyGolayProcessor {
 		return MatrixUtils.createRealMatrix(calculateX(t1, t2));
 	}
 
-	private int calculateP(int width) {
+	private static int calculateP(int width) {
 
 		return (width - 1) / 2;
 	}
 
-	private double[][] createT1(int rows, int columns, int min) {
+	private static double[][] createT1(int rows, int columns, int min) {
 
 		double[][] array = new double[rows][columns];
 		for(int i = 0; i < rows; i++) {
@@ -275,7 +276,7 @@ public class SavitzkyGolayProcessor {
 		return array;
 	}
 
-	private double[][] createT2(int rows, int columns, int min) {
+	private static double[][] createT2(int rows, int columns, int min) {
 
 		double[][] array = new double[rows][columns];
 		for(int i = 0; i < rows; i++) {
@@ -287,7 +288,7 @@ public class SavitzkyGolayProcessor {
 		return array;
 	}
 
-	private double[][] calculateX(double[][] t1, double[][] t2) {
+	private static double[][] calculateX(double[][] t1, double[][] t2) {
 
 		int rows = t1.length;
 		int columns = t1[0].length;
@@ -301,7 +302,7 @@ public class SavitzkyGolayProcessor {
 		return array;
 	}
 
-	private double[] calculateCoefficient(int derivative, int order) {
+	private static double[] calculateCoefficient(int derivative, int order) {
 
 		double[] result;
 		if(derivative > 0) {
@@ -355,7 +356,7 @@ public class SavitzkyGolayProcessor {
 		return result;
 	}
 
-	private double[][] createOnes(int rows, int columns) {
+	private static double[][] createOnes(int rows, int columns) {
 
 		double[][] array = new double[rows][columns];
 		for(int i = 0; i < rows; i++) {
@@ -366,7 +367,7 @@ public class SavitzkyGolayProcessor {
 		return array;
 	}
 
-	private double[] createArray(int size, int start) {
+	private static double[] createArray(int size, int start) {
 
 		double[] array = new double[size];
 		int value = start;
@@ -376,7 +377,7 @@ public class SavitzkyGolayProcessor {
 		return array;
 	}
 
-	public IChromatogramFilterResult apply(ITotalScanSignals totalSignals, ChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
+	public static IChromatogramFilterResult apply(ITotalScanSignals totalSignals, ChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
 
 		double[] sgTic = smooth(totalSignals, filterSettings, monitor);
 		int i = 0;
@@ -385,4 +386,22 @@ public class SavitzkyGolayProcessor {
 		}
 		return new ChromatogramFilterResult(ResultStatus.OK, "The Savitzky-Golay filter has been applied successfully.");
 	}
+	
+	public static void apply(double[][] matrix, ChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
+		
+		double[] ionSignal = new double[matrix.length];
+		for(int i = 0; i < matrix[0].length; i++) {
+			for(int j = 0; j < matrix.length; j++) {
+				ionSignal[j] = matrix[j][i];
+			}
+			ionSignal = smooth(ionSignal, filterSettings, monitor);
+			for(int j = 0; j < matrix.length; j++) {
+				if(ionSignal[j] < 0.0) {
+					ionSignal[j] = 0.0;
+				}
+				matrix[j][i] = ionSignal[j];
+			}
+		}
+	}
+	
 }
