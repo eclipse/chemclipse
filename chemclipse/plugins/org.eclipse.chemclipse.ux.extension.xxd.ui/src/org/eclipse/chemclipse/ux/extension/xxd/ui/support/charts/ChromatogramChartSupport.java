@@ -62,13 +62,6 @@ public class ChromatogramChartSupport {
 
 	public static final String EDITOR_TAB = "_EditorTab#";
 	public static final String REFERENCE_MARKER = "_Reference#";
-	/*
-	 * TODO Derivate as enum
-	 */
-	public static final String DERIVATIVE_NONE = "--";
-	public static final String DERIVATIVE_FIRST = "1st";
-	public static final String DERIVATIVE_SECOND = "2nd";
-	public static final String DERIVATIVE_THIRD = "3rd";
 	//
 	private IColorScheme colorScheme;
 	private Map<String, Color> usedColors;
@@ -107,76 +100,71 @@ public class ChromatogramChartSupport {
 	public ILineSeriesData getLineSeriesDataChromatogram(IChromatogramSelection chromatogramSelection, String seriesId, Color color) {
 
 		DisplayType dataType = DisplayType.TIC;
-		String derivativeType = DERIVATIVE_NONE;
-		return getLineSeriesData(chromatogramSelection, seriesId, dataType, derivativeType, color, null, false);
+		return getLineSeriesData(chromatogramSelection, seriesId, dataType, Derivative.NONE, color, null, false);
 	}
 
 	@SuppressWarnings("rawtypes")
 	public ILineSeriesData getLineSeriesDataChromatogram(IChromatogram chromatogram, String seriesId, Color color) {
 
 		DisplayType dataType = DisplayType.TIC;
-		String derivativeType = DERIVATIVE_NONE;
-		return getLineSeriesData(chromatogram, seriesId, dataType, derivativeType, color, null, false);
+		return getLineSeriesData(chromatogram, seriesId, dataType, Derivative.NONE, color, null, false);
 	}
 
 	@SuppressWarnings("rawtypes")
 	public ILineSeriesData getLineSeriesDataBaseline(IChromatogramSelection chromatogramSelection, String seriesId, Color color) {
 
 		DisplayType dataType = DisplayType.TIC;
-		String derivativeType = DERIVATIVE_NONE;
-		return getLineSeriesData(chromatogramSelection, seriesId, dataType, derivativeType, color, null, true);
+		return getLineSeriesData(chromatogramSelection, seriesId, dataType, Derivative.NONE, color, null, true);
 	}
 
 	@SuppressWarnings("rawtypes")
 	public ILineSeriesData getLineSeriesDataBaseline(IChromatogram chromatogram, String seriesId, Color color) {
 
 		DisplayType dataType = DisplayType.TIC;
-		String derivativeType = DERIVATIVE_NONE;
-		return getLineSeriesData(chromatogram, seriesId, dataType, derivativeType, color, null, true);
+		return getLineSeriesData(chromatogram, seriesId, dataType, Derivative.NONE, color, null, true);
 	}
 
 	public ILineSeriesData getLineSeriesDataBaseline(IChromatogramSelection<?, ?> chromatogramSelection, String seriesId, DisplayType dataType, Color color, boolean timeIntervalSelection) {
 
-		return getLineSeriesData(chromatogramSelection, seriesId, dataType, DERIVATIVE_NONE, color, true, timeIntervalSelection);
+		return getLineSeriesData(chromatogramSelection, seriesId, dataType, Derivative.NONE, color, true, timeIntervalSelection);
 	}
 
 	public ILineSeriesData getLineSeriesDataBaseline(IChromatogram<?> chromatogram, String seriesId, DisplayType dataType, Color color, IMarkedSignals<? extends IMarkedSignal> signals) {
 
-		String derivativeType = DERIVATIVE_NONE;
-		return getLineSeriesData(chromatogram, seriesId, dataType, derivativeType, color, signals, true);
+		return getLineSeriesData(chromatogram, seriesId, dataType, Derivative.NONE, color, signals, true);
 	}
 
 	@SuppressWarnings("rawtypes")
 	public ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, DisplayType dataType, Color color, IMarkedSignals<? extends IMarkedSignal> signals) {
 
-		return getLineSeriesData(chromatogram, seriesId, dataType, DERIVATIVE_NONE, color, signals, false);
+		return getLineSeriesData(chromatogram, seriesId, dataType, Derivative.NONE, color, signals, false);
 	}
 
 	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?, ?> chromatogramSelection, String seriesId, DisplayType dataType, Color color, boolean timeIntervalSelection) {
 
-		return getLineSeriesData(chromatogramSelection, seriesId, dataType, DERIVATIVE_NONE, color, false, timeIntervalSelection);
+		return getLineSeriesData(chromatogramSelection, seriesId, dataType, Derivative.NONE, color, false, timeIntervalSelection);
 	}
 
-	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?, ?> chromatogramSelection, String seriesId, DisplayType dataType, String derivativeType, Color color, boolean timeIntervalSelection) {
+	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?, ?> chromatogramSelection, String seriesId, DisplayType dataType, Derivative derivative, Color color, boolean timeIntervalSelection) {
 
-		return getLineSeriesData(chromatogramSelection, seriesId, dataType, derivativeType, color, false, timeIntervalSelection);
+		return getLineSeriesData(chromatogramSelection, seriesId, dataType, derivative, color, false, timeIntervalSelection);
 	}
 
 	@SuppressWarnings("rawtypes")
-	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?, ?> chromatogramSelection, String seriesId, DisplayType dataType, String derivativeType, Color color, IMarkedSignals<? extends IMarkedSignal> signals, boolean baseline) {
+	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?, ?> chromatogramSelection, String seriesId, DisplayType dataType, Derivative derivative, Color color, IMarkedSignals<? extends IMarkedSignal> signals, boolean baseline) {
 
 		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
 		int stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
-		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, dataType, derivativeType, color, signals, baseline);
+		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, dataType, derivative, color, signals, baseline);
 	}
 
 	@SuppressWarnings("rawtypes")
-	public ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, DisplayType dataType, String derivativeType, Color color, IMarkedSignals<? extends IMarkedSignal> signals, boolean baseline) {
+	public ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, DisplayType dataType, Derivative derivative, Color color, IMarkedSignals<? extends IMarkedSignal> signals, boolean baseline) {
 
 		int startScan = 1;
 		int stopScan = chromatogram.getNumberOfScans();
-		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, dataType, derivativeType, color, signals, baseline);
+		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, dataType, derivative, color, signals, baseline);
 	}
 
 	@Deprecated
@@ -212,7 +200,7 @@ public class ChromatogramChartSupport {
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	private ILineSeriesData getLineSeriesData(IChromatogram chromatogram, int startScan, int stopScan, String seriesId, DisplayType dataType, String derivativeType, Color color, IMarkedSignals<? extends IMarkedSignal> signals, boolean baseline) {
+	private ILineSeriesData getLineSeriesData(IChromatogram chromatogram, int startScan, int stopScan, String seriesId, DisplayType dataType, Derivative derivative, Color color, IMarkedSignals<? extends IMarkedSignal> signals, boolean baseline) {
 
 		IBaselineModel baselineModel = null;
 		if(baseline) {
@@ -307,8 +295,8 @@ public class ChromatogramChartSupport {
 		/*
 		 * Calculate a derivative?
 		 */
-		int derivatives = getNumberOfDerivatives(derivativeType);
-		for(int i = 1; i <= derivatives; i++) {
+		int order = derivative.getOrder();
+		for(int i = 1; i <= order; i++) {
 			ySeries = calculateDerivate(ySeries);
 		}
 		/*
@@ -371,11 +359,11 @@ public class ChromatogramChartSupport {
 		} else {
 			dataType = DisplayType.TIC;
 		}
-		return getLineSeriesData(chromatogramSelection, seriesId, dataType, DERIVATIVE_NONE, color, baseline, timeIntervalSelection);
+		return getLineSeriesData(chromatogramSelection, seriesId, dataType, Derivative.NONE, color, baseline, timeIntervalSelection);
 	}
 
 	@SuppressWarnings("unused")
-	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?, ?> chromatogramSelection, String seriesId, DisplayType dataType, String derivativeType, Color color, boolean baseline, boolean timeIntervalSelection) {
+	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?, ?> chromatogramSelection, String seriesId, DisplayType dataType, Derivative derivative, Color color, boolean baseline, boolean timeIntervalSelection) {
 
 		/*
 		 * refreshUpdateOverlayChart
@@ -397,7 +385,7 @@ public class ChromatogramChartSupport {
 			 */
 			IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
 			IMarkedWavelengths markedWavelengths = chromatogramSelectionWSD.getSelectedWavelengths();
-			return getLineSeriesData(chromatogram, seriesId, dataType, derivativeType, color, markedWavelengths, baseline);
+			return getLineSeriesData(chromatogram, seriesId, dataType, derivative, color, markedWavelengths, baseline);
 		} else if(dataType.equals(DisplayType.TSC)) {
 			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
 			markedSignals = chromatogramSelectionMSD.getExcludedIons();
@@ -422,7 +410,7 @@ public class ChromatogramChartSupport {
 			startScan = 1;
 			stopScan = chromatogram.getNumberOfScans();
 		}
-		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, dataType, derivativeType, color, markedSignals, baseline);
+		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, dataType, derivative, color, markedSignals, baseline);
 	}
 
 	private double getIntensity(IScan scan, DisplayType dataType, IMarkedSignals<? extends IMarkedSignal> signals) {
@@ -513,26 +501,6 @@ public class ChromatogramChartSupport {
 	private LineStyle getLineStyle(DisplayType dataType) {
 
 		return lineStyle;
-	}
-
-	private int getNumberOfDerivatives(String derivativeType) {
-
-		int derivatives;
-		switch(derivativeType) {
-			case DERIVATIVE_FIRST:
-				derivatives = 1;
-				break;
-			case DERIVATIVE_SECOND:
-				derivatives = 2;
-				break;
-			case DERIVATIVE_THIRD:
-				derivatives = 3;
-				break;
-			default:
-				derivatives = 0;
-				break;
-		}
-		return derivatives;
 	}
 
 	private double[] calculateDerivate(double[] values) {

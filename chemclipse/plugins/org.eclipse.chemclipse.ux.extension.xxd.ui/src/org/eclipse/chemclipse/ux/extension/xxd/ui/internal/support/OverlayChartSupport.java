@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 public class OverlayChartSupport {
@@ -27,7 +26,6 @@ public class OverlayChartSupport {
 	public static final String DISPLAY_MODUS_MIRRORED = "Mirrored";
 	//
 	private String[] overlayTypes;
-	private String[] derivativeTypes;
 	private String[] displayModi;
 	//
 
@@ -38,11 +36,6 @@ public class OverlayChartSupport {
 	public String[] getOverlayTypes() {
 
 		return overlayTypes;
-	}
-
-	public String[] getDerivativeTypes() {
-
-		return derivativeTypes;
 	}
 
 	public String[] getDisplayModi() {
@@ -64,12 +57,6 @@ public class OverlayChartSupport {
 				DisplayType.toShortcut(DisplayType.TIC, DisplayType.XIC), //
 				DisplayType.toShortcut(DisplayType.TIC, DisplayType.SIC), //
 				DisplayType.toShortcut(DisplayType.TIC, DisplayType.TSC)};
-		//
-		derivativeTypes = new String[]{//
-				ChromatogramChartSupport.DERIVATIVE_NONE, //
-				ChromatogramChartSupport.DERIVATIVE_FIRST, //
-				ChromatogramChartSupport.DERIVATIVE_SECOND, //
-				ChromatogramChartSupport.DERIVATIVE_THIRD};
 		//
 		displayModi = new String[]{//
 				DISPLAY_MODUS_NORMAL, //

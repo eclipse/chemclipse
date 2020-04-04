@@ -36,6 +36,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.listener.PeakTracesOf
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.Derivative;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
 import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
@@ -121,7 +122,7 @@ public class PeakTracesUI extends ScrollableChart {
 			for(Integer trace : traces) {
 				IMarkedIons markedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
 				markedIons.add(trace);
-				ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogramSelection, Integer.toString(trace), DisplayType.SIC, ChromatogramChartSupport.DERIVATIVE_NONE, colors.getColor(), markedIons, false);
+				ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogramSelection, Integer.toString(trace), DisplayType.SIC, Derivative.NONE, colors.getColor(), markedIons, false);
 				ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 				if(trace == selectedTrace) {
 					lineSeriesSettings.setLineWidth(2);
