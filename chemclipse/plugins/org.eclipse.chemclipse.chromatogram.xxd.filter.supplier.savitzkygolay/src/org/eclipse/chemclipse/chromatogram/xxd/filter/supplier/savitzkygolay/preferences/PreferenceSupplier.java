@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Lorenz Gerber - adjustments for per ion calculation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.preferences;
 
@@ -74,6 +75,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_DERIVATIVE, Integer.toString(DEF_DERIVATIVE));
 		defaultValues.put(P_ORDER, Integer.toString(DEF_ORDER));
 		defaultValues.put(P_WIDTH, Integer.toString(DEF_WIDTH));
+		defaultValues.put(P_PER_ION_CALCULATION, Boolean.toString(DEF_PER_ION_CALCULATION));
 		return defaultValues;
 	}
 
@@ -89,7 +91,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		ChromatogramFilterSettings settings = new ChromatogramFilterSettings();
 		settings.setOrder(preferences.getInt(P_ORDER, DEF_ORDER));
 		settings.setWidth(preferences.getInt(P_WIDTH, DEF_WIDTH));
-		settings.setPerIonCalculation(getPerIonCalculation());
+		settings.setPerIonCalculation(preferences.getBoolean(P_PER_ION_CALCULATION, DEF_PER_ION_CALCULATION));
 		return settings;
 	}
 
