@@ -286,6 +286,9 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_SKIP = "org.eclipse.chemclipse.rcp.ui.icons/skip.gif";
 	String IMAGE_SKIPPED = "org.eclipse.chemclipse.rcp.ui.icons/skipped.gif";
 	String IMAGE_TAG = "org.eclipse.chemclipse.rcp.ui.icons/tag.gif";
+	String IMAGE_SHIFT = "org.eclipse.chemclipse.rcp.ui.icons/shift.gif";
+	String IMAGE_SHIFT_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/shiftActive.gif";
+	String IMAGE_SHIFT_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/shiftDefault.gif";
 	String IMAGE_SHIFT_Y = "org.eclipse.chemclipse.rcp.ui.icons/shiftY.gif";
 	String IMAGE_SHIFT_XY = "org.eclipse.chemclipse.rcp.ui.icons/shiftXY.gif";
 	String IMAGE_SHIFT_AUTO_MIRROR = "org.eclipse.chemclipse.rcp.ui.icons/shiftAutoMirror.gif";
