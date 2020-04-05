@@ -47,6 +47,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOver
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.Derivative;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.DisplayModus;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.AxisConfig.ChartAxis;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTrace;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTraces;
@@ -55,9 +56,12 @@ import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.core.support.MarkedWavelengths;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MBasicFactory;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
+import org.eclipse.e4.ui.workbench.modeling.EModelService;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -365,24 +369,20 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(button.getData(BUTTON_MIRROR_KEY) != null) {
-					/*
-					 * Get the display modus.
-					 */
-					String displayModus = button.getData(BUTTON_MIRROR_KEY).toString();
-					setDisplayModus(displayModus, getSelectedSeriesId());
-				}
+				Object object = button.getData(BUTTON_MIRROR_KEY);
+				DisplayModus displayModus = object instanceof DisplayModus ? (DisplayModus)object : DisplayModus.NORMAL;
+				setDisplayModus(displayModus, getSelectedSeriesId());
 			}
 		});
 		//
 		return button;
 	}
 
-	protected void setDisplayModus(String displayModus, String seriesId) {
+	protected void setDisplayModus(DisplayModus displayModus, String seriesId) {
 
 		BaseChart baseChart = chromatogramChart.getBaseChart();
 		IChartSettings chartSettings = chromatogramChart.getChartSettings();
-		if(displayModus.equals(OverlayChartSupport.DISPLAY_MODUS_MIRRORED)) {
+		if(DisplayModus.MIRRORED.equals(displayModus)) {
 			if(!mirroredSeries.contains(seriesId)) {
 				baseChart.multiplySeries(seriesId, IExtendedChart.Y_AXIS, -1.0d);
 				mirroredSeries.add(seriesId);
@@ -676,14 +676,23 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 
 		String partStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_OVERLAY_CHROMATOGRAM_EXTRA);
 		if(!partStackId.equals(PartSupport.PARTSTACK_NONE)) {
-			MPart part = MBasicFactory.INSTANCE.createPart();
-			part.setLabel(name);
-			part.setCloseable(true);
-			part.setContributionURI("bundleclass://" + bundle + "/" + classPath);
+			/*
+			 * Getting the items via the EclipseContext failed here.
+			 */
+			EModelService modelService = ModelSupportAddon.getModelService();
+			MApplication application = ModelSupportAddon.getApplication();
+			EPartService partService = ModelSupportAddon.getPartService();
 			//
-			MPartStack partStack = PartSupport.getPartStack(partStackId, ModelSupportAddon.getModelService(), ModelSupportAddon.getApplication());
-			partStack.getChildren().add(part);
-			PartSupport.showPart(part, ModelSupportAddon.getPartService());
+			if(modelService != null && application != null && partService != null) {
+				MPart part = MBasicFactory.INSTANCE.createPart();
+				part.setLabel(name);
+				part.setCloseable(true);
+				part.setContributionURI("bundleclass://" + bundle + "/" + classPath);
+				//
+				MPartStack partStack = PartSupport.getPartStack(partStackId, modelService, application);
+				partStack.getChildren().add(part);
+				PartSupport.showPart(part, partService);
+			}
 		}
 	}
 
@@ -763,10 +772,10 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 		//
 		buttonMirrorSeries.setEnabled(isSeriesSelected);
 		if(mirroredSeries.contains(selectedSeries)) {
-			buttonMirrorSeries.setData(BUTTON_MIRROR_KEY, OverlayChartSupport.DISPLAY_MODUS_NORMAL);
+			buttonMirrorSeries.setData(BUTTON_MIRROR_KEY, DisplayModus.NORMAL);
 			buttonMirrorSeries.setToolTipText(normalTooltip);
 		} else {
-			buttonMirrorSeries.setData(BUTTON_MIRROR_KEY, OverlayChartSupport.DISPLAY_MODUS_MIRRORED);
+			buttonMirrorSeries.setData(BUTTON_MIRROR_KEY, DisplayModus.MIRRORED);
 			buttonMirrorSeries.setToolTipText(mirrorTooltip);
 		}
 	}
@@ -1326,9 +1335,9 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 				if(list != null) {
 					for(String id : list) {
 						if(modus == DisplayModus.MIRRORED) {
-							ExtendedChromatogramOverlayUI.this.setDisplayModus(OverlayChartSupport.DISPLAY_MODUS_MIRRORED, id);
+							ExtendedChromatogramOverlayUI.this.setDisplayModus(DisplayModus.MIRRORED, id);
 						} else {
-							ExtendedChromatogramOverlayUI.this.setDisplayModus(OverlayChartSupport.DISPLAY_MODUS_NORMAL, id);
+							ExtendedChromatogramOverlayUI.this.setDisplayModus(DisplayModus.NORMAL, id);
 						}
 					}
 				}

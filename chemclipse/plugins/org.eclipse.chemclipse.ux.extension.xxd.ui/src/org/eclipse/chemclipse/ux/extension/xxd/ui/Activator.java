@@ -33,8 +33,8 @@ import org.osgi.framework.BundleContext;
  */
 public class Activator extends AbstractUIPlugin {
 
-	// The shared instance
 	private static Activator plugin;
+	//
 	private ScopedPreferenceStore preferenceStoreSubtract;
 	private DataUpdateSupport dataUpdateSupport;
 
@@ -98,11 +98,17 @@ public class Activator extends AbstractUIPlugin {
 		return dataUpdateSupport;
 	}
 
-	public IEventBroker getEventBroker() {
+	public IEclipseContext getEclipseContext() {
 
 		BundleContext bundleContext = getBundle().getBundleContext();
 		IEclipseContext eclipseContext = EclipseContextFactory.getServiceContext(bundleContext);
 		eclipseContext.set(Logger.class, null);
+		return eclipseContext;
+	}
+
+	public IEventBroker getEventBroker() {
+
+		IEclipseContext eclipseContext = getEclipseContext();
 		return eclipseContext.get(IEventBroker.class);
 	}
 

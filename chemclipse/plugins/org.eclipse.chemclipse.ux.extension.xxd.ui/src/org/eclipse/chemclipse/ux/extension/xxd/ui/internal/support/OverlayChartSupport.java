@@ -22,12 +22,7 @@ public class OverlayChartSupport {
 	public static final String OVERLAY_STOP_MARKER = ")";
 	public static final String DELIMITER_SIGNAL_DERIVATIVE = ",";
 	//
-	public static final String DISPLAY_MODUS_NORMAL = "Normal";
-	public static final String DISPLAY_MODUS_MIRRORED = "Mirrored";
-	//
 	private String[] overlayTypes;
-	private String[] displayModi;
-	//
 
 	public OverlayChartSupport() {
 		initialize();
@@ -36,11 +31,6 @@ public class OverlayChartSupport {
 	public String[] getOverlayTypes() {
 
 		return overlayTypes;
-	}
-
-	public String[] getDisplayModi() {
-
-		return displayModi;
 	}
 
 	private void initialize() {
@@ -57,11 +47,6 @@ public class OverlayChartSupport {
 				DisplayType.toShortcut(DisplayType.TIC, DisplayType.XIC), //
 				DisplayType.toShortcut(DisplayType.TIC, DisplayType.SIC), //
 				DisplayType.toShortcut(DisplayType.TIC, DisplayType.TSC)};
-		//
-		displayModi = new String[]{//
-				DISPLAY_MODUS_NORMAL, //
-				DISPLAY_MODUS_MIRRORED //
-		};
 	}
 
 	public double getOverlayShiftX() {
