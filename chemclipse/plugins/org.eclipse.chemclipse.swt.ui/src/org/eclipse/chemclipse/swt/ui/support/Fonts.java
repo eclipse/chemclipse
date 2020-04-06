@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - helper for DPI aware font creation
  *******************************************************************************/
 package org.eclipse.chemclipse.swt.ui.support;
 
@@ -17,6 +18,8 @@ import java.util.Map;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.graphics.Point;
 
 public class Fonts {
 
@@ -43,5 +46,19 @@ public class Fonts {
 		}
 		//
 		return fonts.containsKey(fontId) ? fonts.get(fontId) : DisplayUtils.getDisplay().getSystemFont();
+	}
+
+	/**
+	 * Creates a font so it looks the same size on different DPIs for the given device, please not that the caller is responsible for disposing the font
+	 * 
+	 * @param device
+	 * @param fontData
+	 * @return
+	 */
+	public static Font createDPIAwareFont(Device device, FontData fontData) {
+
+		Point dpi = device.getDPI();
+		int pointHeight = fontData.getHeight() * 72 / dpi.y;
+		return new Font(device, fontData.getName(), pointHeight, fontData.getStyle());
 	}
 }
