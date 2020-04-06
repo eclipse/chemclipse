@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
+ * Christoph Läubrich - allow setting of the preference store via constructor
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts;
 
@@ -64,19 +65,33 @@ public class ChromatogramChartSupport {
 	public static final String REFERENCE_MARKER = "_Reference#";
 	//
 	private IColorScheme colorScheme;
-	private Map<String, Color> usedColors;
+	private final Map<String, Color> usedColors = new HashMap<>();
 	private LineStyle lineStyle;
 	//
 	private boolean showArea = false;
+	private final IPreferenceStore preferenceStore;
 
+	/**
+	 * Creates a chart support with the default preference store
+	 */
 	public ChromatogramChartSupport() {
-		usedColors = new HashMap<>();
+
+		this(Activator.getDefault().getPreferenceStore());
+	}
+
+	/**
+	 * creates a chart support with the given preference store, make sure that it is properly initialized (see {@link #initializeDefaults(IPreferenceStore)}
+	 * 
+	 * @param preferenceStore
+	 */
+	public ChromatogramChartSupport(IPreferenceStore preferenceStore) {
+
+		this.preferenceStore = preferenceStore;
 		loadUserSettings();
 	}
 
 	public void loadUserSettings() {
 
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		//
 		colorScheme = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_OVERLAY));
 		lineStyle = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_OVERLAY));
@@ -218,7 +233,6 @@ public class ChromatogramChartSupport {
 			}
 		}
 		LineStyle lineStyle = getLineStyle(dataType);
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		boolean condenseCycleNumberScans = preferenceStore.getBoolean(PreferenceConstants.P_CONDENSE_CYCLE_NUMBER_SCANS);
 		//
 		double[] xSeries;
@@ -517,5 +531,21 @@ public class ChromatogramChartSupport {
 
 		colorScheme.reset();
 		usedColors.clear();
+	}
+
+	/**
+	 * Initialize the defaults of the given preference store used by this class
+	 * 
+	 * @param preferenceStore
+	 *            the preference store to use
+	 * @return the given preference store for chaining
+	 */
+	public static IPreferenceStore initializeDefaults(IPreferenceStore preferenceStore) {
+
+		preferenceStore.setDefault(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_OVERLAY, PreferenceConstants.DEF_COLOR_SCHEME_DISPLAY_OVERLAY);
+		preferenceStore.setDefault(PreferenceConstants.P_LINE_STYLE_DISPLAY_OVERLAY, PreferenceConstants.DEF_LINE_STYLE_DISPLAY_OVERLAY);
+		preferenceStore.setDefault(PreferenceConstants.P_OVERLAY_SHOW_AREA, PreferenceConstants.DEF_OVERLAY_SHOW_AREA);
+		preferenceStore.setDefault(PreferenceConstants.P_CONDENSE_CYCLE_NUMBER_SCANS, PreferenceConstants.DEF_CONDENSE_CYCLE_NUMBER_SCANS);
+		return preferenceStore;
 	}
 }
