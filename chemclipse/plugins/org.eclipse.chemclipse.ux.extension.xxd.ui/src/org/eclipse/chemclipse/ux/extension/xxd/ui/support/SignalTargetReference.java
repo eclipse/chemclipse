@@ -15,6 +15,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -40,6 +41,7 @@ public class SignalTargetReference implements TargetReference, IAdaptable {
 	private final ITargetSupplier supplier;
 
 	public <X extends ISignal & ITargetSupplier> SignalTargetReference(X item, String type, String name) {
+
 		this.signal = item;
 		this.supplier = item;
 		this.type = type;
@@ -88,17 +90,17 @@ public class SignalTargetReference implements TargetReference, IAdaptable {
 		return list;
 	}
 
-	public static List<SignalTargetReference> getPeakReferences(List<? extends IPeak> items) {
+	public static List<SignalTargetReference> getPeakReferences(Collection<? extends IPeak> items) {
 
 		return getPeakReferences(items, null);
 	}
 
-	public static List<SignalTargetReference> getPeakReferences(List<? extends IPeak> items, Function<? super IPeak, IScan> ticProvider) {
+	public static List<SignalTargetReference> getPeakReferences(Collection<? extends IPeak> items, Function<? super IPeak, IScan> ticProvider) {
 
 		List<SignalTargetReference> list = new ArrayList<>();
 		for(IPeak peak : items) {
 			Set<IIdentificationTarget> targets = peak.getTargets();
-			if(peak != null && (targets.size() > 0 || peak.getName() != null) || peak.getClassifier().size()>0) {
+			if(peak != null && (targets.size() > 0 || peak.getName() != null) || peak.getClassifier().size() > 0) {
 				String name = FORMAT.format(peak.getPeakModel().getRetentionTimeAtPeakMaximum() / (1000d * 60d));
 				if(ticProvider == null) {
 					list.add(new SignalTargetReference(peak, TYPE_PEAK, name));
@@ -151,6 +153,7 @@ public class SignalTargetReference implements TargetReference, IAdaptable {
 		private final IScan tic;
 
 		public TICSignalTargetReference(IPeak peak, IScan tic, String type, String name) {
+
 			super(peak, type, name);
 			this.tic = tic;
 		}

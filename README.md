@@ -1,6 +1,6 @@
 <img src="https://science.eclipse.org/images/science/logo.png" height="50" align="right">
 
-# Chemclipse
+# ChemClipse
 
 The Eclipse Chemclipse project offers functionality for data reading and processing in the domain of
 Cheminformatics and Bioinformatics.

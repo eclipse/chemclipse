@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,10 +8,12 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - use more generic collection instead of list as parameter
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts;
 
 import java.text.DecimalFormat;
+import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -32,7 +34,7 @@ public class PeakChartSupport {
 
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0");
 
-	public ILineSeriesData getPeaks(List<? extends IPeak> peaks, boolean includeBackground, boolean mirrored, Color color, String id) {
+	public ILineSeriesData getPeaks(Collection<? extends IPeak> peaks, boolean includeBackground, boolean mirrored, Color color, String id) {
 
 		ISeriesData seriesData = getPeakSeriesData(peaks, includeBackground, mirrored, id);
 		return getLineSeriesData(seriesData, color, true);
@@ -91,7 +93,7 @@ public class PeakChartSupport {
 		return lineSeriesData;
 	}
 
-	private ISeriesData getPeakSeriesData(List<? extends IPeak> peaks, boolean includeBackground, boolean mirrored, String id) {
+	public ISeriesData getPeakSeriesData(Collection<? extends IPeak> peaks, boolean includeBackground, boolean mirrored, String id) {
 
 		int size = peaks.size();
 		double[] xSeries = new double[size];
