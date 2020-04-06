@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - support usage of custom preference store
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.charts;
 
@@ -29,19 +30,38 @@ import org.eclipse.swtchart.extensions.linecharts.LineChart;
 
 public class ChromatogramChart extends LineChart {
 
-	private ChartSupport chartSupport = new ChartSupport(Activator.getDefault().getPreferenceStore());
+	private final ChartSupport chartSupport;
 	//
 	private String titleSeconds = "";
 	private String titleMinutes = "";
 	private String titleRelativeIntensity = "";
+	private final IPreferenceStore preferenceStore;
 
 	public ChromatogramChart() {
+
 		super();
+		this.preferenceStore = Activator.getDefault().getPreferenceStore();
+		this.chartSupport = new ChartSupport(preferenceStore);
 		initialize();
 	}
 
 	public ChromatogramChart(Composite parent, int style) {
+
+		this(parent, style, Activator.getDefault().getPreferenceStore());
+	}
+
+	/**
+	 * creates a new chart with the given parent, style and preference store. Make sure to properly initialize the store
+	 * 
+	 * @param parent
+	 * @param style
+	 * @param preferenceStore
+	 */
+	public ChromatogramChart(Composite parent, int style, IPreferenceStore preferenceStore) {
+
 		super(parent, style);
+		chartSupport = new ChartSupport(preferenceStore);
+		this.preferenceStore = preferenceStore;
 		initialize();
 	}
 
@@ -67,7 +87,6 @@ public class ChromatogramChart extends LineChart {
 		/*
 		 * Initialize secondary axis titles.
 		 */
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		titleSeconds = preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_SECONDS);
 		titleMinutes = preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_MINUTES);
 		titleRelativeIntensity = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_RELATIVE_INTENSITY);
@@ -84,7 +103,6 @@ public class ChromatogramChart extends LineChart {
 
 	private void modifyXAxisMilliseconds() {
 
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		IChartSettings chartSettings = getChartSettings();
 		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
 		primaryAxisSettingsX.setTitle(preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_MILLISECONDS));
@@ -107,7 +125,6 @@ public class ChromatogramChart extends LineChart {
 
 	private void modifyYAxisIntensity() {
 
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		IChartSettings chartSettings = getChartSettings();
 		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
 		primaryAxisSettingsY.setTitle(preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_INTENSITY));
@@ -141,7 +158,6 @@ public class ChromatogramChart extends LineChart {
 		boolean isShowAxis = chartSupport.getBoolean(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_INTENSITY);
 		boolean isShowAxisTitle = chartSupport.getBoolean(PreferenceConstants.P_SHOW_Y_AXIS_TITLE_RELATIVE_INTENSITY);
 		//
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		String title = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_RELATIVE_INTENSITY);
 		String name = preferenceStore.getString(PreferenceConstants.P_FONT_NAME_Y_AXIS_RELATIVE_INTENSITY);
 		int height = preferenceStore.getInt(PreferenceConstants.P_FONT_SIZE_Y_AXIS_RELATIVE_INTENSITY);
@@ -189,7 +205,6 @@ public class ChromatogramChart extends LineChart {
 		boolean isShowAxis = chartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_SECONDS);
 		boolean isShowAxisTitle = chartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_TITLE_SECONDS);
 		//
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		String title = preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_SECONDS);
 		String name = preferenceStore.getString(PreferenceConstants.P_FONT_NAME_X_AXIS_SECONDS);
 		int height = preferenceStore.getInt(PreferenceConstants.P_FONT_SIZE_X_AXIS_SECONDS);
@@ -237,7 +252,6 @@ public class ChromatogramChart extends LineChart {
 		boolean isShowAxis = chartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_MINUTES);
 		boolean isShowAxisTitle = chartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_TITLE_MINUTES);
 		//
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		String title = preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_MINUTES);
 		String name = preferenceStore.getString(PreferenceConstants.P_FONT_NAME_X_AXIS_MINUTES);
 		int height = preferenceStore.getInt(PreferenceConstants.P_FONT_SIZE_X_AXIS_MINUTES);
@@ -270,5 +284,67 @@ public class ChromatogramChart extends LineChart {
 		 * Update the title to retrieve the correct axis.
 		 */
 		titleMinutes = title;
+	}
+
+	/**
+	 * Initialize the defaults of the given preference store used by this class
+	 * 
+	 * @param preferenceStore
+	 *            the preference store to use
+	 * @return the given preference store for chaining
+	 */
+	public static IPreferenceStore initializeDefaults(IPreferenceStore preferenceStore) {
+
+		preferenceStore.setDefault(PreferenceConstants.P_TITLE_X_AXIS_SECONDS, PreferenceConstants.DEF_TITLE_X_AXIS_SECONDS);
+		preferenceStore.setDefault(PreferenceConstants.P_SHOW_X_AXIS_SECONDS, PreferenceConstants.DEF_SHOW_X_AXIS_SECONDS);
+		preferenceStore.setDefault(PreferenceConstants.P_POSITION_X_AXIS_SECONDS, PreferenceConstants.DEF_POSITION_X_AXIS_SECONDS);
+		preferenceStore.setDefault(PreferenceConstants.P_COLOR_X_AXIS_SECONDS, PreferenceConstants.DEF_COLOR_X_AXIS_SECONDS);
+		preferenceStore.setDefault(PreferenceConstants.P_FONT_NAME_X_AXIS_SECONDS, PreferenceConstants.DEF_FONT_NAME_X_AXIS_SECONDS);
+		preferenceStore.setDefault(PreferenceConstants.P_FONT_SIZE_X_AXIS_SECONDS, PreferenceConstants.DEF_FONT_SIZE);
+		preferenceStore.setDefault(PreferenceConstants.P_FONT_STYLE_X_AXIS_SECONDS, PreferenceConstants.DEF_FONT_STYLE_X_AXIS_SECONDS);
+		preferenceStore.setDefault(PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_SECONDS, PreferenceConstants.DEF_GRIDLINE_STYLE_X_AXIS_SECONDS);
+		preferenceStore.setDefault(PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_SECONDS, PreferenceConstants.DEF_GRIDLINE_COLOR_X_AXIS_SECONDS);
+		preferenceStore.setDefault(PreferenceConstants.P_SHOW_X_AXIS_TITLE_SECONDS, PreferenceConstants.DEF_SHOW_X_AXIS_TITLE_SECONDS);
+		preferenceStore.setDefault(PreferenceConstants.P_TITLE_X_AXIS_MINUTES, PreferenceConstants.DEF_TITLE_X_AXIS_MINUTES);
+		preferenceStore.setDefault(PreferenceConstants.P_SHOW_X_AXIS_MINUTES, PreferenceConstants.DEF_SHOW_X_AXIS_MINUTES);
+		preferenceStore.setDefault(PreferenceConstants.P_POSITION_X_AXIS_MINUTES, PreferenceConstants.DEF_POSITION_X_AXIS_MINUTES);
+		preferenceStore.setDefault(PreferenceConstants.P_COLOR_X_AXIS_MINUTES, PreferenceConstants.DEF_COLOR_X_AXIS_MINUTES);
+		preferenceStore.setDefault(PreferenceConstants.P_FONT_NAME_X_AXIS_MINUTES, PreferenceConstants.DEF_FONT_NAME_X_AXIS_MINUTES);
+		preferenceStore.setDefault(PreferenceConstants.P_FONT_SIZE_X_AXIS_MINUTES, PreferenceConstants.DEF_FONT_SIZE);
+		preferenceStore.setDefault(PreferenceConstants.P_FONT_STYLE_X_AXIS_MINUTES, PreferenceConstants.DEF_FONT_STYLE_X_AXIS_MINUTES);
+		preferenceStore.setDefault(PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_MINUTES, PreferenceConstants.DEF_GRIDLINE_STYLE_X_AXIS_MINUTES);
+		preferenceStore.setDefault(PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_MINUTES, PreferenceConstants.DEF_GRIDLINE_COLOR_X_AXIS_MINUTES);
+		preferenceStore.setDefault(PreferenceConstants.P_SHOW_X_AXIS_TITLE_MINUTES, PreferenceConstants.DEF_SHOW_X_AXIS_TITLE_MINUTES);
+		preferenceStore.setDefault(PreferenceConstants.P_TITLE_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.DEF_TITLE_Y_AXIS_RELATIVE_INTENSITY);
+		preferenceStore.setDefault(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.DEF_SHOW_Y_AXIS_RELATIVE_INTENSITY);
+		preferenceStore.setDefault(PreferenceConstants.P_POSITION_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.DEF_POSITION_Y_AXIS_RELATIVE_INTENSITY);
+		preferenceStore.setDefault(PreferenceConstants.P_COLOR_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.DEF_COLOR_Y_AXIS_RELATIVE_INTENSITY);
+		preferenceStore.setDefault(PreferenceConstants.P_FONT_NAME_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.DEF_FONT_NAME_Y_AXIS_RELATIVE_INTENSITY);
+		preferenceStore.setDefault(PreferenceConstants.P_FONT_SIZE_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.DEF_FONT_SIZE);
+		preferenceStore.setDefault(PreferenceConstants.P_FONT_STYLE_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.DEF_FONT_STYLE_Y_AXIS_RELATIVE_INTENSITY);
+		preferenceStore.setDefault(PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.DEF_GRIDLINE_STYLE_Y_AXIS_RELATIVE_INTENSITY);
+		preferenceStore.setDefault(PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.DEF_GRIDLINE_COLOR_Y_AXIS_RELATIVE_INTENSITY);
+		preferenceStore.setDefault(PreferenceConstants.P_SHOW_Y_AXIS_TITLE_RELATIVE_INTENSITY, PreferenceConstants.DEF_SHOW_Y_AXIS_TITLE_RELATIVE_INTENSITY);
+		preferenceStore.setDefault(PreferenceConstants.P_TITLE_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_TITLE_X_AXIS_MILLISECONDS);
+		preferenceStore.setDefault(PreferenceConstants.P_SHOW_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_SHOW_X_AXIS_MILLISECONDS);
+		preferenceStore.setDefault(PreferenceConstants.P_POSITION_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_POSITION_X_AXIS_MILLISECONDS);
+		preferenceStore.setDefault(PreferenceConstants.P_COLOR_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_COLOR_X_AXIS_MILLISECONDS);
+		preferenceStore.setDefault(PreferenceConstants.P_FONT_NAME_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_FONT_NAME_X_AXIS_MILLISECONDS);
+		preferenceStore.setDefault(PreferenceConstants.P_FONT_SIZE_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_FONT_SIZE);
+		preferenceStore.setDefault(PreferenceConstants.P_FONT_STYLE_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_FONT_STYLE_X_AXIS_MILLISECONDS);
+		preferenceStore.setDefault(PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_GRIDLINE_STYLE_X_AXIS_MILLISECONDS);
+		preferenceStore.setDefault(PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_GRIDLINE_COLOR_X_AXIS_MILLISECONDS);
+		preferenceStore.setDefault(PreferenceConstants.P_SHOW_X_AXIS_TITLE_MILLISECONDS, PreferenceConstants.DEF_SHOW_X_AXIS_TITLE_MILLISECONDS);
+		preferenceStore.setDefault(PreferenceConstants.P_TITLE_Y_AXIS_INTENSITY, PreferenceConstants.DEF_TITLE_Y_AXIS_INTENSITY);
+		preferenceStore.setDefault(PreferenceConstants.P_SHOW_Y_AXIS_INTENSITY, PreferenceConstants.DEF_SHOW_Y_AXIS_INTENSITY);
+		preferenceStore.setDefault(PreferenceConstants.P_POSITION_Y_AXIS_INTENSITY, PreferenceConstants.DEF_POSITION_Y_AXIS_INTENSITY);
+		preferenceStore.setDefault(PreferenceConstants.P_COLOR_Y_AXIS_INTENSITY, PreferenceConstants.DEF_COLOR_Y_AXIS_INTENSITY);
+		preferenceStore.setDefault(PreferenceConstants.P_FONT_NAME_Y_AXIS_INTENSITY, PreferenceConstants.DEF_FONT_NAME_Y_AXIS_INTENSITY);
+		preferenceStore.setDefault(PreferenceConstants.P_FONT_SIZE_Y_AXIS_INTENSITY, PreferenceConstants.DEF_FONT_SIZE);
+		preferenceStore.setDefault(PreferenceConstants.P_FONT_STYLE_Y_AXIS_INTENSITY, PreferenceConstants.DEF_FONT_STYLE_Y_AXIS_INTENSITY);
+		preferenceStore.setDefault(PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_INTENSITY, PreferenceConstants.DEF_GRIDLINE_STYLE_Y_AXIS_INTENSITY);
+		preferenceStore.setDefault(PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_INTENSITY, PreferenceConstants.DEF_GRIDLINE_COLOR_Y_AXIS_INTENSITY);
+		preferenceStore.setDefault(PreferenceConstants.P_SHOW_Y_AXIS_TITLE_INTENSITY, PreferenceConstants.DEF_SHOW_Y_AXIS_TITLE_INTENSITY);
+		return preferenceStore;
 	}
 }
