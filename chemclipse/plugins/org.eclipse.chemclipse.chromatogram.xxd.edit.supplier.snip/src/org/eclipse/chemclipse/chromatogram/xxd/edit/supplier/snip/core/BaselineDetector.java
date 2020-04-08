@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - use static {@link SnipCalculator} method, remove warnings and make method static for reuse
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.core;
 
@@ -56,10 +57,9 @@ public class BaselineDetector extends AbstractBaselineDetector {
 	/**
 	 * Calculates the baseline.
 	 */
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	private void calculateBaseline(IChromatogramSelection chromatogramSelection, BaselineDetectorSettings detectorSettings, IProgressMonitor monitor) {
+	public static void calculateBaseline(IChromatogramSelection<?, ?> chromatogramSelection, BaselineDetectorSettings detectorSettings, IProgressMonitor monitor) {
 
-		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
 		int stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
 		IScanRange scanRange = new ScanRange(startScan, stopScan);
@@ -88,7 +88,7 @@ public class BaselineDetector extends AbstractBaselineDetector {
 		}
 	}
 
-	private void calculateSNIPBaseline(ITotalScanSignals totalIonSignals, int iterations, IProgressMonitor monitor) {
+	private static void calculateSNIPBaseline(ITotalScanSignals totalIonSignals, int iterations, IProgressMonitor monitor) {
 
 		/*
 		 * Calculates the SNIP baseline.
@@ -99,8 +99,7 @@ public class BaselineDetector extends AbstractBaselineDetector {
 		for(ITotalScanSignal signal : totalIonSignals.getTotalScanSignals()) {
 			intensityValues[counter++] = signal.getTotalSignal();
 		}
-		SnipCalculator snipCalculator = new SnipCalculator();
-		snipCalculator.calculateBaselineIntensityValues(intensityValues, iterations, monitor);
+		SnipCalculator.calculateBaselineIntensityValues(intensityValues, iterations, monitor);
 		/*
 		 * Set the calculated values.
 		 */
@@ -115,7 +114,7 @@ public class BaselineDetector extends AbstractBaselineDetector {
 	 * 
 	 * @param baselineModel
 	 */
-	private void applyBaseline(IBaselineModel baselineModel, ITotalScanSignals totalIonSignals, int startScan, int stopScan, IProgressMonitor monitor) {
+	private static void applyBaseline(IBaselineModel baselineModel, ITotalScanSignals totalIonSignals, int startScan, int stopScan, IProgressMonitor monitor) {
 
 		ITotalScanSignal actualTotalIonSignal;
 		ITotalScanSignal nextTotalIonSignal;
