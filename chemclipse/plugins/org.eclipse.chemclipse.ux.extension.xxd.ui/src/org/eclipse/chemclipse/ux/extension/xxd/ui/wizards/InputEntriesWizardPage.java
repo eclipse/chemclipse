@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,11 +9,12 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - implementation
- * Christoph Läubrich - support new lazy table model
+ * Christoph Läubrich - support new lazy table model, support double-click
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.wizards;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +25,9 @@ import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerTreeUI;
 import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerTreeUI.DataExplorerTreeRoot;
 import org.eclipse.chemclipse.ux.extension.ui.swt.MultiDataExplorerTreeUI;
 import org.eclipse.chemclipse.xxd.process.files.SupplierFileIdentifierCache;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
 
@@ -32,8 +35,12 @@ public class InputEntriesWizardPage extends WizardPage {
 
 	private final class WizardMultiDataExplorerTreeUI extends MultiDataExplorerTreeUI {
 
-		private WizardMultiDataExplorerTreeUI(Composite parent, SupplierFileIdentifierCache identifierCache, IPreferenceStore preferenceStore) {
+		private InputEntriesWizardPage page;
+
+		private WizardMultiDataExplorerTreeUI(Composite parent, SupplierFileIdentifierCache identifierCache, IPreferenceStore preferenceStore, InputEntriesWizardPage page) {
+
 			super(parent, identifierCache, preferenceStore);
+			this.page = page;
 		}
 
 		@Override
@@ -59,6 +66,25 @@ public class InputEntriesWizardPage extends WizardPage {
 			}
 			return super.getUserLocationPreferenceKey();
 		}
+
+		@Override
+		protected void handleDoubleClick(File file, DataExplorerTreeUI treeUI) {
+
+			IWizardContainer container = page.getContainer();
+			try {
+				Method method = container.getClass().getDeclaredMethod("buttonPressed", int.class);
+				boolean accessible = method.isAccessible();
+				try {
+					method.setAccessible(true);
+					method.invoke(container, IDialogConstants.FINISH_ID);
+				} finally {
+					method.setAccessible(accessible);
+				}
+			} catch(Exception e) {
+				// trigger not possible then
+				e.printStackTrace();
+			}
+		}
 	}
 
 	private final InputWizardSettings inputWizardSettings;
@@ -67,6 +93,7 @@ public class InputEntriesWizardPage extends WizardPage {
 	private MultiDataExplorerTreeUI explorerTreeUI;
 
 	public InputEntriesWizardPage(InputWizardSettings inputWizardSettings) {
+
 		//
 		super(InputEntriesWizardPage.class.getName());
 		this.inputWizardSettings = inputWizardSettings;
@@ -95,7 +122,7 @@ public class InputEntriesWizardPage extends WizardPage {
 	@Override
 	public void createControl(Composite parent) {
 
-		explorerTreeUI = new WizardMultiDataExplorerTreeUI(parent, inputWizardSettings.getSupplierCache(), inputWizardSettings.getPreferenceStore());
+		explorerTreeUI = new WizardMultiDataExplorerTreeUI(parent, inputWizardSettings.getSupplierCache(), inputWizardSettings.getPreferenceStore(), this);
 		explorerTreeUI.expandLastDirectoryPath();
 		setControl(explorerTreeUI.getControl());
 	}

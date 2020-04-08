@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - add system method folder
+ * Christoph Läubrich - add system method folder, create folders if the do not exits
  *******************************************************************************/
 package org.eclipse.chemclipse.logging.support;
 
@@ -42,6 +42,7 @@ public class Settings {
 	 * Use only static methods.
 	 */
 	private Settings() {
+
 	}
 
 	/**
@@ -73,7 +74,11 @@ public class Settings {
 	 */
 	public static final File getSystemMethodDirectory() {
 
-		return new File(Settings.getSystemDirectory(), "methods");
+		File folder = new File(Settings.getSystemDirectory(), "methods");
+		if(!folder.exists()) {
+			folder.mkdirs();
+		}
+		return folder;
 	}
 
 	/**
@@ -82,7 +87,11 @@ public class Settings {
 	 */
 	public static final File getSystemConfigDirectory() {
 
-		return new File(Settings.getSystemDirectory(), "configurations");
+		File folder = new File(Settings.getSystemDirectory(), "configurations");
+		if(!folder.exists()) {
+			folder.mkdirs();
+		}
+		return folder;
 	}
 
 	/**
