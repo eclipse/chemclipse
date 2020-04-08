@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2019 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - make static, remove warnings
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract.processor;
 
@@ -27,9 +28,9 @@ public class BaselineSubtractProcessor {
 	 * 
 	 * @param chromatogramSelection
 	 */
-	public void removeBaseline(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public static void removeBaseline(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
 
-		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
 		int stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
 		/*
@@ -40,7 +41,10 @@ public class BaselineSubtractProcessor {
 		for(int i = startScan; i <= stopScan; i++) {
 			IScan scan = chromatogram.getScan(i);
 			int retentionTime = scan.getRetentionTime();
-			float backgroundSignal = baselineModel.getBackgroundAbundance(retentionTime);
+			float backgroundSignal = baselineModel.getBackground(retentionTime);
+			if(Float.isNaN(backgroundSignal)) {
+				continue;
+			}
 			float adjustedSignal = scan.getTotalSignal() - backgroundSignal;
 			if(adjustedSignal > 0) {
 				scan.adjustTotalSignal(adjustedSignal);
