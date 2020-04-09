@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2019 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Dr. Alexander Kerner - implementation
- * Christoph Läubrich - add method getDefaultSegmentWidth that return the raw enum instead
+ * Christoph Läubrich - add method getDefaultSegmentWidth that return the raw enum instead, null check
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.preferences;
 
@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.osgi.framework.BundleContext;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
@@ -54,7 +55,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	@Override
 	public String getPreferenceNode() {
 
-		return Activator.getContext().getBundle().getSymbolicName();
+		BundleContext context = Activator.getContext();
+		if(context != null) {
+			return context.getBundle().getSymbolicName();
+		} else {
+			return getClass().getName();
+		}
 	}
 
 	@Override

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2019 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - adjust to changed API
+ * Christoph Läubrich - adjust to changed API, add null check
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise;
 
@@ -37,6 +37,7 @@ public class NoiseCalculator {
 	 * This class has only static methods.
 	 */
 	private NoiseCalculator() {
+
 	}
 
 	/**
@@ -141,10 +142,12 @@ public class NoiseCalculator {
 			return null;
 		}
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IConfigurationElement[] elements = registry.getConfigurationElementsFor(EXTENSION_POINT);
-		for(IConfigurationElement element : elements) {
-			if(element.getAttribute(ID).equals(detectorId)) {
-				return element;
+		if(registry != null) {
+			IConfigurationElement[] elements = registry.getConfigurationElementsFor(EXTENSION_POINT);
+			for(IConfigurationElement element : elements) {
+				if(element.getAttribute(ID).equals(detectorId)) {
+					return element;
+				}
 			}
 		}
 		return null;
