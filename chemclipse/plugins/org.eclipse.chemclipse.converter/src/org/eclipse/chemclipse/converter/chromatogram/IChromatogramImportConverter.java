@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,17 +9,20 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
+ * Christoph Läubrich - Result must actually be an {@link IChromatogram}, add default implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.chromatogram;
 
 import java.io.File;
 
 import org.eclipse.chemclipse.converter.core.IImportConverter;
+import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public interface IChromatogramImportConverter<R> extends IImportConverter {
+public interface IChromatogramImportConverter<R extends IChromatogram<?>> extends IImportConverter {
 
 	/**
 	 * All implementing classes must return an IChromatogramOverview instance.<br/>
@@ -34,7 +37,14 @@ public interface IChromatogramImportConverter<R> extends IImportConverter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo<IChromatogramOverview> convertOverview(File file, IProgressMonitor monitor);
+	default IProcessingInfo<IChromatogramOverview> convertOverview(File file, IProgressMonitor monitor) {
+
+		IProcessingInfo<R> chromatogramInfo = convert(file, monitor);
+		ProcessingInfo<IChromatogramOverview> info = new ProcessingInfo<IChromatogramOverview>();
+		info.addMessages(chromatogramInfo);
+		info.setProcessingResult(chromatogramInfo.getProcessingResult());
+		return info;
+	}
 
 	/**
 	 * All implementing classes must return an IChromatogram instance.<br/>
