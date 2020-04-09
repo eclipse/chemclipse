@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - extract constants into interface
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
@@ -29,19 +30,6 @@ public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 
 	private static final long serialVersionUID = 4247159773898302230L;
 	private static final Logger logger = Logger.getLogger(AbstractMeasurementInfo.class);
-	//
-	private static final String OPERATOR = "Operator";
-	private static final String DATE = "Date";
-	private static final String MISC_INFO = "Misc Info";
-	private static final String MISC_INFO_SEPARATED = "Misc Info Separated";
-	private static final String SHORT_INFO = "Short Info";
-	private static final String DETAILED_INFO = "Detailed Info";
-	private static final String SAMPLE_GROUP = "Sample Group";
-	private static final String BARCODE = "Barcode";
-	private static final String BARCODE_TYPE = "Barcode Type";
-	private static final String SAMPLE_WEIGHT = "Sample Weight";
-	private static final String SAMPLE_WEIGHT_UNIT = "Sample Weight Unit";
-	private static final String DATA_NAME = "Data Name";
 	//
 	private Set<String> protectKeys;
 	private Map<String, String> headerDataMap;
