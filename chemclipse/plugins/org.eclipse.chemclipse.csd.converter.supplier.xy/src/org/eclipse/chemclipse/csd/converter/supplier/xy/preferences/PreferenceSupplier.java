@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -39,9 +39,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String DEF_DELIMITER_FORMAT = TAB;
 	//
 	public static final String MINUTES = "Minutes";
+	public static final String SECONDS = "Seconds";
 	public static final String MILLISECONDS = "Milliseconds";
 	public static String[][] RETENTION_TIME_FORMATS = new String[][]{//
 			{"Minutes", MINUTES}, //
+			{"Seconds", SECONDS}, //
 			{"Milliseconds", MILLISECONDS}//
 	};
 	//

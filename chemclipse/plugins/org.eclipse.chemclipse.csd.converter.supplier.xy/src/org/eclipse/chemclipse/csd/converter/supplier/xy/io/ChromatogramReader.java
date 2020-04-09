@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -122,6 +122,9 @@ public class ChromatogramReader extends AbstractChromatogramCSDReader {
 								if(retentionTimeFormat.equals(PreferenceSupplier.MINUTES)) {
 									double retentionTimeInMinutes = Double.parseDouble(value);
 									retentionTime = (int)(retentionTimeInMinutes * IChromatogram.MINUTE_CORRELATION_FACTOR);
+								} else if(retentionTimeFormat.equals(PreferenceSupplier.SECONDS)) {
+									double retentionTimeInSeconds = Double.parseDouble(value);
+									retentionTime = (int)(retentionTimeInSeconds * IChromatogram.SECOND_CORRELATION_FACTOR);
 								} else {
 									retentionTime = Integer.parseInt(value);
 								}

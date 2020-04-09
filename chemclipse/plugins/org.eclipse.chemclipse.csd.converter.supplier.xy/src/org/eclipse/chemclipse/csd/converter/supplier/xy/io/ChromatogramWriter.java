@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -38,7 +38,14 @@ public class ChromatogramWriter extends AbstractChromatogramCSDWriter {
 			 */
 			for(IScan scan : chromatogram.getScans()) {
 				int retentionTime = scan.getRetentionTime();
-				String x = (retentionTimeFormat.equals(PreferenceSupplier.MINUTES)) ? Double.toString(retentionTime / IChromatogram.MINUTE_CORRELATION_FACTOR) : Integer.toString(retentionTime);
+				String x;
+				if(retentionTimeFormat.equals(PreferenceSupplier.MINUTES)) {
+					x = Double.toString(retentionTime / IChromatogram.MINUTE_CORRELATION_FACTOR);
+				} else if(retentionTimeFormat.equals(PreferenceSupplier.SECONDS)) {
+					x = Double.toString(retentionTime / IChromatogram.SECOND_CORRELATION_FACTOR);
+				} else {
+					x = Integer.toString(retentionTime);
+				}
 				printWriter.println(x + delimiterFormat + scan.getTotalSignal());
 			}
 			//
