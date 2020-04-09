@@ -25,7 +25,12 @@ import org.eclipse.swt.SWTException;
 import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.ToolItem;
+import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.PlatformUI;
 
@@ -233,5 +238,27 @@ public class DisplayUtils {
 		}
 		//
 		return shell;
+	}
+
+	public static Shell getShell(Event event) {
+
+		Widget widget = event.widget;
+		if(widget instanceof Control) {
+			return ((Control)widget).getShell();
+		}
+		if(widget instanceof ToolItem) {
+			return ((ToolItem)widget).getParent().getShell();
+		}
+		if(widget instanceof MenuItem) {
+			return ((MenuItem)widget).getParent().getShell();
+		}
+		if(widget instanceof TreeItem) {
+			return ((TreeItem)widget).getParent().getShell();
+		}
+		if(widget instanceof TableItem) {
+			return ((TableItem)widget).getParent().getShell();
+		}
+		// possibly add more...
+		return null;
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -43,6 +43,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.TableColumn;
@@ -87,6 +88,14 @@ public class ControlBuilder {
 		GridLayout layout = new GridLayout(columns, false);
 		composite.setLayout(layout);
 		return fill(composite);
+	}
+
+	public static Group createGroup(Composite parent, int columns, String text) {
+
+		Group group = new Group(parent, SWT.SHADOW_ETCHED_IN);
+		group.setText(text);
+		group.setLayout(new GridLayout(columns, false));
+		return group;
 	}
 
 	/**

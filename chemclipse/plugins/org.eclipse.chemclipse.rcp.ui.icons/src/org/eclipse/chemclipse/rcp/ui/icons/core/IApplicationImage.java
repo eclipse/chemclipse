@@ -68,7 +68,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_SETTINGS_PULL = "org.eclipse.chemclipse.rcp.ui.icons/settings_pull.png";
 	String IMAGE_SETTINGS_PUSH = "org.eclipse.chemclipse.rcp.ui.icons/settings_push.png";
 	String IMAGE_DRIVE = "org.eclipse.chemclipse.rcp.ui.icons/drive.gif";
-	String IMAGE_CHROMATOGRAM_ZERO_SET = "org.eclipse.chemclipse.rcp.ui.icons/chromatogramZeorSet.gif";
+	String IMAGE_CHROMATOGRAM_ZERO_SET = "org.eclipse.chemclipse.rcp.ui.icons/chromatogramZeroSet.gif";
 	String IMAGE_FOLDER_OPENED = "org.eclipse.chemclipse.rcp.ui.icons/folder_opened.gif";
 	String IMAGE_FOLDER_CLOSED = "org.eclipse.chemclipse.rcp.ui.icons/folder_closed.gif";
 	String IMAGE_FILE = "org.eclipse.chemclipse.rcp.ui.icons/file.gif";
