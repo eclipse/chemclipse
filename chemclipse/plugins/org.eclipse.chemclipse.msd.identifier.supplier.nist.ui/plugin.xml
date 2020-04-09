@@ -11,16 +11,16 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
+            category="org.eclipse.chemclipse.chromatogram.msd.identifier.ui.preferences.identifierPreferencePage"
+            class="org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.preferences.NistApplicationPreferencePage"
+            id="org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.dbpreferencespage"
+            name="NIST Database Integration">
+      </page>         
+      <page
             category="org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.dbpreferencespage"
             class="org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.preferences.PreferencePage"
             id="org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.preferences.nistIdentifierPreferencePage"
             name="NIST Commandline Connector">
-      </page>
-      <page
-            category="org.eclipse.chemclipse.rcp.app.ui.preferences.preferencePage"
-            class="org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.preferences.NistApplicationPreferencePage"
-            id="org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.dbpreferencespage"
-            name="NIST Database Integration">
       </page>
    </extension>
    <extension
