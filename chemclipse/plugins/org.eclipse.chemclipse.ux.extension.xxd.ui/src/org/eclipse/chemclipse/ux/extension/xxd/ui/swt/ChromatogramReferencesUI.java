@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -59,6 +59,7 @@ public class ChromatogramReferencesUI {
 	private final EditorToolBar toolBar;
 
 	public ChromatogramReferencesUI(EditorToolBar editorToolBar, Consumer<IChromatogramSelection<?, ?>> chromatogramReferencesListener) {
+
 		comboChromatograms = new ComboContainer(chromatogramReferencesListener.andThen(t -> updateButtons()));
 		Action action = new Action("References", Action.AS_CHECK_BOX) {
 
@@ -118,13 +119,13 @@ public class ChromatogramReferencesUI {
 						String type = ChromatogramDataSupport.getChromatogramType(selection);
 						int index = comboChromatograms.indexOf(selection);
 						if(index > -1) {
+							String dataName = selection.getChromatogram().getDataName();
+							if(dataName != null && !dataName.isEmpty()) {
+								return dataName + " " + type;
+							}
 							if(index == 0) {
 								return "Master Chromatogram " + type;
 							} else {
-								String dataName = selection.getChromatogram().getDataName();
-								if(dataName != null && !dataName.isEmpty()) {
-									return dataName + " " + type;
-								}
 								return "Referenced Chromatogram (" + index + ") " + type;
 							}
 						}
@@ -313,6 +314,7 @@ public class ChromatogramReferencesUI {
 		private final Consumer<IChromatogramSelection<?, ?>> listener;
 
 		public ComboContainer(Consumer<IChromatogramSelection<?, ?>> chromatogramReferencesListener) {
+
 			this.listener = chromatogramReferencesListener;
 		}
 
