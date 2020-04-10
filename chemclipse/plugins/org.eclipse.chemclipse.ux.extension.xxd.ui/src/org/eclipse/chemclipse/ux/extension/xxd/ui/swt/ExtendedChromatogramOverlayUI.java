@@ -46,6 +46,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.Derivative;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.DisplayModus;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.AxisConfig.ChartAxis;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTrace;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTraces;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTracesUI;
@@ -96,7 +97,6 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 	private Label labelStatus;
 	private Combo comboOverlayType;
 	private ComboViewer comboViewerDerivative;
-	private Button buttonToolbarShift;
 	//
 	private final ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
 	private final OverlayChartSupport overlayChartSupport = new OverlayChartSupport();
@@ -139,7 +139,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 		PartSupport.setCompositeVisibility(namedTracesUI, false);
 		PartSupport.setCompositeVisibility(dataShiftControllerUI, false);
 		//
-		dataShiftControllerUI.setChromatogramChart(chromatogramChart);
+		dataShiftControllerUI.setScrollableChart(chromatogramChart);
 		modifyWidgetStatus();
 		setDerivatives();
 		/*
@@ -162,7 +162,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 		labelStatus = createLabelStatus(composite);
 		comboOverlayType = createOverlayTypeCombo(composite);
 		comboViewerDerivative = createDerivativeComboViewer(composite);
-		buttonToolbarShift = createToggleToolbarShiftButton(composite);
+		createToggleToolbarShiftButton(composite);
 		createToggleChartLegendButton(composite);
 		createResetButton(composite);
 		createNewOverlayPartButton(composite);

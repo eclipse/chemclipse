@@ -17,16 +17,21 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlayChartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.ShiftValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.DisplayModus;
+import org.eclipse.core.databinding.validation.IValidator;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jface.fieldassist.ControlDecoration;
+import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -45,11 +50,12 @@ import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.IExtendedChart;
 import org.eclipse.swtchart.extensions.core.ISeriesSettings;
 import org.eclipse.swtchart.extensions.core.MappedSeriesSettings;
+import org.eclipse.swtchart.extensions.core.ScrollableChart;
 import org.eclipse.swtchart.extensions.core.SeriesStatusAdapter;
 
 public class DataShiftControllerUI extends Composite {
 
-	private static final Logger logger = Logger.getLogger(DataShiftControllerUI.class);
+	private static final String SERIES_REDRAW = "";
 	/*
 	 * Mirror Button
 	 */
@@ -70,7 +76,7 @@ public class DataShiftControllerUI extends Composite {
 	private Button buttonShiftUp;
 	private Button buttonShiftDown;
 	//
-	private ChromatogramChart chromatogramChart = null;
+	private ScrollableChart scrollableChart = null;
 	private BaseChart baseChart = null;
 	//
 	private final OverlayChartSupport overlayChartSupport = new OverlayChartSupport();
@@ -81,17 +87,23 @@ public class DataShiftControllerUI extends Composite {
 		createControl();
 	}
 
-	public void setChromatogramChart(ChromatogramChart chromatogramChart) {
+	public void setScrollableChart(ScrollableChart scrollableChart) {
 
-		this.chromatogramChart = chromatogramChart;
-		if(chromatogramChart != null) {
-			this.baseChart = chromatogramChart.getBaseChart();
+		this.scrollableChart = scrollableChart;
+		if(scrollableChart != null) {
+			this.baseChart = scrollableChart.getBaseChart();
 			this.baseChart.addSeriesStatusListener(new SeriesStatusAdapter() {
 
 				@Override
 				public void handleSeriesSelectionEvent(String seriesId) {
 
 					updateComboViewerSelect(seriesId);
+				}
+
+				@Override
+				public void handleRedrawEvent() {
+
+					updateComboViewerSelect(SERIES_REDRAW);
 				}
 			});
 		}
@@ -116,9 +128,9 @@ public class DataShiftControllerUI extends Composite {
 
 	protected void setDisplayModus(DisplayModus displayModus, String seriesId) {
 
-		if(chromatogramChart != null) {
-			BaseChart baseChart = chromatogramChart.getBaseChart();
-			IChartSettings chartSettings = chromatogramChart.getChartSettings();
+		if(scrollableChart != null) {
+			BaseChart baseChart = scrollableChart.getBaseChart();
+			IChartSettings chartSettings = scrollableChart.getChartSettings();
 			if(DisplayModus.MIRRORED.equals(displayModus)) {
 				if(!mirroredSeries.contains(seriesId)) {
 					baseChart.multiplySeries(seriesId, IExtendedChart.Y_AXIS, -1.0d);
@@ -132,9 +144,9 @@ public class DataShiftControllerUI extends Composite {
 			}
 			//
 			modifyWidgetStatus();
-			chromatogramChart.applySettings(chartSettings);
-			chromatogramChart.adjustRange(true);
-			chromatogramChart.redraw();
+			scrollableChart.applySettings(chartSettings);
+			scrollableChart.adjustRange(true);
+			scrollableChart.redraw();
 		}
 	}
 
@@ -161,12 +173,34 @@ public class DataShiftControllerUI extends Composite {
 
 	private Text createTextX(Composite parent) {
 
+		String tooltip = "Shift data in x direction.";
 		Text text = new Text(parent, SWT.BORDER);
 		text.setText("");
-		text.setToolTipText("Shift data in x direction.");
+		text.setToolTipText(tooltip);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.widthHint = 150;
 		text.setLayoutData(gridData);
+		//
+		ShiftValidator shiftValidator = new ShiftValidator();
+		ControlDecoration controlDecoration = new ControlDecoration(text, SWT.LEFT | SWT.TOP);
+		//
+		text.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+				super.keyReleased(e);
+				if(validate(shiftValidator, controlDecoration, tooltip, text)) {
+					if(e.keyCode == SWT.LF || e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) {
+						if(baseChart != null) {
+							double deltaX = getShiftValuePrimary(IExtendedChart.X_AXIS);
+							double deltaY = 0.0d;
+							shiftSeries(deltaX, deltaY);
+						}
+					}
+				}
+			}
+		});
 		//
 		return text;
 	}
@@ -210,12 +244,34 @@ public class DataShiftControllerUI extends Composite {
 
 	private Text createTextY(Composite parent) {
 
+		String tooltip = "Shift data in y direction.";
 		Text text = new Text(parent, SWT.BORDER);
 		text.setText("");
-		text.setToolTipText("Shift data in y direction.");
+		text.setToolTipText(tooltip);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.widthHint = 150;
 		text.setLayoutData(gridData);
+		//
+		ShiftValidator shiftValidator = new ShiftValidator();
+		ControlDecoration controlDecoration = new ControlDecoration(text, SWT.LEFT | SWT.TOP);
+		//
+		text.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+				super.keyReleased(e);
+				if(validate(shiftValidator, controlDecoration, tooltip, text)) {
+					if(e.keyCode == SWT.LF || e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) {
+						if(baseChart != null) {
+							double deltaX = 0.0d;
+							double deltaY = getShiftValuePrimary(IExtendedChart.Y_AXIS);
+							shiftSeries(deltaX, deltaY);
+						}
+					}
+				}
+			}
+		});
 		//
 		return text;
 	}
@@ -273,26 +329,13 @@ public class DataShiftControllerUI extends Composite {
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
-			@SuppressWarnings("rawtypes")
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				if(baseChart != null) {
-					baseChart.suspendUpdate(true);
-					double shiftX = 0.0d;
-					double shiftY = 0.0d;
 					double deltaX = getShiftValuePrimary(IExtendedChart.X_AXIS);
 					double deltaY = getShiftValuePrimary(IExtendedChart.Y_AXIS);
-					for(ISeries series : baseChart.getSeriesSet().getSeries()) {
-						shiftX += deltaX;
-						shiftY += deltaY;
-						String seriesId = series.getId();
-						baseChart.shiftSeries(seriesId, shiftX, shiftY);
-					}
-					baseChart.suspendUpdate(false);
-					baseChart.redraw();
-					persistOverlayShiftX();
-					persistOverlayShiftY();
+					shiftSeries(deltaX, deltaY);
 				}
 			}
 		});
@@ -312,9 +355,9 @@ public class DataShiftControllerUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(chromatogramChart != null) {
+				if(scrollableChart != null) {
 					//
-					IChartSettings chartSettings = chromatogramChart.getChartSettings();
+					IChartSettings chartSettings = scrollableChart.getChartSettings();
 					//
 					int i = 0;
 					for(ISeries series : baseChart.getSeriesSet().getSeries()) {
@@ -328,9 +371,9 @@ public class DataShiftControllerUI extends Composite {
 						i++;
 					}
 					//
-					chromatogramChart.applySettings(chartSettings);
-					chromatogramChart.adjustRange(true);
-					chromatogramChart.redraw();
+					scrollableChart.applySettings(chartSettings);
+					scrollableChart.adjustRange(true);
+					scrollableChart.redraw();
 				}
 			}
 		});
@@ -400,6 +443,7 @@ public class DataShiftControllerUI extends Composite {
 				Object object = button.getData(BUTTON_MIRROR_KEY);
 				DisplayModus displayModus = object instanceof DisplayModus ? (DisplayModus)object : DisplayModus.NORMAL;
 				setDisplayModus(displayModus, getSelectedSeriesId());
+				updateComboViewerSelect(BaseChart.SELECTED_SERIES_NONE);
 			}
 		});
 		//
@@ -612,9 +656,9 @@ public class DataShiftControllerUI extends Composite {
 			 */
 			double value;
 			if(axis.equals(IExtendedChart.X_AXIS)) {
-				value = getTextValue(textX);
+				value = getShift(textX);
 			} else {
-				value = getTextValue(textY);
+				value = getShift(textY);
 			}
 			/*
 			 * Convert the range on demand.
@@ -630,31 +674,38 @@ public class DataShiftControllerUI extends Composite {
 		return shiftValue;
 	}
 
-	private double getTextValue(Text text) {
+	private double getShift(Text text) {
 
-		double value = 0.0d;
-		try {
-			value = Double.parseDouble(text.getText().trim());
-		} catch(NumberFormatException e) {
-			logger.warn(e);
+		double shift = 0.0d;
+		ShiftValidator shiftValidator = new ShiftValidator();
+		IStatus status = shiftValidator.validate(text.getText().trim());
+		if(status.isOK()) {
+			shift = shiftValidator.getShift();
 		}
-		return value;
+		return shift;
 	}
 
 	private void persistOverlayShiftX() {
 
-		overlayChartSupport.setOverlayShiftX(getTextValue(textX));
+		overlayChartSupport.setOverlayShiftX(getShift(textX));
 		overlayChartSupport.setIndexShiftX(comboViewerX.getCombo().getSelectionIndex());
 	}
 
 	private void persistOverlayShiftY() {
 
-		overlayChartSupport.setOverlayShiftY(getTextValue(textY));
+		overlayChartSupport.setOverlayShiftY(getShift(textY));
 		overlayChartSupport.setIndexShiftY(comboViewerY.getCombo().getSelectionIndex());
 	}
 
 	private void updateComboViewerSelect(String seriesId) {
 
+		/*
+		 * If this is the redraw action, keep the selection.
+		 */
+		if(seriesId.equals(SERIES_REDRAW)) {
+			seriesId = getSelectedSeriesId();
+		}
+		//
 		List<MappedSeriesSettings> mappedSettings = new ArrayList<>();
 		mappedSettings.add(new MappedSeriesSettings(BaseChart.SELECTED_SERIES_NONE, null));
 		String label = BaseChart.SELECTED_SERIES_NONE;
@@ -705,5 +756,40 @@ public class DataShiftControllerUI extends Composite {
 		}
 		//
 		return id;
+	}
+
+	private boolean validate(IValidator validator, ControlDecoration controlDecoration, String tooltip, Text text) {
+
+		IStatus status = validator.validate(text.getText().trim());
+		if(status.isOK()) {
+			controlDecoration.hide();
+			text.setToolTipText(tooltip);
+			return true;
+		} else {
+			controlDecoration.setImage(FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_CONTENT_PROPOSAL).getImage());
+			controlDecoration.showHoverText(status.getMessage());
+			controlDecoration.show();
+			text.setToolTipText(status.getMessage());
+			return false;
+		}
+	}
+
+	private void shiftSeries(double deltaX, double deltaY) {
+
+		if(baseChart != null) {
+			baseChart.suspendUpdate(true);
+			double shiftX = 0.0d;
+			double shiftY = 0.0d;
+			for(ISeries<?> series : baseChart.getSeriesSet().getSeries()) {
+				shiftX += deltaX;
+				shiftY += deltaY;
+				String seriesId = series.getId();
+				baseChart.shiftSeries(seriesId, shiftX, shiftY);
+			}
+			baseChart.suspendUpdate(false);
+			baseChart.redraw();
+			persistOverlayShiftX();
+			persistOverlayShiftY();
+		}
 	}
 }
