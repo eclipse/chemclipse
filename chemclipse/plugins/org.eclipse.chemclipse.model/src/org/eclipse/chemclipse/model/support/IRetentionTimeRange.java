@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - add contentEquals / javadoc
+ * Christoph Läubrich - add contentEquals / containsRetentionTime / javadoc
  *******************************************************************************/
 package org.eclipse.chemclipse.model.support;
 
@@ -41,5 +41,10 @@ public interface IRetentionTimeRange {
 			return true;
 		}
 		return getStartRetentionTime() == other.getStartRetentionTime() && getStopRetentionTime() == other.getStopRetentionTime();
+	}
+
+	default boolean containsRetentionTime(int rt) {
+
+		return rt >= getStartRetentionTime() && rt <= getStopRetentionTime();
 	}
 }
