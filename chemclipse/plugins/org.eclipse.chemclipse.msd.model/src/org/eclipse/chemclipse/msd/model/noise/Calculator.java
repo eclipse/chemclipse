@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2019 Lablicate GmbH.
+ * Copyright (c) 2010, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -25,7 +25,6 @@ import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.exceptions.FilterException;
 import org.eclipse.chemclipse.msd.model.support.CombinedMassSpectrumCalculator;
-import org.eclipse.chemclipse.msd.model.support.ICombinedMassSpectrumCalculator;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
 import org.eclipse.chemclipse.numeric.statistics.Calculations;
@@ -53,7 +52,7 @@ public class Calculator {
 	 */
 	public ICombinedMassSpectrum getNoiseMassSpectrum(List<ICombinedMassSpectrum> noiseMassSpectra, IMarkedIons ionsToPreserve, IProgressMonitor monitor) {
 
-		ICombinedMassSpectrumCalculator combinedMassSpectrumCalculator = new CombinedMassSpectrumCalculator();
+		CombinedMassSpectrumCalculator combinedMassSpectrumCalculator = new CombinedMassSpectrumCalculator();
 		/*
 		 * Iterate through all given noise mass spectra.
 		 */
@@ -126,7 +125,7 @@ public class Calculator {
 				 * with the segment. The noise segment will be stored in the
 				 * noise segment list.
 				 */
-				ICombinedMassSpectrumCalculator combinedMassSpectrumCalculator = calculatorSupport.getCombinedMassSpectrumCalculator(analysisSegment, extractedIonSignals);
+				CombinedMassSpectrumCalculator combinedMassSpectrumCalculator = calculatorSupport.getCombinedMassSpectrumCalculator(analysisSegment, extractedIonSignals);
 				ICombinedMassSpectrum noiseMassSpectrum = calculatorSupport.getNoiseMassSpectrum(combinedMassSpectrumCalculator, ionsToPreserve, monitor);
 				INoiseSegment noiseSegment = new NoiseSegment(analysisSegment, noiseMassSpectrum);
 				noiseSegments.add(noiseSegment);

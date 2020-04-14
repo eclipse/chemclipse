@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2019 Lablicate GmbH.
+ * Copyright (c) 2010, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -29,7 +29,6 @@ import org.eclipse.chemclipse.msd.model.exceptions.NoExtractedIonSignalStoredExc
 import org.eclipse.chemclipse.msd.model.implementation.CombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.support.CombinedMassSpectrumCalculator;
-import org.eclipse.chemclipse.msd.model.support.ICombinedMassSpectrumCalculator;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -61,10 +60,10 @@ public class CalculatorSupport {
 	 * 
 	 * @return
 	 */
-	public ICombinedMassSpectrumCalculator getCombinedMassSpectrumCalculator(IAnalysisSegment analysisSegment, IExtractedIonSignals extractedIonSignals) {
+	public CombinedMassSpectrumCalculator getCombinedMassSpectrumCalculator(IAnalysisSegment analysisSegment, IExtractedIonSignals extractedIonSignals) {
 
 		IExtractedIonSignal extractedIonSignal;
-		ICombinedMassSpectrumCalculator combinedMassSpectrumCalculator = new CombinedMassSpectrumCalculator();
+		CombinedMassSpectrumCalculator combinedMassSpectrumCalculator = new CombinedMassSpectrumCalculator();
 		for(int scan = analysisSegment.getStartScan(); scan <= analysisSegment.getStopScan(); scan++) {
 			try {
 				extractedIonSignal = extractedIonSignals.getExtractedIonSignal(scan);
@@ -83,7 +82,7 @@ public class CalculatorSupport {
 
 	public static ICombinedMassSpectrum getCombinedMassSpectrum(IExtractedIonSignals extractedIonSignals, IScanRange range) {
 
-		ICombinedMassSpectrumCalculator combinedMassSpectrumCalculator = new CombinedMassSpectrumCalculator();
+		CombinedMassSpectrumCalculator combinedMassSpectrumCalculator = new CombinedMassSpectrumCalculator();
 		for(int scan = range.getStartScan(); scan <= range.getStopScan(); scan++) {
 			try {
 				IExtractedIonSignal extractedIonSignal = extractedIonSignals.getExtractedIonSignal(scan);
@@ -100,7 +99,7 @@ public class CalculatorSupport {
 		float abundance;
 		ICombinedMassSpectrum noiseMassSpectrum = new CombinedMassSpectrum();
 		IIon noiseIon;
-		Map<Integer, Double> ions = combinedMassSpectrumCalculator.getValues();
+		Map<Integer, Double> ions = combinedMassSpectrumCalculator.getValuesIntensities();
 		for(Integer ion : ions.keySet()) {
 			/*
 			 * Check the abundance.
@@ -121,7 +120,7 @@ public class CalculatorSupport {
 	/*
 	 * Returns a combined mass spectrum.
 	 */
-	public ICombinedMassSpectrum getNoiseMassSpectrum(ICombinedMassSpectrumCalculator combinedMassSpectrumCalculator, IMarkedIons ionsToPreserve, IProgressMonitor monitor) {
+	public ICombinedMassSpectrum getNoiseMassSpectrum(CombinedMassSpectrumCalculator combinedMassSpectrumCalculator, IMarkedIons ionsToPreserve, IProgressMonitor monitor) {
 
 		/*
 		 * Remove the ions to preserve.
@@ -138,7 +137,7 @@ public class CalculatorSupport {
 		float abundance;
 		ICombinedMassSpectrum noiseMassSpectrum = new CombinedMassSpectrum();
 		IIon noiseIon;
-		Map<Integer, Double> ions = combinedMassSpectrumCalculator.getValues();
+		Map<Integer, Double> ions = combinedMassSpectrumCalculator.getValuesIntensities();
 		for(Integer ion : ions.keySet()) {
 			/*
 			 * Check the abundance.

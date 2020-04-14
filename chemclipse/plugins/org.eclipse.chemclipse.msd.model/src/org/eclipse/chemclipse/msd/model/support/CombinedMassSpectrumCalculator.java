@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.support;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -20,41 +21,38 @@ import java.util.Set;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
+import org.eclipse.chemclipse.numeric.statistics.Calculations;
 
-public class CombinedMassSpectrumCalculator implements ICombinedMassSpectrumCalculator {
+public class CombinedMassSpectrumCalculator {
 
-	private Map<Integer, Double> combinedMassSpectrum;
+	private Map<Integer, List<Double>> combinedMassSpectrum = new HashMap<Integer, List<Double>>();
 
-	public CombinedMassSpectrumCalculator() {
-		combinedMassSpectrum = new HashMap<Integer, Double>();
-	}
-
-	@Override
-	public void addIon(double ion, float abundance) {
+	public void addIon(double ion, double abundance) {
 
 		/*
 		 * If the abundance is zero, do nothing and return.
 		 */
-		if(abundance == 0.0f) {
+		if(abundance == 0.0d) {
 			return;
 		}
 		int key = AbstractIon.getIon(ion);
 		/*
 		 * Add the abundance if still a ion exists, otherwise still add the ion.
 		 */
-		if(combinedMassSpectrum.containsKey(key)) {
-			combinedMassSpectrum.put(key, combinedMassSpectrum.get(key) + abundance);
-		} else {
-			combinedMassSpectrum.put(key, (double)abundance);
+		List<Double> intensities = combinedMassSpectrum.get(key);
+		if(intensities == null) {
+			intensities = new ArrayList<Double>();
+			combinedMassSpectrum.put(key, intensities);
 		}
+		intensities.add(abundance);
 	}
 
-	@Override
 	public void addIons(List<IIon> ions, IMarkedIons excludedIons) {
 
 		if(ions == null || excludedIons == null) {
 			return;
 		}
+		//
 		Set<Integer> excludedIonsNominal = excludedIons.getIonsNominal();
 		for(IIon ion : ions) {
 			if(!excludedIonsNominal.contains(ion.getIon())) {
@@ -63,14 +61,12 @@ public class CombinedMassSpectrumCalculator implements ICombinedMassSpectrumCalc
 		}
 	}
 
-	@Override
 	public void removeIon(double ion) {
 
 		int key = AbstractIon.getIon(ion);
 		combinedMassSpectrum.remove(key);
 	}
 
-	@Override
 	public void removeIons(IMarkedIons excludedIons) {
 
 		for(Integer ion : excludedIons.getIonsNominal()) {
@@ -78,24 +74,26 @@ public class CombinedMassSpectrumCalculator implements ICombinedMassSpectrumCalc
 		}
 	}
 
-	@Override
 	public double getAbundance(double ion) {
 
-		double result = 0.0d;
 		int key = AbstractIon.getIon(ion);
-		if(combinedMassSpectrum.containsKey(key)) {
-			result = combinedMassSpectrum.get(key);
-		}
-		return result;
+		return calculateSumIntensity(combinedMassSpectrum.get(key));
 	}
 
-	@Override
-	public Map<Integer, Double> getValues() {
+	public Map<Integer, List<Double>> getValues() {
 
 		return combinedMassSpectrum;
 	}
 
-	@Override
+	public Map<Integer, Double> getValuesIntensities() {
+
+		Map<Integer, Double> map = new HashMap<>();
+		for(Integer key : combinedMassSpectrum.keySet()) {
+			map.put(key, calculateSumIntensity(combinedMassSpectrum.get(key)));
+		}
+		return map;
+	}
+
 	public void normalize(float normalizationFactor) {
 
 		/*
@@ -107,15 +105,38 @@ public class CombinedMassSpectrumCalculator implements ICombinedMassSpectrumCalc
 		/*
 		 * If max is zero it doesn't even make sense to go further on.
 		 */
-		double max = Collections.max(combinedMassSpectrum.values());
+		double max = Collections.max(getValuesIntensities().values());
 		if(max == 0.0d) {
 			return;
 		}
+		//
 		double correlationFactor = normalizationFactor / max;
-		double value;
 		for(Integer key : combinedMassSpectrum.keySet()) {
-			value = correlationFactor * combinedMassSpectrum.get(key);
-			combinedMassSpectrum.put(key, value);
+			List<Double> adjustedIntensities = new ArrayList<>();
+			for(double intensity : combinedMassSpectrum.get(key)) {
+				adjustedIntensities.add(correlationFactor * intensity);
+			}
+			combinedMassSpectrum.put(key, adjustedIntensities);
 		}
+	}
+
+	public double calculateSumIntensity(List<Double> intensities) {
+
+		double sum = 0.0d;
+		if(intensities != null) {
+			int size = intensities.size();
+			double[] values = new double[size];
+			for(int i = 0; i < size; i++) {
+				values[i] = intensities.get(i);
+			}
+			/*
+			 * Add an option here to calculate the sum,
+			 * mean or median signal.
+			 */
+			sum = Calculations.getSum(values);
+			// sum = Calculations.getMean(values);
+			// sum = Calculations.getMedian(values);
+		}
+		return sum;
 	}
 }

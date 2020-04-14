@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2019 Lablicate GmbH.
+ * Copyright (c) 2010, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -16,7 +16,7 @@ import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
-import org.eclipse.chemclipse.msd.model.support.ICombinedMassSpectrumCalculator;
+import org.eclipse.chemclipse.msd.model.support.CombinedMassSpectrumCalculator;
 import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignal;
 import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignals;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
@@ -31,7 +31,7 @@ public class CalculatorSupport_4_Test extends TestCase {
 	private AnalysisSegment analysisSegment;
 	private IExtractedIonSignals extractedIonSignals;
 	private IExtractedIonSignal extractedIonSignal;
-	private ICombinedMassSpectrumCalculator combinedMassSpectrumCalculator;
+	private CombinedMassSpectrumCalculator combinedMassSpectrumCalculator;
 	private IMarkedIons ionsToPreserve;
 	private ICombinedMassSpectrum noiseMassSpectrum;
 

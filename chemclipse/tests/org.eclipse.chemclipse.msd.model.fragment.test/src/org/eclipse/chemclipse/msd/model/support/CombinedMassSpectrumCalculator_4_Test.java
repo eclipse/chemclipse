@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,7 +19,7 @@ import junit.framework.TestCase;
 
 public class CombinedMassSpectrumCalculator_4_Test extends TestCase {
 
-	private ICombinedMassSpectrumCalculator combinedMassSpectrumCalculator;
+	private CombinedMassSpectrumCalculator combinedMassSpectrumCalculator;
 	private IMarkedIons excludedIons;
 
 	@Override
@@ -44,7 +44,7 @@ public class CombinedMassSpectrumCalculator_4_Test extends TestCase {
 	public void testValues_1() {
 
 		int ion = 103;
-		assertEquals(5500.0, combinedMassSpectrumCalculator.getValues().get(ion));
+		assertEquals(5500.0, combinedMassSpectrumCalculator.getValues().get(ion).get(0));
 		excludedIons.add(new MarkedIon(ion));
 		combinedMassSpectrumCalculator.removeIons(excludedIons);
 		assertEquals(null, combinedMassSpectrumCalculator.getValues().get(ion));
@@ -53,7 +53,7 @@ public class CombinedMassSpectrumCalculator_4_Test extends TestCase {
 	public void testValues_2() {
 
 		int ion = 104;
-		assertEquals(5300.0, combinedMassSpectrumCalculator.getValues().get(ion));
+		assertEquals(5300.0, combinedMassSpectrumCalculator.getValues().get(ion).get(0));
 		excludedIons.add(new MarkedIon(ion));
 		combinedMassSpectrumCalculator.removeIons(excludedIons);
 		assertEquals(null, combinedMassSpectrumCalculator.getValues().get(ion));
@@ -61,8 +61,8 @@ public class CombinedMassSpectrumCalculator_4_Test extends TestCase {
 
 	public void testValues_3() {
 
-		assertEquals(5100.0, combinedMassSpectrumCalculator.getValues().get(56));
-		assertEquals(5500.0, combinedMassSpectrumCalculator.getValues().get(103));
+		assertEquals(5100.0, combinedMassSpectrumCalculator.getValues().get(56).get(0));
+		assertEquals(5500.0, combinedMassSpectrumCalculator.getValues().get(103).get(0));
 		excludedIons.add(new MarkedIon(56));
 		excludedIons.add(new MarkedIon(103));
 		combinedMassSpectrumCalculator.removeIons(excludedIons);

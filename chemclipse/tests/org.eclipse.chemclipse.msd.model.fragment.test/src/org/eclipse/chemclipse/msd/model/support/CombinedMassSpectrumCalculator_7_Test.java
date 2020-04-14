@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,14 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.support;
 
-import org.eclipse.chemclipse.msd.model.support.CombinedMassSpectrumCalculator;
-import org.eclipse.chemclipse.msd.model.support.ICombinedMassSpectrumCalculator;
-
 import junit.framework.TestCase;
 
 public class CombinedMassSpectrumCalculator_7_Test extends TestCase {
 
-	private ICombinedMassSpectrumCalculator combinedMassSpectrumCalculator;
+	private CombinedMassSpectrumCalculator combinedMassSpectrumCalculator;
 	private static final float NORMALIZATION_FACTOR = 1000.0f;
 
 	@Override
