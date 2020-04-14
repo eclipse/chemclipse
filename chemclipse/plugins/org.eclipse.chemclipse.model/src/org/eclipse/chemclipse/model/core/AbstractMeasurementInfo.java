@@ -8,12 +8,13 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - extract constants into interface
+ * Christoph Läubrich - extract constants into interface, don't overwrite data from constructor
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -43,20 +44,20 @@ public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 			headerDataMap = new LinkedHashMap<>();
 		}
 		//
-		headerDataMap.put(OPERATOR, "");
-		headerDataMap.put(DATE, dateFormat.format(new Date()));
-		headerDataMap.put(MISC_INFO, "");
-		headerDataMap.put(MISC_INFO_SEPARATED, "");
-		headerDataMap.put(SHORT_INFO, "");
-		headerDataMap.put(DETAILED_INFO, "");
-		headerDataMap.put(SAMPLE_GROUP, "");
-		headerDataMap.put(BARCODE, "");
-		headerDataMap.put(BARCODE_TYPE, "");
-		headerDataMap.put(SAMPLE_WEIGHT, Double.valueOf(0.0d).toString());
-		headerDataMap.put(SAMPLE_WEIGHT_UNIT, "");
-		headerDataMap.put(DATA_NAME, "");
+		headerDataMap.putIfAbsent(OPERATOR, "");
+		headerDataMap.putIfAbsent(DATE, dateFormat.format(new Date()));
+		headerDataMap.putIfAbsent(MISC_INFO, "");
+		headerDataMap.putIfAbsent(MISC_INFO_SEPARATED, "");
+		headerDataMap.putIfAbsent(SHORT_INFO, "");
+		headerDataMap.putIfAbsent(DETAILED_INFO, "");
+		headerDataMap.putIfAbsent(SAMPLE_GROUP, "");
+		headerDataMap.putIfAbsent(BARCODE, "");
+		headerDataMap.putIfAbsent(BARCODE_TYPE, "");
+		headerDataMap.putIfAbsent(SAMPLE_WEIGHT, Double.valueOf(0.0d).toString());
+		headerDataMap.putIfAbsent(SAMPLE_WEIGHT_UNIT, "");
+		headerDataMap.putIfAbsent(DATA_NAME, "");
 		//
-		protectKeys = new HashSet<String>(headerDataMap.keySet());
+		protectKeys = new HashSet<String>(Arrays.asList(OPERATOR, DATE, MISC_INFO, MISC_INFO_SEPARATED, SHORT_INFO, DETAILED_INFO, SAMPLE_GROUP, BARCODE, BARCODE_TYPE, SAMPLE_WEIGHT, SAMPLE_WEIGHT_UNIT, DATA_NAME));
 	}
 
 	public AbstractMeasurementInfo() {
