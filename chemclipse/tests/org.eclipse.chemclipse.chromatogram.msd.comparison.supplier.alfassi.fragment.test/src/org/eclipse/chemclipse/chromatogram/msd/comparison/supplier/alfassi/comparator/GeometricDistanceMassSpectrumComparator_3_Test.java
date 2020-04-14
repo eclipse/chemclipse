@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.alfassi.comparator;
 
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.MatchConstraints;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 
@@ -30,7 +31,7 @@ public class GeometricDistanceMassSpectrumComparator_3_Test extends MassSpectrum
 		IScanMSD reference = syringylAcetone.getMassSpectrum();
 		//
 		comparator = new MassSpectrumComparator();
-		processingInfo = comparator.compare(unknown, reference);
+		processingInfo = comparator.compare(unknown, reference, new MatchConstraints());
 		result = processingInfo.getProcessingResult();
 	}
 

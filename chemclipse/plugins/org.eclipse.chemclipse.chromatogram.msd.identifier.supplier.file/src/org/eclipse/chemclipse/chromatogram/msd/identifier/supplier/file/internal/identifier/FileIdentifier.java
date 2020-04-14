@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2019 Lablicate GmbH.
+ * Copyright (c) 2015, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -36,6 +36,7 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.support.TargetBuilder;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.IPeakIdentificationResults;
+import org.eclipse.chemclipse.model.identifier.MatchConstraints;
 import org.eclipse.chemclipse.model.identifier.PeakIdentificationResults;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -182,6 +183,7 @@ public class FileIdentifier {
 		IMassSpectrumComparator massSpectrumComparator = fileIdentifierSettings.getMassSpectrumComparator();
 		int count = 1;
 		int total = unknownList.size();
+		//
 		for(T item : unknownList) {
 			if(subMonitor.isCanceled()) {
 				throw new OperationCanceledException();
@@ -203,6 +205,7 @@ public class FileIdentifier {
 			count++;
 			subMonitor.worked(1);
 		}
+		//
 		if(UserManagement.isDevMode()) {
 			long end = System.currentTimeMillis();
 			NumberFormat integerFormat = NumberFormat.getIntegerInstance();
@@ -210,6 +213,7 @@ public class FileIdentifier {
 			timeFormat.setMaximumFractionDigits(2);
 			System.out.println("#PERF# Identifaction of " + integerFormat.format(unknownList.size()) + " unknown items against database " + databaseName + " with " + integerFormat.format(references.size()) + " massspectra took " + timeFormat.format((end - start) / 1000d) + " seconds and yields " + matched + " matches");
 		}
+		//
 		return matched;
 	}
 
@@ -251,16 +255,25 @@ public class FileIdentifier {
 		 * Define the number of items where no more splitting occurs
 		 */
 		private static final int THRESHOLD = 400;
+		//
 		private final IScanMSD unknown;
 		private final List<? extends IScanMSD> references;
 		private final IFileIdentifierSettings settings;
 		private final IMassSpectrumComparator spectrumComparator;
+		//
+		private MatchConstraints matchConstraints;
 
 		public FindMatchingSpectras(IScanMSD unknown, List<? extends IScanMSD> references, IFileIdentifierSettings settings, IMassSpectrumComparator spectrumComparator) {
 			this.unknown = unknown;
 			this.references = references;
 			this.settings = settings;
 			this.spectrumComparator = spectrumComparator;
+			/*
+			 * Adjusted to max 1.0 = 100%
+			 */
+			float minMatchFactor = settings.getMinMatchFactor() / 100.0f;
+			float minReverseMatchFactor = settings.getMinReverseMatchFactor() / 100.0f;
+			this.matchConstraints = new MatchConstraints(minMatchFactor, minReverseMatchFactor);
 		}
 
 		@Override
@@ -283,13 +296,14 @@ public class FileIdentifier {
 		private Map<IComparisonResult, IScanMSD> findMatchingReferences() {
 
 			Map<IComparisonResult, IScanMSD> results = new IdentityHashMap<>();
-			float minMF = settings.getMinMatchFactor();
-			float minRMF = settings.getMinReverseMatchFactor();
+			float minMatchFactor = settings.getMinMatchFactor();
+			float minReverseMatchFactor = settings.getMinReverseMatchFactor();
+			//
 			for(IScanMSD reference : references) {
-				IProcessingInfo<IComparisonResult> infoCompare = spectrumComparator.compare(unknown, reference);
+				IProcessingInfo<IComparisonResult> infoCompare = spectrumComparator.compare(unknown, reference, matchConstraints);
 				IComparisonResult comparisonResult = infoCompare.getProcessingResult();
 				applyPenaltyOnDemand(unknown, reference, comparisonResult, settings);
-				if(isValidTarget(comparisonResult, minMF, minRMF)) {
+				if(isValidTarget(comparisonResult, minMatchFactor, minReverseMatchFactor)) {
 					results.put(comparisonResult, reference);
 				}
 			}

@@ -59,7 +59,6 @@ public class ChromatogramReferencesUI {
 	private final EditorToolBar toolBar;
 
 	public ChromatogramReferencesUI(EditorToolBar editorToolBar, Consumer<IChromatogramSelection<?, ?>> chromatogramReferencesListener) {
-
 		comboChromatograms = new ComboContainer(chromatogramReferencesListener.andThen(t -> updateButtons()));
 		Action action = new Action("References", Action.AS_CHECK_BOX) {
 
@@ -314,7 +313,6 @@ public class ChromatogramReferencesUI {
 		private final Consumer<IChromatogramSelection<?, ?>> listener;
 
 		public ComboContainer(Consumer<IChromatogramSelection<?, ?>> chromatogramReferencesListener) {
-
 			this.listener = chromatogramReferencesListener;
 		}
 

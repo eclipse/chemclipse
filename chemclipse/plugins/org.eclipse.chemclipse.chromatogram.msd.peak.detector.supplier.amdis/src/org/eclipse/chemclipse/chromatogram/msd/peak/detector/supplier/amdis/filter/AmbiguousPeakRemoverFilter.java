@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.filter.IPeakFilter;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.MatchConstraints;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.processing.DataCategory;
@@ -160,6 +161,8 @@ public class AmbiguousPeakRemoverFilter implements IPeakFilter<AmbiguousPeakRemo
 
 	private static <T extends IPeak> List<PeakGroup<T>> extractPeaks(List<T> candidatePeakSet, IMassSpectrumComparator comparator, double minMatchFactor) {
 
+		MatchConstraints matchConstraints = new MatchConstraints();
+		//
 		int size = candidatePeakSet.size();
 		if(size < 2) {
 			// nothing to do then...
@@ -174,16 +177,16 @@ public class AmbiguousPeakRemoverFilter implements IPeakFilter<AmbiguousPeakRemo
 					// no need to compare with itself
 					continue;
 				}
-				T comparision = candidatePeakSet.get(j);
-				IProcessingInfo<IComparisonResult> info = comparator.compare(Adapters.adapt(comparision, IPeakMSD.class).getExtractedMassSpectrum(), Adapters.adapt(candidate, IPeakMSD.class).getExtractedMassSpectrum());
+				T comparison = candidatePeakSet.get(j);
+				IProcessingInfo<IComparisonResult> info = comparator.compare(Adapters.adapt(comparison, IPeakMSD.class).getExtractedMassSpectrum(), Adapters.adapt(candidate, IPeakMSD.class).getExtractedMassSpectrum(), matchConstraints);
 				if(info != null) {
 					IComparisonResult result = info.getProcessingResult();
 					if(result != null) {
-						float mf = result.getMatchFactor();
-						if(mf / 100d > minMatchFactor) {
+						float matchFactor = result.getMatchFactor();
+						if(matchFactor / 100.0d > minMatchFactor) {
 							PeakGroup<T> group = new PeakGroup<>();
 							group.addPeak(candidate, i);
-							group.addPeak(comparision, j);
+							group.addPeak(comparison, j);
 							peakGroups.add(group);
 						}
 					}

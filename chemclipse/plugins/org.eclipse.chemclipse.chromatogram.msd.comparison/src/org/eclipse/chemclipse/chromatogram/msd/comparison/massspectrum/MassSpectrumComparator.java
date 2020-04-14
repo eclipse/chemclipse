@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.purity.Ma
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.MatchConstraints;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
@@ -111,10 +112,11 @@ public class MassSpectrumComparator {
 		/*
 		 * Do the comparison
 		 */
+		MatchConstraints matchConstraints = new MatchConstraints();
 		IProcessingInfo<IComparisonResult> processingInfo;
 		if(compare) {
 			if(massSpectrumComparator != null) {
-				processingInfo = massSpectrumComparator.compare(unknown, reference);
+				processingInfo = massSpectrumComparator.compare(unknown, reference, matchConstraints);
 			} else {
 				processingInfo = new ProcessingInfo<>();
 				processingInfo.addErrorMessage("MassSpectrum Comparator", "MassSpectrum comparator can't be null!");

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2019 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.AbstractM
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.IMassSpectrumComparator;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.MatchConstraints;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -30,7 +31,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 public class EuclideanMassSpectrumComparator extends AbstractMassSpectrumComparator implements IMassSpectrumComparator {
 
 	@Override
-	public IProcessingInfo<IComparisonResult> compare(IScanMSD unknown, IScanMSD reference) {
+	public IProcessingInfo<IComparisonResult> compare(IScanMSD unknown, IScanMSD reference, MatchConstraints matchConstraints) {
 
 		IProcessingInfo<IComparisonResult> processingInfo = super.validate(unknown, reference);
 		if(!processingInfo.hasErrorMessages()) {
