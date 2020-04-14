@@ -46,11 +46,13 @@ import org.eclipse.swt.widgets.Widget;
 import org.eclipse.swtchart.Chart;
 import org.eclipse.swtchart.IAxis;
 import org.eclipse.swtchart.IAxisSet;
-import org.eclipse.swtchart.ICustomPaintListener;
 import org.eclipse.swtchart.IPlotArea;
 import org.eclipse.swtchart.ISeries;
+import org.eclipse.swtchart.extensions.core.BaseChart;
+import org.eclipse.swtchart.extensions.marker.AbstractBaseChartPaintListener;
+import org.eclipse.swtchart.extensions.marker.IBaseChartPaintListener;
 
-public class TargetReferenceLabelMarker implements ICustomPaintListener {
+public class TargetReferenceLabelMarker extends AbstractBaseChartPaintListener implements IBaseChartPaintListener {
 
 	private static final boolean DEBUG = false;
 	private static final boolean DEBUG_FENCES = false;
@@ -63,35 +65,35 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 	private int detectionDepth;
 	private final IPreferenceStore preferenceStore;
 
-	public TargetReferenceLabelMarker(int offset, IPreferenceStore preferenceStore) {
-
-		this(false, offset, preferenceStore);
+	public TargetReferenceLabelMarker(BaseChart baseChart, int offset, IPreferenceStore preferenceStore) {
+		this(baseChart, false, offset, preferenceStore);
 	}
 
-	public TargetReferenceLabelMarker(boolean showReferenceId, int offset, IPreferenceStore preferenceStore) {
-
+	public TargetReferenceLabelMarker(BaseChart baseChart, boolean showReferenceId, int offset, IPreferenceStore preferenceStore) {
+		super(baseChart);
 		this.showReferenceId = showReferenceId;
 		this.offset = offset;
 		this.preferenceStore = preferenceStore;
 	}
 
-	public TargetReferenceLabelMarker(Collection<? extends SignalTargetReference> references, TargetDisplaySettings settings, int offset, IPreferenceStore preferenceStore) {
-
-		this(false, offset, preferenceStore);
+	public TargetReferenceLabelMarker(BaseChart baseChart, Collection<? extends SignalTargetReference> references, TargetDisplaySettings settings, int offset, IPreferenceStore preferenceStore) {
+		this(baseChart, false, offset, preferenceStore);
 		setData(references, settings);
 	}
 
 	@Override
 	public void paintControl(PaintEvent event) {
 
-		if(visible && !identifications.isEmpty()) {
-			Widget widget = event.widget;
-			if(widget instanceof IPlotArea) {
-				Chart chart = ((IPlotArea)widget).getChart();
-				ISeries<?> series = getReferenceSeries(chart);
-				if(series != null) {
-					IAxisSet axisSet = chart.getAxisSet();
-					paintLabels(event.gc, axisSet.getXAxis(series.getXAxisId()), axisSet.getYAxis(series.getYAxisId()));
+		if(!getBaseChart().isBufferActive()) {
+			if(visible && !identifications.isEmpty()) {
+				Widget widget = event.widget;
+				if(widget instanceof IPlotArea) {
+					Chart chart = ((IPlotArea)widget).getChart();
+					ISeries<?> series = getReferenceSeries(chart);
+					if(series != null) {
+						IAxisSet axisSet = chart.getAxisSet();
+						paintLabels(event.gc, axisSet.getXAxis(series.getXAxisId()), axisSet.getYAxis(series.getYAxisId()));
+					}
 				}
 			}
 		}
@@ -343,7 +345,6 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		private LabelBounds bounds;
 
 		public TargetLabel(String label, String id, FontData fontData, boolean isActive, double x, double y) {
-
 			this.label = label;
 			this.id = id;
 			this.fontData = fontData;
@@ -363,7 +364,6 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		private Region region;
 
 		public LabelBounds(GC gc, TargetLabel label) {
-
 			this.gc = gc;
 			Point labelSize = gc.textExtent(label.label);
 			width = labelSize.x;

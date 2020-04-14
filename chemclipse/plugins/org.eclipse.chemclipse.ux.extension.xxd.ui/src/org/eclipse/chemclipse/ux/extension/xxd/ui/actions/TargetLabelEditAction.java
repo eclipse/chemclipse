@@ -94,7 +94,7 @@ public class TargetLabelEditAction extends Action {
 				throw new RuntimeException("can't get reference", e.getCause());
 			}
 			IScrollableChart chart = labelChart.getChart();
-			TargetReferenceLabelMarker previewMarker = new TargetReferenceLabelMarker(true, PreferenceConstants.DEF_SYMBOL_SIZE * 2, preferenceStore);
+			TargetReferenceLabelMarker previewMarker = new TargetReferenceLabelMarker(chart.getBaseChart(), true, PreferenceConstants.DEF_SYMBOL_SIZE * 2, preferenceStore);
 			chart.getBaseChart().getPlotArea().addCustomPaintListener(previewMarker);
 			TargetDisplaySettingsWizardListener listener = new TargetDisplaySettingsWizardListener() {
 

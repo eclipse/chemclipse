@@ -42,6 +42,7 @@ import org.eclipse.swtchart.ICustomPaintListener;
 import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
 import org.eclipse.swtchart.IPlotArea;
 import org.eclipse.swtchart.LineStyle;
+import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
@@ -178,8 +179,9 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 				removeIdentificationLabelMarker(peakLabelMarkerMap, seriesId);
 				TargetDisplaySettings settings = PreferenceStoreTargetDisplaySettings.getSettings(preferenceStore);
 				if(settings.isShowPeakLabels()) {
-					IPlotArea plotArea = getBaseChart().getPlotArea();
-					TargetReferenceLabelMarker peakLabelMarker = new TargetReferenceLabelMarker(SignalTargetReference.getPeakReferences(peaks), settings, symbolSize * 2, preferenceStore);
+					BaseChart baseChart = getBaseChart();
+					IPlotArea plotArea = baseChart.getPlotArea();
+					TargetReferenceLabelMarker peakLabelMarker = new TargetReferenceLabelMarker(baseChart, SignalTargetReference.getPeakReferences(peaks), settings, symbolSize * 2, preferenceStore);
 					plotArea.addCustomPaintListener(peakLabelMarker);
 					peakLabelMarkerMap.put(seriesId, peakLabelMarker);
 				}

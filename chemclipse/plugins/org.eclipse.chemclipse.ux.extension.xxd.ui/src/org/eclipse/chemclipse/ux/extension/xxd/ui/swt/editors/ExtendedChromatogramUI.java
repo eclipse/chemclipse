@@ -818,7 +818,8 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			removeIdentificationLabelMarker(peakLabelMarkerMap, seriesId);
 			if(displaySettings.isShowPeakLabels()) {
 				IChromatogramSelection selection = getChromatogramSelection();
-				IPlotArea plotArea = chromatogramChart.getBaseChart().getPlotArea();
+				BaseChart baseChart = chromatogramChart.getBaseChart();
+				IPlotArea plotArea = baseChart.getPlotArea();
 				boolean showAtTic = preferenceStore != null && preferenceStore.getBoolean(PREFERENCE_SHOW_LABELS_AT_TIC);
 				List<SignalTargetReference> peakReferences;
 				if(showAtTic) {
@@ -833,7 +834,8 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 				} else {
 					peakReferences = SignalTargetReference.getPeakReferences(peaks);
 				}
-				TargetReferenceLabelMarker peakLabelMarker = new TargetReferenceLabelMarker(peakReferences, displaySettings, symbolSize * 2, preferenceStore);
+				//
+				TargetReferenceLabelMarker peakLabelMarker = new TargetReferenceLabelMarker(baseChart, peakReferences, displaySettings, symbolSize * 2, preferenceStore);
 				plotArea.addCustomPaintListener(peakLabelMarker);
 				peakLabelMarkerMap.put(seriesId, peakLabelMarker);
 			}
@@ -853,8 +855,9 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			 */
 			removeIdentificationLabelMarker(scanLabelMarkerMap, seriesId);
 			if(displaySettings.isShowScanLables()) {
-				IPlotArea plotArea = chromatogramChart.getBaseChart().getPlotArea();
-				TargetReferenceLabelMarker scanLabelMarker = new TargetReferenceLabelMarker(SignalTargetReference.getScanReferences(scans), displaySettings, symbolSize * 2, preferenceStore);
+				BaseChart baseChart = chromatogramChart.getBaseChart();
+				IPlotArea plotArea = baseChart.getPlotArea();
+				TargetReferenceLabelMarker scanLabelMarker = new TargetReferenceLabelMarker(baseChart, SignalTargetReference.getScanReferences(scans), displaySettings, symbolSize * 2, preferenceStore);
 				plotArea.addCustomPaintListener(scanLabelMarker);
 				scanLabelMarkerMap.put(seriesId, scanLabelMarker);
 			}
