@@ -50,12 +50,15 @@ import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.IExtendedChart;
 import org.eclipse.swtchart.extensions.core.ISeriesSettings;
 import org.eclipse.swtchart.extensions.core.MappedSeriesSettings;
+import org.eclipse.swtchart.extensions.core.RangeRestriction;
+import org.eclipse.swtchart.extensions.core.RangeRestriction.ExtendType;
 import org.eclipse.swtchart.extensions.core.ScrollableChart;
 import org.eclipse.swtchart.extensions.core.SeriesStatusAdapter;
 
 public class DataShiftControllerUI extends Composite {
 
 	private static final String SERIES_REDRAW = "";
+	private static final String SERIES_ALL = "";
 	/*
 	 * Mirror Button
 	 */
@@ -195,7 +198,7 @@ public class DataShiftControllerUI extends Composite {
 						if(baseChart != null) {
 							double deltaX = getShiftValuePrimary(IExtendedChart.X_AXIS);
 							double deltaY = 0.0d;
-							shiftSeries(deltaX, deltaY);
+							shiftSeries(SERIES_ALL, deltaX, deltaY);
 						}
 					}
 				}
@@ -266,7 +269,7 @@ public class DataShiftControllerUI extends Composite {
 						if(baseChart != null) {
 							double deltaX = 0.0d;
 							double deltaY = getShiftValuePrimary(IExtendedChart.Y_AXIS);
-							shiftSeries(deltaX, deltaY);
+							shiftSeries(SERIES_ALL, deltaX, deltaY);
 						}
 					}
 				}
@@ -335,7 +338,7 @@ public class DataShiftControllerUI extends Composite {
 				if(baseChart != null) {
 					double deltaX = getShiftValuePrimary(IExtendedChart.X_AXIS);
 					double deltaY = getShiftValuePrimary(IExtendedChart.Y_AXIS);
-					shiftSeries(deltaX, deltaY);
+					shiftSeries(SERIES_ALL, deltaX, deltaY);
 				}
 			}
 		});
@@ -462,11 +465,10 @@ public class DataShiftControllerUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(baseChart != null) {
-					double shiftX = getShiftValuePrimary(IExtendedChart.X_AXIS) * -1.0d;
-					String selectedSeriesId = getSelectedSeriesId();
-					baseChart.shiftSeries(selectedSeriesId, shiftX, 0.0d);
-					baseChart.redraw();
-					persistOverlayShiftX();
+					String seriesId = getSelectedSeriesId();
+					double deltaX = getShiftValuePrimary(IExtendedChart.X_AXIS) * -1.0d;
+					double deltaY = 0.0d;
+					shiftSeries(seriesId, deltaX, deltaY);
 				}
 			}
 		});
@@ -486,11 +488,10 @@ public class DataShiftControllerUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(baseChart != null) {
-					double shiftX = getShiftValuePrimary(IExtendedChart.X_AXIS);
-					String selectedSeriesId = getSelectedSeriesId();
-					baseChart.shiftSeries(selectedSeriesId, shiftX, 0.0d);
-					baseChart.redraw();
-					persistOverlayShiftX();
+					String seriesId = getSelectedSeriesId();
+					double deltaX = getShiftValuePrimary(IExtendedChart.X_AXIS);
+					double deltaY = 0.0d;
+					shiftSeries(seriesId, deltaX, deltaY);
 				}
 			}
 		});
@@ -510,11 +511,10 @@ public class DataShiftControllerUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(baseChart != null) {
-					double shiftY = getShiftValuePrimary(IExtendedChart.Y_AXIS);
-					String selectedSeriesId = getSelectedSeriesId();
-					baseChart.shiftSeries(selectedSeriesId, 0.0d, shiftY);
-					baseChart.redraw();
-					persistOverlayShiftY();
+					String seriesId = getSelectedSeriesId();
+					double deltaX = 0.0d;
+					double deltaY = getShiftValuePrimary(IExtendedChart.Y_AXIS);
+					shiftSeries(seriesId, deltaX, deltaY);
 				}
 			}
 		});
@@ -534,11 +534,10 @@ public class DataShiftControllerUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(baseChart != null) {
-					double shiftY = getShiftValuePrimary(IExtendedChart.Y_AXIS) * -1.0d;
-					String selectedSeriesId = getSelectedSeriesId();
-					baseChart.shiftSeries(selectedSeriesId, 0.0d, shiftY);
-					baseChart.redraw();
-					persistOverlayShiftY();
+					String seriesId = getSelectedSeriesId();
+					double deltaX = 0.0d;
+					double deltaY = getShiftValuePrimary(IExtendedChart.Y_AXIS) * -1.0d;
+					shiftSeries(seriesId, deltaX, deltaY);
 				}
 			}
 		});
@@ -774,20 +773,47 @@ public class DataShiftControllerUI extends Composite {
 		}
 	}
 
-	private void shiftSeries(double deltaX, double deltaY) {
+	private void shiftSeries(String seriesId, double deltaX, double deltaY) {
 
-		if(baseChart != null) {
+		if(scrollableChart != null) {
+			/*
+			 * Shift the series.
+			 */
 			baseChart.suspendUpdate(true);
 			double shiftX = 0.0d;
 			double shiftY = 0.0d;
 			for(ISeries<?> series : baseChart.getSeriesSet().getSeries()) {
-				shiftX += deltaX;
-				shiftY += deltaY;
-				String seriesId = series.getId();
-				baseChart.shiftSeries(seriesId, shiftX, shiftY);
+				/*
+				 * Do a shift on the series
+				 */
+				boolean shift = false;
+				if(seriesId.equals(SERIES_ALL)) {
+					shift = true;
+				} else if(seriesId.equals(series.getId())) {
+					shift = true;
+				}
+				//
+				if(shift) {
+					shiftX += deltaX;
+					shiftY += deltaY;
+					baseChart.shiftSeries(series.getId(), shiftX, shiftY);
+				}
 			}
+			/*
+			 * Adjust the displayed range.
+			 */
+			IChartSettings chartSettings = scrollableChart.getChartSettings();
+			RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
+			rangeRestriction.setExtendTypeX(ExtendType.ABSOLUTE);
+			rangeRestriction.setExtendMaxX(rangeRestriction.getExtendMaxX() + shiftX);
+			rangeRestriction.setExtendTypeY(ExtendType.ABSOLUTE);
+			rangeRestriction.setExtendMaxY(rangeRestriction.getExtendMaxY() + shiftY);
+			scrollableChart.applySettings(chartSettings);
 			baseChart.suspendUpdate(false);
-			baseChart.redraw();
+			/*
+			 * Update
+			 */
+			scrollableChart.redraw();
 			persistOverlayShiftX();
 			persistOverlayShiftY();
 		}

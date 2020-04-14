@@ -46,7 +46,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.Derivative;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.DisplayModus;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.AxisConfig.ChartAxis;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTrace;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTraces;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTracesUI;
@@ -85,6 +84,8 @@ import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.IExtendedChart;
 import org.eclipse.swtchart.extensions.core.ISeriesModificationListener;
+import org.eclipse.swtchart.extensions.core.RangeRestriction;
+import org.eclipse.swtchart.extensions.core.RangeRestriction.ExtendType;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 
 public class ExtendedChromatogramOverlayUI implements ConfigurableUI<ChromatogramOverlayUIConfig> {
@@ -502,6 +503,17 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 	private void refreshUpdateOverlayChart() {
 
 		if(chromatogramSelections.size() > 0) {
+			/*
+			 * Reset the range restriction
+			 */
+			IChartSettings chartSettings = chromatogramChart.getChartSettings();
+			RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
+			rangeRestriction.setExtendTypeX(ExtendType.ABSOLUTE);
+			rangeRestriction.setExtendMaxX(0.0d);
+			rangeRestriction.setExtendTypeY(ExtendType.ABSOLUTE);
+			rangeRestriction.setExtendMaxY(0.0d);
+			chromatogramChart.applySettings(chartSettings);
+			//
 			IAxisSet axisSet = chromatogramChart.getBaseChart().getAxisSet();
 			Range xrange = axisSet.getXAxis(BaseChart.ID_PRIMARY_X_AXIS).getRange();
 			Range yrange = axisSet.getYAxis(BaseChart.ID_PRIMARY_Y_AXIS).getRange();
