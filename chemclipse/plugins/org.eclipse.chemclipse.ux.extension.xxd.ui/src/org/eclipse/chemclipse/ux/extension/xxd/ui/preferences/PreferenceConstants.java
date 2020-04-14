@@ -140,6 +140,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_COLOR_SCHEME_DISPLAY_OVERLAY = Colors.COLOR_SCHEME_PRINT;
 	public static final String P_LINE_STYLE_DISPLAY_OVERLAY = "lineStyleDisplayOverlay";
 	public static final String DEF_LINE_STYLE_DISPLAY_OVERLAY = LineStyle.SOLID.toString();
+	public static final String P_OVERLAY_BUFFERED_SELECTION = "overlayBufferedSelection";
+	public static final boolean DEF_OVERLAY_BUFFERED_SELECTION = false;
 	/*
 	 * Peak Traces
 	 */

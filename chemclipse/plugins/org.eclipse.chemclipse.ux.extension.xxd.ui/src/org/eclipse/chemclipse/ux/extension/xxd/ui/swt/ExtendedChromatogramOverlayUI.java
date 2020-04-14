@@ -46,6 +46,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.Derivative;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.DisplayModus;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.AxisConfig.ChartAxis;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTrace;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTraces;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTracesUI;
@@ -484,6 +485,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 		chartSettings.setShowRangeSelectorInitially(false);
 		chartSettings.setSupportDataShift(true);
 		chartSettings.getRangeRestriction().setZeroY(false);
+		chartSettings.setBufferSelection(preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_BUFFERED_SELECTION));
 		chromatogramChart.applySettings(chartSettings);
 		//
 		BaseChart baseChart = chromatogramChart.getBaseChart();
@@ -512,6 +514,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 			rangeRestriction.setExtendMaxX(0.0d);
 			rangeRestriction.setExtendTypeY(ExtendType.ABSOLUTE);
 			rangeRestriction.setExtendMaxY(0.0d);
+			chartSettings.setBufferSelection(preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_BUFFERED_SELECTION));
 			chromatogramChart.applySettings(chartSettings);
 			//
 			IAxisSet axisSet = chromatogramChart.getBaseChart().getAxisSet();

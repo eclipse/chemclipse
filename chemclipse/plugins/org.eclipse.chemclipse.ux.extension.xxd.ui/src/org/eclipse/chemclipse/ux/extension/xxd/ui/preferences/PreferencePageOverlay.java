@@ -36,7 +36,8 @@ public class PreferencePageOverlay extends FieldEditorPreferencePage implements 
 	@Override
 	public void createFieldEditors() {
 
-		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_CHART_COMPRESSION_TYPE, "Compression Type:", PreferenceConstants.COMPRESSION_TYPES, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_OVERLAY_CHART_COMPRESSION_TYPE, "Compression Type:", PreferenceConstants.COMPRESSION_TYPES, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_OVERLAY_BUFFERED_SELECTION, "Buffered Selection", getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_OVERLAY, "Display Color Scheme", Colors.getAvailableColorSchemes(), getFieldEditorParent()));

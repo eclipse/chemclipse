@@ -370,6 +370,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS, PreferenceConstants.DEF_SHOW_REFERENCED_CHROMATOGRAMS);
 		store.setDefault(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_OVERLAY, PreferenceConstants.DEF_COLOR_SCHEME_DISPLAY_OVERLAY);
 		store.setDefault(PreferenceConstants.P_LINE_STYLE_DISPLAY_OVERLAY, PreferenceConstants.DEF_LINE_STYLE_DISPLAY_OVERLAY);
+		store.setDefault(PreferenceConstants.P_OVERLAY_BUFFERED_SELECTION, PreferenceConstants.DEF_OVERLAY_BUFFERED_SELECTION);
+		//
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_NAMED_TRACES, PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_NAMED_TRACES);
 		//
 		store.setDefault(PreferenceConstants.P_OVERLAY_SHIFT_X, PreferenceConstants.DEF_OVERLAY_SHIFT_X);
