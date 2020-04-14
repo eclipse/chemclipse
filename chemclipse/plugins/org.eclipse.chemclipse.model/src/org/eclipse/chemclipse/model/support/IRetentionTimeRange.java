@@ -43,8 +43,16 @@ public interface IRetentionTimeRange {
 		return getStartRetentionTime() == other.getStartRetentionTime() && getStopRetentionTime() == other.getStopRetentionTime();
 	}
 
-	default boolean containsRetentionTime(int rt) {
+	/**
+	 * Check if the given retention time is contained within this range
+	 * 
+	 * @param retentionTime
+	 *            the retention time (in milliseconds) to check
+	 * @return <code>true</code> if retention time is within bounds, <code>false</code> otherwise
+	 * 
+	 */
+	default boolean containsRetentionTime(int retentionTime) {
 
-		return rt >= getStartRetentionTime() && rt <= getStopRetentionTime();
+		return retentionTime >= getStartRetentionTime() && retentionTime <= getStopRetentionTime();
 	}
 }
