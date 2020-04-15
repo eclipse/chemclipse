@@ -47,6 +47,7 @@ public class TargetLabelEditAction extends Action {
 	private final List<Runnable> listeners = new CopyOnWriteArrayList<>();
 
 	public TargetLabelEditAction(LabelChart labelChart, IPreferenceStore preferenceStore) {
+
 		super("Labels", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_LABELS, IApplicationImage.SIZE_16x16));
 		this.labelChart = labelChart;
 		this.preferenceStore = preferenceStore;
@@ -94,7 +95,7 @@ public class TargetLabelEditAction extends Action {
 				throw new RuntimeException("can't get reference", e.getCause());
 			}
 			IScrollableChart chart = labelChart.getChart();
-			TargetReferenceLabelMarker previewMarker = new TargetReferenceLabelMarker(chart.getBaseChart(), true, PreferenceConstants.DEF_SYMBOL_SIZE * 2, preferenceStore);
+			TargetReferenceLabelMarker previewMarker = new TargetReferenceLabelMarker(true, PreferenceConstants.DEF_SYMBOL_SIZE * 2, preferenceStore);
 			chart.getBaseChart().getPlotArea().addCustomPaintListener(previewMarker);
 			TargetDisplaySettingsWizardListener listener = new TargetDisplaySettingsWizardListener() {
 

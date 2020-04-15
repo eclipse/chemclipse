@@ -66,11 +66,13 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public ChromatogramPeakChart() {
+
 		super();
 		init();
 	}
 
 	public ChromatogramPeakChart(Composite parent, int style) {
+
 		super(parent, style);
 		init();
 	}
@@ -181,7 +183,7 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 				if(settings.isShowPeakLabels()) {
 					BaseChart baseChart = getBaseChart();
 					IPlotArea plotArea = baseChart.getPlotArea();
-					TargetReferenceLabelMarker peakLabelMarker = new TargetReferenceLabelMarker(baseChart, SignalTargetReference.getPeakReferences(peaks), settings, symbolSize * 2, preferenceStore);
+					TargetReferenceLabelMarker peakLabelMarker = new TargetReferenceLabelMarker(SignalTargetReference.getPeakReferences(peaks), settings, symbolSize * 2, preferenceStore);
 					plotArea.addCustomPaintListener(peakLabelMarker);
 					peakLabelMarkerMap.put(seriesId, peakLabelMarker);
 				}

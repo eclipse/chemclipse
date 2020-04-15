@@ -227,19 +227,23 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 	@Deprecated
 	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker) {
+
 		this(parent, style, eventBroker, Activator.getDefault().getPreferenceStore());
 	}
 
 	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker, ProcessSupplierContext supplierContext) {
+
 		this(parent, style, eventBroker, supplierContext, Activator.getDefault().getPreferenceStore());
 	}
 
 	@Deprecated
 	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker, IPreferenceStore store) {
+
 		this(parent, style, eventBroker, new org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport(), store);
 	}
 
 	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker, ProcessSupplierContext supplierContext, IPreferenceStore store) {
+
 		this.eventBroker = eventBroker;
 		processTypeSupport = supplierContext;
 		preferenceStore = store;
@@ -835,7 +839,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 					peakReferences = SignalTargetReference.getPeakReferences(peaks);
 				}
 				//
-				TargetReferenceLabelMarker peakLabelMarker = new TargetReferenceLabelMarker(baseChart, peakReferences, displaySettings, symbolSize * 2, preferenceStore);
+				TargetReferenceLabelMarker peakLabelMarker = new TargetReferenceLabelMarker(peakReferences, displaySettings, symbolSize * 2, preferenceStore);
 				plotArea.addCustomPaintListener(peakLabelMarker);
 				peakLabelMarkerMap.put(seriesId, peakLabelMarker);
 			}
@@ -857,7 +861,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			if(displaySettings.isShowScanLables()) {
 				BaseChart baseChart = chromatogramChart.getBaseChart();
 				IPlotArea plotArea = baseChart.getPlotArea();
-				TargetReferenceLabelMarker scanLabelMarker = new TargetReferenceLabelMarker(baseChart, SignalTargetReference.getScanReferences(scans), displaySettings, symbolSize * 2, preferenceStore);
+				TargetReferenceLabelMarker scanLabelMarker = new TargetReferenceLabelMarker(SignalTargetReference.getScanReferences(scans), displaySettings, symbolSize * 2, preferenceStore);
 				plotArea.addCustomPaintListener(scanLabelMarker);
 				scanLabelMarkerMap.put(seriesId, scanLabelMarker);
 			}
