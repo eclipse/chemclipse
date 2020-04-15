@@ -12,22 +12,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.noise;
 
-import java.util.Map;
-
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.support.IAnalysisSegment;
 import org.eclipse.chemclipse.model.support.IScanRange;
 import org.eclipse.chemclipse.model.support.ScanRange;
 import org.eclipse.chemclipse.model.support.SegmentValidator;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
-import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.exceptions.FilterException;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.exceptions.NoExtractedIonSignalStoredException;
-import org.eclipse.chemclipse.msd.model.implementation.CombinedMassSpectrum;
-import org.eclipse.chemclipse.msd.model.implementation.Ion;
+import org.eclipse.chemclipse.msd.model.support.CalculationType;
 import org.eclipse.chemclipse.msd.model.support.CombinedMassSpectrumCalculator;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
@@ -95,25 +89,10 @@ public class CalculatorSupport {
 			} catch(NoExtractedIonSignalStoredException e) {
 			}
 		}
-		combinedMassSpectrumCalculator.normalize(NORMALIZATION_FACTOR);
-		float abundance;
-		ICombinedMassSpectrum noiseMassSpectrum = new CombinedMassSpectrum();
-		IIon noiseIon;
-		Map<Integer, Double> ions = combinedMassSpectrumCalculator.getValuesIntensities();
-		for(Integer ion : ions.keySet()) {
-			/*
-			 * Check the abundance.
-			 */
-			abundance = ions.get(ion).floatValue();
-			if(abundance > IIon.ZERO_INTENSITY) {
-				try {
-					noiseIon = new Ion(ion, abundance);
-					noiseMassSpectrum.addIon(noiseIon);
-				} catch(AbundanceLimitExceededException e) {
-				} catch(IonLimitExceededException e) {
-				}
-			}
-		}
+		//
+		ICombinedMassSpectrum noiseMassSpectrum = combinedMassSpectrumCalculator.createMassSpectrum(CalculationType.SUM);
+		noiseMassSpectrum.normalize(NORMALIZATION_FACTOR);
+		//
 		return noiseMassSpectrum;
 	}
 
@@ -122,38 +101,9 @@ public class CalculatorSupport {
 	 */
 	public ICombinedMassSpectrum getNoiseMassSpectrum(CombinedMassSpectrumCalculator combinedMassSpectrumCalculator, IMarkedIons ionsToPreserve, IProgressMonitor monitor) {
 
-		/*
-		 * Remove the ions to preserve.
-		 */
 		combinedMassSpectrumCalculator.removeIons(ionsToPreserve);
-		/*
-		 * Normalize the mass spectrum.
-		 */
-		combinedMassSpectrumCalculator.normalize(NORMALIZATION_FACTOR);
-		/*
-		 * Add all calculated combined ion values to the combined mass
-		 * spectrum.
-		 */
-		float abundance;
-		ICombinedMassSpectrum noiseMassSpectrum = new CombinedMassSpectrum();
-		IIon noiseIon;
-		Map<Integer, Double> ions = combinedMassSpectrumCalculator.getValuesIntensities();
-		for(Integer ion : ions.keySet()) {
-			/*
-			 * Check the abundance.
-			 */
-			abundance = ions.get(ion).floatValue();
-			if(abundance > IIon.ZERO_INTENSITY) {
-				try {
-					noiseIon = new Ion(ion, abundance);
-					noiseMassSpectrum.addIon(noiseIon);
-				} catch(AbundanceLimitExceededException e) {
-					logger.warn(e);
-				} catch(IonLimitExceededException e) {
-					logger.warn(e);
-				}
-			}
-		}
+		ICombinedMassSpectrum noiseMassSpectrum = combinedMassSpectrumCalculator.createMassSpectrum(CalculationType.SUM);
+		noiseMassSpectrum.normalize(NORMALIZATION_FACTOR);
 		return noiseMassSpectrum;
 	}
 

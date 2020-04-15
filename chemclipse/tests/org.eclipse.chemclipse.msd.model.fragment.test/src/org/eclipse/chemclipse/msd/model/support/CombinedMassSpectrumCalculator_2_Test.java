@@ -47,7 +47,7 @@ public class CombinedMassSpectrumCalculator_2_Test extends TestCase {
 	public void testSize_1() {
 
 		combinedMassSpectrumCalculator.addIons(null, null);
-		assertEquals("Size", 0, combinedMassSpectrumCalculator.getValues().size());
+		assertEquals("Size", 0, combinedMassSpectrumCalculator.size());
 	}
 
 	public void testSize_2() {
@@ -55,7 +55,7 @@ public class CombinedMassSpectrumCalculator_2_Test extends TestCase {
 		try {
 			ions.add(new Ion(56.5f, 500.0f));
 			combinedMassSpectrumCalculator.addIons(ions, excludedIons);
-			assertEquals("Size", 1, combinedMassSpectrumCalculator.getValues().size());
+			assertEquals("Size", 1, combinedMassSpectrumCalculator.size());
 		} catch(AbundanceLimitExceededException e) {
 			assertFalse("An AbundanceLimitExceededException should not be thrown here.", false);
 		} catch(IonLimitExceededException e) {
@@ -69,7 +69,7 @@ public class CombinedMassSpectrumCalculator_2_Test extends TestCase {
 			ions.add(new Ion(56.5f, 500.0f));
 			ions.add(new Ion(80.2f, 700.0f));
 			combinedMassSpectrumCalculator.addIons(ions, excludedIons);
-			assertEquals("Size", 2, combinedMassSpectrumCalculator.getValues().size());
+			assertEquals("Size", 2, combinedMassSpectrumCalculator.size());
 		} catch(AbundanceLimitExceededException e) {
 			assertFalse("An AbundanceLimitExceededException should not be thrown here.", false);
 		} catch(IonLimitExceededException e) {
@@ -84,7 +84,7 @@ public class CombinedMassSpectrumCalculator_2_Test extends TestCase {
 			ions.add(new Ion(80.2f, 700.0f));
 			ions.add(new Ion(90.3f, 800.0f));
 			combinedMassSpectrumCalculator.addIons(ions, excludedIons);
-			assertEquals("Size", 3, combinedMassSpectrumCalculator.getValues().size());
+			assertEquals("Size", 3, combinedMassSpectrumCalculator.size());
 		} catch(AbundanceLimitExceededException e) {
 			assertFalse("An AbundanceLimitExceededException should not be thrown here.", false);
 		} catch(IonLimitExceededException e) {
@@ -103,7 +103,7 @@ public class CombinedMassSpectrumCalculator_2_Test extends TestCase {
 			ions.add(new Ion(56.2f, 700.0f));
 			ions.add(new Ion(55.9f, 800.0f));
 			combinedMassSpectrumCalculator.addIons(ions, excludedIons);
-			assertEquals("Size", 1, combinedMassSpectrumCalculator.getValues().size());
+			assertEquals("Size", 1, combinedMassSpectrumCalculator.size());
 		} catch(AbundanceLimitExceededException e) {
 			assertFalse("An AbundanceLimitExceededException should not be thrown here.", false);
 		} catch(IonLimitExceededException e) {

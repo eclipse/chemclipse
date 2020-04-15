@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.msd.model.support.CalculationType;
 import org.eclipse.chemclipse.msd.model.support.FilterSupport;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -182,9 +183,10 @@ public class ExtendedSubtractScanUI {
 					 * Add the selected scan to the session MS.
 					 */
 					IScanMSD massSpectrum1 = PreferenceSupplier.getSessionSubtractMassSpectrum();
+					CalculationType calculationType = PreferenceSupplier.getCalculationType();
 					IVendorMassSpectrum massSpectrum2 = chromatogramSelectionMSD.getSelectedScan();
 					boolean useNormalize = org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNormalizedScan();
-					IScanMSD subtractMassSpectrum = FilterSupport.getCombinedMassSpectrum(massSpectrum1, massSpectrum2, null, useNormalize);
+					IScanMSD subtractMassSpectrum = FilterSupport.getCombinedMassSpectrum(massSpectrum1, massSpectrum2, null, useNormalize, calculationType);
 					saveSessionMassSpectrum(e.display, subtractMassSpectrum);
 				}
 			}
@@ -202,10 +204,11 @@ public class ExtendedSubtractScanUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(chromatogramSelectionMSD != null) {
-					boolean useNormalize = org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier.isUseNormalizedScan();
+					boolean useNormalize = PreferenceSupplier.isUseNormalizedScan();
+					CalculationType calculationType = PreferenceSupplier.getCalculationType();
 					IScanMSD massSpectrum1 = PreferenceSupplier.getSessionSubtractMassSpectrum();
-					IScanMSD massSpectrum2 = FilterSupport.getCombinedMassSpectrum(chromatogramSelectionMSD, null, useNormalize);
-					IScanMSD subtractMassSpectrum = FilterSupport.getCombinedMassSpectrum(massSpectrum1, massSpectrum2, null, useNormalize);
+					IScanMSD massSpectrum2 = FilterSupport.getCombinedMassSpectrum(chromatogramSelectionMSD, null, useNormalize, calculationType);
+					IScanMSD subtractMassSpectrum = FilterSupport.getCombinedMassSpectrum(massSpectrum1, massSpectrum2, null, useNormalize, calculationType);
 					saveSessionMassSpectrum(e.display, subtractMassSpectrum);
 				}
 			}

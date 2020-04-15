@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,12 +13,9 @@ package org.eclipse.chemclipse.msd.model.core;
 
 /**
  * More informations about the class structure of mass spectra are stored in {@link IScanMSD}.
- * 
- * @author eselmeister
  */
 public interface ICombinedMassSpectrum extends IScanMSD {
 
-	// ---------------Retention Time
 	/**
 	 * Returns the start retention time in milliseconds.
 	 * 
@@ -49,7 +46,6 @@ public interface ICombinedMassSpectrum extends IScanMSD {
 	 */
 	void setStopRetentionTime(int stopRetentionTime);
 
-	// ---------------Retention Index
 	/**
 	 * Returns the start retention index.
 	 * 
@@ -80,7 +76,6 @@ public interface ICombinedMassSpectrum extends IScanMSD {
 	 */
 	void setStopRetentionIndex(float stopRetentionIndex);
 
-	// ---------------Scans
 	/**
 	 * Returns the start scan.
 	 * 

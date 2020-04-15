@@ -20,6 +20,8 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.msd.model.support.CalculationType;
 import org.eclipse.chemclipse.msd.model.support.FilterSupport;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -29,6 +31,7 @@ import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -60,7 +63,8 @@ public class ExtendedCombinedScanUI {
 	private ScanChartUI scanChartUI;
 	private ScanTableUI scanTableUI;
 	//
-	private IScanMSD scanMSD;
+	private IChromatogramSelectionMSD chromatogramSelection = null;
+	private IScanMSD scanMSD = null;
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
 
@@ -77,15 +81,18 @@ public class ExtendedCombinedScanUI {
 
 	public void update(Object object) {
 
-		IScanMSD scanMSD = null;
+		chromatogramSelection = null;
+		scanMSD = null;
+		//
 		if(object instanceof IChromatogramSelectionMSD) {
 			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)object;
-			boolean useNormalize = true;
-			scanMSD = FilterSupport.getCombinedMassSpectrum(chromatogramSelectionMSD, null, useNormalize);
+			this.chromatogramSelection = chromatogramSelectionMSD;
+			boolean useNormalize = PreferenceSupplier.isUseNormalizedScan();
+			CalculationType calculationType = PreferenceSupplier.getCalculationType();
+			scanMSD = FilterSupport.getCombinedMassSpectrum(chromatogramSelectionMSD, null, useNormalize, calculationType);
 		}
 		//
 		labelInfo.setText(getCombinedRangeInfo(object));
-		this.scanMSD = scanMSD;
 		updateScan();
 	}
 
@@ -237,6 +244,7 @@ public class ExtendedCombinedScanUI {
 
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePageScans()));
+				preferenceManager.addToRoot(new PreferenceNode("2", new PreferencePageSubtract()));
 				//
 				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
 				preferenceDialog.create();
@@ -254,7 +262,7 @@ public class ExtendedCombinedScanUI {
 
 	private void applySettings() {
 
-		updateScan();
+		update(chromatogramSelection);
 	}
 
 	private void updateScanData() {
@@ -289,6 +297,8 @@ public class ExtendedCombinedScanUI {
 			builder.append(decimalFormat.format((double)startRetentionTime / IChromatogram.MINUTE_CORRELATION_FACTOR));
 			builder.append("–");
 			builder.append(decimalFormat.format((double)stopRetentionTime / IChromatogram.MINUTE_CORRELATION_FACTOR));
+			builder.append(" | Calculation Type: ");
+			builder.append(PreferenceSupplier.getCalculationType().toString());
 		} else {
 			builder.append("No chromatogram selected.");
 		}

@@ -18,14 +18,26 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
+import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
+import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
+import org.eclipse.chemclipse.msd.model.implementation.CombinedMassSpectrum;
+import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.numeric.statistics.Calculations;
 
 public class CombinedMassSpectrumCalculator {
 
+	private static final Logger logger = Logger.getLogger(CombinedMassSpectrumCalculator.class);
 	private Map<Integer, List<Double>> combinedMassSpectrum = new HashMap<Integer, List<Double>>();
+
+	public int size() {
+
+		return combinedMassSpectrum.size();
+	}
 
 	public void addIon(double ion, double abundance) {
 
@@ -74,53 +86,36 @@ public class CombinedMassSpectrumCalculator {
 		}
 	}
 
-	public double getAbundance(double ion) {
+	public ICombinedMassSpectrum createMassSpectrum(CalculationType calculationType) {
 
-		int key = AbstractIon.getIon(ion);
-		return calculateSumIntensity(combinedMassSpectrum.get(key));
+		ICombinedMassSpectrum massSpectrum = new CombinedMassSpectrum();
+		for(Integer ion : combinedMassSpectrum.keySet()) {
+			float intensity = (float)getAbundance(ion, calculationType);
+			if(intensity > IIon.ZERO_INTENSITY) {
+				try {
+					massSpectrum.addIon(new Ion(ion, intensity));
+				} catch(AbundanceLimitExceededException e) {
+					logger.warn(e);
+				} catch(IonLimitExceededException e) {
+					logger.warn(e);
+				}
+			}
+		}
+		return massSpectrum;
 	}
 
 	public Map<Integer, List<Double>> getValues() {
 
-		return combinedMassSpectrum;
+		return Collections.unmodifiableMap(combinedMassSpectrum);
 	}
 
-	public Map<Integer, Double> getValuesIntensities() {
+	private double getAbundance(double ion, CalculationType calculationType) {
 
-		Map<Integer, Double> map = new HashMap<>();
-		for(Integer key : combinedMassSpectrum.keySet()) {
-			map.put(key, calculateSumIntensity(combinedMassSpectrum.get(key)));
-		}
-		return map;
+		int key = AbstractIon.getIon(ion);
+		return calculateSumIntensity(combinedMassSpectrum.get(key), calculationType);
 	}
 
-	public void normalize(float normalizationFactor) {
-
-		/*
-		 * Return if the normalization factor is smaller or equal zero.
-		 */
-		if(normalizationFactor <= 0) {
-			return;
-		}
-		/*
-		 * If max is zero it doesn't even make sense to go further on.
-		 */
-		double max = Collections.max(getValuesIntensities().values());
-		if(max == 0.0d) {
-			return;
-		}
-		//
-		double correlationFactor = normalizationFactor / max;
-		for(Integer key : combinedMassSpectrum.keySet()) {
-			List<Double> adjustedIntensities = new ArrayList<>();
-			for(double intensity : combinedMassSpectrum.get(key)) {
-				adjustedIntensities.add(correlationFactor * intensity);
-			}
-			combinedMassSpectrum.put(key, adjustedIntensities);
-		}
-	}
-
-	public double calculateSumIntensity(List<Double> intensities) {
+	private double calculateSumIntensity(List<Double> intensities, CalculationType calculationType) {
 
 		double sum = 0.0d;
 		if(intensities != null) {
@@ -133,9 +128,17 @@ public class CombinedMassSpectrumCalculator {
 			 * Add an option here to calculate the sum,
 			 * mean or median signal.
 			 */
-			sum = Calculations.getSum(values);
-			// sum = Calculations.getMean(values);
-			// sum = Calculations.getMedian(values);
+			switch(calculationType) {
+				case SUM:
+					sum = Calculations.getSum(values);
+					break;
+				case MEAN:
+					sum = Calculations.getMean(values);
+					break;
+				case MEDIAN:
+					sum = Calculations.getMedian(values);
+					break;
+			}
 		}
 		return sum;
 	}

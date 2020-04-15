@@ -11,23 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.support;
 
-import java.util.Map;
-
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.IIon;
+import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
-import org.eclipse.chemclipse.msd.model.implementation.CombinedMassSpectrum;
-import org.eclipse.chemclipse.msd.model.implementation.Ion;
 
 public class FilterSupport {
 
-	private static final Logger logger = Logger.getLogger(FilterSupport.class);
 	public static final float NORMALIZATION_FACTOR = 1000.0f;
 
 	/**
@@ -38,7 +30,7 @@ public class FilterSupport {
 	 * @param excludedIons
 	 * @return {@link IScanMSD}
 	 */
-	public static IScanMSD getCombinedMassSpectrum(IChromatogramSelectionMSD chromatogramSelection, IMarkedIons excludedIons, boolean useNormalize) {
+	public static IScanMSD getCombinedMassSpectrum(IChromatogramSelectionMSD chromatogramSelection, IMarkedIons excludedIons, boolean useNormalize, CalculationType calculationType) {
 
 		if(chromatogramSelection == null || chromatogramSelection.getChromatogram() == null) {
 			return null;
@@ -64,7 +56,7 @@ public class FilterSupport {
 		/*
 		 * Normalized or normal summed values.
 		 */
-		return getMassSpectrum(massSpectrumCalculator, useNormalize);
+		return getMassSpectrum(massSpectrumCalculator, useNormalize, calculationType);
 	}
 
 	/**
@@ -76,7 +68,7 @@ public class FilterSupport {
 	 * @param excludedIons
 	 * @return
 	 */
-	public static IScanMSD getCombinedMassSpectrum(IScanMSD massSpectrum1, IScanMSD massSpectrum2, IMarkedIons excludedIons, boolean useNormalize) {
+	public static IScanMSD getCombinedMassSpectrum(IScanMSD massSpectrum1, IScanMSD massSpectrum2, IMarkedIons excludedIons, boolean useNormalize, CalculationType calculationType) {
 
 		/*
 		 * Both mass spectrum 1 and 2 shall be not null.
@@ -91,22 +83,22 @@ public class FilterSupport {
 		CombinedMassSpectrumCalculator massSpectrumCalculator = new CombinedMassSpectrumCalculator();
 		//
 		if(massSpectrum1 == null) {
-			addIonsToCalculator(massSpectrum2, excludedIons, massSpectrumCalculator, useNormalize);
+			addIonsToCalculator(massSpectrum2, excludedIons, massSpectrumCalculator, useNormalize, calculationType);
 		} else if(massSpectrum2 == null) {
-			addIonsToCalculator(massSpectrum1, excludedIons, massSpectrumCalculator, useNormalize);
+			addIonsToCalculator(massSpectrum1, excludedIons, massSpectrumCalculator, useNormalize, calculationType);
 		} else {
-			addIonsToCalculator(massSpectrum1, excludedIons, massSpectrumCalculator, useNormalize);
-			addIonsToCalculator(massSpectrum2, excludedIons, massSpectrumCalculator, useNormalize);
+			addIonsToCalculator(massSpectrum1, excludedIons, massSpectrumCalculator, useNormalize, calculationType);
+			addIonsToCalculator(massSpectrum2, excludedIons, massSpectrumCalculator, useNormalize, calculationType);
 		}
 		/*
 		 * Normalized or normal summed values.
 		 */
-		return getMassSpectrum(massSpectrumCalculator, useNormalize);
+		return getMassSpectrum(massSpectrumCalculator, useNormalize, calculationType);
 	}
 
-	private static void addIonsToCalculator(IScanMSD massSpectrum, IMarkedIons excludedIons, CombinedMassSpectrumCalculator massSpectrumCalculator, boolean useNormalize) {
+	private static void addIonsToCalculator(IScanMSD massSpectrum, IMarkedIons excludedIons, CombinedMassSpectrumCalculator massSpectrumCalculator, boolean useNormalize, CalculationType calculationType) {
 
-		IScanMSD massSpectrumCalculated = getCalculatedMassSpectrum(massSpectrum, excludedIons, useNormalize);
+		IScanMSD massSpectrumCalculated = getCalculatedMassSpectrum(massSpectrum, excludedIons, useNormalize, calculationType);
 		massSpectrumCalculator.addIons(massSpectrumCalculated.getIons(), excludedIons);
 	}
 
@@ -118,7 +110,7 @@ public class FilterSupport {
 	 * @param excludedIons
 	 * @return {@link IScanMSD}
 	 */
-	public static IScanMSD getCalculatedMassSpectrum(IScanMSD massSpectrum, IMarkedIons excludedIons, boolean useNormalize) {
+	public static IScanMSD getCalculatedMassSpectrum(IScanMSD massSpectrum, IMarkedIons excludedIons, boolean useNormalize, CalculationType calculationType) {
 
 		if(massSpectrum == null) {
 			return null;
@@ -127,7 +119,7 @@ public class FilterSupport {
 		//
 		CombinedMassSpectrumCalculator massSpectrumCalculator = new CombinedMassSpectrumCalculator();
 		massSpectrumCalculator.addIons(massSpectrum.getIons(), excludedIons);
-		return getMassSpectrum(massSpectrumCalculator, useNormalize);
+		return getMassSpectrum(massSpectrumCalculator, useNormalize, calculationType);
 	}
 
 	/**
@@ -153,48 +145,12 @@ public class FilterSupport {
 	 * @param massSpectrumCalculator
 	 * @return IMassSpectrum
 	 */
-	private static IScanMSD getMassSpectrum(CombinedMassSpectrumCalculator massSpectrumCalculator, boolean useNormalize) {
+	private static IScanMSD getMassSpectrum(CombinedMassSpectrumCalculator combinedMassSpectrumCalculator, boolean useNormalize, CalculationType calculationType) {
 
+		ICombinedMassSpectrum noiseMassSpectrum = combinedMassSpectrumCalculator.createMassSpectrum(calculationType);
 		if(useNormalize) {
-			massSpectrumCalculator.normalize(NORMALIZATION_FACTOR);
+			noiseMassSpectrum.normalize(NORMALIZATION_FACTOR);
 		}
-		Map<Integer, Double> ions = massSpectrumCalculator.getValuesIntensities();
-		return getMassSpectrum(ions);
-	}
-
-	/**
-	 * Returns a mass spectrum using the ion/abundance list.
-	 * 
-	 * @param ions
-	 * @return {@link IScanMSD}
-	 */
-	private static IScanMSD getMassSpectrum(Map<Integer, Double> ions) {
-
-		/*
-		 * Set start and stop retention time, retention index.
-		 */
-		IScanMSD combinedMassSpectrum = new CombinedMassSpectrum();
-		/*
-		 * Add all calculated combined ion values to the combined mass
-		 * spectrum.
-		 */
-		float abundance;
-		for(Integer ion : ions.keySet()) {
-			/*
-			 * Check the abundance.
-			 */
-			abundance = ions.get(ion).floatValue();
-			if(abundance > IIon.ZERO_INTENSITY) {
-				try {
-					IIon combinedIon = new Ion(ion, abundance);
-					combinedMassSpectrum.addIon(combinedIon);
-				} catch(AbundanceLimitExceededException e) {
-					logger.warn(e);
-				} catch(IonLimitExceededException e) {
-					logger.warn(e);
-				}
-			}
-		}
-		return combinedMassSpectrum;
+		return noiseMassSpectrum;
 	}
 }

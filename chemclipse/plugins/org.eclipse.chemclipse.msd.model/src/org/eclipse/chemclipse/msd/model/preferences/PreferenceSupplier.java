@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
+import org.eclipse.chemclipse.msd.model.support.CalculationType;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -41,6 +42,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final boolean DEF_USE_NOMINAL_MZ = true;
 	public static final String P_USE_NORMALIZED_SCAN = "useNormalizedScan";
 	public static final boolean DEF_USE_NORMALIZED_SCAN = true;
+	public static final String P_CALCULATION_TYPE = "calculationType";
+	public static final String DEF_CALCULATION_TYPE = CalculationType.SUM.toString();
 	public static final String P_COPY_TRACES_CLIPBOARD = "copyTracesClipboard";
 	public static final int DEF_COPY_TRACES_CLIPBOARD = 5;
 	//
@@ -52,6 +55,23 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	private static IScanMSD sessionSubtractMassSpectrum;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
+
+	public static String[][] getCalculationTypes() {
+
+		int types = 3;
+		String[][] elements = new String[types][2];
+		//
+		elements[0][0] = "Sum";
+		elements[0][1] = CalculationType.SUM.toString();
+		//
+		elements[1][0] = "Mean";
+		elements[1][1] = CalculationType.MEAN.toString();
+		//
+		elements[2][0] = "Median";
+		elements[2][1] = CalculationType.MEDIAN.toString();
+		//
+		return elements;
+	}
 
 	public static IPreferenceSupplier INSTANCE() {
 
@@ -80,6 +100,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_SUBTRACT_MASS_SPECTRUM, DEF_SUBTRACT_MASS_SPECTRUM);
 		defaultValues.put(P_USE_NOMINAL_MZ, Boolean.toString(DEF_USE_NOMINAL_MZ));
 		defaultValues.put(P_USE_NORMALIZED_SCAN, Boolean.toString(DEF_USE_NORMALIZED_SCAN));
+		defaultValues.put(P_CALCULATION_TYPE, DEF_CALCULATION_TYPE);
 		defaultValues.put(P_COPY_TRACES_CLIPBOARD, Integer.toString(DEF_COPY_TRACES_CLIPBOARD));
 		return defaultValues;
 	}
@@ -145,6 +166,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.get(P_SUBTRACT_MASS_SPECTRUM, DEF_SUBTRACT_MASS_SPECTRUM);
+	}
+
+	public static CalculationType getCalculationType() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return CalculationType.valueOf(preferences.get(P_CALCULATION_TYPE, DEF_CALCULATION_TYPE));
 	}
 
 	public static String getMassSpectrum(IScanMSD massSpectrum) {

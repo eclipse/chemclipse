@@ -32,20 +32,20 @@ public class CombinedMassSpectrumCalculator_1_Test extends TestCase {
 
 	public void testSize_1() {
 
-		assertEquals("Size", 0, combinedMassSpectrumCalculator.getValues().size());
+		assertEquals("Size", 0, combinedMassSpectrumCalculator.size());
 	}
 
 	public void testSize_2() {
 
 		combinedMassSpectrumCalculator.addIon(56.5f, 500.0f);
-		assertEquals("Size", 1, combinedMassSpectrumCalculator.getValues().size());
+		assertEquals("Size", 1, combinedMassSpectrumCalculator.size());
 	}
 
 	public void testSize_3() {
 
 		combinedMassSpectrumCalculator.addIon(56.5f, 500.0f);
 		combinedMassSpectrumCalculator.addIon(80.2f, 700.0f);
-		assertEquals("Size", 2, combinedMassSpectrumCalculator.getValues().size());
+		assertEquals("Size", 2, combinedMassSpectrumCalculator.size());
 	}
 
 	public void testSize_4() {
@@ -53,7 +53,7 @@ public class CombinedMassSpectrumCalculator_1_Test extends TestCase {
 		combinedMassSpectrumCalculator.addIon(56.5f, 500.0f);
 		combinedMassSpectrumCalculator.addIon(80.2f, 700.0f);
 		combinedMassSpectrumCalculator.addIon(90.3f, 800.0f);
-		assertEquals("Size", 3, combinedMassSpectrumCalculator.getValues().size());
+		assertEquals("Size", 3, combinedMassSpectrumCalculator.size());
 	}
 
 	public void testSize_5() {
@@ -65,6 +65,6 @@ public class CombinedMassSpectrumCalculator_1_Test extends TestCase {
 		combinedMassSpectrumCalculator.addIon(56.4f, 500.0f);
 		combinedMassSpectrumCalculator.addIon(56.2f, 700.0f);
 		combinedMassSpectrumCalculator.addIon(55.9f, 800.0f);
-		assertEquals("Size", 1, combinedMassSpectrumCalculator.getValues().size());
+		assertEquals("Size", 1, combinedMassSpectrumCalculator.size());
 	}
 }
