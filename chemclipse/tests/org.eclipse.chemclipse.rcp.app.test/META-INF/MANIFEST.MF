@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Test
 Bundle-SymbolicName: org.eclipse.chemclipse.rcp.app.test
-Bundle-Version: 0.8.0.qualifier
+Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.rcp.app.test.Activator
 Require-Bundle: org.eclipse.core.runtime,
  org.junit;bundle-version="4.11.0"

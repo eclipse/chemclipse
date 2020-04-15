@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Icons
 Bundle-SymbolicName: org.eclipse.chemclipse.rcp.ui.icons
-Bundle-Version: 0.8.0.qualifier
+Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.rcp.ui.icons.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,

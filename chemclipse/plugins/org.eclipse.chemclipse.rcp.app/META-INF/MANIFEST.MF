@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ChemClipse App
 Bundle-SymbolicName: org.eclipse.chemclipse.rcp.app
-Bundle-Version: 0.8.0.qualifier
+Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.rcp.app.Activator
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.e4.core.contexts;bundle-version="1.3.1",

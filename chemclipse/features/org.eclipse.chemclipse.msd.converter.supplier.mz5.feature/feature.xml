@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.chemclipse.msd.converter.supplier.mz5.feature"
       label="MSD MZ5"
-      version="0.8.0.qualifier"
+      version="0.9.0.qualifier"
       provider-name="ChemClipse">
 
    <description url="http://www.chemclipse.net">

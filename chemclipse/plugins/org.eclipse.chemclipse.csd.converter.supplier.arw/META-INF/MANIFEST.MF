@@ -3,7 +3,7 @@ Eclipse-RegisterBuddy: 	org.eclipse.chemclipse.model, org.eclipse.chemclipse.csd
 Bundle-ManifestVersion: 2
 Bundle-Name: Arw
 Bundle-SymbolicName: org.eclipse.chemclipse.csd.converter.supplier.arw;singleton:=true
-Bundle-Version: 0.8.0.qualifier
+Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.csd.converter.supplier.arw.Activator
 Bundle-Vendor: OpenChrom
 Require-Bundle: org.eclipse.core.runtime,

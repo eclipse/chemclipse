@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.feature"
       label="BasePeak Classifier"
-      version="0.8.0.qualifier"
+      version="0.9.0.qualifier"
       provider-name="OpenChrom">
 
    <description url="https://www.openchrom.net">
@@ -22,7 +22,7 @@ http://www.eclipse.org/legal/epl-v10.html
    </license>
 
    <requires>
-      <import feature="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.feature" version="0.8.0.qualifier"/>
+      <import feature="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.feature" version="0.9.0.qualifier"/>
    </requires>
 
    <plugin

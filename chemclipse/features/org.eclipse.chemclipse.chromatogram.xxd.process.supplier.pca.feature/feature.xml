@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.feature"
       label="PCA Support"
-      version="0.8.0.qualifier"
+      version="0.9.0.qualifier"
       provider-name="ChemClipse">
 
    <description url="http://www.chemclipse.net">

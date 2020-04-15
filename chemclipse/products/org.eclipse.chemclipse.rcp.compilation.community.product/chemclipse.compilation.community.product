@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="ChemClipse" uid="org.eclipse.chemclipse.rcp.compilation.community.product.id" id="org.eclipse.chemclipse.rcp.compilation.community.ui.product" application="org.eclipse.chemclipse.rcp.app.ui.org.eclipse.chemclipse.rcp.application" version="0.8.0.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="ChemClipse" uid="org.eclipse.chemclipse.rcp.compilation.community.product.id" id="org.eclipse.chemclipse.rcp.compilation.community.ui.product" application="org.eclipse.chemclipse.rcp.app.ui.org.eclipse.chemclipse.rcp.application" version="0.9.0.qualifier" useFeatures="true" includeLaunchers="true">
 
    <aboutInfo>
       <image path="/org.eclipse.chemclipse.rcp.compilation.community.ui/icons/about_250x330.png"/>
@@ -86,9 +86,9 @@ Contributors:
       <plugin id="org.eclipse.equinox.p2.reconciler.dropins" autoStart="true" startLevel="4" />
       <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
       <plugin id="org.eclipse.update.configurator" autoStart="true" startLevel="4" />
+      <property name="sun.awt.xembedserver" value="true" />
       <property name="org.eclipse.update.reconcile" value="false" />
       <property name="osgi.requiredJavaVersion" value="1.8" />
-      <property name="sun.awt.xembedserver" value="true" />
    </configurations>
 
 </product>

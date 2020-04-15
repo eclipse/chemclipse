@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.chemclipse.msd.converter.supplier.csv.feature"
       label="CSV Converter"
-      version="0.8.0.qualifier"
+      version="0.9.0.qualifier"
       provider-name="http://www.openchrom.net">
 
    <description url="http://www.openchrom.net/plugins/converter/csv/">

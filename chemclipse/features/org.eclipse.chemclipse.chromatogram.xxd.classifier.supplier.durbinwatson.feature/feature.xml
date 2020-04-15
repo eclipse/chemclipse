@@ -2,7 +2,7 @@
 <feature
       id="org.eclipse.chemclipse.chromatogram.xxd.classifier.supplier.durbinwatson.feature"
       label="Durbin-Watson Classifier"
-      version="0.8.0.qualifier"
+      version="0.9.0.qualifier"
       provider-name="ChemClipse">
 
    <description url="http://www.chemclipse.net">
@@ -26,7 +26,7 @@ http://www.eclipse.org/legal/epl-v10.html
    </url>
 
    <requires>
-      <import feature="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.feature" version="0.8.0.qualifier"/>
+      <import feature="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.feature" version="0.9.0.qualifier"/>
    </requires>
 
    <plugin
