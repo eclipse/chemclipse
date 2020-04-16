@@ -30,7 +30,7 @@ public class ChromatogramFilterSettings extends AbstractChromatogramFilterSettin
 	@JsonProperty(value = "Width", defaultValue = "5")
 	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_WIDTH, maxValue = PreferenceSupplier.MAX_WIDTH)
 	private int width = 5;
-	@JsonProperty(value = "Filter individual ion channels", defaultValue = "true")
+	@JsonProperty(value = "Filter individual ion channels (only applicable to MSD data).", defaultValue = "true")
 	@JsonPropertyDescription(value = "Per Ion Filter Calculation.")
 	private boolean perIonCalculation = true;
 
