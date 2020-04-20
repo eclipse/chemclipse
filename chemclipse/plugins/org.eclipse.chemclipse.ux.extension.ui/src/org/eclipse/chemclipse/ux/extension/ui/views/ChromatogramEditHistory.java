@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2019 Lablicate GmbH.
+ * Copyright (c) 2015, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -58,7 +58,7 @@ public class ChromatogramEditHistory extends EditHistoryPart {
 
 				public void handleEvent(Event event) {
 
-					IChromatogramSelection chromatogramSelection = (IChromatogramSelection)event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
+					IChromatogramSelection<?, ?> chromatogramSelection = (IChromatogramSelection<?, ?>)event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
 					boolean forceReload = (Boolean)event.getProperty(IChemClipseEvents.PROPERTY_FORCE_RELOAD);
 					doUpdate(chromatogramSelection, forceReload);
 				}
@@ -76,7 +76,7 @@ public class ChromatogramEditHistory extends EditHistoryPart {
 		}
 	}
 
-	private void doUpdate(IChromatogramSelection chromatogramSelection, boolean forceReload) {
+	private void doUpdate(IChromatogramSelection<?, ?> chromatogramSelection, boolean forceReload) {
 
 		if(isPartVisible() && chromatogramSelection != null && chromatogramSelection.getChromatogram() != null) {
 			IEditHistory editHistory = chromatogramSelection.getChromatogram().getEditHistory();
