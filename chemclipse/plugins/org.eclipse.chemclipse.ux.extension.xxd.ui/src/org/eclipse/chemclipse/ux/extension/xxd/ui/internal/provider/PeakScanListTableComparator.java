@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -98,8 +98,8 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 			case 7:
 				sortOrder = Integer.compare(getStopRetentionTime(object2), getStopRetentionTime(object1));
 				break;
-			case 8: // OK
-				Integer.compare(getWidth(object2), getWidth(object1));
+			case 8:
+				sortOrder = Integer.compare(getWidth(object2), getWidth(object1));
 				break;
 			case 9:
 			case 10:
@@ -151,11 +151,11 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 				sortOrder = Integer.compare(getSuggestedNumberOfComponents(object2), getSuggestedNumberOfComponents(object1));
 				break;
 			case 15:
-				ILibraryInformation libraryInformation1 = getLibraryInformation(object1);
-				ILibraryInformation libraryInformation2 = getLibraryInformation(object2);
+				String name1 = getName(object1);
+				String name2 = getName(object2);
 				//
-				if(libraryInformation1 != null && libraryInformation2 != null) {
-					sortOrder = libraryInformation2.getName().compareTo(libraryInformation1.getName());
+				if(name1 != null && name2 != null) {
+					sortOrder = name2.compareTo(name1);
 				}
 				break;
 			case 16:
@@ -314,11 +314,34 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 		}
 	}
 
-	private ILibraryInformation getLibraryInformation(Object object) {
+	private String getName(Object object) {
 
-		if(object instanceof ITargetSupplier) {
-			return IIdentificationTarget.getBestLibraryInformation(((ITargetSupplier)object).getTargets(), comparator);
+		/*
+		 * Is a peak name set?
+		 */
+		String name = null;
+		if(object instanceof IPeak) {
+			IPeak peak = (IPeak)object;
+			name = peak.getName();
 		}
-		return null;
+		/*
+		 * No peak name set.
+		 * Then try to get the peak or scan best match.
+		 */
+		if(name == null) {
+			if(object instanceof ITargetSupplier) {
+				ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(((ITargetSupplier)object).getTargets(), comparator);
+				if(libraryInformation != null) {
+					name = libraryInformation.getName();
+				}
+			} else {
+				name = "";
+			}
+		}
+		/*
+		 * No hit at all?
+		 * Then return an empty String.
+		 */
+		return name != null ? name : "";
 	}
 }
