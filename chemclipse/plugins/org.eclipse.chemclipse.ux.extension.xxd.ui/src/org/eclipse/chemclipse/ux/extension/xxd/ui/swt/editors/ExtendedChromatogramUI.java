@@ -227,23 +227,19 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 	@Deprecated
 	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker) {
-
 		this(parent, style, eventBroker, Activator.getDefault().getPreferenceStore());
 	}
 
 	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker, ProcessSupplierContext supplierContext) {
-
 		this(parent, style, eventBroker, supplierContext, Activator.getDefault().getPreferenceStore());
 	}
 
 	@Deprecated
 	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker, IPreferenceStore store) {
-
 		this(parent, style, eventBroker, new org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport(), store);
 	}
 
 	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker, ProcessSupplierContext supplierContext, IPreferenceStore store) {
-
 		this.eventBroker = eventBroker;
 		processTypeSupport = supplierContext;
 		preferenceStore = store;
@@ -1023,18 +1019,14 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			@Override
 			public Collection<? extends IPreferencePage> get() {
 
-				IPreferencePage processorsPage = new PreferencePageProcessors(processTypeSupport);
-				IPreferencePage preferencePageChromatogram = new PreferencePageChromatogram(preferenceStore);
-				preferencePageChromatogram.setTitle("Chromatogram Settings");
-				IPreferencePage preferencePageChromatogramAxes = new PreferencePageChromatogramAxes(preferenceStore);
-				preferencePageChromatogramAxes.setTitle("Chromatogram Axes");
-				IPreferencePage preferencePageChromatogramPeaks = new PreferencePageChromatogramPeaks(preferenceStore);
-				preferencePageChromatogramPeaks.setTitle("Chromatogram Peaks");
-				IPreferencePage preferencePageChromatogramScans = new PreferencePageChromatogramScans(preferenceStore);
-				preferencePageChromatogramScans.setTitle("Chromatogram Scans");
-				IPreferencePage preferencePageSWT = new PreferencePageSWT();
-				preferencePageSWT.setTitle("Settings (SWT)");
-				return Arrays.asList(processorsPage, preferencePageChromatogram, preferencePageChromatogramAxes, preferencePageChromatogramPeaks, preferencePageChromatogramScans, preferencePageSWT);
+				List<IPreferencePage> preferencePages = new ArrayList<>();
+				preferencePages.add(new PreferencePageProcessors(processTypeSupport));
+				preferencePages.add(new PreferencePageChromatogram());
+				preferencePages.add(new PreferencePageChromatogramAxes());
+				preferencePages.add(new PreferencePageChromatogramPeaks());
+				preferencePages.add(new PreferencePageChromatogramScans());
+				preferencePages.add(new PreferencePageSWT());
+				return preferencePages;
 			}
 		}, this::applySettings);
 		return editorToolBar;

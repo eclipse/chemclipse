@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,7 +23,8 @@ public class PreferencePageSWT extends FieldEditorPreferencePage implements IWor
 	public PreferencePageSWT() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Settings (SWT)");
+		setTitle("Settings (SWT)");
+		setDescription("");
 	}
 
 	@Override

@@ -173,6 +173,7 @@ public class ExtendedSequenceListUI {
 		methodSupportUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		methodSupportUI.setMethodListener(new IMethodListener() {
 
+			@SuppressWarnings("deprecation")
 			@Override
 			public void execute(IProcessMethod processMethod, IProgressMonitor monitor) {
 
@@ -429,7 +430,7 @@ public class ExtendedSequenceListUI {
 
 				PreferenceManager preferenceManager = new PreferenceManager();
 				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePageSequences()));
-				preferenceManager.addToRoot(new PreferenceNode("2", new PreferencePageChromatogram(Activator.getDefault().getPreferenceStore())));
+				preferenceManager.addToRoot(new PreferenceNode("2", new PreferencePageChromatogram()));
 				//
 				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
 				preferenceDialog.create();

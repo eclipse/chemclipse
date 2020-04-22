@@ -12,19 +12,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
-import java.util.Arrays;
-import java.util.HashSet;
-
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpinnerFieldEditor;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedChromatogramUI;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
-import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swtchart.extensions.preferences.PreferenceSupport;
 import org.eclipse.ui.IWorkbench;
@@ -36,14 +32,12 @@ public class PreferencePageChromatogramPeaks extends FieldEditorPreferencePage i
 	private static final String FIELD_PEAKS = "Peaks";
 	private static final String FIELD_PEAK_LABELS = "Peak Labels";
 	private static final String FIELD_SELECTED_PEAK_SCAN_MARKER = "Selected Peak (Scan Marker)";
-	private HashSet<String> visibleFields;
 
-	public PreferencePageChromatogramPeaks(IPreferenceStore preferenceStore, String... fields) {
+	public PreferencePageChromatogramPeaks() {
 		super(GRID);
-		setPreferenceStore(preferenceStore);
+		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setTitle("Chromatogram Peaks");
 		setDescription("");
-		visibleFields = new HashSet<>(Arrays.asList(fields));
 	}
 
 	@Override
@@ -79,27 +73,5 @@ public class PreferencePageChromatogramPeaks extends FieldEditorPreferencePage i
 	@Override
 	public void init(IWorkbench workbench) {
 
-	}
-
-	@Override
-	protected void addField(FieldEditor editor) {
-
-		if(isVisible(editor)) {
-			super.addField(editor);
-		} else {
-			super.addField(editor);
-			// FIXME does not work ?? editor.dispose();
-		}
-	}
-
-	private boolean isVisible(FieldEditor editor) {
-
-		String key;
-		if(editor instanceof LabelFieldEditor) {
-			key = editor.getLabelText();
-		} else {
-			key = editor.getPreferenceName();
-		}
-		return visibleFields.isEmpty() || visibleFields.contains(key);
 	}
 }

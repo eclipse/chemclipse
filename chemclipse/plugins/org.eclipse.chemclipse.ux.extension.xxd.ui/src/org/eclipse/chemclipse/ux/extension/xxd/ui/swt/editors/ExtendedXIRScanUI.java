@@ -19,13 +19,11 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartXIR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.xir.model.core.IScanXIR;
 import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
@@ -52,7 +50,6 @@ public class ExtendedXIRScanUI {
 	//
 	private Label labelDataInfo;
 	private boolean showRawData = false;
-	//
 
 	public ExtendedXIRScanUI(Composite parent) {
 		initialize(parent);
@@ -279,14 +276,9 @@ public class ExtendedXIRScanUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IPreferencePage preferencePageChromatogram = new PreferencePageChromatogram(Activator.getDefault().getPreferenceStore());
-				preferencePageChromatogram.setTitle("Scan Settings ");
-				IPreferencePage preferencePageSWT = new PreferencePageSWT();
-				preferencePageSWT.setTitle("Settings (SWT)");
-				//
 				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageChromatogram));
-				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageSWT));
+				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePageChromatogram()));
+				preferenceManager.addToRoot(new PreferenceNode("2", new PreferencePageSWT()));
 				//
 				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
 				preferenceDialog.create();
