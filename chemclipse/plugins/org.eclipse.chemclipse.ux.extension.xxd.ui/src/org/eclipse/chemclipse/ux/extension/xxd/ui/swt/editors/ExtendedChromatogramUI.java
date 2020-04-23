@@ -159,6 +159,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 	public static final String PREFERENCE_SHOW_TOOLBAR_TEXT = "ChromatogramUI.showToolbarText";
 	public static final String PREFERENCE_SHOW_LABELS_AT_TIC = "ChromatogramUI.showLabelsAtTic";
+	//
 	private static final Logger logger = Logger.getLogger(ExtendedChromatogramUI.class);
 	//
 	protected static final String TYPE_GENERIC = "TYPE_GENERIC";
