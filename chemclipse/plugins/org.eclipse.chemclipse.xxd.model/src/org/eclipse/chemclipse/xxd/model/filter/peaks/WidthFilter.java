@@ -21,11 +21,12 @@ import org.eclipse.chemclipse.processing.Processor;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
+import org.eclipse.chemclipse.xxd.model.settings.peaks.WidthFilterSettings;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
-@Component(service = { IPeakFilter.class, Filter.class, Processor.class })
+@Component(service = {IPeakFilter.class, Filter.class, Processor.class})
 public class WidthFilter implements IPeakFilter<WidthFilterSettings> {
 
 	private static BiPredicate<Integer, Integer> WIDTH_SMALLER_THAN_LIMIT_COMPARATOR = (width, widthSetting) -> (width < widthSetting);
@@ -37,7 +38,6 @@ public class WidthFilter implements IPeakFilter<WidthFilterSettings> {
 		private final T widthSetting;
 
 		public WidthPredicate(BiPredicate<Integer, T> predicate, T widthSetting) {
-
 			super();
 			this.predicate = predicate;
 			this.widthSetting = widthSetting;
@@ -93,16 +93,16 @@ public class WidthFilter implements IPeakFilter<WidthFilterSettings> {
 			subMonitor.worked(1);
 		}
 	}
-	
+
 	private static WidthPredicate<?> getPredicate(WidthFilterSettings configuration) {
 
 		switch(configuration.getFilterSelectionCriterion()) {
-		case WIDTH_SMALLER_THAN_LIMIT:
-			return new WidthPredicate<>(WIDTH_SMALLER_THAN_LIMIT_COMPARATOR, (int) (configuration.getWidthValue() * 60000));
-		case WIDTH_GREATER_THAN_LIMIT:
-			return new WidthPredicate<>(WIDTH_GREATER_THAN_LIMIT_COMPARATOR, (int) (configuration.getWidthValue() * 60000));
-		default:
-			throw new IllegalArgumentException("Unsupported Peak Filter Selection Criterion!");
+			case WIDTH_SMALLER_THAN_LIMIT:
+				return new WidthPredicate<>(WIDTH_SMALLER_THAN_LIMIT_COMPARATOR, (int)(configuration.getWidthValue() * 60000));
+			case WIDTH_GREATER_THAN_LIMIT:
+				return new WidthPredicate<>(WIDTH_GREATER_THAN_LIMIT_COMPARATOR, (int)(configuration.getWidthValue() * 60000));
+			default:
+				throw new IllegalArgumentException("Unsupported Peak Filter Selection Criterion!");
 		}
 	}
 
@@ -110,28 +110,28 @@ public class WidthFilter implements IPeakFilter<WidthFilterSettings> {
 
 		int width = peak.getPeakModel().getWidthByInflectionPoints();
 		switch(configuration.getFilterTreatmentOption()) {
-		case ENABLE_PEAK:
-			if(predicate.test(width)) {
-				peak.setActiveForAnalysis(true);
-				listener.updated(peak);
-			}
-			break;
-		case DEACTIVATE_PEAK:
-			if(predicate.test(width)) {
-				peak.setActiveForAnalysis(false);
-				listener.updated(peak);
-			}
-			break;
-		case KEEP_PEAK:
-			if(predicate.negate().test(width))
-				listener.delete(peak);
-			break;
-		case DELETE_PEAK:
-			if(predicate.test(width))
-				listener.delete(peak);
-			break;
-		default:
-			throw new IllegalArgumentException("Unsupported Peak Filter Treatment Option!");
+			case ENABLE_PEAK:
+				if(predicate.test(width)) {
+					peak.setActiveForAnalysis(true);
+					listener.updated(peak);
+				}
+				break;
+			case DEACTIVATE_PEAK:
+				if(predicate.test(width)) {
+					peak.setActiveForAnalysis(false);
+					listener.updated(peak);
+				}
+				break;
+			case KEEP_PEAK:
+				if(predicate.negate().test(width))
+					listener.delete(peak);
+				break;
+			case DELETE_PEAK:
+				if(predicate.test(width))
+					listener.delete(peak);
+				break;
+			default:
+				throw new IllegalArgumentException("Unsupported Peak Filter Treatment Option!");
 		}
 	}
 }

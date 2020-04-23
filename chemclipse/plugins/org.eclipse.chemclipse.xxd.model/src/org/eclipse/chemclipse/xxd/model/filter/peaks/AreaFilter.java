@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.processing.Processor;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
+import org.eclipse.chemclipse.xxd.model.settings.peaks.AreaFilterSettings;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
@@ -40,7 +41,6 @@ public class AreaFilter implements IPeakFilter<AreaFilterSettings> {
 		private final T areaSetting;
 
 		public AreaPredicate(BiPredicate<Double, T> predicate, T areaSetting) {
-
 			super();
 			this.predicate = predicate;
 			this.areaSetting = areaSetting;
@@ -92,7 +92,7 @@ public class AreaFilter implements IPeakFilter<AreaFilterSettings> {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
 		AreaPredicate<?> predicate = getPredicate(configuration);
 		for(X peak : read) {
-			//processPeak(listener, configuration, peak, getPredicate(configuration));
+			// processPeak(listener, configuration, peak, getPredicate(configuration));
 			processPeak(listener, configuration, peak, predicate);
 			subMonitor.worked(1);
 		}

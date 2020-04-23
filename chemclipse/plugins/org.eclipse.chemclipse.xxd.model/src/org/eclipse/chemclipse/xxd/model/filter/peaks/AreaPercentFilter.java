@@ -21,13 +21,14 @@ import org.eclipse.chemclipse.processing.Processor;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
+import org.eclipse.chemclipse.xxd.model.settings.peaks.AreaPercentFilterSettings;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
 import com.google.common.collect.Range;
 
-@Component(service = { IPeakFilter.class, Filter.class, Processor.class })
+@Component(service = {IPeakFilter.class, Filter.class, Processor.class})
 public class AreaPercentFilter implements IPeakFilter<AreaPercentFilterSettings> {
 
 	private static BiPredicate<Double, Double> AREA_LESS_THAN_MINIMUM_COMPARATOR = (peakArea, areaSetting) -> (peakArea < areaSetting);
@@ -40,7 +41,6 @@ public class AreaPercentFilter implements IPeakFilter<AreaPercentFilterSettings>
 		private final T areaSetting;
 
 		public AreaPredicate(BiPredicate<Double, T> predicate, T areaSetting) {
-
 			super();
 			this.predicate = predicate;
 			this.areaSetting = areaSetting;
@@ -116,42 +116,42 @@ public class AreaPercentFilter implements IPeakFilter<AreaPercentFilterSettings>
 	private static AreaPredicate<?> getPredicate(AreaPercentFilterSettings configuration) {
 
 		switch(configuration.getFilterSelectionCriterion()) {
-		case AREA_LESS_THAN_MINIMUM:
-			return new AreaPredicate<>(AREA_LESS_THAN_MINIMUM_COMPARATOR, configuration.getMinimumPercentageAreaValue());
-		case AREA_GREATER_THAN_MAXIMUM:
-			return new AreaPredicate<>(AREA_GREATER_THAN_MAXIMUM_COMPARATOR, configuration.getMaximumPercentageAreaValue());
-		case AREA_NOT_WITHIN_RANGE:
-			return new AreaPredicate<>(AREA_NOT_WITHIN_RANGE, Range.closed(configuration.getMinimumPercentageAreaValue(), configuration.getMaximumPercentageAreaValue()));
-		default:
-			throw new IllegalArgumentException("Unsupported Peak Filter Selection Criterion!");
+			case AREA_LESS_THAN_MINIMUM:
+				return new AreaPredicate<>(AREA_LESS_THAN_MINIMUM_COMPARATOR, configuration.getMinimumPercentageAreaValue());
+			case AREA_GREATER_THAN_MAXIMUM:
+				return new AreaPredicate<>(AREA_GREATER_THAN_MAXIMUM_COMPARATOR, configuration.getMaximumPercentageAreaValue());
+			case AREA_NOT_WITHIN_RANGE:
+				return new AreaPredicate<>(AREA_NOT_WITHIN_RANGE, Range.closed(configuration.getMinimumPercentageAreaValue(), configuration.getMaximumPercentageAreaValue()));
+			default:
+				throw new IllegalArgumentException("Unsupported Peak Filter Selection Criterion!");
 		}
 	}
 
 	private static <X extends IPeak> void processPeak(CRUDListener<X, IPeakModel> listener, AreaPercentFilterSettings configuration, X peak, double compareAreaValue, AreaPredicate<?> predicate) {
 
 		switch(configuration.getFilterTreatmentOption()) {
-		case ENABLE_PEAK:
-			if(predicate.test(compareAreaValue)) {
-				peak.setActiveForAnalysis(true);
-				listener.updated(peak);
-			}
-			break;
-		case DEACTIVATE_PEAK:
-			if(predicate.test(compareAreaValue)) {
-				peak.setActiveForAnalysis(false);
-				listener.updated(peak);
-			}
-			break;
-		case KEEP_PEAK:
-			if(predicate.negate().test(compareAreaValue))
-				listener.delete(peak);
-			break;
-		case DELETE_PEAK:
-			if(predicate.test(compareAreaValue))
-				listener.delete(peak);
-			break;
-		default:
-			throw new IllegalArgumentException("Unsupported Peak Filter Treatment Option!");
+			case ENABLE_PEAK:
+				if(predicate.test(compareAreaValue)) {
+					peak.setActiveForAnalysis(true);
+					listener.updated(peak);
+				}
+				break;
+			case DEACTIVATE_PEAK:
+				if(predicate.test(compareAreaValue)) {
+					peak.setActiveForAnalysis(false);
+					listener.updated(peak);
+				}
+				break;
+			case KEEP_PEAK:
+				if(predicate.negate().test(compareAreaValue))
+					listener.delete(peak);
+				break;
+			case DELETE_PEAK:
+				if(predicate.test(compareAreaValue))
+					listener.delete(peak);
+				break;
+			default:
+				throw new IllegalArgumentException("Unsupported Peak Filter Treatment Option!");
 		}
 	}
 }

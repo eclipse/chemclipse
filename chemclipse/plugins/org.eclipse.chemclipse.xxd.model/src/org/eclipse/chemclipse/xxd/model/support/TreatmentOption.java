@@ -14,15 +14,14 @@ package org.eclipse.chemclipse.xxd.model.support;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
- *  Describes how the filter will treat (e.g. process) the peak value with the
- *  selected option:
- *  <li>{@link #ENABLE_PEAK}</li>
- *  <li>{@link #DEACTIVATE_PEAK}</li>
- *  <li>{@link #KEEP_PEAK}</li>
- *  <li>{@link #DELETE_PEAK}</li>
+ * Describes how the filter will treat (e.g. process) the peak value with the
+ * selected option:
+ * <li>{@link #ENABLE_PEAK}</li>
+ * <li>{@link #DEACTIVATE_PEAK}</li>
+ * <li>{@link #KEEP_PEAK}</li>
+ * <li>{@link #DELETE_PEAK}</li>
  */
 public enum TreatmentOption {
-
 	/**
 	 * Select to enable a peak if certain constraints are matched
 	 */
@@ -43,8 +42,7 @@ public enum TreatmentOption {
 	@JsonValue
 	private String filterTreatmentOption;
 
-	private TreatmentOption(String filterTreatmentOption){
-
+	private TreatmentOption(String filterTreatmentOption) {
 		this.filterTreatmentOption = filterTreatmentOption;
 	}
 

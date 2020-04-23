@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,12 +23,13 @@ import org.eclipse.chemclipse.processing.Processor;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
+import org.eclipse.chemclipse.xxd.model.settings.peaks.ClassifiedPeaksFilterSettings;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = {IPeakFilter.class, Filter.class, Processor.class})
-public class DisableClassifiedPeaksFilter implements IPeakFilter<DisableClassifiedPeaksFilterConfig> {
+public class ClassifiedPeaksFilter implements IPeakFilter<ClassifiedPeaksFilterSettings> {
 
 	@Override
 	public String getName() {
@@ -43,13 +44,13 @@ public class DisableClassifiedPeaksFilter implements IPeakFilter<DisableClassifi
 	}
 
 	@Override
-	public Class<DisableClassifiedPeaksFilterConfig> getConfigClass() {
+	public Class<ClassifiedPeaksFilterSettings> getConfigClass() {
 
-		return DisableClassifiedPeaksFilterConfig.class;
+		return ClassifiedPeaksFilterSettings.class;
 	}
 
 	@Override
-	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, DisableClassifiedPeaksFilterConfig configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
+	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, ClassifiedPeaksFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
 
 		Collection<X> read = listener.read();
 		if(configuration == null) {

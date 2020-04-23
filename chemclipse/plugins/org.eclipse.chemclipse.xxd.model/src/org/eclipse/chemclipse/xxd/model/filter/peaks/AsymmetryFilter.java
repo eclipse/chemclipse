@@ -21,23 +21,23 @@ import org.eclipse.chemclipse.processing.Processor;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
+import org.eclipse.chemclipse.xxd.model.settings.peaks.AsymmetryFilterSettings;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
-@Component(service = { IPeakFilter.class, Filter.class, Processor.class })
+@Component(service = {IPeakFilter.class, Filter.class, Processor.class})
 public class AsymmetryFilter implements IPeakFilter<AsymmetryFilterSettings> {
 
 	private static BiPredicate<Double, Double> ASYMMETRY_FACTOR_SMALLER_THAN_LIMIT_COMPARATOR = (factor, factorSetting) -> (factor < factorSetting);
 	private static BiPredicate<Double, Double> ASYMMETRY_FACTOR_GREATER_THAN_LIMIT_COMPARATOR = (factor, factorSetting) -> (factor > factorSetting);
-	
+
 	private static class FactorPredicate<T> {
 
 		private final BiPredicate<Double, T> predicate;
 		private final T factorSetting;
 
 		public FactorPredicate(BiPredicate<Double, T> predicate, T factorSetting) {
-
 			super();
 			this.predicate = predicate;
 			this.factorSetting = factorSetting;
@@ -54,7 +54,7 @@ public class AsymmetryFilter implements IPeakFilter<AsymmetryFilterSettings> {
 			return result;
 		}
 	}
-	
+
 	@Override
 	public String getName() {
 
@@ -97,41 +97,41 @@ public class AsymmetryFilter implements IPeakFilter<AsymmetryFilterSettings> {
 	private static FactorPredicate<?> getPredicate(AsymmetryFilterSettings configuration) {
 
 		switch(configuration.getFilterSelectionCriterion()) {
-		case ASYMMETRY_FACTOR_SMALLER_THAN_LIMIT:
-			return new FactorPredicate<>(ASYMMETRY_FACTOR_SMALLER_THAN_LIMIT_COMPARATOR, configuration.getPeakAsymmetryFactor());
-		case ASYMMETRY_FACTOR_GREATER_THAN_LIMIT:
-			return new FactorPredicate<>(ASYMMETRY_FACTOR_GREATER_THAN_LIMIT_COMPARATOR, configuration.getPeakAsymmetryFactor());
-		default:
-			throw new IllegalArgumentException("Unsupported Peak Filter Selection Criterion!");
+			case ASYMMETRY_FACTOR_SMALLER_THAN_LIMIT:
+				return new FactorPredicate<>(ASYMMETRY_FACTOR_SMALLER_THAN_LIMIT_COMPARATOR, configuration.getPeakAsymmetryFactor());
+			case ASYMMETRY_FACTOR_GREATER_THAN_LIMIT:
+				return new FactorPredicate<>(ASYMMETRY_FACTOR_GREATER_THAN_LIMIT_COMPARATOR, configuration.getPeakAsymmetryFactor());
+			default:
+				throw new IllegalArgumentException("Unsupported Peak Filter Selection Criterion!");
 		}
 	}
 
 	private static <X extends IPeak> void processPeak(AsymmetryFilterSettings configuration, CRUDListener<X, IPeakModel> listener, X peak, FactorPredicate<?> predicate) {
 
-		double  peakAsymmetryFactor = peak.getPeakModel().getTailing()/peak.getPeakModel().getLeading();
+		double peakAsymmetryFactor = peak.getPeakModel().getTailing() / peak.getPeakModel().getLeading();
 		switch(configuration.getFilterTreatmentOption()) {
-		case ENABLE_PEAK:
-			if(predicate.test(peakAsymmetryFactor)) {
-				peak.setActiveForAnalysis(true);
-				listener.updated(peak);
-			}
-			break;
-		case DEACTIVATE_PEAK:
-			if(predicate.test(peakAsymmetryFactor)) {
-				peak.setActiveForAnalysis(false);
-				listener.updated(peak);
-			}
-			break;
-		case KEEP_PEAK:
-			if(predicate.negate().test(peakAsymmetryFactor))
-				listener.delete(peak);
-			break;
-		case DELETE_PEAK:
-			if(predicate.test(peakAsymmetryFactor))
-				listener.delete(peak);
-			break;
-		default:
-			throw new IllegalArgumentException("Unsupported Peak Filter Treatment Option!");
+			case ENABLE_PEAK:
+				if(predicate.test(peakAsymmetryFactor)) {
+					peak.setActiveForAnalysis(true);
+					listener.updated(peak);
+				}
+				break;
+			case DEACTIVATE_PEAK:
+				if(predicate.test(peakAsymmetryFactor)) {
+					peak.setActiveForAnalysis(false);
+					listener.updated(peak);
+				}
+				break;
+			case KEEP_PEAK:
+				if(predicate.negate().test(peakAsymmetryFactor))
+					listener.delete(peak);
+				break;
+			case DELETE_PEAK:
+				if(predicate.test(peakAsymmetryFactor))
+					listener.delete(peak);
+				break;
+			default:
+				throw new IllegalArgumentException("Unsupported Peak Filter Treatment Option!");
 		}
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,12 +23,13 @@ import org.eclipse.chemclipse.processing.Processor;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
+import org.eclipse.chemclipse.xxd.model.settings.peaks.MinimumTracesFilterSettings;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = {IPeakFilter.class, Filter.class, Processor.class})
-public class MinimumNumberOfIonsFilter implements IPeakFilter<MinimumNumberOfIonsFilterSettings> {
+public class MinimumTracesFilter implements IPeakFilter<MinimumTracesFilterSettings> {
 
 	@Override
 	public String getName() {
@@ -43,13 +44,13 @@ public class MinimumNumberOfIonsFilter implements IPeakFilter<MinimumNumberOfIon
 	}
 
 	@Override
-	public Class<MinimumNumberOfIonsFilterSettings> getConfigClass() {
+	public Class<MinimumTracesFilterSettings> getConfigClass() {
 
-		return MinimumNumberOfIonsFilterSettings.class;
+		return MinimumTracesFilterSettings.class;
 	}
 
 	@Override
-	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, MinimumNumberOfIonsFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
+	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, MinimumTracesFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
 
 		Collection<X> read = listener.read();
 		if(configuration == null) {
@@ -64,7 +65,7 @@ public class MinimumNumberOfIonsFilter implements IPeakFilter<MinimumNumberOfIon
 					listener.delete(peak);
 				}
 			} else {
-				throw new IllegalArgumentException("invalid peak");
+				throw new IllegalArgumentException("Invalid Peak");
 			}
 			subMonitor.worked(1);
 		}

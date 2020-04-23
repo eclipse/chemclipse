@@ -46,13 +46,15 @@ Export-Package: org.eclipse.chemclipse.xxd.model.filter.peaks,
  org.eclipse.chemclipse.xxd.model.quantitation
 Import-Package: com.google.common.collect,
  org.osgi.service.component.annotations;version="1.2.0"
-Service-Component: OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.RemoveAllPeaksFilter.xml,
- OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.DisableClassifiedPeaksFilter.xml,
- OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.MinimumNumberOfIonsFilter.xml,
- OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.ClassifierFilter.xml,
+Service-Component: OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.ClassifierFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.AsymmetryFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.AreaPercentFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.ShapeFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.AreaFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.WidthFilter.xml,
- OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.SignalToNoisePeakFilter.xml
+ OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.SignalToNoisePeakFilter.xml,
+ OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.ClassifiedPeaksFilter.xml,
+ OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.MinimumTracesFilter.xml,
+ OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.RemovePeaksFilter.xml,
+ OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.DeleteTargetsFilter.xml,
+ OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.scans.DeleteTargetsFilter.xml

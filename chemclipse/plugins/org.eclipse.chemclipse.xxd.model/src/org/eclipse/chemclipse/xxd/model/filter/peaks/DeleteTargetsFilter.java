@@ -1,13 +1,13 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
+ *
  * Contributors:
- * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.model.filter.peaks;
 
@@ -20,32 +20,44 @@ import org.eclipse.chemclipse.processing.Processor;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
+import org.eclipse.chemclipse.xxd.model.filter.TargetsFilter;
+import org.eclipse.chemclipse.xxd.model.settings.DeleteTargetsFilterSettings;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = {IPeakFilter.class, Filter.class, Processor.class})
-public class RemoveAllPeaksFilter implements IPeakFilter<Void> {
+public class DeleteTargetsFilter implements IPeakFilter<DeleteTargetsFilterSettings> {
 
 	@Override
 	public String getName() {
 
-		return "Remove all peaks";
+		return "Delete Target(s) Filter";
 	}
 
 	@Override
-	public Class<Void> getConfigClass() {
+	public String getDescription() {
 
-		return null;
+		return "Filter Peak Target(s)";
 	}
 
 	@Override
-	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, Void configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
+	public Class<DeleteTargetsFilterSettings> getConfigClass() {
+
+		return DeleteTargetsFilterSettings.class;
+	}
+
+	@Override
+	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, DeleteTargetsFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
 
 		Collection<X> read = listener.read();
+		if(configuration == null) {
+			configuration = createConfiguration(read);
+		}
+		//
 		SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
-		for(X x : read) {
-			listener.delete(x);
+		for(X peak : read) {
+			TargetsFilter.filter(peak, configuration);
 			subMonitor.worked(1);
 		}
 	}

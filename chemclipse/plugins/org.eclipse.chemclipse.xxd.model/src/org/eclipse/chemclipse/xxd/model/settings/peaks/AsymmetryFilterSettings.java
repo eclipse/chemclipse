@@ -9,57 +9,57 @@
  * Contributors:
  * Alexander Stark - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.xxd.model.filter.peaks;
+package org.eclipse.chemclipse.xxd.model.settings.peaks;
 
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
-import org.eclipse.chemclipse.xxd.model.support.PeakWidthSelectionCriterion;
+import org.eclipse.chemclipse.xxd.model.support.AsymmetrySelection;
 import org.eclipse.chemclipse.xxd.model.support.TreatmentOption;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class WidthFilterSettings {
+public class AsymmetryFilterSettings {
 
-	@JsonProperty(value = "Width value [min]:")
-	@JsonPropertyDescription(value = "The width value of a peak to be filtered accordingly.")
-	@DoubleSettingsProperty(minValue = 0.0d, maxValue = 100.0d)
-	private double widthValue = 0.0d;
-
+	@JsonProperty(value = "As:", defaultValue = "1.02")
+	@JsonPropertyDescription(value = "The peak asymmetry factor of a peak to be filtered accordingly.")
+	@DoubleSettingsProperty(minValue = 0.0d, maxValue = 10.0d)
+	// peak asymmetry factor (As) rating � As = 1.0-1.05 [excellent] - As = 1.2 [acceptable] - As >= 2 [unacceptable]
+	private double peakAsymmetryFactor = 1.02d;
 	@JsonProperty(value = "Peak Treatment Option:")
 	@EnumSelectionSettingProperty
 	private TreatmentOption filterTreatmentOption = TreatmentOption.DEACTIVATE_PEAK;
-
-	@JsonProperty(value = "Width Selection Criterion:")
+	@JsonProperty(value = "Peak Selection Criterion:")
 	@EnumSelectionSettingProperty
-	private PeakWidthSelectionCriterion filterSelectionCriterion = PeakWidthSelectionCriterion.WIDTH_GREATER_THAN_LIMIT;
+	private AsymmetrySelection filterSelectionCriterion = AsymmetrySelection.ASYMMETRY_FACTOR_GREATER_THAN_LIMIT;
 
-	public double getWidthValue() {
-		
-		return widthValue;
+	public double getPeakAsymmetryFactor() {
+
+		return peakAsymmetryFactor;
 	}
 
-	public void setWidthValue(double widthValue) {
-		
-		this.widthValue = widthValue;
+	public void setPeakAsymmetryFactor(double peakAsymmetryFactor) {
+
+		this.peakAsymmetryFactor = peakAsymmetryFactor;
 	}
 
 	public TreatmentOption getFilterTreatmentOption() {
-		
+
 		return filterTreatmentOption;
 	}
 
 	public void setFilterTreatmentOption(TreatmentOption filterTreatmentOption) {
-		
+
 		this.filterTreatmentOption = filterTreatmentOption;
 	}
 
-	public PeakWidthSelectionCriterion getFilterSelectionCriterion() {
-		
+	public AsymmetrySelection getFilterSelectionCriterion() {
+
 		return filterSelectionCriterion;
 	}
 
-	public void setFilterSelectionCriterion(PeakWidthSelectionCriterion filterSelectionCriterion) {
-		
+	public void setFilterSelectionCriterion(AsymmetrySelection filterSelectionCriterion) {
+
 		this.filterSelectionCriterion = filterSelectionCriterion;
 	}
 }

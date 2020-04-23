@@ -9,12 +9,12 @@
  * Contributors:
  * Christoph Läubrich, Dr. Philip Wenig, Dr. Alexander Kerner - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.xxd.model.filter.peaks;
+package org.eclipse.chemclipse.xxd.model.settings.peaks;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class SignalToNoisePeakFilterConfig {
+public class SignalToNoisePeakFilterSettings {
 
 	@JsonProperty(value = "Min Signal-To-Noise", defaultValue = "10")
 	@JsonPropertyDescription(value = "The min S/N value to filter peaks.")

@@ -9,39 +9,51 @@
  * Contributors:
  * Alexander Stark - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.xxd.model.filter.peaks;
+package org.eclipse.chemclipse.xxd.model.settings.peaks;
 
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
-import org.eclipse.chemclipse.xxd.model.support.AsymmetrySelection;
+import org.eclipse.chemclipse.xxd.model.support.AreaSelection;
 import org.eclipse.chemclipse.xxd.model.support.TreatmentOption;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class AsymmetryFilterSettings {
+public class AreaFilterSettings {
 
-	@JsonProperty(value = "As:", defaultValue = "1.02")
-	@JsonPropertyDescription(value = "The peak asymmetry factor of a peak to be filtered accordingly.")
-	@DoubleSettingsProperty(minValue = 0.0d, maxValue = 10.0d)
-	// peak asymmetry factor (As) rating — As = 1.0-1.05 [excellent] - As = 1.2 [acceptable] - As >= 2 [unacceptable]
-	private double  peakAsymmetryFactor = 1.02d;
-
+	@JsonProperty(value = "Minimum area:")
+	@JsonPropertyDescription(value = "The minimum area value of a peak to be filtered accordingly.")
+	@DoubleSettingsProperty(minValue = 1.0d, maxValue = Double.MAX_VALUE)
+	private double minimumAreaValue = 1.0d;
+	@JsonProperty(value = "Maximum area:")
+	@JsonPropertyDescription(value = "The maximum area value of a peak to be filtered accordingly.")
+	@DoubleSettingsProperty(minValue = 1.0d, maxValue = Double.MAX_VALUE)
+	private double maximumAreaValue = 1.0d;
 	@JsonProperty(value = "Peak Treatment Option:")
 	@EnumSelectionSettingProperty
 	private TreatmentOption filterTreatmentOption = TreatmentOption.DEACTIVATE_PEAK;
-
 	@JsonProperty(value = "Peak Selection Criterion:")
 	@EnumSelectionSettingProperty
-	private AsymmetrySelection filterSelectionCriterion = AsymmetrySelection.ASYMMETRY_FACTOR_GREATER_THAN_LIMIT;
+	private AreaSelection filterSelectionCriterion = AreaSelection.AREA_LESS_THAN_MINIMUM;
 
-	public double getPeakAsymmetryFactor() {
-		return peakAsymmetryFactor;
+	public double getMinimumAreaValue() {
+
+		return minimumAreaValue;
 	}
 
-	public void setPeakAsymmetryFactor(double peakAsymmetryFactor) {
+	public void setMinimumAreaValue(double minimumAreaValue) {
 
-		this.peakAsymmetryFactor = peakAsymmetryFactor;
+		this.minimumAreaValue = minimumAreaValue;
+	}
+
+	public double getMaximumAreaValue() {
+
+		return maximumAreaValue;
+	}
+
+	public void setMaximumAreaValue(double maximumAreaValue) {
+
+		this.maximumAreaValue = maximumAreaValue;
 	}
 
 	public TreatmentOption getFilterTreatmentOption() {
@@ -54,12 +66,12 @@ public class AsymmetryFilterSettings {
 		this.filterTreatmentOption = filterTreatmentOption;
 	}
 
-	public AsymmetrySelection getFilterSelectionCriterion() {
+	public AreaSelection getFilterSelectionCriterion() {
 
 		return filterSelectionCriterion;
 	}
 
-	public void setFilterSelectionCriterion(AsymmetrySelection filterSelectionCriterion) {
+	public void setFilterSelectionCriterion(AreaSelection filterSelectionCriterion) {
 
 		this.filterSelectionCriterion = filterSelectionCriterion;
 	}

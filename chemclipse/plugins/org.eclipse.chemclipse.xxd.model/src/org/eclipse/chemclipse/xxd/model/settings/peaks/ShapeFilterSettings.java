@@ -9,73 +9,70 @@
  * Contributors:
  * Alexander Stark - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.xxd.model.filter.peaks;
+package org.eclipse.chemclipse.xxd.model.settings.peaks;
 
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
-import org.eclipse.chemclipse.xxd.model.support.AreaSelection;
+import org.eclipse.chemclipse.xxd.model.support.ShapeSelection;
 import org.eclipse.chemclipse.xxd.model.support.TreatmentOption;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class AreaPercentFilterSettings {
+public class ShapeFilterSettings {
 
-	@JsonProperty(value = "Minimum area:")
-	@JsonPropertyDescription(value = "The minimum percentage area value of a peak to be filtered accordingly.")
+	@JsonProperty(value = "Leading:", defaultValue = "0.9")
+	@JsonPropertyDescription(value = "The leading value of a peak to be filtered accordingly.")
 	@DoubleSettingsProperty(minValue = 0.0d, maxValue = 100.0d)
-	private double minimumPercentageAreaValue = 1.0d;
-
-	@JsonProperty(value = "Maximum area:")
-	@JsonPropertyDescription(value = "The maximum percentage area value of a peak to be filtered accordingly.")
+	private double leadingValue = 0.9d;
+	@JsonProperty(value = "Tailing:", defaultValue = "0.9")
+	@JsonPropertyDescription(value = "The tailing value of a peak to be filtered accordingly.")
 	@DoubleSettingsProperty(minValue = 0.0d, maxValue = 100.0d)
-	private double maximumPercentageAreaValue = 10.0d;
-
+	private double tailingValue = 0.9d;
 	@JsonProperty(value = "Peak Treatment Option:")
 	@EnumSelectionSettingProperty
 	private TreatmentOption filterTreatmentOption = TreatmentOption.DEACTIVATE_PEAK;
-
 	@JsonProperty(value = "Peak Selection Criterion:")
 	@EnumSelectionSettingProperty
-	private AreaSelection filterSelectionCriterion = AreaSelection.AREA_LESS_THAN_MINIMUM;
+	private ShapeSelection filterSelectionCriterion = ShapeSelection.TAILING_GREATER_THAN_LIMIT;
 
-	public double getMinimumPercentageAreaValue() {
-		
-		return minimumPercentageAreaValue;
+	public double getLeadingValue() {
+
+		return leadingValue;
 	}
 
-	public void setMinimumPercentageAreaValue(double minimumPercentageAreaValue) {
-		
-		this.minimumPercentageAreaValue = minimumPercentageAreaValue;
+	public void setLeadingValue(double leadingValue) {
+
+		this.leadingValue = leadingValue;
 	}
 
-	public double getMaximumPercentageAreaValue() {
-		
-		return maximumPercentageAreaValue;
+	public double getTailingValue() {
+
+		return tailingValue;
 	}
 
-	public void setMaximumPercentageAreaValue(double maximumPercentageAreaValue) {
-		
-		this.maximumPercentageAreaValue = maximumPercentageAreaValue;
+	public void setTailingValue(double tailingValue) {
+
+		this.tailingValue = tailingValue;
 	}
 
 	public TreatmentOption getFilterTreatmentOption() {
-		
+
 		return filterTreatmentOption;
 	}
 
 	public void setFilterTreatmentOption(TreatmentOption filterTreatmentOption) {
-		
+
 		this.filterTreatmentOption = filterTreatmentOption;
 	}
 
-	public AreaSelection getFilterSelectionCriterion() {
-		
+	public ShapeSelection getFilterSelectionCriterion() {
+
 		return filterSelectionCriterion;
 	}
 
-	public void setFilterSelectionCriterion(AreaSelection filterSelectionCriterion) {
-		
+	public void setFilterSelectionCriterion(ShapeSelection filterSelectionCriterion) {
+
 		this.filterSelectionCriterion = filterSelectionCriterion;
 	}
 }

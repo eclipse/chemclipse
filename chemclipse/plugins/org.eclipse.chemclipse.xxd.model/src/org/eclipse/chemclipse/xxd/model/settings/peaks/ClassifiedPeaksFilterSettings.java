@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,7 +9,7 @@
  * Contributors:
  * Christoph Läubrich - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.xxd.model.filter.peaks;
+package org.eclipse.chemclipse.xxd.model.settings.peaks;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -18,7 +18,7 @@ import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class DisableClassifiedPeaksFilterConfig {
+public class ClassifiedPeaksFilterSettings {
 
 	@JsonPropertyDescription("Disables all peaks with the given Classification, separate different ones with comma")
 	@JsonProperty(value = "Classifications", defaultValue = "")

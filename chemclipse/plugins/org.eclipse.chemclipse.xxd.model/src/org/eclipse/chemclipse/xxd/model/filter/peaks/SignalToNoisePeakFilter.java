@@ -21,11 +21,12 @@ import org.eclipse.chemclipse.processing.Processor;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
+import org.eclipse.chemclipse.xxd.model.settings.peaks.SignalToNoisePeakFilterSettings;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = {IPeakFilter.class, Filter.class, Processor.class})
-public class SignalToNoisePeakFilter implements IPeakFilter<SignalToNoisePeakFilterConfig> {
+public class SignalToNoisePeakFilter implements IPeakFilter<SignalToNoisePeakFilterSettings> {
 
 	@Override
 	public String getName() {
@@ -34,16 +35,16 @@ public class SignalToNoisePeakFilter implements IPeakFilter<SignalToNoisePeakFil
 	}
 
 	@Override
-	public Class<SignalToNoisePeakFilterConfig> getConfigClass() {
+	public Class<SignalToNoisePeakFilterSettings> getConfigClass() {
 
-		return SignalToNoisePeakFilterConfig.class;
+		return SignalToNoisePeakFilterSettings.class;
 	}
 
 	@Override
-	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, SignalToNoisePeakFilterConfig configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
+	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, SignalToNoisePeakFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
 
 		if(configuration == null) {
-			configuration = new SignalToNoisePeakFilterConfig();
+			configuration = new SignalToNoisePeakFilterSettings();
 		}
 		float maxSignalToNoise = configuration.getMaxSignalToNoise();
 		float minSignalToNoise = configuration.getMinSignalToNoise();
