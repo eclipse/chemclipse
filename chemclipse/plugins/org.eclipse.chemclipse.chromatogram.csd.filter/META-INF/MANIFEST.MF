@@ -16,3 +16,6 @@ Export-Package: org.eclipse.chemclipse.chromatogram.csd.filter.core.chromatogram
  org.eclipse.chemclipse.chromatogram.csd.filter.core.peak,
  org.eclipse.chemclipse.chromatogram.csd.filter.exceptions
 Bundle-ActivationPolicy: lazy
+Import-Package: org.eclipse.chemclipse.support.settings.parser,
+ org.osgi.service.component.annotations
+Service-Component: OSGI-INF/org.eclipse.chemclipse.chromatogram.csd.filter.core.chromatogram.ChromatogramFilterCSDProcessSupplier.xml
