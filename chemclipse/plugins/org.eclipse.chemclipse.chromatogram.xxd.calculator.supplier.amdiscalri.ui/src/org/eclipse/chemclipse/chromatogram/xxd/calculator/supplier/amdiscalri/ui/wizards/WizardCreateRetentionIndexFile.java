@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2019 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -202,12 +202,12 @@ public class WizardCreateRetentionIndexFile extends AbstractFileWizard {
 			IChromatogramSelection chromatogramSelection = wizardElements.getChromatogramSelection();
 			if(wizardElements.isUseMassSpectrometryData()) {
 				if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-					IChromatogramMSD chromatogramMSD = ((IChromatogramSelectionMSD)chromatogramSelection).getChromatogramMSD();
+					IChromatogramMSD chromatogramMSD = ((IChromatogramSelectionMSD)chromatogramSelection).getChromatogram();
 					ChromatogramConverterMSD.getInstance().convert(chromatogramFile, chromatogramMSD, CHROMATOGRAM_CONVERTER_ID, monitor);
 				}
 			} else {
 				if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
-					IChromatogramCSD chromatogramCSD = ((IChromatogramSelectionCSD)chromatogramSelection).getChromatogramCSD();
+					IChromatogramCSD chromatogramCSD = ((IChromatogramSelectionCSD)chromatogramSelection).getChromatogram();
 					ChromatogramConverterCSD.getInstance().convert(chromatogramFile, chromatogramCSD, CHROMATOGRAM_CONVERTER_ID, monitor);
 				}
 			}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -35,18 +35,19 @@ public class IdentifyAlkanesRunnable implements IRunnableWithProgress {
 		this.chromatogramSelection = chromatogramSelection;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		try {
 			monitor.beginTask(DESCRIPTION, IProgressMonitor.UNKNOWN);
 			//
-			List<IChromatogramPeakMSD> peaks = chromatogramSelection.getChromatogramMSD().getPeaks(chromatogramSelection);
+			List<IChromatogramPeakMSD> peaks = chromatogramSelection.getChromatogram().getPeaks(chromatogramSelection);
 			List<IPeakMSD> peakList = new ArrayList<IPeakMSD>();
 			for(IChromatogramPeakMSD chromatogramPeak : peaks) {
 				peakList.add(chromatogramPeak);
 			}
-			IProcessingInfo processingInfo = PeakIdentifierMSD.identify(peakList, IDENTIFIER_ID, monitor);
+			IProcessingInfo<?> processingInfo = PeakIdentifierMSD.identify(peakList, IDENTIFIER_ID, monitor);
 			/*
 			 * Update the chromatogram selection.
 			 */

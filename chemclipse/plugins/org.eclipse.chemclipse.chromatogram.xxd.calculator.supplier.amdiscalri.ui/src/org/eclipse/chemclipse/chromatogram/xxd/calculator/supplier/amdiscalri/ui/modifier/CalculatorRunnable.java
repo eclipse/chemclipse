@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -32,12 +32,13 @@ public class CalculatorRunnable implements IRunnableWithProgress {
 		this.chromatogramSelection = chromatogramSelection;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		try {
 			monitor.beginTask("Retention Index Calculator", IProgressMonitor.UNKNOWN);
-			IProcessingInfo processingInfo = ChromatogramCalculator.applyCalculator(chromatogramSelection, CALCULATOR_ID, monitor);
+			IProcessingInfo<?> processingInfo = ChromatogramCalculator.applyCalculator(chromatogramSelection, CALCULATOR_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 			updateSelection();
 		} finally {
