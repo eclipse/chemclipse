@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.DoubleFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.jface.preference.BooleanFieldEditor;
@@ -39,6 +40,7 @@ public class PreferencePageChromatogram extends FieldEditorPreferencePage implem
 
 		addField(new BooleanFieldEditor(PreferenceConstants.P_LEGACY_UPDATE_CHROMATOGRAM_MODUS, "Legacy Chromatogram Update Modus", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_LEGACY_UPDATE_CHROMATOGRAM_MODUS, "Legacy Peak Update Modus", getFieldEditorParent()));
+		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_RETENTION_INDEX_WITHOUT_DECIMALS, "Display RI without decimals", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_AREA_WITHOUT_DECIMALS, "Display Area without decimals", getFieldEditorParent()));
@@ -51,21 +53,29 @@ public class PreferencePageChromatogram extends FieldEditorPreferencePage implem
 		addField(new BooleanFieldEditor(PreferenceConstants.P_ALTERNATE_WINDOW_MOVE_DIRECTION, "Use alternate window move direction", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_CONDENSE_CYCLE_NUMBER_SCANS, "Condense cycle number scans", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SET_CHROMATOGRAM_INTENSITY_RANGE, "Set chromatogram intensity range", getFieldEditorParent()));
+		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new DoubleFieldEditor(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME, "Transfer delta retention time (Minutes)", PreferenceConstants.MIN_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME, PreferenceConstants.MAX_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME, getFieldEditorParent()));
+		addField(new DoubleFieldEditor(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME, "Transfer delta retention time [min]", PreferenceConstants.MIN_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME, PreferenceConstants.MAX_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME, getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY, "Transfer best target only", getFieldEditorParent()));
-		addIntegerField(PreferenceConstants.P_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY, "Stretch Chromatogram Scan Delay (Milliseconds):", PreferenceConstants.MIN_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY, PreferenceConstants.MAX_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY);
-		addIntegerField(PreferenceConstants.P_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH, "Stretch Chromatogram Length (Milliseconds):", PreferenceConstants.MIN_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH, PreferenceConstants.MAX_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH);
+		addIntegerField(PreferenceConstants.P_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY, "Stretch Chromatogram Scan Delay [ms]:", PreferenceConstants.MIN_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY, PreferenceConstants.MAX_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY);
+		addIntegerField(PreferenceConstants.P_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH, "Stretch Chromatogram Length [ms]:", PreferenceConstants.MIN_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH, PreferenceConstants.MAX_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH);
+		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("The following settings define how the chart reacts on a user selection and zoom events.", getFieldEditorParent()));
 		addField(new DoubleFieldEditor(PreferenceConstants.P_CHROMATOGRAM_EXTEND_X, "Extend X (1.0 = 100%)", PreferenceConstants.MIN_CHROMATOGRAM_EXTEND_X, PreferenceConstants.MAX_CHROMATOGRAM_EXTEND_X, getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_CHROMATOGRAM_X_ZOOM_ONLY, "X Zoom Only", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_CHROMATOGRAM_Y_ZOOM_ONLY, "Y Zoom Only", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_CHROMATOGRAM_RESTRICT_SELECT_X, "Restrict Select X", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_CHROMATOGRAM_RESTRICT_SELECT_Y, "Restrict Select Y", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_CHROMATOGRAM_FORCE_ZERO_MIN_Y_MSD, "Force Zero Min Y (MSD)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_CHROMATOGRAM_REFERENCE_ZOOM_ZERO_X, "Reference Zoom Zero X", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_CHROMATOGRAM_REFERENCE_ZOOM_ZERO_Y, "Reference Zoom Zero Y", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_CHROMATOGRAM_RESTRICT_ZOOM_X, "Restrict Zoom X", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_CHROMATOGRAM_RESTRICT_ZOOM_Y, "Restrict Zoom Y", getFieldEditorParent()));
+		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SELECTED_ACTION_ID, "Chromatogram Selected Action Id:", getFieldEditorParent()));
 		addField(new DirectoryFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SAVE_AS_FOLDER, "Save As... Folder", getFieldEditorParent()));
 		addField(new FileFieldEditor(PreferenceConstants.P_CHROMATOGRAM_LOAD_PROCESS_METHOD, "Load Process Method (*.ocm)", getFieldEditorParent()));
-		addIntegerField(PreferenceConstants.P_DELTA_MILLISECONDS_PEAK_SELECTION, "Delta Peak Selection (milliseconds)", PreferenceConstants.MIN_DELTA_MILLISECONDS_PEAK_SELECTION, PreferenceConstants.MAX_DELTA_MILLISECONDS_PEAK_SELECTION);
+		addIntegerField(PreferenceConstants.P_DELTA_MILLISECONDS_PEAK_SELECTION, "Delta Peak Selection [ms]", PreferenceConstants.MIN_DELTA_MILLISECONDS_PEAK_SELECTION, PreferenceConstants.MAX_DELTA_MILLISECONDS_PEAK_SELECTION);
 	}
 
 	private void addIntegerField(String name, String labelText, int min, int max) {

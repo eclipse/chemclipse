@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -48,7 +48,7 @@ public class OverviewChartUI extends LineChart {
 		chartSettings.setHorizontalSliderVisible(true);
 		chartSettings.setVerticalSliderVisible(false);
 		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
-		rangeRestriction.setRestrictZoom(false);
+		rangeRestriction.setRestrictFrame(false);
 		rangeRestriction.setZeroX(true);
 		rangeRestriction.setZeroY(false);
 		chartSettings.addHandledEventProcessor(new IHandledEventProcessor() {

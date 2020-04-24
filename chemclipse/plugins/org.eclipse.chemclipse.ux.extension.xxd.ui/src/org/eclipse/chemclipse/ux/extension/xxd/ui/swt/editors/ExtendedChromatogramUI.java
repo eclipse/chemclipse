@@ -730,8 +730,12 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		/*
 		 * Zooming
 		 */
-		rangeRestriction.setXZoomOnly(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_X_ZOOM_ONLY));
-		rangeRestriction.setYZoomOnly(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_Y_ZOOM_ONLY));
+		rangeRestriction.setRestrictSelectX(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_RESTRICT_SELECT_X));
+		rangeRestriction.setRestrictSelectY(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_RESTRICT_SELECT_Y));
+		rangeRestriction.setReferenceZoomZeroX(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_REFERENCE_ZOOM_ZERO_X));
+		rangeRestriction.setReferenceZoomZeroY(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_REFERENCE_ZOOM_ZERO_Y));
+		rangeRestriction.setRestrictZoomX(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_RESTRICT_ZOOM_X));
+		rangeRestriction.setRestrictZoomY(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_RESTRICT_ZOOM_Y));
 		//
 		chromatogramChart.applySettings(chartSettings);
 	}

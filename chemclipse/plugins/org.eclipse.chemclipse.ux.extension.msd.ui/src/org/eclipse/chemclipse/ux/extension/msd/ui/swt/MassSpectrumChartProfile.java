@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -84,7 +84,7 @@ public class MassSpectrumChartProfile extends LineChart implements IMassSpectrum
 		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
 		rangeRestriction.setZeroX(false);
 		rangeRestriction.setZeroY(false);
-		rangeRestriction.setRestrictZoom(true);
+		rangeRestriction.setRestrictFrame(true);
 		rangeRestriction.setExtendTypeX(RangeRestriction.ExtendType.ABSOLUTE);
 		rangeRestriction.setExtendMinX(2.0d);
 		rangeRestriction.setExtendMaxX(2.0d);

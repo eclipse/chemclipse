@@ -283,6 +283,10 @@ public class ScanChartUI extends ScrollableChart {
 		IChartSettings chartSettings = getChartSettings();
 		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
 		rangeRestriction.setForceZeroMinY(forceZeroY);
+		rangeRestriction.setReferenceZoomZeroX(false);
+		rangeRestriction.setReferenceZoomZeroY(true);
+		rangeRestriction.setRestrictZoomX(false);
+		rangeRestriction.setRestrictZoomY(true);
 		applySettings(chartSettings);
 	}
 
@@ -455,7 +459,7 @@ public class ScanChartUI extends ScrollableChart {
 		chartSettings.setEnableCompress(enableCompress);
 		//
 		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
-		rangeRestriction.setRestrictZoom(true);
+		rangeRestriction.setRestrictFrame(true);
 		rangeRestriction.setExtendTypeX(RangeRestriction.ExtendType.ABSOLUTE);
 		rangeRestriction.setExtendMinX(2.0d);
 		rangeRestriction.setExtendMaxX(2.0d);
@@ -627,7 +631,7 @@ public class ScanChartUI extends ScrollableChart {
 		return label;
 	}
 
-	@SuppressWarnings({"rawtypes", "deprecation"})
+	@SuppressWarnings({"rawtypes"})
 	private List<BarSeriesValue> getBarSeriesValuesList() {
 
 		List<BarSeriesValue> barSeriesIons = new ArrayList<BarSeriesValue>();

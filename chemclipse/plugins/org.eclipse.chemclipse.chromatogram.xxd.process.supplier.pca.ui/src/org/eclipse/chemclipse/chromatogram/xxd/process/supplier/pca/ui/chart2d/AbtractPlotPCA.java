@@ -99,7 +99,7 @@ public abstract class AbtractPlotPCA extends ScatterChart {
 		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
 		rangeRestriction.setZeroX(false);
 		rangeRestriction.setZeroY(false);
-		rangeRestriction.setRestrictZoom(true);
+		rangeRestriction.setRestrictFrame(true);
 		rangeRestriction.setExtendTypeX(RangeRestriction.ExtendType.RELATIVE);
 		rangeRestriction.setExtendTypeY(RangeRestriction.ExtendType.RELATIVE);
 		rangeRestriction.setExtend(0.25d);

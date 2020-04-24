@@ -70,7 +70,7 @@ public class ErrorResidueChart extends BarChart {
 		rangeRestriction.setZeroX(false);
 		rangeRestriction.setZeroY(false);
 		rangeRestriction.setForceZeroMinY(true);
-		rangeRestriction.setRestrictZoom(true);
+		rangeRestriction.setRestrictFrame(true);
 		//
 		chartSettings.setShowAxisZeroMarker(true);
 		chartSettings.setColorAxisZeroMarker(Colors.BLACK);

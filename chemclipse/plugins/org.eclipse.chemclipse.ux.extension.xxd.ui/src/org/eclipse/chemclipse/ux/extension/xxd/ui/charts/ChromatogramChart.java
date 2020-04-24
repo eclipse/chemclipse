@@ -25,29 +25,26 @@ import org.eclipse.swtchart.extensions.axisconverter.PercentageConverter;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.IPrimaryAxisSettings;
 import org.eclipse.swtchart.extensions.core.ISecondaryAxisSettings;
+import org.eclipse.swtchart.extensions.core.RangeRestriction;
 import org.eclipse.swtchart.extensions.core.SecondaryAxisSettings;
 import org.eclipse.swtchart.extensions.linecharts.LineChart;
 
 public class ChromatogramChart extends LineChart {
 
-	private final ChartSupport chartSupport;
+	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	private final ChartSupport chartSupport = new ChartSupport(preferenceStore);
 	//
 	private String titleSeconds = "";
 	private String titleMinutes = "";
 	private String titleRelativeIntensity = "";
-	private final IPreferenceStore preferenceStore;
 
 	public ChromatogramChart() {
 		super();
-		this.preferenceStore = Activator.getDefault().getPreferenceStore();
-		this.chartSupport = new ChartSupport(preferenceStore);
 		initialize();
 	}
 
 	public ChromatogramChart(Composite parent, int style) {
 		super(parent, style);
-		this.preferenceStore = Activator.getDefault().getPreferenceStore();
-		this.chartSupport = new ChartSupport(preferenceStore);
 		initialize();
 	}
 
@@ -81,8 +78,13 @@ public class ChromatogramChart extends LineChart {
 		chartSettings.setOrientation(SWT.HORIZONTAL);
 		chartSettings.setHorizontalSliderVisible(true);
 		chartSettings.setVerticalSliderVisible(false);
-		chartSettings.getRangeRestriction().setZeroX(true);
-		chartSettings.getRangeRestriction().setZeroY(true);
+		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
+		rangeRestriction.setZeroX(true);
+		rangeRestriction.setZeroY(true);
+		rangeRestriction.setReferenceZoomZeroX(false);
+		rangeRestriction.setReferenceZoomZeroY(true);
+		rangeRestriction.setRestrictZoomX(false);
+		rangeRestriction.setRestrictZoomY(true);
 		//
 		modifyAxes(true);
 	}

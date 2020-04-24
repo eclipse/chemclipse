@@ -115,7 +115,7 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 
 		IChartSettings chartSettings = getChartSettings();
 		chartSettings.setCreateMenu(true);
-		chartSettings.getRangeRestriction().setRestrictZoom(true);
+		chartSettings.getRangeRestriction().setRestrictFrame(true);
 		applySettings(chartSettings);
 	}
 

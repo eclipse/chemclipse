@@ -436,12 +436,20 @@ public class PreferenceConstants extends ChartOptions {
 	public static final double MIN_CHROMATOGRAM_EXTEND_X = 0.0d;
 	public static final double MAX_CHROMATOGRAM_EXTEND_X = 10.0d;
 	public static final double DEF_CHROMATOGRAM_EXTEND_X = 0.5d; // 50%
-	public static final String P_CHROMATOGRAM_X_ZOOM_ONLY = "chromatogramXZoomOnly";
-	public static final boolean DEF_CHROMATOGRAM_X_ZOOM_ONLY = false;
-	public static final String P_CHROMATOGRAM_Y_ZOOM_ONLY = "chromatogramYZoomOnly";
-	public static final boolean DEF_CHROMATOGRAM_Y_ZOOM_ONLY = false;
+	public static final String P_CHROMATOGRAM_RESTRICT_SELECT_X = "chromatogramRestrictSelectX";
+	public static final boolean DEF_CHROMATOGRAM_RESTRICT_SELECT_X = false;
+	public static final String P_CHROMATOGRAM_RESTRICT_SELECT_Y = "chromatogramRestrictSelectY";
+	public static final boolean DEF_CHROMATOGRAM_RESTRICT_SELECT_Y = false;
 	public static final String P_CHROMATOGRAM_FORCE_ZERO_MIN_Y_MSD = "chromatogramForceZeroMinYMSD";
 	public static final boolean DEF_CHROMATOGRAM_FORCE_ZERO_MIN_Y_MSD = false;
+	public static final String P_CHROMATOGRAM_REFERENCE_ZOOM_ZERO_X = "chromatogramReferenceZoomZeroX";
+	public static final boolean DEF_CHROMATOGRAM_REFERENCE_ZOOM_ZERO_X = false;
+	public static final String P_CHROMATOGRAM_REFERENCE_ZOOM_ZERO_Y = "chromatogramReferenceZoomZeroY";
+	public static final boolean DEF_CHROMATOGRAM_REFERENCE_ZOOM_ZERO_Y = true;
+	public static final String P_CHROMATOGRAM_RESTRICT_ZOOM_X = "chromatogramRestrictZoomX";
+	public static final boolean DEF_CHROMATOGRAM_RESTRICT_ZOOM_X = false;
+	public static final String P_CHROMATOGRAM_RESTRICT_ZOOM_Y = "chromatogramRestrictZoomY";
+	public static final boolean DEF_CHROMATOGRAM_RESTRICT_ZOOM_Y = true;
 	//
 	public static final String P_TITLE_X_AXIS_MILLISECONDS = "titleXAxisMilliseconds";
 	public static final String DEF_TITLE_X_AXIS_MILLISECONDS = "Time [ms]";

@@ -188,7 +188,7 @@ public class PeakChartUI extends ScrollableChart {
 		chartSettings.setCreateMenu(true);
 		//
 		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
-		rangeRestriction.setRestrictZoom(true);
+		rangeRestriction.setRestrictFrame(true);
 		rangeRestriction.setExtendTypeY(RangeRestriction.ExtendType.RELATIVE);
 		rangeRestriction.setExtendMinY(0.0d);
 		rangeRestriction.setExtendMaxY(0.1d);
