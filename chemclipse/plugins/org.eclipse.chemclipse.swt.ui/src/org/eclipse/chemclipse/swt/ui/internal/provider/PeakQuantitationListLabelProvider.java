@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.swt.ui.internal.provider;
 
 import java.text.DecimalFormat;
 
-import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.support.PeakQuantitation;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -45,13 +45,22 @@ public class PeakQuantitationListLabelProvider extends AbstractChemClipseLabelPr
 			PeakQuantitation peakQuantitationEntry = (PeakQuantitation)element;
 			switch(columnIndex) {
 				case 0:
-					text = decimalFormat.format(peakQuantitationEntry.getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+					text = decimalFormat.format(peakQuantitationEntry.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR);
 					break;
 				case 1:
+					text = peakQuantitationEntry.getName();
+					break;
+				case 2:
 					text = decimalFormat.format(peakQuantitationEntry.getIntegratedArea());
 					break;
+				case 3:
+					text = peakQuantitationEntry.getClassifier();
+					break;
+				case 4:
+					text = peakQuantitationEntry.getQuantifier();
+					break;
 				default:
-					int index = columnIndex - 2;
+					int index = columnIndex - 5;
 					if(index < peakQuantitationEntry.getConcentrations().size()) {
 						text = decimalFormat.format(peakQuantitationEntry.getConcentrations().get(index));
 					} else {

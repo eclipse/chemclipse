@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,13 +22,33 @@ import org.eclipse.swt.widgets.Composite;
 
 public class PeakQuantitationListUI extends ExtendedTableViewer {
 
+	public static final String TIME = "Time [min]";
+	public static final String NAME = "Name";
+	public static final String AREA = "Area";
+	public static final String CLASSIFIER = "Classifier";
+	public static final String QUANTIFIER = "Quantifier";
+	//
 	private static final int DEFAULT_COLUMN_WIDTH = 100;
-	private String[] titles = {"RT (Minutes)", "Area"};
-	private int bounds[] = {DEFAULT_COLUMN_WIDTH, DEFAULT_COLUMN_WIDTH};
+	//
+	private static final String[] TITLES = { //
+			TIME, //
+			NAME, //
+			AREA, //
+			CLASSIFIER, //
+			QUANTIFIER //
+	};
+	//
+	private static final int[] BOUNDS = { //
+			100, //
+			200, //
+			100, //
+			100, //
+			100 //
+	};
 
 	public PeakQuantitationListUI(Composite parent, int style) {
 		super(parent, style);
-		setColumns(titles, bounds);
+		setColumns(TITLES, BOUNDS);
 	}
 
 	public void update(PeakQuantitations peakQuantitations) {
@@ -40,8 +60,8 @@ public class PeakQuantitationListUI extends ExtendedTableViewer {
 			String[] titles;
 			int[] bounds;
 			if(length == 0) {
-				titles = this.titles;
-				bounds = this.bounds;
+				titles = TITLES;
+				bounds = BOUNDS;
 			} else {
 				titles = new String[length];
 				bounds = new int[length];

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,14 +14,13 @@ package org.eclipse.chemclipse.model.support;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * This class is used to summarize the peak quantitation entries.
- *
- */
 public class PeakQuantitation {
 
-	private int retentionTime;
-	private double integratedArea;
+	private int retentionTime = 0;
+	private double integratedArea = 0;
+	private String name = "";
+	private String classifier = "";
+	private String quantifier = "";
 	private List<Double> concentrations;
 
 	public PeakQuantitation() {
@@ -46,6 +45,36 @@ public class PeakQuantitation {
 	public void setIntegratedArea(double integratedArea) {
 
 		this.integratedArea = integratedArea;
+	}
+
+	public String getName() {
+
+		return name;
+	}
+
+	public void setName(String name) {
+
+		this.name = name;
+	}
+
+	public String getClassifier() {
+
+		return classifier;
+	}
+
+	public void setClassifier(String classifier) {
+
+		this.classifier = classifier;
+	}
+
+	public String getQuantifier() {
+
+		return quantifier;
+	}
+
+	public void setQuantifier(String quantifier) {
+
+		this.quantifier = quantifier;
 	}
 
 	public List<Double> getConcentrations() {

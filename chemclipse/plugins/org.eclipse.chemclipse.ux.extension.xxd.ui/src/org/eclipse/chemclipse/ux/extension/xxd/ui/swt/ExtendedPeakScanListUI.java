@@ -87,6 +87,7 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 	private static final Logger logger = Logger.getLogger(ExtendedPeakScanListUI.class);
 	//
 	private static final String MENU_CATEGORY = "Peaks/Scans";
+	//
 	private final ListSupport listSupport = new ListSupport();
 	private final TargetExtendedComparator comparator = new TargetExtendedComparator(SortOrder.DESC);
 	private final IPreferenceStore preferenceStore;

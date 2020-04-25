@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,17 +18,15 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
+import org.eclipse.chemclipse.model.core.Classifiable;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 
 public class PeakQuantitationsExtractor {
 
-	private PeakRetentionTimeComparator chromatogramPeakRetentionTimeComparator;
-
-	public PeakQuantitationsExtractor() {
-		chromatogramPeakRetentionTimeComparator = new PeakRetentionTimeComparator(SortOrder.ASC);
-	}
+	private PeakRetentionTimeComparator peakRetentionTimeComparator = new PeakRetentionTimeComparator(SortOrder.ASC);
 
 	public PeakQuantitations extract(List<? extends IPeak> peaks) {
 
@@ -39,7 +37,7 @@ public class PeakQuantitationsExtractor {
 			 * Sort peak list by retention time.
 			 */
 			peaks = new ArrayList<>(peaks);
-			Collections.sort(peaks, chromatogramPeakRetentionTimeComparator);
+			Collections.sort(peaks, peakRetentionTimeComparator);
 			//
 			Set<String> quantitationColumns = new HashSet<String>();
 			for(IPeak peak : peaks) {
@@ -50,8 +48,11 @@ public class PeakQuantitationsExtractor {
 			/*
 			 * Add the titles.
 			 */
-			peakQuantitations.getTitles().add("RT (Minutes)");
+			peakQuantitations.getTitles().add("Time [min]");
+			peakQuantitations.getTitles().add("Name");
 			peakQuantitations.getTitles().add("Area");
+			peakQuantitations.getTitles().add("Classifier");
+			peakQuantitations.getTitles().add("Quantifier");
 			for(String quantitationColumn : quantitationColumns) {
 				peakQuantitations.getTitles().add(quantitationColumn);
 			}
@@ -59,16 +60,41 @@ public class PeakQuantitationsExtractor {
 			 * Add the concentrations.
 			 */
 			for(IPeak peak : peaks) {
-				PeakQuantitation peakQuantitationEntry = new PeakQuantitation();
-				peakQuantitationEntry.setRetentionTime(peak.getPeakModel().getRetentionTimeAtPeakMaximum());
-				peakQuantitationEntry.setIntegratedArea(peak.getIntegratedArea());
+				PeakQuantitation peakQuantitation = new PeakQuantitation();
+				peakQuantitation.setRetentionTime(peak.getPeakModel().getRetentionTimeAtPeakMaximum());
+				peakQuantitation.setName(getName(peak));
+				peakQuantitation.setIntegratedArea(peak.getIntegratedArea());
+				peakQuantitation.setClassifier(Classifiable.asString(peak));
+				peakQuantitation.setQuantifier(getQuantifier(peak));
+				//
 				for(String quantitationColumn : quantitationColumns) {
-					peakQuantitationEntry.getConcentrations().add(getConcentration(peak, quantitationColumn));
+					peakQuantitation.getConcentrations().add(getConcentration(peak, quantitationColumn));
 				}
-				peakQuantitations.getQuantitationEntries().add(peakQuantitationEntry);
+				peakQuantitations.getQuantitationEntries().add(peakQuantitation);
 			}
 		}
 		return peakQuantitations;
+	}
+
+	private String getName(IPeak peak) {
+
+		String name = "";
+		if(peak != null) {
+			IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets());
+			if(identificationTarget != null) {
+				name = identificationTarget.getLibraryInformation().getName();
+			}
+		}
+		return name;
+	}
+
+	private String getQuantifier(IPeak peak) {
+
+		String quantifier = "";
+		if(peak != null) {
+			quantifier = peak.getInternalStandards().size() > 0 ? "ISTD" : "";
+		}
+		return quantifier;
 	}
 
 	private double getConcentration(IPeak peak, String quantitationColumn) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,15 +23,24 @@ public class PeakQuantitationListTableComparator extends AbstractRecordTableComp
 
 		int sortOrder = 0;
 		if(e1 instanceof PeakQuantitation && e2 instanceof PeakQuantitation) {
-			PeakQuantitation peakQuantitationEntry1 = (PeakQuantitation)e1;
-			PeakQuantitation peakQuantitationEntry2 = (PeakQuantitation)e2;
+			PeakQuantitation peakQuantitation1 = (PeakQuantitation)e1;
+			PeakQuantitation peakQuantitation2 = (PeakQuantitation)e2;
 			//
 			switch(getPropertyIndex()) {
 				case 0:
-					sortOrder = Integer.compare(peakQuantitationEntry2.getRetentionTime(), peakQuantitationEntry1.getRetentionTime());
+					sortOrder = Integer.compare(peakQuantitation2.getRetentionTime(), peakQuantitation1.getRetentionTime());
 					break;
 				case 1:
-					sortOrder = Double.compare(peakQuantitationEntry2.getIntegratedArea(), peakQuantitationEntry1.getIntegratedArea());
+					sortOrder = peakQuantitation2.getName().compareTo(peakQuantitation1.getName());
+					break;
+				case 2:
+					sortOrder = Double.compare(peakQuantitation2.getIntegratedArea(), peakQuantitation1.getIntegratedArea());
+					break;
+				case 3:
+					sortOrder = peakQuantitation2.getClassifier().compareTo(peakQuantitation1.getClassifier());
+					break;
+				case 4:
+					sortOrder = peakQuantitation2.getQuantifier().compareTo(peakQuantitation1.getQuantifier());
 					break;
 				default:
 					sortOrder = 0;
