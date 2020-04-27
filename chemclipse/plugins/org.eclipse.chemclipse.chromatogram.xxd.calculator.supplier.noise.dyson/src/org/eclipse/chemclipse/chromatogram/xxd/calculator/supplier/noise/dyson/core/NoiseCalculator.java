@@ -98,7 +98,9 @@ public class NoiseCalculator implements INoiseCalculator {
 		int counter = 0;
 		for(int scan = segment.getStartScan(); scan <= segment.getStopScan(); scan++) {
 			ITotalScanSignal signal = signals.getTotalScanSignal(scan);
-			values[counter] = signal.getTotalSignal();
+			if(signal != null) {
+				values[counter] = signal.getTotalSignal();
+			}
 			counter++;
 		}
 		/*
