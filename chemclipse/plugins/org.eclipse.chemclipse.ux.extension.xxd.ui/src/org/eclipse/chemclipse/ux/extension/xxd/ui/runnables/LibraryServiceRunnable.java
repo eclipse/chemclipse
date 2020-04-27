@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,7 +11,7 @@
  * Alexander Kerner - Generics
  * Christoph Läubrich - find the best matching service and use that.
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.runnables;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
