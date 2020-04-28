@@ -20,33 +20,40 @@ import org.eclipse.chemclipse.processing.Processor;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
+import org.eclipse.chemclipse.xxd.model.settings.peaks.DeletePeaksFilterSettings;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = {IPeakFilter.class, Filter.class, Processor.class})
-public class RemovePeaksFilter implements IPeakFilter<Void> {
+public class DeletePeaksFilter implements IPeakFilter<DeletePeaksFilterSettings> {
 
 	@Override
 	public String getName() {
 
-		return "Remove Peak(s)";
+		return "Delete Peak(s)";
 	}
 
 	@Override
-	public Class<Void> getConfigClass() {
+	public Class<DeletePeaksFilterSettings> getConfigClass() {
 
-		return null;
+		return DeletePeaksFilterSettings.class;
 	}
 
 	@Override
-	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, Void configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
+	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, DeletePeaksFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
 
 		Collection<X> read = listener.read();
-		SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
-		for(X x : read) {
-			listener.delete(x);
-			subMonitor.worked(1);
+		if(configuration == null) {
+			configuration = createConfiguration(read);
+		}
+		//
+		if(configuration.isDeletePeaks()) {
+			SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
+			for(X x : read) {
+				listener.delete(x);
+				subMonitor.worked(1);
+			}
 		}
 	}
 

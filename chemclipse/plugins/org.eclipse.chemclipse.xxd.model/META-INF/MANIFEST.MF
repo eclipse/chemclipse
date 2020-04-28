@@ -55,6 +55,9 @@ Service-Component: OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.Classi
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.SignalToNoisePeakFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.ClassifiedPeaksFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.MinimumTracesFilter.xml,
- OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.RemovePeaksFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.DeleteTargetsFilter.xml,
- OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.scans.DeleteTargetsFilter.xml
+ OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.scans.DeleteTargetsFilter.xml,
+ OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.DeletePeaksFilter.xml,
+ OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.DeleteQuantitationsFilter.xml,
+ OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.DeleteStandardsFilter.xml,
+ OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.DeleteIntegrationsFilter.xml

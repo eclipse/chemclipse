@@ -20,45 +20,46 @@ import org.eclipse.chemclipse.processing.Processor;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
-import org.eclipse.chemclipse.xxd.model.filter.TargetsFilter;
-import org.eclipse.chemclipse.xxd.model.settings.DeleteTargetsFilterSettings;
+import org.eclipse.chemclipse.xxd.model.settings.peaks.DeleteStandardsFilterSettings;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = {IPeakFilter.class, Filter.class, Processor.class})
-public class DeleteTargetsFilter implements IPeakFilter<DeleteTargetsFilterSettings> {
+public class DeleteStandardsFilter implements IPeakFilter<DeleteStandardsFilterSettings> {
 
 	@Override
 	public String getName() {
 
-		return "Delete Target(s)";
+		return "Delete Standard(s)";
 	}
 
 	@Override
 	public String getDescription() {
 
-		return "Filter Peak Target(s)";
+		return "Filter Peak Standard(s)";
 	}
 
 	@Override
-	public Class<DeleteTargetsFilterSettings> getConfigClass() {
+	public Class<DeleteStandardsFilterSettings> getConfigClass() {
 
-		return DeleteTargetsFilterSettings.class;
+		return DeleteStandardsFilterSettings.class;
 	}
 
 	@Override
-	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, DeleteTargetsFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
+	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, DeleteStandardsFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
 
 		Collection<X> read = listener.read();
 		if(configuration == null) {
 			configuration = createConfiguration(read);
 		}
 		//
-		SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
-		for(X peak : read) {
-			TargetsFilter.filter(peak, configuration);
-			subMonitor.worked(1);
+		if(configuration.isDeleteStandards()) {
+			SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
+			for(X peak : read) {
+				peak.removeInternalStandards();
+				subMonitor.worked(1);
+			}
 		}
 	}
 

@@ -20,45 +20,46 @@ import org.eclipse.chemclipse.processing.Processor;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
-import org.eclipse.chemclipse.xxd.model.filter.TargetsFilter;
-import org.eclipse.chemclipse.xxd.model.settings.DeleteTargetsFilterSettings;
+import org.eclipse.chemclipse.xxd.model.settings.peaks.DeleteIntegrationsFilterSettings;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = {IPeakFilter.class, Filter.class, Processor.class})
-public class DeleteTargetsFilter implements IPeakFilter<DeleteTargetsFilterSettings> {
+public class DeleteIntegrationsFilter implements IPeakFilter<DeleteIntegrationsFilterSettings> {
 
 	@Override
 	public String getName() {
 
-		return "Delete Target(s)";
+		return "Delete Integration(s)";
 	}
 
 	@Override
 	public String getDescription() {
 
-		return "Filter Peak Target(s)";
+		return "Filter Peak Integration(s)";
 	}
 
 	@Override
-	public Class<DeleteTargetsFilterSettings> getConfigClass() {
+	public Class<DeleteIntegrationsFilterSettings> getConfigClass() {
 
-		return DeleteTargetsFilterSettings.class;
+		return DeleteIntegrationsFilterSettings.class;
 	}
 
 	@Override
-	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, DeleteTargetsFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
+	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, DeleteIntegrationsFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
 
 		Collection<X> read = listener.read();
 		if(configuration == null) {
 			configuration = createConfiguration(read);
 		}
 		//
-		SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
-		for(X peak : read) {
-			TargetsFilter.filter(peak, configuration);
-			subMonitor.worked(1);
+		if(configuration.isDeleteIntegrations()) {
+			SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
+			for(X peak : read) {
+				peak.removeAllIntegrationEntries();
+				subMonitor.worked(1);
+			}
 		}
 	}
 

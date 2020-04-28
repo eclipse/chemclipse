@@ -289,6 +289,12 @@ public abstract class AbstractPeak implements IPeak {
 	}
 
 	@Override
+	public void removeInternalStandards() {
+
+		this.internalStandards.clear();
+	}
+
+	@Override
 	public void removeInternalStandard(IInternalStandard internalStandard) {
 
 		internalStandards.remove(internalStandard);

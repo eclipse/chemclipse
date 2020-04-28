@@ -236,6 +236,8 @@ public interface IPeak extends ITargetSupplier, PeakPosition, Classifiable, ISig
 
 	void addInternalStandards(List<IInternalStandard> internalStandards);
 
+	void removeInternalStandards();
+
 	void removeInternalStandard(IInternalStandard internalStandard);
 
 	List<String> getQuantitationReferences();

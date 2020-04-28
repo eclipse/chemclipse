@@ -20,45 +20,46 @@ import org.eclipse.chemclipse.processing.Processor;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
-import org.eclipse.chemclipse.xxd.model.filter.TargetsFilter;
-import org.eclipse.chemclipse.xxd.model.settings.DeleteTargetsFilterSettings;
+import org.eclipse.chemclipse.xxd.model.settings.peaks.DeleteQuantitationsFilterSettings;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = {IPeakFilter.class, Filter.class, Processor.class})
-public class DeleteTargetsFilter implements IPeakFilter<DeleteTargetsFilterSettings> {
+public class DeleteQuantitationsFilter implements IPeakFilter<DeleteQuantitationsFilterSettings> {
 
 	@Override
 	public String getName() {
 
-		return "Delete Target(s)";
+		return "Delete Quantitation(s)";
 	}
 
 	@Override
 	public String getDescription() {
 
-		return "Filter Peak Target(s)";
+		return "Filter Peak Quantitation(s)";
 	}
 
 	@Override
-	public Class<DeleteTargetsFilterSettings> getConfigClass() {
+	public Class<DeleteQuantitationsFilterSettings> getConfigClass() {
 
-		return DeleteTargetsFilterSettings.class;
+		return DeleteQuantitationsFilterSettings.class;
 	}
 
 	@Override
-	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, DeleteTargetsFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
+	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, DeleteQuantitationsFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
 
 		Collection<X> read = listener.read();
 		if(configuration == null) {
 			configuration = createConfiguration(read);
 		}
 		//
-		SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
-		for(X peak : read) {
-			TargetsFilter.filter(peak, configuration);
-			subMonitor.worked(1);
+		if(configuration.isDeleteQuantitations()) {
+			SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
+			for(X peak : read) {
+				peak.removeAllQuantitationEntries();
+				subMonitor.worked(1);
+			}
 		}
 	}
 
