@@ -34,13 +34,13 @@ public class ClassifiedPeaksFilter implements IPeakFilter<ClassifiedPeaksFilterS
 	@Override
 	public String getName() {
 
-		return "Disable classified peaks";
+		return "Disable Classified Peak(s)";
 	}
 
 	@Override
 	public String getDescription() {
 
-		return "Disables peaks with a given classification";
+		return "Disables peak(s) with a given classification";
 	}
 
 	@Override
