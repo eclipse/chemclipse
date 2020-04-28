@@ -23,6 +23,7 @@ import java.util.Set;
 import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -49,7 +50,8 @@ import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 
 public class ChromatogramPeakChart extends ChromatogramChart {
 
-	private static final String SERIES_ID_CHROMATOGRAM = "Chromatogram";
+	private static final String SERIES_ID_CHROMATOGRAM_TIC = "Chromatogram";
+	private static final String SERIES_ID_CHROMATOGRAM_XIC = "Chromatogram (XIC)";
 	private static final String SERIES_ID_BASELINE = "Baseline";
 	private static final String SERIES_ID_PEAKS_NORMAL = "Peaks Normal";
 	private static final String SERIES_ID_PEAKS_SELECTED_MARKER = "Peaks Selected Marker";
@@ -66,13 +68,11 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public ChromatogramPeakChart() {
-
 		super();
 		init();
 	}
 
 	public ChromatogramPeakChart(Composite parent, int style) {
-
 		super(parent, style);
 		init();
 	}
@@ -84,10 +84,14 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 		clearPeakLabelMarker();
 		//
 		if(chromatogramSelection == null) {
-			deleteSeries(SERIES_ID_CHROMATOGRAM);
+			deleteSeries(SERIES_ID_CHROMATOGRAM_TIC);
+			deleteSeries(SERIES_ID_CHROMATOGRAM_XIC);
 			deleteSeries(SERIES_ID_BASELINE);
 			deleteSeries(SERIES_ID_PEAKS_NORMAL);
 		} else {
+			/*
+			 * Add series
+			 */
 			List<IPeak> peaks = chromatogramSelection.getChromatogram().getPeaks(chromatogramSelection);
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 			addChromatogramData(chromatogramSelection, lineSeriesDataList);
@@ -97,15 +101,15 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 		}
 	}
 
-	public void updatePeaks(List<IPeak> selectedPeaks) {
+	public void updatePeaks(List<IPeak> peaks) {
 
 		clearSelectedPeakSeries();
 		//
-		if(selectedPeaks != null && selectedPeaks.size() > 0) {
+		if(peaks != null && peaks.size() > 0) {
 			int index = 1;
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
-			for(IPeak peak : selectedPeaks) {
-				addSelectedPeak(peak, lineSeriesDataList, index++);
+			for(IPeak peak : peaks) {
+				addPeak(peak, lineSeriesDataList, index++);
 			}
 			addLineSeriesData(lineSeriesDataList);
 		}
@@ -134,10 +138,23 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 
 		Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM));
 		boolean enableChromatogramArea = preferenceStore.getBoolean(PreferenceConstants.P_ENABLE_CHROMATOGRAM_AREA);
-		//
-		ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogramSelection, SERIES_ID_CHROMATOGRAM, DisplayType.TIC, color, false);
-		lineSeriesData.getSettings().setEnableArea(enableChromatogramArea);
-		lineSeriesDataList.add(lineSeriesData);
+		/*
+		 * TIC
+		 */
+		ILineSeriesData lineSeriesDataTIC = chromatogramChartSupport.getLineSeriesData(chromatogramSelection, SERIES_ID_CHROMATOGRAM_TIC, DisplayType.TIC, color, false);
+		lineSeriesDataTIC.getSettings().setEnableArea(enableChromatogramArea);
+		lineSeriesDataList.add(lineSeriesDataTIC);
+		/*
+		 * XIC
+		 */
+		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
+			if(chromatogramSelectionMSD.getSelectedIons().size() > 0) {
+				ILineSeriesData lineSeriesDataXIC = chromatogramChartSupport.getLineSeriesData(chromatogramSelectionMSD, SERIES_ID_CHROMATOGRAM_XIC, DisplayType.XIC, color, false);
+				lineSeriesDataXIC.getSettings().setEnableArea(enableChromatogramArea);
+				lineSeriesDataList.add(lineSeriesDataXIC);
+			}
+		}
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -191,7 +208,7 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 		}
 	}
 
-	private void addSelectedPeak(IPeak peak, List<ILineSeriesData> lineSeriesDataList, int index) {
+	private void addPeak(IPeak peak, List<ILineSeriesData> lineSeriesDataList, int index) {
 
 		if(peak != null) {
 			/*
