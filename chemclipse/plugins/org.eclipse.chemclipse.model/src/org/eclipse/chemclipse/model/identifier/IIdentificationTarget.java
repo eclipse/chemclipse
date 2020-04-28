@@ -19,12 +19,29 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
+import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.model.targets.ITarget;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 
 public interface IIdentificationTarget extends ITarget {
 
 	public static final TargetExtendedComparator DEFAULT_COMPARATOR = new TargetExtendedComparator(SortOrder.DESC);
+
+	static IIdentificationTarget createDefaultTarget(String name, String casNumber, String identifier) {
+
+		ILibraryInformation libraryInformation = new LibraryInformation();
+		libraryInformation.setName(name);
+		libraryInformation.setCasNumber(casNumber);
+		libraryInformation.setComments("");
+		libraryInformation.setContributor("");
+		libraryInformation.setReferenceIdentifier("");
+		//
+		IComparisonResult comparisonResult = ComparisonResult.createBestMatchComparisonResult();
+		IIdentificationTarget identificationTarget = new IdentificationTarget(libraryInformation, comparisonResult);
+		identificationTarget.setIdentifier(identifier);
+		//
+		return identificationTarget;
+	}
 
 	static IIdentificationTarget getBestIdentificationTarget(Set<IIdentificationTarget> targets) {
 

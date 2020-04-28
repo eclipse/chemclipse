@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,6 +26,7 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 
 	public static final String VERIFIED_MANUALLY = "Verified (manually)";
 	public static final String NAME = "Name";
+	public static final String RATING = "Rating";
 	public static final String CAS = "CAS";
 	public static final String COMMENTS = "Comments";
 	public static final String FORMULA = "Formula";
@@ -36,7 +37,7 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 	//
 	public static final String[] TITLES = { //
 			VERIFIED_MANUALLY, //
-			"Rating", //
+			RATING, //
 			NAME, //
 			CAS, //
 			"Match Factor", //

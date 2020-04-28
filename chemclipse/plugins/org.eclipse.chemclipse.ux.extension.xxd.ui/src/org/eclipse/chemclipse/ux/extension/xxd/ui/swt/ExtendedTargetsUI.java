@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -37,7 +37,6 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
@@ -97,6 +96,9 @@ public class ExtendedTargetsUI {
 	private static final String IDENTIFIER_MANUAL = "Manual";
 	private static final String MENU_CATEGORY_TARGETS = "Targets";
 	//
+	private final TargetListUtil targetListUtil = new TargetListUtil();
+	private final Map<String, Object> map = new HashMap<String, Object>();
+	//
 	private Label labelTargetOption;
 	private Label labelInfo;
 	private Composite toolbarInfo;
@@ -107,7 +109,6 @@ public class ExtendedTargetsUI {
 	private Button buttonAddTarget;
 	private Button buttonDeleteTarget;
 	private TargetsListUI targetListUI;
-	private final TargetListUtil targetListUtil;
 	private TargetValidator targetValidator;
 	private ControlDecoration targetControlDecoration;
 	/*
@@ -116,15 +117,12 @@ public class ExtendedTargetsUI {
 	 * IChromatogram
 	 */
 	private Object object;
-	private final Map<String, Object> map;
 	//
 	private boolean showChromatogramTargets = false;
 	private final ListSupport listSupport = new ListSupport();
 
 	@Inject
 	public ExtendedTargetsUI(Composite parent) {
-		targetListUtil = new TargetListUtil();
-		map = new HashMap<String, Object>();
 		initialize(parent);
 	}
 
@@ -667,35 +665,37 @@ public class ExtendedTargetsUI {
 				/*
 				 * Fire updates
 				 */
-				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-				IScanMSD massSpectrum = getMassSpectrum();
-				IIdentificationTarget target = (IIdentificationTarget)object;
-				//
-				DisplayUtils.getDisplay().asyncExec(new Runnable() {
-
-					@Override
-					public void run() {
-
-						eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
-					}
-				});
-				//
-				if(massSpectrum != null) {
+				IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+				if(eventBroker != null) {
+					IScanMSD massSpectrum = getMassSpectrum();
+					IIdentificationTarget target = (IIdentificationTarget)object;
+					//
 					DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
 						@Override
 						public void run() {
 
-							/*
-							 * Send the identification target update to let e.g. the molecule renderer react on an update.
-							 */
-							map.clear();
-							IIdentificationTarget identificationTarget = (IIdentificationTarget)object;
-							map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN, massSpectrum);
-							map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY, identificationTarget);
-							eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
+							eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
 						}
 					});
+					//
+					if(massSpectrum != null) {
+						DisplayUtils.getDisplay().asyncExec(new Runnable() {
+
+							@Override
+							public void run() {
+
+								/*
+								 * Send the identification target update to let e.g. the molecule renderer react on an update.
+								 */
+								map.clear();
+								IIdentificationTarget identificationTarget = (IIdentificationTarget)object;
+								map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN, massSpectrum);
+								map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY, identificationTarget);
+								eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
+							}
+						});
+					}
 				}
 			}
 		}
