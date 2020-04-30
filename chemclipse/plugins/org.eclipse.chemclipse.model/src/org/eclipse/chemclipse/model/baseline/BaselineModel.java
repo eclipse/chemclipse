@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -28,8 +28,6 @@ import org.eclipse.chemclipse.numeric.equations.Equations;
 
 /**
  * This class represents the baseline model of the current chromatogram.
- * 
- * @author eselmeister
  */
 public class BaselineModel implements IBaselineModel {
 
@@ -38,24 +36,20 @@ public class BaselineModel implements IBaselineModel {
 	/*
 	 * The start retention time is the key.
 	 */
-	private NavigableMap<Integer, IBaselineSegment> baselineSegments;
+	private NavigableMap<Integer, IBaselineSegment> baselineSegments = new TreeMap<Integer, IBaselineSegment>();
 	private float defaultBackgroundAbundance;
 	private boolean interpolate;
 
 	@SuppressWarnings("rawtypes")
 	public BaselineModel(IChromatogram chromatogram) {
-
 		this.chromatogram = chromatogram;
-		this.baselineSegments = new TreeMap<Integer, IBaselineSegment>();
 		this.defaultBackgroundAbundance = 0f;
 		this.interpolate = false;
 	}
 
 	@SuppressWarnings("rawtypes")
 	public BaselineModel(IChromatogram chromatogram, float defaultBackgroundAbundance) {
-
 		this.chromatogram = chromatogram;
-		this.baselineSegments = new TreeMap<Integer, IBaselineSegment>();
 		this.defaultBackgroundAbundance = defaultBackgroundAbundance;
 		if(Double.isNaN(defaultBackgroundAbundance)) {
 			this.interpolate = true;
@@ -64,7 +58,15 @@ public class BaselineModel implements IBaselineModel {
 		}
 	}
 
-	// --------------------------------------------IBaselineModel
+	@Override
+	public boolean isBaselineSet() {
+
+		if(baselineSegments != null) {
+			return baselineSegments.size() > 0;
+		}
+		return false;
+	}
+
 	@Override
 	public void addBaseline(int startRetentionTime, int stopRetentionTime, float startBackgroundAbundance, float stopBackgroundAbundance, boolean validate) {
 
@@ -110,6 +112,67 @@ public class BaselineModel implements IBaselineModel {
 			 */
 			addBaseline(startRetentionTime, stopRetentionTime, startBackgroundAbundance, stopBackgroundAbundance, false);
 		}
+	}
+
+	@Override
+	public void removeBaseline() {
+
+		clearBaseline();
+	}
+
+	@Override
+	@Deprecated
+	public float getBackgroundAbundance(int retentionTime) {
+
+		float defaultBackgroundAbundance = 0f;
+		if(retentionTime < chromatogram.getStartRetentionTime() || retentionTime > chromatogram.getStopRetentionTime()) {
+			return defaultBackgroundAbundance;
+		}
+		return getBackground(retentionTime, defaultBackgroundAbundance);
+	}
+
+	@Override
+	public float getBackground(int retentionTime) {
+
+		return getBackground(retentionTime, defaultBackgroundAbundance);
+	}
+
+	@Override
+	public float getBackgroundNotNaN(int retentionTime) throws BaselineIsNotDefinedException {
+
+		float background = getBackground(retentionTime);
+		if(background != Float.NaN) {
+			return background;
+		} else {
+			throw new BaselineIsNotDefinedException();
+		}
+	}
+
+	@Override
+	public IBaselineModel makeDeepCopy() {
+
+		IBaselineModel baselineModelCopy = new BaselineModel(chromatogram, defaultBackgroundAbundance);
+		int startRT;
+		int stopRT;
+		float startAB;
+		float stopAB;
+		for(IBaselineSegment segment : baselineSegments.values()) {
+			startRT = segment.getStartRetentionTime();
+			stopRT = segment.getStopRetentionTime();
+			startAB = segment.getStartBackgroundAbundance();
+			stopAB = segment.getStopBackgroundAbundance();
+			baselineModelCopy.addBaseline(startRT, stopRT, startAB, stopAB, false);
+		}
+		return baselineModelCopy;
+	}
+
+	@Override
+	public void removeBaseline(int startRetentionTime, int stopRetentionTime) {
+
+		if(startRetentionTime >= stopRetentionTime) {
+			return;
+		}
+		removeBaselineSegments(startRetentionTime, stopRetentionTime, Float.NaN, Float.NaN);
 	}
 
 	private void removeBaselineSegments(int startRetentionTime, int stopRetentionTime, float startBackgroundAbundance, float stopBackgroundAbundance) {
@@ -260,29 +323,6 @@ public class BaselineModel implements IBaselineModel {
 		}
 	}
 
-	@Override
-	public void removeBaseline() {
-
-		clearBaseline();
-	}
-
-	@Override
-	@Deprecated
-	public float getBackgroundAbundance(int retentionTime) {
-
-		float defaultBackgroundAbundance = 0f;
-		if(retentionTime < chromatogram.getStartRetentionTime() || retentionTime > chromatogram.getStopRetentionTime()) {
-			return defaultBackgroundAbundance;
-		}
-		return getBackground(retentionTime, defaultBackgroundAbundance);
-	}
-
-	@Override
-	public float getBackground(int retentionTime) {
-
-		return getBackground(retentionTime, defaultBackgroundAbundance);
-	}
-
 	private float getBackground(int retentionTime, float defaultAbudance) {
 
 		if(baselineSegments.isEmpty() || retentionTime < baselineSegments.firstKey() || retentionTime > baselineSegments.lastEntry().getValue().getStopRetentionTime()) {
@@ -307,37 +347,6 @@ public class BaselineModel implements IBaselineModel {
 		}
 	}
 
-	@Override
-	public float getBackgroundNotNaN(int retentionTime) throws BaselineIsNotDefinedException {
-
-		float background = getBackground(retentionTime);
-		if(background != Float.NaN) {
-			return background;
-		} else {
-			throw new BaselineIsNotDefinedException();
-		}
-	}
-
-	@Override
-	public IBaselineModel makeDeepCopy() {
-
-		IBaselineModel baselineModelCopy = new BaselineModel(chromatogram, defaultBackgroundAbundance);
-		int startRT;
-		int stopRT;
-		float startAB;
-		float stopAB;
-		for(IBaselineSegment segment : baselineSegments.values()) {
-			startRT = segment.getStartRetentionTime();
-			stopRT = segment.getStopRetentionTime();
-			startAB = segment.getStartBackgroundAbundance();
-			stopAB = segment.getStopBackgroundAbundance();
-			baselineModelCopy.addBaseline(startRT, stopRT, startAB, stopAB, false);
-		}
-		return baselineModelCopy;
-	}
-
-	// --------------------------------------------IBaselineModel
-	// ------------------------------------------private methods
 	private void addBaselineUnchecked(int startRetentionTime, int stopRetentionTime, float startBackgroundAbundance, float stopBackgroundAbundance) {
 
 		IBaselineSegment segment;
@@ -361,15 +370,5 @@ public class BaselineModel implements IBaselineModel {
 		if(baselineSegments != null) {
 			baselineSegments.clear();
 		}
-	}
-	// ------------------------------------------private methods
-
-	@Override
-	public void removeBaseline(int startRetentionTime, int stopRetentionTime) {
-
-		if(startRetentionTime >= stopRetentionTime) {
-			return;
-		}
-		removeBaselineSegments(startRetentionTime, stopRetentionTime, Float.NaN, Float.NaN);
 	}
 }

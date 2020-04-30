@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -21,6 +21,8 @@ public interface IBaselineModel {
 	 */
 	int MIN_RETENTION_TIME = 1;
 	int MAX_RETENTION_TIME = Integer.MAX_VALUE;
+
+	boolean isBaselineSet();
 
 	/**
 	 * Adds a baseline to the corresponding chromatogram.<br/>
