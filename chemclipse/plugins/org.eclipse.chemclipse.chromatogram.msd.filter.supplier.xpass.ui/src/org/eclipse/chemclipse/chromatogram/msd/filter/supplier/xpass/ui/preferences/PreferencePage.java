@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,20 +11,20 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.ui.preferences;
 
-import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.IntegerFieldEditor;
-import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.eclipse.ui.IWorkbench;
-
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.ui.Activator;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.IntegerFieldEditor;
+import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePage() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("XPass Filter");
+		setTitle("XPass Filter");
+		setDescription("");
 	}
 
 	/**
@@ -34,12 +34,8 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 */
 	public void createFieldEditors() {
 
-		IntegerFieldEditor numberHighestFieldEditor = new IntegerFieldEditor(PreferenceSupplier.P_NUMBER_HIGHEST, "Number Highest", getFieldEditorParent());
-		numberHighestFieldEditor.setValidRange(PreferenceSupplier.MIN_NUMBER_HIGHEST, PreferenceSupplier.MAX_NUMBER_HIGHEST);
-		addField(numberHighestFieldEditor);
-		IntegerFieldEditor numberLowestFieldEditor = new IntegerFieldEditor(PreferenceSupplier.P_NUMBER_LOWEST, "Number Lowest", getFieldEditorParent());
-		numberLowestFieldEditor.setValidRange(PreferenceSupplier.MIN_NUMBER_LOWEST, PreferenceSupplier.MAX_NUMBER_LOWEST);
-		addField(numberLowestFieldEditor);
+		addField(new IntegerFieldEditor(PreferenceSupplier.P_NUMBER_HIGHEST, "Number Highest", PreferenceSupplier.MIN_NUMBER_HIGHEST, PreferenceSupplier.MAX_NUMBER_HIGHEST, getFieldEditorParent()));
+		addField(new IntegerFieldEditor(PreferenceSupplier.P_NUMBER_LOWEST, "Number Lowest", PreferenceSupplier.MIN_NUMBER_LOWEST, PreferenceSupplier.MAX_NUMBER_LOWEST, getFieldEditorParent()));
 	}
 
 	/*

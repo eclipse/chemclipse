@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,7 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.Activator;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.settings.MassSpectrumFilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.settings.HighPassFilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.settings.LowPassFilterSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -26,12 +27,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_NUMBER_HIGHEST = "numberHighest";
 	public static final int DEF_NUMBER_HIGHEST = 5;
 	public static final int MIN_NUMBER_HIGHEST = 2;
-	public static final int MAX_NUMBER_HIGHEST = 50;
+	public static final int MAX_NUMBER_HIGHEST = 100;
 	//
 	public static final String P_NUMBER_LOWEST = "numberLowest";
 	public static final int DEF_NUMBER_LOWEST = 5;
 	public static final int MIN_NUMBER_LOWEST = 2;
-	public static final int MAX_NUMBER_LOWEST = 50;
+	public static final int MAX_NUMBER_LOWEST = 100;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -70,10 +71,16 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static MassSpectrumFilterSettings getMassSpectrumFilterSettings() {
+	public static HighPassFilterSettings getHighPassFilterSettings() {
 
-		MassSpectrumFilterSettings settings = new MassSpectrumFilterSettings();
+		HighPassFilterSettings settings = new HighPassFilterSettings();
 		settings.setNumberHighest(getNumberHighest());
+		return settings;
+	}
+
+	public static LowPassFilterSettings getLowPassFilterSettings() {
+
+		LowPassFilterSettings settings = new LowPassFilterSettings();
 		settings.setNumberLowest(getNumberLowest());
 		return settings;
 	}
