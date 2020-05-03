@@ -350,6 +350,11 @@ public abstract class AbstractPeak implements IPeak {
 		this.classifier.remove(classifier);
 	}
 
+	/*
+	 * TODO
+	 * This construct is clumpsy.
+	 * The target list shall define the peak name.
+	 */
 	public void setName(String name) {
 
 		if(name != null && name.trim().isEmpty()) {
