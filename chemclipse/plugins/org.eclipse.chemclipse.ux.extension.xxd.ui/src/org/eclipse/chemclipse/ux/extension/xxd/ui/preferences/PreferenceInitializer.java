@@ -97,6 +97,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_TITLE_X_AXIS_DAUGHTER_RESOLUTION, PreferenceConstants.DEF_TITLE_X_AXIS_DAUGHTER_RESOLUTION);
 		store.setDefault(PreferenceConstants.P_TITLE_X_AXIS_COLLISION_ENERGY, PreferenceConstants.DEF_TITLE_X_AXIS_COLLISION_ENERGY);
 		store.setDefault(PreferenceConstants.P_TITLE_X_AXIS_WAVELENGTH, PreferenceConstants.DEF_TITLE_X_AXIS_WAVELENGTH);
+		//
+		store.setDefault(PreferenceConstants.P_TRACES_VIRTUAL_TABLE, PreferenceConstants.DEF_TRACES_VIRTUAL_TABLE);
 		/*
 		 * Peaks
 		 */

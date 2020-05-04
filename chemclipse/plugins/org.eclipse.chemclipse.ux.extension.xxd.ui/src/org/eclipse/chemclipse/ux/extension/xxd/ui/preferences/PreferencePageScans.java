@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.IntegerFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpinnerFieldEditor;
@@ -67,6 +68,9 @@ public class PreferencePageScans extends FieldEditorPreferencePage implements IW
 		addField(new BooleanFieldEditor(PreferenceConstants.P_LEAVE_EDIT_AFTER_IDENTIFICATION, "Leave edit after identification", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_SUBTRACT_DIALOG, "Show subtract scan preferences dialog", getFieldEditorParent()));
 		addField(new SpinnerFieldEditor(PreferenceConstants.P_MAX_COPY_SCAN_TRACES, "Copy Traces", PreferenceConstants.MIN_TRACES, PreferenceConstants.MAX_TRACES, getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new IntegerFieldEditor(PreferenceConstants.P_TRACES_VIRTUAL_TABLE, "Traces Virtual Table", PreferenceConstants.MIN_TRACES_VIRTUAL_TABLE, PreferenceConstants.MAX_TRACES_VIRTUAL_TABLE, getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

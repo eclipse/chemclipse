@@ -24,12 +24,15 @@ import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.IonListContentProviderLazy;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ScanLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ScanSignalEditingSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ScanSignalListFilter;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ScanTableComparator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -48,6 +51,8 @@ public class ScanTableUI extends ExtendedTableViewer {
 	//
 	private ScanSignalListFilter scanSignalListFilter;
 	private IScan scan = null;
+	//
+	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public ScanTableUI(Composite parent, int style) {
 		super(parent, style);
@@ -259,7 +264,7 @@ public class ScanTableUI extends ExtendedTableViewer {
 					if(dataType.equals(DataType.MSD_HIGHRES)) {
 						IScanMSD scanMSD = (IScanMSD)scan;
 						int numberIons = scanMSD.getNumberOfIons();
-						if(numberIons > 5000) {
+						if(numberIons > preferenceStore.getInt(PreferenceConstants.P_TRACES_VIRTUAL_TABLE)) {
 							return true;
 						}
 					}

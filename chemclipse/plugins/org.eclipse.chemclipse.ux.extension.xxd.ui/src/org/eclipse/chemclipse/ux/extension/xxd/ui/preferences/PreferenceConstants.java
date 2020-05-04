@@ -47,6 +47,9 @@ public class PreferenceConstants extends ChartOptions {
 	public static final int DEF_PEAK_TRACES = 5;
 	public static final int DEF_SCAN_TRACES = 5;
 	//
+	public static final int MIN_TRACES_VIRTUAL_TABLE = 2500;
+	public static final int MAX_TRACES_VIRTUAL_TABLE = 25000;
+	//
 	public static final int MIN_OFFSET_RETENTION_TIME = 0;
 	public static final int MAX_OFFSET_RETENTION_TIME = 10000; // 10 seconds
 	public static final int DEF_OFFSET_RETENTION_TIME = 0;
@@ -222,6 +225,9 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_TITLE_X_AXIS_COLLISION_ENERGY = "Collision Energy [eV]";
 	public static final String P_TITLE_X_AXIS_WAVELENGTH = "titleXAxisWavelength";
 	public static final String DEF_TITLE_X_AXIS_WAVELENGTH = "Wavelength [nm]";
+	//
+	public static final String P_TRACES_VIRTUAL_TABLE = "tracesVirtualTable";
+	public static final int DEF_TRACES_VIRTUAL_TABLE = 5000;
 	/*
 	 * Peaks
 	 */
