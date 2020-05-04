@@ -61,11 +61,13 @@ public class TimeRangeMarker extends AbstractBaseChartPaintListener implements I
 	@Override
 	public void paintControl(PaintEvent e) {
 
-		GC gc = e.gc;
-		for(TimeRange timeRange : timeRanges) {
-			plotMarker(gc, timeRange);
+		if(!getBaseChart().isBufferActive()) {
+			GC gc = e.gc;
+			for(TimeRange timeRange : timeRanges) {
+				plotMarker(gc, timeRange);
+			}
+			gc.setAlpha(255);
 		}
-		gc.setAlpha(255);
 	}
 
 	@Override
