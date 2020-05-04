@@ -29,10 +29,6 @@ import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.osgi.service.component.annotations.Component;
 
-
-
-
-
 @Component(service = {IProcessTypeSupplier.class})
 public class ChromatogramFilterWSDProcessSupplier implements IProcessTypeSupplier {
 
@@ -63,6 +59,7 @@ public class ChromatogramFilterWSDProcessSupplier implements IProcessTypeSupplie
 
 		@SuppressWarnings("unchecked")
 		public ChromatogramFilterWSDProcessorSupplier(IChromatogramFilterSupplier supplier, IProcessTypeSupplier parent) {
+
 			super("ChromatogramFilterWSD." + supplier.getId(), supplier.getFilterName(), supplier.getDescription(), (Class<IChromatogramFilterSettings>)supplier.getSettingsClass(), parent, DataType.WSD);
 			this.supplier = supplier;
 		}
@@ -88,8 +85,5 @@ public class ChromatogramFilterWSDProcessSupplier implements IProcessTypeSupplie
 
 			return super.matchesId(id) || supplier.getId().equals(id);
 		}
-
 	}
 }
-
-
