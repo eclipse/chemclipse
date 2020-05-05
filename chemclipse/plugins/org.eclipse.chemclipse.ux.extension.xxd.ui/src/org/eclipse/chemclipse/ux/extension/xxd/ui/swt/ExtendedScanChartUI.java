@@ -46,7 +46,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstant
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.AxisConfig.ChartAxis;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.SubtractScanWizard;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -184,13 +183,7 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 	private void update(IScan scan, Display display) {
 
 		if(editModus) {
-			/*
-			 * Locked if edit modus is active.
-			 */
 			if(subtractModus) {
-				/*
-				 * Subtract
-				 */
 				if(this.scan instanceof IScanMSD) {
 					IScanMSD scanSource = (IScanMSD)this.scan;
 					if(scan instanceof IScanMSD) {
@@ -200,13 +193,18 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 						 * to subsequent subtractions.
 						 */
 						IScanMSD scanSubtract = (IScanMSD)scan;
-						subtractScanMSD(scanSource, scanSubtract);
-						if(!preferenceStore.getBoolean(PreferenceConstants.P_ENABLE_MULTI_SUBTRACT)) {
-							setSubtractModus(display, false, false);
-							updateInfoLabels();
+						if(scanSource.getScanNumber() != scanSubtract.getScanNumber()) {
+							/*
+							 * Prevent the scan is subtracted from itself.
+							 */
+							subtractScanMSD(scanSource, scanSubtract);
+							if(!preferenceStore.getBoolean(PreferenceConstants.P_ENABLE_MULTI_SUBTRACT)) {
+								setSubtractModus(display, false, false);
+								updateInfoLabels();
+							}
+							fireUpdateChromatogramSelection(display, scanSource);
+							updateScan(scanSource);
 						}
-						fireUpdateChromatogramSelection(display, scanSource);
-						updateScan(scanSource);
 					}
 				}
 			} else {
@@ -443,9 +441,6 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 
 	private void subtractScanMSD(IScanMSD scanSource, IScanMSD scanSubtract) {
 
-		/*
-		 * Settings
-		 */
 		MassSpectrumFilterSettings settings = new MassSpectrumFilterSettings();
 		settings.setUseNominalMasses(PreferenceSupplier.isUseNominalMZ());
 		settings.setUseNormalize(PreferenceSupplier.isUseNormalizedScan());
