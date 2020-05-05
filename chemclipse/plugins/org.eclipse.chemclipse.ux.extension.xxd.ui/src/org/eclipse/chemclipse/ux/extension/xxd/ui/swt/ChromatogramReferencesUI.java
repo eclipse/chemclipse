@@ -29,7 +29,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.swt.EditorToolBar;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.ChromatogramEditorDialog;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.TargetTransferDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
@@ -50,13 +49,14 @@ import org.eclipse.swt.widgets.ToolItem;
 
 public class ChromatogramReferencesUI {
 
-	private Action buttonPrevious;
+	private final EditorToolBar toolBar;
 	private final ComboContainer comboChromatograms;
+	//
+	private Action buttonPrevious;
 	private Action buttonNext;
 	private Action buttonAdd;
 	private Action buttonRemove;
-	private Action buttonTargetTransfer;
-	private final EditorToolBar toolBar;
+	private Action buttonRemoveAll;
 
 	public ChromatogramReferencesUI(EditorToolBar editorToolBar, Consumer<IChromatogramSelection<?, ?>> chromatogramReferencesListener) {
 		comboChromatograms = new ComboContainer(chromatogramReferencesListener.andThen(t -> updateButtons()));
@@ -81,10 +81,93 @@ public class ChromatogramReferencesUI {
 				super.setChecked(checked);
 			}
 		};
+		//
 		editorToolBar.addAction(action);
 		action.setChecked(false);
 		toolBar = editorToolBar.createChild();
 		initialize();
+	}
+
+	public List<IChromatogramSelection<?, ?>> getChromatogramSelections() {
+
+		return Collections.unmodifiableList(comboChromatograms.data);
+	}
+
+	public void update() {
+
+		List<IChromatogramSelection<?, ?>> chromatogramMasterAndReferences = new ArrayList<>();
+		//
+		if(comboChromatograms.master != null) {
+			//
+			IChromatogramSelection<?, ?> masterSelection = comboChromatograms.master;
+			chromatogramMasterAndReferences.add(masterSelection);
+			List<IChromatogram<?>> referencedChromatograms = masterSelection.getChromatogram().getReferencedChromatograms();
+			//
+			for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
+				IChromatogramSelection<?, ?> referenceSelection;
+				if(referencedChromatogram instanceof IChromatogramCSD) {
+					referenceSelection = new ChromatogramSelectionCSD((IChromatogramCSD)referencedChromatogram);
+				} else if(referencedChromatogram instanceof IChromatogramMSD) {
+					referenceSelection = new ChromatogramSelectionMSD((IChromatogramMSD)referencedChromatogram);
+				} else if(referencedChromatogram instanceof IChromatogramWSD) {
+					referenceSelection = new ChromatogramSelectionWSD((IChromatogramWSD)referencedChromatogram);
+				} else {
+					continue;
+				}
+				//
+				chromatogramMasterAndReferences.add(referenceSelection);
+				referenceSelection.setRangeRetentionTime(masterSelection.getStartRetentionTime(), masterSelection.getStopRetentionTime());
+			}
+		}
+		//
+		comboChromatograms.setInput(chromatogramMasterAndReferences);
+		comboChromatograms.refreshUI();
+	}
+
+	public void setMasterChromatogram(IChromatogramSelection<?, ?> chromatogramSelection) {
+
+		if(comboChromatograms.master != chromatogramSelection) {
+			comboChromatograms.master = chromatogramSelection;
+			if(chromatogramSelection == null) {
+				comboChromatograms.setSelection(StructuredSelection.EMPTY);
+				comboChromatograms.setInput(Collections.emptyList());
+			} else {
+				update();
+				comboChromatograms.setSelection(new StructuredSelection(chromatogramSelection));
+			}
+			updateButtons();
+		}
+	}
+
+	private void initialize() {
+
+		buttonPrevious = createButtonSelectPreviousChromatogram(toolBar);
+		createComboChromatograms(toolBar);
+		buttonNext = createButtonSelectNextChromatogram(toolBar);
+		buttonRemove = createButtonRemoveReference(toolBar);
+		buttonRemoveAll = createButtonRemoveReferenceAll(toolBar);
+		buttonAdd = createButtonAddReference(toolBar);
+		toolBar.addSeparator();
+	}
+
+	private Action createButtonSelectPreviousChromatogram(EditorToolBar toolBar) {
+
+		Action action = new Action("Previous", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_ARROW_BACKWARD, IApplicationImage.SIZE_16x16)) {
+
+			{
+				setToolTipText("Select previous chromatogram.");
+			}
+
+			@Override
+			public void run() {
+
+				int index = comboChromatograms.currentIndex();
+				comboChromatograms.selectChromatogram(index - 1);
+				updateButtons();
+			}
+		};
+		toolBar.addAction(action);
+		return action;
 	}
 
 	private void createComboChromatograms(EditorToolBar toolBar) {
@@ -118,10 +201,23 @@ public class ChromatogramReferencesUI {
 						String type = ChromatogramDataSupport.getChromatogramType(selection);
 						int index = comboChromatograms.indexOf(selection);
 						if(index > -1) {
+							/*
+							 * Data Name
+							 */
 							String dataName = selection.getChromatogram().getDataName();
 							if(dataName != null && !dataName.isEmpty()) {
 								return dataName + " " + type;
 							}
+							/*
+							 * Name
+							 */
+							String name = selection.getChromatogram().getName();
+							if(name != null && !name.isEmpty()) {
+								return name + " " + type;
+							}
+							/*
+							 * Generic Name
+							 */
 							if(index == 0) {
 								return "Master Chromatogram " + type;
 							} else {
@@ -134,52 +230,6 @@ public class ChromatogramReferencesUI {
 			});
 			comboChromatograms.refreshUI();
 		}, true, 300);
-	}
-
-	public void setMasterChromatogram(IChromatogramSelection<?, ?> chromatogramSelection) {
-
-		if(comboChromatograms.master != chromatogramSelection) {
-			comboChromatograms.master = chromatogramSelection;
-			if(chromatogramSelection == null) {
-				comboChromatograms.setSelection(StructuredSelection.EMPTY);
-				comboChromatograms.setInput(Collections.emptyList());
-			} else {
-				update();
-				comboChromatograms.setSelection(new StructuredSelection(chromatogramSelection));
-			}
-			updateButtons();
-		}
-	}
-
-	private void initialize() {
-
-		buttonPrevious = createButtonSelectPreviousChromatogram(toolBar);
-		createComboChromatograms(toolBar);
-		buttonNext = createButtonSelectNextChromatogram(toolBar);
-		buttonRemove = createButtonRemoveReference(toolBar);
-		buttonAdd = createButtonAddReference(toolBar);
-		buttonTargetTransfer = createButtonTargetTransfer(toolBar);
-		toolBar.addSeparator();
-	}
-
-	private Action createButtonSelectPreviousChromatogram(EditorToolBar toolBar) {
-
-		Action action = new Action("Previous", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_ARROW_BACKWARD, IApplicationImage.SIZE_16x16)) {
-
-			{
-				setToolTipText("Select previous chromatogram.");
-			}
-
-			@Override
-			public void run() {
-
-				int index = comboChromatograms.currentIndex();
-				comboChromatograms.selectChromatogram(index - 1);
-				updateButtons();
-			}
-		};
-		toolBar.addAction(action);
-		return action;
 	}
 
 	private Action createButtonSelectNextChromatogram(EditorToolBar toolBar) {
@@ -204,7 +254,7 @@ public class ChromatogramReferencesUI {
 
 	private Action createButtonRemoveReference(EditorToolBar toolBar) {
 
-		Action action = new Action("Delete", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_REMOVE, IApplicationImage.SIZE_16x16)) {
+		Action action = new Action("Delete", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16)) {
 
 			{
 				setToolTipText("Remove the reference chromatogram.");
@@ -216,10 +266,40 @@ public class ChromatogramReferencesUI {
 				ToolItem item = (ToolItem)event.widget;
 				int index = comboChromatograms.currentIndex();
 				if(index > 0 && comboChromatograms.master != null) {
-					if(MessageDialog.openQuestion(item.getParent().getShell(), "Delete Reference", "Do you want to delete the chromatogram reference: " + index)) {
+					if(MessageDialog.openQuestion(item.getParent().getShell(), "Delete Reference", "Do you want to delete the chromatogram reference: " + index + "?")) {
 						IChromatogram<?> chromatogram = comboChromatograms.master.getChromatogram();
 						IChromatogramSelection<?, ?> remove = comboChromatograms.data.remove(index);
 						chromatogram.removeReferencedChromatogram(remove.getChromatogram());
+						comboChromatograms.selection = new StructuredSelection(comboChromatograms.master);
+						comboChromatograms.refreshUI();
+					}
+				}
+			}
+		};
+		toolBar.addAction(action);
+		return action;
+	}
+
+	private Action createButtonRemoveReferenceAll(EditorToolBar toolBar) {
+
+		Action action = new Action("Delete All", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImage.SIZE_16x16)) {
+
+			{
+				setToolTipText("Remove all reference chromatogram(s).");
+			}
+
+			@Override
+			public void runWithEvent(Event event) {
+
+				ToolItem item = (ToolItem)event.widget;
+				int index = comboChromatograms.currentIndex();
+				if(index == 0 && comboChromatograms.master != null) {
+					if(MessageDialog.openQuestion(item.getParent().getShell(), "Delete Reference(s)", "Do you want to delete all chromatogram reference(s)?")) {
+						IChromatogram<?> chromatogram = comboChromatograms.master.getChromatogram();
+						while(comboChromatograms.data.size() > 1) {
+							comboChromatograms.data.remove(1);
+						}
+						chromatogram.removeAllReferencedChromatograms();
 						comboChromatograms.selection = new StructuredSelection(comboChromatograms.master);
 						comboChromatograms.refreshUI();
 					}
@@ -242,7 +322,7 @@ public class ChromatogramReferencesUI {
 			public void runWithEvent(Event event) {
 
 				ToolItem item = (ToolItem)event.widget;
-				ChromatogramEditorDialog dialog = new ChromatogramEditorDialog(item.getParent().getShell());
+				ChromatogramEditorDialog dialog = new ChromatogramEditorDialog(item.getParent().getShell(), comboChromatograms.master.getChromatogram());
 				if(IDialogConstants.OK_ID == dialog.open()) {
 					IChromatogramSelection<?, ?> chromatogramSelection = dialog.getChromatogramSelection();
 					if(chromatogramSelection != null) {
@@ -266,32 +346,6 @@ public class ChromatogramReferencesUI {
 		return action;
 	}
 
-	private Action createButtonTargetTransfer(EditorToolBar toolBar) {
-
-		Action action = new Action("Transfer", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_TARGETS, IApplicationImage.SIZE_16x16)) {
-
-			{
-				setToolTipText("Transfer the peak targets.");
-			}
-
-			@SuppressWarnings("rawtypes")
-			@Override
-			public void runWithEvent(Event event) {
-
-				ToolItem item = (ToolItem)event.widget;
-				IChromatogramSelection chromatogramSelection = (IChromatogramSelection)comboChromatograms.selection.getFirstElement();
-				if(chromatogramSelection != null) {
-					TargetTransferDialog dialog = new TargetTransferDialog(item.getParent().getShell(), chromatogramSelection);
-					dialog.open();
-				} else {
-					MessageDialog.openWarning(item.getParent().getShell(), "Peak Target Transfer", "Please select a source chromatogram.");
-				}
-			}
-		};
-		toolBar.addAction(action);
-		return action;
-	}
-
 	private void updateButtons() {
 
 		int size = comboChromatograms.data.size();
@@ -300,8 +354,8 @@ public class ChromatogramReferencesUI {
 		buttonPrevious.setEnabled(selectionIndex > 0);
 		buttonNext.setEnabled(selectionIndex < size - 1);
 		buttonRemove.setEnabled(selectionIndex > 0); // 0 is the master can't be removed
+		buttonRemoveAll.setEnabled(selectionIndex == 0 && size > 1); // Remove all when in master modus
 		buttonAdd.setEnabled(selectionIndex == 0); // 0 references can be added only to master
-		buttonTargetTransfer.setEnabled(size > 1);
 	}
 
 	private static final class ComboContainer implements ISelectionChangedListener {
@@ -377,30 +431,5 @@ public class ChromatogramReferencesUI {
 				}
 			}
 		}
-	}
-
-	public void update() {
-
-		List<IChromatogramSelection<?, ?>> chromatogramMasterAndReferences = new ArrayList<>();
-		if(comboChromatograms.master != null) {
-			IChromatogramSelection<?, ?> masterSelection = comboChromatograms.master;
-			chromatogramMasterAndReferences.add(masterSelection);
-			List<IChromatogram<?>> referencedChromatograms = masterSelection.getChromatogram().getReferencedChromatograms();
-			for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
-				IChromatogramSelection<?, ?> referenceSelection;
-				if(referencedChromatogram instanceof IChromatogramCSD) {
-					referenceSelection = new ChromatogramSelectionCSD((IChromatogramCSD)referencedChromatogram);
-				} else if(referencedChromatogram instanceof IChromatogramMSD) {
-					referenceSelection = new ChromatogramSelectionMSD((IChromatogramMSD)referencedChromatogram);
-				} else if(referencedChromatogram instanceof IChromatogramWSD) {
-					referenceSelection = new ChromatogramSelectionWSD((IChromatogramWSD)referencedChromatogram);
-				} else {
-					continue;
-				}
-				chromatogramMasterAndReferences.add(referenceSelection);
-				referenceSelection.setRangeRetentionTime(masterSelection.getStartRetentionTime(), masterSelection.getStopRetentionTime());
-			}
-		}
-		comboChromatograms.setInput(chromatogramMasterAndReferences);
 	}
 }

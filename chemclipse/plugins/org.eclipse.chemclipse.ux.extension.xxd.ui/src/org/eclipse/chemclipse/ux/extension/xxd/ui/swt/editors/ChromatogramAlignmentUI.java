@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,7 +26,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ChromatogramLengthModifier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EditorUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ChromatogramSourceCombo;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -58,9 +57,9 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 	private List<Button> buttons = new ArrayList<>();
 	//
 	@SuppressWarnings("rawtypes")
-	private IChromatogramSelection chromatogramSelectionSource;
+	private IChromatogramSelection chromatogramSelectionSource = null;
+	private List<IChromatogramSelection<?, ?>> chromatogramSelectionsInternal = new ArrayList<>();
 	//
-	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private EditorUpdateSupport editorUpdateSupport = new EditorUpdateSupport();
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
@@ -74,6 +73,15 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 	public void update(IChromatogramSelection chromatogramSelectionSource) {
 
 		this.chromatogramSelectionSource = chromatogramSelectionSource;
+		enableButtons();
+	}
+
+	public void update(List<IChromatogramSelection<?, ?>> chromatogramSelectionsInternal) {
+
+		this.chromatogramSelectionsInternal.clear();
+		if(chromatogramSelectionsInternal != null) {
+			this.chromatogramSelectionsInternal.addAll(chromatogramSelectionsInternal);
+		}
 		enableButtons();
 	}
 
@@ -210,7 +218,7 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 
 	private void enableButtons() {
 
-		boolean enabled = chromatogramSelectionSource != null && (chromatogramSourceCombo.isSourceReferences() || chromatogramSourceCombo.isSourceEditors());
+		boolean enabled = isActionValid();
 		for(Button button : buttons) {
 			button.setEnabled(enabled);
 		}
@@ -243,11 +251,10 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 					 * the correct range will be loaded.
 					 * selection.fireUpdateChange(true);
 					 */
-					selection.setStartRetentionTime(startRetentionTime);
-					selection.setStopRetentionTime(stopRetentionTime);
+					selection.setRangeRetentionTime(startRetentionTime, stopRetentionTime);
 					if(setChromatogramIntensityRange) {
-						selection.setStartAbundance(startAbundance);
 						selection.setStopAbundance(stopAbundance);
+						selection.setStartAbundance(startAbundance);
 					}
 				}
 			}
@@ -386,25 +393,34 @@ public class ChromatogramAlignmentUI extends Composite implements IChromatogramS
 		return chromatogram;
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
+	private boolean isActionValid() {
+
+		boolean enabled = false;
+		if(chromatogramSelectionSource != null) {
+			/*
+			 * Referenced / editor chromatogram available?
+			 * Size > 1, because the master is also contained.
+			 */
+			if(chromatogramSourceCombo.isSourceReferences()) {
+				enabled = chromatogramSelectionsInternal.size() > 1;
+			} else if(chromatogramSourceCombo.isSourceEditors()) {
+				enabled = editorUpdateSupport.getChromatogramSelections().size() > 1;
+			}
+		}
+		return enabled;
+	}
+
+	@SuppressWarnings("rawtypes")
 	private List<IChromatogramSelection> getTargetChromatogramSelections() {
 
 		List<IChromatogramSelection> selections = new ArrayList<>();
 		if(chromatogramSelectionSource != null) {
+			/*
+			 * Fetch referenced / editor chromatogram selections.
+			 */
 			if(chromatogramSourceCombo.isSourceReferences()) {
-				/*
-				 * Get the chromatogram and its referenced chromatograms.
-				 */
-				selections.add(chromatogramSelectionSource);
-				List<IChromatogram> referencedChromatograms = chromatogramSelectionSource.getChromatogram().getReferencedChromatograms();
-				for(IChromatogram referencedChromatogram : referencedChromatograms) {
-					IChromatogramSelection chromatogramSelectionSink = chromatogramDataSupport.getChromatogramSelection(referencedChromatogram);
-					selections.add(chromatogramSelectionSink);
-				}
+				selections.addAll(chromatogramSelectionsInternal);
 			} else if(chromatogramSourceCombo.isSourceEditors()) {
-				/*
-				 * Get the editor chromatograms.
-				 */
 				selections.addAll(editorUpdateSupport.getChromatogramSelections());
 			}
 		}

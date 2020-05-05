@@ -196,6 +196,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	private EditorToolBar toolbarMain;
 	private Label labelChromatogramInfo;
 	private ChromatogramReferencesUI chromatogramReferencesUI;
+	private ChromatogramAlignmentUI chromatogramAlignmentUI;
 	private RetentionIndexUI retentionIndexUI;
 	private ChromatogramChart chromatogramChart;
 	private ComboViewer comboViewerSeparationColumn;
@@ -415,6 +416,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 		setChromatogramSelectionInternal(chromatogramSelection);
 		chromatogramReferencesUI.setMasterChromatogram(chromatogramSelection);
+		chromatogramAlignmentUI.update(chromatogramReferencesUI.getChromatogramSelections());
 	}
 
 	private void setChromatogramSelectionInternal(IChromatogramSelection chromatogramSelection) {
@@ -657,6 +659,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			addjustChromatogramChart();
 			addChromatogramSeriesData(getTargetSettings());
 			adjustChromatogramSelectionRange();
+			chromatogramAlignmentUI.update(chromatogramReferencesUI.getChromatogramSelections());
 		}
 	}
 
@@ -1083,9 +1086,9 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 	private ChromatogramAlignmentUI createChromatogramAlignmentUI(Composite parent) {
 
-		ChromatogramAlignmentUI composite = new ChromatogramAlignmentUI(parent, SWT.NONE);
-		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		return composite;
+		chromatogramAlignmentUI = new ChromatogramAlignmentUI(parent, SWT.NONE);
+		chromatogramAlignmentUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		return chromatogramAlignmentUI;
 	}
 
 	private void initComboViewerSeparationColumn(ComboViewer comboViewer) {
