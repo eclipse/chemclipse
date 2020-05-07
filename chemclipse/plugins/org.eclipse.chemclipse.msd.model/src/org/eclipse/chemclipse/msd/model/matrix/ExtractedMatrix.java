@@ -71,17 +71,17 @@ public class ExtractedMatrix {
 	private List<IScanMSD> extractScans() {
 
 		List<IScanMSD> scans;
-		int startRT;
-		int stopRT;
-		startRT = selection.getStartRetentionTime();
-		stopRT = selection.getStopRetentionTime();
+		int startScan;
+		int stopScan;
+		startScan = selection.getStartScan();
+		stopScan = selection.getStopScan();
 		scans = selection.getChromatogram() //
 				.getScans() //
 				.stream() //
 				.filter(s -> s instanceof IScanMSD) //
 				.map(IScanMSD.class::cast) //
-				.filter(s -> s.getRetentionTime() >= startRT) //
-				.filter(s -> s.getRetentionTime() <= stopRT) //
+				.filter(s -> s.getScanNumber() >= startScan) //
+				.filter(s -> s.getScanNumber() <= stopScan) //
 				.collect(Collectors.toList()); //
 		return (scans);
 	}
@@ -113,13 +113,15 @@ public class ExtractedMatrix {
 
 		IScanMSD currentScan;
 		IIon currentIon;
+		int startScan = selection.getStartScan();
+		int stopScan = selection.getStopScan();
 		try {
-			for(int i = 1; i <= signal.length; i++) {
+			for(int i = startScan; i <= stopScan; i++) {
 				currentScan = (IScanMSD)selection.getChromatogram().getScan(i);
 				currentScan.removeAllIons();
 				for(int j = startIon; j < stopIon; j++) {
-					if(signal[i - 1][j - startIon] != 0.0) {
-						currentIon = new Ion(j, (float)signal[i - 1][j - startIon]);
+					if(signal[i - startScan][j - startIon] != 0.0) {
+						currentIon = new Ion(j, (float)signal[i - startScan][j - startIon]);
 						currentScan.addIon(currentIon);
 					}
 				}
