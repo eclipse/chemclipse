@@ -46,7 +46,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.Derivative;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.DisplayModus;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.AxisConfig.ChartAxis;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTrace;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTraces;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTracesUI;
@@ -440,7 +439,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 		if(isExtractedIonsModusEnabled()) {
 			namedTracesUI.setEnabled(true);
 		} else if(isExtractedWavelengthsModusEnabled()) {
-			namedTracesUI.setEnabled(false);
+			namedTracesUI.setEnabled(true);
 		} else {
 			namedTracesUI.setEnabled(false);
 		}
