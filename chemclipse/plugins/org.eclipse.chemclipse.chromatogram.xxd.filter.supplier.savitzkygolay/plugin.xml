@@ -2,13 +2,33 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="org.eclipse.chemclipse.chromatogram.filter.chromatogramFilterSupplier">
+         point="org.eclipse.chemclipse.chromatogram.msd.filter.chromatogramFilterSupplier">
       <ChromatogramFilterSupplier
             description="This filter applies the Savitzky-Golay filter."
-            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.core.ChromatogramFilter"
-            filterName="Savitzky-Golay Smoothing"
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.core.ChromatogramFilterMSD"
+            filterName="Savitzky-Golay Smoothing (MSD)"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ChromatogramFilterSettingsMSD"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.savitzkygolay">
+      </ChromatogramFilterSupplier>
+   </extension>
+      <extension
+         point="org.eclipse.chemclipse.chromatogram.csd.filter.chromatogramFilterSupplier">
+      <ChromatogramFilterSupplier
+            description="This filter applies the Savitzky-Golay filter."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.core.ChromatogramFilterCSD"
+            filterName="Savitzky-Golay Smoothing (CSD)"
             filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ChromatogramFilterSettings"
-            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay">
+            id="org.eclipse.chemclipse.chromatogram.csd.filter.supplier.savitzkygolay">
+      </ChromatogramFilterSupplier>
+   </extension>
+         <extension
+         point="org.eclipse.chemclipse.chromatogram.wsd.filter.chromatogramFilterSupplier">
+      <ChromatogramFilterSupplier
+            description="This filter applies the Savitzky-Golay filter."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.core.ChromatogramFilterWSD"
+            filterName="Savitzky-Golay Smoothing (WSD)"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ChromatogramFilterSettings"
+            id="org.eclipse.chemclipse.chromatogram.wsd.filter.supplier.savitzkygolay">
       </ChromatogramFilterSupplier>
    </extension>
    <extension

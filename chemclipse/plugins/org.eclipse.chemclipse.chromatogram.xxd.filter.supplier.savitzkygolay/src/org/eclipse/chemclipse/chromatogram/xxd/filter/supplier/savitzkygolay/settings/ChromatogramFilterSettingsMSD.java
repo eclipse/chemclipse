@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings;
 
-import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
@@ -20,7 +19,7 @@ import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class ChromatogramFilterSettings extends AbstractChromatogramFilterSettings {
+public class ChromatogramFilterSettingsMSD extends ChromatogramFilterSettings {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramFilterSettings.class);
 	//
@@ -30,6 +29,9 @@ public class ChromatogramFilterSettings extends AbstractChromatogramFilterSettin
 	@JsonProperty(value = "Width", defaultValue = "5")
 	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_WIDTH, maxValue = PreferenceSupplier.MAX_WIDTH)
 	private int width = 5;
+	@JsonProperty(value = "Filter individual ion channels (only applicable to MSD data).", defaultValue = "true")
+	@JsonPropertyDescription(value = "Per Ion Filter Calculation.")
+	private boolean perIonCalculation = true;
 
 	public int getDerivative() {
 
@@ -63,4 +65,13 @@ public class ChromatogramFilterSettings extends AbstractChromatogramFilterSettin
 		this.width = width;
 	}
 
+	public boolean getPerIonCalculation() {
+
+		return this.perIonCalculation;
+	}
+
+	public void setPerIonCalculation(boolean perIonCalculation) {
+
+		this.perIonCalculation = perIonCalculation;
+	}
 }

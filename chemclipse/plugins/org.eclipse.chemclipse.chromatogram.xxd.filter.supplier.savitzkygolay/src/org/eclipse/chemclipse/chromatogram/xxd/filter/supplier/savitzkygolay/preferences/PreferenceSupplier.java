@@ -17,6 +17,7 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ChromatogramFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ChromatogramFilterSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.MassSpectrumFilterSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -89,6 +90,15 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		ChromatogramFilterSettings settings = new ChromatogramFilterSettings();
+		settings.setOrder(preferences.getInt(P_ORDER, DEF_ORDER));
+		settings.setWidth(preferences.getInt(P_WIDTH, DEF_WIDTH));
+		return settings;
+	}
+
+	public static ChromatogramFilterSettingsMSD getFilterSettingsMSD() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		ChromatogramFilterSettingsMSD settings = new ChromatogramFilterSettingsMSD();
 		settings.setOrder(preferences.getInt(P_ORDER, DEF_ORDER));
 		settings.setWidth(preferences.getInt(P_WIDTH, DEF_WIDTH));
 		settings.setPerIonCalculation(preferences.getBoolean(P_PER_ION_CALCULATION, DEF_PER_ION_CALCULATION));

@@ -24,7 +24,8 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 
-public class ChromatogramFilterMSD {
+@SuppressWarnings("rawtypes")
+public class ChromatogramFilterMSD  {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramFilterMSD.class);
 	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.chromatogram.msd.filter.chromatogramFilterSupplier";
@@ -130,6 +131,7 @@ public class ChromatogramFilterMSD {
 	 * Returns a {@link IChromatogramFilterMSD} instance given by the filterId or
 	 * null, if none is available.
 	 */
+	@SuppressWarnings("rawtypes")
 	private static IChromatogramFilterMSD getChromatogramFilter(final String filterId) {
 
 		IConfigurationElement element;
@@ -167,4 +169,5 @@ public class ChromatogramFilterMSD {
 		return null;
 	}
 	// --------------------------------------------private methods
+
 }
