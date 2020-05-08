@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.ChromatogramSelection;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
@@ -23,7 +22,6 @@ import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -35,11 +33,10 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.listener.PeakTracesOffsetListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.Derivative;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakChartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
-import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swtchart.ILineSeries;
@@ -64,7 +61,6 @@ public class PeakTracesUI extends ScrollableChart {
 	private IPeak peak = null;
 	//
 	private PeakTracesOffsetListener peakTracesOffsetListener = new PeakTracesOffsetListener(this.getBaseChart());
-	private ScanDataSupport scanDataSupport = new ScanDataSupport();
 
 	public PeakTracesUI() {
 		super();
@@ -95,7 +91,6 @@ public class PeakTracesUI extends ScrollableChart {
 	@SuppressWarnings("rawtypes")
 	public void updateChart() {
 
-		modifyChart(peak);
 		deleteSeries();
 		traces.clear();
 		peakTracesOffsetListener.setOffsetRetentionTime(0);
@@ -177,24 +172,19 @@ public class PeakTracesUI extends ScrollableChart {
 		rangeRestriction.setExtendMinY(0.0d);
 		rangeRestriction.setExtendMaxY(0.1d);
 		//
+		String titleX = preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_MILLISECONDS);
+		String titleY = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_INTENSITY);
+		String titleX1 = preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_MINUTES);
+		String titleY1 = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_RELATIVE_INTENSITY);
+		//
+		ChartSupport.setPrimaryAxisSet(chartSettings, titleX, false, titleY);
+		ChartSupport.clearSecondaryAxes(chartSettings);
+		ChartSupport.addSecondaryAxisX(chartSettings, titleX1);
+		ChartSupport.addSecondaryAxisY(chartSettings, titleY1);
+		//
 		BaseChart baseChart = getBaseChart();
 		IPlotArea plotArea = baseChart.getPlotArea();
 		plotArea.addCustomPaintListener(peakTracesOffsetListener);
-		//
-		applySettings(chartSettings);
-	}
-
-	private void modifyChart(IPeak peak) {
-
-		IChartSettings chartSettings = getChartSettings();
-		//
-		if(peak instanceof IPeakMSD) {
-			scanDataSupport.setDataTypeMSD(chartSettings);
-		} else if(peak instanceof IPeakCSD) {
-			scanDataSupport.setDataTypeCSD(chartSettings);
-		} else if(peak instanceof IPeakWSD) {
-			scanDataSupport.setDataTypeWSD(chartSettings);
-		}
 		//
 		applySettings(chartSettings);
 	}
