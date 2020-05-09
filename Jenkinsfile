@@ -9,7 +9,6 @@ pipeline {
 	}
 	parameters {
 		booleanParam(name: 'CLEAN_WORKSPACE', defaultValue: false, description: 'Clean the workspace before build')
-		booleanParam(name: 'CLEAN_INTEGRATION', defaultValue: false, description: 'Clean the integration download directory')
 	}
 	tools {
 		maven 'apache-maven-latest'
@@ -30,25 +29,6 @@ pipeline {
 				checkout scm
 			}
 		}
-		stage ('clean integration') {
-			when {
-				environment name: 'CLEAN_INTEGRATION', value: 'true'
-			}
-			steps {
-				sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
-					sh '''
-						#
-						# Integration
-						#
-						ssh genie.chemclipse@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/chemclipse/eselmeister/
-						ssh genie.chemclipse@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/chemclipse/StripJavaFX/
-						ssh genie.chemclipse@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/chemclipse/develop-kerner1000/
-						ssh genie.chemclipse@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/chemclipse/kerner1000/
-						ssh genie.chemclipse@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/chemclipse/updates/
-					'''
-				}
-			}
-		}
 		stage('build') {
 			steps {
 				wrap([$class: 'Xvnc', takeScreenshot: false, useXauthority: true]) {
@@ -63,7 +43,7 @@ pipeline {
 			}
 			steps {
 				sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
-					sh "ssh genie.chemclipse@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/chemclipse/${BRANCH_NAME}"
+					sh "ssh genie.chemclipse@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/chemclipse/integration/${BRANCH_NAME}"
 				}
 			}
 		}
@@ -72,17 +52,26 @@ pipeline {
 				sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
 					sh '''
 						#
+						# Delete
+						#
+						ssh genie.chemclipse@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/chemclipse/0.8.x/
+						ssh genie.chemclipse@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/chemclipse/GSTL-1.0.x/
+						ssh genie.chemclipse@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/chemclipse/GSTL-1.1.x/
+						ssh genie.chemclipse@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/chemclipse/REL-0.8.0/
+						ssh genie.chemclipse@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/chemclipse/develop/
+						ssh genie.chemclipse@projects-storage.eclipse.org rm -rf /home/data/httpd/download.eclipse.org/chemclipse/downloads/
+						#
 						# Integration
 						#
-						ssh genie.chemclipse@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/chemclipse/${BRANCH_NAME}/repository
-						ssh genie.chemclipse@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/chemclipse/${BRANCH_NAME}/downloads
-						scp -r chemclipse/sites/org.eclipse.chemclipse.rcp.compilation.community.updateSite/target/repository/* genie.chemclipse@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/chemclipse/${BRANCH_NAME}/repository
+						ssh genie.chemclipse@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/chemclipse/integration/${BRANCH_NAME}/repository
+						ssh genie.chemclipse@projects-storage.eclipse.org mkdir -p /home/data/httpd/download.eclipse.org/chemclipse/integration/${BRANCH_NAME}/downloads
+						scp -r chemclipse/sites/org.eclipse.chemclipse.rcp.compilation.community.updateSite/target/repository/* genie.chemclipse@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/chemclipse/integration/${BRANCH_NAME}/repository
 						#
 						# Only activate to deploy bundles when creating a release.
 						#						
-						# scp chemclipse/products/org.eclipse.chemclipse.rcp.compilation.community.product/target/products/org.eclipse.chemclipse.rcp.compilation.community.product.id-win32.win32.x86_64.zip genie.chemclipse@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/chemclipse/${BRANCH_NAME}/downloads/chemclipse-win32.win32.x86_64.zip
-						# scp chemclipse/products/org.eclipse.chemclipse.rcp.compilation.community.product/target/products/org.eclipse.chemclipse.rcp.compilation.community.product.id-linux.gtk.x86_64.tar.gz genie.chemclipse@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/chemclipse/${BRANCH_NAME}/downloads/chemclipse-linux.gtk.x86_64.tar.gz
-						# scp chemclipse/products/org.eclipse.chemclipse.rcp.compilation.community.product/target/products/org.eclipse.chemclipse.rcp.compilation.community.product.id-macosx.cocoa.x86_64.tar.gz genie.chemclipse@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/chemclipse/${BRANCH_NAME}/downloads/chemclipse-macosx.cocoa.x86_64.tar.gz
+						# scp chemclipse/products/org.eclipse.chemclipse.rcp.compilation.community.product/target/products/org.eclipse.chemclipse.rcp.compilation.community.product.id-win32.win32.x86_64.zip genie.chemclipse@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/chemclipse/integration/${BRANCH_NAME}/downloads/chemclipse-win32.win32.x86_64.zip
+						# scp chemclipse/products/org.eclipse.chemclipse.rcp.compilation.community.product/target/products/org.eclipse.chemclipse.rcp.compilation.community.product.id-linux.gtk.x86_64.tar.gz genie.chemclipse@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/chemclipse/integration/${BRANCH_NAME}/downloads/chemclipse-linux.gtk.x86_64.tar.gz
+						# scp chemclipse/products/org.eclipse.chemclipse.rcp.compilation.community.product/target/products/org.eclipse.chemclipse.rcp.compilation.community.product.id-macosx.cocoa.x86_64.tar.gz genie.chemclipse@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/chemclipse/integration/${BRANCH_NAME}/downloads/chemclipse-macosx.cocoa.x86_64.tar.gz
 					'''
 				}
 			}
