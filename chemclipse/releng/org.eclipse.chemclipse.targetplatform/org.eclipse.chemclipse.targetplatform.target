@@ -13,7 +13,7 @@
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.persistence.sdk.feature.group" version="0.0.0"/>
-<repository location="http://download.eclipse.org/rt/eclipselink/updates/"/>
+<repository location="http://download.eclipse.org/rt/eclipselink/updates/2.7.6.v20200131-b7c997804f"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.nebula.feature.feature.group" version="0.0.0"/>
