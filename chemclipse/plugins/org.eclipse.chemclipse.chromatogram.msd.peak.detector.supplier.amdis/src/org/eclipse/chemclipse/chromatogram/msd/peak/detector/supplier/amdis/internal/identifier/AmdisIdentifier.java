@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2019 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -42,6 +42,7 @@ public class AmdisIdentifier {
 	 */
 	private static final String CONVERTER_ID = "net.openchrom.msd.converter.supplier.cdf";
 
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	public IProcessingResult<Void> calulateAndSetDeconvolutedPeaks(IChromatogramSelectionMSD chromatogramSelection, PeakDetectorSettings peakDetectorSettings, IProgressMonitor monitor) throws InterruptedException {
 
 		SubMonitor subMonitor = SubMonitor.convert(monitor, 100);
@@ -49,7 +50,7 @@ public class AmdisIdentifier {
 		/*
 		 * Settings
 		 */
-		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogramMSD();
+		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogram();
 		IOnsiteSettings onsiteSettings = peakDetectorSettings.getOnsiteSettings();
 		/*
 		 * amdisTmpPath, e.g.:
@@ -75,7 +76,7 @@ public class AmdisIdentifier {
 		}
 		try {
 			AMDISParser parser = new AMDISParser(fileChromatogram);
-			IProcessingResult<IPeaks> amdisPeaks = executeAMDIS(fileChromatogram, onsiteSettings, parser, subMonitor.split(80));
+			IProcessingResult<IPeaks<?>> amdisPeaks = executeAMDIS(fileChromatogram, onsiteSettings, parser, subMonitor.split(80));
 			result.addMessages(amdisPeaks);
 			if(result.hasErrorMessages()) {
 				return result;
@@ -93,7 +94,7 @@ public class AmdisIdentifier {
 		return result;
 	}
 
-	private IProcessingResult<IPeaks> executeAMDIS(File fileChromatogram, IOnsiteSettings onsiteSettings, AMDISParser parser, IProgressMonitor monitor) throws InterruptedException {
+	private IProcessingResult<IPeaks<?>> executeAMDIS(File fileChromatogram, IOnsiteSettings onsiteSettings, AMDISParser parser, IProgressMonitor monitor) throws InterruptedException {
 
 		IExtendedRuntimeSupport runtimeSupport;
 		String amdisApplication = PreferenceSupplier.getAmdisApplication();

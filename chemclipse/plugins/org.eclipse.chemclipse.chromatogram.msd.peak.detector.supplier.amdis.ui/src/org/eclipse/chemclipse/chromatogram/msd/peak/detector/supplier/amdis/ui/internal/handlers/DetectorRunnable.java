@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -44,14 +44,13 @@ public class DetectorRunnable implements IRunnableWithProgress {
 		try {
 			monitor.beginTask("Deconvolution (AMDIS)", IProgressMonitor.UNKNOWN);
 			PeakDetectorMSD.detect(chromatogramSelection, PEAK_DETECTOR_ID, monitor);
-			detectedPeaks = chromatogramSelection.getChromatogramMSD().getNumberOfPeaks();
+			detectedPeaks = chromatogramSelection.getChromatogram().getNumberOfPeaks();
 			updateSelection();
 		} finally {
 			monitor.done();
 		}
 	}
 
-	// ---------------------------------------------------------private methods
 	/*
 	 * Updates the selection using the GUI thread.
 	 */
@@ -71,5 +70,4 @@ public class DetectorRunnable implements IRunnableWithProgress {
 			}
 		});
 	}
-	// ---------------------------------------------------------private methods
 }

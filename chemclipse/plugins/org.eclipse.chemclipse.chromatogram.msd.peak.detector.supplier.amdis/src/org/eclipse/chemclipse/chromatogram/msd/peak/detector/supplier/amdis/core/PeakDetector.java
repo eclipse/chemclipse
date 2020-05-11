@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -29,13 +29,14 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 
 	private static final Logger logger = Logger.getLogger(PeakDetector.class);
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public IProcessingInfo detect(IChromatogramSelectionMSD chromatogramSelection, IPeakDetectorSettingsMSD peakDetectorSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<?> detect(IChromatogramSelectionMSD chromatogramSelection, IPeakDetectorSettingsMSD peakDetectorSettings, IProgressMonitor monitor) {
 
 		/*
 		 * Validate
 		 */
-		IProcessingInfo processingInfo = validate(chromatogramSelection, peakDetectorSettings, monitor);
+		IProcessingInfo<?> processingInfo = validate(chromatogramSelection, peakDetectorSettings, monitor);
 		if(!processingInfo.hasErrorMessages()) {
 			if(peakDetectorSettings instanceof PeakDetectorSettings) {
 				PeakDetectorSettings amdisSettings = (PeakDetectorSettings)peakDetectorSettings;
@@ -60,7 +61,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 	}
 
 	@Override
-	public IProcessingInfo detect(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<?> detect(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
 		PeakDetectorSettings peakDetectorSettings = PreferenceSupplier.getPeakDetectorSettings();
 		return detect(chromatogramSelection, peakDetectorSettings, monitor);

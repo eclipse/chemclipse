@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -42,9 +42,9 @@ public class AMDISParser {
 		resFile = getFile(fileChromatogram, "RES");
 	}
 
-	public IProcessingResult<IPeaks> parse(IProgressMonitor monitor) throws InterruptedException {
+	public IProcessingResult<IPeaks<?>> parse(IProgressMonitor monitor) throws InterruptedException {
 
-		DefaultProcessingResult<IPeaks> result = new DefaultProcessingResult<>();
+		DefaultProcessingResult<IPeaks<?>> result = new DefaultProcessingResult<>();
 		try {
 			SubMonitor subMonitor = SubMonitor.convert(monitor, 100);
 			if(!waitForFile(eluFile, WAIT_TIMEOUT_ELU, TimeUnit.SECONDS, subMonitor.split(10, SubMonitor.SUPPRESS_NONE))) {

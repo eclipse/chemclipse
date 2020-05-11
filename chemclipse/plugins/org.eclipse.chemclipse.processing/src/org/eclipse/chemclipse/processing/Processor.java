@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,9 +12,11 @@
 package org.eclipse.chemclipse.processing;
 
 /**
- * a processor performs a specific task
- * 
- * @author Christoph Läubrich
+ * A processor performs a specific task.
+ * Processor can be also defined and stored in a bundle in the OSGi directory:
+ * OSGI-INF
+ * > processors
+ * >> MyProcessor.ocm
  *
  */
 public interface Processor<ConfigType> {
@@ -48,7 +50,7 @@ public interface Processor<ConfigType> {
 	/**
 	 * A {@link Processor} can advertise the general category of data it is able to process, this can be used to narrow down {@link Processor} presented to a user
 	 * 
-	 * @return the default implementation returns {@link DataType#AUTO_DETECT} as the only choice to indicate that the caller has to determine the type by means of content type sensing
+	 * @return the default implementation returns DataType#AUTO_DETECT} as the only choice to indicate that the caller has to determine the type by means of content type sensing
 	 */
 	default DataCategory[] getDataCategories() {
 

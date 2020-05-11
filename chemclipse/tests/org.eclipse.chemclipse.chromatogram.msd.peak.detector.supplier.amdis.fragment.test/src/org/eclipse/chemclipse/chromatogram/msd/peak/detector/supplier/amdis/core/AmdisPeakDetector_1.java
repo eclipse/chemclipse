@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -40,8 +40,8 @@ public class AmdisPeakDetector_1 extends TestCase {
 
 		super.setUp();
 		file = new File(PathResolver.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_OP17760));
-		IProcessingInfo processingInfo = ChromatogramConverterMSD.getInstance().convert(file, new NullProgressMonitor());
-		chromatogram = (IChromatogramMSD)processingInfo.getProcessingResult(IChromatogramMSD.class);
+		IProcessingInfo<?> processingInfo = ChromatogramConverterMSD.getInstance().convert(file, new NullProgressMonitor());
+		chromatogram = (IChromatogramMSD)processingInfo.getProcessingResult();
 		chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
 		peakDetectorSettings = new PeakDetectorSettings();
 		detector = new PeakDetector();
@@ -61,7 +61,7 @@ public class AmdisPeakDetector_1 extends TestCase {
 	public void testIntegrate() {
 
 		Date start = new Date();
-		IProcessingInfo processingInfo = detector.detect(chromatogramSelection, peakDetectorSettings, new NullProgressMonitor());
+		IProcessingInfo<?> processingInfo = detector.detect(chromatogramSelection, peakDetectorSettings, new NullProgressMonitor());
 		assertFalse(processingInfo.hasErrorMessages());
 		Date stop = new Date();
 		System.out.println("Zeit ms:" + (stop.getTime() - start.getTime()));

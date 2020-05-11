@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -38,6 +38,7 @@ public class PeakProcessorSupport {
 
 	public static final String PEAK_CONVERTER_ID = "org.eclipse.chemclipse.msd.converter.supplier.amdis.peak.elu";
 
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void extractEluFileAndSetPeaks(IChromatogramSelectionMSD chromatogramSelection, File file, PeakDetectorSettings peakDetectorSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo<IPeaks<?>> processingInfo = PeakConverterMSD.convert(file, PEAK_CONVERTER_ID, monitor);
@@ -57,7 +58,7 @@ public class PeakProcessorSupport {
 	public static IProcessingResult<Void> insertPeaks(IChromatogramSelectionMSD chromatogramSelection, List<IPeak> peaks, PeakDetectorSettings peakDetectorSettings, IProgressMonitor monitor) {
 
 		DefaultProcessingResult<Void> result = new DefaultProcessingResult<>();
-		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogramMSD();
+		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogram();
 		int startRetentionTime = chromatogramSelection.getStartRetentionTime();
 		int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
 		for(IPeak peak : peaks) {
