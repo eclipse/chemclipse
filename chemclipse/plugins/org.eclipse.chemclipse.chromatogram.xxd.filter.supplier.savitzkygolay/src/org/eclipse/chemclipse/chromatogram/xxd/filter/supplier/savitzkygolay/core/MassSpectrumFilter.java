@@ -56,7 +56,6 @@ public class MassSpectrumFilter extends AbstractMassSpectrumFilter {
 				processingInfo.addErrorMessage(DESCRIPTION, "The filter settings instance is not of type: " + MassSpectrumFilterSettings.class);
 			}
 		}
-		//
 		return processingInfo;
 	}
 }

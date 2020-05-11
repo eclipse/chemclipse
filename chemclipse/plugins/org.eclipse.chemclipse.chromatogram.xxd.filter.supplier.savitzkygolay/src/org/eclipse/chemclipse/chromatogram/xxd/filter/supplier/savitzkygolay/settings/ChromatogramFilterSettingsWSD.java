@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2020 Lablicate GmbH.
+ * Copyright (c) 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,20 +7,17 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
- * Lorenz Gerber - Ion-wise savitzky-golay on msd data
+ * Lorenz Gerber - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings;
 
-import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class ChromatogramFilterSettings extends AbstractChromatogramFilterSettings {
+public class ChromatogramFilterSettingsWSD extends ChromatogramFilterSettings {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramFilterSettings.class);
 	//
@@ -62,5 +59,4 @@ public class ChromatogramFilterSettings extends AbstractChromatogramFilterSettin
 
 		this.width = width;
 	}
-
 }

@@ -22,5 +22,18 @@
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.preferences.preferencePage"
             name="Savitzky-Golay Filter">
       </page>
+      <page
+            category="org.eclipse.chemclipse.chromatogram.filter.ui.preferences.filterPreferencePage"
+            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.preferences.PreferencePageMSD"
+            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.preferences.preferencePageMSD"
+            name="MSD">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.chromatogram.filter.ui.preferences.filterPreferencePage"
+            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.preferences.PreferencePageCSD"
+            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.preferences.preferencePageCSD"
+            name="CSD">
+      </page>
+      
    </extension>
 </plugin>

@@ -14,8 +14,10 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui
 import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.ChromatogramFilter;
+import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.processor.AbstractChromatogramProcessor;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -25,6 +27,8 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 
 	private static final String DESCRIPTION = "Savitzky-Golay Smoothing";
 	private static final String FILTER_ID = "org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay";
+	private static final String FILTER_MSD_ID = "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.savitzkygoaly";
+	private static final String FILTER_CSD_ID = "org.eclipse.chemclipse.chromatogram.csd.filter.supplier.savitzkygolay";
 
 	@SuppressWarnings("rawtypes")
 	public FilterModifier(IChromatogramSelection chromatogramSelection) {
@@ -37,8 +41,16 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 
 		if(getChromatogramSelection() != null) {
 			IChromatogramSelection chromatogramSelection = getChromatogramSelection();
-			IProcessingInfo processingInfo = ChromatogramFilter.applyFilter(chromatogramSelection, FILTER_ID, monitor);
+			IProcessingInfo processingInfo;
+			if(chromatogramSelection instanceof ChromatogramSelectionMSD) {
+				processingInfo = ChromatogramFilter.applyFilter(chromatogramSelection, FILTER_MSD_ID, monitor);
+			} else if(chromatogramSelection instanceof ChromatogramSelectionCSD) {
+				processingInfo = ChromatogramFilter.applyFilter(chromatogramSelection, FILTER_CSD_ID, monitor);
+			} else {
+				processingInfo = ChromatogramFilter.applyFilter(chromatogramSelection, FILTER_ID, monitor);
+			}
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
+			
 		}
 	}
 

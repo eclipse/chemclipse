@@ -12,15 +12,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings;
 
-import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class ChromatogramFilterSettings extends AbstractChromatogramFilterSettings {
+public class ChromatogramFilterSettingsCSD extends ChromatogramFilterSettings {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramFilterSettings.class);
 	//
@@ -62,5 +60,6 @@ public class ChromatogramFilterSettings extends AbstractChromatogramFilterSettin
 
 		this.width = width;
 	}
+
 
 }
