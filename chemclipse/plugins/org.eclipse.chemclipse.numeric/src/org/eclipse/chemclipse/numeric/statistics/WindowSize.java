@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,6 +19,7 @@ public enum WindowSize {
 	 * SCANS was used before and might be used in the settings.
 	 * Find a way to safely handle old values.
 	 */
+	NONE(0), //
 	WIDTH_3(3), // SCANS_3
 	WIDTH_5(5), // SCANS_5
 	WIDTH_7(7), // SCANS_7

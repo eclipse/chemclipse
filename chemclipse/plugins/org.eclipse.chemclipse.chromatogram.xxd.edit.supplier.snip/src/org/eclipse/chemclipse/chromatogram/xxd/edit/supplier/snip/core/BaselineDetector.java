@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.support.IScanRange;
 import org.eclipse.chemclipse.model.support.ScanRange;
+import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
@@ -71,7 +72,7 @@ public class BaselineDetector extends AbstractBaselineDetector {
 		/*
 		 * If the scan range is lower than the given window size, do nothing.
 		 */
-		if(scanRange.getWidth() <= windowSize) {
+		if(WindowSize.NONE.equals(windowSize) || scanRange.getWidth() <= windowSize) {
 			return;
 		}
 		/*

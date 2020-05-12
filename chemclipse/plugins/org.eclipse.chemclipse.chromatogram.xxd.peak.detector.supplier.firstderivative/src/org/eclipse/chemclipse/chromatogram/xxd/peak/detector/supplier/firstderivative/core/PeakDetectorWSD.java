@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -53,15 +53,15 @@ public class PeakDetectorWSD extends BasePeakDetector implements IPeakDetectorWS
 	private static final String DETECTOR_DESCRIPTION = "Peak Detector First Derivative";
 	//
 	private static float NORMALIZATION_BASE = 100000.0f;
-	private static int CONSECUTIVE_SCAN_STEPS = 3;
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public IProcessingInfo detect(IChromatogramSelectionWSD chromatogramSelection, IPeakDetectorSettingsWSD detectorSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<?> detect(IChromatogramSelectionWSD chromatogramSelection, IPeakDetectorSettingsWSD detectorSettings, IProgressMonitor monitor) {
 
 		/*
 		 * Check whether the chromatogram selection is null or not.
 		 */
-		IProcessingInfo processingInfo = validate(chromatogramSelection, detectorSettings, monitor);
+		IProcessingInfo<?> processingInfo = validate(chromatogramSelection, detectorSettings, monitor);
 		if(!processingInfo.hasErrorMessages()) {
 			if(detectorSettings instanceof PeakDetectorSettingsWSD) {
 				PeakDetectorSettingsWSD peakDetectorSettings = (PeakDetectorSettingsWSD)detectorSettings;
@@ -79,7 +79,7 @@ public class PeakDetectorWSD extends BasePeakDetector implements IPeakDetectorWS
 	}
 
 	@Override
-	public IProcessingInfo detect(IChromatogramSelectionWSD chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<?> detect(IChromatogramSelectionWSD chromatogramSelection, IProgressMonitor monitor) {
 
 		PeakDetectorSettingsWSD peakDetectorSettings = PreferenceSupplier.getPeakDetectorSettingsWSD();
 		return detect(chromatogramSelection, peakDetectorSettings, monitor);
@@ -151,7 +151,7 @@ public class PeakDetectorWSD extends BasePeakDetector implements IPeakDetectorWS
 	 * @param window
 	 * @return {@link IFirstDerivativeDetectorSlopes}
 	 */
-	public static IFirstDerivativeDetectorSlopes getFirstDerivativeSlopes(IChromatogramSelectionWSD chromatogramSelection, WindowSize window) {
+	public static IFirstDerivativeDetectorSlopes getFirstDerivativeSlopes(IChromatogramSelectionWSD chromatogramSelection, WindowSize windowSize) {
 
 		ITotalScanSignals signals = new TotalScanSignals(chromatogramSelection);
 		TotalScanSignalsModifier.normalize(signals, NORMALIZATION_BASE);
@@ -175,7 +175,13 @@ public class PeakDetectorWSD extends BasePeakDetector implements IPeakDetectorWS
 				slopes.add(slope);
 			}
 		}
-		slopes.calculateMovingAverage(window);
+		/*
+		 * Moving average on the slopes
+		 */
+		if(!WindowSize.NONE.equals(windowSize)) {
+			slopes.calculateMovingAverage(windowSize);
+		}
+		//
 		return slopes;
 	}
 

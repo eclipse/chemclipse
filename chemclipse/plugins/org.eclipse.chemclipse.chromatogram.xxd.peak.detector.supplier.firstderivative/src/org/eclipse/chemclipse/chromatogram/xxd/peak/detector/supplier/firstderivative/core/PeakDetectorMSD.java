@@ -261,7 +261,7 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 	 * @param windowSize
 	 * @return {@link IFirstDerivativeDetectorSlopes}
 	 */
-	public static IFirstDerivativeDetectorSlopes getFirstDerivativeSlopes(IChromatogramSelectionMSD chromatogramSelection, WindowSize movingAverageWindowSize, IMarkedIons filterIons) {
+	public static IFirstDerivativeDetectorSlopes getFirstDerivativeSlopes(IChromatogramSelectionMSD chromatogramSelection, WindowSize windowSize, IMarkedIons filterIons) {
 
 		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogram();
 		try {
@@ -287,7 +287,12 @@ public class PeakDetectorMSD extends BasePeakDetector implements IPeakDetectorMS
 					slopes.add(slope);
 				}
 			}
-			slopes.calculateMovingAverage(movingAverageWindowSize);
+			/*
+			 * Moving average on the slopes
+			 */
+			if(!WindowSize.NONE.equals(windowSize)) {
+				slopes.calculateMovingAverage(windowSize);
+			}
 			return slopes;
 		} catch(ChromatogramIsNullException e) {
 			logger.warn(e.getLocalizedMessage(), e);

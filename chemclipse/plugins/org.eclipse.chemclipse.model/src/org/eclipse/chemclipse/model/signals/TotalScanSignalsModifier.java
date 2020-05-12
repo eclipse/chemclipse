@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -199,7 +199,7 @@ public class TotalScanSignalsModifier {
 		/*
 		 * Return if the windowSize or totalIonSignals is null.
 		 */
-		if(windowSize == null || totalIonSignals == null) {
+		if(windowSize == null || WindowSize.NONE.equals(windowSize) || totalIonSignals == null) {
 			return;
 		}
 		/*

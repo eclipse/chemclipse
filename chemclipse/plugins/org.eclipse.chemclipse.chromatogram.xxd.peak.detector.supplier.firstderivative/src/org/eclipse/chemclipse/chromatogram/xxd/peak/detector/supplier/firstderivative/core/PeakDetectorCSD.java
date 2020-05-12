@@ -232,7 +232,7 @@ public class PeakDetectorCSD extends BasePeakDetector implements IPeakDetectorCS
 	 * @param window
 	 * @return {@link IFirstDerivativeDetectorSlopes}
 	 */
-	public static IFirstDerivativeDetectorSlopes getFirstDerivativeSlopes(IChromatogramSelectionCSD chromatogramSelection, WindowSize window) {
+	public static IFirstDerivativeDetectorSlopes getFirstDerivativeSlopes(IChromatogramSelectionCSD chromatogramSelection, WindowSize windowSize) {
 
 		ITotalScanSignals signals = new TotalScanSignals(chromatogramSelection);
 		TotalScanSignalsModifier.normalize(signals, NORMALIZATION_BASE);
@@ -256,7 +256,13 @@ public class PeakDetectorCSD extends BasePeakDetector implements IPeakDetectorCS
 				slopes.add(slope);
 			}
 		}
-		slopes.calculateMovingAverage(window);
+		/*
+		 * Moving average on the slopes
+		 */
+		if(!WindowSize.NONE.equals(windowSize)) {
+			slopes.calculateMovingAverage(windowSize);
+		}
+		//
 		return slopes;
 	}
 

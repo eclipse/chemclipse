@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -64,9 +64,9 @@ public class DetectorSlopes implements IDetectorSlopes {
 	public void calculateMovingAverage(WindowSize windowSize) {
 
 		/*
-		 * Return if the windowSize is null.
+		 * Return if the windowSize is null or NONE.
 		 */
-		if(windowSize == null) {
+		if(windowSize == null || WindowSize.NONE.equals(windowSize)) {
 			return;
 		}
 		/*
