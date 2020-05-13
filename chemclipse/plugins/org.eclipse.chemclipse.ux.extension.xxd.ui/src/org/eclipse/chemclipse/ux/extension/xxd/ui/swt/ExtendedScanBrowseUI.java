@@ -11,12 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
-import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createContainer;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.selection.ChromatogramSelection;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -36,6 +36,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -44,91 +45,141 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 @SuppressWarnings("rawtypes")
-public class ExtendedScanBrowseUI {
+public class ExtendedScanBrowseUI extends Composite {
 
 	private Composite toolbarInfo;
 	private Label labelInfo;
-	private ScanChartUI scanChartUI;
 	//
 	private Button buttonPreviousScan;
-	private ComboViewer comboChromatograms;
+	private ComboViewer comboViewerType;
+	private ComboViewer comboViewerSource;
 	private Button buttonNextScan;
+	private ScanChartUI scanChartUI;
 	//
+	private IChromatogramSelection<?, ?> chromatogramSelection;
 	private int masterRetentionTime;
 	//
 	private final ScanDataSupport scanDataSupport = new ScanDataSupport();
-	private EditorUpdateSupport editorUpdateSupport = new EditorUpdateSupport();
 
-	public ExtendedScanBrowseUI(Composite parent) {
-		initialize(parent);
+	private enum Type {
+		EXTERNAL("Editor(s)"), //
+		INTERNAL("Reference(s)"), //
+		BOTH("Both"); //
+
+		private String label = "";
+
+		private Type(String label) {
+
+			this.label = label;
+		}
+
+		public String getLabel() {
+
+			return label;
+		}
 	}
 
-	public void update(IScan scan) {
+	public ExtendedScanBrowseUI(Composite parent, int type) {
 
-		setScan(scan);
-		enableReferenceScanWidgets();
+		super(parent, type);
+		createControl();
 	}
 
-	private void setScan(IScan scan) {
+	public void update(IChromatogramSelection<?, ?> chromatogramSelection) {
 
+		this.chromatogramSelection = chromatogramSelection;
+		IScan scan = chromatogramSelection != null ? chromatogramSelection.getSelectedScan() : null;
 		masterRetentionTime = (scan != null) ? scan.getRetentionTime() : 0;
 		updateScan(scan);
-		setComboReferenceItems(scan);
 	}
 
-	private void updateScan(IScan scan) {
+	private void createControl() {
 
-		labelInfo.setText(scanDataSupport.getScanLabel(scan));
-		scanChartUI.setInput(scan);
-	}
-
-	private void initialize(Composite parent) {
-
-		Composite container = createContainer(parent);
+		setLayout(new FillLayout());
 		//
-		createToolbarReferences(container);
-		toolbarInfo = createToolbarInfo(container);
-		createScanChart(container);
-		/*
-		 * No initial selection.
-		 */
+		Composite composite = new Composite(this, SWT.NONE);
+		composite.setBackgroundMode(SWT.INHERIT_FORCE);
+		GridLayout layout = new GridLayout(1, true);
+		composite.setLayout(layout);
+		//
+		createToolbarMain(composite);
+		toolbarInfo = createToolbarInfo(composite);
+		scanChartUI = createScanChart(composite);
+		//
 		PartSupport.setCompositeVisibility(toolbarInfo, true);
-		setScan(null);
 	}
 
-	private Composite createToolbarReferences(Composite parent) {
+	private Composite createToolbarMain(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(4, false));
+		composite.setLayout(new GridLayout(5, false));
 		//
+		comboViewerType = createComboViewerType(composite);
 		buttonPreviousScan = createPreviousReferenceScanButton(composite);
-		comboChromatograms = createReferenceCombo(composite);
+		comboViewerSource = createComboViewerSource(composite);
 		buttonNextScan = createNextReferenceScanButton(composite);
 		createSettingsButton(composite);
 		//
 		return composite;
 	}
 
+	private ComboViewer createComboViewerType(Composite parent) {
+
+		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		comboViewer.setContentProvider(new ArrayContentProvider());
+		comboViewer.setLabelProvider(new LabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+
+				if(element instanceof Type) {
+					return ((Type)element).getLabel();
+				}
+				return null;
+			}
+		});
+		//
+		Combo combo = comboViewer.getCombo();
+		combo.setToolTipText("Select the source of referenced scan(s).");
+		GridData gridData = new GridData();
+		gridData.widthHint = 150;
+		combo.setLayoutData(gridData);
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				IScan scan = chromatogramSelection != null ? chromatogramSelection.getSelectedScan() : null;
+				updateScan(scan);
+			}
+		});
+		//
+		comboViewer.setInput(Type.values());
+		combo.select(0);
+		//
+		return comboViewer;
+	}
+
 	private Button createPreviousReferenceScanButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Get the scan of the previous reference.");
+		button.setToolTipText("Get the scan of the previous source.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PREVIOUS_YELLOW, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				selectReferenceScan(-1);
+				selectScan(-1);
 			}
 		});
 		return button;
 	}
 
-	private ComboViewer createReferenceCombo(Composite parent) {
+	private ComboViewer createComboViewerSource(Composite parent) {
 
 		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
 		comboViewer.setContentProvider(new ArrayContentProvider());
@@ -140,7 +191,13 @@ public class ExtendedScanBrowseUI {
 				String label = "";
 				if(element instanceof IChromatogramSelection) {
 					IChromatogramSelection chromatogramSelection = (IChromatogramSelection)element;
-					label = chromatogramSelection.getChromatogram().getName();
+					IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+					String dataName = chromatogram.getDataName();
+					if(dataName != null && !"".equals(dataName)) {
+						label = dataName;
+					} else {
+						label = chromatogram.getName();
+					}
 				}
 				return label;
 			}
@@ -154,7 +211,7 @@ public class ExtendedScanBrowseUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				selectReferenceScan(0);
+				selectScan(0);
 			}
 		});
 		return comboViewer;
@@ -164,14 +221,14 @@ public class ExtendedScanBrowseUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Get the scan of the next reference.");
+		button.setToolTipText("Get the scan of the next source.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_NEXT_YELLOW, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				selectReferenceScan(1);
+				selectScan(1);
 			}
 		});
 		return button;
@@ -212,48 +269,29 @@ public class ExtendedScanBrowseUI {
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(1, false));
 		//
-		labelInfo = new Label(composite, SWT.NONE);
-		labelInfo.setText("");
-		labelInfo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		labelInfo = createLabel(composite);
 		//
 		return composite;
 	}
 
-	private void createScanChart(Composite parent) {
+	private Label createLabel(Composite parent) {
 
-		scanChartUI = new ScanChartUI(parent, SWT.BORDER);
+		Label label = new Label(parent, SWT.NONE);
+		label.setText("");
+		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		return label;
+	}
+
+	private ScanChartUI createScanChart(Composite parent) {
+
+		ScanChartUI scanChartUI = new ScanChartUI(parent, SWT.BORDER);
 		scanChartUI.setLayoutData(new GridData(GridData.FILL_BOTH));
+		return scanChartUI;
 	}
 
-	private void setComboReferenceItems(IScan scan) {
+	private void selectScan(int moveIndex) {
 
-		List<IChromatogramSelection> chromatogramSelections = editorUpdateSupport.getChromatogramSelections();
-		comboChromatograms.setInput(chromatogramSelections);
-		//
-		if(scan != null) {
-			exitloop:
-			for(int i = 0; i < chromatogramSelections.size(); i++) {
-				IChromatogramSelection chromatogramSelection = chromatogramSelections.get(i);
-				if(chromatogramSelection.getSelectedScan() == scan) {
-					comboChromatograms.getCombo().select(i);
-					break exitloop;
-				}
-			}
-		}
-		//
-		enableReferenceScanWidgets();
-	}
-
-	private void enableReferenceScanWidgets() {
-
-		Combo combo = comboChromatograms.getCombo();
-		buttonPreviousScan.setEnabled(combo.getSelectionIndex() > 0);
-		buttonNextScan.setEnabled(combo.getSelectionIndex() < combo.getItemCount() - 1);
-	}
-
-	private void selectReferenceScan(int moveIndex) {
-
-		Combo combo = comboChromatograms.getCombo();
+		Combo combo = comboViewerSource.getCombo();
 		int index = combo.getSelectionIndex() + moveIndex;
 		//
 		if(moveIndex < 0) {
@@ -267,7 +305,7 @@ public class ExtendedScanBrowseUI {
 		 * Update the chart and label
 		 */
 		IScan referenceScan = null;
-		IStructuredSelection structuredSelection = comboChromatograms.getStructuredSelection();
+		IStructuredSelection structuredSelection = comboViewerSource.getStructuredSelection();
 		Object object = structuredSelection.getFirstElement();
 		if(object instanceof IChromatogramSelection) {
 			IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
@@ -276,7 +314,112 @@ public class ExtendedScanBrowseUI {
 			referenceScan = chromatogram.getScan(scanNumber);
 		}
 		//
-		updateScan(referenceScan);
-		enableReferenceScanWidgets();
+		updateChart(referenceScan);
+		updatePreviousAndNextButton();
+	}
+
+	private void updateScan(IScan scan) {
+
+		updateLabel(scan);
+		updateChart(scan);
+		updateComboViewer(scan);
+		updatePreviousAndNextButton();
+	}
+
+	private void updateLabel(IScan scan) {
+
+		labelInfo.setText(scanDataSupport.getScanLabel(scan));
+	}
+
+	private void updateChart(IScan scan) {
+
+		scanChartUI.setInput(scan);
+		scanChartUI.getBaseChart().redraw();
+	}
+
+	private void updateComboViewer(IScan scan) {
+
+		Type type = getSelectedType();
+		List<IChromatogramSelection> chromatogramSelections = new ArrayList<>();
+		/*
+		 * Add this selection as the first entry.
+		 */
+		if(chromatogramSelection != null) {
+			chromatogramSelections.add(chromatogramSelection);
+		}
+		/*
+		 * Add the reference(s)
+		 */
+		switch(type) {
+			case INTERNAL:
+				chromatogramSelections.addAll(extractInternal());
+				break;
+			case EXTERNAL:
+				chromatogramSelections.addAll(extractExternal());
+				break;
+			default:
+				chromatogramSelections.addAll(extractInternal());
+				chromatogramSelections.addAll(extractExternal());
+				break;
+		}
+		/*
+		 * Set and select the reference(s)
+		 */
+		Combo combo = comboViewerSource.getCombo();
+		comboViewerSource.setInput(chromatogramSelections);
+		if(chromatogramSelections.size() > 0) {
+			combo.select(0);
+		}
+	}
+
+	private void updatePreviousAndNextButton() {
+
+		Combo combo = comboViewerSource.getCombo();
+		buttonPreviousScan.setEnabled(combo.getSelectionIndex() > 0);
+		buttonNextScan.setEnabled(combo.getSelectionIndex() < combo.getItemCount() - 1);
+	}
+
+	private Type getSelectedType() {
+
+		Object object = comboViewerType.getStructuredSelection().getFirstElement();
+		if(object instanceof Type) {
+			return (Type)object;
+		}
+		return Type.BOTH;
+	}
+
+	@SuppressWarnings({"unchecked"})
+	private List<IChromatogramSelection> extractInternal() {
+
+		List<IChromatogramSelection> chromatogramSelections = new ArrayList<>();
+		if(chromatogramSelection != null) {
+			Object object = chromatogramSelection.getChromatogram();
+			if(object instanceof IChromatogram) {
+				IChromatogram chromatogram = (IChromatogram)object;
+				List<IChromatogram> chromatograms = chromatogram.getReferencedChromatograms();
+				for(IChromatogram chromatogramReference : chromatograms) {
+					chromatogramSelections.add(new ChromatogramSelection(chromatogramReference));
+				}
+			}
+		}
+		return chromatogramSelections;
+	}
+
+	private List<IChromatogramSelection> extractExternal() {
+
+		List<IChromatogramSelection> chromatogramSelections = new ArrayList<>();
+		EditorUpdateSupport editorUpdateSupport = new EditorUpdateSupport();
+		if(chromatogramSelection != null) {
+			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			for(IChromatogramSelection chromatogramSelectionEditor : editorUpdateSupport.getChromatogramSelections()) {
+				if(chromatogram != chromatogramSelectionEditor.getChromatogram()) {
+					chromatogramSelections.add(chromatogramSelectionEditor);
+				}
+			}
+		} else {
+			chromatogramSelections.addAll(editorUpdateSupport.getChromatogramSelections());
+		}
+		//
+		return chromatogramSelections;
 	}
 }

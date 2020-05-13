@@ -15,54 +15,87 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EnhancedUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedScanBrowseUI;
-import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class ScanBrowsePart extends EnhancedUpdateSupport implements IUpdateSupport {
+public class ScanBrowsePart {
 
-	private ExtendedScanBrowseUI extendedScanBrowseUI;
+	private static final String TOPIC = IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION;
+	//
+	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
+	private ExtendedScanBrowseUI composite;
+	//
+	private IDataUpdateListener updateListener = new IDataUpdateListener() {
+
+		@Override
+		public void update(String topic, List<Object> objects) {
+
+			updateSelection(objects, topic);
+		}
+	};
 
 	@Inject
-	public ScanBrowsePart(Composite parent, MPart part, IEventBroker eventBroker) {
-		super(parent, Activator.getDefault().getDataUpdateSupport(), IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, part);
+	public ScanBrowsePart(Composite parent, MPart part) {
+
+		composite = new ExtendedScanBrowseUI(parent, SWT.NONE);
+		dataUpdateSupport.add(updateListener);
+	}
+
+	@Focus
+	public void setFocus() {
+
+		updateSelection(dataUpdateSupport.getUpdates(TOPIC), TOPIC);
 	}
 
 	@Override
-	public void createControl(Composite parent) {
+	protected void finalize() throws Throwable {
 
-		extendedScanBrowseUI = new ExtendedScanBrowseUI(parent);
+		dataUpdateSupport.remove(updateListener);
+		super.finalize();
 	}
 
-	@Override
-	public void updateSelection(List<Object> objects, String topic) {
+	private void updateSelection(List<Object> objects, String topic) {
 
 		/*
 		 * 0 => because only one property was used to register the event.
 		 */
-		if(objects.size() == 1) {
-			Object object = objects.get(0);
-			if(isScanTopic(topic)) {
-				IScan scan = null;
-				if(object instanceof IScan) {
-					scan = (IScan)object;
+		if(isVisible()) {
+			if(objects.size() == 1) {
+				Object object = objects.get(0);
+				if(isChromatogramTopic(topic)) {
+					if(object instanceof IChromatogramSelection) {
+						composite.update((IChromatogramSelection<?, ?>)object);
+					}
 				}
-				extendedScanBrowseUI.update(scan);
 			}
 		}
 	}
 
-	private boolean isScanTopic(String topic) {
+	private boolean isVisible() {
 
-		if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION)) {
+		return (composite != null && !composite.isDisposed() && composite.isVisible());
+	}
+
+	private boolean isChromatogramTopic(String topic) {
+
+		if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION)) {
 			return true;
+		} else if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION)) {
+			return true;
+		} else if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION)) {
+			return true;
+		} else if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION)) {
+			return true;
+		} else {
+			return false;
 		}
-		return false;
 	}
 }
