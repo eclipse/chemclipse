@@ -51,6 +51,5 @@ public class ChromatogramConverter_2_Test extends TestCase {
 		 */
 		assertTrue("Amount Filter Names", 3 <= filterNames.length);
 		assertEquals("FilterName", true, result.contains("OpenChrom Chromatogram (*.ocb)"));
-		assertEquals("FilterName", true, result.contains("ANDI/AIA CDF Chromatogram (*.CDF)"));
 	}
 }

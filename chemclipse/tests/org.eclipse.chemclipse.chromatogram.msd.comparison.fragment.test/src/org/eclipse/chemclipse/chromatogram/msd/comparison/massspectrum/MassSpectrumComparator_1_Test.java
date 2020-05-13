@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -45,10 +45,9 @@ public class MassSpectrumComparator_1_Test extends TestCase {
 
 		int count = 0;
 		String[] names = support.getComparatorNames();
-		String[] rcs = new String[4];
+		String[] rcs = new String[2];
 		rcs[0] = "INCOS";
 		rcs[1] = "Alfassi Geometric Distance";
-		rcs[2] = "PBM";
 		for(String name : names) {
 			for(String rc : rcs) {
 				if(name.equals(rc)) {
@@ -56,17 +55,16 @@ public class MassSpectrumComparator_1_Test extends TestCase {
 				}
 			}
 		}
-		assertEquals("Registered Comparator Names", 3, count);
+		assertTrue(count >= 2);
 	}
 
 	public void testGetMassSpectrumComparatorSupport_2() throws NoMassSpectrumComparatorAvailableException {
 
 		int count = 0;
 		List<String> ids = support.getAvailableComparatorIds();
-		String[] rcs = new String[4];
+		String[] rcs = new String[2];
 		rcs[0] = "org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos";
 		rcs[1] = "org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.alfassi.geometric";
-		rcs[2] = "net.openchrom.chromatogram.msd.comparison.supplier.pbm";
 		for(String id : ids) {
 			for(String rc : rcs) {
 				if(id.equals(rc)) {
@@ -74,7 +72,7 @@ public class MassSpectrumComparator_1_Test extends TestCase {
 				}
 			}
 		}
-		assertEquals("Registered Comparator Ids", 3, count);
+		assertTrue(count >= 2);
 	}
 
 	public void testGetMassSpectrumComparatorSupport_3() throws NoMassSpectrumComparatorAvailableException {
@@ -125,17 +123,6 @@ public class MassSpectrumComparator_1_Test extends TestCase {
 		String comparatorName = "Alfassi Geometric Distance";
 		String description = "This comparator calculates the similarity between two mass spectra with the alfassi geomtric distance algorithm.";
 		String id = "org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.alfassi.geometric";
-		IMassSpectrumComparisonSupplier supplier = support.getMassSpectrumComparisonSupplier(id);
-		assertEquals("ComparatorName", comparatorName, supplier.getComparatorName());
-		assertEquals("Description", description, supplier.getDescription());
-		assertEquals("Id", id, supplier.getId());
-	}
-
-	public void testGetMassSpectrumComparisonSupplier_5() throws NoMassSpectrumComparatorAvailableException {
-
-		String comparatorName = "PBM";
-		String description = "This comparator calculates the similarity between two mass spectra with the pbm algorithm.";
-		String id = "net.openchrom.chromatogram.msd.comparison.supplier.pbm";
 		IMassSpectrumComparisonSupplier supplier = support.getMassSpectrumComparisonSupplier(id);
 		assertEquals("ComparatorName", comparatorName, supplier.getComparatorName());
 		assertEquals("Description", description, supplier.getDescription());
