@@ -29,9 +29,8 @@ public class LoadingsPlotPart {
 
 	private static final String TOPIC = Activator.TOPIC_PCA_EVALUATION_LOAD;
 	//
-	private Composite parent;
 	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
-	private ExtendedLoadingsPlot plot;
+	private ExtendedLoadingsPlot composite;
 	//
 	private IDataUpdateListener updateListener = new IDataUpdateListener() {
 
@@ -44,8 +43,8 @@ public class LoadingsPlotPart {
 
 	@Inject
 	public LoadingsPlotPart(Composite parent, MPart part) {
-		plot = new ExtendedLoadingsPlot(parent, SWT.NONE);
-		this.parent = parent;
+
+		composite = new ExtendedLoadingsPlot(parent, SWT.NONE);
 		dataUpdateSupport.add(updateListener);
 	}
 
@@ -70,11 +69,11 @@ public class LoadingsPlotPart {
 		if(isVisible()) {
 			if(objects.size() == 1) {
 				if(isUnloadEvent(topic)) {
-					plot.setInput(null);
+					composite.setInput(null);
 				} else {
 					Object object = objects.get(0);
 					if(object instanceof EvaluationPCA) {
-						plot.setInput((EvaluationPCA)object);
+						composite.setInput((EvaluationPCA)object);
 					}
 				}
 			}
@@ -83,14 +82,11 @@ public class LoadingsPlotPart {
 
 	private boolean isUnloadEvent(String topic) {
 
-		if(topic.equals(Activator.TOPIC_PCA_EVALUATION_CLEAR)) {
-			return true;
-		}
-		return false;
+		return topic.equals(Activator.TOPIC_PCA_EVALUATION_CLEAR);
 	}
 
 	private boolean isVisible() {
 
-		return (parent != null && parent.isVisible());
+		return (composite != null && !composite.isDisposed() && composite.isVisible());
 	}
 }

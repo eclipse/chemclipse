@@ -30,9 +30,8 @@ public class FeatureTablePart {
 
 	private static final String TOPIC = Activator.TOPIC_PCA_EVALUATION_LOAD;
 	//
-	private Composite parent;
 	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
-	private ExtendedFeatureList list;
+	private ExtendedFeatureList composite;
 	//
 	private IDataUpdateListener updateListener = new IDataUpdateListener() {
 
@@ -45,8 +44,8 @@ public class FeatureTablePart {
 
 	@Inject
 	public FeatureTablePart(Composite parent, MPart part) {
-		list = new ExtendedFeatureList(parent, SWT.NONE);
-		this.parent = parent;
+
+		composite = new ExtendedFeatureList(parent, SWT.NONE);
 		dataUpdateSupport.add(updateListener);
 	}
 
@@ -71,11 +70,11 @@ public class FeatureTablePart {
 		if(isVisible()) {
 			if(objects.size() == 1) {
 				if(isUnloadEvent(topic)) {
-					list.setInput(null);
+					composite.setInput(null);
 				} else {
 					Object object = objects.get(0);
 					if(object instanceof EvaluationPCA) {
-						list.setInput((EvaluationPCA)object);
+						composite.setInput((EvaluationPCA)object);
 					}
 				}
 			}
@@ -84,14 +83,11 @@ public class FeatureTablePart {
 
 	private boolean isUnloadEvent(String topic) {
 
-		if(topic.equals(Activator.TOPIC_PCA_EVALUATION_CLEAR)) {
-			return true;
-		}
-		return false;
+		return topic.equals(Activator.TOPIC_PCA_EVALUATION_CLEAR);
 	}
 
 	private boolean isVisible() {
 
-		return (parent != null && parent.isVisible());
+		return (composite != null && !composite.isDisposed() && composite.isVisible());
 	}
 }
