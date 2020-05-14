@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -50,7 +50,7 @@ public class ChromatogramGson_1000 {
 	private static final String BARCODE = "BARCODE";
 	//
 	private static final String RTS = "RTS"; // Retention Times (milliseconds)
-	private static final String RT = "RT"; // Retention Time (milliseconds)
+	private static final String RT = "RT"; // Retention Time [ms]
 	private static final String RI = "RI"; // Retention Index
 	private static final String TIC = "TIC";
 	//

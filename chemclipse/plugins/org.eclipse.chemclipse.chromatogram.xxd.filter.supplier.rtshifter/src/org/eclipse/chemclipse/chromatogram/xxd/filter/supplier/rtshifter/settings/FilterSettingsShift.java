@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class FilterSettingsShift extends AbstractChromatogramFilterSettings {
 
-	@JsonProperty(value = "Shift Retention Time (Milliseconds)", defaultValue = "0")
+	@JsonProperty(value = "Shift Retention Time [ms]", defaultValue = "0")
 	@JsonPropertyDescription(value = "Set retention time shift.")
 	@IntSettingsProperty(minValue = PreferenceSupplier.SHIFT_MILLISECONDS_MIN, maxValue = PreferenceSupplier.SHIFT_MILLISECONDS_MAX)
 	private int millisecondsToShift = 0;

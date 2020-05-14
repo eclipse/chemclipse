@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -70,14 +70,14 @@ public interface IChromatogramOverview extends IMeasurementInfo {
 	 * Returns the start retention time in milliseconds.<br/>
 	 * If no scans are stored, 0 will be returned.
 	 * 
-	 * @return start retention time (milliseconds)
+	 * @return start Retention Time [ms]
 	 */
 	int getStartRetentionTime(); // milliseconds
 
 	/**
 	 * Returns the stop retention time in milliseconds
 	 * 
-	 * @return stop retention time (milliseconds)
+	 * @return stop Retention Time [ms]
 	 */
 	int getStopRetentionTime(); // milliseconds
 

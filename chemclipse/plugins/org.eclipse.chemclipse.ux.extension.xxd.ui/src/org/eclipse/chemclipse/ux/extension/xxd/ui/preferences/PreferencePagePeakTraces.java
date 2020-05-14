@@ -33,7 +33,7 @@ public class PreferencePagePeakTraces extends FieldEditorPreferencePage implemen
 
 		addField(new ComboFieldEditor(PreferenceConstants.P_COLOR_SCHEME_PEAK_TRACES, "Color Scheme", Colors.getAvailableColorSchemes(), getFieldEditorParent()));
 		addField(new SpinnerFieldEditor(PreferenceConstants.P_MAX_DISPLAY_PEAK_TRACES, "Display Traces", PreferenceConstants.MIN_TRACES, PreferenceConstants.MAX_TRACES, getFieldEditorParent()));
-		addField(new IntegerFieldEditor(PreferenceConstants.P_PEAK_TRACES_OFFSET_RETENTION_TIME, "Offset Retention Time (Milliseconds)", PreferenceConstants.MIN_OFFSET_RETENTION_TIME, PreferenceConstants.MAX_OFFSET_RETENTION_TIME, getFieldEditorParent()));
+		addField(new IntegerFieldEditor(PreferenceConstants.P_PEAK_TRACES_OFFSET_RETENTION_TIME, "Offset Time [ms]", PreferenceConstants.MIN_OFFSET_RETENTION_TIME, PreferenceConstants.MAX_OFFSET_RETENTION_TIME, getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {
