@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.feature"
+      label="Splitter Feature"
+      version="0.9.0.qualifier"
+      provider-name="ChemClipse">
+
+   <description url="http://www.chemclipse.net">
+      This filter splits a chromatogram into its MS1, MS2, ... reference chromatogram(s).
+   </description>
+
+   <copyright url="http://www.chemclipse.net">
+      This feature is published under the Eclispe Public License v1.0.
+   </copyright>
+
+   <license url="http://www.eclipse.org/legal/epl-v10.html">
+      Copyright (c) 2020 Lablicate GmbH.
+All rights reserved. This program and the accompanying materials
+are made available under the terms of the Eclipse Public License
+v1.0 which accompanies this distribution, and is available at
+http://www.eclipse.org/legal/epl-v10.html
+   </license>
+
+   <plugin
+         id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

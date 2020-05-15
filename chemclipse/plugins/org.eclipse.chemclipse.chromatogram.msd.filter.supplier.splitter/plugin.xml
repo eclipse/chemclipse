@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.filter.chromatogramFilterSupplier">
+      <ChromatogramFilterSupplier
+            description="This filter splits a chromatogram into its MS1, MS2, ... reference chromatogram(s)."
+            filter="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.core.ChromatogramFilter"
+            filterName="Chromatogram Splitter (MS1, MS2, ...)"
+            filterSettings="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.settings.FilterSettings"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter">
+      </ChromatogramFilterSupplier>
+   </extension>   
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+</plugin>
