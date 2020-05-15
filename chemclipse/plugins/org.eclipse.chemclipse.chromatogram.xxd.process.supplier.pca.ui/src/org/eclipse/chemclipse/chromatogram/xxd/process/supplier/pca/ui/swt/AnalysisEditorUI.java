@@ -61,7 +61,7 @@ public class AnalysisEditorUI extends Composite {
 
 	private static final Logger logger = Logger.getLogger(AnalysisEditorUI.class);
 	//
-	private ISamplesPCA<? extends IVariable, ? extends ISample> samples = null;
+	private ISamplesPCA<IVariable, ISample> samples = null;
 	private EvaluationPCA evaluationPCA = null;
 	//
 	private Composite toolbarSearch;
@@ -74,6 +74,7 @@ public class AnalysisEditorUI extends Composite {
 	private Algorithm[] algorithms = Algorithm.getAlgorithms();
 
 	public AnalysisEditorUI(Composite parent, int style) {
+
 		super(parent, style);
 		createControl();
 	}
@@ -88,13 +89,8 @@ public class AnalysisEditorUI extends Composite {
 	public void setInput(ISamplesPCA<IVariable, ISample> samples) {
 
 		this.samples = samples;
-		if(samples != null) {
-			sampleListUI.setInput(samples.getSampleList());
-			updateWidgets(samples.getAnalysisSettings());
-		} else {
-			sampleListUI.setInput(null);
-			updateWidgets(null);
-		}
+		updateSampleList();
+		updateControls();
 	}
 
 	private void createControl() {
@@ -234,6 +230,7 @@ public class AnalysisEditorUI extends Composite {
 
 				runCalculation(e.display);
 				fireUpdate(e.display, evaluationPCA);
+				updateSampleList();
 			}
 		});
 		//
@@ -401,6 +398,24 @@ public class AnalysisEditorUI extends Composite {
 					}
 				}
 			});
+		}
+	}
+
+	private void updateControls() {
+
+		if(samples != null) {
+			updateWidgets(samples.getAnalysisSettings());
+		} else {
+			updateWidgets(null);
+		}
+	}
+
+	private void updateSampleList() {
+
+		if(samples != null) {
+			sampleListUI.updateInput(samples.getSampleList());
+		} else {
+			sampleListUI.updateInput(null);
 		}
 	}
 }

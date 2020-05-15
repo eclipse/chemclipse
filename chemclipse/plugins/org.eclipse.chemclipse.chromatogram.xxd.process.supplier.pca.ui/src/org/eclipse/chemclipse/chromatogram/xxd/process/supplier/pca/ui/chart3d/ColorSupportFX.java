@@ -23,7 +23,7 @@ public class ColorSupportFX {
 
 	public static Map<String, javafx.scene.paint.Color> getGroupNameColorMap(List<IResultPCA> resultList) {
 
-		Map<String, Color> colorMap = ColorSupport.getGroupNameColorMap(resultList);
+		Map<String, Color> colorMap = ColorSupport.getColorMapResults(resultList);
 		Map<String, javafx.scene.paint.Color> colorMapFX = new HashMap<>();
 		//
 		for(Map.Entry<String, Color> colorEntry : colorMap.entrySet()) {

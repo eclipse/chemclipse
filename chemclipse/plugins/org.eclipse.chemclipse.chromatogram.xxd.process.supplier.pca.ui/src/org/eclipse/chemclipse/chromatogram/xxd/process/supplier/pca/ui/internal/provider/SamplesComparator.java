@@ -28,17 +28,18 @@ public class SamplesComparator extends AbstractRecordTableComparator implements 
 			//
 			switch(getPropertyIndex()) {
 				case 0:
-					sortOrder = sample2.getName().compareTo(sample1.getName());
+					String name1 = sample1.getName() != null ? sample1.getName() : "";
+					String name2 = sample2.getName() != null ? sample2.getName() : "";
+					sortOrder = name2.compareTo(name1);
 					break;
 				case 1:
 					sortOrder = Boolean.compare(sample2.isSelected(), sample1.isSelected());
 					break;
-				case 2:
-					if(sample1.getGroupName() != null && sample2.getGroupName() != null) {
-						sortOrder = sample2.getGroupName().compareTo(sample1.getGroupName());
-					} else {
-						sortOrder = 0;
-					}
+				case 2: // Color is defined by the group name
+				case 3:
+					String groupName1 = sample1.getGroupName() != null ? sample1.getGroupName() : "";
+					String groupName2 = sample2.getGroupName() != null ? sample2.getGroupName() : "";
+					sortOrder = groupName2.compareTo(groupName1);
 					break;
 			}
 		}

@@ -116,7 +116,7 @@ public class SeriesConverter {
 		 * Group Colors
 		 */
 		List<IResultPCA> resultList = resultsPCA.getPcaResultList();
-		Map<String, Color> colorMap = ColorSupport.getGroupNameColorMap(resultList);
+		Map<String, Color> colorMap = ColorSupport.getColorMapResults(resultList);
 		//
 		for(int i = 0; i < resultsPCA.getPcaResultList().size(); i++) {
 			IResultPCA pcaResult = resultList.get(i);

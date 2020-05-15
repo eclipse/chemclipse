@@ -12,17 +12,24 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt;
 
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.provider.SamplesComparator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.provider.SamplesEditingSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.provider.SamplesLabelProvider;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.provider.SamplesListFilter;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.ColorSupport;
+import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
 
 public class SamplesListUI extends ExtendedTableViewer {
@@ -33,10 +40,23 @@ public class SamplesListUI extends ExtendedTableViewer {
 	private final ITableLabelProvider labelProvider = new SamplesLabelProvider();
 	private final ViewerComparator comparator = new SamplesComparator();
 	private final SamplesListFilter listFilter = new SamplesListFilter();
+	//
+	private Map<String, Color> colorMap = null;
 
 	public SamplesListUI(Composite parent, int style) {
+
 		super(parent, style);
 		createColumns();
+	}
+
+	public void updateInput(List<ISample> sampleList) {
+
+		super.setInput(sampleList);
+		if(sampleList != null) {
+			colorMap = ColorSupport.getColorMapSamples(sampleList);
+		} else {
+			colorMap = null;
+		}
 	}
 
 	public void setSearchText(String searchText, boolean caseSensitive) {
@@ -53,6 +73,7 @@ public class SamplesListUI extends ExtendedTableViewer {
 		setComparator(comparator);
 		setFilters(new ViewerFilter[]{listFilter});
 		setEditingSupport();
+		setCellColorProvider();
 	}
 
 	private void setEditingSupport() {
@@ -75,5 +96,30 @@ public class SamplesListUI extends ExtendedTableViewer {
 			return true;
 		}
 		return false;
+	}
+
+	private void setCellColorProvider() {
+
+		List<TableViewerColumn> tableViewerColumns = getTableViewerColumns();
+		TableViewerColumn tableViewerColumn = tableViewerColumns.get(SamplesLabelProvider.INDEX_COLOR); // Match Quality
+		if(tableViewerColumn != null) {
+			tableViewerColumn.setLabelProvider(new StyledCellLabelProvider() {
+
+				@Override
+				public void update(ViewerCell cell) {
+
+					if(cell != null && colorMap != null) {
+						Object element = cell.getElement();
+						if(element instanceof ISample) {
+							ISample sample = (ISample)element;
+							cell.setBackground(colorMap.get(sample.getGroupName()));
+							cell.setForeground(Colors.BLACK);
+							cell.setText("");
+						}
+						super.update(cell);
+					}
+				}
+			});
+		}
 	}
 }

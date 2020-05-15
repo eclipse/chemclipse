@@ -21,16 +21,21 @@ public class SamplesLabelProvider extends AbstractChemClipseLabelProvider {
 
 	public static final String SAMPLE_NAME = "Sample Name";
 	public static final String USE = "Use";
+	public static final String COLOR = "Color";
 	public static final String GROUP_NAME = "Group Name";
+	//
+	public static final int INDEX_COLOR = 2;
 	//
 	public static String[] TITLES = {//
 			SAMPLE_NAME, //
 			USE, //
+			COLOR, //
 			GROUP_NAME //
 	};
 	//
 	public static int[] BOUNDS = {//
 			300, //
+			30, //
 			30, //
 			300 //
 	};
@@ -62,13 +67,16 @@ public class SamplesLabelProvider extends AbstractChemClipseLabelProvider {
 			//
 			switch(columnIndex) {
 				case 0:
-					text = sample.getName();
+					text = sample.getName() != null ? sample.getName() : "";
 					break;
 				case 1:
 					text = ""; // Checkbox
 					break;
 				case 2:
-					text = sample.getGroupName();
+					text = ""; // Color
+					break;
+				case 3:
+					text = sample.getGroupName() != null ? sample.getGroupName() : "";
 					break;
 			}
 		}
