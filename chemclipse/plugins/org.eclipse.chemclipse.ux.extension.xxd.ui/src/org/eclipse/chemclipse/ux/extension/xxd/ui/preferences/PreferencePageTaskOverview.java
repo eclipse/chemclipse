@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -20,9 +20,10 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class PreferencePageTaskOverview extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePageTaskOverview() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setTitle("Quick Access");
+		setTitle("Overview");
 		setDescription("");
 	}
 

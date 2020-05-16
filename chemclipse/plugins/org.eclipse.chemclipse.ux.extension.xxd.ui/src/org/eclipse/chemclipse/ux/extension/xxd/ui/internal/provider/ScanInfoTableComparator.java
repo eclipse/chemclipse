@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,7 +16,7 @@ import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
 import org.eclipse.jface.viewers.Viewer;
 
-public class ChromtogramScanInfoTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
+public class ScanInfoTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
 
 	@Override
 	public int compare(Viewer viewer, Object e1, Object e2) {

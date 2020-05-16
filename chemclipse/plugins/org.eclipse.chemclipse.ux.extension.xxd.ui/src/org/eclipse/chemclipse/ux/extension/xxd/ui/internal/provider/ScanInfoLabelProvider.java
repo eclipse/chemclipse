@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,16 +23,47 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Image;
 
-public class ChromatogramScanInfoLabelProvider extends AbstractChemClipseLabelProvider {
+public class ScanInfoLabelProvider extends AbstractChemClipseLabelProvider {
 
-	private static final int MAX_SIM_IONS = 10;
-	private StringBuilder builder;
+	public static final String LABEL_EMPTY = "EMPTY";
+	public static final String LABEL_SIM = "SIM";
+	public static final String LABEL_SCAN = "SCAN";
+	public static final String LABEL_DOTS = "...";
+	public static final String LABEL_BLANK = "--";
+	//
+	public static final String SCAN = "Scan#";
+	public static final String RETENTION_TIME = "Time [min]";
+	public static final String COUNT_IONS = "Count Ion(s)";
+	public static final String CLASSIFICATION = "SIM/SCAN";
+	public static final String IONS = "m/z...";
+	//
+	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	private int limitSimTraces = preferenceStore.getInt(PreferenceConstants.P_LIMIT_SIM_TRACES);
+	//
+	public static final String[] TITLES = { //
+			SCAN, //
+			RETENTION_TIME, //
+			COUNT_IONS, //
+			CLASSIFICATION, //
+			IONS //
+	};
+	//
+	public static final int[] BOUNDS = { //
+			120, //
+			120, //
+			120, //
+			120, //
+			120 //
+	};
 
-	public ChromatogramScanInfoLabelProvider() {
+	public ScanInfoLabelProvider() {
+
 		super("0.000");
-		builder = new StringBuilder();
 	}
 
 	@Override
@@ -52,6 +83,7 @@ public class ChromatogramScanInfoLabelProvider extends AbstractChemClipseLabelPr
 		String text = "";
 		if(element instanceof IScanMSD) {
 			IScanMSD scanMSD = (IScanMSD)element;
+			int numberOfIons = scanMSD.getNumberOfIons();
 			switch(columnIndex) {
 				case 0:
 					text = Integer.toString(scanMSD.getScanNumber());
@@ -60,13 +92,21 @@ public class ChromatogramScanInfoLabelProvider extends AbstractChemClipseLabelPr
 					text = decimalFormat.format(scanMSD.getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
 					break;
 				case 2:
-					text = Integer.toString(scanMSD.getNumberOfIons());
+					text = Integer.toString(numberOfIons);
 					break;
 				case 3:
-					text = (scanMSD.getNumberOfIons() <= MAX_SIM_IONS) ? "SIM" : "SCAN";
+					if(numberOfIons > 0) {
+						text = (numberOfIons <= limitSimTraces) ? LABEL_SIM : LABEL_SCAN;
+					} else {
+						text = LABEL_EMPTY;
+					}
 					break;
 				case 4:
-					text = (scanMSD.getNumberOfIons() <= MAX_SIM_IONS) ? getIons(scanMSD) : "";
+					if(numberOfIons > 0) {
+						text = (scanMSD.getNumberOfIons() <= limitSimTraces) ? getIons(scanMSD) : LABEL_DOTS;
+					} else {
+						text = LABEL_BLANK;
+					}
 					break;
 				default:
 					text = "n.v.";
@@ -77,10 +117,7 @@ public class ChromatogramScanInfoLabelProvider extends AbstractChemClipseLabelPr
 
 	private String getIons(IScanMSD scanMSD) {
 
-		/*
-		 * Clear the builder.
-		 */
-		builder.delete(0, builder.length());
+		StringBuilder builder = new StringBuilder();
 		/*
 		 * Get the ions.
 		 */

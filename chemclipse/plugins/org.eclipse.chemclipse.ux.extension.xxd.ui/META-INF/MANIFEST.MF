@@ -1,6 +1,7 @@
 Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.chemclipse.ux.extension.xxd.ui
 Bundle-ManifestVersion: 2
-Bundle-Name: Ui
+Bundle-Name: XXD UI
 Bundle-SymbolicName: org.eclipse.chemclipse.ux.extension.xxd.ui;singleton:=true
 Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.ux.extension.xxd.ui.Activator

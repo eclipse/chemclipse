@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
@@ -31,11 +33,25 @@ public class DataUpdateSupport {
 	private List<IDataUpdateListener> updateListeners = new ArrayList<>();
 
 	public DataUpdateSupport(IEventBroker eventBroker) throws IllegalArgumentException {
+
 		if(eventBroker == null) {
 			throw new IllegalArgumentException("The event broker must be not null.");
 		} else {
 			this.eventBroker = eventBroker;
 		}
+	}
+
+	public static boolean isVisible(Composite composite) {
+
+		if(composite != null && !composite.isDisposed()) {
+			/*
+			 * UI Thread
+			 */
+			if(Thread.currentThread() == Display.getDefault().getThread()) {
+				return composite.isVisible();
+			}
+		}
+		return false;
 	}
 
 	public void add(IDataUpdateListener updateListener) {

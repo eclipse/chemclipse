@@ -23,6 +23,8 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.e4.ui.model.application.MApplication;
+import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
@@ -42,6 +44,7 @@ public class Activator extends AbstractUIPlugin {
 	 * The constructor
 	 */
 	public Activator() {
+
 	}
 
 	/*
@@ -110,6 +113,18 @@ public class Activator extends AbstractUIPlugin {
 
 		IEclipseContext eclipseContext = getEclipseContext();
 		return eclipseContext.get(IEventBroker.class);
+	}
+
+	public MApplication getApplication() {
+
+		IEclipseContext eclipseContext = getEclipseContext();
+		return eclipseContext.get(MApplication.class);
+	}
+
+	public EModelService getModelService() {
+
+		IEclipseContext eclipseContext = getEclipseContext();
+		return eclipseContext.get(EModelService.class);
 	}
 
 	private void initialize(DataUpdateSupport dataUpdateSupport) {

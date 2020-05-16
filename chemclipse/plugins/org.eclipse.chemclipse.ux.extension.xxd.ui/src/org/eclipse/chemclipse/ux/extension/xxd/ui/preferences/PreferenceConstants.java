@@ -53,6 +53,9 @@ public class PreferenceConstants extends ChartOptions {
 	public static final int MIN_OFFSET_RETENTION_TIME = 0;
 	public static final int MAX_OFFSET_RETENTION_TIME = 10000; // 10 seconds
 	public static final int DEF_OFFSET_RETENTION_TIME = 0;
+	//
+	public static final int MIN_SIM_IONS = 1;
+	public static final int MAX_SIM_IONS = 50;
 	/*
 	 * General / Task Quick Access
 	 */
@@ -228,6 +231,8 @@ public class PreferenceConstants extends ChartOptions {
 	//
 	public static final String P_TRACES_VIRTUAL_TABLE = "tracesVirtualTable";
 	public static final int DEF_TRACES_VIRTUAL_TABLE = 5000;
+	public static final String P_LIMIT_SIM_TRACES = "limitSimTraces";
+	public static final int DEF_LIMIT_SIM_TRACES = 5;
 	/*
 	 * Peaks
 	 */

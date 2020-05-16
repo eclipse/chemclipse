@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
 import java.util.List;
 
+import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
@@ -30,9 +31,9 @@ public class ScanBrowsePart {
 
 	private static final String TOPIC = IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION;
 	//
-	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
-	private ExtendedScanBrowseUI composite;
+	private ExtendedScanBrowseUI control;
 	//
+	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
 	private IDataUpdateListener updateListener = new IDataUpdateListener() {
 
 		@Override
@@ -45,7 +46,7 @@ public class ScanBrowsePart {
 	@Inject
 	public ScanBrowsePart(Composite parent, MPart part) {
 
-		composite = new ExtendedScanBrowseUI(parent, SWT.NONE);
+		control = new ExtendedScanBrowseUI(parent, SWT.NONE);
 		dataUpdateSupport.add(updateListener);
 	}
 
@@ -55,33 +56,24 @@ public class ScanBrowsePart {
 		updateSelection(dataUpdateSupport.getUpdates(TOPIC), TOPIC);
 	}
 
-	@Override
-	protected void finalize() throws Throwable {
+	@PreDestroy
+	protected void preDestroy() {
 
 		dataUpdateSupport.remove(updateListener);
-		super.finalize();
 	}
 
 	private void updateSelection(List<Object> objects, String topic) {
 
-		/*
-		 * 0 => because only one property was used to register the event.
-		 */
-		if(isVisible()) {
+		if(DataUpdateSupport.isVisible(control)) {
 			if(objects.size() == 1) {
 				Object object = objects.get(0);
 				if(isChromatogramTopic(topic)) {
 					if(object instanceof IChromatogramSelection) {
-						composite.update((IChromatogramSelection<?, ?>)object);
+						control.update((IChromatogramSelection<?, ?>)object);
 					}
 				}
 			}
 		}
-	}
-
-	private boolean isVisible() {
-
-		return (composite != null && !composite.isDisposed() && composite.isVisible());
 	}
 
 	private boolean isChromatogramTopic(String topic) {

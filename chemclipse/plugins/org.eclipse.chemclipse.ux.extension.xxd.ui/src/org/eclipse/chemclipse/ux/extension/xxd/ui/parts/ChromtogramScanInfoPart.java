@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2019 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,60 +13,68 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
 import java.util.List;
 
+import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ChromtogramScanInfoUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateListener;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedScanInfoUI;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
-public class ChromtogramScanInfoPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
+public class ChromtogramScanInfoPart {
 
-	private ChromtogramScanInfoUI chromtogramScanInfoUI;
+	private static final String TOPIC = IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION;
+	//
+	private ExtendedScanInfoUI control;
+	//
+	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
+	private IDataUpdateListener updateListener = new IDataUpdateListener() {
+
+		@Override
+		public void update(String topic, List<Object> objects) {
+
+			updateSelection(objects, topic);
+		}
+	};
 
 	@Inject
 	public ChromtogramScanInfoPart(Composite parent, MPart part) {
-		super(part);
-		parent.setLayout(new FillLayout());
-		chromtogramScanInfoUI = new ChromtogramScanInfoUI(parent, SWT.NONE);
+
+		control = new ExtendedScanInfoUI(parent, SWT.NONE);
+		dataUpdateSupport.add(updateListener);
 	}
 
 	@Focus
 	public void setFocus() {
 
-		updateObjects(getObjects(), getTopic());
+		updateSelection(dataUpdateSupport.getUpdates(TOPIC), TOPIC);
 	}
 
-	@Override
-	public void registerEvents() {
+	@PreDestroy
+	protected void preDestroy() {
 
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
+		dataUpdateSupport.remove(updateListener);
 	}
 
-	@Override
-	public void updateObjects(List<Object> objects, String topic) {
+	private void updateSelection(List<Object> objects, String topic) {
 
-		/*
-		 * 0 => because only one property was used to register the event.
-		 */
-		if(objects.size() == 1) {
-			Object object = null;
-			if(!isUnloadEvent(topic)) {
-				object = objects.get(0);
-				if(object instanceof IChromatogramSelectionMSD) {
-					chromtogramScanInfoUI.update((IChromatogramSelectionMSD)object);
+		if(DataUpdateSupport.isVisible(control)) {
+			if(objects.size() == 1) {
+				Object object = null;
+				if(!isUnloadEvent(topic)) {
+					object = objects.get(0);
+					if(object instanceof IChromatogramSelectionMSD) {
+						control.setInput(object);
+					}
 				} else {
-					chromtogramScanInfoUI.update(null);
+					control.setInput(null);
 				}
-			} else {
-				chromtogramScanInfoUI.update(null);
 			}
 		}
 	}
