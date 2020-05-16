@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts;
 
 import java.util.List;
 
+import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
@@ -29,9 +30,9 @@ public class ScorePlot2DPart {
 
 	private static final String TOPIC = Activator.TOPIC_PCA_EVALUATION_LOAD;
 	//
-	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
-	private ExtendedScorePlot2D composite;
+	private ExtendedScorePlot2D control;
 	//
+	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
 	private IDataUpdateListener updateListener = new IDataUpdateListener() {
 
 		@Override
@@ -44,7 +45,7 @@ public class ScorePlot2DPart {
 	@Inject
 	public ScorePlot2DPart(Composite parent, MPart part) {
 
-		composite = new ExtendedScorePlot2D(parent, SWT.NONE);
+		control = new ExtendedScorePlot2D(parent, SWT.NONE);
 		dataUpdateSupport.add(updateListener);
 	}
 
@@ -54,26 +55,22 @@ public class ScorePlot2DPart {
 		updateSelection(dataUpdateSupport.getUpdates(TOPIC), TOPIC);
 	}
 
-	@Override
-	protected void finalize() throws Throwable {
+	@PreDestroy
+	protected void preDestroy() {
 
 		dataUpdateSupport.remove(updateListener);
-		super.finalize();
 	}
 
 	private void updateSelection(List<Object> objects, String topic) {
 
-		/*
-		 * 0 => because only one property was used to register the event.
-		 */
-		if(isVisible()) {
+		if(DataUpdateSupport.isVisible(control)) {
 			if(objects.size() == 1) {
 				if(isUnloadEvent(topic)) {
-					composite.setInput(null);
+					control.setInput(null);
 				} else {
 					Object object = objects.get(0);
 					if(object instanceof EvaluationPCA) {
-						composite.setInput((EvaluationPCA)object);
+						control.setInput((EvaluationPCA)object);
 					}
 				}
 			}
@@ -83,10 +80,5 @@ public class ScorePlot2DPart {
 	private boolean isUnloadEvent(String topic) {
 
 		return topic.equals(Activator.TOPIC_PCA_EVALUATION_CLEAR);
-	}
-
-	private boolean isVisible() {
-
-		return (composite != null && !composite.isDisposed() && composite.isVisible());
 	}
 }

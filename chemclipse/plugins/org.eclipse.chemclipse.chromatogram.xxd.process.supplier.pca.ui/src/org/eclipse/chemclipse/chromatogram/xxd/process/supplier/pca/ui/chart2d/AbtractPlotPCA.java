@@ -38,6 +38,7 @@ public abstract class AbtractPlotPCA extends ScatterChart {
 	private String title = "";
 
 	public AbtractPlotPCA(Composite parent, int style, String title) {
+
 		super(parent, style);
 		this.title = title;
 		initialize();
@@ -144,7 +145,6 @@ public abstract class AbtractPlotPCA extends ScatterChart {
 		getChartSettings().getPrimaryAxisSettingsX().setTitle("PC" + pcX);
 		getChartSettings().getPrimaryAxisSettingsY().setTitle("PC" + pcY);
 		applySettings(getChartSettings());
-		update();
 		getBaseChart().redraw();
 	}
 }
