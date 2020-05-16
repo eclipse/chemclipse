@@ -121,12 +121,6 @@ public class SubtractCalculator {
 		for(IPeakMSD peak : peaks) {
 			IScanMSD targetMassSpectrum = peak.getExtractedMassSpectrum();
 			adjustIntensityValues(targetMassSpectrum, subtractMassSpectrumMap, useNominalMasses, useNormalize);
-			/*
-			 * Delete the peak area. It needs to be recalculated.
-			 */
-			peak.getTargets().clear();
-			peak.getIntegrationEntries().clear();
-			peak.getQuantitationEntries().clear();
 		}
 	}
 
