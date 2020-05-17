@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,6 +30,7 @@ import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.support.ui.workbench.PartSupport;
+import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.ProcessMethodNotifications;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedMethodUI;
 import org.eclipse.core.runtime.Adapters;
@@ -44,7 +45,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
-public class ProcessMethodEditor implements IModificationHandler {
+public class ProcessMethodEditor implements IModificationHandler, IChemClipseEditor {
 
 	public static final String SNIPPET_ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.processMethodEditor";
 	//
@@ -78,44 +79,36 @@ public class ProcessMethodEditor implements IModificationHandler {
 	@Persist
 	public void save(@Named(IServiceConstants.ACTIVE_SHELL) Shell shell) {
 
-		File saveFile = getSaveFile(shell);
-		if(saveFile != null) {
-			IProcessMethod oldMethod = currentProcessMethod;
-			IProcessMethod editedMethod = extendedMethodUI.getProcessMethod();
-			ProcessMethod newMethod = new ProcessMethod(editedMethod);
-			newMethod.setSourceFile(saveFile);
-			// copy the UUID from the old method to keep the file consistent
-			newMethod.setUUID(oldMethod.getUUID());
-			// copy the readOnlyFlag
-			if(editedMethod.isFinal()) {
-				newMethod.setReadOnly(editedMethod.isFinal());
-			}
-			IProcessingInfo<?> info = MethodConverter.convert(saveFile, newMethod, MethodConverter.DEFAULT_METHOD_CONVERTER_ID, new NullProgressMonitor());
-			if(info.hasErrorMessages()) {
-				ProcessingInfoViewSupport.updateProcessingInfo(info);
-			} else {
-				part.setDirty(false);
-				currentProcessMethod = newMethod;
-				notifications.updated(newMethod, oldMethod);
-				processMethodFile = saveFile;
-				part.setLabel(processMethodFile.getName() + " " + currentProcessMethod.getDataCategories());
-			}
+		File file;
+		if(processMethodFile != null && processMethodFile.exists()) {
+			file = processMethodFile;
+		} else {
+			file = getSaveFile(shell);
 		}
+		//
+		save(file, false);
+	}
+
+	@Override
+	public boolean saveAs() {
+
+		File file = getSaveFile(extendedMethodUI.getShell());
+		return save(file, true);
 	}
 
 	private File getSaveFile(Shell shell) {
 
-		if(processMethodFile != null && processMethodFile.exists()) {
-			return processMethodFile;
-		}
 		FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
 		fileDialog.setOverwrite(true);
-		fileDialog.setText("Save Process Method as");
+		fileDialog.setText("Save As...");
 		String methodName = extendedMethodUI.getMethodName();
 		if(methodName.isEmpty()) {
 			fileDialog.setFileName(MethodConverter.DEFAULT_METHOD_FILE_NAME);
 		} else {
-			fileDialog.setFileName(methodName + "." + MethodConverter.DEFAULT_METHOD_FILE_NAME_EXTENSION);
+			String extension = "." + MethodConverter.DEFAULT_METHOD_FILE_NAME_EXTENSION;
+			if(!methodName.endsWith(extension)) {
+				fileDialog.setFileName(methodName + extension);
+			}
 		}
 		fileDialog.setFilterExtensions(MethodConverter.DEFAULT_METHOD_FILE_EXTENSIONS);
 		fileDialog.setFilterNames(MethodConverter.DEFAULT_METHOD_FILE_NAMES);
@@ -123,6 +116,7 @@ public class ProcessMethodEditor implements IModificationHandler {
 		if(userDirectory.exists()) {
 			fileDialog.setFilterPath(MethodConverter.getUserMethodDirectory().getAbsolutePath());
 		}
+		//
 		String selectedFile = fileDialog.open();
 		if(selectedFile != null) {
 			File file = new File(selectedFile);
@@ -131,7 +125,43 @@ public class ProcessMethodEditor implements IModificationHandler {
 			}
 			return file;
 		}
+		//
 		return null;
+	}
+
+	private boolean save(File file, boolean saveAs) {
+
+		boolean success = false;
+		if(file != null) {
+			IProcessMethod oldMethod = currentProcessMethod;
+			IProcessMethod editedMethod = extendedMethodUI.getProcessMethod();
+			ProcessMethod newMethod = new ProcessMethod(editedMethod);
+			newMethod.setSourceFile(file);
+			/*
+			 * Copy the UUID from the old method to keep the file consistent
+			 * and copy the read only flag.
+			 */
+			newMethod.setUUID(oldMethod.getUUID());
+			if(editedMethod.isFinal()) {
+				newMethod.setReadOnly(editedMethod.isFinal());
+			}
+			//
+			IProcessingInfo<?> info = MethodConverter.convert(file, newMethod, MethodConverter.DEFAULT_METHOD_CONVERTER_ID, new NullProgressMonitor());
+			if(info.hasErrorMessages()) {
+				ProcessingInfoViewSupport.updateProcessingInfo(info);
+			} else {
+				success = true;
+				if(!saveAs) {
+					part.setDirty(false);
+					currentProcessMethod = newMethod;
+					notifications.updated(newMethod, oldMethod);
+					processMethodFile = file;
+					part.setLabel(processMethodFile.getName() + " " + currentProcessMethod.getDataCategories());
+				}
+			}
+		}
+		//
+		return success;
 	}
 
 	@PostConstruct
