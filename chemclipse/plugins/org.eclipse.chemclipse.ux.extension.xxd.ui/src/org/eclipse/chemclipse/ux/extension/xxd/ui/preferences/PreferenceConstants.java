@@ -343,6 +343,8 @@ public class PreferenceConstants extends ChartOptions {
 	 */
 	public static final String P_TIME_RANGE_TEMPLATE_FOLDER = "timeRangeTemplateFolder";
 	public static final String DEF_TIME_RANGE_TEMPLATE_FOLDER = "";
+	public static final String P_SHOW_TIME_RANGE_SPINNER_LABEL = "showTimeRangeSpinnerLabel";
+	public static final boolean DEF_SHOW_TIME_RANGE_SPINNER_LABEL = false;
 	/*
 	 * Named Traces
 	 */
@@ -709,8 +711,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String P_PCR_COLOR_CODES = "pcrColorCodes";
 	public static final String DEF_PCR_COLOR_CODES = "";
 	/*
-	 * Time Ranges
+	 * Processor
 	 */
-	public static final String P_SHOW_TIME_RANGE_SPINNER_LABEL = "showTimeRangeSpinnerLabel";
-	public static final boolean DEF_SHOW_TIME_RANGE_SPINNER_LABEL = false;
+	public static final String P_PROCESSOR_SELECTION_DATA_CATEGORY = "processorSelectionDataCategory";
+	public static final boolean DEF_PROCESSOR_SELECTION_DATA_CATEGORY = true;
 }

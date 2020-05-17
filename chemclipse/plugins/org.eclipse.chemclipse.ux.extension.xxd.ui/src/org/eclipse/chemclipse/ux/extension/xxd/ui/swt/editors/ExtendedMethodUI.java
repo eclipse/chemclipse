@@ -129,10 +129,12 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 	private String[] knownCategories;
 
 	public ExtendedMethodUI(Composite parent, int style, ProcessSupplierContext processingSupport, DataCategory[] dataCategories) {
+
 		this(parent, style, processingSupport, (entry, context) -> entry.getPreferences(context), dataCategories);
 	}
 
 	public ExtendedMethodUI(Composite parent, int style, ProcessSupplierContext processingSupport, BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>> preferencesSupplier, DataCategory[] dataCategories) {
+
 		super(parent, style);
 		this.readonly = (style & SWT.READ_ONLY) != 0;
 		this.processingSupport = processingSupport;

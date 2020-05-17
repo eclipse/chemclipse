@@ -159,14 +159,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_TARGET_LIST, PreferenceConstants.DEF_TARGET_LIST);
 		store.setDefault(PreferenceConstants.P_PROPAGATE_TARGET_ON_UPDATE, PreferenceConstants.DEF_PROPAGATE_TARGET_ON_UPDATE);
 		store.setDefault(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER, PreferenceConstants.DEF_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER);
-		/*
-		 * Time Ranges
-		 */
-		store.setDefault(PreferenceConstants.P_TIME_RANGE_TEMPLATE_FOLDER, PreferenceConstants.DEF_TIME_RANGE_TEMPLATE_FOLDER);
-		/*
-		 * Named Traces
-		 */
-		store.setDefault(PreferenceConstants.P_NAMED_TRACES_TEMPLATE_FOLDER, PreferenceConstants.DEF_NAMED_TRACES_TEMPLATE_FOLDER);
 		//
 		initializeChromatogramDefaults(store);
 		/*
@@ -366,8 +358,20 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_SAVE_AS_FOLDER, PreferenceConstants.DEF_CHROMATOGRAM_SAVE_AS_FOLDER);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_LOAD_PROCESS_METHOD, PreferenceConstants.DEF_CHROMATOGRAM_LOAD_PROCESS_METHOD);
 		store.setDefault(PreferenceConstants.P_DELTA_MILLISECONDS_PEAK_SELECTION, PreferenceConstants.DEF_DELTA_MILLISECONDS_PEAK_SELECTION);
-		//
+		/*
+		 * Time Ranges
+		 */
+		store.setDefault(PreferenceConstants.P_TIME_RANGE_TEMPLATE_FOLDER, PreferenceConstants.DEF_TIME_RANGE_TEMPLATE_FOLDER);
 		store.setDefault(PreferenceConstants.P_SHOW_TIME_RANGE_SPINNER_LABEL, PreferenceConstants.DEF_SHOW_TIME_RANGE_SPINNER_LABEL);
+		/*
+		 * Named Traces
+		 */
+		store.setDefault(PreferenceConstants.P_NAMED_TRACES_TEMPLATE_FOLDER, PreferenceConstants.DEF_NAMED_TRACES_TEMPLATE_FOLDER);
+		/*
+		 * Processor
+		 */
+		store.setDefault(PreferenceConstants.P_PROCESSOR_SELECTION_DATA_CATEGORY, PreferenceConstants.DEF_PROCESSOR_SELECTION_DATA_CATEGORY);
+		//
 		return store;
 	}
 
@@ -389,6 +393,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_OVERLAY_SHOW_AREA, PreferenceConstants.DEF_OVERLAY_SHOW_AREA);
 		store.setDefault(PreferenceConstants.P_OVERLAY_AUTOFOCUS_PROFILE_SETTINGS, PreferenceConstants.DEF_OVERLAY_AUTOFOCUS_PROFILE_SETTINGS);
 		store.setDefault(PreferenceConstants.P_OVERLAY_AUTOFOCUS_SHIFT_SETTINGS, PreferenceConstants.DEF_OVERLAY_AUTOFOCUS_SHIFT_SETTINGS);
+		//
 		return store;
 	}
 }

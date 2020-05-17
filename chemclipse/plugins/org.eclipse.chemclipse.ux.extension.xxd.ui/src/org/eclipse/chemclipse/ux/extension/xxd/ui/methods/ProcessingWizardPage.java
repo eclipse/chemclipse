@@ -30,7 +30,10 @@ import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.xxd.process.comparators.NameComparator;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -41,8 +44,6 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -52,19 +53,31 @@ import org.eclipse.swt.widgets.Label;
 
 public class ProcessingWizardPage extends WizardPage {
 
-	private ComboViewer comboViewerCategory;
-	private ComboViewer comboViewerProcessor;
 	private final Map<ProcessSupplierContext, String> processSupplierContextMap;
 	private final Set<DataCategory> selectedDataTypes = new HashSet<>();
-	private final List<Button> dataTypeSelections = new ArrayList<>();
+	private final List<Button> dataCategorySelections = new ArrayList<>();
+	private final List<DataCategory> dataCategories = new ArrayList<>();
+	//
+	private ComboViewer comboViewerCategory;
+	private ComboViewer comboViewerProcessor;
 	private ProcessEntry processEntry;
 	private ProcessSupplierContext processContext;
-	private final DataCategory[] dataCategories;
+	//
+	private static IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	protected ProcessingWizardPage(Map<ProcessSupplierContext, String> contexts, DataCategory[] dataCategories) {
+
 		super("ProcessingWizardPage");
 		this.processSupplierContextMap = contexts;
-		this.dataCategories = dataCategories;
+		/*
+		 * Collect and sort the data categories.
+		 */
+		if(dataCategories != null) {
+			for(DataCategory dataCategory : dataCategories) {
+				this.dataCategories.add(dataCategory);
+			}
+			Collections.sort(this.dataCategories, (c1, c2) -> c1.name().compareTo(c2.name()));
+		}
 		processContext = contexts.entrySet().iterator().next().getKey();
 		setTitle("Process Entry");
 		setDescription("Select a chromatogram filter, integrator, identifier ... .");
@@ -76,41 +89,42 @@ public class ProcessingWizardPage extends WizardPage {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
 		//
-		if(dataCategories.length > 1) {
-			createLabel(composite, "Select the desired data types");
-			for(DataCategory dataType : dataCategories) {
-				Button button = createDataTypeCheckbox(composite, dataType);
-				dataTypeSelections.add(button);
-				button.addSelectionListener(new SelectionListener() {
+		if(dataCategories.size() > 1) {
+			createLabel(composite, "Select the data categorie(s) to list processor(s).");
+			for(DataCategory dataCategory : dataCategories) {
+				/*
+				 * Set the default visibility.
+				 */
+				setDataTypeSelectionDefault(dataCategory);
+				Button button = createDataTypeCheckbox(composite, dataCategory);
+				dataCategorySelections.add(button);
+				button.addSelectionListener(new SelectionAdapter() {
 
 					@Override
 					public void widgetSelected(SelectionEvent e) {
 
-						updateComboCategoryItems();
-					}
-
-					@Override
-					public void widgetDefaultSelected(SelectionEvent e) {
-
+						updateComboDataCategoryItems();
 					}
 				});
 			}
 		}
+		//
 		if(processSupplierContextMap.size() > 1) {
 			createLabel(composite, "Context");
-			createComboContext(composite);
+			createComboViewerContext(composite);
 		}
-		createLabel(composite, "Category");
-		comboViewerCategory = createComboCategory(composite);
-		createLabel(composite, "Processor");
-		comboViewerProcessor = createComboProcessor(composite);
 		//
-		updateComboCategoryItems();
+		createLabel(composite, "Category");
+		comboViewerCategory = createComboViewerCategory(composite);
+		createLabel(composite, "Processor");
+		comboViewerProcessor = createComboViewerProcessor(composite);
+		//
+		updateComboDataCategoryItems();
 		setControl(composite);
 		validate();
 	}
 
-	private void createComboContext(Composite parent) {
+	private void createComboViewerContext(Composite parent) {
 
 		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
 		comboViewer.getControl().setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -123,6 +137,7 @@ public class ProcessingWizardPage extends WizardPage {
 				return processSupplierContextMap.get(element);
 			}
 		});
+		//
 		comboViewer.setInput(processSupplierContextMap.keySet());
 		comboViewer.setSelection(new StructuredSelection(getProcessSupplierContext()));
 		comboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -131,36 +146,44 @@ public class ProcessingWizardPage extends WizardPage {
 			public void selectionChanged(SelectionChangedEvent event) {
 
 				processContext = (ProcessSupplierContext)comboViewer.getStructuredSelection().getFirstElement();
-				updateComboCategoryItems();
+				updateComboDataCategoryItems();
 			}
 		});
 	}
 
-	private static Button createDataTypeCheckbox(Composite parent, DataCategory dataType) {
+	private static Button createDataTypeCheckbox(Composite parent, DataCategory dataCategory) {
 
 		Button button = new Button(parent, SWT.CHECK);
-		button.setData(dataType);
-		button.setText(dataType.getLabel());
-		button.setToolTipText("Select the " + dataType.name() + " processor items");
-		button.setSelection(true);
-		Color enabledColor = button.getForeground();
+		button.setData(dataCategory);
+		button.setText(dataCategory.getLabel());
+		button.setToolTipText("Select the " + dataCategory.name() + " processor item(s).");
+		button.setSelection(getDataTypeSelection(dataCategory));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				boolean selection = button.getSelection();
-				if(selection) {
-					button.setForeground(enabledColor);
-				} else {
-					button.setForeground(parent.getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
-				}
+				setDataTypeSelection(dataCategory, selection);
 			}
 		});
-		if(!button.getSelection()) {
-			button.setForeground(parent.getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
-		}
+		//
 		return button;
+	}
+
+	private static void setDataTypeSelectionDefault(DataCategory dataCategory) {
+
+		preferenceStore.setDefault(PreferenceConstants.P_PROCESSOR_SELECTION_DATA_CATEGORY + dataCategory.name(), PreferenceConstants.DEF_PROCESSOR_SELECTION_DATA_CATEGORY);
+	}
+
+	private static boolean getDataTypeSelection(DataCategory dataCategory) {
+
+		return preferenceStore.getBoolean(PreferenceConstants.P_PROCESSOR_SELECTION_DATA_CATEGORY + dataCategory.name());
+	}
+
+	private static void setDataTypeSelection(DataCategory dataCategory, boolean selection) {
+
+		preferenceStore.setValue(PreferenceConstants.P_PROCESSOR_SELECTION_DATA_CATEGORY + dataCategory.name(), selection);
 	}
 
 	public IProcessEntry getProcessEntry() {
@@ -174,22 +197,24 @@ public class ProcessingWizardPage extends WizardPage {
 		label.setText(text);
 	}
 
-	private void updateComboCategoryItems() {
+	private void updateComboDataCategoryItems() {
 
-		if(dataTypeSelections == null) {
+		if(dataCategorySelections == null) {
 			return;
 		}
+		//
 		selectedDataTypes.clear();
-		if(dataCategories.length == 1) {
-			selectedDataTypes.add(dataCategories[0]);
+		if(dataCategories.size() == 1) {
+			selectedDataTypes.add(dataCategories.get(0));
 		} else {
-			for(Button button : dataTypeSelections) {
+			for(Button button : dataCategorySelections) {
 				button.setEnabled(true);
 				if(button.getSelection()) {
 					selectedDataTypes.add(((DataCategory)button.getData()));
 				}
 			}
 		}
+		//
 		Set<IProcessSupplier<?>> processTypeSuppliers = new LinkedHashSet<>();
 		getProcessSupplierContext().visitSupplier(new Consumer<IProcessSupplier<?>>() {
 
@@ -204,6 +229,7 @@ public class ProcessingWizardPage extends WizardPage {
 				}
 			}
 		});
+		//
 		Map<String, ProcessCategory> categories = new TreeMap<>();
 		for(IProcessSupplier<?> supplier : processTypeSuppliers) {
 			String category = supplier.getCategory();
@@ -214,16 +240,18 @@ public class ProcessingWizardPage extends WizardPage {
 			}
 			processCategory.addSupplier(supplier, selectedDataTypes);
 		}
+		//
 		Object[] objects = categories.values().toArray();
 		comboViewerCategory.setInput(objects);
 		if(objects.length == 1) {
 			comboViewerCategory.setSelection(new StructuredSelection(objects[0]));
 		}
+		//
 		comboViewerCategory.getControl().setEnabled(objects.length > 1);
 		updateCategory();
 	}
 
-	private ComboViewer createComboCategory(Composite parent) {
+	private ComboViewer createComboViewerCategory(Composite parent) {
 
 		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
 		Combo combo = comboViewer.getCombo();
@@ -239,6 +267,7 @@ public class ProcessingWizardPage extends WizardPage {
 				return "-";
 			}
 		});
+		//
 		combo.setToolTipText("Select a process category.");
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.widthHint = 150;
@@ -251,6 +280,7 @@ public class ProcessingWizardPage extends WizardPage {
 				updateCategory();
 			}
 		});
+		//
 		return comboViewer;
 	}
 
@@ -271,7 +301,7 @@ public class ProcessingWizardPage extends WizardPage {
 		validate();
 	}
 
-	private ComboViewer createComboProcessor(Composite parent) {
+	private ComboViewer createComboViewerProcessor(Composite parent) {
 
 		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
 		Combo combo = comboViewer.getCombo();
@@ -294,6 +324,7 @@ public class ProcessingWizardPage extends WizardPage {
 				return "-";
 			}
 		});
+		//
 		combo.setToolTipText("Select a processor.");
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.widthHint = 150;
@@ -306,6 +337,7 @@ public class ProcessingWizardPage extends WizardPage {
 				validate();
 			}
 		});
+		//
 		return comboViewer;
 	}
 
@@ -327,9 +359,9 @@ public class ProcessingWizardPage extends WizardPage {
 
 	private void validate() {
 
-		if(!dataTypeSelections.isEmpty()) {
+		if(!dataCategorySelections.isEmpty()) {
 			int selected = 0;
-			for(Button button : dataTypeSelections) {
+			for(Button button : dataCategorySelections) {
 				if(button.getSelection()) {
 					selected++;
 				}
@@ -340,16 +372,19 @@ public class ProcessingWizardPage extends WizardPage {
 				return;
 			}
 		}
+		//
 		if(comboViewerCategory.getSelection().isEmpty()) {
 			setPageComplete(false);
 			setErrorMessage("Please select a category");
 			return;
 		}
+		//
 		if(comboViewerProcessor.getSelection().isEmpty()) {
 			setPageComplete(false);
 			setErrorMessage("Please select a processor");
 			return;
 		}
+		//
 		setPageComplete(true);
 		setErrorMessage(null);
 		updateEntry();
@@ -359,9 +394,10 @@ public class ProcessingWizardPage extends WizardPage {
 
 		private static final NameComparator COMPARATOR = new NameComparator();
 		private final String name;
-		List<IProcessSupplier<?>> processorSuppliers = new ArrayList<>();
+		private List<IProcessSupplier<?>> processorSuppliers = new ArrayList<>();
 
 		public ProcessCategory(String name) {
+
 			this.name = name;
 		}
 

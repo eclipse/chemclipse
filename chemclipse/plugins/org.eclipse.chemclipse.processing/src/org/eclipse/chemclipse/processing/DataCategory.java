@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,7 +18,13 @@ package org.eclipse.chemclipse.processing;
  *
  */
 public enum DataCategory {
-	MSD(Messages.getString("DataCategory.MSD")), CSD(Messages.getString("DataCategory.CSD")), WSD(Messages.getString("DataCategory.WSD")), FID(Messages.getString("DataCategory.FID")), NMR(Messages.getString("DataCategory.NMR")), XIR(Messages.getString("DataCategory.XIR")), PCR(Messages.getString("DataCategory.PCR")),
+	MSD(Messages.getString("DataCategory.MSD")), //
+	CSD(Messages.getString("DataCategory.CSD")), //
+	WSD(Messages.getString("DataCategory.WSD")), //
+	FID(Messages.getString("DataCategory.FID")), //
+	NMR(Messages.getString("DataCategory.NMR")), //
+	XIR(Messages.getString("DataCategory.XIR")), //
+	PCR(Messages.getString("DataCategory.PCR")),
 	/**
 	 * Suggests that this Filter can support a wide range of datatypes and content-sensing is the only option to check if the filter, processor or converter can really handle the data or not
 	 */
@@ -27,6 +33,7 @@ public enum DataCategory {
 	private String label;
 
 	private DataCategory(String label) {
+
 		this.label = label;
 	}
 
