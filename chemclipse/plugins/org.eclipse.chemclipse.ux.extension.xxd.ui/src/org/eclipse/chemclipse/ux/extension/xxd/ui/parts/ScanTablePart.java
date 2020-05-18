@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,53 +13,81 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
 import java.util.List;
 
+import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedScanTableUI;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
+public class ScanTablePart {
 
-	private ExtendedScanTableUI extendedScanTableUI;
+	private static final String TOPIC = IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION;
+	//
+	private ExtendedScanTableUI control;
+	private boolean initialUpdate = true;
+	//
+	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
+	private IDataUpdateListener updateListener = new IDataUpdateListener() {
+
+		@Override
+		public void update(String topic, List<Object> objects) {
+
+			updateSelection(objects, topic);
+		}
+	};
 
 	@Inject
 	public ScanTablePart(Composite parent, MPart part) {
-		super(part);
-		extendedScanTableUI = new ExtendedScanTableUI(parent);
+
+		control = new ExtendedScanTableUI(parent, SWT.NONE);
+		dataUpdateSupport.add(updateListener);
 	}
 
 	@Focus
 	public void setFocus() {
 
-		updateObjects(getObjects(), getTopic());
+		if(initialUpdate) {
+			updateSelection(dataUpdateSupport.getUpdates(TOPIC), TOPIC);
+		}
 	}
 
-	@Override
-	public void registerEvents() {
+	@PreDestroy
+	protected void preDestroy() {
 
-		registerEvent(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_SCAN);
-		registerEvent(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_SCAN);
-		registerEvent(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_PEAK);
-		registerEvent(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_PEAK);
+		dataUpdateSupport.remove(updateListener);
 	}
 
-	@Override
-	public void updateObjects(List<Object> objects, String topic) {
+	private void updateSelection(List<Object> objects, String topic) {
 
-		/*
-		 * 0 => because only one property was used to register the event.
-		 */
-		if(objects.size() == 1) {
-			Object object = null;
-			if(!isUnloadEvent(topic)) {
-				object = objects.get(0);
+		if(DataUpdateSupport.isVisible(control)) {
+			if(objects.size() == 1) {
+				if(isLoadEvent(topic)) {
+					initialUpdate = false;
+					control.setInput(objects.get(0));
+				} else {
+					if(isUnloadEvent(topic)) {
+						control.setInput(null);
+					}
+				}
 			}
-			extendedScanTableUI.update(object);
+		}
+	}
+
+	private boolean isLoadEvent(String topic) {
+
+		if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION)) {
+			return true;
+		} else if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION)) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -69,7 +97,8 @@ public class ScanTablePart extends AbstractDataUpdateSupport implements IDataUpd
 			return true;
 		} else if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION)) {
 			return true;
+		} else {
+			return false;
 		}
-		return false;
 	}
 }

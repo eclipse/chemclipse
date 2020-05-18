@@ -12,8 +12,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
-import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createContainer;
-
 import java.util.EnumSet;
 import java.util.List;
 
@@ -65,6 +63,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -73,14 +72,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
-public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
+public class ExtendedScanChartUI extends Composite implements ConfigurableUI<ScanChartUIConfig> {
 
 	private static final Logger logger = Logger.getLogger(ScanChartPart.class);
 	/*
 	 * The event broker should be set, but it
 	 * could be null if no events shall be fired.
 	 */
-	private final IEventBroker eventBroker;
+	private IEventBroker eventBroker;
 	//
 	private Composite toolbarMain;
 	private Composite toolbarInfo;
@@ -114,9 +113,15 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 	private boolean subtractModus = false;
 	private Color backgroundDefault;
 
-	public ExtendedScanChartUI(Composite parent, IEventBroker eventBroker) {
+	public ExtendedScanChartUI(Composite parent, int style) {
+
+		super(parent, style);
+		createControl();
+	}
+
+	public void setEventBroker(IEventBroker eventBroker) {
+
 		this.eventBroker = eventBroker;
-		initialize(parent);
 	}
 
 	@Override
@@ -242,16 +247,21 @@ public class ExtendedScanChartUI implements ConfigurableUI<ScanChartUIConfig> {
 		}
 	}
 
-	private void initialize(Composite parent) {
+	private void createControl() {
 
-		Composite container = createContainer(parent);
-		backgroundDefault = container.getBackground();
+		setLayout(new FillLayout());
 		//
-		toolbarMain = createToolbarMain(container);
-		toolbarInfo = createToolbarInfo(container);
-		toolbarTypes = createToolbarTypes(container);
-		toolbarEdit = createToolbarEdit(container);
-		scanChartUI = createScanChart(container);
+		Composite composite = new Composite(this, SWT.NONE);
+		composite.setBackgroundMode(SWT.INHERIT_FORCE);
+		GridLayout layout = new GridLayout(1, true);
+		composite.setLayout(layout);
+		backgroundDefault = composite.getBackground();
+		//
+		toolbarMain = createToolbarMain(composite);
+		toolbarInfo = createToolbarInfo(composite);
+		toolbarTypes = createToolbarTypes(composite);
+		toolbarEdit = createToolbarEdit(composite);
+		scanChartUI = createScanChart(composite);
 		//
 		PartSupport.setCompositeVisibility(toolbarInfo, true);
 		PartSupport.setCompositeVisibility(toolbarTypes, false);

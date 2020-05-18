@@ -49,7 +49,6 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 	private static final Logger logger = Logger.getLogger(PagePeakSelection.class);
 	private IRetentionIndexWizardElements wizardElements;
 	private ChromatogramPeakChart chromatogramPeakChart;
-	private Composite massSpectrumComposite;
 	private ExtendedScanChartUI extendedScanChartUI;
 	private PeakTableRetentionIndexViewerUI peakTableViewerUI;
 	//
@@ -57,6 +56,7 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 	private static final int PEAKS_DELETE = 2;
 
 	public PagePeakSelection(IRetentionIndexWizardElements wizardElements) {
+
 		//
 		super(PagePeakSelection.class.getName());
 		setTitle("Peak Selection");
@@ -93,10 +93,10 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 				 * Hide the mass spectrum view if it is CSD data.
 				 */
 				boolean isVisible = (chromatogram instanceof IChromatogramMSD) ? true : false;
-				GridData gridData = (GridData)massSpectrumComposite.getLayoutData();
+				GridData gridData = (GridData)extendedScanChartUI.getLayoutData();
 				gridData.exclude = !isVisible;
-				massSpectrumComposite.setVisible(isVisible);
-				Composite parent = massSpectrumComposite.getParent();
+				extendedScanChartUI.setVisible(isVisible);
+				Composite parent = extendedScanChartUI.getParent();
 				parent.layout(false);
 				parent.redraw();
 				//
@@ -126,7 +126,7 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 		composite.setLayout(new GridLayout(1, false));
 		//
 		createChromatogramField(composite);
-		createMassSpectrumField(composite);
+		createScanChart(composite);
 		createPeakTableField(composite);
 		//
 		validateSelection();
@@ -141,12 +141,10 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 		chromatogramPeakChart = new ChromatogramPeakChart(composite, SWT.BORDER);
 	}
 
-	private void createMassSpectrumField(Composite parent) {
+	private void createScanChart(Composite parent) {
 
-		massSpectrumComposite = new Composite(parent, SWT.NONE);
-		massSpectrumComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		massSpectrumComposite.setLayout(new FillLayout());
-		extendedScanChartUI = new ExtendedScanChartUI(massSpectrumComposite, null);
+		extendedScanChartUI = new ExtendedScanChartUI(parent, SWT.NONE);
+		extendedScanChartUI.setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
 	private void createPeakTableField(Composite parent) {

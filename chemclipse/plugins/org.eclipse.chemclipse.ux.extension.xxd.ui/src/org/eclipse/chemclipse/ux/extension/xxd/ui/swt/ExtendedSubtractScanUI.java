@@ -43,6 +43,7 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -52,7 +53,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 
-public class ExtendedSubtractScanUI {
+public class ExtendedSubtractScanUI extends Composite {
 
 	private static final Logger logger = Logger.getLogger(ExtendedScanChartUI.class);
 	//
@@ -64,14 +65,18 @@ public class ExtendedSubtractScanUI {
 	private IChromatogramSelectionMSD chromatogramSelectionMSD = null;
 
 	@Inject
-	public ExtendedSubtractScanUI(Composite parent) {
-		initialize(parent);
+	public ExtendedSubtractScanUI(Composite parent, int style) {
+
+		super(parent, style);
+		createControl();
 	}
 
 	@Focus
-	public void setFocus() {
+	public boolean setFocus() {
 
+		boolean focus = super.setFocus();
 		updateScanData(scanMSD);
+		return focus;
 	}
 
 	public void update(Object object) {
@@ -85,14 +90,19 @@ public class ExtendedSubtractScanUI {
 		updateScanData(scanMSD);
 	}
 
-	private void initialize(Composite parent) {
+	private void createControl() {
 
-		parent.setLayout(new GridLayout(1, true));
+		setLayout(new FillLayout());
 		//
-		createToolbarMain(parent);
-		createScanTabFolderSection(parent);
+		Composite composite = new Composite(this, SWT.NONE);
+		composite.setBackgroundMode(SWT.INHERIT_FORCE);
+		GridLayout layout = new GridLayout(1, true);
+		composite.setLayout(layout);
 		//
-		loadSessionMassSpectrum(parent.getDisplay());
+		createToolbarMain(composite);
+		createScanTabFolderSection(composite);
+		//
+		loadSessionMassSpectrum(composite.getDisplay());
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -154,7 +164,8 @@ public class ExtendedSubtractScanUI {
 		composite.setLayout(new GridLayout(1, true));
 		tabItem.setControl(composite);
 		//
-		extendedScanTableUI = new ExtendedScanTableUI(composite);
+		extendedScanTableUI = new ExtendedScanTableUI(composite, SWT.NONE);
+		extendedScanTableUI.setLayoutData(new GridData(GridData.FILL_BOTH));
 		extendedScanTableUI.forceEnableEditModus(true);
 		extendedScanTableUI.setFireUpdate(false);
 		//
@@ -335,7 +346,7 @@ public class ExtendedSubtractScanUI {
 			 * Table
 			 */
 			if(extendedScanTableUI.isVisible()) {
-				extendedScanTableUI.update(scanMSD);
+				extendedScanTableUI.setInput(scanMSD);
 			}
 		}
 	}

@@ -55,6 +55,7 @@ public class ScanTableUI extends ExtendedTableViewer {
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public ScanTableUI(Composite parent, int style) {
+
 		super(parent, style);
 		labelProviderMap = new HashMap<DataType, ITableLabelProvider>();
 		viewerComparatorMap = new HashMap<DataType, ViewerComparator>();
@@ -86,7 +87,14 @@ public class ScanTableUI extends ExtendedTableViewer {
 			 */
 			super.setInput(null); // Can only enable the hash look up before input has been set
 			IScanMSD scanMSD = (IScanMSD)scan;
-			List<IIon> ions = scanMSD.getIons();
+			IScanMSD optimizedScanMSD = scanMSD.getOptimizedMassSpectrum();
+			//
+			List<IIon> ions;
+			if(optimizedScanMSD != null) {
+				ions = optimizedScanMSD.getIons();
+			} else {
+				ions = scanMSD.getIons();
+			}
 			int size = ions.size();
 			//
 			DataType dataType = DataType.MSD_NOMINAL;

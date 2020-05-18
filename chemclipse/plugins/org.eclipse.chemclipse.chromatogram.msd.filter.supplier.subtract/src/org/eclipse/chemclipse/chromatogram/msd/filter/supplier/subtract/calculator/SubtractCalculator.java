@@ -155,8 +155,6 @@ public class SubtractCalculator {
 		 */
 		for(IScanMSD targetMassSpectrum : massSpectra) {
 			adjustIntensityValues(targetMassSpectrum, subtractMassSpectrumMap, useNominalMasses, useNormalize);
-			massSpectrum.getTargets().clear();
-			// TODO Delete peak area ..., but we don't know if this MS is a scan or a peak.
 		}
 	}
 

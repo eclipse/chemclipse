@@ -14,10 +14,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.inject.Inject;
-
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
-import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -25,6 +22,7 @@ import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.ILibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
@@ -38,12 +36,13 @@ import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
+import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.parts.ScanTablePart;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
-import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.ScanSignalWSD;
@@ -51,49 +50,63 @@ import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.dnd.Clipboard;
+import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 
-public class ExtendedScanTableUI {
+public class ExtendedScanTableUI extends Composite {
 
 	private static final Logger logger = Logger.getLogger(ScanTablePart.class);
 	//
+	private Composite toolbarMain;
 	private Composite toolbarInfoTop;
 	private Label labelInfoTop;
 	private Composite toolbarInfoBottom;
 	private Label labelInfoBottom;
 	private Composite toolbarEdit;
 	private Composite toolbarSearch;
+	private Button buttonCopyTraces;
 	private Button buttonSaveScan;
-	private Button buttonOptimizedScan;
 	private Button buttonToggleToolbarEdit;
+	//
+	private CLabel labelOptimized;
+	private Button buttonDeleteOptimized;
 	//
 	private Label labelX;
 	private Text textX;
 	private Label labelY;
 	private Text textY;
-	//
+	/*
+	 * The object could be a IScan or IPeak
+	 */
 	private ScanTableUI scanTableUI;
-	//
-	private Object object; // IScan or IPeak
-	private IScanMSD optimizedMassSpectrum;
+	private Object object;
 	//
 	private DeleteMenuEntry deleteMenuEntry;
 	private DeleteKeyEventProcessor deleteKeyEventProcessor;
@@ -103,15 +116,19 @@ public class ExtendedScanTableUI {
 	private boolean forceEnableEditModus = false;
 	private boolean fireUpdate = true;
 	//
-	private ScanDataSupport scanDataSupport = new ScanDataSupport();
+	private final ScanDataSupport scanDataSupport = new ScanDataSupport();
+	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	private IEventBroker eventBroker = Activator.getDefault().getEventBroker();
 	private EditListener editListener = null;
+	//
+	private Color backgroundDefault;
 
 	private class DeleteMenuEntry implements ITableMenuEntry {
 
 		@Override
 		public String getName() {
 
-			return "Delete Signal(s)";
+			return "Delete Trace(s)";
 		}
 
 		@Override
@@ -123,7 +140,7 @@ public class ExtendedScanTableUI {
 		@Override
 		public void execute(ExtendedTableViewer extendedTableViewer) {
 
-			deleteSignals(extendedTableViewer.getTable().getShell());
+			deleteTraces(extendedTableViewer.getTable().getShell());
 		}
 	}
 
@@ -133,34 +150,29 @@ public class ExtendedScanTableUI {
 		public void handleEvent(ExtendedTableViewer extendedTableViewer, KeyEvent e) {
 
 			if(e.keyCode == SWT.DEL) {
-				/*
-				 * DEL
-				 */
-				deleteSignals(e.display.getActiveShell());
+				deleteTraces(e.display.getActiveShell());
 			}
 		}
 	}
 
-	@Inject
-	public ExtendedScanTableUI(Composite parent) {
-		initialize(parent);
+	public ExtendedScanTableUI(Composite parent, int style) {
+
+		super(parent, style);
+		createControl();
 	}
 
 	@Focus
-	public void setFocus() {
+	public boolean setFocus() {
 
+		boolean focus = super.setFocus();
 		updateObject();
+		return focus;
 	}
 
-	public void update(Object object) {
+	public void setInput(Object object) {
 
 		this.object = object;
 		updateObject();
-	}
-
-	public boolean isVisible() {
-
-		return scanTableUI.getTable().isVisible();
 	}
 
 	public void addEditListener(EditListener editListener) {
@@ -182,6 +194,7 @@ public class ExtendedScanTableUI {
 	protected void forceEnableEditModus(boolean forceEnableEditModus) {
 
 		this.forceEnableEditModus = forceEnableEditModus;
+		enableEditModus();
 	}
 
 	/**
@@ -211,26 +224,22 @@ public class ExtendedScanTableUI {
 			tableSettings.removeMenuEntry(deleteMenuEntry);
 			tableSettings.removeKeyEventProcessor(deleteKeyEventProcessor);
 		}
+		//
 		scanTableUI.applySettings(tableSettings);
+		toolbarMain.layout(true);
+		toolbarMain.redraw();
 	}
 
 	private void updateObject() {
 
-		IScan scan = getScan();
-		boolean isLibraryMassSpectrum = enableEditModus();
-		setInfoTop(scan, isLibraryMassSpectrum);
-		setInfoBottom(scan);
-		scanTableUI.setInput(scan);
-		modifyEditFields();
-		/*
-		 * Optimized Scan
-		 */
-		optimizedMassSpectrum = null;
-		buttonOptimizedScan.setEnabled(scanDataSupport.containsOptimizedScan(scan));
-		buttonSaveScan.setEnabled(isSaveEnabled());
+		setInfoTop();
+		setInfoBottom();
+		scanTableUI.setInput(getScan());
+		updateEditFields();
+		updateButtonStatus();
 	}
 
-	private void modifyEditFields() {
+	private void updateEditFields() {
 
 		List<TableViewerColumn> tableViewerColumns = scanTableUI.getTableViewerColumns();
 		if(tableViewerColumns.size() >= 2) {
@@ -254,13 +263,158 @@ public class ExtendedScanTableUI {
 		boolean isLibraryMassSpectrum = false;
 		enableEditModus(false);
 		//
-		if(object instanceof IScan) {
-			isLibraryMassSpectrum = (object instanceof ILibraryMassSpectrum);
+		IScan scan = getScan();
+		if(scan != null) {
+			isLibraryMassSpectrum = (scan instanceof ILibraryMassSpectrum);
 			if(forceEnableEditModus || isLibraryMassSpectrum) {
 				enableEditModus(true);
 			}
 		}
 		return isLibraryMassSpectrum;
+	}
+
+	private void setInfoTop() {
+
+		IScan scan = getScan();
+		boolean isLibraryMassSpectrum = enableEditModus();
+		//
+		if(forceEnableEditModus || isLibraryMassSpectrum) {
+			String editInformation = scanTableUI.isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
+			labelInfoTop.setText(scanDataSupport.getScanLabel(scan) + " - " + editInformation);
+		} else {
+			labelInfoTop.setText(scanDataSupport.getScanLabel(scan));
+		}
+	}
+
+	private void setInfoBottom() {
+
+		String signals;
+		IScan scan = getScan();
+		if(scan instanceof IScanCSD) {
+			signals = "1";
+		} else if(scan instanceof IScanMSD) {
+			IScanMSD scanMSD = getScanMSD();
+			IScanMSD optimizedScanMSD = getOptimizedScanMSD();
+			signals = Integer.toString(optimizedScanMSD != null ? optimizedScanMSD.getNumberOfIons() : scanMSD.getNumberOfIons());
+		} else if(scan instanceof IScanWSD) {
+			IScanWSD scanWSD = (IScanWSD)scan;
+			signals = Integer.toString(scanWSD.getNumberOfScanSignals());
+		} else {
+			signals = "--";
+		}
+		labelInfoBottom.setText("Signals: " + signals);
+	}
+
+	private boolean isSaveEnabled() {
+
+		IScanMSD scanMSD = getScanMSD();
+		return scanMSD != null;
+	}
+
+	private void createControl() {
+
+		setLayout(new FillLayout());
+		backgroundDefault = getBackground();
+		//
+		Composite composite = new Composite(this, SWT.NONE);
+		composite.setBackgroundMode(SWT.INHERIT_FORCE);
+		GridLayout layout = new GridLayout(1, true);
+		composite.setLayout(layout);
+		//
+		deleteMenuEntry = new DeleteMenuEntry();
+		deleteKeyEventProcessor = new DeleteKeyEventProcessor();
+		//
+		toolbarMain = createToolbarMain(composite);
+		toolbarInfoTop = createToolbarInfoTop(composite);
+		toolbarEdit = createToolbarEdit(composite);
+		toolbarSearch = createToolbarSearch(composite);
+		createTable(composite);
+		toolbarInfoBottom = createToolbarInfoBottom(composite);
+		//
+		PartSupport.setCompositeVisibility(toolbarInfoTop, true);
+		PartSupport.setCompositeVisibility(toolbarEdit, false);
+		PartSupport.setCompositeVisibility(toolbarSearch, false);
+		PartSupport.setCompositeVisibility(toolbarInfoBottom, true);
+		//
+		enableEditModus(false); // Disable the edit modus by default.
+	}
+
+	private Composite createToolbarMain(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		composite.setLayout(new GridLayout(9, false));
+		//
+		labelOptimized = createInfoLabelOptimized(composite);
+		createButtonToggleToolbarInfo(composite);
+		buttonToggleToolbarEdit = createButtonToggleToolbarEdit(composite);
+		createButtonToggleToolbarSearch(composite);
+		buttonCopyTraces = createButtonCopyTracesClipboard(composite);
+		createResetButton(composite);
+		buttonSaveScan = createSaveButton(composite);
+		buttonDeleteOptimized = createDeleteOptimizedButton(composite);
+		createSettingsButton(composite);
+		//
+		return composite;
+	}
+
+	private CLabel createInfoLabelOptimized(Composite parent) {
+
+		CLabel label = createInfoLabel(parent);
+		label.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+
+				if(!"".equals(label.getText())) {
+					deleteOptimizedScan(e.widget.getDisplay());
+				}
+			}
+		});
+		return label;
+	}
+
+	private CLabel createInfoLabel(Composite parent) {
+
+		CLabel label = new CLabel(parent, SWT.CENTER);
+		label.setForeground(Colors.RED);
+		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		return label;
+	}
+
+	private void deleteOptimizedScan(Display display) {
+
+		IScan scan = getScan();
+		if(scan instanceof IScanMSD) {
+			if(MessageDialog.openQuestion(display.getActiveShell(), "Optimized Scan", "Would you like to delete the optimized scan?")) {
+				IScanMSD scanMSD = (IScanMSD)scan;
+				scanMSD.setOptimizedMassSpectrum(null);
+				updateObject();
+			}
+		}
+	}
+
+	private void updateButtonStatus() {
+
+		buttonCopyTraces.setEnabled(getScanMSD() != null);
+		buttonSaveScan.setEnabled(isSaveEnabled());
+		buttonDeleteOptimized.setEnabled(isOptimizedScan() ? true : false);
+		updateLabel(labelOptimized, isOptimizedScan() ? "Optimized" : "");
+	}
+
+	private void updateLabel(CLabel label, String message) {
+
+		label.setText(message);
+		if("".equals(message)) {
+			label.setBackground(backgroundDefault);
+		} else {
+			label.setBackground(Colors.YELLOW);
+		}
+	}
+
+	private boolean isOptimizedScan() {
+
+		return getOptimizedScanMSD() != null;
 	}
 
 	private IScan getScan() {
@@ -275,80 +429,25 @@ public class ExtendedScanTableUI {
 		return scan;
 	}
 
-	private void setInfoTop(IScan scan, boolean isLibraryMassSpectrum) {
+	private IScanMSD getScanMSD() {
 
-		if(forceEnableEditModus || isLibraryMassSpectrum) {
-			String editInformation = scanTableUI.isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
-			labelInfoTop.setText(scanDataSupport.getScanLabel(scan) + " - " + editInformation);
-		} else {
-			labelInfoTop.setText(scanDataSupport.getScanLabel(scan));
+		IScan scan = getScan();
+		if(scan instanceof IScanMSD) {
+			return (IScanMSD)scan;
 		}
+		return null;
 	}
 
-	private void setInfoBottom(IScan scan) {
+	private IScanMSD getOptimizedScanMSD() {
 
-		String signals;
-		if(scan instanceof IScanCSD) {
-			signals = "1";
-		} else if(scan instanceof IScanMSD) {
-			IScanMSD scanMSD = (IScanMSD)scan;
-			signals = Integer.toString(scanMSD.getNumberOfIons());
-		} else if(scan instanceof IScanWSD) {
-			IScanWSD scanWSD = (IScanWSD)scan;
-			signals = Integer.toString(scanWSD.getNumberOfScanSignals());
-		} else {
-			signals = "--";
+		IScanMSD scanMSD = getScanMSD();
+		if(scanMSD != null) {
+			IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
+			if(optimizedMassSpectrum != null) {
+				return optimizedMassSpectrum;
+			}
 		}
-		labelInfoBottom.setText("Signals: " + signals);
-	}
-
-	private boolean isSaveEnabled() {
-
-		if(object instanceof IScanMSD) {
-			return true;
-		} else if(object instanceof IPeakMSD) {
-			return true;
-		}
-		return false;
-	}
-
-	private void initialize(Composite parent) {
-
-		parent.setLayout(new GridLayout(1, true));
-		//
-		deleteMenuEntry = new DeleteMenuEntry();
-		deleteKeyEventProcessor = new DeleteKeyEventProcessor();
-		//
-		createToolbarMain(parent);
-		toolbarInfoTop = createToolbarInfoTop(parent);
-		toolbarEdit = createToolbarEdit(parent);
-		toolbarSearch = createToolbarSearch(parent);
-		createTable(parent);
-		toolbarInfoBottom = createToolbarInfoBottom(parent);
-		//
-		PartSupport.setCompositeVisibility(toolbarInfoTop, true);
-		PartSupport.setCompositeVisibility(toolbarEdit, false);
-		PartSupport.setCompositeVisibility(toolbarSearch, false);
-		PartSupport.setCompositeVisibility(toolbarInfoBottom, true);
-		//
-		enableEditModus(false); // Disable the edit modus by default.
-	}
-
-	private void createToolbarMain(Composite parent) {
-
-		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalAlignment = SWT.END;
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(7, false));
-		//
-		createButtonToggleToolbarInfo(composite);
-		buttonToggleToolbarEdit = createButtonToggleToolbarEdit(composite);
-		createButtonToggleToolbarSearch(composite);
-		createResetButton(composite);
-		buttonSaveScan = createSaveButton(composite);
-		buttonOptimizedScan = createOptimizedScanButton(composite);
-		createSettingsButton(composite);
+		return null;
 	}
 
 	private Button createButtonToggleToolbarInfo(Composite parent) {
@@ -423,6 +522,31 @@ public class ExtendedScanTableUI {
 		return button;
 	}
 
+	private Button createButtonCopyTracesClipboard(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Copy the traces to clipboard.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_COPY_CLIPBOARD, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				IScanMSD scanMSD = getScanMSD();
+				int maxCopyTraces = preferenceStore.getInt(PreferenceConstants.P_MAX_COPY_SCAN_TRACES);
+				String traces = scanDataSupport.extractTracesText(scanMSD, maxCopyTraces);
+				TextTransfer textTransfer = TextTransfer.getInstance();
+				Object[] data = new Object[]{traces};
+				Transfer[] dataTypes = new Transfer[]{textTransfer};
+				Clipboard clipboard = new Clipboard(e.widget.getDisplay());
+				clipboard.setContents(data, dataTypes);
+			}
+		});
+		//
+		return button;
+	}
+
 	private void createResetButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
@@ -451,20 +575,24 @@ public class ExtendedScanTableUI {
 
 				try {
 					if(object instanceof IScanMSD) {
-						IScanMSD massSpectrum = null;
-						if(optimizedMassSpectrum != null) {
-							massSpectrum = optimizedMassSpectrum;
-						} else {
-							if(object instanceof IScanMSD) {
-								massSpectrum = (IScanMSD)object;
-							} else if(object instanceof IPeakMSD) {
-								IPeakMSD peakMSD = (IPeakMSD)object;
-								massSpectrum = peakMSD.getExtractedMassSpectrum();
-							}
-						}
+						IScanMSD scanMSD = (IScanMSD)object;
+						IScanMSD optimizedScanMSD = scanMSD.getOptimizedMassSpectrum();
 						//
-						if(massSpectrum != null) {
-							DatabaseFileSupport.saveMassSpectrum(e.display.getActiveShell(), massSpectrum, "Scan" + massSpectrum.getScanNumber());
+						if(optimizedScanMSD != null) {
+							DatabaseFileSupport.saveMassSpectrum(e.display.getActiveShell(), optimizedScanMSD, "Scan[optimized]");
+						} else {
+							DatabaseFileSupport.saveMassSpectrum(e.display.getActiveShell(), scanMSD, "Scan");
+						}
+					} else if(object instanceof IPeakMSD) {
+						IPeakMSD peakMSD = (IPeakMSD)object;
+						IPeakModelMSD peakModelMSD = peakMSD.getPeakModel();
+						IScanMSD scanMSD = peakModelMSD.getPeakMassSpectrum();
+						IScanMSD optimizedScanMSD = scanMSD.getOptimizedMassSpectrum();
+						//
+						if(optimizedScanMSD != null) {
+							DatabaseFileSupport.saveMassSpectrum(e.display.getActiveShell(), optimizedScanMSD, "Peak[optimized]");
+						} else {
+							DatabaseFileSupport.saveMassSpectrum(e.display.getActiveShell(), scanMSD, "Peak");
 						}
 					}
 				} catch(NoConverterAvailableException e1) {
@@ -475,26 +603,17 @@ public class ExtendedScanTableUI {
 		return button;
 	}
 
-	private Button createOptimizedScanButton(Composite parent) {
+	private Button createDeleteOptimizedButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Show optimized scan.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PLUS, IApplicationImage.SIZE_16x16));
+		button.setToolTipText("Delete the optimized scan.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(object instanceof IScanMSD) {
-					IScanMSD scanMSD = (IScanMSD)object;
-					optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
-					if(optimizedMassSpectrum != null) {
-						scanTableUI.setInput(optimizedMassSpectrum);
-						labelInfoTop.setText(scanDataSupport.getScanLabel(optimizedMassSpectrum));
-						labelInfoBottom.setText("Signals: " + optimizedMassSpectrum.getNumberOfIons());
-						button.setEnabled(false);
-					}
-				}
+				deleteOptimizedScan(e.widget.getDisplay());
 			}
 		});
 		return button;
@@ -632,7 +751,8 @@ public class ExtendedScanTableUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(object != null) {
+				IScan scan = getScan();
+				if(scan != null) {
 					addSignal(e.display.getActiveShell());
 					scanTableUI.updateScan();
 					fireEditEvent();
@@ -654,7 +774,7 @@ public class ExtendedScanTableUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				deleteSignals(e.display.getActiveShell());
+				deleteTraces(e.display.getActiveShell());
 				scanTableUI.updateScan();
 				fireEditEvent();
 			}
@@ -699,7 +819,7 @@ public class ExtendedScanTableUI {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void deleteSignals(Shell shell) {
+	private void deleteTraces(Shell shell) {
 
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText("Delete Signal(s)");
@@ -721,43 +841,28 @@ public class ExtendedScanTableUI {
 
 	private void deleteSignal(Object signal) {
 
-		if(object instanceof IScanMSD) {
-			IScanMSD scanMSD = (IScanMSD)object;
+		IScan scan = getScan();
+		if(scan instanceof IScanCSD) {
+			/*
+			 * CSD
+			 */
+			IScanCSD scanCSD = (IScanCSD)scan;
+			scanCSD.adjustTotalSignal(0.0f);
+		} else if(scan instanceof IScanMSD) {
+			/*
+			 * MSD
+			 */
+			IScanMSD scanMSD = (IScanMSD)scan;
 			if(signal instanceof IIon) {
 				scanMSD.removeIon((IIon)signal);
 			}
-		} else if(object instanceof IScanCSD) {
-			IScanCSD scanCSD = (IScanCSD)object;
-			scanCSD.adjustTotalSignal(0.0f);
-		} else if(object instanceof IScanWSD) {
-			IScanWSD scanWSD = (IScanWSD)object;
+		} else if(scan instanceof IScanWSD) {
+			/*
+			 * WSD
+			 */
+			IScanWSD scanWSD = (IScanWSD)scan;
 			if(signal instanceof IScanSignalWSD) {
 				scanWSD.removeScanSignal((IScanSignalWSD)signal);
-			}
-		} else if(object instanceof IPeakMSD) {
-			IPeakMSD peakMSD = (IPeakMSD)object;
-			if(signal instanceof IIon) {
-				peakMSD.getExtractedMassSpectrum().removeIon((IIon)signal);
-			}
-		} else if(object instanceof IPeakCSD) {
-			IPeakCSD peakCSD = (IPeakCSD)object;
-			if(signal instanceof IScanCSD) {
-				IScan scan = peakCSD.getPeakModel().getPeakMaximum();
-				if(scan instanceof IScanCSD) {
-					IScanCSD scanCSD = (IScanCSD)scan;
-					scanCSD.adjustTotalSignal(0);
-				}
-			}
-		} else if(object instanceof IPeakWSD) {
-			IPeakWSD peakWSD = (IPeakWSD)object;
-			if(signal instanceof IScanSignalWSD) {
-				IScan scan = (IScan)peakWSD.getPeakModel().getPeakMaximum();
-				if(scan instanceof IScanWSD) {
-					IScanWSD scanWSD = (IScanWSD)scan;
-					if(signal instanceof IScanSignalWSD) {
-						scanWSD.removeScanSignal((IScanSignalWSD)signal);
-					}
-				}
 			}
 		}
 	}
@@ -777,32 +882,25 @@ public class ExtendedScanTableUI {
 				double valueX = Double.parseDouble(x);
 				float valueY = Float.parseFloat(y);
 				//
-				if(object instanceof IScanMSD) {
-					IScanMSD scanMSD = (IScanMSD)object;
-					scanMSD.addIon(new Ion(valueX, valueY));
-				} else if(object instanceof IScanCSD) {
-					IScanCSD scanCSD = (IScanCSD)object;
+				IScan scan = getScan();
+				if(scan instanceof IScanCSD) {
+					/*
+					 * CSD
+					 */
+					IScanCSD scanCSD = (IScanCSD)scan;
 					scanCSD.adjustTotalSignal(valueY);
-				} else if(object instanceof IScanWSD) {
-					IScanWSD scanWSD = (IScanWSD)object;
+				} else if(scan instanceof IScanMSD) {
+					/*
+					 * MSD
+					 */
+					IScanMSD scanMSD = (IScanMSD)scan;
+					scanMSD.addIon(new Ion(valueX, valueY));
+				} else if(scan instanceof IScanWSD) {
+					/*
+					 * WSD
+					 */
+					IScanWSD scanWSD = (IScanWSD)scan;
 					scanWSD.addScanSignal(new ScanSignalWSD(valueX, valueY));
-				} else if(object instanceof IPeakMSD) {
-					IPeakMSD peakMSD = (IPeakMSD)object;
-					peakMSD.getExtractedMassSpectrum().addIon(new Ion(valueX, valueY));
-				} else if(object instanceof IPeakCSD) {
-					IPeakCSD peakCSD = (IPeakCSD)object;
-					IScan scan = peakCSD.getPeakModel().getPeakMaximum();
-					if(scan instanceof IScanCSD) {
-						IScanCSD scanCSD = (IScanCSD)scan;
-						scanCSD.adjustTotalSignal(valueY);
-					}
-				} else if(object instanceof IPeakWSD) {
-					IPeakWSD peakWSD = (IPeakWSD)object;
-					IScan scan = (IScan)peakWSD.getPeakModel().getPeakMaximum();
-					if(scan instanceof IScanWSD) {
-						IScanWSD scanWSD = (IScanWSD)scan;
-						scanWSD.addScanSignal(new ScanSignalWSD(valueX, valueY));
-					}
 				}
 				//
 				textX.setText("");
@@ -822,7 +920,6 @@ public class ExtendedScanTableUI {
 		 * Fire an update.
 		 */
 		if(fireUpdate) {
-			IEventBroker eventBroker = Activator.getDefault().getEventBroker();
 			if(eventBroker != null) {
 				if(object instanceof IScan) {
 					eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, object);

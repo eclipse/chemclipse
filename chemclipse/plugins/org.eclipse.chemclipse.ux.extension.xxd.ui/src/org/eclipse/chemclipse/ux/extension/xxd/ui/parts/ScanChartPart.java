@@ -14,50 +14,75 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
 import java.util.List;
 
+import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EnhancedUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedScanChartUI;
+import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class ScanChartPart extends EnhancedUpdateSupport implements IUpdateSupport {
+public class ScanChartPart {
 
-	private ExtendedScanChartUI extendedScanChartUI;
+	private static final String TOPIC = IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION;
+	//
+	private ExtendedScanChartUI control;
+	private boolean initialUpdate = true;
+	//
+	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
+	private IDataUpdateListener updateListener = new IDataUpdateListener() {
+
+		@Override
+		public void update(String topic, List<Object> objects) {
+
+			updateSelection(objects, topic);
+		}
+	};
 
 	@Inject
 	public ScanChartPart(Composite parent, MPart part) {
-		super(parent, Activator.getDefault().getDataUpdateSupport(), IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, part);
+
+		control = new ExtendedScanChartUI(parent, SWT.NONE);
+		dataUpdateSupport.add(updateListener);
 	}
 
-	@Override
-	public void createControl(Composite parent) {
+	@Focus
+	public void setFocus() {
 
-		extendedScanChartUI = new ExtendedScanChartUI(parent, Activator.getDefault().getEventBroker());
+		if(initialUpdate) {
+			updateSelection(dataUpdateSupport.getUpdates(TOPIC), TOPIC);
+		}
 	}
 
-	@Override
-	public void updateSelection(List<Object> objects, String topic) {
+	@PreDestroy
+	protected void preDestroy() {
 
-		/*
-		 * 0 => because only one property was used to register the event.
-		 */
-		if(objects.size() == 1) {
-			if(isScanOrPeakTopic(topic)) {
-				Object object = objects.get(0);
-				IScan scan = null;
-				if(object instanceof IScan) {
-					scan = (IScan)object;
-				} else if(object instanceof IPeak) {
-					IPeak peak = (IPeak)object;
-					scan = peak.getPeakModel().getPeakMaximum();
+		dataUpdateSupport.remove(updateListener);
+	}
+
+	private void updateSelection(List<Object> objects, String topic) {
+
+		if(DataUpdateSupport.isVisible(control)) {
+			if(objects.size() == 1) {
+				if(isScanOrPeakTopic(topic)) {
+					initialUpdate = false;
+					Object object = objects.get(0);
+					IScan scan = null;
+					if(object instanceof IScan) {
+						scan = (IScan)object;
+					} else if(object instanceof IPeak) {
+						IPeak peak = (IPeak)object;
+						scan = peak.getPeakModel().getPeakMaximum();
+					}
+					control.update(scan);
 				}
-				extendedScanChartUI.update(scan);
 			}
 		}
 	}

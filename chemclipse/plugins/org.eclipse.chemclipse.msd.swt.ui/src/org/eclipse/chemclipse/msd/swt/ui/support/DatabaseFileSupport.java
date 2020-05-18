@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -49,6 +49,7 @@ public class DatabaseFileSupport {
 	 * Use only static methods.
 	 */
 	private DatabaseFileSupport() {
+
 	}
 
 	public static void saveMassSpectrum(IScanMSD massSpectrum) throws NoConverterAvailableException {
@@ -75,9 +76,6 @@ public class DatabaseFileSupport {
 		}
 		//
 		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
-		/*
-		 * Create the dialogue.
-		 */
 		dialog.setFilterPath(Activator.getDefault().getSettingsPath());
 		dialog.setFileName(fileName);
 		dialog.setText("Save Mass Spectrum As");
