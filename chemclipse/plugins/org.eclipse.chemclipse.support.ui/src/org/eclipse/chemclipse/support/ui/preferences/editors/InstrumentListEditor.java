@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,7 +16,7 @@ import java.util.Arrays;
 import org.eclipse.chemclipse.support.l10n.Messages;
 import org.eclipse.chemclipse.support.messages.ISupportMessages;
 import org.eclipse.chemclipse.support.messages.SupportMessages;
-import org.eclipse.chemclipse.support.util.InstrumentListUtil;
+import org.eclipse.chemclipse.support.util.InstrumentNameListUtil;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -35,6 +35,7 @@ import org.eclipse.swt.widgets.Shell;
 public class InstrumentListEditor extends ListEditor {
 
 	public InstrumentListEditor(String name, String labelText, Composite parent) {
+
 		super(name, labelText, parent);
 		initialize(parent);
 	}
@@ -42,7 +43,7 @@ public class InstrumentListEditor extends ListEditor {
 	@Override
 	protected String createList(String[] items) {
 
-		InstrumentListUtil instrumentListUtil = new InstrumentListUtil();
+		InstrumentNameListUtil instrumentListUtil = new InstrumentNameListUtil();
 		return instrumentListUtil.createList(items);
 	}
 
@@ -113,7 +114,7 @@ public class InstrumentListEditor extends ListEditor {
 	@Override
 	protected String[] parseString(String stringList) {
 
-		InstrumentListUtil instrumentListUtil = new InstrumentListUtil();
+		InstrumentNameListUtil instrumentListUtil = new InstrumentNameListUtil();
 		String[] instruments = instrumentListUtil.parseString(stringList);
 		Arrays.sort(instruments);
 		return instruments;

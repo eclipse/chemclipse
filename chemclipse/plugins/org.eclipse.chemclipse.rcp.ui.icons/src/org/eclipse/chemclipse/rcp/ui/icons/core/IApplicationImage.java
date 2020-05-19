@@ -378,4 +378,6 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_TYPES = "org.eclipse.chemclipse.rcp.ui.icons/types.png";
 	String IMAGE_VALUE_DECREASE = "org.eclipse.chemclipse.rcp.ui.icons/valueDecrease.gif";
 	String IMAGE_VALUE_INCREASE = "org.eclipse.chemclipse.rcp.ui.icons/valueIncrease.gif";
+	//
+	String IMAGE_INSTRUMENT = "org.eclipse.chemclipse.rcp.ui.icons/instrument.gif";
 }

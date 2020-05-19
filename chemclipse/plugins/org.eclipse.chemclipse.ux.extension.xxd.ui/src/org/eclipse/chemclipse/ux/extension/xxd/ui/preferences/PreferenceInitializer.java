@@ -368,6 +368,10 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		 */
 		store.setDefault(PreferenceConstants.P_NAMED_TRACES_TEMPLATE_FOLDER, PreferenceConstants.DEF_NAMED_TRACES_TEMPLATE_FOLDER);
 		/*
+		 * Instruments
+		 */
+		store.setDefault(PreferenceConstants.P_INSTRUMENTS_TEMPLATE_FOLDER, PreferenceConstants.DEF_INSTRUMENTS_TEMPLATE_FOLDER);
+		/*
 		 * Processor
 		 */
 		store.setDefault(PreferenceConstants.P_PROCESSOR_SELECTION_DATA_CATEGORY, PreferenceConstants.DEF_PROCESSOR_SELECTION_DATA_CATEGORY);

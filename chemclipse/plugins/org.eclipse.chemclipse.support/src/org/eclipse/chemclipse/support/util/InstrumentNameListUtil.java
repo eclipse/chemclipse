@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Philip Wenig - initial API and implementation
+ * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.support.util;
 
@@ -15,19 +15,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class InstrumentListUtil {
+public class InstrumentNameListUtil {
 
 	public static final String SEPARATOR_TOKEN = ";";
-	public static final String SEPARATOR_ENTRY = "|";
 
 	public String createList(String[] items) {
 
-		List<String> list = getValues(items);
-		String values = "";
-		for(String value : list) {
-			values = values.concat(value + SEPARATOR_TOKEN);
+		List<String> instrumentList = getInstruments(items);
+		String instruments = "";
+		for(String instrument : instrumentList) {
+			instruments = instruments.concat(instrument + SEPARATOR_TOKEN);
 		}
-		return values;
+		return instruments;
 	}
 
 	public String[] parseString(String stringList) {
@@ -36,35 +35,36 @@ public class InstrumentListUtil {
 		if(stringList.contains(SEPARATOR_TOKEN)) {
 			decodedArray = stringList.split(SEPARATOR_TOKEN);
 		} else {
-			decodedArray = new String[]{stringList};
+			decodedArray = new String[1];
+			decodedArray[0] = stringList;
 		}
 		return decodedArray;
 	}
 
-	public List<String> getList(String preferenceEntry) {
+	public List<String> getInstruments(String preferenceEntry) {
 
-		List<String> values = new ArrayList<String>();
+		List<String> instruments = new ArrayList<String>();
 		if(preferenceEntry != "") {
 			String[] items = parseString(preferenceEntry);
 			if(items.length > 0) {
 				for(String item : items) {
-					values.add(item);
+					instruments.add(item);
 				}
 			}
 		}
-		Collections.sort(values);
-		return values;
+		Collections.sort(instruments);
+		return instruments;
 	}
 
-	private List<String> getValues(String[] items) {
+	private List<String> getInstruments(String[] items) {
 
-		List<String> values = new ArrayList<String>();
+		List<String> instruments = new ArrayList<String>();
 		if(items != null) {
 			int size = items.length;
 			for(int i = 0; i < size; i++) {
-				values.add(items[i]);
+				instruments.add(items[i]);
 			}
 		}
-		return values;
+		return instruments;
 	}
 }

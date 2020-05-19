@@ -351,6 +351,11 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String P_NAMED_TRACES_TEMPLATE_FOLDER = "namedTracesTemplateFolder";
 	public static final String DEF_NAMED_TRACES_TEMPLATE_FOLDER = "";
 	/*
+	 * Instruments
+	 */
+	public static final String P_INSTRUMENTS_TEMPLATE_FOLDER = "instrumentsTemplateFolder";
+	public static final String DEF_INSTRUMENTS_TEMPLATE_FOLDER = "";
+	/*
 	 * Chromatogram
 	 */
 	public static final String P_LEGACY_UPDATE_CHROMATOGRAM_MODUS = "legacyUpdateChromatogramModus";
