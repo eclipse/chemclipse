@@ -119,7 +119,7 @@ public class ExtractedMatrix {
 			for(int i = startScan; i <= stopScan; i++) {
 				currentScan = (IScanMSD)selection.getChromatogram().getScan(i);
 				currentScan.removeAllIons();
-				for(int j = startIon; j < stopIon; j++) {
+				for(int j = startIon; j <= stopIon; j++) {
 					if(signal[i - startScan][j - startIon] != 0.0) {
 						currentIon = new Ion(j, (float)signal[i - startScan][j - startIon]);
 						currentScan.addIon(currentIon);
