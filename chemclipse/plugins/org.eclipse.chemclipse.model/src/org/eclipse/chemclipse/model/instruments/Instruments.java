@@ -9,7 +9,7 @@
  * Contributors:
  * Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.instruments;
+package org.eclipse.chemclipse.model.instruments;
 
 import java.io.BufferedReader;
 import java.io.File;

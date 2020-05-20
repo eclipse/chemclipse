@@ -15,11 +15,11 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.chemclipse.model.instruments.Instrument;
+import org.eclipse.chemclipse.model.instruments.Instruments;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.instruments.Instrument;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.instruments.Instruments;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.InstrumentInputValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.InstrumentListUI;

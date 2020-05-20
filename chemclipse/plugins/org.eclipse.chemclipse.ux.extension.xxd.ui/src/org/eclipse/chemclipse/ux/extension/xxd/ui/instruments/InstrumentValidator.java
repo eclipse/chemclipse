@@ -19,7 +19,7 @@ import org.eclipse.core.runtime.IStatus;
 public class InstrumentValidator implements IValidator {
 
 	private static final String ERROR = "Please enter a correct instrument.";
-	private static final String ERROR_CONTENT = "The following character must be not used: " + InstrumentListUtil.SEPARATOR_TOKEN;
+	private static final String ERROR_CONTENT = "The following character must be not used: ";
 	//
 	private String identifier = "";
 	private String name = "";
@@ -37,7 +37,10 @@ public class InstrumentValidator implements IValidator {
 				String[] values = value.toString().trim().split("\\" + InstrumentListUtil.SEPARATOR_ENTRY);
 				//
 				identifier = values.length > 0 ? values[0].trim() : "";
-				message = checkContent(identifier);
+				message = checkAlphaNumeric(identifier);
+				if(message == null) {
+					message = checkContent(identifier);
+				}
 				//
 				if(message == null) {
 					name = values.length > 1 ? values[1].trim() : "";
@@ -60,11 +63,20 @@ public class InstrumentValidator implements IValidator {
 		}
 	}
 
+	private String checkAlphaNumeric(String content) {
+
+		// TODO Check
+		return null;
+	}
+
 	private String checkContent(String content) {
 
 		if(content.contains(InstrumentListUtil.SEPARATOR_TOKEN)) {
-			return ERROR_CONTENT;
+			return ERROR_CONTENT + InstrumentListUtil.SEPARATOR_TOKEN;
 		} else {
+			if(content.contains(InstrumentListUtil.SEPARATOR_ENTRY)) {
+				return ERROR_CONTENT + InstrumentListUtil.SEPARATOR_ENTRY;
+			}
 			return null;
 		}
 	}

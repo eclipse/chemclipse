@@ -9,7 +9,9 @@
  * Contributors:
  * Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.instruments;
+package org.eclipse.chemclipse.model.instruments;
+
+import org.eclipse.chemclipse.support.util.InstrumentListUtil;
 
 public class Instrument {
 
@@ -37,8 +39,16 @@ public class Instrument {
 		return identifier;
 	}
 
+	/**
+	 * Only alphanumeric values are allowed.
+	 * Non-allowed characters will be removed.
+	 * 
+	 * @param identifier
+	 */
 	public void setIdentifier(String identifier) {
 
+		identifier = removeNonAlphaNumericTokens(identifier);
+		identifier = removeSeparatorTokens(identifier);
 		this.identifier = identifier;
 	}
 
@@ -47,9 +57,14 @@ public class Instrument {
 		return name;
 	}
 
+	/**
+	 * Non-allowed characters will be removed.
+	 * 
+	 * @param description
+	 */
 	public void setName(String name) {
 
-		this.name = name;
+		this.name = removeSeparatorTokens(name);
 	}
 
 	public String getDescription() {
@@ -57,9 +72,14 @@ public class Instrument {
 		return description;
 	}
 
+	/**
+	 * Non-allowed characters will be removed.
+	 * 
+	 * @param description
+	 */
 	public void setDescription(String description) {
 
-		this.description = description;
+		this.description = removeSeparatorTokens(description);
 	}
 
 	@Override
@@ -96,5 +116,16 @@ public class Instrument {
 				", name=" + name + //
 				", description=" + description + //
 				"]";
+	}
+
+	private String removeNonAlphaNumericTokens(String value) {
+
+		return value.replaceAll("\\P{Alnum}", "");
+	}
+
+	private String removeSeparatorTokens(String value) {
+
+		return value.replaceAll("\\" + InstrumentListUtil.SEPARATOR_ENTRY, "") //
+				.replaceAll(InstrumentListUtil.SEPARATOR_TOKEN, "");
 	}
 }

@@ -11,10 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
+import org.eclipse.chemclipse.model.instruments.Instrument;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.instruments.Instrument;
 import org.eclipse.swt.graphics.Image;
 
 public class InstrumentLabelProvider extends AbstractChemClipseLabelProvider {
