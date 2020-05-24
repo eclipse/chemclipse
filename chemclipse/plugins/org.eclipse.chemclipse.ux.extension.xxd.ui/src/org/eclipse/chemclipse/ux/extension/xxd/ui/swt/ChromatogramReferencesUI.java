@@ -15,6 +15,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
@@ -57,8 +58,11 @@ public class ChromatogramReferencesUI {
 	private Action buttonAdd;
 	private Action buttonRemove;
 	private Action buttonRemoveAll;
+	//
+	private HashMap<IChromatogram<?>, IChromatogramSelection<?, ?>> referenceSelections = new HashMap<>();
 
 	public ChromatogramReferencesUI(EditorToolBar editorToolBar, Consumer<IChromatogramSelection<?, ?>> chromatogramReferencesListener) {
+
 		comboChromatograms = new ComboContainer(chromatogramReferencesListener.andThen(t -> updateButtons()));
 		Action action = new Action("References", Action.AS_CHECK_BOX) {
 
@@ -104,19 +108,14 @@ public class ChromatogramReferencesUI {
 			List<IChromatogram<?>> referencedChromatograms = masterSelection.getChromatogram().getReferencedChromatograms();
 			//
 			for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
-				IChromatogramSelection<?, ?> referenceSelection;
-				if(referencedChromatogram instanceof IChromatogramCSD) {
-					referenceSelection = new ChromatogramSelectionCSD((IChromatogramCSD)referencedChromatogram);
-				} else if(referencedChromatogram instanceof IChromatogramMSD) {
-					referenceSelection = new ChromatogramSelectionMSD((IChromatogramMSD)referencedChromatogram);
-				} else if(referencedChromatogram instanceof IChromatogramWSD) {
-					referenceSelection = new ChromatogramSelectionWSD((IChromatogramWSD)referencedChromatogram);
-				} else {
-					continue;
+				IChromatogramSelection<?, ?> referenceSelection = referenceSelections.get(referencedChromatogram);
+				if(referenceSelection == null) {
+					referenceSelection = createChromatogramSelection(referencedChromatogram);
+					if(referenceSelection != null) {
+						referenceSelections.put(referencedChromatogram, referenceSelection);
+					}
 				}
-				//
 				chromatogramMasterAndReferences.add(referenceSelection);
-				referenceSelection.setRangeRetentionTime(masterSelection.getStartRetentionTime(), masterSelection.getStopRetentionTime());
 			}
 		}
 		//
@@ -124,17 +123,25 @@ public class ChromatogramReferencesUI {
 		comboChromatograms.refreshUI();
 	}
 
+	private IChromatogramSelection<?, ?> createChromatogramSelection(IChromatogram<?> referencedChromatogram) {
+
+		if(referencedChromatogram instanceof IChromatogramCSD) {
+			return new ChromatogramSelectionCSD((IChromatogramCSD)referencedChromatogram);
+		} else if(referencedChromatogram instanceof IChromatogramMSD) {
+			return new ChromatogramSelectionMSD((IChromatogramMSD)referencedChromatogram);
+		} else if(referencedChromatogram instanceof IChromatogramWSD) {
+			return new ChromatogramSelectionWSD((IChromatogramWSD)referencedChromatogram);
+		} else {
+			return null;
+		}
+	}
+
 	public void setMasterChromatogram(IChromatogramSelection<?, ?> chromatogramSelection) {
 
-		if(comboChromatograms.master != chromatogramSelection) {
+		if(chromatogramSelection != null && comboChromatograms.master != chromatogramSelection) {
 			comboChromatograms.master = chromatogramSelection;
-			if(chromatogramSelection == null) {
-				comboChromatograms.setSelection(StructuredSelection.EMPTY);
-				comboChromatograms.setInput(Collections.emptyList());
-			} else {
-				update();
-				comboChromatograms.setSelection(new StructuredSelection(chromatogramSelection));
-			}
+			update();
+			comboChromatograms.setSelection(new StructuredSelection(chromatogramSelection));
 			updateButtons();
 		}
 	}
@@ -367,6 +374,7 @@ public class ChromatogramReferencesUI {
 		private final Consumer<IChromatogramSelection<?, ?>> listener;
 
 		public ComboContainer(Consumer<IChromatogramSelection<?, ?>> chromatogramReferencesListener) {
+
 			this.listener = chromatogramReferencesListener;
 		}
 
