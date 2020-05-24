@@ -2,7 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="org.eclipse.chemclipse.chromatogram.filter.chromatogramFilterSupplier">
+         point="org.eclipse.chemclipse.chromatogram.msd.filter.chromatogramFilterSupplier">
       <ChromatogramFilterSupplier
             description="This filter splits a chromatogram into its MS1, MS2, ... reference chromatogram(s)."
             filter="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.core.ChromatogramFilter"
