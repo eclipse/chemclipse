@@ -30,7 +30,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String DEF_NOISE_CALCULATOR_ID = "org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.dyson";
 	//
 	public static final String P_SEGMENT_WIDTH = "segmentWidth";
-	public static final String DEF_SEGMENT_WIDTH = SegmentWidth.WIDTH_13.toString();
+	public static final String DEF_SEGMENT_WIDTH = SegmentWidth.WIDTH_9.toString();
 	private static IPreferenceSupplier preferenceSupplier;
 
 	public static IPreferenceSupplier INSTANCE() {
