@@ -23,6 +23,8 @@ public class SnipCalculator {
 	 * SNIP, a statistics-sensitive background treatment for the quantitative analysis of PIXE spectra in geoscience applications
 	 * http://dx.doi.org/10.1016/0168-583X(88)90063-8
 	 * 
+	 * SNIP: Statistics-sensitive Non-linear Iterative Peak-clipping
+	 * 
 	 * @param intensityValues
 	 * @param iterations
 	 * @return float[]

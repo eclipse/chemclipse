@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -64,7 +64,7 @@ public interface IBaselineDetector {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo validate(IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor);
+	IProcessingInfo<?> validate(IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor);
 
 	/**
 	 * Validates the parameters.

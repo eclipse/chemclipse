@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -34,8 +34,6 @@ import org.eclipse.core.runtime.Platform;
  * manipulated by several baseline detector plugins.<br/>
  * What does it mean? An approach could be to detect the baseline automatically
  * and correct is manually afterwards.
- * 
- * @author eselmeister
  */
 public class BaselineDetector {
 
@@ -58,6 +56,7 @@ public class BaselineDetector {
 	 * This class has only static methods.
 	 */
 	private BaselineDetector() {
+
 	}
 
 	/**
@@ -170,9 +169,9 @@ public class BaselineDetector {
 		return null;
 	}
 
-	private static IProcessingInfo getNoDetectorAvailableProcessingInfo() {
+	private static IProcessingInfo<?> getNoDetectorAvailableProcessingInfo() {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<Object>();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Baseline Detector", NO_DETECTOR_AVAILABLE);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -48,7 +48,7 @@ public class BaselineDetector_2_Test extends TestCase {
 
 		try {
 			String detectorId = BaselineDetector.getBaselineDetectorSupport().getDetectorId(0);
-			IProcessingInfo processingInfo = BaselineDetector.setBaseline(null, null, detectorId, new NullProgressMonitor());
+			IProcessingInfo<?> processingInfo = BaselineDetector.setBaseline(null, null, detectorId, new NullProgressMonitor());
 			assertTrue(processingInfo.hasErrorMessages());
 		} catch(NoBaselineDetectorAvailableException e) {
 			assertTrue("NoBaselineDetectorAvailableException", false);
@@ -59,7 +59,7 @@ public class BaselineDetector_2_Test extends TestCase {
 
 		String detectorId = "";
 		IChromatogramSelectionMSD chromatogramSelection = new ChromatogramSelectionMSD(new ChromatogramMSD());
-		IProcessingInfo processingInfo = BaselineDetector.setBaseline(chromatogramSelection, null, detectorId, new NullProgressMonitor());
+		IProcessingInfo<?> processingInfo = BaselineDetector.setBaseline(chromatogramSelection, null, detectorId, new NullProgressMonitor());
 		assertTrue(processingInfo.hasErrorMessages());
 	}
 }

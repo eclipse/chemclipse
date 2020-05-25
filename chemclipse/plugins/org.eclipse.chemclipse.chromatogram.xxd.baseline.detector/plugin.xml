@@ -7,8 +7,18 @@
       <BaselineDetectorSupplier
             baselineDetector="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.impl.BaselineDetector"
             description="Find the lowest intensity and set it as the baseline."
-            detectorName="Baseline Detector (Lowest)"
+            detectorName="Lowest Intensity"
             id="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.impl.lowest">
       </BaselineDetectorSupplier>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.baselineDetectorSupplier">
+      <BaselineDetectorSupplier
+            baselineDetector="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.impl.BaselineDelete"
+            description="Deletes the baseline."
+            detectorName="Delete"
+            detectorSettings="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.impl.DeleteSettings"
+            id="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.impl.delete">
+      </BaselineDetectorSupplier>
+   </extension>   
 </plugin>

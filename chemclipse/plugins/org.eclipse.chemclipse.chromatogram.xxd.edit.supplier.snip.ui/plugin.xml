@@ -2,19 +2,12 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         id="org.eclipse.chemclipse.chromatogram.msd.baseline.detector.ui.modelContribution"
-         point="org.eclipse.e4.workbench.model">
-      <fragment
-            uri="fragment.e4xmi">
-      </fragment>
-   </extension>
-   <extension
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.ui.preferences.baselineDetectorPreferencePage"
             class="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.preferences.PreferencePage"
             id="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui"
-            name="SNIP Baseline Detector">
+            name="SNIP Detector/Filter">
       </page>
    </extension>
    <extension
@@ -23,14 +16,7 @@
             category="org.eclipse.chemclipse.chromatogram.msd.filter.ui.preferences.filterPreferencePage"
             class="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.preferences.PreferencePage"
             id="org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.peak"
-            name="SNIP Peak Filter">
+            name="SNIP Detector/Filter">
       </page>
    </extension>
-   <extension
-         point="org.eclipse.help.toc">
-      <toc
-            file="toc_baselinedectector.xml">
-      </toc>
-   </extension>
-
 </plugin>

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -28,7 +28,7 @@ public abstract class AbstractBaselineDetector implements IBaselineDetector {
 	@SuppressWarnings("rawtypes")
 	public IProcessingInfo validate(IChromatogramSelection chromatogramSelection, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<Object>();
 		if(chromatogramSelection == null) {
 			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, ERROR_DESCRIPTION, "The chromatogram selection is invalid.");
 			processingInfo.addMessage(processingMessage);
@@ -52,7 +52,7 @@ public abstract class AbstractBaselineDetector implements IBaselineDetector {
 	@SuppressWarnings("rawtypes")
 	public IProcessingInfo validate(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<Object>();
 		if(chromatogramSelection == null) {
 			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, ERROR_DESCRIPTION, "The chromatogram selection is invalid.");
 			processingInfo.addMessage(processingMessage);
@@ -66,9 +66,9 @@ public abstract class AbstractBaselineDetector implements IBaselineDetector {
 	}
 
 	@Override
-	public IProcessingInfo validate(IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<?> validate(IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<Object>();
 		/*
 		 * Settings
 		 */

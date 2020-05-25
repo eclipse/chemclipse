@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -77,9 +77,9 @@ public abstract class AbstractBaselineSignalDetector extends AbstractBaselineDet
 		throw new UnsupportedOperationException("Class " + chromatogramSelection.getClass().getName() + " is not supported");
 	}
 
-	private IProcessingInfo process(IChromatogramSelectionCSD chromatogramSelection, IBaselineDetectorSettings settings, IProgressMonitor monitor) {
+	private IProcessingInfo<?> process(IChromatogramSelectionCSD chromatogramSelection, IBaselineDetectorSettings settings, IProgressMonitor monitor) {
 
-		IChromatogramCSD chromatogramCSD = chromatogramSelection.getChromatogramCSD();
+		IChromatogramCSD chromatogramCSD = chromatogramSelection.getChromatogram();
 		/*
 		 * 1. step - export signal from chromatogram
 		 */
@@ -91,7 +91,7 @@ public abstract class AbstractBaselineSignalDetector extends AbstractBaselineDet
 		/*
 		 * 2. step - create baseline
 		 */
-		IProcessingInfo processInfo = baselineProcess(totalSignals, settings, monitor);
+		IProcessingInfo<?> processInfo = baselineProcess(totalSignals, settings, monitor);
 		/*
 		 * 3. step - set baseline
 		 */
@@ -101,9 +101,9 @@ public abstract class AbstractBaselineSignalDetector extends AbstractBaselineDet
 		return processInfo;
 	}
 
-	private IProcessingInfo process(IChromatogramSelectionMSD chromatogramSelection, IBaselineDetectorSettings settings, IProgressMonitor monitor) {
+	private IProcessingInfo<?> process(IChromatogramSelectionMSD chromatogramSelection, IBaselineDetectorSettings settings, IProgressMonitor monitor) {
 
-		IChromatogramMSD chromatogramMSD = chromatogramSelection.getChromatogramMSD();
+		IChromatogramMSD chromatogramMSD = chromatogramSelection.getChromatogram();
 		/*
 		 * 1. step - export signal from chromatogram
 		 */
@@ -115,7 +115,7 @@ public abstract class AbstractBaselineSignalDetector extends AbstractBaselineDet
 		/*
 		 * 2. step - create baseline
 		 */
-		IProcessingInfo processInfo = baselineProcess(totalSignals, settings, monitor);
+		IProcessingInfo<?> processInfo = baselineProcess(totalSignals, settings, monitor);
 		/*
 		 * 3. step - set baseline
 		 */
@@ -129,9 +129,9 @@ public abstract class AbstractBaselineSignalDetector extends AbstractBaselineDet
 		return processInfo;
 	}
 
-	private IProcessingInfo process(IChromatogramSelectionWSD chromatogramSelection, IBaselineDetectorSettings settings, IProgressMonitor monitor) {
+	private IProcessingInfo<?> process(IChromatogramSelectionWSD chromatogramSelection, IBaselineDetectorSettings settings, IProgressMonitor monitor) {
 
-		IChromatogramWSD chromatogramWSD = chromatogramSelection.getChromatogramWSD();
+		IChromatogramWSD chromatogramWSD = chromatogramSelection.getChromatogram();
 		/*
 		 * 1. step - export signals from chromatogram
 		 */
@@ -143,9 +143,9 @@ public abstract class AbstractBaselineSignalDetector extends AbstractBaselineDet
 		/*
 		 * 2. step - process signals - each wavelength separately
 		 */
-		IProcessingInfo processingInfoTotal = new ProcessingInfo();
+		IProcessingInfo<?> processingInfoTotal = new ProcessingInfo<Object>();
 		for(IExtractedSingleWavelengthSignals totalSignals : extractedSingleWavelengthSignals) {
-			IProcessingInfo processingInfo = baselineProcess(totalSignals, settings, monitor);
+			IProcessingInfo<?> processingInfo = baselineProcess(totalSignals, settings, monitor);
 			processingInfoTotal.addMessages(processingInfo);
 		}
 		/*
@@ -167,14 +167,14 @@ public abstract class AbstractBaselineSignalDetector extends AbstractBaselineDet
 		// support not old version processing
 		ITotalScanSignalExtractor totalScanSignalExtractor = new TotalScanSignalExtractor(chromatogramWSD);
 		ITotalScanSignals totalSignals = totalScanSignalExtractor.getTotalScanSignals(chromatogramSelection, false);
-		IProcessingInfo processInfo = baselineProcess(totalSignals, settings, monitor);
+		IProcessingInfo<?> processInfo = baselineProcess(totalSignals, settings, monitor);
 		if(!processInfo.hasErrorMessages()) {
 			applyBaseline(totalSignals, chromatogramWSD.getBaselineModel(), monitor);
 		}
 		return processingInfoTotal;
 	}
 
-	private IProcessingInfo baselineProcess(ITotalScanSignals totalScanSignals, IBaselineDetectorSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	private IProcessingInfo<?> baselineProcess(ITotalScanSignals totalScanSignals, IBaselineDetectorSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
 		if(chromatogramFilterSettings == null) {
 			return setBaseline(totalScanSignals, monitor);
@@ -183,9 +183,9 @@ public abstract class AbstractBaselineSignalDetector extends AbstractBaselineDet
 		}
 	}
 
-	protected abstract IProcessingInfo setBaseline(ITotalScanSignals totalScanSignals, IProgressMonitor monitor);
+	protected abstract IProcessingInfo<?> setBaseline(ITotalScanSignals totalScanSignals, IProgressMonitor monitor);
 
-	protected abstract IProcessingInfo setBaseline(ITotalScanSignals totalScanSignals, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor);
+	protected abstract IProcessingInfo<?> setBaseline(ITotalScanSignals totalScanSignals, IBaselineDetectorSettings baselineDetectorSettings, IProgressMonitor monitor);
 
 	private void applyBaseline(ITotalScanSignals totalIonSignals, IBaselineModel baselineModel, IProgressMonitor monitor) {
 

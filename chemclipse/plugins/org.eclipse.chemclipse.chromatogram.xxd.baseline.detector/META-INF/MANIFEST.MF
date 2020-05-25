@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.xxd.baseline.detector
 Bundle-ManifestVersion: 2
 Bundle-Name: Dector Plug-in
 Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.xxd.baseline.detector;singleton:=true
@@ -10,7 +11,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.processing;bundle-version="0.8.0",
  org.eclipse.chemclipse.model;bundle-version="0.8.0",
  org.eclipse.chemclipse.csd.model;bundle-version="0.8.0",
- org.eclipse.chemclipse.wsd.model;bundle-version="0.8.0"
+ org.eclipse.chemclipse.wsd.model;bundle-version="0.8.0",
+ com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.9.9"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.core,

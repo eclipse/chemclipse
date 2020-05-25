@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -47,8 +47,7 @@ public class FilterSupplier {
 		/*
 		 * Run the SNIP baseline calculation.
 		 */
-		SnipCalculator snipCalculator = new SnipCalculator();
-		snipCalculator.calculateBaselineIntensityValues(intensityValues, iterations, monitor);
+		SnipCalculator.calculateBaselineIntensityValues(intensityValues, iterations, monitor);
 		/*
 		 * Subtract the values.
 		 */
