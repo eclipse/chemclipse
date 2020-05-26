@@ -34,9 +34,3 @@ Require-Bundle: org.eclipse.ui,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: org.osgi.service.event;version="1.3.0"
-Service-Component: OSGI-INF/detectorHandlerMSD.xml,
- OSGI-INF/detectorHandlerCSD.xml,
- OSGI-INF/detectorHandlerWSD.xml, 
- OSGI-INF/filterHandlerAllPeaks.xml,
- OSGI-INF/filterHandlerSelectedPeak.xml,
- OSGI-INF/filterHandlerMassSpectrum.xml
