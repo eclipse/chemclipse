@@ -16,8 +16,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ChromatogramFilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ChromatogramFilterSettingsCSD;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ChromatogramFilterSettingsMSD;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ChromatogramFilterSettingsWSD;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.MassSpectrumFilterSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -86,10 +87,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static ChromatogramFilterSettings getFilterSettings() {
+	public static ChromatogramFilterSettingsCSD getFilterSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		ChromatogramFilterSettings settings = new ChromatogramFilterSettings();
+		ChromatogramFilterSettingsCSD settings = new ChromatogramFilterSettingsCSD();
 		settings.setOrder(preferences.getInt(P_ORDER, DEF_ORDER));
 		settings.setWidth(preferences.getInt(P_WIDTH, DEF_WIDTH));
 		return settings;
@@ -102,6 +103,15 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		settings.setOrder(preferences.getInt(P_ORDER, DEF_ORDER));
 		settings.setWidth(preferences.getInt(P_WIDTH, DEF_WIDTH));
 		settings.setPerIonCalculation(preferences.getBoolean(P_PER_ION_CALCULATION, DEF_PER_ION_CALCULATION));
+		return settings;
+	}
+
+	public static ChromatogramFilterSettingsWSD getFilterSettingsWSD() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		ChromatogramFilterSettingsWSD settings = new ChromatogramFilterSettingsWSD();
+		settings.setOrder(preferences.getInt(P_ORDER, DEF_ORDER));
+		settings.setWidth(preferences.getInt(P_WIDTH, DEF_WIDTH));
 		return settings;
 	}
 

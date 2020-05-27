@@ -23,9 +23,10 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class PreferencePageMSD extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePageMSD() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("MSD");
+		setDescription("Savitzky-Golay Smoothing MSD");
 	}
 
 	/**
