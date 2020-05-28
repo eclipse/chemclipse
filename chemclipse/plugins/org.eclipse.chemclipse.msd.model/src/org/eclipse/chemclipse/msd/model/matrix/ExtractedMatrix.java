@@ -60,9 +60,11 @@ public class ExtractedMatrix {
 		double rangeAbs;
 		for(IScanMSD scan : scans) {
 			bounds = scan.getIonBounds();
-			rangeAbs = bounds.getHighestIon().getIon() - bounds.getLowestIon().getIon();
-			if(rangeAbs + limit < scan.getIons().size()) {
-				return (true);
+			if(bounds != null) {
+				rangeAbs = bounds.getHighestIon().getIon() - bounds.getLowestIon().getIon();
+				if(rangeAbs + limit < scan.getIons().size()) {
+					return (true);
+				}
 			}
 		}
 		return false;
