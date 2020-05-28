@@ -6,7 +6,7 @@
       <ChromatogramFilterSupplier
             description="This filter applies the Savitzky-Golay filter."
             filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.core.ChromatogramFilterMSD"
-            filterName="Savitzky-Golay Smoothing (MSD)"
+            filterName="Savitzky-Golay Smoothing"
             filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ChromatogramFilterSettingsMSD"
             id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.savitzkygolay">
       </ChromatogramFilterSupplier>
@@ -16,7 +16,7 @@
       <ChromatogramFilterSupplier
             description="This filter applies the Savitzky-Golay filter."
             filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.core.ChromatogramFilterCSD"
-            filterName="Savitzky-Golay Smoothing (CSD)"
+            filterName="Savitzky-Golay Smoothing"
             filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ChromatogramFilterSettings"
             id="org.eclipse.chemclipse.chromatogram.csd.filter.supplier.savitzkygolay">
       </ChromatogramFilterSupplier>
@@ -26,7 +26,7 @@
       <ChromatogramFilterSupplier
             description="This filter applies the Savitzky-Golay filter."
             filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.core.ChromatogramFilterWSD"
-            filterName="Savitzky-Golay Smoothing (WSD)"
+            filterName="Savitzky-Golay Smoothing"
             filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.ChromatogramFilterSettings"
             id="org.eclipse.chemclipse.chromatogram.wsd.filter.supplier.savitzkygolay">
       </ChromatogramFilterSupplier>
