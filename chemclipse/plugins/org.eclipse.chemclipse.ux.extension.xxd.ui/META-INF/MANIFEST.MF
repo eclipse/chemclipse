@@ -27,6 +27,7 @@ Export-Package: org.eclipse.chemclipse.ux.extension.xxd.ui.actions,
  org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts,
  org.eclipse.chemclipse.ux.extension.xxd.ui.swt,
  org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors,
+ org.eclipse.chemclipse.ux.extension.xxd.ui.traces,
  org.eclipse.chemclipse.ux.extension.xxd.ui.wizards
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
