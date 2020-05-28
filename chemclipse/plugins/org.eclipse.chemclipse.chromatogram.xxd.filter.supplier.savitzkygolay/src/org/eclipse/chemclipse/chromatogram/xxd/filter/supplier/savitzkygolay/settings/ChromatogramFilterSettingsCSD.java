@@ -15,18 +15,22 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.se
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
+import org.eclipse.chemclipse.support.settings.IntSettingsProperty.Validation;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class ChromatogramFilterSettingsCSD extends ChromatogramFilterSettings {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramFilterSettings.class);
 	//
 	@JsonProperty(value = "Order", defaultValue = "2")
+	@JsonPropertyDescription(value = "Order p of the polynomial to be fitted: Integer in the range from 2 to 5")
 	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_ORDER, maxValue = PreferenceSupplier.MAX_ORDER)
 	private int order = 2;
 	@JsonProperty(value = "Width", defaultValue = "5")
-	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_WIDTH, maxValue = PreferenceSupplier.MAX_WIDTH)
+	@JsonPropertyDescription(value = "Filter width, odd integer in the range from 5 to 51")
+	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_WIDTH, maxValue = PreferenceSupplier.MAX_WIDTH, validation = Validation.ODD_NUMBER)
 	private int width = 5;
 
 	public int getDerivative() {
@@ -60,6 +64,4 @@ public class ChromatogramFilterSettingsCSD extends ChromatogramFilterSettings {
 
 		this.width = width;
 	}
-
-
 }
