@@ -21,19 +21,19 @@
             category="org.eclipse.chemclipse.chromatogram.msd.filter.ui.preferences.filterPreferencePage"
             class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.preferences.PreferencePageMSD"
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.preferences.preferencePageMSD"
-            name="Savitzky-Golay Smoothing MSD">
+            name="Savitzky-Golay Smoothing">
       </page>
       <page
             category="org.eclipse.chemclipse.chromatogram.csd.filter.ui.preferences.filterPreferencePage"
             class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.preferences.PreferencePageCSD"
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.preferences.preferencePageCSD"
-            name="Savitzky-Golay Smoothing CSD">
+            name="Savitzky-Golay Smoothing">
       </page>
             <page
             category="org.eclipse.chemclipse.chromatogram.wsd.filter.ui.preferences.filterPreferencePage"
             class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.preferences.PreferencePageWSD"
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.preferences.preferencePageWSD"
-            name="Savitzky-Golay Smoothing WSD">
+            name="Savitzky-Golay Smoothing">
       </page>
       
    </extension>

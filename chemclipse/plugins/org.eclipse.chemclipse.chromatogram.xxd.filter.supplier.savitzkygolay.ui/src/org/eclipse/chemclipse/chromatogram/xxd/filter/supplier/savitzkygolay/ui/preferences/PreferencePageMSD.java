@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Lorenz Gerber - data type specific settings
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.preferences;
 
@@ -26,7 +27,8 @@ public class PreferencePageMSD extends FieldEditorPreferencePage implements IWor
 
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Savitzky-Golay Smoothing MSD");
+		setTitle("Savitzky-Golay Smoothing");
+		setDescription("");
 	}
 
 	/**

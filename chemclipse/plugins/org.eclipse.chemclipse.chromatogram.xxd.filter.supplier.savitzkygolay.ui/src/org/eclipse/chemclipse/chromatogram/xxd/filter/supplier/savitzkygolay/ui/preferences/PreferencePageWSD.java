@@ -25,7 +25,8 @@ public class PreferencePageWSD extends FieldEditorPreferencePage implements IWor
 
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Savitzky-Golay Smoothing WSD");
+		setTitle("Savitzky-Golay Smoothing");
+		setDescription("");
 	}
 
 	/**
