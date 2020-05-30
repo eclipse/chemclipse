@@ -24,6 +24,8 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.traces.NamedTrace;
+import org.eclipse.chemclipse.model.traces.NamedTraces;
 import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
@@ -46,8 +48,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.Derivative;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.DisplayModus;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTrace;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTraces;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTracesUI;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;

@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
+import org.eclipse.chemclipse.model.traces.NamedTrace;
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTrace;
 import org.eclipse.jface.viewers.Viewer;
 
 public class NamedTracesComparator extends AbstractRecordTableComparator implements IRecordTableComparator {

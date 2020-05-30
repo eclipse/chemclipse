@@ -9,7 +9,7 @@
  * Contributors:
  * Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.traces;
+package org.eclipse.chemclipse.model.traces;
 
 public class NamedTraceUtil {
 

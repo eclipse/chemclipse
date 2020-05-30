@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -18,6 +18,17 @@ public class TargetTemplate implements ITargetTemplate {
 	private String comments = "";
 	private String contributor = "";
 	private String referenceId = "";
+
+	public TargetTemplate() {
+
+		this("", "");
+	}
+
+	public TargetTemplate(String name, String casNumber) {
+
+		this.name = name;
+		this.casNumber = casNumber;
+	}
 
 	@Override
 	public String getName() {

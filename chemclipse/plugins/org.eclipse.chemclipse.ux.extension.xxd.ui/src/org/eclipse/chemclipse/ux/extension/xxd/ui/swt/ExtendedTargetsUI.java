@@ -65,7 +65,6 @@ import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.fieldassist.IContentProposal;
 import org.eclipse.jface.fieldassist.IContentProposalProvider;
-import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
@@ -123,6 +122,7 @@ public class ExtendedTargetsUI {
 
 	@Inject
 	public ExtendedTargetsUI(Composite parent) {
+
 		initialize(parent);
 	}
 
@@ -321,17 +321,10 @@ public class ExtendedTargetsUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IPreferencePage preferencePageSWT = new PreferencePageSWT();
-				preferencePageSWT.setTitle("Settings (SWT)");
-				IPreferencePage preferencePageTargets = new PreferencePageTargets();
-				preferencePageTargets.setTitle("Target Settings");
-				IPreferencePage preferencePageLists = new PreferencePageLists();
-				preferencePageLists.setTitle("Lists");
-				//
 				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageTargets));
-				preferenceManager.addToRoot(new PreferenceNode("2", preferencePageSWT));
-				preferenceManager.addToRoot(new PreferenceNode("3", preferencePageLists));
+				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePageTargets()));
+				preferenceManager.addToRoot(new PreferenceNode("2", new PreferencePageSWT()));
+				preferenceManager.addToRoot(new PreferenceNode("3", new PreferencePageLists()));
 				//
 				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
 				preferenceDialog.create();
