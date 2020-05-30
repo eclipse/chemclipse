@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,11 +17,6 @@ import org.eclipse.chemclipse.model.core.IPeakModel;
 
 public class Peak extends AbstractPeak implements IPeak {
 
-	/**
-	 * Renew the UUID on change.
-	 */
-	private static final long serialVersionUID = 8407887114553864483L;
-	//
 	private IPeakModel peakModel;
 
 	/**
@@ -29,14 +24,17 @@ public class Peak extends AbstractPeak implements IPeak {
 	 * peak model is null.
 	 */
 	public Peak() {
+
 	}
 
 	public Peak(IPeakModel peakModel) throws IllegalArgumentException {
+
 		validatePeakModel(peakModel);
 		this.peakModel = peakModel;
 	}
 
 	public Peak(IPeakModel peakModel, String modelDescription) throws IllegalArgumentException {
+
 		this(peakModel);
 		setModelDescription(modelDescription);
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -28,7 +28,7 @@ public interface IPeakIdentifier {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo identify(IPeak peak, IPeakIdentifierSettings peakIdentifierSettings, IProgressMonitor monitor);
+	IProcessingInfo<?> identify(IPeak peak, IPeakIdentifierSettings peakIdentifierSettings, IProgressMonitor monitor);
 
 	/**
 	 * Identifies the peak.
@@ -37,7 +37,7 @@ public interface IPeakIdentifier {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo identify(IPeak peak, IProgressMonitor monitor);
+	IProcessingInfo<?> identify(IPeak peak, IProgressMonitor monitor);
 
 	/**
 	 * Identifies a list of peaks.
@@ -47,7 +47,7 @@ public interface IPeakIdentifier {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo identify(List<IPeak> peaks, IPeakIdentifierSettings peakIdentifierSettings, IProgressMonitor monitor);
+	IProcessingInfo<?> identify(List<IPeak> peaks, IPeakIdentifierSettings peakIdentifierSettings, IProgressMonitor monitor);
 
 	/**
 	 * The same as the other method but without settings.
@@ -56,7 +56,7 @@ public interface IPeakIdentifier {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo identify(List<IPeak> peaks, IProgressMonitor monitor);
+	IProcessingInfo<?> identify(List<IPeak> peaks, IProgressMonitor monitor);
 
 	@SuppressWarnings("rawtypes")
 	IProcessingInfo identify(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor);

@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.model.identifier;
+package org.eclipse.chemclipse.model.identifier.template;
 
 public class TargetTemplate implements ITargetTemplate {
 

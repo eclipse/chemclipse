@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,8 +19,9 @@ import java.util.Set;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
-import org.eclipse.chemclipse.model.identifier.ITargetTemplate;
-import org.eclipse.chemclipse.model.identifier.TargetTemplate;
+import org.eclipse.chemclipse.model.identifier.template.ITargetTemplate;
+import org.eclipse.chemclipse.model.identifier.template.TargetTemplate;
+import org.eclipse.chemclipse.model.identifier.template.TargetTemplates;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverterSupport;
 import org.eclipse.chemclipse.msd.model.core.ILibraryMassSpectrum;
@@ -31,7 +32,6 @@ import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.DatabaseImportRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.TargetTemplateInputValidator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.model.TargetTemplates;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.TargetTemplateListUI;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -68,6 +68,7 @@ public class TargetFieldEditor extends FieldEditor {
 	private TargetTemplateListUI targetTemplateListUI;
 
 	public TargetFieldEditor(String name, String labelText, Composite parent) {
+
 		init(name, labelText);
 		createControl(parent);
 	}
