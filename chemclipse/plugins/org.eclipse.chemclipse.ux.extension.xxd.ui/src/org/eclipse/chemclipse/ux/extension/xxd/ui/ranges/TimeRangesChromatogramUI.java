@@ -35,6 +35,7 @@ public class TimeRangesChromatogramUI extends Composite {
 	private TimeRangeSelector timeRangeSelector = new TimeRangeSelector();
 
 	public TimeRangesChromatogramUI(Composite parent, int style) {
+
 		super(parent, style);
 		createControl();
 	}
@@ -131,8 +132,30 @@ public class TimeRangesChromatogramUI extends Composite {
 
 		timeRangeMarker.getTimeRanges().clear();
 		if(timeRanges != null) {
+			/*
+			 * Show the time range composite.
+			 */
+			setTimeRangesVisible(true);
 			timeRangeMarker.getTimeRanges().addAll(timeRanges.values());
+		} else {
+			/*
+			 * Hide the time range composite.
+			 */
+			setTimeRangesVisible(false);
 		}
 		chromatogramChart.getBaseChart().redraw();
+	}
+
+	private void setTimeRangesVisible(boolean visible) {
+
+		timeRangesUI.setVisible(visible);
+		Object layoutData = timeRangesUI.getLayoutData();
+		if(layoutData instanceof GridData) {
+			GridData gridData = (GridData)layoutData;
+			gridData.exclude = !visible;
+		}
+		Composite parent = timeRangesUI.getParent();
+		parent.layout(true);
+		parent.redraw();
 	}
 }
