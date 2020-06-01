@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -28,7 +28,7 @@ public abstract class AbstractDatabaseExportConverter extends AbstractExportConv
 	@Override
 	public IProcessingInfo<File> validate(IScanMSD massSpectrum) {
 
-		IProcessingInfo<File> processingInfo = new ProcessingInfo();
+		IProcessingInfo<File> processingInfo = new ProcessingInfo<>();
 		if(massSpectrum == null) {
 			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Database Export", "The is no mass spectrum to export.");
 			processingInfo.addMessage(processingMessage);
@@ -39,7 +39,7 @@ public abstract class AbstractDatabaseExportConverter extends AbstractExportConv
 	@Override
 	public IProcessingInfo<File> validate(IMassSpectra massSpectra) {
 
-		IProcessingInfo<File> processingInfo = new ProcessingInfo();
+		IProcessingInfo<File> processingInfo = new ProcessingInfo<>();
 		if(massSpectra == null) {
 			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Database Export", "The are no mass spectra to export.");
 			processingInfo.addMessage(processingMessage);

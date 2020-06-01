@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -42,6 +42,7 @@ public class ScanConverterXIR {
 	 * This class has only static methods.
 	 */
 	private ScanConverterXIR() {
+
 	}
 
 	public static IProcessingInfo<IScanXIR> convert(final File file, final String converterId, final IProgressMonitor monitor) {
@@ -78,6 +79,7 @@ public class ScanConverterXIR {
 		IProcessingInfo<IScanXIR> processingInfo;
 		IScanConverterSupport converterSupport = getScanConverterSupport();
 		try {
+			@SuppressWarnings("deprecation")
 			List<String> availableConverterIds = converterSupport.getAvailableConverterIds(file);
 			for(String converterId : availableConverterIds) {
 				/*
@@ -88,7 +90,7 @@ public class ScanConverterXIR {
 				if(importConverter != null) {
 					processingInfo = importConverter.convert(file, monitor);
 					if(!processingInfo.hasErrorMessages()) {
-						IScanXIR object = processingInfo.getProcessingResult();
+						// IScanXIR object = processingInfo.getProcessingResult();
 						return processingInfo;
 					}
 				}

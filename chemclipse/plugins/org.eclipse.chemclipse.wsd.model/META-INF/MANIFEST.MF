@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.chemclipse.wsd.model
 Bundle-ManifestVersion: 2
 Bundle-Name: Model
 Bundle-SymbolicName: org.eclipse.chemclipse.wsd.model

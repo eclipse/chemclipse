@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,20 +23,20 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class DatabaseExportConverter extends AbstractDatabaseExportConverter {
 
 	@Override
-	public IProcessingInfo convert(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo<File> convert(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) {
 
 		return getProcessingInfo();
 	}
 
 	@Override
-	public IProcessingInfo convert(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo<File> convert(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) {
 
 		return getProcessingInfo();
 	}
 
-	private IProcessingInfo getProcessingInfo() {
+	private IProcessingInfo<File> getProcessingInfo() {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<File> processingInfo = new ProcessingInfo<>();
 		processingInfo.addErrorMessage("JCAMP-DX Library", "The JCAMP-DX converter has no capabilities to export a library.");
 		return processingInfo;
 	}

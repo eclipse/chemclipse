@@ -23,20 +23,20 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class MassSpectrumExportConverter extends AbstractMassSpectrumExportConverter {
 
 	@Override
-	public IProcessingInfo convert(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo<?> convert(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) {
 
 		return getProcessingInfo();
 	}
 
 	@Override
-	public IProcessingInfo convert(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo<?> convert(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) {
 
 		return getProcessingInfo();
 	}
 
-	private IProcessingInfo getProcessingInfo() {
+	private IProcessingInfo<?> getProcessingInfo() {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		processingInfo.addErrorMessage("ASCII Library", "The ASCII converter has no capabilities to export a library.");
 		return processingInfo;
 	}
