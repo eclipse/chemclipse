@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,6 +27,7 @@ public class InputWizardSettings {
 
 	public static final int DEFAULT_WIDTH = 500;
 	public static final int DEFAULT_HEIGHT = 400;
+	//
 	private String title = "Title";
 	private String description = "Description";
 	private IPreferenceStore preferenceStore;
@@ -34,6 +35,7 @@ public class InputWizardSettings {
 	private SupplierFileIdentifierCache identifierCache;
 
 	public InputWizardSettings(IPreferenceStore preferenceStore, String userLocationPreferenceKey, Collection<? extends ISupplierFileIdentifier> supplierFileIdentifierList) {
+
 		this.preferenceStore = preferenceStore;
 		this.userLocationPreferenceKey = userLocationPreferenceKey;
 		identifierCache = new SupplierFileIdentifierCache(500);
