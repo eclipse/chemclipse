@@ -77,6 +77,7 @@ public class PreferencePageChromatogram extends FieldEditorPreferencePage implem
 		addField(new DirectoryFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SAVE_AS_FOLDER, "Save As... Folder", getFieldEditorParent()));
 		addField(new FileFieldEditor(PreferenceConstants.P_CHROMATOGRAM_LOAD_PROCESS_METHOD, "Load Process Method (*.ocm)", getFieldEditorParent()));
 		addIntegerField(PreferenceConstants.P_DELTA_MILLISECONDS_PEAK_SELECTION, "Delta Peak Selection [ms]", PreferenceConstants.MIN_DELTA_MILLISECONDS_PEAK_SELECTION, PreferenceConstants.MAX_DELTA_MILLISECONDS_PEAK_SELECTION);
+		addField(new BooleanFieldEditor(PreferenceConstants.P_CHROMATOGRAM_MARK_ANALYSIS_SEGMENTS, "Mark Analysis Segments", getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addIntegerField(PreferenceConstants.P_LIMIT_SIM_TRACES, "If the scan contains less than ... it's SIM.", PreferenceConstants.MIN_SIM_IONS, PreferenceConstants.MAX_SIM_IONS);

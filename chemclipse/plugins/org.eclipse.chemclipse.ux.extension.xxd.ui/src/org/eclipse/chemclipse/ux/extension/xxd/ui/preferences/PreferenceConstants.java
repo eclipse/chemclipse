@@ -599,6 +599,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final int MAX_DELTA_MILLISECONDS_PEAK_SELECTION = 120000; // = 2.0 minutes
 	public static final String P_DELTA_MILLISECONDS_PEAK_SELECTION = "deltaMillisecondsPeakSelection";
 	public static final int DEF_DELTA_MILLISECONDS_PEAK_SELECTION = 2000; // 2 seconds
+	public static final String P_CHROMATOGRAM_MARK_ANALYSIS_SEGMENTS = "chromatogramMarkAnalysisSegments";
+	public static final boolean DEF_CHROMATOGRAM_MARK_ANALYSIS_SEGMENTS = false;
 	/*
 	 * Calibration Chart
 	 */

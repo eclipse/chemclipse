@@ -1194,21 +1194,25 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		 */
 		BaseChart baseChart = chromatogramChart.getBaseChart();
 		baseChart.addCustomRangeSelectionHandler(new ChromatogramSelectionHandler(this));
-		AnalysisSegmentPaintListener<IAnalysisSegment> listener = new AnalysisSegmentPaintListener<IAnalysisSegment>(AnalysisSegmentColorScheme.CHROMATOGRAM, new Supplier<Collection<IAnalysisSegment>>() {
+		//
+		boolean markAnalysisSegments = preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_MARK_ANALYSIS_SEGMENTS);
+		if(markAnalysisSegments) {
+			AnalysisSegmentPaintListener<IAnalysisSegment> listener = new AnalysisSegmentPaintListener<IAnalysisSegment>(AnalysisSegmentColorScheme.CHROMATOGRAM, new Supplier<Collection<IAnalysisSegment>>() {
 
-			@Override
-			public Collection<IAnalysisSegment> get() {
+				@Override
+				public Collection<IAnalysisSegment> get() {
 
-				if(chromatogramSelection != null) {
-					return chromatogramSelection.getChromatogram().getAnalysisSegments();
+					if(chromatogramSelection != null) {
+						return chromatogramSelection.getChromatogram().getAnalysisSegments();
+					}
+					return Collections.emptyList();
 				}
-				return Collections.emptyList();
-			}
-		}, always -> false);
-		listener.setPaintArea(true);
-		listener.setPaintLines(true);
-		listener.setAlpha(50);
-		baseChart.getPlotArea().addCustomPaintListener(listener);
+			}, always -> false);
+			listener.setPaintArea(true);
+			listener.setPaintLines(true);
+			listener.setAlpha(50);
+			baseChart.getPlotArea().addCustomPaintListener(listener);
+		}
 		/*
 		 * Chart Settings
 		 */

@@ -116,15 +116,18 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 			}
 		}
 	};
+	//
 	private final ObjectChangedListener<IMeasurementResult<?>> updateMeasurementResult = new MeasurementResultListener();
 	private final ProcessSupplierContext processSupplierContext;
 
 	@Deprecated
 	public AbstractChromatogramEditor(DataType dataType, Composite parent, MPart part, MDirtyable dirtyable, ProcessorFactory filterFactory, Shell shell) {
+
 		this(dataType, parent, part, dirtyable, new ProcessTypeSupport(), shell);
 	}
 
 	public AbstractChromatogramEditor(DataType dataType, Composite parent, MPart part, MDirtyable dirtyable, ProcessSupplierContext processSupplierContext, Shell shell) {
+
 		super(part);
 		//
 		this.dataType = dataType;
@@ -190,6 +193,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 
 		notifications.removeObjectChangedListener(updateMenuListener);
 		measurementNotification.removeObjectChangedListener(updateMeasurementResult);
+		//
 		if(eventBroker != null) {
 			DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
@@ -448,26 +452,31 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 
 			if(type == ChangeType.SELECTED) {
 				boolean mustRedraw = false;
+				//
 				if(oldPaintListener != null) {
 					extendedChromatogramUI.getChromatogramChart().getBaseChart().getPlotArea().removeCustomPaintListener(oldPaintListener);
 					mustRedraw = true;
 					oldPaintListener = null;
 				}
+				//
 				if(oldObserver != null) {
 					oldObserver.deleteObserver(this);
 					oldObserver = null;
 				}
+				//
 				ICustomPaintListener paintListener = Adapters.adapt(newObject, ICustomPaintListener.class);
 				if(paintListener != null) {
 					oldPaintListener = paintListener;
 					extendedChromatogramUI.getChromatogramChart().getBaseChart().getPlotArea().addCustomPaintListener(paintListener);
 					mustRedraw = true;
 				}
+				//
 				Observable observable = Adapters.adapt(newObject, Observable.class);
 				if(observable != null) {
 					oldObserver = observable;
 					observable.addObserver(this);
 				}
+				//
 				if(mustRedraw) {
 					Display.getDefault().asyncExec(this::redraw);
 				}

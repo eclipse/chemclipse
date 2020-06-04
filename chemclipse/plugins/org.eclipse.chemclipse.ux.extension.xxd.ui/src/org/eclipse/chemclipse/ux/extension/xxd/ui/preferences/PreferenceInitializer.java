@@ -358,6 +358,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_SAVE_AS_FOLDER, PreferenceConstants.DEF_CHROMATOGRAM_SAVE_AS_FOLDER);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_LOAD_PROCESS_METHOD, PreferenceConstants.DEF_CHROMATOGRAM_LOAD_PROCESS_METHOD);
 		store.setDefault(PreferenceConstants.P_DELTA_MILLISECONDS_PEAK_SELECTION, PreferenceConstants.DEF_DELTA_MILLISECONDS_PEAK_SELECTION);
+		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_MARK_ANALYSIS_SEGMENTS, PreferenceConstants.DEF_CHROMATOGRAM_MARK_ANALYSIS_SEGMENTS);
 		/*
 		 * Time Ranges
 		 */
