@@ -22,6 +22,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.core.ISignal;
@@ -101,7 +102,7 @@ public class SignalTargetReference implements TargetReference, IAdaptable {
 		for(IPeak peak : items) {
 			Set<IIdentificationTarget> targets = peak.getTargets();
 			if(peak != null && (targets.size() > 0 || peak.getName() != null) || peak.getClassifier().size() > 0) {
-				String name = FORMAT.format(peak.getPeakModel().getRetentionTimeAtPeakMaximum() / (1000d * 60d));
+				String name = FORMAT.format(peak.getPeakModel().getRetentionTimeAtPeakMaximum() / IChromatogram.MINUTE_CORRELATION_FACTOR);
 				if(ticProvider == null) {
 					list.add(new SignalTargetReference(peak, TYPE_PEAK, name));
 				} else {

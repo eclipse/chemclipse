@@ -68,11 +68,13 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public ChromatogramPeakChart() {
+
 		super();
 		init();
 	}
 
 	public ChromatogramPeakChart(Composite parent, int style) {
+
 		super(parent, style);
 		init();
 	}
@@ -142,14 +144,17 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 		 * TIC
 		 */
 		ILineSeriesData lineSeriesDataTIC = chromatogramChartSupport.getLineSeriesData(chromatogramSelection, SERIES_ID_CHROMATOGRAM_TIC, DisplayType.TIC, color, false);
-		lineSeriesDataTIC.getSettings().setEnableArea(enableChromatogramArea);
+		ILineSeriesSettings settings = lineSeriesDataTIC.getSettings();
+		settings.setEnableArea(enableChromatogramArea);
+		settings.setVisible(true); // TODO Option
 		lineSeriesDataList.add(lineSeriesDataTIC);
-		/*
-		 * XIC
-		 */
+		//
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
 			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
 			if(chromatogramSelectionMSD.getSelectedIons().size() > 0) {
+				/*
+				 * XIC
+				 */
 				ILineSeriesData lineSeriesDataXIC = chromatogramChartSupport.getLineSeriesData(chromatogramSelectionMSD, SERIES_ID_CHROMATOGRAM_XIC, DisplayType.XIC, color, false);
 				lineSeriesDataXIC.getSettings().setEnableArea(enableChromatogramArea);
 				lineSeriesDataList.add(lineSeriesDataXIC);

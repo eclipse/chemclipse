@@ -73,6 +73,8 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_FOLDER_CLOSED = "org.eclipse.chemclipse.rcp.ui.icons/folder_closed.gif";
 	String IMAGE_FILE = "org.eclipse.chemclipse.rcp.ui.icons/file.gif";
 	String IMAGE_PEAK = "org.eclipse.chemclipse.rcp.ui.icons/peak.gif";
+	String IMAGE_PEAK_ADD = "org.eclipse.chemclipse.rcp.ui.icons/peakAdd.gif";
+	String IMAGE_PEAK_REPLACE = "org.eclipse.chemclipse.rcp.ui.icons/peakReplace.gif";
 	String IMAGE_PEAKS = "org.eclipse.chemclipse.rcp.ui.icons/peaks.gif";
 	String IMAGE_WARN = "org.eclipse.chemclipse.rcp.ui.icons/warn.gif";
 	String IMAGE_INFO = "org.eclipse.chemclipse.rcp.ui.icons/info.gif";
