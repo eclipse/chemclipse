@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,6 +14,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.peak;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,14 +39,19 @@ import org.eclipse.core.runtime.Platform;
 
 /**
  * Use the methods of this class to identify the mass spectrum of a peak.<br/>
- *
- * @author Dr. Philip Wenig
  */
 public class PeakIdentifierMSD {
 
 	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.chromatogram.msd.identifier.peakIdentifier";
 	private static final Logger logger = Logger.getLogger(PeakIdentifierMSD.class);
 	private static final String NO_IDENTIFIER_AVAILABLE = "There is no suitable peak identifier available";
+
+	/**
+	 * This class should have only static methods.
+	 */
+	private PeakIdentifierMSD() {
+
+	}
 
 	/**
 	 * Returns an {@link IConfigurationElement} instance or null if none is
@@ -69,7 +75,6 @@ public class PeakIdentifierMSD {
 		return null;
 	}
 
-	// --------------------------------------------private methods
 	private static <T> IProcessingInfo<T> getNoIdentifierAvailableProcessingInfo() {
 
 		IProcessingInfo<T> processingInfo = new ProcessingInfo<T>();
@@ -78,7 +83,6 @@ public class PeakIdentifierMSD {
 		return processingInfo;
 	}
 
-	// --------------------------------------------private methods
 	/**
 	 * Returns a {@link IPeakIdentifierMSD} instance given by the identifierId or
 	 * null, if none is available.
@@ -144,9 +148,11 @@ public class PeakIdentifierMSD {
 	 * @return {@link IProcessingInfo}
 	 * @throws NoIdentifierAvailableException
 	 */
-	public static <T> IProcessingInfo<T> identify(IChromatogramPeakMSD peak, IPeakIdentifierSettingsMSD identifierSettings, String identifierId, IProgressMonitor monitor) {
+	public static <T extends IIdentificationResults> IProcessingInfo<T> identify(IChromatogramPeakMSD peak, IPeakIdentifierSettingsMSD identifierSettings, String identifierId, IProgressMonitor monitor) {
 
-		return identify(peak, identifierSettings, identifierId, monitor);
+		List<IChromatogramPeakMSD> peaks = new ArrayList<>();
+		peaks.add(peak);
+		return identify(peaks, identifierSettings, identifierId, monitor);
 	}
 
 	/**
@@ -205,11 +211,5 @@ public class PeakIdentifierMSD {
 	public static <T extends IIdentificationResults> IProcessingInfo<T> identify(IChromatogramSelectionMSD chromatogramSelectionMSD, IPeakIdentifierSettingsMSD peakIdentifierSettingsMSD, String identifierId, IProgressMonitor monitor) {
 
 		return identify(chromatogramSelectionMSD.getChromatogram().getPeaks(chromatogramSelectionMSD), peakIdentifierSettingsMSD, identifierId, monitor);
-	}
-
-	/**
-	 * This class should have only static methods.
-	 */
-	private PeakIdentifierMSD() {
 	}
 }

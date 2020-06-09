@@ -66,6 +66,7 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 	private final Set<String> selectedPeakIds = new HashSet<>();
 	//
 	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	private PeakChartSettings peakChartSettingsDefault = new PeakChartSettings();
 
 	public ChromatogramPeakChart() {
 
@@ -79,8 +80,13 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 		init();
 	}
 
+	public void updateChromatogram(IChromatogramSelection<?, ?> chromatogramSelection) {
+
+		updateChromatogram(chromatogramSelection, peakChartSettingsDefault);
+	}
+
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	public void updateChromatogram(IChromatogramSelection chromatogramSelection) {
+	public void updateChromatogram(IChromatogramSelection chromatogramSelection, PeakChartSettings peakChartSettings) {
 
 		clearSelectedPeakSeries();
 		clearPeakLabelMarker();
@@ -96,8 +102,8 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 			 */
 			List<IPeak> peaks = chromatogramSelection.getChromatogram().getPeaks(chromatogramSelection);
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
-			addChromatogramData(chromatogramSelection, lineSeriesDataList);
-			addBaselineData(chromatogramSelection, lineSeriesDataList);
+			addChromatogramData(chromatogramSelection, lineSeriesDataList, peakChartSettings);
+			addBaselineData(chromatogramSelection, lineSeriesDataList, peakChartSettings);
 			addPeakData(peaks, lineSeriesDataList);
 			addLineSeriesData(lineSeriesDataList);
 		}
@@ -136,7 +142,7 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void addChromatogramData(IChromatogramSelection chromatogramSelection, List<ILineSeriesData> lineSeriesDataList) {
+	private void addChromatogramData(IChromatogramSelection chromatogramSelection, List<ILineSeriesData> lineSeriesDataList, PeakChartSettings peakChartSettings) {
 
 		Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM));
 		boolean enableChromatogramArea = preferenceStore.getBoolean(PreferenceConstants.P_ENABLE_CHROMATOGRAM_AREA);
@@ -144,9 +150,9 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 		 * TIC
 		 */
 		ILineSeriesData lineSeriesDataTIC = chromatogramChartSupport.getLineSeriesData(chromatogramSelection, SERIES_ID_CHROMATOGRAM_TIC, DisplayType.TIC, color, false);
-		ILineSeriesSettings settings = lineSeriesDataTIC.getSettings();
-		settings.setEnableArea(enableChromatogramArea);
-		settings.setVisible(true); // TODO Option
+		ILineSeriesSettings settingsTIC = lineSeriesDataTIC.getSettings();
+		settingsTIC.setEnableArea(enableChromatogramArea);
+		settingsTIC.setVisible(peakChartSettings.isShowChromatogramTIC());
 		lineSeriesDataList.add(lineSeriesDataTIC);
 		//
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
@@ -156,14 +162,16 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 				 * XIC
 				 */
 				ILineSeriesData lineSeriesDataXIC = chromatogramChartSupport.getLineSeriesData(chromatogramSelectionMSD, SERIES_ID_CHROMATOGRAM_XIC, DisplayType.XIC, color, false);
-				lineSeriesDataXIC.getSettings().setEnableArea(enableChromatogramArea);
+				ILineSeriesSettings settingsXIC = lineSeriesDataXIC.getSettings();
+				settingsXIC.setEnableArea(enableChromatogramArea);
+				settingsXIC.setVisible(peakChartSettings.isShowChromatogramXIC());
 				lineSeriesDataList.add(lineSeriesDataXIC);
 			}
 		}
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void addBaselineData(IChromatogramSelection chromatogramSelection, List<ILineSeriesData> lineSeriesDataList) {
+	private void addBaselineData(IChromatogramSelection chromatogramSelection, List<ILineSeriesData> lineSeriesDataList, PeakChartSettings peakChartSettings) {
 
 		boolean showChromatogramBaseline = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_BASELINE);
 		//
@@ -172,7 +180,9 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 			boolean enableBaselineArea = preferenceStore.getBoolean(PreferenceConstants.P_ENABLE_BASELINE_AREA);
 			ILineSeriesData lineSeriesData = null;
 			lineSeriesData = chromatogramChartSupport.getLineSeriesDataBaseline(chromatogramSelection, SERIES_ID_BASELINE, DisplayType.TIC, color, false);
-			lineSeriesData.getSettings().setEnableArea(enableBaselineArea);
+			ILineSeriesSettings settings = lineSeriesData.getSettings();
+			settings.setEnableArea(enableBaselineArea);
+			settings.setVisible(peakChartSettings.isShowBaseline());
 			lineSeriesDataList.add(lineSeriesData);
 		}
 	}

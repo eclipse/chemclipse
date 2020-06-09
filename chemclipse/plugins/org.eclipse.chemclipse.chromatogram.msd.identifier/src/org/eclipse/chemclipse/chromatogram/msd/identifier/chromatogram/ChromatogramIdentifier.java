@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -41,6 +41,7 @@ public class ChromatogramIdentifier {
 	 * This class should only have static methods.
 	 */
 	private ChromatogramIdentifier() {
+
 	}
 
 	/**
@@ -53,9 +54,9 @@ public class ChromatogramIdentifier {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo identify(IChromatogramSelectionMSD chromatogramSelection, IChromatogramIdentifierSettings identifierSettings, String identifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo<?> identify(IChromatogramSelectionMSD chromatogramSelection, IChromatogramIdentifierSettings identifierSettings, String identifierId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<?> processingInfo;
 		IChromatogramIdentifier chromatogramIdentifier = getChromatogramIdentifier(identifierId);
 		if(chromatogramIdentifier != null) {
 			processingInfo = chromatogramIdentifier.identify(chromatogramSelection, identifierSettings, monitor);
@@ -73,9 +74,9 @@ public class ChromatogramIdentifier {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo identify(IChromatogramSelectionMSD chromatogramSelection, String identifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo<?> identify(IChromatogramSelectionMSD chromatogramSelection, String identifierId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<?> processingInfo;
 		IChromatogramIdentifier chromatogramIdentifier = getChromatogramIdentifier(identifierId);
 		if(chromatogramIdentifier != null) {
 			processingInfo = chromatogramIdentifier.identify(chromatogramSelection, monitor);
@@ -162,10 +163,9 @@ public class ChromatogramIdentifier {
 		return null;
 	}
 
-	// --------------------------------------------private methods
-	private static IProcessingInfo getNoIdentifierAvailableProcessingInfo() {
+	private static IProcessingInfo<?> getNoIdentifierAvailableProcessingInfo() {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Chromatogram Identifier", NO_IDENTIFIER_AVAILABLE);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;

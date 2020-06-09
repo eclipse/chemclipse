@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -21,9 +21,9 @@ public abstract class AbstractChromatogramIdentifier implements IChromatogramIde
 
 	private static final String DESCRIPTION = "ChromatogramIdentifier";
 
-	public IProcessingInfo validate(IChromatogramSelectionMSD chromatogramSelection, IIdentifierSettingsMSD identifierSettings) {
+	public IProcessingInfo<?> validate(IChromatogramSelectionMSD chromatogramSelection, IIdentifierSettingsMSD identifierSettings) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		try {
 			validateChromatogramSelection(chromatogramSelection);
 			validateSettings(identifierSettings);

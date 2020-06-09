@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2019 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -41,6 +41,7 @@ public class LibraryService {
 	 * This class should have only static methods.
 	 */
 	private LibraryService() {
+
 	}
 
 	public static IProcessingInfo<IMassSpectra> identify(IIdentificationTarget identificationTarget, String identifierId, IProgressMonitor monitor) {
@@ -120,7 +121,6 @@ public class LibraryService {
 		return identifierSupport;
 	}
 
-	// --------------------------------------------private methods
 	/**
 	 * Returns a {@link ILibraryService} instance given by the
 	 * identifierId or null, if none is available.
@@ -162,10 +162,9 @@ public class LibraryService {
 		return null;
 	}
 
-	// --------------------------------------------private methods
 	private static <T> IProcessingInfo<T> getNoIdentifierAvailableProcessingInfo() {
 
-		IProcessingInfo<T> processingInfo = new ProcessingInfo();
+		IProcessingInfo<T> processingInfo = new ProcessingInfo<>();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Library Service", NO_IDENTIFIER_AVAILABLE);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;

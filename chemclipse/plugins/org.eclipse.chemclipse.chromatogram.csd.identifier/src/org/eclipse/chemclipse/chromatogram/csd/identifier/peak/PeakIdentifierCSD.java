@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,6 +13,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.csd.identifier.peak;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.csd.identifier.settings.IPeakIdentifierSettingsCSD;
@@ -21,6 +23,7 @@ import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.NoIdentifierAvailableException;
+import org.eclipse.chemclipse.model.identifier.IIdentificationResults;
 import org.eclipse.chemclipse.model.identifier.core.Identifier;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
@@ -39,6 +42,13 @@ public class PeakIdentifierCSD {
 	//
 	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.chromatogram.csd.identifier.peakIdentifier";
 	private static final String NO_IDENTIFIER_AVAILABLE = "There is no suitable peak identifier available";
+
+	/**
+	 * This class should have only static methods.
+	 */
+	private PeakIdentifierCSD() {
+
+	}
 
 	/**
 	 * Returns an {@link IConfigurationElement} instance or null if none is
@@ -62,7 +72,6 @@ public class PeakIdentifierCSD {
 		return null;
 	}
 
-	// --------------------------------------------private methods
 	private static <T> IProcessingInfo<T> getNoIdentifierAvailableProcessingInfo() {
 
 		IProcessingInfo<T> processingInfo = new ProcessingInfo<>();
@@ -71,11 +80,11 @@ public class PeakIdentifierCSD {
 		return processingInfo;
 	}
 
-	// --------------------------------------------private methods
 	/**
 	 * Returns a {@link IPeakIdentifierCSD} instance given by the identifierId or
 	 * null, if none is available.
 	 */
+	@SuppressWarnings("unchecked")
 	private static <T> IPeakIdentifierCSD<T> getPeakIdentifier(final String identifierId) {
 
 		IConfigurationElement element;
@@ -136,16 +145,11 @@ public class PeakIdentifierCSD {
 	 * @return {@link IProcessingInfo}
 	 * @throws NoIdentifierAvailableException
 	 */
-	public static <T> IProcessingInfo<T> identify(IChromatogramPeakCSD peak, IPeakIdentifierSettingsCSD identifierSettings, String identifierId, IProgressMonitor monitor) {
+	public static <T extends IIdentificationResults> IProcessingInfo<T> identify(IChromatogramPeakCSD peak, IPeakIdentifierSettingsCSD identifierSettings, String identifierId, IProgressMonitor monitor) {
 
-		IProcessingInfo<T> processingInfo;
-		IPeakIdentifierCSD<T> peakIdentifier = getPeakIdentifier(identifierId);
-		if(peakIdentifier != null) {
-			processingInfo = peakIdentifier.identify(peak, identifierSettings, monitor);
-		} else {
-			processingInfo = getNoIdentifierAvailableProcessingInfo();
-		}
-		return processingInfo;
+		List<IChromatogramPeakCSD> peaks = new ArrayList<>();
+		peaks.add(peak);
+		return identify(peaks, identifierSettings, identifierId, monitor);
 	}
 
 	/**
@@ -157,16 +161,9 @@ public class PeakIdentifierCSD {
 	 * @return {@link IProcessingInfo}
 	 * @throws NoIdentifierAvailableException
 	 */
-	public static <T> IProcessingInfo<T> identify(IPeakCSD peak, String identifierId, IProgressMonitor monitor) {
+	public static <T extends IIdentificationResults> IProcessingInfo<T> identify(IPeakCSD peak, String identifierId, IProgressMonitor monitor) {
 
-		IProcessingInfo<T> processingInfo;
-		IPeakIdentifierCSD<T> peakIdentifier = getPeakIdentifier(identifierId);
-		if(peakIdentifier != null) {
-			processingInfo = peakIdentifier.identify(peak, monitor);
-		} else {
-			processingInfo = getNoIdentifierAvailableProcessingInfo();
-		}
-		return processingInfo;
+		return identify(Collections.singletonList(peak), identifierId, monitor);
 	}
 
 	/**
@@ -179,16 +176,14 @@ public class PeakIdentifierCSD {
 	 * @return {@link IProcessingInfo}
 	 * @throws NoIdentifierAvailableException
 	 */
-	public static <T> IProcessingInfo<T> identify(List<? extends IPeakCSD> peaks, IPeakIdentifierSettingsCSD identifierSettings, String identifierId, IProgressMonitor monitor) {
+	public static <T extends IIdentificationResults> IProcessingInfo<T> identify(List<? extends IPeakCSD> peaks, IPeakIdentifierSettingsCSD identifierSettings, String identifierId, IProgressMonitor monitor) {
 
-		IProcessingInfo<T> processingInfo;
 		IPeakIdentifierCSD<T> peakIdentifier = getPeakIdentifier(identifierId);
 		if(peakIdentifier != null) {
-			processingInfo = peakIdentifier.identify(peaks, identifierSettings, monitor);
+			return peakIdentifier.identify(peaks, identifierSettings, monitor);
 		} else {
-			processingInfo = getNoIdentifierAvailableProcessingInfo();
+			return getNoIdentifierAvailableProcessingInfo();
 		}
-		return processingInfo;
 	}
 
 	/**
@@ -200,46 +195,18 @@ public class PeakIdentifierCSD {
 	 * @return {@link IProcessingInfo}
 	 * @throws NoIdentifierAvailableException
 	 */
-	public static <T> IProcessingInfo<T> identify(List<? extends IPeakCSD> peaks, String identifierId, IProgressMonitor monitor) {
+	public static <T extends IIdentificationResults> IProcessingInfo<T> identify(List<? extends IPeakCSD> peaks, String identifierId, IProgressMonitor monitor) {
 
-		IProcessingInfo<T> processingInfo;
-		IPeakIdentifierCSD<T> peakIdentifier = getPeakIdentifier(identifierId);
-		if(peakIdentifier != null) {
-			processingInfo = peakIdentifier.identify(peaks, monitor);
-		} else {
-			processingInfo = getNoIdentifierAvailableProcessingInfo();
-		}
-		return processingInfo;
+		return identify(peaks, null, identifierId, monitor);
 	}
 
-	public static <T> IProcessingInfo<T> identify(IChromatogramSelectionCSD chromatogramSelectionCSD, String identifierId, IProgressMonitor monitor) {
+	public static <T extends IIdentificationResults> IProcessingInfo<T> identify(IChromatogramSelectionCSD chromatogramSelectionCSD, String identifierId, IProgressMonitor monitor) {
 
-		IProcessingInfo<T> processingInfo;
-		IPeakIdentifierCSD<T> peakIdentifier = getPeakIdentifier(identifierId);
-		if(peakIdentifier != null) {
-			processingInfo = peakIdentifier.identify(chromatogramSelectionCSD, monitor);
-		} else {
-			processingInfo = getNoIdentifierAvailableProcessingInfo();
-		}
-		return processingInfo;
+		return identify(chromatogramSelectionCSD, null, identifierId, monitor);
 	}
 
-	public static <T> IProcessingInfo<T> identify(IChromatogramSelectionCSD chromatogramSelectionCSD, IPeakIdentifierSettingsCSD peakIdentifierSettingsCSD, String identifierId, IProgressMonitor monitor) {
+	public static <T extends IIdentificationResults> IProcessingInfo<T> identify(IChromatogramSelectionCSD chromatogramSelectionCSD, IPeakIdentifierSettingsCSD peakIdentifierSettingsCSD, String identifierId, IProgressMonitor monitor) {
 
-		IProcessingInfo<T> processingInfo;
-		IPeakIdentifierCSD<T> peakIdentifier = getPeakIdentifier(identifierId);
-		if(peakIdentifier != null) {
-			processingInfo = peakIdentifier.identify(chromatogramSelectionCSD, peakIdentifierSettingsCSD, monitor);
-		} else {
-			processingInfo = getNoIdentifierAvailableProcessingInfo();
-		}
-		return processingInfo;
-	}
-
-	/**
-	 * This class should have only static methods.
-	 */
-	private PeakIdentifierCSD() {
-
+		return identify(chromatogramSelectionCSD.getChromatogram().getPeaks(chromatogramSelectionCSD), peakIdentifierSettingsCSD, identifierId, monitor);
 	}
 }

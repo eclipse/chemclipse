@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -23,30 +23,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IPeakIdentifierMSD<T extends IIdentificationResults> {
 
-	// /**
-	// * Identifies a peak.
-	// *
-	// * @param peak
-	// * @param peakIdentifierSettings
-	// * @param monitor
-	// * @return {@link IProcessingInfo}
-	// */
-	// default IProcessingInfo<T> identify(IPeakMSD peak, IPeakIdentifierSettingsMSD peakIdentifierSettings, IProgressMonitor monitor) {
-	//
-	// return identify(Collections.singletonList(peak), peakIdentifierSettings, monitor);
-	// }
-	//
-	// /**
-	// * Identifies the peak.
-	// *
-	// * @param peak
-	// * @param monitor
-	// * @return {@link IProcessingInfo}
-	// */
-	// default IProcessingInfo<T> identify(IPeakMSD peak, IProgressMonitor monitor) {
-	//
-	// return identify(peak, null, monitor);
-	// }
 	/**
 	 * Identifies a list of peaks.
 	 *
@@ -56,25 +32,4 @@ public interface IPeakIdentifierMSD<T extends IIdentificationResults> {
 	 * @return {@link IProcessingInfo}
 	 */
 	IProcessingInfo<T> identify(List<? extends IPeakMSD> peaks, IPeakIdentifierSettingsMSD peakIdentifierSettings, IProgressMonitor monitor);
-	// /**
-	// * The same as the other method but without settings.
-	// *
-	// * @param peaks
-	// * @param monitor
-	// * @return {@link IProcessingInfo}
-	// */
-	// default IProcessingInfo<T> identify(List<? extends IPeakMSD> peaks, IProgressMonitor monitor) {
-	//
-	// return identify(peaks, null, monitor);
-	// }
-	//
-	// default IProcessingInfo<T> identify(IChromatogramSelectionMSD chromatogramSelectionMSD, IProgressMonitor monitor) {
-	//
-	// return identify(chromatogramSelectionMSD, null, monitor);
-	// }
-	//
-	// default IProcessingInfo<T> identify(IChromatogramSelectionMSD chromatogramSelectionMSD, IPeakIdentifierSettingsMSD peakIdentifierSettings, IProgressMonitor monitor) {
-	//
-	// return identify(chromatogramSelectionMSD.getChromatogram().getPeaks(chromatogramSelectionMSD), peakIdentifierSettings, monitor);
-	// }
 }
