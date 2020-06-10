@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse
 Bundle-ManifestVersion: 2
 Bundle-Name: ChemClipse
 Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse;singleton:=true

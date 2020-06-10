@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.chemclipse.msd.identifier.supplier.triplequad
 Bundle-ManifestVersion: 2
 Bundle-Name: Triplequad
 Bundle-SymbolicName: org.eclipse.chemclipse.msd.identifier.supplier.triplequad

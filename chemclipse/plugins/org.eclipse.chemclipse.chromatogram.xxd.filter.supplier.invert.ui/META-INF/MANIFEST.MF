@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.invert.ui
 Bundle-ManifestVersion: 2
 Bundle-Name: Invert UI
 Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.invert.ui;singleton:=true

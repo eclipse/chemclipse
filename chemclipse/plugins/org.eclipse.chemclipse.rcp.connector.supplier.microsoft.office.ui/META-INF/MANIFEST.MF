@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui
 Bundle-ManifestVersion: 2
 Bundle-Name: Ui
 Bundle-SymbolicName: org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui;singleton:=true

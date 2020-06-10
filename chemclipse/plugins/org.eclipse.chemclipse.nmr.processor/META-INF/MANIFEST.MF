@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.chemclipse.nmr.processor
 Bundle-ManifestVersion: 2
 Bundle-Name: Processor
 Bundle-SymbolicName: org.eclipse.chemclipse.nmr.processor;singleton:=true

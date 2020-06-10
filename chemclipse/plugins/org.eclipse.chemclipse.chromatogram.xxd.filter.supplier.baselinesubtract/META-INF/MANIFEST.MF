@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract
 Bundle-ManifestVersion: 2
 Bundle-Name: Baselinesubtract
 Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract;singleton:=true

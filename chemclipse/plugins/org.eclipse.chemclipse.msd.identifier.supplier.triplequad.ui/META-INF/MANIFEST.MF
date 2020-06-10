@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.chemclipse.msd.identifier.supplier.triplequad.ui
 Bundle-ManifestVersion: 2
 Bundle-Name: Ui
 Bundle-SymbolicName: org.eclipse.chemclipse.msd.identifier.supplier.triplequad.ui;singleton:=true

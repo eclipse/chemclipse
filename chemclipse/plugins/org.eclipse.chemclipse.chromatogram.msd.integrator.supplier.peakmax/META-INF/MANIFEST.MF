@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax
 Bundle-ManifestVersion: 2
 Bundle-Name: Peakmax
 Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax;singleton:=true

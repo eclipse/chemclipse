@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.chemclipse.msd.converter.supplier.mz5
 Bundle-ManifestVersion: 2
 Bundle-Name: Mz5
 Bundle-SymbolicName: org.eclipse.chemclipse.msd.converter.supplier.mz5;singleton:=true

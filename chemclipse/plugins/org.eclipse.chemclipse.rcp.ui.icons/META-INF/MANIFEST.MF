@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.chemclipse.rcp.ui.icons
 Bundle-ManifestVersion: 2
 Bundle-Name: Icons
 Bundle-SymbolicName: org.eclipse.chemclipse.rcp.ui.icons

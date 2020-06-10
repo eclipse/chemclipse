@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.chemclipse.msd.identifier.supplier.nist
 Bundle-ManifestVersion: 2
 Bundle-Name: Nist
 Bundle-SymbolicName: org.eclipse.chemclipse.msd.identifier.supplier.nist;singleton:=true

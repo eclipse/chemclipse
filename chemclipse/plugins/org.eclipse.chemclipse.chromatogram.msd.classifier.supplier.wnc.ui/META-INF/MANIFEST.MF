@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui
 Bundle-ManifestVersion: 2
 Bundle-Name: Classifier WNC UI
 Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui;singleton:=true

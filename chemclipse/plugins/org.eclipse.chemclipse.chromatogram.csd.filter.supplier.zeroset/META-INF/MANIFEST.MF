@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset
 Bundle-ManifestVersion: 2
 Bundle-Name: Zeroset
 Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset;singleton:=true

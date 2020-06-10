@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.chemclipse.msd.converter.supplier.massbank
 Bundle-ManifestVersion: 2
 Bundle-Name: Massbank
 Bundle-SymbolicName: org.eclipse.chemclipse.msd.converter.supplier.massbank;singleton:=true
