@@ -382,4 +382,12 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_VALUE_INCREASE = "org.eclipse.chemclipse.rcp.ui.icons/valueIncrease.gif";
 	//
 	String IMAGE_INSTRUMENT = "org.eclipse.chemclipse.rcp.ui.icons/instrument.gif";
+	String IMAGE_BASELINE_SHOW = "org.eclipse.chemclipse.rcp.ui.icons/baselineShow.gif";
+	String IMAGE_BASELINE_HIDE = "org.eclipse.chemclipse.rcp.ui.icons/baselineHide.gif";
+	String IMAGE_CHROMATOGRAM_TIC_SHOW = "org.eclipse.chemclipse.rcp.ui.icons/chromatogramTicShow.gif";
+	String IMAGE_CHROMATOGRAM_TIC_HIDE = "org.eclipse.chemclipse.rcp.ui.icons/chromatogramTicHide.gif";
+	String IMAGE_CHROMATOGRAM_XIC_SHOW = "org.eclipse.chemclipse.rcp.ui.icons/chromatogramXicShow.gif";
+	String IMAGE_CHROMATOGRAM_XIC_HIDE = "org.eclipse.chemclipse.rcp.ui.icons/chromatogramXicHide.gif";
+	String IMAGE_REVIEW_DETAILS_SHOW = "org.eclipse.chemclipse.rcp.ui.icons/reviewDetailsShow.gif";
+	String IMAGE_REVIEW_DETAILS_HIDE = "org.eclipse.chemclipse.rcp.ui.icons/reviewDetailsHide.gif";
 }
