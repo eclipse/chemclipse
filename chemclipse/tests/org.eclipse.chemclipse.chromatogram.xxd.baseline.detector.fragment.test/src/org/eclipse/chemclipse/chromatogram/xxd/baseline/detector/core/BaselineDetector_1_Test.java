@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -46,7 +46,7 @@ public class BaselineDetector_1_Test extends TestCase {
 		int count = 0;
 		String[] names = support.getDetectorNames();
 		String[] rcs = new String[1];
-		rcs[0] = "Threshold (TIC) Baseline Detector";
+		rcs[0] = "Threshold (TIC) Baseline Detector"; // Was removed
 		for(String name : names) {
 			for(String rc : rcs) {
 				if(name.equals(rc)) {
@@ -54,7 +54,7 @@ public class BaselineDetector_1_Test extends TestCase {
 				}
 			}
 		}
-		assertEquals("Registered Detector Names", 1, count);
+		assertEquals("Registered Detector Names", 0, count);
 	}
 
 	public void testGetMassSpectrumComparatorSupport_2() throws NoBaselineDetectorAvailableException {
@@ -62,7 +62,7 @@ public class BaselineDetector_1_Test extends TestCase {
 		int count = 0;
 		List<String> ids = support.getAvailableDetectorIds();
 		String[] rcs = new String[1];
-		rcs[0] = "org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic";
+		rcs[0] = "org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic"; // Was removed
 		for(String id : ids) {
 			for(String rc : rcs) {
 				if(id.equals(rc)) {
@@ -70,7 +70,7 @@ public class BaselineDetector_1_Test extends TestCase {
 				}
 			}
 		}
-		assertEquals("Registered Detector Ids", 1, count);
+		assertEquals("Registered Detector Ids", 0, count);
 	}
 
 	public void testGetMassSpectrumComparatorSupport_3() throws NoBaselineDetectorAvailableException {
@@ -107,12 +107,12 @@ public class BaselineDetector_1_Test extends TestCase {
 
 	public void testGetMassSpectrumComparisonSupplier_3() throws NoBaselineDetectorAvailableException {
 
-		String comparatorName = "Threshold (TIC) Baseline Detector";
-		String description = "This baseline detector calculator sets the baseline by the lowest TIC value.";
 		String id = "org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.supplier.tic";
-		IBaselineDetectorSupplier supplier = support.getBaselineDetectorSupplier(id);
-		assertEquals("DetectorName", comparatorName, supplier.getDetectorName());
-		assertEquals("Description", description, supplier.getDescription());
-		assertEquals("Id", id, supplier.getId());
+		try {
+			IBaselineDetectorSupplier supplier = support.getBaselineDetectorSupplier(id);
+			assertNull(supplier);
+		} catch(Exception e) {
+			assertTrue(true); // The detector was removed
+		}
 	}
 }
