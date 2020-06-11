@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -32,6 +32,7 @@ public class ChromatogramHeatmapPart extends AbstractDataUpdateSupport implement
 
 	@Inject
 	public ChromatogramHeatmapPart(Composite parent, MPart part) {
+
 		super(part);
 		parent.setLayout(new FillLayout());
 		chromatogramHeatmapUI = new ChromatogramHeatmapUI(parent, SWT.NONE);
@@ -52,6 +53,7 @@ public class ChromatogramHeatmapPart extends AbstractDataUpdateSupport implement
 		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public void updateObjects(List<Object> objects, String topic) {
 

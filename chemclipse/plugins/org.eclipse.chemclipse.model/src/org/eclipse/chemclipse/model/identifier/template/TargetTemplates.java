@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.support.util.TargetListUtil;
+import org.eclipse.chemclipse.model.targets.TargetListUtil;
 
 public class TargetTemplates extends HashMap<String, ITargetTemplate> {
 

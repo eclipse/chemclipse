@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -9,12 +9,13 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.support.ui.preferences.editors;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.Arrays;
 
+import org.eclipse.chemclipse.model.targets.TargetListUtil;
 import org.eclipse.chemclipse.support.util.QuantReferencesListUtil;
-import org.eclipse.chemclipse.support.util.TargetListUtil;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.QuantInputValidator;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -33,6 +34,7 @@ import org.eclipse.swt.widgets.Shell;
 public class QuantReferencesListEditor extends ListEditor {
 
 	public QuantReferencesListEditor(String name, String labelText, Composite parent) {
+
 		super(name, labelText, parent);
 		initialize(parent);
 	}

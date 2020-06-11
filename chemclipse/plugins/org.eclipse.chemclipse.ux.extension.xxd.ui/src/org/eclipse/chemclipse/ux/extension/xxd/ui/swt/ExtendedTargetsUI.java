@@ -12,26 +12,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
-import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.autoComplete;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.ITargetSupplier;
-import org.eclipse.chemclipse.model.identifier.ComparisonResult;
-import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
-import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
-import org.eclipse.chemclipse.model.identifier.LibraryInformation;
-import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.model.targets.ITarget;
+import org.eclipse.chemclipse.model.updates.ITargetUpdateListener;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -43,35 +34,25 @@ import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.IColumnMoveListener;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
-import org.eclipse.chemclipse.support.util.TargetListUtil;
-import org.eclipse.chemclipse.support.validators.TargetValidator;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
-import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.ListSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTargets;
-import org.eclipse.core.databinding.validation.IValidator;
-import org.eclipse.core.runtime.IStatus;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.targets.ComboTarget;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.fieldassist.ContentProposal;
-import org.eclipse.jface.fieldassist.ControlDecoration;
-import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
-import org.eclipse.jface.fieldassist.IContentProposal;
-import org.eclipse.jface.fieldassist.IContentProposalProvider;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -81,7 +62,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
@@ -92,10 +72,8 @@ import org.eclipse.swtchart.extensions.core.IKeyboardSupport;
 
 public class ExtendedTargetsUI {
 
-	private static final String IDENTIFIER_MANUAL = "Manual";
 	private static final String MENU_CATEGORY_TARGETS = "Targets";
 	//
-	private final TargetListUtil targetListUtil = new TargetListUtil();
 	private final Map<String, Object> map = new HashMap<String, Object>();
 	//
 	private Label labelTargetOption;
@@ -103,13 +81,10 @@ public class ExtendedTargetsUI {
 	private Composite toolbarInfo;
 	private Composite toolbarSearch;
 	private Composite toolbarModify;
-	private Label labelInputErrors;
-	private Combo comboTargetName;
+	private ComboTarget comboTarget;
 	private Button buttonAddTarget;
 	private Button buttonDeleteTarget;
 	private TargetsListUI targetListUI;
-	private TargetValidator targetValidator;
-	private ControlDecoration targetControlDecoration;
 	/*
 	 * IScan,
 	 * IPeak,
@@ -165,7 +140,6 @@ public class ExtendedTargetsUI {
 		PartSupport.setCompositeVisibility(toolbarModify, false);
 		//
 		targetListUI.setEditEnabled(false);
-		clearLabelInputErrors();
 		applySettings();
 	}
 
@@ -278,7 +252,7 @@ public class ExtendedTargetsUI {
 
 				boolean visible = PartSupport.toggleCompositeVisibility(toolbarModify);
 				if(visible) {
-					setComboTargetNameItems();
+					comboTarget.updateContentProposals();
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ACTIVE, IApplicationImage.SIZE_16x16));
 				} else {
 					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DEFAULT, IApplicationImage.SIZE_16x16));
@@ -343,8 +317,7 @@ public class ExtendedTargetsUI {
 	private Composite createToolbarInfo(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		composite.setLayoutData(gridData);
+		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		composite.setLayout(new GridLayout(1, false));
 		//
 		labelInfo = new Label(composite, SWT.NONE);
@@ -373,14 +346,10 @@ public class ExtendedTargetsUI {
 	private Composite createToolbarModify(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		composite.setLayoutData(gridData);
-		int columns = 3;
-		composite.setLayout(new GridLayout(columns, false));
+		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		composite.setLayout(new GridLayout(3, false));
 		//
-		labelInputErrors = createLabel(composite, columns);
-		//
-		comboTargetName = createComboTarget(composite);
+		comboTarget = createComboTarget(composite);
 		buttonAddTarget = createButtonAdd(composite);
 		buttonDeleteTarget = createButtonDelete(composite);
 		//
@@ -389,68 +358,26 @@ public class ExtendedTargetsUI {
 
 	private void setEditWidgetStatus(boolean enabled) {
 
-		labelInputErrors.setEnabled(enabled);
-		comboTargetName.setEnabled(enabled);
+		comboTarget.setEnabled(enabled);
 		buttonAddTarget.setEnabled(enabled);
 		buttonDeleteTarget.setEnabled(enabled);
 	}
 
-	private Label createLabel(Composite parent, int horizontalSpan) {
+	private ComboTarget createComboTarget(Composite parent) {
 
-		Label label = new Label(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = horizontalSpan;
-		gridData.grabExcessHorizontalSpace = true;
-		label.setLayoutData(gridData);
-		//
-		return label;
-	}
-
-	private Combo createComboTarget(Composite parent) {
-
-		Combo combo = new Combo(parent, SWT.NONE);
-		combo.setText("");
-		combo.setToolTipText("Select a target or type in a new substance name.");
-		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
-		targetValidator = new TargetValidator();
-		targetControlDecoration = new ControlDecoration(combo, SWT.LEFT | SWT.TOP);
-		//
-		combo.addKeyListener(new KeyAdapter() {
+		ComboTarget comboTarget = new ComboTarget(parent, SWT.NONE);
+		comboTarget.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		comboTarget.setTargetUpdateListener(new ITargetUpdateListener() {
 
 			@Override
-			public void keyReleased(KeyEvent e) {
+			public void update(IIdentificationTarget identificationTarget) {
 
-				validate(targetValidator, targetControlDecoration, combo);
-				if(e.keyCode == SWT.LF || e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) {
-					addTarget(e.display.getActiveShell());
+				if(identificationTarget != null) {
+					setTarget(identificationTarget);
 				}
 			}
 		});
-		enableAuotComplete(combo);
-		return combo;
-	}
-
-	private void enableAuotComplete(Combo combo) {
-
-		IContentProposalProvider proposalProvider = new IContentProposalProvider() {
-
-			@Override
-			public IContentProposal[] getProposals(String contents, int position) {
-
-				List<ContentProposal> list = new ArrayList<>();
-				if(contents != null) {
-					String[] items = combo.getItems();
-					for(String item : items) {
-						if(item.toLowerCase().contains(contents.toLowerCase())) {
-							list.add(new ContentProposal(item));
-						}
-					}
-				}
-				return list.toArray(new IContentProposal[0]);
-			}
-		};
-		autoComplete(combo, proposalProvider);
+		return comboTarget;
 	}
 
 	private Button createButtonAdd(Composite parent) {
@@ -464,7 +391,10 @@ public class ExtendedTargetsUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				addTarget(e.display.getActiveShell());
+				IIdentificationTarget identificationTarget = comboTarget.createTarget();
+				if(identificationTarget != null) {
+					setTarget(identificationTarget);
+				}
 			}
 		});
 		return button;
@@ -696,23 +626,7 @@ public class ExtendedTargetsUI {
 
 	private void applySettings() {
 
-		setComboTargetNameItems();
-	}
-
-	private void setComboTargetNameItems() {
-
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		boolean useTargetList = preferenceStore.getBoolean(PreferenceConstants.P_USE_TARGET_LIST);
-		//
-		String[] items;
-		if(useTargetList) {
-			items = targetListUtil.parseString(preferenceStore.getString(PreferenceConstants.P_TARGET_LIST));
-			Arrays.sort(items);
-		} else {
-			items = new String[]{};
-		}
-		//
-		comboTargetName.setItems(items);
+		comboTarget.updateContentProposals();
 	}
 
 	private void updateTargets() {
@@ -759,7 +673,7 @@ public class ExtendedTargetsUI {
 	private void updateWidgets() {
 
 		boolean enabled = (object == null) ? false : true;
-		comboTargetName.setEnabled(enabled);
+		comboTarget.setEnabled(enabled);
 		buttonAddTarget.setEnabled(enabled);
 		buttonDeleteTarget.setEnabled(enabled);
 	}
@@ -796,37 +710,14 @@ public class ExtendedTargetsUI {
 		 */
 	}
 
-	private void addTarget(Shell shell) {
+	private void setTarget(IIdentificationTarget identificationTarget) {
 
-		boolean isInputValid = validate(targetValidator, targetControlDecoration, comboTargetName);
-		if(isInputValid) {
-			setTarget(targetValidator);
-		} else {
-			MessageDialog.openError(shell, "Add Target", "The given target is invalid.");
-		}
-	}
-
-	private void setTarget(TargetValidator targetValidator) {
-
-		/*
-		 * Add a new entry.
-		 */
-		ILibraryInformation libraryInformation = new LibraryInformation();
-		libraryInformation.setName(targetValidator.getName());
-		libraryInformation.setCasNumber(targetValidator.getCasNumber());
-		libraryInformation.setComments(targetValidator.getComments());
-		libraryInformation.setContributor(targetValidator.getContributor());
-		libraryInformation.setReferenceIdentifier(targetValidator.getReferenceId());
-		IComparisonResult comparisonResult = ComparisonResult.createBestMatchComparisonResult();
-		IIdentificationTarget identificationTarget = new IdentificationTarget(libraryInformation, comparisonResult);
-		setIdentifier(identificationTarget);
-		//
 		if(object instanceof ITargetSupplier) {
 			ITargetSupplier targetSupplier = (ITargetSupplier)object;
 			targetSupplier.getTargets().add(identificationTarget);
 		}
 		//
-		comboTargetName.setText("");
+		comboTarget.setText("");
 		updateTargets();
 	}
 
@@ -847,42 +738,9 @@ public class ExtendedTargetsUI {
 		}
 	}
 
-	private void setIdentifier(IIdentificationTarget identificationTarget) {
-
-		identificationTarget.setIdentifier(IDENTIFIER_MANUAL);
-	}
-
 	private void updateTargetOptionLabel() {
 
 		String text = showChromatogramTargets ? "Chromatogram Targets (Active)" : "Targets (Active)";
 		labelTargetOption.setText(text);
-	}
-
-	private boolean validate(IValidator validator, ControlDecoration controlDecoration, Combo combo) {
-
-		IStatus status = validator.validate(combo.getText());
-		if(status.isOK()) {
-			controlDecoration.hide();
-			clearLabelInputErrors();
-			return true;
-		} else {
-			setLabelInputError(status.getMessage());
-			controlDecoration.setImage(FieldDecorationRegistry.getDefault().getFieldDecoration(FieldDecorationRegistry.DEC_CONTENT_PROPOSAL).getImage());
-			controlDecoration.showHoverText("Input Error");
-			controlDecoration.show();
-			return false;
-		}
-	}
-
-	private void clearLabelInputErrors() {
-
-		labelInputErrors.setText("Example: Styrene | 100-42-5 | comment | contributor | referenceId");
-		labelInputErrors.setBackground(null);
-	}
-
-	private void setLabelInputError(String message) {
-
-		labelInputErrors.setText(message);
-		labelInputErrors.setBackground(Colors.YELLOW);
 	}
 }

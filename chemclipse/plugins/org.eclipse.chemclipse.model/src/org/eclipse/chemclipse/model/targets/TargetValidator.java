@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,16 +9,23 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.support.validators;
+package org.eclipse.chemclipse.model.targets;
 
-import org.eclipse.chemclipse.support.util.TargetListUtil;
+import org.eclipse.chemclipse.model.identifier.ComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.identifier.LibraryInformation;
+import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 
 public class TargetValidator implements IValidator {
 
-	private static final String ERROR_TARGET = "Please enter target, e.g.: Styrene | 100-42-5 | comment | contributor | referenceId";
+	public static final String IDENTIFIER = "Manual";
+	//
+	private static final String ERROR_TARGET = "Please enter target, e.g.: " + TargetListUtil.EXAMPLE;
 	private static final String ERROR_TOKEN = "The target must not contain: " + TargetListUtil.SEPARATOR_TOKEN;
 	//
 	private String name = "";
@@ -30,6 +37,15 @@ public class TargetValidator implements IValidator {
 	@Override
 	public IStatus validate(Object value) {
 
+		/*
+		 * Reset
+		 */
+		name = "";
+		casNumber = "";
+		comments = "";
+		contributor = "";
+		referenceId = "";
+		//
 		String message = null;
 		if(value == null) {
 			message = ERROR_TARGET;
@@ -84,23 +100,18 @@ public class TargetValidator implements IValidator {
 		return name;
 	}
 
-	public String getCasNumber() {
+	public IIdentificationTarget getIdentificationTarget() {
 
-		return casNumber;
-	}
-
-	public String getComments() {
-
-		return comments;
-	}
-
-	public String getContributor() {
-
-		return contributor;
-	}
-
-	public String getReferenceId() {
-
-		return referenceId;
+		ILibraryInformation libraryInformation = new LibraryInformation();
+		libraryInformation.setName(name);
+		libraryInformation.setCasNumber(casNumber);
+		libraryInformation.setComments(comments);
+		libraryInformation.setContributor(contributor);
+		libraryInformation.setReferenceIdentifier(referenceId);
+		IComparisonResult comparisonResult = ComparisonResult.createBestMatchComparisonResult();
+		IIdentificationTarget identificationTarget = new IdentificationTarget(libraryInformation, comparisonResult);
+		identificationTarget.setIdentifier(IDENTIFIER);
+		//
+		return identificationTarget;
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.chemclipse.support.validators.TargetValidator;
+import org.eclipse.chemclipse.model.targets.TargetValidator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IInputValidator;
 
@@ -24,6 +24,7 @@ public class TargetTemplateInputValidator implements IInputValidator {
 	private Set<String> names = new HashSet<>();
 
 	public TargetTemplateInputValidator(Set<String> names) {
+
 		if(names != null) {
 			this.names = names;
 		}
