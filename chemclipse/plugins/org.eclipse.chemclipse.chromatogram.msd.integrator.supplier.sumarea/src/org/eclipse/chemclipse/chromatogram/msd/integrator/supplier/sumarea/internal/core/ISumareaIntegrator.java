@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,7 +16,7 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 public interface ISumareaIntegrator {
 
 	float INTEGRATION_STEPS = 100.0f; // steps of 100 milliseconds.
-	String DESCRIPTION = "Integrator Trapezoid";
+	String DESCRIPTION = "SumArea";
 
 	/*
 	 * Integrates the TIC signal.

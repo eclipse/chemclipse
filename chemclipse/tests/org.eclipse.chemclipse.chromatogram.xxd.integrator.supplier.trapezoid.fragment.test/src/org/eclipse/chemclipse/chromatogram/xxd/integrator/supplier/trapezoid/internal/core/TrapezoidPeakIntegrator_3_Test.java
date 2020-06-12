@@ -22,15 +22,12 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
-/**
- * @author eselmeister
- */
 public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 
 	private PeakIntegrator integrator;
 	private IPeakIntegrationResult result;
 	private PeakIntegrationSettings peakIntegrationSettings;
-	private String INTEGRATOR = "Integrator Trapezoid";
+	private String INTEGRATOR = "Trapezoid";
 
 	@Override
 	protected void setUp() throws Exception {

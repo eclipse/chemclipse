@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -52,7 +52,7 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 		PeakIntegrationResult result = null;
 		IBaselineSupport baselineSupport = peakIntegrationSettings.getBaselineSupport();
 		List<IIntegrationEntry> integrationEntries = calculateIntegratedArea(peak, baselineSupport, peakIntegrationSettings.getSelectedIons());
-		peak.setIntegratedArea(integrationEntries, IPeakMaxPeakIntegrator.DESCRIPTION);
+		peak.setIntegratedArea(integrationEntries, IPeakMaxPeakIntegrator.INTEGRATOR_DESCRIPTION);
 		/*
 		 * Get the peak area if the peak should be reported.
 		 */
@@ -248,7 +248,7 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 		Set<Integer> integratedIons = getIntegratedIons(selectedIons);
 		PeakIntegrationResult result = new PeakIntegrationResult();
 		result.setIntegratedArea(integratedArea);
-		result.setIntegratorType(IPeakMaxPeakIntegrator.DESCRIPTION);
+		result.setIntegratorType(IPeakMaxPeakIntegrator.INTEGRATOR_DESCRIPTION);
 		result.setPeakType(peak.getPeakType().toString());
 		/*
 		 * Specific values.

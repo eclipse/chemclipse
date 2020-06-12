@@ -32,7 +32,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramIntegratorSupport {
 
-	public static final String INTEGRATOR_DESCRIPTION = "Integrator Trapezoid";
+	public static final String INTEGRATOR_DESCRIPTION = "Trapezoid";
 
 	@SuppressWarnings("rawtypes")
 	public IChromatogramIntegrationResults calculateChromatogramIntegrationResults(IChromatogramSelection chromatogramSelection, ChromatogramIntegrationSettings chromatogramIntegrationSettings, IProgressMonitor monitor) {

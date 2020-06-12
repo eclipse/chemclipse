@@ -66,7 +66,7 @@ public class PeakIntegrator {
 	 * The FirstDerivative seems to use a correction factor.
 	 * Otherwise, the peak areas are too high.
 	 */
-	private static final String DESCRIPTION = "Integrator Trapezoid";
+	private static final String INTEGRATOR_DESCRIPTION = "Trapezoid";
 	// private static final String XIC = "XIC =";
 	// private static final String TIC = "TIC";
 	//
@@ -85,7 +85,7 @@ public class PeakIntegrator {
 		IBaselineSupport baselineSupport = peakIntegrationSettings.getBaselineSupport();
 		//
 		List<? extends IIntegrationEntry> integrationEntries = calculateIntegratedArea(peak, baselineSupport, peakIntegrationSettings.getSelectedIons(), includeBackground);
-		peak.setIntegratedArea(integrationEntries, DESCRIPTION);
+		peak.setIntegratedArea(integrationEntries, INTEGRATOR_DESCRIPTION);
 		/*
 		 * Get the peak area if the peak should be reported.
 		 */
@@ -472,7 +472,7 @@ public class PeakIntegrator {
 		Set<Integer> integratedIons = getIntegratedIons(selectedIons);
 		PeakIntegrationResult result = new PeakIntegrationResult();
 		result.setIntegratedArea(integratedArea);
-		result.setIntegratorType(DESCRIPTION);
+		result.setIntegratorType(INTEGRATOR_DESCRIPTION);
 		result.setPeakType(peak.getPeakType().toString());
 		/*
 		 * Chromatogram Peak
