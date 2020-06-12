@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -33,6 +33,7 @@ public class SearchSupportUI extends Composite {
 	private ISearchListener searchListener;
 
 	public SearchSupportUI(Composite parent, int style) {
+
 		super(parent, style);
 		createControl();
 	}
@@ -68,18 +69,21 @@ public class SearchSupportUI extends Composite {
 		gridLayout.marginRight = 0;
 		composite.setLayout(gridLayout);
 		//
-		createTextSearch(composite);
+		text = createTextSearch(composite);
 		createButtonSearch(composite);
 		createButtonReset(composite);
-		createCheckBoxCaseSensitive(composite);
+		checkbox = createCheckBoxCaseSensitive(composite);
 	}
 
-	private void createTextSearch(Composite parent) {
+	private Text createTextSearch(Composite parent) {
 
-		text = new Text(parent, SWT.BORDER);
+		Text text = new Text(parent, SWT.BORDER | SWT.SEARCH | SWT.ICON_CANCEL | SWT.ICON_SEARCH);
 		text.setText("");
 		text.setToolTipText("Type in the search items.");
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		/*
+		 * Listen to search key event.
+		 */
 		text.addKeyListener(new KeyAdapter() {
 
 			@Override
@@ -95,6 +99,24 @@ public class SearchSupportUI extends Composite {
 				}
 			}
 		});
+		/*
+		 * Click on the icons.
+		 */
+		text.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+
+				if(e.detail == SWT.ICON_CANCEL) {
+					text.setText("");
+					runSearch();
+				} else if(e.detail == SWT.ICON_SEARCH) {
+					runSearch();
+				}
+			}
+		});
+		//
+		return text;
 	}
 
 	private void createButtonSearch(Composite parent) {
@@ -130,20 +152,23 @@ public class SearchSupportUI extends Composite {
 		});
 	}
 
-	private void createCheckBoxCaseSensitive(Composite parent) {
+	private Button createCheckBoxCaseSensitive(Composite parent) {
 
-		checkbox = new Button(parent, SWT.CHECK);
-		checkbox.setText("Case sensitive");
-		checkbox.setSelection(PreferenceSupplier.isSearchCaseSensitive());
-		checkbox.addSelectionListener(new SelectionAdapter() {
+		Button button = new Button(parent, SWT.CHECK);
+		button.setText("");
+		button.setToolTipText("Case sensitive");
+		button.setSelection(PreferenceSupplier.isSearchCaseSensitive());
+		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				PreferenceSupplier.setSearchCaseSensitive(checkbox.getSelection());
+				PreferenceSupplier.setSearchCaseSensitive(button.getSelection());
 				runSearch();
 			}
 		});
+		//
+		return button;
 	}
 
 	private void runSearch() {
