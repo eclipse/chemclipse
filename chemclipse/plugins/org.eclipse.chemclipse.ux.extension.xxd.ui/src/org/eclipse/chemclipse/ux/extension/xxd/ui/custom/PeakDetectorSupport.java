@@ -37,7 +37,7 @@ import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 public class PeakDetectorSupport {
 
 	private static final Logger logger = Logger.getLogger(PeakDetectorSupport.class);
-	private static final String DESCRIPTION = "Peak Detector (UX)";
+	private static final String DETECTOR_DESCRIPTION = "Peak Detector (UX)";
 
 	public static IPeak extractPeakByRetentionTime(IChromatogram<? extends IPeak> chromatogram, int startRetentionTime, int stopRetentionTime, boolean includeBackground, boolean optimizeRange, Set<Integer> traces) {
 
@@ -74,11 +74,11 @@ public class PeakDetectorSupport {
 					} else {
 						peak = PeakBuilderMSD.createPeak(chromatogramMSD, scanRange, includeBackground);
 					}
-					peak.setDetectorDescription(DESCRIPTION);
+					peak.setDetectorDescription(DETECTOR_DESCRIPTION);
 				} else if(chromatogram instanceof IChromatogramCSD) {
 					IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
 					peak = PeakBuilderCSD.createPeak(chromatogramCSD, scanRange, includeBackground);
-					peak.setDetectorDescription(DESCRIPTION);
+					peak.setDetectorDescription(DETECTOR_DESCRIPTION);
 				} else if(chromatogram instanceof IChromatogramWSD) {
 					logger.info("Handling WSD data is not supported yet");
 				}

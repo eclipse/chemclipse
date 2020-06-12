@@ -50,7 +50,7 @@ public class PeakDetectorWSD extends BasePeakDetector implements IPeakDetectorWS
 
 	private static final Logger logger = Logger.getLogger(PeakDetectorWSD.class);
 	//
-	private static final String DETECTOR_DESCRIPTION = "Peak Detector First Derivative";
+	private static final String DETECTOR_DESCRIPTION = "First Derivative";
 	//
 	private static float NORMALIZATION_BASE = 100000.0f;
 

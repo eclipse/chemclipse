@@ -54,7 +54,7 @@ public class PeakDetectorCSD extends BasePeakDetector implements IPeakDetectorCS
 
 	private static final Logger logger = Logger.getLogger(PeakDetectorCSD.class);
 	//
-	private static final String DETECTOR_DESCRIPTION = "Peak Detector First Derivative";
+	private static final String DETECTOR_DESCRIPTION = "First Derivative";
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override

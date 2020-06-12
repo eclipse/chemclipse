@@ -62,6 +62,8 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider i
 	public static final String LEADING = "Leading";
 	public static final String TAILING = "Tailing";
 	public static final String MODEL_DESCRIPTION = "Model Description";
+	public static final String DETECTOR = "Detector";
+	public static final String INTEGRATOR = "Integrator";
 	public static final String SUGGESTED_COMPONENTS = "Suggested Components";
 	public static final String AREA_PERCENT = "Area [%]";
 	public static final String QUANTIFIER = "Quantifier";
@@ -69,6 +71,9 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider i
 	//
 	public static final String PEAK = "PEAK";
 	public static final String SCAN = "SCAN";
+	//
+	private static final String BLANK = "";
+	private static final String NO_VALUE = "--";
 	//
 	private double chromatogramPeakArea = 0.0d;
 	//
@@ -87,6 +92,8 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider i
 			LEADING, //
 			TAILING, //
 			MODEL_DESCRIPTION, //
+			DETECTOR, //
+			INTEGRATOR, //
 			SUGGESTED_COMPONENTS, //
 			NAME, //
 			AREA_PERCENT, //
@@ -100,6 +107,8 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider i
 			100, //
 			100, //
 			60, //
+			100, //
+			100, //
 			100, //
 			100, //
 			100, //
@@ -193,7 +202,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider i
 	@Override
 	public String getColumnText(Object element, int columnIndex) {
 
-		String text = "";
+		String text = BLANK;
 		if(element instanceof IPeak || element instanceof IScan) {
 			/*
 			 * Show peak and scan data.
@@ -214,11 +223,11 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider i
 		IPeakModel peakModel = peak.getPeakModel();
 		DecimalFormat decimalFormat = getDecimalFormat();
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		String text = "";
+		String text = BLANK;
 		//
 		switch(columnIndex) {
 			case 0:
-				text = "";
+				text = BLANK;
 				break;
 			case 1:
 				text = PEAK;
@@ -300,9 +309,15 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider i
 				text = peak.getModelDescription();
 				break;
 			case 14:
+				text = peak.getDetectorDescription();
+				break;
+			case 15:
+				text = peak.getIntegratorDescription();
+				break;
+			case 16:
 				text = Integer.toString(peak.getSuggestedNumberOfComponents());
 				break;
-			case 15: {
+			case 17: {
 				String peakName = peak.getName();
 				if(peakName != null) {
 					return peakName;
@@ -313,18 +328,18 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider i
 				}
 			}
 				break;
-			case 16:
+			case 18:
 				if(chromatogramPeakArea > 0) {
 					double peakAreaPercent = (100.0d / chromatogramPeakArea) * peak.getIntegratedArea();
 					text = decimalFormat.format(peakAreaPercent);
 				} else {
-					text = "-";
+					text = NO_VALUE;
 				}
 				break;
-			case 17:
-				text = (peak.getInternalStandards().size() > 0) ? "ISTD" : "";
+			case 19:
+				text = (peak.getInternalStandards().size() > 0) ? "ISTD" : BLANK;
 				break;
-			case 18: {
+			case 20: {
 				ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(peak.getTargets());
 				if(libraryInformation != null) {
 					Set<String> set = new LinkedHashSet<>();
@@ -344,11 +359,11 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider i
 
 		DecimalFormat decimalFormat = getDecimalFormat();
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		String text = "";
+		String text = BLANK;
 		//
 		switch(columnIndex) {
 			case 0:
-				text = "";
+				text = BLANK;
 				break;
 			case 1:
 				text = SCAN;
@@ -375,26 +390,32 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider i
 			case 10:
 			case 11:
 			case 12:
-				text = "--";
+				text = NO_VALUE;
 				break;
 			case 13:
-				text = "";
+				text = BLANK;
 				break;
 			case 14:
-				text = "--";
+				text = NO_VALUE;
 				break;
 			case 15:
+				text = NO_VALUE;
+				break;
+			case 16:
+				text = NO_VALUE;
+				break;
+			case 17:
 				ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(scan.getTargets());
 				if(libraryInformation != null) {
 					text = libraryInformation.getName();
 				}
 				break;
-			case 16:
-				text = "--";
-				break;
-			case 17:
 			case 18:
-				text = "";
+				text = NO_VALUE;
+				break;
+			case 19:
+			case 20:
+				text = BLANK;
 				break;
 		}
 		//

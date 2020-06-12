@@ -81,11 +81,13 @@ public class AmdisIdentifier {
 			if(result.hasErrorMessages()) {
 				return result;
 			}
+			//
 			IPeaks peaks = amdisPeaks.getProcessingResult();
 			if(peaks == null) {
 				result.addErrorMessage(IDENTIFIER, "Parsing peaks does not return a result");
 				return result;
 			}
+			//
 			IProcessingResult<Void> insertPeaks = PeakProcessorSupport.insertPeaks(chromatogramSelection, peaks.getPeaks(), peakDetectorSettings, subMonitor.split(10));
 			result.addMessages(insertPeaks);
 		} finally {

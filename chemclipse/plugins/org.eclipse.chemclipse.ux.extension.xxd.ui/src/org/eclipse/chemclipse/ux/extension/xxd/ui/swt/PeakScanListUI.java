@@ -35,11 +35,13 @@ public class PeakScanListUI extends ExtendedTableViewer {
 
 	private final String[] titles = PeakScanListLabelProvider.TITLES;
 	private final int[] bounds = PeakScanListLabelProvider.BOUNDS;
+	//
 	private final PeakScanListLabelProvider labelProvider = new PeakScanListLabelProvider();
 	private final PeakScanListTableComparator tableComparator = new PeakScanListTableComparator();
 	private final PeakScanListFilter listFilter = new PeakScanListFilter();
 
 	public PeakScanListUI(Composite parent, int style) {
+
 		super(parent, style);
 		createColumns();
 	}

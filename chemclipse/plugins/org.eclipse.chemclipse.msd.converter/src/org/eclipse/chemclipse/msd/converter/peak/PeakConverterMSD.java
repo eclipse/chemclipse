@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -53,6 +53,7 @@ public class PeakConverterMSD {
 	 * This class has only static methods.
 	 */
 	private PeakConverterMSD() {
+
 	}
 
 	public static IProcessingInfo<IPeaks<?>> convert(File file, String converterId, IProgressMonitor monitor) {
@@ -68,14 +69,16 @@ public class PeakConverterMSD {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static IProcessingInfo convert(File file, IProgressMonitor monitor) {
 
 		return getPeaks(file, monitor);
 	}
 
-	public static IProcessingInfo convert(File file, IPeaks peaks, boolean append, String converterId, IProgressMonitor monitor) {
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	public static IProcessingInfo<?> convert(File file, IPeaks peaks, boolean append, String converterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<?> processingInfo;
 		/*
 		 * Do not use a safe runnable here.
 		 */
@@ -88,9 +91,9 @@ public class PeakConverterMSD {
 		return processingInfo;
 	}
 
-	private static IProcessingInfo getPeaks(final File file, IProgressMonitor monitor) {
+	private static IProcessingInfo<?> getPeaks(final File file, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<?> processingInfo;
 		PeakConverterSupport converterSupport = getPeakConverterSupport();
 		/*
 		 * Try to convert.
@@ -129,7 +132,7 @@ public class PeakConverterMSD {
 					processingInfo = importConverter.convert(file, monitor);
 					if(!processingInfo.hasErrorMessages()) {
 						try {
-							processingInfo.getProcessingResult(IPeaks.class);
+							processingInfo.getProcessingResult();
 							return processingInfo;
 						} catch(TypeCastException e) {
 							logger.warn(e);
@@ -226,9 +229,9 @@ public class PeakConverterMSD {
 		return peakConverterSupport;
 	}
 
-	private static IProcessingInfo getNoExportConverterAvailableProcessingInfo(File file) {
+	private static IProcessingInfo<?> getNoExportConverterAvailableProcessingInfo(File file) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.WARN, "Peak Export Converter", "There is no suitable converter available to export the peaks to the file: " + file.getAbsolutePath());
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;

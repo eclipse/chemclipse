@@ -36,6 +36,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakProcessorSupport {
 
+	public static final String DETECTOR_DESCRIPTION = "AMDIS (Extern)";
 	public static final String PEAK_CONVERTER_ID = "org.eclipse.chemclipse.msd.converter.supplier.amdis.peak.elu";
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
@@ -84,7 +85,8 @@ public class PeakProcessorSupport {
 					 * Add only peaks above the given minSignalToNoiseRatio and within the
 					 * chromatogram selection.
 					 */
-					IChromatogramPeakMSD chromatogramPeakMSD = new ChromatogramPeakMSD(peakModelMSD, chromatogram, "AMDIS Peak (ELU)");
+					IChromatogramPeakMSD chromatogramPeakMSD = new ChromatogramPeakMSD(peakModelMSD, chromatogram);
+					chromatogramPeakMSD.setDetectorDescription(DETECTOR_DESCRIPTION);
 					if(isValidPeak(chromatogramPeakMSD, startRetentionTime, stopRetentionTime, peakDetectorSettings)) {
 						/*
 						 * Adjust the peak retention times if possible.
