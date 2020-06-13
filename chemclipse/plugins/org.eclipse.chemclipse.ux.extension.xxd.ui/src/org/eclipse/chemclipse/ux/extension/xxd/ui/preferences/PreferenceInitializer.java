@@ -243,6 +243,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_SHOW_AREA_WITHOUT_DECIMALS, PreferenceConstants.DEF_SHOW_AREA_WITHOUT_DECIMALS);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_CHART_COMPRESSION_TYPE, PreferenceConstants.DEF_CHROMATOGRAM_CHART_COMPRESSION_TYPE);
 		store.setDefault(PreferenceConstants.P_COLOR_CHROMATOGRAM, PreferenceConstants.DEF_COLOR_CHROMATOGRAM);
+		store.setDefault(PreferenceConstants.P_COLOR_CHROMATOGRAM_INACTIVE, PreferenceConstants.DEF_COLOR_CHROMATOGRAM_INACTIVE);
 		store.setDefault(PreferenceConstants.P_ENABLE_CHROMATOGRAM_AREA, PreferenceConstants.DEF_ENABLE_CHROMATOGRAM_AREA);
 		store.setDefault(PreferenceConstants.P_COLOR_CHROMATOGRAM_SELECTED_PEAK, PreferenceConstants.DEF_COLOR_CHROMATOGRAM_SELECTED_PEAK);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_SELECTED_PEAK_SCAN_MARKER_SIZE, PreferenceConstants.DEF_CHROMATOGRAM_SELECTED_PEAK_SCAN_MARKER_SIZE);

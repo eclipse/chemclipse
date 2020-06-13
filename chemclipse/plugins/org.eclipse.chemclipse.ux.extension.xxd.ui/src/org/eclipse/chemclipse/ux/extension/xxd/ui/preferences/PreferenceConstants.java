@@ -371,6 +371,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_CHROMATOGRAM_CHART_COMPRESSION_TYPE = LineChart.COMPRESSION_MEDIUM;
 	public static final String P_COLOR_CHROMATOGRAM = "colorChromatogram";
 	public static final String DEF_COLOR_CHROMATOGRAM = "255,0,0";
+	public static final String P_COLOR_CHROMATOGRAM_INACTIVE = "colorChromatogramInactive";
+	public static final String DEF_COLOR_CHROMATOGRAM_INACTIVE = "125,125,125";
 	public static final String P_ENABLE_CHROMATOGRAM_AREA = "enableChromatogramArea";
 	public static final boolean DEF_ENABLE_CHROMATOGRAM_AREA = true;
 	public static final String P_COLOR_CHROMATOGRAM_SELECTED_PEAK = "colorChromatogramSelectedPeak";

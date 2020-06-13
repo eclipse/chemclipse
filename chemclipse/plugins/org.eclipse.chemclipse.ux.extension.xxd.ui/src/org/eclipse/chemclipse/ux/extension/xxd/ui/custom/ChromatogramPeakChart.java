@@ -144,30 +144,42 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 	@SuppressWarnings("rawtypes")
 	private void addChromatogramData(IChromatogramSelection chromatogramSelection, List<ILineSeriesData> lineSeriesDataList, PeakChartSettings peakChartSettings) {
 
-		Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM));
+		boolean containsXIC = containsXIC(chromatogramSelection);
+		Color colorActive = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM));
+		Color colorInactive = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_INACTIVE));
+		Color colorTIC = containsXIC ? colorInactive : colorActive;
 		boolean enableChromatogramArea = preferenceStore.getBoolean(PreferenceConstants.P_ENABLE_CHROMATOGRAM_AREA);
 		/*
 		 * TIC
 		 */
-		ILineSeriesData lineSeriesDataTIC = chromatogramChartSupport.getLineSeriesData(chromatogramSelection, SERIES_ID_CHROMATOGRAM_TIC, DisplayType.TIC, color, false);
+		ILineSeriesData lineSeriesDataTIC = chromatogramChartSupport.getLineSeriesData(chromatogramSelection, SERIES_ID_CHROMATOGRAM_TIC, DisplayType.TIC, colorTIC, false);
 		ILineSeriesSettings settingsTIC = lineSeriesDataTIC.getSettings();
 		settingsTIC.setEnableArea(enableChromatogramArea);
 		settingsTIC.setVisible(peakChartSettings.isShowChromatogramTIC());
 		lineSeriesDataList.add(lineSeriesDataTIC);
 		//
+		if(containsXIC) {
+			/*
+			 * XIC
+			 */
+			ILineSeriesData lineSeriesDataXIC = chromatogramChartSupport.getLineSeriesData((IChromatogramSelectionMSD)chromatogramSelection, SERIES_ID_CHROMATOGRAM_XIC, DisplayType.XIC, colorActive, false);
+			ILineSeriesSettings settingsXIC = lineSeriesDataXIC.getSettings();
+			settingsXIC.setEnableArea(enableChromatogramArea);
+			settingsXIC.setVisible(peakChartSettings.isShowChromatogramXIC());
+			lineSeriesDataList.add(lineSeriesDataXIC);
+		}
+	}
+
+	@SuppressWarnings("rawtypes")
+	private boolean containsXIC(IChromatogramSelection chromatogramSelection) {
+
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
 			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
 			if(chromatogramSelectionMSD.getSelectedIons().size() > 0) {
-				/*
-				 * XIC
-				 */
-				ILineSeriesData lineSeriesDataXIC = chromatogramChartSupport.getLineSeriesData(chromatogramSelectionMSD, SERIES_ID_CHROMATOGRAM_XIC, DisplayType.XIC, color, false);
-				ILineSeriesSettings settingsXIC = lineSeriesDataXIC.getSettings();
-				settingsXIC.setEnableArea(enableChromatogramArea);
-				settingsXIC.setVisible(peakChartSettings.isShowChromatogramXIC());
-				lineSeriesDataList.add(lineSeriesDataXIC);
+				return true;
 			}
 		}
+		return false;
 	}
 
 	@SuppressWarnings("rawtypes")
