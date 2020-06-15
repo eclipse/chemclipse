@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -29,6 +29,7 @@ public class DetectorByFileRunnable implements IRunnableWithProgress {
 	private File file;
 
 	public DetectorByFileRunnable(IChromatogramSelectionMSD chromatogramSelection, File file) {
+
 		this.chromatogramSelection = chromatogramSelection;
 		this.file = file;
 	}
@@ -37,7 +38,7 @@ public class DetectorByFileRunnable implements IRunnableWithProgress {
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		try {
-			monitor.beginTask("Deconvolution (AMDIS) - Read ELU", IProgressMonitor.UNKNOWN);
+			monitor.beginTask("AMDIS (extern) - Read ELU", IProgressMonitor.UNKNOWN);
 			PeakProcessorSupport peakProcessorSupport = new PeakProcessorSupport();
 			PeakDetectorSettings peakDetectorSettings = PreferenceSupplier.getPeakDetectorSettings();
 			peakProcessorSupport.extractEluFileAndSetPeaks(chromatogramSelection, file, peakDetectorSettings, monitor);

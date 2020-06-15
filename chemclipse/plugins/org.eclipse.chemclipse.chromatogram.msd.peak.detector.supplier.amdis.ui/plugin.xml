@@ -14,14 +14,7 @@
             category="org.eclipse.chemclipse.chromatogram.msd.peak.detector.ui.preferences.peakDetectorPreferencePage"
             class="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.ui.preferences.PreferencePage"
             id="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.ui.preferences.amdisPeakDetectorPreferencePage"
-            name="AMDIS Peak Detector">
+            name="AMDIS (extern)">
       </page>
    </extension>
-   <extension
-         point="org.eclipse.help.toc">
-      <toc
-            file="toc_peakdetector.xml">
-      </toc>
-   </extension>
-
 </plugin>

@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis
 Bundle-ManifestVersion: 2
-Bundle-Name: Amdis Plug-in
+Bundle-Name: AMDIS
 Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis;singleton:=true
 Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.Activator
@@ -21,7 +21,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.chromatogram.msd.comparison
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Bundle-Vendor: OpenChrom
+Bundle-Vendor: ChemClipse
 Export-Package: org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.core,
  org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.preferences,
  org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings,

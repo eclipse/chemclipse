@@ -27,6 +27,7 @@ public class DetectorRunnable implements IRunnableWithProgress {
 	private static final String PEAK_DETECTOR_ID = "org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis";
 
 	public DetectorRunnable(IChromatogramSelectionMSD chromatogramSelection) {
+
 		this.chromatogramSelection = chromatogramSelection;
 	}
 
@@ -42,7 +43,7 @@ public class DetectorRunnable implements IRunnableWithProgress {
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		try {
-			monitor.beginTask("Deconvolution (AMDIS)", IProgressMonitor.UNKNOWN);
+			monitor.beginTask("AMDIS (extern)", IProgressMonitor.UNKNOWN);
 			PeakDetectorMSD.detect(chromatogramSelection, PEAK_DETECTOR_ID, monitor);
 			detectedPeaks = chromatogramSelection.getChromatogram().getNumberOfPeaks();
 			updateSelection();

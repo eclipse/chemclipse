@@ -44,7 +44,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 				try {
 					IProcessingResult<Void> result = identifier.calulateAndSetDeconvolutedPeaks(chromatogramSelection, amdisSettings, monitor);
 					if(!result.hasErrorMessages()) {
-						processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "AMDIS Peak Detector", "Peaks have been detected successfully."));
+						processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "AMDIS (extern)", "Peaks have been detected successfully."));
 					}
 					for(IProcessingMessage message : result.getMessages()) {
 						processingInfo.addMessage(message);

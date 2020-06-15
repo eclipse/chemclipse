@@ -7,7 +7,7 @@
             description="This is the base AMDIS Peak Deconvolution"
             id="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis"
             peakDetector="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.core.PeakDetector"
-            peakDetectorName="AMDIS Peak Deconvolution">
+            peakDetectorName="AMDIS (extern)">
       </PeakDetector>
    </extension>
    <extension

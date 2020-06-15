@@ -49,7 +49,8 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("AMDIS Peak Detector");
+		setTitle("AMDIS (extern)");
+		setDescription("");
 	}
 
 	/**
