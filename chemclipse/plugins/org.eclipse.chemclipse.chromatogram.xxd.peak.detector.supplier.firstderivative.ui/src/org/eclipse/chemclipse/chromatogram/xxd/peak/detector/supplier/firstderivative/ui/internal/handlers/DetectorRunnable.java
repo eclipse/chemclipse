@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,6 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 import org.eclipse.chemclipse.chromatogram.csd.peak.detector.core.PeakDetectorCSD;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.PeakDetectorMSD;
 import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.core.PeakDetectorWSD;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.core.FirstDerivativePeakDetector;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
@@ -36,6 +37,7 @@ public class DetectorRunnable implements IRunnableWithProgress {
 
 	@SuppressWarnings("rawtypes")
 	public DetectorRunnable(IChromatogramSelection chromatogramSelection) {
+
 		this.chromatogramSelection = chromatogramSelection;
 	}
 
@@ -51,7 +53,7 @@ public class DetectorRunnable implements IRunnableWithProgress {
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		try {
-			monitor.beginTask("Peak Detector First Derivative", IProgressMonitor.UNKNOWN);
+			monitor.beginTask(FirstDerivativePeakDetector.DETECTOR_DESCRIPTION, IProgressMonitor.UNKNOWN);
 			/*
 			 * Detect Peaks in actual chromatogram selection.
 			 */

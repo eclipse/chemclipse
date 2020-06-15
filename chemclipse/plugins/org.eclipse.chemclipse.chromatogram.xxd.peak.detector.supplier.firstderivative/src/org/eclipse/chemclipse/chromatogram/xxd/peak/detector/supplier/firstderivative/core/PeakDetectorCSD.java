@@ -53,8 +53,6 @@ import org.eclipse.core.runtime.SubMonitor;
 public class PeakDetectorCSD extends BasePeakDetector implements IPeakDetectorCSD {
 
 	private static final Logger logger = Logger.getLogger(PeakDetectorCSD.class);
-	//
-	private static final String DETECTOR_DESCRIPTION = "First Derivative";
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
@@ -83,7 +81,7 @@ public class PeakDetectorCSD extends BasePeakDetector implements IPeakDetectorCS
 				for(IChromatogramPeakCSD peak : peaks) {
 					chromatogram.addPeak(peak);
 				}
-				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "Peak Detector First Derivative", "Peaks have been detected successfully."));
+				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, FirstDerivativePeakDetector.DETECTOR_DESCRIPTION, "Peaks have been detected successfully."));
 			} else {
 				logger.warn("Settings is not of type: " + PeakDetectorSettingsCSD.class);
 			}
@@ -212,7 +210,7 @@ public class PeakDetectorCSD extends BasePeakDetector implements IPeakDetectorCS
 					/*
 					 * Add the detector description.
 					 */
-					peak.setDetectorDescription(DETECTOR_DESCRIPTION);
+					peak.setDetectorDescription(FirstDerivativePeakDetector.DETECTOR_DESCRIPTION);
 					peaks.add(peak);
 				}
 			} catch(IllegalArgumentException e) {

@@ -46,10 +46,12 @@ import org.osgi.service.component.annotations.Component;
 @Component(service = {IMeasurementPeakDetector.class, Detector.class})
 public class FirstDerivativePeakDetector implements IMeasurementPeakDetector<FirstDerivativePeakDetectorSettings> {
 
+	public static final String DETECTOR_DESCRIPTION = "First Derivative";
+
 	@Override
 	public String getName() {
 
-		return "First Derivative Peak Detector";
+		return DETECTOR_DESCRIPTION;
 	}
 
 	@Override
@@ -156,6 +158,7 @@ public class FirstDerivativePeakDetector implements IMeasurementPeakDetector<Fir
 		private double slope;
 
 		public SignalSlope(ISignal signal, ISignal signalNext) {
+
 			IPoint p1 = new Point(signal.getX(), signal.getY());
 			IPoint p2 = new Point(signalNext.getX(), signalNext.getY());
 			slope = Equations.calculateSlopeAbs(p1, p2);
