@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
+ * Copyright (c) 2010, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -96,6 +96,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final float DEF_MIN_TAILING = 0.1f;
 	public static final String P_MAX_TAILING = "maxTailing";
 	public static final float DEF_MAX_TAILING = 2.0f;
+	public static final String P_FILTER_MODEL_PEAKS = "filterModelPeaks";
+	public static final boolean DEF_FILTER_MODEL_PEAKS = true;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -165,6 +167,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_MAX_LEADING, Float.toString(DEF_MAX_LEADING));
 		defaultValues.put(P_MIN_TAILING, Float.toString(DEF_MIN_TAILING));
 		defaultValues.put(P_MAX_TAILING, Float.toString(DEF_MAX_TAILING));
+		defaultValues.put(P_FILTER_MODEL_PEAKS, Boolean.toString(DEF_FILTER_MODEL_PEAKS));
 		//
 		return defaultValues;
 	}
@@ -184,6 +187,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		peakDetectorSettings.setMaxLeading(preferences.getFloat(P_MAX_LEADING, DEF_MAX_LEADING));
 		peakDetectorSettings.setMinTailing(preferences.getFloat(P_MIN_TAILING, DEF_MIN_TAILING));
 		peakDetectorSettings.setMaxTailing(preferences.getFloat(P_MAX_TAILING, DEF_MAX_TAILING));
+		peakDetectorSettings.setFilterModelPeaks(preferences.getBoolean(P_FILTER_MODEL_PEAKS, DEF_FILTER_MODEL_PEAKS));
 		//
 		IOnsiteSettings onsiteSettings = peakDetectorSettings.getOnsiteSettings();
 		onsiteSettings.setValue(IOnsiteSettings.KEY_LOW_MZ_AUTO, (preferences.getBoolean(P_LOW_MZ_AUTO, DEF_LOW_MZ_AUTO)) ? IOnsiteSettings.VALUE_YES : IOnsiteSettings.VALUE_NO);

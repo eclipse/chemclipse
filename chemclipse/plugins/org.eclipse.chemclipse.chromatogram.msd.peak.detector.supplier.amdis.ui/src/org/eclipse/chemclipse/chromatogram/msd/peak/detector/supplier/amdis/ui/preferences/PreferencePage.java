@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -46,6 +46,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	private IntegerFieldEditor columnBleedMZ;
 
 	public PreferencePage() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("AMDIS Peak Detector");
@@ -104,6 +105,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		addField(new FloatFieldEditor(PreferenceSupplier.P_MAX_LEADING, "Max Leading:", 0.0f, Float.MAX_VALUE, getFieldEditorParent()));
 		addField(new FloatFieldEditor(PreferenceSupplier.P_MIN_TAILING, "Min Tailing:", 0.0f, Float.MAX_VALUE, getFieldEditorParent()));
 		addField(new FloatFieldEditor(PreferenceSupplier.P_MAX_TAILING, "Max Tailing:", 0.0f, Float.MAX_VALUE, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_FILTER_MODEL_PEAKS, "Filter Model Peaks", getFieldEditorParent()));
 		//
 		for(Control control : getFieldEditorParent().getChildren()) {
 			control.addMouseListener(new MouseAdapter() {

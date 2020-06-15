@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -30,8 +30,11 @@ public class PeakDetectorSettings extends AbstractPeakDetectorSettingsMSD {
 	private float minTailing = 0.1f;
 	@JsonProperty(value = "Max Tailing", defaultValue = "2.0")
 	private float maxTailing = 2.0f;
+	@JsonProperty(value = "Filter Model Peaks", defaultValue = "true")
+	private boolean filterModelPeaks = true;
 
 	public PeakDetectorSettings() {
+
 		onsiteSettings = new OnsiteSettings();
 	}
 
@@ -88,5 +91,15 @@ public class PeakDetectorSettings extends AbstractPeakDetectorSettingsMSD {
 	public void setMaxTailing(float maxTailing) {
 
 		this.maxTailing = maxTailing;
+	}
+
+	public boolean isFilterModelPeaks() {
+
+		return filterModelPeaks;
+	}
+
+	public void setFilterModelPeaks(boolean filterModelPeaks) {
+
+		this.filterModelPeaks = filterModelPeaks;
 	}
 }

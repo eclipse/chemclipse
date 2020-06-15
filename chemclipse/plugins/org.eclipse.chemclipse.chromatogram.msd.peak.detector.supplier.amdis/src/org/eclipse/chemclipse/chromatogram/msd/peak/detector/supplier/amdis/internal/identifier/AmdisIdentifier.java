@@ -63,17 +63,23 @@ public class AmdisIdentifier {
 			result.addErrorMessage(IDENTIFIER, "Conversion to CDF returned no result");
 			return result;
 		}
+		//
 		for(IProcessingMessage message : processingInfo.getMessages()) {
 			result.addMessage(message);
 		}
+		//
 		File fileChromatogram = processingInfo.getProcessingResult();
 		if(fileChromatogram == null) {
 			result.addErrorMessage(IDENTIFIER, "Conversion to CDF returned no file");
 			return result;
 		}
+		//
 		if(result.hasErrorMessages()) {
 			return result;
 		}
+		/*
+		 * Execute AMDIS and parse the deconvoluted peak(s).
+		 */
 		try {
 			AMDISParser parser = new AMDISParser(fileChromatogram);
 			IProcessingResult<IPeaks<?>> amdisPeaks = executeAMDIS(fileChromatogram, onsiteSettings, parser, subMonitor.split(80));
