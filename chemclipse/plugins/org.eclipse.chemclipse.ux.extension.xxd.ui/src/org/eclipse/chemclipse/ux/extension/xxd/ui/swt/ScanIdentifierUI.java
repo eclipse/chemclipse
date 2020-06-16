@@ -38,6 +38,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 public class ScanIdentifierUI extends Composite {
 
@@ -50,8 +51,42 @@ public class ScanIdentifierUI extends Composite {
 	private IUpdateListener updateListener = null;
 
 	public ScanIdentifierUI(Composite parent, int style) {
+
 		super(parent, style);
 		createControl();
+	}
+
+	/**
+	 * Identify the scan by calling the selected identifier.
+	 * 
+	 * @param display
+	 * @param scanMSD
+	 */
+	public void runIdentification(Display display, IScanMSD scanMSD, boolean update) {
+
+		if(scanMSD != null) {
+			IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
+			IScanMSD massSpectrum = (optimizedMassSpectrum != null) ? optimizedMassSpectrum : scanMSD;
+			/*
+			 * Identification
+			 */
+			Object object = comboViewer.getStructuredSelection().getFirstElement();
+			if(object instanceof IMassSpectrumIdentifierSupplier) {
+				IMassSpectrumIdentifierSupplier supplier = (IMassSpectrumIdentifierSupplier)object;
+				IRunnableWithProgress runnable = new MassSpectrumIdentifierRunnable(massSpectrum, supplier.getId());
+				ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
+				try {
+					monitor.run(true, true, runnable);
+					if(update) {
+						fireUpdate();
+					}
+				} catch(InvocationTargetException e1) {
+					logger.warn(e1);
+				} catch(InterruptedException e1) {
+					logger.warn(e1);
+				}
+			}
+		}
 	}
 
 	public void setInput(IScan scan) {
@@ -129,29 +164,7 @@ public class ScanIdentifierUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(scan instanceof IScanMSD) {
-					/*
-					 * Select the mass spectrum.
-					 */
-					IScanMSD scanMSD = (IScanMSD)scan;
-					IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
-					IScanMSD massSpectrum = (optimizedMassSpectrum != null) ? optimizedMassSpectrum : scanMSD;
-					/*
-					 * Identification
-					 */
-					Object object = comboViewer.getStructuredSelection().getFirstElement();
-					if(object instanceof IMassSpectrumIdentifierSupplier) {
-						IMassSpectrumIdentifierSupplier supplier = (IMassSpectrumIdentifierSupplier)object;
-						IRunnableWithProgress runnable = new MassSpectrumIdentifierRunnable(massSpectrum, supplier.getId());
-						ProgressMonitorDialog monitor = new ProgressMonitorDialog(e.display.getActiveShell());
-						try {
-							monitor.run(true, true, runnable);
-							fireUpdate();
-						} catch(InvocationTargetException e1) {
-							logger.warn(e1);
-						} catch(InterruptedException e1) {
-							logger.warn(e1);
-						}
-					}
+					runIdentification(e.display, (IScanMSD)scan, true);
 				}
 			}
 		});

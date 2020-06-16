@@ -44,6 +44,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstant
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.AxisConfig.ChartAxis;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.SubtractScanWizard;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -92,6 +93,7 @@ public class ExtendedScanChartUI extends Composite implements ConfigurableUI<Sca
 	//
 	private Label labelScan;
 	private Button buttonEdit;
+	private Button buttonIdentify;
 	private Button buttonCopyTraces;
 	private Button buttonSave;
 	private Button buttonDeleteOptimized;
@@ -274,7 +276,7 @@ public class ExtendedScanChartUI extends Composite implements ConfigurableUI<Sca
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		composite.setLayout(new GridLayout(11, false));
+		composite.setLayout(new GridLayout(12, false));
 		//
 		labelEdit = createInfoLabelEdit(composite);
 		labelSubtract = createInfoLabelSubtract(composite);
@@ -282,6 +284,7 @@ public class ExtendedScanChartUI extends Composite implements ConfigurableUI<Sca
 		createButtonToggleToolbarInfo(composite);
 		createButtonToggleToolbarTypes(composite);
 		buttonEdit = createButtonToggleToolbarEdit(composite);
+		buttonIdentify = createButtonIdentify(composite);
 		buttonCopyTraces = createButtonCopyTracesClipboard(composite);
 		createResetButton(composite);
 		buttonSave = createSaveButton(composite);
@@ -646,12 +649,35 @@ public class ExtendedScanChartUI extends Composite implements ConfigurableUI<Sca
 	private void updateButtons() {
 
 		boolean enabled = isMassSpectrum();
+		buttonIdentify.setEnabled(enabled);
 		buttonCopyTraces.setEnabled(enabled);
 		buttonSave.setEnabled(enabled);
 		buttonDeleteOptimized.setEnabled(enabled && isOptimizedScan() ? true : false);
 		buttonSubtractOption.setEnabled(enabled);
 		scanFilterUI.setEnabled(enabled);
 		scanIdentifierUI.setEnabled(enabled);
+	}
+
+	private Button createButtonIdentify(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Identify the currently selected scan.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IDENTIFY_MASS_SPECTRUM, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				IScanMSD scanMSD = getScanMSD();
+				if(scanMSD != null) {
+					scanIdentifierUI.runIdentification(e.display, scanMSD, false);
+					fireUpdateScan(e.display, scanMSD);
+				}
+			}
+		});
+		//
+		return button;
 	}
 
 	private Button createButtonCopyTracesClipboard(Composite parent) {
@@ -666,13 +692,15 @@ public class ExtendedScanChartUI extends Composite implements ConfigurableUI<Sca
 			public void widgetSelected(SelectionEvent e) {
 
 				IScanMSD scanMSD = getScanMSD();
-				int maxCopyTraces = preferenceStore.getInt(PreferenceConstants.P_MAX_COPY_SCAN_TRACES);
-				String traces = scanDataSupport.extractTracesText(scanMSD, maxCopyTraces);
-				TextTransfer textTransfer = TextTransfer.getInstance();
-				Object[] data = new Object[]{traces};
-				Transfer[] dataTypes = new Transfer[]{textTransfer};
-				Clipboard clipboard = new Clipboard(e.widget.getDisplay());
-				clipboard.setContents(data, dataTypes);
+				if(scanMSD != null) {
+					int maxCopyTraces = preferenceStore.getInt(PreferenceConstants.P_MAX_COPY_SCAN_TRACES);
+					String traces = scanDataSupport.extractTracesText(scanMSD, maxCopyTraces);
+					TextTransfer textTransfer = TextTransfer.getInstance();
+					Object[] data = new Object[]{traces};
+					Transfer[] dataTypes = new Transfer[]{textTransfer};
+					Clipboard clipboard = new Clipboard(e.widget.getDisplay());
+					clipboard.setContents(data, dataTypes);
+				}
 			}
 		});
 		//
