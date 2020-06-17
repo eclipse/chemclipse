@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.traces;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -21,8 +22,10 @@ import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.NamedTraceInputValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.TraceValidator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -30,6 +33,7 @@ import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
@@ -42,23 +46,39 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Text;
 
 public class NamedTracesUI extends Composite {
 
 	private static final String TOOLTIP_TEXT = "Enter/modify the traces.";
 	//
+	public static final String IMPORT_TITLE = "Import Named Trace(s)";
+	public static final String EXPORT_TITLE = "Export Named Trace(s)";
+	public static final String MESSAGE_IMPORT_SUCCESSFUL = "Named trace(s) have been imported successfully.";
+	public static final String MESSAGE_EXPORT_SUCCESSFUL = "Named trace(s) have been exported successfully.";
+	public static final String MESSAGE_EXPORT_FAILED = "Failed to export the named trace(s).";
+	//
+	private static final String FILTER_EXTENSION = "*.txt";
+	private static final String FILTER_NAME = "Named Traces (*.txt)";
+	private static final String FILE_NAME = "NamedTraces.txt";
+	//
 	private ComboViewer comboViewer;
 	private Text textTraces;
 	private Button buttonAdd;
 	private Button buttonDelete;
+	private Button buttonImport;
+	private Button buttonExport;
 	//
 	private NamedTraces namedTraces = null;
 	private NamedTrace namedTrace = null;
 	//
 	private IUpdateListener updateListener = null;
+	//
+	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public NamedTracesUI(Composite parent, int style) {
+
 		super(parent, style);
 		createControl();
 	}
@@ -119,7 +139,7 @@ public class NamedTracesUI extends Composite {
 
 	private void createControl() {
 
-		GridLayout gridLayout = new GridLayout(4, false);
+		GridLayout gridLayout = new GridLayout(6, false);
 		// gridLayout.marginWidth = 0;
 		// gridLayout.marginLeft = 0;
 		// gridLayout.marginRight = 0;
@@ -129,6 +149,8 @@ public class NamedTracesUI extends Composite {
 		textTraces = createText(this);
 		buttonAdd = createButtonAdd(this);
 		buttonDelete = createButtonDelete(this);
+		buttonImport = createButtonImport(this);
+		buttonExport = createButtonExport(this);
 	}
 
 	private ComboViewer createComboViewer(Composite composite) {
@@ -254,6 +276,73 @@ public class NamedTracesUI extends Composite {
 		return button;
 	}
 
+	private Button createButtonImport(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Import named trace(s).");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(namedTraces != null) {
+					FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
+					fileDialog.setText(IMPORT_TITLE);
+					fileDialog.setFilterExtensions(new String[]{FILTER_EXTENSION});
+					fileDialog.setFilterNames(new String[]{FILTER_NAME});
+					fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_NAMED_TRACES_TEMPLATE_FOLDER));
+					String path = fileDialog.open();
+					if(path != null) {
+						preferenceStore.putValue(PreferenceConstants.P_NAMED_TRACES_TEMPLATE_FOLDER, fileDialog.getFilterPath());
+						File file = new File(path);
+						namedTraces.importItems(file);
+						MessageDialog.openInformation(e.display.getActiveShell(), IMPORT_TITLE, MESSAGE_IMPORT_SUCCESSFUL);
+						updateInput(null);
+						fireUpdate();
+					}
+				}
+			}
+		});
+		return button;
+	}
+
+	private Button createButtonExport(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Export named trace(s).");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXPORT, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(namedTraces != null) {
+					FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
+					fileDialog.setOverwrite(true);
+					fileDialog.setText(EXPORT_TITLE);
+					fileDialog.setFilterExtensions(new String[]{FILTER_EXTENSION});
+					fileDialog.setFilterNames(new String[]{FILTER_NAME});
+					fileDialog.setFileName(FILE_NAME);
+					fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_NAMED_TRACES_TEMPLATE_FOLDER));
+					String path = fileDialog.open();
+					if(path != null) {
+						preferenceStore.putValue(PreferenceConstants.P_NAMED_TRACES_TEMPLATE_FOLDER, fileDialog.getFilterPath());
+						File file = new File(path);
+						if(namedTraces.exportItems(file)) {
+							MessageDialog.openInformation(e.display.getActiveShell(), EXPORT_TITLE, MESSAGE_EXPORT_SUCCESSFUL);
+						} else {
+							MessageDialog.openWarning(e.display.getActiveShell(), EXPORT_TITLE, MESSAGE_EXPORT_FAILED);
+						}
+					}
+				}
+			}
+		});
+		return button;
+	}
+
 	private void updateInput(String identifier) {
 
 		namedTrace = null;
@@ -297,12 +386,16 @@ public class NamedTracesUI extends Composite {
 			//
 			buttonAdd.setEnabled(true);
 			buttonDelete.setEnabled(itemCount > 0);
+			buttonImport.setEnabled(true);
+			buttonExport.setEnabled(true);
 		} else {
 			/*
 			 * Settings
 			 */
 			buttonAdd.setEnabled(false);
 			buttonDelete.setEnabled(false);
+			buttonImport.setEnabled(false);
+			buttonExport.setEnabled(false);
 			comboViewer.setInput(null);
 		}
 		//
