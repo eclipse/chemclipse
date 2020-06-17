@@ -50,13 +50,13 @@ import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 
 public class ChromatogramPeakChart extends ChromatogramChart {
 
-	private static final String SERIES_ID_CHROMATOGRAM_TIC = "Chromatogram";
-	private static final String SERIES_ID_CHROMATOGRAM_XIC = "Chromatogram (XIC)";
-	private static final String SERIES_ID_BASELINE = "Baseline";
-	private static final String SERIES_ID_PEAKS_NORMAL = "Peaks Normal";
-	private static final String SERIES_ID_PEAKS_SELECTED_MARKER = "Peaks Selected Marker";
-	private static final String SERIES_ID_PEAKS_SELECTED_SHAPE = "Peaks Selected Shape";
-	private static final String SERIES_ID_PEAKS_SELECTED_BACKGROUND = "Peaks Selected Background";
+	public static final String SERIES_ID_CHROMATOGRAM_TIC = "Chromatogram";
+	public static final String SERIES_ID_CHROMATOGRAM_XIC = "Chromatogram (XIC)";
+	public static final String SERIES_ID_BASELINE = "Baseline";
+	public static final String SERIES_ID_PEAKS_NORMAL = "Peaks Normal";
+	public static final String SERIES_ID_PEAKS_SELECTED_MARKER = "Peaks Selected Marker";
+	public static final String SERIES_ID_PEAKS_SELECTED_SHAPE = "Peaks Selected Shape";
+	public static final String SERIES_ID_PEAKS_SELECTED_BACKGROUND = "Peaks Selected Background";
 	//
 	private final PeakRetentionTimeComparator peakRetentionTimeComparator = new PeakRetentionTimeComparator(SortOrder.ASC);
 	private final PeakChartSupport peakChartSupport = new PeakChartSupport();
