@@ -32,17 +32,16 @@ public class ChromatogramFilterSettings extends AbstractChromatogramFilterSettin
 	@JsonPropertyDescription(value = "Filter width, uneven integer in the range from 5 to 51")
 	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_WIDTH, maxValue = PreferenceSupplier.MAX_WIDTH)
 	private int width = 5;
+	private int derivative = 0;
 
 	public int getDerivative() {
 
-		return 0;
+		return derivative;
 	}
 
 	public void setDerivative(int derivative) {
 
-		if(derivative != 0) {
-			logger.debug("Derivative is not supported");
-		}
+		this.derivative = derivative;
 	}
 
 	public int getOrder() {
