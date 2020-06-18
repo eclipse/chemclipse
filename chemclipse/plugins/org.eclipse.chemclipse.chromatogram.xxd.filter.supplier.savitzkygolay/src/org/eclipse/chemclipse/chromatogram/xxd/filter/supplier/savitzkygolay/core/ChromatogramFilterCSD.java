@@ -35,7 +35,7 @@ public class ChromatogramFilterCSD extends AbstractChromatogramFilterCSD {
 
 	private IChromatogramFilterResult process(IChromatogramSelectionCSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IChromatogramCSD chromatogramCSD = chromatogramSelection.getChromatogramCSD();
+		IChromatogramCSD chromatogramCSD = chromatogramSelection.getChromatogram();
 		TotalScanSignalExtractor totalScanSignalExtractor = new TotalScanSignalExtractor(chromatogramCSD);
 		ITotalScanSignals totalSignals = totalScanSignalExtractor.getTotalScanSignals(chromatogramSelection, false);
 		IChromatogramFilterResult chromatogramFilterResult = SavitzkyGolayProcessor.apply(totalSignals, (ChromatogramFilterSettings)chromatogramFilterSettings, monitor);

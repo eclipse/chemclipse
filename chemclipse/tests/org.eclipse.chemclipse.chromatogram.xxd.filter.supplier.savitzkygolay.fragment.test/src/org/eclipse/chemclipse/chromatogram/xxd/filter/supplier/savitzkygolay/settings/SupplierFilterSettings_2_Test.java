@@ -33,7 +33,7 @@ public class SupplierFilterSettings_2_Test extends TestCase {
 	public void test1() {
 
 		settings.setDerivative(5); // Other than 0 not supported
-		assertEquals(0, settings.getDerivative());
+		assertEquals(5, settings.getDerivative());
 	}
 
 	public void test2() {

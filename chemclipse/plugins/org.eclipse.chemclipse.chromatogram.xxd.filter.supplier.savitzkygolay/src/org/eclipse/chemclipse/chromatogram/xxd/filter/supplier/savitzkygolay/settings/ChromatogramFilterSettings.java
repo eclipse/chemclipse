@@ -14,16 +14,14 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.se
 
 import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class ChromatogramFilterSettings extends AbstractChromatogramFilterSettings {
 
-	private static final Logger logger = Logger.getLogger(ChromatogramFilterSettings.class);
-	//
 	@JsonProperty(value = "Order", defaultValue = "2")
 	@JsonPropertyDescription(value = "Order p of the polynomial to be fitted: Integer in the range from 2 to 5")
 	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_ORDER, maxValue = PreferenceSupplier.MAX_ORDER)
@@ -32,6 +30,7 @@ public class ChromatogramFilterSettings extends AbstractChromatogramFilterSettin
 	@JsonPropertyDescription(value = "Filter width, uneven integer in the range from 5 to 51")
 	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_WIDTH, maxValue = PreferenceSupplier.MAX_WIDTH)
 	private int width = 5;
+	@JsonIgnore
 	private int derivative = 0;
 
 	public int getDerivative() {

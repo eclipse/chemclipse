@@ -34,7 +34,7 @@ public class ChromatogramFilterWSD extends AbstractChromatogramFilterWSD {
 
 	private IChromatogramFilterResult process(IChromatogramSelectionWSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IChromatogramWSD chromatogramWSD = chromatogramSelection.getChromatogramWSD();
+		IChromatogramWSD chromatogramWSD = chromatogramSelection.getChromatogram();
 		/*
 		 * 1. step - export signal from chromatogram
 		 */
