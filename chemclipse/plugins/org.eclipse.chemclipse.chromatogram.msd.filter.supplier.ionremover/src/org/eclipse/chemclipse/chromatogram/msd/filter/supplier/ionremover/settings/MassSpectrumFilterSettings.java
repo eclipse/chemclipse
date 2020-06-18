@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2019 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,10 +21,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class MassSpectrumFilterSettings extends AbstractMassSpectrumFilterSettings {
 
-	@JsonProperty(value = "Ions", defaultValue = "18;28;84;207")
-	@JsonPropertyDescription(value = "List the ions, separated by a semicolon.")
-	@StringSettingsProperty(regExp = "(\\d+;?)+", isMultiLine = false)
-	private String ionsToRemove = "18;28;84;207";
+	@JsonProperty(value = "Ions", defaultValue = "18 28 84 207")
+	@JsonPropertyDescription(value = "List the ions, separated by a white space.")
+	@StringSettingsProperty(regExp = "(\\d+[;|\\s]?)+", isMultiLine = false)
+	private String ionsToRemove = "18 28 84 207";
 	@JsonProperty(value = "Mode", defaultValue = "INCLUDE")
 	@JsonPropertyDescription(value = "Gives the mode to use (include = remove all ions given in the list, exclude = remove all ions not in the list)")
 	private IMarkedIons.IonMarkMode markMode = IonMarkMode.INCLUDE;

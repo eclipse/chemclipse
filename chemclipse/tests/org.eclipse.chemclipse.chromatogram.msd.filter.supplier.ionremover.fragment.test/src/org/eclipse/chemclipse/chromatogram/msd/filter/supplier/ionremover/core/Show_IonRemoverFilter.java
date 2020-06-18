@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -33,7 +33,7 @@ public class Show_IonRemoverFilter extends ChromatogramImporterTestCase {
 	private final static String EXTENSION_POINT_ID = "org.eclipse.chemclipse.msd.converter.supplier.agilent";
 	protected IChromatogramMSD chromatogram;
 	protected IChromatogramSelectionMSD chromatogramSelection;
-	private IChromatogramFilterMSD chromatogramFilter;
+	private IChromatogramFilterMSD<?> chromatogramFilter;
 	private ChromatogramFilterSettings chromatogramFilterSettings;
 	private IMarkedIons excludedIons;
 	private File fileImport;
@@ -50,7 +50,7 @@ public class Show_IonRemoverFilter extends ChromatogramImporterTestCase {
 		// File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_OP21705));
 		fileImport = new File("E:\\Dissertation\\Pyrolyseläufe\\OP\\OP21680-707\\OP21705.D\\DATA.MS");
 		IProcessingInfo<IChromatogramMSD> processingInfo = ChromatogramConverterMSD.getInstance().convert(fileImport, EXTENSION_POINT_ID, new NullProgressMonitor());
-		chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
+		chromatogram = processingInfo.getProcessingResult();
 		chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
 		chromatogramFilter = new ChromatogramFilter();
 		chromatogramFilterSettings = new ChromatogramFilterSettings();

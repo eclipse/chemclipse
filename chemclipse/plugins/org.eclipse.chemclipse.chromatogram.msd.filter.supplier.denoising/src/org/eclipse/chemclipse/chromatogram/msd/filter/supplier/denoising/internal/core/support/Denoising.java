@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2019 Lablicate GmbH.
+ * Copyright (c) 2010, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -50,6 +50,7 @@ public class Denoising {
 	 * Use only static methods.
 	 */
 	private Denoising() {
+
 	}
 
 	/**
@@ -458,7 +459,7 @@ public class Denoising {
 	 */
 	private static int calculateLeadingScans(INoiseSegment noiseSegment) {
 
-		int width = noiseSegment.getAnalysisSegment().getSegmentWidth();
+		int width = noiseSegment.getAnalysisSegment().getWidth();
 		int result = 0;
 		if(width > 0) {
 			result = width / 2;
@@ -475,7 +476,7 @@ public class Denoising {
 	 */
 	private static int calculateTailingScans(INoiseSegment noiseSegment) {
 
-		int width = noiseSegment.getAnalysisSegment().getSegmentWidth();
+		int width = noiseSegment.getAnalysisSegment().getWidth();
 		int result = 0;
 		if(width > 0) {
 			/*

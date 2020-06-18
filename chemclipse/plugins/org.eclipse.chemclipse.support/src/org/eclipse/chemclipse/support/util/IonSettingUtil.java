@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,11 +25,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class IonSettingUtil implements IStringSerialization<String> {
 
-	public static final String SEPARATOR = ";";
+	public static final String SEPARATOR_SEMICOLON = ";"; // Legacy
+	public static final String SEPARATOR_WHITESPACE = " ";
 	public static final String RANGE_SEPARATOR = "-";
+	//
 	private ObjectMapper objectMapper;
 
 	public IonSettingUtil() {
+
 		objectMapper = new ObjectMapper();
 	}
 
@@ -81,8 +84,9 @@ public class IonSettingUtil implements IStringSerialization<String> {
 		 * support original save...
 		 */
 		String[] decodedArray;
+		String token = deserialize.contains(SEPARATOR_SEMICOLON) ? SEPARATOR_SEMICOLON : SEPARATOR_WHITESPACE;
 		String stringList = deserialize;
-		StringTokenizer stringTokenizer = new StringTokenizer(stringList, ";");
+		StringTokenizer stringTokenizer = new StringTokenizer(stringList, token);
 		int arraySize = stringTokenizer.countTokens();
 		if(arraySize > 0) {
 			/*
@@ -90,7 +94,7 @@ public class IonSettingUtil implements IStringSerialization<String> {
 			 */
 			decodedArray = new String[arraySize];
 			for(int i = 0; i < arraySize; i++) {
-				decodedArray[i] = stringTokenizer.nextToken(";");
+				decodedArray[i] = stringTokenizer.nextToken(token);
 			}
 		} else {
 			/*
@@ -138,7 +142,7 @@ public class IonSettingUtil implements IStringSerialization<String> {
 
 	private int[][] parseString(String stringList) {
 
-		StringTokenizer stringTokenizer = new StringTokenizer(stringList, SEPARATOR);
+		StringTokenizer stringTokenizer = new StringTokenizer(stringList, SEPARATOR_SEMICOLON);
 		int arraySize = stringTokenizer.countTokens();
 		int[][] decodedArray = new int[arraySize][2];
 		try {

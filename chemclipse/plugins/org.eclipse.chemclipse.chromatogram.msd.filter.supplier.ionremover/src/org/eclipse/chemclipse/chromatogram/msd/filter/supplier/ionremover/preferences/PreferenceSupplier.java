@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
+ * Copyright (c) 2010, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,7 +27,7 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_IONS_TO_REMOVE = "ionsToRemove";
-	public static final String DEF_IONS_TO_REMOVE = "18;28;84;207";
+	public static final String DEF_IONS_TO_REMOVE = "18 28 84 207";
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 

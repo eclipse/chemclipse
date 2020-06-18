@@ -18,12 +18,6 @@
       </page>
    </extension>
    <extension
-         point="org.eclipse.help.toc">
-      <toc
-            file="toc_filter.xml">
-      </toc>
-   </extension>
-   <extension
          point="org.eclipse.core.runtime.adapters">
       <factory
             adaptableType="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.result.IDenoisingFilterResult"

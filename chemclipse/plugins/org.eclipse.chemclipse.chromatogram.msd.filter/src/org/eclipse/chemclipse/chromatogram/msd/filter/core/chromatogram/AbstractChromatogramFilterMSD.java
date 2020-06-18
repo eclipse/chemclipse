@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,20 +16,20 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 
+@SuppressWarnings("rawtypes")
 public abstract class AbstractChromatogramFilterMSD implements IChromatogramFilterMSD {
 
 	private static final String DESCRIPTION = "Chromatogram Filter";
 
 	@Override
-	public IProcessingInfo validate(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings) {
+	public IProcessingInfo<?> validate(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		processingInfo.addMessages(validateChromatogramSelection(chromatogramSelection));
 		processingInfo.addMessages(validateFilterSettings(chromatogramFilterSettings));
 		return processingInfo;
 	}
 
-	// --------------------------------------------private methods
 	/**
 	 * Validates that chromatogram selection and the stored chromatogram are not
 	 * null.
@@ -37,9 +37,9 @@ public abstract class AbstractChromatogramFilterMSD implements IChromatogramFilt
 	 * @param chromatogramSelection
 	 * @return {@link IProcessingInfo}
 	 */
-	private IProcessingInfo validateChromatogramSelection(IChromatogramSelectionMSD chromatogramSelection) {
+	private IProcessingInfo<?> validateChromatogramSelection(IChromatogramSelectionMSD chromatogramSelection) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		if(chromatogramSelection == null) {
 			processingInfo.addErrorMessage(DESCRIPTION, "The chromatogram selection is not valid.");
 		} else {
@@ -56,13 +56,12 @@ public abstract class AbstractChromatogramFilterMSD implements IChromatogramFilt
 	 * @param chromatogramFilterSettings
 	 * @return {@link IProcessingInfo}
 	 */
-	private IProcessingInfo validateFilterSettings(IChromatogramFilterSettings chromatogramFilterSettings) {
+	private IProcessingInfo<?> validateFilterSettings(IChromatogramFilterSettings chromatogramFilterSettings) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		if(chromatogramFilterSettings == null) {
 			processingInfo.addErrorMessage(DESCRIPTION, "The filter settings are not valid.");
 		}
 		return processingInfo;
 	}
-	// --------------------------------------------private methods
 }

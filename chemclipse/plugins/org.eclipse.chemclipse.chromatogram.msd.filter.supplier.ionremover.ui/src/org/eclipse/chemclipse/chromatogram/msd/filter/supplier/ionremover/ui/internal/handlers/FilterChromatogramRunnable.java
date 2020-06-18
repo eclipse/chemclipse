@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -21,18 +21,17 @@ import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
-/**
- * @author eselmeister
- */
 public class FilterChromatogramRunnable extends AbstractChromatogramProcessor implements IRunnableWithProgress {
 
 	private static final String DESCRIPTION = "Ion Remover Chromatogram Filter";
 	private static final String FILTER_ID = "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.chromatogram";
 
 	public FilterChromatogramRunnable(IChromatogramSelectionMSD chromatogramSelection) {
+
 		super(chromatogramSelection);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void execute(IProgressMonitor monitor) {
 
@@ -41,7 +40,7 @@ public class FilterChromatogramRunnable extends AbstractChromatogramProcessor im
 			 * Apply the filter.
 			 */
 			IChromatogramSelectionMSD chromatogramSelection = (IChromatogramSelectionMSD)getChromatogramSelection();
-			final IProcessingInfo processingInfo = ChromatogramFilterMSD.applyFilter(chromatogramSelection, FILTER_ID, monitor);
+			final IProcessingInfo<?> processingInfo = ChromatogramFilterMSD.applyFilter(chromatogramSelection, FILTER_ID, monitor);
 			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
 		}
 	}

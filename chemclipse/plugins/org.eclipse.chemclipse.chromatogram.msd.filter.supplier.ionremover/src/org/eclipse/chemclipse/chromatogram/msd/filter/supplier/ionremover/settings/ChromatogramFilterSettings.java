@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,10 +19,10 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class ChromatogramFilterSettings extends AbstractChromatogramFilterSettings {
 
-	@JsonProperty(value = "Ions To Remove", defaultValue = "18;28;84;207")
-	@JsonPropertyDescription(value = "List the ions to remove, separated by a semicolon.")
-	@StringSettingsProperty(regExp = "(\\d+;?)+", isMultiLine = false)
-	private String ionsToRemove = "18;28;84;207";
+	@JsonProperty(value = "Ions To Remove", defaultValue = "18 28 84 207")
+	@JsonPropertyDescription(value = "List the ions to remove, separated by a white space.")
+	@StringSettingsProperty(regExp = "(\\d+[;|\\s]?)+", isMultiLine = false)
+	private String ionsToRemove = "18 28 84 207";
 
 	public String getIonsToRemove() {
 

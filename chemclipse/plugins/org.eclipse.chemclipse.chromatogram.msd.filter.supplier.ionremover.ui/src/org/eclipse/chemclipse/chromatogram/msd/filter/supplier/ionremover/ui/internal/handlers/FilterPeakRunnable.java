@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -31,10 +31,12 @@ public class FilterPeakRunnable implements IRunnableWithProgress {
 	private boolean useSelectedPeak = true; // default
 
 	public FilterPeakRunnable(IChromatogramSelectionMSD chromatogramSelectionMSD, boolean useSelectedPeak) {
+
 		this.chromatogramSelectionMSD = chromatogramSelectionMSD;
 		this.useSelectedPeak = useSelectedPeak;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
@@ -49,7 +51,7 @@ public class FilterPeakRunnable implements IRunnableWithProgress {
 			 * Apply the filter.
 			 */
 			IPeakFilterSettings peakFilterSettings = PreferenceSupplier.getPeakFilterSettings();
-			final IProcessingInfo processingInfo;
+			final IProcessingInfo<?> processingInfo;
 			if(useSelectedPeak) {
 				processingInfo = PeakFilter.applyFilter(chromatogramSelectionMSD.getSelectedPeak(), peakFilterSettings, FILTER_ID_PEAK, monitor);
 			} else {
