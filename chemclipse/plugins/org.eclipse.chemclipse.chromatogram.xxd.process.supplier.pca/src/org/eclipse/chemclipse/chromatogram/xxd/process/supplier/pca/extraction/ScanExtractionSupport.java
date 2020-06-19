@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,8 +8,9 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - improvements
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core;
+package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.extraction;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,7 +36,7 @@ import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.statistics.RetentionTime;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ScansExtractionSupport {
+public class ScanExtractionSupport {
 
 	public enum ExtractionType {
 		CLOSEST_SCAN, LINEAR_INTERPOLATION_SCAN;
@@ -48,12 +49,65 @@ public class ScansExtractionSupport {
 	private int retentionTimeWindow;
 	private boolean useDefaultProperties;
 
-	public ScansExtractionSupport(int retentionTimeWindow, int maximalNumberScans, ExtractionType extractionType, boolean useDefaultProperties) {
+	public ScanExtractionSupport(int retentionTimeWindow, int maximalNumberScans, ExtractionType extractionType, boolean useDefaultProperties) {
 
 		this.retentionTimeWindow = retentionTimeWindow;
 		this.extractionType = extractionType;
 		this.useDefaultProperties = useDefaultProperties;
 		this.maximalNumberScans = maximalNumberScans;
+	}
+
+	public Samples process(Map<IDataInputEntry, Collection<IScan>> dataInput, IProgressMonitor monitor) {
+
+		/*
+		 * Initialize PCA Results
+		 */
+		Samples samples = new Samples(dataInput.keySet());
+		/*
+		 * Extract data
+		 */
+		Map<String, NavigableMap<Integer, Float>> extractScans = extractScans(dataInput, monitor);
+		//
+		boolean similarChromatogram = true;
+		if(useDefaultProperties) {
+			Collection<NavigableMap<Integer, Float>> dataSet = extractScans.values();
+			boolean isFirst = true;
+			Set<Integer> retentionTimes = new HashSet<>();
+			int retentionTimeSize = retentionTimes.size();
+			for(NavigableMap<Integer, Float> data : dataSet) {
+				if(isFirst) {
+					retentionTimes.addAll(data.keySet());
+				} else {
+					if(data.size() != retentionTimes.size()) {
+						similarChromatogram = false;
+						break;
+					}
+					long dataSiza = data.keySet().stream().filter(time -> retentionTimes.contains(time)).count();
+					if(dataSiza != retentionTimeSize) {
+						similarChromatogram = false;
+						break;
+					}
+				}
+			}
+		}
+		int size = ((endRetentionTimeMin - beginRetentionTimeMax) / retentionTimeWindow);
+		if(size > maximalNumberScans) {
+			retentionTimeWindow = (endRetentionTimeMin - beginRetentionTimeMax) / maximalNumberScans;
+			similarChromatogram = false;
+		}
+		if(similarChromatogram && useDefaultProperties) {
+			useDefaultProperties(samples, extractScans);
+		} else {
+			switch(extractionType) {
+				case CLOSEST_SCAN:
+					setClosestScan(samples, extractScans);
+					break;
+				case LINEAR_INTERPOLATION_SCAN:
+					interpolation(samples, extractScans, new LinearInterpolator());
+					break;
+			}
+		}
+		return samples;
 	}
 
 	private Map<String, NavigableMap<Integer, Float>> extractScans(Map<IDataInputEntry, Collection<IScan>> inputs, IProgressMonitor monitor) {
@@ -121,64 +175,11 @@ public class ScansExtractionSupport {
 			UnivariateFunction fun = interpolator.interpolate(retetnionTime, scanValues);
 			for(int i = beginRetentionTimeMax; i <= endRetentionTimeMin; i += retentionTimeWindow) {
 				double value = fun.value(i);
-		PeakSampleData d = new PeakSampleData(value, null);
+				PeakSampleData d = new PeakSampleData(value, null);
 				data.add(d);
 			}
 		}
 		setRetentionTime(samples);
-	}
-
-	public Samples process(Map<IDataInputEntry, Collection<IScan>> dataInput, IProgressMonitor monitor) {
-
-		/*
-		 * Initialize PCA Results
-		 */
-		Samples samples = new Samples(dataInput.keySet());
-		/*
-		 * Extract data
-		 */
-		Map<String, NavigableMap<Integer, Float>> extractScans = extractScans(dataInput, monitor);
-		//
-		boolean similarChromatogram = true;
-		if(useDefaultProperties) {
-			Collection<NavigableMap<Integer, Float>> dataSet = extractScans.values();
-			boolean isFirst = true;
-			Set<Integer> retentionTimes = new HashSet<>();
-			int retentionTimeSize = retentionTimes.size();
-			for(NavigableMap<Integer, Float> data : dataSet) {
-				if(isFirst) {
-					retentionTimes.addAll(data.keySet());
-				} else {
-					if(data.size() != retentionTimes.size()) {
-						similarChromatogram = false;
-						break;
-					}
-					long dataSiza = data.keySet().stream().filter(time -> retentionTimes.contains(time)).count();
-					if(dataSiza != retentionTimeSize) {
-						similarChromatogram = false;
-						break;
-					}
-				}
-			}
-		}
-		int size = ((endRetentionTimeMin - beginRetentionTimeMax) / retentionTimeWindow);
-		if(size > maximalNumberScans) {
-			retentionTimeWindow = (endRetentionTimeMin - beginRetentionTimeMax) / maximalNumberScans;
-			similarChromatogram = false;
-		}
-		if(similarChromatogram && useDefaultProperties) {
-			useDefaultProperties(samples, extractScans);
-		} else {
-			switch(extractionType) {
-				case CLOSEST_SCAN:
-					setClosestScan(samples, extractScans);
-					break;
-				case LINEAR_INTERPOLATION_SCAN:
-					interpolation(samples, extractScans, new LinearInterpolator());
-					break;
-			}
-		}
-		return samples;
 	}
 
 	private void setClosestScan(Samples samples, Map<String, NavigableMap<Integer, Float>> extractScans) {
@@ -188,7 +189,7 @@ public class ScansExtractionSupport {
 			NavigableMap<Integer, Float> scans = extractScans.get(sample.getName());
 			for(int i = beginRetentionTimeMax; i <= endRetentionTimeMin; i += retentionTimeWindow) {
 				Float value = getClosestScans(scans, i);
-		PeakSampleData d = new PeakSampleData(value, null);
+				PeakSampleData d = new PeakSampleData(value, null);
 				data.add(d);
 			}
 		}
@@ -218,10 +219,10 @@ public class ScansExtractionSupport {
 				Float value = scans.get(time);
 				PeakSampleData d;
 				if(value != null) {
-		    d = new PeakSampleData(value, null);
+					d = new PeakSampleData(value, null);
 				} else {
 					value = getClosestScans(scans, time);
-		    d = new PeakSampleData(value, null);
+					d = new PeakSampleData(value, null);
 				}
 				data.add(d);
 			}

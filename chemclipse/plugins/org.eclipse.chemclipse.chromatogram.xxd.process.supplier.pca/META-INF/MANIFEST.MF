@@ -25,6 +25,7 @@ Export-Package: org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.cor
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.exception,
+ org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.extraction,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences
 Import-Package: org.ejml.data;version="0.38.0",

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,24 +18,25 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.ScansExtractionSupport.ExtractionType;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.extraction.ScanExtractionSupport;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.extraction.ScanExtractionSupport.ExtractionType;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.model.statistics.RetentionTime;
+import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.junit.Before;
 import org.junit.Test;
 
 public class ScansExtractionSupportTest1_4 {
 
-	private ScansExtractionSupport scansExtractionSupport;
+	private ScanExtractionSupport scansExtractionSupport;
 	private Samples samples;
 
 	@Before
 	public void setUp() throws Exception {
 
-		scansExtractionSupport = new ScansExtractionSupport(1, 20, ExtractionType.LINEAR_INTERPOLATION_SCAN, false);
+		scansExtractionSupport = new ScanExtractionSupport(1, 20, ExtractionType.LINEAR_INTERPOLATION_SCAN, false);
 		Map<IDataInputEntry, Collection<IScan>> dataInput = new LinkedHashMap<>();
 		TestSupport.putScanDataToMap("Sample1", "Group1", new int[]{1, 3}, new float[]{3.2f, 3.4f}, dataInput);
 		TestSupport.putScanDataToMap("Sample2", "Group2", new int[]{1, 2}, new float[]{7f, 10f}, dataInput);
@@ -49,9 +50,9 @@ public class ScansExtractionSupportTest1_4 {
 		/**
 		 * check variable
 		 */
-		List<RetentionTime> variables = samples.getVariables();
+		List<IVariable> variables = samples.getVariables();
 		assertEquals(2, variables.size());
-		assertEquals(1, variables.get(0).getRetentionTime());
-		assertEquals(2, variables.get(1).getRetentionTime());
+		assertEquals(1, Integer.parseInt(variables.get(0).getValue()));
+		assertEquals(2, Integer.parseInt(variables.get(1).getValue()));
 	}
 }

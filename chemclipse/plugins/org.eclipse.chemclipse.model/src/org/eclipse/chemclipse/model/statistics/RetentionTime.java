@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Jan Holy
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -32,15 +32,17 @@ public class RetentionTime extends AbstractVariable implements IRetentionTime {
 		return retentionTimesList;
 	}
 
-	public RetentionTime(int retentioTime) {
+	public RetentionTime(int retentionTime) {
+
 		super();
-		this.retentionTime = retentioTime;
+		this.retentionTime = retentionTime;
 		setValue(convertValue());
 		setType(IRetentionTime.TYPE);
 		setSelected(true);
 	}
 
 	public RetentionTime(int retentionTime, String description) {
+
 		this(retentionTime);
 		setDescription(description);
 	}
@@ -73,7 +75,7 @@ public class RetentionTime extends AbstractVariable implements IRetentionTime {
 	}
 
 	@Override
-	public void setRetentioTime(int retentionTime) {
+	public void setRetentionTime(int retentionTime) {
 
 		this.retentionTime = retentionTime;
 		setValue(convertValue());

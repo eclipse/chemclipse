@@ -19,7 +19,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.ScansExtractionSupport.ExtractionType;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.extraction.ScanExtractionSupport;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.extraction.ScanExtractionSupport.ExtractionType;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -47,7 +48,7 @@ public class PcaExtractionScans implements IExtractionData {
 	@Override
 	public Samples process(IProgressMonitor monitor) {
 
-		ScansExtractionSupport scansExtractionSupport = new ScansExtractionSupport(retentionTimeWindow, maximalNumberScans, extractionType, useDefaultProperties);
+		ScanExtractionSupport scansExtractionSupport = new ScanExtractionSupport(retentionTimeWindow, maximalNumberScans, extractionType, useDefaultProperties);
 		Map<IDataInputEntry, Collection<IScan>> inputData = new HashMap<>();
 		for(IDataInputEntry input : dataInputEntries) {
 			IProcessingInfo<IChromatogramMSD> processingInfo = ChromatogramConverterMSD.getInstance().convert(new File(input.getInputFile()), monitor);

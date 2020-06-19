@@ -18,6 +18,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.extraction.ExtractionSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.extraction.PeakExtractionSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -31,11 +33,12 @@ public class PcaExtractionPeaks implements IExtractionData {
 	private static final Logger logger = Logger.getLogger(PcaExtractionPeaks.class);
 	//
 	private final List<IDataInputEntry> dataInputEntries;
-	private final int retentionTimeWindow;
+	private final ExtractionSettings extractionSettings;
 
-	public PcaExtractionPeaks(List<IDataInputEntry> dataInputEntries, int retentionTimeWindow) {
-		this.retentionTimeWindow = retentionTimeWindow;
+	public PcaExtractionPeaks(List<IDataInputEntry> dataInputEntries, ExtractionSettings extractionSettings) {
+
 		this.dataInputEntries = dataInputEntries;
+		this.extractionSettings = extractionSettings;
 	}
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
@@ -61,8 +64,8 @@ public class PcaExtractionPeaks implements IExtractionData {
 	@Override
 	public Samples process(IProgressMonitor monitor) {
 
-		PeakExtractionSupport peakExtractionSupport = new PeakExtractionSupport(retentionTimeWindow);
+		PeakExtractionSupport peakExtractionSupport = new PeakExtractionSupport();
 		Map<IDataInputEntry, IPeaks<?>> peakMap = extractPeaks(dataInputEntries, monitor);
-		return peakExtractionSupport.extractPeakData(peakMap, monitor);
+		return peakExtractionSupport.extractPeakData(peakMap, extractionSettings, monitor);
 	}
 }

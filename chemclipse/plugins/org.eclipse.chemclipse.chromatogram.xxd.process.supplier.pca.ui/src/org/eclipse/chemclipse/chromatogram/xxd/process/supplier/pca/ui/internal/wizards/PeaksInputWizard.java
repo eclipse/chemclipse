@@ -17,6 +17,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IExtrac
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IPreprocessingSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaExtractionPeaks;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.extraction.ExtractionSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.jface.wizard.Wizard;
@@ -77,8 +78,10 @@ public class PeaksInputWizard extends Wizard implements IInputWizard {
 	public boolean performFinish() {
 
 		List<IDataInputEntry> dataInputs = getDataInputEntries();
+		boolean useTargets = peakSettingsWizardPage.isUseTargets();
 		int retentionTimeWindow = peakSettingsWizardPage.getRetentionTimeWindow();
-		pcaExtractionData = new PcaExtractionPeaks(dataInputs, retentionTimeWindow);
+		ExtractionSettings extractionSettings = new ExtractionSettings(useTargets, retentionTimeWindow);
+		pcaExtractionData = new PcaExtractionPeaks(dataInputs, extractionSettings);
 		return true;
 	}
 }

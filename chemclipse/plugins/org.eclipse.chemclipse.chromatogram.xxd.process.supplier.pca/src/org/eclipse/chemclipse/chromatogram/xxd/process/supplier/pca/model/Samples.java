@@ -14,13 +14,14 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 import java.util.Collection;
 
 import org.eclipse.chemclipse.model.statistics.AbstractSamples;
-import org.eclipse.chemclipse.model.statistics.RetentionTime;
+import org.eclipse.chemclipse.model.statistics.IVariable;
 
-public class Samples extends AbstractSamples<RetentionTime, Sample> implements ISamplesPCA<RetentionTime, Sample> {
+public class Samples extends AbstractSamples<IVariable, Sample> implements ISamplesPCA<IVariable, Sample> {
 
 	private IAnalysisSettings analysisSettings = new AnalysisSettings();
 
 	public Samples(Collection<IDataInputEntry> dataInputEntries) {
+
 		super();
 		dataInputEntries.forEach(d -> getSampleList().add(new Sample(d)));
 	}

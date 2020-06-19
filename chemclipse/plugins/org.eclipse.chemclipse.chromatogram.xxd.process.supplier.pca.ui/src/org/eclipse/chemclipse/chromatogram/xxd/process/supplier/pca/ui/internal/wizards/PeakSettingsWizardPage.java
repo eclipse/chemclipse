@@ -34,8 +34,11 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
@@ -47,9 +50,15 @@ public class PeakSettingsWizardPage extends WizardPage {
 	private DataBindingContext dataBindingContext = new DataBindingContext();
 	private IObservableValue<Double> retentionTimeWindow = new WritableValue<>();
 	//
+	private Button buttonRetentionTime;
+	private Button buttonTargets;
+	private Label labelRetentionTime;
+	private Text textRetentionTime;
+	//
 	private Algorithm[] algorithms = Algorithm.getAlgorithms();
 
 	public PeakSettingsWizardPage() {
+
 		super("Main Properties");
 		setTitle("PCA");
 		setDescription("Set main PCA parameters.");
@@ -65,14 +74,22 @@ public class PeakSettingsWizardPage extends WizardPage {
 		//
 		WizardPageSupport.create(this, dataBindingContext);
 		//
-		createLabel(composite, "Retention Time Windows [min]:");
-		createVariableSection(composite);
+		createRadioGroup(composite);
+		labelRetentionTime = createLabel(composite, "Retention Time Windows [min]:");
+		textRetentionTime = createVariableSection(composite);
 		createLabel(composite, "Number of PCs:");
 		createSpinnerPrincipleComponents(composite);
 		createLabel(composite, "Algorithm:");
 		createComboViewerAlgorithm(composite);
 		//
+		updateWidgets();
+		//
 		setControl(composite);
+	}
+
+	public boolean isUseTargets() {
+
+		return buttonTargets.getSelection();
 	}
 
 	public int getRetentionTimeWindow() {
@@ -85,6 +102,39 @@ public class PeakSettingsWizardPage extends WizardPage {
 		return analysisSettings;
 	}
 
+	private void createRadioGroup(Composite parent) {
+
+		Group group = new Group(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 2;
+		group.setLayoutData(gridData);
+		group.setLayout(new RowLayout(SWT.HORIZONTAL));
+		group.setText("Group By:");
+		//
+		buttonRetentionTime = new Button(group, SWT.RADIO);
+		buttonRetentionTime.setText("Retention Time");
+		buttonRetentionTime.setSelection(true);
+		buttonRetentionTime.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				updateWidgets();
+			}
+		});
+		//
+		buttonTargets = new Button(group, SWT.RADIO);
+		buttonTargets.setText("Peak Target(s)");
+		buttonTargets.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				updateWidgets();
+			}
+		});
+	}
+
 	private Label createLabel(Composite parent, String text) {
 
 		Label label = new Label(parent, SWT.NONE);
@@ -92,7 +142,7 @@ public class PeakSettingsWizardPage extends WizardPage {
 		return label;
 	}
 
-	private void createVariableSection(Composite parent) {
+	private Text createVariableSection(Composite parent) {
 
 		Text text = new Text(parent, SWT.BORDER);
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -118,6 +168,8 @@ public class PeakSettingsWizardPage extends WizardPage {
 		//
 		UpdateValueStrategy modelToWidget = UpdateValueStrategy.create(IConverter.create(Double.class, String.class, o1 -> Double.toString(((Double)o1))));
 		dataBindingContext.bindValue(WidgetProperties.text(SWT.Modify).observe(text), retentionTimeWindow, widgetToModel, modelToWidget);
+		//
+		return text;
 	}
 
 	private Spinner createSpinnerPrincipleComponents(Composite parent) {
@@ -190,5 +242,12 @@ public class PeakSettingsWizardPage extends WizardPage {
 			}
 		}
 		return -1;
+	}
+
+	private void updateWidgets() {
+
+		boolean enabled = !isUseTargets();
+		labelRetentionTime.setEnabled(enabled);
+		textRetentionTime.setEnabled(enabled);
 	}
 }

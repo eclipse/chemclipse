@@ -17,6 +17,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.extraction.ExtractionSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.extraction.PeakExtractionSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PeakSampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
@@ -32,12 +34,13 @@ public class PeakExtractionSupportTest_1_4 {
 	@Before
 	public void setUp() {
 
-		PeakExtractionSupport peakExtractionSupport = new PeakExtractionSupport(1);
+		ExtractionSettings extractionSettings = new ExtractionSettings(false, 1);
+		PeakExtractionSupport peakExtractionSupport = new PeakExtractionSupport();
 		Map<IDataInputEntry, IPeaks<?>> dataInput = new LinkedHashMap<>();
 		TestSupport.putPeakDataToMap("Sample1", "Group1", new int[]{1, 2}, new double[]{3.2, 3.4}, dataInput);
 		TestSupport.putPeakDataToMap("Sample2", "Group2", new int[]{1, 2}, new double[]{7, 10}, dataInput);
 		TestSupport.putPeakDataToMap("Sample3", null, new int[]{1, 2, 3}, new double[]{2, 3, 4}, dataInput);
-		samples = peakExtractionSupport.extractPeakData(dataInput, new NullProgressMonitor());
+		samples = peakExtractionSupport.extractPeakData(dataInput, extractionSettings, new NullProgressMonitor());
 	}
 
 	@Test
