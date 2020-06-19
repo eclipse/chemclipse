@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings;
 public class PeakFilesWizardPage extends DataInputPageWizard {
 
 	public PeakFilesWizardPage() {
+
 		super("Peak File(s) Input");
 		setTitle("Peak File(s) Input");
 		setDescription("This wizard lets you select peak input files.");
@@ -36,7 +37,7 @@ public class PeakFilesWizardPage extends DataInputPageWizard {
 	@Override
 	protected void addFiles() {
 
-		InputWizardSettings inputWizardSettings = InputWizardSettings.create(Activator.getDefault().getPreferenceStore(), PreferenceSupplier.N_INPUT_FILE, DataType.MSD);
+		InputWizardSettings inputWizardSettings = InputWizardSettings.create(Activator.getDefault().getPreferenceStore(), PreferenceSupplier.N_INPUT_FILE, new DataType[]{DataType.MSD, DataType.CSD});
 		inputWizardSettings.setTitle("Peak Input Files");
 		inputWizardSettings.setDescription("This wizard lets you select several peak input files.");
 		//

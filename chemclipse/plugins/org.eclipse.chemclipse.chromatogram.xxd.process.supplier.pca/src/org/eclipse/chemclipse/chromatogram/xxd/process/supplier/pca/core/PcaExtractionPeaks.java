@@ -22,7 +22,10 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.extraction.E
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.extraction.PeakExtractionSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
+import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
+import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -47,8 +50,21 @@ public class PcaExtractionPeaks implements IExtractionData {
 		Map<IDataInputEntry, IPeaks<?>> peakMap = new LinkedHashMap<>();
 		for(IDataInputEntry peakFile : peakInputFiles) {
 			try {
+				/*
+				 * MSD
+				 */
 				IProcessingInfo<IPeaks> processingInfo = PeakConverterMSD.convert(new File(peakFile.getInputFile()), monitor);
 				IPeaks<?> peaks = processingInfo.getProcessingResult();
+				if(peaks != null && peaks.isEmpty()) {
+					/*
+					 * CSD
+					 */
+					IChromatogramCSD chromatogram = ChromatogramConverterCSD.getInstance().convert(new File(peakFile.getInputFile()), monitor).getProcessingResult();
+					for(IPeak peak : chromatogram.getPeaks()) {
+						peaks.addPeak(peak);
+					}
+				}
+				//
 				if(!peaks.isEmpty()) {
 					peakMap.put(peakFile, peaks);
 				} else {
