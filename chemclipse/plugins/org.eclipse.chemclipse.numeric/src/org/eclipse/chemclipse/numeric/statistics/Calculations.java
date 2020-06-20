@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -80,6 +80,24 @@ public class Calculations {
 			sum += Math.pow(value, 2);
 		}
 		return Math.sqrt(sum);
+	}
+
+	public static int getMin(int[] values) {
+
+		int min = values.length > 0 ? Integer.MAX_VALUE : 0;
+		for(int value : values) {
+			min = Math.min(min, value);
+		}
+		return min;
+	}
+
+	public static int getMax(int[] values) {
+
+		int max = values.length > 0 ? Integer.MIN_VALUE : 0;
+		for(int value : values) {
+			max = Math.max(max, value);
+		}
+		return max;
 	}
 
 	/**
