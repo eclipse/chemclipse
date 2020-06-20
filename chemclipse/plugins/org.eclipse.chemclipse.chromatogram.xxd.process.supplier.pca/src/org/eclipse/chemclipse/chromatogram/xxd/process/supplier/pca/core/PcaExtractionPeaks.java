@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
+import org.eclipse.chemclipse.model.implementation.Peaks;
 import org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -44,27 +45,12 @@ public class PcaExtractionPeaks implements IExtractionData {
 		this.extractionSettings = extractionSettings;
 	}
 
-	@SuppressWarnings({"unchecked", "rawtypes"})
 	private Map<IDataInputEntry, IPeaks<?>> extractPeaks(List<IDataInputEntry> peakInputFiles, IProgressMonitor monitor) {
 
 		Map<IDataInputEntry, IPeaks<?>> peakMap = new LinkedHashMap<>();
 		for(IDataInputEntry peakFile : peakInputFiles) {
 			try {
-				/*
-				 * MSD
-				 */
-				IProcessingInfo<IPeaks> processingInfo = PeakConverterMSD.convert(new File(peakFile.getInputFile()), monitor);
-				IPeaks<?> peaks = processingInfo.getProcessingResult();
-				if(peaks != null && peaks.isEmpty()) {
-					/*
-					 * CSD
-					 */
-					IChromatogramCSD chromatogram = ChromatogramConverterCSD.getInstance().convert(new File(peakFile.getInputFile()), monitor).getProcessingResult();
-					for(IPeak peak : chromatogram.getPeaks()) {
-						peaks.addPeak(peak);
-					}
-				}
-				//
+				IPeaks<?> peaks = extractPeaks(peakFile, monitor);
 				if(!peaks.isEmpty()) {
 					peakMap.put(peakFile, peaks);
 				} else {
@@ -83,5 +69,35 @@ public class PcaExtractionPeaks implements IExtractionData {
 		PeakExtractionSupport peakExtractionSupport = new PeakExtractionSupport();
 		Map<IDataInputEntry, IPeaks<?>> peakMap = extractPeaks(dataInputEntries, monitor);
 		return peakExtractionSupport.extractPeakData(peakMap, extractionSettings, monitor);
+	}
+
+	@SuppressWarnings("unchecked")
+	private IPeaks<?> extractPeaks(IDataInputEntry peakFile, IProgressMonitor monitor) {
+
+		IPeaks<?> peaks = new Peaks();
+		File file = new File(peakFile.getInputFile());
+		//
+		IProcessingInfo<IPeaks<?>> processingInfo = PeakConverterMSD.convert(file, monitor);
+		if(processingInfo.getProcessingResult() != null) {
+			/*
+			 * MSD
+			 */
+			for(IPeak peak : processingInfo.getProcessingResult().getPeaks()) {
+				peaks.addPeak(peak);
+			}
+		} else {
+			/*
+			 * CSD
+			 */
+			IChromatogramCSD chromatogram = ChromatogramConverterCSD.getInstance().convert(file, monitor).getProcessingResult();
+			if(chromatogram.getNumberOfPeaks() > 0) {
+				for(IPeak peak : chromatogram.getPeaks()) {
+					peaks.addPeak(peak);
+				}
+				return peaks;
+			}
+		}
+		//
+		return peaks;
 	}
 }
