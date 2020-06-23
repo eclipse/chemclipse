@@ -148,9 +148,15 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 				sortOrder = getModelDescription(object2).compareTo(getModelDescription(object1));
 				break;
 			case 14:
-				sortOrder = Integer.compare(getSuggestedNumberOfComponents(object2), getSuggestedNumberOfComponents(object1));
+				sortOrder = getDetectorDescription(object2).compareTo(getDetectorDescription(object1));
 				break;
 			case 15:
+				sortOrder = getIntegratorDescription(object2).compareTo(getIntegratorDescription(object1));
+				break;
+			case 16:
+				sortOrder = Integer.compare(getSuggestedNumberOfComponents(object2), getSuggestedNumberOfComponents(object1));
+				break;
+			case 17:
 				String name1 = getName(object1);
 				String name2 = getName(object2);
 				//
@@ -158,7 +164,7 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 					sortOrder = name2.compareTo(name1);
 				}
 				break;
-			case 16:
+			case 18:
 				if(chromatogramPeakArea > 0) {
 					double factor = 100.0d / chromatogramPeakArea;
 					double peakAreaPercent1 = factor * getIntegratedArea(object1);
@@ -168,10 +174,10 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 					sortOrder = 0;
 				}
 				break;
-			case 17:
+			case 19:
 				sortOrder = Integer.compare(getInternalStandards(object2), getInternalStandards(object1));
 				break;
-			case 18:
+			case 20:
 				sortOrder = getClassifier(object2).size() - (getClassifier(object1)).size();
 				break;
 		}
@@ -282,6 +288,24 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 
 		if(object instanceof IPeak) {
 			return ((IPeak)object).getModelDescription();
+		} else {
+			return "";
+		}
+	}
+
+	private String getDetectorDescription(Object object) {
+
+		if(object instanceof IPeak) {
+			return ((IPeak)object).getDetectorDescription();
+		} else {
+			return "";
+		}
+	}
+
+	private String getIntegratorDescription(Object object) {
+
+		if(object instanceof IPeak) {
+			return ((IPeak)object).getIntegratorDescription();
 		} else {
 			return "";
 		}
