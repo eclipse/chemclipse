@@ -39,6 +39,8 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakChartSuppor
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swtchart.IAxis;
+import org.eclipse.swtchart.IAxisSet;
 import org.eclipse.swtchart.ICustomPaintListener;
 import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
 import org.eclipse.swtchart.IPlotArea;
@@ -141,9 +143,25 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 		selectedRangeY = baseChart.getAxisSet().getYAxis(BaseChart.ID_PRIMARY_Y_AXIS).getRange();
 	}
 
+	public Range getCurrentRangeX() {
+
+		BaseChart baseChart = getBaseChart();
+		IAxisSet axisSet = baseChart.getAxisSet();
+		IAxis xAxis = axisSet.getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
+		return new Range(xAxis.getRange().lower, xAxis.getRange().upper);
+	}
+
 	public void updateRangeX(Range selectedRangeX) {
 
 		updateRange(selectedRangeX, selectedRangeY);
+	}
+
+	public Range getCurrentRangeY() {
+
+		BaseChart baseChart = getBaseChart();
+		IAxisSet axisSet = baseChart.getAxisSet();
+		IAxis yAxis = axisSet.getYAxis(BaseChart.ID_PRIMARY_Y_AXIS);
+		return new Range(yAxis.getRange().lower, yAxis.getRange().upper);
 	}
 
 	public void updateRangeY(Range selectedRangeY) {
