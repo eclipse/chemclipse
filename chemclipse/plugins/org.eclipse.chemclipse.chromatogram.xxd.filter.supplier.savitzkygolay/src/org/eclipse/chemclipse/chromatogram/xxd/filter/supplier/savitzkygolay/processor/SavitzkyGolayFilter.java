@@ -22,16 +22,16 @@ import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.pre
 
 public class SavitzkyGolayFilter {
 
-	final int derivative;
-	final int order;
-	final int width;
-	RealMatrix normalEquations;
-	double[][] weights;
-	double[] filterCoefficients;
-	double[] derivativeCoefficients;
-	double[][] startStopWeights;
-	double[][] uStart;
-	double[][] uStop;
+	private final int derivative;
+	private final int order;
+	private final int width;
+	private RealMatrix normalEquations;
+	private double[][] weights;
+	private double[] filterCoefficients;
+	private double[] derivativeCoefficients;
+	private double[][] startStopWeights;
+	private double[][] uStart;
+	private double[][] uStop;
 
 	public SavitzkyGolayFilter(int order, int width, int derivative) {
 
