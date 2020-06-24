@@ -80,6 +80,12 @@ public class SavitzkyGolayProcessor {
 		return smoothValues(ticValues, filter, monitor);
 	}
 
+	public static double[] smooth(double[] ticValues, int derivative, int order, int width, IProgressMonitor monitor) {
+
+		SavitzkyGolayFilter filter = new SavitzkyGolayFilter(order, width, derivative);
+		return smoothValues(ticValues, filter, monitor);
+	}
+
 	public static double[] smooth(ITotalScanSignals totalScanSignals, ChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
 
 		int size = totalScanSignals.size();
