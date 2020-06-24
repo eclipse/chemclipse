@@ -43,8 +43,10 @@ import org.eclipse.swtchart.ICustomPaintListener;
 import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
 import org.eclipse.swtchart.IPlotArea;
 import org.eclipse.swtchart.LineStyle;
+import org.eclipse.swtchart.Range;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
+import org.eclipse.swtchart.extensions.core.IExtendedChart;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 
@@ -67,6 +69,9 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 	//
 	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private PeakChartSettings peakChartSettingsDefault = new PeakChartSettings();
+	//
+	private Range selectedRangeX = null;
+	private Range selectedRangeY = null;
 
 	public ChromatogramPeakChart() {
 
@@ -121,6 +126,43 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 			}
 			addLineSeriesData(lineSeriesDataList);
 		}
+	}
+
+	public void clearSelectedRange() {
+
+		selectedRangeX = null;
+		selectedRangeY = null;
+	}
+
+	public void assignCurrentRangeSelection() {
+
+		BaseChart baseChart = getBaseChart();
+		selectedRangeX = baseChart.getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS).getRange();
+		selectedRangeY = baseChart.getAxisSet().getYAxis(BaseChart.ID_PRIMARY_Y_AXIS).getRange();
+	}
+
+	public void updateRangeX(Range selectedRangeX) {
+
+		updateRange(selectedRangeX, selectedRangeY);
+	}
+
+	public void updateRangeY(Range selectedRangeY) {
+
+		updateRange(selectedRangeX, selectedRangeY);
+	}
+
+	public void updateRange(Range selectedRangeX, Range selectedRangeY) {
+
+		this.selectedRangeX = selectedRangeX;
+		this.selectedRangeY = selectedRangeY;
+		adjustChartRange();
+	}
+
+	public void adjustChartRange() {
+
+		setRange(IExtendedChart.X_AXIS, selectedRangeX);
+		setRange(IExtendedChart.Y_AXIS, selectedRangeY);
+		redrawChart();
 	}
 
 	private void init() {
@@ -319,5 +361,10 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 		 * Clear the maps.
 		 */
 		peakLabelMarkerMap.clear();
+	}
+
+	private void redrawChart() {
+
+		getBaseChart().redraw();
 	}
 }
