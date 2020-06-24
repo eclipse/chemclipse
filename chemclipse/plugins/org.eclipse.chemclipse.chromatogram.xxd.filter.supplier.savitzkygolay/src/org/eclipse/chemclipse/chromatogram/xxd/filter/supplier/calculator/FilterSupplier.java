@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.processor.SavitzkyGolayFilter;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.processor.SavitzkyGolayProcessor;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.IIon;
@@ -44,8 +45,8 @@ public class FilterSupplier {
 		List<IIon> ions = new ArrayList<>(massSpectrum.getIons());
 		Collections.sort(ions, new IonValueComparator());
 		double[] intensityValues = getIntensityValues(ions);
-		SavitzkyGolayProcessor processor = new SavitzkyGolayProcessor();
-		double[] smoothed = processor.smooth(intensityValues, derivative, order, width, monitor);
+		SavitzkyGolayFilter filter = new SavitzkyGolayFilter(order, width, derivative);
+		double[] smoothed = SavitzkyGolayProcessor.smooth(intensityValues, filter, monitor);
 		int i = 0;
 		int smoothedIons = result.getProcessingResult();
 		for(IIon ion : ions) {
