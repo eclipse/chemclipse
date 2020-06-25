@@ -12,7 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.traces;
 
 import org.eclipse.chemclipse.support.util.NamedTraceListUtil;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.TraceValidator;
+import org.eclipse.chemclipse.support.validators.TraceValidator;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;

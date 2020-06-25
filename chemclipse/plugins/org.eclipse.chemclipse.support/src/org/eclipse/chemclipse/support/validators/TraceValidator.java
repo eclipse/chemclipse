@@ -9,10 +9,11 @@
  * Contributors:
  * Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation;
+package org.eclipse.chemclipse.support.validators;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -64,9 +65,18 @@ public class TraceValidator implements IValidator {
 		}
 	}
 
-	public List<Double> getTraces() {
+	public List<Double> getTracesAsDouble() {
 
 		return new ArrayList<Double>(traces);
+	}
+
+	public List<Integer> getTracesAsInteger() {
+
+		Set<Integer> trazes = new HashSet<>();
+		for(double trace : traces) {
+			trazes.add(Math.round((float)trace));
+		}
+		return new ArrayList<>(trazes);
 	}
 
 	public String getTracesAsString() {

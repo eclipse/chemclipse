@@ -34,13 +34,13 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.support.validators.TraceValidator;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChartConfigSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlayChartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.TraceValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageNamedTraces;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay;
@@ -110,10 +110,12 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 	private boolean lockZoom = false;
 
 	public ExtendedChromatogramOverlayUI(Composite parent) {
+
 		this(parent, SWT.BORDER);
 	}
 
 	public ExtendedChromatogramOverlayUI(Composite parent, int style) {
+
 		this.style = style;
 		initialize(parent);
 	}
@@ -787,15 +789,10 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 			TraceValidator traceValidator = new TraceValidator();
 			IStatus status = traceValidator.validate(namedTrace.getTraces());
 			if(status.isOK()) {
-				List<Double> traces = traceValidator.getTraces();
 				if(isNominal) {
-					Set<Integer> tracesInt = new HashSet<>();
-					for(double trace : traces) {
-						tracesInt.add(Math.round((float)trace));
-					}
-					traceList.addAll(tracesInt);
+					traceList.addAll(traceValidator.getTracesAsInteger());
 				} else {
-					traceList.addAll(traces);
+					traceList.addAll(traceValidator.getTracesAsDouble());
 				}
 			}
 		}
