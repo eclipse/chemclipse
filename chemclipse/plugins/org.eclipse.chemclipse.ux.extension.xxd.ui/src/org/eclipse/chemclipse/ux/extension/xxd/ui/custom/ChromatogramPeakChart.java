@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.numeric.statistics.Calculations;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -44,6 +45,7 @@ import org.eclipse.swtchart.IAxisSet;
 import org.eclipse.swtchart.ICustomPaintListener;
 import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
 import org.eclipse.swtchart.IPlotArea;
+import org.eclipse.swtchart.ISeries;
 import org.eclipse.swtchart.LineStyle;
 import org.eclipse.swtchart.Range;
 import org.eclipse.swtchart.extensions.core.BaseChart;
@@ -52,7 +54,7 @@ import org.eclipse.swtchart.extensions.core.IExtendedChart;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 
-public class ChromatogramPeakChart extends ChromatogramChart {
+public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSupport {
 
 	public static final String SERIES_ID_CHROMATOGRAM_TIC = "Chromatogram";
 	public static final String SERIES_ID_CHROMATOGRAM_XIC = "Chromatogram (XIC)";
@@ -130,12 +132,14 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 		}
 	}
 
+	@Override
 	public void clearSelectedRange() {
 
 		selectedRangeX = null;
 		selectedRangeY = null;
 	}
 
+	@Override
 	public void assignCurrentRangeSelection() {
 
 		BaseChart baseChart = getBaseChart();
@@ -143,6 +147,7 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 		selectedRangeY = baseChart.getAxisSet().getYAxis(BaseChart.ID_PRIMARY_Y_AXIS).getRange();
 	}
 
+	@Override
 	public Range getCurrentRangeX() {
 
 		BaseChart baseChart = getBaseChart();
@@ -151,11 +156,13 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 		return new Range(xAxis.getRange().lower, xAxis.getRange().upper);
 	}
 
+	@Override
 	public void updateRangeX(Range selectedRangeX) {
 
 		updateRange(selectedRangeX, selectedRangeY);
 	}
 
+	@Override
 	public Range getCurrentRangeY() {
 
 		BaseChart baseChart = getBaseChart();
@@ -164,11 +171,13 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 		return new Range(yAxis.getRange().lower, yAxis.getRange().upper);
 	}
 
+	@Override
 	public void updateRangeY(Range selectedRangeY) {
 
 		updateRange(selectedRangeX, selectedRangeY);
 	}
 
+	@Override
 	public void updateRange(Range selectedRangeX, Range selectedRangeY) {
 
 		this.selectedRangeX = selectedRangeX;
@@ -176,6 +185,46 @@ public class ChromatogramPeakChart extends ChromatogramChart {
 		adjustChartRange();
 	}
 
+	@Override
+	public void focusXIC(int percentOffset) {
+
+		BaseChart baseChart = getBaseChart();
+		ISeries<?> series = baseChart.getSeriesSet().getSeries(ChromatogramPeakChart.SERIES_ID_CHROMATOGRAM_XIC);
+		if(series != null && series.getXSeries().length > 0) {
+			double maxY = getMaxY(series);
+			if(maxY > 0) {
+				maxY += maxY * percentOffset / 100.0d;
+				IAxisSet axisSet = baseChart.getAxisSet();
+				IAxis yAxis = axisSet.getYAxis(BaseChart.ID_PRIMARY_Y_AXIS);
+				Range selectedRangeY = new Range(yAxis.getRange().lower, maxY);
+				updateRangeY(selectedRangeY);
+			}
+		}
+	}
+
+	private double getMaxY(ISeries<?> series) {
+
+		if(selectedRangeX == null) {
+			return Calculations.getMax(series.getYSeries());
+		} else {
+			double[] xSeries = series.getXSeries();
+			double[] ySeries = series.getYSeries();
+			double start = selectedRangeX.lower;
+			double stop = selectedRangeX.upper;
+			double maxY = Double.MIN_VALUE;
+			//
+			for(int i = 0; i < xSeries.length; i++) {
+				double x = xSeries[i];
+				if(x >= start && x <= stop) {
+					maxY = Math.max(maxY, ySeries[i]);
+				}
+			}
+			//
+			return maxY;
+		}
+	}
+
+	@Override
 	public void adjustChartRange() {
 
 		setRange(IExtendedChart.X_AXIS, selectedRangeX);
