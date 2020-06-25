@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,6 +16,7 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.settings.FilterSettingsCleaner;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.settings.FilterSettingsDeleteIdentifier;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.settings.FilterSettingsRemover;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -78,6 +79,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		FilterSettingsRemover filterSettings = new FilterSettingsRemover();
 		filterSettings.setScanRemoverPattern(preferences.get(P_REMOVER_PATTERN, DEF_REMOVER_PATTERN));
 		return filterSettings;
+	}
+
+	public static FilterSettingsDeleteIdentifier getDeleteIdentifierFilterSettings() {
+
+		return new FilterSettingsDeleteIdentifier();
 	}
 
 	/**

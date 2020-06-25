@@ -16,7 +16,14 @@
             filterName="Remove Empty Scans Filter"
             filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.settings.FilterSettingsCleaner"
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.removeemptyscans">
-      </ChromatogramFilterSupplier>      
+      </ChromatogramFilterSupplier> 
+      <ChromatogramFilterSupplier
+            description="This filters deletes scan identification(s)."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.core.FilterDeleteIdentifier"
+            filterName="Delete Scan Identification(s)"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.settings.FilterSettingsDeleteIdentifier"
+            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.removescanidentifications">
+      </ChromatogramFilterSupplier>           
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
