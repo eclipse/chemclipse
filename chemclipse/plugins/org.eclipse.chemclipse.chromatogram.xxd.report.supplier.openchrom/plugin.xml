@@ -29,7 +29,16 @@
             reportGenerator="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.core.Report3"
             reportName="Quantitation Report (*.txt)"
             reportSettings="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings3">
-      </ChromatogramReportSupplier>            
+      </ChromatogramReportSupplier>
+      <ChromatogramReportSupplier
+            description="Reports Peaks as ASCII text."
+            fileExtension=".txt"
+            fileName="PeakTableReport"
+            id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.peaktableReportASCII"
+            reportGenerator="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.core.Report4"
+            reportName="Peak Table Report (*.txt)"
+            reportSettings="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings4">
+      </ChromatogramReportSupplier> 
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
