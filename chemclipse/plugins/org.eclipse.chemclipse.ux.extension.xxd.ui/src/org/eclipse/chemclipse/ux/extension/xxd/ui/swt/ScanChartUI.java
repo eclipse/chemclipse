@@ -32,6 +32,7 @@ import org.eclipse.chemclipse.swt.ui.support.Fonts;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.BarSeriesValue;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.BarSeriesYComparator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.LabelOption;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.SignalType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanChartSupport;
@@ -57,7 +58,6 @@ import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
 import org.eclipse.swtchart.extensions.core.RangeRestriction;
 import org.eclipse.swtchart.extensions.core.ScrollableChart;
-import org.eclipse.swtchart.extensions.customcharts.MassSpectrumChart.LabelOption;
 import org.eclipse.swtchart.extensions.exceptions.SeriesException;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
@@ -101,6 +101,7 @@ public class ScanChartUI extends ScrollableChart {
 		 * @param useX
 		 */
 		public LabelPaintListener(boolean useX) {
+
 			this.useX = useX;
 		}
 
@@ -171,11 +172,13 @@ public class ScanChartUI extends ScrollableChart {
 	}
 
 	public ScanChartUI() {
+
 		super();
 		setDefaultDataAndSignalType();
 	}
 
 	public ScanChartUI(Composite parent, int style) {
+
 		super(parent, style);
 		setDefaultDataAndSignalType();
 	}
