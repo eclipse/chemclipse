@@ -76,7 +76,9 @@ public class PcaExtractionFiles implements IExtractionData {
 						 */
 						int size = record.size();
 						if(size > 4) {
-							//
+							/*
+							 * TODO Extend the sample class.
+							 */
 							String name = record.get(0).trim();
 							String groupName = record.get(1).trim();
 							String classification = record.get(2).trim();
@@ -107,8 +109,6 @@ public class PcaExtractionFiles implements IExtractionData {
 											double value = Double.parseDouble(record.get(i).trim());
 											Target target = new Target(targetName);
 											target.setValue(Double.toString(value));
-											target.setClassification(classification);
-											target.setDescription(description);
 											variablesMap.put(targetName, target);
 										}
 									} catch(NumberFormatException e) {
@@ -156,32 +156,10 @@ public class PcaExtractionFiles implements IExtractionData {
 			for(Target mappedVariable : variableMap.values()) {
 				//
 				String key = mappedVariable.getTarget();
-				String classification = mappedVariable.getClassification().trim();
-				String description = mappedVariable.getDescription().trim();
 				Target target = targets.get(key);
-				//
 				if(target == null) {
 					target = new Target(key);
-					target.setClassification(classification);
-					target.setDescription(description);
 					targets.put(key, target);
-				} else {
-					/*
-					 * Classification
-					 */
-					if(!classification.isEmpty()) {
-						if(!target.getClassification().contains(classification)) {
-							target.setClassification(target.getClassification() + ", " + classification);
-						}
-					}
-					/*
-					 * Description
-					 */
-					if(!description.isEmpty()) {
-						if(!target.getDescription().contains(description)) {
-							target.setDescription(target.getDescription() + ", " + description);
-						}
-					}
 				}
 			}
 		}
