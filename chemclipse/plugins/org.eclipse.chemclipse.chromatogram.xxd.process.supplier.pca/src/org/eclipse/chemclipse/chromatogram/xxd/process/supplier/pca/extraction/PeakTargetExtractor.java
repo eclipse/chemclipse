@@ -46,7 +46,9 @@ public class PeakTargetExtractor {
 
 	public Samples extractPeakData(Map<IDataInputEntry, IPeaks<?>> peaks, IProgressMonitor monitor) {
 
-		Samples samples = new Samples(peaks.keySet());
+		List<Sample> samplesList = new ArrayList<>();
+		peaks.keySet().forEach(d -> samplesList.add(new Sample(d.getName(), d.getGroupName())));
+		Samples samples = new Samples(samplesList);
 		//
 		Map<String, IPeaks<?>> peakMap = new LinkedHashMap<>();
 		peaks.forEach((dataInputEntry, peaksInput) -> {

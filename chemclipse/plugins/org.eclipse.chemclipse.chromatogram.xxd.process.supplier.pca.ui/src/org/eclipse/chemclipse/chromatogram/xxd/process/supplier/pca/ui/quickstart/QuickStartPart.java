@@ -30,18 +30,19 @@ public class QuickStartPart {
 	@PostConstruct
 	public void create(Composite parent) {
 
-		TaskTileContainer tileContainer = new TaskTileContainer(parent, 2, () -> context);
+		TaskTileContainer tileContainer = new TaskTileContainer(parent, 3, () -> context);
 		/*
 		 * Default
 		 */
 		tileContainer.addTaskTile(new PeakTileDefinition());
 		tileContainer.addTaskTile(new ScanTileDefinition());
+		tileContainer.addTaskTile(new FileTileDefinition());
 		/*
 		 * Additional
 		 */
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setDefault(WelcomeViewExtensionHandler.PREFERENCE_MAX_TILES, 8);
-		store.setDefault(WelcomeViewExtensionHandler.PREFERENCE_MIN_TILES, 2);
+		store.setDefault(WelcomeViewExtensionHandler.PREFERENCE_MAX_TILES, 9);
+		store.setDefault(WelcomeViewExtensionHandler.PREFERENCE_MIN_TILES, 3);
 		//
 		new WelcomeViewExtensionHandler(tileContainer, store, CreatePcaEvaluation.PCA_PERSPECTIVE);
 	}

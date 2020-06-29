@@ -23,6 +23,7 @@ import org.easymock.EasyMock;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.DataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PeakSampleData;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Sample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -35,6 +36,7 @@ import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 public class TestSupport {
 
 	public TestSupport() {
+
 	}
 
 	public static void putScanDataToMap(String name, String groupName, int[] retentionTimes, float[] totalSignal, Map<IDataInputEntry, Collection<IScan>> map) {
@@ -81,7 +83,11 @@ public class TestSupport {
 		for(String[] sample : samples) {
 			dataInputEntries.add(createDataInputEntry(sample[0], sample[1]));
 		}
-		Samples samplesOutput = new Samples(dataInputEntries);
+		//
+		List<Sample> samplesList = new ArrayList<>();
+		dataInputEntries.forEach(d -> samplesList.add(new Sample(d.getName(), d.getGroupName())));
+		Samples samplesOutput = new Samples(samplesList);
+		//
 		Arrays.stream(variables).forEach(v -> samplesOutput.getVariables().add(new RetentionTime(v)));
 		int i = 0;
 		for(double sampleData[] : data) {
@@ -109,9 +115,9 @@ public class TestSupport {
 		return d;
 	}
 
-	private static IPeaks cretePeaks(int[] retentionTimes, double[] integrationArea) {
+	private static IPeaks<?> cretePeaks(int[] retentionTimes, double[] integrationArea) {
 
-		IPeaks peaks = new Peaks();
+		IPeaks<?> peaks = new Peaks();
 		for(int i = 0; i < integrationArea.length; i++) {
 			IPeakModelMSD peakModel = EasyMock.createMock(IPeakModelMSD.class);
 			EasyMock.expect(peakModel.getRetentionTimeAtPeakMaximum()).andStubReturn(retentionTimes[i]);

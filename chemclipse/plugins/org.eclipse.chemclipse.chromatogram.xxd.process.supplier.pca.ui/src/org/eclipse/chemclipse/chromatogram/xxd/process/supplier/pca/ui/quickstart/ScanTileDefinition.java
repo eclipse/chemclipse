@@ -22,7 +22,7 @@ public class ScanTileDefinition extends WizardTile {
 	@Override
 	public String getTitle() {
 
-		return "PCA Scan(s)";
+		return "Scan(s)";
 	}
 
 	@Override

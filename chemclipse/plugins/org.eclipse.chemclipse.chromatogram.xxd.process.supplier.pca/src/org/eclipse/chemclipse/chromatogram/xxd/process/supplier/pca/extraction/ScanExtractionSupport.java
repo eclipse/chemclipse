@@ -62,7 +62,9 @@ public class ScanExtractionSupport {
 		/*
 		 * Initialize PCA Results
 		 */
-		Samples samples = new Samples(dataInput.keySet());
+		List<Sample> samplesList = new ArrayList<>();
+		dataInput.keySet().forEach(d -> samplesList.add(new Sample(d.getName(), d.getGroupName())));
+		Samples samples = new Samples(samplesList);
 		/*
 		 * Extract data
 		 */

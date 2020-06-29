@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
-import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.chemclipse.model.statistics.AbstractSamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
@@ -20,10 +20,12 @@ public class Samples extends AbstractSamples<IVariable, Sample> implements ISamp
 
 	private IAnalysisSettings analysisSettings = new AnalysisSettings();
 
-	public Samples(Collection<IDataInputEntry> dataInputEntries) {
+	public Samples(List<Sample> samples) {
 
 		super();
-		dataInputEntries.forEach(d -> getSampleList().add(new Sample(d)));
+		for(Sample sample : samples) {
+			getSampleList().add(sample);
+		}
 	}
 
 	@Override

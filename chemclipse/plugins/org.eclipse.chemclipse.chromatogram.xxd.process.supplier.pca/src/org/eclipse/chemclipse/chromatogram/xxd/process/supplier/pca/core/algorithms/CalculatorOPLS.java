@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,17 +15,16 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.OptionalDouble;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.exception.MathIllegalArgumentException;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.AbstractMultivariateCalculator;
 import org.ejml.data.DMatrixRMaj;
 import org.ejml.dense.row.CommonOps_DDRM;
 
-
 public class CalculatorOPLS extends AbstractMultivariateCalculator {
 
 	public CalculatorOPLS(int numObs, int numVars, int numComps) throws MathIllegalArgumentException {
+
 		super(numObs, numVars, numComps);
 	}
 
@@ -43,45 +42,6 @@ public class CalculatorOPLS extends AbstractMultivariateCalculator {
 		}
 		DMatrixRMaj yVector = new DMatrixRMaj(groupNames.size(), 1, true, vector);
 		return yVector;
-	}
-
-	private DMatrixRMaj getAvgYVector() {
-
-		double[] yVector = getYVector().data;
-		double[] avgYData = new double[yVector.length];
-		OptionalDouble avgValue = Arrays.stream(yVector).average();
-		if(avgValue.isPresent()) {
-			Arrays.fill(avgYData, avgValue.getAsDouble());
-		}
-		DMatrixRMaj avgYVector = new DMatrixRMaj(yVector.length, 1, true, avgYData);
-		return avgYVector;
-	}
-
-	private DMatrixRMaj getAvgXVector() {
-
-		DMatrixRMaj X = getSampleData();
-		DMatrixRMaj avgOfCols = new DMatrixRMaj(1, getSampleData().getNumCols());
-		CommonOps_DDRM.sumCols(X, avgOfCols);
-		CommonOps_DDRM.divide(avgOfCols, getSampleData().getNumRows());
-		return avgOfCols;
-	}
-
-	private DMatrixRMaj getSDXVector() {
-
-		DMatrixRMaj X = getSampleData().copy();
-		DMatrixRMaj avgOfCols = getAvgXVector();
-		DMatrixRMaj sdXVector = new DMatrixRMaj(1, getSampleData().getNumCols());
-		for(int i = 0; i < getSampleData().getNumCols(); i++) {
-			for(int j = 0; j < getSampleData().getNumRows(); j++) {
-				X.set(j, i, X.get(j, i) - avgOfCols.get(0, i));
-				X.set(j, i, X.get(j, i) * X.get(j, i));
-			}
-		}
-		CommonOps_DDRM.sumCols(X, sdXVector);
-		for(int i = 0; i < getSampleData().getNumCols(); i++) {
-			sdXVector.set(0, i, Math.sqrt(sdXVector.get(0, i)));
-		}
-		return sdXVector;
 	}
 
 	@Override
@@ -142,7 +102,6 @@ public class CalculatorOPLS extends AbstractMultivariateCalculator {
 				// #7
 				DMatrixRMaj wTemp2 = new DMatrixRMaj(1, 1);
 				DMatrixRMaj w_ortho_temp = new DMatrixRMaj(numberOfVariables, 1);
-				DMatrixRMaj wTemp3 = new DMatrixRMaj(1, numberOfVariables);
 				CommonOps_DDRM.multTransAB(w, p, wTemp2);
 				CommonOps_DDRM.divide(wTemp2, wTemp.get(0));
 				CommonOps_DDRM.mult(w, wTemp2, w_ortho_temp);
