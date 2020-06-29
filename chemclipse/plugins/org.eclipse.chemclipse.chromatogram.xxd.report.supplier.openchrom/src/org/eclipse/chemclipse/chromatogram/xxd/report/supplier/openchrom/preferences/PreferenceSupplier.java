@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Christoph Läubrich - Settings
+ * Lorenz Gerber - report 4
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.preferences;
 
@@ -19,6 +20,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.Activat
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings1;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings2;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings3;
+import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings4;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -94,6 +96,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static ReportSettings3 getReportSettings3() {
 
 		return new ReportSettings3();
+	}
+
+	public static ReportSettings4 getReportSettings4() {
+
+		return new ReportSettings4();
 	}
 
 	public static boolean isAppendFiles() {
