@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -48,11 +48,12 @@ public class ChromatogramReports {
 	 * This class has only static methods.
 	 */
 	private ChromatogramReports() {
+
 	}
 
-	public static IProcessingInfo generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, IChromatogramReportSettings chromatogramReportSettings, String reportSupplierId, IProgressMonitor monitor) {
+	public static IProcessingInfo<?> generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, IChromatogramReportSettings chromatogramReportSettings, String reportSupplierId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<?> processingInfo;
 		IChromatogramReportGenerator reportGenerator = getChromatogramReportGenerator(reportSupplierId);
 		if(reportGenerator != null) {
 			processingInfo = reportGenerator.generate(file, append, chromatogram, chromatogramReportSettings, monitor);
@@ -62,9 +63,9 @@ public class ChromatogramReports {
 		return processingInfo;
 	}
 
-	public static IProcessingInfo generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, String reportSupplierId, IProgressMonitor monitor) {
+	public static IProcessingInfo<?> generate(File file, boolean append, IChromatogram<? extends IPeak> chromatogram, String reportSupplierId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<?> processingInfo;
 		IChromatogramReportGenerator reportGenerator = getChromatogramReportGenerator(reportSupplierId);
 		if(reportGenerator != null) {
 			processingInfo = reportGenerator.generate(file, append, chromatogram, monitor);
@@ -74,9 +75,9 @@ public class ChromatogramReports {
 		return processingInfo;
 	}
 
-	public static IProcessingInfo generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IChromatogramReportSettings chromatogramReportSettings, String reportSupplierId, IProgressMonitor monitor) {
+	public static IProcessingInfo<?> generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, IChromatogramReportSettings chromatogramReportSettings, String reportSupplierId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<?> processingInfo;
 		IChromatogramReportGenerator reportGenerator = getChromatogramReportGenerator(reportSupplierId);
 		if(reportGenerator != null) {
 			processingInfo = reportGenerator.generate(file, append, chromatograms, chromatogramReportSettings, monitor);
@@ -86,9 +87,9 @@ public class ChromatogramReports {
 		return processingInfo;
 	}
 
-	public static IProcessingInfo generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, String reportSupplierId, IProgressMonitor monitor) {
+	public static IProcessingInfo<?> generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, String reportSupplierId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<?> processingInfo;
 		IChromatogramReportGenerator reportGenerator = getChromatogramReportGenerator(reportSupplierId);
 		if(reportGenerator != null) {
 			processingInfo = reportGenerator.generate(file, append, chromatograms, monitor);
@@ -192,9 +193,9 @@ public class ChromatogramReports {
 		return null;
 	}
 
-	private static IProcessingInfo getNoChromatogramReportAvailableProcessingInfo(File file) {
+	private static IProcessingInfo<?> getNoChromatogramReportAvailableProcessingInfo(File file) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		processingInfo.addErrorMessage("Chromatogram Report Generator", "There is no suitable chromatogram report generator available for: " + file.getAbsolutePath());
 		return processingInfo;
 	}
