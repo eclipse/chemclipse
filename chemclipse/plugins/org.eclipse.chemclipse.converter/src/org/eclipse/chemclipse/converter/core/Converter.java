@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -21,6 +21,7 @@ import java.util.regex.Pattern;
 
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
+import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.support.util.FileUtil;
 
 public class Converter {
@@ -44,6 +45,7 @@ public class Converter {
 	 * This class has only static methods.
 	 */
 	private Converter() {
+
 	}
 
 	/**
@@ -71,18 +73,6 @@ public class Converter {
 		Pattern pattern = Pattern.compile(regex);
 		Matcher matcher = pattern.matcher(input);
 		return !matcher.find();
-	}
-
-	/**
-	 * Gets e.g.
-	 * .r##
-	 * and returns
-	 * .*\\.r[0-9][0-9]
-	 */
-	public static String getExtensionMatcher(String supplierExtension) {
-
-		String extensionMatcher = supplierExtension.replaceAll(ISupplier.WILDCARD_NUMBER, "[0-9]");
-		return extensionMatcher.replace(".", ".*\\.");
 	}
 
 	public static List<ISupplier> getSupplierForFile(final File file, Iterable<? extends ISupplier> suppliers) throws NoConverterAvailableException {
@@ -124,31 +114,21 @@ public class Converter {
 				 * if the bare file name shall be used.
 				 */
 				if(FileUtil.fileHasExtension(file)) {
-					/*
-					 * Enable to read files whether they end with lower or upper
-					 * case letters. Take care, files like *.cdf would cause no
-					 * problem, as they could be *.cdf (lower case) or *.CDF (upper
-					 * case).<br/> There are problems using files, e.g. *.ionXML. The
-					 * name must exactly fit the file extension or must be all in
-					 * lower case (*.ionxml) or in upper case (*.IonXML) notation.
-					 */
 					String fileExtension = supplier.getFileExtension();
 					if(fileExtension == null || fileExtension.equals("")) {
 						continue;
 					} else {
 						if(fileExtension.contains(ISupplier.WILDCARD_NUMBER)) {
 							/*
-							 * Get the matcher.
+							 * E.g. *.r## is a matcher for *.r01, *.r02 ...
 							 */
 							String supplierExtension = fileExtension.toLowerCase();
 							String extensionMatcher = regularExpressions.get(supplierExtension);
 							if(extensionMatcher == null) {
-								extensionMatcher = getExtensionMatcher(supplierExtension);
+								extensionMatcher = ISupplierFileIdentifier.getExtensionMatcher(supplierExtension);
 								regularExpressions.put(supplierExtension, extensionMatcher);
 							}
-							/*
-							 * E.g. *.r## is a matcher for *.r01, *.r02 ...
-							 */
+							//
 							if(fileName.toLowerCase().matches(extensionMatcher)) {
 								availableConverters.add(supplier);
 							}

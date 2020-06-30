@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2019 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,6 +22,7 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 	private final List<ISupplier> suppliers;
 
 	public AbstractSupplierFileIdentifier(List<ISupplier> suppliers) {
+
 		this.suppliers = suppliers;
 	}
 
@@ -73,12 +74,9 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 		if(hasExtension) {
 			if(supplierExtension.contains(ISupplier.WILDCARD_NUMBER)) {
 				/*
-				 * Get the matcher.
-				 */
-				String extensionMatcher = getExtensionMatcher(supplierExtension);
-				/*
 				 * E.g. *.r## is a matcher for *.r01, *.r02 ...
 				 */
+				String extensionMatcher = ISupplierFileIdentifier.getExtensionMatcher(supplierExtension);
 				if(extension.matches(extensionMatcher)) {
 					return supplier.isImportable();
 				}
@@ -166,11 +164,5 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 			}
 		}
 		return false;
-	}
-
-	private static String getExtensionMatcher(String supplierExtension) {
-
-		String extensionMatcher = supplierExtension.replaceAll(ISupplier.WILDCARD_NUMBER, "[0-9]");
-		return extensionMatcher.replace(".", ".*\\.");
 	}
 }

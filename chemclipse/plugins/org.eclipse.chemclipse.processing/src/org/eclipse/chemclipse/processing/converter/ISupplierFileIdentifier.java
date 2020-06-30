@@ -35,6 +35,18 @@ public interface ISupplierFileIdentifier extends SupplierContext {
 	String TYPE_QDB = "QDB"; // Quantitation Database
 
 	/**
+	 * If the following term is supplied:
+	 * .r##
+	 * the it returns:
+	 * .*\\.r[0-9][0-9]
+	 */
+	static String getExtensionMatcher(String supplierExtension) {
+
+		String extensionMatcher = supplierExtension.replaceAll(ISupplier.WILDCARD_NUMBER, "[0-9]");
+		return extensionMatcher.replace(".", ".*\\.");
+	}
+
+	/**
 	 * Returns the identifier type.
 	 * 
 	 * @return String

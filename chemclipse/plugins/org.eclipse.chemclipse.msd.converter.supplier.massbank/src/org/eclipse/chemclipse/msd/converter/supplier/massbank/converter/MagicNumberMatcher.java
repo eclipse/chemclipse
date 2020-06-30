@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,7 +13,6 @@
 package org.eclipse.chemclipse.msd.converter.supplier.massbank.converter;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -26,23 +25,27 @@ public class MagicNumberMatcher extends AbstractMagicNumberMatcher implements IM
 	@Override
 	public boolean checkFileFormat(File file) {
 
-		if(file.getName().toLowerCase().endsWith(".zip")) {
-			try {
-				try (ZipFile zipFile = new ZipFile(file)) {
-					Enumeration<? extends ZipEntry> entries = zipFile.entries();
-					while(entries.hasMoreElements()) {
-						ZipEntry entry = entries.nextElement();
-						if(entry.getName().startsWith("MassBank-data-")) {
-							return true;
-						} else if(entry.getName().endsWith("List_of_Contributors_Prefixes_and_Projects.md")) {
-							return true;
-						}
+		if(checkFileExtension(file, ".txt")) {
+			return true;
+		} else if(checkFileExtension(file, ".zip")) {
+			try (ZipFile zipFile = new ZipFile(file)) {
+				Enumeration<? extends ZipEntry> entries = zipFile.entries();
+				while(entries.hasMoreElements()) {
+					ZipEntry entry = entries.nextElement();
+					if(entry.getName().startsWith("MassBank-data-")) {
+						return true;
+					} else if(entry.getName().endsWith("List_of_Contributors_Prefixes_and_Projects.md")) {
+						return true;
 					}
 				}
-			} catch(IOException e) {
-				return false;
+			} catch(Exception e) {
+				/*
+				 * java.lang.IllegalArgumentException: MALFORMED
+				 * at java.util.zip.ZipCoder.toString(ZipCoder.java:58)
+				 */
 			}
 		}
-		return checkFileExtension(file, ".txt");
+		//
+		return false;
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2019 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,6 +30,17 @@ public abstract class AbstractMagicNumberMatcher implements IMagicNumberMatcher 
 
 		String fileExtension = (caseSensitive) ? file.getName() : file.getName().toLowerCase();
 		return fileExtension.endsWith((caseSensitive) ? extension : extension.toLowerCase());
+	}
+
+	protected boolean checkFilePrefix(File file, String prefix) {
+
+		return checkFilePrefix(file, prefix, false);
+	}
+
+	protected boolean checkFilePrefix(File file, String prefix, boolean caseSensitive) {
+
+		String filePrefix = (caseSensitive) ? file.getName() : file.getName().toLowerCase();
+		return filePrefix.startsWith((caseSensitive) ? prefix : prefix.toLowerCase());
 	}
 
 	protected boolean checkFileName(File file, String regex) {
