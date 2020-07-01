@@ -45,6 +45,7 @@ public class TimeRanges {
 	private final Map<String, TimeRange> timeRangeMap = new HashMap<>();
 
 	public TimeRanges() {
+
 	}
 
 	/**
@@ -53,6 +54,7 @@ public class TimeRanges {
 	 * @param timeRanges
 	 */
 	public TimeRanges(String timeRanges) {
+
 		load(timeRanges);
 	}
 

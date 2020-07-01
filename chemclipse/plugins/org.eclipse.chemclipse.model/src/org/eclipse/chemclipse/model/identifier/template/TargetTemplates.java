@@ -30,6 +30,20 @@ public class TargetTemplates extends HashMap<String, ITargetTemplate> {
 	//
 	private TargetListUtil targetListUtil = new TargetListUtil();
 
+	public TargetTemplates() {
+
+	}
+
+	/**
+	 * Initializes this templates from the given settings.
+	 * 
+	 * @param timeRanges
+	 */
+	public TargetTemplates(String targetTemplates) {
+
+		load(targetTemplates);
+	}
+
 	public void add(ITargetTemplate targetTemplate) {
 
 		if(targetTemplate != null) {
