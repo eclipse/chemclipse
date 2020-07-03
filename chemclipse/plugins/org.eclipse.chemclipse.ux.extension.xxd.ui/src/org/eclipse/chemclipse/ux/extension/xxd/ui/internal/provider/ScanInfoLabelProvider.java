@@ -12,14 +12,10 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
 
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
-import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.support.ScanSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
@@ -103,7 +99,7 @@ public class ScanInfoLabelProvider extends AbstractChemClipseLabelProvider {
 					break;
 				case 4:
 					if(numberOfIons > 0) {
-						text = (scanMSD.getNumberOfIons() <= limitSimTraces) ? getIons(scanMSD) : LABEL_DOTS;
+						text = (scanMSD.getNumberOfIons() <= limitSimTraces) ? ScanSupport.getSortedTraces(scanMSD) : LABEL_DOTS;
 					} else {
 						text = LABEL_BLANK;
 					}
@@ -113,30 +109,6 @@ public class ScanInfoLabelProvider extends AbstractChemClipseLabelProvider {
 			}
 		}
 		return text;
-	}
-
-	private String getIons(IScanMSD scanMSD) {
-
-		StringBuilder builder = new StringBuilder();
-		/*
-		 * Get the ions.
-		 */
-		List<Integer> ions = new ArrayList<Integer>();
-		for(IIon ion : scanMSD.getIons()) {
-			ions.add((int)Math.round(ion.getIon()));
-		}
-		/*
-		 * Get the list.
-		 */
-		Collections.sort(ions);
-		Iterator<Integer> iterator = ions.iterator();
-		while(iterator.hasNext()) {
-			builder.append(Integer.toString(iterator.next()));
-			if(iterator.hasNext()) {
-				builder.append(" ");
-			}
-		}
-		return builder.toString();
 	}
 
 	public Image getImage(Object element) {
