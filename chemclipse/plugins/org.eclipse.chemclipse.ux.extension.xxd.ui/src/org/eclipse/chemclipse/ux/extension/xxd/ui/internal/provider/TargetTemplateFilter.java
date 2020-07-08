@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
-import org.eclipse.chemclipse.model.identifier.template.ITargetTemplate;
+import org.eclipse.chemclipse.model.identifier.template.TargetTemplate;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 
@@ -36,8 +36,8 @@ public class TargetTemplateFilter extends ViewerFilter {
 			return true;
 		}
 		//
-		if(element instanceof ITargetTemplate) {
-			ITargetTemplate targetTemplate = (ITargetTemplate)element;
+		if(element instanceof TargetTemplate) {
+			TargetTemplate targetTemplate = (TargetTemplate)element;
 			String name = targetTemplate.getName();
 			String casNumber = targetTemplate.getCasNumber();
 			String comment = targetTemplate.getComments();

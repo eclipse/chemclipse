@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.targets;
 
 import java.util.List;
 
@@ -27,11 +27,13 @@ public class TargetTemplateListUI extends ExtendedTableViewer {
 
 	private static final String[] TITLES = TargetTemplateLabelProvider.TITLES;
 	private static final int[] BOUNDS = TargetTemplateLabelProvider.BOUNDS;
+	//
 	private TargetTemplateLabelProvider labelProvider = new TargetTemplateLabelProvider();
 	private TargetTemplateComparator tableComparator = new TargetTemplateComparator();
 	private TargetTemplateFilter listFilter = new TargetTemplateFilter();
 
 	public TargetTemplateListUI(Composite parent, int style) {
+
 		super(parent, style);
 		createColumns();
 	}

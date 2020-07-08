@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
-import org.eclipse.chemclipse.model.identifier.template.ITargetTemplate;
+import org.eclipse.chemclipse.model.identifier.template.TargetTemplate;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
@@ -53,8 +53,8 @@ public class TargetTemplateLabelProvider extends AbstractChemClipseLabelProvider
 	public String getColumnText(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof ITargetTemplate) {
-			ITargetTemplate targetTemplate = (ITargetTemplate)element;
+		if(element instanceof TargetTemplate) {
+			TargetTemplate targetTemplate = (TargetTemplate)element;
 			switch(columnIndex) {
 				case 0:
 					text = targetTemplate.getName();

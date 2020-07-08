@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.fieldeditors;
 
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.NamedTracesEditor;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTracesEditor;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;

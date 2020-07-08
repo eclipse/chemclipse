@@ -100,6 +100,26 @@ public class TargetValidator implements IValidator {
 		return name;
 	}
 
+	public String getCasNumber() {
+
+		return casNumber;
+	}
+
+	public String getComments() {
+
+		return comments;
+	}
+
+	public String getContributor() {
+
+		return contributor;
+	}
+
+	public String getReferenceId() {
+
+		return referenceId;
+	}
+
 	public IIdentificationTarget getIdentificationTarget() {
 
 		ILibraryInformation libraryInformation = new LibraryInformation();

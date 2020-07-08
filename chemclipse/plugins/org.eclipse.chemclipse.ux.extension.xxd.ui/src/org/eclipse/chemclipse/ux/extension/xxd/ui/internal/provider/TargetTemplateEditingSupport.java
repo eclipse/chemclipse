@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
-import org.eclipse.chemclipse.model.identifier.template.ITargetTemplate;
+import org.eclipse.chemclipse.model.identifier.template.TargetTemplate;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
@@ -46,8 +46,8 @@ public class TargetTemplateEditingSupport extends EditingSupport {
 	@Override
 	protected Object getValue(Object element) {
 
-		if(element instanceof ITargetTemplate) {
-			ITargetTemplate targetTemplate = (ITargetTemplate)element;
+		if(element instanceof TargetTemplate) {
+			TargetTemplate targetTemplate = (TargetTemplate)element;
 			switch(column) {
 				// case TargetTemplateLabelProvider.NAME:
 				// return targetTemplate.getName();
@@ -67,8 +67,8 @@ public class TargetTemplateEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 
-		if(element instanceof ITargetTemplate) {
-			ITargetTemplate targetTemplate = (ITargetTemplate)element;
+		if(element instanceof TargetTemplate) {
+			TargetTemplate targetTemplate = (TargetTemplate)element;
 			switch(column) {
 				// case TargetTemplateLabelProvider.NAME:
 				// targetTemplate.setName((String)value);

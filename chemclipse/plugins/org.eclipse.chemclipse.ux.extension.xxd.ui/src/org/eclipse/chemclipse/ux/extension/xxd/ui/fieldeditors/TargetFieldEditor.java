@@ -19,7 +19,6 @@ import java.util.Set;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
-import org.eclipse.chemclipse.model.identifier.template.ITargetTemplate;
 import org.eclipse.chemclipse.model.identifier.template.TargetTemplate;
 import org.eclipse.chemclipse.model.identifier.template.TargetTemplates;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
@@ -33,7 +32,7 @@ import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.DatabaseImpor
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.TargetTemplateInputValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.TargetTemplateListUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.targets.TargetTemplateListUI;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -165,7 +164,7 @@ public class TargetFieldEditor extends FieldEditor {
 				InputDialog dialog = new InputDialog(e.display.getActiveShell(), "Target", "You can create a new target here.", "Styrene | 100-42-5 | comment | contributor | referenceId", new TargetTemplateInputValidator(targetTemplates.keySet()));
 				if(IDialogConstants.OK_ID == dialog.open()) {
 					String item = dialog.getValue();
-					ITargetTemplate targetTemplate = targetTemplates.extractTargetTemplate(item);
+					TargetTemplate targetTemplate = targetTemplates.extractTargetTemplate(item);
 					if(targetTemplate != null) {
 						targetTemplates.add(targetTemplate);
 						setTableViewerInput();
@@ -188,15 +187,15 @@ public class TargetFieldEditor extends FieldEditor {
 
 				IStructuredSelection structuredSelection = (IStructuredSelection)targetTemplateListUI.getSelection();
 				Object object = structuredSelection.getFirstElement();
-				if(object instanceof ITargetTemplate) {
+				if(object instanceof TargetTemplate) {
 					Set<String> keySetEdit = new HashSet<>();
 					keySetEdit.addAll(targetTemplates.keySet());
-					ITargetTemplate targetTemplate = (ITargetTemplate)object;
+					TargetTemplate targetTemplate = (TargetTemplate)object;
 					keySetEdit.remove(targetTemplate.getName());
 					InputDialog dialog = new InputDialog(e.display.getActiveShell(), "Target", "Edit the target.", targetTemplates.extractTargetTemplate(targetTemplate), new TargetTemplateInputValidator(keySetEdit));
 					if(IDialogConstants.OK_ID == dialog.open()) {
 						String item = dialog.getValue();
-						ITargetTemplate targetTemplateNew = targetTemplates.extractTargetTemplate(item);
+						TargetTemplate targetTemplateNew = targetTemplates.extractTargetTemplate(item);
 						if(targetTemplateNew != null) {
 							targetTemplate.setName(targetTemplateNew.getName());
 							targetTemplate.setCasNumber(targetTemplateNew.getCasNumber());
@@ -225,8 +224,8 @@ public class TargetFieldEditor extends FieldEditor {
 				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Target Template(s)", "Do you want to delete the selected target template(s)?")) {
 					IStructuredSelection structuredSelection = (IStructuredSelection)targetTemplateListUI.getSelection();
 					for(Object object : structuredSelection.toArray()) {
-						if(object instanceof ITargetTemplate) {
-							targetTemplates.remove(((ITargetTemplate)object).getName());
+						if(object instanceof TargetTemplate) {
+							targetTemplates.remove(((TargetTemplate)object).getName());
 						}
 					}
 					setTableViewerInput();
@@ -380,7 +379,7 @@ public class TargetFieldEditor extends FieldEditor {
 				/*
 				 * Transfer the target
 				 */
-				ITargetTemplate targetTemplate = new TargetTemplate();
+				TargetTemplate targetTemplate = new TargetTemplate();
 				targetTemplate.setName(libraryInformation.getName());
 				targetTemplate.setCasNumber(libraryInformation.getCasNumber());
 				targetTemplate.setComments(libraryInformation.getComments());

@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier.template;
 
-public class TargetTemplate implements ITargetTemplate {
+public class TargetTemplate {
 
 	private String name = "";
 	private String casNumber = "";
@@ -30,61 +30,51 @@ public class TargetTemplate implements ITargetTemplate {
 		this.casNumber = casNumber;
 	}
 
-	@Override
 	public String getName() {
 
 		return name;
 	}
 
-	@Override
 	public void setName(String name) {
 
 		this.name = name;
 	}
 
-	@Override
 	public String getCasNumber() {
 
 		return casNumber;
 	}
 
-	@Override
 	public void setCasNumber(String casNumber) {
 
 		this.casNumber = casNumber;
 	}
 
-	@Override
 	public String getComments() {
 
 		return comments;
 	}
 
-	@Override
 	public void setComments(String comments) {
 
 		this.comments = comments;
 	}
 
-	@Override
 	public String getContributor() {
 
 		return contributor;
 	}
 
-	@Override
 	public void setContributor(String contributor) {
 
 		this.contributor = contributor;
 	}
 
-	@Override
 	public String getReferenceId() {
 
 		return referenceId;
 	}
 
-	@Override
 	public void setReferenceId(String referenceId) {
 
 		this.referenceId = referenceId;

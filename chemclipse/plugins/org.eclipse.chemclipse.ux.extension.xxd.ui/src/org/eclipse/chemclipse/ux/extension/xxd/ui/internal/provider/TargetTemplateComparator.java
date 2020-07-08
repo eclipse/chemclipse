@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
-import org.eclipse.chemclipse.model.identifier.template.ITargetTemplate;
+import org.eclipse.chemclipse.model.identifier.template.TargetTemplate;
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
 import org.eclipse.jface.viewers.Viewer;
@@ -22,10 +22,10 @@ public class TargetTemplateComparator extends AbstractRecordTableComparator impl
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof ITargetTemplate && e2 instanceof ITargetTemplate) {
+		if(e1 instanceof TargetTemplate && e2 instanceof TargetTemplate) {
 			//
-			ITargetTemplate targetTemplate1 = (ITargetTemplate)e1;
-			ITargetTemplate targetTemplate2 = (ITargetTemplate)e2;
+			TargetTemplate targetTemplate1 = (TargetTemplate)e1;
+			TargetTemplate targetTemplate2 = (TargetTemplate)e2;
 			//
 			switch(getPropertyIndex()) {
 				case 0:

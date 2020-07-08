@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2020 Lablicate GmbH.
- * 
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -9,22 +9,22 @@
  * Contributors:
  * Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.traces;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.targets;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.chemclipse.model.traces.NamedTrace;
-import org.eclipse.chemclipse.model.traces.NamedTraces;
+import org.eclipse.chemclipse.model.identifier.template.TargetTemplate;
+import org.eclipse.chemclipse.model.identifier.template.TargetTemplates;
+import org.eclipse.chemclipse.model.targets.TargetValidator;
 import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
-import org.eclipse.chemclipse.support.validators.TraceValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.NamedTraceInputValidator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.TargetTemplateInputValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IStatus;
@@ -49,50 +49,50 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Text;
 
-public class NamedTracesUI extends Composite {
+public class TargetTemplatesUI extends Composite {
 
-	private static final String TOOLTIP_TEXT = "Enter/modify the traces.";
+	private static final String TOOLTIP_TEXT = "Enter/modify the target templates.";
 	//
-	public static final String IMPORT_TITLE = "Import Named Trace(s)";
-	public static final String EXPORT_TITLE = "Export Named Trace(s)";
-	public static final String MESSAGE_IMPORT_SUCCESSFUL = "Named trace(s) have been imported successfully.";
-	public static final String MESSAGE_EXPORT_SUCCESSFUL = "Named trace(s) have been exported successfully.";
-	public static final String MESSAGE_EXPORT_FAILED = "Failed to export the named trace(s).";
+	public static final String IMPORT_TITLE = "Import Target Template(s)";
+	public static final String EXPORT_TITLE = "Export Target Template(s)";
+	public static final String MESSAGE_IMPORT_SUCCESSFUL = "Target template(s) have been imported successfully.";
+	public static final String MESSAGE_EXPORT_SUCCESSFUL = "Target template(s) have been exported successfully.";
+	public static final String MESSAGE_EXPORT_FAILED = "Failed to export the target template(s).";
 	//
 	private static final String FILTER_EXTENSION = "*.txt";
-	private static final String FILTER_NAME = "Named Traces (*.txt)";
-	private static final String FILE_NAME = "NamedTraces.txt";
+	private static final String FILTER_NAME = "Target Templates (*.txt)";
+	private static final String FILE_NAME = "TargetTemplates.txt";
 	//
 	private ComboViewer comboViewer;
-	private Text textTraces;
+	private Text textTargets;
 	private Button buttonAdd;
 	private Button buttonDelete;
 	private Button buttonImport;
 	private Button buttonExport;
 	//
-	private NamedTraces namedTraces = null;
-	private NamedTrace namedTrace = null;
+	private TargetTemplates targetTemplates = null;
+	private TargetTemplate targetTemplate = null;
 	//
 	private IUpdateListener updateListener = null;
 	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
-	public NamedTracesUI(Composite parent, int style) {
+	public TargetTemplatesUI(Composite parent, int style) {
 
 		super(parent, style);
 		createControl();
 	}
 
-	public void setInput(NamedTraces namedTraces) {
+	public void setInput(TargetTemplates targetTemplates) {
 
-		this.namedTraces = namedTraces;
+		this.targetTemplates = targetTemplates;
 		updateInput(null);
 	}
 
 	public void update() {
 
 		super.update();
-		updateNamedTrace();
+		updateTargetTemplate();
 	}
 
 	public void setUpdateListener(IUpdateListener updateListener) {
@@ -110,9 +110,9 @@ public class NamedTracesUI extends Composite {
 		if(index >= 0 && index < getItems().length) {
 			comboViewer.getCombo().select(index);
 			Object object = comboViewer.getStructuredSelection().getFirstElement();
-			if(object instanceof NamedTrace) {
-				namedTrace = (NamedTrace)object;
-				updateNamedTrace();
+			if(object instanceof TargetTemplate) {
+				targetTemplate = (TargetTemplate)object;
+				updateTargetTemplate();
 			}
 		}
 	}
@@ -120,21 +120,21 @@ public class NamedTracesUI extends Composite {
 	/**
 	 * Could be null if none has been set.
 	 * 
-	 * @return {@link NamedTraces}
+	 * @return {@link TargetTemplates}
 	 */
-	public NamedTraces getNamedTraces() {
+	public TargetTemplates getTargetTemplates() {
 
-		return namedTraces;
+		return targetTemplates;
 	}
 
 	/**
 	 * Could be null if none is selected.
 	 * 
-	 * @return {@link NamedTrace}
+	 * @return {@link TargetTemplate}
 	 */
-	public NamedTrace getNamedTrace() {
+	public TargetTemplate getTargetTemplate() {
 
-		return namedTrace;
+		return targetTemplate;
 	}
 
 	private void createControl() {
@@ -146,7 +146,7 @@ public class NamedTracesUI extends Composite {
 		setLayout(gridLayout);
 		//
 		comboViewer = createComboViewer(this);
-		textTraces = createText(this);
+		textTargets = createText(this);
 		buttonAdd = createButtonAdd(this);
 		buttonDelete = createButtonDelete(this);
 		buttonImport = createButtonImport(this);
@@ -163,9 +163,9 @@ public class NamedTracesUI extends Composite {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof NamedTrace) {
-					NamedTrace namedTrace = (NamedTrace)element;
-					return namedTrace.getIdentifier();
+				if(element instanceof TargetTemplate) {
+					TargetTemplate targetTemplate = (TargetTemplate)element;
+					return targetTemplate.getName();
 				}
 				return null;
 			}
@@ -173,7 +173,7 @@ public class NamedTracesUI extends Composite {
 		/*
 		 * Select the item.
 		 */
-		combo.setToolTipText("Select a named trace.");
+		combo.setToolTipText("Select a target template.");
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.widthHint = 150;
 		combo.setLayoutData(gridData);
@@ -183,9 +183,9 @@ public class NamedTracesUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof NamedTrace) {
-					namedTrace = (NamedTrace)object;
-					updateNamedTrace();
+				if(object instanceof TargetTemplate) {
+					targetTemplate = (TargetTemplate)object;
+					updateTargetTemplate();
 					fireUpdate();
 				}
 			}
@@ -198,10 +198,10 @@ public class NamedTracesUI extends Composite {
 
 		Text text = new Text(parent, SWT.BORDER);
 		text.setText("");
-		text.setToolTipText(TOOLTIP_TEXT);
+		text.setToolTipText("Target Template");
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
-		TraceValidator traceValidator = new TraceValidator();
+		TargetValidator targetValidator = new TargetValidator();
 		ControlDecoration controlDecoration = new ControlDecoration(text, SWT.LEFT | SWT.TOP);
 		//
 		text.addModifyListener(new ModifyListener() {
@@ -209,9 +209,13 @@ public class NamedTracesUI extends Composite {
 			@Override
 			public void modifyText(ModifyEvent event) {
 
-				if(namedTrace != null) {
-					if(validate(traceValidator, controlDecoration, text)) {
-						namedTrace.setTraces(traceValidator.getTracesAsString());
+				if(targetTemplate != null) {
+					if(validate(targetValidator, controlDecoration, text)) {
+						targetTemplate.setName(targetValidator.getName());
+						targetTemplate.setCasNumber(targetValidator.getCasNumber());
+						targetTemplate.setComments(targetValidator.getComments());
+						targetTemplate.setContributor(targetValidator.getContributor());
+						targetTemplate.setReferenceId(targetValidator.getReferenceId());
 						fireUpdate();
 					}
 				}
@@ -225,22 +229,22 @@ public class NamedTracesUI extends Composite {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Add a new named trace.");
+		button.setToolTipText("Add a new target template.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(namedTraces != null) {
-					InputDialog dialog = new InputDialog(e.display.getActiveShell(), "Named Trace", "Create a new named trace.", "Hydrocarbons | 57 71 85", new NamedTraceInputValidator(namedTraces.keySet()));
+				if(targetTemplates != null) {
+					InputDialog dialog = new InputDialog(e.display.getActiveShell(), "Target Template", "Create a new target template.", "Styrene | 100-42-5 | comment | contributor | referenceId", new TargetTemplateInputValidator(targetTemplates.keySet()));
 					if(IDialogConstants.OK_ID == dialog.open()) {
 						String item = dialog.getValue();
-						NamedTrace namedTraceNew = namedTraces.extractNamedTrace(item);
-						if(namedTraceNew != null) {
-							namedTraces.add(namedTraceNew);
-							namedTrace = namedTraceNew;
-							updateInput(namedTrace.getIdentifier());
+						TargetTemplate targetTemplateNew = targetTemplates.extractTargetTemplate(item);
+						if(targetTemplateNew != null) {
+							targetTemplates.add(targetTemplateNew);
+							targetTemplate = targetTemplateNew;
+							updateInput(targetTemplate.getName());
 							fireUpdate();
 						}
 					}
@@ -254,18 +258,18 @@ public class NamedTracesUI extends Composite {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Delete the selected named trace.");
+		button.setToolTipText("Delete the selected target template.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Named Trace", "Would you like to delete the selected named trace?")) {
+				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Target Template", "Would you like to delete the selected target template?")) {
 					Object object = comboViewer.getStructuredSelection().getFirstElement();
-					if(object instanceof NamedTrace) {
-						namedTrace = null;
-						namedTraces.remove((NamedTrace)object);
+					if(object instanceof TargetTemplate) {
+						targetTemplate = null;
+						targetTemplates.remove(((TargetTemplate)object).getName());
 						updateInput(null);
 						fireUpdate();
 					}
@@ -279,24 +283,24 @@ public class NamedTracesUI extends Composite {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Import named trace(s).");
+		button.setToolTipText("Import target template(s).");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(namedTraces != null) {
+				if(targetTemplates != null) {
 					FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
 					fileDialog.setText(IMPORT_TITLE);
 					fileDialog.setFilterExtensions(new String[]{FILTER_EXTENSION});
 					fileDialog.setFilterNames(new String[]{FILTER_NAME});
-					fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_NAMED_TRACES_TEMPLATE_FOLDER));
+					fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_TARGET_TEMPLATES_FOLDER));
 					String path = fileDialog.open();
 					if(path != null) {
-						preferenceStore.putValue(PreferenceConstants.P_NAMED_TRACES_TEMPLATE_FOLDER, fileDialog.getFilterPath());
+						preferenceStore.putValue(PreferenceConstants.P_TARGET_TEMPLATES_FOLDER, fileDialog.getFilterPath());
 						File file = new File(path);
-						namedTraces.importItems(file);
+						targetTemplates.importItems(file);
 						MessageDialog.openInformation(e.display.getActiveShell(), IMPORT_TITLE, MESSAGE_IMPORT_SUCCESSFUL);
 						updateInput(null);
 						fireUpdate();
@@ -311,26 +315,26 @@ public class NamedTracesUI extends Composite {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Export named trace(s).");
+		button.setToolTipText("Export target template(s).");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXPORT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(namedTraces != null) {
+				if(targetTemplates != null) {
 					FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
 					fileDialog.setOverwrite(true);
 					fileDialog.setText(EXPORT_TITLE);
 					fileDialog.setFilterExtensions(new String[]{FILTER_EXTENSION});
 					fileDialog.setFilterNames(new String[]{FILTER_NAME});
 					fileDialog.setFileName(FILE_NAME);
-					fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_NAMED_TRACES_TEMPLATE_FOLDER));
+					fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_TARGET_TEMPLATES_FOLDER));
 					String path = fileDialog.open();
 					if(path != null) {
-						preferenceStore.putValue(PreferenceConstants.P_NAMED_TRACES_TEMPLATE_FOLDER, fileDialog.getFilterPath());
+						preferenceStore.putValue(PreferenceConstants.P_TARGET_TEMPLATES_FOLDER, fileDialog.getFilterPath());
 						File file = new File(path);
-						if(namedTraces.exportItems(file)) {
+						if(targetTemplates.exportItems(file)) {
 							MessageDialog.openInformation(e.display.getActiveShell(), EXPORT_TITLE, MESSAGE_EXPORT_SUCCESSFUL);
 						} else {
 							MessageDialog.openWarning(e.display.getActiveShell(), EXPORT_TITLE, MESSAGE_EXPORT_FAILED);
@@ -344,13 +348,13 @@ public class NamedTracesUI extends Composite {
 
 	private void updateInput(String identifier) {
 
-		namedTrace = null;
-		if(namedTraces != null) {
+		targetTemplate = null;
+		if(targetTemplates != null) {
 			/*
 			 * Sort the traces by identifier.
 			 */
-			List<NamedTrace> traces = new ArrayList<>(namedTraces.values());
-			Collections.sort(traces, (t1, t2) -> t1.getIdentifier().compareTo(t2.getIdentifier()));
+			List<TargetTemplate> traces = new ArrayList<>(targetTemplates.values());
+			Collections.sort(traces, (t1, t2) -> t1.getName().compareTo(t2.getName()));
 			/*
 			 * Populate the combo viewer
 			 */
@@ -368,7 +372,7 @@ public class NamedTracesUI extends Composite {
 				} else {
 					exitloop:
 					for(int i = 0; i < traces.size(); i++) {
-						if(identifier.equals(traces.get(i).getIdentifier())) {
+						if(identifier.equals(traces.get(i).getName())) {
 							index = i;
 							break exitloop;
 						}
@@ -379,7 +383,7 @@ public class NamedTracesUI extends Composite {
 				 */
 				if(index >= 0 && index < itemCount) {
 					combo.select(index);
-					namedTrace = traces.get(index);
+					targetTemplate = traces.get(index);
 				}
 			}
 			//
@@ -398,13 +402,17 @@ public class NamedTracesUI extends Composite {
 			comboViewer.setInput(null);
 		}
 		//
-		updateNamedTrace();
+		updateTargetTemplate();
 	}
 
-	private void updateNamedTrace() {
+	private void updateTargetTemplate() {
 
-		textTraces.setText(namedTrace != null ? namedTrace.getTraces() : "");
-		buttonDelete.setEnabled(namedTrace != null);
+		String text = "";
+		if(targetTemplates != null && targetTemplate != null) {
+			text = targetTemplates.extractTargetTemplate(targetTemplate);
+		}
+		textTargets.setText(text);
+		buttonDelete.setEnabled(targetTemplate != null);
 	}
 
 	private boolean validate(IValidator validator, ControlDecoration controlDecoration, Text text) {

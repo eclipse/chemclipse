@@ -23,7 +23,7 @@ import java.util.Iterator;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.targets.TargetListUtil;
 
-public class TargetTemplates extends HashMap<String, ITargetTemplate> {
+public class TargetTemplates extends HashMap<String, TargetTemplate> {
 
 	private static final long serialVersionUID = -439374805911311705L;
 	private static final Logger logger = Logger.getLogger(TargetTemplates.class);
@@ -44,7 +44,7 @@ public class TargetTemplates extends HashMap<String, ITargetTemplate> {
 		load(targetTemplates);
 	}
 
-	public void add(ITargetTemplate targetTemplate) {
+	public void add(TargetTemplate targetTemplate) {
 
 		if(targetTemplate != null) {
 			put(targetTemplate.getName(), targetTemplate);
@@ -64,9 +64,9 @@ public class TargetTemplates extends HashMap<String, ITargetTemplate> {
 	public String save() {
 
 		StringBuilder builder = new StringBuilder();
-		Iterator<ITargetTemplate> iterator = values().iterator();
+		Iterator<TargetTemplate> iterator = values().iterator();
 		while(iterator.hasNext()) {
-			ITargetTemplate targetTemplate = iterator.next();
+			TargetTemplate targetTemplate = iterator.next();
 			extractTargetTemplate(targetTemplate, builder);
 			if(iterator.hasNext()) {
 				builder.append(TargetListUtil.SEPARATOR_TOKEN);
@@ -81,7 +81,7 @@ public class TargetTemplates extends HashMap<String, ITargetTemplate> {
 			BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
 			String line;
 			while((line = bufferedReader.readLine()) != null) {
-				ITargetTemplate template = extractTargetTemplate(line);
+				TargetTemplate template = extractTargetTemplate(line);
 				if(template != null) {
 					add(template);
 				}
@@ -98,10 +98,10 @@ public class TargetTemplates extends HashMap<String, ITargetTemplate> {
 
 		try {
 			PrintWriter printWriter = new PrintWriter(file);
-			Iterator<ITargetTemplate> iterator = values().iterator();
+			Iterator<TargetTemplate> iterator = values().iterator();
 			while(iterator.hasNext()) {
 				StringBuilder builder = new StringBuilder();
-				ITargetTemplate template = iterator.next();
+				TargetTemplate template = iterator.next();
 				extractTargetTemplate(template, builder);
 				printWriter.println(builder.toString());
 			}
@@ -120,7 +120,7 @@ public class TargetTemplates extends HashMap<String, ITargetTemplate> {
 			String[] items = targetListUtil.parseString(targetTemplates);
 			if(items.length > 0) {
 				for(String item : items) {
-					ITargetTemplate targetTemplate = extractTargetTemplate(item);
+					TargetTemplate targetTemplate = extractTargetTemplate(item);
 					if(targetTemplate != null) {
 						add(targetTemplate);
 					}
@@ -129,16 +129,16 @@ public class TargetTemplates extends HashMap<String, ITargetTemplate> {
 		}
 	}
 
-	public String extractTargetTemplate(ITargetTemplate targetTemplate) {
+	public String extractTargetTemplate(TargetTemplate targetTemplate) {
 
 		StringBuilder builder = new StringBuilder();
 		extractTargetTemplate(targetTemplate, builder);
 		return builder.toString();
 	}
 
-	public ITargetTemplate extractTargetTemplate(String item) {
+	public TargetTemplate extractTargetTemplate(String item) {
 
-		ITargetTemplate targetTemplate = null;
+		TargetTemplate targetTemplate = null;
 		//
 		if(!"".equals(item)) {
 			String[] values = item.split("\\" + TargetListUtil.SEPARATOR_ENTRY);
@@ -153,7 +153,7 @@ public class TargetTemplates extends HashMap<String, ITargetTemplate> {
 		return targetTemplate;
 	}
 
-	private void extractTargetTemplate(ITargetTemplate targetTemplate, StringBuilder builder) {
+	private void extractTargetTemplate(TargetTemplate targetTemplate, StringBuilder builder) {
 
 		builder.append(targetTemplate.getName());
 		builder.append(" ");
