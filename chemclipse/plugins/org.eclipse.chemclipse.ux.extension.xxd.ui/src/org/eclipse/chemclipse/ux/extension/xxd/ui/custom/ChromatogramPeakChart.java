@@ -97,15 +97,11 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public void updateChromatogram(IChromatogramSelection chromatogramSelection, PeakChartSettings peakChartSettings) {
 
+		clearChromatogramSeries();
 		clearSelectedPeakSeries();
 		clearPeakLabelMarker();
 		//
-		if(chromatogramSelection == null) {
-			deleteSeries(SERIES_ID_CHROMATOGRAM_TIC);
-			deleteSeries(SERIES_ID_CHROMATOGRAM_XIC);
-			deleteSeries(SERIES_ID_BASELINE);
-			deleteSeries(SERIES_ID_PEAKS_NORMAL);
-		} else {
+		if(chromatogramSelection != null) {
 			/*
 			 * Add series
 			 */
@@ -401,6 +397,14 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 	private String getSelectedPeakSerieId(String id, int index) {
 
 		return id + " (" + index + ")";
+	}
+
+	private void clearChromatogramSeries() {
+
+		deleteSeries(SERIES_ID_CHROMATOGRAM_TIC);
+		deleteSeries(SERIES_ID_CHROMATOGRAM_XIC);
+		deleteSeries(SERIES_ID_BASELINE);
+		deleteSeries(SERIES_ID_PEAKS_NORMAL);
 	}
 
 	private void clearSelectedPeakSeries() {
