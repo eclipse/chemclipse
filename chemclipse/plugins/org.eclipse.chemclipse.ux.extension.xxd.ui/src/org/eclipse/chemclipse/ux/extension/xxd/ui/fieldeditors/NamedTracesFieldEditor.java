@@ -11,14 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.fieldeditors;
 
-import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTracesEditor;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTracesSettingsEditor;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 
 public class NamedTracesFieldEditor extends FieldEditor {
 
-	private NamedTracesEditor editor;
+	private NamedTracesSettingsEditor editor;
 
 	public NamedTracesFieldEditor(String name, String labelText, Composite parent) {
 
@@ -30,7 +30,7 @@ public class NamedTracesFieldEditor extends FieldEditor {
 	protected void doFillIntoGrid(Composite parent, int numColumns) {
 
 		getLabelControl(parent);
-		editor = new NamedTracesEditor(parent, null, null);
+		editor = new NamedTracesSettingsEditor(parent, null, null);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		editor.getControl().setLayoutData(gridData);
 	}

@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.targets;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.identifier.template.TargetTemplate;
@@ -131,7 +132,7 @@ public class TargetTemplatesEditor extends Composite {
 							/*
 							 * Delete
 							 */
-							deleteTargetTemplates(deleteItems);
+							delete(deleteItems);
 							/*
 							 * Update
 							 */
@@ -146,7 +147,7 @@ public class TargetTemplatesEditor extends Composite {
 		return targetTemplateListUI;
 	}
 
-	private void deleteTargetTemplates(List<TargetTemplate> deleteItems) {
+	private void delete(List<TargetTemplate> deleteItems) {
 
 		if(targetTemplates != null) {
 			for(TargetTemplate deleteItem : deleteItems) {
@@ -163,7 +164,9 @@ public class TargetTemplatesEditor extends Composite {
 	private void updateTargetTemplatesTable() {
 
 		if(targetTemplates != null) {
-			targetTemplateListUI.setInput(targetTemplates.values());
+			List<TargetTemplate> list = new ArrayList<>(targetTemplates.values());
+			Collections.sort(list, (t1, t2) -> t1.getName().compareTo(t2.getName()));
+			targetTemplateListUI.setInput(list);
 		} else {
 			targetTemplateListUI.setInput(null);
 		}

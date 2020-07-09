@@ -27,7 +27,7 @@ public class NamedTracesLabelProvider extends AbstractChemClipseLabelProvider {
 			TRACES //
 	};
 	public static final int[] BOUNDS = { //
-			200, //
+			300, //
 			250 //
 	};
 
