@@ -33,7 +33,7 @@ public class TargetTemplateLabelProvider extends AbstractChemClipseLabelProvider
 			REFERENCE_ID//
 	};
 	public static final int[] BOUNDS = { //
-			200, //
+			250, //
 			100, //
 			100, //
 			100, //

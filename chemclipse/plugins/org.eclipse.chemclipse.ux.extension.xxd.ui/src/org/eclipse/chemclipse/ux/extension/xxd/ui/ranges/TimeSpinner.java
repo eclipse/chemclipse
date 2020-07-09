@@ -54,9 +54,10 @@ public class TimeSpinner extends Composite {
 	private IUpdateListener updateListener = null;
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
-	IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public TimeSpinner(Composite parent, int style, TimeRange.Marker marker) {
+
 		super(parent, style);
 		this.marker = marker;
 		createControl();
