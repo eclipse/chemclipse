@@ -17,6 +17,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -48,6 +49,13 @@ public class TargetTemplates extends HashMap<String, TargetTemplate> {
 
 		if(targetTemplate != null) {
 			put(targetTemplate.getName(), targetTemplate);
+		}
+	}
+
+	public void addAll(Collection<TargetTemplate> targetTemplates) {
+
+		for(TargetTemplate targetTemplate : targetTemplates) {
+			add(targetTemplate);
 		}
 	}
 

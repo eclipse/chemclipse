@@ -37,6 +37,7 @@ public class NamedTraces {
 	private final Map<String, NamedTrace> namedTraceMap = new HashMap<>();
 
 	public NamedTraces() {
+
 	}
 
 	/**
@@ -45,12 +46,13 @@ public class NamedTraces {
 	 * @param namedTraces
 	 */
 	public NamedTraces(String namedTraces) {
+
 		load(namedTraces);
 	}
 
-	public void addAll(Collection<NamedTrace> NamedTraces) {
+	public void addAll(Collection<NamedTrace> namedTraces) {
 
-		for(NamedTrace namedTrace : NamedTraces) {
+		for(NamedTrace namedTrace : namedTraces) {
 			add(namedTrace);
 		}
 	}
