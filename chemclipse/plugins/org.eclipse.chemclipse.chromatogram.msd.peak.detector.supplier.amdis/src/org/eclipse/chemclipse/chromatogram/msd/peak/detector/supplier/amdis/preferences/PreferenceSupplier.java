@@ -16,6 +16,7 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.Activator;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.IOnsiteSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.PeakDetectorELUSettings;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.PeakDetectorSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
@@ -99,6 +100,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_FILTER_MODEL_PEAKS = "filterModelPeaks";
 	public static final boolean DEF_FILTER_MODEL_PEAKS = true;
 	//
+	public static final String P_PATH_ELU_FILE = "pathELUFile";
+	public static final String DEF_PATH_ELU_FILE = "";
+	//
 	private static IPreferenceSupplier preferenceSupplier;
 
 	public static IPreferenceSupplier INSTANCE() {
@@ -169,6 +173,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_MAX_TAILING, Float.toString(DEF_MAX_TAILING));
 		defaultValues.put(P_FILTER_MODEL_PEAKS, Boolean.toString(DEF_FILTER_MODEL_PEAKS));
 		//
+		defaultValues.put(P_PATH_ELU_FILE, DEF_PATH_ELU_FILE);
+		//
 		return defaultValues;
 	}
 
@@ -180,8 +186,25 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static PeakDetectorSettings getPeakDetectorSettings() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		PeakDetectorSettings peakDetectorSettings = new PeakDetectorSettings();
+		setPeakDetectorSettings(peakDetectorSettings);
+		//
+		return peakDetectorSettings;
+	}
+
+	public static PeakDetectorELUSettings getPeakDetectorELUSettings() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		PeakDetectorELUSettings peakDetectorSettings = new PeakDetectorELUSettings();
+		setPeakDetectorSettings(peakDetectorSettings);
+		peakDetectorSettings.setPathFileELU(preferences.get(P_PATH_ELU_FILE, DEF_PATH_ELU_FILE));
+		//
+		return peakDetectorSettings;
+	}
+
+	public static void setPeakDetectorSettings(PeakDetectorSettings peakDetectorSettings) {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		peakDetectorSettings.setMinSignalToNoiseRatio(preferences.getFloat(P_MIN_SN_RATIO, DEF_MIN_SN_RATIO));
 		peakDetectorSettings.setMinLeading(preferences.getFloat(P_MIN_LEADING, DEF_MIN_LEADING));
 		peakDetectorSettings.setMaxLeading(preferences.getFloat(P_MAX_LEADING, DEF_MAX_LEADING));
@@ -208,8 +231,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		onsiteSettings.setValue(IOnsiteSettings.KEY_RESOLUTION, preferences.get(P_RESOLUTION, DEF_RESOLUTION));
 		onsiteSettings.setValue(IOnsiteSettings.KEY_SENSITIVITY, preferences.get(P_SENSITIVITY, DEF_SENSITIVITY));
 		onsiteSettings.setValue(IOnsiteSettings.KEY_SHAPE_REQUIREMENTS, preferences.get(P_SHAPE_REQUIREMENTS, DEF_SHAPE_REQUIREMENTS));
-		//
-		return peakDetectorSettings;
 	}
 
 	public static String getMacWineBinary() {

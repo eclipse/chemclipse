@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -20,12 +20,13 @@ import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 
+@SuppressWarnings("rawtypes")
 public abstract class AbstractMassSpectrumExportConverter extends AbstractExportConverter implements IMassSpectrumExportConverter {
 
 	@Override
-	public IProcessingInfo validate(IScanMSD massSpectrum) {
+	public IProcessingInfo<?> validate(IScanMSD massSpectrum) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		if(massSpectrum == null) {
 			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Mass Spectra Export", "The is no mass spectrum to export.");
 			processingInfo.addMessage(processingMessage);
@@ -34,9 +35,9 @@ public abstract class AbstractMassSpectrumExportConverter extends AbstractExport
 	}
 
 	@Override
-	public IProcessingInfo validate(IMassSpectra massSpectra) {
+	public IProcessingInfo<?> validate(IMassSpectra massSpectra) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		if(massSpectra == null) {
 			IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Mass Spectra Export", "The are no mass spectra to export.");
 			processingInfo.addMessage(processingMessage);

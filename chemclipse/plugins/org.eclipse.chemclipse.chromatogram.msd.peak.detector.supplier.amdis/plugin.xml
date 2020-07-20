@@ -11,6 +11,15 @@
       </PeakDetector>
    </extension>
    <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.peak.detector.peakDetectorSupplier">
+      <PeakDetector
+            description="Import deconvoluted data from an *.ELU file."
+            id="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.elu"
+            peakDetector="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.core.PeakDetectorELU"
+            peakDetectorName="AMDIS [ELU] (extern)">
+      </PeakDetector>
+   </extension>   
+   <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
             class="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.preferences.PreferenceInitializer">

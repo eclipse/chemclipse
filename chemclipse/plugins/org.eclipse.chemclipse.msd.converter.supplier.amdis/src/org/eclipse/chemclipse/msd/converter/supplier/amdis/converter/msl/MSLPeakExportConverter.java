@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -22,7 +22,6 @@ import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.peak.AbstractPeakExportConverter;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.internal.converter.SpecificationValidatorMSL;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.PeakWriterMSL;
-import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -69,14 +68,6 @@ public class MSLPeakExportConverter extends AbstractPeakExportConverter {
 				processingInfo.addErrorMessage(DESCRIPTION, "Something has gone completely wrong: " + file.getAbsolutePath());
 			}
 		}
-		return processingInfo;
-	}
-
-	private IProcessingInfo validate(File file, IPeakMSD peak) {
-
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		processingInfo.addMessages(super.validate(file));
-		processingInfo.addMessages(super.validate(peak));
 		return processingInfo;
 	}
 

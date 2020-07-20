@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -49,7 +49,7 @@ public class AbstractMassSpectrumImportConverter_1_Test extends TestCase {
 	public void testFileNotFoundException_1() {
 
 		File file = new File("");
-		IProcessingInfo processingInfo = ic.convert(file, new NullProgressMonitor());
+		IProcessingInfo<?> processingInfo = ic.convert(file, new NullProgressMonitor());
 		assertTrue(processingInfo.hasErrorMessages());
 	}
 

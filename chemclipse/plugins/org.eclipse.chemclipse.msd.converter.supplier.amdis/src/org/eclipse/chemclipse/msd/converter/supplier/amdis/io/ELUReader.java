@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2019 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -58,23 +58,24 @@ public class ELUReader implements IPeakReader {
 	 * We could try to add additional filter options in this class.
 	 */
 	private static final Logger logger = Logger.getLogger(ELUReader.class);
-	private static final Pattern hitsPattern = Pattern.compile("(NAME)");
-	private static final Pattern peakDataPattern = Pattern.compile("(NAME)(.*?)(^$)", Pattern.DOTALL | Pattern.MULTILINE);
-	private static final Pattern namePattern = Pattern.compile("(NAME)(.*)(SC)([0-9]+)(.*)(FR)([0-9]+)(-)([0-9]+)(.*)(RT)([0-9]+[.,]+[0-9]+)"); // "(NAME)(.*)"
-	private static final Pattern profileDataPattern = Pattern.compile("(RE)(.*?)(NUM PEAKS)", Pattern.DOTALL | Pattern.MULTILINE);
-	private static final Pattern profilePattern = Pattern.compile("([0-9]+)");
-	private static final Pattern peakPattern = Pattern.compile("(NUM PEAKS)(.*)", Pattern.DOTALL | Pattern.MULTILINE);
-	private static final Pattern ionPattern = Pattern.compile("\\((\\d+),(\\d+) ?(\\w[\\d.]*)?\\)");
+	//
+	private static final Pattern HITS_PATTERN = Pattern.compile("(NAME)");
+	private static final Pattern PEAK_DATA_PATTERN = Pattern.compile("(NAME)(.*?)(^$)", Pattern.DOTALL | Pattern.MULTILINE);
+	private static final Pattern NAME_PATTERN = Pattern.compile("(NAME)(.*)(SC)([0-9]+)(.*)(FR)([0-9]+)(-)([0-9]+)(.*)(RT)([0-9]+[.,]+[0-9]+)"); // "(NAME)(.*)"
+	private static final Pattern PROFILE_DATA_PATTERN = Pattern.compile("(RE)(.*?)(NUM PEAKS)", Pattern.DOTALL | Pattern.MULTILINE);
+	private static final Pattern PROFILE_PATTERN = Pattern.compile("([0-9]+)");
+	private static final Pattern PEAK_PATTERN = Pattern.compile("(NUM PEAKS)(.*)", Pattern.DOTALL | Pattern.MULTILINE);
+	private static final Pattern ION_PATTERN = Pattern.compile("\\((\\d+),(\\d+) ?(\\w[\\d.]*)?\\)");
 	//
 	private static final String CHARSET_US = "US-ASCII";
 	private static final String NEW_LINE = "\n";
 	private static final String CARRIAGE_RETURN = "\r";
 
 	@Override
-	public IProcessingInfo read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IProcessingInfo<IPeaks<?>> read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
 		Charset charset = Charset.forName(CHARSET_US);
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<IPeaks<?>> processingInfo = new ProcessingInfo<IPeaks<?>>();
 		String content = FileUtils.readFileToString(file, charset);
 		int numberOfHits = getNumberOfHits(content);
 		if(numberOfHits <= 0) {
@@ -96,7 +97,7 @@ public class ELUReader implements IPeakReader {
 
 	private int getNumberOfHits(String content) {
 
-		Matcher matcher = hitsPattern.matcher(content);
+		Matcher matcher = HITS_PATTERN.matcher(content);
 		int counter = 0;
 		while(matcher.find()) {
 			counter++;
@@ -113,7 +114,7 @@ public class ELUReader implements IPeakReader {
 	private int calculateScanIntervalSimple(String content) {
 
 		List<Double> scanIntervals = new ArrayList<Double>();
-		Matcher matcher = namePattern.matcher(content);
+		Matcher matcher = NAME_PATTERN.matcher(content);
 		while(matcher.find()) {
 			/*
 			 * Try to calculate a mean value using the scan number and its retention time.
@@ -153,7 +154,7 @@ public class ELUReader implements IPeakReader {
 		 * Key: Scan, Value: Retention Time
 		 */
 		Map<Integer, Double> scanRetentionTimes = new HashMap<Integer, Double>();
-		Matcher matcher = namePattern.matcher(content);
+		Matcher matcher = NAME_PATTERN.matcher(content);
 		while(matcher.find()) {
 			/*
 			 * Try to calculate a mean value using the scan number and its retention time.
@@ -222,7 +223,7 @@ public class ELUReader implements IPeakReader {
 			processingInfo.addErrorMessage("AMDIS ELU Parser", "There seems to be no peak in the file. The scan interval is <= 0.");
 		} else {
 			IPeaks peaks = new Peaks();
-			Matcher matcher = peakDataPattern.matcher(content);
+			Matcher matcher = PEAK_DATA_PATTERN.matcher(content);
 			while(matcher.find()) {
 				/*
 				 * Extract each peak.
@@ -301,7 +302,7 @@ public class ELUReader implements IPeakReader {
 	private int extractPeakStartRetentionTime(String peakData, int scanInterval) {
 
 		int startRetentionTime = 0;
-		Matcher matcher = namePattern.matcher(peakData);
+		Matcher matcher = NAME_PATTERN.matcher(peakData);
 		if(matcher.find()) {
 			try {
 				int scan = Integer.parseInt(matcher.group(4));
@@ -320,7 +321,7 @@ public class ELUReader implements IPeakReader {
 
 	private void extractScanRange(IPeakModelMSD peakModel, String peakData) {
 
-		Matcher matcher = namePattern.matcher(peakData);
+		Matcher matcher = NAME_PATTERN.matcher(peakData);
 		if(matcher.find()) {
 			int maxScan = Integer.parseInt(matcher.group(4));
 			int startScan = Integer.parseInt(matcher.group(7));
@@ -335,7 +336,7 @@ public class ELUReader implements IPeakReader {
 	private IPeakIntensityValues extractPeakProfile(String peakData, int peakStartRetentionTime, int scanInterval) {
 
 		IPeakIntensityValues peakIntensityValues = new PeakIntensityValues(Float.MAX_VALUE);
-		Matcher matcher = profileDataPattern.matcher(peakData);
+		Matcher matcher = PROFILE_DATA_PATTERN.matcher(peakData);
 		if(matcher.find()) {
 			String profileData = matcher.group().replaceAll(NEW_LINE, " ").replaceAll(CARRIAGE_RETURN, " ");
 			extractProfile(peakIntensityValues, profileData, peakStartRetentionTime, scanInterval);
@@ -347,7 +348,7 @@ public class ELUReader implements IPeakReader {
 	private void extractProfile(IPeakIntensityValues peakIntensityValues, String profileData, int peakStartRetentionTime, int scanInterval) {
 
 		int retentionTime = peakStartRetentionTime;
-		Matcher matcher = profilePattern.matcher(profileData);
+		Matcher matcher = PROFILE_PATTERN.matcher(profileData);
 		while(matcher.find()) {
 			try {
 				float relativeIntensity = Float.parseFloat(matcher.group(1));
@@ -362,7 +363,7 @@ public class ELUReader implements IPeakReader {
 	private IPeakMassSpectrum extractPeakMassSpectrum(String peakData) {
 
 		IPeakMassSpectrum peakMassSpectrum = new PeakMassSpectrum();
-		Matcher matcher = peakPattern.matcher(peakData);
+		Matcher matcher = PEAK_PATTERN.matcher(peakData);
 		if(matcher.find()) {
 			String massSpectrumData = matcher.group().replaceAll(NEW_LINE, " ").replaceAll(CARRIAGE_RETURN, " ");
 			extractPeakIons(massSpectrumData, peakMassSpectrum);
@@ -373,7 +374,7 @@ public class ELUReader implements IPeakReader {
 
 	private void extractPeakIons(String massSpectrumData, IPeakMassSpectrum peakMassSpectrum) {
 
-		Matcher ions = ionPattern.matcher(massSpectrumData);
+		Matcher ions = ION_PATTERN.matcher(massSpectrumData);
 		while(ions.find()) {
 			try {
 				if(PreferenceSupplier.isExcludeUncertainIons()) {

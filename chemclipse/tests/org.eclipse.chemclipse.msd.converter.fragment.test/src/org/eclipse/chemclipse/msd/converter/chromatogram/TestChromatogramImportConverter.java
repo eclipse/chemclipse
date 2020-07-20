@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -22,25 +22,24 @@ import org.eclipse.core.runtime.IProgressMonitor;
 /**
  * THIS CLASS IS NOT SUITED FOR PRODUCTIVE USE!<br/>
  * IT IS AN TESTCLASS!
- * 
- * @author eselmeister
  */
+@SuppressWarnings("rawtypes")
 public class TestChromatogramImportConverter extends AbstractChromatogramImportConverter implements IChromatogramImportConverter {
 
 	@Override
-	public IProcessingInfo convert(File chromatogram, IProgressMonitor monitor) {
+	public IProcessingInfo<?> convert(File chromatogram, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = super.validate(chromatogram);
-		IProcessingInfo processingInfoImport = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = super.validate(chromatogram);
+		IProcessingInfo<?> processingInfoImport = new ProcessingInfo<Object>();
 		processingInfoImport.addMessages(processingInfo);
 		return processingInfoImport;
 	}
 
 	@Override
-	public IProcessingInfo convertOverview(File chromatogram, IProgressMonitor monitor) {
+	public IProcessingInfo<?> convertOverview(File chromatogram, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = super.validate(chromatogram);
-		IProcessingInfo processingInfoImport = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = super.validate(chromatogram);
+		IProcessingInfo<?> processingInfoImport = new ProcessingInfo<Object>();
 		processingInfoImport.addMessages(processingInfo);
 		return processingInfoImport;
 	}

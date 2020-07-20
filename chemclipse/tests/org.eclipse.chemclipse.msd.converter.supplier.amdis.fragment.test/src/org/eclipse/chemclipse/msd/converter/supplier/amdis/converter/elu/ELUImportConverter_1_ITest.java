@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2019 Lablicate GmbH.
+ * Copyright (c) 2015, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -57,14 +57,14 @@ public class ELUImportConverter_1_ITest extends TestCase {
 		super.tearDown();
 	}
 
+	@SuppressWarnings("unchecked")
 	public void testRead_1() {
 
 		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
 		preferences.putBoolean(PreferenceSupplier.P_EXCLUDE_UNCERTAIN_IONS, false);
 		try {
-			@SuppressWarnings("unchecked")
-			IProcessingInfo<IPeaks> processingInfo = reader.read(file, new NullProgressMonitor());
-			List<IPeak> peaks = processingInfo.getProcessingResult().getPeaks();
+			IProcessingInfo<IPeaks<?>> processingInfo = reader.read(file, new NullProgressMonitor());
+			List<IPeak> peaks = (List<IPeak>)processingInfo.getProcessingResult().getPeaks();
 			IPeakMSD peak1 = (IPeakMSD)peaks.get(0);
 			//
 			assertEquals(14, peak1.getPeakModel().getTemporarilyInfo(IPeakReader.TEMP_INFO_START_SCAN));

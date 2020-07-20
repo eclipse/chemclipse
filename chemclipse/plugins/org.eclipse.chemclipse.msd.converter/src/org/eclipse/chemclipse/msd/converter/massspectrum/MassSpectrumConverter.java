@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -57,6 +57,7 @@ public class MassSpectrumConverter {
 	 * This class has only static methods.
 	 */
 	private MassSpectrumConverter() {
+
 	}
 
 	/**
@@ -322,7 +323,7 @@ public class MassSpectrumConverter {
 	// ---------------------------------------------ConverterMethods
 	private static <T> IProcessingInfo<T> getNoExportConverterAvailableProcessingInfo(File file) {
 
-		IProcessingInfo<T> processingInfo = new ProcessingInfo();
+		IProcessingInfo<T> processingInfo = new ProcessingInfo<>();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.WARN, "MassSpectrum Export Converter", "There is no suitable converter available to export the mass spectra to the file: " + file.getAbsolutePath());
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;
@@ -330,7 +331,7 @@ public class MassSpectrumConverter {
 
 	private static <T> IProcessingInfo<T> getNoImportConverterAvailableProcessingInfo(File file) {
 
-		IProcessingInfo<T> processingInfo = new ProcessingInfo();
+		IProcessingInfo<T> processingInfo = new ProcessingInfo<>();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.WARN, "MassSpectrum Import Converter", "There is no suitable converter available to load the mass spectra from the file: " + file.getAbsolutePath());
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;
