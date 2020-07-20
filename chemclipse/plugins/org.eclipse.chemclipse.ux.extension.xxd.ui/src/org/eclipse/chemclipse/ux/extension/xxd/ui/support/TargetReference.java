@@ -64,6 +64,7 @@ public interface TargetReference extends ITargetSupplier {
 				return name;
 			}
 		}
+		//
 		if(libraryField == LibraryField.CLASSIFICATION) {
 			IPeak peak = Adapters.adapt(this, IPeak.class);
 			if(peak != null) {
@@ -80,10 +81,12 @@ public interface TargetReference extends ITargetSupplier {
 				return Classifiable.asString(set);
 			}
 		}
+		//
 		IIdentificationTarget bestTarget = getBestTarget();
 		if(bestTarget != null) {
 			return libraryField.stringTransformer().apply(bestTarget);
 		}
+		//
 		return null;
 	}
 }

@@ -130,6 +130,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_FILTER_IONREMOVER = "org.eclipse.chemclipse.rcp.ui.icons/ionremover.gif";
 	String IMAGE_WORD_DOCUMENT = "org.eclipse.chemclipse.rcp.ui.icons/word_document.gif";
 	String IMAGE_EXCEL_DOCUMENT = "org.eclipse.chemclipse.rcp.ui.icons/excel_document.gif";
+	String IMAGE_BITMAP_DOCUMENT = "org.eclipse.chemclipse.rcp.ui.icons/bitmap_document.gif";
 	String IMAGE_BACKWARD = "org.eclipse.chemclipse.rcp.ui.icons/backward.gif";
 	String IMAGE_FAST_BACKWARD = "org.eclipse.chemclipse.rcp.ui.icons/fastbackward.gif";
 	String IMAGE_FORWARD = "org.eclipse.chemclipse.rcp.ui.icons/forward.gif";
