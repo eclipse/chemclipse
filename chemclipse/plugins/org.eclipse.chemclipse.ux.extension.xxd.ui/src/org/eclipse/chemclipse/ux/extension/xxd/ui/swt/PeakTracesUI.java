@@ -52,22 +52,26 @@ import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 
 public class PeakTracesUI extends ScrollableChart {
 
+	private final int NO_TRACE_SELECTION = 0;
+	//
 	private final ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
 	private final PeakChartSupport peakChartSupport = new PeakChartSupport();
 	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	//
 	private List<Integer> traces = new ArrayList<>();
-	private int selectedTrace = 0;
+	private int selectedTrace = NO_TRACE_SELECTION;
 	private IPeak peak = null;
 	//
 	private PeakTracesOffsetListener peakTracesOffsetListener = new PeakTracesOffsetListener(this.getBaseChart());
 
 	public PeakTracesUI() {
+
 		super();
 		modifyChart();
 	}
 
 	public PeakTracesUI(Composite parent, int style) {
+
 		super(parent, style);
 		modifyChart();
 	}
@@ -75,6 +79,11 @@ public class PeakTracesUI extends ScrollableChart {
 	public List<Integer> getTraces() {
 
 		return traces;
+	}
+
+	public void deselectTrace() {
+
+		setSelectedTrace(NO_TRACE_SELECTION);
 	}
 
 	public void setSelectedTrace(int selectedTrace) {
