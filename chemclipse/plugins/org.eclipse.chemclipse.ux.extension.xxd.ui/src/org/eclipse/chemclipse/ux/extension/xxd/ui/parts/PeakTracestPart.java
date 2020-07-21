@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSuppor
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedPeakTracesUI;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 public class PeakTracestPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
@@ -30,8 +31,9 @@ public class PeakTracestPart extends AbstractDataUpdateSupport implements IDataU
 
 	@Inject
 	public PeakTracestPart(Composite parent, MPart part) {
+
 		super(part);
-		extendedPeakTracesUI = new ExtendedPeakTracesUI(parent);
+		extendedPeakTracesUI = new ExtendedPeakTracesUI(parent, SWT.NONE);
 	}
 
 	@Focus

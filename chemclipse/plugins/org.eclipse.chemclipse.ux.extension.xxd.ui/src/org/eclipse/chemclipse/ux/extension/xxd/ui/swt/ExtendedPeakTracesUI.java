@@ -48,7 +48,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 
-public class ExtendedPeakTracesUI {
+public class ExtendedPeakTracesUI extends Composite {
 
 	private Composite toolbarInfo;
 	private Label labelPeak;
@@ -62,14 +62,17 @@ public class ExtendedPeakTracesUI {
 	private final PeakDataSupport peakDataSupport = new PeakDataSupport();
 
 	@Inject
-	public ExtendedPeakTracesUI(Composite parent) {
-		initialize(parent);
+	public ExtendedPeakTracesUI(Composite parent, int style) {
+
+		super(parent, style);
+		createControl();
 	}
 
 	@Focus
-	public void setFocus() {
+	public boolean setFocus() {
 
 		update(peak);
+		return true;
 	}
 
 	public void update(IPeak peak) {
@@ -86,13 +89,14 @@ public class ExtendedPeakTracesUI {
 		updateComboTraces();
 	}
 
-	private void initialize(Composite parent) {
+	private void createControl() {
 
-		parent.setLayout(new GridLayout(1, true));
+		GridLayout gridLayout = new GridLayout(1, true);
+		setLayout(gridLayout);
 		//
-		createToolbarMain(parent);
-		toolbarInfo = createToolbarInfo(parent);
-		createPeakChart(parent);
+		createToolbarMain(this);
+		toolbarInfo = createToolbarInfo(this);
+		createPeakChart(this);
 		//
 		PartSupport.setCompositeVisibility(toolbarInfo, true);
 	}
