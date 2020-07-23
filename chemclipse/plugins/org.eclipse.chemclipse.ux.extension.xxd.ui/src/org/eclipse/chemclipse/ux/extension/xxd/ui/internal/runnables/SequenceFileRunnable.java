@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -38,6 +38,7 @@ public class SequenceFileRunnable implements IRunnableWithProgress {
 	private List<File> files;
 
 	public SequenceFileRunnable(File file) {
+
 		this.file = file;
 	}
 

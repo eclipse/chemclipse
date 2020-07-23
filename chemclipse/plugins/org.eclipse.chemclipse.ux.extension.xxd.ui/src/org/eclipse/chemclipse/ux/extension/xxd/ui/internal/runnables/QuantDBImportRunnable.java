@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -45,7 +45,7 @@ public class QuantDBImportRunnable implements IRunnableWithProgress {
 		try {
 			monitor.beginTask("Import Quantitation Database", IProgressMonitor.UNKNOWN);
 			IProcessingInfo<IQuantitationDatabase> processingInfo = QuantDBConverter.convert(file, monitor);
-			quantitationDatabase = processingInfo.getProcessingResult(IQuantitationDatabase.class);
+			quantitationDatabase = processingInfo.getProcessingResult();
 		} catch(Exception e) {
 			logger.error(e.getLocalizedMessage(), e);
 		} finally {

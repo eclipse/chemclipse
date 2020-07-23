@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -32,6 +32,7 @@ public class PCRExportRunnable implements IRunnableWithProgress {
 	private File data = null;
 
 	public PCRExportRunnable(File file, IPlate plate, ISupplier supplier) {
+
 		this.file = file;
 		this.plate = plate;
 		this.supplier = supplier;
@@ -47,7 +48,7 @@ public class PCRExportRunnable implements IRunnableWithProgress {
 
 		try {
 			monitor.beginTask("Export Plate", IProgressMonitor.UNKNOWN);
-			IProcessingInfo processingInfo = PlateConverterPCR.convert(file, plate, supplier.getId(), monitor);
+			IProcessingInfo<?> processingInfo = PlateConverterPCR.convert(file, plate, supplier.getId(), monitor);
 			data = (File)processingInfo.getProcessingResult();
 		} catch(Exception e) {
 			logger.error(e.getLocalizedMessage(), e);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -26,11 +26,13 @@ public class ChromatogramLengthModifier implements IRunnableWithProgress {
 	private int chromatogramLength;
 
 	public ChromatogramLengthModifier(IChromatogramSelection chromatogramSelection, int scanDelay, int chromatogramLength) {
+
 		this.chromatogramSelection = chromatogramSelection;
 		this.scanDelay = scanDelay;
 		this.chromatogramLength = chromatogramLength;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 

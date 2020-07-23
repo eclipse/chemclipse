@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,7 +17,6 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
@@ -31,14 +30,13 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 
 public class ChromatogramExportRunnable implements IRunnableWithProgress {
 
-	private static final Logger logger = Logger.getLogger(ChromatogramExportRunnable.class);
 	private File data;
 	private File file;
-	private IChromatogram chromatogram;
+	private IChromatogram<?> chromatogram;
 	private ISupplier supplier;
 	private DataType dataType;
 
-	public ChromatogramExportRunnable(File file, IChromatogram chromatogram, ISupplier supplier, DataType dataType) {
+	public ChromatogramExportRunnable(File file, IChromatogram<?> chromatogram, ISupplier supplier, DataType dataType) {
 
 		this.file = file;
 		this.chromatogram = chromatogram;
