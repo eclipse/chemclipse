@@ -94,6 +94,15 @@ public class Settings {
 		return folder;
 	}
 
+	public static final File getSystemPluginDirectory() {
+
+		File folder = new File(Settings.getSystemDirectory(), "plugins");
+		if(!folder.exists()) {
+			folder.mkdirs();
+		}
+		return folder;
+	}
+
 	/**
 	 * Returns e.g.: 0.9.0
 	 * 
@@ -239,6 +248,7 @@ public class Settings {
 		System.out.println("System Path:               " + getSystemDirectory());
 		System.out.println("System Method Path:        " + getSystemMethodDirectory());
 		System.out.println("System Configuration Path: " + getSystemConfigDirectory());
+		System.out.println("System Plugins Path:       " + getSystemPluginDirectory());
 		System.out.println("----------------------------------------------------------------------------------");
 	}
 

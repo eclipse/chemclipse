@@ -200,4 +200,8 @@ public interface IChemClipseEvents {
 	String TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION = "identification/targets/update/selection";
 	String TOPIC_IDENTIFICATION_TARGETS_UNLOAD_SELECTION = "identification/targets/unload/selection";
 	String PROPERTY_SELECTED_IDENTIFICATION_TARGET_SUPPLIER = IEVENTBROKER_DATA; // ITargetSupplier
+	String TOPIC_METHOD_SELECTED = "methods/select";
+	String TOPIC_METHOD_CREATED = "methods/create";
+	String TOPIC_METHOD_UPDATE = "methods/update";
+	String PROPERTY_METHOD_OLD_OBJECT = IEVENTBROKER_DATA + ".olditem";
 }

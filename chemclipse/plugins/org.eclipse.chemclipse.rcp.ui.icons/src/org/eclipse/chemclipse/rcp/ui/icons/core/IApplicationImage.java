@@ -142,6 +142,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_MIRRORED_MASS_SPECTRUM = "org.eclipse.chemclipse.rcp.ui.icons/mirroredMassSpectrum.gif";
 	String IMAGE_SHIFTED_MASS_SPECTRUM = "org.eclipse.chemclipse.rcp.ui.icons/shiftedMassSpectrum.gif";
 	String IMAGE_IMPORT = "org.eclipse.chemclipse.rcp.ui.icons/import.png";
+	String IMAGE_PREPROCESSING = "org.eclipse.chemclipse.rcp.ui.icons/preprocessing.png";
 	String IMAGE_IMPORT_CHROMATOGRAM = "org.eclipse.chemclipse.rcp.ui.icons/importChromatogram.png";
 	String IMAGE_EXPORT = "org.eclipse.chemclipse.rcp.ui.icons/export.png";
 	String IMAGE_GROOVY_EXECUTE = "org.eclipse.chemclipse.rcp.ui.icons/groovy_execute.gif";
@@ -392,4 +393,5 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_CHROMATOGRAM_XIC_HIDE = "org.eclipse.chemclipse.rcp.ui.icons/chromatogramXicHide.gif";
 	String IMAGE_REVIEW_DETAILS_SHOW = "org.eclipse.chemclipse.rcp.ui.icons/reviewDetailsShow.gif";
 	String IMAGE_REVIEW_DETAILS_HIDE = "org.eclipse.chemclipse.rcp.ui.icons/reviewDetailsHide.gif";
+	String IMAGE_PLUGINS = "org.eclipse.chemclipse.rcp.ui.icons/plugins.png";
 }

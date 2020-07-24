@@ -46,12 +46,11 @@ Require-Bundle: javax.inject;bundle-version="1.0.0",
  org.apache.commons.cli;bundle-version="1.2.0",
  org.eclipse.chemclipse.rcp.app;bundle-version="0.8.0",
  org.eclipse.chemclipse.support.ui;bundle-version="0.8.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: javax.annotation;version="[1.0.0,2.0.0)",
+ javax.inject;version="1.0.0",
  org.osgi.framework;version="[1.0.0,2.0.0)",
  org.osgi.service.event;version="[1.0.0,2.0.0)"
-Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: org.eclipse.chemclipse.rcp.app.ui
-Provide-Capability: osgi.extender; osgi.extender=osgi.serviceloader.processor,
- osgi.extender; osgi.extender=osgi.serviceloader.registrar,
- osgi.serviceloader; osgi.serviceloader=org.eclipse.jetty.util.security.CredentialProvider
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Provide-Capability: osgi.extender; osgi.extender=osgi.serviceloader.processor,osgi.extender; osgi.extender=osgi.serviceloader.registrar,osgi.serviceloader; osgi.serviceloader=org.eclipse.jetty.util.security.CredentialProvider
