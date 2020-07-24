@@ -31,8 +31,10 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.swt.columns.SimpleColumnDefinition;
 import org.eclipse.chemclipse.support.ui.wizards.SinglePageWizard;
+import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Evaluate;
 import org.eclipse.e4.core.di.annotations.Execute;
+import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.di.extensions.Service;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.services.IServiceConstants;
@@ -115,6 +117,12 @@ public class InstallAssetsHandler {
 			// rescan plugins
 			bundleReader.run();
 		}
+	}
+	
+	@CanExecute
+	public boolean canExecute(@Optional @Service(filterExpression = "(action=ConfigReader)") Runnable configReader, @Optional @Service(filterExpression = "(action=BundleReader)") Runnable bundleReader, @Optional IEventBroker eventBroker) {
+
+		return configReader != null && bundleReader != null && eventBroker != null;
 	}
 
 	private static final class AssetInstallPage extends WizardPage {
