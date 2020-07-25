@@ -2,8 +2,7 @@
 <feature
       id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer.feature"
       label="UnitSum Normalizer"
-      version="0.9.0.qualifier"
-      provider-name="OpenChrom">
+      version="0.9.0.qualifier" provider-name="ChemClipse" plugin="org.eclipse.chemclipse.feature.branding">
 
    <description url="http://www.openchrom.net">
       This is a unit sum normalizing filter.

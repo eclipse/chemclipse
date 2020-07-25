@@ -3,7 +3,7 @@
       id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.feature"
       label="Splitter Feature"
       version="0.9.0.qualifier"
-      provider-name="ChemClipse">
+      provider-name="ChemClipse" plugin="org.eclipse.chemclipse.feature.branding">
 
    <description url="http://www.chemclipse.net">
       This filter splits a chromatogram into its MS1, MS2, ... reference chromatogram(s).

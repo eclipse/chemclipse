@@ -3,7 +3,7 @@
       id="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative.feature"
       label="Peak Detector 3rd Derivative"
       version="0.9.0.qualifier"
-      provider-name="ChemClipse">
+      provider-name="ChemClipse" plugin="org.eclipse.chemclipse.feature.branding">
 
    <description url="http://www.example.com/description">
       [Enter Feature Description here.]

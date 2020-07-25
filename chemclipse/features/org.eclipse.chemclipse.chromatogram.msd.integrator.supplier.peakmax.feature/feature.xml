@@ -3,7 +3,7 @@
       id="org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.feature"
       label="PeakMax Integrator"
       version="0.9.0.qualifier"
-      provider-name="ChemClipse">
+      provider-name="ChemClipse" plugin="org.eclipse.chemclipse.feature.branding">
 
    <description url="http://www.chemclipse.net/plugins/integrators/peakmax/">
       This peak integrator uses the intensity of the peak maximum.

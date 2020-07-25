@@ -3,7 +3,7 @@
       id="org.eclipse.chemclipse.msd.identifier.supplier.proteoms.feature"
       label="Proteomics Support"
       version="0.9.0.qualifier"
-      provider-name="OpenChrom">
+       provider-name="ChemClipse" plugin="org.eclipse.chemclipse.feature.branding">
 
    <description url="http://www.openchrom.net">
       This is the ProteoMS plugin.

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.feature"
-      label="OpenChrom Workflows"
-      version="0.9.0.qualifier"
-      provider-name="OpenChrom">
+      label="ChemClipse Workflows"
+      version="0.9.0.qualifier" provider-name="ChemClipse" plugin="org.eclipse.chemclipse.feature.branding">
 
    <description url="http://www.openchrom.net">
       This is the workflow processing plugin.

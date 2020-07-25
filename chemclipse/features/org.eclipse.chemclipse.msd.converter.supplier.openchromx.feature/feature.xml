@@ -3,7 +3,7 @@
       id="org.eclipse.chemclipse.msd.converter.supplier.openchromx.feature"
       label="OpenChrom XML Converter"
       version="0.9.0.qualifier"
-      provider-name="ChemClipse">
+      provider-name="ChemClipse" plugin="org.eclipse.chemclipse.feature.branding">
 
    <description url="http://www.chemclipse.net">
       This is the ChemClipse XML chromatogram converter.

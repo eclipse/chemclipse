@@ -3,7 +3,7 @@
       id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.feature"
       label="Savitzky-Golay Filter"
       version="0.9.0.qualifier"
-      provider-name="ChemClipse">
+      provider-name="ChemClipse" plugin="org.eclipse.chemclipse.feature.branding">
 
    <description url="http://www.chemclipse.net/plugins/filter/savitzkygolay">
       This filter enables to apply a Savitzky-Golay smoothing on the selected

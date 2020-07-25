@@ -3,7 +3,7 @@
       id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.feature"
       label="RT Shifter Filter"
       version="0.9.0.qualifier"
-      provider-name="ChemClipse">
+      provider-name="ChemClipse" plugin="org.eclipse.chemclipse.feature.branding">
 
    <description url="http://www.chemclipse.net">
       This is a Retention Time Shifter filter.

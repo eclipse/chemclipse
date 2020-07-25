@@ -2,8 +2,7 @@
 <feature
       id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.feature"
       label="Multiplier Plugin Feature"
-      version="0.9.0.qualifier"
-      provider-name="OpenChrom">
+      version="0.9.0.qualifier" provider-name="ChemClipse" plugin="org.eclipse.chemclipse.feature.branding">
 
    <description url="http://www.openchrom.net">
       This is a multiplier filter.

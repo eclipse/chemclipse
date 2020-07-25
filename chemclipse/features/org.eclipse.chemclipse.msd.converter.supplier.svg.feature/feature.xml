@@ -3,7 +3,7 @@
       id="org.eclipse.chemclipse.msd.converter.supplier.svg.feature"
       label="MSD SVG"
       version="0.9.0.qualifier"
-      provider-name="ChemClipse">
+      provider-name="ChemClipse" plugin="org.eclipse.chemclipse.feature.branding">
 
    <description url="http://www.chemclipse.net/plugins/converter/chemclipse/">
       This is the ChemClipse SVG chromatogram converter.

@@ -3,7 +3,7 @@
       id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.feature"
       label="Subtract Filter"
       version="0.9.0.qualifier"
-      provider-name="ChemClipse">
+      provider-name="ChemClipse" plugin="org.eclipse.chemclipse.feature.branding">
 
    <description url="http://www.chemclipse.net">
       This is a subtract MS supplier.

@@ -3,7 +3,7 @@
       id="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.feature"
       label="BasePeak Classifier"
       version="0.9.0.qualifier"
-      provider-name="OpenChrom">
+      provider-name="ChemClipse" plugin="org.eclipse.chemclipse.feature.branding">
 
    <description url="https://www.openchrom.net">
       This plugin uses the mol peak for identification.

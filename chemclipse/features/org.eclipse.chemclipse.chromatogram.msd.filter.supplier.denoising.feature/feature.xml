@@ -3,7 +3,7 @@
       id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.feature"
       label="Denoising Filter"
       version="0.9.0.qualifier"
-      provider-name="ChemClipse">
+      provider-name="ChemClipse" plugin="org.eclipse.chemclipse.feature.branding">
 
    <description url="http://www.chemclipse.net/plugins/filter/denoising">
       This is a Denoising (NOISERA) filter.

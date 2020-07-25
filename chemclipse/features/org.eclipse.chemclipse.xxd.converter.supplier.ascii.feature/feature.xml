@@ -3,7 +3,7 @@
       id="org.eclipse.chemclipse.xxd.converter.supplier.ascii.feature"
       label="ASCII"
       version="0.9.0.qualifier"
-      provider-name="OpenChrom">
+       provider-name="ChemClipse" plugin="org.eclipse.chemclipse.feature.branding">
 
    <description url="http://www.openchrom.net">
       This is a JSON chromatogram converter.
