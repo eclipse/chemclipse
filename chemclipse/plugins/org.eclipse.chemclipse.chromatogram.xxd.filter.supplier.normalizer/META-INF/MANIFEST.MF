@@ -16,7 +16,7 @@ Require-Bundle: org.eclipse.core.runtime,
  com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.6.2"
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Bundle-Vendor: OpenChrom
+Bundle-Vendor: Chemclipse
 Export-Package: org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.core,
  org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.exceptions,
  org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.preferences,

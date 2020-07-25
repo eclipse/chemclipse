@@ -20,4 +20,4 @@ Export-Package: org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multipli
  org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.exceptions,
  org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.preferences,
  org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.settings
-Bundle-Vendor: OpenChrom
+Bundle-Vendor: Chemclipse

@@ -5,7 +5,7 @@ Bundle-Name: Workflows
 Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows;singleton:=true
 Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.Activator
-Bundle-Vendor: OpenChrom
+Bundle-Vendor: Chemclipse
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.msd.converter;bundle-version="0.8.0",
  org.eclipse.chemclipse.msd.model;bundle-version="0.8.0",

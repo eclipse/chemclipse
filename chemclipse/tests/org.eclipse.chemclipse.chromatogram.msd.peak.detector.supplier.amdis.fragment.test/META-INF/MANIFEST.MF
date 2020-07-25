@@ -8,4 +8,4 @@ Fragment-Host: org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.am
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.junit;bundle-version="4.11.0",
  org.eclipse.chemclipse.msd.converter;bundle-version="0.8.0"
-Bundle-Vendor: OpenChrom
+Bundle-Vendor: Chemclipse

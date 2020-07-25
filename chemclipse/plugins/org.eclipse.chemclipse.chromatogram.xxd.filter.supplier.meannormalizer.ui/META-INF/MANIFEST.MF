@@ -31,4 +31,4 @@ Import-Package: org.osgi.service.event;version="1.3.0"
 Service-Component: OSGI-INF/filterHandlerMSD.xml,
  OSGI-INF/filterHandlerCSD.xml,
  OSGI-INF/filterHandlerWSD.xml
-Bundle-Vendor: OpenChrom
+Bundle-Vendor: Chemclipse

@@ -19,4 +19,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.mediannormalizer.core,
  org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.mediannormalizer.exceptions,
  org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.mediannormalizer.preferences
-Bundle-Vendor: OpenChrom
+Bundle-Vendor: Chemclipse

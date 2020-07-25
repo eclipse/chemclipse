@@ -5,7 +5,7 @@ Bundle-Name: Ui
 Bundle-SymbolicName: org.eclipse.chemclipse.msd.converter.supplier.excel.ui;singleton:=true
 Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.msd.converter.supplier.excel.ui.Activator
-Bundle-Vendor: OpenChrom
+Bundle-Vendor: Chemclipse
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.chemclipse.logging;bundle-version="0.8.0",
