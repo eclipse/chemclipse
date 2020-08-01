@@ -94,6 +94,10 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_STACK_POSITION_SCAN_TABLE = PartSupport.PARTSTACK_BOTTOM_RIGHT;
 	public static final String P_STACK_POSITION_SCAN_BROWSE = "stackPositionScanBrowse";
 	public static final String DEF_STACK_POSITION_SCAN_BROWSE = PartSupport.PARTSTACK_NONE;
+	public static final String P_STACK_POSITION_SYNONYMS = "stackPositionSynonyms";
+	public static final String DEF_STACK_POSITION_SYNONYMS = PartSupport.PARTSTACK_NONE;
+	public static final String P_STACK_POSITION_MOLECULE_STRUCTURE = "stackPositionMoleculeStructure";
+	public static final String DEF_STACK_POSITION_MOLECULE_STRUCTURE = PartSupport.PARTSTACK_NONE;
 	public static final String P_STACK_POSITION_PEAK_CHART = "stackPositionPeakChart";
 	public static final String DEF_STACK_POSITION_PEAK_CHART = PartSupport.PARTSTACK_BOTTOM_RIGHT;
 	public static final String P_STACK_POSITION_PEAK_DETAILS = "stackPositionPeakDetails";

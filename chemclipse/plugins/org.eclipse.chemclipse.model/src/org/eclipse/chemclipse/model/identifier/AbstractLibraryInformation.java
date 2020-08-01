@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2019 Lablicate GmbH.
+ * Copyright (c) 2010, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -41,8 +41,10 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	private final Set<String> classification = new LinkedHashSet<>();
 	private int retentionTime = 0;
 	private float retentionIndex = 0.0f;
+	private String moleculeStructure = ""; // TODO
 
 	public AbstractLibraryInformation() {
+
 		this(null);
 	}
 
@@ -52,6 +54,7 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	 * @param libraryInformation
 	 */
 	public AbstractLibraryInformation(ILibraryInformation libraryInformation) {
+
 		if(libraryInformation != null) {
 			name = libraryInformation.getName();
 			synonyms.addAll(libraryInformation.getSynonyms());
@@ -69,6 +72,7 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 			classification.addAll(libraryInformation.getClassifier());
 			retentionTime = libraryInformation.getRetentionTime();
 			retentionIndex = libraryInformation.getRetentionIndex();
+			moleculeStructure = libraryInformation.getMoleculeStructure();
 		}
 	}
 
@@ -290,6 +294,18 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	public void setRetentionIndex(float retentionIndex) {
 
 		this.retentionIndex = retentionIndex;
+	}
+
+	@Override
+	public String getMoleculeStructure() {
+
+		return moleculeStructure;
+	}
+
+	@Override
+	public void setMoleculeStructure(String moleculeStructure) {
+
+		this.moleculeStructure = moleculeStructure;
 	}
 
 	@Override

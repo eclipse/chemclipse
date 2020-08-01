@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2019 Lablicate GmbH.
+ * Copyright (c) 2010, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -183,4 +183,8 @@ public interface ILibraryInformation extends Serializable, Classifiable {
 	float getRetentionIndex();
 
 	void setRetentionIndex(float retentionIndex);
+
+	String getMoleculeStructure();
+
+	void setMoleculeStructure(String moleculeStructure);
 }

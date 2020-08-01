@@ -20,6 +20,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class PreferencePageTaskScans extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePageTaskScans() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setTitle("Scans");
@@ -32,6 +33,8 @@ public class PreferencePageTaskScans extends FieldEditorPreferencePage implement
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_SCAN_CHART, "Scan Chart:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_SCAN_TABLE, "Scan Table:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_SCAN_BROWSE, "Scan Browse:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_SYNONYMS, "Synonyms:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_MOLECULE_STRUCTURE, "Molecule Structure:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

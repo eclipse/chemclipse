@@ -36,6 +36,7 @@ public class Activator implements BundleActivator {
 		System.out.println("TODO Additions: v1400");
 		System.out.println("\tPeak Quantitation References");
 		System.out.println("\tBaseline Model Changes");
+		System.out.println("\tILibraryInformation - Molecule Structure");
 		//
 		logger.info("-------------------------------------------------");
 		logger.info("Ensure backward and forward compatibility!");
