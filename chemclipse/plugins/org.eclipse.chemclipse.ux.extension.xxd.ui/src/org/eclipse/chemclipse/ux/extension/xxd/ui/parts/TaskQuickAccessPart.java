@@ -142,7 +142,6 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 		PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_SCAN_CHART, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_CHART), partService, modelService, application, eventBroker);
 		PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_SCAN_TABLE, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_TABLE), partService, modelService, application, eventBroker);
 		PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_SCAN_BROWSE, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_BROWSE), partService, modelService, application, eventBroker);
-		PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_SYNONYMS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SYNONYMS), partService, modelService, application, eventBroker);
 	}
 
 	private void createOverviewTask(Composite parent) {
