@@ -23,6 +23,8 @@ import java.util.Set;
 import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.targets.ITargetDisplaySettings;
+import org.eclipse.chemclipse.model.targets.TargetReference;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.numeric.statistics.Calculations;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
@@ -32,9 +34,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.TargetReferenceLabelMarker;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.PreferenceStoreTargetDisplaySettings;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.SignalTargetReference;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetDisplaySettings;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakChartSupport;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -76,6 +75,8 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 	//
 	private Range selectedRangeX = null;
 	private Range selectedRangeY = null;
+	//
+	private ITargetDisplaySettings targetDisplaySettings = null;
 
 	public ChromatogramPeakChart() {
 
@@ -100,11 +101,13 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 		clearChromatogramSeries();
 		clearSelectedPeakSeries();
 		clearPeakLabelMarker();
+		targetDisplaySettings = null;
 		//
 		if(chromatogramSelection != null) {
 			/*
 			 * Add series
 			 */
+			targetDisplaySettings = chromatogramSelection.getChromatogram();
 			List<IPeak> peaks = chromatogramSelection.getChromatogram().getPeaks(chromatogramSelection);
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 			addChromatogramData(chromatogramSelection, lineSeriesDataList, peakChartSettings);
@@ -328,11 +331,10 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 			 */
 			if(addLabelMarker) {
 				removeIdentificationLabelMarker(peakLabelMarkerMap, seriesId);
-				TargetDisplaySettings settings = PreferenceStoreTargetDisplaySettings.getSettings(preferenceStore);
-				if(settings.isShowPeakLabels()) {
+				if(targetDisplaySettings != null && targetDisplaySettings.isShowPeakLabels()) {
 					BaseChart baseChart = getBaseChart();
 					IPlotArea plotArea = baseChart.getPlotArea();
-					TargetReferenceLabelMarker peakLabelMarker = new TargetReferenceLabelMarker(SignalTargetReference.getPeakReferences(peaks), settings, symbolSize * 2, preferenceStore);
+					TargetReferenceLabelMarker peakLabelMarker = new TargetReferenceLabelMarker(TargetReference.getPeakReferences(peaks, targetDisplaySettings), targetDisplaySettings, symbolSize * 2);
 					plotArea.addCustomPaintListener(peakLabelMarker);
 					peakLabelMarkerMap.put(seriesId, peakLabelMarker);
 				}

@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactoring target label support
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.actions;
 
@@ -17,40 +18,39 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Predicate;
 
+import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.targets.ITargetDisplaySettings;
+import org.eclipse.chemclipse.model.targets.TargetReference;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.TargetReferenceLabelMarker;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.SignalTargetReference;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetDisplaySettings;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetReference;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.TargetDisplaySettingsWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.TargetDisplaySettingsWizardListener;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.swtchart.Range;
-import org.eclipse.swtchart.extensions.core.IExtendedChart;
-import org.eclipse.swtchart.extensions.core.IScrollableChart;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swtchart.extensions.core.BaseChart;
 
 public class TargetLabelEditAction extends Action {
 
 	public static final boolean DEF_SHOW_PREVIEW = false;
 	public static final String P_SHOW_PREVIEW = "TargetLabelEditAction.showPreview";
-	private final LabelChart labelChart;
-	private final IPreferenceStore preferenceStore;
+	//
+	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private final List<Runnable> listeners = new CopyOnWriteArrayList<>();
+	private ILabelEditSettings labelEditSettings = null;
 
-	public TargetLabelEditAction(LabelChart labelChart, IPreferenceStore preferenceStore) {
+	public TargetLabelEditAction(ILabelEditSettings labelEditSettings) {
 
 		super("Labels", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_LABELS, IApplicationImage.SIZE_16x16));
-		this.labelChart = labelChart;
-		this.preferenceStore = preferenceStore;
+		this.labelEditSettings = labelEditSettings;
 		setToolTipText("Mange the labels to display in the chromatogram");
 		setShowPreviewDefault(DEF_SHOW_PREVIEW);
 	}
@@ -65,18 +65,20 @@ public class TargetLabelEditAction extends Action {
 	@Override
 	public void run() {
 
-		IChromatogramSelection<?, ?> chromatogramSelection = labelChart.getChromatogramSelection();
-		if(chromatogramSelection != null) {
-			List<SignalTargetReference> identifications;
+		if(labelEditSettings != null && labelEditSettings.getChromatogramSelection() != null && labelEditSettings.getChromatogramUI() != null) {
+			IChromatogramSelection<?, ?> chromatogramSelection = labelEditSettings.getChromatogramSelection();
+			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
+			ITargetDisplaySettings targetDisplaySettings = chromatogram;
+			List<TargetReference> targetReferences;
 			try {
-				identifications = DisplayUtils.executeBusy(() -> {
-					List<SignalTargetReference> list = new ArrayList<>();
-					list.addAll(SignalTargetReference.getPeakReferences(chromatogramSelection.getChromatogram().getPeaks()));
-					list.addAll(SignalTargetReference.getScanReferences(ChromatogramDataSupport.getIdentifiedScans(chromatogramSelection.getChromatogram())));
-					Collections.sort(list, new Comparator<SignalTargetReference>() {
+				targetReferences = DisplayUtils.executeBusy(() -> {
+					List<TargetReference> targetReferenceList = new ArrayList<>();
+					targetReferenceList.addAll(TargetReference.getPeakReferences(chromatogram.getPeaks(), targetDisplaySettings));
+					targetReferenceList.addAll(TargetReference.getScanReferences(ChromatogramDataSupport.getIdentifiedScans(chromatogram), targetDisplaySettings));
+					Collections.sort(targetReferenceList, new Comparator<TargetReference>() {
 
 						@Override
-						public int compare(SignalTargetReference o1, SignalTargetReference o2) {
+						public int compare(TargetReference o1, TargetReference o2) {
 
 							int compare = Double.compare(o1.getSignal().getX(), o2.getSignal().getX());
 							if(compare == 0) {
@@ -86,65 +88,41 @@ public class TargetLabelEditAction extends Action {
 							}
 						}
 					});
-					return list;
+					return targetReferenceList;
 				});
 			} catch(InterruptedException e) {
 				Thread.currentThread().interrupt();
 				return;
 			} catch(ExecutionException e) {
-				throw new RuntimeException("can't get reference", e.getCause());
+				throw new RuntimeException("Can't get the reference", e.getCause());
 			}
-			IScrollableChart chart = labelChart.getChart();
-			TargetReferenceLabelMarker previewMarker = new TargetReferenceLabelMarker(true, PreferenceConstants.DEF_SYMBOL_SIZE * 2, preferenceStore);
-			chart.getBaseChart().getPlotArea().addCustomPaintListener(previewMarker);
-			TargetDisplaySettingsWizardListener listener = new TargetDisplaySettingsWizardListener() {
+			/*
+			 * References
+			 */
+			TargetReferenceLabelMarker targetReferenceLabelMarker = new TargetReferenceLabelMarker(true, PreferenceConstants.DEF_SYMBOL_SIZE * 2);
+			ChromatogramChart chromatogramChart = labelEditSettings.getChromatogramUI().getChromatogramChart();
+			chromatogramChart.getBaseChart().getPlotArea().addCustomPaintListener(targetReferenceLabelMarker);
+			TargetDisplaySettingsWizardListener settingsWizardListener = new TargetDisplaySettingsWizardListener() {
 
-				boolean previewDisabled = true;
-				private boolean showPreview;
+				private boolean showPreview = true;
 
 				@Override
-				public String getIDLabel() {
+				public String getLabelID() {
 
 					return "RT";
 				}
 
 				@Override
-				public void setPreviewSettings(TargetDisplaySettings previewSettings, Predicate<TargetReference> activeFilter) {
+				public void setPreviewSettings(ITargetDisplaySettings targetDisplaySettings) {
 
-					if(previewSettings == null && previewDisabled) {
+					if(targetDisplaySettings == null) {
 						return;
 					}
-					previewDisabled = previewSettings == null;
-					labelChart.setChartMarkerVisible(previewDisabled);
-					Predicate<TargetReference> settingsFilter = previewMarker.setData(identifications, previewSettings, activeFilter);
-					if(previewDisabled) {
-						chart.setRange(IExtendedChart.X_AXIS, new Range(chromatogramSelection.getStartRetentionTime(), chromatogramSelection.getStopRetentionTime()));
-					} else {
-						double minRT = Double.NaN;
-						double maxRT = Double.NaN;
-						for(SignalTargetReference scanTargetReference : identifications) {
-							if(settingsFilter.test(scanTargetReference) && (activeFilter == null || activeFilter.test(scanTargetReference))) {
-								double rt = scanTargetReference.getSignal().getX();
-								if(Double.isNaN(minRT) || rt < minRT) {
-									minRT = rt;
-								}
-								if(Double.isNaN(maxRT) || rt > maxRT) {
-									maxRT = rt;
-								}
-							}
-						}
-						int absStart = chromatogramSelection.getChromatogram().getStartRetentionTime();
-						if(Double.isNaN(minRT)) {
-							minRT = absStart;
-						}
-						int absStop = chromatogramSelection.getChromatogram().getStopRetentionTime();
-						if(Double.isNaN(maxRT)) {
-							maxRT = absStop;
-						}
-						long windowOffset = TimeUnit.MINUTES.toMillis(1);
-						chart.setRange(IExtendedChart.X_AXIS, new Range(Math.max(minRT - windowOffset, absStart), Math.min(absStop, maxRT + windowOffset)));
+					//
+					if(showPreview) {
+						labelEditSettings.getChromatogramUI().update();
+						chromatogramChart.getBaseChart().redraw();
 					}
-					labelChart.redraw();
 				}
 
 				@Override
@@ -165,9 +143,14 @@ public class TargetLabelEditAction extends Action {
 					this.showPreview = preview;
 				}
 			};
-			boolean settingsChanged = TargetDisplaySettingsWizard.openWizard(chart.getBaseChart().getShell(), identifications, listener, labelChart.getTargetSettings());
-			chart.getBaseChart().getPlotArea().removeCustomPaintListener(previewMarker);
-			listener.setPreviewSettings(null, null);
+			/*
+			 * Opens the Wizard
+			 */
+			BaseChart baseChart = chromatogramChart.getBaseChart();
+			Shell shell = baseChart.getShell();
+			boolean settingsChanged = TargetDisplaySettingsWizard.openWizard(shell, targetReferences, chromatogramSelection.getChromatogram(), settingsWizardListener);
+			baseChart.getPlotArea().removeCustomPaintListener(targetReferenceLabelMarker);
+			settingsWizardListener.setPreviewSettings(null);
 			if(settingsChanged) {
 				listeners.forEach(Runnable::run);
 			}
@@ -177,21 +160,5 @@ public class TargetLabelEditAction extends Action {
 	public void addChangeListener(Runnable listener) {
 
 		listeners.add(listener);
-	}
-
-	public static interface LabelChart {
-
-		IScrollableChart getChart();
-
-		/**
-		 * triggers a simple redraw action
-		 */
-		void redraw();
-
-		TargetDisplaySettings getTargetSettings();
-
-		IChromatogramSelection<?, ?> getChromatogramSelection();
-
-		void setChartMarkerVisible(boolean visible);
 	}
 }

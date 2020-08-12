@@ -57,7 +57,7 @@ import org.eclipse.core.runtime.ISafeRunnable;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SafeRunner;
 
-public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeasurement implements IChromatogram<T> {
+public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeasurementTarget implements IChromatogram<T> {
 
 	private static final long serialVersionUID = -2540103992883061431L;
 	private static final Logger logger = Logger.getLogger(AbstractChromatogram.class);
@@ -1148,5 +1148,4 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		builder.append("]");
 		return builder.toString();
 	}
-	// ----------------------------hashCode, equals and toString
 }

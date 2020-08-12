@@ -7,17 +7,24 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.support;
+package org.eclipse.chemclipse.model.targets;
 
-import java.util.Map;
+public enum TargetReferenceType {
+	NONE("None"), //
+	SCAN("Scan"), //
+	PEAK("Peak");
 
-public interface SelectableTargetDisplaySettings extends TargetDisplaySettings {
+	private String label = "";
 
-	Map<String, TargetDisplaySettings> getSettings();
+	private TargetReferenceType(String label) {
 
-	void setSelectedSettings(TargetDisplaySettings settings);
+		this.label = label;
+	}
 
-	boolean isSelectedSettings(TargetDisplaySettings settings);
+	public String getLabel() {
+
+		return label;
+	}
 }

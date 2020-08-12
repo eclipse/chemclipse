@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,26 +8,24 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactoring target label support
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.wizards;
 
-import java.util.function.Predicate;
-
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetDisplaySettings;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetReference;
+import org.eclipse.chemclipse.model.targets.ITargetDisplaySettings;
 
 public interface TargetDisplaySettingsWizardListener {
 
-	String getIDLabel();
+	String getLabelID();
 
 	/**
 	 * Set the preview settings
 	 * 
-	 * @param settings
+	 * @param targetDisplaySettings
 	 *            the settings to use for preview or <code>null</code> if no preview is desired
 	 * @param viewerFilters
 	 */
-	void setPreviewSettings(TargetDisplaySettings settings, Predicate<TargetReference> filter);
+	void setPreviewSettings(ITargetDisplaySettings targetDisplaySettings);
 
 	boolean isShowPreview();
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -41,6 +41,7 @@ public class FilterMenuEntry extends AbstractChartMenuEntry implements IChartMen
 
 	@SuppressWarnings("rawtypes")
 	public FilterMenuEntry(ExtendedChromatogramUI extendedChromatogramUI, String name, String filterId, String type, IChromatogramSelection chromatogramSelection) {
+
 		this.extendedChromatogramUI = extendedChromatogramUI;
 		this.name = name;
 		this.filterId = filterId;
@@ -72,7 +73,7 @@ public class FilterMenuEntry extends AbstractChartMenuEntry implements IChartMen
 				@Override
 				public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-					IProcessingInfo processingInfo = null;
+					IProcessingInfo<?> processingInfo = null;
 					switch(type) {
 						case ExtendedChromatogramUI.TYPE_GENERIC:
 							processingInfo = ChromatogramFilter.applyFilter(chromatogramSelection, filterId, monitor);

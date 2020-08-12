@@ -89,10 +89,12 @@ public class ExtendedSequenceListUI {
 
 	@Deprecated
 	public ExtendedSequenceListUI(Composite parent) {
+
 		this(parent, new ProcessTypeSupport());
 	}
 
 	public ExtendedSequenceListUI(Composite parent, ProcessSupplierContext processSupplierContext) {
+
 		this.processSupplierContext = processSupplierContext;
 		initialize(parent);
 	}

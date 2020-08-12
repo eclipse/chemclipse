@@ -15,7 +15,6 @@ import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEdit
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpinnerFieldEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
@@ -27,6 +26,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class PreferencePageChromatogramScans extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePageChromatogramScans() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setTitle("Chromatogram Scans");
@@ -43,7 +43,6 @@ public class PreferencePageChromatogramScans extends FieldEditorPreferencePage i
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Scan Labels", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_CHROMATOGRAM_SCAN_LABELS, "Show Labels", getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_NAME, "Font Name:", getFieldEditorParent()));
 		addField(new SpinnerFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_SIZE, "Font Size:", PreferenceConstants.MIN_FONT_SIZE, PreferenceConstants.MAX_FONT_SIZE, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE, "Font Style:", PreferenceConstants.FONT_STYLES, getFieldEditorParent()));

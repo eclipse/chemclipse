@@ -9,6 +9,7 @@
  * Contributors:
  * Jan Holy - initial API and implementation
  * Christoph Läubrich - support new lazy table model, support NMR_SCANs as InputDataType
+ * Philip Wenig - refactoring
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.wizards;
 
@@ -17,9 +18,11 @@ import java.util.Collection;
 
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.UserPathPreferencePage;
 import org.eclipse.chemclipse.xxd.process.files.SupplierFileIdentifierCache;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 
@@ -91,7 +94,8 @@ public class InputWizardSettings {
 
 		Collection<ISupplierFileIdentifier> list = new ArrayList<>();
 		for(DataType dataType : dataTypes) {
-			list.add(new SupplierEditorSupport(dataType));
+			IEclipseContext context = Activator.getDefault().getEclipseContext();
+			list.add(new SupplierEditorSupport(dataType, () -> context));
 		}
 		return new InputWizardSettings(preferenceStore, userLocationPreferenceKey, list);
 	}

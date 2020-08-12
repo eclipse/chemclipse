@@ -7,13 +7,16 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.support;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.actions;
 
-public interface VisibilityTargetDisplaySettings extends TargetDisplaySettings {
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedChromatogramUI;
 
-	boolean isVisible(TargetReference reference);
+public interface ILabelEditSettings {
 
-	void setVisible(TargetReference reference, boolean visible);
+	IChromatogramSelection<?, ?> getChromatogramSelection();
+
+	ExtendedChromatogramUI getChromatogramUI();
 }
