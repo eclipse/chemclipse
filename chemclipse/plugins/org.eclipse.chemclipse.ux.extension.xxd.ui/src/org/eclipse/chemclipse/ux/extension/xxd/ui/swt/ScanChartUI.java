@@ -53,6 +53,7 @@ import org.eclipse.swtchart.ISeries;
 import org.eclipse.swtchart.extensions.barcharts.IBarSeriesData;
 import org.eclipse.swtchart.extensions.barcharts.IBarSeriesSettings;
 import org.eclipse.swtchart.extensions.core.BaseChart;
+import org.eclipse.swtchart.extensions.core.ChartType;
 import org.eclipse.swtchart.extensions.core.IAxisSettings;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
@@ -202,12 +203,14 @@ public class ScanChartUI extends ScrollableChart {
 			Color colorScan1 = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_SCAN_1));
 			//
 			if(usedSignalType.equals(SignalType.PROFILE)) {
+				setChartType(ChartType.LINE);
 				List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 				ILineSeriesData lineSeriesData = scanChartSupport.getLineSeriesData(scan, "", false);
 				lineSeriesData.getSettings().setLineColor(colorScan1);
 				lineSeriesDataList.add(lineSeriesData);
 				addLineSeriesData(lineSeriesDataList);
 			} else {
+				setChartType(ChartType.BAR);
 				List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
 				IBarSeriesData barSeriesData = scanChartSupport.getBarSeriesData(scan, "", false);
 				barSeriesData.getSettings().setBarColor(colorScan1);
@@ -240,6 +243,7 @@ public class ScanChartUI extends ScrollableChart {
 			Color colorScan2 = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_SCAN_2));
 			//
 			if(usedSignalType.equals(SignalType.PROFILE)) {
+				setChartType(ChartType.LINE);
 				List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 				ILineSeriesData lineSeriesDataScan1 = scanChartSupport.getLineSeriesData(scan1, labelScan1, false);
 				ILineSeriesData lineSeriesDataScan2 = scanChartSupport.getLineSeriesData(scan2, labelScan2, mirrored);
@@ -249,6 +253,7 @@ public class ScanChartUI extends ScrollableChart {
 				lineSeriesDataList.add(lineSeriesDataScan2);
 				addLineSeriesData(lineSeriesDataList);
 			} else {
+				setChartType(ChartType.BAR);
 				List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
 				IBarSeriesData barSeriesDataScan1 = scanChartSupport.getBarSeriesData(scan1, labelScan1, false);
 				IBarSeriesData barSeriesDataScan2 = scanChartSupport.getBarSeriesData(scan2, labelScan2, mirrored);
