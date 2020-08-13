@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public LicensepeakChartSupport v1.0
@@ -58,7 +58,7 @@ public class ScanChartSupport {
 		return lineSeriesData;
 	}
 
-	public ILineSeriesData getLineSeriesDataPoint(IScan scan, boolean mirrored, String seriesId, DisplayType displayType, IMarkedSignals markedSignals) {
+	public ILineSeriesData getLineSeriesDataPoint(IScan scan, boolean mirrored, String seriesId, DisplayType displayType, IMarkedSignals<?> markedSignals) {
 
 		List<IScan> scans = new ArrayList<>();
 		scans.add(scan);
@@ -67,25 +67,25 @@ public class ScanChartSupport {
 
 	public ILineSeriesData getLineSeriesDataPoint(List<IScan> scans, boolean mirrored, String seriesId) {
 
-		IMarkedSignals markedSignals = null;
+		IMarkedSignals<?> markedSignals = null;
 		return getLineSeriesDataPoint(scans, mirrored, seriesId, DisplayType.TIC, markedSignals);
 	}
 
-	public ILineSeriesData getLineSeriesDataPoint(List<IScan> scans, boolean mirrored, String seriesId, DisplayType displayType, IChromatogramSelection chromatogramSelection) {
+	public ILineSeriesData getLineSeriesDataPoint(List<IScan> scans, boolean mirrored, String seriesId, DisplayType displayType, IChromatogramSelection<?, ?> chromatogramSelection) {
 
-		IMarkedSignals markedSignals = null;
+		IMarkedSignals<?> markedSignals = null;
 		if(displayType.equals(DisplayType.SWC)) {
 			markedSignals = ((IChromatogramSelectionWSD)chromatogramSelection).getSelectedWavelengths();
 		}
 		return getLineSeriesDataPoint(scans, mirrored, seriesId, displayType, markedSignals);
 	}
 
-	public ILineSeriesData getLineSeriesDataPoint(IScan scan, boolean mirrored, String seriesId, DisplayType displayType, IChromatogramSelection chromatogramSelection) {
+	public ILineSeriesData getLineSeriesDataPoint(IScan scan, boolean mirrored, String seriesId, DisplayType displayType, IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		return getLineSeriesDataPoint(Collections.singletonList(scan), mirrored, seriesId, displayType, chromatogramSelection);
 	}
 
-	public ILineSeriesData getLineSeriesDataPoint(List<IScan> scans, boolean mirrored, String seriesId, DisplayType displayType, IMarkedSignals markedSignals) {
+	public ILineSeriesData getLineSeriesDataPoint(List<IScan> scans, boolean mirrored, String seriesId, DisplayType displayType, IMarkedSignals<?> markedSignals) {
 
 		List<Double> xSeries = new ArrayList<>(scans.size());
 		List<Double> ySeries = new ArrayList<>(scans.size());

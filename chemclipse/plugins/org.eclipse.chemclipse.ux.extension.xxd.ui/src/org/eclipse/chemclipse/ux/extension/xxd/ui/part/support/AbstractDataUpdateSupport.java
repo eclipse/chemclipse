@@ -18,8 +18,8 @@ import java.util.List;
 import javax.annotation.PreDestroy;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.UIEvents;
@@ -33,10 +33,11 @@ public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport im
 	private final List<Object> objects = new ArrayList<Object>();
 	private String topic = "";
 	//
-	private final IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
+	private final IEventBroker eventBroker = Activator.getDefault().getEventBroker();
 	private final List<EventHandler> registeredEventHandler;
 
 	public AbstractDataUpdateSupport(MPart part) {
+
 		this(part, false);
 	}
 
@@ -50,6 +51,7 @@ public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport im
 	 * @param handlePartCloseEvent
 	 */
 	public AbstractDataUpdateSupport(MPart part, boolean handlePartCloseEvent) {
+
 		super(part);
 		/*
 		 * Additional events.

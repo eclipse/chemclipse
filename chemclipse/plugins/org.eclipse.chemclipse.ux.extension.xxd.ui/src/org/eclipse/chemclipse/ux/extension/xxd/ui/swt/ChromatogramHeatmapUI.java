@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -52,11 +52,12 @@ public class ChromatogramHeatmapUI extends Composite {
 	private Composite header;
 
 	public ChromatogramHeatmapUI(Composite parent, int style) {
+
 		super(parent, style);
 		initialize(parent);
 	}
 
-	public void update(IChromatogramSelection chromatogramSelection, boolean forceReload) {
+	public void update(IChromatogramSelection<?, ?> chromatogramSelection, boolean forceReload) {
 
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
 			update((IChromatogramSelectionMSD)chromatogramSelection);

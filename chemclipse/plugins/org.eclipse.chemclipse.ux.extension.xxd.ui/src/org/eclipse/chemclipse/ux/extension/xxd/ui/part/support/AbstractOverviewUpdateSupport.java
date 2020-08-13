@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,7 +15,6 @@ import java.io.File;
 import java.util.List;
 
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IMeasurementInfo;
@@ -31,10 +30,10 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 
 public abstract class AbstractOverviewUpdateSupport extends AbstractDataUpdateSupport implements IOverviewUpdateSupport {
 
-	private static final Logger logger = Logger.getLogger(AbstractOverviewUpdateSupport.class);
 	private String filePath = "";
 
 	public AbstractOverviewUpdateSupport(MPart part) {
+
 		super(part);
 	}
 
@@ -118,7 +117,7 @@ public abstract class AbstractOverviewUpdateSupport extends AbstractDataUpdateSu
 				/*
 				 * NMR
 				 */
-				IProcessingInfo processingInfo = ScanConverterNMR.convert(file, new NullProgressMonitor());
+				IProcessingInfo<?> processingInfo = ScanConverterNMR.convert(file, new NullProgressMonitor());
 				Object data = processingInfo.getProcessingResult();
 				if(data instanceof IMeasurementInfo) {
 					update(data);
@@ -127,7 +126,7 @@ public abstract class AbstractOverviewUpdateSupport extends AbstractDataUpdateSu
 				/*
 				 * XIR
 				 */
-				IProcessingInfo processingInfo = ScanConverterXIR.convert(file, new NullProgressMonitor());
+				IProcessingInfo<?> processingInfo = ScanConverterXIR.convert(file, new NullProgressMonitor());
 				Object data = processingInfo.getProcessingResult();
 				if(data instanceof IMeasurementInfo) {
 					update(data);
@@ -160,11 +159,9 @@ public abstract class AbstractOverviewUpdateSupport extends AbstractDataUpdateSu
 				break;
 		}
 		//
-
 		if(processingInfo != null) {
 			chromatogramOverview = processingInfo.getProcessingResult();
 		}
-
 		//
 		return chromatogramOverview;
 	}
