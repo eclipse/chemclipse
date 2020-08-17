@@ -13,5 +13,22 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.sett
 
 import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+
 public class FilterSettingsDeleteIdentifier extends AbstractChromatogramFilterSettings {
+
+	@JsonProperty(value = "Delete Scan Identification(s)", defaultValue = "false")
+	@JsonPropertyDescription(value = "Confirm to delete the scan identification(s).")
+	private boolean deleteScanIdentifications;
+
+	public boolean isDeleteScanIdentifications() {
+
+		return deleteScanIdentifications;
+	}
+
+	public void setDeleteScanIdentifications(boolean deleteScanIdentifications) {
+
+		this.deleteScanIdentifications = deleteScanIdentifications;
+	}
 }

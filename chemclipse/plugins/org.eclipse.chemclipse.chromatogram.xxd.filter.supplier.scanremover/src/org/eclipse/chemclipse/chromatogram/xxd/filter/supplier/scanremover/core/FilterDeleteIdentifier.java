@@ -37,9 +37,14 @@ public class FilterDeleteIdentifier extends AbstractChromatogramFilter {
 		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
 		if(!processingInfo.hasErrorMessages()) {
 			try {
-				removeScanIdentifications(chromatogramSelection, monitor);
-				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "Delete Scan Identification(s)", "Scan identification(s) have been removed successfully."));
-				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "Scan identification(s) have been removed successfully."));
+				if(chromatogramFilterSettings instanceof FilterSettingsDeleteIdentifier) {
+					FilterSettingsDeleteIdentifier settings = (FilterSettingsDeleteIdentifier)chromatogramFilterSettings;
+					if(settings.isDeleteScanIdentifications()) {
+						removeScanIdentifications(chromatogramSelection, monitor);
+						processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "Delete Scan Identification(s)", "Scan identification(s) have been removed successfully."));
+						processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "Scan identification(s) have been removed successfully."));
+					}
+				}
 			} catch(FilterException e) {
 				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.EXCEPTION, e.getMessage()));
 			}
