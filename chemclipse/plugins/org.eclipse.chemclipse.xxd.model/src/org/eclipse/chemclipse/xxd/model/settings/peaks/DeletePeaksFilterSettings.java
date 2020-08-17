@@ -19,6 +19,9 @@ public class DeletePeaksFilterSettings {
 	@JsonProperty(value = "Delete Peak(s)", defaultValue = "false")
 	@JsonPropertyDescription(value = "Confirm to delete the peak(s).")
 	private boolean deletePeaks;
+	@JsonProperty(value = "Unidentified Only", defaultValue = "false")
+	@JsonPropertyDescription(value = "Only delete the unidentified peak(s).")
+	private boolean deleteUnidentifiedOnly;
 
 	public boolean isDeletePeaks() {
 
@@ -28,5 +31,15 @@ public class DeletePeaksFilterSettings {
 	public void setDeletePeaks(boolean deletePeaks) {
 
 		this.deletePeaks = deletePeaks;
+	}
+
+	public boolean isDeleteUnidentifiedOnly() {
+
+		return deleteUnidentifiedOnly;
+	}
+
+	public void setDeleteUnidentifiedOnly(boolean deleteUnidentifiedOnly) {
+
+		this.deleteUnidentifiedOnly = deleteUnidentifiedOnly;
 	}
 }

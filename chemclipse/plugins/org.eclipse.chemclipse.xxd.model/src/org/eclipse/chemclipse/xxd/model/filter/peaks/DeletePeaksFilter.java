@@ -51,7 +51,13 @@ public class DeletePeaksFilter implements IPeakFilter<DeletePeaksFilterSettings>
 		if(configuration.isDeletePeaks()) {
 			SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
 			for(X x : read) {
-				listener.delete(x);
+				if(configuration.isDeleteUnidentifiedOnly()) {
+					if(x.getTargets().size() == 0) {
+						listener.delete(x);
+					}
+				} else {
+					listener.delete(x);
+				}
 				subMonitor.worked(1);
 			}
 		}
