@@ -26,4 +26,3 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.annotation;version="[1.0.0,2.0.0)",
  org.osgi.service.event;version="[1.0.0,2.0.0)"
-Service-Component: OSGI-INF/deleteUnidentifiedPeaksHandler.xml
