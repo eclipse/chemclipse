@@ -86,14 +86,14 @@ public class SavitzkyGolaySmoothingFilter implements IScanFilter<MassSpectrumFil
 		if(configuration == null) {
 			configuration = createNewConfiguration();
 		}
-		ChromatogramFilterSettings cfs = new ChromatogramFilterSettings();
-		cfs.setDerivative(configuration.getDerivative());
-		cfs.setOrder(configuration.getOrder());
-		cfs.setWidth(configuration.getWidth());
-		SavitzkyGolayProcessor processor = new SavitzkyGolayProcessor();
+		ChromatogramFilterSettings chromatogramFilterSettings = new ChromatogramFilterSettings();
+		chromatogramFilterSettings.setDerivative(configuration.getDerivative());
+		chromatogramFilterSettings.setOrder(configuration.getOrder());
+		chromatogramFilterSettings.setWidth(configuration.getWidth());
+		//
 		DefaultProcessingResult<Boolean> result = new DefaultProcessingResult<>();
 		for(ITotalScanSignals signals : filterItems) {
-			IChromatogramFilterResult filterResult = processor.apply(signals, cfs, monitor);
+			IChromatogramFilterResult filterResult = SavitzkyGolayProcessor.apply(signals, chromatogramFilterSettings, monitor);
 			if(filterResult.getResultStatus() != ResultStatus.OK) {
 				result.addErrorMessage(getName(), filterResult.getDescription());
 				break;
