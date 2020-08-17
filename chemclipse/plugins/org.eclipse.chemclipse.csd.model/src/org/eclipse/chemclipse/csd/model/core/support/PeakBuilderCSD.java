@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -108,6 +108,35 @@ public class PeakBuilderCSD {
 		 */
 		IScanCSD supplierScanCSD = getPeakScan(totalScanSignals, backgroundEquation);
 		IPeakModelCSD peakModel = new PeakModelCSD(supplierScanCSD, peakIntensityValues, backgroundAbundanceRange.getStartBackgroundAbundance(), backgroundAbundanceRange.getStopBackgroundAbundance());
+		IChromatogramPeakCSD peak = new ChromatogramPeakCSD(peakModel, chromatogram);
+		return peak;
+	}
+
+	public static IChromatogramPeakCSD createPeak(IChromatogramCSD chromatogram, IScanRange scanRange, float startIntensity, float stopIntensity) throws PeakException {
+
+		/*
+		 * Validate the given objects.
+		 */
+		validateChromatogram(chromatogram);
+		validateScanRange(scanRange);
+		checkScanRange(chromatogram, scanRange);
+		/*
+		 * Get the total signals and determine the start and stop background
+		 * abundance.
+		 */
+		ITotalScanSignals totalScanSignals = getTotalScanSignals(chromatogram, scanRange);
+		float firstSignal = totalScanSignals.getFirstTotalScanSignal().getTotalSignal();
+		float lastSignal = totalScanSignals.getLastTotalScanSignal().getTotalSignal();
+		startIntensity = startIntensity <= firstSignal ? startIntensity : firstSignal;
+		stopIntensity = stopIntensity <= lastSignal ? stopIntensity : lastSignal;
+		LinearEquation backgroundEquation = getBackgroundEquation(totalScanSignals, scanRange, new BackgroundAbundanceRange(startIntensity, stopIntensity));
+		ITotalScanSignals peakIntensityTotalScanSignals = adjustTotalScanSignals(totalScanSignals, backgroundEquation);
+		IPeakIntensityValues peakIntensityValues = getPeakIntensityValues(peakIntensityTotalScanSignals);
+		/*
+		 * Create the peak.
+		 */
+		IScanCSD supplierScanCSD = getPeakScan(totalScanSignals, backgroundEquation);
+		IPeakModelCSD peakModel = new PeakModelCSD(supplierScanCSD, peakIntensityValues, startIntensity, stopIntensity);
 		IChromatogramPeakCSD peak = new ChromatogramPeakCSD(peakModel, chromatogram);
 		return peak;
 	}

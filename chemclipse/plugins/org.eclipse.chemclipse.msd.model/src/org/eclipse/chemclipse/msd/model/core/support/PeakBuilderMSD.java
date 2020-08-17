@@ -118,9 +118,38 @@ public class PeakBuilderMSD {
 		return peak;
 	}
 
+	public static IChromatogramPeakMSD createPeak(IChromatogramMSD chromatogram, IScanRange scanRange, float startIntensity, float stopIntensity, Set<Integer> includedIons, IonMarkMode filterMode) throws PeakException {
+
+		/*
+		 * Validate the given objects.
+		 */
+		validateChromatogram(chromatogram);
+		validateScanRange(scanRange);
+		checkScanRange(chromatogram, scanRange);
+		/*
+		 * Calculate the intensity values.
+		 */
+		ITotalScanSignals totalIonSignals = getTotalIonSignals(chromatogram, scanRange, new MarkedIons(includedIons, filterMode));
+		float firstSignal = totalIonSignals.getFirstTotalScanSignal().getTotalSignal();
+		float lastSignal = totalIonSignals.getLastTotalScanSignal().getTotalSignal();
+		startIntensity = startIntensity <= firstSignal ? startIntensity : firstSignal;
+		stopIntensity = stopIntensity <= lastSignal ? stopIntensity : lastSignal;
+		LinearEquation backgroundEquation = getBackgroundEquation(totalIonSignals, scanRange, new BackgroundAbundanceRange(startIntensity, stopIntensity));
+		ITotalScanSignals peakIntensityTotalIonSignals = adjustTotalIonSignals(totalIonSignals, backgroundEquation);
+		IPeakIntensityValues peakIntensityValues = getPeakIntensityValues(peakIntensityTotalIonSignals);
+		IPeakMassSpectrum peakMassSpectrum = getPeakMassSpectrum(chromatogram, totalIonSignals, backgroundEquation, new MarkedIons(includedIons, filterMode));
+		/*
+		 * Create the peak.
+		 */
+		IPeakModelMSD peakModel = new PeakModelMSD(peakMassSpectrum, peakIntensityValues, startIntensity, stopIntensity);
+		IChromatogramPeakMSD peak = new ChromatogramPeakMSD(peakModel, chromatogram);
+		return peak;
+	}
+
 	/**
 	 * EXPERIMENTAL!
 	 */
+	@SuppressWarnings("unused")
 	private static IPeakMassSpectrum getPeakMassSpectrum(IChromatogramMSD chromatogram, IScanMSD massSpectrum, LinearEquation backgroundEquation) throws PeakException {
 
 		if(chromatogram == null || massSpectrum == null || backgroundEquation == null) {
@@ -219,6 +248,34 @@ public class PeakBuilderMSD {
 		return peak;
 	}
 
+	public static IChromatogramPeakMSD createPeak(IChromatogramMSD chromatogram, IScanRange scanRange, float startIntensity, float stopIntensity) throws PeakException {
+
+		/*
+		 * Validate the given objects.
+		 */
+		validateChromatogram(chromatogram);
+		validateScanRange(scanRange);
+		checkScanRange(chromatogram, scanRange);
+		/*
+		 * Calculate the intensity values.
+		 */
+		ITotalScanSignals totalIonSignals = getTotalIonSignals(chromatogram, scanRange);
+		float firstSignal = totalIonSignals.getFirstTotalScanSignal().getTotalSignal();
+		float lastSignal = totalIonSignals.getLastTotalScanSignal().getTotalSignal();
+		startIntensity = startIntensity <= firstSignal ? startIntensity : firstSignal;
+		stopIntensity = stopIntensity <= lastSignal ? stopIntensity : lastSignal;
+		LinearEquation backgroundEquation = getBackgroundEquation(totalIonSignals, scanRange, new BackgroundAbundanceRange(startIntensity, stopIntensity));
+		ITotalScanSignals peakIntensityTotalIonSignals = adjustTotalIonSignals(totalIonSignals, backgroundEquation);
+		IPeakIntensityValues peakIntensityValues = getPeakIntensityValues(peakIntensityTotalIonSignals);
+		IPeakMassSpectrum peakMassSpectrum = getPeakMassSpectrum(chromatogram, totalIonSignals, backgroundEquation, null);
+		/*
+		 * Create the peak.
+		 */
+		IPeakModelMSD peakModel = new PeakModelMSD(peakMassSpectrum, peakIntensityValues, startIntensity, stopIntensity);
+		IChromatogramPeakMSD peak = new ChromatogramPeakMSD(peakModel, chromatogram);
+		return peak;
+	}
+
 	/**
 	 * Creates an instance of IPeak.<br/>
 	 * The background abundance will be used as given.<br/>
@@ -294,13 +351,8 @@ public class PeakBuilderMSD {
 		totalIonSignal = totalIonSignals.getTotalScanSignal(scanRange.getStopScan());
 		float stopBackgroundAbundance = totalIonSignal.getTotalSignal();
 		backgroundAbundanceRange = new BackgroundAbundanceRange(startBackgroundAbundance, stopBackgroundAbundance);
-		/*
-		 *
-		 */
+		//
 		LinearEquation backgroundEquation = getBackgroundEquation(totalIonSignals, scanRange, backgroundAbundanceRange);
-		/*
-		 *
-		 */
 		ITotalScanSignals peakIntensityTotalIonSignals = adjustTotalIonSignals(totalIonSignals, backgroundEquation);
 		IPeakIntensityValues peakIntensityValues = getPeakIntensityValues(peakIntensityTotalIonSignals);
 		IPeakMassSpectrum peakMassSpectrum = getPeakMassSpectrum(chromatogram, totalIonSignals, backgroundEquation, excludedIons);
@@ -339,13 +391,8 @@ public class PeakBuilderMSD {
 		 */
 		ITotalScanSignals totalIonSignals = getTotalIonSignals(chromatogram, scanRange, excludedIons);
 		backgroundAbundanceRange = checkBackgroundAbundanceRange(totalIonSignals, scanRange, backgroundAbundanceRange);
-		/*
-		 *
-		 */
+		//
 		LinearEquation backgroundEquation = getBackgroundEquation(totalIonSignals, scanRange, backgroundAbundanceRange);
-		/*
-		 *
-		 */
 		ITotalScanSignals peakIntensityTotalIonSignals = adjustTotalIonSignals(totalIonSignals, backgroundEquation);
 		IPeakIntensityValues peakIntensityValues = getPeakIntensityValues(peakIntensityTotalIonSignals);
 		IPeakMassSpectrum peakMassSpectrum = getPeakMassSpectrum(chromatogram, totalIonSignals, backgroundEquation, excludedIons);
@@ -383,13 +430,8 @@ public class PeakBuilderMSD {
 		totalIonSignal = totalIonSignals.getTotalScanSignal(scanRange.getStopScan());
 		float stopBackgroundAbundance = totalIonSignal.getTotalSignal();
 		backgroundAbundanceRange = new BackgroundAbundanceRange(startBackgroundAbundance, stopBackgroundAbundance);
-		/*
-		 *
-		 */
+		//
 		LinearEquation backgroundEquation = getBackgroundEquation(totalIonSignals, scanRange, backgroundAbundanceRange);
-		/*
-		 *
-		 */
 		ITotalScanSignals peakIntensityTotalIonSignals = adjustTotalIonSignals(totalIonSignals, backgroundEquation);
 		IPeakIntensityValues peakIntensityValues = getPeakIntensityValues(peakIntensityTotalIonSignals);
 		/*
@@ -423,13 +465,8 @@ public class PeakBuilderMSD {
 		 * BackgroundAbundanceRange
 		 */
 		backgroundAbundanceRange = checkBackgroundAbundanceRange(totalIonSignals, scanRange, backgroundAbundanceRange);
-		/*
-		 *
-		 */
+		//
 		LinearEquation backgroundEquation = getBackgroundEquation(totalIonSignals, scanRange, backgroundAbundanceRange);
-		/*
-		 *
-		 */
 		ITotalScanSignals peakIntensityTotalIonSignals = adjustTotalIonSignals(totalIonSignals, backgroundEquation);
 		IPeakIntensityValues peakIntensityValues = getPeakIntensityValues(peakIntensityTotalIonSignals);
 		/*
@@ -477,13 +514,8 @@ public class PeakBuilderMSD {
 		totalIonSignal = totalIonSignals.getTotalScanSignal(scanRange.getStopScan());
 		float stopBackgroundAbundance = totalIonSignal.getTotalSignal();
 		backgroundAbundanceRange = new BackgroundAbundanceRange(startBackgroundAbundance, stopBackgroundAbundance);
-		/*
-		 *
-		 */
+		//
 		LinearEquation backgroundEquation = getBackgroundEquation(totalIonSignals, scanRange, backgroundAbundanceRange);
-		/*
-		 *
-		 */
 		ITotalScanSignals peakIntensityTotalIonSignals = adjustTotalIonSignals(totalIonSignals, backgroundEquation);
 		IPeakIntensityValues peakIntensityValues = getPeakIntensityValues(peakIntensityTotalIonSignals);
 		IPeakMassSpectrum peakMassSpectrum = getPeakMassSpectrum(extractedIonSignals, chromatogram, totalIonSignals, backgroundEquation, null);
@@ -495,7 +527,6 @@ public class PeakBuilderMSD {
 		return peak;
 	}
 
-	// -------------------------------------------------protected methods
 	/**
 	 * Returns the peak mass spectrum from the given values.
 	 */
@@ -928,5 +959,4 @@ public class PeakBuilderMSD {
 			throw new PeakException("The extracted ion signals instance must not be null.");
 		}
 	}
-	// -------------------------------------------------protected methods
 }
