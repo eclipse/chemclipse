@@ -147,6 +147,7 @@ public class ChromatogramReferencesUI {
 			comboChromatograms.master = chromatogramSelection;
 			update();
 			comboChromatograms.setSelection(new StructuredSelection(chromatogramSelection));
+			chromatogramSelection.update(true);
 			updateButtons();
 		}
 	}
@@ -185,7 +186,7 @@ public class ChromatogramReferencesUI {
 	private void createComboChromatograms(EditorToolBar toolBar) {
 
 		toolBar.createCombo(viewer -> {
-			ComboViewer oldViewer = comboChromatograms.viewerReferenece.getAndSet(viewer);
+			ComboViewer oldViewer = comboChromatograms.viewerReference.getAndSet(viewer);
 			if(oldViewer != null) {
 				oldViewer.removeSelectionChangedListener(comboChromatograms);
 			}
@@ -197,7 +198,7 @@ public class ChromatogramReferencesUI {
 				@Override
 				public void widgetDisposed(DisposeEvent e) {
 
-					if(comboChromatograms.viewerReferenece.compareAndSet(viewer, null)) {
+					if(comboChromatograms.viewerReference.compareAndSet(viewer, null)) {
 						viewer.removeSelectionChangedListener(comboChromatograms);
 						comboChromatograms.refreshUI();
 					}
@@ -403,7 +404,7 @@ public class ChromatogramReferencesUI {
 		private IChromatogramSelection<?, ?> master;
 		private IStructuredSelection selection = StructuredSelection.EMPTY;
 		private List<IChromatogramSelection<?, ?>> data = Collections.emptyList();
-		private final AtomicReference<ComboViewer> viewerReferenece = new AtomicReference<>();
+		private final AtomicReference<ComboViewer> viewerReference = new AtomicReference<>();
 		private final Consumer<IChromatogramSelection<?, ?>> listener;
 
 		public ComboContainer(Consumer<IChromatogramSelection<?, ?>> chromatogramReferencesListener) {
@@ -443,7 +444,7 @@ public class ChromatogramReferencesUI {
 
 		private void setSelection(IStructuredSelection selection) {
 
-			ComboViewer viewer = viewerReferenece.get();
+			ComboViewer viewer = viewerReference.get();
 			if(viewer != null) {
 				viewer.setSelection(selection);
 			}
@@ -454,7 +455,7 @@ public class ChromatogramReferencesUI {
 
 			setInput(data);
 			setSelection(selection);
-			ComboViewer viewer = viewerReferenece.get();
+			ComboViewer viewer = viewerReference.get();
 			if(viewer != null) {
 				viewer.refresh();
 			}
@@ -463,7 +464,7 @@ public class ChromatogramReferencesUI {
 		private void setInput(List<IChromatogramSelection<?, ?>> data) {
 
 			this.data = data;
-			ComboViewer viewer = viewerReferenece.get();
+			ComboViewer viewer = viewerReference.get();
 			if(viewer != null) {
 				viewer.setInput(data != null ? data : Collections.EMPTY_LIST);
 				Control control = viewer.getControl();

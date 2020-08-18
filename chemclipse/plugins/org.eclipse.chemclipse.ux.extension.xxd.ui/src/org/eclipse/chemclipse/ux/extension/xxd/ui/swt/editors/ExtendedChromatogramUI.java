@@ -421,37 +421,54 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	private void setChromatogramSelectionInternal(IChromatogramSelection chromatogramSelection) {
 
 		if(this.chromatogramSelection != chromatogramSelection) {
-			DataCategory datatype = DataCategory.AUTO_DETECT;
+			DataCategory dataCategory = DataCategory.AUTO_DETECT;
 			if(chromatogramSelection != null) {
 				IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 				if(chromatogram instanceof IChromatogramMSD) {
-					datatype = DataCategory.MSD;
+					dataCategory = DataCategory.MSD;
 				} else if(chromatogram instanceof IChromatogramWSD) {
-					datatype = DataCategory.WSD;
+					dataCategory = DataCategory.WSD;
 				} else if(chromatogram instanceof IChromatogramCSD) {
-					datatype = DataCategory.CSD;
+					dataCategory = DataCategory.CSD;
 				}
 			}
-			dataCategoryPredicate = ProcessSupplierContext.createDataCategoryPredicate(datatype);
+			/*
+			 * Adjust
+			 */
+			dataCategoryPredicate = ProcessSupplierContext.createDataCategoryPredicate(dataCategory);
 			targetDisplaySettings = null;
 			this.chromatogramSelection = chromatogramSelection;
 			updateToolbar(toolbars.get(TOOLBAR_CHROMATOGRAM_ALIGNMENT), chromatogramSelection);
 			//
 			if(chromatogramSelection != null) {
-				/*
-				 * Adjust
-				 */
 				adjustAxisSettings();
 				updateMenu(true);
 				updateChromatogram();
 				setSeparationColumnSelection();
 				retentionIndexUI.setInput(chromatogramSelection.getChromatogram().getSeparationColumnIndices());
 			} else {
-				retentionIndexUI.setInput(null);
+				adjustAxisSettings();
 				updateChromatogram();
+				retentionIndexUI.setInput(null);
 			}
+			/*
+			 * Update the chart.
+			 * fireUpdate(getChromatogramChart().getDisplay()); makes problems here.
+			 * The update process needs to be addressed generally.
+			 */
 			processorToolbar.update();
-			fireUpdate(getChromatogramChart().getDisplay());
+			if(chromatogramSelection != null) {
+				IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+				if(eventBroker != null) {
+					try {
+						eventBroker.post(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION, chromatogramSelection);
+						// eventBroker.post(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, chromatogramSelection.getSelectedPeak());
+						// eventBroker.post(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, chromatogramSelection.getSelectedScan());
+					} catch(Exception e) {
+						logger.warn(e);
+					}
+				}
+			}
 		}
 	}
 
@@ -537,9 +554,12 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			if(chromatogramSelection != null) {
 				chromatogramSelection.getChromatogram().setDirty(true);
 			}
+			/*
+			 * Select the reference chromatogram.
+			 */
 			updateChromatogram();
-			updateSelection();
 			chromatogramReferencesUI.update();
+			updateSelection();
 			fireUpdate(shell.getDisplay());
 		} catch(Exception e) {
 			logger.error(e.getLocalizedMessage(), e);
