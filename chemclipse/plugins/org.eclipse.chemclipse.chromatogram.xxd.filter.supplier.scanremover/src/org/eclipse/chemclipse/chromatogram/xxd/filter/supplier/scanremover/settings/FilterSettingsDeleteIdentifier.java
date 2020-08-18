@@ -18,8 +18,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class FilterSettingsDeleteIdentifier extends AbstractChromatogramFilterSettings {
 
-	@JsonProperty(value = "Delete Scan Identification(s)", defaultValue = "false")
-	@JsonPropertyDescription(value = "Confirm to delete the scan identification(s).")
+	@JsonProperty(value = "Delete Scan Target(s)", defaultValue = "false")
+	@JsonPropertyDescription(value = "Confirm to delete the scan target(s).")
 	private boolean deleteScanIdentifications;
 
 	public boolean isDeleteScanIdentifications() {

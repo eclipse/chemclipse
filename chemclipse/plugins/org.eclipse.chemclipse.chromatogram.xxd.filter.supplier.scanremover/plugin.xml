@@ -20,7 +20,7 @@
       <ChromatogramFilterSupplier
             description="This filters deletes scan identification(s)."
             filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.core.FilterDeleteIdentifier"
-            filterName="Delete Scan Identification(s)"
+            filterName="Delete Scan Target(s)"
             filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.settings.FilterSettingsDeleteIdentifier"
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.removescanidentifications">
       </ChromatogramFilterSupplier>           

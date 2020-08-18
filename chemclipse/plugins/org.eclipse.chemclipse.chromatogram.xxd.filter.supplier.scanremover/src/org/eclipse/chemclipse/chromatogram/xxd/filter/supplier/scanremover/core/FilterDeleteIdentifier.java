@@ -41,7 +41,7 @@ public class FilterDeleteIdentifier extends AbstractChromatogramFilter {
 					FilterSettingsDeleteIdentifier settings = (FilterSettingsDeleteIdentifier)chromatogramFilterSettings;
 					if(settings.isDeleteScanIdentifications()) {
 						removeScanIdentifications(chromatogramSelection, monitor);
-						processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "Delete Scan Identification(s)", "Scan identification(s) have been removed successfully."));
+						processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "Delete Scan Target(s)", "Scan Target(s) have been removed successfully."));
 						processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "Scan identification(s) have been removed successfully."));
 					}
 				}
@@ -64,7 +64,7 @@ public class FilterDeleteIdentifier extends AbstractChromatogramFilter {
 		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
 		int stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
-		SubMonitor subMonitor = SubMonitor.convert(monitor, "Remove scan identification(s) from chromatogram.", stopScan - startScan);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, "Delete Scan Target(s) from chromatogram.", stopScan - startScan);
 		/*
 		 * Iterate through all selected scans and mark those to be removed.
 		 */
