@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -256,8 +256,8 @@ public class ReportWriter2 {
 			//
 			IPeakModel peakModelSource = peakSource.getPeakModel();
 			int retentionTimeSource = peakModelSource.getRetentionTimeAtPeakMaximum();
-			int startRetentionTime = peakModelSource.getStartRetentionTime() - (int)(reportSettings.getDeltaRetentionTimeMinutesLeft() * IChromatogram.MINUTE_CORRELATION_FACTOR);
-			int stopRetentionTime = peakModelSource.getStopRetentionTime() - (int)(reportSettings.getDeltaRetentionTimeMinutesRight() * IChromatogram.MINUTE_CORRELATION_FACTOR);
+			int startRetentionTime = peakModelSource.getStartRetentionTime() - reportSettings.getDeltaRetentionTimeLeft();
+			int stopRetentionTime = peakModelSource.getStopRetentionTime() - reportSettings.getDeltaRetentionTimeRight();
 			boolean useBestMatch = reportSettings.isUseBestMatch();
 			//
 			List<IPeak> peaksOfInterest = extractPeaksOfInterest(referencedChromatogram, startRetentionTime, stopRetentionTime);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,41 +14,41 @@ package org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settin
 
 import org.eclipse.chemclipse.chromatogram.xxd.report.settings.DefaultChromatogramReportSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class ReportSettings2 extends DefaultChromatogramReportSettings {
 
-	@DoubleSettingsProperty(minValue = PreferenceSupplier.MIN_DELTA_RETENTION_TIME_MINUTES, maxValue = PreferenceSupplier.MAX_DELTA_RETENTION_TIME_MINUTES)
-	@JsonProperty(value = "Delta Retention Time Left (Minutes)", defaultValue = "" + PreferenceSupplier.DEF_DELTA_RETENTION_TIME_MINUTES_LEFT)
-	private double deltaRetentionTimeMinutesLeft = 0.0d;
+	@JsonProperty(value = "Delta Retention Time Left [ms]", defaultValue = "0")
+	@JsonPropertyDescription(value = "This is the left delta retention time in milliseconds.")
+	private int deltaRetentionTimeLeft = 0;
 	//
-	@DoubleSettingsProperty(minValue = PreferenceSupplier.MIN_DELTA_RETENTION_TIME_MINUTES, maxValue = PreferenceSupplier.MAX_DELTA_RETENTION_TIME_MINUTES)
-	@JsonProperty(value = "Delta Retention Time Right (Minutes)", defaultValue = "" + PreferenceSupplier.DEF_DELTA_RETENTION_TIME_MINUTES_RIGHT)
-	private double deltaRetentionTimeMinutesRight = 0.0d;
+	@JsonProperty(value = "Delta Retention Time Right [ms]", defaultValue = "0")
+	@JsonPropertyDescription(value = "This is the right delta retention time in milliseconds.")
+	private int deltaRetentionTimeRight = 0;
 	//
 	@JsonProperty(value = "Use Best Match", defaultValue = "" + PreferenceSupplier.DEF_USE_BEST_MATCH)
 	private boolean useBestMatch;
 
-	public double getDeltaRetentionTimeMinutesLeft() {
+	public int getDeltaRetentionTimeLeft() {
 
-		return deltaRetentionTimeMinutesLeft;
+		return deltaRetentionTimeLeft;
 	}
 
-	public void setDeltaRetentionTimeMinutesLeft(double deltaRetentionTimeMinutesLeft) {
+	public void setDeltaRetentionTimeLeft(int deltaRetentionTimeLeft) {
 
-		this.deltaRetentionTimeMinutesLeft = deltaRetentionTimeMinutesLeft;
+		this.deltaRetentionTimeLeft = deltaRetentionTimeLeft;
 	}
 
-	public double getDeltaRetentionTimeMinutesRight() {
+	public int getDeltaRetentionTimeRight() {
 
-		return deltaRetentionTimeMinutesRight;
+		return deltaRetentionTimeRight;
 	}
 
-	public void setDeltaRetentionTimeMinutesRight(double deltaRetentionTimeMinutesRight) {
+	public void setDeltaRetentionTimeRight(int deltaRetentionTimeRight) {
 
-		this.deltaRetentionTimeMinutesRight = deltaRetentionTimeMinutesRight;
+		this.deltaRetentionTimeRight = deltaRetentionTimeRight;
 	}
 
 	public boolean isUseBestMatch() {
