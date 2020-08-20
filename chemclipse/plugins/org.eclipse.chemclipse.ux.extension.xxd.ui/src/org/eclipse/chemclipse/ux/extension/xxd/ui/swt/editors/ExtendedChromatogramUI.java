@@ -461,7 +461,10 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 				IEventBroker eventBroker = Activator.getDefault().getEventBroker();
 				if(eventBroker != null) {
 					try {
-						eventBroker.post(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION, chromatogramSelection);
+						/*
+						 * Use send!
+						 */
+						eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION, chromatogramSelection);
 						// eventBroker.post(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, chromatogramSelection.getSelectedPeak());
 						// eventBroker.post(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, chromatogramSelection.getSelectedScan());
 					} catch(Exception e) {
