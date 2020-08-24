@@ -21,7 +21,7 @@ public class HighPassFilterSettings extends AbstractMassSpectrumFilterSettings {
 
 	@JsonProperty(value = "Number Highest", defaultValue = "5")
 	@JsonPropertyDescription(value = "This value defines the number of n highest ions to be preserved.")
-	@IntSettingsProperty(minValue = 2, maxValue = 100)
+	@IntSettingsProperty(minValue = 2, maxValue = 1000)
 	private int numberHighest = 5;
 
 	public int getNumberHighest() {

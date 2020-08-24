@@ -21,7 +21,7 @@ public class LowPassFilterSettings extends AbstractMassSpectrumFilterSettings {
 
 	@JsonProperty(value = "Number Lowest", defaultValue = "5")
 	@JsonPropertyDescription(value = "This value defines the number of n lowest ions to be preserved.")
-	@IntSettingsProperty(minValue = 2, maxValue = 100)
+	@IntSettingsProperty(minValue = 2, maxValue = 1000)
 	private int numberLowest = 5;
 
 	public int getNumberLowest() {
