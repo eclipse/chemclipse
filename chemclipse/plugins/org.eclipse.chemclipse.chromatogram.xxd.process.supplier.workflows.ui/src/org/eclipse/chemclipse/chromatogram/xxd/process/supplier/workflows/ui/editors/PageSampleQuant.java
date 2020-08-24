@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,6 +19,7 @@ import java.lang.reflect.InvocationTargetException;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.model.ISampleQuantReport;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.model.ISampleQuantSubstance;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.runnables.ImportChromatogramRunnable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.swt.SampleQuantTableViewerUI;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -26,7 +27,6 @@ import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -67,6 +67,7 @@ public class PageSampleQuant {
 	private IChromatogramMSD chromatogramMSD;
 
 	public PageSampleQuant(Composite container, EditorSampleQuant editorSampleQuant) {
+
 		createControl(container);
 		this.editorSampleQuant = editorSampleQuant;
 	}
@@ -204,8 +205,10 @@ public class PageSampleQuant {
 							 * Send the mass spectrum update, e.g. used by the comparison part.
 							 */
 							if(scanMSD != null) {
-								IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-								eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scanMSD);
+								IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+								if(eventBroker != null) {
+									eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scanMSD);
+								}
 							}
 						}
 					}

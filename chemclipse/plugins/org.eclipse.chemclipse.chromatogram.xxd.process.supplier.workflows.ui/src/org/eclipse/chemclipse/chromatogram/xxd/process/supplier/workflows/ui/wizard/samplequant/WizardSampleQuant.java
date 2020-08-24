@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2019 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.wi
 
 import java.io.File;
 import java.util.Date;
-import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.core.SampleQuantProcessor;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.model.ISampleQuantReport;
@@ -41,6 +40,7 @@ public class WizardSampleQuant extends AbstractFileWizard {
 	private PageDataVerification pageDataVerification;
 
 	public WizardSampleQuant() {
+
 		super("SampleQuantReport_" + new Date().getTime(), SampleQuantProcessor.REPORT_FILE_EXTENSION);
 	}
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2019 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  *
@@ -23,6 +23,7 @@ public class ImportChromatogramRunnable implements IRunnableWithProgress {
 	private IChromatogramMSD chromatogramMSD;
 
 	public ImportChromatogramRunnable(String pathChromatogram) {
+
 		this.pathChromatogram = pathChromatogram;
 	}
 
@@ -36,6 +37,6 @@ public class ImportChromatogramRunnable implements IRunnableWithProgress {
 
 		File chromatogramImportFile = new File(pathChromatogram);
 		org.eclipse.chemclipse.processing.core.IProcessingInfo<IChromatogramMSD> processingInfoImport = ChromatogramConverterMSD.getInstance().convert(chromatogramImportFile, monitor);
-		chromatogramMSD = processingInfoImport.getProcessingResult(IChromatogramMSD.class);
+		chromatogramMSD = processingInfoImport.getProcessingResult();
 	}
 }

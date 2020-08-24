@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2019 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -64,7 +64,7 @@ public class SampleQuantProcessor {
 			sampleQuantReport.setPathChromatogramOriginal(pathChromatogramOriginal);
 			File chromatogramImportFile = new File(pathChromatogramOriginal);
 			IProcessingInfo<IChromatogramMSD> processingInfoImport = ChromatogramConverterMSD.getInstance().convert(chromatogramImportFile, monitor);
-			IChromatogramMSD chromatogramMSD = processingInfoImport.getProcessingResult(IChromatogramMSD.class);
+			IChromatogramMSD chromatogramMSD = processingInfoImport.getProcessingResult();
 			//
 			sampleQuantReport.setName(chromatogramMSD.getName());
 			sampleQuantReport.setDataName(chromatogramMSD.getDataName());
@@ -91,7 +91,7 @@ public class SampleQuantProcessor {
 			 */
 			File chromatogramExportFile = new File(sampleQuantReportFile.getAbsolutePath().replace(REPORT_FILE_EXTENSION, CHROMATOGRAM_FILE_EXTENSION));
 			IProcessingInfo<File> processingInfoExport = ChromatogramConverterMSD.getInstance().convert(chromatogramExportFile, chromatogramMSD, CHROMATOGRAM_CONVERTER_ID, monitor);
-			sampleQuantReport.setPathChromatogramEdited(processingInfoExport.getProcessingResult(File.class).getAbsolutePath());
+			sampleQuantReport.setPathChromatogramEdited(processingInfoExport.getProcessingResult().getAbsolutePath());
 			/*
 			 * Write sample quant report
 			 */
@@ -225,7 +225,7 @@ public class SampleQuantProcessor {
 		IReportRowModel reportRowModel;
 		IProcessingInfo<IReportRowModel> processingInfo = ReportConverter.convert(fileImport, extensionPointId, new NullProgressMonitor());
 		try {
-			reportRowModel = processingInfo.getProcessingResult(IReportRowModel.class);
+			reportRowModel = processingInfo.getProcessingResult();
 		} catch(TypeCastException e) {
 			reportRowModel = null;
 		}
