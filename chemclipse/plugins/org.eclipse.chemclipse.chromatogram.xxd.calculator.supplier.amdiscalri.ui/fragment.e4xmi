@@ -1,26 +1,17 @@
 <?xml version="1.0" encoding="ASCII"?>
 <fragment:ModelFragments xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:commands="http://www.eclipse.org/ui/2010/UIModel/application/commands" xmlns:fragment="http://www.eclipse.org/ui/2010/UIModel/fragment" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmlns:ui="http://www.eclipse.org/ui/2010/UIModel/application/ui" xmi:id="_9IWuEMuEEeOtT4qEJiN-Qw">
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_tRJvYMuFEeOtT4qEJiN-Qw" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
-    <elements xsi:type="commands:Command" xmi:id="_aeQM4MuMEeOtT4qEJiN-Qw" elementId="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.command.retentionIndexCalculator" commandName="Retention Index (Chromatogram and Peaks)"/>
     <elements xsi:type="commands:Command" xmi:id="_QQgNsBklEea9O6zJ5dOHjQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.command.createRetentionIndexFile" commandName="Create Retention Index File"/>
-    <elements xsi:type="commands:Command" xmi:id="_1FpsQBnwEeaEkJ-bL8kgdw" elementId="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.command.identifyAlkanes" commandName="Identify Alkanes"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_tjxwcMuFEeOtT4qEJiN-Qw" featurename="handlers" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
-    <elements xsi:type="commands:Handler" xmi:id="_deGpMMuMEeOtT4qEJiN-Qw" elementId="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.handler.retentionIndexCalculator" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.handlers.CalculatorHandler" command="_aeQM4MuMEeOtT4qEJiN-Qw"/>
     <elements xsi:type="commands:Handler" xmi:id="_Z89E4BklEea9O6zJ5dOHjQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.handler.createRetentionIndexFile" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.handlers.CreateRetentionIndexFileHandler" command="_QQgNsBklEea9O6zJ5dOHjQ"/>
-    <elements xsi:type="commands:Handler" xmi:id="_tYTJkBnxEeaEkJ-bL8kgdw" elementId="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.handler.identifyAlkanes" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.handlers.IdentifyAlkanesHandler" command="_1FpsQBnwEeaEkJ-bL8kgdw"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_t5wngMuFEeOtT4qEJiN-Qw" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.calculators.chromatogram">
-    <elements xsi:type="menu:HandledMenuItem" xmi:id="_T3dpoMuNEeOtT4qEJiN-Qw" elementId="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.handledmenuitem" label="Retention Index (Chromatogram and Peaks)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/retentionIndex.gif" command="_aeQM4MuMEeOtT4qEJiN-Qw">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_T3dpoMuNEeOtT4qEJiN-Qw" elementId="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.handledmenuitem" label="Retention Index (Chromatogram and Peaks)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/retentionIndex.gif">
       <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_ZloTgAP8Eea988xguwzXfA" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeXXD"/>
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_zyJhQBklEea9O6zJ5dOHjQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.process">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_2f12kBklEea9O6zJ5dOHjQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.handledmenuitem.createRetentionIndexFile" label="Create Retention Index File" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/batchprocess.gif" command="_QQgNsBklEea9O6zJ5dOHjQ"/>
-  </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_1rXzABnxEeaEkJ-bL8kgdw" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.identifier">
-    <elements xsi:type="menu:HandledMenuItem" xmi:id="_4V44gBnxEeaEkJ-bL8kgdw" elementId="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.handledmenuitem.identifyAlkanes" label="Identify Alkanes" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/identify_peaks.gif" command="_1FpsQBnwEeaEkJ-bL8kgdw">
-      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_7FBYQBnxEeaEkJ-bL8kgdw" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
-    </elements>
   </fragments>
 </fragment:ModelFragments>
