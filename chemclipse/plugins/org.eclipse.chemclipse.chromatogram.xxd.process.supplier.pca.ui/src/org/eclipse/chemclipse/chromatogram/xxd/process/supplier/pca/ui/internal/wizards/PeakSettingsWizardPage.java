@@ -16,7 +16,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Algori
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.AnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
@@ -48,7 +47,7 @@ public class PeakSettingsWizardPage extends WizardPage {
 	private IAnalysisSettings analysisSettings = new AnalysisSettings();
 	//
 	private DataBindingContext dataBindingContext = new DataBindingContext();
-	private IObservableValue<Double> retentionTimeWindow = new WritableValue<>();
+	private IObservableValue<Integer> retentionTimeWindow = new WritableValue<>();
 	//
 	private Button buttonRetentionTime;
 	private Button buttonTargets;
@@ -63,7 +62,7 @@ public class PeakSettingsWizardPage extends WizardPage {
 		setTitle("PCA");
 		setDescription("Set main PCA parameters.");
 		//
-		retentionTimeWindow.setValue(0.1);
+		retentionTimeWindow.setValue(1500); // 1.5 sec
 	}
 
 	@Override
@@ -75,7 +74,7 @@ public class PeakSettingsWizardPage extends WizardPage {
 		WizardPageSupport.create(this, dataBindingContext);
 		//
 		createRadioGroup(composite);
-		labelRetentionTime = createLabel(composite, "Retention Time Windows [min]:");
+		labelRetentionTime = createLabel(composite, "Retention Time Window [ms]:");
 		textRetentionTime = createVariableSection(composite);
 		createLabel(composite, "Number of PCs:");
 		createSpinnerPrincipleComponents(composite);
@@ -94,7 +93,7 @@ public class PeakSettingsWizardPage extends WizardPage {
 
 	public int getRetentionTimeWindow() {
 
-		return (int)Math.round(retentionTimeWindow.getValue() * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
+		return retentionTimeWindow.getValue();
 	}
 
 	public IAnalysisSettings getAnalysisSettings() {
@@ -147,9 +146,9 @@ public class PeakSettingsWizardPage extends WizardPage {
 		Text text = new Text(parent, SWT.BORDER);
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
-		UpdateValueStrategy widgetToModel = UpdateValueStrategy.create(IConverter.create(String.class, Double.class, o1 -> {
+		UpdateValueStrategy widgetToModel = UpdateValueStrategy.create(IConverter.create(String.class, Integer.class, o1 -> {
 			try {
-				return Double.parseDouble((String)o1);
+				return Integer.parseInt((String)o1);
 			} catch(NumberFormatException e) {
 				// No message
 			}
@@ -157,8 +156,8 @@ public class PeakSettingsWizardPage extends WizardPage {
 		}));
 		//
 		widgetToModel.setBeforeSetValidator(o1 -> {
-			if(o1 instanceof Double) {
-				Double i = (Double)o1;
+			if(o1 instanceof Integer) {
+				Integer i = (Integer)o1;
 				if(i > 0) {
 					return ValidationStatus.ok();
 				}
@@ -166,7 +165,7 @@ public class PeakSettingsWizardPage extends WizardPage {
 			return ValidationStatus.error("Warning: The value must be positive.");
 		});
 		//
-		UpdateValueStrategy modelToWidget = UpdateValueStrategy.create(IConverter.create(Double.class, String.class, o1 -> Double.toString(((Double)o1))));
+		UpdateValueStrategy modelToWidget = UpdateValueStrategy.create(IConverter.create(Integer.class, String.class, o1 -> Integer.toString(((Integer)o1))));
 		dataBindingContext.bindValue(WidgetProperties.text(SWT.Modify).observe(text), retentionTimeWindow, widgetToModel, modelToWidget);
 		//
 		return text;

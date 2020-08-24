@@ -81,8 +81,8 @@ public class PcaExtractionFiles implements IExtractionData {
 							 */
 							String name = record.get(0).trim();
 							String groupName = record.get(1).trim();
-							String classification = record.get(2).trim();
-							String description = record.get(3).trim();
+							// String classification = record.get(2).trim();
+							// String description = record.get(3).trim();
 							//
 							if(!name.isEmpty()) {
 								/*

@@ -48,15 +48,16 @@ public class ScanSettingsWizardPage extends WizardPage {
 	private DataBindingContext dataBindingContext = new DataBindingContext();
 	private ExtractionType extractionType;
 	private IObservableValue<Integer> maximalNumberScans = new WritableValue<>();
-	private IObservableValue<Double> retentionTimeWindow = new WritableValue<>();
+	private IObservableValue<Integer> retentionTimeWindow = new WritableValue<>();
 	private boolean useDefaultProperties;
 	//
 	private Algorithm[] algorithms = new Algorithm[]{Algorithm.SVD, Algorithm.NIPALS, Algorithm.OPLS};
 
 	public ScanSettingsWizardPage() {
+
 		super("Main Parameters");
 		setTitle("Set Main Parameters");
-		retentionTimeWindow.setValue(1.0);
+		retentionTimeWindow.setValue(1500); // 1.5 sec
 		maximalNumberScans.setValue(5000);
 		extractionType = ExtractionType.CLOSEST_SCAN;
 		useDefaultProperties = true;
@@ -64,7 +65,7 @@ public class ScanSettingsWizardPage extends WizardPage {
 
 	public int getRetentionTimeWindow() {
 
-		return (int)Math.round(retentionTimeWindow.getValue() * 1000);
+		return retentionTimeWindow.getValue();
 	}
 
 	public IAnalysisSettings getAnalysisSettings() {
@@ -95,7 +96,7 @@ public class ScanSettingsWizardPage extends WizardPage {
 		//
 		WizardPageSupport.create(this, dataBindingContext);
 		//
-		createLabel(composite, "Retention Time Windows [s]:");
+		createLabel(composite, "Retention Time Window [ms]:");
 		createVariableSection(composite);
 		createLabel(composite, "Maximum Number of Scans:");
 		createSpinnerNumberOfScans(composite);
@@ -123,9 +124,9 @@ public class ScanSettingsWizardPage extends WizardPage {
 		Text text = new Text(parent, SWT.BORDER);
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
-		UpdateValueStrategy widgetToModel = UpdateValueStrategy.create(IConverter.create(String.class, Double.class, o1 -> {
+		UpdateValueStrategy widgetToModel = UpdateValueStrategy.create(IConverter.create(String.class, Integer.class, o1 -> {
 			try {
-				return Double.parseDouble((String)o1);
+				return Integer.parseInt((String)o1);
 			} catch(NumberFormatException e) {
 				// No message
 			}
@@ -133,8 +134,8 @@ public class ScanSettingsWizardPage extends WizardPage {
 		}));
 		//
 		widgetToModel.setBeforeSetValidator(o1 -> {
-			if(o1 instanceof Double) {
-				Double i = (Double)o1;
+			if(o1 instanceof Integer) {
+				Integer i = (Integer)o1;
 				if(i > 0) {
 					return ValidationStatus.ok();
 				}
@@ -142,7 +143,7 @@ public class ScanSettingsWizardPage extends WizardPage {
 			return ValidationStatus.error("Warning: The value must be positive.");
 		});
 		//
-		UpdateValueStrategy modelToWidget = UpdateValueStrategy.create(IConverter.create(Double.class, String.class, o1 -> Double.toString(((Double)o1))));
+		UpdateValueStrategy modelToWidget = UpdateValueStrategy.create(IConverter.create(Integer.class, String.class, o1 -> Integer.toString(((Integer)o1))));
 		dataBindingContext.bindValue(WidgetProperties.text(SWT.Modify).observe(text), retentionTimeWindow, widgetToModel, modelToWidget);
 	}
 
