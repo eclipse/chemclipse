@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2019 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,11 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.i
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.PathResolver;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
@@ -35,8 +31,8 @@ public class StandardsReader {
 	public IMassSpectra getStandardsMassSpectra() {
 
 		File file = new File(PathResolver.getAbsolutePath(PathResolver.ALKANES));
-		IProcessingInfo processingInfo = DatabaseConverter.convert(file, new NullProgressMonitor());
-		IMassSpectra massSpectra = (IMassSpectra)processingInfo.getProcessingResult(IMassSpectra.class);
+		IProcessingInfo<?> processingInfo = DatabaseConverter.convert(file, new NullProgressMonitor());
+		IMassSpectra massSpectra = (IMassSpectra)processingInfo.getProcessingResult();
 		return massSpectra;
 	}
 
@@ -57,41 +53,5 @@ public class StandardsReader {
 		}
 		//
 		return retentionIndexEntries;
-	}
-
-	public Set<String> getStandardNames() {
-
-		Set<String> standardNames = new HashSet<>();
-		List<IRetentionIndexEntry> retentionIndexEntries = getStandardsList();
-		for(IRetentionIndexEntry retentionIndexEntry : retentionIndexEntries) {
-			standardNames.add(retentionIndexEntry.getName());
-		}
-		return standardNames;
-	}
-
-	public String[] getAvailableStandards() {
-
-		List<IRetentionIndexEntry> retentionIndexEntries = getStandardsList();
-		int size = retentionIndexEntries.size();
-		//
-		String[] entries = new String[size];
-		for(int i = 0; i < size; i++) {
-			entries[i] = retentionIndexEntries.get(i).getName();
-		}
-		//
-		return entries;
-	}
-
-	public Map<String, Integer> getNameIndexMap() {
-
-		Map<String, Integer> retentionIndices = new HashMap<>();
-		//
-		StandardsReader standardsReader = new StandardsReader();
-		List<IRetentionIndexEntry> retentionIndexEntries = standardsReader.getStandardsList();
-		for(IRetentionIndexEntry retentionIndexEntry : retentionIndexEntries) {
-			retentionIndices.put(retentionIndexEntry.getName(), (int)retentionIndexEntry.getRetentionIndex());
-		}
-		//
-		return retentionIndices;
 	}
 }

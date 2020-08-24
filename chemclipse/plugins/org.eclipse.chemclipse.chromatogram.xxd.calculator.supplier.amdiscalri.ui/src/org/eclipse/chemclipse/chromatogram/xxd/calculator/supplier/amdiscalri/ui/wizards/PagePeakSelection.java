@@ -47,7 +47,8 @@ import org.eclipse.swt.widgets.TableItem;
 public class PagePeakSelection extends AbstractExtendedWizardPage {
 
 	private static final Logger logger = Logger.getLogger(PagePeakSelection.class);
-	private IRetentionIndexWizardElements wizardElements;
+	//
+	private RetentionIndexWizardElements wizardElements;
 	private ChromatogramPeakChart chromatogramPeakChart;
 	private ExtendedScanChartUI extendedScanChartUI;
 	private PeakTableRetentionIndexViewerUI peakTableViewerUI;
@@ -55,9 +56,8 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 	private static final int PEAK_SHOW = 1;
 	private static final int PEAKS_DELETE = 2;
 
-	public PagePeakSelection(IRetentionIndexWizardElements wizardElements) {
+	public PagePeakSelection(RetentionIndexWizardElements wizardElements) {
 
-		//
 		super(PagePeakSelection.class.getName());
 		setTitle("Peak Selection");
 		setDescription("Please select the peaks that shall be used.");

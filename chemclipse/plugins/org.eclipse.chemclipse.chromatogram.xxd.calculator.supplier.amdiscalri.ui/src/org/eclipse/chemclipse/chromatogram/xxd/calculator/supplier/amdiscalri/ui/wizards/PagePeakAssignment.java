@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.wizards;
 
+import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.autoComplete;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +20,6 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.AlkaneIdentifier;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
@@ -34,6 +35,9 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakTableRetentionIndexViewerUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakTargetsViewerUI;
+import org.eclipse.jface.fieldassist.ContentProposal;
+import org.eclipse.jface.fieldassist.IContentProposal;
+import org.eclipse.jface.fieldassist.IContentProposalProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
@@ -57,12 +61,10 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 
 	private static final Logger logger = Logger.getLogger(PagePeakAssignment.class);
 	//
-	private IRetentionIndexWizardElements wizardElements;
+	private RetentionIndexWizardElements wizardElements;
 	private PeakTableRetentionIndexViewerUI peakTableViewerUI;
 	private PeakTargetsViewerUI targetsViewerUI;
-	private Combo comboStartIndexName;
 	private Label labelIndexRange;
-	private Combo comboStopIndexName;
 	private Button buttonPrevious;
 	private Text textCurrentIndexName;
 	private Button buttonNext;
@@ -74,8 +76,8 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 	private static final int ACTION_INCREASE_INDEX = 1;
 	private static final int ACTION_DECREASE_INDEX = 2;
 
-	public PagePeakAssignment(IRetentionIndexWizardElements wizardElements) {
-		//
+	public PagePeakAssignment(RetentionIndexWizardElements wizardElements) {
+
 		super(PagePeakAssignment.class.getName());
 		setTitle("Peak Assigment");
 		setDescription("Please assign the alkanes.");
@@ -168,48 +170,105 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 		composite.setLayoutData(gridDataComposite);
 		composite.setLayout(new GridLayout(2, true));
 		//
-		comboStartIndexName = new Combo(composite, SWT.NONE);
-		comboStartIndexName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		comboStartIndexName.setItems(availableStandards);
-		comboStartIndexName.setToolTipText("Select the start index.");
-		comboStartIndexName.addSelectionListener(new SelectionAdapter() {
+		Combo comboStartIndex = createComboStartIndex(composite);
+		Combo comboStopIndex = createComboStopIndex(composite);
+		//
+		labelIndexRange = createLabelIndexRange(composite);
+		/*
+		 * Auto-Complete
+		 */
+		enableAuotComplete(comboStartIndex);
+		enableAuotComplete(comboStopIndex);
+	}
+
+	private Combo createComboStartIndex(Composite parent) {
+
+		Combo combo = new Combo(parent, SWT.NONE);
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		combo.setItems(availableStandards);
+		combo.setToolTipText("Start Index.");
+		//
+		combo.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				wizardElements.setStartIndexName(comboStartIndexName.getText().trim());
-				validateIndexSelection();
-				updateLabel();
+				setStartIndexName(combo);
 			}
 		});
 		//
-		comboStopIndexName = new Combo(composite, SWT.NONE);
-		comboStopIndexName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		comboStopIndexName.setItems(availableStandards);
-		comboStopIndexName.setToolTipText("Select the stop index.");
-		comboStopIndexName.addSelectionListener(new SelectionAdapter() {
+		combo.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+				setStartIndexName(combo);
+			}
+		});
+		//
+		return combo;
+	}
+
+	private void setStartIndexName(Combo combo) {
+
+		wizardElements.setStartIndexName(combo.getText().trim());
+		validateIndexSelection();
+		updateLabel();
+	}
+
+	private Combo createComboStopIndex(Composite parent) {
+
+		Combo combo = new Combo(parent, SWT.NONE);
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		combo.setItems(availableStandards);
+		combo.setToolTipText("Stop Index.");
+		combo.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				wizardElements.setStopIndexName(comboStopIndexName.getText().trim());
-				validateIndexSelection();
-				updateLabel();
+				setStopIndexName(combo);
 			}
 		});
 		//
-		labelIndexRange = new Label(composite, SWT.NONE);
-		labelIndexRange.setText("");
+		combo.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+				setStopIndexName(combo);
+			}
+		});
+		//
+		return combo;
+	}
+
+	private void setStopIndexName(Combo combo) {
+
+		wizardElements.setStopIndexName(combo.getText().trim());
+		validateIndexSelection();
+		updateLabel();
+	}
+
+	private Label createLabelIndexRange(Composite parent) {
+
+		Label label = new Label(parent, SWT.NONE);
+		label.setText("");
 		GridData gridDataLabel = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataLabel.grabExcessHorizontalSpace = true;
 		gridDataLabel.horizontalSpan = 2;
-		labelIndexRange.setLayoutData(gridDataLabel);
+		label.setLayoutData(gridDataLabel);
+		//
+		return label;
 	}
 
 	private void createAutoAssignField(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("Auto Assign Standards");
+		button.setToolTipText("Automatically assign the selected index range.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
+		//
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 3;
 		button.setLayoutData(gridData);
@@ -227,13 +286,12 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 					if(chromatogramSelection != null && chromatogramSelection.getChromatogram() != null) {
 						IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 						List<? extends IPeak> chromatogramPeaks = chromatogram.getPeaks();
-						List<IRetentionIndexEntry> retentionIndexEntries = wizardElements.getSelectedRetentionIndexEntries();
+						List<String> selectedIndices = wizardElements.getSelectedIndices();
 						//
-						if(chromatogramPeaks.size() == retentionIndexEntries.size()) {
+						if(chromatogramPeaks.size() == selectedIndices.size()) {
 							for(int i = 0; i < chromatogramPeaks.size(); i++) {
 								IPeak chromatogramPeak = chromatogramPeaks.get(i);
-								IRetentionIndexEntry retentionIndexEntry = retentionIndexEntries.get(i);
-								setPeakTarget(chromatogramPeak, retentionIndexEntry.getName(), true);
+								setPeakTarget(chromatogramPeak, selectedIndices.get(i), true);
 							}
 							/*
 							 * Set the first peak.
@@ -246,7 +304,7 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 								targetsViewerUI.getTable().setSelection(0);
 							}
 						} else {
-							String message = "The number of peaks (" + chromatogramPeaks.size() + ") and selected standards (" + retentionIndexEntries.size() + ") is unequal.";
+							String message = "The number of peaks (" + chromatogramPeaks.size() + ") and selected standards (" + selectedIndices.size() + ") is unequal.";
 							updateStatus(message);
 						}
 					}
@@ -477,9 +535,9 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 
 	private void updateLabel() {
 
-		List<IRetentionIndexEntry> retentionIndexEntries = wizardElements.getSelectedRetentionIndexEntries();
+		List<String> selectedIndices = wizardElements.getSelectedIndices();
 		int size = wizardElements.getChromatogramSelection().getChromatogram().getPeaks().size();
-		labelIndexRange.setText("Number of peaks (" + size + ") -> Selected Standards (" + retentionIndexEntries.size() + ")");
+		labelIndexRange.setText("Number of peaks (" + size + ") -> Selected Standards (" + selectedIndices.size() + ")");
 	}
 
 	private void validateIndexSelection() {
@@ -491,7 +549,7 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 		if(message == null) {
 			String startIndexName = wizardElements.getStartIndexName();
 			if(startIndexName.equals("")) {
-				message = "Please select and start index.";
+				message = "Please select a start index.";
 			} else {
 				if(getComboIndex(startIndexName) == -1) {
 					message = "The select start index is not valid.";
@@ -504,7 +562,7 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 		if(message == null) {
 			String stopIndexName = wizardElements.getStopIndexName();
 			if(stopIndexName.equals("")) {
-				message = "Please select and stop index.";
+				message = "Please select a stop index.";
 			} else {
 				if(getComboIndex(stopIndexName) == -1) {
 					message = "The select stop index is not valid.";
@@ -525,5 +583,28 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 			}
 		}
 		return -1;
+	}
+
+	private void enableAuotComplete(Combo combo) {
+
+		IContentProposalProvider proposalProvider = new IContentProposalProvider() {
+
+			@Override
+			public IContentProposal[] getProposals(String contents, int position) {
+
+				List<ContentProposal> list = new ArrayList<>();
+				if(contents != null) {
+					String[] items = combo.getItems();
+					for(String item : items) {
+						if(item.toLowerCase().contains(contents.toLowerCase())) {
+							list.add(new ContentProposal(item));
+						}
+					}
+				}
+				return list.toArray(new IContentProposal[0]);
+			}
+		};
+		//
+		autoComplete(combo, proposalProvider);
 	}
 }

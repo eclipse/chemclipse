@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,7 +30,7 @@ import org.eclipse.swt.widgets.Text;
 
 public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 
-	private IRetentionIndexWizardElements wizardElements;
+	private RetentionIndexWizardElements wizardElements;
 	//
 	private Button checkBoxUseExistingCalibrationFile;
 	private Text textPathRetentionIndexFile;
@@ -41,8 +41,8 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 	//
 	private Button checkBoxUseExistingPeaks;
 
-	public PageCalibrationSettings(IRetentionIndexWizardElements wizardElements) {
-		//
+	public PageCalibrationSettings(RetentionIndexWizardElements wizardElements) {
+
 		super(PageCalibrationSettings.class.getName());
 		setTitle("Calibration Settings");
 		setDescription("Please select the calibration settings.");

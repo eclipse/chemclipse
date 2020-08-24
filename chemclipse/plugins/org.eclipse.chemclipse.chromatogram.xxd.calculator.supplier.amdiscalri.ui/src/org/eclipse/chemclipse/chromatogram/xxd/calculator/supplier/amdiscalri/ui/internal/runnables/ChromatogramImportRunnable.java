@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,7 +17,7 @@ import java.lang.reflect.InvocationTargetException;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.AlkanePatternDetectorCSD;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.AlkanePatternDetectorMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.wizards.IRetentionIndexWizardElements;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.wizards.RetentionIndexWizardElements;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -25,10 +25,11 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 
 public class ChromatogramImportRunnable implements IRunnableWithProgress {
 
-	private IRetentionIndexWizardElements wizardElements;
+	private RetentionIndexWizardElements wizardElements;
 	private IChromatogram<? extends IPeak> chromatogram;
 
-	public ChromatogramImportRunnable(IRetentionIndexWizardElements wizardElements) {
+	public ChromatogramImportRunnable(RetentionIndexWizardElements wizardElements) {
+
 		this.wizardElements = wizardElements;
 	}
 

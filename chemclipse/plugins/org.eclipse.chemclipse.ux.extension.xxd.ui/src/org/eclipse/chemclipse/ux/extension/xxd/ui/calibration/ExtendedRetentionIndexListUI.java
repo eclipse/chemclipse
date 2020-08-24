@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,11 +22,11 @@ import org.eclipse.chemclipse.msd.swt.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
@@ -65,11 +65,12 @@ public class ExtendedRetentionIndexListUI extends Composite {
 	private ISeparationColumnIndices separationColumnIndices = null;
 
 	public ExtendedRetentionIndexListUI(Composite parent, int style) {
+
 		super(parent, style);
 		initialize();
 	}
 
-	public void addRetentionIndexEntries(List<IRetentionIndexEntry> retentionIndexEntries) {
+	public void setInput(List<IRetentionIndexEntry> retentionIndexEntries) {
 
 		retentionIndexUI.addRetentionIndexEntries(retentionIndexEntries);
 	}
@@ -300,9 +301,11 @@ public class ExtendedRetentionIndexListUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-				eventBroker.post(IChemClipseEvents.TOPIC_RI_LIBRARY_ADD_ADD_TO_PROCESS, retentionIndexFile);
-				MessageDialog.openConfirm(e.display.getActiveShell(), "RI Calculator", "The RI library has been added.");
+				IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+				if(eventBroker != null) {
+					eventBroker.post(IChemClipseEvents.TOPIC_RI_LIBRARY_ADD_ADD_TO_PROCESS, retentionIndexFile);
+					MessageDialog.openConfirm(e.display.getActiveShell(), "RI Calculator", "The RI library has been added.");
+				}
 			}
 		});
 		//
@@ -320,9 +323,11 @@ public class ExtendedRetentionIndexListUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-				eventBroker.post(IChemClipseEvents.TOPIC_RI_LIBRARY_REMOVE_FROM_PROCESS, retentionIndexFile);
-				MessageDialog.openConfirm(e.display.getActiveShell(), "RI Calculator", "The RI library has been removed.");
+				IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+				if(eventBroker != null) {
+					eventBroker.post(IChemClipseEvents.TOPIC_RI_LIBRARY_REMOVE_FROM_PROCESS, retentionIndexFile);
+					MessageDialog.openConfirm(e.display.getActiveShell(), "RI Calculator", "The RI library has been removed.");
+				}
 			}
 		});
 		//

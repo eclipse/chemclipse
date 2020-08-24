@@ -46,7 +46,7 @@ public class WizardCreateRetentionIndexFile extends AbstractFileWizard {
 	//
 	private static final Logger logger = Logger.getLogger(WizardCreateRetentionIndexFile.class);
 	//
-	private IRetentionIndexWizardElements wizardElements = new RetentionIndexWizardElements();
+	private RetentionIndexWizardElements wizardElements = new RetentionIndexWizardElements();
 	//
 	private static final String CALIBRATION_FILE_EXTENSION = ".cal";
 	private static final String CHROMATOGRAM_FILE_EXTENSION = ".ocb";
@@ -60,6 +60,7 @@ public class WizardCreateRetentionIndexFile extends AbstractFileWizard {
 	private PageCalibrationTable pageCalibrationTable;
 
 	public WizardCreateRetentionIndexFile() {
+
 		super("RetentionIndices_" + new Date().getTime(), CALIBRATION_FILE_EXTENSION);
 	}
 

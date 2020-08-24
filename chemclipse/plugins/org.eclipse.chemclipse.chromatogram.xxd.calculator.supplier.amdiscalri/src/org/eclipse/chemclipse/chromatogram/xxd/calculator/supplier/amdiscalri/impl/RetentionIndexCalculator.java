@@ -13,15 +13,19 @@
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.CalibrationFileReader;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.CalculatorSettings;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
@@ -40,6 +44,122 @@ import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class RetentionIndexCalculator {
+
+	private static final Logger logger = Logger.getLogger(RetentionIndexCalculator.class);
+	private static final Pattern PATTERN_ALKANE = Pattern.compile("(C)(\\d+)");
+
+	public static String[] getStandards() {
+
+		Map<Integer, String> prefix = new HashMap<>();
+		prefix.put(30, "Triacontane");
+		prefix.put(40, "Tetracontane");
+		prefix.put(50, "Pentacontane");
+		prefix.put(60, "Hexacontane");
+		prefix.put(70, "Heptacontane");
+		prefix.put(80, "Octacontane");
+		prefix.put(90, "Nonacontane");
+		//
+		Map<Integer, String> postfix = new HashMap<>();
+		postfix.put(1, "Hen");
+		postfix.put(2, "Do");
+		postfix.put(3, "Tri");
+		postfix.put(4, "Tetra");
+		postfix.put(5, "Penta");
+		postfix.put(6, "Hexa");
+		postfix.put(7, "Hepta");
+		postfix.put(8, "Octa");
+		postfix.put(9, "Nona");
+		//
+		List<String> standards = new ArrayList<>();
+		/*
+		 * C1 - C9
+		 */
+		standards.add("C1 (Methane)");
+		standards.add("C2 (Ethane)");
+		standards.add("C3 (Propane)");
+		standards.add("C4 (Butane)");
+		standards.add("C5 (Pentane)");
+		standards.add("C6 (Hexane)");
+		standards.add("C7 (Heptane)");
+		standards.add("C8 (Octane)");
+		standards.add("C9 (Nonane)");
+		/*
+		 * C10 - C19
+		 */
+		standards.add("C10 (Decane)");
+		standards.add("C11 (Undecane)");
+		standards.add("C12 (Dodecane)");
+		standards.add("C13 (Tridecane)");
+		standards.add("C14 (Tetradecane)");
+		standards.add("C15 (Pentadecane)");
+		standards.add("C16 (Hexadecane)");
+		standards.add("C17 (Heptadecane)");
+		standards.add("C18 (Octadecane)");
+		standards.add("C19 (Nonadecane)");
+		/*
+		 * C20 - C29
+		 */
+		standards.add("C20 (Eicosane)");
+		standards.add("C21 (Heneicosane)");
+		standards.add("C22 (Docosane)");
+		standards.add("C23 (Tricosane)");
+		standards.add("C24 (Tetracosane)");
+		standards.add("C25 (Pentacosane)");
+		standards.add("C26 (Hexacosane)");
+		standards.add("C27 (Heptacosane)");
+		standards.add("C28 (Octacosane)");
+		standards.add("C29 (Nonacosane)");
+		/*
+		 * C30 - C99
+		 */
+		for(int i = 3; i <= 9; i++) {
+			int carbon = i * 10;
+			String name = prefix.getOrDefault(carbon, "");
+			//
+			for(int j = 0; j <= 9; j++) {
+				StringBuilder builder = new StringBuilder();
+				builder.append("C");
+				builder.append(Integer.toString(carbon + j));
+				builder.append(" (");
+				if(j == 0) {
+					/*
+					 * C30 (Triacontane)
+					 */
+					builder.append(name);
+				} else {
+					/*
+					 * C31 (Hentriacontane)
+					 * ...
+					 */
+					builder.append(postfix.getOrDefault(j, ""));
+					builder.append(name.toLowerCase());
+				}
+				builder.append(")");
+				standards.add(builder.toString());
+			}
+		}
+		//
+		return standards.toArray(new String[standards.size()]);
+	}
+
+	public static float getRetentionIndex(String name) {
+
+		float retentionIndex = 0.0f;
+		Matcher matcher = PATTERN_ALKANE.matcher(name);
+		if(matcher.find()) {
+			try {
+				/*
+				 * C8 (Octane)
+				 * => 800
+				 */
+				retentionIndex = Integer.parseInt(matcher.group(2)) * 100;
+			} catch(NumberFormatException e) {
+				logger.warn(e);
+			}
+		}
+		//
+		return retentionIndex;
+	}
 
 	@SuppressWarnings("rawtypes")
 	public IProcessingInfo apply(IChromatogramSelection chromatogramSelection, CalculatorSettings calculatorSettings, IProgressMonitor monitor) {
