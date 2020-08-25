@@ -17,6 +17,7 @@ import java.io.IOException;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
+import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.io.IPeakReader;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.PeakReader_0701;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.PeakReader_0801;
@@ -42,11 +43,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakReaderMSD implements IPeakReader {
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public IProcessingInfo read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IProcessingInfo<IPeaks<?>> read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
-		IProcessingInfo processingInfo = null;
+		IProcessingInfo<IPeaks<?>> processingInfo = null;
 		ReaderHelper readerHelper = new ReaderHelper();
 		String version = readerHelper.getVersion(file);
 		/*

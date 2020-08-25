@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -58,6 +58,6 @@ public class AnalysisSegment_3_Test extends TestCase {
 
 	public void testGetSegmentWidth_1() {
 
-		assertEquals("SegmentWidth", 0, segment.getSegmentWidth());
+		assertEquals("SegmentWidth", 0, segment.getWidth());
 	}
 }

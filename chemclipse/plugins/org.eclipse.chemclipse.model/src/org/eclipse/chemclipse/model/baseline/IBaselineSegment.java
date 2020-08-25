@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,8 +14,6 @@ package org.eclipse.chemclipse.model.baseline;
 /**
  * Defines the values for a baseline segment, e.g. start and stop retention
  * time, start and stop background abundance.
- * 
- * @author eselmeister
  */
 public interface IBaselineSegment {
 
@@ -26,7 +24,6 @@ public interface IBaselineSegment {
 	 * 
 	 * @param startRetentionTime
 	 */
-	@Deprecated
 	void setStartRetentionTime(int startRetentionTime);
 
 	float getStartBackgroundAbundance();
@@ -45,7 +42,6 @@ public interface IBaselineSegment {
 	 * 
 	 * @param stopRetentionTime
 	 */
-	@Deprecated
 	void setStopRetentionTime(int stopRetentionTime);
 
 	float getStopBackgroundAbundance();

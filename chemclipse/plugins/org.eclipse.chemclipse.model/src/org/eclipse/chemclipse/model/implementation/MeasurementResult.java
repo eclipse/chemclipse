@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.model.implementation;
 import org.eclipse.chemclipse.model.core.AbstractMeasurementResult;
 import org.eclipse.chemclipse.model.core.IMeasurementResult;
 
-public class MeasurementResult extends AbstractMeasurementResult implements IMeasurementResult {
+public class MeasurementResult extends AbstractMeasurementResult<Object> implements IMeasurementResult<Object> {
 
 	public MeasurementResult(String name, String identifier, String description, Object result) {
 

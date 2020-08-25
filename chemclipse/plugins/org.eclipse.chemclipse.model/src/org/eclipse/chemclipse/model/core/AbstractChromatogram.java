@@ -24,14 +24,17 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.baseline.BaselineModel;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
+import org.eclipse.chemclipse.model.baseline.IChromatogramBaseline;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
@@ -90,9 +93,11 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	 */
 	private final IEditHistory editHistory;
 	/*
-	 * The baseline model.
+	 * The baseline model map.
+	 * A chromatogram could contain several baseline models.
 	 */
-	private IBaselineModel baselineModel = null;
+	private String activeBaselineId = DEFAULT_BASELINE_ID;
+	private Map<String, IBaselineModel> baselineModelMap = new HashMap<>();
 	/*
 	 * Store all scans in this list.<br/>
 	 */
@@ -128,7 +133,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		updateSupport = new ArrayList<IChromatogramUpdateListener>(5);
 		versionManagement = new VersionManagement();
 		editHistory = new EditHistory();
-		baselineModel = new BaselineModel(this);
+		baselineModelMap.put(DEFAULT_BASELINE_ID, new BaselineModel(this));
 		referencedChromatograms = new ArrayList<IChromatogram<?>>();
 		chromatogramIntegrationEntries = new ArrayList<IIntegrationEntry>();
 		backgroundIntegrationEntries = new ArrayList<IIntegrationEntry>();
@@ -600,7 +605,54 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	@Override
 	public IBaselineModel getBaselineModel() {
 
+		IBaselineModel baselineModel = baselineModelMap.get(activeBaselineId);
+		if(baselineModel == null) {
+			baselineModel = new BaselineModel(this);
+			baselineModelMap.put(activeBaselineId, baselineModel);
+		}
+		//
 		return baselineModel;
+	}
+
+	@Override
+	public Set<String> getBaselineIds() {
+
+		return Collections.unmodifiableSet(baselineModelMap.keySet());
+	}
+
+	@Override
+	public String getActiveBaseline() {
+
+		return activeBaselineId;
+	}
+
+	@Override
+	public void setActiveBaselineDefault() {
+
+		setActiveBaseline(IChromatogramBaseline.DEFAULT_BASELINE_ID);
+	}
+
+	@Override
+	public void setActiveBaseline(String id) {
+
+		if(id != null && !id.isEmpty()) {
+			/*
+			 * Activate the id and create a new baseline model.
+			 */
+			this.activeBaselineId = id;
+			getBaselineModel();
+		}
+	}
+
+	@Override
+	public void removeBaseline(String id) {
+
+		if(id != null && !id.isEmpty()) {
+			if(!DEFAULT_BASELINE_ID.equals(id)) {
+				baselineModelMap.remove(id);
+				setActiveBaseline(DEFAULT_BASELINE_ID);
+			}
+		}
 	}
 
 	@Override

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,14 +13,14 @@ package org.eclipse.chemclipse.model.implementation;
 
 import java.util.List;
 
-import junit.framework.TestCase;
-
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 
+import junit.framework.TestCase;
+
 public class Chromatogram_4_Test extends TestCase {
 
-	private IChromatogram chromatogram;
+	private IChromatogram<?> chromatogram;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -103,7 +103,7 @@ public class Chromatogram_4_Test extends TestCase {
 		return intensity;
 	}
 
-	private void addScan(IChromatogram chromatogram, int retentionTime, float intensity, int cycleNumber) {
+	private void addScan(IChromatogram<?> chromatogram, int retentionTime, float intensity, int cycleNumber) {
 
 		IScan scan = new Scan(intensity);
 		scan.setRetentionTime(retentionTime);

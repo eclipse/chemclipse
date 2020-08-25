@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -101,8 +101,8 @@ public class TotalScanSignals implements ITotalScanSignals {
 	}
 
 	// TODO JUnit
-	@SuppressWarnings("rawtypes")
-	public TotalScanSignals(IChromatogram chromatogram) throws ChromatogramIsNullException {
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	public TotalScanSignals(IChromatogram<?> chromatogram) throws ChromatogramIsNullException {
 
 		this(new ChromatogramSelection(chromatogram));
 	}

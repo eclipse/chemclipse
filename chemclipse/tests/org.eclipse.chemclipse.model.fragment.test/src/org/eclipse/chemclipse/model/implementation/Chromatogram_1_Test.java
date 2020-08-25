@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -44,7 +44,7 @@ public class Chromatogram_1_Test extends TestCase {
 		String identifier = "test1.identifier";
 		String description = "test1.description";
 		String result = "Hello World!";
-		IMeasurementResult chromatogramResult = new MeasurementResult(name, identifier, description, result);
+		IMeasurementResult<?> chromatogramResult = new MeasurementResult(name, identifier, description, result);
 		assertEquals(0, chromatogram.getMeasurementResults().size());
 		chromatogram.addMeasurementResult(chromatogramResult);
 		assertEquals(1, chromatogram.getMeasurementResults().size());

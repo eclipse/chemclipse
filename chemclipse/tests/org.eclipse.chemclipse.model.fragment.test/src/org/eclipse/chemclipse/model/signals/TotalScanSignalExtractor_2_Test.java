@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.signals;
 
-import junit.framework.TestCase;
-
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
@@ -21,9 +19,11 @@ import org.eclipse.chemclipse.model.implementation.Scan;
 import org.eclipse.chemclipse.model.selection.ChromatogramSelection;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 
+import junit.framework.TestCase;
+
 public class TotalScanSignalExtractor_2_Test extends TestCase {
 
-	private IChromatogram chromatogram;
+	private IChromatogram<?> chromatogram;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -39,6 +39,7 @@ public class TotalScanSignalExtractor_2_Test extends TestCase {
 		super.tearDown();
 	}
 
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void test_1() {
 
 		boolean condenseCycleNumberScans = false;
@@ -50,7 +51,7 @@ public class TotalScanSignalExtractor_2_Test extends TestCase {
 		assertEquals(false, chromatogram.containsScanCycles());
 		//
 		try {
-			IChromatogramSelection chromatogramSelection = new ChromatogramSelection(chromatogram);
+			IChromatogramSelection<?, ?> chromatogramSelection = new ChromatogramSelection(chromatogram);
 			ITotalScanSignalExtractor totalIonSignalExtractor = new TotalScanSignalExtractor(chromatogram);
 			ITotalScanSignals signals = totalIonSignalExtractor.getTotalScanSignals(chromatogramSelection, true, condenseCycleNumberScans);
 			assertEquals(2898.2f, signals.getMinSignal());
@@ -61,6 +62,7 @@ public class TotalScanSignalExtractor_2_Test extends TestCase {
 		}
 	}
 
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void test_2() {
 
 		boolean condenseCycleNumberScans = true;
@@ -72,7 +74,7 @@ public class TotalScanSignalExtractor_2_Test extends TestCase {
 		assertEquals(false, chromatogram.containsScanCycles());
 		//
 		try {
-			IChromatogramSelection chromatogramSelection = new ChromatogramSelection(chromatogram);
+			IChromatogramSelection<?, ?> chromatogramSelection = new ChromatogramSelection(chromatogram);
 			ITotalScanSignalExtractor totalIonSignalExtractor = new TotalScanSignalExtractor(chromatogram);
 			ITotalScanSignals signals = totalIonSignalExtractor.getTotalScanSignals(chromatogramSelection, true, condenseCycleNumberScans);
 			assertEquals(433449.53f, signals.getMinSignal());
@@ -83,6 +85,7 @@ public class TotalScanSignalExtractor_2_Test extends TestCase {
 		}
 	}
 
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void test_3() {
 
 		boolean condenseCycleNumberScans = false;
@@ -94,7 +97,7 @@ public class TotalScanSignalExtractor_2_Test extends TestCase {
 		assertEquals(true, chromatogram.containsScanCycles());
 		//
 		try {
-			IChromatogramSelection chromatogramSelection = new ChromatogramSelection(chromatogram);
+			IChromatogramSelection<?, ?> chromatogramSelection = new ChromatogramSelection(chromatogram);
 			ITotalScanSignalExtractor totalIonSignalExtractor = new TotalScanSignalExtractor(chromatogram);
 			ITotalScanSignals signals = totalIonSignalExtractor.getTotalScanSignals(chromatogramSelection, true, condenseCycleNumberScans);
 			assertEquals(2898.2f, signals.getMinSignal());
@@ -105,6 +108,7 @@ public class TotalScanSignalExtractor_2_Test extends TestCase {
 		}
 	}
 
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	public void test_4() {
 
 		boolean condenseCycleNumberScans = true;
@@ -116,7 +120,7 @@ public class TotalScanSignalExtractor_2_Test extends TestCase {
 		assertEquals(true, chromatogram.containsScanCycles());
 		//
 		try {
-			IChromatogramSelection chromatogramSelection = new ChromatogramSelection(chromatogram);
+			IChromatogramSelection<?, ?> chromatogramSelection = new ChromatogramSelection(chromatogram);
 			ITotalScanSignalExtractor totalIonSignalExtractor = new TotalScanSignalExtractor(chromatogram);
 			ITotalScanSignals signals = totalIonSignalExtractor.getTotalScanSignals(chromatogramSelection, true, condenseCycleNumberScans);
 			assertEquals(3983.0f, signals.getMinSignal());
@@ -127,7 +131,7 @@ public class TotalScanSignalExtractor_2_Test extends TestCase {
 		}
 	}
 
-	private void addScan(IChromatogram chromatogram, int retentionTime, float intensity, int cycleNumber) {
+	private void addScan(IChromatogram<?> chromatogram, int retentionTime, float intensity, int cycleNumber) {
 
 		IScan scan = new Scan(intensity);
 		scan.setRetentionTime(retentionTime);

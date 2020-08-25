@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,12 +12,6 @@
 package org.eclipse.chemclipse.model.support;
 
 import java.util.List;
-
-import org.eclipse.chemclipse.model.support.AnalysisSupport;
-import org.eclipse.chemclipse.model.support.IAnalysisSegment;
-import org.eclipse.chemclipse.model.support.IAnalysisSupport;
-import org.eclipse.chemclipse.model.support.IScanRange;
-import org.eclipse.chemclipse.model.support.ScanRange;
 
 import junit.framework.TestCase;
 
@@ -55,7 +49,7 @@ public class AnalysisSupport_6_Test extends TestCase {
 		IAnalysisSegment segment = segments.get(0);
 		assertEquals("StartScan", 178, segment.getStartScan());
 		assertEquals("StopScan", 187, segment.getStopScan());
-		assertEquals("SegmentWidth", 10, segment.getSegmentWidth());
+		assertEquals("SegmentWidth", 10, segment.getWidth());
 	}
 
 	public void testSegment_2() {
@@ -64,6 +58,6 @@ public class AnalysisSupport_6_Test extends TestCase {
 		IAnalysisSegment segment = segments.get(7);
 		assertEquals("StartScan", 248, segment.getStartScan());
 		assertEquals("StopScan", 250, segment.getStopScan());
-		assertEquals("SegmentWidth", 3, segment.getSegmentWidth());
+		assertEquals("SegmentWidth", 3, segment.getWidth());
 	}
 }

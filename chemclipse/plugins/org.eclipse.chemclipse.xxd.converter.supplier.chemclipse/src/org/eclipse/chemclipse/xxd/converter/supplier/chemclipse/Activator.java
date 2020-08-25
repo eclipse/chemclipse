@@ -38,6 +38,7 @@ public class Activator implements BundleActivator {
 		System.out.println("\tBaseline Model Changes");
 		System.out.println("\tILibraryInformation - Molecule Structure");
 		System.out.println("\tChromatogram - peak/scan target visibility");
+		System.out.println("\tChromatogram - baseline map");
 		//
 		logger.info("-------------------------------------------------");
 		logger.info("Ensure backward and forward compatibility!");
