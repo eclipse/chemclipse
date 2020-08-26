@@ -291,6 +291,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_REFERENCE_LABEL, PreferenceConstants.DEF_CHROMATOGRAM_REFERENCE_LABEL);
 		//
 		store.setDefault(PreferenceConstants.P_TITLE_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_TITLE_X_AXIS_MILLISECONDS);
+		store.setDefault(PreferenceConstants.P_FORMAT_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_FORMAT_X_AXIS_MILLISECONDS);
 		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_SHOW_X_AXIS_MILLISECONDS);
 		store.setDefault(PreferenceConstants.P_POSITION_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_POSITION_X_AXIS_MILLISECONDS);
 		store.setDefault(PreferenceConstants.P_COLOR_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_COLOR_X_AXIS_MILLISECONDS);
@@ -302,6 +303,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_TITLE_MILLISECONDS, PreferenceConstants.DEF_SHOW_X_AXIS_TITLE_MILLISECONDS);
 		//
 		store.setDefault(PreferenceConstants.P_TITLE_X_AXIS_SECONDS, PreferenceConstants.DEF_TITLE_X_AXIS_SECONDS);
+		store.setDefault(PreferenceConstants.P_FORMAT_X_AXIS_SECONDS, PreferenceConstants.DEF_FORMAT_X_AXIS_SECONDS);
 		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_SECONDS, PreferenceConstants.DEF_SHOW_X_AXIS_SECONDS);
 		store.setDefault(PreferenceConstants.P_POSITION_X_AXIS_SECONDS, PreferenceConstants.DEF_POSITION_X_AXIS_SECONDS);
 		store.setDefault(PreferenceConstants.P_COLOR_X_AXIS_SECONDS, PreferenceConstants.DEF_COLOR_X_AXIS_SECONDS);
@@ -313,6 +315,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_TITLE_SECONDS, PreferenceConstants.DEF_SHOW_X_AXIS_TITLE_SECONDS);
 		//
 		store.setDefault(PreferenceConstants.P_TITLE_X_AXIS_MINUTES, PreferenceConstants.DEF_TITLE_X_AXIS_MINUTES);
+		store.setDefault(PreferenceConstants.P_FORMAT_X_AXIS_MINUTES, PreferenceConstants.DEF_FORMAT_X_AXIS_MINUTES);
 		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_MINUTES, PreferenceConstants.DEF_SHOW_X_AXIS_MINUTES);
 		store.setDefault(PreferenceConstants.P_POSITION_X_AXIS_MINUTES, PreferenceConstants.DEF_POSITION_X_AXIS_MINUTES);
 		store.setDefault(PreferenceConstants.P_COLOR_X_AXIS_MINUTES, PreferenceConstants.DEF_COLOR_X_AXIS_MINUTES);
@@ -324,6 +327,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_TITLE_MINUTES, PreferenceConstants.DEF_SHOW_X_AXIS_TITLE_MINUTES);
 		//
 		store.setDefault(PreferenceConstants.P_TITLE_X_AXIS_SCANS, PreferenceConstants.DEF_TITLE_X_AXIS_SCANS);
+		store.setDefault(PreferenceConstants.P_FORMAT_X_AXIS_SCANS, PreferenceConstants.DEF_FORMAT_X_AXIS_SCANS);
 		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_SCANS, PreferenceConstants.DEF_SHOW_X_AXIS_SCANS);
 		store.setDefault(PreferenceConstants.P_POSITION_X_AXIS_SCANS, PreferenceConstants.DEF_POSITION_X_AXIS_SCANS);
 		store.setDefault(PreferenceConstants.P_COLOR_X_AXIS_SCANS, PreferenceConstants.DEF_COLOR_X_AXIS_SCANS);
@@ -335,6 +339,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_TITLE_SCANS, PreferenceConstants.DEF_SHOW_X_AXIS_TITLE_SCANS);
 		//
 		store.setDefault(PreferenceConstants.P_TITLE_Y_AXIS_INTENSITY, PreferenceConstants.DEF_TITLE_Y_AXIS_INTENSITY);
+		store.setDefault(PreferenceConstants.P_FORMAT_Y_AXIS_INTENSITY, PreferenceConstants.DEF_FORMAT_Y_AXIS_INTENSITY);
 		store.setDefault(PreferenceConstants.P_SHOW_Y_AXIS_INTENSITY, PreferenceConstants.DEF_SHOW_Y_AXIS_INTENSITY);
 		store.setDefault(PreferenceConstants.P_POSITION_Y_AXIS_INTENSITY, PreferenceConstants.DEF_POSITION_Y_AXIS_INTENSITY);
 		store.setDefault(PreferenceConstants.P_COLOR_Y_AXIS_INTENSITY, PreferenceConstants.DEF_COLOR_Y_AXIS_INTENSITY);
@@ -346,6 +351,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_SHOW_Y_AXIS_TITLE_INTENSITY, PreferenceConstants.DEF_SHOW_Y_AXIS_TITLE_INTENSITY);
 		//
 		store.setDefault(PreferenceConstants.P_TITLE_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.DEF_TITLE_Y_AXIS_RELATIVE_INTENSITY);
+		store.setDefault(PreferenceConstants.P_FORMAT_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.DEF_FORMAT_Y_AXIS_RELATIVE_INTENSITY);
 		store.setDefault(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.DEF_SHOW_Y_AXIS_RELATIVE_INTENSITY);
 		store.setDefault(PreferenceConstants.P_POSITION_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.DEF_POSITION_Y_AXIS_RELATIVE_INTENSITY);
 		store.setDefault(PreferenceConstants.P_COLOR_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.DEF_COLOR_Y_AXIS_RELATIVE_INTENSITY);

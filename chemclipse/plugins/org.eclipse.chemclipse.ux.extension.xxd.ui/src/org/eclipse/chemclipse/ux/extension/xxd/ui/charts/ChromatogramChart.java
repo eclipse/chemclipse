@@ -32,18 +32,19 @@ import org.eclipse.swtchart.extensions.linecharts.LineChart;
 public class ChromatogramChart extends LineChart {
 
 	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private final ChartSupport chartSupport = new ChartSupport(preferenceStore);
 	//
 	private String titleSeconds = "";
 	private String titleMinutes = "";
 	private String titleRelativeIntensity = "";
 
 	public ChromatogramChart() {
+
 		super();
 		initialize();
 	}
 
 	public ChromatogramChart(Composite parent, int style) {
+
 		super(parent, style);
 		initialize();
 	}
@@ -53,11 +54,14 @@ public class ChromatogramChart extends LineChart {
 	 */
 	public void modifyAxes(boolean applySettings) {
 
-		modifyXAxisMilliseconds();
-		modifyYAxisIntensity();
-		modifyXAxisSeconds();
-		modifyXAxisMinutes();
-		modifyYAxisRelativeIntensity();
+		/*
+		 * Adjust Title, Format, ...
+		 */
+		adjustAxisMilliseconds();
+		adjustAxisIntensity();
+		adjustAxisSeconds();
+		adjustAxisMinutes();
+		adjustAxisRelativeIntensity();
 		//
 		if(applySettings) {
 			IChartSettings chartSettings = getChartSettings();
@@ -89,21 +93,21 @@ public class ChromatogramChart extends LineChart {
 		modifyAxes(true);
 	}
 
-	private void modifyXAxisMilliseconds() {
+	private void adjustAxisMilliseconds() {
 
 		IChartSettings chartSettings = getChartSettings();
 		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
 		primaryAxisSettingsX.setTitle(preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_MILLISECONDS));
 		//
 		String positionNode = PreferenceConstants.P_POSITION_X_AXIS_MILLISECONDS;
-		String pattern = "0.0##";
+		String patternNode = PreferenceConstants.P_FORMAT_X_AXIS_MILLISECONDS;
 		String colorNode = PreferenceConstants.P_COLOR_X_AXIS_MILLISECONDS;
 		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_MILLISECONDS;
 		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_MILLISECONDS;
 		//
-		chartSupport.setAxisSettings(primaryAxisSettingsX, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
-		primaryAxisSettingsX.setVisible(chartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_MILLISECONDS));
-		primaryAxisSettingsX.setTitleVisible(chartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_TITLE_MILLISECONDS));
+		ChartSupport.setAxisSettingsExtended(primaryAxisSettingsX, positionNode, patternNode, colorNode, gridLineStyleNode, gridColorNode);
+		primaryAxisSettingsX.setVisible(ChartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_MILLISECONDS));
+		primaryAxisSettingsX.setTitleVisible(ChartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_TITLE_MILLISECONDS));
 		//
 		String name = preferenceStore.getString(PreferenceConstants.P_FONT_NAME_X_AXIS_MILLISECONDS);
 		int height = preferenceStore.getInt(PreferenceConstants.P_FONT_SIZE_X_AXIS_MILLISECONDS);
@@ -111,21 +115,21 @@ public class ChromatogramChart extends LineChart {
 		primaryAxisSettingsX.setTitleFont(Fonts.getCachedFont(getBaseChart().getDisplay(), name, height, style));
 	}
 
-	private void modifyYAxisIntensity() {
+	private void adjustAxisIntensity() {
 
 		IChartSettings chartSettings = getChartSettings();
 		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
 		primaryAxisSettingsY.setTitle(preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_INTENSITY));
 		//
 		String positionNode = PreferenceConstants.P_POSITION_Y_AXIS_INTENSITY;
-		String pattern = "0.0#E0";
+		String patternNode = PreferenceConstants.P_FORMAT_Y_AXIS_INTENSITY;
 		String colorNode = PreferenceConstants.P_COLOR_Y_AXIS_INTENSITY;
 		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_INTENSITY;
 		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_INTENSITY;
 		//
-		chartSupport.setAxisSettings(primaryAxisSettingsY, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
-		primaryAxisSettingsY.setVisible(chartSupport.getBoolean(PreferenceConstants.P_SHOW_Y_AXIS_INTENSITY));
-		primaryAxisSettingsY.setTitleVisible(chartSupport.getBoolean(PreferenceConstants.P_SHOW_Y_AXIS_TITLE_INTENSITY));
+		ChartSupport.setAxisSettingsExtended(primaryAxisSettingsY, positionNode, patternNode, colorNode, gridLineStyleNode, gridColorNode);
+		primaryAxisSettingsY.setVisible(ChartSupport.getBoolean(PreferenceConstants.P_SHOW_Y_AXIS_INTENSITY));
+		primaryAxisSettingsY.setTitleVisible(ChartSupport.getBoolean(PreferenceConstants.P_SHOW_Y_AXIS_TITLE_INTENSITY));
 		//
 		String name = preferenceStore.getString(PreferenceConstants.P_FONT_NAME_Y_AXIS_INTENSITY);
 		int height = preferenceStore.getInt(PreferenceConstants.P_FONT_SIZE_Y_AXIS_INTENSITY);
@@ -133,18 +137,18 @@ public class ChromatogramChart extends LineChart {
 		primaryAxisSettingsY.setTitleFont(Fonts.getCachedFont(getBaseChart().getDisplay(), name, height, style));
 	}
 
-	private void modifyYAxisRelativeIntensity() {
+	private void adjustAxisRelativeIntensity() {
 
 		IChartSettings chartSettings = getChartSettings();
-		ISecondaryAxisSettings axisSettings = chartSupport.getSecondaryAxisSettingsY(titleRelativeIntensity, chartSettings);
+		ISecondaryAxisSettings axisSettings = ChartSupport.getSecondaryAxisSettingsY(titleRelativeIntensity, chartSettings);
 		//
 		String positionNode = PreferenceConstants.P_POSITION_Y_AXIS_RELATIVE_INTENSITY;
-		String pattern = "0.00";
+		String patternNode = PreferenceConstants.P_FORMAT_Y_AXIS_RELATIVE_INTENSITY;
 		String colorNode = PreferenceConstants.P_COLOR_Y_AXIS_RELATIVE_INTENSITY;
 		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_Y_AXIS_RELATIVE_INTENSITY;
 		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_Y_AXIS_RELATIVE_INTENSITY;
-		boolean isShowAxis = chartSupport.getBoolean(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_INTENSITY);
-		boolean isShowAxisTitle = chartSupport.getBoolean(PreferenceConstants.P_SHOW_Y_AXIS_TITLE_RELATIVE_INTENSITY);
+		boolean isShowAxis = ChartSupport.getBoolean(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_INTENSITY);
+		boolean isShowAxisTitle = ChartSupport.getBoolean(PreferenceConstants.P_SHOW_Y_AXIS_TITLE_RELATIVE_INTENSITY);
 		//
 		String title = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_RELATIVE_INTENSITY);
 		String name = preferenceStore.getString(PreferenceConstants.P_FONT_NAME_Y_AXIS_RELATIVE_INTENSITY);
@@ -155,12 +159,12 @@ public class ChromatogramChart extends LineChart {
 		if(isShowAxis) {
 			if(axisSettings == null) {
 				ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings(title, new PercentageConverter(SWT.VERTICAL, true));
-				chartSupport.setAxisSettings(secondaryAxisSettingsY, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
+				ChartSupport.setAxisSettingsExtended(secondaryAxisSettingsY, positionNode, patternNode, colorNode, gridLineStyleNode, gridColorNode);
 				secondaryAxisSettingsY.setTitleVisible(isShowAxisTitle);
 				secondaryAxisSettingsY.setTitleFont(titleFont);
 				chartSettings.getSecondaryAxisSettingsListY().add(secondaryAxisSettingsY);
 			} else {
-				chartSupport.setAxisSettings(axisSettings, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
+				ChartSupport.setAxisSettingsExtended(axisSettings, positionNode, patternNode, colorNode, gridLineStyleNode, gridColorNode);
 				axisSettings.setTitle(title);
 				axisSettings.setTitleFont(titleFont);
 				axisSettings.setVisible(true);
@@ -180,18 +184,18 @@ public class ChromatogramChart extends LineChart {
 		titleRelativeIntensity = title;
 	}
 
-	private void modifyXAxisSeconds() {
+	private void adjustAxisSeconds() {
 
 		IChartSettings chartSettings = getChartSettings();
-		ISecondaryAxisSettings axisSettings = chartSupport.getSecondaryAxisSettingsX(titleSeconds, chartSettings);
+		ISecondaryAxisSettings axisSettings = ChartSupport.getSecondaryAxisSettingsX(titleSeconds, chartSettings);
 		//
 		String positionNode = PreferenceConstants.P_POSITION_X_AXIS_SECONDS;
-		String pattern = "0.00";
+		String patternNode = PreferenceConstants.P_FORMAT_X_AXIS_SECONDS;
 		String colorNode = PreferenceConstants.P_COLOR_X_AXIS_SECONDS;
 		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_SECONDS;
 		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_SECONDS;
-		boolean isShowAxis = chartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_SECONDS);
-		boolean isShowAxisTitle = chartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_TITLE_SECONDS);
+		boolean isShowAxis = ChartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_SECONDS);
+		boolean isShowAxisTitle = ChartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_TITLE_SECONDS);
 		//
 		String title = preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_SECONDS);
 		String name = preferenceStore.getString(PreferenceConstants.P_FONT_NAME_X_AXIS_SECONDS);
@@ -202,12 +206,12 @@ public class ChromatogramChart extends LineChart {
 		if(isShowAxis) {
 			if(axisSettings == null) {
 				ISecondaryAxisSettings secondaryAxisSettingsX = new SecondaryAxisSettings(title, new MillisecondsToSecondsConverter());
-				chartSupport.setAxisSettings(secondaryAxisSettingsX, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
+				ChartSupport.setAxisSettingsExtended(secondaryAxisSettingsX, positionNode, patternNode, colorNode, gridLineStyleNode, gridColorNode);
 				secondaryAxisSettingsX.setTitleFont(titleFont);
 				secondaryAxisSettingsX.setTitleVisible(isShowAxisTitle);
 				chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX);
 			} else {
-				chartSupport.setAxisSettings(axisSettings, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
+				ChartSupport.setAxisSettingsExtended(axisSettings, positionNode, patternNode, colorNode, gridLineStyleNode, gridColorNode);
 				axisSettings.setTitle(title);
 				axisSettings.setTitleFont(titleFont);
 				axisSettings.setVisible(true);
@@ -227,18 +231,18 @@ public class ChromatogramChart extends LineChart {
 		titleSeconds = title;
 	}
 
-	private void modifyXAxisMinutes() {
+	private void adjustAxisMinutes() {
 
 		IChartSettings chartSettings = getChartSettings();
-		ISecondaryAxisSettings axisSettings = chartSupport.getSecondaryAxisSettingsX(titleMinutes, chartSettings);
+		ISecondaryAxisSettings axisSettings = ChartSupport.getSecondaryAxisSettingsX(titleMinutes, chartSettings);
 		//
 		String positionNode = PreferenceConstants.P_POSITION_X_AXIS_MINUTES;
-		String pattern = "0.00";
+		String patternNode = PreferenceConstants.P_FORMAT_X_AXIS_MINUTES;
 		String colorNode = PreferenceConstants.P_COLOR_X_AXIS_MINUTES;
 		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_MINUTES;
 		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_MINUTES;
-		boolean isShowAxis = chartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_MINUTES);
-		boolean isShowAxisTitle = chartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_TITLE_MINUTES);
+		boolean isShowAxis = ChartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_MINUTES);
+		boolean isShowAxisTitle = ChartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_TITLE_MINUTES);
 		//
 		String title = preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_MINUTES);
 		String name = preferenceStore.getString(PreferenceConstants.P_FONT_NAME_X_AXIS_MINUTES);
@@ -249,12 +253,12 @@ public class ChromatogramChart extends LineChart {
 		if(isShowAxis) {
 			if(axisSettings == null) {
 				ISecondaryAxisSettings secondaryAxisSettingsX = new SecondaryAxisSettings(title, new MillisecondsToMinuteConverter());
-				chartSupport.setAxisSettings(secondaryAxisSettingsX, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
+				ChartSupport.setAxisSettingsExtended(secondaryAxisSettingsX, positionNode, patternNode, colorNode, gridLineStyleNode, gridColorNode);
 				secondaryAxisSettingsX.setTitleFont(titleFont);
 				secondaryAxisSettingsX.setTitleVisible(isShowAxisTitle);
 				chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX);
 			} else {
-				chartSupport.setAxisSettings(axisSettings, positionNode, pattern, colorNode, gridLineStyleNode, gridColorNode);
+				ChartSupport.setAxisSettingsExtended(axisSettings, positionNode, patternNode, colorNode, gridLineStyleNode, gridColorNode);
 				axisSettings.setTitle(title);
 				axisSettings.setTitleFont(titleFont);
 				axisSettings.setVisible(true);

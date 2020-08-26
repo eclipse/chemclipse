@@ -169,20 +169,50 @@
       </page>
       <page
             category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageChromatogram"
-            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramAxes"
-            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.referencePageChromatogramAxes"
-            name="Chromatogram Axes">
-      </page>       
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.ChromatogramAxisMilliseconds"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.chromatogramAxisMilliseconds"
+            name="Chromatogram Milliseconds (X Axis)">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageChromatogram"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.ChromatogramAxisIntensity"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.chromatogramAxisIntensity"
+            name="Chromatogram Intensity (Y Axis)">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageChromatogram"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.ChromatogramAxisSeconds"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.chromatogramAxisSeconds"
+            name="Chromatogram Seconds (X Axis)">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageChromatogram"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.ChromatogramAxisScans"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.chromatogramAxisScans"
+            name="Chromatogram Scans (X Axis)">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageChromatogram"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.ChromatogramAxisMinutes"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.chromatogramAxisMinutes"
+            name="Chromatogram Minutes (X Axis)">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageChromatogram"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.ChromatogramAxisRelativeIntensity"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.chromatogramAxisRelativeIntensity"
+            name="Chromatogram Intensity% (Y Axis)">
+      </page>   
       <page
             category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageChromatogram"
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramPeaks"
-            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.referencePageChromatogramPeaks"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageChromatogramPeaks"
             name="Chromatogram Peaks">
       </page>   
       <page
             category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageChromatogram"
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramScans"
-            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.referencePageChromatogramScans"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageChromatogramScans"
             name="Chromatogram Scans">
       </page>
       <page

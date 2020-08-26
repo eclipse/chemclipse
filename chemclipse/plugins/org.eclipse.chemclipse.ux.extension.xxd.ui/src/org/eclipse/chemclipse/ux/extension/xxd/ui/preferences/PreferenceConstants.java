@@ -484,6 +484,8 @@ public class PreferenceConstants extends ChartOptions {
 	//
 	public static final String P_TITLE_X_AXIS_MILLISECONDS = "titleXAxisMilliseconds";
 	public static final String DEF_TITLE_X_AXIS_MILLISECONDS = "Time [ms]";
+	public static final String P_FORMAT_X_AXIS_MILLISECONDS = "formatXAxisMilliseconds";
+	public static final String DEF_FORMAT_X_AXIS_MILLISECONDS = "0.###";
 	public static final String P_SHOW_X_AXIS_MILLISECONDS = "showXAxisMilliseconds";
 	public static final boolean DEF_SHOW_X_AXIS_MILLISECONDS = false;
 	public static final String P_POSITION_X_AXIS_MILLISECONDS = "positionXAxisMilliseconds";
@@ -504,6 +506,8 @@ public class PreferenceConstants extends ChartOptions {
 	//
 	public static final String P_TITLE_X_AXIS_SECONDS = "titleXAxisSeconds";
 	public static final String DEF_TITLE_X_AXIS_SECONDS = "Time [s]";
+	public static final String P_FORMAT_X_AXIS_SECONDS = "formatXAxisSeconds";
+	public static final String DEF_FORMAT_X_AXIS_SECONDS = "0.00#";
 	public static final String P_SHOW_X_AXIS_SECONDS = "showXAxisSeconds";
 	public static final boolean DEF_SHOW_X_AXIS_SECONDS = false;
 	public static final String P_POSITION_X_AXIS_SECONDS = "positionXAxisSeconds";
@@ -524,6 +528,8 @@ public class PreferenceConstants extends ChartOptions {
 	//
 	public static final String P_TITLE_X_AXIS_MINUTES = "titleXAxisMinutes";
 	public static final String DEF_TITLE_X_AXIS_MINUTES = "Time [min]";
+	public static final String P_FORMAT_X_AXIS_MINUTES = "formatXAxisMinutes";
+	public static final String DEF_FORMAT_X_AXIS_MINUTES = "0.00#";
 	public static final String P_SHOW_X_AXIS_MINUTES = "showXAxisMinutes";
 	public static final boolean DEF_SHOW_X_AXIS_MINUTES = true;
 	public static final String P_POSITION_X_AXIS_MINUTES = "positionXAxisMinutes";
@@ -544,6 +550,8 @@ public class PreferenceConstants extends ChartOptions {
 	//
 	public static final String P_TITLE_X_AXIS_SCANS = "titleXAxisScans";
 	public static final String DEF_TITLE_X_AXIS_SCANS = "Scan";
+	public static final String P_FORMAT_X_AXIS_SCANS = "formatXAxisScans";
+	public static final String DEF_FORMAT_X_AXIS_SCANS = "0.###";
 	public static final String P_SHOW_X_AXIS_SCANS = "showXAxisScans";
 	public static final boolean DEF_SHOW_X_AXIS_SCANS = false;
 	public static final String P_POSITION_X_AXIS_SCANS = "positionXAxisScans";
@@ -564,6 +572,8 @@ public class PreferenceConstants extends ChartOptions {
 	//
 	public static final String P_TITLE_Y_AXIS_INTENSITY = "titleYAxisIntensity";
 	public static final String DEF_TITLE_Y_AXIS_INTENSITY = "Intensity [counts]";
+	public static final String P_FORMAT_Y_AXIS_INTENSITY = "formatYAxisIntensity";
+	public static final String DEF_FORMAT_Y_AXIS_INTENSITY = "0.0#E0";
 	public static final String P_SHOW_Y_AXIS_INTENSITY = "showYAxisIntensity";
 	public static final boolean DEF_SHOW_Y_AXIS_INTENSITY = true;
 	public static final String P_POSITION_Y_AXIS_INTENSITY = "positionYAxisIntensity";
@@ -584,6 +594,8 @@ public class PreferenceConstants extends ChartOptions {
 	//
 	public static final String P_TITLE_Y_AXIS_RELATIVE_INTENSITY = "titleYAxisRelativeIntensity";
 	public static final String DEF_TITLE_Y_AXIS_RELATIVE_INTENSITY = "Intensity [%]";
+	public static final String P_FORMAT_Y_AXIS_RELATIVE_INTENSITY = "formatYAxisRelativeIntensity";
+	public static final String DEF_FORMAT_Y_AXIS_RELATIVE_INTENSITY = "0.00#";
 	public static final String P_SHOW_Y_AXIS_RELATIVE_INTENSITY = "showYAxisRelativeIntensity";
 	public static final boolean DEF_SHOW_Y_AXIS_RELATIVE_INTENSITY = true;
 	public static final String P_POSITION_Y_AXIS_RELATIVE_INTENSITY = "positionYAxisRelativeIntensity";

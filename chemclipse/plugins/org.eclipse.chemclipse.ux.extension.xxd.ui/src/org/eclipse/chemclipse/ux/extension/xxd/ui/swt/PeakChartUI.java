@@ -19,8 +19,8 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakChartSupport;
 import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -50,11 +50,13 @@ public class PeakChartUI extends ScrollableChart {
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public PeakChartUI() {
+
 		super();
 		modifyChart();
 	}
 
 	public PeakChartUI(Composite parent, int style) {
+
 		super(parent, style);
 		modifyChart();
 	}

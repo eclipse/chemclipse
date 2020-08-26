@@ -15,15 +15,12 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -35,7 +32,6 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
 import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
-import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -84,10 +80,15 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorProcessTypeSuppl
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.TargetReferenceLabelMarker;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupportUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.ChromatogramAxisIntensity;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.ChromatogramAxisMilliseconds;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.ChromatogramAxisMinutes;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.ChromatogramAxisRelativeIntensity;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.ChromatogramAxisScans;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.ChromatogramAxisSeconds;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceInitializer;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramAxes;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramPeaks;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogramScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessors;
@@ -132,7 +133,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swtchart.IAxis.Position;
 import org.eclipse.swtchart.ICustomPaintListener;
 import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
 import org.eclipse.swtchart.IPlotArea;
@@ -178,9 +178,6 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	private static final String SERIES_ID_IDENTIFIED_SCANS = "Identified Scans";
 	private static final String SERIES_ID_IDENTIFIED_SCAN_SELECTED = "Identified Scan Selected";
 	//
-	private static final int THREE_MINUTES = (int)(AbstractChromatogram.MINUTE_CORRELATION_FACTOR * 3);
-	private static final int FIVE_MINUTES = (int)(AbstractChromatogram.MINUTE_CORRELATION_FACTOR * 5);
-	//
 	private static final String TOOLBAR_INFO = "TOOLBAR_INFO";
 	private static final String TOOLBAR_RETENTION_INDICES = "TOOLBAR_RETENTION_INDICES";
 	private static final String TOOLBAR_METHOD = "TOOLBAR_METHOD";
@@ -208,7 +205,6 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	private final PeakChartSupport peakChartSupport = new PeakChartSupport();
 	private final ScanChartSupport scanChartSupport = new ScanChartSupport();
 	private final ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
-	private final ChartSupport chartSupport;
 	//
 	private DisplayType displayType = DisplayType.TIC;
 	//
@@ -244,7 +240,6 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		this.eventBroker = eventBroker;
 		processTypeSupport = supplierContext;
 		preferenceStore = store;
-		chartSupport = new ChartSupport(store);
 		initialize(parent, style);
 	}
 
@@ -569,29 +564,6 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		}
 	}
 
-	private void adjustMinuteScale() {
-
-		if(chromatogramSelection != null) {
-			int startRetentionTime = chromatogramSelection.getStartRetentionTime();
-			int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
-			int deltaRetentionTime = stopRetentionTime - startRetentionTime + 1;
-			IChartSettings chartSettings = chromatogramChart.getChartSettings();
-			List<ISecondaryAxisSettings> axisSettings = chartSettings.getSecondaryAxisSettingsListX();
-			for(ISecondaryAxisSettings axisSetting : axisSettings) {
-				if(axisSetting.getTitle().equals("Minutes")) {
-					if(deltaRetentionTime >= FIVE_MINUTES) {
-						axisSetting.setDecimalFormat(new DecimalFormat("0.00", new DecimalFormatSymbols(Locale.ENGLISH)));
-					} else if(deltaRetentionTime >= THREE_MINUTES) {
-						axisSetting.setDecimalFormat(new DecimalFormat("0.000", new DecimalFormatSymbols(Locale.ENGLISH)));
-					} else {
-						axisSetting.setDecimalFormat(new DecimalFormat("0.0000", new DecimalFormatSymbols(Locale.ENGLISH)));
-					}
-				}
-			}
-			chromatogramChart.applySettings(chartSettings);
-		}
-	}
-
 	public void updateMenu() {
 
 		updateMenu(false);
@@ -673,7 +645,6 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 		updateLabel();
 		clearPeakAndScanLabels();
-		adjustMinuteScale();
 		deleteScanNumberSecondaryAxisX();
 		chromatogramChart.deleteSeries();
 		//
@@ -1034,7 +1005,12 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 				List<IPreferencePage> preferencePages = new ArrayList<>();
 				preferencePages.add(new PreferencePageProcessors(processTypeSupport));
 				preferencePages.add(new PreferencePageChromatogram());
-				preferencePages.add(new PreferencePageChromatogramAxes());
+				preferencePages.add(new ChromatogramAxisMilliseconds());
+				preferencePages.add(new ChromatogramAxisIntensity());
+				preferencePages.add(new ChromatogramAxisSeconds());
+				preferencePages.add(new ChromatogramAxisScans());
+				preferencePages.add(new ChromatogramAxisMinutes());
+				preferencePages.add(new ChromatogramAxisRelativeIntensity());
 				preferencePages.add(new PreferencePageChromatogramPeaks());
 				preferencePages.add(new PreferencePageChromatogramScans());
 				preferencePages.add(new PreferencePageSWT());
@@ -1469,7 +1445,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			if(chromatogram != null) {
 				IChartSettings chartSettings = chromatogramChart.getChartSettings();
-				ISecondaryAxisSettings axisSettings = chartSupport.getSecondaryAxisSettingsX(titleScans, chartSettings);
+				ISecondaryAxisSettings axisSettings = ChartSupport.getSecondaryAxisSettingsX(titleScans, chartSettings);
 				String title = preferenceStore.getString(PreferenceConstants.P_TITLE_X_AXIS_SCANS);
 				//
 				if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_SCANS)) {
@@ -1508,12 +1484,12 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 	private void setScanAxisSettings(IAxisSettings axisSettings) {
 
-		ChartSupport chartSupport = new ChartSupport(preferenceStore);
-		Position position = Position.valueOf(preferenceStore.getString(PreferenceConstants.P_POSITION_X_AXIS_SCANS));
-		Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_X_AXIS_SCANS));
-		LineStyle gridLineStyle = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_SCANS));
-		Color gridColor = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_SCANS));
-		chartSupport.setAxisSettings(axisSettings, position, "0", color, gridLineStyle, gridColor);
+		String positionNode = PreferenceConstants.P_POSITION_X_AXIS_SCANS;
+		String patternNode = PreferenceConstants.P_FORMAT_X_AXIS_SCANS;
+		String colorNode = PreferenceConstants.P_COLOR_X_AXIS_SCANS;
+		String gridLineStyleNode = PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_SCANS;
+		String gridColorNode = PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_SCANS;
+		ChartSupport.setAxisSettingsExtended(axisSettings, positionNode, patternNode, colorNode, gridLineStyleNode, gridColorNode);
 		//
 		String name = preferenceStore.getString(PreferenceConstants.P_FONT_NAME_X_AXIS_SCANS);
 		int height = preferenceStore.getInt(PreferenceConstants.P_FONT_SIZE_X_AXIS_SCANS);

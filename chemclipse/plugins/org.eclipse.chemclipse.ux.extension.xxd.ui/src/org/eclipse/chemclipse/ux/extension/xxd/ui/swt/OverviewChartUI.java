@@ -32,6 +32,7 @@ import org.eclipse.swtchart.extensions.linecharts.LineChart;
 public class OverviewChartUI extends LineChart {
 
 	public OverviewChartUI(Composite parent, int style) {
+
 		super(parent, style);
 		setBackground(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_WHITE));
 		try {
