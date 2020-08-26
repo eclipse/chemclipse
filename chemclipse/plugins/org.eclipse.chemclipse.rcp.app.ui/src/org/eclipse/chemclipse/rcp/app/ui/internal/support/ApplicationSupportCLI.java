@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Christoph Läubrich - allow to execute cli operations with an UI
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.app.ui.internal.support;
 
@@ -24,6 +25,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.rcp.app.cli.ICommandLineProcessor;
+import org.eclipse.chemclipse.rcp.app.ui.Activator;
 import org.eclipse.chemclipse.rcp.app.ui.ApplicationWorkbenchAdvisor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -31,6 +33,7 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.app.IApplication;
 import org.eclipse.equinox.app.IApplicationContext;
+import org.eclipse.osgi.service.runnable.StartupMonitor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
@@ -51,6 +54,9 @@ public class ApplicationSupportCLI {
 	// Command Line
 	private static final String OPTION_COMMAND_LINE = "cli";
 	private static final String OPTION_COMMAND_LINE_DESCRIPTION = "Run the application in command line mode.";
+	// no shutdown option if running in UI mode
+	private static final String OPTION_NOSHUTDOWN = "noshutdown";
+	private static final String OPTION_NOSHUTDOWN_DESCRIPTION = "Keeps the UI open after execution";
 	// Eclipse Command Line
 	private static final String OPTION_ECLIPSE_COMMAND_LINE_DESCRIPTION = "See eclipse command line description.";
 	// Attributes
@@ -60,11 +66,12 @@ public class ApplicationSupportCLI {
 	private static final String EXECUTABLE_EXTENSION_NAME = "processor";
 
 	public ApplicationSupportCLI() {
+
 		registry = Platform.getExtensionRegistry();
 		elements = registry.getConfigurationElementsFor(EXTENSION_POINT);
 		logger.info("Command Line Processor Options");
 		for(IConfigurationElement element : elements) {
-			logger.info("Option: -" + element.getAttribute(OPTION_ATTRIBUTE_NAME));
+			logger.info("Option: -" + element.getAttribute(OPTION_ATTRIBUTE_NAME) + " " + element.getAttribute(OPTION_ATTRIBUTE_DESCRIPTION));
 		}
 	}
 
@@ -89,6 +96,24 @@ public class ApplicationSupportCLI {
 			if(commandLine.hasOption(OPTION_HELP) || commandLine.hasOption(OPTION_COMMAND_LINE)) {
 				return startCommandLineContext(commandLine, options);
 			} else {
+				Activator.getDefault().getBundle().getBundleContext().registerService(StartupMonitor.class, new StartupMonitor() {
+
+					@Override
+					public void update() {
+
+					}
+
+					@Override
+					public void applicationRunning() {
+
+						startCommandLineContext(commandLine, options);
+						if(commandLine.hasOption(OPTION_NOSHUTDOWN)) {
+							return;
+						} else {
+							PlatformUI.getWorkbench().close();
+						}
+					}
+				}, null);
 				return startGraphicalContext();
 			}
 		} catch(ParseException e) {
@@ -101,10 +126,8 @@ public class ApplicationSupportCLI {
 
 		if(commandLine.hasOption(OPTION_HELP)) {
 			return printOptionsHelp(options);
-		} else if(commandLine.hasOption(OPTION_COMMAND_LINE)) {
-			return executeCommandLineCommands(elements, commandLine);
 		} else {
-			return IApplication.EXIT_OK;
+			return executeCommandLineCommands(elements, commandLine);
 		}
 	}
 
@@ -170,6 +193,7 @@ public class ApplicationSupportCLI {
 
 		options.addOption(OPTION_HELP, false, OPTION_HELP_DESCRIPTION);
 		options.addOption(OPTION_COMMAND_LINE, false, OPTION_COMMAND_LINE_DESCRIPTION);
+		options.addOption(OPTION_NOSHUTDOWN, false, OPTION_NOSHUTDOWN_DESCRIPTION);
 	}
 
 	/*
