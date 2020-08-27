@@ -394,4 +394,5 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_REVIEW_DETAILS_SHOW = "org.eclipse.chemclipse.rcp.ui.icons/reviewDetailsShow.gif";
 	String IMAGE_REVIEW_DETAILS_HIDE = "org.eclipse.chemclipse.rcp.ui.icons/reviewDetailsHide.gif";
 	String IMAGE_PLUGINS = "org.eclipse.chemclipse.rcp.ui.icons/plugins.png";
+	String IMAGE_ZIP_FILE = "org.eclipse.chemclipse.rcp.ui.icons/zip_file.png";
 }
