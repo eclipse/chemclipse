@@ -440,17 +440,22 @@ public class AssetInstallPage extends WizardPage {
 			@Override
 			public void run() {
 
-				List<AssetItem> assetItems = new ArrayList<>();
-				for(Object item : tableViewer.getStructuredSelection().toArray()) {
-					if(item instanceof AssetItem) {
-						AssetItem assetItem = (AssetItem)item;
-						assetItems.add(assetItem);
-						deleteAsset(assetItem);
+				if(MessageDialog.openQuestion(getShell(), "Delete Selected Asset(s)", "Would you like to delete the selected asset(s)?")) {
+					/*
+					 * Delete
+					 */
+					List<AssetItem> assetItems = new ArrayList<>();
+					for(Object item : tableViewer.getStructuredSelection().toArray()) {
+						if(item instanceof AssetItem) {
+							AssetItem assetItem = (AssetItem)item;
+							assetItems.add(assetItem);
+							deleteAsset(assetItem);
+						}
 					}
-				}
-				//
-				if(assetItems.size() > 0) {
-					tableViewer.remove(assetItems.toArray());
+					//
+					if(assetItems.size() > 0) {
+						tableViewer.remove(assetItems.toArray());
+					}
 				}
 			}
 		};
