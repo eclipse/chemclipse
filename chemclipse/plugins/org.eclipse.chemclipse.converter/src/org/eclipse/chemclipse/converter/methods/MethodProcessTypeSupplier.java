@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -196,7 +196,7 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 			File[] listFiles = systemMethodFolder.listFiles();
 			if(listFiles != null) {
 				for(File file : listFiles) {
-					if(file.isFile()) {
+					if(file.isFile() && file.getName().toLowerCase().endsWith("." + MethodConverter.DEFAULT_METHOD_FILE_NAME_EXTENSION)) {
 						try {
 							try (InputStream inputStream = new FileInputStream(file)) {
 								IProcessingInfo<IProcessMethod> load = MethodConverter.load(inputStream, file.getAbsolutePath(), null);
