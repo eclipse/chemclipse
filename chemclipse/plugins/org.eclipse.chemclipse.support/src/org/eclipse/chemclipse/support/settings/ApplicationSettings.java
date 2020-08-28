@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -20,6 +20,11 @@ import org.slf4j.LoggerFactory;
 public class ApplicationSettings {
 
 	private static final Logger logger = LoggerFactory.getLogger(ApplicationSettings.class);
+
+	public static File getSystemTmpDirectory() {
+
+		return new File(System.getProperty("java.io.tmpdir"));
+	}
 
 	/**
 	 * Returns a file object (directory) of the chemclipse settings folder.

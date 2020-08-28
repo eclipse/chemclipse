@@ -37,6 +37,7 @@ import org.eclipse.chemclipse.rcp.app.assets.AssetItem;
 import org.eclipse.chemclipse.rcp.app.assets.AssetType;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.settings.ApplicationSettings;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.ui.swt.columns.SimpleColumnDefinition;
 import org.eclipse.jface.action.Action;
@@ -223,7 +224,7 @@ public class AssetInstallPage extends WizardPage {
 					/*
 					 * ZIP contains methods, ...
 					 */
-					File directoryTmp = new File(System.getProperty("java.io.tmpdir"));
+					File directoryTmp = ApplicationSettings.getSystemTmpDirectory();
 					if(directoryTmp.exists()) {
 						File file = new File(open);
 						try (ZipFile zipFile = new ZipFile(file)) {
@@ -251,9 +252,9 @@ public class AssetInstallPage extends WizardPage {
 										 */
 										byte[] bytes = extractFileBytes(zipFile, zipEntry);
 										if(bytes.length > 0) {
-											File fileAsset = writeTempFile(directoryTmp, name, bytes);
-											if(fileAsset.exists()) {
-												AssetItem assetItem = getAssetItem(fileAsset);
+											File fileAssetTmp = writeTempFile(directoryTmp, name, bytes);
+											if(fileAssetTmp.exists()) {
+												AssetItem assetItem = getAssetItem(fileAssetTmp);
 												if(assetItem != null) {
 													String message = addNewAsset(assetItem);
 													if(message != null) {
@@ -263,6 +264,10 @@ public class AssetInstallPage extends WizardPage {
 													}
 												}
 											}
+											/*
+											 * Delete the extracted tmp file on exit.
+											 */
+											fileAssetTmp.deleteOnExit();
 										}
 									}
 								}
