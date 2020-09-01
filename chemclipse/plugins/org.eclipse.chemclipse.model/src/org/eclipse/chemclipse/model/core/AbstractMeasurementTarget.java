@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip Wenig - initial API and implementation
+ * Christoph Läubrich - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
