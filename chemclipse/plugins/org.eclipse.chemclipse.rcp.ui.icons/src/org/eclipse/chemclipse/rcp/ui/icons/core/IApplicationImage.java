@@ -217,6 +217,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_CHROMATOGRAM_OVERLAY = "org.eclipse.chemclipse.rcp.ui.icons/chromatogramOverlay.gif";
 	//
 	String IMAGE_RESET = "org.eclipse.chemclipse.rcp.ui.icons/reset.gif";
+	String IMAGE_RESET_EQUAL = "org.eclipse.chemclipse.rcp.ui.icons/reset-equal.gif";
 	String IMAGE_OFFSET_LEFT = "org.eclipse.chemclipse.rcp.ui.icons/offsetLeft.gif";
 	String IMAGE_OFFSET_LEFT_FAST = "org.eclipse.chemclipse.rcp.ui.icons/offsetLeftFast.gif";
 	String IMAGE_OFFSET_RIGHT = "org.eclipse.chemclipse.rcp.ui.icons/offsetRight.gif";
@@ -396,4 +397,11 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_PLUGINS = "org.eclipse.chemclipse.rcp.ui.icons/plugins.png";
 	String IMAGE_ZIP_FILE = "org.eclipse.chemclipse.rcp.ui.icons/zip_file.png";
 	String IMAGE_TRANSFER = "org.eclipse.chemclipse.rcp.ui.icons/transfer.png";
+	//
+	String IMAGE_FOCUS_TOP = "org.eclipse.chemclipse.rcp.ui.icons/focus_top.gif";
+	String IMAGE_FOCUS_BOTTOM = "org.eclipse.chemclipse.rcp.ui.icons/focus_bottom.gif";
+	String IMAGE_FOCUS_BOTH_HORIZONTAL = "org.eclipse.chemclipse.rcp.ui.icons/focus_both_horizontal.gif";
+	String IMAGE_FOCUS_LEFT = "org.eclipse.chemclipse.rcp.ui.icons/focus_left.gif";
+	String IMAGE_FOCUS_RIGHT = "org.eclipse.chemclipse.rcp.ui.icons/focus_right.gif";
+	String IMAGE_FOCUS_BOTH_VERTICAL = "org.eclipse.chemclipse.rcp.ui.icons/focus_both_vertical.gif";
 }
