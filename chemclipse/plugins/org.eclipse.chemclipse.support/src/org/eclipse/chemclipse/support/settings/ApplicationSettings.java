@@ -23,7 +23,7 @@ public class ApplicationSettings {
 
 	public static File getSystemTmpDirectory() {
 
-		return new File(System.getProperty("java.io.tmpdir"));
+		return new File(System.getProperty("java.io.tmpdir", ""));
 	}
 
 	/**
