@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2019 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,10 +25,10 @@ public interface IScanWSD extends IScan {
 	/**
 	 * method return signal on exact wavelength
 	 * 
-	 * @param wavelenght
+	 * @param wavelength
 	 * @return signal scan
 	 */
-	Optional<IScanSignalWSD> getScanSignal(double wavelenght);
+	Optional<IScanSignalWSD> getScanSignal(double wavelength);
 
 	void addScanSignal(IScanSignalWSD scanSignalWSD);
 

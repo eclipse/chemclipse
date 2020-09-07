@@ -15,9 +15,10 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Set;
 
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
@@ -42,10 +43,8 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
-import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
-import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelength;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignal;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignals;
@@ -497,14 +496,29 @@ public class ChromatogramChartSupport {
 			 * SWC
 			 */
 			if(scan instanceof IScanWSD && signals instanceof IMarkedWavelengths) {
+				/*
+				 * Get the extracted wavelength map.
+				 */
 				IScanWSD scanWSD = (IScanWSD)scan;
+				IExtractedWavelengthSignal extractedWavelengthSignal = scanWSD.getExtractedWavelengthSignal();
 				IMarkedWavelengths markedWavelengths = (IMarkedWavelengths)signals;
-				Iterator<IMarkedWavelength> it = markedWavelengths.iterator();
-				if(it.hasNext()) {
-					Optional<IScanSignalWSD> scanSignal = scanWSD.getScanSignal(it.next().getWavelength());
-					if(scanSignal.isPresent()) {
-						intensity = scanSignal.get().getAbundance();
-					}
+				/*
+				 * Integer wavelengths
+				 */
+				Set<Integer> wavelengths = new HashSet<>();
+				for(double wavelength : markedWavelengths.getWavelengths()) {
+					wavelengths.add((int)Math.round(wavelength));
+				}
+				/*
+				 * This fails when running in SWC modus - needs adjustment.
+				 * --
+				 * Optional<IScanSignalWSD> scanSignal = scanWSD.getScanSignal(wavelength);
+				 * if(scanSignal.isPresent()) {
+				 * intensity = scanSignal.get().getAbundance();
+				 * }
+				 */
+				for(int wavelength : wavelengths) {
+					intensity = extractedWavelengthSignal.getAbundance(wavelength);
 				}
 			}
 		}
