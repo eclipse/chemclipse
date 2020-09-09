@@ -18,13 +18,12 @@ import java.io.File;
  * parsed.<br/>
  * It is possible to use it for a short file overview or a chromatogram overlay
  * method.
- * 
- * @author eselmeister
  */
 public interface IChromatogramOverview extends IMeasurementInfo {
 
 	double SECOND_CORRELATION_FACTOR = 1000.0d; // 1ms * 1000 = 1s;
 	double MINUTE_CORRELATION_FACTOR = 60000.0d; // 1ms * 1000 = 1s; 1s * 60 = 1min
+	double HOUR_CORRELATION_FACTOR = 3600000.0d; // 1ms * 1000 = 1s; 1s * 60 = 1min * 60 = 1hour
 
 	/**
 	 * Returns an unique identifier for the actual chromatogram object. This
