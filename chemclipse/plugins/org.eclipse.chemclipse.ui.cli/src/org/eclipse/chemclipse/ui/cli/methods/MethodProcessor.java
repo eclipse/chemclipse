@@ -8,8 +8,9 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - adjust bundle/class naming conventions
  *******************************************************************************/
-package org.eclipse.chemclipse.cli;
+package org.eclipse.chemclipse.ui.cli.methods;
 
 import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -30,21 +31,22 @@ import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.rcp.app.cli.AbstractCommandLineProcessor;
 import org.eclipse.chemclipse.rcp.app.cli.ICommandLineProcessor;
+import org.eclipse.chemclipse.ui.cli.ContextCLI;
+import org.eclipse.chemclipse.ui.cli.converter.ChromatogramImportProcessor;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
-public class MethodCommandLineProcessor extends AbstractCommandLineProcessor implements ICommandLineProcessor {
+public class MethodProcessor extends AbstractCommandLineProcessor implements ICommandLineProcessor {
 
 	private static final NullProgressMonitor MONITOR = new NullProgressMonitor();
-	private static final Logger LOG = Logger.getLogger(ChromatogramReaderCommandLineProcessor.class);
-
+	private static final Logger LOG = Logger.getLogger(ChromatogramImportProcessor.class);
 
 	@Override
 	public void process(String[] args) {
 
-		ProcessSupplierContext processSupplierContext = CliContext.getProcessSupplierContext();
+		ProcessSupplierContext processSupplierContext = ContextCLI.getProcessSupplierContext();
 		if(processSupplierContext == null) {
 			LOG.error("Can't get a supplier context!");
 			throw new RuntimeException();
@@ -58,8 +60,9 @@ public class MethodCommandLineProcessor extends AbstractCommandLineProcessor imp
 				LOG.error("Can't read method file " + arg);
 				continue;
 			}
+			//
 			LOG.info("Applying " + method.getName() + "...");
-			for(IChromatogram<?> chromatogram : CliContext.getChromatograms()) {
+			for(IChromatogram<?> chromatogram : ContextCLI.getChromatograms()) {
 				IChromatogramSelection<?, ?> selection;
 				if(chromatogram instanceof IChromatogramMSD) {
 					selection = new ChromatogramSelectionMSD((IChromatogramMSD)chromatogram) {
@@ -101,6 +104,7 @@ public class MethodCommandLineProcessor extends AbstractCommandLineProcessor imp
 					LOG.error("Unknwon Chromatogram Type " + chromatogram);
 					continue;
 				}
+				//
 				LOG.info("... processing " + chromatogram.getName());
 				ProcessingInfo<?> processorResult = new ProcessingInfo<>();
 				ProcessEntryContainer.applyProcessEntries(method, new ProcessExecutionContext(MONITOR, processorResult, processSupplierContext), IChromatogramSelectionProcessSupplier.createConsumer(selection));

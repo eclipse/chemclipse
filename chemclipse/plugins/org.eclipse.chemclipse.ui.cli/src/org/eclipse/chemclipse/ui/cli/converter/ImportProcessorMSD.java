@@ -8,8 +8,9 @@
  *
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - adjust bundle/class naming conventions
  *******************************************************************************/
-package org.eclipse.chemclipse.cli;
+package org.eclipse.chemclipse.ui.cli.converter;
 
 import java.io.File;
 
@@ -18,7 +19,7 @@ import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMS
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class MsdReaderCommandLineProcessor extends ChromatogramReaderCommandLineProcessor {
+public class ImportProcessorMSD extends ChromatogramImportProcessor {
 
 	@Override
 	protected IProcessingInfo<? extends IChromatogram<?>> load(File file, IProgressMonitor monitor) {

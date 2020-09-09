@@ -8,8 +8,9 @@
  *
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - adjust bundle/class naming conventions
  *******************************************************************************/
-package org.eclipse.chemclipse.cli;
+package org.eclipse.chemclipse.ui.cli.converter;
 
 import java.io.File;
 
@@ -18,13 +19,14 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.rcp.app.cli.AbstractCommandLineProcessor;
 import org.eclipse.chemclipse.rcp.app.cli.ICommandLineProcessor;
+import org.eclipse.chemclipse.ui.cli.ContextCLI;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
-public abstract class ChromatogramReaderCommandLineProcessor extends AbstractCommandLineProcessor implements ICommandLineProcessor {
+public abstract class ChromatogramImportProcessor extends AbstractCommandLineProcessor implements ICommandLineProcessor {
 
 	private static final NullProgressMonitor MONITOR = new NullProgressMonitor();
-	private static final Logger LOG = Logger.getLogger(ChromatogramReaderCommandLineProcessor.class);
+	private static final Logger LOG = Logger.getLogger(ChromatogramImportProcessor.class);
 
 	@Override
 	public void process(String[] args) {
@@ -37,7 +39,7 @@ public abstract class ChromatogramReaderCommandLineProcessor extends AbstractCom
 				LOG.info("... failed!");
 				continue;
 			}
-			CliContext.addChromatogram(info.getProcessingResult());
+			ContextCLI.addChromatogram(info.getProcessingResult());
 		}
 	}
 

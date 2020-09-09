@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: ChemClipse CLI Support
-Bundle-SymbolicName: org.eclipse.chemclipse.cli;singleton:=true
+Bundle-Name: ChemClipse CLI Support (UI)
+Bundle-SymbolicName: org.eclipse.chemclipse.ui.cli;singleton:=true
 Bundle-Version: 0.9.0.qualifier
 Require-Bundle: org.eclipse.chemclipse.rcp.app.ui,
  org.eclipse.chemclipse.rcp.app,
@@ -27,4 +27,4 @@ Import-Package: javax.inject;version="1.0.0",
  org.osgi.util.tracker;version="1.4.0"
 Bundle-ActivationPolicy: lazy
 Automatic-Module-Name: org.eclipse.chemclipse.cli
-Bundle-Activator: org.eclipse.chemclipse.cli.CliContext
+Bundle-Activator: org.eclipse.chemclipse.ui.cli.ContextCLI

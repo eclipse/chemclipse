@@ -8,8 +8,9 @@
  *
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - adjust bundle/class naming conventions
  *******************************************************************************/
-package org.eclipse.chemclipse.cli;
+package org.eclipse.chemclipse.ui.cli;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,9 +28,8 @@ import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * Global CLI Exchange object
- *
  */
-public class CliContext implements BundleActivator {
+public class ContextCLI implements BundleActivator {
 
 	private static List<IChromatogram<?>> CHROMATOGRAMS = new ArrayList<IChromatogram<?>>();
 	private static ProcessSupplierContext processSupplierContext;
