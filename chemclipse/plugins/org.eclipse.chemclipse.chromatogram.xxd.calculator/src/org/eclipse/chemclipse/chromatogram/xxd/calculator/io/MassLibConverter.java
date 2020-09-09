@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.io;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -25,7 +26,7 @@ import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.model.columns.RetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.SeparationColumnIndices;
-import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 
@@ -36,6 +37,44 @@ public class MassLibConverter {
 	private Pattern patternColumn = Pattern.compile("(INFO1:)(\\s+)(\\w+)(\\s+)(\\w+-?\\w+)");
 	private Pattern patternIndices = Pattern.compile("(RETIND:)(\\s+)(\\d+:\\d+:?\\d+)(\\s+)(\\d*)");
 	private Pattern patternTargets = Pattern.compile("(SCANDESC:)(\\s+)(\\d+)(\\s+)(')(.*)(')");
+
+	/**
+	 * 1:01
+	 * 1:55
+	 * 0:2:29
+	 * 
+	 * @param value
+	 * @return int
+	 */
+	public int parseRetentionTime(String time) {
+
+		String[] values = time.trim().split(":");
+		int retentionTime = 0;
+		//
+		if(values.length == 2) {
+			retentionTime += getInteger(values[0]) * IChromatogram.MINUTE_CORRELATION_FACTOR; // Minutes
+			retentionTime += getInteger(values[1]) * IChromatogram.SECOND_CORRELATION_FACTOR; // Seconds
+		} else if(values.length == 3) {
+			retentionTime += getInteger(values[0]) * IChromatogram.HOUR_CORRELATION_FACTOR; // Hours
+			retentionTime += getInteger(values[1]) * IChromatogram.MINUTE_CORRELATION_FACTOR; // Minutes
+			retentionTime += getInteger(values[2]) * IChromatogram.SECOND_CORRELATION_FACTOR; // Seconds
+		}
+		//
+		return retentionTime;
+	}
+
+	/**
+	 * 600
+	 * 700
+	 * 
+	 * @param index
+	 * @return float
+	 */
+	public float parseRetentionIndex(String index) {
+
+		float retentionIndex = getFloat(index.trim());
+		return retentionIndex < 0 ? 0 : retentionIndex;
+	}
 
 	/**
 	 * Return ISeparationColumnIndices via IProcessingInfo.
@@ -63,7 +102,7 @@ public class MassLibConverter {
 		 * ...
 		 */
 		try {
-			String content = FileUtils.readFileToString(file);
+			String content = FileUtils.readFileToString(file, StandardCharsets.US_ASCII);
 			/*
 			 * Column
 			 */
@@ -75,35 +114,12 @@ public class MassLibConverter {
 				separationColumn.setLength(length);
 			}
 			/*
-			 * Indices
+			 * Indices (RT/RI)
 			 */
 			Matcher matcherIndices = patternIndices.matcher(content);
 			while(matcherIndices.find()) {
-				/*
-				 * RT
-				 */
-				String[] values = matcherIndices.group(3).trim().split(":");
-				String value = "";
-				if(values.length == 2) {
-					String minutes = values[0];
-					String seconds = values[1];
-					value = minutes + "." + seconds;
-				} else if(values.length == 3) {
-					String hours = values[0];
-					String minutes = values[1];
-					String seconds = values[2];
-					if(!"0".equals(hours)) {
-						int h = getInteger(hours);
-						int m = getInteger(minutes);
-						minutes = Integer.toString(h * 60 + m);
-					}
-					value = minutes + "." + seconds;
-				}
-				int retentionTime = (int)(getDouble(value) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
-				/*
-				 * RI
-				 */
-				float retentionIndex = getFloat(matcherIndices.group(5).trim());
+				int retentionTime = parseRetentionTime(matcherIndices.group(3));
+				float retentionIndex = parseRetentionIndex(matcherIndices.group(5));
 				separationColumnIndices.put(new RetentionIndexEntry(retentionTime, retentionIndex, ""));
 			}
 		} catch(IOException e) {
@@ -120,7 +136,7 @@ public class MassLibConverter {
 		Map<Integer, String> targets = new HashMap<>();
 		//
 		try {
-			String content = FileUtils.readFileToString(file);
+			String content = FileUtils.readFileToString(file, StandardCharsets.US_ASCII);
 			Matcher matcherTargets = patternTargets.matcher(content);
 			while(matcherTargets.find()) {
 				int scan = getInteger(matcherTargets.group(3).trim());
@@ -133,17 +149,6 @@ public class MassLibConverter {
 		//
 		processingInfo.setProcessingResult(targets);
 		return processingInfo;
-	}
-
-	private double getDouble(String value) {
-
-		double result = 0.0d;
-		try {
-			result = Double.valueOf(value);
-		} catch(NumberFormatException e) {
-			logger.warn(e);
-		}
-		return result;
 	}
 
 	private float getFloat(String value) {
