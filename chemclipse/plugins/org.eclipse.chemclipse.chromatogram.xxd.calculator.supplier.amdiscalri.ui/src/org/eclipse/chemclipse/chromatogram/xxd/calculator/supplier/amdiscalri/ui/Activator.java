@@ -93,21 +93,18 @@ public class Activator extends AbstractActivatorUI {
 					if(object instanceof File) {
 						File file = (File)object;
 						if(file.exists()) {
+							/*
+							 * Add/Remove the RI calibration file.
+							 */
 							String library = file.getAbsolutePath();
 							List<String> libraries = PreferenceSupplier.getRetentionIndexFiles();
 							if(IChemClipseEvents.TOPIC_RI_LIBRARY_ADD_ADD_TO_PROCESS.equals(topic)) {
-								/*
-								 * Add the library.
-								 */
 								if(!libraries.contains(library)) {
-									libraries.add(library);
+									libraries.add(library); // ADD
 								}
 							} else if(IChemClipseEvents.TOPIC_RI_LIBRARY_REMOVE_FROM_PROCESS.equals(topic)) {
-								/*
-								 * Remove the library
-								 */
 								if(libraries.contains(library)) {
-									libraries.remove(library);
+									libraries.remove(library); // REMOVE
 								}
 							}
 							PreferenceSupplier.setRetentionIndexFiles(libraries);

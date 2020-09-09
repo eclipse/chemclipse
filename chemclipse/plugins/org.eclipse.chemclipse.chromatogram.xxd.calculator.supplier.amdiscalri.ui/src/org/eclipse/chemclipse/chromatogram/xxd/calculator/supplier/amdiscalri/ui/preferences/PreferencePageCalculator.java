@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -26,6 +26,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class PreferencePageCalculator extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePageCalculator() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setDescription("Retention Index Filter Settings.");
@@ -45,7 +46,7 @@ public class PreferencePageCalculator extends FieldEditorPreferencePage implemen
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Calculator Options", getFieldEditorParent()));
-		addField(new RadioGroupFieldEditor(PreferenceSupplier.P_DETECTION_STRATEGY, "Detection Strategy", 1, PreferenceSupplier.DETECTION_OPTIONS, getFieldEditorParent()));
+		addField(new RadioGroupFieldEditor(PreferenceSupplier.P_CALCULATOR_STRATEGY, "Calculator Strategy", 1, PreferenceSupplier.CALCULATOR_OPTIONS, getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_DEFAULT_COLUMN, "Use Default Column (in case of no match)", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_PROCESS_REFERENCED_CHROMATOGRAMS, "Process Referenced Chromatograms", getFieldEditorParent()));
 		//

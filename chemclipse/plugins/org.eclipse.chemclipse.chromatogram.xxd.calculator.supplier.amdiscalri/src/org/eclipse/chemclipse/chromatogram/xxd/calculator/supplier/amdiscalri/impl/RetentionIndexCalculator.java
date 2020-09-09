@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2019 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,7 +21,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.CalibrationFileReader;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.CalculatorSettings;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
@@ -172,7 +171,7 @@ public class RetentionIndexCalculator {
 				 * Master
 				 */
 				calculateIndex(chromatogramSelection, separationColumnIndices);
-				if(PreferenceSupplier.isProcessReferencedChromatograms()) {
+				if(calculatorSettings.isProcessReferencedChromatograms()) {
 					/*
 					 * References
 					 */
@@ -194,14 +193,14 @@ public class RetentionIndexCalculator {
 	private ISeparationColumnIndices getSeparationColumnIndices(IChromatogramSelection chromatogramSelection, CalculatorSettings calculatorSettings) {
 
 		ISeparationColumnIndices separationColumnIndices;
-		switch(PreferenceSupplier.getDetectionStrategy()) {
-			case PreferenceSupplier.DETECTION_STRATEGY_AUTO:
+		switch(calculatorSettings.getCalculatorStrategy()) {
+			case AUTO:
 				separationColumnIndices = getAutoIndices(chromatogramSelection, calculatorSettings);
 				break;
-			case PreferenceSupplier.DETECTION_STRATEGY_CHROMATOGRAM:
+			case CHROMATOGRAM:
 				separationColumnIndices = getChromatogramIndices(chromatogramSelection);
 				break;
-			case PreferenceSupplier.DETECTION_STRATEGY_FILES:
+			case FILES:
 				separationColumnIndices = getFileIndices(chromatogramSelection, calculatorSettings);
 				break;
 			default:
@@ -257,7 +256,7 @@ public class RetentionIndexCalculator {
 		String columnName = chromatogramSelection.getChromatogram().getSeparationColumnIndices().getSeparationColumn().getName();
 		ISeparationColumnIndices separationColumnIndices = calibrationMap.get(columnName);
 		if(separationColumnIndices == null) {
-			if(PreferenceSupplier.isUseDefaultColumn()) {
+			if(calculatorSettings.isUseDefaultColumn()) {
 				separationColumnIndices = calibrationMap.get(SeparationColumnFactory.TYPE_DEFAULT);
 			}
 		}

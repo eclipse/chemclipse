@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.Activator;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.CalculatorStrategy;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.CalculatorSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
@@ -28,18 +29,19 @@ import org.osgi.service.prefs.BackingStoreException;
 public class PreferenceSupplier implements IPreferenceSupplier {
 
 	private static final Logger logger = Logger.getLogger(PreferenceSupplier.class);
+	//
+	public static final String[][] CALCULATOR_OPTIONS = new String[][]{ //
+			{CalculatorStrategy.AUTO.getLabel(), CalculatorStrategy.AUTO.name()}, //
+			{CalculatorStrategy.CHROMATOGRAM.getLabel(), CalculatorStrategy.CHROMATOGRAM.name()}, //
+			{CalculatorStrategy.FILES.getLabel(), CalculatorStrategy.FILES.name()} //
+	};
 	/*
 	 * RI Calculation
 	 */
-	public static final String DETECTION_STRATEGY_AUTO = "Automatic";
-	public static final String DETECTION_STRATEGY_CHROMATOGRAM = "Chromatogram";
-	public static final String DETECTION_STRATEGY_FILES = "Files";
-	//
 	public static final String P_RETENTION_INDEX_FILES = "retentionIndexFiles";
 	public static final String DEF_RETENTION_INDEX_FILES = "";
-	public static final String P_DETECTION_STRATEGY = "detectionStrategy";
-	public static final String DEF_DETECTION_STRATEGY = DETECTION_STRATEGY_FILES;
-	public static final String[][] DETECTION_OPTIONS = new String[][]{{"First Chromatogram - Then File(s)", DETECTION_STRATEGY_AUTO}, {"Chromatogram Only", DETECTION_STRATEGY_CHROMATOGRAM}, {"File(s) Only", DETECTION_STRATEGY_FILES}};
+	public static final String P_CALCULATOR_STRATEGY = "calculatorStrategy";
+	public static final String DEF_CALCULATOR_STRATEGY = CalculatorStrategy.FILES.name();
 	public static final String P_USE_DEFAULT_COLUMN = "useDefaultColumn";
 	public static final boolean DEF_USE_DEFAULT_COLUMN = true;
 	public static final String P_PROCESS_REFERENCED_CHROMATOGRAMS = "processReferencedChromatograms";
@@ -95,7 +97,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
 		defaultValues.put(P_RETENTION_INDEX_FILES, DEF_RETENTION_INDEX_FILES);
-		defaultValues.put(P_DETECTION_STRATEGY, DEF_DETECTION_STRATEGY);
+		defaultValues.put(P_CALCULATOR_STRATEGY, DEF_CALCULATOR_STRATEGY);
 		defaultValues.put(P_USE_DEFAULT_COLUMN, Boolean.toString(DEF_USE_DEFAULT_COLUMN));
 		defaultValues.put(P_PROCESS_REFERENCED_CHROMATOGRAMS, Boolean.toString(DEF_PROCESS_REFERENCED_CHROMATOGRAMS));
 		defaultValues.put(P_FILTER_PATH_INDEX_FILES, DEF_FILTER_PATH_INDEX_FILES);
@@ -117,26 +119,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static CalculatorSettings getChromatogramCalculatorSettings() {
 
 		CalculatorSettings calculatorSettings = new CalculatorSettings();
+		calculatorSettings.setCalibrationFile(null); // Only used by dynamic process settings.
 		calculatorSettings.setRetentionIndexFiles(getRetentionIndexFiles());
+		calculatorSettings.setCalculatorStrategy(getCalculatorStrategy());
+		calculatorSettings.setUseDefaultColumn(isUseDefaultColumn());
+		calculatorSettings.setProcessReferencedChromatograms(isProcessReferencedChromatograms());
 		return calculatorSettings;
-	}
-
-	public static String getDetectionStrategy() {
-
-		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
-		return preferences.get(P_DETECTION_STRATEGY, DEF_DETECTION_STRATEGY);
-	}
-
-	public static boolean isUseDefaultColumn() {
-
-		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
-		return preferences.getBoolean(P_USE_DEFAULT_COLUMN, DEF_USE_DEFAULT_COLUMN);
-	}
-
-	public static boolean isProcessReferencedChromatograms() {
-
-		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
-		return preferences.getBoolean(P_PROCESS_REFERENCED_CHROMATOGRAMS, DEF_PROCESS_REFERENCED_CHROMATOGRAMS);
 	}
 
 	public static List<String> getRetentionIndexFiles() {
@@ -211,6 +199,24 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
 		return preferences.getBoolean(P_ADD_UNKNOWN_MZ_LIST, DEF_ADD_UNKNOWN_MZ_LIST);
+	}
+
+	private static CalculatorStrategy getCalculatorStrategy() {
+
+		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
+		return CalculatorStrategy.valueOf(preferences.get(P_CALCULATOR_STRATEGY, DEF_CALCULATOR_STRATEGY));
+	}
+
+	private static boolean isUseDefaultColumn() {
+
+		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
+		return preferences.getBoolean(P_USE_DEFAULT_COLUMN, DEF_USE_DEFAULT_COLUMN);
+	}
+
+	private static boolean isProcessReferencedChromatograms() {
+
+		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
+		return preferences.getBoolean(P_PROCESS_REFERENCED_CHROMATOGRAMS, DEF_PROCESS_REFERENCED_CHROMATOGRAMS);
 	}
 
 	private static String getFilterPath(String key, String def) {
