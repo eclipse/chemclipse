@@ -15,7 +15,7 @@ package org.eclipse.chemclipse.msd.converter.supplier.amdis.io;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -67,16 +67,14 @@ public class ELUReader implements IPeakReader {
 	private static final Pattern PEAK_PATTERN = Pattern.compile("(NUM PEAKS)(.*)", Pattern.DOTALL | Pattern.MULTILINE);
 	private static final Pattern ION_PATTERN = Pattern.compile("\\((\\d+),(\\d+) ?(\\w[\\d.]*)?\\)");
 	//
-	private static final String CHARSET_US = "US-ASCII";
 	private static final String NEW_LINE = "\n";
 	private static final String CARRIAGE_RETURN = "\r";
 
 	@Override
 	public IProcessingInfo<IPeaks<?>> read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
-		Charset charset = Charset.forName(CHARSET_US);
 		IProcessingInfo<IPeaks<?>> processingInfo = new ProcessingInfo<IPeaks<?>>();
-		String content = FileUtils.readFileToString(file, charset);
+		String content = FileUtils.readFileToString(file, StandardCharsets.US_ASCII);
 		int numberOfHits = getNumberOfHits(content);
 		if(numberOfHits <= 0) {
 			processingInfo.addErrorMessage("AMDIS ELU Parser", "There seems to be no peak in the file.");
