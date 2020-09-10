@@ -18,6 +18,8 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.settings.AbstractChromatogramCalculatorSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.CalculatorStrategy;
 import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
+import org.eclipse.chemclipse.support.settings.FileSettingProperty;
+import org.eclipse.chemclipse.support.settings.FileSettingProperty.DialogType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -25,8 +27,9 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class CalculatorSettings extends AbstractChromatogramCalculatorSettings implements IRetentionIndexFilterSettings {
 
-	@JsonProperty(value = "Calibration File (*.cal)", defaultValue = "")
+	@JsonProperty(value = "Calibration File", defaultValue = "")
 	@JsonPropertyDescription("Select the file that contains the retention time / index entries.")
+	@FileSettingProperty(dialogType = DialogType.OPEN_DIALOG, extensionNames = {"AMDIS (*.cal)", "AMDIS (*.CAL)"}, validExtensions = {"*.cal", "*.CAL"}, onlyDirectory = false)
 	private File calibrationFile;
 	@JsonProperty(value = "Calculator Strategy", defaultValue = "FILES")
 	@JsonPropertyDescription(value = "The strategy defines the data source, that shall be used for RI calculation.")
