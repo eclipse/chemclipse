@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2020 Lablicate GmbH.
+ * Copyright (c) 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,28 +15,28 @@ import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.chromatogram.Abst
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.settings.IChromatogramCalculatorSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.RetentionIndexCalculator;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.CalculatorSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.ResetterSettings;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramCalculator extends AbstractChromatogramCalculator {
+public class ChromatogramResetter extends AbstractChromatogramCalculator {
 
 	@SuppressWarnings("rawtypes")
 	@Override
 	public IProcessingInfo applyCalculator(IChromatogramSelection chromatogramSelection, IChromatogramCalculatorSettings chromatogramCalculatorSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = null;
-		if(chromatogramCalculatorSettings instanceof CalculatorSettings) {
-			CalculatorSettings calculatorSettings = (CalculatorSettings)chromatogramCalculatorSettings;
+		if(chromatogramCalculatorSettings instanceof ResetterSettings) {
+			ResetterSettings resetterSettings = (ResetterSettings)chromatogramCalculatorSettings;
 			RetentionIndexCalculator calculator = new RetentionIndexCalculator();
-			processingInfo = calculator.calculateIndices(chromatogramSelection, calculatorSettings, monitor);
+			processingInfo = calculator.resetIndices(chromatogramSelection, resetterSettings, monitor);
 		}
 		//
 		if(processingInfo == null) {
 			processingInfo = new ProcessingInfo();
-			processingInfo.addErrorMessage("RI Calculator", "Something went wrong.");
+			processingInfo.addErrorMessage("RI Resetter", "Something went wrong.");
 		}
 		//
 		return processingInfo;
@@ -46,7 +46,7 @@ public class ChromatogramCalculator extends AbstractChromatogramCalculator {
 	@Override
 	public IProcessingInfo applyCalculator(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
-		CalculatorSettings calculatorSettings = PreferenceSupplier.getChromatogramCalculatorSettings();
-		return applyCalculator(chromatogramSelection, calculatorSettings, monitor);
+		ResetterSettings resetterSettings = PreferenceSupplier.getChromatogramResetterSettings();
+		return applyCalculator(chromatogramSelection, resetterSettings, monitor);
 	}
 }

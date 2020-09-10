@@ -18,6 +18,7 @@ import java.util.Map;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.CalculatorStrategy;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.CalculatorSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.ResetterSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.util.FileListUtil;
@@ -118,13 +119,20 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static CalculatorSettings getChromatogramCalculatorSettings() {
 
-		CalculatorSettings calculatorSettings = new CalculatorSettings();
-		calculatorSettings.setCalibrationFile(null); // Only used by dynamic process settings.
-		calculatorSettings.setRetentionIndexFiles(getRetentionIndexFiles());
-		calculatorSettings.setCalculatorStrategy(getCalculatorStrategy());
-		calculatorSettings.setUseDefaultColumn(isUseDefaultColumn());
-		calculatorSettings.setProcessReferencedChromatograms(isProcessReferencedChromatograms());
-		return calculatorSettings;
+		CalculatorSettings settings = new CalculatorSettings();
+		settings.setCalibrationFile(null); // Only used by dynamic process settings.
+		settings.setRetentionIndexFiles(getRetentionIndexFiles());
+		settings.setCalculatorStrategy(getCalculatorStrategy());
+		settings.setUseDefaultColumn(isUseDefaultColumn());
+		settings.setProcessReferencedChromatograms(isProcessReferencedChromatograms());
+		return settings;
+	}
+
+	public static ResetterSettings getChromatogramResetterSettings() {
+
+		ResetterSettings settings = new ResetterSettings();
+		settings.setProcessReferencedChromatograms(isProcessReferencedChromatograms());
+		return settings;
 	}
 
 	public static List<String> getRetentionIndexFiles() {

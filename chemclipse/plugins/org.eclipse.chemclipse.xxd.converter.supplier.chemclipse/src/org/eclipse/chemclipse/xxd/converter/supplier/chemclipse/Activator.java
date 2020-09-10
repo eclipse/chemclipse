@@ -39,6 +39,7 @@ public class Activator implements BundleActivator {
 		System.out.println("\tILibraryInformation - Molecule Structure");
 		System.out.println("\tChromatogram - peak/scan target visibility");
 		System.out.println("\tChromatogram - baseline map");
+		System.out.println("\tCheck (Scan) - are additional RI values stored? RetentionIndexType.POLAR, ...");
 		//
 		logger.info("-------------------------------------------------");
 		logger.info("Ensure backward and forward compatibility!");

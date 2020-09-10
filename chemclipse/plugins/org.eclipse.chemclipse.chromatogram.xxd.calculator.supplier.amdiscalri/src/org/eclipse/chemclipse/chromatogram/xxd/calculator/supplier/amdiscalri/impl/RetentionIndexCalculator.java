@@ -22,8 +22,7 @@ import java.util.regex.Pattern;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.CalibrationFileReader;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.CalculatorSettings;
-import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
-import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.ResetterSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.ISeparationColumn;
@@ -33,13 +32,9 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
-import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
-import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class RetentionIndexCalculator {
@@ -160,8 +155,8 @@ public class RetentionIndexCalculator {
 		return retentionIndex;
 	}
 
-	@SuppressWarnings("rawtypes")
-	public IProcessingInfo apply(IChromatogramSelection chromatogramSelection, CalculatorSettings calculatorSettings, IProgressMonitor monitor) {
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	public IProcessingInfo calculateIndices(IChromatogramSelection chromatogramSelection, CalculatorSettings calculatorSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
 		if(chromatogramSelection != null) {
@@ -170,17 +165,41 @@ public class RetentionIndexCalculator {
 				/*
 				 * Master
 				 */
-				calculateIndex(chromatogramSelection, separationColumnIndices);
+				calculateIndex(chromatogramSelection.getChromatogram(), separationColumnIndices);
 				if(calculatorSettings.isProcessReferencedChromatograms()) {
 					/*
 					 * References
 					 */
 					IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 					for(Object object : chromatogram.getReferencedChromatograms()) {
-						IChromatogramSelection chromatogramSelectionReference = getChromatogramSelection(object);
-						if(chromatogramSelectionReference != null) {
-							calculateIndex(chromatogramSelectionReference, separationColumnIndices);
+						if(object instanceof IChromatogram) {
+							calculateIndex((IChromatogram)object, separationColumnIndices);
 						}
+					}
+				}
+			}
+		}
+		//
+		return processingInfo;
+	}
+
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	public IProcessingInfo resetIndices(IChromatogramSelection chromatogramSelection, ResetterSettings resetterSettings, IProgressMonitor monitor) {
+
+		IProcessingInfo processingInfo = new ProcessingInfo();
+		/*
+		 * Master
+		 */
+		if(chromatogramSelection != null) {
+			resetIndex(chromatogramSelection.getChromatogram());
+			if(resetterSettings.isProcessReferencedChromatograms()) {
+				/*
+				 * References
+				 */
+				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+				for(Object object : chromatogram.getReferencedChromatograms()) {
+					if(object instanceof IChromatogram) {
+						resetIndex((IChromatogram)object);
 					}
 				}
 			}
@@ -317,28 +336,49 @@ public class RetentionIndexCalculator {
 		return retentionIndex;
 	}
 
-	@SuppressWarnings({"unchecked", "rawtypes"})
-	private void calculateIndex(IChromatogramSelection chromatogramSelection, ISeparationColumnIndices separationColumnIndices) {
+	private void resetIndex(IChromatogram<? extends IPeak> chromatogram) {
+
+		float retentionIndex = 0.0f;
+		/*
+		 * Scans
+		 */
+		for(IScan scan : chromatogram.getScans()) {
+			scan.setRetentionIndex(retentionIndex);
+			/*
+			 * Calculate RI also for the optimized MS.
+			 */
+			if(scan instanceof IScanMSD) {
+				IScanMSD scanMSD = (IScanMSD)scan;
+				IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
+				if(optimizedMassSpectrum != null) {
+					optimizedMassSpectrum.setRetentionIndex(retentionIndex);
+				}
+			}
+		}
+		/*
+		 * Peaks
+		 */
+		for(IPeak peak : chromatogram.getPeaks()) {
+			IScan scan = peak.getPeakModel().getPeakMaximum();
+			scan.setRetentionIndex(retentionIndex);
+		}
+	}
+
+	private void calculateIndex(IChromatogram<? extends IPeak> chromatogram, ISeparationColumnIndices separationColumnIndices) {
 
 		if(separationColumnIndices != null) {
-			IChromatogram<? extends IPeak> chromatogram = chromatogramSelection.getChromatogram();
-			int startRetentionTime = chromatogramSelection.getStartRetentionTime();
-			int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
-			int startScan = chromatogram.getScanNumber(startRetentionTime);
-			int stopScan = chromatogram.getScanNumber(stopRetentionTime);
 			/*
 			 * Scans
 			 */
-			for(int scan = startScan; scan <= stopScan; scan++) {
-				IScan supplierScan = chromatogram.getScan(scan);
-				int retentionTime = supplierScan.getRetentionTime();
+			for(IScan scan : chromatogram.getScans()) {
+				int retentionTime = scan.getRetentionTime();
 				float retentionIndex = calculateRetentionIndex(retentionTime, separationColumnIndices);
-				supplierScan.setRetentionIndex(retentionIndex);
+				scan.setRetentionIndex(retentionIndex);
 				/*
 				 * Calculate RI also for the optimized MS.
 				 */
-				if(supplierScan instanceof IScanMSD) {
-					IScanMSD scanMSD = (IScanMSD)supplierScan;
+				if(scan instanceof IScanMSD) {
+					IScanMSD scanMSD = (IScanMSD)scan;
 					IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
 					if(optimizedMassSpectrum != null) {
 						optimizedMassSpectrum.setRetentionIndex(retentionIndex);
@@ -348,31 +388,12 @@ public class RetentionIndexCalculator {
 			/*
 			 * Peaks
 			 */
-			List<? extends IPeak> peaks = chromatogram.getPeaks();
-			for(IPeak peak : peaks) {
+			for(IPeak peak : chromatogram.getPeaks()) {
 				IScan scan = peak.getPeakModel().getPeakMaximum();
 				int retentionTime = scan.getRetentionTime();
-				if(retentionTime >= startRetentionTime && retentionTime <= stopRetentionTime) {
-					float retentionIndex = calculateRetentionIndex(retentionTime, separationColumnIndices);
-					scan.setRetentionIndex(retentionIndex);
-				}
+				float retentionIndex = calculateRetentionIndex(retentionTime, separationColumnIndices);
+				scan.setRetentionIndex(retentionIndex);
 			}
-		}
-	}
-
-	@SuppressWarnings("rawtypes")
-	public IChromatogramSelection getChromatogramSelection(Object object) {
-
-		if(object instanceof IChromatogramSelection) {
-			return (IChromatogramSelection)object;
-		} else if(object instanceof IChromatogramCSD) {
-			return new ChromatogramSelectionCSD((IChromatogramCSD)object);
-		} else if(object instanceof IChromatogramMSD) {
-			return new ChromatogramSelectionMSD((IChromatogramMSD)object);
-		} else if(object instanceof IChromatogramWSD) {
-			return new ChromatogramSelectionWSD((IChromatogramWSD)object);
-		} else {
-			return null;
 		}
 	}
 }

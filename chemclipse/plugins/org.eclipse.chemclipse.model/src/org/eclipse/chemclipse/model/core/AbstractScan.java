@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -56,6 +56,7 @@ public abstract class AbstractScan extends AbstractSignal implements IScan {
 	private String identifier = "";
 
 	public AbstractScan() {
+
 	}
 
 	/**
@@ -66,6 +67,7 @@ public abstract class AbstractScan extends AbstractSignal implements IScan {
 	 *            {@link IScan scan} that is used as a template
 	 */
 	public AbstractScan(IScan templateScan) {
+
 		this.parentChromatogram = templateScan.getParentChromatogram();
 		this.retentionIndex = templateScan.getRetentionIndex();
 		this.scanNumber = templateScan.getScanNumber();
@@ -170,10 +172,17 @@ public abstract class AbstractScan extends AbstractSignal implements IScan {
 	@Override
 	public void setRetentionIndex(float retentionIndex) {
 
-		if(retentionIndex > 0) {
+		/*
+		 * 0 must be allowed, otherwise resetting the
+		 * retention index would be not possible.
+		 */
+		if(retentionIndex >= 0.0f) {
 			this.retentionIndex = retentionIndex;
-			setDirty(true);
+		} else {
+			this.retentionIndex = 0.0f;
 		}
+		//
+		setDirty(true);
 	}
 
 	@Override
@@ -204,7 +213,13 @@ public abstract class AbstractScan extends AbstractSignal implements IScan {
 		}
 		/*
 		 * Add the index.
+		 * 0 must be allowed, otherwise resetting the
+		 * retention index would be not possible.
 		 */
+		if(retentionIndex < 0.0f) {
+			retentionIndex = 0.0f;
+		}
+		//
 		additionalRetentionIndices.put(retentionIndexType, retentionIndex);
 	}
 
@@ -323,5 +338,4 @@ public abstract class AbstractScan extends AbstractSignal implements IScan {
 		builder.append("]");
 		return builder.toString();
 	}
-	// -----------------------------equals, hashCode, toString
 }
