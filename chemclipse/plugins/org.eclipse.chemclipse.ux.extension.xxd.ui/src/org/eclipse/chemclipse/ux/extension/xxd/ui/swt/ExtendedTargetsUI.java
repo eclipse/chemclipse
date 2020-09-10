@@ -19,6 +19,8 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.core.ITargetSupplier;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.targets.ITarget;
@@ -30,6 +32,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
+import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.IColumnMoveListener;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
@@ -43,14 +46,18 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.ListSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTargets;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakDataSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.targets.ComboTarget;
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
 import org.eclipse.jface.preference.PreferenceNode;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
@@ -58,88 +65,127 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swtchart.extensions.core.IKeyboardSupport;
 
-public class ExtendedTargetsUI {
+public class ExtendedTargetsUI extends Composite {
 
 	private static final String MENU_CATEGORY_TARGETS = "Targets";
+	private static final String TARGET_OPTION_AUTO = "Auto";
+	private static final String TARGET_OPTION_CHROMATOGRAM = "Chromatogram";
 	//
 	private final Map<String, Object> map = new HashMap<String, Object>();
 	//
-	private Label labelTargetOption;
 	private Label labelInfo;
+	private ComboViewer comboViewerTargetOption;
 	private Composite toolbarInfo;
 	private Composite toolbarSearch;
 	private Composite toolbarModify;
 	private ComboTarget comboTarget;
 	private Button buttonAddTarget;
 	private Button buttonDeleteTarget;
+	private Button buttonDeleteTargets;
 	private TargetsListUI targetListUI;
 	/*
 	 * IScan,
 	 * IPeak,
-	 * IChromatogram
+	 * IChromatogram,
+	 * ITargetSupplier
 	 */
-	private Object object;
+	private Object object = null;
+	private Object objectCacheChromatogram = null;
+	private Object objectCacheOther = null;
 	//
-	private boolean showChromatogramTargets = false;
 	private final ListSupport listSupport = new ListSupport();
+	private ScanDataSupport scanDataSupport = new ScanDataSupport();
+	private PeakDataSupport peakDataSupport = new PeakDataSupport();
 
 	@Inject
-	public ExtendedTargetsUI(Composite parent) {
+	public ExtendedTargetsUI(Composite parent, int style) {
 
-		initialize(parent);
+		super(parent, style);
+		createControl();
 	}
 
-	@Focus
-	public void setFocus() {
+	public boolean setFocus() {
 
 		updateTargets();
+		return super.setFocus();
 	}
 
 	public void update(Object object) {
 
+		/*
+		 * Option: AUTO -> Collect IChromatogram
+		 */
+		if(!isTargetOptionChromatogram() && object instanceof IChromatogram) {
+			this.objectCacheChromatogram = object;
+		}
+		/*
+		 * Option: CHROMATOGRAM -> Collect Other
+		 */
+		if(isTargetOptionChromatogram() && !(object instanceof IChromatogram)) {
+			this.objectCacheOther = object;
+		}
+		/*
+		 * Various objects are updated here.
+		 * Hence, a simple this.object = object won't work.
+		 */
+		boolean showChromatogramTargets = isTargetOptionChromatogram();
 		if(object instanceof IChromatogram) {
+			/*
+			 * Chromatogram
+			 */
 			if(showChromatogramTargets) {
 				this.object = object;
 				updateTargets();
 			}
 		} else if(object != null) {
+			/*
+			 * Other (Peak, Scan, ITargetSupplier (General))
+			 */
 			if(!showChromatogramTargets) {
 				this.object = object;
 				updateTargets();
 			}
 		} else {
-			this.object = object;
+			/*
+			 * Object must be null here.
+			 */
+			this.object = null;
 			updateTargets();
 		}
 	}
 
-	private void initialize(Composite parent) {
+	private void createControl() {
 
-		parent.setLayout(new GridLayout(1, true));
+		GridLayout gridLayout = new GridLayout(1, true);
+		gridLayout.marginWidth = 0;
+		gridLayout.marginLeft = 0;
+		gridLayout.marginRight = 0;
+		setLayout(gridLayout);
 		//
-		createToolbarMain(parent);
-		toolbarInfo = createToolbarInfo(parent);
-		toolbarSearch = createToolbarSearch(parent);
-		toolbarModify = createToolbarModify(parent);
-		targetListUI = createTargetTable(parent);
+		createToolbarMain(this);
+		toolbarInfo = createToolbarInfo(this);
+		toolbarSearch = createToolbarSearch(this);
+		toolbarModify = createToolbarModify(this);
+		targetListUI = createTargetTable(this);
 		//
 		PartSupport.setCompositeVisibility(toolbarInfo, true);
 		PartSupport.setCompositeVisibility(toolbarSearch, false);
 		PartSupport.setCompositeVisibility(toolbarModify, false);
 		//
 		targetListUI.setEditEnabled(false);
+		comboViewerTargetOption.setInput(new String[]{TARGET_OPTION_AUTO, TARGET_OPTION_CHROMATOGRAM});
+		comboViewerTargetOption.getCombo().select(0);
 		applySettings();
 	}
 
@@ -147,27 +193,16 @@ public class ExtendedTargetsUI {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		// gridData.horizontalAlignment = SWT.END;
+		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(7, false));
+		composite.setLayout(new GridLayout(6, false));
 		//
-		createTargetOptionLabel(composite);
 		createButtonToggleToolbarInfo(composite);
-		createButtonToggleOptionTargets(composite);
+		comboViewerTargetOption = createComboViewerTargetOption(composite);
 		createButtonToggleToolbarSearch(composite);
 		createButtonToggleToolbarModify(composite);
-		createButtonToggleEditModus(composite);
-		createSettingsButton(composite);
-		//
-		updateTargetOptionLabel();
-	}
-
-	private void createTargetOptionLabel(Composite parent) {
-
-		labelTargetOption = new Label(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.grabExcessHorizontalSpace = true;
-		labelTargetOption.setLayoutData(gridData);
+		buttonDeleteTargets = createButtonDeleteAll(composite);
+		createButtonSettings(composite);
 	}
 
 	private Button createButtonToggleToolbarInfo(Composite parent) {
@@ -193,27 +228,46 @@ public class ExtendedTargetsUI {
 		return button;
 	}
 
-	private Button createButtonToggleOptionTargets(Composite parent) {
+	private ComboViewer createComboViewerTargetOption(Composite composite) {
 
-		Image imageChromatogram = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHROMATOGRAM, IApplicationImage.SIZE_16x16);
-		Image imageScan = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_MASS_SPECTRUM, IApplicationImage.SIZE_16x16);
-		//
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle whether to display chromatogram or scan/peak targets.");
-		button.setText("");
-		button.setImage(showChromatogramTargets ? imageChromatogram : imageScan);
-		button.addSelectionListener(new SelectionAdapter() {
+		ComboViewer comboViewer = new ComboViewer(composite, SWT.READ_ONLY);
+		Combo combo = comboViewer.getCombo();
+		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
+		comboViewer.setLabelProvider(new AbstractLabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+
+				if(element instanceof String) {
+					return (String)element;
+				}
+				return null;
+			}
+		});
+		/*
+		 * Select the item.
+		 */
+		combo.setToolTipText("Select the target display option.");
+		GridData gridData = new GridData();
+		gridData.widthHint = 150;
+		combo.setLayoutData(gridData);
+		combo.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				showChromatogramTargets = !showChromatogramTargets;
-				button.setImage(showChromatogramTargets ? imageChromatogram : imageScan);
-				updateTargetOptionLabel();
+				Object object = comboViewer.getStructuredSelection().getFirstElement();
+				if(object != null) {
+					if(TARGET_OPTION_CHROMATOGRAM.equals(object)) {
+						update(objectCacheChromatogram);
+					} else {
+						update(objectCacheOther);
+					}
+				}
 			}
 		});
 		//
-		return button;
+		return comboViewer;
 	}
 
 	private Button createButtonToggleToolbarSearch(Composite parent) {
@@ -284,7 +338,28 @@ public class ExtendedTargetsUI {
 		return button;
 	}
 
-	private void createSettingsButton(Composite parent) {
+	private Button createButtonDeleteAll(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Delete all target(s)");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Target(s)", "Do you want to delete all target(s)?")) {
+					deleteAllTargets();
+					updateTargets();
+				}
+			}
+		});
+		//
+		return button;
+	}
+
+	private void createButtonSettings(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Open the Settings");
@@ -347,20 +422,14 @@ public class ExtendedTargetsUI {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		composite.setLayout(new GridLayout(3, false));
+		composite.setLayout(new GridLayout(4, false));
 		//
 		comboTarget = createComboTarget(composite);
 		buttonAddTarget = createButtonAdd(composite);
 		buttonDeleteTarget = createButtonDelete(composite);
+		createButtonToggleEditModus(composite);
 		//
 		return composite;
-	}
-
-	private void setEditWidgetStatus(boolean enabled) {
-
-		comboTarget.setEnabled(enabled);
-		buttonAddTarget.setEnabled(enabled);
-		buttonDeleteTarget.setEnabled(enabled);
 	}
 
 	private ComboTarget createComboTarget(Composite parent) {
@@ -423,6 +492,15 @@ public class ExtendedTargetsUI {
 		listUI.setEditingSupport();
 		Table table = listUI.getTable();
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
+		table.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				updateWidgets();
+			}
+		});
+		//
 		listUI.getControl().addMouseListener(new MouseAdapter() {
 
 			@Override
@@ -657,16 +735,33 @@ public class ExtendedTargetsUI {
 	private void updateInput() {
 
 		if(object instanceof ITargetSupplier) {
-			String editInformation = targetListUI.isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
-			labelInfo.setText("Targets - " + editInformation);
 			ITargetSupplier targetSupplier = (ITargetSupplier)object;
 			targetListUI.setInput(targetSupplier.getTargets());
-			setEditWidgetStatus(true);
+		} else {
+			targetListUI.setInput(null);
+			PartSupport.setCompositeVisibility(toolbarModify, false);
+		}
+		//
+		updateLabelInfo();
+	}
+
+	private void updateLabelInfo() {
+
+		if(object instanceof ITargetSupplier) {
+			String dataDescription;
+			if(object instanceof IChromatogram) {
+				dataDescription = ChromatogramDataSupport.getChromatogramLabel((IChromatogram<?>)object);
+			} else if(object instanceof IPeak) {
+				dataDescription = peakDataSupport.getPeakLabel((IPeak)object);
+			} else if(object instanceof IScan) {
+				dataDescription = scanDataSupport.getScanLabel((IScan)object);
+			} else {
+				dataDescription = "Target Supplier";
+			}
+			String editInformation = targetListUI.isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
+			labelInfo.setText(dataDescription + " : " + editInformation);
 		} else {
 			labelInfo.setText("No target data has been selected yet.");
-			targetListUI.clear();
-			setEditWidgetStatus(false);
-			PartSupport.setCompositeVisibility(toolbarModify, false);
 		}
 	}
 
@@ -675,16 +770,21 @@ public class ExtendedTargetsUI {
 		boolean enabled = (object == null) ? false : true;
 		comboTarget.setEnabled(enabled);
 		buttonAddTarget.setEnabled(enabled);
-		buttonDeleteTarget.setEnabled(enabled);
+		//
+		if(object instanceof ITargetSupplier) {
+			ITargetSupplier targetSupplier = (ITargetSupplier)object;
+			buttonDeleteTarget.setEnabled(targetListUI.getTable().getSelectionIndex() >= 0);
+			buttonDeleteTargets.setEnabled(targetSupplier.getTargets().size() > 0);
+		} else {
+			buttonDeleteTarget.setEnabled(false);
+			buttonDeleteTargets.setEnabled(false);
+		}
 	}
 
 	@SuppressWarnings("rawtypes")
 	private void deleteTargets(Shell shell) {
 
-		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-		messageBox.setText("Delete Target(s)");
-		messageBox.setMessage("Would you like to delete the selected target(s)?");
-		if(messageBox.open() == SWT.YES) {
+		if(MessageDialog.openQuestion(shell, "Target(s)", "Would you like to delete the selected target(s)?")) {
 			/*
 			 * Delete Target
 			 */
@@ -708,6 +808,14 @@ public class ExtendedTargetsUI {
 		/*
 		 * Don't do an table update here, cause this method could be called several times in a loop.
 		 */
+	}
+
+	private void deleteAllTargets() {
+
+		if(object instanceof ITargetSupplier) {
+			ITargetSupplier targetSupplier = (ITargetSupplier)object;
+			targetSupplier.getTargets().clear();
+		}
 	}
 
 	private void setTarget(IIdentificationTarget identificationTarget) {
@@ -738,9 +846,9 @@ public class ExtendedTargetsUI {
 		}
 	}
 
-	private void updateTargetOptionLabel() {
+	private boolean isTargetOptionChromatogram() {
 
-		String text = showChromatogramTargets ? "Chromatogram Targets (Active)" : "Targets (Active)";
-		labelTargetOption.setText(text);
+		Object object = comboViewerTargetOption.getStructuredSelection().getFirstElement();
+		return TARGET_OPTION_CHROMATOGRAM.equals(object);
 	}
 }
