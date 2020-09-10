@@ -27,16 +27,13 @@ public class ChromatogramResetter extends AbstractChromatogramCalculator {
 	@Override
 	public IProcessingInfo applyCalculator(IChromatogramSelection chromatogramSelection, IChromatogramCalculatorSettings chromatogramCalculatorSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = null;
+		IProcessingInfo<?> processingInfo = new ProcessingInfo();
+		//
 		if(chromatogramCalculatorSettings instanceof ResetterSettings) {
 			ResetterSettings resetterSettings = (ResetterSettings)chromatogramCalculatorSettings;
 			RetentionIndexCalculator calculator = new RetentionIndexCalculator();
-			processingInfo = calculator.resetIndices(chromatogramSelection, resetterSettings, monitor);
-		}
-		//
-		if(processingInfo == null) {
-			processingInfo = new ProcessingInfo();
-			processingInfo.addErrorMessage("RI Resetter", "Something went wrong.");
+			IProcessingInfo<?> calculatorInfo = calculator.resetIndices(chromatogramSelection, resetterSettings, monitor);
+			processingInfo.addMessages(calculatorInfo);
 		}
 		//
 		return processingInfo;

@@ -41,6 +41,7 @@ public class RetentionIndexCalculator {
 
 	private static final Logger logger = Logger.getLogger(RetentionIndexCalculator.class);
 	private static final Pattern PATTERN_ALKANE = Pattern.compile("(C)(\\d+)");
+	private static final String DESCRIPTION = "Retention Index Calculator";
 
 	public static String[] getStandards() {
 
@@ -177,7 +178,12 @@ public class RetentionIndexCalculator {
 						}
 					}
 				}
+				processingInfo.addInfoMessage(DESCRIPTION, "The retention indices have been calculated.");
+			} else {
+				processingInfo.addErrorMessage(DESCRIPTION, "The retention index map could not be found. Is a calibration (*.cal) file or chromatogram RI map available?");
 			}
+		} else {
+			processingInfo.addErrorMessage(DESCRIPTION, "The chromatogram selection is not available.");
 		}
 		//
 		return processingInfo;
@@ -203,6 +209,9 @@ public class RetentionIndexCalculator {
 					}
 				}
 			}
+			processingInfo.addInfoMessage(DESCRIPTION, "The retention indices have been set to 0.");
+		} else {
+			processingInfo.addErrorMessage(DESCRIPTION, "The chromatogram selection is not available.");
 		}
 		//
 		return processingInfo;
