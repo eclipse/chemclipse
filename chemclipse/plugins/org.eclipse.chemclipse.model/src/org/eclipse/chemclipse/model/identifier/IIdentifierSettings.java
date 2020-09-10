@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,16 +16,11 @@ import org.eclipse.chemclipse.model.settings.IProcessSettings;
 
 public interface IIdentifierSettings extends IProcessSettings {
 
-	String PENALTY_CALCULATION_NONE = "NONE";
-	String PENALTY_CALCULATION_RETENTION_INDEX = "RI";
-	String PENALTY_CALCULATION_RETENTION_TIME = "RT";
-	String BOTH = "BOTH";
-	//
 	String[][] PENALTY_CALCULATION_OPTIONS = new String[][]{//
-			{"None", PENALTY_CALCULATION_NONE}, //
-			{"Retention Index", PENALTY_CALCULATION_RETENTION_INDEX}, //
-			{"Retention Time", PENALTY_CALCULATION_RETENTION_TIME}, //
-			{"Both", BOTH}};
+			{PenaltyCalculation.NONE.getLabel(), PenaltyCalculation.NONE.name()}, //
+			{PenaltyCalculation.RETENTION_INDEX.getLabel(), PenaltyCalculation.RETENTION_INDEX.name()}, //
+			{PenaltyCalculation.RETENTION_TIME.getLabel(), PenaltyCalculation.RETENTION_TIME.name()}, //
+			{PenaltyCalculation.BOTH.getLabel(), PenaltyCalculation.BOTH.name()}};
 	//
 	float DEF_PENALTY_CALCULATION_LEVEL_FACTOR = 5.0f;
 	float MIN_PENALTY_CALCULATION_LEVEL_FACTOR = 1.0f;
@@ -50,9 +45,9 @@ public interface IIdentifierSettings extends IProcessSettings {
 	/**
 	 * Retention Time / Index Penalty Calculation
 	 */
-	String getPenaltyCalculation();
+	PenaltyCalculation getPenaltyCalculation();
 
-	void setPenaltyCalculation(String penaltyCalculation);
+	void setPenaltyCalculation(PenaltyCalculation penaltyCalculation);
 
 	int getRetentionTimeWindow();
 

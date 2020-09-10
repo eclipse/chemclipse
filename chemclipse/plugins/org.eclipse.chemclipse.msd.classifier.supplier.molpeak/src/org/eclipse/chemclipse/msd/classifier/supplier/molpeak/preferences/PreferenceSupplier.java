@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,7 +17,6 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.Activator;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.ClassifierSettings;
-import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.IBasePeakSettings;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.MassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.PeakIdentifierSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
@@ -27,11 +26,6 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
-	public static final String P_MATCH_SENSITIVITY = "matchSensitivity";
-	public static final float DEF_MATCH_SENSITIVITY = 80.0f;
-	public static final float MIN_MATCH_SENSITIVITY = 0.0f;
-	public static final float MAX_MATCH_SENSITIVITY = 100.0f;
-	//
 	private static IPreferenceSupplier preferenceSupplier;
 
 	public static IPreferenceSupplier INSTANCE() {
@@ -58,23 +52,18 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public Map<String, String> getDefaultValues() {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
-		//
-		defaultValues.put(P_MATCH_SENSITIVITY, Float.toString(DEF_MATCH_SENSITIVITY));
-		//
 		return defaultValues;
 	}
 
 	public static MassSpectrumIdentifierSettings getMassSpectrumIdentifierSettings() {
 
 		MassSpectrumIdentifierSettings settings = new MassSpectrumIdentifierSettings();
-		setBasePeakSettings(settings);
 		return settings;
 	}
 
 	public static PeakIdentifierSettings getPeakIdentifierSettings() {
 
 		PeakIdentifierSettings settings = new PeakIdentifierSettings();
-		setBasePeakSettings(settings);
 		return settings;
 	}
 
@@ -87,11 +76,5 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public IEclipsePreferences getPreferences() {
 
 		return getScopeContext().getNode(getPreferenceNode());
-	}
-
-	private static void setBasePeakSettings(IBasePeakSettings settings) {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		settings.setMatchSensitivity(preferences.getFloat(P_MATCH_SENSITIVITY, DEF_MATCH_SENSITIVITY));
 	}
 }

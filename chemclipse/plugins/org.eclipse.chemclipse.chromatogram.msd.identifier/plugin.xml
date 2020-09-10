@@ -5,16 +5,4 @@
    <extension-point id="org.eclipse.chemclipse.chromatogram.msd.identifier.chromatogramIdentifier" name="Chromatogram Identifier" schema="schema/org.eclipse.chemclipse.chromatogram.msd.identifier.chromatogramIdentifier.exsd"/>
    <extension-point id="org.eclipse.chemclipse.chromatogram.msd.identifier.massSpectrumIdentifier" name="MassSpectrum Identifier" schema="schema/org.eclipse.chemclipse.chromatogram.msd.identifier.massSpectrumIdentifier.exsd"/>
    <extension-point id="org.eclipse.chemclipse.chromatogram.msd.identifier.libraryService" name="Library Service" schema="schema/org.eclipse.chemclipse.chromatogram.msd.identifier.libraryService.exsd"/>
-
-   <extension
-         point="org.eclipse.chemclipse.chromatogram.msd.identifier.peakIdentifier">
-      <PeakIdentificationSupplier
-            description="This plugin deletes unidentified peaks."
-            id="org.eclipse.chemclipse.chromatogram.msd.identifier.deleteUnidentifiedPeaks"
-            identifier="org.eclipse.chemclipse.chromatogram.msd.identifier.impl.PeakIdentifierRemoveUnidentified"
-            identifierName="Delete Unidentified Peaks"
-            identifierSettings="org.eclipse.chemclipse.chromatogram.msd.identifier.settings.PeakIdentifierSettings">
-      </PeakIdentificationSupplier>
-   </extension>
-
 </plugin>

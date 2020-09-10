@@ -1,7 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2020 Lablicate GmbH.
  * 
- * All rights reserved.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
@@ -22,6 +25,7 @@ public abstract class AbstractControllerComposite extends Composite implements I
 	private ISaveListener saveListener;
 
 	public AbstractControllerComposite(Composite parent, int style) {
+
 		super(parent, style);
 		nextListeners = new ArrayList<INextListener>();
 		nextSectionListeners = new ArrayList<INextListener>();
@@ -75,7 +79,7 @@ public abstract class AbstractControllerComposite extends Composite implements I
 	@Override
 	public void removeProcessListener(IProcessListener processListener) {
 
-		previousListeners.remove(processListener);
+		processListeners.remove(processListener);
 	}
 
 	@Override

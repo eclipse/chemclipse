@@ -7,7 +7,7 @@
             description="This plugin uses the NIST library to identify peaks."
             id="org.eclipse.chemclipse.msd.identifier.supplier.nist.peak"
             identifier="org.eclipse.chemclipse.msd.identifier.supplier.nist.core.PeakIdentifier"
-            identifierName="NIST Peak Identifier"
+            identifierName="NIST (extern)"
             identifierSettings="org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.PeakIdentifierSettings">
       </PeakIdentificationSupplier>
    </extension>
@@ -17,7 +17,7 @@
             description="This plugin uses the NIST library to identify mass spectra."
             id="org.eclipse.chemclipse.msd.identifier.supplier.nist.massSpectrum"
             identifier="org.eclipse.chemclipse.msd.identifier.supplier.nist.core.MassSpectrumIdentifier"
-            identifierName="NIST MS Identifier">
+            identifierName="NIST (extern)">
       </MassSpectrumIdentificationSupplier>
    </extension>
    <extension

@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<component name="org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.handlers.IdentifySelectedMassSpectrumHandler">
-   <implementation class="org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.handlers.IdentifySelectedMassSpectrumHandler" />
-   <property name="event.topics" value="chromatogram/msd/update/chromatogramselection" />
-   <service>
-      <provide interface="org.osgi.service.event.EventHandler" />
-   </service>
-</component>

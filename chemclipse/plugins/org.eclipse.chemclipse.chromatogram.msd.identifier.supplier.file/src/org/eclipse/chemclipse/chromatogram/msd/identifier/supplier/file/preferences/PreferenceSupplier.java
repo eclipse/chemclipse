@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2019 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.PeakUnknownSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.PenaltyCalculation;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.util.FileListUtil;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -41,7 +42,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_MASS_SPECTRA_FILES = "massSpectraFiles";
 	public static final String DEF_MASS_SPECTRA_FILES = "";
 	public static final String P_MASS_SPECTRUM_COMPARATOR_ID = "massSpectrumComparatorId";
-	public static final String DEF_MASS_SPECTRUM_COMPARATOR_ID = "org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos";
+	public static final String DEF_MASS_SPECTRUM_COMPARATOR_ID = IIdentifierSettingsMSD.DEFAULT_COMPARATOR_ID;
 	//
 	public static final String P_USE_PRE_OPTIMIZATION = "usePreOptimization";
 	public static final Boolean DEF_USE_PRE_OPTIMIZATION = true;
@@ -72,7 +73,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	 * RI / RT penalty calculation.
 	 */
 	public static final String P_PENALTY_CALCULATION = "penaltyCalculation";
-	public static final String DEF_PENALTY_CALCULATION = IIdentifierSettingsMSD.PENALTY_CALCULATION_NONE;
+	public static final String DEF_PENALTY_CALCULATION = PenaltyCalculation.NONE.name();
 	//
 	public static final String P_PENALTY_CALCULATION_LEVEL_FACTOR = "penaltyCalculationLevelFactor";
 	public static final String P_MAX_PENALTY = "maxPenalty";
@@ -152,7 +153,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		settings.setMinMatchFactor(preferences.getFloat(P_MIN_MATCH_FACTOR, DEF_MIN_MATCH_FACTOR));
 		settings.setMinReverseMatchFactor(preferences.getFloat(P_MIN_REVERSE_MATCH_FACTOR, DEF_MIN_REVERSE_MATCH_FACTOR));
 		//
-		settings.setPenaltyCalculation(preferences.get(P_PENALTY_CALCULATION, DEF_PENALTY_CALCULATION));
+		settings.setPenaltyCalculation(getPenaltyCalculation());
 		settings.setPenaltyCalculationLevelFactor(preferences.getFloat(P_PENALTY_CALCULATION_LEVEL_FACTOR, IIdentifierSettingsMSD.DEF_PENALTY_CALCULATION_LEVEL_FACTOR));
 		settings.setMaxPenalty(preferences.getFloat(P_MAX_PENALTY, IComparisonResult.DEF_MAX_PENALTY));
 		settings.setRetentionTimeWindow(preferences.getInt(P_RETENTION_TIME_WINDOW, DEF_RETENTION_TIME_WINDOW));
@@ -173,7 +174,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		settings.setMinMatchFactor(preferences.getFloat(P_MIN_MATCH_FACTOR, DEF_MIN_MATCH_FACTOR));
 		settings.setMinReverseMatchFactor(preferences.getFloat(P_MIN_REVERSE_MATCH_FACTOR, DEF_MIN_REVERSE_MATCH_FACTOR));
 		//
-		settings.setPenaltyCalculation(preferences.get(P_PENALTY_CALCULATION, DEF_PENALTY_CALCULATION));
+		settings.setPenaltyCalculation(getPenaltyCalculation());
 		settings.setPenaltyCalculationLevelFactor(preferences.getFloat(P_PENALTY_CALCULATION_LEVEL_FACTOR, IIdentifierSettingsMSD.DEF_PENALTY_CALCULATION_LEVEL_FACTOR));
 		settings.setMaxPenalty(preferences.getFloat(P_MAX_PENALTY, IComparisonResult.DEF_MAX_PENALTY));
 		settings.setRetentionTimeWindow(preferences.getInt(P_RETENTION_TIME_WINDOW, DEF_RETENTION_TIME_WINDOW));
@@ -231,7 +232,27 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static void setFilterPathIdentifierFiles(String filterPath) {
 
-		setFilterPath(P_FILTER_PATH_IDENTIFIER_FILES, filterPath);
+		putSetting(P_FILTER_PATH_IDENTIFIER_FILES, filterPath);
+	}
+
+	private static PenaltyCalculation getPenaltyCalculation() {
+
+		IEclipsePreferences eclipsePreferences = INSTANCE().getPreferences();
+		String setting = eclipsePreferences.get(P_PENALTY_CALCULATION, DEF_PENALTY_CALCULATION);
+		/*
+		 * Backward compatibility, see:
+		 * org.eclipse.chemclipse.model.identifier.IIdentifierSettings
+		 * commit 58061db00e5a47107fc35255135e2f368bd75e32
+		 */
+		if("RT".equals(setting)) {
+			putSetting(P_PENALTY_CALCULATION, PenaltyCalculation.RETENTION_TIME.name());
+			return PenaltyCalculation.RETENTION_TIME;
+		} else if("RI".equals(setting)) {
+			putSetting(P_PENALTY_CALCULATION, PenaltyCalculation.RETENTION_INDEX.name());
+			return PenaltyCalculation.RETENTION_INDEX;
+		} else {
+			return PenaltyCalculation.valueOf(setting);
+		}
 	}
 
 	private static String getFilterPath(String key, String def) {
@@ -240,11 +261,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return eclipsePreferences.get(key, def);
 	}
 
-	private static void setFilterPath(String key, String filterPath) {
+	private static void putSetting(String key, String value) {
 
 		try {
 			IEclipsePreferences eclipsePreferences = INSTANCE().getPreferences();
-			eclipsePreferences.put(key, filterPath);
+			eclipsePreferences.put(key, value);
 			eclipsePreferences.flush();
 		} catch(BackingStoreException e) {
 			logger.warn(e);

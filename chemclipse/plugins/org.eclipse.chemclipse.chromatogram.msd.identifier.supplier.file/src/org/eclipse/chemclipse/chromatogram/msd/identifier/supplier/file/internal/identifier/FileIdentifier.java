@@ -58,6 +58,7 @@ public class FileIdentifier {
 	private final DatabasesCache databasesCache;
 
 	public FileIdentifier() {
+
 		//
 		databasesCache = new DatabasesCache(PreferenceSupplier.getMassSpectraFiles());
 	}
@@ -220,23 +221,27 @@ public class FileIdentifier {
 	private static void applyPenaltyOnDemand(IScanMSD unknown, IScanMSD reference, IComparisonResult comparisonResult, IIdentifierSettingsMSD identifierSettings) {
 
 		float penalty = 0.0f;
-		String penaltyCalculation = identifierSettings.getPenaltyCalculation();
-		if(penaltyCalculation != null) {
-			//
-			switch(penaltyCalculation) {
-				case IIdentifierSettingsMSD.PENALTY_CALCULATION_RETENTION_TIME:
-					penalty = PenaltyCalculationSupport.calculatePenaltyFromRetentionTime(unknown.getRetentionTime(), reference.getRetentionTime(), identifierSettings.getRetentionTimeWindow(), identifierSettings.getPenaltyCalculationLevelFactor(), identifierSettings.getMaxPenalty());
-					break;
-				case IIdentifierSettingsMSD.PENALTY_CALCULATION_RETENTION_INDEX:
-					penalty = PenaltyCalculationSupport.calculatePenaltyFromRetentionIndex(unknown, reference, identifierSettings.getRetentionIndexWindow(), identifierSettings.getPenaltyCalculationLevelFactor(), identifierSettings.getMaxPenalty());
-					break;
-			}
-			/*
-			 * Apply the penalty on demand.
-			 */
-			if(penalty != 0.0f) {
-				comparisonResult.setPenalty(penalty);
-			}
+		switch(identifierSettings.getPenaltyCalculation()) {
+			case RETENTION_TIME:
+				penalty = PenaltyCalculationSupport.calculatePenaltyFromRetentionTime(unknown.getRetentionTime(), reference.getRetentionTime(), identifierSettings.getRetentionTimeWindow(), identifierSettings.getPenaltyCalculationLevelFactor(), identifierSettings.getMaxPenalty());
+				break;
+			case RETENTION_INDEX:
+				penalty = PenaltyCalculationSupport.calculatePenaltyFromRetentionIndex(unknown, reference, identifierSettings.getRetentionIndexWindow(), identifierSettings.getPenaltyCalculationLevelFactor(), identifierSettings.getMaxPenalty());
+				break;
+			case BOTH:
+				float penaltyRT = PenaltyCalculationSupport.calculatePenaltyFromRetentionTime(unknown.getRetentionTime(), reference.getRetentionTime(), identifierSettings.getRetentionTimeWindow(), identifierSettings.getPenaltyCalculationLevelFactor(), identifierSettings.getMaxPenalty());
+				float penaltyRI = PenaltyCalculationSupport.calculatePenaltyFromRetentionIndex(unknown, reference, identifierSettings.getRetentionIndexWindow(), identifierSettings.getPenaltyCalculationLevelFactor(), identifierSettings.getMaxPenalty());
+				penalty = (penaltyRT + penaltyRI) / 2.0f;
+				break;
+			case NONE:
+				// Do nothing.
+				break;
+		}
+		/*
+		 * Apply the penalty on demand.
+		 */
+		if(penalty != 0.0f) {
+			comparisonResult.setPenalty(penalty);
 		}
 	}
 
@@ -264,6 +269,7 @@ public class FileIdentifier {
 		private MatchConstraints matchConstraints;
 
 		public FindMatchingSpectras(IScanMSD unknown, List<? extends IScanMSD> references, IFileIdentifierSettings settings, IMassSpectrumComparator spectrumComparator) {
+
 			this.unknown = unknown;
 			this.references = references;
 			this.settings = settings;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,24 +7,32 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings;
+package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.MassSpectrumIdentifierAdapterSettings;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class MassSpectrumUnknownSettings extends MassSpectrumIdentifierAdapterSettings {
+public class MassSpectrumIdentifierAlkaneSettings extends MassSpectrumIdentifierAdapterSettings {
 
+	@JsonProperty(value = "Number of Targets", defaultValue = "15")
+	private int numberOfTargets = 15;
 	@JsonProperty(value = "Min Match Factor", defaultValue = "80.0")
-	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_FACTOR, maxValue = PreferenceSupplier.MAX_FACTOR)
 	private float minMatchFactor = 80.0f;
 	@JsonProperty(value = "Min Reverse Match Factor", defaultValue = "80.0")
-	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_FACTOR, maxValue = PreferenceSupplier.MAX_FACTOR)
 	private float minReverseMatchFactor = 80.0f;
+
+	public int getNumberOfTargets() {
+
+		return numberOfTargets;
+	}
+
+	public void setNumberOfTargets(int numberOfTargets) {
+
+		this.numberOfTargets = numberOfTargets;
+	}
 
 	public float getMinMatchFactor() {
 

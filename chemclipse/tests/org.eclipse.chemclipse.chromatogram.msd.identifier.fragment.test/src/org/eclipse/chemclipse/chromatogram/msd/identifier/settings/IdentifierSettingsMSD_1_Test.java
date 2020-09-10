@@ -1,17 +1,22 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
- * 
+ * Copyright (c) 2020 Lablicate GmbH.
+ *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.support.ui.listener;
+package org.eclipse.chemclipse.chromatogram.msd.identifier.settings;
 
-public interface IProcessListener {
+import junit.framework.TestCase;
 
-	void processAction();
+public class IdentifierSettingsMSD_1_Test extends TestCase {
+
+	public void test1() {
+
+		assertEquals("org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos", IIdentifierSettingsMSD.DEFAULT_COMPARATOR_ID);
+	}
 }

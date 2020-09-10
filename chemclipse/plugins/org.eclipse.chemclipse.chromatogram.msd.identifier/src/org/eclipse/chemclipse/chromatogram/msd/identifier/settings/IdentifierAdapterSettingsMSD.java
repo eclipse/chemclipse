@@ -15,21 +15,21 @@ package org.eclipse.chemclipse.chromatogram.msd.identifier.settings;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.IMassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.IMassSpectrumComparisonSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.MassSpectrumComparator;
-import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.MassSpectrumComparatorDynamicSettingProperty;
-import org.eclipse.chemclipse.model.identifier.AbstractIdentifierSettings;
+import org.eclipse.chemclipse.model.identifier.IdentifierAdapterSettings;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
-import org.eclipse.chemclipse.support.settings.ComboSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class AbstractIdentifierSettingsMSD extends AbstractIdentifierSettings implements IIdentifierSettingsMSD {
+/**
+ * Default settings class, which sets all identifier settings values
+ * to their defaults. Additionally, no JsonAnnotations are declared, so
+ * that each identifier settings class, which don't need the underlying
+ * settings, can re-use this default class.
+ */
+public abstract class IdentifierAdapterSettingsMSD extends IdentifierAdapterSettings implements IIdentifierSettingsMSD {
 
-	@JsonProperty(value = "Mass Spectrum Comparator", defaultValue = DEFAULT_COMPARATOR_ID)
-	@JsonPropertyDescription(value = "Select the algorithm used for mass spectrum comparison calculation.")
-	@ComboSettingsProperty(MassSpectrumComparatorDynamicSettingProperty.class)
+	@JsonIgnore
 	private String massSpectrumComparatorId = DEFAULT_COMPARATOR_ID;
 	@JsonIgnore
 	private IMarkedIons excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2019 Lablicate GmbH.
+ * Copyright (c) 2010, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,11 +12,23 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.identifier.supplier.nist.settings;
 
-/**
- * @author Dr. Philip Wenig
- * 
- */
+import java.io.File;
+
 public interface INistSettings {
+
+	/**
+	 * MSSEARCH
+	 * 
+	 * @return
+	 */
+	File getNistFolder();
+
+	/**
+	 * MSSEARCH
+	 * 
+	 * @param nistFolder
+	 */
+	void setNistFolder(File nistFolder);
 
 	/**
 	 * Set number of targets.

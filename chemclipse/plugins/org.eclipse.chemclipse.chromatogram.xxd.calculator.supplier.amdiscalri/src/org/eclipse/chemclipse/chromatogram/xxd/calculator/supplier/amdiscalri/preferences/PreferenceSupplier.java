@@ -18,6 +18,8 @@ import java.util.Map;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.CalculatorStrategy;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.CalculatorSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.MassSpectrumIdentifierAlkaneSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.PeakIdentifierAlkaneSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.ResetterSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
@@ -68,8 +70,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final float DEF_MIN_REVERSE_MATCH_FACTOR = 70.0f;
 	public static final float MIN_MIN_REVERSE_MATCH_FACTOR = 0.0f;
 	public static final float MAX_MIN_REVERSE_MATCH_FACTOR = 100.0f;
-	public static final String P_ADD_UNKNOWN_MZ_LIST = "addUnknownMzList";
-	public static final boolean DEF_ADD_UNKNOWN_MZ_LIST = true;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -107,7 +107,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_NUMBER_OF_TARGETS, Integer.toString(DEF_NUMBER_OF_TARGETS));
 		defaultValues.put(P_MIN_MATCH_FACTOR, Float.toString(DEF_MIN_MATCH_FACTOR));
 		defaultValues.put(P_MIN_REVERSE_MATCH_FACTOR, Float.toString(DEF_MIN_REVERSE_MATCH_FACTOR));
-		defaultValues.put(P_ADD_UNKNOWN_MZ_LIST, Boolean.toString(DEF_ADD_UNKNOWN_MZ_LIST));
 		return defaultValues;
 	}
 
@@ -115,6 +114,24 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public IEclipsePreferences getPreferences() {
 
 		return getScopeContext().getNode(getPreferenceNode());
+	}
+
+	public static PeakIdentifierAlkaneSettings getPeakIdentifierAlkaneSettings() {
+
+		PeakIdentifierAlkaneSettings settings = new PeakIdentifierAlkaneSettings();
+		settings.setNumberOfTargets(getNumberOfTargets());
+		settings.setMinMatchFactor(getMinMatchFactor());
+		settings.setMinReverseMatchFactor(getMinReverseMatchFactor());
+		return settings;
+	}
+
+	public static MassSpectrumIdentifierAlkaneSettings getMassSpectrumIdentifierAlkaneSettings() {
+
+		MassSpectrumIdentifierAlkaneSettings settings = new MassSpectrumIdentifierAlkaneSettings();
+		settings.setNumberOfTargets(getNumberOfTargets());
+		settings.setMinMatchFactor(getMinMatchFactor());
+		settings.setMinReverseMatchFactor(getMinReverseMatchFactor());
+		return settings;
 	}
 
 	public static CalculatorSettings getChromatogramCalculatorSettings() {
@@ -201,12 +218,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
 		return preferences.getFloat(P_MIN_REVERSE_MATCH_FACTOR, DEF_MIN_REVERSE_MATCH_FACTOR);
-	}
-
-	public static boolean isAddUnknownMzList() {
-
-		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
-		return preferences.getBoolean(P_ADD_UNKNOWN_MZ_LIST, DEF_ADD_UNKNOWN_MZ_LIST);
 	}
 
 	private static CalculatorStrategy getCalculatorStrategy() {

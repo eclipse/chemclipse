@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2019 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -32,6 +32,7 @@ import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.identifier.PenaltyCalculation;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.PathResolver;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.IBasePeakSettings;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
@@ -51,20 +52,17 @@ public class BasePeakIdentifier {
 
 	private static final Logger logger = Logger.getLogger(BasePeakIdentifier.class);
 	//
+	public static final String IDENTIFIER = "SGH + C Identifier";
+	public static final String NOT_FOUND = "Not Found (" + IDENTIFIER + ")";
 	public static final String SYRINGYL = "Syringyl";
 	public static final String GUAIACYL = "Guaiacyl";
 	public static final String PHYDROXYPHENYL = "p-Hydroxyphenyl";
 	public static final String CARBOHYDRATE = "Carbohydrate";
 	//
-	private static final String IDENTIFIER = "BASEPEAK-IDENT";
-	private static final String MASS_SPECTRUM_COMPARATOR_ID = "org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos";
-	//
-	// private static final String ESSTOGEERATIO = "S/G Ratio";
-	private static final String NOTFOUND = "Not Found (BasePeak Identifier)";
-	private static final ArrayList<Integer> syringylBaseMZs = new ArrayList<>();
-	private static final ArrayList<Integer> guaiacylBaseMZs = new ArrayList<>();
-	private static final ArrayList<Integer> pHydroxyPhenylBaseMZs = new ArrayList<>();
-	private static final ArrayList<Integer> carbohydrateBaseMZs = new ArrayList<>();
+	private static final ArrayList<Integer> SYRINGYL_BASE = new ArrayList<>();
+	private static final ArrayList<Integer> GUAIACYL_BASE = new ArrayList<>();
+	private static final ArrayList<Integer> PHYDROXYPHENYL_BASE = new ArrayList<>();
+	private static final ArrayList<Integer> CARBOHYDRATE_BASE = new ArrayList<>();
 	//
 	private final TargetBuilder targetBuilder;
 	// These one's are run when initializing the class
@@ -77,21 +75,26 @@ public class BasePeakIdentifier {
 		Integer[] guaiacyl = {109, 123, 136, 137, 138, 140, 150, 151, 152, 162, 164, 168, 178};
 		Integer[] pHydroxyPhenyl = {94, 107, 108, 120, 121, 124, 134};
 		Integer[] carbohydrate = {29, 31, 39, 41, 42, 43, 44, 45, 46, 55, 56, 57, 58, 59, 60, 68, 69, 73, 81, 82, 84, 85, 87, 95, 96, 98, 114, 126, 142};
-		for(Integer currentMZ : syringyl) {
-			syringylBaseMZs.add(currentMZ);
+		//
+		for(Integer mz : syringyl) {
+			SYRINGYL_BASE.add(mz);
 		}
-		for(Integer currentMZ : guaiacyl) {
-			guaiacylBaseMZs.add(currentMZ);
+		//
+		for(Integer mz : guaiacyl) {
+			GUAIACYL_BASE.add(mz);
 		}
-		for(Integer currentMZ : pHydroxyPhenyl) {
-			pHydroxyPhenylBaseMZs.add(currentMZ);
+		//
+		for(Integer mz : pHydroxyPhenyl) {
+			PHYDROXYPHENYL_BASE.add(mz);
 		}
-		for(Integer currentMZ : carbohydrate) {
-			carbohydrateBaseMZs.add(currentMZ);
+		//
+		for(Integer mz : carbohydrate) {
+			CARBOHYDRATE_BASE.add(mz);
 		}
 	}
 
 	public BasePeakIdentifier() {
+
 		targetBuilder = new TargetBuilder();
 		massSpectraFiles = PathResolver.getAbsolutePath(PathResolver.GERBER_ET_AL_2012);
 	}
@@ -120,7 +123,7 @@ public class BasePeakIdentifier {
 			/*
 			 * Grep all not identified peaks.
 			 */
-			if(peakTarget.getLibraryInformation().getName().equals(NOTFOUND)) {
+			if(peakTarget.getLibraryInformation().getName().equals(NOT_FOUND)) {
 				peaksNotFound.add(peak);
 			}
 		}
@@ -140,7 +143,7 @@ public class BasePeakIdentifier {
 				exitloop:
 				for(IIdentificationTarget peakTarget : peakTargets) {
 					ILibraryInformation libraryInformation = peakTarget.getLibraryInformation();
-					if(libraryInformation.getName().equals(NOTFOUND)) {
+					if(libraryInformation.getName().equals(NOT_FOUND)) {
 						peakTargetToRemove = peakTarget;
 						break exitloop;
 					}
@@ -169,7 +172,7 @@ public class BasePeakIdentifier {
 			/*
 			 * Grep all not identified scans.
 			 */
-			if(massSpectrumTarget.getLibraryInformation().getName().equals(NOTFOUND)) {
+			if(massSpectrumTarget.getLibraryInformation().getName().equals(NOT_FOUND)) {
 				scansNotFound.add(massSpectrum);
 			}
 		}
@@ -188,7 +191,7 @@ public class BasePeakIdentifier {
 				exitloop:
 				for(IIdentificationTarget target : scan.getTargets()) {
 					ILibraryInformation libraryInformation = target.getLibraryInformation();
-					if(libraryInformation.getName().equals(NOTFOUND)) {
+					if(libraryInformation.getName().equals(NOT_FOUND)) {
 						targetToRemove = target;
 						break exitloop;
 					}
@@ -230,7 +233,7 @@ public class BasePeakIdentifier {
 					if(references != null) {
 						for(IScanMSD reference : references.getList()) {
 							/*
-							 * Search for Guaiacyl and Lorenzyl
+							 * Search for Guaiacyl
 							 */
 							if(reference instanceof ILibraryMassSpectrum) {
 								ILibraryMassSpectrum libraryMassSpectrum = (ILibraryMassSpectrum)reference;
@@ -296,16 +299,16 @@ public class BasePeakIdentifier {
 	private String getIdentification(IScanMSD massSpectrum, IBasePeakSettings settings, int index) {
 
 		int basePeak = (int)massSpectrum.getBasePeak();
-		if(syringylBaseMZs.contains(basePeak)) {
+		if(SYRINGYL_BASE.contains(basePeak)) {
 			return SYRINGYL;
-		} else if(guaiacylBaseMZs.contains(basePeak)) {
+		} else if(GUAIACYL_BASE.contains(basePeak)) {
 			return GUAIACYL;
-		} else if(pHydroxyPhenylBaseMZs.contains(basePeak)) {
+		} else if(PHYDROXYPHENYL_BASE.contains(basePeak)) {
 			return PHYDROXYPHENYL;
-		} else if(carbohydrateBaseMZs.contains(basePeak)) {
+		} else if(CARBOHYDRATE_BASE.contains(basePeak)) {
 			return CARBOHYDRATE;
 		} else {
-			return NOTFOUND;
+			return NOT_FOUND;
 		}
 	}
 
@@ -316,8 +319,8 @@ public class BasePeakIdentifier {
 
 	private void setIdentifierSettings(IIdentifierSettingsMSD identifierSettings) {
 
-		identifierSettings.setMassSpectrumComparatorId(MASS_SPECTRUM_COMPARATOR_ID);
-		identifierSettings.setPenaltyCalculation(IIdentifierSettingsMSD.PENALTY_CALCULATION_NONE);
+		identifierSettings.setMassSpectrumComparatorId(IIdentifierSettingsMSD.DEFAULT_COMPARATOR_ID);
+		identifierSettings.setPenaltyCalculation(PenaltyCalculation.NONE);
 		identifierSettings.setPenaltyCalculationLevelFactor(0.0f);
 		identifierSettings.setMaxPenalty(0.0f);
 		identifierSettings.setRetentionTimeWindow(0);

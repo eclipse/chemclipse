@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2019 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -32,13 +32,15 @@ public class MassSpectrumIdentifierFile extends AbstractMassSpectrumIdentifier {
 	public IProcessingInfo<IMassSpectra> identify(List<IScanMSD> massSpectraList, IMassSpectrumIdentifierSettings identifierSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo<IMassSpectra> processingInfo = new ProcessingInfo<>();
-		MassSpectrumIdentifierSettings massSpectrumIdentifierSettings;
-		if(identifierSettings instanceof MassSpectrumIdentifierSettings) {
-			massSpectrumIdentifierSettings = (MassSpectrumIdentifierSettings)identifierSettings;
-		} else {
-			massSpectrumIdentifierSettings = PreferenceSupplier.getMassSpectrumIdentifierSettings();
-		}
+		//
 		try {
+			MassSpectrumIdentifierSettings massSpectrumIdentifierSettings;
+			if(identifierSettings instanceof MassSpectrumIdentifierSettings) {
+				massSpectrumIdentifierSettings = (MassSpectrumIdentifierSettings)identifierSettings;
+			} else {
+				massSpectrumIdentifierSettings = PreferenceSupplier.getMassSpectrumIdentifierSettings();
+			}
+			//
 			FileIdentifier fileIdentifier = new FileIdentifier();
 			IMassSpectra massSpectra = fileIdentifier.runIdentification(massSpectraList, massSpectrumIdentifierSettings, monitor);
 			processingInfo.setProcessingResult(massSpectra);
@@ -46,6 +48,7 @@ public class MassSpectrumIdentifierFile extends AbstractMassSpectrumIdentifier {
 		} catch(FileNotFoundException e) {
 			processingInfo.addErrorMessage(FileIdentifier.IDENTIFIER, "An I/O error ocurred.");
 		}
+		//
 		return processingInfo;
 	}
 }

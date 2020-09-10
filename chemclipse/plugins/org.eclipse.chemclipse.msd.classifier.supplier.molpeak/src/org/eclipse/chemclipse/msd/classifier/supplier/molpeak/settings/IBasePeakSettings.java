@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,8 +13,4 @@
 package org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings;
 
 public interface IBasePeakSettings {
-
-	float getMatchSensitivity();
-
-	void setMatchSensitivity(float matchSensitivity);
 }

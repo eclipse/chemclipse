@@ -29,7 +29,8 @@ public class PreferencePageCalculator extends FieldEditorPreferencePage implemen
 
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Retention Index Filter Settings.");
+		setTitle("Retention Index Calculator");
+		setDescription("");
 	}
 
 	/**

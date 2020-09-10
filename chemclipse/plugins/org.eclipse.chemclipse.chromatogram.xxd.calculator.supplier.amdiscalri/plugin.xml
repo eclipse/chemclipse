@@ -38,17 +38,18 @@
             description="This identifier tries to identify alkanes."
             id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.peak"
             identifier="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core.PeakIdentifier"
-            identifierName="Alkane Identifier"
-            identifierSettings="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.PeakIdentifierSettings">
+            identifierName="Alkane(s)"
+            identifierSettings="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.PeakIdentifierAlkaneSettings">
       </PeakIdentificationSupplier>
    </extension>
    <extension
          point="org.eclipse.chemclipse.chromatogram.msd.identifier.massSpectrumIdentifier">
       <MassSpectrumIdentificationSupplier
+            config="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.MassSpectrumIdentifierAlkaneSettings"
             description="This identifier tries to identify alkanes."
             id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.massSpectrum"
             identifier="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core.MassSpectrumIdentifier"
-            identifierName="Alkane Identifier">
+            identifierName="Alkane(s)">
       </MassSpectrumIdentificationSupplier>
    </extension>   
    <extension

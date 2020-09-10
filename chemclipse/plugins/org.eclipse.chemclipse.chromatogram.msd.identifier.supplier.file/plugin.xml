@@ -7,14 +7,14 @@
             description="This plugin uses a file library to identify peaks."
             id="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.peak"
             identifier="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.PeakIdentifierFile"
-            identifierName="File MS Identifier"
+            identifierName="Library File (MS)"
             identifierSettings="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.PeakIdentifierSettings">
       </PeakIdentificationSupplier>
       <PeakIdentificationSupplier
             description="This plugin sets a peak identification using the highest intensity m/z values."
             id="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.unknown.peak"
             identifier="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.PeakIdentifierUnknown"
-            identifierName="Unknown MS Identifier"
+            identifierName="Unknown Marker"
             identifierSettings="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.PeakUnknownSettings">
       </PeakIdentificationSupplier>      
    </extension>
@@ -24,13 +24,13 @@
             description="This plugin uses a file library to identify mass spectra."
             id="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.massSpectrum"
             identifier="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.MassSpectrumIdentifierFile"
-            identifierName="File MS Identifier">
+            identifierName="Library File (MS)">
       </MassSpectrumIdentificationSupplier>
       <MassSpectrumIdentificationSupplier
             description="This plugin sets a mass spectrum identification using the highest intensity m/z values."
             id="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.unknown.massSpectrum"
             identifier="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.MassSpectrumIdentifierUnknown"
-            identifierName="Unknown MS Identifier">
+            identifierName="Unknown Marker">
       </MassSpectrumIdentificationSupplier>        
    </extension>
    <extension

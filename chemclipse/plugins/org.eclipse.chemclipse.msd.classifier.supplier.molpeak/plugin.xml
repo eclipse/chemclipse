@@ -7,17 +7,18 @@
             description="This is a base peak identifier."
             id="org.eclipse.chemclipse.msd.identifier.supplier.basepeak.peak"
             identifier="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.core.PeakIdentifier"
-            identifierName="BasePeak Peak Identifier"
+            identifierName="Lignin (SGH) and Carbohydrate (C)"
             identifierSettings="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.PeakIdentifierSettings">
       </PeakIdentificationSupplier>
    </extension>
    <extension
          point="org.eclipse.chemclipse.chromatogram.msd.identifier.massSpectrumIdentifier">
       <MassSpectrumIdentificationSupplier
+            config="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.MassSpectrumIdentifierSettings"
             description="This is a base peak identifier."
             id="org.eclipse.chemclipse.msd.identifier.supplier.basepeak.massSpectrum"
             identifier="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.core.MassSpectrumIdentifier"
-            identifierName="BasePeak MS Identifier">
+            identifierName="Lignin (SGH) and Carbohydrate (C)">
       </MassSpectrumIdentificationSupplier>
    </extension>
    <extension
@@ -33,7 +34,7 @@
          point="org.eclipse.chemclipse.chromatogram.msd.classifier.chromatogramClassifierSupplier">
       <ChromatogramClassifierSupplier
             classifier="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.core.Classifier"
-            classifierName="BasePeak Classifier"
+            classifierName="Lignin (SGH) and Carbohydrate (C)"
             classifierSettings="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.ClassifierSettings"
             description="This classifier calculates the lignin ratio in a chromatogram."
             id="org.eclipse.chemclipse.msd.classifier.supplier.molpeak">

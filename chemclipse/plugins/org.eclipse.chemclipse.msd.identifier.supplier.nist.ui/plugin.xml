@@ -14,7 +14,7 @@
             category="org.eclipse.chemclipse.chromatogram.msd.identifier.ui.preferences.identifierPreferencePage"
             class="org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.preferences.NistApplicationPreferencePage"
             id="org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.dbpreferencespage"
-            name="NIST Database Integration">
+            name="NIST (extern)">
       </page>         
       <page
             category="org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.dbpreferencespage"
@@ -22,12 +22,6 @@
             id="org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.preferences.nistIdentifierPreferencePage"
             name="NIST Commandline Connector">
       </page>
-   </extension>
-   <extension
-         point="org.eclipse.help.toc">
-      <toc
-            file="pluginToc.xml">
-      </toc>
    </extension>
 
 </plugin>

@@ -92,6 +92,7 @@ public class Identifier {
 	private static final String BACKUP_CONTROL_EXTENSION = ".openchrom.bak";
 
 	public Identifier() {
+
 		targetCombinedComparator = new TargetCombinedComparator(SortOrder.DESC);
 	}
 
@@ -111,7 +112,7 @@ public class Identifier {
 		/*
 		 * Get the OS NIST support. Use Wine in a non MS-Windows system.
 		 */
-		File nistFolder = PreferenceSupplier.getNistInstallationFolder();
+		File nistFolder = massSpectrumIdentifierSettings.getNistFolder(); // PreferenceSupplier.getNistInstallationFolder();
 		IStatus status = PreferenceSupplier.validateLocation(nistFolder);
 		if(status.isOK()) {
 			IExtendedRuntimeSupport runtimeSupport = RuntimeSupportFactory.getRuntimeSupport(nistFolder);
@@ -182,7 +183,7 @@ public class Identifier {
 		/*
 		 * Get the OS NIST support. Use Wine in a non MS-Windows system.
 		 */
-		File nistFolder = PreferenceSupplier.getNistInstallationFolder();
+		File nistFolder = peakIdentifierSettings.getNistFolder(); // PreferenceSupplier.getNistInstallationFolder();
 		IStatus status = PreferenceSupplier.validateLocation(nistFolder);
 		if(status.isOK()) {
 			IExtendedRuntimeSupport runtimeSupport = RuntimeSupportFactory.getRuntimeSupport(nistFolder);
@@ -244,7 +245,7 @@ public class Identifier {
 		/*
 		 * Get the OS NIST support. Use Wine in a non MS-Windows system.
 		 */
-		File nistFolder = PreferenceSupplier.getNistInstallationFolder();
+		File nistFolder = nistSettings.getNistFolder(); // PreferenceSupplier.getNistInstallationFolder();
 		IStatus status = PreferenceSupplier.validateLocation(nistFolder);
 		if(status.isOK()) {
 			IExtendedRuntimeSupport runtimeSupport = RuntimeSupportFactory.getRuntimeSupport(nistFolder);
@@ -355,7 +356,6 @@ public class Identifier {
 		runtimeSupport.getNistSupport().setNumberOfTargets(numberOfTargets);
 	}
 
-	// -----------------------------------------------private methods
 	/**
 	 * Deletes unnecessary files.
 	 */
@@ -582,8 +582,8 @@ public class Identifier {
 		IPeakIdentificationResult identificationResult;
 		IIdentificationTarget identificationEntry;
 		//
-		float minMatchFactor = PreferenceSupplier.getMinMatchFactor();
-		float minReverseMatchFactor = PreferenceSupplier.getMinReverseMatchFactor();
+		float minMatchFactor = peakIdentifierSettings.getMinMatchFactor(); // PreferenceSupplier.getMinMatchFactor();
+		float minReverseMatchFactor = peakIdentifierSettings.getMinReverseMatchFactor(); // PreferenceSupplier.getMinReverseMatchFactor();
 		int numberOfTargets = peakIdentifierSettings.getNumberOfTargets();
 		//
 		for(Compound compound : compounds.getCompounds()) {
@@ -814,5 +814,4 @@ public class Identifier {
 		}
 		return identificationEntry;
 	}
-	// -----------------------------------------------private methods
 }

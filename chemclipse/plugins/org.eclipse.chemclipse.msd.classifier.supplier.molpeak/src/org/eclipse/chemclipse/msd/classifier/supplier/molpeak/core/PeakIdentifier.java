@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2019 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -42,7 +42,7 @@ public class PeakIdentifier extends AbstractPeakIdentifierMSD<IPeakIdentificatio
 			PeakIdentifierSettings peakIdentifierSettings = (PeakIdentifierSettings)identifierSettings;
 			BasePeakIdentifier basePeakIdentifier = new BasePeakIdentifier();
 			basePeakIdentifier.identifyPeaks(peaks, peakIdentifierSettings, monitor);
-			processingInfo.addInfoMessage("BasePeakIdentifier", "Everything is supi.");
+			processingInfo.addInfoMessage("BasePeakIdentifier", "Peak(s) have been identified.");
 		}
 		//
 		return processingInfo;

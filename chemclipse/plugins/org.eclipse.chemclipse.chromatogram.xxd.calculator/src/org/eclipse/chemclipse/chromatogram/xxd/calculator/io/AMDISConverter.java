@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -39,9 +39,9 @@ public class AMDISConverter {
 	 * @param file
 	 * @return {@link IProcessingInfo}
 	 */
-	public IProcessingInfo parseRetentionIndices(File file) {
+	public IProcessingInfo<ISeparationColumnIndices> parseRetentionIndices(File file) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<ISeparationColumnIndices> processingInfo = new ProcessingInfo<ISeparationColumnIndices>();
 		processingInfo.setProcessingResult(parse(file));
 		return processingInfo;
 	}

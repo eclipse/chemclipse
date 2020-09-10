@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -29,9 +29,10 @@ public class NistApplicationPreferencePage extends FieldEditorPreferencePage imp
 	private DirectoryFieldEditor pathEditor;
 
 	public NistApplicationPreferencePage() {
+
 		super(GRID);
 		setPreferenceStore(new ScopedPreferenceStore(InstanceScope.INSTANCE, PreferenceSupplier.INSTANCE().getPreferenceNode()));
-		setTitle("NIST Database Integration");
+		setTitle("NIST (extern)");
 		setDescription("Here you can configure the location of the NIST-Database Application that should be used by NIST integration modules");
 		noDefaultButton();
 	}

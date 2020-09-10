@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -29,6 +29,8 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
+	public static final float MIN_FACTOR = 0.0f;
+	public static final float MAX_FACTOR = 100.0f;
 	public static final int MIN_NUMBER_OF_TARGETS = 1;
 	public static final int MAX_NUMBER_OF_TARGETS = 100;
 	public static final String MSP_EXPORT_FILE_NAME = "openchrom-unknown.msp";
@@ -186,21 +188,29 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static PeakIdentifierSettings getPeakIdentifierSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		PeakIdentifierSettings peakIdentifierSettings = new PeakIdentifierSettings();
-		peakIdentifierSettings.setNumberOfTargets(preferences.getInt(P_NUMBER_OF_TARGETS, DEF_NUMBER_OF_TARGETS));
-		peakIdentifierSettings.setStoreTargets(preferences.getBoolean(P_STORE_TARGETS, DEF_STORE_TARGETS));
-		peakIdentifierSettings.setTimeoutInMinutes(preferences.getInt(P_TIMEOUT_IN_MINUTES, DEF_TIMEOUT_IN_MINUTES));
-		return peakIdentifierSettings;
+		PeakIdentifierSettings settings = new PeakIdentifierSettings();
+		settings.setNistFolder(PreferenceSupplier.getNistInstallationFolder());
+		settings.setNumberOfTargets(preferences.getInt(P_NUMBER_OF_TARGETS, DEF_NUMBER_OF_TARGETS));
+		settings.setStoreTargets(preferences.getBoolean(P_STORE_TARGETS, DEF_STORE_TARGETS));
+		settings.setTimeoutInMinutes(preferences.getInt(P_TIMEOUT_IN_MINUTES, DEF_TIMEOUT_IN_MINUTES));
+		settings.setMinMatchFactor(getMinMatchFactor());
+		settings.setMinReverseMatchFactor(getMinReverseMatchFactor());
+		//
+		return settings;
 	}
 
 	public static MassSpectrumIdentifierSettings getMassSpectrumIdentifierSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		MassSpectrumIdentifierSettings massSpectrumIdentifierSettings = new MassSpectrumIdentifierSettings();
-		massSpectrumIdentifierSettings.setNumberOfTargets(preferences.getInt(P_NUMBER_OF_TARGETS, DEF_NUMBER_OF_TARGETS));
-		massSpectrumIdentifierSettings.setStoreTargets(preferences.getBoolean(P_STORE_TARGETS, DEF_STORE_TARGETS));
-		massSpectrumIdentifierSettings.setTimeoutInMinutes(preferences.getInt(P_TIMEOUT_IN_MINUTES, DEF_TIMEOUT_IN_MINUTES));
-		return massSpectrumIdentifierSettings;
+		MassSpectrumIdentifierSettings settings = new MassSpectrumIdentifierSettings();
+		settings.setNistFolder(PreferenceSupplier.getNistInstallationFolder());
+		settings.setNumberOfTargets(preferences.getInt(P_NUMBER_OF_TARGETS, DEF_NUMBER_OF_TARGETS));
+		settings.setStoreTargets(preferences.getBoolean(P_STORE_TARGETS, DEF_STORE_TARGETS));
+		settings.setTimeoutInMinutes(preferences.getInt(P_TIMEOUT_IN_MINUTES, DEF_TIMEOUT_IN_MINUTES));
+		settings.setMinMatchFactor(getMinMatchFactor());
+		settings.setMinReverseMatchFactor(getMinReverseMatchFactor());
+		//
+		return settings;
 	}
 
 	public static String getMacWineBinary() {

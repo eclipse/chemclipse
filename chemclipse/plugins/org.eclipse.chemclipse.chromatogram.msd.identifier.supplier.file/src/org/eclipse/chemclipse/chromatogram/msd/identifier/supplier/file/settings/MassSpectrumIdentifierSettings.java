@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2019 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,24 +12,26 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings;
 
-import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.MassSpectrumComparatorDynamicSettingProperty;
+import java.io.File;
+
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.AbstractMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.support.settings.ComboSettingsProperty;
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
+import org.eclipse.chemclipse.support.settings.FileSettingProperty;
+import org.eclipse.chemclipse.support.settings.FileSettingProperty.DialogType;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
-import org.eclipse.chemclipse.support.settings.MultiFileSettingProperty;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class MassSpectrumIdentifierSettings extends AbstractMassSpectrumIdentifierSettings implements IFileIdentifierSettings {
 
-	@JsonProperty(value = "Mass Spectra Files", defaultValue = "")
-	@JsonPropertyDescription(value = "Use a semicolon to separate the path of several files.") // see FileListUtil()
-	@MultiFileSettingProperty
-	private String massSpectraFiles = "";
+	@JsonProperty(value = "Library File", defaultValue = "")
+	@JsonPropertyDescription("Select the library file.")
+	@FileSettingProperty(dialogType = DialogType.OPEN_DIALOG, extensionNames = {"AMDIS (*.msl)", "AMDIS (*.msp)"}, validExtensions = {"*.msl", "*.msp"}, onlyDirectory = false)
+	private File libraryFile;
 	@JsonProperty(value = "Pre-Optimization", defaultValue = "false")
 	private boolean usePreOptimization = false;
 	@JsonProperty(value = "Threshold Pre-Optimization", defaultValue = "0.12")
@@ -44,14 +46,20 @@ public class MassSpectrumIdentifierSettings extends AbstractMassSpectrumIdentifi
 	@JsonProperty(value = "Min Reverse Match Factor", defaultValue = "80.0")
 	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_FACTOR, maxValue = PreferenceSupplier.MAX_FACTOR)
 	private float minReverseMatchFactor = 80.0f;
-	@JsonProperty(value = "Alternate Identifier Id", defaultValue = "")
-	@ComboSettingsProperty(MassSpectrumComparatorDynamicSettingProperty.class)
+	//
+	@JsonIgnore
 	private String alternateIdentifierId = "";
+	@JsonIgnore
+	private String massSpectraFiles = "";
 
 	@Override
 	public String getMassSpectraFiles() {
 
-		return massSpectraFiles;
+		if(libraryFile != null) {
+			return libraryFile.getAbsolutePath();
+		} else {
+			return massSpectraFiles;
+		}
 	}
 
 	@Override

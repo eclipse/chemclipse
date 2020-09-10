@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,7 +24,7 @@ public abstract class AbstractChromatogramCalculator implements IChromatogramCal
 	@Override
 	public IProcessingInfo validate(IChromatogramSelection chromatogramSelection, IChromatogramCalculatorSettings chromatogramCalculatorSettings) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo();
 		processingInfo.addMessages(validateChromatogramSelection(chromatogramSelection));
 		processingInfo.addMessages(validateCalculatorSettings(chromatogramCalculatorSettings));
 		return processingInfo;
@@ -57,9 +57,9 @@ public abstract class AbstractChromatogramCalculator implements IChromatogramCal
 	 * @param chromatogramFilterSettings
 	 * @return {@link IProcessingInfo}
 	 */
-	private IProcessingInfo validateCalculatorSettings(IChromatogramCalculatorSettings chromatogramFilterSettings) {
+	private IProcessingInfo<?> validateCalculatorSettings(IChromatogramCalculatorSettings chromatogramFilterSettings) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		if(chromatogramFilterSettings == null) {
 			processingInfo.addErrorMessage(DESCRIPTION, "The calculator settings are not valid.");
 		}
