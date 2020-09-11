@@ -38,7 +38,7 @@ public class PeakReader_1_MSD_0802_ITest extends PeakReaderMSDTestCase {
 
 		IPeak peak = peaks.getPeak(1);
 		IPeakMSD peakMSD = (IPeakMSD)peak;
-		assertEquals("First Derivative", peakMSD.getDetectorDescription());
+		assertEquals("Peak Detector First Derivative", peakMSD.getDetectorDescription());
 		assertEquals(1219140.1874049378d, peakMSD.getIntegratedArea());
 		assertEquals("Integrator Trapezoid: TIC", peakMSD.getIntegratorDescription());
 		assertEquals("", peakMSD.getQuantifierDescription());

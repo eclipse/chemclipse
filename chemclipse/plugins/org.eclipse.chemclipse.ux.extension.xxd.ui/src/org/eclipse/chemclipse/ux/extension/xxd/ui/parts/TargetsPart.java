@@ -67,22 +67,24 @@ public class TargetsPart {
 
 	private void updateSelection(List<Object> objects, String topic) {
 
-		/*
-		 * 0 => because only one property was used to register the event.
-		 */
-		if(objects.size() == 1) {
-			if(isChromatogramUnloadEvent(topic) || isOtherUnloadEvent(topic)) {
-				control.update(null);
-			} else {
-				Object object = objects.get(0);
-				if(isChromatogramTopic(topic)) {
-					if(object instanceof IChromatogramSelection) {
-						IChromatogramSelection<?, ?> chromatogramSelection = (IChromatogramSelection<?, ?>)object;
-						object = chromatogramSelection.getChromatogram();
+		if(DataUpdateSupport.isVisible(control)) {
+			/*
+			 * 0 => because only one property was used to register the event.
+			 */
+			if(objects.size() == 1) {
+				if(isChromatogramUnloadEvent(topic) || isOtherUnloadEvent(topic)) {
+					control.update(null);
+				} else {
+					Object object = objects.get(0);
+					if(isChromatogramTopic(topic)) {
+						if(object instanceof IChromatogramSelection) {
+							IChromatogramSelection<?, ?> chromatogramSelection = (IChromatogramSelection<?, ?>)object;
+							object = chromatogramSelection.getChromatogram();
+							control.update(object);
+						}
+					} else if(isScanOrPeakTopic(topic) || isIdentificationTopic(topic)) {
 						control.update(object);
 					}
-				} else if(isScanOrPeakTopic(topic) || isIdentificationTopic(topic)) {
-					control.update(object);
 				}
 			}
 		}

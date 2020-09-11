@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -34,7 +34,7 @@ import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
-import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
+import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -74,6 +74,7 @@ public class MassSpectrumLibraryUI extends Composite {
 	private File massSpectrumFile = null;
 
 	public MassSpectrumLibraryUI(Composite parent, int style) {
+
 		super(parent, style);
 		comparisonResult = ComparisonResult.createBestMatchComparisonResult();
 		createControl();
@@ -264,7 +265,7 @@ public class MassSpectrumLibraryUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IPreferencePage preferencePageSWT = new PreferencePageSWT();
+				IPreferencePage preferencePageSWT = new PreferencePageSystem();
 				preferencePageSWT.setTitle("Settings (SWT)");
 				IPreferencePage preferencePageMSD = new PreferencePage();
 				preferencePageMSD.setTitle("Settings (MSD)");

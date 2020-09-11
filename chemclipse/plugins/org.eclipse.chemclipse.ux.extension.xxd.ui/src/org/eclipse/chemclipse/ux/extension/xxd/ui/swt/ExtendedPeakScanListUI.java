@@ -44,7 +44,7 @@ import org.eclipse.chemclipse.support.ui.swt.IColumnMoveListener;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
-import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
+import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.InternalStandardDialog;
@@ -58,7 +58,6 @@ import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.preference.PreferenceManager;
@@ -115,6 +114,7 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 	private RetentionTimeRange lastRange;
 
 	public ExtendedPeakScanListUI(Composite parent, IEventBroker eventBroker, IPreferenceStore preferenceStore) {
+
 		this.eventBroker = eventBroker;
 		this.preferenceStore = preferenceStore;
 		initialize(parent);
@@ -811,14 +811,9 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 
-					IPreferencePage preferencePageSWT = new PreferencePageSWT();
-					preferencePageSWT.setTitle("Settings (SWT)");
-					IPreferencePage preferencePageLists = new PreferencePageLists();
-					preferencePageLists.setTitle("Lists");
-					//
 					PreferenceManager preferenceManager = new PreferenceManager();
-					preferenceManager.addToRoot(new PreferenceNode("1", preferencePageSWT));
-					preferenceManager.addToRoot(new PreferenceNode("2", preferencePageLists));
+					preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePageSystem()));
+					preferenceManager.addToRoot(new PreferenceNode("2", new PreferencePageLists()));
 					//
 					PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
 					preferenceDialog.create();

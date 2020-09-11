@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Matthias Mailänder.
+ * Copyright (c) 2016, 2020 Matthias Mailänder.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Matthias Mailänder - initial API and implementation
+ * Philip Wenig - fix export
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.csv.core;
 
@@ -41,14 +42,14 @@ public class DatabaseExportConverter extends AbstractDatabaseExportConverter {
 	private static final String DESCRIPTION = "CSV Mass Spectrum Export";
 
 	@Override
-	public IProcessingInfo convert(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo<File> convert(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<File> processingInfo = new ProcessingInfo<>();
 		/*
 		 * Checks that file and mass spectrum are not null.
 		 */
 		file = SpecificationValidator.validateSpecification(file, "csv");
-		IProcessingInfo processingInfoValidate = validate(file, massSpectrum);
+		IProcessingInfo<?> processingInfoValidate = validate(file, massSpectrum);
 		if(processingInfoValidate.hasErrorMessages()) {
 			processingInfo.addMessages(processingInfoValidate);
 		} else {
@@ -74,14 +75,14 @@ public class DatabaseExportConverter extends AbstractDatabaseExportConverter {
 	}
 
 	@Override
-	public IProcessingInfo convert(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo<File> convert(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<File> processingInfo = new ProcessingInfo<>();
 		/*
 		 * Checks that file and mass spectra are not null.
 		 */
 		file = SpecificationValidator.validateSpecification(file, "csv");
-		IProcessingInfo processingInfoValidate = validate(file, massSpectra);
+		IProcessingInfo<?> processingInfoValidate = validate(file, massSpectra);
 		if(processingInfoValidate.hasErrorMessages()) {
 			processingInfo.addMessages(processingInfoValidate);
 		} else {
@@ -106,17 +107,17 @@ public class DatabaseExportConverter extends AbstractDatabaseExportConverter {
 		return processingInfo;
 	}
 
-	private IProcessingInfo validate(File file, IScanMSD massSpectrum) {
+	private IProcessingInfo<?> validate(File file, IScanMSD massSpectrum) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		processingInfo.addMessages(super.validate(file));
 		processingInfo.addMessages(super.validate(massSpectrum));
 		return processingInfo;
 	}
 
-	private IProcessingInfo validate(File file, IMassSpectra massSpectra) {
+	private IProcessingInfo<?> validate(File file, IMassSpectra massSpectra) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		processingInfo.addMessages(super.validate(file));
 		processingInfo.addMessages(super.validate(massSpectra));
 		return processingInfo;

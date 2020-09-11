@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -33,6 +33,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_CONDENSE_CYCLE_NUMBER_SCANS, true);
 		store.setDefault(PreferenceConstants.P_SHOW_RETENTION_INDEX_WITHOUT_DECIMALS, true);
 		store.setDefault(PreferenceConstants.P_SHOW_AREA_WITHOUT_DECIMALS, true);
+		store.setDefault(PreferenceConstants.P_SORT_CASE_SENSITIVE, true);
 		//
 		store.setDefault(PreferenceConstants.P_SEARCH_CASE_SENSITIVE, PreferenceConstants.DEF_SEARCH_CASE_SENSITIVE);
 	}

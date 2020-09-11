@@ -66,7 +66,7 @@ import org.eclipse.chemclipse.support.ui.swt.EditorToolBar;
 import org.eclipse.chemclipse.support.ui.swt.ProcessorToolbar;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.IMethodListener;
-import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
+import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.Fonts;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
@@ -1013,7 +1013,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 				preferencePages.add(new ChromatogramAxisRelativeIntensity());
 				preferencePages.add(new PreferencePageChromatogramPeaks());
 				preferencePages.add(new PreferencePageChromatogramScans());
-				preferencePages.add(new PreferencePageSWT());
+				preferencePages.add(new PreferencePageSystem());
 				return preferencePages;
 			}
 		}, this::applySettings);

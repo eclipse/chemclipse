@@ -108,8 +108,6 @@ public class PeakScanListUI extends ExtendedTableViewer {
 				tableViewerColumn.setEditingSupport(new PeakScanListEditingSupport(this, label));
 			} else if(PeakScanListLabelProvider.CLASSIFIER.equals(label)) {
 				tableViewerColumn.setEditingSupport(new PeakScanListEditingSupport(this, label));
-			} else if(PeakScanListLabelProvider.NAME.equals(label)) {
-				tableViewerColumn.setEditingSupport(new PeakScanListEditingSupport(this, label));
 			}
 		}
 	}

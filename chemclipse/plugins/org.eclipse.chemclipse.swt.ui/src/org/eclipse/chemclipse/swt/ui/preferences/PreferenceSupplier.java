@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -20,6 +20,7 @@ public class PreferenceSupplier {
 	 * Use only static methods.
 	 */
 	private PreferenceSupplier() {
+
 	}
 
 	public static boolean condenseCycleNumberScans() {
@@ -38,6 +39,12 @@ public class PreferenceSupplier {
 
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		return store.getBoolean(PreferenceConstants.P_SHOW_AREA_WITHOUT_DECIMALS);
+	}
+
+	public static boolean isSortCaseSensitive() {
+
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		return store.getBoolean(PreferenceConstants.P_SORT_CASE_SENSITIVE);
 	}
 
 	public static boolean useAlternateWindowMoveDirection() {

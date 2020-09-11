@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -34,7 +34,7 @@ public class MassSpectrumIdentificationExportConverter extends AbstractDatabaseE
 	private static final String DESCRIPTION = "CSV Mass Spectrum List Export";
 
 	@Override
-	public IProcessingInfo convert(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo<File> convert(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) {
 
 		MassSpectra massSpectra = new MassSpectra();
 		massSpectra.addMassSpectrum(massSpectrum);
@@ -42,14 +42,14 @@ public class MassSpectrumIdentificationExportConverter extends AbstractDatabaseE
 	}
 
 	@Override
-	public IProcessingInfo convert(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) {
+	public IProcessingInfo<File> convert(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<File> processingInfo = new ProcessingInfo<>();
 		/*
 		 * Checks that file and mass spectra are not null.
 		 */
 		file = SpecificationValidator.validateSpecification(file, "csv");
-		IProcessingInfo processingInfoValidate = validate(file, massSpectra);
+		IProcessingInfo<?> processingInfoValidate = validate(file, massSpectra);
 		if(processingInfoValidate.hasErrorMessages()) {
 			processingInfo.addMessages(processingInfoValidate);
 		} else {
@@ -74,9 +74,9 @@ public class MassSpectrumIdentificationExportConverter extends AbstractDatabaseE
 		return processingInfo;
 	}
 
-	private IProcessingInfo validate(File file, IMassSpectra massSpectra) {
+	private IProcessingInfo<?> validate(File file, IMassSpectra massSpectra) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		processingInfo.addMessages(super.validate(file));
 		processingInfo.addMessages(super.validate(massSpectra));
 		return processingInfo;

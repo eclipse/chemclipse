@@ -43,7 +43,6 @@ public abstract class AbstractPeak implements IPeak {
 	private final List<IInternalStandard> internalStandards = new ArrayList<IInternalStandard>();
 	private final List<String> quantitationReferences = new ArrayList<String>(); // Used to quantify against certain ISTDs or ESTDs
 	private final Set<String> classifier = new LinkedHashSet<>();
-	private String name;
 
 	@Override
 	public String getModelDescription() {
@@ -348,33 +347,5 @@ public abstract class AbstractPeak implements IPeak {
 	public void removeClassifier(String classifier) {
 
 		this.classifier.remove(classifier);
-	}
-
-	/*
-	 * TODO
-	 * This construct is clumpsy.
-	 * The target list shall define the peak name.
-	 */
-	public void setName(String name) {
-
-		if(name != null && name.trim().isEmpty()) {
-			this.name = null;
-		} else {
-			this.name = name;
-		}
-	}
-
-	public boolean isNameSet() {
-
-		return name != null;
-	}
-
-	@Override
-	public String getName() {
-
-		if(isNameSet()) {
-			return name;
-		}
-		return IPeak.super.getName();
 	}
 }

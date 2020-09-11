@@ -61,7 +61,6 @@ import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.exceptions.IonTransitionIsNullException;
-import org.eclipse.chemclipse.msd.model.implementation.ChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.IonTransitionSettings;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
@@ -134,7 +133,7 @@ public class PeakReader_1301 extends AbstractZipReader implements IPeakReader {
 		String modelDescription = readString(dataInputStream); // Model Description
 		PeakType peakType = PeakType.valueOf(readString(dataInputStream)); // Peak Type
 		int suggestedNumberOfComponents = dataInputStream.readInt(); // Suggest Number Of Components
-		String peakName = readString(dataInputStream);
+		readString(dataInputStream); // Keep this for backward compatibility 2020/09/11
 		List<String> classifiers = IFileHelper.readStringCollection(dataInputStream);
 		//
 		float startBackgroundAbundance = dataInputStream.readFloat(); // Start Background Abundance
@@ -187,17 +186,6 @@ public class PeakReader_1301 extends AbstractZipReader implements IPeakReader {
 		//
 		List<IInternalStandard> internalStandards = readInternalStandards(dataInputStream);
 		peak.addInternalStandards(internalStandards);
-		/*
-		 * Peak Name
-		 */
-		String currentName = peak.getName();
-		if(currentName == null || !currentName.equals(peakName)) {
-			// restore the user custom name
-			if(peak instanceof ChromatogramPeakMSD) {
-				ChromatogramPeakMSD peakMSD = (ChromatogramPeakMSD)peak;
-				peakMSD.setName(peakName);
-			}
-		}
 		//
 		return peak;
 	}

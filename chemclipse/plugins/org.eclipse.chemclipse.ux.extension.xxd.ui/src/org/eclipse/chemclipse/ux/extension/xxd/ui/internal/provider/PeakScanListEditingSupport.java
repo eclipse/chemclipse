@@ -15,7 +15,6 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 import java.util.Collection;
 import java.util.Set;
 
-import org.eclipse.chemclipse.model.core.AbstractPeak;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ClassifierCellEditor;
@@ -31,6 +30,7 @@ public class PeakScanListEditingSupport extends EditingSupport {
 	private final String column;
 
 	public PeakScanListEditingSupport(ExtendedTableViewer tableViewer, String column) {
+
 		super(tableViewer);
 		this.column = column;
 		if(PeakScanListLabelProvider.CLASSIFIER.equals(column)) {
@@ -54,8 +54,6 @@ public class PeakScanListEditingSupport extends EditingSupport {
 
 		if(column == PeakScanListLabelProvider.ACTIVE_FOR_ANALYSIS) {
 			return (element instanceof IPeak);
-		} else if(PeakScanListLabelProvider.NAME.equals(column)) {
-			return element instanceof AbstractPeak && tableViewer.isEditEnabled();
 		} else {
 			return tableViewer.isEditEnabled();
 		}
@@ -71,12 +69,6 @@ public class PeakScanListEditingSupport extends EditingSupport {
 					return peak.isActiveForAnalysis();
 				case PeakScanListLabelProvider.CLASSIFIER:
 					return peak;
-				case PeakScanListLabelProvider.NAME:
-					String name = peak.getName();
-					if(name == null) {
-						return "";
-					}
-					return name;
 			}
 		}
 		return false;
@@ -90,16 +82,6 @@ public class PeakScanListEditingSupport extends EditingSupport {
 			switch(column) {
 				case PeakScanListLabelProvider.ACTIVE_FOR_ANALYSIS:
 					peak.setActiveForAnalysis((boolean)value);
-					break;
-				case PeakScanListLabelProvider.NAME:
-					if(peak instanceof AbstractPeak) {
-						AbstractPeak abstractPeak = (AbstractPeak)peak;
-						String name = (String)value;
-						if(name != null && name.equals(abstractPeak.getName())) {
-							return;
-						}
-						abstractPeak.setName(name);
-					}
 					break;
 				case PeakScanListLabelProvider.CLASSIFIER:
 					if(value instanceof Set<?>) {

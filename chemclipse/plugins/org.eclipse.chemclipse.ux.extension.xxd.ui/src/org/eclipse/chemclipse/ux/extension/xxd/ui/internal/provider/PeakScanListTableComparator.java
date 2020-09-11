@@ -12,27 +12,19 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
-import java.util.Collection;
-import java.util.Collections;
-
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
-import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.model.core.ITargetSupplier;
-import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
-import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
+import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.jface.viewers.Viewer;
 
 public class PeakScanListTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
 
 	private double chromatogramPeakArea = 0.0d;
-	private final TargetExtendedComparator comparator = new TargetExtendedComparator(SortOrder.DESC);
 
 	public void setChromatogramPeakArea(double chromatogramPeakArea) {
 
@@ -47,15 +39,11 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 		Object object1 = null;
 		Object object2 = null;
 		//
-		if(e1 instanceof IPeak) {
-			object1 = e1;
-		} else if(e1 instanceof IScan) {
+		if(e1 instanceof IPeak || e1 instanceof IScan) {
 			object1 = e1;
 		}
 		//
-		if(e2 instanceof IPeak) {
-			object2 = e2;
-		} else if(e2 instanceof IScan) {
+		if(e2 instanceof IPeak || e2 instanceof IScan) {
 			object2 = e2;
 		}
 		//
@@ -157,12 +145,9 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 				sortOrder = Integer.compare(getSuggestedNumberOfComponents(object2), getSuggestedNumberOfComponents(object1));
 				break;
 			case 17:
-				String name1 = getName(object1);
-				String name2 = getName(object2);
-				//
-				if(name1 != null && name2 != null) {
-					sortOrder = name2.compareTo(name1);
-				}
+				String name1 = PeakScanListSupport.getName(object1);
+				String name2 = PeakScanListSupport.getName(object2);
+				sortOrder = PreferenceSupplier.isSortCaseSensitive() ? name2.compareTo(name1) : name2.compareToIgnoreCase(name1);
 				break;
 			case 18:
 				if(chromatogramPeakArea > 0) {
@@ -178,7 +163,9 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 				sortOrder = Integer.compare(getInternalStandards(object2), getInternalStandards(object1));
 				break;
 			case 20:
-				sortOrder = getClassifier(object2).size() - (getClassifier(object1)).size();
+				String classifier1 = PeakScanListSupport.getClassifier(object1);
+				String classifier2 = PeakScanListSupport.getClassifier(object2);
+				sortOrder = PreferenceSupplier.isSortCaseSensitive() ? classifier2.compareTo(classifier1) : classifier2.compareToIgnoreCase(classifier1);
 				break;
 		}
 		//
@@ -327,45 +314,5 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 		} else {
 			return 0;
 		}
-	}
-
-	private Collection<String> getClassifier(Object object) {
-
-		if(object instanceof IPeak) {
-			return ((IPeak)object).getClassifier();
-		} else {
-			return Collections.emptyList();
-		}
-	}
-
-	private String getName(Object object) {
-
-		/*
-		 * Is a peak name set?
-		 */
-		String name = null;
-		if(object instanceof IPeak) {
-			IPeak peak = (IPeak)object;
-			name = peak.getName();
-		}
-		/*
-		 * No peak name set.
-		 * Then try to get the peak or scan best match.
-		 */
-		if(name == null) {
-			if(object instanceof ITargetSupplier) {
-				ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(((ITargetSupplier)object).getTargets(), comparator);
-				if(libraryInformation != null) {
-					name = libraryInformation.getName();
-				}
-			} else {
-				name = "";
-			}
-		}
-		/*
-		 * No hit at all?
-		 * Then return an empty String.
-		 */
-		return name != null ? name : "";
 	}
 }

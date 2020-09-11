@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.msd.converter.supplier.csv.core;
 import java.io.File;
 
 import org.eclipse.chemclipse.msd.converter.database.AbstractDatabaseImportConverter;
+import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -21,9 +22,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class MassSpectrumIdentificationImportConverter extends AbstractDatabaseImportConverter {
 
 	@Override
-	public IProcessingInfo convert(File file, IProgressMonitor monitor) {
+	public IProcessingInfo<IMassSpectra> convert(File file, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<IMassSpectra> processingInfo = new ProcessingInfo<>();
 		processingInfo.addErrorMessage("CSV Mass Spectrum List Import", "Mass spectrum import through CSV list files isn't implemented yet.");
 		return processingInfo;
 	}

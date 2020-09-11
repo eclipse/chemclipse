@@ -18,12 +18,13 @@ import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-public class PreferencePageSWT extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class PreferencePageSystem extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	public PreferencePageSWT() {
+	public PreferencePageSystem() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setTitle("Settings (SWT)");
+		setTitle("System Settings");
 		setDescription("");
 	}
 
@@ -42,6 +43,7 @@ public class PreferencePageSWT extends FieldEditorPreferencePage implements IWor
 		addField(new BooleanFieldEditor(PreferenceConstants.P_CONDENSE_CYCLE_NUMBER_SCANS, "Condense Scans with Cycle Number", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_RETENTION_INDEX_WITHOUT_DECIMALS, "Show retention index without decimals", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_AREA_WITHOUT_DECIMALS, "Show area without decimals", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SORT_CASE_SENSITIVE, "Sort Case Sensitive", getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SEARCH_CASE_SENSITIVE, "Search: Case sensitive", getFieldEditorParent()));

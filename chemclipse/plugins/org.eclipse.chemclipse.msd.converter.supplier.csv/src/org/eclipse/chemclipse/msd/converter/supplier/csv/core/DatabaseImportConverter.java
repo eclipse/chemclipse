@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Matthias Mailänder.
+ * Copyright (c) 2016, 2020 Matthias Mailänder.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,12 +8,14 @@
  * 
  * Contributors:
  * Matthias Mailänder - initial API and implementation
+ * Philip Wenig - fix export
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.csv.core;
 
 import java.io.File;
 
 import org.eclipse.chemclipse.msd.converter.database.AbstractDatabaseImportConverter;
+import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -21,9 +23,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class DatabaseImportConverter extends AbstractDatabaseImportConverter {
 
 	@Override
-	public IProcessingInfo convert(File file, IProgressMonitor monitor) {
+	public IProcessingInfo<IMassSpectra> convert(File file, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<IMassSpectra> processingInfo = new ProcessingInfo<>();
 		processingInfo.addErrorMessage("CSV Mass Spectrum Import", "Mass spectrum import through CSV files isn't implemented yet.");
 		return processingInfo;
 	}

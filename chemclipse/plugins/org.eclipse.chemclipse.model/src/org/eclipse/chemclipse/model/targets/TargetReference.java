@@ -104,7 +104,7 @@ public class TargetReference implements ITargetReference {
 		List<TargetReference> targetReferences = new ArrayList<>();
 		for(IPeak peak : peaks) {
 			Set<IIdentificationTarget> targets = peak.getTargets();
-			if(peak != null && (targets.size() > 0 || peak.getName() != null) || peak.getClassifier().size() > 0) {
+			if(peak != null && (targets.size() > 0 || peak.getClassifier().size() > 0)) {
 				String name = FORMAT.format(peak.getPeakModel().getRetentionTimeAtPeakMaximum() / IChromatogram.MINUTE_CORRELATION_FACTOR);
 				TargetReference targetReference = new TargetReference(peak, TargetReferenceType.PEAK, name);
 				targetReferences.add(targetReference);

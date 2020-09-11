@@ -46,8 +46,12 @@ import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
+import org.eclipse.chemclipse.model.identifier.ComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.identifier.LibraryInformation;
+import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.model.implementation.IntegrationEntry;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
 import org.eclipse.chemclipse.model.implementation.Peaks;
@@ -172,11 +176,7 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 				IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets());
 				IPeakModel peakModel = peak.getPeakModel();
 				// Name
-				String peakName = peak.getName();
-				if(peakName == null) {
-					peakName = getLibInfo(target, ILibraryInformation::getName);
-				}
-				csv.print(peakName);
+				csv.print(getName(peak));
 				// RT
 				csv.print(nf.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
 				// RRT
@@ -213,6 +213,7 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 			synchronized(NUMBER_FORMAT) {
 				nf = (NumberFormat)NUMBER_FORMAT.clone();
 			}
+			//
 			for(CSVRecord record : parser) {
 				PeakModelMSD peakModel = new PeakModelMSD(parseMassSpectrum(record.get(HEADER_MZ)), parseIntensityValues(record.get(HEADER_INTENSITIES)));
 				IScan maximum = peakModel.getPeakMaximum();
@@ -220,12 +221,21 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 				maximum.setRelativeRetentionTime((int)(nf.parse(record.get(HEADER_RRT)).doubleValue() * IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
 				maximum.setRetentionIndex(nf.parse(record.get(HEADER_RI)).floatValue());
 				PeakMSD peakMSD = new PeakMSD(peakModel);
-				peakMSD.setName(record.get(HEADER_NAME));
+				addTarget(peakMSD, record.get(HEADER_NAME));
 				peakMSD.addAllIntegrationEntries(new IntegrationEntry(nf.parse(record.get(HEADER_AREA)).doubleValue()));
 				result.addPeak(peakMSD);
 			}
 		}
 		return result;
+	}
+
+	private static void addTarget(IPeak peak, String name) {
+
+		ILibraryInformation libraryInformation = new LibraryInformation();
+		libraryInformation.setName(name);
+		IComparisonResult comparisonResult = ComparisonResult.createBestMatchComparisonResult();
+		IIdentificationTarget identificationTarget = new IdentificationTarget(libraryInformation, comparisonResult);
+		peak.getTargets().add(identificationTarget);
 	}
 
 	private static IPeakMassSpectrum parseMassSpectrum(String headerMz) {
@@ -275,5 +285,21 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 		} catch(IOException e) {
 		}
 		return false;
+	}
+
+	/**
+	 * Returns the best hit or "".
+	 * 
+	 * @param peak
+	 * @return
+	 */
+	public static String getName(IPeak peak) {
+
+		ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(peak.getTargets());
+		if(libraryInformation != null) {
+			return libraryInformation.getName();
+		}
+		//
+		return "";
 	}
 }

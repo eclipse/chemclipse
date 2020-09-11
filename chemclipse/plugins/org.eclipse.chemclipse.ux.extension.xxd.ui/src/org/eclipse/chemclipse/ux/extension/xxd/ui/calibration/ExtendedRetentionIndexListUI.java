@@ -23,7 +23,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
-import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSWT;
+import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -345,7 +345,7 @@ public class ExtendedRetentionIndexListUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IPreferencePage preferencePageSWT = new PreferencePageSWT();
+				IPreferencePage preferencePageSWT = new PreferencePageSystem();
 				preferencePageSWT.setTitle("Settings (SWT)");
 				IPreferencePage preferencePageMSD = new PreferencePage();
 				preferencePageMSD.setTitle("Settings (MSD)");

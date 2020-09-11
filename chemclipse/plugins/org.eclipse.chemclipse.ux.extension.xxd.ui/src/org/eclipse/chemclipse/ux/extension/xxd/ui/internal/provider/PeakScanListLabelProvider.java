@@ -13,12 +13,9 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import java.text.DecimalFormat;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
-import org.eclipse.chemclipse.model.core.AbstractPeak;
-import org.eclipse.chemclipse.model.core.Classifiable;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
@@ -36,16 +33,10 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.resource.FontDescriptor;
-import org.eclipse.jface.viewers.ColumnViewer;
-import org.eclipse.jface.viewers.ITableFontProvider;
-import org.eclipse.jface.viewers.ViewerColumn;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 
-public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider implements ITableFontProvider {
+public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 
 	public static final String NAME = "Name";
 	public static final String ACTIVE_FOR_ANALYSIS = "Active for Analysis";
@@ -124,7 +115,6 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider i
 			100, //
 			100 //
 	};
-	private Font italicFont;
 
 	public void setChromatogramPeakArea(double chromatogramPeakArea) {
 
@@ -148,35 +138,6 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider i
 			}
 		}
 		return super.getBackground(element);
-	}
-
-	@Override
-	public Font getFont(Object element, int columnIndex) {
-
-		if(columnIndex == 15 && element instanceof AbstractPeak) {
-			AbstractPeak abstractPeak = (AbstractPeak)element;
-			if(abstractPeak.isNameSet()) {
-				return italicFont;
-			}
-		}
-		return null;
-	}
-
-	@Override
-	protected void initialize(ColumnViewer viewer, ViewerColumn column) {
-
-		super.initialize(viewer, column);
-		Font defaultFont = viewer.getControl().getFont();
-		italicFont = FontDescriptor.createFrom(defaultFont).setStyle(SWT.ITALIC).createFont(defaultFont.getDevice());
-	}
-
-	@Override
-	public void dispose(ColumnViewer viewer, ViewerColumn column) {
-
-		if(italicFont != null) {
-			italicFont.dispose();
-		}
-		super.dispose(viewer, column);
 	}
 
 	@Override
@@ -317,16 +278,8 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider i
 			case 16:
 				text = Integer.toString(peak.getSuggestedNumberOfComponents());
 				break;
-			case 17: {
-				String peakName = peak.getName();
-				if(peakName != null) {
-					return peakName;
-				}
-				ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(peak.getTargets());
-				if(libraryInformation != null) {
-					return libraryInformation.getName();
-				}
-			}
+			case 17:
+				text = PeakScanListSupport.getName(peak);
 				break;
 			case 18:
 				if(chromatogramPeakArea > 0) {
@@ -340,15 +293,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider i
 				text = (peak.getInternalStandards().size() > 0) ? "ISTD" : BLANK;
 				break;
 			case 20: {
-				ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(peak.getTargets());
-				if(libraryInformation != null) {
-					Set<String> set = new LinkedHashSet<>();
-					set.addAll(peak.getClassifier());
-					set.addAll(libraryInformation.getClassifier());
-					return Classifiable.asString(set);
-				} else {
-					return Classifiable.asString(peak);
-				}
+				text = PeakScanListSupport.getClassifier(peak);
 			}
 		}
 		//

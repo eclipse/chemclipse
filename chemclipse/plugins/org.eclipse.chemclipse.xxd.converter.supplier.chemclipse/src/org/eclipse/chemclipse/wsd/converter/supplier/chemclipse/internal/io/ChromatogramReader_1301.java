@@ -371,7 +371,7 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 		String modelDescription = readString(dataInputStream); // Model Description
 		PeakType peakType = PeakType.valueOf(readString(dataInputStream)); // Peak Type
 		int suggestedNumberOfComponents = dataInputStream.readInt(); // Suggest Number Of Components
-		String peakName = readString(dataInputStream);
+		readString(dataInputStream); // Keep this for backward compatibility 2020/09/11
 		List<String> classifiers = IFileHelper.readStringCollection(dataInputStream);
 		//
 		float startBackgroundAbundance = dataInputStream.readFloat(); // Start Background Abundance
@@ -441,11 +441,6 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 		List<IInternalStandard> internalStandards = readInternalStandards(dataInputStream);
 		peak.addInternalStandards(internalStandards);
 		//
-		String currentName = peak.getName();
-		if(currentName == null || !currentName.equals(peakName)) {
-			// restore the user custom name
-			peak.setName(peakName);
-		}
 		return peak;
 	}
 
