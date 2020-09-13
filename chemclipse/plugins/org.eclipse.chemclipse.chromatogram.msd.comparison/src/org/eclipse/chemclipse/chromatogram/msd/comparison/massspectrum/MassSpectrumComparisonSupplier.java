@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -22,7 +22,7 @@ public class MassSpectrumComparisonSupplier implements IMassSpectrumComparisonSu
 
 	/**
 	 * Sets the supplier id like
-	 * "org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos".
+	 * "org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.xyz".
 	 * 
 	 * @param id
 	 */

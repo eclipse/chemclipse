@@ -17,7 +17,7 @@ import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 
 public interface IIdentifierSettingsMSD extends IIdentifierSettings {
 
-	String DEFAULT_COMPARATOR_ID = "org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos";
+	String DEFAULT_COMPARATOR_ID = "org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.cosine";
 
 	/**
 	 * Returns the id of the MS comparator that shall be used
@@ -29,7 +29,7 @@ public interface IIdentifierSettingsMSD extends IIdentifierSettings {
 
 	/**
 	 * Set the id of the mass spectrum comparator. E.g.:
-	 * org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos
+	 * org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.cosine
 	 * 
 	 * 
 	 * @param massSpectrumComparatorId

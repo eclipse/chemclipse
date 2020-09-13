@@ -63,7 +63,7 @@ public class MassSpectrumComparator_1_Test extends TestCase {
 		int count = 0;
 		List<String> ids = support.getAvailableComparatorIds();
 		String[] rcs = new String[2];
-		rcs[0] = "org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos";
+		rcs[0] = "org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.cosine";
 		rcs[1] = "org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.alfassi.geometric";
 		for(String id : ids) {
 			for(String rc : rcs) {
@@ -105,17 +105,6 @@ public class MassSpectrumComparator_1_Test extends TestCase {
 		} catch(NoMassSpectrumComparatorAvailableException e) {
 			assertTrue("NoMassSpectrumComparatorAvailableException", true);
 		}
-	}
-
-	public void testGetMassSpectrumComparisonSupplier_3() throws NoMassSpectrumComparatorAvailableException {
-
-		String comparatorName = "INCOS";
-		String description = "This comparator calculates the similarity between two mass spectra with the incos algorithm.";
-		String id = "org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos";
-		IMassSpectrumComparisonSupplier supplier = support.getMassSpectrumComparisonSupplier(id);
-		assertEquals("ComparatorName", comparatorName, supplier.getComparatorName());
-		assertEquals("Description", description, supplier.getDescription());
-		assertEquals("Id", id, supplier.getId());
 	}
 
 	public void testGetMassSpectrumComparisonSupplier_4() throws NoMassSpectrumComparatorAvailableException {

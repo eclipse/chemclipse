@@ -52,7 +52,7 @@
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
-                  Set a unique suppliers id, e.g. &quot;org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos&quot;.
+                  Set a unique suppliers id.
                </documentation>
             </annotation>
          </attribute>

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,7 +15,7 @@ public interface IMassSpectrumComparisonSupplier {
 
 	/**
 	 * The id of the extension point: e.g.
-	 * (org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos)
+	 * (org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.xyz)
 	 * 
 	 * @return String
 	 */

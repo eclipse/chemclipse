@@ -17,6 +17,6 @@ public class IdentifierSettingsMSD_1_Test extends TestCase {
 
 	public void test1() {
 
-		assertEquals("org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.incos", IIdentifierSettingsMSD.DEFAULT_COMPARATOR_ID);
+		assertEquals("org.eclipse.chemclipse.chromatogram.msd.comparison.supplier.distance.cosine", IIdentifierSettingsMSD.DEFAULT_COMPARATOR_ID);
 	}
 }
