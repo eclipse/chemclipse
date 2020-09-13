@@ -44,6 +44,7 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.support.settings.UserManagement;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.util.FileListUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
@@ -209,10 +210,9 @@ public class FileIdentifier {
 		//
 		if(UserManagement.isDevMode()) {
 			long end = System.currentTimeMillis();
-			NumberFormat integerFormat = NumberFormat.getIntegerInstance();
-			NumberFormat timeFormat = NumberFormat.getNumberInstance();
-			timeFormat.setMaximumFractionDigits(2);
-			System.out.println("#PERF# Identifaction of " + integerFormat.format(unknownList.size()) + " unknown items against database " + databaseName + " with " + integerFormat.format(references.size()) + " massspectra took " + timeFormat.format((end - start) / 1000d) + " seconds and yields " + matched + " matches");
+			NumberFormat integerFormat = ValueFormat.getDecimalFormatEnglish("0");
+			NumberFormat timeFormat = ValueFormat.getDecimalFormatEnglish("0.000");
+			System.out.println("#PERF# Identifaction of " + integerFormat.format(unknownList.size()) + " unknown items against database " + databaseName + " with " + integerFormat.format(references.size()) + " massspectra took " + timeFormat.format((end - start) / 1000.0d) + " seconds and yields " + matched + " matches");
 		}
 		//
 		return matched;
