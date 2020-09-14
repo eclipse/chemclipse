@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,17 +8,18 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - refactoring
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Locale;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.RetentionTimeFilter;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.core.databinding.AggregateValidationStatus;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
@@ -54,13 +55,14 @@ public class FilterRetentionTimeWizardPage extends WizardPage implements IFilter
 	private DataBindingContext dbc = new DataBindingContext();
 	private int filterType;
 	private List<int[]> intervals;
-	private NumberFormat nf = NumberFormat.getNumberInstance(Locale.US);
 	private IObservableValue<Double> observeBegin = new WritableValue<>();
 	private IObservableValue<Double> observeFinish = new WritableValue<>();
 	private RetentionTimeFilter retentionTimeFilter;
 	private TableViewer tableViewer;
+	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
 
 	public FilterRetentionTimeWizardPage(RetentionTimeFilter retentionTimeFilter) {
+
 		super("Retention time interval filter");
 		setTitle("Retention Time Interval Filter");
 		this.filterType = retentionTimeFilter.getFiltrationType();
@@ -91,7 +93,7 @@ public class FilterRetentionTimeWizardPage extends WizardPage implements IFilter
 
 				int[] i = (int[])cell.getElement();
 				double v = i[0] / IChromatogramOverview.MINUTE_CORRELATION_FACTOR;
-				cell.setText(nf.format(v));
+				cell.setText(decimalFormat.format(v));
 			}
 		});
 		col = createTableViewerColumn(titles[1], bounds[1]);
@@ -102,7 +104,7 @@ public class FilterRetentionTimeWizardPage extends WizardPage implements IFilter
 
 				int[] i = (int[])cell.getElement();
 				double v = i[1] / IChromatogramOverview.MINUTE_CORRELATION_FACTOR;
-				cell.setText(nf.format(v));
+				cell.setText(decimalFormat.format(v));
 			}
 		});
 	}
@@ -126,14 +128,14 @@ public class FilterRetentionTimeWizardPage extends WizardPage implements IFilter
 		label.setText("Set time interval parametrs:");
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(label);
 		label = new Label(composite, SWT.None);
-		label.setText("Start Time of Interval (minutes)");
+		label.setText("Start Time of Interval [min]");
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(label);
 		Text text = new Text(composite, SWT.BORDER);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(text);
 		ISWTObservableValue targetObservableValue = WidgetProperties.text(SWT.Modify).observe(text);
 		UpdateValueStrategy targetToModel = UpdateValueStrategy.create(IConverter.create(String.class, Double.class, o1 -> {
 			try {
-				return nf.parse((String)o1).doubleValue();
+				return decimalFormat.parse((String)o1).doubleValue();
 			} catch(ParseException e1) {
 			}
 			return null;
@@ -149,25 +151,27 @@ public class FilterRetentionTimeWizardPage extends WizardPage implements IFilter
 		});
 		UpdateValueStrategy modelToTarget = UpdateValueStrategy.create(IConverter.create(Double.class, String.class, o1 -> {
 			try {
-				return nf.format((o1));
+				return decimalFormat.format((o1));
 			} catch(NumberFormatException e) {
 			}
 			return null;
 		}));
+		//
 		dbc.bindValue(targetObservableValue, observeBegin, targetToModel, modelToTarget);
 		label = new Label(composite, SWT.None);
-		label.setText("End Time of Interval (minutes)");
+		label.setText("End Time of Interval [min]");
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(label);
 		text = new Text(composite, SWT.BORDER);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(text);
 		targetObservableValue = WidgetProperties.text(SWT.Modify).observe(text);
 		targetToModel = UpdateValueStrategy.create(IConverter.create(String.class, Double.class, o1 -> {
 			try {
-				return nf.parse((String)o1).doubleValue();
+				return decimalFormat.parse((String)o1).doubleValue();
 			} catch(ParseException e1) {
 			}
 			return null;
 		}));
+		//
 		targetToModel.setBeforeSetValidator(o1 -> {
 			if(o1 instanceof Double) {
 				Double d = (Double)o1;
@@ -177,13 +181,15 @@ public class FilterRetentionTimeWizardPage extends WizardPage implements IFilter
 			}
 			return ValidationStatus.error("error");
 		});
+		//
 		modelToTarget = UpdateValueStrategy.create(IConverter.create(Double.class, String.class, o1 -> {
 			try {
-				return nf.format((o1));
+				return decimalFormat.format((o1));
 			} catch(NumberFormatException e) {
 			}
 			return null;
 		}));
+		//
 		dbc.bindValue(targetObservableValue, observeFinish, targetToModel, modelToTarget);
 		dbc.addValidationStatusProvider(new MultiValidator() {
 

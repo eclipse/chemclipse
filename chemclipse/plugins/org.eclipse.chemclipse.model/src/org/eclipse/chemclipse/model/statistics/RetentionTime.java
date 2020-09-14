@@ -8,20 +8,21 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - refactoring
  *******************************************************************************/
 package org.eclipse.chemclipse.model.statistics;
 
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 
 public class RetentionTime extends AbstractVariable implements IRetentionTime {
 
-	private NumberFormat nf = NumberFormat.getInstance(Locale.US);
-	private int retentionTime;
+	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
+	private int retentionTime = 0;
 
 	public static List<RetentionTime> create(List<Integer> retentionTimes) {
 
@@ -59,7 +60,7 @@ public class RetentionTime extends AbstractVariable implements IRetentionTime {
 
 	private String convertValue() {
 
-		return nf.format(getRetentionTimeMinutes());
+		return decimalFormat.format(getRetentionTimeMinutes());
 	}
 
 	@Override
