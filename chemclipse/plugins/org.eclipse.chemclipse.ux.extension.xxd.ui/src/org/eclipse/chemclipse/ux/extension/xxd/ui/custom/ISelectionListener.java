@@ -12,10 +12,9 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.custom;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.model.core.IPeak;
 
-public interface IPeakDetectorListener {
+public interface ISelectionListener {
 
 	@SuppressWarnings("rawtypes")
-	void update(IChromatogram chromatogram, IPeak peak);
+	void update(IChromatogram chromatogram, SelectionCoordinates selectionCoordinates);
 }

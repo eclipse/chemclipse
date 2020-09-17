@@ -11,9 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.custom;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.BaselineSelectionPaintListener;
@@ -23,11 +20,12 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swtchart.IAxis;
+import org.eclipse.swtchart.IAxisSet;
 import org.eclipse.swtchart.IPlotArea;
 import org.eclipse.swtchart.Range;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 
-public class ManualPeakDetectorChart extends ChromatogramPeakChart {
+public class ManualSelectionChart extends ChromatogramPeakChart {
 
 	private Cursor defaultCursor;
 	//
@@ -38,27 +36,30 @@ public class ManualPeakDetectorChart extends ChromatogramPeakChart {
 	//
 	private IChromatogram<? extends IPeak> chromatogram;
 	private BaselineSelectionPaintListener baselineSelectionPaintListener;
-	private IPeakDetectorListener peakDetectorListener = null;
+	private ISelectionListener selectionListener = null;
+	//
 	private boolean manualDetectionEnabled = false;
 
-	public ManualPeakDetectorChart() {
+	public ManualSelectionChart() {
+
 		super();
 		init();
 	}
 
-	public ManualPeakDetectorChart(Composite parent, int style) {
+	public ManualSelectionChart(Composite parent, int style) {
+
 		super(parent, style);
 		init();
 	}
 
-	public void addPeakDetectorListener(IPeakDetectorListener peakDetectorListener) {
+	public void addSelectionListener(ISelectionListener selectionListener) {
 
-		this.peakDetectorListener = peakDetectorListener;
+		this.selectionListener = selectionListener;
 	}
 
-	public void removePeakDetectorListener() {
+	public void removeSelectionListener() {
 
-		this.peakDetectorListener = null;
+		this.selectionListener = null;
 	}
 
 	public boolean isManualDetectionEnabled() {
@@ -191,30 +192,23 @@ public class ManualPeakDetectorChart extends ChromatogramPeakChart {
 	private void extractPeak() {
 
 		if(chromatogram != null) {
-			IPeak peak = extractPeakFromUserSelection(xStart, yStart, xStop, yStop);
-			if(peak != null) {
-				if(peakDetectorListener != null) {
-					peakDetectorListener.update(chromatogram, peak);
-				}
+			SelectionCoordinates selectionCoordinates = extractSelectionCoordinates(xStart, yStart, xStop, yStop);
+			if(selectionListener != null) {
+				selectionListener.update(chromatogram, selectionCoordinates);
 			}
 		}
 	}
 
-	/**
-	 * Extracts the selected peak.
-	 * 
-	 * @param xStop
-	 * @param yStop
-	 */
-	private IPeak extractPeakFromUserSelection(int xStart, int yStart, int xStop, int yStop) {
+	private SelectionCoordinates extractSelectionCoordinates(int xStart, int yStart, int xStop, int yStop) {
 
-		/*
-		 * Calculate the rectangle factors.
-		 * Enable to set the peak as selected with retention time and abundance range.
-		 */
-		IPeak peak = null;
+		SelectionCoordinates selectionCoordinates = new SelectionCoordinates();
 		if(chromatogram != null) {
-			Point rectangle = getBaseChart().getPlotArea().getSize();
+			/*
+			 * BaseChart
+			 */
+			BaseChart baseChart = getBaseChart();
+			IAxisSet axisSet = baseChart.getAxisSet();
+			Point rectangle = baseChart.getPlotArea().getSize();
 			int width = rectangle.x;
 			double factorWidth = 0.0d;
 			if(width != 0) {
@@ -224,25 +218,34 @@ public class ManualPeakDetectorChart extends ChromatogramPeakChart {
 				/*
 				 * Calculate the start and end points.
 				 */
-				BaseChart baseChart = getBaseChart();
 				IAxis retentionTime = baseChart.getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
 				Range millisecondsRange = retentionTime.getRange();
 				/*
-				 * With abundance and retention time.
+				 * Start and stop retention time
 				 */
 				double millisecondsWidth = millisecondsRange.upper - millisecondsRange.lower;
-				/*
-				 * Peak start and stop abundances and retention times.
-				 */
 				int startRetentionTime = (int)(millisecondsRange.lower + millisecondsWidth * percentageStartWidth);
 				int stopRetentionTime = (int)(millisecondsRange.lower + millisecondsWidth * percentageStopWidth);
-				//
-				Set<Integer> traces = new HashSet<>();
-				boolean includeBackground = true;
-				boolean optimizeRange = true;
-				peak = PeakDetectorSupport.extractPeakByRetentionTime(chromatogram, startRetentionTime, stopRetentionTime, includeBackground, optimizeRange, traces);
+				selectionCoordinates.setStartRetentionTime(startRetentionTime);
+				selectionCoordinates.setStopRetentionTime(stopRetentionTime);
+				/*
+				 * Start and stop intensity
+				 */
+				double height = rectangle.y;
+				if(height > 0) {
+					double factorY1 = 1.0d - yStart / height;
+					double factorY2 = 1.0d - yStop / height;
+					IAxis intensity = axisSet.getYAxis(BaseChart.ID_PRIMARY_Y_AXIS);
+					Range intensityRange = intensity.getRange();
+					double intensityHeight = intensityRange.upper - intensityRange.lower;
+					float startIntensity = (float)(intensityRange.lower + intensityHeight * factorY1);
+					float stopIntensity = (float)(intensityRange.lower + intensityHeight * factorY2);
+					selectionCoordinates.setStartIntensity(startIntensity);
+					selectionCoordinates.setStopIntensity(stopIntensity);
+				}
 			}
 		}
-		return peak;
+		//
+		return selectionCoordinates;
 	}
 }
