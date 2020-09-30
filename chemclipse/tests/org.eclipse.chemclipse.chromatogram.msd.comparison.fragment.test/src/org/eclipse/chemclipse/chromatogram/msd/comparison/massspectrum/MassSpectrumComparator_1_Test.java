@@ -46,7 +46,7 @@ public class MassSpectrumComparator_1_Test extends TestCase {
 		int count = 0;
 		String[] names = support.getComparatorNames();
 		String[] rcs = new String[2];
-		rcs[0] = "INCOS";
+		rcs[0] = "Cosine";
 		rcs[1] = "Alfassi Geometric Distance";
 		for(String name : names) {
 			for(String rc : rcs) {
