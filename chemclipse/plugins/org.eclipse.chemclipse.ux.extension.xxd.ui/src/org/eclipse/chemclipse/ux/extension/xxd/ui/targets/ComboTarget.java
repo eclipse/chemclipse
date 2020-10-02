@@ -127,11 +127,11 @@ public class ComboTarget extends Composite {
 				}
 			}
 		});
-		enableAuotComplete(combo);
+		enableAutoComplete(combo);
 		return combo;
 	}
 
-	private void enableAuotComplete(Combo combo) {
+	private void enableAutoComplete(Combo combo) {
 
 		IContentProposalProvider proposalProvider = new IContentProposalProvider() {
 
