@@ -428,7 +428,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 		/*
 		 * Overlay Type
 		 */
-		Set<DisplayType> types = getOverlayType();
+		Set<DisplayType> types = getDisplayType();
 		comboOverlayType.setToolTipText(DisplayType.toDescription(types));
 		if(preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_AUTOFOCUS_PROFILE_SETTINGS)) {
 			if(isExtractedIonsModusEnabled() || isExtractedWavelengthsModusEnabled()) {
@@ -502,7 +502,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 		return chromatogramChart;
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
+	@SuppressWarnings("rawtypes")
 	private void refreshUpdateOverlayChart() {
 
 		if(chromatogramSelections.size() > 0) {
@@ -526,219 +526,27 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 			int i = 0;
 			for(Entry<IChromatogramSelection, List<String>> entry : chromatogramSelections.entrySet()) {
-				IChromatogramSelection chromatogramSelection = entry.getKey();
+				IChromatogramSelection<?, ?> chromatogramSelection = entry.getKey();
 				List<String> selectionSeries = entry.getValue();
-				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-				List<IChromatogram> referencedChromatograms = chromatogram.getReferencedChromatograms();
+				IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 				String chromatogramName = chromatogram.getName() + ChromatogramChartSupport.EDITOR_TAB + (i + 1);
 				/*
 				 * refreshUpdateOverlayChart
 				 * Select which series shall be displayed.
 				 */
-				Set<DisplayType> displayTypes = getOverlayType();
-				Derivative derivative = getSelectedDerivative();
-				if(derivative != null) {
-					//
-					for(DisplayType overlayType : displayTypes) {
-						if(overlayType.equals(DisplayType.SIC)) {
-							/*
-							 * SIC
-							 */
-							List<Number> ions = getSelectedTraces(true);
-							if(chromatogram instanceof IChromatogramMSD) {
-								for(Number number : ions) {
-									int ion = number.intValue();
-									String seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + ion + OverlayChartSupport.OVERLAY_STOP_MARKER;
-									Color color = chromatogramChartSupport.getSeriesColor(seriesId, overlayType);
-									availableSeriesIds.add(seriesId);
-									selectionSeries.add(seriesId);
-									if(!baseChart.isSeriesContained(seriesId)) {
-										IMarkedIons markedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
-										markedIons.add(ion);
-										lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, overlayType, derivative, color, markedIons, false));
-									}
-								}
-							}
-							/*
-							 * References
-							 */
-							if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
-								int j = 1;
-								for(IChromatogram referencedChromatogram : referencedChromatograms) {
-									if(referencedChromatogram instanceof IChromatogramMSD) {
-										for(Number number : ions) {
-											int ion = number.intValue();
-											String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j++;
-											String seriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + ion + OverlayChartSupport.OVERLAY_STOP_MARKER;
-											Color color = chromatogramChartSupport.getSeriesColor(seriesId, overlayType);
-											availableSeriesIds.add(seriesId);
-											selectionSeries.add(seriesId);
-											if(!baseChart.isSeriesContained(seriesId)) {
-												IMarkedIons markedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
-												markedIons.add(ion);
-												lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, overlayType, derivative, color, markedIons, false));
-											}
-										}
-									}
-								}
-							}
-						} else if(overlayType.equals(DisplayType.SWC)) {
-							/*
-							 * SWC
-							 */
-							List<Number> wavelengths = getSelectedTraces(false);
-							if(chromatogram instanceof IChromatogramWSD) {
-								//
-								for(Number number : wavelengths) {
-									//
-									double wavelength = number.doubleValue();
-									String seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + wavelength + OverlayChartSupport.OVERLAY_STOP_MARKER;
-									availableSeriesIds.add(seriesId);
-									selectionSeries.add(seriesId);
-									Color color = chromatogramChartSupport.getSeriesColor(seriesId, overlayType);
-									IMarkedWavelengths markedWavelengths = new MarkedWavelengths();
-									markedWavelengths.add(wavelength);
-									//
-									if(!baseChart.isSeriesContained(seriesId)) {
-										lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, overlayType, derivative, color, markedWavelengths, false));
-									}
-								}
-								/*
-								 * References
-								 */
-								if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
-									int j = 1;
-									for(IChromatogram referencedChromatogram : referencedChromatograms) {
-										if(referencedChromatogram instanceof IChromatogramWSD) {
-											String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j++;
-											for(Number number : wavelengths) {
-												//
-												double wavelength = number.doubleValue();
-												String seriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + wavelength + OverlayChartSupport.OVERLAY_STOP_MARKER;
-												availableSeriesIds.add(seriesId);
-												selectionSeries.add(seriesId);
-												Color color = chromatogramChartSupport.getSeriesColor(seriesId, overlayType);
-												IMarkedWavelengths markedWavelengths = new MarkedWavelengths();
-												markedWavelengths.add(wavelength);
-												//
-												if(!baseChart.isSeriesContained(seriesId)) {
-													lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, overlayType, derivative, color, markedWavelengths, false));
-												}
-											}
-										}
-									}
-								}
-							}
-						} else if(overlayType.equals(DisplayType.XWC)) {
-							/*
-							 * AWC
-							 */
-							if(chromatogram instanceof IChromatogramWSD) {
-								//
-								for(double wavelength : ((IChromatogramWSD)chromatogram).getWavelengths()) {
-									//
-									String seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + wavelength + OverlayChartSupport.OVERLAY_STOP_MARKER;
-									availableSeriesIds.add(seriesId);
-									selectionSeries.add(seriesId);
-									Color color = chromatogramChartSupport.getSeriesColor(seriesId, overlayType);
-									IMarkedWavelengths markedWavelengths = new MarkedWavelengths();
-									markedWavelengths.add(wavelength);
-									//
-									if(!baseChart.isSeriesContained(seriesId)) {
-										lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, overlayType, derivative, color, markedWavelengths, false));
-									}
-								}
-								/*
-								 * References
-								 */
-								if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
-									int j = 1;
-									for(IChromatogram referencedChromatogram : referencedChromatograms) {
-										if(referencedChromatogram instanceof IChromatogramWSD) {
-											String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j++;
-											for(double wavelength : ((IChromatogramWSD)referencedChromatogram).getWavelengths()) {
-												//
-												String seriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + wavelength + OverlayChartSupport.OVERLAY_STOP_MARKER;
-												availableSeriesIds.add(seriesId);
-												selectionSeries.add(seriesId);
-												Color color = chromatogramChartSupport.getSeriesColor(seriesId, overlayType);
-												IMarkedWavelengths markedWavelengths = new MarkedWavelengths();
-												markedWavelengths.add(wavelength);
-												//
-												if(!baseChart.isSeriesContained(seriesId)) {
-													lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, overlayType, derivative, color, markedWavelengths, false));
-												}
-											}
-										}
-									}
-								}
-							}
+				Set<DisplayType> displayTypes = getDisplayType();
+				for(DisplayType displayType : displayTypes) {
+					if(displayType.equals(DisplayType.SIC)) {
+						appendSIC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
+					} else if(displayType.equals(DisplayType.SWC)) {
+						appendSWC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
+					} else if(displayType.equals(DisplayType.XWC)) {
+						appendXWC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
+					} else {
+						if(displayType.equals(DisplayType.BPC) || displayType.equals(DisplayType.XIC) || displayType.equals(DisplayType.TSC)) {
+							appendXXC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
 						} else {
-							//
-							String seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.OVERLAY_STOP_MARKER;
-							Color color = chromatogramChartSupport.getSeriesColor(chromatogramName, overlayType);
-							//
-							if(overlayType.equals(DisplayType.BPC) || overlayType.equals(DisplayType.XIC) || overlayType.equals(DisplayType.TSC)) {
-								/*
-								 * BPC, XIC, TSC
-								 */
-								IMarkedIons markedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
-								List ions = getSelectedTraces(true);
-								markedIons.add(ions);
-								//
-								if(chromatogram instanceof IChromatogramMSD) {
-									availableSeriesIds.add(seriesId);
-									selectionSeries.add(seriesId);
-									if(!baseChart.isSeriesContained(seriesId)) {
-										lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, overlayType, derivative, color, markedIons, false));
-									}
-								}
-								/*
-								 * References
-								 */
-								if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
-									int j = 1;
-									for(IChromatogram referencedChromatogram : referencedChromatograms) {
-										if(referencedChromatogram instanceof IChromatogramMSD) {
-											String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j++;
-											String referenceSeriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.OVERLAY_STOP_MARKER;
-											availableSeriesIds.add(referenceSeriesId);
-											selectionSeries.add(seriesId);
-											if(!baseChart.isSeriesContained(referenceSeriesId)) {
-												color = chromatogramChartSupport.getSeriesColor(referenceChromatogramName, overlayType);
-												lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(referencedChromatogram, referenceSeriesId, overlayType, derivative, color, markedIons, false));
-											}
-										}
-									}
-								}
-							} else {
-								/*
-								 * TIC
-								 */
-								availableSeriesIds.add(seriesId);
-								selectionSeries.add(seriesId);
-								if(!baseChart.isSeriesContained(seriesId)) {
-									lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, overlayType, derivative, color, null, false));
-								}
-								/*
-								 * References
-								 */
-								if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
-									int j = 1;
-									for(IChromatogram referencedChromatogram : referencedChromatograms) {
-										if(referencedChromatogram != null) {
-											String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j++;
-											String referenceSeriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + overlayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.OVERLAY_STOP_MARKER;
-											availableSeriesIds.add(referenceSeriesId);
-											selectionSeries.add(referenceSeriesId);
-											if(!baseChart.isSeriesContained(referenceSeriesId)) {
-												color = chromatogramChartSupport.getSeriesColor(referenceChromatogramName, overlayType);
-												lineSeriesDataList.add(chromatogramChartSupport.getLineSeriesData(referencedChromatogram, referenceSeriesId, overlayType, derivative, color, null, false));
-											}
-										}
-									}
-								}
-							}
+							appendTIC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
 						}
 					}
 				}
@@ -772,13 +580,277 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 		}
 	}
 
+	private void appendSIC(Set<String> availableSeriesIds, List<String> selectionSeries, List<ILineSeriesData> lineSeriesDataList, IChromatogram<?> chromatogram, DisplayType displayType, String chromatogramName) {
+
+		String seriesId;
+		Color color;
+		//
+		BaseChart baseChart = chromatogramChart.getBaseChart();
+		Derivative derivative = getSelectedDerivative();
+		/*
+		 * SIC
+		 */
+		List<Number> ions = getSelectedTraces(true);
+		if(chromatogram instanceof IChromatogramMSD) {
+			for(Number number : ions) {
+				int ion = number.intValue();
+				seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + ion + OverlayChartSupport.OVERLAY_STOP_MARKER;
+				color = chromatogramChartSupport.getSeriesColor(seriesId, displayType);
+				availableSeriesIds.add(seriesId);
+				selectionSeries.add(seriesId);
+				if(!baseChart.isSeriesContained(seriesId)) {
+					IMarkedIons markedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+					markedIons.add(ion);
+					ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, displayType, derivative, color, markedIons, false);
+					lineSeriesData.getSettings().setDescription("m/z " + Integer.toString(ion) + " (" + chromatogram.getName() + ")");
+					lineSeriesDataList.add(lineSeriesData);
+				}
+			}
+		}
+		/*
+		 * References
+		 */
+		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
+			List<IChromatogram<?>> referencedChromatograms = chromatogram.getReferencedChromatograms();
+			int j = 1;
+			for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
+				if(referencedChromatogram instanceof IChromatogramMSD) {
+					for(Number number : ions) {
+						int ion = number.intValue();
+						String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j++;
+						seriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + ion + OverlayChartSupport.OVERLAY_STOP_MARKER;
+						color = chromatogramChartSupport.getSeriesColor(seriesId, displayType);
+						availableSeriesIds.add(seriesId);
+						selectionSeries.add(seriesId);
+						if(!baseChart.isSeriesContained(seriesId)) {
+							IMarkedIons markedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+							markedIons.add(ion);
+							ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, displayType, derivative, color, markedIons, false);
+							lineSeriesData.getSettings().setDescription("m/z " + Integer.toString(ion) + " (" + chromatogram.getName() + ")");
+							lineSeriesDataList.add(lineSeriesData);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private void appendSWC(Set<String> availableSeriesIds, List<String> selectionSeries, List<ILineSeriesData> lineSeriesDataList, IChromatogram<?> chromatogram, DisplayType displayType, String chromatogramName) {
+
+		String seriesId;
+		Color color;
+		//
+		BaseChart baseChart = chromatogramChart.getBaseChart();
+		Derivative derivative = getSelectedDerivative();
+		/*
+		 * SWC
+		 */
+		List<Number> wavelengths = getSelectedTraces(false);
+		if(chromatogram instanceof IChromatogramWSD) {
+			//
+			for(Number number : wavelengths) {
+				//
+				double wavelength = number.doubleValue();
+				seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + wavelength + OverlayChartSupport.OVERLAY_STOP_MARKER;
+				availableSeriesIds.add(seriesId);
+				selectionSeries.add(seriesId);
+				color = chromatogramChartSupport.getSeriesColor(seriesId, displayType);
+				IMarkedWavelengths markedWavelengths = new MarkedWavelengths();
+				markedWavelengths.add(wavelength);
+				//
+				if(!baseChart.isSeriesContained(seriesId)) {
+					ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, displayType, derivative, color, markedWavelengths, false);
+					lineSeriesData.getSettings().setDescription(Double.toString(wavelength) + " nm (" + chromatogram.getName() + ")");
+					lineSeriesDataList.add(lineSeriesData);
+				}
+			}
+			/*
+			 * References
+			 */
+			if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
+				List<IChromatogram<?>> referencedChromatograms = chromatogram.getReferencedChromatograms();
+				int j = 1;
+				for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
+					if(referencedChromatogram instanceof IChromatogramWSD) {
+						String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j++;
+						for(Number number : wavelengths) {
+							//
+							double wavelength = number.doubleValue();
+							seriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + wavelength + OverlayChartSupport.OVERLAY_STOP_MARKER;
+							availableSeriesIds.add(seriesId);
+							selectionSeries.add(seriesId);
+							color = chromatogramChartSupport.getSeriesColor(seriesId, displayType);
+							IMarkedWavelengths markedWavelengths = new MarkedWavelengths();
+							markedWavelengths.add(wavelength);
+							//
+							if(!baseChart.isSeriesContained(seriesId)) {
+								ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, displayType, derivative, color, markedWavelengths, false);
+								lineSeriesData.getSettings().setDescription(Double.toString(wavelength) + " nm (" + chromatogram.getName() + ")");
+								lineSeriesDataList.add(lineSeriesData);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private void appendXWC(Set<String> availableSeriesIds, List<String> selectionSeries, List<ILineSeriesData> lineSeriesDataList, IChromatogram<?> chromatogram, DisplayType displayType, String chromatogramName) {
+
+		String seriesId;
+		Color color;
+		//
+		BaseChart baseChart = chromatogramChart.getBaseChart();
+		Derivative derivative = getSelectedDerivative();
+		/*
+		 * XWC
+		 */
+		if(chromatogram instanceof IChromatogramWSD) {
+			//
+			for(double wavelength : ((IChromatogramWSD)chromatogram).getWavelengths()) {
+				//
+				seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + wavelength + OverlayChartSupport.OVERLAY_STOP_MARKER;
+				availableSeriesIds.add(seriesId);
+				selectionSeries.add(seriesId);
+				color = chromatogramChartSupport.getSeriesColor(seriesId, displayType);
+				IMarkedWavelengths markedWavelengths = new MarkedWavelengths();
+				markedWavelengths.add(wavelength);
+				//
+				if(!baseChart.isSeriesContained(seriesId)) {
+					ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, displayType, derivative, color, markedWavelengths, false);
+					lineSeriesData.getSettings().setDescription(Double.toString(wavelength) + " nm (" + chromatogram.getName() + ")");
+					lineSeriesDataList.add(lineSeriesData);
+				}
+			}
+			/*
+			 * References
+			 */
+			if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
+				List<IChromatogram<?>> referencedChromatograms = chromatogram.getReferencedChromatograms();
+				int j = 1;
+				for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
+					if(referencedChromatogram instanceof IChromatogramWSD) {
+						String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j++;
+						for(double wavelength : ((IChromatogramWSD)referencedChromatogram).getWavelengths()) {
+							//
+							seriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + wavelength + OverlayChartSupport.OVERLAY_STOP_MARKER;
+							availableSeriesIds.add(seriesId);
+							selectionSeries.add(seriesId);
+							color = chromatogramChartSupport.getSeriesColor(seriesId, displayType);
+							IMarkedWavelengths markedWavelengths = new MarkedWavelengths();
+							markedWavelengths.add(wavelength);
+							//
+							if(!baseChart.isSeriesContained(seriesId)) {
+								ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, displayType, derivative, color, markedWavelengths, false);
+								lineSeriesData.getSettings().setDescription(Double.toString(wavelength) + " nm (" + chromatogram.getName() + ")");
+								lineSeriesDataList.add(lineSeriesData);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private void appendXXC(Set<String> availableSeriesIds, List<String> selectionSeries, List<ILineSeriesData> lineSeriesDataList, IChromatogram<?> chromatogram, DisplayType displayType, String chromatogramName) {
+
+		BaseChart baseChart = chromatogramChart.getBaseChart();
+		Derivative derivative = getSelectedDerivative();
+		String seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.OVERLAY_STOP_MARKER;
+		Color color = chromatogramChartSupport.getSeriesColor(chromatogramName, displayType);
+		/*
+		 * BPC, XIC, TSC
+		 */
+		IMarkedIons markedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+		List<Number> ions = getSelectedTraces(true);
+		for(Number ion : ions) {
+			markedIons.add(ion.intValue());
+		}
+		//
+		if(chromatogram instanceof IChromatogramMSD) {
+			availableSeriesIds.add(seriesId);
+			selectionSeries.add(seriesId);
+			if(!baseChart.isSeriesContained(seriesId)) {
+				ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, displayType, derivative, color, markedIons, false);
+				lineSeriesData.getSettings().setDescription(chromatogram.getName() + " (" + displayType.getShortcut() + ")");
+				lineSeriesDataList.add(lineSeriesData);
+			}
+		}
+		/*
+		 * References
+		 */
+		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
+			List<IChromatogram<?>> referencedChromatograms = chromatogram.getReferencedChromatograms();
+			int j = 1;
+			for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
+				if(referencedChromatogram instanceof IChromatogramMSD) {
+					String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j++;
+					String referenceSeriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.OVERLAY_STOP_MARKER;
+					availableSeriesIds.add(referenceSeriesId);
+					selectionSeries.add(seriesId);
+					if(!baseChart.isSeriesContained(referenceSeriesId)) {
+						color = chromatogramChartSupport.getSeriesColor(referenceChromatogramName, displayType);
+						ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(referencedChromatogram, referenceSeriesId, displayType, derivative, color, markedIons, false);
+						lineSeriesData.getSettings().setDescription(chromatogram.getName() + " (" + displayType.getShortcut() + ")");
+						lineSeriesDataList.add(lineSeriesData);
+					}
+				}
+			}
+		}
+	}
+
+	private void appendTIC(Set<String> availableSeriesIds, List<String> selectionSeries, List<ILineSeriesData> lineSeriesDataList, IChromatogram<?> chromatogram, DisplayType displayType, String chromatogramName) {
+
+		BaseChart baseChart = chromatogramChart.getBaseChart();
+		Derivative derivative = getSelectedDerivative();
+		String seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.OVERLAY_STOP_MARKER;
+		Color color = chromatogramChartSupport.getSeriesColor(chromatogramName, displayType);
+		/*
+		 * TIC
+		 */
+		availableSeriesIds.add(seriesId);
+		selectionSeries.add(seriesId);
+		if(!baseChart.isSeriesContained(seriesId)) {
+			ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, displayType, derivative, color, null, false);
+			lineSeriesData.getSettings().setDescription(chromatogram.getName());
+			lineSeriesDataList.add(lineSeriesData);
+		}
+		/*
+		 * References
+		 */
+		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
+			List<IChromatogram<?>> referencedChromatograms = chromatogram.getReferencedChromatograms();
+			int j = 1;
+			for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
+				if(referencedChromatogram != null) {
+					String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j++;
+					String referenceSeriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.OVERLAY_STOP_MARKER;
+					availableSeriesIds.add(referenceSeriesId);
+					selectionSeries.add(referenceSeriesId);
+					if(!baseChart.isSeriesContained(referenceSeriesId)) {
+						color = chromatogramChartSupport.getSeriesColor(referenceChromatogramName, displayType);
+						ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(referencedChromatogram, referenceSeriesId, displayType, derivative, color, null, false);
+						lineSeriesData.getSettings().setDescription(chromatogram.getName());
+						lineSeriesDataList.add(lineSeriesData);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Return the selected derivative or NONE as a default.
+	 * 
+	 * @return {@link Derivative}
+	 */
 	private Derivative getSelectedDerivative() {
 
 		Object object = comboViewerDerivative.getStructuredSelection().getFirstElement();
 		if(object instanceof Derivative) {
 			return (Derivative)object;
 		}
-		return null;
+		//
+		return Derivative.NONE;
 	}
 
 	private List<Number> getSelectedTraces(boolean isNominal) {
@@ -800,14 +872,14 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 		return traceList;
 	}
 
-	private Set<DisplayType> getOverlayType() {
+	private Set<DisplayType> getDisplayType() {
 
 		return DisplayType.toDisplayTypes(comboOverlayType.getText().trim());
 	}
 
 	private boolean isExtractedIonsModusEnabled() {
 
-		Set<DisplayType> overlayType = getOverlayType();
+		Set<DisplayType> overlayType = getDisplayType();
 		return overlayType.contains(DisplayType.XIC) || //
 				overlayType.contains(DisplayType.SIC) || //
 				overlayType.contains(DisplayType.TSC);
@@ -815,7 +887,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 
 	private boolean isExtractedWavelengthsModusEnabled() {
 
-		return getOverlayType().contains(DisplayType.SWC);
+		return getDisplayType().contains(DisplayType.SWC);
 	}
 
 	@Override
