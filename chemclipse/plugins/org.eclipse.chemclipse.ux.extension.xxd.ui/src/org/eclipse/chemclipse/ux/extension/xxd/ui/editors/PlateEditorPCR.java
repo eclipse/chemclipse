@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,10 +23,10 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.PCRFileSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.PCRImportRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
@@ -55,6 +55,8 @@ public class PlateEditorPCR extends AbstractDataUpdateSupport implements IChemCl
 	//
 	private final MPart part;
 	private final MDirtyable dirtyable;
+	private final EModelService modelService;
+	private final MApplication application;
 	//
 	private File plateFile;
 	private IPlate plate = null;
@@ -63,11 +65,14 @@ public class PlateEditorPCR extends AbstractDataUpdateSupport implements IChemCl
 	private final Shell shell;
 
 	@Inject
-	public PlateEditorPCR(Composite parent, MPart part, MDirtyable dirtyable, Shell shell) {
+	public PlateEditorPCR(Composite parent, MPart part, MDirtyable dirtyable, EModelService modelService, MApplication application, Shell shell) {
+
 		super(part);
 		//
 		this.part = part;
 		this.dirtyable = dirtyable;
+		this.modelService = modelService;
+		this.application = application;
 		this.shell = shell;
 		//
 		initialize(parent);
@@ -101,9 +106,8 @@ public class PlateEditorPCR extends AbstractDataUpdateSupport implements IChemCl
 
 		super.preDestroy();
 		unloadPlate();
-		EModelService modelService = ModelSupportAddon.getModelService();
-		if(modelService != null) {
-			MApplication application = ModelSupportAddon.getApplication();
+		//
+		if(modelService != null && application != null) {
 			MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);
 			part.setToBeRendered(false);
 			part.setVisible(false);
@@ -207,27 +211,31 @@ public class PlateEditorPCR extends AbstractDataUpdateSupport implements IChemCl
 
 		extendedPCRPlateUI.update(plate);
 		//
-		IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-		DisplayUtils.getDisplay().asyncExec(new Runnable() {
+		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+		if(eventBroker != null) {
+			DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
-			@Override
-			public void run() {
+				@Override
+				public void run() {
 
-				eventBroker.send(IChemClipseEvents.TOPIC_PLATE_PCR_UPDATE_SELECTION, plate);
-			}
-		});
+					eventBroker.send(IChemClipseEvents.TOPIC_PLATE_PCR_UPDATE_SELECTION, plate);
+				}
+			});
+		}
 	}
 
 	private void unloadPlate() {
 
-		IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-		DisplayUtils.getDisplay().asyncExec(new Runnable() {
+		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+		if(eventBroker != null) {
+			DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
-			@Override
-			public void run() {
+				@Override
+				public void run() {
 
-				eventBroker.send(IChemClipseEvents.TOPIC_PLATE_PCR_UNLOAD_SELECTION, null);
-			}
-		});
+					eventBroker.send(IChemClipseEvents.TOPIC_PLATE_PCR_UNLOAD_SELECTION, null);
+				}
+			});
+		}
 	}
 }

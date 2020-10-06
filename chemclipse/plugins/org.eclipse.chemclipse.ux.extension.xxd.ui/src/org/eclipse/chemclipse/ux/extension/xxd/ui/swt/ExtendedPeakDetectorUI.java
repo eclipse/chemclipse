@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -33,7 +33,6 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
@@ -64,7 +63,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Cursor;
-import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -156,7 +155,6 @@ public class ExtendedPeakDetectorUI {
 	private int yStop;
 	private int xBoxMoveStart;
 	//
-	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 	private ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
 	private PeakChartSupport peakChartSupport = new PeakChartSupport();
 
@@ -165,6 +163,7 @@ public class ExtendedPeakDetectorUI {
 		private int keyCode;
 
 		public KeyPressedEventProcessor(int keyCode) {
+
 			this.keyCode = keyCode;
 		}
 
@@ -297,6 +296,7 @@ public class ExtendedPeakDetectorUI {
 
 	@Inject
 	public ExtendedPeakDetectorUI(Composite parent) {
+
 		detectionTypeDescriptions = new HashMap<String, String>();
 		detectionTypeDescriptions.put(DETECTION_TYPE_BASELINE, "Modus (Baseline) [Key:" + KEY_BASELINE + "]");
 		detectionTypeDescriptions.put(DETECTION_TYPE_BOX_BB, "Modus (BB) [Key:" + KEY_BB + "]");
@@ -322,7 +322,7 @@ public class ExtendedPeakDetectorUI {
 		}
 		//
 		setDetectionType(DETECTION_TYPE_NONE);
-		labelChromatogram.setText(chromatogramDataSupport.getChromatogramLabel(chromatogram));
+		labelChromatogram.setText(ChromatogramDataSupport.getChromatogramLabel(chromatogram));
 		this.peak = null;
 		//
 		updateChromatogramAndPeak();
@@ -802,38 +802,38 @@ public class ExtendedPeakDetectorUI {
 				int y;
 				switch(detectionType) {
 					case DETECTION_TYPE_BOX_BB:
-						y = getPlotArea().getBounds().height;
+						y = getPlotArea().getSize().y;
 						break;
 					case DETECTION_TYPE_BOX_VV:
 						y = event.y;
 						break;
 					case DETECTION_TYPE_BOX_BV:
-						y = getPlotArea().getBounds().height;
+						y = getPlotArea().getSize().y;
 						break;
 					case DETECTION_TYPE_BOX_VB:
 						y = event.y;
 						break;
 					default:
-						y = getPlotArea().getBounds().height;
+						y = getPlotArea().getSize().y;
 				}
 				startBoxPeakSelection(event.x, y);
 			} else if(xStart > 0 && xStop == 0) {
 				int y;
 				switch(detectionType) {
 					case DETECTION_TYPE_BOX_BB:
-						y = getPlotArea().getBounds().height;
+						y = getPlotArea().getSize().y;
 						break;
 					case DETECTION_TYPE_BOX_VV:
 						y = event.y;
 						break;
 					case DETECTION_TYPE_BOX_BV:
-						y = getPlotArea().getBounds().height;
+						y = getPlotArea().getSize().y;
 						break;
 					case DETECTION_TYPE_BOX_VB:
 						y = event.y;
 						break;
 					default:
-						y = getPlotArea().getBounds().height;
+						y = getPlotArea().getSize().y;
 				}
 				stopBoxPeakSelection(event.x, y);
 			} else {
@@ -999,8 +999,10 @@ public class ExtendedPeakDetectorUI {
 	private void extractPeak(String detectionType) {
 
 		this.peak = extractPeakFromUserSelection(xStart, yStart, xStop, yStop);
-		IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-		eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
+		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+		if(eventBroker != null) {
+			eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
+		}
 		/*
 		 * Get the selected range.
 		 */
@@ -1035,10 +1037,10 @@ public class ExtendedPeakDetectorUI {
 		/*
 		 * Calculate the rectangle factors.
 		 */
-		Rectangle rectangle = getPlotArea().getBounds();
-		int height = rectangle.height;
+		Point size = getPlotArea().getSize();
+		int height = size.y;
 		double factorHeight = 100.0d / height;
-		int width = rectangle.width;
+		int width = size.x;
 		double factorWidth = 100.0d / width;
 		/*
 		 * Calculate the percentage heights and widths.
@@ -1077,7 +1079,7 @@ public class ExtendedPeakDetectorUI {
 			try {
 				IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
 				ManualPeakDetector manualPeakDetector = new ManualPeakDetector();
-				IChromatogramMSD chromatogram = chromatogramSelectionMSD.getChromatogramMSD();
+				IChromatogramMSD chromatogram = chromatogramSelectionMSD.getChromatogram();
 				IChromatogramPeakMSD chromatogramPeak = manualPeakDetector.calculatePeak(chromatogram, startRetentionTime, stopRetentionTime, startAbundance, stopAbundance);
 				peak = chromatogramPeak;
 			} catch(PeakException e) {
@@ -1090,7 +1092,7 @@ public class ExtendedPeakDetectorUI {
 			try {
 				IChromatogramSelectionCSD chromatogramSelectionCSD = (IChromatogramSelectionCSD)chromatogramSelection;
 				ManualPeakDetector manualPeakDetector = new ManualPeakDetector();
-				IChromatogramCSD chromatogram = chromatogramSelectionCSD.getChromatogramCSD();
+				IChromatogramCSD chromatogram = chromatogramSelectionCSD.getChromatogram();
 				IChromatogramPeakCSD chromatogramPeak = manualPeakDetector.calculatePeak(chromatogram, startRetentionTime, stopRetentionTime, startAbundance, stopAbundance);
 				peak = chromatogramPeak;
 			} catch(PeakException e) {
@@ -1103,7 +1105,7 @@ public class ExtendedPeakDetectorUI {
 			try {
 				IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
 				ManualPeakDetector manualPeakDetector = new ManualPeakDetector();
-				IChromatogramWSD chromatogram = chromatogramSelectionWSD.getChromatogramWSD();
+				IChromatogramWSD chromatogram = chromatogramSelectionWSD.getChromatogram();
 				IChromatogramPeakWSD chromatogramPeak = manualPeakDetector.calculatePeak(chromatogram, startRetentionTime, stopRetentionTime, startAbundance, stopAbundance);
 				peak = chromatogramPeak;
 			} catch(PeakException e) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,8 +15,8 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
@@ -31,6 +31,7 @@ public class ScanSelectionHandler extends AbstractHandledEventProcessor implemen
 	private ExtendedChromatogramUI extendedChromatogramUI;
 
 	public ScanSelectionHandler(ExtendedChromatogramUI extendedChromatogramUI) {
+
 		this.extendedChromatogramUI = extendedChromatogramUI;
 	}
 
@@ -64,15 +65,17 @@ public class ScanSelectionHandler extends AbstractHandledEventProcessor implemen
 			IScan scan = chromatogram.getScan(scanNumber);
 			if(scan != null) {
 				chromatogramSelection.setSelectedScan(scan);
-				DisplayUtils.getDisplay().asyncExec(new Runnable() {
+				IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+				if(eventBroker != null) {
+					DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
-					@Override
-					public void run() {
+						@Override
+						public void run() {
 
-						IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-						eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scan);
-					}
-				});
+							eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scan);
+						}
+					});
+				}
 			}
 		}
 	}

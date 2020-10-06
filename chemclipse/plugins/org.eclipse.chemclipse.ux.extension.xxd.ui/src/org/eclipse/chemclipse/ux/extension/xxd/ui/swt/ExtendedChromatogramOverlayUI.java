@@ -32,7 +32,6 @@ import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.validators.TraceValidator;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
@@ -103,6 +102,10 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 	private final OverlayChartSupport overlayChartSupport = new OverlayChartSupport();
 	//
 	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	//
+	private EModelService modelService;
+	private MApplication application;
+	private EPartService partService;
 	//
 	@SuppressWarnings("rawtypes")
 	private final Map<IChromatogramSelection, List<String>> chromatogramSelections = new LinkedHashMap<>();
@@ -357,17 +360,17 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 		});
 	}
 
+	public void update(EModelService modelService, MApplication application, EPartService partService) {
+
+		this.modelService = modelService;
+		this.application = application;
+		this.partService = partService;
+	}
+
 	private void createNewPart(String bundle, String classPath, String name) {
 
 		String partStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_OVERLAY_CHROMATOGRAM_EXTRA);
 		if(!partStackId.equals(PartSupport.PARTSTACK_NONE)) {
-			/*
-			 * Getting the items via the EclipseContext failed here.
-			 */
-			EModelService modelService = ModelSupportAddon.getModelService();
-			MApplication application = ModelSupportAddon.getApplication();
-			EPartService partService = ModelSupportAddon.getPartService();
-			//
 			if(modelService != null && application != null && partService != null) {
 				MPart part = MBasicFactory.INSTANCE.createPart();
 				part.setLabel(name);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -29,7 +29,6 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.processing.ui.E4ProcessSupplierContext;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.SequenceImportRunnable;
@@ -58,6 +57,8 @@ public class SequenceEditor extends AbstractDataUpdateSupport implements IDataUp
 	//
 	private final MPart part;
 	private final MDirtyable dirtyable;
+	private final EModelService modelService;
+	private final MApplication application;
 	//
 	private File sequenceFile;
 	private ExtendedSequenceListUI extendedSequenceListUI;
@@ -65,11 +66,14 @@ public class SequenceEditor extends AbstractDataUpdateSupport implements IDataUp
 	private E4ProcessSupplierContext processContext;
 
 	@Inject
-	public SequenceEditor(Composite parent, MPart part, MDirtyable dirtyable, Shell shell) {
+	public SequenceEditor(Composite parent, MPart part, MDirtyable dirtyable, EModelService modelService, MApplication application, Shell shell) {
+
 		super(part);
 		//
 		this.part = part;
 		this.dirtyable = dirtyable;
+		this.modelService = modelService;
+		this.application = application;
 		//
 		initialize(parent);
 	}
@@ -101,9 +105,8 @@ public class SequenceEditor extends AbstractDataUpdateSupport implements IDataUp
 	protected void preDestroy() {
 
 		super.preDestroy();
-		EModelService modelService = ModelSupportAddon.getModelService();
-		if(modelService != null) {
-			MApplication application = ModelSupportAddon.getApplication();
+		//
+		if(modelService != null && application != null) {
 			MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);
 			part.setToBeRendered(false);
 			part.setVisible(false);

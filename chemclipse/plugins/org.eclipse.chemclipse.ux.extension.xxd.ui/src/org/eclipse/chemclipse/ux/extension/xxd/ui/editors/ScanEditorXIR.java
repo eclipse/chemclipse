@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,10 +22,10 @@ import javax.inject.Inject;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorXIR;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ScanXIRImportRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
@@ -54,8 +54,8 @@ public class ScanEditorXIR extends AbstractDataUpdateSupport implements IScanEdi
 	//
 	private final MPart part;
 	private final MDirtyable dirtyable;
-	//
-	private final IEventBroker eventBroker;
+	private final EModelService modelService;
+	private final MApplication application;
 	//
 	private File scanFile;
 	private ExtendedXIRScanUI extendedScanXIREditorUI;
@@ -65,12 +65,14 @@ public class ScanEditorXIR extends AbstractDataUpdateSupport implements IScanEdi
 	private final Shell shell;
 
 	@Inject
-	public ScanEditorXIR(Composite parent, MPart part, MDirtyable dirtyable, Shell shell) {
+	public ScanEditorXIR(Composite parent, MPart part, MDirtyable dirtyable, EModelService modelService, MApplication application, Shell shell) {
+
 		super(part);
 		//
 		this.part = part;
 		this.dirtyable = dirtyable;
-		this.eventBroker = ModelSupportAddon.getEventBroker();
+		this.modelService = modelService;
+		this.application = application;
 		this.shell = shell;
 		//
 		initialize(parent);
@@ -104,11 +106,13 @@ public class ScanEditorXIR extends AbstractDataUpdateSupport implements IScanEdi
 	protected void preDestroy() {
 
 		super.preDestroy();
-		eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XIR_UNLOAD_SELECTION, null);
 		//
-		EModelService modelService = ModelSupportAddon.getModelService();
-		if(modelService != null) {
-			MApplication application = ModelSupportAddon.getApplication();
+		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+		if(eventBroker != null) {
+			eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XIR_UNLOAD_SELECTION, null);
+		}
+		//
+		if(modelService != null && application != null) {
 			MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);
 			part.setToBeRendered(false);
 			part.setVisible(false);
