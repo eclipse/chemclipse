@@ -22,6 +22,7 @@ import java.util.function.Consumer;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -54,6 +55,8 @@ import org.eclipse.swt.widgets.ToolItem;
 
 public class ChromatogramReferencesUI {
 
+	private static final Logger logger = Logger.getLogger(ChromatogramReferencesUI.class);
+	//
 	private final EditorToolBar toolBar;
 	private final ComboContainer comboChromatograms;
 	//
@@ -69,12 +72,16 @@ public class ChromatogramReferencesUI {
 	public ChromatogramReferencesUI(EditorToolBar editorToolBar, Consumer<IChromatogramSelection<?, ?>> chromatogramReferencesListener) {
 
 		comboChromatograms = new ComboContainer(chromatogramReferencesListener.andThen(t -> updateButtons()));
+		//
 		Action action = new Action("References", Action.AS_CHECK_BOX) {
 
 			@Override
 			public void run() {
 
 				toolBar.setVisible(isChecked());
+				if(isChecked()) {
+					updateButtons();
+				}
 			}
 
 			@Override
@@ -389,23 +396,30 @@ public class ChromatogramReferencesUI {
 
 	private void updateButtons() {
 
-		int size = comboChromatograms.data.size();
-		int selectionIndex = comboChromatograms.currentIndex();
-		//
-		buttonPrevious.setEnabled(selectionIndex > 0);
-		buttonNext.setEnabled(selectionIndex < size - 1);
-		buttonRemove.setEnabled(selectionIndex > 0); // 0 is the master can't be removed
-		buttonRemoveAll.setEnabled(selectionIndex == 0 && size > 1); // Remove all when in master modus
-		buttonAdd.setEnabled(selectionIndex == 0); // 0 references can be added only to master
+		try {
+			if(toolBar.isVisible()) {
+				int size = comboChromatograms.data.size();
+				int selectionIndex = comboChromatograms.currentIndex();
+				//
+				buttonPrevious.setEnabled(selectionIndex > 0);
+				buttonNext.setEnabled(selectionIndex < size - 1);
+				buttonRemove.setEnabled(selectionIndex > 0); // 0 is the master can't be removed
+				buttonRemoveAll.setEnabled(selectionIndex == 0 && size > 1); // Remove all when in master modus
+				buttonAdd.setEnabled(selectionIndex == 0); // 0 references can be added only to master
+			}
+		} catch(Exception e) {
+			logger.warn(e);
+		}
 	}
 
 	private static final class ComboContainer implements ISelectionChangedListener {
 
+		private final AtomicReference<ComboViewer> viewerReference = new AtomicReference<>();
+		private final Consumer<IChromatogramSelection<?, ?>> listener;
+		//
 		private IChromatogramSelection<?, ?> master;
 		private IStructuredSelection selection = StructuredSelection.EMPTY;
 		private List<IChromatogramSelection<?, ?>> data = Collections.emptyList();
-		private final AtomicReference<ComboViewer> viewerReference = new AtomicReference<>();
-		private final Consumer<IChromatogramSelection<?, ?>> listener;
 
 		public ComboContainer(Consumer<IChromatogramSelection<?, ?>> chromatogramReferencesListener) {
 
