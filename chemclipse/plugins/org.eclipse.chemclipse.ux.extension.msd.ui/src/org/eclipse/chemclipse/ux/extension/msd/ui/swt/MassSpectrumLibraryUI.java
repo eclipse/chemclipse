@@ -30,12 +30,12 @@ import org.eclipse.chemclipse.msd.swt.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
+import org.eclipse.chemclipse.ux.extension.msd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -225,9 +225,11 @@ public class MassSpectrumLibraryUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-				eventBroker.post(IChemClipseEvents.TOPIC_LIBRARY_MSD_ADD_TO_DB_SEARCH, massSpectrumFile);
-				MessageDialog.openConfirm(DisplayUtils.getShell(), "DB Search", "The library has been added.");
+				IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+				if(eventBroker != null) {
+					eventBroker.post(IChemClipseEvents.TOPIC_LIBRARY_MSD_ADD_TO_DB_SEARCH, massSpectrumFile);
+					MessageDialog.openConfirm(DisplayUtils.getShell(), "DB Search", "The library has been added.");
+				}
 			}
 		});
 		//
@@ -245,9 +247,11 @@ public class MassSpectrumLibraryUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-				eventBroker.post(IChemClipseEvents.TOPIC_LIBRARY_MSD_REMOVE_FROM_DB_SEARCH, massSpectrumFile);
-				MessageDialog.openConfirm(DisplayUtils.getShell(), "DB Search", "The library has been removed.");
+				IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+				if(eventBroker != null) {
+					eventBroker.post(IChemClipseEvents.TOPIC_LIBRARY_MSD_REMOVE_FROM_DB_SEARCH, massSpectrumFile);
+					MessageDialog.openConfirm(DisplayUtils.getShell(), "DB Search", "The library has been removed.");
+				}
 			}
 		});
 		//
@@ -348,9 +352,11 @@ public class MassSpectrumLibraryUI extends Composite {
 					IScanMSD massSpectrum = (IScanMSD)firstElement;
 					MassSpectrumSelectionUpdateNotifier.fireUpdateChange(massSpectrum, true);
 					//
-					IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-					IIdentificationTarget identificationTarget = getIdentificationTarget(massSpectrum);
-					eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, identificationTarget);
+					IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+					if(eventBroker != null) {
+						IIdentificationTarget identificationTarget = getIdentificationTarget(massSpectrum);
+						eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, identificationTarget);
+					}
 					/*
 					 * It's important to set the focus here.
 					 * The PerspectiveSwitchHandler.focusPerspectiveAndView activates other views and sets the

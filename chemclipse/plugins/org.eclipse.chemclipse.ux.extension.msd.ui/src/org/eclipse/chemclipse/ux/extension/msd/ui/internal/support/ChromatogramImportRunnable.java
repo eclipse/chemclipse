@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -45,7 +45,7 @@ public class ChromatogramImportRunnable implements IRunnableWithProgress {
 		try {
 			monitor.beginTask("Import Chromatogram", IProgressMonitor.UNKNOWN);
 			IProcessingInfo<IChromatogramMSD> processingInfo = ChromatogramConverterMSD.getInstance().convert(file, monitor);
-			IChromatogramMSD chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
+			IChromatogramMSD chromatogram = processingInfo.getProcessingResult();
 			chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
 		} catch(Exception e) {
 			/*

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -195,13 +195,13 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 				 * Try to save the mass spectrum.
 				 */
 				monitor.subTask("Save Mass Spectrum");
-				IProcessingInfo processingInfo = MassSpectrumConverter.convert(massSpectrumFile, massSpectra, false, converterId, monitor);
+				IProcessingInfo<?> processingInfo = MassSpectrumConverter.convert(massSpectrumFile, massSpectra, false, converterId, monitor);
 				try {
 					/*
 					 * If no failures have occurred, set the dirty status to
 					 * false.
 					 */
-					processingInfo.getProcessingResult(File.class);
+					processingInfo.getProcessingResult();
 					dirtyable.setDirty(false);
 				} catch(TypeCastException e) {
 					logger.warn(e);

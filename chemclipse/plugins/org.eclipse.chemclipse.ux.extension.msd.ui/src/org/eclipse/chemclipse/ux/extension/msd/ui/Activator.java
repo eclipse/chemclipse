@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.e4.core.contexts.EclipseContextFactory;
+import org.eclipse.e4.core.contexts.IEclipseContext;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -28,6 +32,7 @@ public class Activator extends AbstractUIPlugin {
 	 * The constructor
 	 */
 	public Activator() {
+
 	}
 
 	/*
@@ -69,5 +74,19 @@ public class Activator extends AbstractUIPlugin {
 
 		Location location = Platform.getUserLocation();
 		return location.getURL().getPath().toString();
+	}
+
+	public IEclipseContext getEclipseContext() {
+
+		BundleContext bundleContext = getBundle().getBundleContext();
+		IEclipseContext eclipseContext = EclipseContextFactory.getServiceContext(bundleContext);
+		eclipseContext.set(Logger.class, null);
+		return eclipseContext;
+	}
+
+	public IEventBroker getEventBroker() {
+
+		IEclipseContext eclipseContext = getEclipseContext();
+		return eclipseContext.get(IEventBroker.class);
 	}
 }

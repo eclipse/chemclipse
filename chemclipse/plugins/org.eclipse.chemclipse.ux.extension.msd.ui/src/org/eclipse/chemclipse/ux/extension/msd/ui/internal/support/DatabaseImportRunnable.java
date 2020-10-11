@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -43,8 +43,8 @@ public class DatabaseImportRunnable implements IRunnableWithProgress {
 
 		try {
 			monitor.beginTask("Import Database", IProgressMonitor.UNKNOWN);
-			IProcessingInfo processingInfo = DatabaseConverter.convert(file, monitor);
-			massSpectra = (IMassSpectra)processingInfo.getProcessingResult(IMassSpectra.class);
+			IProcessingInfo<IMassSpectra> processingInfo = DatabaseConverter.convert(file, monitor);
+			massSpectra = processingInfo.getProcessingResult();
 		} catch(Exception e) {
 			/*
 			 * Exceptions: FileNotFoundException
