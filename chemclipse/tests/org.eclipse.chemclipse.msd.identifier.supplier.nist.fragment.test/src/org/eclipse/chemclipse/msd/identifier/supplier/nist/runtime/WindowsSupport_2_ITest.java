@@ -38,7 +38,7 @@ public class WindowsSupport_2_ITest extends TestCase {
 
 		String nistApp = TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_WINDOWS_NIST_APPLICATION);
 		try {
-			runtimeSupport = new WindowsSupport(new File(nistApp).getParentFile(), INistSupport.PARAMETER);
+			runtimeSupport = new WindowsSupport(new File(nistApp).getParentFile(), INistSupport.PARAMETER_BACKGROUND);
 			assertNotNull(runtimeSupport);
 		} catch(FileNotFoundException e) {
 			assertTrue("A file not found exception should not occur here.", false);
@@ -49,7 +49,7 @@ public class WindowsSupport_2_ITest extends TestCase {
 
 		String nistApp = "";
 		try {
-			runtimeSupport = new WindowsSupport(new File(nistApp).getParentFile(), INistSupport.PARAMETER);
+			runtimeSupport = new WindowsSupport(new File(nistApp).getParentFile(), INistSupport.PARAMETER_BACKGROUND);
 			assertNull(runtimeSupport);
 		} catch(FileNotFoundException e) {
 			assertTrue("A file not found exception should not occur here.", true);

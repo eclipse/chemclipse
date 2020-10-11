@@ -80,7 +80,7 @@
                </appInfo>
             </annotation>
          </attribute>
-         <attribute name="config" type="string">
+         <attribute name="identifierSettings" type="string">
             <annotation>
                <documentation>
                   

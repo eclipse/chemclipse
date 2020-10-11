@@ -31,7 +31,7 @@ public class LinuxWineSupport_DOSDEVICES_1_ITest extends TestCase {
 		nistApplication = TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_WINE_DOSDEVICES_NIST_APPLICATION);
 		testfileNistApplication = new File(nistApplication);
 		nistApplicationPath = testfileNistApplication.getParent();
-		runtimeSupport = new LinuxWineSupport(testfileNistApplication.getParentFile(), INistSupport.PARAMETER);
+		runtimeSupport = new LinuxWineSupport(testfileNistApplication.getParentFile(), INistSupport.PARAMETER_BACKGROUND);
 	}
 
 	@Override

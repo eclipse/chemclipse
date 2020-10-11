@@ -17,10 +17,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.Activator;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.MassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.PeakIdentifierSettings;
+import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.ScanDirectIdentifierSettings;
+import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.ScanIdentifierSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -39,19 +39,15 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	 */
 	public static final String P_NIST_APPLICATION = "nistApplication";
 	public static final String P_NUMBER_OF_TARGETS = "numberOfTargets";
-	public static final int DEF_NUMBER_OF_TARGETS = 3;
-	public static final String P_STORE_TARGETS = "storeTargets";
-	public static final boolean DEF_STORE_TARGETS = true;
+	public static final int DEF_NUMBER_OF_TARGETS = 15;
+	public static final String P_USE_OPTIMIZED_MASS_SPECTRUM = "useOptimizedMassSpectrum";
+	public static final boolean DEF_USE_OPTIMIZED_MASS_SPECTRUM = true;
 	public static final String P_MAC_WINE_BINARY = "macWineBinary";
 	public static final String DEF_MAC_WINE_BINARY = "/Applications/Wine.app";
-	public static final String P_USE_GUI_DIRECT = "useGUIDirect";
-	public static final boolean DEF_USE_GUI_DIRECT = false;
-	public static final boolean DEF_USE_GUI_DIRECT_MAC = true;
 	public static final String P_TIMEOUT_IN_MINUTES = "timeoutInMinutes";
 	public static final int DEF_TIMEOUT_IN_MINUTES = 20;
-	public static final String P_SHOW_GUI_DIALOG = "showGUIDialog";
-	public static final boolean DEF_SHOW_GUI_DIALOG = true;
-	//
+	public static final String P_WAIT_IN_SECONDS = "waitInSeconds";
+	public static final int DEF_WAIT_IN_SECONDS = 3;
 	public static final String P_MIN_MATCH_FACTOR = "minMatchFactor";
 	public static final float DEF_MIN_MATCH_FACTOR = 80.0f;
 	public static final String P_MIN_REVERSE_MATCH_FACTOR = "minReverseMatchFactor";
@@ -157,18 +153,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		Map<String, String> defaultValues = new HashMap<String, String>();
 		defaultValues.put(P_MAC_WINE_BINARY, DEF_MAC_WINE_BINARY);
 		defaultValues.put(P_NUMBER_OF_TARGETS, Integer.toString(DEF_NUMBER_OF_TARGETS));
-		defaultValues.put(P_STORE_TARGETS, Boolean.toString(DEF_STORE_TARGETS));
-		/*
-		 * Mac or other
-		 */
-		if(OperatingSystemUtils.isMac()) {
-			defaultValues.put(P_USE_GUI_DIRECT, Boolean.toString(DEF_USE_GUI_DIRECT_MAC));
-		} else {
-			defaultValues.put(P_USE_GUI_DIRECT, Boolean.toString(DEF_USE_GUI_DIRECT));
-		}
-		defaultValues.put(P_SHOW_GUI_DIALOG, Boolean.toString(DEF_SHOW_GUI_DIALOG));
+		defaultValues.put(P_USE_OPTIMIZED_MASS_SPECTRUM, Boolean.toString(DEF_USE_OPTIMIZED_MASS_SPECTRUM));
 		defaultValues.put(P_TIMEOUT_IN_MINUTES, Integer.toString(DEF_TIMEOUT_IN_MINUTES));
-		//
+		defaultValues.put(P_WAIT_IN_SECONDS, Integer.toString(DEF_WAIT_IN_SECONDS));
 		defaultValues.put(P_MIN_MATCH_FACTOR, Float.toString(DEF_MIN_MATCH_FACTOR));
 		defaultValues.put(P_MIN_REVERSE_MATCH_FACTOR, Float.toString(DEF_MIN_REVERSE_MATCH_FACTOR));
 		return defaultValues;
@@ -180,35 +167,44 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	/**
-	 * Returns the peak identifier settings.
-	 * 
-	 * @return IPeakIdentifierSettings
-	 */
 	public static PeakIdentifierSettings getPeakIdentifierSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		//
 		PeakIdentifierSettings settings = new PeakIdentifierSettings();
 		settings.setNistFolder(PreferenceSupplier.getNistInstallationFolder());
 		settings.setNumberOfTargets(preferences.getInt(P_NUMBER_OF_TARGETS, DEF_NUMBER_OF_TARGETS));
-		settings.setStoreTargets(preferences.getBoolean(P_STORE_TARGETS, DEF_STORE_TARGETS));
+		settings.setUseOptimizedMassSpectrum(preferences.getBoolean(P_USE_OPTIMIZED_MASS_SPECTRUM, DEF_USE_OPTIMIZED_MASS_SPECTRUM));
 		settings.setTimeoutInMinutes(preferences.getInt(P_TIMEOUT_IN_MINUTES, DEF_TIMEOUT_IN_MINUTES));
-		settings.setMinMatchFactor(getMinMatchFactor());
-		settings.setMinReverseMatchFactor(getMinReverseMatchFactor());
+		settings.setMinMatchFactor(preferences.getFloat(P_MIN_MATCH_FACTOR, DEF_MIN_MATCH_FACTOR));
+		settings.setMinReverseMatchFactor(preferences.getFloat(P_MIN_REVERSE_MATCH_FACTOR, DEF_MIN_REVERSE_MATCH_FACTOR));
 		//
 		return settings;
 	}
 
-	public static MassSpectrumIdentifierSettings getMassSpectrumIdentifierSettings() {
+	public static ScanIdentifierSettings getScanIdentifierSettings() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		MassSpectrumIdentifierSettings settings = new MassSpectrumIdentifierSettings();
+		//
+		ScanIdentifierSettings settings = new ScanIdentifierSettings();
 		settings.setNistFolder(PreferenceSupplier.getNistInstallationFolder());
 		settings.setNumberOfTargets(preferences.getInt(P_NUMBER_OF_TARGETS, DEF_NUMBER_OF_TARGETS));
-		settings.setStoreTargets(preferences.getBoolean(P_STORE_TARGETS, DEF_STORE_TARGETS));
+		settings.setUseOptimizedMassSpectrum(preferences.getBoolean(P_USE_OPTIMIZED_MASS_SPECTRUM, DEF_USE_OPTIMIZED_MASS_SPECTRUM));
 		settings.setTimeoutInMinutes(preferences.getInt(P_TIMEOUT_IN_MINUTES, DEF_TIMEOUT_IN_MINUTES));
-		settings.setMinMatchFactor(getMinMatchFactor());
-		settings.setMinReverseMatchFactor(getMinReverseMatchFactor());
+		settings.setMinMatchFactor(preferences.getFloat(P_MIN_MATCH_FACTOR, DEF_MIN_MATCH_FACTOR));
+		settings.setMinReverseMatchFactor(preferences.getFloat(P_MIN_REVERSE_MATCH_FACTOR, DEF_MIN_REVERSE_MATCH_FACTOR));
+		//
+		return settings;
+	}
+
+	public static ScanDirectIdentifierSettings getScanDirectIdentifierSettings() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		//
+		ScanDirectIdentifierSettings settings = new ScanDirectIdentifierSettings();
+		settings.setNistFolder(PreferenceSupplier.getNistInstallationFolder());
+		settings.setUseOptimizedMassSpectrum(preferences.getBoolean(P_USE_OPTIMIZED_MASS_SPECTRUM, DEF_USE_OPTIMIZED_MASS_SPECTRUM));
+		settings.setWaitInSeconds(preferences.getInt(P_WAIT_IN_SECONDS, DEF_WAIT_IN_SECONDS));
 		//
 		return settings;
 	}
@@ -217,63 +213,5 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.get(P_MAC_WINE_BINARY, DEF_MAC_WINE_BINARY);
-	}
-
-	public static boolean isUseGUIDirect() {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_USE_GUI_DIRECT, DEF_USE_GUI_DIRECT_MAC);
-	}
-
-	public static boolean isShowGUIDialog() {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_SHOW_GUI_DIALOG, DEF_SHOW_GUI_DIALOG);
-	}
-
-	public static void setShowGUIDialog(boolean showGUIDialog) {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		preferences.putBoolean(P_SHOW_GUI_DIALOG, showGUIDialog);
-	}
-
-	public static float getMinMatchFactor() {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getFloat(P_MIN_MATCH_FACTOR, DEF_MIN_MATCH_FACTOR);
-	}
-
-	public static float getMinReverseMatchFactor() {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getFloat(P_MIN_REVERSE_MATCH_FACTOR, DEF_MIN_REVERSE_MATCH_FACTOR);
-	}
-
-	/**
-	 * Returns the number of targets to use in the report.
-	 * 
-	 * @return int
-	 */
-	public static int getNumberOfTargets() {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getInt(P_NUMBER_OF_TARGETS, DEF_NUMBER_OF_TARGETS);
-	}
-
-	/**
-	 * Shall the targets be stored.
-	 * 
-	 * @return boolean
-	 */
-	public static boolean getStoreTargets() {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_STORE_TARGETS, DEF_STORE_TARGETS);
-	}
-
-	public static int getTimeoutInMinutes() {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getInt(P_TIMEOUT_IN_MINUTES, DEF_TIMEOUT_IN_MINUTES);
 	}
 }

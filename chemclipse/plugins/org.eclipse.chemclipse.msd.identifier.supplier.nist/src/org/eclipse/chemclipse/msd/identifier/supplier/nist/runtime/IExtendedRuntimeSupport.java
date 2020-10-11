@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -21,4 +21,19 @@ public interface IExtendedRuntimeSupport extends IRuntimeSupport {
 	 * @return {@link INistSupport}
 	 */
 	INistSupport getNistSupport();
+
+	/**
+	 * If the parameter contains '/PAR=2', then the background modus is used.
+	 * 
+	 * @param parameter
+	 * @return boolean
+	 */
+	default boolean isBatchModus() {
+
+		String parameter = getParameter();
+		if(parameter != null) {
+			return parameter.contains(INistSupport.PAR2);
+		}
+		return true;
+	}
 }

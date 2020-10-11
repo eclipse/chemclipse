@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2019 Lablicate GmbH.
+ * Copyright (c) 2010, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,37 +19,38 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.AbstractM
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IMassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.core.support.Identifier;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.MassSpectrumIdentifierSettings;
+import org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime.INistSupport;
+import org.eclipse.chemclipse.msd.identifier.supplier.nist.settings.ScanDirectIdentifierSettings;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class MassSpectrumIdentifier extends AbstractMassSpectrumIdentifier {
-
-	private static final String DESCRIPTION = "NIST-DB Identifier";
+public class ScanDirectIdentifier extends AbstractMassSpectrumIdentifier {
 
 	@Override
 	public IProcessingInfo<IMassSpectra> identify(List<IScanMSD> massSpectrumList, IMassSpectrumIdentifierSettings identifierSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo<IMassSpectra> processingInfo = new ProcessingInfo<>();
-		MassSpectrumIdentifierSettings massSpectrumIdentifierSettings;
-		if(identifierSettings instanceof MassSpectrumIdentifierSettings) {
-			massSpectrumIdentifierSettings = (MassSpectrumIdentifierSettings)identifierSettings;
+		//
+		if(identifierSettings == null) {
+			identifierSettings = PreferenceSupplier.getScanDirectIdentifierSettings();
+		}
+		//
+		if(identifierSettings instanceof ScanDirectIdentifierSettings) {
+			try {
+				ScanDirectIdentifierSettings scanDirectIdentifierSettings = (ScanDirectIdentifierSettings)identifierSettings;
+				Identifier identifier = new Identifier();
+				IMassSpectra massSpectra = identifier.runMassSpectrumIdentification(massSpectrumList, scanDirectIdentifierSettings, monitor);
+				processingInfo.setProcessingResult(massSpectra);
+			} catch(FileNotFoundException e) {
+				processingInfo.addErrorMessage(INistSupport.NIST_DESCRIPTION, "An I/O error ocurred.");
+			}
 		} else {
-			massSpectrumIdentifierSettings = PreferenceSupplier.getMassSpectrumIdentifierSettings();
+			processingInfo.addErrorMessage(INistSupport.NIST_DESCRIPTION, "The settings are not of type: " + ScanDirectIdentifierSettings.class);
 		}
-		try {
-			Identifier identifier = new Identifier();
-			IMassSpectra massSpectra = identifier.runMassSpectrumIdentification(massSpectrumList, massSpectrumIdentifierSettings, monitor);
-			processingInfo.setProcessingResult(massSpectra);
-		} catch(FileNotFoundException e) {
-			processingInfo.addErrorMessage(DESCRIPTION, "An I/O error ocurred.");
-		}
-		/*
-		 * Run the identifier.
-		 */
+		//
 		return processingInfo;
 	}
 }

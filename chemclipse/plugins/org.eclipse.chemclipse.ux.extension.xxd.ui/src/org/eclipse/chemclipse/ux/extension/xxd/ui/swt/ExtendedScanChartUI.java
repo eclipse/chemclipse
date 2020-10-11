@@ -431,6 +431,7 @@ public class ExtendedScanChartUI extends Composite implements ConfigurableUI<Sca
 
 		ScanIdentifierUI scanIdentifierUI = new ScanIdentifierUI(parent, SWT.NONE);
 		scanIdentifierUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
 		scanIdentifierUI.setUpdateListener(new IUpdateListener() {
 
 			@Override
@@ -449,6 +450,7 @@ public class ExtendedScanChartUI extends Composite implements ConfigurableUI<Sca
 				fireUpdateChromatogramSelection(display, null);
 			}
 		});
+		//
 		return scanIdentifierUI;
 	}
 

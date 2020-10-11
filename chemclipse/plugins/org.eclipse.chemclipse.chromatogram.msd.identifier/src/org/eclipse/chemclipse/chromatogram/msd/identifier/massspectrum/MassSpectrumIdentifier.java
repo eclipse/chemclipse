@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2019 Lablicate GmbH.
+ * Copyright (c) 2010, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -34,13 +34,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 
 /**
- * Use the methods of this class to identify a mass spectrum.<br/>
- * 
- * @author Dr. Philip Wenig
+ * Use the methods of this class to identify a mass spectrum.
  */
 public class MassSpectrumIdentifier {
 
 	private static final Logger logger = Logger.getLogger(MassSpectrumIdentifier.class);
+	//
 	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.chromatogram.msd.identifier.massSpectrumIdentifier";
 	private static final String NO_IDENTIFIER_AVAILABLE = "There is no suitable mass spectrum identifier available";
 
@@ -48,6 +47,7 @@ public class MassSpectrumIdentifier {
 	 * This class should have only static methods.
 	 */
 	private MassSpectrumIdentifier() {
+
 	}
 
 	/**
@@ -135,12 +135,21 @@ public class MassSpectrumIdentifier {
 			supplier.setId(element.getAttribute(Identifier.ID));
 			supplier.setDescription(element.getAttribute(Identifier.DESCRIPTION));
 			supplier.setIdentifierName(element.getAttribute(Identifier.IDENTIFIER_NAME));
+			if(element.getAttribute(Identifier.IDENTIFIER_SETTINGS) != null) {
+				try {
+					IMassSpectrumIdentifierSettings instance = (IMassSpectrumIdentifierSettings)element.createExecutableExtension(Identifier.IDENTIFIER_SETTINGS);
+					supplier.setIdentifierSettingsClass(instance.getClass());
+				} catch(CoreException e) {
+					logger.warn(e);
+					// settings class is optional, set null instead
+					supplier.setIdentifierSettingsClass(null);
+				}
+			}
 			identifierSupport.add(supplier);
 		}
 		return identifierSupport;
 	}
 
-	// --------------------------------------------private methods
 	/**
 	 * Returns a {@link IMassSpectrumIdentifier} instance given by the
 	 * identifierId or null, if none is available.
@@ -172,6 +181,7 @@ public class MassSpectrumIdentifier {
 		if("".equals(filterId)) {
 			return null;
 		}
+		//
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IConfigurationElement[] elements = registry.getConfigurationElementsFor(EXTENSION_POINT);
 		for(IConfigurationElement element : elements) {
@@ -179,10 +189,10 @@ public class MassSpectrumIdentifier {
 				return element;
 			}
 		}
+		//
 		return null;
 	}
 
-	// --------------------------------------------private methods
 	private static IProcessingInfo<IMassSpectra> getNoIdentifierAvailableProcessingInfo() {
 
 		IProcessingInfo<IMassSpectra> processingInfo = new ProcessingInfo<>();

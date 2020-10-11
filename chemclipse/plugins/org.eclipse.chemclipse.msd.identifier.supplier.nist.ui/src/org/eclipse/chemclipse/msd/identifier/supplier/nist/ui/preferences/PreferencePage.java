@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,21 +11,30 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.preferences;
 
+import java.io.File;
+
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.Activator;
-import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.FloatFieldEditor;
-import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.IntegerFieldEditor;
+import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
+	private DirectoryFieldEditor pathEditor;
+
 	public PreferencePage() {
+
 		super(GRID);
-		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setTitle("NIST-DB Commandline Connector");
+		setPreferenceStore(new ScopedPreferenceStore(InstanceScope.INSTANCE, PreferenceSupplier.INSTANCE().getPreferenceNode()));
+		setTitle("NIST (extern)");
+		setDescription("NIST-DB Application Settings");
+		noDefaultButton();
 	}
 
 	/**
@@ -36,28 +45,31 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	@Override
 	public void createFieldEditors() {
 
+		pathEditor = new DirectoryFieldEditor(PreferenceSupplier.P_NIST_APPLICATION, "NIST 'MSSEARCH' Folder", getFieldEditorParent()) {
+
+			@Override
+			protected boolean doCheckState() {
+
+				String value = pathEditor.getStringValue();
+				if(!value.isEmpty()) {
+					File location = new File(value);
+					IStatus status = PreferenceSupplier.validateLocation(location);
+					if(!status.isOK()) {
+						setErrorMessage(status.getMessage());
+						return false;
+					}
+				}
+				return super.doCheckState();
+			}
+		};
+		pathEditor.setEmptyStringAllowed(true);
+		addField(pathEditor);
 		/*
-		 * Use only the GUI without storing the results.
+		 * MAC OS X - try to define the Wine binary
 		 */
-		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_GUI_DIRECT, "Use the GUI version (results will be not stored)", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_GUI_DIALOG, "Show the GUI dialog", getFieldEditorParent()));
-		addField(new IntegerFieldEditor(PreferenceSupplier.P_TIMEOUT_IN_MINUTES, "Timeout (Minutes)", getFieldEditorParent()));
-		/*
-		 * Set additional settings.
-		 */
-		StringBuilder builder = new StringBuilder();
-		builder.append("Number of Targets (");
-		builder.append(PreferenceSupplier.MIN_NUMBER_OF_TARGETS);
-		builder.append(" - ");
-		builder.append(PreferenceSupplier.MAX_NUMBER_OF_TARGETS);
-		builder.append(")");
-		IntegerFieldEditor integerFieldEditor = new IntegerFieldEditor(PreferenceSupplier.P_NUMBER_OF_TARGETS, builder.toString(), getFieldEditorParent(), 3);
-		integerFieldEditor.setValidRange(PreferenceSupplier.MIN_NUMBER_OF_TARGETS, PreferenceSupplier.MAX_NUMBER_OF_TARGETS);
-		addField(integerFieldEditor);
-		addField(new BooleanFieldEditor(PreferenceSupplier.P_STORE_TARGETS, "Store the hits (results) in the peaks or mass spectra.", getFieldEditorParent()));
-		//
-		addField(new FloatFieldEditor(PreferenceSupplier.P_MIN_MATCH_FACTOR, "Min Match Factor", 0.0f, 100.0f, getFieldEditorParent()));
-		addField(new FloatFieldEditor(PreferenceSupplier.P_MIN_REVERSE_MATCH_FACTOR, "Min Reverse Match Factor", 0.0f, 100.0f, getFieldEditorParent()));
+		if(OperatingSystemUtils.isMac()) {
+			addField(new StringFieldEditor(PreferenceSupplier.P_MAC_WINE_BINARY, "Wine binary (/Applications/Wine.app)", getFieldEditorParent()));
+		}
 	}
 
 	/*

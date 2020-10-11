@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,11 +13,16 @@ package org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime;
 
 public interface INistSupport {
 
+	String NIST_IDENTIFIER = "NIST";
+	String NIST_DESCRIPTION = "NIST-DB Identifier";
 	/*
-	 * The parameter is used to run the NIST-DB
-	 * in batch mode.
+	 * The parameter is used to run the NIST-DB in batch mode.
+	 * NIST MS Search (nistms$.exe) Command Line Options, Ver24Man.pdf, page 60
 	 */
-	String PARAMETER = "/INSTRUMENT /PAR=2";
+	String PAR2 = "/PAR=2";
+	String INSTRUMENT = "/INSTRUMENT";
+	String PARAMETER_BACKGROUND = INSTRUMENT + " " + PAR2;
+	String PARAMETER_FOREGROUND = INSTRUMENT;
 	/*
 	 * The path is nist library specific.
 	 */

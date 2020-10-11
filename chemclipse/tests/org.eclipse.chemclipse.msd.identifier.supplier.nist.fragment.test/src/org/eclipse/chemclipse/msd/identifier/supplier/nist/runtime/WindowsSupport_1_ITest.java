@@ -32,7 +32,7 @@ public class WindowsSupport_1_ITest extends TestCase {
 		nistApplication = TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_WINDOWS_NIST_APPLICATION);
 		testfileNistApplication = new File(nistApplication);
 		nistApplicationPath = testfileNistApplication.getParent();
-		runtimeSupport = new WindowsSupport(testfileNistApplication.getParentFile(), INistSupport.PARAMETER);
+		runtimeSupport = new WindowsSupport(testfileNistApplication.getParentFile(), INistSupport.PARAMETER_BACKGROUND);
 	}
 
 	@Override

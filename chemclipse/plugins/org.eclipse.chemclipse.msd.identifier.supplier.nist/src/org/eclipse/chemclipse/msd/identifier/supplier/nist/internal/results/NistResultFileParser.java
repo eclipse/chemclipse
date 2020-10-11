@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.msd.identifier.supplier.nist.internal.results;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.regex.Matcher;
@@ -47,6 +46,7 @@ public class NistResultFileParser {
 	private Pattern libPattern;
 
 	public NistResultFileParser() {
+
 		compoundPattern = Pattern.compile(COMPOUND_PATTERN);
 		identifierPattern = Pattern.compile(IDENTIFIER_PATTERN);
 		hitPattern = Pattern.compile(HIT_PATTERN);
@@ -65,8 +65,7 @@ public class NistResultFileParser {
 	 */
 	public Compounds getCompounds(File results) {
 
-		String content = getResultFileContent(results);
-		return extractCompounds(content);
+		return extractCompounds(getResultFileContent(results));
 	}
 
 	/**
@@ -77,14 +76,9 @@ public class NistResultFileParser {
 
 		String content = "";
 		/*
-		 * Try to read the result file line by line.
+		 * Read the file as ISO-8859-1 (latin 1) to avoid crappy chars.
 		 */
-		BufferedReader reader = null;
-		try {
-			/*
-			 * Read the file as ISO-8859-1 (latin 1) to avoid crappy chars.
-			 */
-			reader = new BufferedReader(new InputStreamReader(new FileInputStream(results), "ISO8859_1"));
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(results), "ISO8859_1"))) {
 			String line;
 			StringBuilder builder = new StringBuilder();
 			while((line = reader.readLine()) != null) {
@@ -92,19 +86,10 @@ public class NistResultFileParser {
 				builder.append(DELIMITER);
 			}
 			content = builder.toString();
-		} catch(FileNotFoundException e) {
-			logger.warn(e);
 		} catch(IOException e) {
 			logger.warn(e);
-		} finally {
-			if(reader != null) {
-				try {
-					reader.close();
-				} catch(IOException e) {
-					logger.warn(e);
-				}
-			}
 		}
+		//
 		return content;
 	}
 
@@ -117,7 +102,6 @@ public class NistResultFileParser {
 	private Compounds extractCompounds(String input) {
 
 		Compounds compounds = new Compounds();
-		Compound compound;
 		/*
 		 * Find the compounds.
 		 */
@@ -126,12 +110,13 @@ public class NistResultFileParser {
 			/*
 			 * Each compound could have more than one hit.
 			 */
-			compound = new Compound();
+			Compound compound = new Compound();
 			extractAndAddIdentifier(matcher.group(1), compound); // ID of the peak
 			extractAndAddInLibFactor(matcher.group(4), compound); // InLib factor
 			extractAndAddHits(matcher.group(5), compound); // Hits
 			compounds.add(compound);
 		}
+		//
 		return compounds;
 	}
 

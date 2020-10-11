@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,6 +24,7 @@ public abstract class AbstractLinuxWineSupport extends AbstractWineRuntimeSuppor
 	 * @param parameter
 	 */
 	public AbstractLinuxWineSupport(String application, String parameter) throws FileNotFoundException {
+
 		super(application, parameter);
 	}
 
@@ -31,8 +32,7 @@ public abstract class AbstractLinuxWineSupport extends AbstractWineRuntimeSuppor
 	public Process executeRunCommand() throws IOException {
 
 		Runtime runtime = Runtime.getRuntime();
-		Process process = runtime.exec(getRunCommand());
-		return process;
+		return runtime.exec(getRunCommand());
 	}
 
 	private String getRunCommand() {

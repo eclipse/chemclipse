@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -21,15 +21,30 @@ public class RuntimeSupportFactory {
 
 	/**
 	 * Returns the appropriate runtime support.
+	 * By default, it is operated in background modus.
 	 * 
-	 * @param application
-	 * @throws FileNotFoundException
+	 * @param applicationFolder
 	 * @return {@link IExtendedRuntimeSupport}
+	 * @throws FileNotFoundException
 	 */
 	public static IExtendedRuntimeSupport getRuntimeSupport(File applicationFolder) throws FileNotFoundException {
 
+		return getRuntimeSupport(applicationFolder, true);
+	}
+
+	/**
+	 * Returns the appropriate runtime support.
+	 * 
+	 * @param applicationFolder
+	 * @param batchModus
+	 * @return {@link IExtendedRuntimeSupport}
+	 * @throws FileNotFoundException
+	 */
+	public static IExtendedRuntimeSupport getRuntimeSupport(File applicationFolder, boolean batchModus) throws FileNotFoundException {
+
 		IExtendedRuntimeSupport runtimeSupport;
-		String parameter = INistSupport.PARAMETER;
+		String parameter = batchModus ? INistSupport.PARAMETER_BACKGROUND : INistSupport.PARAMETER_FOREGROUND;
+		//
 		if(OperatingSystemUtils.isWindows()) {
 			runtimeSupport = new WindowsSupport(applicationFolder, parameter);
 		} else if(OperatingSystemUtils.isMac()) {

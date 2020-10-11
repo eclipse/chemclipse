@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.msd.identifier.supplier.nist.settings;
 
 import java.io.File;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.MassSpectrumIdentifierAdapterSettings;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty.DialogType;
@@ -24,7 +23,7 @@ import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class MassSpectrumIdentifierSettings extends MassSpectrumIdentifierAdapterSettings implements INistSettings {
+public class ScanIdentifierSettings extends AbstractScanSearchSettings {
 
 	@JsonProperty(value = "NIST Folder (MSSEARCH)", defaultValue = "")
 	@JsonPropertyDescription("Select the NIST-DB folder, called MSSEARCH.")
@@ -34,17 +33,17 @@ public class MassSpectrumIdentifierSettings extends MassSpectrumIdentifierAdapte
 	@JsonPropertyDescription(value = "The number of iterations to targets to store.")
 	@IntSettingsProperty
 	private int numberOfTargets = PreferenceSupplier.DEF_NUMBER_OF_TARGETS;
+	@JsonProperty(value = "Use Optimized Mass Spectrum", defaultValue = "true")
+	@JsonPropertyDescription(value = "If true, the optimized spectrum will be used if available.")
+	private boolean useOptimizedMassSpectrum = true;
 	@JsonProperty(value = "Min Match Factor", defaultValue = "80.0")
 	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_FACTOR, maxValue = PreferenceSupplier.MAX_FACTOR)
-	private float minMatchFactor = PreferenceSupplier.getMinMatchFactor();
+	private float minMatchFactor = 80.0f;
 	@JsonProperty(value = "Min Reverse Match Factor", defaultValue = "80.0")
 	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_FACTOR, maxValue = PreferenceSupplier.MAX_FACTOR)
-	private float minReverseMatchFactor = PreferenceSupplier.getMinReverseMatchFactor();
-	@JsonProperty(value = "Store Targets", defaultValue = "true")
-	@JsonPropertyDescription(value = "Shall the targets be stored.")
-	private boolean storeTargets = true;
+	private float minReverseMatchFactor = 80.0f;
 	@JsonProperty(value = "Timeout [min]", defaultValue = "20")
-	@JsonPropertyDescription(value = "The timeout in minutes to stop the action if something goes wrong.")
+	@JsonPropertyDescription(value = "The timeout in minutes to stop the background action if something goes wrong.")
 	@IntSettingsProperty
 	private int timeoutInMinutes = 20;
 
@@ -54,7 +53,6 @@ public class MassSpectrumIdentifierSettings extends MassSpectrumIdentifierAdapte
 		return nistFolder;
 	}
 
-	@Override
 	public void setNistFolder(File nistFolder) {
 
 		this.nistFolder = nistFolder;
@@ -66,7 +64,6 @@ public class MassSpectrumIdentifierSettings extends MassSpectrumIdentifierAdapte
 		return numberOfTargets;
 	}
 
-	@Override
 	public void setNumberOfTargets(int numberOfTargets) {
 
 		if(numberOfTargets >= PreferenceSupplier.MIN_NUMBER_OF_TARGETS && numberOfTargets <= PreferenceSupplier.MAX_NUMBER_OF_TARGETS) {
@@ -74,6 +71,18 @@ public class MassSpectrumIdentifierSettings extends MassSpectrumIdentifierAdapte
 		}
 	}
 
+	@Override
+	public boolean isUseOptimizedMassSpectrum() {
+
+		return useOptimizedMassSpectrum;
+	}
+
+	public void setUseOptimizedMassSpectrum(boolean useOptimizedMassSpectrum) {
+
+		this.useOptimizedMassSpectrum = useOptimizedMassSpectrum;
+	}
+
+	@Override
 	public float getMinMatchFactor() {
 
 		return minMatchFactor;
@@ -84,6 +93,7 @@ public class MassSpectrumIdentifierSettings extends MassSpectrumIdentifierAdapte
 		this.minMatchFactor = minMatchFactor;
 	}
 
+	@Override
 	public float getMinReverseMatchFactor() {
 
 		return minReverseMatchFactor;
@@ -95,26 +105,25 @@ public class MassSpectrumIdentifierSettings extends MassSpectrumIdentifierAdapte
 	}
 
 	@Override
-	public boolean getStoreTargets() {
-
-		return storeTargets;
-	}
-
-	@Override
-	public void setStoreTargets(boolean storeTargets) {
-
-		this.storeTargets = storeTargets;
-	}
-
-	@Override
 	public int getTimeoutInMinutes() {
 
 		return timeoutInMinutes;
 	}
 
-	@Override
 	public void setTimeoutInMinutes(int timeoutInMinutes) {
 
 		this.timeoutInMinutes = timeoutInMinutes;
+	}
+
+	@Override
+	public boolean isBatchModus() {
+
+		return true; // Always true
+	}
+
+	@Override
+	public int getWaitInSeconds() {
+
+		return 3; // Only used if batch modus == false
 	}
 }
