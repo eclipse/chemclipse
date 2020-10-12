@@ -108,11 +108,6 @@
       <children xsi:type="menu:Menu" xmi:id="_GRIXQBDTEei3erbzL7KMaw" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.spectrum.filter" label="Filter"/>
     </elements>
   </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_bX07oENPEeaHxO-Ahlk0cA" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.main" positionInList="after:org.eclipse.chemclipse.ux.extension.ui.spectra.menu">
-    <elements xsi:type="menu:Menu" xmi:id="_OE3pEE8xEeWZpNQ-SxTOqA" elementId="org.eclipse.chemclipse.ux.extension.ui.controls.menu" label="Controls">
-      <children xsi:type="menu:HandledMenuItem" xmi:id="_8trigENOEeaHxO-Ahlk0cA" elementId="org.eclipse.chemclipse.ux.extension.ui.handledmenuitem.infoControls" label="Info" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/info.gif" command="_JZm4AENOEeaHxO-Ahlk0cA"/>
-    </elements>
-  </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_9O66YK1-EeeOj_frlqyeaw" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.main" positionInList="after:org.eclipse.chemclipse.ux.extension.ui.menu">
     <elements xsi:type="menu:Menu" xmi:id="_9qTloDL-EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.ux.extension.ui.menu.process" label="Processors"/>
   </fragments>
