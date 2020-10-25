@@ -9,6 +9,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactoring
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
@@ -21,6 +22,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.ScrolledComposite;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -35,10 +38,16 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 
 	private boolean isDontAskAgain;
 	private boolean isUseSystemDefaults;
+	//
+	private Button buttonDefault;
+	private Button buttonUser;
+	private SettingsUI<?> settingsUI;
+	//
 	private String jsonSettings;
 	private final ProcessorPreferences<T> preferences;
 
 	public SettingsPreferencesPage(ProcessorPreferences<T> preferences) {
+
 		super(SettingsPreferencesPage.class.getName());
 		this.preferences = preferences;
 	}
@@ -46,26 +55,107 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 	@Override
 	public void createControl(Composite parent) {
 
-		boolean requiresUserSettings = preferences.requiresUserSettings();
+		ScrolledComposite scrolledComposite = new ScrolledComposite(parent, SWT.V_SCROLL);
+		scrolledComposite.setLayout(new GridLayout(1, true));
+		scrolledComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		//
+		Composite control = createOptionSection(scrolledComposite);
+		control.pack(true);
+		//
+		scrolledComposite.setMinSize(control.computeSize(SWT.DEFAULT, SWT.DEFAULT));
+		scrolledComposite.setContent(control);
+		scrolledComposite.setExpandVertical(true);
+		scrolledComposite.setExpandHorizontal(false);
+		scrolledComposite.setAlwaysShowScrollBars(false);
+		//
+		setControl(scrolledComposite);
+	}
+
+	public boolean getIsDontAskAgainEdited() {
+
+		return isDontAskAgain;
+	}
+
+	public String getSettingsEdited() throws IOException {
+
+		return jsonSettings;
+	}
+
+	public boolean getIsUseSystemDefaultsEdited() {
+
+		return isUseSystemDefaults;
+	}
+
+	private Composite createOptionSection(Composite parent) {
+
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new GridLayout());
-		Button buttonDefault = new Button(composite, SWT.RADIO);
-		buttonDefault.setText("Use System Options");
-		if(requiresUserSettings) {
+		composite.setLayout(new GridLayout(1, true));
+		GridData gridData = new GridData(GridData.FILL_BOTH);
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.grabExcessVerticalSpace = true;
+		composite.setLayoutData(gridData);
+		//
+		createSystemOptions(composite);
+		createUserOptions(composite);
+		//
+		Listener validationListener = createValidationListener();
+		SelectionListener selectionListener = createSelectionListener(validationListener);
+		addButtonSettings(composite, validationListener, selectionListener);
+		//
+		return composite;
+	}
+
+	private void createSystemOptions(Composite parent) {
+
+		buttonDefault = createButtonDefault(parent);
+		//
+		if(preferences.requiresUserSettings()) {
 			buttonDefault.setEnabled(false);
 			buttonDefault.setToolTipText("This processor does not offer System options or they are not applicable at the moment");
 		}
-		Label titleBarSeparator = new Label(composite, SWT.HORIZONTAL | SWT.SEPARATOR);
+		//
+		Label titleBarSeparator = new Label(parent, SWT.HORIZONTAL | SWT.SEPARATOR);
 		titleBarSeparator.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		Button buttonUser = new Button(composite, SWT.RADIO);
-		buttonUser.setText("Use Specific Options");
-		SettingsUI<?> settingsUI;
+	}
+
+	private Button createButtonDefault(Composite parent) {
+
+		Button button = new Button(parent, SWT.RADIO);
+		button.setText("Use System Options");
+		//
+		return button;
+	}
+
+	private void createUserOptions(Composite parent) {
+
+		buttonUser = createButtonUser(parent);
+		settingsUI = createSettingsUI(parent);
+	}
+
+	private Button createButtonUser(Composite parent) {
+
+		Button button = new Button(parent, SWT.RADIO);
+		button.setText("Use Specific Options");
+		//
+		return button;
+	}
+
+	private SettingsUI<?> createSettingsUI(Composite parent) {
+
+		SettingsUI<?> settingsUI = null;
+		//
 		try {
-			settingsUI = new SettingsUI<>(composite, preferences);
+			settingsUI = new SettingsUI<>(parent, preferences);
+			settingsUI.setLayoutData(new GridData(GridData.FILL_BOTH));
 		} catch(IOException e1) {
 			throw new RuntimeException("reading settings failed", e1);
 		}
-		settingsUI.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		//
+		return settingsUI;
+	}
+
+	private Listener createValidationListener() {
+
 		Listener validationListener = new Listener() {
 
 			@Override
@@ -88,13 +178,19 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 				try {
 					jsonSettings = settingsUI.getControl().getSettings();
 				} catch(Exception e) {
-					Activator.getDefault().getLog().log(new Status(IStatus.ERROR, getClass().getName(), "Error while fetching settings", e));
+					Activator.getDefault().getLog().log(new Status(IStatus.ERROR, getClass().getName(), "Error while fetching the settings.", e));
 					setErrorMessage(e.toString());
 					setPageComplete(false);
 				}
 			}
 		};
-		SelectionListener radioButtonListener = new SelectionListener() {
+		//
+		return validationListener;
+	}
+
+	private SelectionListener createSelectionListener(Listener validationListener) {
+
+		SelectionListener selectionListener = new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -103,57 +199,40 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 				validationListener.handleEvent(null);
 				isUseSystemDefaults = buttonDefault.getSelection();
 			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-
-			}
 		};
-		buttonDefault.addSelectionListener(radioButtonListener);
-		buttonUser.addSelectionListener(radioButtonListener);
+		//
+		return selectionListener;
+	}
+
+	private void addButtonSettings(Composite parent, Listener validationListener, SelectionListener selectionListener) {
+
+		buttonDefault.addSelectionListener(selectionListener);
+		buttonUser.addSelectionListener(selectionListener);
+		//
 		if(preferences.getDialogBehaviour() == DialogBehavior.NONE) {
 			isDontAskAgain = false;
 		} else {
-			Button buttonDontAskAgain = new Button(composite, SWT.CHECK);
+			Button buttonDontAskAgain = new Button(parent, SWT.CHECK);
 			buttonDontAskAgain.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, true, false));
 			buttonDontAskAgain.setText("Remember my decision and don't ask again");
-			buttonDontAskAgain.addSelectionListener(new SelectionListener() {
+			buttonDontAskAgain.addSelectionListener(new SelectionAdapter() {
 
 				@Override
 				public void widgetSelected(SelectionEvent e) {
 
 					isDontAskAgain = buttonDontAskAgain.getSelection();
 				}
-
-				@Override
-				public void widgetDefaultSelected(SelectionEvent e) {
-
-				}
 			});
 			buttonDontAskAgain.setSelection(isDontAskAgain = !(preferences.getDialogBehaviour() == DialogBehavior.SHOW));
 		}
-		if(preferences.isUseSystemDefaults() && !requiresUserSettings) {
+		//
+		if(preferences.isUseSystemDefaults() && !preferences.requiresUserSettings()) {
 			buttonDefault.setSelection(true);
 		} else {
 			buttonUser.setSelection(true);
 		}
-		radioButtonListener.widgetSelected(null);
+		//
+		selectionListener.widgetSelected(null);
 		settingsUI.getControl().addChangeListener(validationListener);
-		setControl(composite);
-	}
-
-	public boolean getIsDontAskAgainEdited() {
-
-		return isDontAskAgain;
-	}
-
-	public String getSettingsEdited() throws IOException {
-
-		return jsonSettings;
-	}
-
-	public boolean getIsUseSystemDefaultsEdited() {
-
-		return isUseSystemDefaults;
 	}
 }
