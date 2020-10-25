@@ -7,19 +7,16 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings;
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.AbstractPeakDetectorSettingsMSD;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class PeakDetectorSettings extends AbstractPeakDetectorSettingsMSD {
+public class AbstractProcessSettings extends AbstractPeakDetectorSettingsMSD implements IProcessSettings {
 
-	@JsonIgnore
-	private IOnsiteSettings onsiteSettings;
 	@JsonProperty(value = "Min S/N Ratio", defaultValue = "0.0")
 	private float minSignalToNoiseRatio = 0.0f;
 	@JsonProperty(value = "Min Leading", defaultValue = "0.1")
@@ -33,71 +30,73 @@ public class PeakDetectorSettings extends AbstractPeakDetectorSettingsMSD {
 	@JsonProperty(value = "Filter Model Peaks", defaultValue = "true")
 	private boolean filterModelPeaks = true;
 
-	public PeakDetectorSettings() {
-
-		onsiteSettings = new OnsiteSettings();
-	}
-
-	public IOnsiteSettings getOnsiteSettings() {
-
-		return onsiteSettings;
-	}
-
+	@Override
 	public float getMinSignalToNoiseRatio() {
 
 		return minSignalToNoiseRatio;
 	}
 
+	@Override
 	public void setMinSignalToNoiseRatio(float minSignalToNoiseRatio) {
 
 		this.minSignalToNoiseRatio = minSignalToNoiseRatio;
 	}
 
+	@Override
 	public float getMinLeading() {
 
 		return minLeading;
 	}
 
+	@Override
 	public void setMinLeading(float minLeading) {
 
 		this.minLeading = minLeading;
 	}
 
+	@Override
 	public float getMaxLeading() {
 
 		return maxLeading;
 	}
 
+	@Override
 	public void setMaxLeading(float maxLeading) {
 
 		this.maxLeading = maxLeading;
 	}
 
+	@Override
 	public float getMinTailing() {
 
 		return minTailing;
 	}
 
+	@Override
 	public void setMinTailing(float minTailing) {
 
 		this.minTailing = minTailing;
 	}
 
+	@Override
 	public float getMaxTailing() {
 
 		return maxTailing;
 	}
 
+	@Override
 	public void setMaxTailing(float maxTailing) {
 
 		this.maxTailing = maxTailing;
 	}
 
+	@Override
 	public boolean isFilterModelPeaks() {
 
 		return filterModelPeaks;
 	}
 
+	@Override
 	public void setFilterModelPeaks(boolean filterModelPeaks) {
 
 		this.filterModelPeaks = filterModelPeaks;

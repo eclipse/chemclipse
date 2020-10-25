@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.support.PeakProcessorSupport;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSD;
@@ -37,6 +38,7 @@ public class AMDISParser {
 	private final File resFile;
 
 	public AMDISParser(File fileChromatogram) {
+
 		eluFile = getFile(fileChromatogram, "ELU");
 		finFile = getFile(fileChromatogram, "FIN");
 		resFile = getFile(fileChromatogram, "RES");
@@ -55,7 +57,7 @@ public class AMDISParser {
 			}
 			IProcessingInfo<IPeaks<?>> peaksResult = PeakConverterMSD.convert(eluFile, PeakProcessorSupport.PEAK_CONVERTER_ID, subMonitor.split(70));
 			if(peaksResult == null) {
-				result.addErrorMessage(AmdisIdentifier.IDENTIFIER, "PeakParser returned no result");
+				result.addErrorMessage(PreferenceSupplier.IDENTIFIER, "PeakParser returned no result");
 				return result;
 			}
 			Object processingResult = peaksResult.getProcessingResult();
@@ -66,7 +68,7 @@ public class AMDISParser {
 				result.addMessage(message);
 			}
 		} catch(IOException e) {
-			result.addErrorMessage(AmdisIdentifier.IDENTIFIER, "Reading data failed: " + e);
+			result.addErrorMessage(PreferenceSupplier.IDENTIFIER, "Reading data failed: " + e);
 		} finally {
 			// delete files produced by amdis...
 			eluFile.delete();

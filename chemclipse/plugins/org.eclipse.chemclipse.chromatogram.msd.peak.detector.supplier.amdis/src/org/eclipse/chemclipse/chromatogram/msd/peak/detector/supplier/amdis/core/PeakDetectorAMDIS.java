@@ -15,7 +15,7 @@ import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.AbstractPeakDe
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.internal.identifier.AmdisIdentifier;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.PeakDetectorSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.SettingsAMDIS;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -25,9 +25,9 @@ import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class PeakDetector extends AbstractPeakDetectorMSD {
+public class PeakDetectorAMDIS extends AbstractPeakDetectorMSD {
 
-	private static final Logger logger = Logger.getLogger(PeakDetector.class);
+	private static final Logger logger = Logger.getLogger(PeakDetectorAMDIS.class);
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -38,11 +38,11 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 		 */
 		IProcessingInfo<?> processingInfo = validate(chromatogramSelection, peakDetectorSettings, monitor);
 		if(!processingInfo.hasErrorMessages()) {
-			if(peakDetectorSettings instanceof PeakDetectorSettings) {
-				PeakDetectorSettings amdisSettings = (PeakDetectorSettings)peakDetectorSettings;
+			if(peakDetectorSettings instanceof SettingsAMDIS) {
+				SettingsAMDIS settingsAMDIS = (SettingsAMDIS)peakDetectorSettings;
 				AmdisIdentifier identifier = new AmdisIdentifier();
 				try {
-					IProcessingResult<Void> result = identifier.calulateAndSetDeconvolutedPeaks(chromatogramSelection, amdisSettings, monitor);
+					IProcessingResult<Void> result = identifier.calulateAndSetDeconvolutedPeaks(chromatogramSelection, settingsAMDIS, monitor);
 					if(!result.hasErrorMessages()) {
 						processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "AMDIS (extern)", "Peaks have been detected successfully."));
 					}
@@ -54,7 +54,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 					return null;
 				}
 			} else {
-				logger.warn("The settings is not of type: " + PeakDetectorSettings.class);
+				logger.warn("The settings is not of type: " + SettingsAMDIS.class);
 			}
 		}
 		return processingInfo;
@@ -63,7 +63,7 @@ public class PeakDetector extends AbstractPeakDetectorMSD {
 	@Override
 	public IProcessingInfo<?> detect(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
-		PeakDetectorSettings peakDetectorSettings = PreferenceSupplier.getPeakDetectorSettings();
-		return detect(chromatogramSelection, peakDetectorSettings, monitor);
+		SettingsAMDIS settingsAMDIS = PreferenceSupplier.getSettingsAMDIS();
+		return detect(chromatogramSelection, settingsAMDIS, monitor);
 	}
 }

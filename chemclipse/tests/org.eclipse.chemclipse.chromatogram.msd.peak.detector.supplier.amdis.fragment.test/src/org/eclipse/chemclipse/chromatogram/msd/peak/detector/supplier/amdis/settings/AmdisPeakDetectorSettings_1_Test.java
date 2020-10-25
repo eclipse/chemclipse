@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,13 +15,13 @@ import junit.framework.TestCase;
 
 public class AmdisPeakDetectorSettings_1_Test extends TestCase {
 
-	private PeakDetectorSettings settings;
+	private SettingsAMDIS settings;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		settings = new PeakDetectorSettings();
+		settings = new SettingsAMDIS();
 	}
 
 	@Override

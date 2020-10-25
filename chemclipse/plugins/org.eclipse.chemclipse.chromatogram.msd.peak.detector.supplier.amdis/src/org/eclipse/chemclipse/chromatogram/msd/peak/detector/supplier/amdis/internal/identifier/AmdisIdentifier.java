@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.pref
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.runtime.IExtendedRuntimeSupport;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.runtime.RuntimeSupportFactory;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.IOnsiteSettings;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.PeakDetectorSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.SettingsAMDIS;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.support.PeakProcessorSupport;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
@@ -36,14 +36,8 @@ import org.eclipse.core.runtime.SubMonitor;
 
 public class AmdisIdentifier {
 
-	public static final String IDENTIFIER = "AMDIS Identifier";
-	/*
-	 * AMDIS is able to import CDF files.
-	 */
-	private static final String CONVERTER_ID = "net.openchrom.msd.converter.supplier.cdf";
-
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	public IProcessingResult<Void> calulateAndSetDeconvolutedPeaks(IChromatogramSelectionMSD chromatogramSelection, PeakDetectorSettings peakDetectorSettings, IProgressMonitor monitor) throws InterruptedException {
+	public IProcessingResult<Void> calulateAndSetDeconvolutedPeaks(IChromatogramSelectionMSD chromatogramSelection, SettingsAMDIS settingsAMDIS, IProgressMonitor monitor) throws InterruptedException {
 
 		SubMonitor subMonitor = SubMonitor.convert(monitor, 100);
 		DefaultProcessingResult<Void> result = new DefaultProcessingResult<>();
@@ -51,16 +45,15 @@ public class AmdisIdentifier {
 		 * Settings
 		 */
 		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogram();
-		IOnsiteSettings onsiteSettings = peakDetectorSettings.getOnsiteSettings();
 		/*
 		 * amdisTmpPath, e.g.:
 		 * E.g.: /home/openchrom/.wine/drive_c/tmp
 		 */
-		String amdisTmpPath = PreferenceSupplier.getAmdisTmpPath();
-		File file = new File(amdisTmpPath + File.separator + chromatogram.getName());
-		IProcessingInfo<File> processingInfo = ChromatogramConverterMSD.getInstance().convert(file, chromatogram, CONVERTER_ID, subMonitor.split(10));
+		File amdisTmpPath = settingsAMDIS.getTmpFolder();
+		File file = new File(amdisTmpPath.getAbsolutePath() + File.separator + chromatogram.getName());
+		IProcessingInfo<File> processingInfo = ChromatogramConverterMSD.getInstance().convert(file, chromatogram, PreferenceSupplier.CONVERTER_ID, subMonitor.split(10));
 		if(processingInfo == null) {
-			result.addErrorMessage(IDENTIFIER, "Conversion to CDF returned no result");
+			result.addErrorMessage(PreferenceSupplier.IDENTIFIER, "Conversion to CDF returned no result");
 			return result;
 		}
 		//
@@ -70,7 +63,7 @@ public class AmdisIdentifier {
 		//
 		File fileChromatogram = processingInfo.getProcessingResult();
 		if(fileChromatogram == null) {
-			result.addErrorMessage(IDENTIFIER, "Conversion to CDF returned no file");
+			result.addErrorMessage(PreferenceSupplier.IDENTIFIER, "Conversion to CDF returned no file");
 			return result;
 		}
 		//
@@ -82,7 +75,7 @@ public class AmdisIdentifier {
 		 */
 		try {
 			AMDISParser parser = new AMDISParser(fileChromatogram);
-			IProcessingResult<IPeaks<?>> amdisPeaks = executeAMDIS(fileChromatogram, onsiteSettings, parser, subMonitor.split(80));
+			IProcessingResult<IPeaks<?>> amdisPeaks = executeAMDIS(fileChromatogram, settingsAMDIS, parser, subMonitor.split(80));
 			result.addMessages(amdisPeaks);
 			if(result.hasErrorMessages()) {
 				return result;
@@ -90,31 +83,35 @@ public class AmdisIdentifier {
 			//
 			IPeaks peaks = amdisPeaks.getProcessingResult();
 			if(peaks == null) {
-				result.addErrorMessage(IDENTIFIER, "Parsing peaks does not return a result");
+				result.addErrorMessage(PreferenceSupplier.IDENTIFIER, "Parsing peaks does not return a result");
 				return result;
 			}
 			//
-			IProcessingResult<Void> insertPeaks = PeakProcessorSupport.insertPeaks(chromatogramSelection, peaks.getPeaks(), peakDetectorSettings, subMonitor.split(10));
+			IProcessingResult<Void> insertPeaks = PeakProcessorSupport.insertPeaks(chromatogramSelection, peaks.getPeaks(), settingsAMDIS, subMonitor.split(10));
 			result.addMessages(insertPeaks);
 		} finally {
 			fileChromatogram.delete();
 		}
+		//
 		return result;
 	}
 
-	private IProcessingResult<IPeaks<?>> executeAMDIS(File fileChromatogram, IOnsiteSettings onsiteSettings, AMDISParser parser, IProgressMonitor monitor) throws InterruptedException {
+	private IProcessingResult<IPeaks<?>> executeAMDIS(File fileChromatogram, SettingsAMDIS settingsAMDIS, AMDISParser parser, IProgressMonitor monitor) throws InterruptedException {
 
 		IExtendedRuntimeSupport runtimeSupport;
-		String amdisApplication = PreferenceSupplier.getAmdisApplication();
-		String filePath = getAmdisCompatibleFilePath(fileChromatogram);
+		String amdisApplication = settingsAMDIS.getAmdisFolder().getAbsolutePath() + File.separator + PreferenceSupplier.AMDIS_EXECUTABLE;
+		String filePath = getAmdisCompatibleFilePath(fileChromatogram, settingsAMDIS);
+		//
 		try {
 			runtimeSupport = RuntimeSupportFactory.getRuntimeSupport(amdisApplication, filePath);
 		} catch(FileNotFoundException e) {
 			return createErrorResult("Can't get AMDIS executable, make sure that AMDIS is installed and the configuration points to the right AMDIS location", e);
 		}
+		//
 		try {
-			runtimeSupport.getAmdisSupport().modifySettings(onsiteSettings);
 			try {
+				IOnsiteSettings onsiteSettings = settingsAMDIS.getOnsiteSettings();
+				runtimeSupport.getAmdisSupport().modifySettings(onsiteSettings);
 				runtimeSupport.executeRunCommand();
 			} catch(IOException e) {
 				return createErrorResult("Can't execute AMDIS", e);
@@ -131,7 +128,7 @@ public class AmdisIdentifier {
 	private <T> IProcessingResult<T> createErrorResult(String msg, Exception e) {
 
 		DefaultProcessingResult<T> errorResult = new DefaultProcessingResult<>();
-		errorResult.addErrorMessage(IDENTIFIER, msg + ": " + e.getMessage());
+		errorResult.addErrorMessage(PreferenceSupplier.IDENTIFIER, msg + ": " + e.getMessage());
 		return errorResult;
 	}
 
@@ -141,21 +138,21 @@ public class AmdisIdentifier {
 	 * @param fileChromatogram
 	 * @return String
 	 */
-	private String getAmdisCompatibleFilePath(File fileChromatogram) {
+	private String getAmdisCompatibleFilePath(File fileChromatogram, SettingsAMDIS settingsAMDIS) {
 
 		String filePath = "";
-		String amdisTmpPath = PreferenceSupplier.getAmdisTmpPath();
+		File amdisTmpPath = settingsAMDIS.getTmpFolder();
 		if(OperatingSystemUtils.isWindows()) {
 			/*
 			 * e.g.:
 			 * C:\tmp\Chromatogram1.CDF
 			 */
-			filePath = amdisTmpPath + File.separator + fileChromatogram.getName();
+			filePath = amdisTmpPath.getAbsolutePath() + File.separator + fileChromatogram.getName();
 		} else {
 			/*
 			 * Wine
 			 */
-			String wineTmpPath = amdisTmpPath + File.separator + fileChromatogram.getName();
+			String wineTmpPath = amdisTmpPath.getAbsolutePath() + File.separator + fileChromatogram.getName();
 			if(wineTmpPath.contains(".wine/dosdevices/")) {
 				/*
 				 * /home/openchrom/.wine/dosdevices/c:/tmp/Chromatogram1.CDF

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,31 +14,12 @@ package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.set
 import java.util.HashMap;
 import java.util.Map;
 
-public class OnsiteSettings implements IOnsiteSettings {
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-	private Map<String, String> settingsToModify;
+public class OnsiteSettings extends AbstractProcessSettings implements IOnsiteSettings {
 
-	public OnsiteSettings() {
-		/*
-		 * Create the settings map
-		 * and set the default CDF converter
-		 * values.
-		 */
-		settingsToModify = new HashMap<String, String>();
-		//
-		settingsToModify.put(KEY_SCAN_DIRECTION, VALUE_SCAN_DIRECTION_NONE);
-		settingsToModify.put(KEY_INSTRUMENT_FILE, VALUE_INSTRUMENT_FILE_CDF);
-		settingsToModify.put(KEY_INSTRUMENT_TYPE, VALUE_INSTRUMENT_TYPE_QUADRUPOLE);
-		//
-		settingsToModify.put(KEY_LOW_MZ_AUTO, VALUE_YES);
-		settingsToModify.put(KEY_HIGH_MZ_AUTO, VALUE_YES);
-		settingsToModify.put(KEY_USE_SOLVENT_TAILING, VALUE_YES);
-		settingsToModify.put(KEY_SOLVENT_TAILING_MZ, Integer.toString(VALUE_SOLVENT_TAILING_MZ));
-		settingsToModify.put(KEY_USE_COLUMN_BLEED, VALUE_YES);
-		settingsToModify.put(KEY_COLUMN_BLEED_MZ, Integer.toString(VALUE_COLUMN_BLEED_MZ));
-		settingsToModify.put(KEY_OMIT_MZ, VALUE_NO);
-		settingsToModify.put(KEY_OMITED_MZ, "");
-	}
+	@JsonIgnore
+	private Map<String, String> settings = new HashMap<String, String>();
 
 	@Override
 	public String getLine(String line) {
@@ -47,8 +28,8 @@ public class OnsiteSettings implements IOnsiteSettings {
 			String[] values = line.split("=");
 			if(values.length == 2) {
 				String key = values[0];
-				if(settingsToModify.containsKey(key)) {
-					line = key + "=" + settingsToModify.get(key);
+				if(settings.containsKey(key)) {
+					line = key + "=" + settings.get(key);
 				}
 			}
 		}
@@ -58,6 +39,6 @@ public class OnsiteSettings implements IOnsiteSettings {
 	@Override
 	public void setValue(String key, String value) {
 
-		settingsToModify.put(key, value);
+		settings.put(key, value);
 	}
 }

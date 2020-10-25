@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,20 +11,29 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+public interface IProcessSettings {
 
-public class PeakDetectorELUSettings extends PeakDetectorSettings {
+	float getMinSignalToNoiseRatio();
 
-	@JsonProperty(value = "Path of the ELU file.", defaultValue = "")
-	private String pathFileELU = "";
+	void setMinSignalToNoiseRatio(float minSignalToNoiseRatio);
 
-	public String getPathFileELU() {
+	float getMinLeading();
 
-		return pathFileELU;
-	}
+	void setMinLeading(float minLeading);
 
-	public void setPathFileELU(String pathFileELU) {
+	float getMaxLeading();
 
-		this.pathFileELU = pathFileELU;
-	}
+	void setMaxLeading(float maxLeading);
+
+	float getMinTailing();
+
+	void setMinTailing(float minTailing);
+
+	float getMaxTailing();
+
+	void setMaxTailing(float maxTailing);
+
+	boolean isFilterModelPeaks();
+
+	void setFilterModelPeaks(boolean filterModelPeaks);
 }

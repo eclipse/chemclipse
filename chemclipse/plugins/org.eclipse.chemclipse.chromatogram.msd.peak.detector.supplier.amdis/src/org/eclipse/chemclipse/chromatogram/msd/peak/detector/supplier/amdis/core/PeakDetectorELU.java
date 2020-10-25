@@ -16,7 +16,7 @@ import java.io.File;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.core.AbstractPeakDetectorMSD;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.IPeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.PeakDetectorELUSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.SettingsELU;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.support.PeakProcessorSupport;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
@@ -36,17 +36,17 @@ public class PeakDetectorELU extends AbstractPeakDetectorMSD {
 		 */
 		IProcessingInfo<?> processingInfo = validate(chromatogramSelection, peakDetectorSettings, monitor);
 		if(!processingInfo.hasErrorMessages()) {
-			if(peakDetectorSettings instanceof PeakDetectorELUSettings) {
-				PeakDetectorELUSettings amdisSettings = (PeakDetectorELUSettings)peakDetectorSettings;
+			if(peakDetectorSettings instanceof SettingsELU) {
+				SettingsELU settingsELU = (SettingsELU)peakDetectorSettings;
 				PeakProcessorSupport peakProcessorSupport = new PeakProcessorSupport();
-				File file = new File(amdisSettings.getPathFileELU());
-				if(file.exists()) {
-					peakProcessorSupport.extractEluFileAndSetPeaks(chromatogramSelection, file, amdisSettings, monitor);
+				File file = settingsELU.getResultFile();
+				if(file != null && file.exists()) {
+					peakProcessorSupport.extractEluFileAndSetPeaks(chromatogramSelection, file, settingsELU, monitor);
 				} else {
 					logger.warn("The file doesn't exist: " + file.getAbsolutePath());
 				}
 			} else {
-				logger.warn("The settings is not of type: " + PeakDetectorELUSettings.class);
+				logger.warn("The settings is not of type: " + SettingsELU.class);
 			}
 		}
 		return processingInfo;
@@ -55,7 +55,7 @@ public class PeakDetectorELU extends AbstractPeakDetectorMSD {
 	@Override
 	public IProcessingInfo<?> detect(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
-		PeakDetectorELUSettings peakDetectorSettings = PreferenceSupplier.getPeakDetectorELUSettings();
-		return detect(chromatogramSelection, peakDetectorSettings, monitor);
+		SettingsELU settingsELU = PreferenceSupplier.getSettingsELU();
+		return detect(chromatogramSelection, settingsELU, monitor);
 	}
 }

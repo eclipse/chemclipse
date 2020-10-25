@@ -17,7 +17,7 @@ import java.util.Date;
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.PathResolver;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.TestPathHelper;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.PeakDetectorSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.SettingsAMDIS;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
@@ -32,8 +32,8 @@ public class AmdisPeakDetector_1 extends TestCase {
 	private File file;
 	private IChromatogramMSD chromatogram;
 	private IChromatogramSelectionMSD chromatogramSelection;
-	private PeakDetectorSettings peakDetectorSettings;
-	private PeakDetector detector;
+	private SettingsAMDIS peakDetectorSettings;
+	private PeakDetectorAMDIS detector;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -43,8 +43,8 @@ public class AmdisPeakDetector_1 extends TestCase {
 		IProcessingInfo<?> processingInfo = ChromatogramConverterMSD.getInstance().convert(file, new NullProgressMonitor());
 		chromatogram = (IChromatogramMSD)processingInfo.getProcessingResult();
 		chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
-		peakDetectorSettings = new PeakDetectorSettings();
-		detector = new PeakDetector();
+		peakDetectorSettings = new SettingsAMDIS();
+		detector = new PeakDetectorAMDIS();
 	}
 
 	@Override

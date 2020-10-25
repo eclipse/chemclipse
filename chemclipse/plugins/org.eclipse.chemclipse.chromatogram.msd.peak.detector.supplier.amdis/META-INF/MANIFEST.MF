@@ -23,6 +23,7 @@ Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: ChemClipse
 Export-Package: org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.core,
+ org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.model,
  org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.preferences,
  org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings,
  org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.support

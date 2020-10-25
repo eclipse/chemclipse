@@ -11,11 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.ui.preferences;
 
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.model.AdjacentPeakSubtraction;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.model.Resolution;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.model.Sensitivity;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.model.ShapeRequirements;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.model.Threshold;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.IOnsiteSettings;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.ui.Activator;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.FloatFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.IntegerFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.jface.preference.BooleanFieldEditor;
@@ -24,7 +30,6 @@ import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -66,9 +71,8 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		 * that need some other arguments.
 		 */
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new LabelFieldEditor("AMDIS application (AMDIS32$.EXE).", getFieldEditorParent()));
-		addField(new FileFieldEditor(PreferenceSupplier.P_AMDIS_APPLICATION, "AMDIS32$.EXE", getFieldEditorParent()));
-		addField(new DirectoryFieldEditor(PreferenceSupplier.P_AMDIS_TMP_PATH, "Tmp Path", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_AMDIS_APPLICATION_PATH, "Folder AMDIS32", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_AMDIS_TMP_PATH, "Folder Data", getFieldEditorParent()));
 		/*
 		 * MAC OS X - try to define the Wine binary
 		 */
@@ -88,16 +92,15 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		addField(solventTailingMZ = new IntegerFieldEditor(PreferenceSupplier.P_SOLVENT_TAILING_MZ, "Solvent tailing m/z:", getFieldEditorParent()));
 		addField(useColumnBleed = new BooleanFieldEditor(PreferenceSupplier.P_USE_COLUMN_BLEED, "Use column bleed:", getFieldEditorParent()));
 		addField(columnBleedMZ = new IntegerFieldEditor(PreferenceSupplier.P_COLUMN_BLEED_MZ, "Column bleed m/z:", getFieldEditorParent()));
+		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		IntegerFieldEditor peakWidthFieldEditor = new IntegerFieldEditor(PreferenceSupplier.P_PEAK_WIDTH, "Peak width:", getFieldEditorParent());
-		peakWidthFieldEditor.setValidRange(IOnsiteSettings.VALUE_MIN_PEAK_WIDTH, IOnsiteSettings.VALUE_MAX_PEAK_WIDTH);
-		addField(peakWidthFieldEditor);
+		addField(new IntegerFieldEditor(PreferenceSupplier.P_PEAK_WIDTH, "Peak width:", IOnsiteSettings.MIN_PEAK_WIDTH, IOnsiteSettings.MAX_PEAK_WIDTH, getFieldEditorParent()));
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceSupplier.P_THRESHOLD, "Threshold:", IOnsiteSettings.THRESHOLD_VALUES, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceSupplier.P_ADJACENT_PEAK_SUBTRACTION, "Adjacent Peak Subtraction:", IOnsiteSettings.ADJACENT_PEAK_SUBTRACTION_VALUES, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceSupplier.P_RESOLUTION, "Resolution:", IOnsiteSettings.RESOLUTION_VALUES, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceSupplier.P_SENSITIVITY, "Sensitivity:", IOnsiteSettings.SENSITIVITY_VALUES, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceSupplier.P_SHAPE_REQUIREMENTS, "Shape Requirements:", IOnsiteSettings.SHAPE_REQUIREMENTS_VALUES, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_THRESHOLD, "Threshold:", Threshold.getItems(), getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_ADJACENT_PEAK_SUBTRACTION, "Adjacent Peak Subtraction:", AdjacentPeakSubtraction.getItems(), getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_RESOLUTION, "Resolution:", Resolution.getItems(), getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_SENSITIVITY, "Sensitivity:", Sensitivity.getItems(), getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_SHAPE_REQUIREMENTS, "Shape Requirements:", ShapeRequirements.getItems(), getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Extra settings (to improve the result quality).", getFieldEditorParent()));
