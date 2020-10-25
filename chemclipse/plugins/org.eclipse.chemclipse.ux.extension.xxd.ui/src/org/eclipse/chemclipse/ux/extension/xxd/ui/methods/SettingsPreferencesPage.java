@@ -55,17 +55,16 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 	@Override
 	public void createControl(Composite parent) {
 
-		ScrolledComposite scrolledComposite = new ScrolledComposite(parent, SWT.V_SCROLL);
+		ScrolledComposite scrolledComposite = new ScrolledComposite(parent, SWT.V_SCROLL | SWT.H_SCROLL);
 		scrolledComposite.setLayout(new GridLayout(1, true));
 		scrolledComposite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
 		Composite control = createOptionSection(scrolledComposite);
-		control.pack(true);
 		//
 		scrolledComposite.setMinSize(control.computeSize(SWT.DEFAULT, SWT.DEFAULT));
 		scrolledComposite.setContent(control);
 		scrolledComposite.setExpandVertical(true);
-		scrolledComposite.setExpandHorizontal(false);
+		scrolledComposite.setExpandHorizontal(true);
 		scrolledComposite.setAlwaysShowScrollBars(false);
 		//
 		setControl(scrolledComposite);
@@ -90,10 +89,7 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, true));
-		GridData gridData = new GridData(GridData.FILL_BOTH);
-		gridData.grabExcessHorizontalSpace = true;
-		gridData.grabExcessVerticalSpace = true;
-		composite.setLayoutData(gridData);
+		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
 		createSystemOptions(composite);
 		createUserOptions(composite);
@@ -108,22 +104,25 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 	private void createSystemOptions(Composite parent) {
 
 		buttonDefault = createButtonDefault(parent);
-		//
-		if(preferences.requiresUserSettings()) {
-			buttonDefault.setEnabled(false);
-			buttonDefault.setToolTipText("This processor does not offer System options or they are not applicable at the moment");
-		}
-		//
-		Label titleBarSeparator = new Label(parent, SWT.HORIZONTAL | SWT.SEPARATOR);
-		titleBarSeparator.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		createLabelSeparator(parent);
 	}
 
 	private Button createButtonDefault(Composite parent) {
 
 		Button button = new Button(parent, SWT.RADIO);
 		button.setText("Use System Options");
+		if(preferences.requiresUserSettings()) {
+			button.setEnabled(false);
+			button.setToolTipText("This processor does not offer system options or they are not applicable at the moment.");
+		}
 		//
 		return button;
+	}
+
+	private void createLabelSeparator(Composite parent) {
+
+		Label label = new Label(parent, SWT.HORIZONTAL | SWT.SEPARATOR);
+		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 	}
 
 	private void createUserOptions(Composite parent) {
@@ -148,7 +147,7 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 			settingsUI = new SettingsUI<>(parent, preferences);
 			settingsUI.setLayoutData(new GridData(GridData.FILL_BOTH));
 		} catch(IOException e1) {
-			throw new RuntimeException("reading settings failed", e1);
+			throw new RuntimeException("Reading the settings failed.", e1);
 		}
 		//
 		return settingsUI;
@@ -214,7 +213,7 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 		} else {
 			Button buttonDontAskAgain = new Button(parent, SWT.CHECK);
 			buttonDontAskAgain.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, true, false));
-			buttonDontAskAgain.setText("Remember my decision and don't ask again");
+			buttonDontAskAgain.setText("Remember my decision and don't ask again.");
 			buttonDontAskAgain.addSelectionListener(new SelectionAdapter() {
 
 				@Override

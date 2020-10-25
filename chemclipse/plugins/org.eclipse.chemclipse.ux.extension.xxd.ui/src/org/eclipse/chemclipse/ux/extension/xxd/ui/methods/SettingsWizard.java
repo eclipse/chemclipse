@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -39,6 +39,7 @@ public class SettingsWizard extends Wizard {
 	public static final int DEFAULT_HEIGHT = 600;
 
 	private SettingsWizard(String title) {
+
 		setWindowTitle(title);
 		setNeedsProgressMonitor(false);
 	}
@@ -61,12 +62,15 @@ public class SettingsWizard extends Wizard {
 
 		IProcessSupplier<T> processorSupplier = preferences.getSupplier();
 		SettingsWizard wizard = new SettingsWizard("Edit Processor Options");
+		//
 		SettingsPreferencesPage<T> page = new SettingsPreferencesPage<>(preferences);
-		page.setTitle("Select options to use for " + processorSupplier.getName());
+		page.setTitle("Select the options for " + processorSupplier.getName());
 		page.setMessage(processorSupplier.getDescription());
 		wizard.addPage(page);
+		//
 		WizardDialog wizardDialog = new WizardDialog(shell, wizard);
 		wizardDialog.setMinimumPageSize(SettingsWizard.DEFAULT_WIDTH, SettingsWizard.DEFAULT_HEIGHT);
+		//
 		if(wizardDialog.open() == WizardDialog.OK) {
 			preferences.setAskForSettings(!page.getIsDontAskAgainEdited());
 			boolean useSystem = page.getIsUseSystemDefaultsEdited();
