@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -66,10 +66,11 @@ public class ExtendedSequenceExplorerUI {
 	private SequenceFilesUI sequenceFilesUI;
 	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private ISupplierEditorSupport supplierEditorSupport = new SupplierEditorSupport(DataType.SEQ);
+	private ISupplierEditorSupport supplierEditorSupport = new SupplierEditorSupport(DataType.SEQ, () -> Activator.getDefault().getEclipseContext());
 
 	@Inject
 	public ExtendedSequenceExplorerUI(Composite parent) {
+
 		initialize(parent);
 	}
 

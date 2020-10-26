@@ -24,6 +24,7 @@ import java.util.stream.Stream;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
@@ -33,7 +34,7 @@ public class SequenceFileRunnable implements IRunnableWithProgress {
 
 	private static final Logger logger = Logger.getLogger(SequenceFileRunnable.class);
 	//
-	private ISupplierEditorSupport supplierEditorSupport = new SupplierEditorSupport(DataType.SEQ);
+	private ISupplierEditorSupport supplierEditorSupport = new SupplierEditorSupport(DataType.SEQ, () -> Activator.getDefault().getEclipseContext());
 	private File file;
 	private List<File> files;
 
@@ -92,7 +93,7 @@ public class SequenceFileRunnable implements IRunnableWithProgress {
 
 	private boolean isSequenceFile(File file) {
 
-		if(supplierEditorSupport.isSupplierFile(file)) {
+		if(!supplierEditorSupport.getSupplier(file).isEmpty()) {
 			if(supplierEditorSupport.isMatchMagicNumber(file)) {
 				return true;
 			}

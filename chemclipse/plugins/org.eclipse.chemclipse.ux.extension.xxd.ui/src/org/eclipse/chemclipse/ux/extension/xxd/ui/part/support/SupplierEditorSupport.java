@@ -69,12 +69,8 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 	private final Supplier<IEclipseContext> contextSupplier;
 	private final DataType dataType;
 
-	@Deprecated
-	public SupplierEditorSupport(DataType dataType) {
-		this(dataType, org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon::getEclipseContext);
-	}
-
 	public SupplierEditorSupport(DataType dataType, Supplier<IEclipseContext> contextSupplier) {
+
 		super(getSupplier(dataType));
 		this.dataType = dataType;
 		this.contextSupplier = contextSupplier;
