@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -75,7 +75,60 @@ public class MSLReader extends AbstractMassSpectraReader implements IMassSpectra
 	}
 
 	/**
-	 * Returns a list of mass spectral data.
+	 * Extracts the mass spectrum from the given text.
+	 * 
+	 * @param massSpectrumData
+	 * @return {@link IVendorLibraryMassSpectrum}
+	 */
+	protected IVendorLibraryMassSpectrum extractMassSpectrum(String massSpectrumData) {
+
+		return extractMassSpectrum(massSpectrumData, "", "");
+	}
+
+	/**
+	 * Extracts the mass spectrum from the given text.
+	 * 
+	 * @param massSpectrumData
+	 * @param referenceIdentifierMarker
+	 * @param referenceIdentifierPrefix
+	 * @return {@link IVendorLibraryMassSpectrum}
+	 */
+	protected IVendorLibraryMassSpectrum extractMassSpectrum(String massSpectrumData, String referenceIdentifierMarker, String referenceIdentifierPrefix) {
+
+		IVendorLibraryMassSpectrum massSpectrum = new VendorLibraryMassSpectrum();
+		/*
+		 * Extract name and reference identifier.
+		 * Additionally, add the reference identifier if it is stored as a pattern.
+		 */
+		String name = extractContentAsString(massSpectrumData, NAME, 2);
+		extractNameAndReferenceIdentifier(massSpectrum, name, referenceIdentifierMarker, referenceIdentifierPrefix);
+		String referenceIdentifier = extractContentAsString(massSpectrumData, REFERENCE_IDENTIFIER, 2) + massSpectrum.getLibraryInformation().getReferenceIdentifier();
+		massSpectrum.getLibraryInformation().setReferenceIdentifier(referenceIdentifier);
+		//
+		String comments = extractContentAsString(massSpectrumData, COMMENTS, 2);
+		massSpectrum.getLibraryInformation().setComments(comments);
+		String casNumber = extractContentAsString(massSpectrumData, CAS, 3);
+		massSpectrum.getLibraryInformation().setCasNumber(casNumber);
+		String database = extractContentAsString(massSpectrumData, DB_NAME, 3);
+		massSpectrum.getLibraryInformation().setDatabase(database);
+		String smiles = extractContentAsString(massSpectrumData, SMILES, 2);
+		massSpectrum.getLibraryInformation().setSmiles(smiles);
+		int retentionTime = extractContentAsInt(massSpectrumData, RETENTION_TIME, 2);
+		massSpectrum.setRetentionTime(retentionTime);
+		int relativeRetentionTime = extractContentAsInt(massSpectrumData, RELATIVE_RETENTION_TIME, 2);
+		massSpectrum.setRelativeRetentionTime(relativeRetentionTime);
+		String retentionIndices = extractContentAsString(massSpectrumData, RETENTION_INDEX, 2);
+		extractRetentionIndices(massSpectrum, retentionIndices, RETENTION_INDICES_DELIMITER);
+		/*
+		 * Extracts all ions and stored them.
+		 */
+		extractIons(massSpectrum, massSpectrumData);
+		//
+		return massSpectrum;
+	}
+
+	/**
+	 * Returns a list of mass spectra data.
 	 * 
 	 * @throws IOException
 	 */
@@ -158,38 +211,11 @@ public class MSLReader extends AbstractMassSpectraReader implements IMassSpectra
 	 */
 	private void addMassSpectrum(IMassSpectra massSpectra, String massSpectrumData, String referenceIdentifierMarker, String referenceIdentifierPrefix) {
 
-		IVendorLibraryMassSpectrum massSpectrum = new VendorLibraryMassSpectrum();
-		/*
-		 * Extract name and reference identifier.
-		 * Additionally, add the reference identifier if it is stored as a pattern.
-		 */
-		String name = extractContentAsString(massSpectrumData, NAME, 2);
-		extractNameAndReferenceIdentifier(massSpectrum, name, referenceIdentifierMarker, referenceIdentifierPrefix);
-		String referenceIdentifier = extractContentAsString(massSpectrumData, REFERENCE_IDENTIFIER, 2) + massSpectrum.getLibraryInformation().getReferenceIdentifier();
-		massSpectrum.getLibraryInformation().setReferenceIdentifier(referenceIdentifier);
-		//
-		String comments = extractContentAsString(massSpectrumData, COMMENTS, 2);
-		massSpectrum.getLibraryInformation().setComments(comments);
-		String casNumber = extractContentAsString(massSpectrumData, CAS, 3);
-		massSpectrum.getLibraryInformation().setCasNumber(casNumber);
-		String database = extractContentAsString(massSpectrumData, DB_NAME, 3);
-		massSpectrum.getLibraryInformation().setDatabase(database);
-		String smiles = extractContentAsString(massSpectrumData, SMILES, 2);
-		massSpectrum.getLibraryInformation().setSmiles(smiles);
-		int retentionTime = extractContentAsInt(massSpectrumData, RETENTION_TIME, 2);
-		massSpectrum.setRetentionTime(retentionTime);
-		int relativeRetentionTime = extractContentAsInt(massSpectrumData, RELATIVE_RETENTION_TIME, 2);
-		massSpectrum.setRelativeRetentionTime(relativeRetentionTime);
-		String retentionIndices = extractContentAsString(massSpectrumData, RETENTION_INDEX, 2);
-		extractRetentionIndices(massSpectrum, retentionIndices, RETENTION_INDICES_DELIMITER);
-		/*
-		 * Extracts all ions and stored them.
-		 */
-		extractIons(massSpectrum, massSpectrumData);
 		/*
 		 * Store the mass spectrum in mass spectra if there is at least 1 mass
 		 * fragment.
 		 */
+		IVendorLibraryMassSpectrum massSpectrum = extractMassSpectrum(massSpectrumData, referenceIdentifierMarker, referenceIdentifierPrefix);
 		if(massSpectrum.getNumberOfIons() > 0) {
 			massSpectra.addMassSpectrum(massSpectrum);
 		}
