@@ -24,13 +24,15 @@
             description="This plugin uses a file library to identify mass spectra."
             id="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.massSpectrum"
             identifier="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.MassSpectrumIdentifierFile"
-            identifierName="Library File (MS)">
+            identifierName="Library File (MS)"
+            identifierSettings="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.MassSpectrumIdentifierSettings">
       </MassSpectrumIdentificationSupplier>
       <MassSpectrumIdentificationSupplier
             description="This plugin sets a mass spectrum identification using the highest intensity m/z values."
             id="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.unknown.massSpectrum"
             identifier="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.MassSpectrumIdentifierUnknown"
-            identifierName="Unknown Marker">
+            identifierName="Unknown Marker"
+            identifierSettings="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.MassSpectrumUnknownSettings">
       </MassSpectrumIdentificationSupplier>        
    </extension>
    <extension
