@@ -15,9 +15,7 @@ public enum ModelPeakOption {
 	ALL("MPx (All)", 0), //
 	MP1("MP1", 1), //
 	MP2("MP2", 2), //
-	MP3("MP3", 3), //
-	MP4("MP4", 4), //
-	MP5("MP5", 5);
+	MP3("MP3", 3);
 
 	private String label = "";
 	private int value = 0;
@@ -44,9 +42,7 @@ public enum ModelPeakOption {
 				{ALL.getLabel(), Integer.toString(ALL.getValue())}, //
 				{MP1.getLabel(), Integer.toString(MP1.getValue())}, //
 				{MP2.getLabel(), Integer.toString(MP2.getValue())}, //
-				{MP3.getLabel(), Integer.toString(MP3.getValue())}, //
-				{MP4.getLabel(), Integer.toString(MP4.getValue())}, //
-				{MP5.getLabel(), Integer.toString(MP5.getValue())} //
+				{MP3.getLabel(), Integer.toString(MP3.getValue())} //
 		};
 	}
 }

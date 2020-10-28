@@ -124,6 +124,10 @@ public class PeakProcessorSupport {
 							logger.info(message);
 							result.addInfoMessage(PreferenceSupplier.IDENTIFIER, message);
 						}
+					} else {
+						String message = "Invalid Peak (ELU): " + header;
+						logger.info(message);
+						result.addInfoMessage(PreferenceSupplier.IDENTIFIER, message);
 					}
 				} catch(Exception e) {
 					logger.warn(e);
