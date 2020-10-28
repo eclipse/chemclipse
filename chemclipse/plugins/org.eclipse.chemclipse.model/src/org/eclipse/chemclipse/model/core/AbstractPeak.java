@@ -43,6 +43,10 @@ public abstract class AbstractPeak implements IPeak {
 	private final List<IInternalStandard> internalStandards = new ArrayList<IInternalStandard>();
 	private final List<String> quantitationReferences = new ArrayList<String>(); // Used to quantify against certain ISTDs or ESTDs
 	private final Set<String> classifier = new LinkedHashSet<>();
+	/*
+	 * Transient
+	 */
+	private String temporaryData = "";
 
 	@Override
 	public String getModelDescription() {
@@ -347,5 +351,17 @@ public abstract class AbstractPeak implements IPeak {
 	public void removeClassifier(String classifier) {
 
 		this.classifier.remove(classifier);
+	}
+
+	@Override
+	public String getTemporaryData() {
+
+		return temporaryData;
+	}
+
+	@Override
+	public void setTemporaryData(String temporaryData) {
+
+		this.temporaryData = temporaryData;
 	}
 }

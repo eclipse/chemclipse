@@ -246,6 +246,16 @@ public interface IPeak extends ITargetSupplier, PeakPosition, Classifiable, ISig
 
 	void removeQuantitationReference(String quantitationReference);
 
+	String getTemporaryData();
+
+	/**
+	 * The temporary data is not saved!
+	 * It can be used to place volatile process information.
+	 * 
+	 * @param temporaryData
+	 */
+	void setTemporaryData(String temporaryData);
+
 	@Override
 	default int getPeakEnd() {
 

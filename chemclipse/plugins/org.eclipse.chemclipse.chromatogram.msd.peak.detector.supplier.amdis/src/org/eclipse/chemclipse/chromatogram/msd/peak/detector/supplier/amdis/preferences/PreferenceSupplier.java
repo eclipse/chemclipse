@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.mode
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.model.Threshold;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.IOnsiteSettings;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.IProcessSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.ModelPeakOption;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.SettingsAMDIS;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.SettingsELU;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
@@ -111,8 +112,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final float DEF_MIN_TAILING = 0.1f;
 	public static final String P_MAX_TAILING = "maxTailing";
 	public static final float DEF_MAX_TAILING = 2.0f;
-	public static final String P_FILTER_MODEL_PEAKS = "filterModelPeaks";
-	public static final boolean DEF_FILTER_MODEL_PEAKS = true;
+	public static final String P_MODEL_PEAK_OPTION = "modelPeakOption";
+	public static final String DEF_MODEL_PEAK_OPTION = ModelPeakOption.MP1.name();
 	//
 	public static final String P_PATH_ELU_FILE = "pathELUFile";
 	public static final String DEF_PATH_ELU_FILE = "";
@@ -185,7 +186,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_MAX_LEADING, Float.toString(DEF_MAX_LEADING));
 		defaultValues.put(P_MIN_TAILING, Float.toString(DEF_MIN_TAILING));
 		defaultValues.put(P_MAX_TAILING, Float.toString(DEF_MAX_TAILING));
-		defaultValues.put(P_FILTER_MODEL_PEAKS, Boolean.toString(DEF_FILTER_MODEL_PEAKS));
+		defaultValues.put(P_MODEL_PEAK_OPTION, DEF_MODEL_PEAK_OPTION);
 		//
 		defaultValues.put(P_PATH_ELU_FILE, DEF_PATH_ELU_FILE);
 		//
@@ -244,7 +245,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		processSettings.setMaxLeading(preferences.getFloat(P_MAX_LEADING, DEF_MAX_LEADING));
 		processSettings.setMinTailing(preferences.getFloat(P_MIN_TAILING, DEF_MIN_TAILING));
 		processSettings.setMaxTailing(preferences.getFloat(P_MAX_TAILING, DEF_MAX_TAILING));
-		processSettings.setFilterModelPeaks(preferences.getBoolean(P_FILTER_MODEL_PEAKS, DEF_FILTER_MODEL_PEAKS));
+		processSettings.setModelPeakOption(ModelPeakOption.valueOf(preferences.get(P_MODEL_PEAK_OPTION, DEF_MODEL_PEAK_OPTION)));
 	}
 
 	public static void setResultSettings(SettingsELU settings) {

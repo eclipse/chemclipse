@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings;
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.AbstractPeakDetectorSettingsMSD;
+import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -27,8 +28,9 @@ public class AbstractProcessSettings extends AbstractPeakDetectorSettingsMSD imp
 	private float minTailing = 0.1f;
 	@JsonProperty(value = "Max Tailing", defaultValue = "2.0")
 	private float maxTailing = 2.0f;
-	@JsonProperty(value = "Filter Model Peaks", defaultValue = "true")
-	private boolean filterModelPeaks = true;
+	@JsonProperty(value = "Filter Model Peaks", defaultValue = "MP1")
+	@EnumSelectionSettingProperty
+	private ModelPeakOption modelPeakOption = ModelPeakOption.MP1;
 
 	@Override
 	public float getMinSignalToNoiseRatio() {
@@ -91,14 +93,14 @@ public class AbstractProcessSettings extends AbstractPeakDetectorSettingsMSD imp
 	}
 
 	@Override
-	public boolean isFilterModelPeaks() {
+	public ModelPeakOption getModelPeakOption() {
 
-		return filterModelPeaks;
+		return modelPeakOption;
 	}
 
 	@Override
-	public void setFilterModelPeaks(boolean filterModelPeaks) {
+	public void setModelPeakOption(ModelPeakOption modelPeakOption) {
 
-		this.filterModelPeaks = filterModelPeaks;
+		this.modelPeakOption = modelPeakOption;
 	}
 }

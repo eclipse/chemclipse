@@ -32,7 +32,6 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
-import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
 import org.eclipse.chemclipse.model.implementation.Peaks;
 import org.eclipse.chemclipse.msd.converter.io.IPeakReader;
@@ -59,6 +58,7 @@ public class ELUReader implements IPeakReader {
 	 */
 	private static final Logger logger = Logger.getLogger(ELUReader.class);
 	//
+	private static final Pattern HEADER_PATTERN = Pattern.compile("(NAME.*)");
 	private static final Pattern HITS_PATTERN = Pattern.compile("(NAME)");
 	private static final Pattern PEAK_DATA_PATTERN = Pattern.compile("(NAME)(.*?)(^$)", Pattern.DOTALL | Pattern.MULTILINE);
 	private static final Pattern NAME_PATTERN = Pattern.compile("(NAME)(.*)(SC)([0-9]+)(.*)(FR)([0-9]+)(-)([0-9]+)(.*)(RT)([0-9]+[.,]+[0-9]+)"); // "(NAME)(.*)"
@@ -224,10 +224,19 @@ public class ELUReader implements IPeakReader {
 			Matcher matcher = PEAK_DATA_PATTERN.matcher(content);
 			while(matcher.find()) {
 				/*
-				 * Extract each peak.
+				 * NAME: |SC3|CN1|MP1-MODN:185(%57.6)|AM44322|PC25|SN154|WD>18|TA6.8|TR9.5|FR0-26|RT1.6150|MN0.17|RA0.142|IS482918|XN598097|MO6: 185 276 195 284 59 237|EW0-1|FG0.822|TN2.408|OR2|NT0
+				 * RE
+				 * 36347 55021 61507 45358 31167
+				 * 26292 22722 20328 14626 13494
+				 * ...
+				 * NUM PEAKS: 103
+				 * (59,18 )(60,51 )(61,999 )(62,25 )(70,949 )
+				 * (74,17 )(87,28 )(88,302 )(185,4 )(276,3 )
+				 * (321,2 )(349,1 )(355,5 )(487,2 )(71,35 B0.0)
+				 * ...
 				 */
 				String peakData = matcher.group();
-				IPeakMSD peak = extractAmdisPeak(peakData, scanInterval);
+				IPeakMSD peak = extractPeak(peakData, scanInterval);
 				if(peak != null) {
 					peaks.addPeak(peak);
 				}
@@ -243,35 +252,32 @@ public class ELUReader implements IPeakReader {
 	 * @param scanInterval
 	 * @return {@link IPeakMSD}
 	 */
-	private IPeakMSD extractAmdisPeak(String peakData, int scanInterval) {
+	private IPeakMSD extractPeak(String peakData, int scanInterval) {
 
-		/*
-		 * Try to parse the peak data.
-		 */
 		IPeakMSD peak = null;
+		//
+		String header = extractHeader(peakData, HEADER_PATTERN, "");
 		int peakStartRetentionTime = extractPeakStartRetentionTime(peakData, scanInterval);
+		//
 		if(peakStartRetentionTime > 0) {
-			/*
-			 * Only process peaks with a valid start retention time.
-			 * Get the highest signal from the intensity values list. It is used to scale the mass spectrum.
-			 * Afterwards, the intensity values need to be normalized.
-			 */
-			IPeakIntensityValues peakIntensityValues = extractPeakProfile(peakData, peakStartRetentionTime, scanInterval);
-			float totalSignal = extractTotalSignal(peakIntensityValues);
-			peakIntensityValues.normalize();
-			IPeakMassSpectrum peakMassSpectrum = extractPeakMassSpectrum(peakData);
-			peakMassSpectrum.adjustTotalSignal(totalSignal);
-			/*
-			 * Try to create a peak model. It fails of certain conditions are not matched.
-			 */
 			try {
+				/*
+				 * Try to create a peak model. It fails of certain conditions are not matched.
+				 * Only process peaks with a valid start retention time.
+				 * Get the highest signal from the intensity values list. It is used to scale the mass spectrum.
+				 * Afterwards, the intensity values need to be normalized.
+				 */
+				IPeakIntensityValues peakIntensityValues = extractPeakProfile(peakData, peakStartRetentionTime, scanInterval);
+				float totalSignal = extractTotalSignal(peakIntensityValues);
+				peakIntensityValues.normalize();
+				IPeakMassSpectrum peakMassSpectrum = extractPeakMassSpectrum(peakData);
+				peakMassSpectrum.adjustTotalSignal(totalSignal);
 				IPeakModelMSD peakModel = new PeakModelMSD(peakMassSpectrum, peakIntensityValues, 0.0f, 0.0f);
 				extractScanRange(peakModel, peakData);
-				peak = new PeakMSD(peakModel, "AMDIS ELU");
-			} catch(IllegalArgumentException e) {
-				logger.warn(e);
-			} catch(PeakException e) {
-				logger.warn(e);
+				peak = new PeakMSD(peakModel, "AMDIS (ELU)");
+				peak.setTemporaryData(header);
+			} catch(Exception e) {
+				logger.warn("PeakModel fails for AMDIS (ELU) component: " + header);
 			}
 		}
 		//
@@ -303,18 +309,29 @@ public class ELUReader implements IPeakReader {
 		Matcher matcher = NAME_PATTERN.matcher(peakData);
 		if(matcher.find()) {
 			try {
-				int scan = Integer.parseInt(matcher.group(4));
-				int startScan = Integer.parseInt(matcher.group(7));
-				double retentionTime = (int)(Double.parseDouble(matcher.group(12)) * IChromatogram.MINUTE_CORRELATION_FACTOR);
 				/*
 				 * Calculate the start retention time of the peak.
 				 */
+				int scan = Integer.parseInt(matcher.group(4));
+				int startScan = Integer.parseInt(matcher.group(7));
+				double retentionTime = (int)(Double.parseDouble(matcher.group(12)) * IChromatogram.MINUTE_CORRELATION_FACTOR);
 				startRetentionTime = (int)(retentionTime - ((scan - startScan - 1) * scanInterval));
 			} catch(NumberFormatException e) {
-				//
+				// No warning, default will be returned.
 			}
 		}
 		return startRetentionTime;
+	}
+
+	private String extractHeader(String peakData, Pattern pattern, String defaultValue) {
+
+		String value = defaultValue;
+		Matcher matcher = pattern.matcher(peakData);
+		if(matcher.find()) {
+			value = matcher.group();
+		}
+		//
+		return value;
 	}
 
 	private void extractScanRange(IPeakModelMSD peakModel, String peakData) {

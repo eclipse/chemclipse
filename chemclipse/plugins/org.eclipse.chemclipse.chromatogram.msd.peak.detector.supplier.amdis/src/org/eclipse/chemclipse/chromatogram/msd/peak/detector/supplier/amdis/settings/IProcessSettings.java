@@ -33,7 +33,7 @@ public interface IProcessSettings {
 
 	void setMaxTailing(float maxTailing);
 
-	boolean isFilterModelPeaks();
+	ModelPeakOption getModelPeakOption();
 
-	void setFilterModelPeaks(boolean filterModelPeaks);
+	void setModelPeakOption(ModelPeakOption modelPeakOption);
 }

@@ -13,16 +13,15 @@ package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.sup
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.IProcessSettings;
+import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.ModelPeakOption;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IPeaks;
-import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.msd.converter.io.IPeakReader;
 import org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -38,6 +37,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakProcessorSupport {
 
+	private static final Logger logger = Logger.getLogger(PeakProcessorSupport.class);
+	//
 	public static final String DETECTOR_DESCRIPTION = "AMDIS (Extern)";
 	public static final String PEAK_CONVERTER_ID = "org.eclipse.chemclipse.msd.converter.supplier.amdis.peak.elu";
 
@@ -64,13 +65,12 @@ public class PeakProcessorSupport {
 		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogram();
 		int startRetentionTime = chromatogramSelection.getStartRetentionTime();
 		int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
-		Set<Integer> peakMaxRetentionTimes = new HashSet<>();
+		ModelPeakOption modelPeakOption = processSettings.getModelPeakOption();
+		String modelPeakMarker = "MP" + modelPeakOption.getValue();
 		//
 		for(IPeak peak : peaks) {
 			if(peak instanceof IPeakMSD) {
-				/*
-				 * Try to add the peak.
-				 */
+				String header = peak.getTemporaryData();
 				try {
 					IPeakMSD peakMSD = (IPeakMSD)peak;
 					IPeakModelMSD peakModelMSD = peakMSD.getPeakModel();
@@ -93,39 +93,41 @@ public class PeakProcessorSupport {
 					chromatogramPeakMSD.setDetectorDescription(DETECTOR_DESCRIPTION);
 					if(isValidPeak(chromatogramPeakMSD, startRetentionTime, stopRetentionTime, processSettings)) {
 						/*
-						 * Adjust the peak retention times if possible.
+						 * Pre-check
 						 */
-						try {
-							/*
-							 * Pre-check
-							 */
-							if(startScan > 0 && stopScan > startScan && maxScan > startScan) {
-								List<Integer> retentionTimes = new ArrayList<>();
-								for(int scan = startScan; scan <= stopScan; scan++) {
-									retentionTimes.add(chromatogram.getScan(scan).getRetentionTime());
-								}
-								chromatogramPeakMSD.getPeakModel().replaceRetentionTimes(retentionTimes);
+						if(startScan > 0 && stopScan > startScan && maxScan > startScan) {
+							List<Integer> retentionTimes = new ArrayList<>();
+							for(int scan = startScan; scan <= stopScan; scan++) {
+								retentionTimes.add(chromatogram.getScan(scan).getRetentionTime());
 							}
 							/*
-							 * Add the peak.
+							 * Adjust the peak retention times if possible.
 							 */
-							int retentionTimeMax = chromatogramPeakMSD.getPeakModel().getRetentionTimeAtPeakMaximum();
-							if(processSettings.isFilterModelPeaks()) {
-								if(!peakMaxRetentionTimes.contains(retentionTimeMax)) {
-									peakMaxRetentionTimes.add(retentionTimeMax);
-									chromatogram.addPeak(chromatogramPeakMSD);
-								}
-							} else {
-								chromatogram.addPeak(chromatogramPeakMSD);
+							chromatogramPeakMSD.getPeakModel().replaceRetentionTimes(retentionTimes);
+						}
+						/*
+						 * Post-check
+						 */
+						if(!ModelPeakOption.ALL.equals(modelPeakOption)) {
+							if(header == null || !header.contains(modelPeakMarker)) {
+								chromatogramPeakMSD = null;
 							}
-						} catch(Exception e) {
-							result.addWarnMessage(PreferenceSupplier.IDENTIFIER, "Pre check failed for peak: " + e);
+						}
+						/*
+						 * Add the peak
+						 */
+						if(chromatogramPeakMSD != null) {
+							chromatogram.addPeak(chromatogramPeakMSD);
+							logger.info("Add Peak (ELU): " + header);
+						} else {
+							String message = "Skip Peak (ELU): " + header;
+							logger.info(message);
+							result.addInfoMessage(PreferenceSupplier.IDENTIFIER, message);
 						}
 					}
-				} catch(IllegalArgumentException e) {
-					result.addWarnMessage(PreferenceSupplier.IDENTIFIER, "Adding AMDIS peak failed: " + e);
-				} catch(PeakException e) {
-					result.addWarnMessage(PreferenceSupplier.IDENTIFIER, "Adding AMDIS peak failed: " + e);
+				} catch(Exception e) {
+					logger.warn(e);
+					result.addWarnMessage(PreferenceSupplier.IDENTIFIER, "Peak Error (ELU): " + header);
 				}
 			}
 		}
