@@ -80,7 +80,6 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 		this.dataTypes = dataTypes;
 		//
 		inputWizardSettings = createInputWizardSettings(dataTypes);
-		//
 		control = createControl(parent);
 	}
 

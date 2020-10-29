@@ -38,6 +38,7 @@ public class DataExplorerLabelProvider extends LabelProvider implements ILabelPr
 	private final Function<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> supplierFunction;
 
 	public DataExplorerLabelProvider(Function<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> identifier) {
+
 		this.supplierFunction = identifier;
 	}
 
@@ -69,6 +70,7 @@ public class DataExplorerLabelProvider extends LabelProvider implements ILabelPr
 		if(element instanceof File) {
 			File file = (File)element;
 			ImageDescriptor descriptor = null;
+			//
 			if(file.getName().equals("") || file.getParent() == null) {
 				descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DRIVE, IApplicationImage.SIZE_16x16);
 			} else {
@@ -85,6 +87,9 @@ public class DataExplorerLabelProvider extends LabelProvider implements ILabelPr
 						}
 					}
 				}
+				/*
+				 * Try to get the data type image.
+				 */
 				if(descriptor == null) {
 					Collection<ISupplierFileIdentifier> identifier = map.keySet();
 					for(ISupplierFileIdentifier fileIdentifier : identifier) {
@@ -94,6 +99,9 @@ public class DataExplorerLabelProvider extends LabelProvider implements ILabelPr
 						}
 					}
 				}
+				/*
+				 * Default folder or file.
+				 */
 				if(descriptor == null) {
 					if(file.isDirectory()) {
 						descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FOLDER_OPENED, IApplicationImage.SIZE_16x16);
@@ -102,6 +110,9 @@ public class DataExplorerLabelProvider extends LabelProvider implements ILabelPr
 					}
 				}
 			}
+			/*
+			 * Fallback
+			 */
 			if(descriptor != null) {
 				return (Image)resourceManager.get(descriptor);
 			}
