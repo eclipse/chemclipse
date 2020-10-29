@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,8 +17,8 @@ import junit.framework.TestCase;
 
 public class ProcessingInfo_3_Test extends TestCase {
 
-	private IProcessingInfo processingInfo;
-	private IProcessingInfo processingInfo2;
+	private IProcessingInfo<String> processingInfo;
+	private IProcessingInfo<String> processingInfo2;
 	private IProcessingMessage processingMessage;
 	private String processingResult;
 	private String processingResult2;
@@ -27,7 +27,7 @@ public class ProcessingInfo_3_Test extends TestCase {
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		processingInfo = new ProcessingInfo();
+		processingInfo = new ProcessingInfo<>();
 		processingResult = "Hello World!";
 		processingInfo.setProcessingResult(processingResult);
 		//
@@ -42,7 +42,7 @@ public class ProcessingInfo_3_Test extends TestCase {
 		/*
 		 * ProcessingInfo2
 		 */
-		processingInfo2 = new ProcessingInfo(processingInfo);
+		processingInfo2 = new ProcessingInfo<>(processingInfo);
 		processingResult2 = "Hello World 2!";
 		processingInfo2.setProcessingResult(processingResult2);
 	}

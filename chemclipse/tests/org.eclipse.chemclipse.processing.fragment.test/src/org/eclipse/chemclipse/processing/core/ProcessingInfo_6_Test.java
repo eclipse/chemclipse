@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,14 +18,14 @@ import junit.framework.TestCase;
 
 public class ProcessingInfo_6_Test extends TestCase {
 
-	private IProcessingInfo processingInfo;
+	private IProcessingInfo<String> processingInfo;
 	private String processingResult;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		processingInfo = new ProcessingInfo();
+		processingInfo = new ProcessingInfo<>();
 		processingResult = "Hello World!";
 		processingInfo.setProcessingResult(processingResult);
 	}
@@ -38,11 +38,12 @@ public class ProcessingInfo_6_Test extends TestCase {
 
 	public void testProcessingInfo_1() {
 
-		String result = (String)processingInfo.getProcessingResult(String.class);
+		String result = processingInfo.getProcessingResult();
 		assertNotNull(result);
 		assertEquals("Hello World!", result);
 	}
 
+	@SuppressWarnings("deprecation")
 	public void testProcessingInfo_2() {
 
 		try {
