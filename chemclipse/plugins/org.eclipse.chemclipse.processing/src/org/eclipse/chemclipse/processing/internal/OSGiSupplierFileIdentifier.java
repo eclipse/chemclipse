@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - fixed remove operation
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.internal;
 
@@ -31,6 +32,7 @@ public class OSGiSupplierFileIdentifier extends AbstractSupplierFileIdentifier i
 	private final List<SupplierContext> supplierContexts = new CopyOnWriteArrayList<>();
 
 	public OSGiSupplierFileIdentifier() {
+
 		super(new CopyOnWriteArrayList<>());
 	}
 
@@ -48,7 +50,7 @@ public class OSGiSupplierFileIdentifier extends AbstractSupplierFileIdentifier i
 
 	public void removeSupplierContext(SupplierContext supplierContext) {
 
-		supplierContexts.remove(supplierContexts);
+		supplierContexts.remove(supplierContext);
 	}
 
 	@Override
