@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.swt.ui.components;
 
-import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
-import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
@@ -64,14 +62,12 @@ public class SearchSupportUI extends Composite {
 		setLayout(new FillLayout());
 		//
 		Composite composite = new Composite(this, SWT.NONE);
-		GridLayout gridLayout = new GridLayout(4, false);
+		GridLayout gridLayout = new GridLayout(2, false);
 		gridLayout.marginLeft = 0;
 		gridLayout.marginRight = 0;
 		composite.setLayout(gridLayout);
 		//
 		text = createTextSearch(composite);
-		createButtonSearch(composite);
-		createButtonReset(composite);
 		checkbox = createCheckBoxCaseSensitive(composite);
 	}
 
@@ -119,44 +115,11 @@ public class SearchSupportUI extends Composite {
 		return text;
 	}
 
-	private void createButtonSearch(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setText("");
-		button.setToolTipText("Search");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				runSearch();
-			}
-		});
-	}
-
-	private void createButtonReset(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setText("");
-		button.setToolTipText("Reset");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				text.setText("");
-				runSearch();
-			}
-		});
-	}
-
 	private Button createCheckBoxCaseSensitive(Composite parent) {
 
 		Button button = new Button(parent, SWT.CHECK);
 		button.setText("");
-		button.setToolTipText("Case sensitive");
+		button.setToolTipText("Search Case Sensitive");
 		button.setSelection(PreferenceSupplier.isSearchCaseSensitive());
 		button.addSelectionListener(new SelectionAdapter() {
 
