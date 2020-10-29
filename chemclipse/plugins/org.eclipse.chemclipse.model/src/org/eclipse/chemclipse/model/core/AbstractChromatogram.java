@@ -1058,8 +1058,8 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	@Override
 	public void removeAllPeaks() {
 
-		for(T p : getPeaks()) {
-			p.setPeakType(PeakType.DELETED);
+		for(T peak : getPeaks()) {
+			peak.setMarkedAsDeleted(true);
 		}
 		peaks.removeAllPeaks();
 	}
@@ -1082,15 +1082,15 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	public void removePeak(T peak) {
 
 		peaks.removePeak(peak);
-		peak.setPeakType(PeakType.DELETED);
+		peak.setMarkedAsDeleted(true);
 	}
 
 	@Override
 	public void removePeaks(List<T> peaksToDelete) {
 
 		peaks.removePeaks(peaksToDelete);
-		for(T p : peaksToDelete) {
-			p.setPeakType(PeakType.DELETED);
+		for(T peak : peaksToDelete) {
+			peak.setMarkedAsDeleted(true);
 		}
 	}
 

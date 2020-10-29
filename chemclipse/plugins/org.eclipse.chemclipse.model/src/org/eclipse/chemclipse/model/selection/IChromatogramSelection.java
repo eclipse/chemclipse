@@ -220,4 +220,24 @@ public interface IChromatogramSelection<P extends IPeak, C extends IChromatogram
 			return -1;
 		}
 	}
+
+	/**
+	 * Validates the peak. If the peak has been marked as deleted,
+	 * null is returned.
+	 * 
+	 * @param peak
+	 * @return P
+	 */
+	default P validatePeak(P peak) {
+
+		if(peak != null) {
+			if(peak.isMarkedAsDeleted()) {
+				return null;
+			} else if(getChromatogram().getNumberOfPeaks() == 0) {
+				return null;
+			}
+		}
+		//
+		return peak;
+	}
 }

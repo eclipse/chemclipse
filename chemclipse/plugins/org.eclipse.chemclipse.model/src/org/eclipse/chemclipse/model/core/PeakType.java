@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Christoph Läubrich - adding delete type
+ * Philip Wenig - delete type doesn't make sense here, moved to IPeak (markedAsDeleted)
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
@@ -40,12 +41,12 @@ public enum PeakType {
 	PB("perpendicular" + " - " + "baseline"), //
 	VP("valey" + " - " + "perpendicular"), //
 	BP("baseline" + " - " + "perpendicular"), //
-	DD("deconvoluted" + " - " + "deconvoluted"), //
-	DELETED("this peak was deleted");
+	DD("deconvoluted" + " - " + "deconvoluted");
 
 	private String description = "";
 
 	private PeakType(String description) {
+
 		this.description = description;
 	}
 

@@ -256,6 +256,16 @@ public interface IPeak extends ITargetSupplier, PeakPosition, Classifiable, ISig
 	 */
 	void setTemporaryData(String temporaryData);
 
+	boolean isMarkedAsDeleted();
+
+	/**
+	 * Mark this peak as deleted. The DELETED PeakType was used before,
+	 * but that doesn't make sense.
+	 *
+	 * @param markedAsDeleted
+	 */
+	void setMarkedAsDeleted(boolean markedAsDeleted);
+
 	@Override
 	default int getPeakEnd() {
 

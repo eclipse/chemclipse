@@ -32,16 +32,19 @@ public abstract class AbstractChromatogramSelection<T extends IChromatogramPeak,
 	private Point offset;
 
 	public AbstractChromatogramSelection(C chromatogram) throws ChromatogramIsNullException {
+
 		this(chromatogram, true);
 	}
 
 	public AbstractChromatogramSelection(C chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
+
 		/*
 		 * Check
 		 */
 		if(chromatogram == null) {
 			throw new ChromatogramIsNullException("The chromatogram must not be null.");
 		}
+		//
 		this.chromatogram = chromatogram;
 		overlaySelected = true;
 		lockOffset = false;
@@ -305,5 +308,4 @@ public abstract class AbstractChromatogramSelection<T extends IChromatogramPeak,
 		builder.append("]");
 		return builder.toString();
 	}
-	// ------------------------------------equals, hashCode, toString
 }

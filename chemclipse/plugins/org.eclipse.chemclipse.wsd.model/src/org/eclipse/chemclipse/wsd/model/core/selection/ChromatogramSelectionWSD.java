@@ -33,10 +33,12 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection<IChr
 	private IScan identifiedScan;
 
 	public ChromatogramSelectionWSD(IChromatogramWSD chromatogram) throws ChromatogramIsNullException {
+
 		this(chromatogram, true);
 	}
 
 	public ChromatogramSelectionWSD(IChromatogramWSD chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
+
 		/*
 		 * Set all members to default values.<br/> This includes also to set a
 		 * valid scan and if exists a valid peak.
@@ -183,8 +185,12 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection<IChr
 	@Override
 	public void update(boolean forceReload) {
 
+		selectedPeak = validatePeak(selectedPeak);
 		super.update(forceReload);
+		//
 		setSelectedScan(selectedScan, false);
+		setSelectedPeak(selectedPeak, false);
+		//
 		fireUpdateChange(forceReload);
 	}
 

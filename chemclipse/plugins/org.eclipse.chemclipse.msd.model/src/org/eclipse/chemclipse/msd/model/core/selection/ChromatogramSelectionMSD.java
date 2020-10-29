@@ -17,7 +17,6 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.model.core.PeakType;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.selection.AbstractChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -48,10 +47,12 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChr
 	private IMarkedIonTransitions markedIonTransitions;
 
 	public ChromatogramSelectionMSD(IChromatogramMSD chromatogram) throws ChromatogramIsNullException {
+
 		this(chromatogram, true);
 	}
 
 	public ChromatogramSelectionMSD(IChromatogramMSD chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
+
 		super(chromatogram, fireUpdate);
 		/*
 		 * Create instances of selected and excluded ions.
@@ -291,13 +292,13 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChr
 	@Override
 	public void update(boolean forceReload) {
 
-		if(selectedPeak != null && selectedPeak.getPeakType() == PeakType.DELETED) {
-			selectedPeak = null;
-		}
+		selectedPeak = validatePeak(selectedPeak);
 		super.update(forceReload);
+		//
 		setSelectedScan(selectedScan, false);
 		setSelectedIdentifiedScan(selectedIdentifiedScan, false);
 		setSelectedPeak(selectedPeak, false);
+		//
 		fireUpdateChange(forceReload);
 	}
 

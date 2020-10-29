@@ -47,6 +47,7 @@ public abstract class AbstractPeak implements IPeak {
 	 * Transient
 	 */
 	private String temporaryData = "";
+	private boolean markedAsDeleted = false;
 
 	@Override
 	public String getModelDescription() {
@@ -363,5 +364,17 @@ public abstract class AbstractPeak implements IPeak {
 	public void setTemporaryData(String temporaryData) {
 
 		this.temporaryData = temporaryData;
+	}
+
+	@Override
+	public boolean isMarkedAsDeleted() {
+
+		return markedAsDeleted;
+	}
+
+	@Override
+	public void setMarkedAsDeleted(boolean markedAsDeleted) {
+
+		this.markedAsDeleted = markedAsDeleted;
 	}
 }
