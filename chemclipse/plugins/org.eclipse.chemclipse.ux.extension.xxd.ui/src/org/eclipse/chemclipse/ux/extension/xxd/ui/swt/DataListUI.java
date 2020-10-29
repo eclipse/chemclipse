@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - improvements file selection
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -44,11 +45,16 @@ import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
@@ -61,17 +67,21 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 	private Composite control;
 	private InputWizardSettings inputWizardSettings;
 	private Composite toolbarMain;
+	//
+	private IPreferenceStore preferenceStore;
+	private String userPathKey;
+	private DataType[] dataTypes;
 
 	public DataListUI(Composite parent, Consumer<Boolean> dirtyListener, IPreferenceStore preferenceStore, String userPathKey, DataType... dataTypes) {
+
 		this.dirtyListener = dirtyListener;
-		inputWizardSettings = InputWizardSettings.create(preferenceStore, userPathKey, dataTypes);
-		inputWizardSettings.setTitle("Select files");
-		inputWizardSettings.setDescription("Select items(s) to process.");
-		control = new Composite(parent, SWT.NONE);
-		control.setLayout(new GridLayout(1, true));
-		createToolbarTop(control);
-		createTableViewer(control);
-		createToolbarBottom(control);
+		this.preferenceStore = preferenceStore;
+		this.userPathKey = userPathKey;
+		this.dataTypes = dataTypes;
+		//
+		inputWizardSettings = createInputWizardSettings(dataTypes);
+		//
+		control = createControl(parent);
 	}
 
 	public ExtendedTableViewer getTableViewer() {
@@ -79,11 +89,184 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 		return tableViewer;
 	}
 
+	public String getPath(File file) {
+
+		return file.getAbsolutePath();
+	}
+
+	public String getName(File file) {
+
+		if(file.exists()) {
+			return file.getName();
+		} else {
+			return "File doesn't exist.";
+		}
+	}
+
+	public Control getControl() {
+
+		return control;
+	}
+
+	public List<File> getFiles() {
+
+		return Collections.unmodifiableList(files);
+	}
+
+	@Override
+	public DataListUIConfig getConfig() {
+
+		return new DataListUIConfig() {
+
+			@Override
+			public void setToolbarVisible(boolean visible) {
+
+				PartSupport.setCompositeVisibility(toolbarMain, visible);
+			}
+
+			@Override
+			public boolean isToolbarVisible() {
+
+				return toolbarMain.isVisible();
+			}
+
+			@Override
+			public IPreferencePage[] getPreferencePages() {
+
+				return new IPreferencePage[]{inputWizardSettings.getPreferencePage()};
+			}
+
+			@Override
+			public void applySettings() {
+
+				// nothing to do
+			}
+		};
+	}
+
+	/**
+	 * set the initial file list for this control and clears the dirty flag
+	 * 
+	 * @param files
+	 */
+	public void setFiles(Collection<File> files) {
+
+		this.files.clear();
+		if(files != null) {
+			this.files.addAll(files);
+		}
+		updateList(false);
+	}
+
+	protected void removed(File file) {
+
+	}
+
+	protected void addFiles(Collection<File> newFiles) {
+
+		files.addAll(newFiles);
+	}
+
+	private ToolItem createAddButton(ToolBar toolBar) {
+
+		final ToolItem item = new ToolItem(toolBar, SWT.DROP_DOWN);
+		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		item.setToolTipText("Add item(s) to the list.");
+		//
+		if(dataTypes.length > 1) {
+			addFileSelectionMenu(toolBar, item);
+		} else {
+			addFileSelectionListener(item);
+		}
+		//
+		return item;
+	}
+
+	private void addFileSelectionListener(ToolItem item) {
+
+		item.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				updateFiles(e.display.getActiveShell(), createInputWizardSettings(dataTypes));
+			}
+		});
+	}
+
+	private void addFileSelectionMenu(ToolBar toolBar, ToolItem item) {
+
+		final Menu menu = new Menu(toolBar.getShell(), SWT.POP_UP);
+		toolBar.addDisposeListener(new DisposeListener() {
+
+			@Override
+			public void widgetDisposed(DisposeEvent e) {
+
+				menu.dispose();
+			}
+		});
+		//
+		item.addListener(SWT.Selection, event -> {
+			if(event.detail == SWT.ARROW) {
+				Rectangle rectangle = item.getBounds();
+				Point point = new Point(rectangle.x, rectangle.y + rectangle.height);
+				point = toolBar.toDisplay(point);
+				//
+				for(MenuItem menuItem : menu.getItems()) {
+					menuItem.dispose();
+				}
+				//
+				for(DataType dataType : dataTypes) {
+					MenuItem menuItem = new MenuItem(menu, SWT.NONE);
+					menuItem.setText(dataType.name());
+					menuItem.addSelectionListener(new SelectionAdapter() {
+
+						@Override
+						public void widgetSelected(SelectionEvent e) {
+
+							/*
+							 * Show the selected data type.
+							 */
+							updateFiles(e.display.getActiveShell(), createInputWizardSettings(dataType));
+						}
+					});
+				}
+				//
+				menu.setLocation(point.x, point.y);
+				menu.setVisible(true);
+			} else {
+				/*
+				 * Show all available data types.
+				 */
+				updateFiles(menu.getShell(), createInputWizardSettings(dataTypes));
+			}
+		});
+	}
+
+	private void updateList(boolean dirtyStatus) {
+
+		dirtyListener.accept(dirtyStatus);
+		tableViewer.refresh();
+	}
+
+	private Composite createControl(Composite parent) {
+
+		Composite control = new Composite(parent, SWT.NONE);
+		control.setLayout(new GridLayout(1, true));
+		//
+		createToolbarTop(control);
+		createTableViewer(control);
+		createToolbarBottom(control);
+		//
+		return control;
+	}
+
 	private void createTableViewer(Composite composite) {
 
 		tableViewer = new ExtendedTableViewer(composite, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		tableViewer.setContentProvider(ArrayContentProvider.getInstance());
 		tableViewer.setInput(files);
+		//
 		DataExplorerLabelProvider dataExplorerLabelProvider = new DataExplorerLabelProvider(inputWizardSettings.getSupplierCache());
 		composite.addDisposeListener(new DisposeListener() {
 
@@ -93,6 +276,7 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 				dataExplorerLabelProvider.dispose();
 			}
 		});
+		//
 		tableViewer.addColumn(new SimpleColumnDefinition<>("Name", 250, new ColumnLabelProvider() {
 
 			@Override
@@ -107,10 +291,10 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 			@Override
 			public Image getImage(Object element) {
 
-				Image image = dataExplorerLabelProvider.getImage(element);
-				return image;
+				return dataExplorerLabelProvider.getImage(element);
 			}
 		}, null, this::getName));
+		//
 		tableViewer.addColumn(new SimpleColumnDefinition<>("Path", 300, new ColumnLabelProvider() {
 
 			@Override
@@ -122,6 +306,7 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 				return "-";
 			}
 		}, null, this::getPath));
+		//
 		tableViewer.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
@@ -158,6 +343,7 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		toolBar.setLayoutData(gridData);
+		//
 		createMoveUpButton(toolBar);
 		createMoveDownButton(toolBar);
 		createRemoveButton(toolBar);
@@ -232,107 +418,21 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 		return item;
 	}
 
-	protected void removed(File file) {
+	private void updateFiles(Shell shell, InputWizardSettings inputWizardSettings) {
 
-	}
-
-	protected void addFiles(Collection<File> newFiles) {
-
-		files.addAll(newFiles);
-	}
-
-	private ToolItem createAddButton(ToolBar toolBar) {
-
-		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
-		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
-		item.setToolTipText("Add item(s) to the list.");
-		item.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				Set<File> newFiles = InputEntriesWizard.openWizard(getControl().getShell(), inputWizardSettings).keySet();
-				if(!newFiles.isEmpty()) {
-					addFiles(newFiles);
-					updateList(true);
-				}
-			}
-		});
-		return item;
-	}
-
-	/**
-	 * set the initial file list for this control and clears the dirty flag
-	 * 
-	 * @param files
-	 */
-	public void setFiles(Collection<File> files) {
-
-		this.files.clear();
-		if(files != null) {
-			this.files.addAll(files);
-		}
-		updateList(false);
-	}
-
-	private void updateList(boolean dirtyStatus) {
-
-		dirtyListener.accept(dirtyStatus);
-		tableViewer.refresh();
-	}
-
-	public String getPath(File file) {
-
-		return file.getAbsolutePath();
-	}
-
-	public String getName(File file) {
-
-		if(file.exists()) {
-			return file.getName();
-		} else {
-			return "File doesn't exist.";
+		Set<File> newFiles = InputEntriesWizard.openWizard(shell, inputWizardSettings).keySet();
+		if(!newFiles.isEmpty()) {
+			addFiles(newFiles);
+			updateList(true);
 		}
 	}
 
-	public Control getControl() {
+	private InputWizardSettings createInputWizardSettings(DataType... dataTypes) {
 
-		return control;
-	}
-
-	public List<File> getFiles() {
-
-		return Collections.unmodifiableList(files);
-	}
-
-	@Override
-	public DataListUIConfig getConfig() {
-
-		return new DataListUIConfig() {
-
-			@Override
-			public void setToolbarVisible(boolean visible) {
-
-				PartSupport.setCompositeVisibility(toolbarMain, visible);
-			}
-
-			@Override
-			public boolean isToolbarVisible() {
-
-				return toolbarMain.isVisible();
-			}
-
-			@Override
-			public IPreferencePage[] getPreferencePages() {
-
-				return new IPreferencePage[]{inputWizardSettings.getPreferencePage()};
-			}
-
-			@Override
-			public void applySettings() {
-
-				// nothing to do
-			}
-		};
+		inputWizardSettings = InputWizardSettings.create(preferenceStore, userPathKey, dataTypes);
+		inputWizardSettings.setTitle("Select files");
+		inputWizardSettings.setDescription("Select items(s) to process.");
+		//
+		return inputWizardSettings;
 	}
 }
