@@ -32,12 +32,6 @@
             id="org.eclipse.chemclipse.chromatogram.msd.batchprocess.ui.editors.BatchProcessJobEditor"
             name="Batch Process Job Editor">
       </editor>
-   </extension>
-   <extension
-         point="org.eclipse.help.toc">
-      <toc
-            file="toc_plugin.xml">
-      </toc>
    </extension>   
    <extension
          point="org.eclipse.ui.preferencePages">
