@@ -404,4 +404,6 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_FOCUS_LEFT = "org.eclipse.chemclipse.rcp.ui.icons/focus_left.gif";
 	String IMAGE_FOCUS_RIGHT = "org.eclipse.chemclipse.rcp.ui.icons/focus_right.gif";
 	String IMAGE_FOCUS_BOTH_VERTICAL = "org.eclipse.chemclipse.rcp.ui.icons/focus_both_vertical.gif";
+	//
+	String IMAGE_PEAK_RANGE = "org.eclipse.chemclipse.rcp.ui.icons/peak-range.gif";
 }
