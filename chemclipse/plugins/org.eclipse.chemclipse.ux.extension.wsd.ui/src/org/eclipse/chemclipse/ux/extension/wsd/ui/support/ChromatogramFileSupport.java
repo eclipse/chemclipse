@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,6 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramConverterSupport;
+import org.eclipse.chemclipse.converter.core.IConverterSupport;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
@@ -41,6 +42,7 @@ public class ChromatogramFileSupport {
 	 * Use only static methods.
 	 */
 	private ChromatogramFileSupport() {
+
 	}
 
 	/**
@@ -49,6 +51,7 @@ public class ChromatogramFileSupport {
 	 * @param chromatogram
 	 * @throws NoConverterAvailableException
 	 */
+	@SuppressWarnings("deprecation")
 	public static boolean saveChromatogram(IChromatogramWSD chromatogram) throws NoConverterAvailableException {
 
 		if(chromatogram == null) {
@@ -67,9 +70,9 @@ public class ChromatogramFileSupport {
 		/*
 		 * Set the filters that allow an export of chromatographic data.
 		 */
-		String[] filterExtensions = converterSupport.getExportableFilterExtensions();
+		String[] filterExtensions = converterSupport.getFilterExtensions(IConverterSupport.EXPORT_SUPPLIER);
 		dialog.setFilterExtensions(filterExtensions);
-		String[] filterNames = converterSupport.getExportableFilterNames();
+		String[] filterNames = converterSupport.getFilterNames(IConverterSupport.EXPORT_SUPPLIER);
 		dialog.setFilterNames(filterNames);
 		/*
 		 * Opens the dialog.<br/> Use converterSupport.getExportSupplier()
@@ -120,7 +123,6 @@ public class ChromatogramFileSupport {
 		}
 	}
 
-	// ---------------------------------------------------private methods
 	/**
 	 * Validates the selected file to save the chromatogram. This method checks
 	 * if the chromatogram is stored in a directory or not and prepares the file
@@ -246,7 +248,6 @@ public class ChromatogramFileSupport {
 		}
 	}
 
-	// ---------------------------------------------------private methods
 	/**
 	 * Removes an existing directory extension if exists. For example if a new
 	 * chromatogram should be written and the filename is "TEST.D.MS" than

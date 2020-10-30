@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -29,7 +29,7 @@ import org.osgi.service.event.EventHandler;
 
 public class DeleteChromatogramIntegrationsHandler implements EventHandler {
 
-	private static IChromatogramSelection chromatogramSelection;
+	private static IChromatogramSelection<?, ?> chromatogramSelection;
 
 	@SuppressWarnings("rawtypes")
 	@Execute

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,7 +16,6 @@ import javax.inject.Named;
 import org.eclipse.chemclipse.model.selection.AbstractChromatogramSelection;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.di.UISynchronize;
 import org.eclipse.e4.ui.services.IServiceConstants;
@@ -26,8 +25,9 @@ import org.osgi.service.event.EventHandler;
 
 public class UnzoomChromatogramHandler implements EventHandler {
 
-	private static IChromatogramSelection chromatogramSelection;
+	private static IChromatogramSelection<?, ?> chromatogramSelection;
 
+	@SuppressWarnings("rawtypes")
 	@Execute
 	public void execute(UISynchronize uiSynchronize, final @Named(IServiceConstants.ACTIVE_SHELL) Shell shell) {
 
@@ -50,9 +50,9 @@ public class UnzoomChromatogramHandler implements EventHandler {
 	public void handleEvent(Event event) {
 
 		if(event.getTopic().equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION)) {
-			chromatogramSelection = (IChromatogramSelection)event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
+			chromatogramSelection = (IChromatogramSelection<?, ?>)event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
 		} else if(event.getTopic().equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION)) {
-			chromatogramSelection = (IChromatogramSelection)event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
+			chromatogramSelection = (IChromatogramSelection<?, ?>)event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
 		}
 	}
 }

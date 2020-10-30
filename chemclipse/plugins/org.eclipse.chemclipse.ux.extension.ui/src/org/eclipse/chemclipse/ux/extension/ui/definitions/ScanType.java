@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,7 +15,7 @@ import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
+import org.eclipse.chemclipse.ux.extension.ui.Activator;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.osgi.service.event.Event;
@@ -61,7 +61,7 @@ public class ScanType implements EventHandler {
 		 * org.eclipse.core.expressions.definitions
 		 * isScanTypeMSD
 		 */
-		IEclipseContext eclipseContext = ModelSupportAddon.getEclipseContext();
+		IEclipseContext eclipseContext = Activator.getDefault().getEclipseContext();
 		if(eclipseContext != null) {
 			eclipseContext.set(SCAN_SELECTION, scanSelection);
 			eclipseContext.set(SCAN_TYPE, scanType);
@@ -75,7 +75,7 @@ public class ScanType implements EventHandler {
 	 */
 	public static IScan getSelectedScan() {
 
-		IEclipseContext eclipseContext = ModelSupportAddon.getEclipseContext();
+		IEclipseContext eclipseContext = Activator.getDefault().getEclipseContext();
 		Object object = eclipseContext.get(SCAN_SELECTION);
 		//
 		IScan scan = null;
@@ -93,7 +93,7 @@ public class ScanType implements EventHandler {
 	 */
 	public static IScanMSD getSelectedScanMSD() {
 
-		IEclipseContext eclipseContext = ModelSupportAddon.getEclipseContext();
+		IEclipseContext eclipseContext = Activator.getDefault().getEclipseContext();
 		Object object = eclipseContext.get(SCAN_SELECTION);
 		//
 		IScanMSD scanMSD = null;
@@ -111,7 +111,7 @@ public class ScanType implements EventHandler {
 	 */
 	public static IScanCSD getSelectedScanCSD() {
 
-		IEclipseContext eclipseContext = ModelSupportAddon.getEclipseContext();
+		IEclipseContext eclipseContext = Activator.getDefault().getEclipseContext();
 		Object object = eclipseContext.get(SCAN_SELECTION);
 		//
 		IScanCSD scanCSD = null;
@@ -129,7 +129,7 @@ public class ScanType implements EventHandler {
 	 */
 	public static IScanWSD getSelectedScanWSD() {
 
-		IEclipseContext eclipseContext = ModelSupportAddon.getEclipseContext();
+		IEclipseContext eclipseContext = Activator.getDefault().getEclipseContext();
 		Object object = eclipseContext.get(SCAN_SELECTION);
 		//
 		IScanWSD scanWSD = null;

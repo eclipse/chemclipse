@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2019 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,7 +15,7 @@ import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
+import org.eclipse.chemclipse.ux.extension.ui.Activator;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.osgi.service.event.Event;
@@ -79,7 +79,7 @@ public class ChromatogramType implements EventHandler {
 		 * org.eclipse.core.expressions.definitions
 		 * isChromatogramTypeMSD
 		 */
-		IEclipseContext eclipseContext = ModelSupportAddon.getEclipseContext();
+		IEclipseContext eclipseContext = Activator.getDefault().getEclipseContext();
 		if(eclipseContext != null) {
 			eclipseContext.set(CHROMATOGRAM_SELECTION, chromatogramSelection);
 			eclipseContext.set(CHROMATOGRAM_TYPE, chromatogramType);
@@ -94,7 +94,7 @@ public class ChromatogramType implements EventHandler {
 	@SuppressWarnings("rawtypes")
 	public static IChromatogramSelection getChromatogramSelection() {
 
-		IEclipseContext eclipseContext = ModelSupportAddon.getEclipseContext();
+		IEclipseContext eclipseContext = Activator.getDefault().getEclipseContext();
 		Object object = eclipseContext.get(ChromatogramType.CHROMATOGRAM_SELECTION);
 		//
 		IChromatogramSelection chromatogramSelection = null;
@@ -112,7 +112,7 @@ public class ChromatogramType implements EventHandler {
 	 */
 	public static IChromatogramSelectionMSD getChromatogramSelectionMSD() {
 
-		IEclipseContext eclipseContext = ModelSupportAddon.getEclipseContext();
+		IEclipseContext eclipseContext = Activator.getDefault().getEclipseContext();
 		Object object = eclipseContext.get(ChromatogramType.CHROMATOGRAM_SELECTION);
 		//
 		IChromatogramSelectionMSD chromatogramSelectionMSD = null;
@@ -130,7 +130,7 @@ public class ChromatogramType implements EventHandler {
 	 */
 	public static IChromatogramSelectionCSD getChromatogramSelectionCSD() {
 
-		IEclipseContext eclipseContext = ModelSupportAddon.getEclipseContext();
+		IEclipseContext eclipseContext = Activator.getDefault().getEclipseContext();
 		Object object = eclipseContext.get(ChromatogramType.CHROMATOGRAM_SELECTION);
 		//
 		IChromatogramSelectionCSD chromatogramSelectionCSD = null;
@@ -148,7 +148,7 @@ public class ChromatogramType implements EventHandler {
 	 */
 	public static IChromatogramSelectionWSD getChromatogramSelectionWSD() {
 
-		IEclipseContext eclipseContext = ModelSupportAddon.getEclipseContext();
+		IEclipseContext eclipseContext = Activator.getDefault().getEclipseContext();
 		Object object = eclipseContext.get(ChromatogramType.CHROMATOGRAM_SELECTION);
 		//
 		IChromatogramSelectionWSD chromatogramSelectionWSD = null;

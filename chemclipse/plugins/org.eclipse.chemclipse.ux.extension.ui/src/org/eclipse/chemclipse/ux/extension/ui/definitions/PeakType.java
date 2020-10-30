@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,7 +15,7 @@ import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
+import org.eclipse.chemclipse.ux.extension.ui.Activator;
 import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.osgi.service.event.Event;
@@ -61,7 +61,7 @@ public class PeakType implements EventHandler {
 		 * org.eclipse.core.expressions.definitions
 		 * isPeakTypeMSD
 		 */
-		IEclipseContext eclipseContext = ModelSupportAddon.getEclipseContext();
+		IEclipseContext eclipseContext = Activator.getDefault().getEclipseContext();
 		if(eclipseContext != null) {
 			eclipseContext.set(PEAK_SELECTION, peakSelection);
 			eclipseContext.set(PEAK_TYPE, peakType);
@@ -75,7 +75,7 @@ public class PeakType implements EventHandler {
 	 */
 	public static IPeak getSelectedPeak() {
 
-		IEclipseContext eclipseContext = ModelSupportAddon.getEclipseContext();
+		IEclipseContext eclipseContext = Activator.getDefault().getEclipseContext();
 		Object object = eclipseContext.get(PEAK_SELECTION);
 		//
 		IPeak peak = null;
@@ -93,7 +93,7 @@ public class PeakType implements EventHandler {
 	 */
 	public static IPeakMSD getSelectedPeakMSD() {
 
-		IEclipseContext eclipseContext = ModelSupportAddon.getEclipseContext();
+		IEclipseContext eclipseContext = Activator.getDefault().getEclipseContext();
 		Object object = eclipseContext.get(PEAK_SELECTION);
 		//
 		IPeakMSD peakMSD = null;
@@ -111,7 +111,7 @@ public class PeakType implements EventHandler {
 	 */
 	public static IPeakCSD getSelectedPeakCSD() {
 
-		IEclipseContext eclipseContext = ModelSupportAddon.getEclipseContext();
+		IEclipseContext eclipseContext = Activator.getDefault().getEclipseContext();
 		Object object = eclipseContext.get(PEAK_SELECTION);
 		//
 		IPeakCSD peakCSD = null;
@@ -129,7 +129,7 @@ public class PeakType implements EventHandler {
 	 */
 	public static IPeakWSD getSelectedPeakWSD() {
 
-		IEclipseContext eclipseContext = ModelSupportAddon.getEclipseContext();
+		IEclipseContext eclipseContext = Activator.getDefault().getEclipseContext();
 		Object object = eclipseContext.get(PEAK_SELECTION);
 		//
 		IPeakWSD peakWSD = null;

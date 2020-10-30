@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.ux.extension.ui.definitions;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
+import org.eclipse.chemclipse.ux.extension.ui.Activator;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
@@ -50,7 +50,7 @@ public class LibraryType implements EventHandler {
 		 * org.eclipse.core.expressions.definitions
 		 * isLibraryTypeMSD
 		 */
-		IEclipseContext eclipseContext = ModelSupportAddon.getEclipseContext();
+		IEclipseContext eclipseContext = Activator.getDefault().getEclipseContext();
 		if(eclipseContext != null) {
 			eclipseContext.set(LIBRARY_SELECTION, librarySelection);
 			eclipseContext.set(LIBRARY_TYPE, libraryType);
@@ -64,7 +64,7 @@ public class LibraryType implements EventHandler {
 	 */
 	public static IMassSpectra getMassSpectra() {
 
-		IEclipseContext eclipseContext = ModelSupportAddon.getEclipseContext();
+		IEclipseContext eclipseContext = Activator.getDefault().getEclipseContext();
 		Object object = eclipseContext.get(LIBRARY_SELECTION);
 		//
 		IMassSpectra massSpectra = null;
