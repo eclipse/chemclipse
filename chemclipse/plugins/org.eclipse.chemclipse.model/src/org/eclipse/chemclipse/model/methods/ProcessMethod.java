@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -28,22 +28,17 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 
 	public static final Set<DataCategory> CHROMATOGRAPHY = Collections.unmodifiableSet(EnumSet.copyOf(Arrays.asList(DataCategory.MSD, DataCategory.CSD, DataCategory.WSD)));
 	public static final Set<DataCategory> NMR = Collections.unmodifiableSet(EnumSet.copyOf(Arrays.asList(DataCategory.FID, DataCategory.NMR)));
+	//
+	private final Map<String, String> metadata = new LinkedHashMap<>();
+	private final Set<DataCategory> catgories;
+	//
 	private String UUID = java.util.UUID.randomUUID().toString();
 	private String operator;
 	private String category;
 	private File sourceFile;
-	private final Set<DataCategory> catgories;
-	private final Map<String, String> metadata = new LinkedHashMap<>();
-
-	/**
-	 * @deprecated specify explicitly the desired categories
-	 */
-	@Deprecated
-	public ProcessMethod() {
-		this(CHROMATOGRAPHY);
-	}
 
 	public ProcessMethod(Set<DataCategory> categories) {
+
 		this.catgories = Collections.unmodifiableSet(categories);
 	}
 
@@ -53,6 +48,7 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 	 * @param other
 	 */
 	public ProcessMethod(IProcessMethod other) {
+
 		super(other);
 		if(other != null) {
 			this.operator = other.getOperator();

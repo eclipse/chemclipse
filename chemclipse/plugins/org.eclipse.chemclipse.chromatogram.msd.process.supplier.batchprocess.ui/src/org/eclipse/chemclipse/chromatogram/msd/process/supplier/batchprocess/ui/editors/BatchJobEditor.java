@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 , 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -37,7 +37,6 @@ import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.E4ProcessSupplierContext;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.BatchJobUI;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
@@ -54,13 +53,13 @@ import org.eclipse.ui.part.EditorPart;
 
 public class BatchJobEditor extends EditorPart implements IRunnableWithProgress {
 
-	private static final DataType[] DATA_TYPES = new DataType[]{DataType.CSD, DataType.MSD, DataType.WSD};
 	private static final Logger logger = Logger.getLogger(BatchJobEditor.class);
 	//
 	private BatchJobUI batchJobUI;
 	private File file;
 	private boolean isDirty = false;
-	private BatchProcessJob currentJob;
+	private BatchProcessJob batchProcessJob;
+	//
 	private E4ProcessSupplierContext supplierContext;
 
 	@Override
@@ -69,8 +68,8 @@ public class BatchJobEditor extends EditorPart implements IRunnableWithProgress 
 		if(file != null) {
 			JobWriter writer = new JobWriter();
 			try {
-				currentJob = getBatchProcessJob();
-				writer.writeBatchProcessJob(file, currentJob, monitor);
+				batchProcessJob = getBatchProcessJob();
+				writer.writeBatchProcessJob(file, batchProcessJob, monitor);
 				updateDirtyStatus(false);
 			} catch(FileNotFoundException e) {
 				logger.warn(e);
@@ -99,15 +98,15 @@ public class BatchJobEditor extends EditorPart implements IRunnableWithProgress 
 		fileName = fileName.substring(0, fileName.length() - 4);
 		setPartName(fileName);
 		//
-		if(input instanceof IFileEditorInput) {
+		if(batchProcessJob == null && input instanceof IFileEditorInput) {
 			IFileEditorInput fileEditorInput = (IFileEditorInput)input;
 			file = fileEditorInput.getFile().getLocation().toFile();
 			//
 			ImportRunnable runnable = new ImportRunnable(file);
 			ProgressMonitorDialog monitor = new ProgressMonitorDialog(site.getShell());
 			try {
-				monitor.run(false, true, runnable);
-				currentJob = runnable.getBatchProcessJob();
+				monitor.run(false, false, runnable);
+				batchProcessJob = runnable.getBatchProcessJob();
 			} catch(InvocationTargetException e) {
 				throw new PartInitException("The file could't be loaded.", e);
 			} catch(InterruptedException e) {
@@ -129,9 +128,10 @@ public class BatchJobEditor extends EditorPart implements IRunnableWithProgress 
 	 */
 	protected void updateDirtyStatus(boolean dirty) {
 
-		if(dirty && getBatchProcessJob().equals(currentJob)) {
+		if(dirty && getBatchProcessJob().equals(batchProcessJob)) {
 			dirty = false;
 		}
+		//
 		if(this.isDirty != dirty) {
 			this.isDirty = dirty;
 			firePropertyChange(IEditorPart.PROP_DIRTY);
@@ -145,22 +145,19 @@ public class BatchJobEditor extends EditorPart implements IRunnableWithProgress 
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public void createPartControl(Composite parent) {
 
 		parent.setLayout(new FillLayout());
-		supplierContext = ContextInjectionFactory.make(E4ProcessSupplierContext.class, ModelSupportAddon.getEclipseContext());
-		batchJobUI = new BatchJobUI(parent, supplierContext, Activator.getDefault().getPreferenceStore(), PreferenceSupplier.P_FILTER_PATH_IMPORT_RECORDS, DATA_TYPES, this);
+		//
+		supplierContext = ContextInjectionFactory.make(E4ProcessSupplierContext.class, Activator.getDefault().getEclipseContext());
+		DataType[] dataTypes = batchProcessJob.getDataTypes();
+		batchJobUI = new BatchJobUI(parent, supplierContext, Activator.getDefault().getPreferenceStore(), PreferenceSupplier.P_FILTER_PATH_IMPORT_RECORDS, dataTypes, this);
 		batchJobUI.setModificationHandler(this::updateDirtyStatus);
-		if(currentJob != null) {
-			List<IChromatogramInputEntry> chromatogramInputEntries = currentJob.getChromatogramInputEntries();
-			List<File> files = new ArrayList<>();
-			for(IChromatogramInputEntry entry : chromatogramInputEntries) {
-				files.add(new File(entry.getInputFile()));
-			}
-			batchJobUI.doLoad(files, new ProcessMethod(currentJob.getProcessMethod()));
+		//
+		if(batchProcessJob != null) {
+			batchJobUI.doLoad(getBatchJobFiles(), new ProcessMethod(batchProcessJob.getProcessMethod()));
 		} else {
-			batchJobUI.doLoad(Collections.emptyList(), new ProcessMethod());
+			batchJobUI.doLoad(Collections.emptyList(), new ProcessMethod(ProcessMethod.CHROMATOGRAPHY));
 		}
 	}
 
@@ -168,6 +165,17 @@ public class BatchJobEditor extends EditorPart implements IRunnableWithProgress 
 	public void setFocus() {
 
 		batchJobUI.setFocus();
+	}
+
+	private List<File> getBatchJobFiles() {
+
+		List<IChromatogramInputEntry> chromatogramInputEntries = batchProcessJob.getChromatogramInputEntries();
+		List<File> files = new ArrayList<>();
+		for(IChromatogramInputEntry entry : chromatogramInputEntries) {
+			files.add(new File(entry.getInputFile()));
+		}
+		//
+		return files;
 	}
 
 	private BatchProcessJob getBatchProcessJob() {
@@ -183,7 +191,8 @@ public class BatchJobEditor extends EditorPart implements IRunnableWithProgress 
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-		BatchProcess batchProcess = new BatchProcess(DATA_TYPES, supplierContext);
+		DataType[] dataTypes = batchProcessJob.getDataTypes();
+		BatchProcess batchProcess = new BatchProcess(dataTypes, supplierContext);
 		IProcessingInfo<?> processingInfo = batchProcess.execute(getBatchProcessJob(), monitor);
 		ProcessingInfoViewSupport.updateProcessingInfo(processingInfo);
 	}

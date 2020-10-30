@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
+ * Copyright (c) 2010, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -31,6 +31,7 @@ import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.int
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.BatchProcessJob;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -40,36 +41,39 @@ public class JobWriter {
 	public void writeBatchProcessJob(File file, BatchProcessJob batchProcessJob, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException, XMLStreamException {
 
 		XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newInstance();
-		BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(file));
-		XMLEventWriter eventWriter = xmlOutputFactory.createXMLEventWriter(bufferedOutputStream, JobTags.UTF8);
-		XMLEventFactory eventFactory = XMLEventFactory.newInstance();
-		/*
-		 * Document
-		 */
-		eventWriter.add(eventFactory.createStartDocument());
-		StartElement chromatogramStart = eventFactory.createStartElement("", "", JobTags.BATCH_PROCESS_JOB);
-		eventWriter.add(chromatogramStart);
-		/*
-		 * Write the header and the list informations.
-		 */
-		writeBatchProcessJobHeader(eventWriter, eventFactory, batchProcessJob);
-		writeComment(eventWriter, eventFactory, "Load the following chromatograms.");
-		writeChromatogramInputEntries(eventWriter, eventFactory, batchProcessJob.getChromatogramInputEntries());
-		writeComment(eventWriter, eventFactory, "Process each chromatogram with the listed method entries.");
-		writeChromatogramProcessEntries(eventWriter, eventFactory, batchProcessJob.getProcessMethod());
-		/*
-		 * Close the document
-		 */
-		EndElement chromatogramEnd = eventFactory.createEndElement("", "", JobTags.BATCH_PROCESS_JOB);
-		eventWriter.add(chromatogramEnd);
-		eventWriter.add(eventFactory.createEndDocument());
-		/*
-		 * Close the streams
-		 */
-		bufferedOutputStream.flush();
-		eventWriter.flush();
-		bufferedOutputStream.close();
-		eventWriter.close();
+		try (BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(file))) {
+			/*
+			 * Writer
+			 */
+			XMLEventWriter eventWriter = xmlOutputFactory.createXMLEventWriter(bufferedOutputStream, JobTags.UTF8);
+			XMLEventFactory eventFactory = XMLEventFactory.newInstance();
+			/*
+			 * Document
+			 */
+			eventWriter.add(eventFactory.createStartDocument());
+			StartElement chromatogramStart = eventFactory.createStartElement("", "", JobTags.BATCH_PROCESS_JOB);
+			eventWriter.add(chromatogramStart);
+			/*
+			 * Write the header and the list informations.
+			 */
+			writeBatchProcessJobHeader(eventWriter, eventFactory, batchProcessJob);
+			writeComment(eventWriter, eventFactory, "Data Types");
+			writeDataTypes(eventWriter, eventFactory, batchProcessJob.getDataTypeEntries());
+			writeComment(eventWriter, eventFactory, "Chromatograms");
+			writeChromatogramInputEntries(eventWriter, eventFactory, batchProcessJob.getChromatogramInputEntries());
+			writeComment(eventWriter, eventFactory, "Process Entries");
+			writeChromatogramProcessEntries(eventWriter, eventFactory, batchProcessJob.getProcessMethod());
+			/*
+			 * Close the document
+			 */
+			EndElement chromatogramEnd = eventFactory.createEndElement("", "", JobTags.BATCH_PROCESS_JOB);
+			eventWriter.add(chromatogramEnd);
+			eventWriter.add(eventFactory.createEndDocument());
+			//
+			bufferedOutputStream.flush();
+			eventWriter.flush();
+			eventWriter.close();
+		}
 	}
 
 	/**
@@ -110,6 +114,23 @@ public class JobWriter {
 		eventWriter.add(headerEnd);
 	}
 
+	private void writeDataTypes(XMLEventWriter eventWriter, XMLEventFactory eventFactory, List<DataType> dataTypes) throws XMLStreamException {
+
+		/*
+		 * Element and content definition.
+		 */
+		StartElement entriesStart = eventFactory.createStartElement("", "", JobTags.DATA_TYPE_ENTRIES);
+		EndElement entriesEnd = eventFactory.createEndElement("", "", JobTags.DATA_TYPE_ENTRIES);
+		/*
+		 * Write the elements.
+		 */
+		eventWriter.add(entriesStart);
+		for(DataType dataType : dataTypes) {
+			writeDataType(eventWriter, eventFactory, dataType);
+		}
+		eventWriter.add(entriesEnd);
+	}
+
 	/**
 	 * Writes the chromatogram input entries.
 	 * 
@@ -133,6 +154,25 @@ public class JobWriter {
 			writeChromatogramInputEntry(eventWriter, eventFactory, inputEntry);
 		}
 		eventWriter.add(entriesEnd);
+	}
+
+	private void writeDataType(XMLEventWriter eventWriter, XMLEventFactory eventFactory, DataType dataType) throws XMLStreamException {
+
+		/*
+		 * Element and content definition.
+		 */
+		StartElement entryStart = eventFactory.createStartElement("", "", JobTags.DATA_TYPE_ENTRY);
+		EndElement entryEnd = eventFactory.createEndElement("", "", JobTags.DATA_TYPE_ENTRY);
+		/*
+		 * Values.
+		 */
+		Characters inputFile = eventFactory.createCData(dataType.name());
+		/*
+		 * Write the elements.
+		 */
+		eventWriter.add(entryStart);
+		eventWriter.add(inputFile);
+		eventWriter.add(entryEnd);
 	}
 
 	/**

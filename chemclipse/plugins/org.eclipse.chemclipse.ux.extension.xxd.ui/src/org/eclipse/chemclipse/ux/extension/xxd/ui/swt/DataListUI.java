@@ -168,11 +168,13 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 
 	private ToolItem createAddButton(ToolBar toolBar) {
 
-		final ToolItem item = new ToolItem(toolBar, SWT.DROP_DOWN);
+		boolean optionsAvailable = dataTypes.length > 1;
+		int style = optionsAvailable ? SWT.DROP_DOWN : SWT.PUSH;
+		final ToolItem item = new ToolItem(toolBar, style);
 		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
 		item.setToolTipText("Add item(s) to the list.");
 		//
-		if(dataTypes.length > 1) {
+		if(optionsAvailable) {
 			addFileSelectionMenu(toolBar, item);
 		} else {
 			addFileSelectionListener(item);
@@ -316,6 +318,7 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 		gridData.horizontalAlignment = SWT.END;
 		toolbarMain.setLayoutData(gridData);
 		toolbarMain.setLayout(new GridLayout(1, false));
+		//
 		Button button = new Button(toolbarMain, SWT.PUSH);
 		button.setToolTipText("Open the Settings");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));

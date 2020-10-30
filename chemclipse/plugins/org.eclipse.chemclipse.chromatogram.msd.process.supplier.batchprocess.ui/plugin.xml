@@ -16,9 +16,9 @@
       </category>
       <wizard
             category="org.eclipse.chemclipse.chromatogram.msd.batchprocess.ui"
-            class="org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.wizards.BatchProcessJobWizard"
+            class="org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.wizards.WizardProcessor"
             icon="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/batchprocess.gif"
-            id="org.eclipse.chemclipse.chromatogram.msd.batchprocess.ui.wizards.BatchProcessJobWizard"
+            id="org.eclipse.chemclipse.chromatogram.msd.batchprocess.ui.wizards.wizardProcessor"
             name="Batch Process Job">
       </wizard>
    </extension>

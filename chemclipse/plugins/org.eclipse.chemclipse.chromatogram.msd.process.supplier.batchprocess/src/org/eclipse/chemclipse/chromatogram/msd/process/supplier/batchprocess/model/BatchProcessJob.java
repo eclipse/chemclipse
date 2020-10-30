@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2019 Lablicate GmbH.
+ * Copyright (c) 2010, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,19 +17,39 @@ import java.util.List;
 
 import org.eclipse.chemclipse.converter.model.IChromatogramInputEntry;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 
 public class BatchProcessJob {
 
-	private List<IChromatogramInputEntry> chromatogramInputEntries = new ArrayList<IChromatogramInputEntry>();
+	private static final DataType[] DATA_TYPES = new DataType[]{DataType.CSD, DataType.MSD, DataType.WSD};
+	//
+	private List<DataType> dataTypeEntries = new ArrayList<>();
+	private List<IChromatogramInputEntry> chromatogramInputEntries = new ArrayList<>();
 	private IProcessMethod processMethod;
 
 	public BatchProcessJob() {
-		this(new ProcessMethod());
+
+		this(new ProcessMethod(ProcessMethod.CHROMATOGRAPHY));
 	}
 
 	public BatchProcessJob(IProcessMethod processMethod) {
+
 		this.processMethod = processMethod;
+	}
+
+	public DataType[] getDataTypes() {
+
+		if(dataTypeEntries.isEmpty()) {
+			return DATA_TYPES;
+		} else {
+			return dataTypeEntries.toArray(new DataType[dataTypeEntries.size()]);
+		}
+	}
+
+	public List<DataType> getDataTypeEntries() {
+
+		return dataTypeEntries;
 	}
 
 	public List<IChromatogramInputEntry> getChromatogramInputEntries() {
@@ -48,7 +68,7 @@ public class BatchProcessJob {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((chromatogramInputEntries == null) ? 0 : chromatogramInputEntries.hashCode());
-		result = prime * result + ((processMethod == null) ? 0 : processMethod.hashCode());
+		result = prime * result + ((dataTypeEntries == null) ? 0 : dataTypeEntries.hashCode());
 		return result;
 	}
 
@@ -67,10 +87,10 @@ public class BatchProcessJob {
 				return false;
 		} else if(!chromatogramInputEntries.equals(other.chromatogramInputEntries))
 			return false;
-		if(processMethod == null) {
-			if(other.processMethod != null)
+		if(dataTypeEntries == null) {
+			if(other.dataTypeEntries != null)
 				return false;
-		} else if(!processMethod.equals(other.processMethod))
+		} else if(!dataTypeEntries.equals(other.dataTypeEntries))
 			return false;
 		return true;
 	}

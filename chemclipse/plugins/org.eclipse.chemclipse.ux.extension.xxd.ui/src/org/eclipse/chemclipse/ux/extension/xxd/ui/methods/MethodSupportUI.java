@@ -79,6 +79,7 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 	private IMethodListener methodListener = null;
 
 	public MethodSupportUI(Composite parent, int style) {
+
 		super(parent, style);
 		createControl();
 	}
@@ -386,7 +387,7 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 			 * Select a file where the process method shall be stored.
 			 */
 			file = new File(filePath);
-			ProcessMethod processMethod = new ProcessMethod();
+			ProcessMethod processMethod = new ProcessMethod(ProcessMethod.CHROMATOGRAPHY);
 			processMethod.setOperator(UserManagement.getCurrentUser());
 			processMethod.setDescription("Process Method");
 			//

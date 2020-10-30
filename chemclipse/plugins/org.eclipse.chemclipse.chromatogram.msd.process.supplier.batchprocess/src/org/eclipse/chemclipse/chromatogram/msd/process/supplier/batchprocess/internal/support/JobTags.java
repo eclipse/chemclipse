@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
+ * Copyright (c) 2010, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,6 +24,11 @@ public interface JobTags {
 	String HEADER = "Header";
 	String REPORT_FOLDER = "ReportFolder";
 	String OVERRIDE_REPORT = "OverrideReport";
+	/*
+	 * Data Type
+	 */
+	String DATA_TYPE_ENTRIES = "DataTypes";
+	String DATA_TYPE_ENTRY = "DataType";
 	/*
 	 * Chromatogram Input Entries
 	 */

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,26 +11,32 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.ui.wizards;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
-import javax.xml.stream.XMLStreamException;
-
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.io.JobWriter;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.BatchProcessJob;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractFileWizard;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class BatchProcessJobWizard extends AbstractFileWizard {
+public class WizardProcessor extends AbstractFileWizard {
 
-	private static final Logger logger = Logger.getLogger(BatchProcessJobWizard.class);
+	private static final Logger logger = Logger.getLogger(WizardProcessor.class);
+	private PageDataType pageDataType;
 
-	public BatchProcessJobWizard() {
+	public WizardProcessor() {
+
 		super("BatchJob", ".obj");
+	}
+
+	@Override
+	public void addPages() {
+
+		super.addPages();
+		//
+		pageDataType = new PageDataType();
+		addPage(pageDataType);
 	}
 
 	@Override
@@ -39,22 +45,28 @@ public class BatchProcessJobWizard extends AbstractFileWizard {
 		final IFile file = super.prepareProject(monitor);
 		//
 		try {
-			BatchProcessJob batchProcessJob = new BatchProcessJob();
-			JobWriter batchProcessJobWriter = new JobWriter();
-			batchProcessJobWriter.writeBatchProcessJob(file.getLocation().toFile(), batchProcessJob, monitor);
-		} catch(FileNotFoundException e1) {
-			logger.warn(e1);
-		} catch(FileIsNotWriteableException e1) {
-			logger.warn(e1);
-		} catch(IOException e1) {
-			logger.warn(e1);
-		} catch(XMLStreamException e1) {
-			logger.warn(e1);
+			/*
+			 * Create the project.
+			 */
+			JobWriter jobWriter = new JobWriter();
+			jobWriter.writeBatchProcessJob(file.getLocation().toFile(), createBatchProcessJob(), monitor);
+		} catch(Exception e) {
+			logger.warn(e);
 		}
 		/*
 		 * Refresh
 		 */
 		super.refreshWorkspace(monitor);
 		super.runOpenEditor(file, monitor);
+	}
+
+	private BatchProcessJob createBatchProcessJob() {
+
+		BatchProcessJob batchProcessJob = new BatchProcessJob();
+		for(DataType dataType : pageDataType.getDataTypes()) {
+			batchProcessJob.getDataTypeEntries().add(dataType);
+		}
+		//
+		return batchProcessJob;
 	}
 }
