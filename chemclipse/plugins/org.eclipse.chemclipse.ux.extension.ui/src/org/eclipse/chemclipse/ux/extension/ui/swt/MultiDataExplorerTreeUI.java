@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactoring
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.swt;
 
@@ -24,7 +25,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.ui.provider.LazyFileExplorerContentProvider;
-import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerTreeUI.DataExplorerTreeRoot;
 import org.eclipse.chemclipse.xxd.process.files.SupplierFileIdentifierCache;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -39,7 +39,6 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -53,57 +52,64 @@ public class MultiDataExplorerTreeUI {
 
 	private static final DataExplorerTreeRoot[] DEFAULT_ROOTS = {DataExplorerTreeRoot.DRIVES, DataExplorerTreeRoot.HOME, DataExplorerTreeRoot.USER_LOCATION};
 	private static final String TAB_KEY_SUFFIX = "selectedTab";
+	//
 	private final TabFolder tabFolder;
-	private final DataExplorerTreeUI[] treeUIs;
+	private final DataExplorerTreeUI[] dataExplorerTreeUIs;
 	private final IPreferenceStore preferenceStore;
-	private final SupplierFileIdentifierCache identifierCache;
+	//
+	private final SupplierFileIdentifierCache supplierFileIdentifierCache = new SupplierFileIdentifierCache(LazyFileExplorerContentProvider.MAX_CACHE_SIZE);
 
 	public MultiDataExplorerTreeUI(Composite parent, IPreferenceStore preferenceStore) {
-		this(parent, new SupplierFileIdentifierCache(LazyFileExplorerContentProvider.MAX_CACHE_SIZE), preferenceStore);
+
+		this(parent, DEFAULT_ROOTS, preferenceStore);
 	}
 
-	public MultiDataExplorerTreeUI(Composite parent, SupplierFileIdentifierCache identifierCache, IPreferenceStore preferenceStore) {
-		this(parent, identifierCache, DEFAULT_ROOTS, preferenceStore);
-	}
+	public MultiDataExplorerTreeUI(Composite parent, DataExplorerTreeRoot[] roots, IPreferenceStore preferenceStore) {
 
-	public MultiDataExplorerTreeUI(Composite parent, SupplierFileIdentifierCache identifierCache, DataExplorerTreeRoot[] roots, IPreferenceStore preferenceStore) {
-		this.identifierCache = identifierCache;
 		this.preferenceStore = preferenceStore;
+		//
 		tabFolder = new TabFolder(parent, SWT.NONE);
-		treeUIs = new DataExplorerTreeUI[roots.length];
+		dataExplorerTreeUIs = new DataExplorerTreeUI[roots.length];
 		for(int i = 0; i < roots.length; i++) {
-			treeUIs[i] = createTab(tabFolder, roots[i]);
+			dataExplorerTreeUIs[i] = createDataExplorerTreeUI(tabFolder, roots[i]);
 		}
 	}
 
-	protected Function<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> getIdentifierSupplier() {
+	public void setFocus() {
 
-		return identifierCache;
+		tabFolder.setFocus();
+		for(TabItem item : tabFolder.getSelection()) {
+			item.getControl().setFocus();
+		}
+	}
+
+	public Control getControl() {
+
+		return tabFolder;
 	}
 
 	public void setSupplierFileIdentifier(Collection<? extends ISupplierFileIdentifier> supplierFileEditorSupportList) {
 
-		identifierCache.setIdentifier(supplierFileEditorSupportList);
-		for(DataExplorerTreeUI ui : treeUIs) {
-			ui.getTreeViewer().refresh();
+		supplierFileIdentifierCache.setIdentifier(supplierFileEditorSupportList);
+		for(DataExplorerTreeUI dataExplorerTreeUI : dataExplorerTreeUIs) {
+			dataExplorerTreeUI.getTreeViewer().refresh();
 		}
 	}
 
 	public void expandLastDirectoryPath() {
 
-		for(DataExplorerTreeUI ui : treeUIs) {
-			String preferenceKey = getPreferenceKey(ui.getRoot());
-			ui.expandLastDirectoryPath(preferenceStore, preferenceKey);
+		for(DataExplorerTreeUI dataExplorerTreeUI : dataExplorerTreeUIs) {
+			String preferenceKey = getPreferenceKey(dataExplorerTreeUI.getRoot());
+			dataExplorerTreeUI.expandLastDirectoryPath(preferenceStore, preferenceKey);
 		}
-		int index = preferenceStore.getInt(getSelectedTabPreferenceKey());
-		tabFolder.setSelection(index);
 	}
 
 	public void saveLastDirectoryPath() {
 
-		for(DataExplorerTreeUI ui : treeUIs) {
-			ui.saveLastDirectoryPath(preferenceStore, getPreferenceKey(ui.getRoot()));
+		for(DataExplorerTreeUI dataExplorerTreeUI : dataExplorerTreeUIs) {
+			dataExplorerTreeUI.saveLastDirectoryPath(preferenceStore, getPreferenceKey(dataExplorerTreeUI.getRoot()));
 		}
+		//
 		int index = tabFolder.getSelectionIndex();
 		preferenceStore.setValue(getSelectedTabPreferenceKey(), index);
 		if(preferenceStore.needsSaving()) {
@@ -115,6 +121,19 @@ public class MultiDataExplorerTreeUI {
 				}
 			}
 		}
+	}
+
+	protected Function<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> getIdentifierSupplier() {
+
+		return supplierFileIdentifierCache;
+	}
+
+	protected void handleDoubleClick(File file, DataExplorerTreeUI treeUI) {
+
+	}
+
+	protected void handleSelection(File[] files, DataExplorerTreeUI treeUI) {
+
 	}
 
 	protected String getSelectedTabPreferenceKey() {
@@ -132,17 +151,30 @@ public class MultiDataExplorerTreeUI {
 		return DataExplorerTreeUI.getDefaultPathPreferenceKey(root);
 	}
 
-	private DataExplorerTreeUI createTab(TabFolder tabFolder, DataExplorerTreeRoot root) {
+	protected void initTabComponent(Composite parent, DataExplorerTreeUI treeUI) {
 
-		TabItem tab = new TabItem(tabFolder, SWT.NONE);
-		tab.setText(root.toString());
+		if(treeUI.getRoot() == DataExplorerTreeRoot.USER_LOCATION) {
+			addUserLocationButton(parent, treeUI);
+			File directory = new File(preferenceStore.getString(getUserLocationPreferenceKey()));
+			if(directory.exists()) {
+				treeUI.getTreeViewer().setInput(new File[]{directory});
+			}
+		}
+	}
+
+	private DataExplorerTreeUI createDataExplorerTreeUI(TabFolder tabFolder, DataExplorerTreeRoot root) {
+
+		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
+		tabItem.setText(root.toString());
 		//
 		Composite composite = new Composite(tabFolder, SWT.NONE);
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		composite.setLayout(new GridLayout());
-		DataExplorerTreeUI treeUI = new DataExplorerTreeUI(composite, root, getIdentifierSupplier());
-		TreeViewer treeViewer = treeUI.getTreeViewer();
+		//
+		DataExplorerTreeUI dataExplorerTreeUI = new DataExplorerTreeUI(composite, root, getIdentifierSupplier());
+		TreeViewer treeViewer = dataExplorerTreeUI.getTreeViewer();
 		treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
+		//
 		ISelectionChangedListener selectionChangedListener = new ISelectionChangedListener() {
 
 			@Override
@@ -153,9 +185,10 @@ public class MultiDataExplorerTreeUI {
 				for(int i = 0; i < files.length; i++) {
 					files[i] = (File)array[i];
 				}
-				handleSelection(files, treeUI);
+				handleSelection(files, dataExplorerTreeUI);
 			}
 		};
+		//
 		treeViewer.addSelectionChangedListener(selectionChangedListener);
 		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
 
@@ -163,41 +196,27 @@ public class MultiDataExplorerTreeUI {
 			public void doubleClick(DoubleClickEvent event) {
 
 				File file = (File)((IStructuredSelection)event.getSelection()).getFirstElement();
-				handleDoubleClick(file, treeUI);
+				handleDoubleClick(file, dataExplorerTreeUI);
 			}
 		});
-		initTabComponent(composite, treeUI);
-		tab.setControl(composite);
-		tabFolder.addSelectionListener(new SelectionListener() {
+		//
+		initTabComponent(composite, dataExplorerTreeUI);
+		tabItem.setControl(composite);
+		tabFolder.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				TabItem[] selection = tabFolder.getSelection();
 				for(TabItem item : selection) {
-					if(item == tab) {
+					if(item == tabItem) {
 						selectionChangedListener.selectionChanged(null);
 					}
 				}
 			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-
-			}
 		});
-		return treeUI;
-	}
-
-	protected void initTabComponent(Composite parent, DataExplorerTreeUI treeUI) {
-
-		if(treeUI.getRoot() == DataExplorerTreeRoot.USER_LOCATION) {
-			addUserLocationButton(parent, treeUI);
-			File directory = new File(preferenceStore.getString(getUserLocationPreferenceKey()));
-			if(directory.exists()) {
-				treeUI.getTreeViewer().setInput(new File[]{directory});
-			}
-		}
+		//
+		return dataExplorerTreeUI;
 	}
 
 	private void addUserLocationButton(Composite parent, DataExplorerTreeUI treeUI) {
@@ -223,26 +242,5 @@ public class MultiDataExplorerTreeUI {
 				}
 			}
 		});
-	}
-
-	protected void handleDoubleClick(File file, DataExplorerTreeUI treeUI) {
-
-	}
-
-	protected void handleSelection(File[] files, DataExplorerTreeUI treeUI) {
-
-	}
-
-	public void setFocus() {
-
-		tabFolder.setFocus();
-		for(TabItem item : tabFolder.getSelection()) {
-			item.getControl().setFocus();
-		}
-	}
-
-	public Control getControl() {
-
-		return tabFolder;
 	}
 }

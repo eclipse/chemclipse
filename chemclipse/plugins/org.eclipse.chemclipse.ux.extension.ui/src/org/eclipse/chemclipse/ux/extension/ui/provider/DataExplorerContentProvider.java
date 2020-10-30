@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2019 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,12 +19,19 @@ import java.util.function.Function;
 
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
+import org.eclipse.chemclipse.ux.extension.ui.swt.IdentifierCacheSupport;
 
 public class DataExplorerContentProvider extends LazyFileExplorerContentProvider {
 
 	private final Function<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> supplierFunction;
 
+	public DataExplorerContentProvider(Collection<? extends ISupplierFileIdentifier> supplierFileIdentifierList) {
+
+		this(IdentifierCacheSupport.createIdentifierCache(supplierFileIdentifierList));
+	}
+
 	public DataExplorerContentProvider(Function<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> identifier) {
+
 		this.supplierFunction = identifier;
 	}
 

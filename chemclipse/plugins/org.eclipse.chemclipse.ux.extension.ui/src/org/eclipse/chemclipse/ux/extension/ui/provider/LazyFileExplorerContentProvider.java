@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactoring
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.provider;
 
@@ -41,6 +42,7 @@ import org.eclipse.swt.widgets.Display;
 public class LazyFileExplorerContentProvider implements ILazyTreeContentProvider, FileFilter {
 
 	public static final int MAX_CACHE_SIZE = Integer.parseInt(System.getProperty("fileexplorer.max_cache_size", "1000"));
+	//
 	private static final File[] NO_CHILD = new File[0];
 	private TreeViewer viewer;
 	private File[] roots;
@@ -214,6 +216,7 @@ public class LazyFileExplorerContentProvider implements ILazyTreeContentProvider
 		private static final long serialVersionUID = -5978638803700871374L;
 
 		public FileCache() {
+
 			super(MAX_CACHE_SIZE, 0.75f, true);
 		}
 

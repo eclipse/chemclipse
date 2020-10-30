@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2019 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.ui.editors.EditorDescriptor;
+import org.eclipse.chemclipse.ux.extension.ui.swt.IdentifierCacheSupport;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.JFaceResources;
@@ -34,8 +35,13 @@ import org.eclipse.ui.navigator.IDescriptionProvider;
 
 public class DataExplorerLabelProvider extends LabelProvider implements ILabelProvider, IDescriptionProvider {
 
-	ResourceManager resourceManager = new LocalResourceManager(JFaceResources.getResources());
 	private final Function<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> supplierFunction;
+	private ResourceManager resourceManager = new LocalResourceManager(JFaceResources.getResources());
+
+	public DataExplorerLabelProvider(Collection<? extends ISupplierFileIdentifier> supplierFileIdentifierList) {
+
+		this(IdentifierCacheSupport.createIdentifierCache(supplierFileIdentifierList));
+	}
 
 	public DataExplorerLabelProvider(Function<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> identifier) {
 

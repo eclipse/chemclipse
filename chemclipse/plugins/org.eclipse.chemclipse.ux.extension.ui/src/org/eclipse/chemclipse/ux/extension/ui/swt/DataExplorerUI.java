@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -51,6 +51,7 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI {
 	private final IEventBroker eventBroker;
 
 	public DataExplorerUI(Composite parent, IEventBroker eventBroker, IPreferenceStore preferenceStore) {
+
 		super(parent, preferenceStore);
 		this.eventBroker = eventBroker;
 	}
@@ -97,6 +98,7 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI {
 						return o1.getId().compareTo(o2.getId());
 					}
 				});
+				//
 				for(Object object : selection) {
 					if(object instanceof File) {
 						File file = (File)object;
@@ -107,6 +109,7 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI {
 						}
 					}
 				}
+				//
 				for(ISupplier activeFileSupplier : supplierSet) {
 					contextMenu.add(new Action("Open as: " + activeFileSupplier.getFilterName()) {
 
@@ -140,6 +143,7 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI {
 						};
 					});
 				}
+				//
 				if(selection.length == 1 && selection[0] instanceof File && ((File)selection[0]).isDirectory()) {
 					contextMenu.add(new Action("Open all contained measurements in this folder") {
 
@@ -152,6 +156,7 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI {
 				}
 			}
 		});
+		//
 		Menu menu = contextMenu.createContextMenu(treeViewer.getControl());
 		treeViewer.getControl().setMenu(menu);
 	}
@@ -209,10 +214,10 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI {
 		});
 	}
 
-	private void openOverview(File file, DataExplorerTreeUI treeUI) {
+	private void openOverview(File file, DataExplorerTreeUI dataExplorerTreeUI) {
 
 		if(file != null) {
-			DataExplorerContentProvider contentProvider = (DataExplorerContentProvider)treeUI.getTreeViewer().getContentProvider();
+			DataExplorerContentProvider contentProvider = (DataExplorerContentProvider)dataExplorerTreeUI.getTreeViewer().getContentProvider();
 			/*
 			 * Update the directories content, until there is
 			 * actual no way to monitor the file system outside
@@ -222,6 +227,7 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI {
 			if(file.isDirectory()) {
 				contentProvider.refresh(file);
 			}
+			//
 			Collection<ISupplierFileIdentifier> identifiers = getIdentifierSupplier().apply(file).keySet();
 			for(ISupplierFileIdentifier identifier : identifiers) {
 				if(identifier instanceof ISupplierFileEditorSupport) {
@@ -230,6 +236,7 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI {
 					return;
 				}
 			}
+			//
 			if(eventBroker != null) {
 				eventBroker.post(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_NONE, null);
 			}

@@ -21,7 +21,6 @@ import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.UserPathPreferencePage;
-import org.eclipse.chemclipse.xxd.process.files.SupplierFileIdentifierCache;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -35,14 +34,13 @@ public class InputWizardSettings {
 	private String description = "Description";
 	private IPreferenceStore preferenceStore;
 	private String userLocationPreferenceKey;
-	private SupplierFileIdentifierCache identifierCache;
+	private Collection<? extends ISupplierFileIdentifier> supplierFileEditorSupportList;
 
 	public InputWizardSettings(IPreferenceStore preferenceStore, String userLocationPreferenceKey, Collection<? extends ISupplierFileIdentifier> supplierFileIdentifierList) {
 
 		this.preferenceStore = preferenceStore;
 		this.userLocationPreferenceKey = userLocationPreferenceKey;
-		identifierCache = new SupplierFileIdentifierCache(500);
-		identifierCache.setIdentifier(supplierFileIdentifierList);
+		this.supplierFileEditorSupportList = supplierFileIdentifierList;
 	}
 
 	public IPreferencePage getPreferencePage() {
@@ -60,9 +58,14 @@ public class InputWizardSettings {
 		return userLocationPreferenceKey;
 	}
 
-	public SupplierFileIdentifierCache getSupplierCache() {
+	public Collection<? extends ISupplierFileIdentifier> getSupplierFileEditorSupportList() {
 
-		return identifierCache;
+		return supplierFileEditorSupportList;
+	}
+
+	public void setSupplierFileEditorSupportList(Collection<? extends ISupplierFileIdentifier> supplierFileEditorSupportList) {
+
+		this.supplierFileEditorSupportList = supplierFileEditorSupportList;
 	}
 
 	public String getTitle() {

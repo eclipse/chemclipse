@@ -21,10 +21,9 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
+import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerTreeRoot;
 import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerTreeUI;
-import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerTreeUI.DataExplorerTreeRoot;
 import org.eclipse.chemclipse.ux.extension.ui.swt.MultiDataExplorerTreeUI;
-import org.eclipse.chemclipse.xxd.process.files.SupplierFileIdentifierCache;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.IWizardContainer;
@@ -37,9 +36,9 @@ public class InputEntriesWizardPage extends WizardPage {
 
 		private InputEntriesWizardPage page;
 
-		private WizardMultiDataExplorerTreeUI(Composite parent, SupplierFileIdentifierCache identifierCache, IPreferenceStore preferenceStore, InputEntriesWizardPage page) {
+		private WizardMultiDataExplorerTreeUI(Composite parent, IPreferenceStore preferenceStore, InputEntriesWizardPage page) {
 
-			super(parent, identifierCache, preferenceStore);
+			super(parent, preferenceStore);
 			this.page = page;
 		}
 
@@ -122,7 +121,8 @@ public class InputEntriesWizardPage extends WizardPage {
 	@Override
 	public void createControl(Composite parent) {
 
-		explorerTreeUI = new WizardMultiDataExplorerTreeUI(parent, inputWizardSettings.getSupplierCache(), inputWizardSettings.getPreferenceStore(), this);
+		explorerTreeUI = new WizardMultiDataExplorerTreeUI(parent, inputWizardSettings.getPreferenceStore(), this);
+		explorerTreeUI.setSupplierFileIdentifier(inputWizardSettings.getSupplierFileEditorSupportList());
 		explorerTreeUI.expandLastDirectoryPath();
 		setControl(explorerTreeUI.getControl());
 	}

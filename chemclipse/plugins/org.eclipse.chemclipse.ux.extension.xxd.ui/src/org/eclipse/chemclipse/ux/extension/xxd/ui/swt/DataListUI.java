@@ -266,7 +266,7 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 		tableViewer.setContentProvider(ArrayContentProvider.getInstance());
 		tableViewer.setInput(files);
 		//
-		DataExplorerLabelProvider dataExplorerLabelProvider = new DataExplorerLabelProvider(inputWizardSettings.getSupplierCache());
+		DataExplorerLabelProvider dataExplorerLabelProvider = new DataExplorerLabelProvider(inputWizardSettings.getSupplierFileEditorSupportList());
 		composite.addDisposeListener(new DisposeListener() {
 
 			@Override

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,13 +8,13 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - improvement identifier handling
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.swt;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -26,8 +26,6 @@ import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerContentProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerLabelProvider;
-import org.eclipse.chemclipse.ux.extension.ui.provider.LazyFileExplorerContentProvider;
-import org.eclipse.chemclipse.xxd.process.files.SupplierFileIdentifierCache;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.preference.IPersistentPreferenceStore;
@@ -40,67 +38,23 @@ import org.eclipse.swt.widgets.Display;
 
 public class DataExplorerTreeUI {
 
-	public static enum DataExplorerTreeRoot {
-		NONE(""), DRIVES("Drives"), HOME("Home"), USER_LOCATION("User Location");
-
-		private String label;
-
-		private DataExplorerTreeRoot(String label) {
-			this.label = label;
-		}
-
-		@Override
-		public String toString() {
-
-			return this != NONE ? label : super.toString();
-		}
-	}
-
 	private final TreeViewer treeViewer;
-	private final DataExplorerTreeRoot root;
+	private final DataExplorerTreeRoot dataExplorerTreeRoot;
 
-	public DataExplorerTreeUI(Composite parent, DataExplorerTreeRoot root) {
-		this(parent, root, Collections.emptyList());
+	public DataExplorerTreeUI(Composite parent, DataExplorerTreeRoot dataExplorerTreeRoot, Collection<? extends ISupplierFileIdentifier> identifier) {
+
+		this(parent, dataExplorerTreeRoot, IdentifierCacheSupport.createIdentifierCache(identifier));
 	}
 
-	public DataExplorerTreeUI(Composite parent, DataExplorerTreeRoot root, Collection<? extends ISupplierFileIdentifier> identifier) {
-		this(parent, root, createIdentifierCache(identifier));
-	}
+	public DataExplorerTreeUI(Composite parent, DataExplorerTreeRoot dataExplorerTreeRoot, Function<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> identifier) {
 
-	private static SupplierFileIdentifierCache createIdentifierCache(Collection<? extends ISupplierFileIdentifier> identifier) {
-
-		SupplierFileIdentifierCache cache = new SupplierFileIdentifierCache(LazyFileExplorerContentProvider.MAX_CACHE_SIZE);
-		cache.setIdentifier(identifier);
-		return cache;
-	}
-
-	public DataExplorerTreeUI(Composite parent, DataExplorerTreeRoot root, Function<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> identifier) {
-		this.root = root;
-		treeViewer = new TreeViewer(parent, SWT.MULTI | SWT.VIRTUAL);
-		treeViewer.setUseHashlookup(true);
-		treeViewer.setExpandPreCheckFilters(true);
-		treeViewer.setContentProvider(new DataExplorerContentProvider(identifier));
-		treeViewer.setLabelProvider(new DataExplorerLabelProvider(identifier));
-		switch(root) {
-			case DRIVES:
-				treeViewer.setInput(File.listRoots());
-				break;
-			case HOME:
-				treeViewer.setInput(new File[]{new File(UserManagement.getUserHome())});
-				break;
-			case USER_LOCATION:
-				treeViewer.setInput(new File[]{getUserLocation()});
-				break;
-			case NONE:
-				// fall through...
-			default:
-				break;
-		}
+		this.dataExplorerTreeRoot = dataExplorerTreeRoot;
+		treeViewer = createTreeViewer(parent, identifier);
 	}
 
 	public DataExplorerTreeRoot getRoot() {
 
-		return root;
+		return dataExplorerTreeRoot;
 	}
 
 	public TreeViewer getTreeViewer() {
@@ -108,19 +62,9 @@ public class DataExplorerTreeUI {
 		return treeViewer;
 	}
 
-	private File getUserLocation() {
-
-		String userLocationPath = PreferenceSupplier.getUserLocationPath();
-		File userLocation = new File(userLocationPath);
-		if(!userLocation.exists()) {
-			userLocation = new File(UserManagement.getUserHome());
-		}
-		return userLocation;
-	}
-
 	public void expandLastDirectoryPath(IPreferenceStore preferenceStore) {
 
-		expandLastDirectoryPath(preferenceStore, getDefaultPathPreferenceKey(root));
+		expandLastDirectoryPath(preferenceStore, getDefaultPathPreferenceKey(dataExplorerTreeRoot));
 	}
 
 	public void expandLastDirectoryPath(IPreferenceStore preferenceStore, String preferenceKey) {
@@ -174,13 +118,14 @@ public class DataExplorerTreeUI {
 				preferenceStore.setValue(preferenceKey, directoryPath.getAbsolutePath());
 			}
 		}
+		//
 		if(preferenceStore.needsSaving()) {
 			if(preferenceStore instanceof IPersistentPreferenceStore) {
 				try {
 					IPersistentPreferenceStore persistentPreferenceStore = (IPersistentPreferenceStore)preferenceStore;
 					persistentPreferenceStore.save();
 				} catch(IOException e) {
-					Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), "Storing preferences failed", e));
+					Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), "Storing the preferences failed.", e));
 				}
 			}
 		}
@@ -199,6 +144,48 @@ public class DataExplorerTreeUI {
 			default:
 				return "selected" + root.name() + "path";
 		}
+	}
+
+	private TreeViewer createTreeViewer(Composite parent, Function<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> identifier) {
+
+		TreeViewer treeViewer = new TreeViewer(parent, SWT.MULTI | SWT.VIRTUAL);
+		//
+		treeViewer.setUseHashlookup(true);
+		treeViewer.setExpandPreCheckFilters(true);
+		treeViewer.setContentProvider(new DataExplorerContentProvider(identifier));
+		treeViewer.setLabelProvider(new DataExplorerLabelProvider(identifier));
+		setInput(treeViewer);
+		//
+		return treeViewer;
+	}
+
+	private void setInput(TreeViewer treeViewer) {
+
+		switch(dataExplorerTreeRoot) {
+			case DRIVES:
+				treeViewer.setInput(File.listRoots());
+				break;
+			case HOME:
+				treeViewer.setInput(new File[]{new File(UserManagement.getUserHome())});
+				break;
+			case USER_LOCATION:
+				treeViewer.setInput(new File[]{getUserLocation()});
+				break;
+			case NONE:
+				// fall through...
+			default:
+				break;
+		}
+	}
+
+	private File getUserLocation() {
+
+		String userLocationPath = PreferenceSupplier.getUserLocationPath();
+		File userLocation = new File(userLocationPath);
+		if(!userLocation.exists()) {
+			userLocation = new File(UserManagement.getUserHome());
+		}
+		return userLocation;
 	}
 
 	private int getNumberOfChildDirectories(File directory) {

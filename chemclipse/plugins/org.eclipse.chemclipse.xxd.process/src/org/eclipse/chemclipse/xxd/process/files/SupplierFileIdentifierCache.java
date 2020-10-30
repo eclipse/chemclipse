@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactoring
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.files;
 
@@ -27,6 +28,7 @@ public class SupplierFileIdentifierCache implements Function<File, Map<ISupplier
 	private Map<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> supplierCache;
 
 	public SupplierFileIdentifierCache(int maxFileSize) {
+
 		supplierCache = new LinkedHashMap<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>>(maxFileSize, 0.75f, true) {
 
 			private static final long serialVersionUID = 1L;
@@ -49,6 +51,7 @@ public class SupplierFileIdentifierCache implements Function<File, Map<ISupplier
 	public Map<ISupplierFileIdentifier, Collection<ISupplier>> apply(File file) {
 
 		Map<ISupplierFileIdentifier, Collection<ISupplier>> list = supplierCache.get(file);
+		//
 		if(list == null) {
 			list = new LinkedHashMap<>();
 			for(ISupplierFileIdentifier supplierFileIdentifier : fileIdentifiers) {

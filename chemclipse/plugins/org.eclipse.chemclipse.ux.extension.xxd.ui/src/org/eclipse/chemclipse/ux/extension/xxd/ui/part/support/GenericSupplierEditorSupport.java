@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactoring
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.part.support;
 
@@ -28,10 +29,12 @@ import org.eclipse.e4.core.di.annotations.Execute;
 public class GenericSupplierEditorSupport implements ISupplierFileEditorSupport {
 
 	private static final Object NO_EXECUTE_METHOD = new Object();
+	//
 	private final Supplier<IEclipseContext> contextSupplier;
 	private final ISupplierFileIdentifier fileIdentifier;
 
 	public GenericSupplierEditorSupport(ISupplierFileIdentifier fileIdentifier, Supplier<IEclipseContext> contextSupplier) {
+
 		this.fileIdentifier = fileIdentifier;
 		this.contextSupplier = contextSupplier;
 	}
