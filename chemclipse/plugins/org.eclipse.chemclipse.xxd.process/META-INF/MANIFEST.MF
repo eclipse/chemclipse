@@ -12,28 +12,20 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.model;bundle-version="0.8.0",
  org.eclipse.chemclipse.converter,
  org.eclipse.chemclipse.support;bundle-version="0.8.0",
- com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.9.9"
+ com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.9.9",
+ org.apache.commons.io;bundle-version="2.6.0",
+ org.eclipse.chemclipse.msd.converter;bundle-version="0.9.0",
+ org.eclipse.chemclipse.csd.converter;bundle-version="0.9.0",
+ org.eclipse.chemclipse.nmr.converter;bundle-version="0.9.0",
+ org.eclipse.chemclipse.pcr.converter;bundle-version="0.9.0",
+ org.eclipse.chemclipse.wsd.converter;bundle-version="0.9.0",
+ org.eclipse.chemclipse.xir.converter;bundle-version="0.9.0",
+ org.eclipse.chemclipse.msd.model;bundle-version="0.9.0",
+ org.eclipse.chemclipse.csd.model;bundle-version="0.9.0",
+ org.eclipse.chemclipse.wsd.model;bundle-version="0.9.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.xxd.process.comparators,
  org.eclipse.chemclipse.xxd.process.files,
  org.eclipse.chemclipse.xxd.process.support
-Import-Package: org.apache.commons.io,
- org.eclipse.chemclipse.converter.chromatogram,
- org.eclipse.chemclipse.converter.methods,
- org.eclipse.chemclipse.converter.quantitation,
- org.eclipse.chemclipse.converter.sequence,
- org.eclipse.chemclipse.csd.converter.chromatogram,
- org.eclipse.chemclipse.csd.model.core,
- org.eclipse.chemclipse.csd.model.core.selection,
- org.eclipse.chemclipse.msd.converter.chromatogram,
- org.eclipse.chemclipse.msd.model.core,
- org.eclipse.chemclipse.msd.model.core.selection,
- org.eclipse.chemclipse.nmr.converter.core,
- org.eclipse.chemclipse.pcr.converter.core,
- org.eclipse.chemclipse.wsd.converter.chromatogram,
- org.eclipse.chemclipse.wsd.model.core,
- org.eclipse.chemclipse.wsd.model.core.selection,
- org.eclipse.chemclipse.xir.converter.core,
- org.osgi.service.component.annotations;version="1.2.0"
-Service-Component: OSGI-INF/org.eclipse.chemclipse.xxd.process.ProcessProcessTypeSupplier.xml
+Import-Package: org.osgi.service.component.annotations;version="1.2.0"

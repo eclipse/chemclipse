@@ -35,11 +35,11 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.ui.E4ProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.BatchJobUI;
+import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.layout.FillLayout;
@@ -60,7 +60,7 @@ public class BatchJobEditor extends EditorPart implements IRunnableWithProgress 
 	private boolean isDirty = false;
 	private BatchProcessJob batchProcessJob;
 	//
-	private E4ProcessSupplierContext supplierContext;
+	private ProcessSupplierContext supplierContext;
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
@@ -149,7 +149,7 @@ public class BatchJobEditor extends EditorPart implements IRunnableWithProgress 
 
 		parent.setLayout(new FillLayout());
 		//
-		supplierContext = ContextInjectionFactory.make(E4ProcessSupplierContext.class, Activator.getDefault().getEclipseContext());
+		supplierContext = new ProcessTypeSupport();
 		DataType[] dataTypes = batchProcessJob.getDataTypes();
 		batchJobUI = new BatchJobUI(parent, supplierContext, Activator.getDefault().getPreferenceStore(), PreferenceSupplier.P_FILTER_PATH_IMPORT_RECORDS, dataTypes, this);
 		batchJobUI.setModificationHandler(this::updateDirtyStatus);

@@ -59,7 +59,6 @@ public interface ISupplierFileIdentifier extends SupplierContext {
 	 * @param file
 	 * @return boolean
 	 */
-	@Deprecated
 	default boolean isSupplierFile(File file) {
 
 		return !getSupplier(file).isEmpty();
@@ -80,7 +79,6 @@ public interface ISupplierFileIdentifier extends SupplierContext {
 	 * @param file
 	 * @return true
 	 */
-	@Deprecated
 	default boolean isMatchMagicNumber(File file) {
 
 		return true;

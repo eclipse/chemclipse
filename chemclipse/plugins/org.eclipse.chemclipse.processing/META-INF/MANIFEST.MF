@@ -25,3 +25,5 @@ Service-Component: OSGI-INF/org.eclipse.chemclipse.processing.internal.OSGiFilte
  OSGI-INF/org.eclipse.chemclipse.processing.internal.OSGiProcessSupplierContext.xml,
  OSGI-INF/org.eclipse.chemclipse.processing.internal.OSGiSupplierFileIdentifier.xml
 Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.core.runtime;bundle-version="3.14.0"
+Bundle-Activator: org.eclipse.chemclipse.processing.Activator
