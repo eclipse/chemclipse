@@ -259,16 +259,16 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		//
-		onsiteSettings.setValue(IOnsiteSettings.KEY_LOW_MZ_AUTO, (preferences.getBoolean(P_LOW_MZ_AUTO, DEF_LOW_MZ_AUTO)) ? Option.YES.getValue() : Option.NO.getValue());
+		onsiteSettings.setValue(IOnsiteSettings.KEY_LOW_MZ_AUTO, preferences.getBoolean(P_LOW_MZ_AUTO, DEF_LOW_MZ_AUTO) ? Option.YES.getValue() : Option.NO.getValue());
 		onsiteSettings.setValue(IOnsiteSettings.KEY_START_MZ, Integer.toString(preferences.getInt(P_START_MZ, DEF_START_MZ)));
-		onsiteSettings.setValue(IOnsiteSettings.KEY_HIGH_MZ_AUTO, (preferences.getBoolean(P_HIGH_MZ_AUTO, DEF_HIGH_MZ_AUTO)) ? Option.YES.getValue() : Option.NO.getValue());
+		onsiteSettings.setValue(IOnsiteSettings.KEY_HIGH_MZ_AUTO, preferences.getBoolean(P_HIGH_MZ_AUTO, DEF_HIGH_MZ_AUTO) ? Option.YES.getValue() : Option.NO.getValue());
 		onsiteSettings.setValue(IOnsiteSettings.KEY_STOP_MZ, Integer.toString(preferences.getInt(P_STOP_MZ, DEF_STOP_MZ)));
-		onsiteSettings.setValue(IOnsiteSettings.KEY_OMIT_MZ, (preferences.getBoolean(P_OMIT_MZ, DEF_OMIT_MZ)) ? Option.YES.getValue() : Option.NO.getValue());
+		onsiteSettings.setValue(IOnsiteSettings.KEY_OMIT_MZ, preferences.getBoolean(P_OMIT_MZ, DEF_OMIT_MZ) ? Option.YES.getValue() : Option.NO.getValue());
 		onsiteSettings.setValue(IOnsiteSettings.KEY_OMITED_MZ, preferences.get(P_OMITED_MZ, DEF_OMITED_MZ));
 		//
-		onsiteSettings.setValue(IOnsiteSettings.KEY_USE_SOLVENT_TAILING, (preferences.getBoolean(P_USE_SOLVENT_TAILING, DEF_USE_SOLVENT_TAILING)) ? Option.YES.getValue() : Option.NO.getValue());
+		onsiteSettings.setValue(IOnsiteSettings.KEY_USE_SOLVENT_TAILING, preferences.getBoolean(P_USE_SOLVENT_TAILING, DEF_USE_SOLVENT_TAILING) ? Option.YES.getValue() : Option.NO.getValue());
 		onsiteSettings.setValue(IOnsiteSettings.KEY_SOLVENT_TAILING_MZ, Integer.toString(preferences.getInt(P_SOLVENT_TAILING_MZ, DEF_SOLVENT_TAILING_MZ)));
-		onsiteSettings.setValue(IOnsiteSettings.KEY_USE_COLUMN_BLEED, (preferences.getBoolean(P_USE_COLUMN_BLEED, DEF_USE_COLUMN_BLEED)) ? Option.YES.getValue() : Option.NO.getValue());
+		onsiteSettings.setValue(IOnsiteSettings.KEY_USE_COLUMN_BLEED, preferences.getBoolean(P_USE_COLUMN_BLEED, DEF_USE_COLUMN_BLEED) ? Option.YES.getValue() : Option.NO.getValue());
 		onsiteSettings.setValue(IOnsiteSettings.KEY_COLUMN_BLEED_MZ, Integer.toString(preferences.getInt(P_COLUMN_BLEED_MZ, DEF_COLUMN_BLEED_MZ)));
 		//
 		onsiteSettings.setValue(IOnsiteSettings.KEY_THRESHOLD, preferences.get(P_THRESHOLD, DEF_THRESHOLD));

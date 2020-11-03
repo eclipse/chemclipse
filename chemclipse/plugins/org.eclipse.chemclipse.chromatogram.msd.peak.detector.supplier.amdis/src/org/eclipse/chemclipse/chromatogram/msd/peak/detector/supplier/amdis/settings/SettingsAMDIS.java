@@ -43,33 +43,30 @@ public class SettingsAMDIS extends AbstractProcessSettings {
 	@FileSettingProperty(dialogType = DialogType.OPEN_DIALOG, onlyDirectory = true)
 	private File tmpFolder = PreferenceSupplier.getInstallationFolder();
 	//
-	@JsonProperty(value = "Autodetect low m/z", defaultValue = "YES")
-	@EnumSelectionRadioButtonsSettingProperty
-	private Option lowMzAuto = Option.YES;
+	@JsonProperty(value = "Autodetect low m/z", defaultValue = "true")
+	private boolean lowMzAuto = true;
 	@JsonProperty(value = "Start m/z", defaultValue = "35")
 	@IntSettingsProperty(minValue = 1, maxValue = 1000)
 	private int startMZ = 35;
-	@JsonProperty(value = "Autodetect high m/z", defaultValue = "YES")
-	@EnumSelectionRadioButtonsSettingProperty
-	private Option highMzAuto = Option.YES;
+	@JsonProperty(value = "Autodetect high m/z", defaultValue = "true")
+	private boolean highMzAuto = true;
 	@JsonProperty(value = "Stop m/z", defaultValue = "600")
 	@IntSettingsProperty(minValue = 1, maxValue = 1000)
 	private int stopMZ = 600;
 	//
-	@JsonProperty(value = "Omit m/z", defaultValue = "NO")
+	@JsonProperty(value = "Omit m/z", defaultValue = "false")
 	@EnumSelectionRadioButtonsSettingProperty
-	private Option omitMz = Option.NO;
+	private boolean omitMz = false;
 	@JsonProperty(value = "Up to 8 m/z values separated by a space, 0 to omit TIC.", defaultValue = "0 18 28")
 	private String omitedMZ = "0 18 28";
 	//
-	@JsonProperty(value = "Use solvent tailing", defaultValue = "YES")
-	@EnumSelectionRadioButtonsSettingProperty
-	private Option useSolventTailing = Option.YES;
+	@JsonProperty(value = "Use solvent tailing", defaultValue = "true")
+	private boolean useSolventTailing = true;
 	@JsonProperty(value = "Solvent tailing m/z.", defaultValue = "84")
 	private String solventTailingMZ = "84";
-	@JsonProperty(value = "Use column bleed", defaultValue = "YES")
+	@JsonProperty(value = "Use column bleed", defaultValue = "true")
 	@EnumSelectionRadioButtonsSettingProperty
-	private Option useColumnBleed = Option.YES;
+	private boolean useColumnBleed = true;
 	@JsonProperty(value = "Column Bleed m/z.", defaultValue = "207")
 	private String columnBleedMZ = "207";
 	//
@@ -109,17 +106,17 @@ public class SettingsAMDIS extends AbstractProcessSettings {
 			onsiteSettings.setValue(IOnsiteSettings.KEY_INSTRUMENT_FILE, InstrumentFile.CDF.getValue());
 			onsiteSettings.setValue(IOnsiteSettings.KEY_INSTRUMENT_TYPE, InstrumentType.QUADRUPOLE.getValue());
 			//
-			onsiteSettings.setValue(IOnsiteSettings.KEY_LOW_MZ_AUTO, lowMzAuto.getValue());
+			onsiteSettings.setValue(IOnsiteSettings.KEY_LOW_MZ_AUTO, lowMzAuto ? Option.YES.getValue() : Option.NO.getValue());
 			onsiteSettings.setValue(IOnsiteSettings.KEY_START_MZ, Integer.toString(startMZ));
-			onsiteSettings.setValue(IOnsiteSettings.KEY_HIGH_MZ_AUTO, highMzAuto.getValue());
+			onsiteSettings.setValue(IOnsiteSettings.KEY_HIGH_MZ_AUTO, highMzAuto ? Option.YES.getValue() : Option.NO.getValue());
 			onsiteSettings.setValue(IOnsiteSettings.KEY_STOP_MZ, Integer.toString(stopMZ));
 			//
-			onsiteSettings.setValue(IOnsiteSettings.KEY_OMIT_MZ, omitMz.getValue());
+			onsiteSettings.setValue(IOnsiteSettings.KEY_OMIT_MZ, omitMz ? Option.YES.getValue() : Option.NO.getValue());
 			onsiteSettings.setValue(IOnsiteSettings.KEY_OMITED_MZ, omitedMZ);
 			//
-			onsiteSettings.setValue(IOnsiteSettings.KEY_USE_SOLVENT_TAILING, useSolventTailing.getValue());
+			onsiteSettings.setValue(IOnsiteSettings.KEY_USE_SOLVENT_TAILING, useSolventTailing ? Option.YES.getValue() : Option.NO.getValue());
 			onsiteSettings.setValue(IOnsiteSettings.KEY_SOLVENT_TAILING_MZ, solventTailingMZ);
-			onsiteSettings.setValue(IOnsiteSettings.KEY_USE_COLUMN_BLEED, useColumnBleed.getValue());
+			onsiteSettings.setValue(IOnsiteSettings.KEY_USE_COLUMN_BLEED, useColumnBleed ? Option.YES.getValue() : Option.NO.getValue());
 			onsiteSettings.setValue(IOnsiteSettings.KEY_COLUMN_BLEED_MZ, columnBleedMZ);
 			//
 			onsiteSettings.setValue(IOnsiteSettings.KEY_THRESHOLD, threshold.getValue());
