@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -38,6 +38,7 @@ public class MassSpectrumFileSupport {
 	 * Use only static methods.
 	 */
 	private MassSpectrumFileSupport() {
+
 	}
 
 	public static boolean saveMassSpectra(IMassSpectra massSpectra) throws NoConverterAvailableException {
@@ -61,10 +62,10 @@ public class MassSpectrumFileSupport {
 		if(massSpectra == null || massSpectra.size() == 0) {
 			return;
 		}
-		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
 		/*
 		 * Create the dialogue.
 		 */
+		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
 		dialog.setFilterPath(Activator.getDefault().getSettingsPath());
 		dialog.setFileName(fileName);
 		dialog.setText("Save Mass Spectra As...");
@@ -170,9 +171,9 @@ public class MassSpectrumFileSupport {
 					 * The file name has been modified. Ask for override if it
 					 * still exists.
 					 */
-					File chromatogramFile = new File(filename);
-					if(chromatogramFile.exists()) {
-						if(MessageDialog.openQuestion(shell, "Overwrite", "Would you like to overwrite the mass spectra file " + chromatogramFile.toString() + "?")) {
+					File msFile = new File(filename);
+					if(msFile.exists()) {
+						if(MessageDialog.openQuestion(shell, "Overwrite", "Would you like to overwrite the mass spectra file " + msFile.toString() + "?")) {
 							overwrite = true;
 						} else {
 							overwrite = false;
@@ -275,6 +276,7 @@ public class MassSpectrumFileSupport {
 		} catch(InterruptedException e) {
 			logger.warn(e);
 		}
+		//
 		File data = runnable.getData();
 		if(data == null) {
 			MessageDialog.openInformation(shell, "Save Mass Spectrum", "There is not suitable mass spectrum converter available.");

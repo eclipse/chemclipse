@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -56,6 +56,7 @@ public class DatabaseConverter {
 	 * This class has only static methods.
 	 */
 	private DatabaseConverter() {
+
 	}
 
 	/**
@@ -228,7 +229,6 @@ public class DatabaseConverter {
 	 * @param converterId
 	 * @return IDatabaseExportConverter
 	 */
-	@SuppressWarnings("unchecked")
 	private static <T> IDatabaseExportConverter getDatabaseExportConverter(final String converterId) {
 
 		IConfigurationElement element;
@@ -324,10 +324,9 @@ public class DatabaseConverter {
 		return magicNumberMatcher;
 	}
 
-	// ---------------------------------------------ConverterMethods
 	private static <T> IProcessingInfo<T> getNoExportConverterAvailableProcessingInfo(File file) {
 
-		IProcessingInfo<T> processingInfo = new ProcessingInfo();
+		IProcessingInfo<T> processingInfo = new ProcessingInfo<>();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.WARN, "Database Export Converter", "There is no suitable converter available to export the mass spectra to the file: " + file.getAbsolutePath());
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;
@@ -335,7 +334,7 @@ public class DatabaseConverter {
 
 	private static <T> IProcessingInfo<T> getNoImportConverterAvailableProcessingInfo(File file) {
 
-		IProcessingInfo<T> processingInfo = new ProcessingInfo();
+		IProcessingInfo<T> processingInfo = new ProcessingInfo<>();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.WARN, "Database Import Converter", "There is no suitable converter available to load the mass spectra from the file: " + file.getAbsolutePath());
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;
