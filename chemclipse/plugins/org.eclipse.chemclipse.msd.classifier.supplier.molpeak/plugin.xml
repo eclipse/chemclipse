@@ -14,10 +14,10 @@
    <extension
          point="org.eclipse.chemclipse.chromatogram.msd.identifier.massSpectrumIdentifier">
       <MassSpectrumIdentificationSupplier
-            config="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.MassSpectrumIdentifierSettings"
             description="This is a base peak identifier."
             id="org.eclipse.chemclipse.msd.identifier.supplier.basepeak.massSpectrum"
             identifier="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.core.MassSpectrumIdentifier"
+            identifierSettings="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.MassSpectrumIdentifierSettings"
             identifierName="Lignin (SGH) and Carbohydrate (C)">
       </MassSpectrumIdentificationSupplier>
    </extension>
