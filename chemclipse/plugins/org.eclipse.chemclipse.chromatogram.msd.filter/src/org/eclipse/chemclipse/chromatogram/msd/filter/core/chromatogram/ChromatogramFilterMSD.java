@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,8 +24,7 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Platform;
 
-@SuppressWarnings("rawtypes")
-public class ChromatogramFilterMSD  {
+public class ChromatogramFilterMSD {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramFilterMSD.class);
 	private static final String EXTENSION_POINT = "org.eclipse.chemclipse.chromatogram.msd.filter.chromatogramFilterSupplier";
@@ -60,10 +59,10 @@ public class ChromatogramFilterMSD  {
 	 * @param filterId
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, String filterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, String filterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
-		IChromatogramFilterMSD chromatogramFilter = getChromatogramFilter(filterId);
+		IProcessingInfo<IChromatogramFilterResult> processingInfo;
+		IChromatogramFilterMSD<IChromatogramFilterResult> chromatogramFilter = getChromatogramFilter(filterId);
 		if(chromatogramFilter != null) {
 			processingInfo = chromatogramFilter.applyFilter(chromatogramSelection, chromatogramFilterSettings, monitor);
 		} else {
@@ -86,7 +85,7 @@ public class ChromatogramFilterMSD  {
 	public static IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelectionMSD chromatogramSelection, String filterId, IProgressMonitor monitor) {
 
 		IProcessingInfo<IChromatogramFilterResult> processingInfo;
-		IChromatogramFilterMSD chromatogramFilter = getChromatogramFilter(filterId);
+		IChromatogramFilterMSD<IChromatogramFilterResult> chromatogramFilter = getChromatogramFilter(filterId);
 		if(chromatogramFilter != null) {
 			processingInfo = chromatogramFilter.applyFilter(chromatogramSelection, monitor);
 		} else {
@@ -126,17 +125,16 @@ public class ChromatogramFilterMSD  {
 		return filterSupport;
 	}
 
-	// --------------------------------------------private methods
 	/**
 	 * Returns a {@link IChromatogramFilterMSD} instance given by the filterId or
 	 * null, if none is available.
 	 */
-	@SuppressWarnings("rawtypes")
-	private static IChromatogramFilterMSD getChromatogramFilter(final String filterId) {
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	private static IChromatogramFilterMSD<IChromatogramFilterResult> getChromatogramFilter(final String filterId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(filterId);
-		IChromatogramFilterMSD instance = null;
+		IChromatogramFilterMSD<IChromatogramFilterResult> instance = null;
 		if(element != null) {
 			try {
 				instance = (IChromatogramFilterMSD)element.createExecutableExtension(FILTER);
@@ -168,6 +166,4 @@ public class ChromatogramFilterMSD  {
 		}
 		return null;
 	}
-	// --------------------------------------------private methods
-
 }
