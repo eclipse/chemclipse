@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -22,6 +22,8 @@ public class PreferenceConstants {
 	public static final String DEF_SELECTED_DRIVE_PATH = "";
 	public static final String P_SELECTED_HOME_PATH = "selectedHomePath";
 	public static final String DEF_SELECTED_HOME_PATH = "";
+	public static final String P_SELECTED_WORKSPACE_PATH = "selectedWorkspacePath";
+	public static final String DEF_SELECTED_WORKSPACE_PATH = "";
 	public static final String P_SELECTED_USER_LOCATION_PATH = "selectedUserLocationPath";
 	public static final String DEF_SELECTED_USER_LOCATION_PATH = "";
 	//

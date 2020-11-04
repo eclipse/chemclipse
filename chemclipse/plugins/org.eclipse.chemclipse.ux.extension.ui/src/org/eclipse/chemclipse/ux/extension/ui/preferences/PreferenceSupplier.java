@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -20,6 +20,7 @@ public class PreferenceSupplier {
 	 * Use only static methods.
 	 */
 	private PreferenceSupplier() {
+
 	}
 
 	public static String getSelectedDrivePath() {
@@ -44,6 +45,18 @@ public class PreferenceSupplier {
 
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		store.setValue(PreferenceConstants.P_SELECTED_HOME_PATH, directoryPath);
+	}
+
+	public static String getSelectedWorkspacePath() {
+
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		return store.getString(PreferenceConstants.P_SELECTED_WORKSPACE_PATH);
+	}
+
+	public static void setSelectedWorkspaceath(String directoryPath) {
+
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		store.setValue(PreferenceConstants.P_SELECTED_WORKSPACE_PATH, directoryPath);
 	}
 
 	public static String getSelectedUserLocationPath() {

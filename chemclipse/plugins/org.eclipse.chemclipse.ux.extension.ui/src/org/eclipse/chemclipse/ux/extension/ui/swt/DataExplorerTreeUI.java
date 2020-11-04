@@ -20,10 +20,7 @@ import java.util.function.Function;
 
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
-import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.ux.extension.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceConstants;
-import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerContentProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerLabelProvider;
 import org.eclipse.core.runtime.IStatus;
@@ -64,7 +61,8 @@ public class DataExplorerTreeUI {
 
 	public void expandLastDirectoryPath(IPreferenceStore preferenceStore) {
 
-		expandLastDirectoryPath(preferenceStore, getDefaultPathPreferenceKey(dataExplorerTreeRoot));
+		String preferenceKey = dataExplorerTreeRoot.getPreferenceKeyDefaultPath();
+		expandLastDirectoryPath(preferenceStore, preferenceKey);
 	}
 
 	public void expandLastDirectoryPath(IPreferenceStore preferenceStore, String preferenceKey) {
@@ -89,7 +87,8 @@ public class DataExplorerTreeUI {
 
 	public void saveLastDirectoryPath(IPreferenceStore preferenceStore) {
 
-		saveLastDirectoryPath(preferenceStore, getDefaultPathPreferenceKey(getRoot()));
+		String preferenceKey = getRoot().getPreferenceKeyDefaultPath();
+		saveLastDirectoryPath(preferenceStore, preferenceKey);
 	}
 
 	public void saveLastDirectoryPath(IPreferenceStore preferenceStore, String preferenceKey) {
@@ -131,21 +130,6 @@ public class DataExplorerTreeUI {
 		}
 	}
 
-	public static final String getDefaultPathPreferenceKey(DataExplorerTreeRoot root) {
-
-		switch(root) {
-			case DRIVES:
-				return PreferenceConstants.P_SELECTED_DRIVE_PATH;
-			case HOME:
-				return PreferenceConstants.P_SELECTED_HOME_PATH;
-			case USER_LOCATION:
-				return PreferenceConstants.P_SELECTED_USER_LOCATION_PATH;
-			case NONE:
-			default:
-				return "selected" + root.name() + "path";
-		}
-	}
-
 	private TreeViewer createTreeViewer(Composite parent, Function<File, Map<ISupplierFileIdentifier, Collection<ISupplier>>> identifier) {
 
 		TreeViewer treeViewer = new TreeViewer(parent, SWT.MULTI | SWT.VIRTUAL);
@@ -161,31 +145,7 @@ public class DataExplorerTreeUI {
 
 	private void setInput(TreeViewer treeViewer) {
 
-		switch(dataExplorerTreeRoot) {
-			case DRIVES:
-				treeViewer.setInput(File.listRoots());
-				break;
-			case HOME:
-				treeViewer.setInput(new File[]{new File(UserManagement.getUserHome())});
-				break;
-			case USER_LOCATION:
-				treeViewer.setInput(new File[]{getUserLocation()});
-				break;
-			case NONE:
-				// fall through...
-			default:
-				break;
-		}
-	}
-
-	private File getUserLocation() {
-
-		String userLocationPath = PreferenceSupplier.getUserLocationPath();
-		File userLocation = new File(userLocationPath);
-		if(!userLocation.exists()) {
-			userLocation = new File(UserManagement.getUserHome());
-		}
-		return userLocation;
+		treeViewer.setInput(dataExplorerTreeRoot.getRootContent());
 	}
 
 	private int getNumberOfChildDirectories(File directory) {

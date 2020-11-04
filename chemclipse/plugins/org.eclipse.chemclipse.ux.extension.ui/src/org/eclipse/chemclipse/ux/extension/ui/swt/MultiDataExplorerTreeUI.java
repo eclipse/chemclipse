@@ -50,7 +50,6 @@ import org.eclipse.swt.widgets.TabItem;
 
 public class MultiDataExplorerTreeUI {
 
-	private static final DataExplorerTreeRoot[] DEFAULT_ROOTS = {DataExplorerTreeRoot.DRIVES, DataExplorerTreeRoot.HOME, DataExplorerTreeRoot.USER_LOCATION};
 	private static final String TAB_KEY_SUFFIX = "selectedTab";
 	//
 	private final TabFolder tabFolder;
@@ -61,7 +60,7 @@ public class MultiDataExplorerTreeUI {
 
 	public MultiDataExplorerTreeUI(Composite parent, IPreferenceStore preferenceStore) {
 
-		this(parent, DEFAULT_ROOTS, preferenceStore);
+		this(parent, DataExplorerTreeRoot.getDefaultRoots(), preferenceStore);
 	}
 
 	public MultiDataExplorerTreeUI(Composite parent, DataExplorerTreeRoot[] roots, IPreferenceStore preferenceStore) {
@@ -148,7 +147,7 @@ public class MultiDataExplorerTreeUI {
 
 	protected String getPreferenceKey(DataExplorerTreeRoot root) {
 
-		return DataExplorerTreeUI.getDefaultPathPreferenceKey(root);
+		return root.getPreferenceKeyDefaultPath();
 	}
 
 	protected void initTabComponent(Composite parent, DataExplorerTreeUI treeUI) {

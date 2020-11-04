@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -30,6 +30,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		store.setDefault(PreferenceConstants.P_SELECTED_DRIVE_PATH, PreferenceConstants.DEF_SELECTED_DRIVE_PATH);
 		store.setDefault(PreferenceConstants.P_SELECTED_HOME_PATH, PreferenceConstants.DEF_SELECTED_HOME_PATH);
+		store.setDefault(PreferenceConstants.P_SELECTED_WORKSPACE_PATH, PreferenceConstants.DEF_SELECTED_WORKSPACE_PATH);
 		store.setDefault(PreferenceConstants.P_SELECTED_USER_LOCATION_PATH, PreferenceConstants.DEF_SELECTED_USER_LOCATION_PATH);
 		//
 		store.setDefault(PreferenceConstants.P_USER_LOCATION_PATH, PreferenceConstants.DEF_USER_LOCATION_PATH);
