@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,15 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.swt;
 
-import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.jface.viewers.ViewerComparator;
 
-public class EnhancedViewerSorter extends ViewerSorter {
+public class EnhancedViewerSorter extends ViewerComparator {
 
 	public static final int ASCENDING = 0;
 	private int propertyIndex = -1;
 	private int direction = ASCENDING;
 
 	public EnhancedViewerSorter() {
+
 		propertyIndex = 0;
 		direction = ASCENDING;
 	}
