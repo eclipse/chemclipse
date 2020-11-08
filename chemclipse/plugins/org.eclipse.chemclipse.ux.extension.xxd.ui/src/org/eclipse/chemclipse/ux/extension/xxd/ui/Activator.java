@@ -14,26 +14,20 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui;
 
 import java.util.Map;
 
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
+import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.e4.core.contexts.EclipseContextFactory;
-import org.eclipse.e4.core.contexts.IEclipseContext;
-import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.e4.ui.model.application.MApplication;
-import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.osgi.service.datalocation.Location;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends AbstractUIPlugin {
+public class Activator extends AbstractActivatorUI {
 
 	private static Activator plugin;
 	//
@@ -99,32 +93,6 @@ public class Activator extends AbstractUIPlugin {
 			initialize(dataUpdateSupport);
 		}
 		return dataUpdateSupport;
-	}
-
-	public IEclipseContext getEclipseContext() {
-
-		BundleContext bundleContext = getBundle().getBundleContext();
-		IEclipseContext eclipseContext = EclipseContextFactory.getServiceContext(bundleContext);
-		eclipseContext.set(Logger.class, null);
-		return eclipseContext;
-	}
-
-	public IEventBroker getEventBroker() {
-
-		IEclipseContext eclipseContext = getEclipseContext();
-		return eclipseContext.get(IEventBroker.class);
-	}
-
-	public MApplication getApplication() {
-
-		IEclipseContext eclipseContext = getEclipseContext();
-		return eclipseContext.get(MApplication.class);
-	}
-
-	public EModelService getModelService() {
-
-		IEclipseContext eclipseContext = getEclipseContext();
-		return eclipseContext.get(EModelService.class);
 	}
 
 	private void initialize(DataUpdateSupport dataUpdateSupport) {

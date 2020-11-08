@@ -22,6 +22,9 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.e4.ui.model.application.MApplication;
+import org.eclipse.e4.ui.workbench.modeling.EModelService;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
@@ -33,6 +36,7 @@ import org.osgi.framework.BundleContext;
 
 public abstract class AbstractActivatorUI extends AbstractUIPlugin {
 
+	private static final Logger logger = Logger.getLogger(AbstractActivatorUI.class);
 	/*
 	 * This preference store uses the model store instead of the GUI store
 	 * achieve a clean separation of concerns.
@@ -41,7 +45,7 @@ public abstract class AbstractActivatorUI extends AbstractUIPlugin {
 	/*
 	 * The event broker is initialized on first use.
 	 */
-	private IEventBroker eventBroker = null;
+	private IEclipseContext eclipseContext = null;
 
 	/*
 	 * (non-Javadoc)
@@ -88,19 +92,59 @@ public abstract class AbstractActivatorUI extends AbstractUIPlugin {
 
 	public IEventBroker getEventBroker() {
 
-		if(eventBroker == null) {
-			IEclipseContext eclipseContext = EclipseContextFactory.getServiceContext(getBundle().getBundleContext());
-			eclipseContext.set(Logger.class, null);
-			eventBroker = eclipseContext.get(IEventBroker.class);
-		}
-		return eventBroker;
+		IEclipseContext eclipseContext = getEclipseContext();
+		return eclipseContext.get(IEventBroker.class);
+	}
+
+	public MApplication getApplication() {
+
+		IEclipseContext eclipseContext = getEclipseContext();
+		return eclipseContext.get(MApplication.class);
+	}
+
+	public EModelService getModelService() {
+
+		IEclipseContext eclipseContext = getEclipseContext();
+		return eclipseContext.get(EModelService.class);
+	}
+
+	public EPartService getPartService() {
+
+		IEclipseContext eclipseContext = getEclipseContext();
+		return eclipseContext.get(EPartService.class);
 	}
 
 	public IEclipseContext getEclipseContext() {
 
-		BundleContext bundleContext = getBundle().getBundleContext();
-		IEclipseContext eclipseContext = EclipseContextFactory.getServiceContext(bundleContext);
-		eclipseContext.set(Logger.class, null);
+		if(eclipseContext == null) {
+			/*
+			 * Create and initialize the context.
+			 */
+			eclipseContext = EclipseContextFactory.getServiceContext(getBundle().getBundleContext());
+			eclipseContext.set(Logger.class, logger);
+			//
+			// eclipseContext.set(MApplication.class, ModelSupportAddon.getApplication());
+			// eclipseContext.set(EModelService.class, ModelSupportAddon.getModelService());
+			// eclipseContext.set(EPartService.class, ModelSupportAddon.getPartService());
+			eclipseContext.set(MApplication.class, ContextAddon.getApplication());
+			eclipseContext.set(EModelService.class, ContextAddon.getModelService());
+			eclipseContext.set(EPartService.class, ContextAddon.getPartService());
+			/*
+			 * Checks
+			 */
+			if(eclipseContext.get(MApplication.class) == null) {
+				logger.warn("MApplication is null!");
+			}
+			//
+			if(eclipseContext.get(EModelService.class) == null) {
+				logger.warn("EModelService is null!");
+			}
+			//
+			if(eclipseContext.get(EPartService.class) == null) {
+				logger.warn("EPartService is null!");
+			}
+		}
+		//
 		return eclipseContext;
 	}
 
