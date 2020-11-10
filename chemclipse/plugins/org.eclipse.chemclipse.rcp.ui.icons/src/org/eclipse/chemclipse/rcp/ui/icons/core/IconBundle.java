@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - active decorator option has been added
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.ui.icons.core;
 
@@ -31,22 +32,32 @@ public class IconBundle implements IApplicationImageProvider {
 	private final ImageRegistry registry = new ImageRegistry(Display.getDefault());
 
 	public IconBundle(Bundle bundle) {
+
 		this.bundle = bundle;
 	}
 
 	@Override
 	public Image getImage(String fileName, String size) {
 
+		return getImage(fileName, size, false);
+	}
+
+	@Override
+	public Image getImage(String fileName, String size, boolean active) {
+
 		String path = getPath(fileName, size);
 		Image image = registry.get(path);
+		//
 		if(image == null) {
 			addIconImageDescriptor(path);
 			return registry.get(path);
 		}
+		//
 		if(image.isDisposed()) {
 			registry.remove(path);
-			return getImage(fileName, size);
+			return getImage(fileName, size, active);
 		}
+		//
 		return image;
 	}
 

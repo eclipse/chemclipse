@@ -31,6 +31,7 @@ public interface IApplicationImageProvider {
 	 * Sizes of icons, overlays ...
 	 */
 	String SIZE_7x8 = "7x8";
+	String SIZE_8x8 = "8x8";
 	String SIZE_7x16 = "7x16";
 	String SIZE_16x16 = "16x16";
 	String SIZE_32x32 = "32x32";
@@ -49,6 +50,16 @@ public interface IApplicationImageProvider {
 	 * @return Image
 	 */
 	Image getImage(String fileName, String size);
+
+	/**
+	 * Returns an image with the given icons size.
+	 * 
+	 * @param fileName
+	 * @param size
+	 * @param active
+	 * @return Image
+	 */
+	Image getImage(String fileName, String size, boolean active);
 
 	/**
 	 * Returns an image descriptor with the given icons size.

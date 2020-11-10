@@ -65,6 +65,9 @@ public class PreferenceConstants extends ChartOptions {
 	//
 	public static final int MIN_SIM_IONS = 1;
 	public static final int MAX_SIM_IONS = 50;
+	//
+	public static final int MIN_LENGTH_NAME_EXPORT = 1;
+	public static final int MAX_LENGTH_NAME_EXPORT = 1000;
 	/*
 	 * General / Task Quick Access
 	 */
@@ -747,4 +750,11 @@ public class PreferenceConstants extends ChartOptions {
 	 */
 	public static final String P_PROCESSOR_SELECTION_DATA_CATEGORY = "processorSelectionDataCategory";
 	public static final boolean DEF_PROCESSOR_SELECTION_DATA_CATEGORY = true;
+	/*
+	 * Molecule(s)
+	 */
+	public static final String P_MOLECULE_PATH_EXPORT = "moleculePathExport";
+	public static final String DEF_MOLECULE_PATH_EXPORT = "";
+	public static final String P_LENGTH_MOLECULE_NAME_EXPORT = "lengthMoleculeNameExport";
+	public static final int DEF_LENGTH_MOLECULE_NAME_EXPORT = 40;
 }

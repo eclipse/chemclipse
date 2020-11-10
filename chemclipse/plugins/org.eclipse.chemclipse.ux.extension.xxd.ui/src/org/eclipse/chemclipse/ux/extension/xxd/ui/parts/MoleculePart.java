@@ -16,22 +16,24 @@ import java.util.List;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.ILibraryMassSpectrum;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateListener;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedMoleculeStructureUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedMoleculeUI;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class MoleculeStructurePart {
+public class MoleculePart {
 
 	private static final String TOPIC = IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION;
 	//
-	private ExtendedMoleculeStructureUI control;
+	private ExtendedMoleculeUI control;
 	private boolean initialUpdate = true;
 	//
 	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
@@ -45,9 +47,9 @@ public class MoleculeStructurePart {
 	};
 
 	@Inject
-	public MoleculeStructurePart(Composite parent, MPart part) {
+	public MoleculePart(Composite parent, MPart part) {
 
-		control = new ExtendedMoleculeStructureUI(parent, SWT.NONE);
+		control = new ExtendedMoleculeUI(parent, SWT.NONE);
 		dataUpdateSupport.add(updateListener);
 	}
 
@@ -72,11 +74,21 @@ public class MoleculeStructurePart {
 				if(isScanOrPeakTopic(topic)) {
 					initialUpdate = false;
 					Object object = objects.get(0);
-					ILibraryMassSpectrum libraryMassSpectrum = null;
+					ILibraryInformation libraryInformation = null;
 					if(object instanceof ILibraryMassSpectrum) {
-						libraryMassSpectrum = (ILibraryMassSpectrum)object;
+						ILibraryMassSpectrum libraryMassSpectrum = (ILibraryMassSpectrum)object;
+						libraryInformation = libraryMassSpectrum.getLibraryInformation();
 					}
-					control.setInput(libraryMassSpectrum);
+					control.setInput(libraryInformation);
+				} else if(isIdentificationTargetTopic(topic)) {
+					initialUpdate = false;
+					Object object = objects.get(0);
+					ILibraryInformation libraryInformation = null;
+					if(object instanceof IIdentificationTarget) {
+						IIdentificationTarget identificationTarget = (IIdentificationTarget)object;
+						libraryInformation = identificationTarget.getLibraryInformation();
+					}
+					control.setInput(libraryInformation);
 				}
 			}
 		}
@@ -87,6 +99,14 @@ public class MoleculeStructurePart {
 		if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION)) {
 			return true;
 		} else if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION)) {
+			return true;
+		}
+		return false;
+	}
+
+	private boolean isIdentificationTargetTopic(String topic) {
+
+		if(topic.equals(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE)) {
 			return true;
 		}
 		return false;

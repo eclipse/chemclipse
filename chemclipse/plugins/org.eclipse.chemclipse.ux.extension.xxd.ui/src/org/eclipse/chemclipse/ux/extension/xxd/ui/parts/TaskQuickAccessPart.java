@@ -212,7 +212,7 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_SCAN_TABLE, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_TABLE), partService, modelService, application, eventBroker);
 				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_SCAN_BROWSE, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SCAN_BROWSE), partService, modelService, application, eventBroker);
 				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_SYNONYMS, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_SYNONYMS), partService, modelService, application, eventBroker);
-				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_MOLECULE_STRUCTURE, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_MOLECULE_STRUCTURE), partService, modelService, application, eventBroker);
+				PartSupport.togglePartVisibility(PartSupport.PARTDESCRIPTOR_MOLECULE, preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_MOLECULE_STRUCTURE), partService, modelService, application, eventBroker);
 			}
 		});
 		//
@@ -221,7 +221,7 @@ public class TaskQuickAccessPart extends AbstractDataUpdateSupport implements ID
 		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_SCAN_TABLE, button, imageActive, imageDefault);
 		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_SCAN_BROWSE, button, imageActive, imageDefault);
 		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_SYNONYMS, button, imageActive, imageDefault);
-		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_MOLECULE_STRUCTURE, button, imageActive, imageDefault);
+		PartSupport.addPartImageMappings(PartSupport.PARTDESCRIPTOR_MOLECULE, button, imageActive, imageDefault);
 	}
 
 	private void createPeaksTask(Composite parent) {

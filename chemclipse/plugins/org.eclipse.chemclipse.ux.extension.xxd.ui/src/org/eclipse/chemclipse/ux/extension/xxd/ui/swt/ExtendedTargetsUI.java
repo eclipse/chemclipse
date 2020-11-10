@@ -676,6 +676,9 @@ public class ExtendedTargetsUI extends Composite {
 						@Override
 						public void run() {
 
+							/*
+							 * Molecule Part
+							 */
 							eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
 						}
 					});

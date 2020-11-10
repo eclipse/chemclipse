@@ -18,11 +18,13 @@ import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
+import org.eclipse.chemclipse.swt.ui.services.IMoleculeImageService;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.osgi.framework.BundleContext;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -33,6 +35,8 @@ public class Activator extends AbstractActivatorUI {
 	//
 	private ScopedPreferenceStore preferenceStoreSubtract;
 	private DataUpdateSupport dataUpdateSupport;
+	//
+	private ServiceTracker<IMoleculeImageService, IMoleculeImageService> moleculeImageServiceTracker = null;
 
 	/**
 	 * The constructor
@@ -51,6 +55,9 @@ public class Activator extends AbstractActivatorUI {
 		super.start(context);
 		plugin = this;
 		initializePreferenceStoreSubtract(PreferenceSupplier.INSTANCE());
+		//
+		moleculeImageServiceTracker = new ServiceTracker<>(context, IMoleculeImageService.class, null);
+		moleculeImageServiceTracker.open();
 	}
 
 	/*
@@ -95,6 +102,11 @@ public class Activator extends AbstractActivatorUI {
 		return dataUpdateSupport;
 	}
 
+	public Object[] getMoleculeImageServices() {
+
+		return moleculeImageServiceTracker.getServices();
+	}
+
 	private void initialize(DataUpdateSupport dataUpdateSupport) {
 
 		/*
@@ -110,6 +122,7 @@ public class Activator extends AbstractActivatorUI {
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_SCAN);
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_PEAK);
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_IDENTIFICATION_TARGET_SUPPLIER);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET);
 		/*
 		 * Subtract MS
 		 */

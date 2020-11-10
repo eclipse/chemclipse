@@ -17,6 +17,10 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String PICTOGRAM_SUBTRACT_SCAN_ONE = "org.eclipse.chemclipse.rcp.ui.icons/subtractScanOne.png";
 	String PICTOGRAM_SUBTRACT_SCAN_MANY = "org.eclipse.chemclipse.rcp.ui.icons/subtractScanMany.png";
 	/*
+	 * 8x8 (Decorator)
+	 */
+	String IMAGE_DECORATOR_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/decorator_active.gif";
+	/*
 	 * Icons and Images
 	 */
 	String IMAGE_ADD = "org.eclipse.chemclipse.rcp.ui.icons/add.gif";

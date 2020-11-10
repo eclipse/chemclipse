@@ -33,24 +33,41 @@ import org.osgi.util.tracker.BundleTrackerCustomizer;
 public class ApplicationImage implements IApplicationImage, BundleTrackerCustomizer<IconBundle> {
 
 	private static final String BUNDLE_SEPARATOR = "/";
+	//
 	private final BundleTracker<IconBundle> bundleTracker;
 	private final Map<String, ImageDescriptor> descriptorCache = new ConcurrentHashMap<>();
 	private final Map<String, Image> imageCache = new ConcurrentHashMap<>();
 	private final Map<String, Collection<String>> listCache = new ConcurrentHashMap<>();
+	private final ImageDecorator imageDecorator = new ImageDecorator();
 
 	public ApplicationImage(BundleContext bundleContext) {
+
 		bundleTracker = new BundleTracker<>(bundleContext, Bundle.RESOLVED | Bundle.STARTING | Bundle.ACTIVE, this);
 	}
 
 	@Override
 	public Image getImage(String fileName, String size) {
 
-		return imageCache.computeIfAbsent(size + "/" + fileName, t -> {
+		return getImage(fileName, size, false);
+	}
+
+	@Override
+	public Image getImage(String fileName, String size, boolean active) {
+
+		return imageCache.computeIfAbsent(size + "/" + fileName + "/" + active, t -> {
 			String[] parts = fileName.split(BUNDLE_SEPARATOR, 2);
 			if(parts.length < 2) {
 				return EmptyApplicationImageProvider.getInstance().getImage(fileName, size);
 			}
-			return getProvider(parts[0]).getImage(parts[1], size);
+			//
+			Image image = getProvider(parts[0]).getImage(parts[1], size, active);
+			if(active) {
+				imageDecorator.setSize(size);
+				imageDecorator.setImage(image);
+				return imageDecorator.createImage();
+			} else {
+				return image;
+			}
 		});
 	}
 

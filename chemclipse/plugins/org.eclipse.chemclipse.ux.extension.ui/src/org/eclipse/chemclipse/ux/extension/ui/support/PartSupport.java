@@ -59,7 +59,7 @@ public class PartSupport {
 	public static final String PARTDESCRIPTOR_SCAN_TABLE = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.scanTablePartDescriptor";
 	public static final String PARTDESCRIPTOR_SCAN_BROWSE = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.scanBrowsePartDescriptor";
 	public static final String PARTDESCRIPTOR_SYNONYMS = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.synonymsPartDescriptor";
-	public static final String PARTDESCRIPTOR_MOLECULE_STRUCTURE = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.moleculeStructurePartDescriptor";
+	public static final String PARTDESCRIPTOR_MOLECULE = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.moleculePartDescriptor";
 	public static final String PARTDESCRIPTOR_TARGETS = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.targetsPartDescriptor";
 	public static final String PARTDESCRIPTOR_PEAK_CHART = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.peakChartPartDescriptor";
 	public static final String PARTDESCRIPTOR_PEAK_DETAILS = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.peakDetailsPartDescriptor";

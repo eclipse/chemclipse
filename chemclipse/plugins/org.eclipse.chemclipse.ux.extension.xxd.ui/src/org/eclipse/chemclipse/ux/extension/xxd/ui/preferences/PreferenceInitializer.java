@@ -232,6 +232,11 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		 */
 		store.setDefault(PreferenceConstants.P_PCR_DEFAULT_COLOR, PreferenceConstants.DEF_PCR_DEFAULT_COLOR);
 		store.setDefault(PreferenceConstants.P_PCR_COLOR_CODES, PreferenceConstants.DEF_PCR_COLOR_CODES);
+		/*
+		 * Molecule(s)
+		 */
+		store.setDefault(PreferenceConstants.P_MOLECULE_PATH_EXPORT, PreferenceConstants.DEF_MOLECULE_PATH_EXPORT);
+		store.setDefault(PreferenceConstants.P_LENGTH_MOLECULE_NAME_EXPORT, PreferenceConstants.DEF_LENGTH_MOLECULE_NAME_EXPORT);
 	}
 
 	public static IPreferenceStore initializeChromatogramDefaults(IPreferenceStore store) {

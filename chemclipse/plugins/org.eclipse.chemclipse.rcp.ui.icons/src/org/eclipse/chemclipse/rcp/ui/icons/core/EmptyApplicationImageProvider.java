@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - active decorator option has been added
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.ui.icons.core;
 
@@ -27,6 +28,12 @@ public class EmptyApplicationImageProvider implements IApplicationImageProvider 
 
 	@Override
 	public Image getImage(String fileName, String size) {
+
+		return getImage(fileName, size, false);
+	}
+
+	@Override
+	public Image getImage(String fileName, String size, boolean active) {
 
 		if(image == null) {
 			image = ImageDescriptor.getMissingImageDescriptor().createImage();

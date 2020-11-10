@@ -32,11 +32,18 @@ public abstract class AbstractApplicationImage implements IApplicationImage {
 	private final Bundle bundle;
 
 	public AbstractApplicationImage(Bundle bundle) {
+
 		this.bundle = bundle;
 	}
 
 	@Override
 	public Image getImage(String fileName, String size) {
+
+		return getImage(fileName, size, false);
+	}
+
+	@Override
+	public Image getImage(String fileName, String size, boolean active) {
 
 		String path = getPath(fileName, size);
 		Image image = JFaceResources.getImageRegistry().get(path);
