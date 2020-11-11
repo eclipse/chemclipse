@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -19,7 +21,6 @@ import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.swt.ui.services.IMoleculeImageService;
 import org.eclipse.chemclipse.swt.ui.services.ImageServiceInput;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
-import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
@@ -53,20 +54,23 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 
-public class ExtendedMoleculeUI extends Composite {
+public class ExtendedMoleculeUI extends Composite implements IChemClipsePart {
 
 	private static final ILibraryInformation LIBRARY_INFORMATION_THIAMIN = createLibraryInformationDefault();
 	private static final String THIAMINE_NAME = "Thiamine";
 	private static final String THIAMINE_CAS = "70-16-6";
 	private static final String THIAMINE_SMILES = "OCCc1c(C)[n+](=cs1)Cc2cnc(C)nc(N)2";
 	//
+	private static final String TOOLTIP_INFO = "additional information."; // "Show/Hide ..."
+	private static final String TOOLTIP_EDIT = "the edit toolbar."; // "Show/Hide ..."
+	//
 	private Button buttonToolbarInfo;
-	private Composite toolbarInfo;
+	private AtomicReference<Composite> toolbarInfo = new AtomicReference<>();
+	private Button buttonToolbarEdit;
+	private AtomicReference<Composite> toolbarEdit = new AtomicReference<>();
 	private Label labelInfo;
 	private TabFolder tabFolder;
 	private ComboViewer comboViewerServices;
-	private Button buttonToolbarModify;
-	private Composite toolbarEdit;
 	private Text textInput;
 	private ComboViewer comboViewerInput;
 	private Label labelMolecule;
@@ -94,8 +98,8 @@ public class ExtendedMoleculeUI extends Composite {
 		setLayout(new GridLayout(1, true));
 		//
 		createToolbarMain(this);
-		toolbarInfo = createToolbarInfo(this);
-		toolbarEdit = createToolbarModify(this);
+		createToolbarInfo(this);
+		createToolbarEdit(this);
 		createTabFolderSection(this);
 		//
 		initialize();
@@ -103,10 +107,8 @@ public class ExtendedMoleculeUI extends Composite {
 
 	private void initialize() {
 
-		PartSupport.setCompositeVisibility(toolbarInfo, true);
-		setImageButtonInfo(true);
-		PartSupport.setCompositeVisibility(toolbarEdit, false);
-		setImageButtonEdit(false);
+		enableToolbar(toolbarInfo, buttonToolbarInfo, IApplicationImage.IMAGE_INFO, TOOLTIP_INFO, true);
+		enableToolbar(toolbarEdit, buttonToolbarEdit, IApplicationImage.IMAGE_EDIT, TOOLTIP_EDIT, false);
 		/*
 		 * Services
 		 */
@@ -134,15 +136,15 @@ public class ExtendedMoleculeUI extends Composite {
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(6, false));
 		//
-		buttonToolbarInfo = createButtonToggleToolbarInfo(composite);
-		buttonToolbarModify = createButtonToggleToolbarEdit(composite);
+		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IApplicationImage.IMAGE_INFO, TOOLTIP_INFO);
+		buttonToolbarEdit = createButtonToggleToolbar(composite, toolbarEdit, IApplicationImage.IMAGE_EDIT, TOOLTIP_EDIT);
 		comboViewerServices = createComboViewerServices(composite);
 		createButtonReset(composite);
 		createButtonExport(composite);
 		createSettingsButton(composite);
 	}
 
-	private Composite createToolbarInfo(Composite parent) {
+	private void createToolbarInfo(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -153,10 +155,10 @@ public class ExtendedMoleculeUI extends Composite {
 		labelInfo.setText("");
 		labelInfo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
-		return composite;
+		toolbarInfo.set(composite);
 	}
 
-	private Composite createToolbarModify(Composite parent) {
+	private void createToolbarEdit(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -167,7 +169,7 @@ public class ExtendedMoleculeUI extends Composite {
 		comboViewerInput = createComboViewerInput(composite);
 		createButtonCalculate(composite);
 		//
-		return composite;
+		toolbarEdit.set(composite);
 	}
 
 	private Text createTextInput(Composite parent) {
@@ -304,52 +306,6 @@ public class ExtendedMoleculeUI extends Composite {
 		text.setToolTipText("Molecule Structure");
 		//
 		return text;
-	}
-
-	private Button createButtonToggleToolbarInfo(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setText("");
-		button.setToolTipText("Toggle the info toolbar.");
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				boolean active = PartSupport.toggleCompositeVisibility(toolbarInfo);
-				setImageButtonInfo(active);
-			}
-		});
-		//
-		return button;
-	}
-
-	private void setImageButtonInfo(boolean active) {
-
-		buttonToolbarInfo.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16, active));
-	}
-
-	private Button createButtonToggleToolbarEdit(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setText("");
-		button.setToolTipText("Toggle the edit toolbar.");
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				boolean active = PartSupport.toggleCompositeVisibility(toolbarEdit);
-				setImageButtonEdit(active);
-			}
-		});
-		//
-		return button;
-	}
-
-	private void setImageButtonEdit(boolean active) {
-
-		buttonToolbarModify.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16, active));
 	}
 
 	private ComboViewer createComboViewerServices(Composite composite) {
