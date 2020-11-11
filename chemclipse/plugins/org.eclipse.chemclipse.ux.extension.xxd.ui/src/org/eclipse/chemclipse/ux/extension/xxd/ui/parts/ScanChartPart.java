@@ -29,7 +29,7 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class ScanChartPart {
+public class ScanChartPart extends AbstractPart {
 
 	private static final String TOPIC = IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION;
 	//
@@ -65,6 +65,7 @@ public class ScanChartPart {
 	protected void preDestroy() {
 
 		dataUpdateSupport.remove(updateListener);
+		super.preDestroy();
 	}
 
 	private void updateSelection(List<Object> objects, String topic) {

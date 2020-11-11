@@ -54,7 +54,7 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 
-public class ExtendedMoleculeUI extends Composite implements IChemClipsePart {
+public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 	private static final ILibraryInformation LIBRARY_INFORMATION_THIAMIN = createLibraryInformationDefault();
 	private static final String THIAMINE_NAME = "Thiamine";

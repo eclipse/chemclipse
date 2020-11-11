@@ -25,7 +25,7 @@ import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.swt.widgets.Composite;
 
-public class ChromatogramOverlayPart {
+public class ChromatogramOverlayPart extends AbstractPart {
 
 	private final ExtendedChromatogramOverlayUI extendedChromatogramOverlayUI;
 	private final EditorUpdateSupport editorUpdateSupport = new EditorUpdateSupport();

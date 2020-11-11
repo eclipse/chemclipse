@@ -18,11 +18,14 @@ import java.util.List;
 import javax.annotation.PreDestroy;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.support.ui.activator.ContextAddon;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.UIEvents;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
@@ -94,6 +97,7 @@ public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport im
 			for(EventHandler eventHandler : registeredEventHandler) {
 				eventBroker.unsubscribe(eventHandler);
 			}
+			eventBroker.send(IChemClipseEvents.TOPIC_PART_CLOSED, getClass().getSimpleName());
 		}
 	}
 
@@ -123,7 +127,10 @@ public abstract class AbstractDataUpdateSupport extends AbstractUpdateSupport im
 						if(part.getElementId().equals(myPart.getElementId())) {
 							if(part.isCloseable()) {
 								if(!toBeRendered) {
-									PartSupport.setPartVisibility(part, false, eventBroker);
+									EPartService partService = ContextAddon.getPartService();
+									if(partService != null) {
+										PartSupport.setPartVisibility(part, partService, false);
+									}
 								}
 							}
 						}

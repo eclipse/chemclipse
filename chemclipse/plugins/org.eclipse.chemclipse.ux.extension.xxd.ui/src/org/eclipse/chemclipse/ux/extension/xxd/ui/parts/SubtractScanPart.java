@@ -28,7 +28,7 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class SubtractScanPart {
+public class SubtractScanPart extends AbstractPart {
 
 	private static final String TOPIC = IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM;
 	//
@@ -61,6 +61,7 @@ public class SubtractScanPart {
 	protected void preDestroy() {
 
 		dataUpdateSupport.remove(updateListener);
+		super.preDestroy();
 	}
 
 	private void updateSelection(List<Object> objects, String topic) {

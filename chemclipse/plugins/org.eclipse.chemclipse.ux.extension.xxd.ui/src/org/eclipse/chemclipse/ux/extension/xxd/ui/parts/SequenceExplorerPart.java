@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,12 +18,13 @@ import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.widgets.Composite;
 
-public class SequenceExplorerPart {
+public class SequenceExplorerPart extends AbstractPart {
 
 	private ExtendedSequenceExplorerUI extendedSequenceExplorerUI;
 
 	@Inject
 	public SequenceExplorerPart(Composite parent, MPart part) {
+
 		extendedSequenceExplorerUI = new ExtendedSequenceExplorerUI(parent);
 	}
 

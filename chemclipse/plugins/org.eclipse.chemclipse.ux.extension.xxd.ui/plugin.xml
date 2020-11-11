@@ -58,18 +58,12 @@
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskPeaks"
             id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTaskPeaks"
             name="Peaks">
-      </page>  
+      </page> 
       <page
             category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTasks"
-            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskLists"
-            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTaskLists"
-            name="Lists">
-      </page>  
-      <page
-            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTasks"
-            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskQuantitation"
-            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTaskQuantitation"
-            name="Quantitation">
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskChromatogram"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTaskChromatogram"
+            name="Chromatogram">
       </page> 
       <page
             category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTasks"
@@ -85,34 +79,10 @@
       </page>
       <page
             category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTasks"
-            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskSubtract"
-            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTaskSubtract"
-            name="Subtract">
-      </page>  
-      <page
-            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTasks"
-            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskCombined"
-            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTaskCombined"
-            name="Combined Scans">
-      </page>  
-      <page
-            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTasks"
-            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskComparison"
-            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTaskComparison"
-            name="Comparison">
-      </page> 
-      <page
-            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTasks"
-            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskResults"
-            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTaskResults"
-            name="Results">
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskMiscellaneous"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTaskMiscellaneous"
+            name="Miscellaneous">
       </page>           
-      <page
-            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTasks"
-            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskHeatmaps"
-            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTaskHeatmaps"
-            name="Heatmaps">
-      </page>
       <page
             category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTasks"
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTaskPCR"
@@ -226,12 +196,6 @@
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageQuantitationAxes"
             id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageQuantitationAxes"
             name="Quantitation Axes">
-      </page>              
-      <page
-            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
-            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePCR"
-            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePagePCR"
-            name="PCR">
       </page>
       <page
             category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
@@ -281,5 +245,13 @@
          </adapter>
       </factory>
    </extension>   
-
+   <extension
+         point="org.eclipse.chemclipse.ux.extension.ui.welcometile">
+      <WelcomeTile
+            Description="Polymerace Chain Reaction (PCR)"
+            PerspectiveId="org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.pcr"
+            Section="PCR"
+            defaultShow="true">
+      </WelcomeTile>
+   </extension> 
 </plugin>

@@ -14,6 +14,8 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.part.support;
 import java.io.File;
 import java.util.List;
 
+import javax.annotation.PreDestroy;
+
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
@@ -23,9 +25,11 @@ import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMS
 import org.eclipse.chemclipse.nmr.converter.core.ScanConverterNMR;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 import org.eclipse.chemclipse.xir.converter.core.ScanConverterXIR;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 
 public abstract class AbstractOverviewUpdateSupport extends AbstractDataUpdateSupport implements IOverviewUpdateSupport {
@@ -93,6 +97,15 @@ public abstract class AbstractOverviewUpdateSupport extends AbstractDataUpdateSu
 					update(null);
 				}
 			}
+		}
+	}
+
+	@PreDestroy
+	protected void preDestroy() {
+
+		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+		if(eventBroker != null) {
+			eventBroker.send(IChemClipseEvents.TOPIC_PART_CLOSED, getClass().getSimpleName());
 		}
 	}
 

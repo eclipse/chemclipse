@@ -22,7 +22,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
-public interface IChemClipsePart {
+public interface IExtendedPartUI {
 
 	default Button createButtonToggleToolbar(Composite parent, AtomicReference<Composite> toolbar, String image, String tooltip) {
 

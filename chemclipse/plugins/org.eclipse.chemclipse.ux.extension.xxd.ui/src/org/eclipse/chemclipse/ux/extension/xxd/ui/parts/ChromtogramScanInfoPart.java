@@ -27,7 +27,7 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class ChromtogramScanInfoPart {
+public class ChromtogramScanInfoPart extends AbstractPart {
 
 	private static final String TOPIC = IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION;
 	//
@@ -60,6 +60,7 @@ public class ChromtogramScanInfoPart {
 	protected void preDestroy() {
 
 		dataUpdateSupport.remove(updateListener);
+		super.preDestroy();
 	}
 
 	private void updateSelection(List<Object> objects, String topic) {

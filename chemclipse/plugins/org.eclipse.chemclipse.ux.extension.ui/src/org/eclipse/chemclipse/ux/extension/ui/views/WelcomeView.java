@@ -35,6 +35,7 @@ public class WelcomeView {
 
 	public static final String WELCOME_MAIN_CONTEXT = "WelcomeView.Main";
 	public static final String PERSPECTIVE_DATA_ANALYSIS = "org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.main";
+	//
 	private static final String PERSPECTIVE_PCA = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.perspective";
 	private static final String PERSPECTIVE_LOGGING = "org.eclipse.chemclipse.logging.ui.perspective.main";
 	private static final int DEFAULT_NUMBER_OF_COLUMNS = Integer.getInteger("chemclipse.welcome.columns", 4);
@@ -49,6 +50,7 @@ public class WelcomeView {
 		private String description;
 
 		public Component(String perspectiveId, Image image, String section, String description) {
+
 			this.perspectiveId = perspectiveId;
 			this.image = image;
 			this.section = section;

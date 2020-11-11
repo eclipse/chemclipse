@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,31 +11,22 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.toolbar.GroupHandler;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.toolbar.GroupHandlerOverlay;
 import org.eclipse.jface.preference.ComboFieldEditor;
-import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPreferencePage;
 
-public class PreferencePageTaskOverlay extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class PreferencePageTaskOverlay extends AbstractPreferencePageTask {
 
 	public PreferencePageTaskOverlay() {
-		super(GRID);
-		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setTitle("Overlay");
-		setDescription("");
+
+		super(GroupHandler.getGroupHandler(GroupHandlerOverlay.NAME));
 	}
 
 	public void createFieldEditors() {
 
-		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_OVERLAY_CHROMATOGRAM_DEFAULT, "Overlay Chromatogram Default:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_OVERLAY_CHROMATOGRAM_EXTRA, "Overlay Chromatogram Extra:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_OVERLAY_NMR, "Overlay NMR:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_OVERLAY_XIR, "Overlay XIR:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_BASELINE, "Baseline:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
-	}
-
-	public void init(IWorkbench workbench) {
-
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		super.createFieldEditors();
 	}
 }

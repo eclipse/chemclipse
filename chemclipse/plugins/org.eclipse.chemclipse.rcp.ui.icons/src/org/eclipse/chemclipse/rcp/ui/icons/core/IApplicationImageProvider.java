@@ -30,6 +30,7 @@ public interface IApplicationImageProvider {
 	/*
 	 * Sizes of icons, overlays ...
 	 */
+	String SIZE_7x7 = "7x7";
 	String SIZE_7x8 = "7x8";
 	String SIZE_8x8 = "8x8";
 	String SIZE_7x16 = "7x16";

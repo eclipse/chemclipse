@@ -17,28 +17,27 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.MUIElement;
 import org.eclipse.e4.ui.model.application.ui.advanced.MArea;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.model.application.ui.basic.MStackElement;
+import org.eclipse.e4.ui.model.application.ui.menu.MDirectToolItem;
+import org.eclipse.e4.ui.model.application.ui.menu.MToolBar;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 
 public class PartSupport {
 
+	private static final Logger logger = Logger.getLogger(PartSupport.class);
 	//
 	public static final String PERSPECTIVE_DATA_ANALYSIS = "org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.main";
-	//
 	public static final String AREA = "org.eclipse.chemclipse.rcp.app.ui.editor";
 	/*
 	 * Parts
@@ -59,7 +58,7 @@ public class PartSupport {
 	public static final String PARTDESCRIPTOR_SCAN_TABLE = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.scanTablePartDescriptor";
 	public static final String PARTDESCRIPTOR_SCAN_BROWSE = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.scanBrowsePartDescriptor";
 	public static final String PARTDESCRIPTOR_SYNONYMS = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.synonymsPartDescriptor";
-	public static final String PARTDESCRIPTOR_MOLECULE = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.moleculePartDescriptor";
+	public static final String PARTDESCRIPTOR_MOLECULE_STRUCTURE = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.moleculeStructurePartDescriptor";
 	public static final String PARTDESCRIPTOR_TARGETS = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.targetsPartDescriptor";
 	public static final String PARTDESCRIPTOR_PEAK_CHART = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.peakChartPartDescriptor";
 	public static final String PARTDESCRIPTOR_PEAK_DETAILS = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.peakDetailsPartDescriptor";
@@ -76,11 +75,6 @@ public class PartSupport {
 	public static final String PARTDESCRIPTOR_MEASUREMENT_RESULTS = "org.eclipse.chemclipse.ux.extension.xxd.ui.partdescriptor.measurementResultsPartDescriptor";
 	public static final String PARTDESCRIPTOR_CHROMATOGRAM_HEATMAP = "org.eclipse.chemclipse.ux.extension.xxd.ui.partdescriptor.chromatogramHeatmapPartDescriptor";
 	public static final String PARTDESCRIPTOR_PEAK_QUANTITATION_REFERENCES = "org.eclipse.chemclipse.ux.extension.xxd.ui.partdescriptor.peakQuantitationReferencesPartDescriptor";
-	public static final String PARTDESCRIPTOR_PlATE_CHARTS = "org.eclipse.chemclipse.ux.extension.xxd.ui.partdescriptor.plateChartsPartDescriptor";
-	public static final String PARTDESCRIPTOR_WELL_DATA = "org.eclipse.chemclipse.ux.extension.xxd.ui.partdescriptor.wellDataPartDescriptor";
-	public static final String PARTDESCRIPTOR_WELL_CHART = "org.eclipse.chemclipse.ux.extension.xxd.ui.partdescriptor.wellChartPartDescriptor";
-	public static final String PARTDESCRIPTOR_WELL_CHANNELS = "org.eclipse.chemclipse.ux.extension.xxd.ui.partdescriptor.wellChannelsPartDescriptor";
-	public static final String PARTDESCRIPTOR_PlATE_DATA = "org.eclipse.chemclipse.ux.extension.xxd.ui.partdescriptor.plateDataPartDescriptor";
 	public static final String PARTDESCRIPTOR_QUANT_RESPONSE_CHART = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.quantResponseChartPartDescriptor";
 	public static final String PARTDESCRIPTOR_QUANT_RESPONSE_LIST = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.quantResponseListPartDescriptor";
 	public static final String PARTDESCRIPTOR_QUANT_PEAKS_CHART = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.quantPeaksChartPartDescriptor";
@@ -88,7 +82,6 @@ public class PartSupport {
 	public static final String PARTDESCRIPTOR_QUANT_SIGNALS_LIST = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.quantSignalsListPartDescriptor";
 	//
 	public static final String PARTSTACK_NONE = "";
-	public static final String PARTSTACK_QUICKACCESS = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.quickaccess";
 	public static final String PARTSTACK_LEFT_TOP = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.left.top";
 	public static final String PARTSTACK_LEFT_CENTER = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.left.center"; // Default hidden
 	public static final String PARTSTACK_RIGHT_TOP = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.right.top"; // Default hidden
@@ -101,7 +94,6 @@ public class PartSupport {
 	private static Set<String> hiddenPartStacks = new HashSet<String>();
 	//
 	private static Map<String, String> partMap = new HashMap<String, String>();
-	private static Map<String, Map<Boolean, Map<Button, Image>>> partImageMap = new HashMap<String, Map<Boolean, Map<Button, Image>>>();
 	//
 	static {
 		hiddenPartStacks.add(PARTSTACK_LEFT_CENTER);
@@ -131,13 +123,11 @@ public class PartSupport {
 
 	public static MPart getPart(String partId, String partStackId, EPartService partService, EModelService modelService, MApplication application) {
 
-		MPart part = null;
-		MUIElement element = modelService.find(partId, application);
-		if(element instanceof MPart) {
+		MPart part = getPart(partId, modelService, application);
+		if(part != null) {
 			/*
 			 * Get the part or create it.
 			 */
-			part = (MPart)element;
 			if(!partService.getParts().contains(part)) {
 				partService.createPart(part.getElementId());
 			}
@@ -148,6 +138,84 @@ public class PartSupport {
 		}
 		//
 		return part;
+	}
+
+	public static boolean partStackContainsPart(String partId, String partStackId, EModelService modelService, MApplication application) {
+
+		MPartStack partStack = getPartStack(partStackId, modelService, application);
+		if(partStack != null) {
+			for(MStackElement stackElement : partStack.getChildren()) {
+				if(partId.equals(stackElement.getElementId())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public static MPartStack getPartStack(String partStackId, EModelService modelService, MApplication application) {
+
+		MUIElement element = getElement(partStackId, modelService, application);
+		if(element instanceof MPartStack) {
+			return (MPartStack)element;
+		}
+		//
+		return null;
+	}
+
+	public static MToolBar getToolBar(String toolBarId, EModelService modelService, MApplication application) {
+
+		MUIElement element = getElement(toolBarId, modelService, application);
+		if(element instanceof MToolBar) {
+			return (MToolBar)element;
+		}
+		//
+		return null;
+	}
+
+	public static MDirectToolItem getDirectToolItem(String toolItemId, EModelService modelService, MApplication application) {
+
+		MUIElement element = getElement(toolItemId, modelService, application);
+		if(element instanceof MDirectToolItem) {
+			return (MDirectToolItem)element;
+		}
+		//
+		return null;
+	}
+
+	public static MPart getPart(String partId, EModelService modelService, MApplication application) {
+
+		MUIElement element = getElement(partId, modelService, application);
+		if(element instanceof MPart) {
+			return (MPart)element;
+		}
+		//
+		return null;
+	}
+
+	public static MUIElement getElement(String elementId, EModelService modelService, MApplication application) {
+
+		return modelService.find(elementId, application);
+	}
+
+	public static boolean isPartVisible(String partId, EModelService modelService, MApplication application) {
+
+		MPart part = getPart(partId, modelService, application);
+		if(part != null) {
+			return part.isVisible();
+		}
+		//
+		return false;
+	}
+
+	public static boolean isPartToBeRendered(String partId, EModelService modelService, MApplication application) {
+
+		MPart part = getPart(partId, modelService, application);
+		if(part != null) {
+			return part.isToBeRendered();
+		}
+		//
+		return false;
 	}
 
 	/***
@@ -162,11 +230,9 @@ public class PartSupport {
 		boolean isVisible = false;
 		if(part != null) {
 			if(part.isVisible()) {
-				part.setVisible(false);
-				partService.hidePart(part);
+				setPartVisibility(part, partService, false);
 			} else {
-				part.setVisible(true);
-				partService.showPart(part, PartState.ACTIVATE);
+				setPartVisibility(part, partService, true);
 				isVisible = true;
 			}
 		}
@@ -230,11 +296,6 @@ public class PartSupport {
 		}
 	}
 
-	public static MPartStack getPartStack(String partStackId, EModelService modelService, MApplication application) {
-
-		return (MPartStack)modelService.find(partStackId, application);
-	}
-
 	public static void setAreaVisibility(String areaId, boolean visible, EModelService modelService, MApplication application) {
 
 		MArea area = (MArea)modelService.find(areaId, application);
@@ -290,25 +351,26 @@ public class PartSupport {
 		parent.redraw();
 	}
 
-	public static void setPartVisibility(String partId, String partStackId, boolean visible, EPartService partService, EModelService modelService, MApplication application, IEventBroker eventBroker) {
+	public static void setPartVisibility(String partId, String partStackId, boolean visible, EPartService partService, EModelService modelService, MApplication application) {
 
 		MPart part = getPart(partId, partStackId, partService, modelService, application);
-		setPartVisibility(part, visible, eventBroker);
+		setPartVisibility(part, partService, visible);
 	}
 
-	public static void setPartVisibility(MPart part, boolean visible, IEventBroker eventBroker) {
+	public static void setPartVisibility(MPart part, EPartService partService, boolean visible) {
 
 		if(part != null) {
+			/*
+			 * Show/Hide the part.
+			 */
 			part.setVisible(visible);
-			String partId = part.getElementId();
-			//
-			if(eventBroker != null) {
-				if(visible) {
-					eventBroker.post(IChemClipseEvents.TOPIC_TOGGLE_PART_VISIBILITY_TRUE, partId);
-				} else {
-					eventBroker.post(IChemClipseEvents.TOPIC_TOGGLE_PART_VISIBILITY_FALSE, partId);
-				}
+			if(visible) {
+				showPart(part, partService);
+			} else {
+				hidePart(part, partService);
 			}
+			//
+			logger.info("Visibility changed to '" + visible + "' for the part id: " + part.getElementId());
 		}
 	}
 
@@ -318,7 +380,7 @@ public class PartSupport {
 	 * @param partId
 	 * @param partStackId
 	 */
-	public static boolean togglePartVisibility(String partId, String partStackId, EPartService partService, EModelService modelService, MApplication application, IEventBroker eventBroker) {
+	public static boolean togglePartVisibility(String partId, String partStackId, EPartService partService, EModelService modelService, MApplication application) {
 
 		boolean visible = false;
 		if(PartSupport.PARTSTACK_NONE.equals(partStackId)) {
@@ -327,7 +389,7 @@ public class PartSupport {
 			 */
 			String currentPartStackId = partMap.get(partId);
 			if(currentPartStackId != null) {
-				setPartVisibility(partId, currentPartStackId, false, partService, modelService, application, eventBroker);
+				setPartVisibility(partId, currentPartStackId, false, partService, modelService, application);
 			}
 		} else {
 			/*
@@ -339,7 +401,7 @@ public class PartSupport {
 				/*
 				 * Initialize the part.
 				 */
-				setPartVisibility(partId, partStackId, false, partService, modelService, application, eventBroker);
+				setPartVisibility(partId, partStackId, false, partService, modelService, application);
 			} else {
 				/*
 				 * Move the part to another part stack.
@@ -365,15 +427,6 @@ public class PartSupport {
 			 */
 			MPart part = getPart(partId, partStackId, partService, modelService, application);
 			visible = togglePartVisibility(part, partStackId, partService);
-			/*
-			 * Fire an event.
-			 * E.g. the icons in the toolbar "TaskQuickAccessPart.java" will be modified.
-			 */
-			if(visible) {
-				eventBroker.post(IChemClipseEvents.TOPIC_TOGGLE_PART_VISIBILITY_TRUE, partId);
-			} else {
-				eventBroker.post(IChemClipseEvents.TOPIC_TOGGLE_PART_VISIBILITY_FALSE, partId);
-			}
 		}
 		//
 		return visible;
@@ -391,46 +444,6 @@ public class PartSupport {
 		if(partStack != null) {
 			partStack.setVisible(visible);
 		}
-	}
-
-	public static void addPartImageMappings(String partId, Button button, Image imageActive, Image imageDefault) {
-
-		addImageMappings(partImageMap, partId, button, imageActive, imageDefault);
-	}
-
-	public static void setButtonImage(String id, boolean visible) {
-
-		Map<Boolean, Map<Button, Image>> imageMap = partImageMap.get(id);
-		if(imageMap != null) {
-			Map<Button, Image> buttonMap = imageMap.get(visible);
-			if(buttonMap != null) {
-				for(Button button : buttonMap.keySet()) {
-					Image image = buttonMap.get(button);
-					if(image != null) {
-						button.setImage(image);
-					}
-				}
-			}
-		}
-	}
-
-	private static void addImageMappings(Map<String, Map<Boolean, Map<Button, Image>>> buttonImageMap, String partId, Button button, Image imageActive, Image imageDefault) {
-
-		HashMap<Boolean, Map<Button, Image>> imageMap = new HashMap<Boolean, Map<Button, Image>>();
-		/*
-		 * Active
-		 */
-		Map<Button, Image> activeMap = new HashMap<Button, Image>();
-		activeMap.put(button, imageActive);
-		imageMap.put(true, activeMap);
-		/*
-		 * Default
-		 */
-		Map<Button, Image> defaultMap = new HashMap<Button, Image>();
-		defaultMap.put(button, imageDefault);
-		imageMap.put(false, defaultMap);
-		//
-		buttonImageMap.put(partId, imageMap);
 	}
 
 	private static boolean is3xEditorPart(MPart mPart, String editorId) {

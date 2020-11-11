@@ -12,11 +12,38 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.ui.icons.core;
 
+import org.eclipse.chemclipse.rcp.ui.icons.Activator;
+
 public interface IApplicationImage extends IApplicationImageProvider {
+
+	/**
+	 * platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/comparisonScanDefault.gif
+	 * 
+	 * @param fileName
+	 * @param size
+	 * @return String
+	 */
+	public static String getLocation(String fileName, String size) {
+
+		String bundleName = Activator.getDefault().getBundle().getSymbolicName();
+		StringBuilder builder = new StringBuilder();
+		String[] values = fileName.split("/");
+		String imageName = values.length == 2 ? values[1] : "info.gif";
+		//
+		builder.append("platform:/plugin/");
+		builder.append(bundleName);
+		builder.append("/icons/");
+		builder.append(size);
+		builder.append("/");
+		builder.append(imageName);
+		//
+		return builder.toString();
+	}
 
 	String PICTOGRAM_SUBTRACT_SCAN_ONE = "org.eclipse.chemclipse.rcp.ui.icons/subtractScanOne.png";
 	String PICTOGRAM_SUBTRACT_SCAN_MANY = "org.eclipse.chemclipse.rcp.ui.icons/subtractScanMany.png";
 	/*
+	 * 7x7 (Decorator)
 	 * 8x8 (Decorator)
 	 */
 	String IMAGE_DECORATOR_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/decorator_active.gif";
@@ -342,6 +369,8 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_EXTERNAL_STANDARDS_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/externalStandardsActive.gif";
 	String IMAGE_EDIT_ENTRY_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/editEntryDefault.gif";
 	String IMAGE_EDIT_ENTRY_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/editEntryActive.gif";
+	String IMAGE_CHROMATOGRAM_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/chromatogramDefault.gif";
+	String IMAGE_CHROMATOGRAM_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/chromatogramActive.gif";
 	//
 	String IMAGE_PROCESS_CONTROL = "org.eclipse.chemclipse.rcp.ui.icons/processControl.gif";
 	String IMAGE_START_PROCESSING = "org.eclipse.chemclipse.rcp.ui.icons/startProcessing.gif";

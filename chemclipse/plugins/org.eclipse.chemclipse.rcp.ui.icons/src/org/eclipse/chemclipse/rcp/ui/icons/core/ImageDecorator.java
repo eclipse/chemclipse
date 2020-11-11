@@ -63,7 +63,7 @@ public class ImageDecorator extends CompositeImageDescriptor {
 				@Override
 				public ImageData getImageData(int zoom) {
 
-					return ImageModifier.toGrayScale(image);
+					return image.getImageData();
 				}
 			};
 			drawImage(imageDataProvider, 0, 0);
@@ -72,7 +72,7 @@ public class ImageDecorator extends CompositeImageDescriptor {
 
 	private void drawDecorator(int width, int height) {
 
-		Image decorator = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DECORATOR_ACTIVE, IApplicationImage.SIZE_8x8);
+		Image decorator = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DECORATOR_ACTIVE, IApplicationImage.SIZE_7x7);
 		ImageDataProvider imageDataProvider = new ImageDataProvider() {
 
 			@Override
@@ -84,7 +84,7 @@ public class ImageDecorator extends CompositeImageDescriptor {
 		/*
 		 * Place the decorator in the upper right edge, space 1 px.
 		 */
-		drawImage(imageDataProvider, width - 9, 1);
+		drawImage(imageDataProvider, width - 8, 1);
 	}
 
 	private void calculateSize() {

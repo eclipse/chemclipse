@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,12 +20,13 @@ import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.swt.widgets.Composite;
 
-public class NMROverlayPart {
+public class NMROverlayPart extends AbstractPart {
 
 	private ExtendedNMROverlayUI extendedNMROverlayUI;
 
 	@Inject
 	public NMROverlayPart(Composite parent, EPartService partservice) {
+
 		extendedNMROverlayUI = new ExtendedNMROverlayUI(parent, partservice, Activator.getDefault().getPreferenceStore());
 	}
 

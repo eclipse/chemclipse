@@ -90,7 +90,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.chemclipse.xxd.process.ui;bundle-version="0.8.0",
  org.eclipse.chemclipse.xxd.model;bundle-version="0.8.0",
  org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract;bundle-version="0.8.0",
- org.apache.commons.lang3;bundle-version="3.1.0"
+ org.apache.commons.lang3;bundle-version="3.1.0",
+ org.eclipse.emf.ecore;bundle-version="2.14.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Service-Component: OSGI-INF/deleteAllIdentificationsHandlerMSD.xml,
  OSGI-INF/deleteAllIdentificationsHandlerCSD.xml,

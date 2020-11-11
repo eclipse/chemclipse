@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,28 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.jface.preference.ComboFieldEditor;
-import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPreferencePage;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.toolbar.GroupHandler;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.toolbar.GroupHandlerISTD;
 
-public class PreferencePageTaskISTD extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class PreferencePageTaskISTD extends AbstractPreferencePageTask {
 
 	public PreferencePageTaskISTD() {
-		super(GRID);
-		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setTitle("Internal Standards (ISTD)");
-		setDescription("");
-	}
 
-	public void createFieldEditors() {
-
-		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_INTERNAL_STANDARDS, "Internal Standards:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_STACK_POSITION_PEAK_QUANTITATION_REFERENCES, "Peak Quantitation References:", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
-	}
-
-	public void init(IWorkbench workbench) {
-
+		super(GroupHandler.getGroupHandler(GroupHandlerISTD.NAME));
 	}
 }

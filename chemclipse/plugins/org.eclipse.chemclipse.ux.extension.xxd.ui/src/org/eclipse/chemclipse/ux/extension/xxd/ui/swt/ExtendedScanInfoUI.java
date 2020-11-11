@@ -158,7 +158,7 @@ public class ExtendedScanInfoUI extends Composite {
 
 	private ScanInfoListUI createScanInfoList(Composite parent) {
 
-		ScanInfoListUI scanInfoListUI = new ScanInfoListUI(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		ScanInfoListUI scanInfoListUI = new ScanInfoListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		Table table = scanInfoListUI.getTable();
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
 		table.addSelectionListener(new SelectionAdapter() {

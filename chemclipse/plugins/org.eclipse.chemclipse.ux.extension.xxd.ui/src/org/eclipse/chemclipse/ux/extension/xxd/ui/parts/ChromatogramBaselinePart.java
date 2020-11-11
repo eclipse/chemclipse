@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -25,12 +25,13 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
-public class BaselinePart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
+public class ChromatogramBaselinePart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
 
 	private ExtendedBaselineUI extendedBaselineUI;
 
 	@Inject
-	public BaselinePart(Composite parent, MPart part) {
+	public ChromatogramBaselinePart(Composite parent, MPart part) {
+
 		super(part);
 		parent.setLayout(new FillLayout());
 		extendedBaselineUI = new ExtendedBaselineUI(parent);
