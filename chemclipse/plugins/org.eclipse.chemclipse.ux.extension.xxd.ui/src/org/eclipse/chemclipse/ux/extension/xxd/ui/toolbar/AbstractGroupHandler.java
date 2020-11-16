@@ -112,13 +112,6 @@ public abstract class AbstractGroupHandler implements IGroupHandler {
 		return DIRECT_MENU_ITEM + "." + getGroupHandlerId();
 	}
 
-	private void adjustToolTip(MDirectToolItem directToolItem, boolean show) {
-
-		if(directToolItem != null) {
-			directToolItem.setTooltip(show ? "Deactivate all referenced parts." : "Activate all referenced parts.");
-		}
-	}
-
 	private void adjustIcon(MDirectToolItem directToolItem, boolean show) {
 
 		if(directToolItem != null) {
@@ -130,7 +123,6 @@ public abstract class AbstractGroupHandler implements IGroupHandler {
 
 	private void activateParts(MDirectToolItem directToolItem, boolean show) {
 
-		adjustToolTip(directToolItem, show);
 		adjustIcon(directToolItem, show);
 		/*
 		 * If parts are activated, only activate the manadatory parts.
