@@ -21,6 +21,8 @@ import org.eclipse.jface.preference.IPreferencePage;
 public class GroupHandler {
 
 	private static Map<String, IGroupHandler> groupHandlerMap = new HashMap<>();
+	private static Map<String, IGroupHandler> activateMap = new HashMap<>();
+	private static Map<String, IGroupHandler> deactivateMap = new HashMap<>();
 	private static Map<String, Boolean> visibilityMap = new HashMap<>();
 	private static Map<String, IPartHandler> partHandlerMap = new HashMap<>();
 	//
@@ -49,7 +51,26 @@ public class GroupHandler {
 
 		IGroupHandler groupHandler = getGroupHandler(GroupHandlerScans.NAME);
 		if(groupHandler != null) {
-			groupHandler.activateParts();
+			groupHandler.setPartStatus(true);
+		}
+	}
+
+	public static void actionParts(String elementId) {
+
+		IGroupHandler groupHandler = null;
+		boolean visible = false;
+		//
+		if(elementId.endsWith(Action.SHOW.getId())) {
+			groupHandler = activateMap.get(elementId);
+			visible = true;
+		} else {
+			groupHandler = deactivateMap.get(elementId);
+			visible = false;
+		}
+		//
+		System.out.println(elementId);
+		if(groupHandler != null) {
+			groupHandler.setPartStatus(visible);
 		}
 	}
 
@@ -83,6 +104,11 @@ public class GroupHandler {
 		return Collections.emptyList();
 	}
 
+	public static void setShow(String name, boolean visible) {
+
+		visibilityMap.put(name, visible);
+	}
+
 	public static boolean toggleShow(String name) {
 
 		boolean partsAreActivated = !visibilityMap.getOrDefault(name, false);
@@ -99,6 +125,8 @@ public class GroupHandler {
 
 		String name = groupHandler.getName();
 		groupHandlerMap.put(name, groupHandler);
+		activateMap.put(groupHandler.getActionElementId(Action.SHOW), groupHandler);
+		deactivateMap.put(groupHandler.getActionElementId(Action.HIDE), groupHandler);
 		visibilityMap.put(name, false);
 		//
 		for(IPartHandler partHandler : groupHandler.getPartHandler()) {

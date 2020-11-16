@@ -11,33 +11,24 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.toolbar;
 
-import java.util.List;
+public enum Action {
+	SHOW("Show"), //
+	HIDE("Hide");
 
-import org.eclipse.jface.preference.IPreferencePage;
+	private String label = "";
 
-public interface IGroupHandler {
+	private Action(String label) {
 
-	List<IPreferencePage> getPreferencePages();
+		this.label = label;
+	}
 
-	List<IPartHandler> getPartHandler();
+	public String getLabel() {
 
-	List<IPartHandler> getPartHandlerMandatory();
+		return label;
+	}
 
-	List<IPartHandler> getPartHandlerAdditional();
+	public String getId() {
 
-	void setPartStatus(boolean visible);
-
-	void updateMenu();
-
-	String getPartElementId(IPartHandler partHandler);
-
-	String getSettingsElementId();
-
-	String getActionElementId(Action action);
-
-	String getImageHide();
-
-	String getImageShow();
-
-	String getName();
+		return label.toLowerCase();
+	}
 }

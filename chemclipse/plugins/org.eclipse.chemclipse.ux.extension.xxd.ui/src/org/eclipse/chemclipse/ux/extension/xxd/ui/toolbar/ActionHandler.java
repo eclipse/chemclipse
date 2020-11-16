@@ -11,33 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.toolbar;
 
-import java.util.List;
+import org.eclipse.e4.core.di.annotations.Execute;
+import org.eclipse.e4.ui.model.application.ui.menu.MDirectMenuItem;
 
-import org.eclipse.jface.preference.IPreferencePage;
+public class ActionHandler {
 
-public interface IGroupHandler {
+	@Execute
+	public void execute(MDirectMenuItem menuItem) {
 
-	List<IPreferencePage> getPreferencePages();
-
-	List<IPartHandler> getPartHandler();
-
-	List<IPartHandler> getPartHandlerMandatory();
-
-	List<IPartHandler> getPartHandlerAdditional();
-
-	void setPartStatus(boolean visible);
-
-	void updateMenu();
-
-	String getPartElementId(IPartHandler partHandler);
-
-	String getSettingsElementId();
-
-	String getActionElementId(Action action);
-
-	String getImageHide();
-
-	String getImageShow();
-
-	String getName();
+		if(menuItem != null) {
+			String elementId = menuItem.getElementId();
+			GroupHandler.actionParts(elementId);
+		}
+	}
 }
