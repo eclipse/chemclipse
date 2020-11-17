@@ -18,12 +18,15 @@ import java.util.List;
 @SuppressWarnings("rawtypes")
 public abstract class AbstractSample<D extends ISampleData> implements ISample {
 
-	private String groupName;
 	private String name;
+	private String groupName;
+	private String classification;
+	private String description;
 	private List<D> sampleData;
 	private boolean selected;
 
 	public AbstractSample(String name) {
+
 		this.name = name;
 		sampleData = new ArrayList<>();
 		selected = true;
@@ -46,15 +49,51 @@ public abstract class AbstractSample<D extends ISampleData> implements ISample {
 	}
 
 	@Override
+	public String getName() {
+
+		return name;
+	}
+
+	@Override
+	public void setName(String name) {
+
+		this.name = name;
+	}
+
+	@Override
 	public String getGroupName() {
 
 		return groupName;
 	}
 
 	@Override
-	public String getName() {
+	public void setGroupName(String groupName) {
 
-		return name;
+		this.groupName = groupName;
+	}
+
+	@Override
+	public String getClassification() {
+
+		return classification;
+	}
+
+	@Override
+	public void setClassification(String classification) {
+
+		this.classification = classification;
+	}
+
+	@Override
+	public String getDescription() {
+
+		return description;
+	}
+
+	@Override
+	public void setDescription(String description) {
+
+		this.description = description;
 	}
 
 	@Override
@@ -67,18 +106,6 @@ public abstract class AbstractSample<D extends ISampleData> implements ISample {
 	public boolean isSelected() {
 
 		return selected;
-	}
-
-	@Override
-	public void setGroupName(String groupName) {
-
-		this.groupName = groupName;
-	}
-
-	@Override
-	public void setName(String name) {
-
-		this.name = name;
 	}
 
 	@Override

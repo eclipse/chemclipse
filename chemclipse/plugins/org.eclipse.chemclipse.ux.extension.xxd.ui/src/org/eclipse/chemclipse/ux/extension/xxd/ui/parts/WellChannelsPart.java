@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,56 +17,52 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.pcr.model.core.IWell;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedWellChannelsUI;
-import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class WellChannelsPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
+public class WellChannelsPart extends AbstractPart<ExtendedWellChannelsUI> {
 
-	private ExtendedWellChannelsUI extendedWellChannelsUI;
+	private static final String TOPIC = IChemClipseEvents.TOPIC_WELL_PCR_UPDATE_SELECTION;
 
 	@Inject
-	public WellChannelsPart(Composite parent, MPart part) {
-		super(part);
-		extendedWellChannelsUI = new ExtendedWellChannelsUI(parent);
-	}
+	public WellChannelsPart(Composite parent) {
 
-	@Focus
-	public void setFocus() {
-
-		updateObjects(getObjects(), getTopic());
+		super(parent, TOPIC);
 	}
 
 	@Override
-	public void registerEvents() {
+	protected ExtendedWellChannelsUI createControl(Composite parent) {
 
-		registerEvent(IChemClipseEvents.TOPIC_WELL_PCR_UPDATE_SELECTION, IEventBroker.DATA);
-		registerEvent(IChemClipseEvents.TOPIC_WELL_PCR_UNLOAD_SELECTION, IEventBroker.DATA);
-		registerEvent(IChemClipseEvents.TOPIC_PLATE_PCR_UNLOAD_SELECTION, IEventBroker.DATA);
+		return new ExtendedWellChannelsUI(parent, SWT.NONE);
 	}
 
 	@Override
-	public void updateObjects(List<Object> objects, String topic) {
+	protected boolean updateData(List<Object> objects, String topic) {
 
-		/*
-		 * 0 => because only one property was used to register the event.
-		 */
 		if(objects.size() == 1) {
 			if(isUnloadEvent(topic)) {
-				extendedWellChannelsUI.update(null);
+				getControl().update(null);
+				return false;
 			} else {
 				Object object = objects.get(0);
 				if(object instanceof IWell) {
-					extendedWellChannelsUI.update((IWell)object);
+					getControl().update((IWell)object);
+					return true;
 				} else {
-					extendedWellChannelsUI.update(null);
+					getControl().update(null);
+					return true;
 				}
 			}
 		}
+		//
+		return false;
+	}
+
+	@Override
+	protected boolean isUpdateTopic(String topic) {
+
+		return TOPIC.equals(topic) || isUnloadEvent(topic);
 	}
 
 	private boolean isUnloadEvent(String topic) {

@@ -7,14 +7,14 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.part.support;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.List;
-
-import javax.annotation.PreDestroy;
+import java.util.Set;
 
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
@@ -25,58 +25,27 @@ import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMS
 import org.eclipse.chemclipse.nmr.converter.core.ScanConverterNMR;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 import org.eclipse.chemclipse.xir.converter.core.ScanConverterXIR;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 
-public abstract class AbstractOverviewUpdateSupport extends AbstractDataUpdateSupport implements IOverviewUpdateSupport {
+public class OverviewSupport {
 
-	private String filePath = "";
+	private String lastDisplayedFile = "";
+	private Set<String> topics = new HashSet<>();
+	private IOverviewListener overviewListener;
 
-	public AbstractOverviewUpdateSupport(MPart part) {
+	public OverviewSupport() {
 
-		super(part);
+		initializeTopics();
 	}
 
-	@Override
-	public void registerEvents() {
+	public boolean isUpdateTopic(String topic) {
 
-		/*
-		 * Raw files
-		 */
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_RAWFILE, IChemClipseEvents.PROPERTY_CHROMATOGRAM_MSD_RAWFILE);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_RAWFILE, IChemClipseEvents.PROPERTY_CHROMATOGRAM_CSD_RAWFILE);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_RAWFILE, IChemClipseEvents.PROPERTY_CHROMATOGRAM_WSD_RAWFILE);
-		registerEvent(IChemClipseEvents.TOPIC_SCAN_NMR_UPDATE_RAWFILE, IChemClipseEvents.PROPERTY_SCAN_NMR_RAWFILE);
-		registerEvent(IChemClipseEvents.TOPIC_SCAN_XIR_UPDATE_RAWFILE, IChemClipseEvents.PROPERTY_SCAN_XIR_RAWFILE);
-		/*
-		 * Overview
-		 */
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_OVERVIEW, IChemClipseEvents.PROPERTY_CHROMATOGRAM_MSD_OVERVIEW);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_OVERVIEW, IChemClipseEvents.PROPERTY_CHROMATOGRAM_CSD_OVERVIEW);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_OVERVIEW, IChemClipseEvents.PROPERTY_CHROMATOGRAM_WSD_OVERVIEW);
-		registerEvent(IChemClipseEvents.TOPIC_SCAN_NMR_UPDATE_OVERVIEW, IChemClipseEvents.PROPERTY_SCAN_NMR_OVERVIEW);
-		registerEvent(IChemClipseEvents.TOPIC_SCAN_XIR_UPDATE_OVERVIEW, IChemClipseEvents.PROPERTY_SCAN_XIR_OVERVIEW);
-		/*
-		 * Chromatogram Selection
-		 */
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
-		/*
-		 * Unload
-		 */
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_NONE, IChemClipseEvents.PROPERTY_CHROMATOGRAM_XXD_RAWFILE);
+		return topics.contains(topic);
 	}
 
-	@SuppressWarnings("rawtypes")
-	@Override
-	public void updateObjects(List<Object> objects, String topic) {
+	public boolean process(List<Object> objects, String topic) {
 
 		/*
 		 * 0 => because only one property was used to register the event.
@@ -85,46 +54,45 @@ public abstract class AbstractOverviewUpdateSupport extends AbstractDataUpdateSu
 			Object object = objects.get(0);
 			if(object instanceof IChromatogramOverview) {
 				IChromatogramOverview chromatogramOverview = (IChromatogramOverview)object;
-				update(chromatogramOverview);
+				return fireUpdate(chromatogramOverview);
 			} else if(object instanceof IChromatogramSelection) {
-				IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
-				updateChromatogramSelection(chromatogramSelection);
+				IChromatogramSelection<?, ?> chromatogramSelection = (IChromatogramSelection<?, ?>)object;
+				return updateChromatogramSelection(chromatogramSelection);
 			} else if(object instanceof File) {
 				File file = (File)object;
-				updateFile(file, topic);
+				return updateFile(file, topic);
 			} else {
 				if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_NONE)) {
-					update(null);
+					return fireUpdate(null);
 				}
 			}
 		}
+		//
+		return false;
 	}
 
-	@PreDestroy
-	protected void preDestroy() {
+	public void setOverviewListener(IOverviewListener overviewListener) {
 
-		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-		if(eventBroker != null) {
-			eventBroker.send(IChemClipseEvents.TOPIC_PART_CLOSED, getClass().getSimpleName());
-		}
+		this.overviewListener = overviewListener;
 	}
 
-	@SuppressWarnings("rawtypes")
-	private void updateChromatogramSelection(IChromatogramSelection chromatogramSelection) {
+	private boolean updateChromatogramSelection(IChromatogramSelection<?, ?> chromatogramSelection) {
 
-		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 		if(chromatogram != null) {
-			update(chromatogram);
+			return fireUpdate(chromatogram);
 		}
+		//
+		return false;
 	}
 
-	private void updateFile(File file, String topic) {
+	private boolean updateFile(File file, String topic) {
 
-		if(!file.getAbsolutePath().equals(filePath)) {
+		if(!file.getAbsolutePath().equals(lastDisplayedFile)) {
 			/*
 			 * Only load the overview if it is a new file.
 			 */
-			filePath = file.getAbsolutePath();
+			lastDisplayedFile = file.getAbsolutePath();
 			//
 			if(topic.equals(IChemClipseEvents.TOPIC_SCAN_NMR_UPDATE_RAWFILE)) {
 				/*
@@ -132,8 +100,15 @@ public abstract class AbstractOverviewUpdateSupport extends AbstractDataUpdateSu
 				 */
 				IProcessingInfo<?> processingInfo = ScanConverterNMR.convert(file, new NullProgressMonitor());
 				Object data = processingInfo.getProcessingResult();
-				if(data instanceof IMeasurementInfo) {
-					update(data);
+				if(data instanceof List<?>) {
+					@SuppressWarnings({"unchecked", "rawtypes"})
+					List<Object> list = (List)data;
+					if(list.size() > 0) {
+						/*
+						 * IComplexSignalMeasurement<?>
+						 */
+						return fireUpdate(list.get(0));
+					}
 				}
 			} else if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XIR_UPDATE_RAWFILE)) {
 				/*
@@ -142,7 +117,7 @@ public abstract class AbstractOverviewUpdateSupport extends AbstractDataUpdateSu
 				IProcessingInfo<?> processingInfo = ScanConverterXIR.convert(file, new NullProgressMonitor());
 				Object data = processingInfo.getProcessingResult();
 				if(data instanceof IMeasurementInfo) {
-					update(data);
+					return fireUpdate(data);
 				}
 			} else {
 				/*
@@ -150,10 +125,12 @@ public abstract class AbstractOverviewUpdateSupport extends AbstractDataUpdateSu
 				 */
 				IChromatogramOverview chromatogramOverview = getChromatogramOverview(file, topic);
 				if(chromatogramOverview != null) {
-					update(chromatogramOverview);
+					return fireUpdate(chromatogramOverview);
 				}
 			}
 		}
+		//
+		return false;
 	}
 
 	private IChromatogramOverview getChromatogramOverview(File file, String topic) {
@@ -177,5 +154,34 @@ public abstract class AbstractOverviewUpdateSupport extends AbstractDataUpdateSu
 		}
 		//
 		return chromatogramOverview;
+	}
+
+	private boolean fireUpdate(Object object) {
+
+		if(overviewListener != null) {
+			overviewListener.update(object);
+			return true;
+		}
+		//
+		return false;
+	}
+
+	private void initializeTopics() {
+
+		topics.add(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION);
+		topics.add(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION);
+		topics.add(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION);
+		topics.add(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION);
+		topics.add(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_RAWFILE);
+		topics.add(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_RAWFILE);
+		topics.add(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_RAWFILE);
+		topics.add(IChemClipseEvents.TOPIC_SCAN_NMR_UPDATE_RAWFILE);
+		topics.add(IChemClipseEvents.TOPIC_SCAN_XIR_UPDATE_RAWFILE);
+		topics.add(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_OVERVIEW);
+		topics.add(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_OVERVIEW);
+		topics.add(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_OVERVIEW);
+		topics.add(IChemClipseEvents.TOPIC_SCAN_NMR_UPDATE_OVERVIEW);
+		topics.add(IChemClipseEvents.TOPIC_SCAN_XIR_UPDATE_OVERVIEW);
+		topics.add(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_NONE);
 	}
 }

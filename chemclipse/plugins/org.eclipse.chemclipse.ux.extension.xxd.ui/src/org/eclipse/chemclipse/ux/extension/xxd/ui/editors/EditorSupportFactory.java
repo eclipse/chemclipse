@@ -17,7 +17,6 @@ import java.util.function.Supplier;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
 import org.eclipse.chemclipse.xxd.process.files.SupplierFileIdentifier;
 import org.eclipse.e4.core.contexts.IEclipseContext;
@@ -26,13 +25,6 @@ public class EditorSupportFactory {
 
 	private final ISupplierFileIdentifier supplierFileIdentifier;
 	private final ISupplierEditorSupport supplierEditorSupport;
-
-	@Deprecated
-	public EditorSupportFactory(DataType dataType) {
-
-		supplierFileIdentifier = new SupplierFileIdentifier(dataType);
-		supplierEditorSupport = new SupplierEditorSupport(dataType, () -> Activator.getDefault().getEclipseContext());
-	}
 
 	public EditorSupportFactory(DataType dataType, Supplier<IEclipseContext> context) {
 

@@ -13,10 +13,9 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import javax.inject.Inject;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.types.DataType;
@@ -33,16 +32,10 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.SequenceFil
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSequences;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.preference.PreferenceDialog;
-import org.eclipse.jface.preference.PreferenceManager;
-import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -54,9 +47,10 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 
-public class ExtendedSequenceExplorerUI {
+public class ExtendedSequenceExplorerUI extends Composite implements IExtendedPartUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedSequenceExplorerUI.class);
 	//
@@ -68,28 +62,29 @@ public class ExtendedSequenceExplorerUI {
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private ISupplierEditorSupport supplierEditorSupport = new SupplierEditorSupport(DataType.SEQ, () -> Activator.getDefault().getEclipseContext());
 
-	@Inject
-	public ExtendedSequenceExplorerUI(Composite parent) {
+	public ExtendedSequenceExplorerUI(Composite parent, int style) {
 
-		initialize(parent);
+		super(parent, style);
+		createControl();
 	}
 
-	public void setFocus() {
+	public boolean setFocus() {
 
 		sequenceFilesUI.getTable().setFocus();
+		return true;
 	}
 
-	private void initialize(Composite parent) {
+	private void createControl() {
 
-		parent.setLayout(new GridLayout(1, true));
-		parent.setBackground(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
+		setLayout(new GridLayout(1, true));
+		setBackground(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		//
-		createToolbarMain(parent);
-		toolbarSearch = createToolbarSearch(parent);
-		createSequenceSelection(parent);
+		createToolbarMain(this);
+		toolbarSearch = createToolbarSearch(this);
+		createSequenceSelection(this);
 		//
 		PartSupport.setCompositeVisibility(toolbarSearch, false);
-		adjustSettings();
+		applySettings();
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -146,31 +141,12 @@ public class ExtendedSequenceExplorerUI {
 
 	private void createSettingsButton(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Open the Settings");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		createSettingsButton(parent, Arrays.asList(PreferencePageSequences.class), new ISettingsHandler() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void apply(Display display) {
 
-				IPreferencePage preferencePage1 = new PreferencePageSequences();
-				preferencePage1.setTitle("Sequences");
-				//
-				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage1));
-				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
-				preferenceDialog.create();
-				preferenceDialog.setMessage("Settings");
-				if(preferenceDialog.open() == Window.OK) {
-					try {
-						adjustSettings();
-					} catch(Exception e1) {
-						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the chart settings.");
-					}
-				}
+				applySettings();
 			}
 		});
 	}
@@ -437,7 +413,7 @@ public class ExtendedSequenceExplorerUI {
 		}
 	}
 
-	private void adjustSettings() {
+	private void applySettings() {
 
 		File file = new File(preferenceStore.getString(PreferenceConstants.P_SEQUENCE_EXPLORER_PATH_ROOT_FOLDER));
 		if(file.exists() && file.isDirectory()) {

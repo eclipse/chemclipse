@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,8 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Jan Holy - initial API and implementation
+ * Philip Wenig - initial API and implementation
+ * Jan Holy - initial API and implementation, code copied from ChromatogramHeatmapUI
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 
@@ -26,11 +27,12 @@ import org.eclipse.chemclipse.wsd.model.xwc.ExtractedSingleWavelengthSignalExtra
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedSingleWavelengthSignalExtractor;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedSingleWavelengthSignals;
 import org.eclipse.nebula.visualization.widgets.datadefinition.FloatArrayWrapper;
+import org.eclipse.nebula.visualization.widgets.datadefinition.IPrimaryArrayWrapper;
 import org.eclipse.nebula.visualization.xygraph.linearscale.Range;
 
 public class ChromatogramHeatmapSupport {
 
-	public Optional<ChromatogramHeatmapData> getHeatmap(@SuppressWarnings("rawtypes") IChromatogram chromatogram) {
+	public Optional<ChromatogramHeatmapData> getHeatmapData(IChromatogram<?> chromatogram) {
 
 		if(chromatogram instanceof IChromatogramMSD) {
 			return getHeatmap((IChromatogramMSD)chromatogram);
@@ -41,55 +43,66 @@ public class ChromatogramHeatmapSupport {
 		}
 	}
 
-	public Optional<ChromatogramHeatmapData> getHeatmap(IChromatogramWSD chromatogram) {
+	private Optional<ChromatogramHeatmapData> getHeatmap(IChromatogramWSD chromatogram) {
 
 		IExtractedSingleWavelengthSignalExtractor extractor = new ExtractedSingleWavelengthSignalExtractor(chromatogram, true);
 		List<IExtractedSingleWavelengthSignals> signals = extractor.getExtractedWavelengthSignals();
 		if(signals.size() >= 2) {
 			//
-			double startWavelength = signals.get(0).getWavelength();
-			double stopWavelength = signals.get(signals.size() - 1).getWavelength();
 			int startScan = 1;
 			int stopScan = chromatogram.getNumberOfScans();
+			//
+			double startWavelength = signals.get(0).getWavelength();
+			double stopWavelength = signals.get(signals.size() - 1).getWavelength();
+			//
 			int dataHeight = signals.size(); // y -> wavelength
 			int dataWidth = stopScan - startScan + 1; // x -> scans
+			//
 			double startRetentionTime = chromatogram.getStartRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR;
 			double stopRetentionTime = chromatogram.getStopRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR;
+			//
 			float[] heatmapData = new float[dataHeight * dataWidth * 2];
 			int j = 0;
 			for(int signalNumber = signals.size() - 1; signalNumber >= 0; signalNumber--) {
 				IExtractedSingleWavelengthSignals signal = signals.get(signalNumber);
 				for(int scan = startScan; scan <= stopScan; scan++) {
 					/*
-					 * 
+					 * XY data
 					 */
 					int i = Math.min(Math.max(signal.getStartScan(), scan), signal.getStopScan());
 					heatmapData[j] = signal.getTotalScanSignal(i).getTotalSignal();
 					j++;
 				}
 			}
+			//
 			float maxAbudance = -Float.MAX_VALUE;
 			float minAbudance = Float.MAX_VALUE;
-			for(float f : heatmapData) {
-				maxAbudance = Float.max(maxAbudance, f);
-				minAbudance = Float.min(minAbudance, f);
+			for(float value : heatmapData) {
+				maxAbudance = Float.max(maxAbudance, value);
+				minAbudance = Float.min(minAbudance, value);
 			}
-			return Optional.of(new ChromatogramHeatmapData(new FloatArrayWrapper(heatmapData), new Range(startRetentionTime, stopRetentionTime), new Range(startWavelength, stopWavelength), minAbudance, maxAbudance, dataWidth, dataHeight));
+			//
+			IPrimaryArrayWrapper arrayWrapper = new FloatArrayWrapper(heatmapData);
+			Range axisRangeWidth = new Range(startRetentionTime, stopRetentionTime);
+			Range axisRangeHeight = new Range(startWavelength, stopWavelength);
+			double minimum = minAbudance;
+			double maximum = maxAbudance;
+			//
+			return Optional.of(new ChromatogramHeatmapData(arrayWrapper, axisRangeWidth, axisRangeHeight, minimum, maximum, dataWidth, dataHeight));
 		}
 		return Optional.empty();
 	}
 
-	public Optional<ChromatogramHeatmapData> getHeatmap(IChromatogramMSD chromatogram) {
+	private Optional<ChromatogramHeatmapData> getHeatmap(IChromatogramMSD chromatogram) {
 
-		IExtractedIonSignalExtractor extractedIonSignalExtractor;
-		extractedIonSignalExtractor = new ExtractedIonSignalExtractor(chromatogram);
-		IExtractedIonSignals extractedIonSignals = extractedIonSignalExtractor.getExtractedIonSignals();
+		IExtractedIonSignalExtractor extractor = new ExtractedIonSignalExtractor(chromatogram);
+		IExtractedIonSignals signals = extractor.getExtractedIonSignals();
 		//
-		int startScan = extractedIonSignals.getStartScan();
-		int stopScan = extractedIonSignals.getStopScan();
+		int startScan = signals.getStartScan();
+		int stopScan = signals.getStopScan();
 		//
-		int startIon = extractedIonSignals.getStartIon();
-		int stopIon = extractedIonSignals.getStopIon();
+		int startIon = signals.getStartIon();
+		int stopIon = signals.getStopIon();
 		//
 		int dataWidth = stopScan - startScan + 1; // x -> scans
 		int dataHeight = stopIon - startIon + 1; // x -> m/z values
@@ -102,22 +115,17 @@ public class ChromatogramHeatmapSupport {
 		if(dataHeight <= 1 || dataWidth <= 1) {
 			return Optional.empty();
 		}
-		/*
-		 * Parse the heatmap data
-		 */
+		//
 		float[] heatmapData = new float[dataWidth * dataHeight * 2];
-		/*
-		 * Y-Axis: Scans
-		 */
+		//
 		int i = 0;
 		for(int ion = stopIon; ion >= startIon; ion--) {
 			for(int scan = startScan; scan <= stopScan; scan++) {
-				IExtractedIonSignal extractedIonSignal;
 				try {
-					extractedIonSignal = extractedIonSignals.getExtractedIonSignal(scan);
 					/*
 					 * XY data
 					 */
+					IExtractedIonSignal extractedIonSignal = signals.getExtractedIonSignal(scan);
 					heatmapData[i] = extractedIonSignal.getAbundance(ion);
 				} catch(NoExtractedIonSignalStoredException e) {
 					heatmapData[i] = 0;
@@ -125,13 +133,20 @@ public class ChromatogramHeatmapSupport {
 				i++;
 			}
 		}
+		//
 		float maxAbudance = -Float.MAX_VALUE;
 		float minAbudance = Float.MAX_VALUE;
-		for(float f : heatmapData) {
-			maxAbudance = Float.max(maxAbudance, f);
-			minAbudance = Float.min(minAbudance, f);
+		for(float value : heatmapData) {
+			maxAbudance = Float.max(maxAbudance, value);
+			minAbudance = Float.min(minAbudance, value);
 		}
-		maxAbudance = (float)(maxAbudance / (dataWidth / 5.0d));
-		return Optional.of(new ChromatogramHeatmapData(new FloatArrayWrapper(heatmapData), new Range(startRetentionTime, stopRetentionTime), new Range(startIon, stopIon), minAbudance, maxAbudance, dataWidth, dataHeight));
+		//
+		IPrimaryArrayWrapper arrayWrapper = new FloatArrayWrapper(heatmapData);
+		Range axisRangeWidth = new Range(startRetentionTime, stopRetentionTime);
+		Range axisRangeHeight = new Range(startIon, stopIon);
+		double minimum = minAbudance;
+		double maximum = (float)(maxAbudance / (dataWidth / 5.0d));
+		//
+		return Optional.of(new ChromatogramHeatmapData(arrayWrapper, axisRangeWidth, axisRangeHeight, minimum, maximum, dataWidth, dataHeight));
 	}
 }

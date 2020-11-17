@@ -12,8 +12,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
-import java.util.EnumSet;
+import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 import javax.inject.Inject;
@@ -32,10 +33,9 @@ import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
-import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChartConfigSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.runnables.LibraryServiceRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
@@ -43,12 +43,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.preference.PreferenceDialog;
-import org.eclipse.jface.preference.PreferenceManager;
-import org.eclipse.jface.preference.PreferenceNode;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -59,9 +54,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Label;
 
-public class ExtendedComparisonScanUI implements ConfigurableUI<ComparisonScanUIConfig> {
+public class ExtendedComparisonScanUI extends Composite implements IExtendedPartUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedComparisonScanUI.class);
 	//
@@ -82,12 +76,12 @@ public class ExtendedComparisonScanUI implements ConfigurableUI<ComparisonScanUI
 	private static final String POSTFIX_SHIFTED = " SHIFTED (+1)";
 	//
 	private Button buttonOptimizedScan;
-	private Label labelInfoReference;
-	private Composite toolbarInfoUnknown;
+	private Button buttonToolbarInfo;
+	private AtomicReference<InformationUI> toolbarInfoTop = new AtomicReference<>();
+	private AtomicReference<InformationUI> toolbarInfoBottom = new AtomicReference<>();
 	private ScanChartUI scanChartUI;
-	private Label labelInfoComparison;
-	private Composite toolbarInfoReference;
-	private Composite toolbarOptions;
+	private Button buttonToolbarEdit;
+	private AtomicReference<Composite> toolbarEdit = new AtomicReference<>();
 	//
 	private IScanMSD scan1 = null;
 	private IScanMSD scan2 = null;
@@ -100,21 +94,19 @@ public class ExtendedComparisonScanUI implements ConfigurableUI<ComparisonScanUI
 	private boolean displayShifted = false;
 	//
 	private final ScanDataSupport scanDataSupport = new ScanDataSupport();
-	private Composite toolbarMain;
-	private Composite toolbarInfo;
-	private final int style;
-	private Composite comparisonInfo;
 
 	@Inject
 	public ExtendedComparisonScanUI(Composite parent, int style) {
-		this.style = style;
-		initialize(parent);
+
+		super(parent, style);
+		createControl();
 	}
 
 	@Focus
-	public void setFocus() {
+	public boolean setFocus() {
 
 		Display.getDefault().asyncExec(this::updateChart);
+		return true;
 	}
 
 	public void update(IScanMSD scanMSD) {
@@ -223,8 +215,8 @@ public class ExtendedComparisonScanUI implements ConfigurableUI<ComparisonScanUI
 		IScanMSD scan_1 = (scan1Optimized != null) ? scan1Optimized : scan1;
 		IScanMSD scan_2 = (scan2Optimized != null) ? scan2Optimized : scan2;
 		//
-		labelInfoReference.setText(scanDataSupport.getMassSpectrumLabel(scan_1, PREFIX_U, TITLE_UNKNOWN, POSTFIX_NONE));
-		labelInfoComparison.setText(scanDataSupport.getMassSpectrumLabel(scan_2, PREFIX_R, TITLE_REFERENCE, shifted ? POSTFIX_SHIFTED : POSTFIX_NONE));
+		toolbarInfoTop.get().setText(scanDataSupport.getMassSpectrumLabel(scan_1, PREFIX_U, TITLE_UNKNOWN, POSTFIX_NONE));
+		toolbarInfoBottom.get().setText(scanDataSupport.getMassSpectrumLabel(scan_2, PREFIX_R, TITLE_REFERENCE, shifted ? POSTFIX_SHIFTED : POSTFIX_NONE));
 		//
 		if(shifted) {
 			IScanMSD scan2Shifted = new ScanMSD();
@@ -248,8 +240,8 @@ public class ExtendedComparisonScanUI implements ConfigurableUI<ComparisonScanUI
 		IScanMSD scan_1 = (scan1Optimized != null) ? scan1Optimized : scan1;
 		IScanMSD scan_2 = (scan2Optimized != null) ? scan2Optimized : scan2;
 		//
-		labelInfoReference.setText(scanDataSupport.getMassSpectrumLabel(scan_1, PREFIX_UR, TITLE_UNKNOWN, POSTFIX_NONE));
-		labelInfoComparison.setText(scanDataSupport.getMassSpectrumLabel(scan_2, PREFIX_UR, TITLE_REFERENCE, shifted ? POSTFIX_SHIFTED : POSTFIX_NONE));
+		toolbarInfoTop.get().setText(scanDataSupport.getMassSpectrumLabel(scan_1, PREFIX_UR, TITLE_UNKNOWN, POSTFIX_NONE));
+		toolbarInfoBottom.get().setText(scanDataSupport.getMassSpectrumLabel(scan_2, PREFIX_UR, TITLE_REFERENCE, shifted ? POSTFIX_SHIFTED : POSTFIX_NONE));
 		//
 		IExtractedIonSignal extractedIonSignalReference = scan_1.getExtractedIonSignal();
 		IExtractedIonSignal extractedIonSignalComparison = scan_2.getExtractedIonSignal();
@@ -278,16 +270,16 @@ public class ExtendedComparisonScanUI implements ConfigurableUI<ComparisonScanUI
 
 	private void updateScanNormal() {
 
-		labelInfoReference.setText("");
-		labelInfoComparison.setText("");
+		toolbarInfoTop.get().setText("");
+		toolbarInfoBottom.get().setText("");
 		//
 		if(scan1 != null) {
 			IScanMSD scan_1 = (scan1Optimized != null) ? scan1Optimized : scan1;
-			labelInfoReference.setText(scanDataSupport.getMassSpectrumLabel(scan_1, PREFIX_U, TITLE_UNKNOWN, POSTFIX_NONE));
+			toolbarInfoTop.get().setText(scanDataSupport.getMassSpectrumLabel(scan_1, PREFIX_U, TITLE_UNKNOWN, POSTFIX_NONE));
 			scanChartUI.setInput(scan_1);
 		} else if(scan2 != null) {
 			IScanMSD scan_2 = (scan2Optimized != null) ? scan2Optimized : scan2;
-			labelInfoReference.setText(scanDataSupport.getMassSpectrumLabel(scan_2, PREFIX_U, TITLE_UNKNOWN, POSTFIX_NONE));
+			toolbarInfoTop.get().setText(scanDataSupport.getMassSpectrumLabel(scan_2, PREFIX_U, TITLE_UNKNOWN, POSTFIX_NONE));
 			scanChartUI.setInput(scan_2);
 		} else {
 			scanChartUI.setInput(null);
@@ -307,52 +299,43 @@ public class ExtendedComparisonScanUI implements ConfigurableUI<ComparisonScanUI
 		return ion;
 	}
 
-	private void initialize(Composite parent) {
+	private void createControl() {
 
-		parent.setLayout(new GridLayout(1, true));
+		setLayout(new GridLayout(1, true));
 		//
-		createToolbarMain(parent);
-		toolbarInfoUnknown = createToolbarInfoUnknown(parent);
-		toolbarOptions = createToolbarOptions(parent);
-		createScanChart(parent);
-		toolbarInfoReference = createToolbarInfoReference(parent);
+		createToolbarMain(this);
+		createToolbarInfoTop(this);
+		createToolbarOptions(this);
+		createScanChart(this);
+		createToolbarInfoBottom(this);
 		//
-		PartSupport.setCompositeVisibility(toolbarInfoUnknown, true);
-		PartSupport.setCompositeVisibility(toolbarInfoReference, true);
-		PartSupport.setCompositeVisibility(toolbarOptions, false);
+		initialize();
+	}
+
+	private void initialize() {
+
+		enableToolbar(toolbarInfoTop, buttonToolbarInfo, IApplicationImage.IMAGE_INFO, TOOLTIP_INFO, true);
+		enableToolbar(toolbarInfoBottom, buttonToolbarInfo, IApplicationImage.IMAGE_INFO, TOOLTIP_INFO, true);
+		enableToolbar(toolbarEdit, buttonToolbarEdit, IApplicationImage.IMAGE_EDIT, TOOLTIP_EDIT, false);
 	}
 
 	private void createToolbarMain(Composite parent) {
 
-		toolbarMain = new Composite(parent, SWT.NONE);
+		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
-		toolbarMain.setLayoutData(gridData);
-		toolbarMain.setLayout(new GridLayout(6, false));
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(6, false));
 		//
-		createButtonToggleToolbarInfo(toolbarMain);
-		createButtonToggleToolbarOptions(toolbarMain);
-		createResetButton(toolbarMain);
-		createSaveButton(toolbarMain);
-		buttonOptimizedScan = createOptimizedScanButton(toolbarMain);
-		createSettingsButton(toolbarMain);
+		buttonToolbarInfo = createButtonToggleToolbar(composite, Arrays.asList(toolbarInfoTop, toolbarInfoBottom), IMAGE_INFO, TOOLTIP_INFO);
+		buttonToolbarEdit = createButtonToggleToolbar(composite, toolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT);
+		createResetButton(composite);
+		createSaveButton(composite);
+		buttonOptimizedScan = createOptimizedScanButton(composite);
+		createSettingsButton(composite);
 	}
 
-	private Composite createToolbarInfoUnknown(Composite parent) {
-
-		toolbarInfo = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		toolbarInfo.setLayoutData(gridData);
-		toolbarInfo.setLayout(new GridLayout(1, false));
-		//
-		labelInfoReference = new Label(toolbarInfo, SWT.NONE);
-		labelInfoReference.setText("");
-		labelInfoReference.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
-		return toolbarInfo;
-	}
-
-	private Composite createToolbarOptions(Composite parent) {
+	private void createToolbarOptions(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -363,7 +346,7 @@ public class ExtendedComparisonScanUI implements ConfigurableUI<ComparisonScanUI
 		createDisplayGroup(composite);
 		createMirrorOptionSection(composite);
 		//
-		return composite;
+		toolbarEdit.set(composite);
 	}
 
 	private void createUpdateGroup(Composite parent) {
@@ -495,69 +478,26 @@ public class ExtendedComparisonScanUI implements ConfigurableUI<ComparisonScanUI
 
 	private void createScanChart(Composite parent) {
 
-		scanChartUI = new ScanChartUI(parent, style);
+		scanChartUI = new ScanChartUI(parent, SWT.BORDER);
 		scanChartUI.setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
-	private Composite createToolbarInfoReference(Composite parent) {
+	private void createToolbarInfoTop(Composite parent) {
 
-		comparisonInfo = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		comparisonInfo.setLayoutData(gridData);
-		comparisonInfo.setLayout(new GridLayout(1, false));
-		//
-		labelInfoComparison = new Label(comparisonInfo, SWT.NONE);
-		labelInfoComparison.setText("");
-		labelInfoComparison.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
-		return comparisonInfo;
+		toolbarInfoTop.set(createToolbarInfo(parent));
 	}
 
-	private Button createButtonToggleToolbarInfo(Composite parent) {
+	private void createToolbarInfoBottom(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle the reference/comparison info toolbar.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				PartSupport.toggleCompositeVisibility(toolbarInfoUnknown);
-				boolean visible = PartSupport.toggleCompositeVisibility(toolbarInfoReference);
-				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-				}
-			}
-		});
-		//
-		return button;
+		toolbarInfoBottom.set(createToolbarInfo(parent));
 	}
 
-	private Button createButtonToggleToolbarOptions(Composite parent) {
+	private InformationUI createToolbarInfo(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle the options toolbar.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DEFAULT, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				boolean visible = PartSupport.toggleCompositeVisibility(toolbarOptions);
-				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ACTIVE, IApplicationImage.SIZE_16x16));
-				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DEFAULT, IApplicationImage.SIZE_16x16));
-				}
-			}
-		});
+		InformationUI informationUI = new InformationUI(parent, SWT.NONE);
+		informationUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
-		return button;
+		return informationUI;
 	}
 
 	private void createResetButton(Composite parent) {
@@ -637,28 +577,12 @@ public class ExtendedComparisonScanUI implements ConfigurableUI<ComparisonScanUI
 
 	private void createSettingsButton(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Open the Settings");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		createSettingsButton(parent, Arrays.asList(PreferencePageScans.class), new ISettingsHandler() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void apply(Display display) {
 
-				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePageScans()));
-				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
-				preferenceDialog.create();
-				preferenceDialog.setMessage("Settings");
-				if(preferenceDialog.open() == Window.OK) {
-					try {
-						applySettings();
-					} catch(Exception e1) {
-						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the chart settings.");
-					}
-				}
+				applySettings();
 			}
 		});
 	}
@@ -674,89 +598,5 @@ public class ExtendedComparisonScanUI implements ConfigurableUI<ComparisonScanUI
 	private void applySettings() {
 
 		updateChart();
-	}
-
-	@Override
-	public ComparisonScanUIConfig getConfig() {
-
-		return new ComparisonScanUIConfig() {
-
-			ChartConfigSupport axisSupport = new ChartConfigSupport(scanChartUI, EnumSet.of(ChartAxis.PRIMARY_X, ChartAxis.PRIMARY_Y, ChartAxis.SECONDARY_Y));
-
-			@Override
-			public void setToolbarVisible(boolean visible) {
-
-				PartSupport.setCompositeVisibility(toolbarMain, visible);
-			}
-
-			@Override
-			public boolean hasToolbarInfo() {
-
-				return true;
-			}
-
-			@Override
-			public void setToolbarInfoVisible(boolean visible) {
-
-				PartSupport.setCompositeVisibility(toolbarInfo, visible);
-			}
-
-			@Override
-			public boolean isToolbarVisible() {
-
-				return toolbarMain.isVisible();
-			}
-
-			@Override
-			public void setAxisLabelVisible(ChartAxis axis, boolean visible) {
-
-				axisSupport.setAxisLabelVisible(axis, visible);
-			}
-
-			@Override
-			public void setAxisVisible(ChartAxis axis, boolean visible) {
-
-				axisSupport.setAxisVisible(axis, visible);
-			}
-
-			@Override
-			public boolean hasAxis(ChartAxis axis) {
-
-				return axisSupport.hasAxis(axis);
-			}
-
-			@Override
-			public void setDisplayOption(DisplayOption option) {
-
-				ExtendedComparisonScanUI.this.displayOption = option.name();
-			}
-
-			@Override
-			public void setDisplayDifference(boolean displayDifference) {
-
-				ExtendedComparisonScanUI.this.displayDifference = displayDifference;
-				updateChart();
-			}
-
-			@Override
-			public void setDisplayMirrored(boolean displayMirrored) {
-
-				ExtendedComparisonScanUI.this.displayMirrored = displayMirrored;
-				updateChart();
-			}
-
-			@Override
-			public void setDisplayShifted(boolean displayShifted) {
-
-				ExtendedComparisonScanUI.this.displayShifted = displayShifted;
-				updateChart();
-			}
-
-			@Override
-			public void setComparisonLabelVisible(boolean visible) {
-
-				PartSupport.setCompositeVisibility(comparisonInfo, visible);
-			};
-		};
 	}
 }

@@ -14,7 +14,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.ArrayList;
-import java.util.EnumSet;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -38,7 +38,6 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChartConfigSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlayChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageNamedTraces;
@@ -46,7 +45,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOver
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.Derivative;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.DisplayModus;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTracesUI;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
@@ -58,14 +56,9 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.preference.PreferenceDialog;
-import org.eclipse.jface.preference.PreferenceManager;
-import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -75,6 +68,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swtchart.IAxisSet;
 import org.eclipse.swtchart.ISeries;
@@ -87,13 +81,12 @@ import org.eclipse.swtchart.extensions.core.RangeRestriction;
 import org.eclipse.swtchart.extensions.core.RangeRestriction.ExtendType;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 
-public class ExtendedChromatogramOverlayUI implements ConfigurableUI<ChromatogramOverlayUIConfig> {
+public class ExtendedChromatogramOverlayUI extends Composite implements IExtendedPartUI {
 
 	private NamedTracesUI namedTracesUI;
 	private DataShiftControllerUI dataShiftControllerUI;
 	private ChromatogramChart chromatogramChart;
 	//
-	private Composite toolbarMain;
 	private Label labelStatus;
 	private Combo comboOverlayType;
 	private ComboViewer comboViewerDerivative;
@@ -103,24 +96,14 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 	//
 	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	//
-	private EModelService modelService;
-	private MApplication application;
-	private EPartService partService;
-	//
 	@SuppressWarnings("rawtypes")
 	private final Map<IChromatogramSelection, List<String>> chromatogramSelections = new LinkedHashMap<>();
-	private final int style;
 	private boolean lockZoom = false;
-
-	public ExtendedChromatogramOverlayUI(Composite parent) {
-
-		this(parent, SWT.BORDER);
-	}
 
 	public ExtendedChromatogramOverlayUI(Composite parent, int style) {
 
-		this.style = style;
-		initialize(parent);
+		super(parent, style);
+		createControl();
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -133,14 +116,14 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 		refreshUpdateOverlayChart();
 	}
 
-	private void initialize(Composite parent) {
+	private void createControl() {
 
-		parent.setLayout(new GridLayout(1, true));
+		setLayout(new GridLayout(1, true));
 		//
-		toolbarMain = createToolbarMain(parent);
-		namedTracesUI = createNamedTraces(parent);
-		dataShiftControllerUI = createDataShiftControllerUI(parent);
-		chromatogramChart = createOverlayChart(parent);
+		createToolbarMain(this);
+		namedTracesUI = createNamedTraces(this);
+		dataShiftControllerUI = createDataShiftControllerUI(this);
+		chromatogramChart = createOverlayChart(this);
 		//
 		PartSupport.setCompositeVisibility(namedTracesUI, false);
 		PartSupport.setCompositeVisibility(dataShiftControllerUI, false);
@@ -151,12 +134,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 		/*
 		 * This is needed to layout both combo boxes accordingly.
 		 */
-		parent.layout(true);
-	}
-
-	private void setDisplayModus(DisplayModus displayModus, String seriesId) {
-
-		dataShiftControllerUI.setDisplayModus(displayModus, seriesId);
+		this.layout(true);
 	}
 
 	private Composite createToolbarMain(Composite parent) {
@@ -332,13 +310,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 
 	private void reset() {
 
-		// PartSupport.setCompositeVisibility(dataShiftControllerUI, false);
-		// dataShiftControllerUI.reset();
-		// buttonToolbarShift.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SHIFT_DEFAULT, IApplicationImage.SIZE_16x16));
-		// PartSupport.setCompositeVisibility(namedTracesUI, false);
-		// comboOverlayType.select(0);
-		// comboViewerDerivative.getCombo().select(0);
-		applyOverlaySettings();
+		applySettings();
 	}
 
 	private void createNewOverlayPartButton(Composite parent) {
@@ -360,17 +332,17 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 		});
 	}
 
-	public void update(EModelService modelService, MApplication application, EPartService partService) {
-
-		this.modelService = modelService;
-		this.application = application;
-		this.partService = partService;
-	}
-
 	private void createNewPart(String bundle, String classPath, String name) {
 
 		String partStackId = preferenceStore.getString(PreferenceConstants.P_STACK_POSITION_OVERLAY_CHROMATOGRAM_EXTRA);
 		if(!partStackId.equals(PartSupport.PARTSTACK_NONE)) {
+			/*
+			 * Services
+			 */
+			EModelService modelService = Activator.getDefault().getModelService();
+			MApplication application = Activator.getDefault().getApplication();
+			EPartService partService = Activator.getDefault().getPartService();
+			//
 			if(modelService != null && application != null && partService != null) {
 				MPart part = MBasicFactory.INSTANCE.createPart();
 				part.setLabel(name);
@@ -386,31 +358,12 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 
 	private void createSettingsButton(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Open the Settings");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		createSettingsButton(parent, Arrays.asList(PreferencePageOverlay.class, PreferencePageNamedTraces.class), new ISettingsHandler() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void apply(Display display) {
 
-				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePageOverlay()));
-				preferenceManager.addToRoot(new PreferenceNode("2", new PreferencePageNamedTraces()));
-				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
-				preferenceDialog.create();
-				preferenceDialog.setMessage("Settings");
-				//
-				if(preferenceDialog.open() == Window.OK) {
-					try {
-						applyOverlaySettings();
-					} catch(Exception e1) {
-						System.out.println(e1);
-						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the chart settings.");
-					}
-				}
+				applySettings();
 			}
 		});
 	}
@@ -461,7 +414,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 		}
 	}
 
-	private void applyOverlaySettings() {
+	private void applySettings() {
 
 		updateNamedTraces();
 		chromatogramChartSupport.loadUserSettings();
@@ -478,7 +431,7 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 
 	private ChromatogramChart createOverlayChart(Composite parent) {
 
-		ChromatogramChart chromatogramChart = new ChromatogramChart(parent, style);
+		ChromatogramChart chromatogramChart = new ChromatogramChart(parent, SWT.NONE);
 		chromatogramChart.setLayoutData(new GridData(GridData.FILL_BOTH));
 		/*
 		 * Chart Settings
@@ -891,60 +844,6 @@ public class ExtendedChromatogramOverlayUI implements ConfigurableUI<Chromatogra
 	private boolean isExtractedWavelengthsModusEnabled() {
 
 		return getDisplayType().contains(DisplayType.SWC);
-	}
-
-	@Override
-	public ChromatogramOverlayUIConfig getConfig() {
-
-		return new ChromatogramOverlayUIConfig() {
-
-			ChartConfigSupport chartConfigSupport = new ChartConfigSupport(chromatogramChart, EnumSet.of(ChartAxis.PRIMARY_X, ChartAxis.PRIMARY_Y, ChartAxis.SECONDARY_Y));
-
-			@Override
-			public void setToolbarVisible(boolean visible) {
-
-				PartSupport.setCompositeVisibility(toolbarMain, visible);
-			}
-
-			@Override
-			public boolean isToolbarVisible() {
-
-				return toolbarMain.isVisible();
-			}
-
-			@Override
-			public void setAxisLabelVisible(ChartAxis axis, boolean visible) {
-
-				chartConfigSupport.setAxisLabelVisible(axis, visible);
-			}
-
-			@Override
-			public void setAxisVisible(ChartAxis axis, boolean visible) {
-
-				chartConfigSupport.setAxisVisible(axis, visible);
-			}
-
-			@Override
-			public boolean hasAxis(ChartAxis axis) {
-
-				return chartConfigSupport.hasAxis(axis);
-			}
-
-			@Override
-			public void setDisplayModus(DisplayModus modus, IChromatogramSelection<?, ?> selection) {
-
-				List<String> list = chromatogramSelections.get(selection);
-				if(list != null) {
-					for(String id : list) {
-						if(modus == DisplayModus.MIRRORED) {
-							ExtendedChromatogramOverlayUI.this.setDisplayModus(DisplayModus.MIRRORED, id);
-						} else {
-							ExtendedChromatogramOverlayUI.this.setDisplayModus(DisplayModus.NORMAL, id);
-						}
-					}
-				}
-			}
-		};
 	}
 
 	public void setZoomLocked(boolean lockZoom) {

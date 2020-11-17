@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PreDestroy;
@@ -27,13 +26,10 @@ import org.eclipse.chemclipse.converter.model.reports.ISequence;
 import org.eclipse.chemclipse.converter.model.reports.ISequenceRecord;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
-import org.eclipse.chemclipse.processing.ui.E4ProcessSupplierContext;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.SequenceImportRunnable;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedSequenceListUI;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
@@ -43,10 +39,11 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 
-public class SequenceEditor extends AbstractDataUpdateSupport implements IDataUpdateSupport {
+public class SequenceEditor {
 
 	private static final Logger logger = Logger.getLogger(SequenceEditor.class);
 	//
@@ -62,14 +59,10 @@ public class SequenceEditor extends AbstractDataUpdateSupport implements IDataUp
 	//
 	private File sequenceFile;
 	private ExtendedSequenceListUI extendedSequenceListUI;
-	@Inject
-	private E4ProcessSupplierContext processContext;
 
 	@Inject
 	public SequenceEditor(Composite parent, MPart part, MDirtyable dirtyable, EModelService modelService, MApplication application, Shell shell) {
 
-		super(part);
-		//
 		this.part = part;
 		this.dirtyable = dirtyable;
 		this.modelService = modelService;
@@ -78,34 +71,15 @@ public class SequenceEditor extends AbstractDataUpdateSupport implements IDataUp
 		initialize(parent);
 	}
 
-	@Override
-	public void registerEvents() {
-
-	}
-
-	@Override
-	public void updateObjects(List<Object> objects, String topic) {
-
-		/*
-		 * 0 => because only one property was used to register the event.
-		 */
-		if(objects.size() == 1) {
-			//
-		}
-	}
-
 	@Focus
 	public void setFocus() {
 
-		//
+		extendedSequenceListUI.setFocus();
 	}
 
-	@Override
 	@PreDestroy
 	protected void preDestroy() {
 
-		super.preDestroy();
-		//
 		if(modelService != null && application != null) {
 			MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);
 			part.setToBeRendered(false);
@@ -197,6 +171,6 @@ public class SequenceEditor extends AbstractDataUpdateSupport implements IDataUp
 
 	private void createPage(Composite parent) {
 
-		extendedSequenceListUI = new ExtendedSequenceListUI(parent, processContext);
+		extendedSequenceListUI = new ExtendedSequenceListUI(parent, SWT.NONE);
 	}
 }

@@ -11,271 +11,214 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.msd.model.exceptions.NoExtractedIonSignalStoredException;
-import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignalExtractor;
-import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
-import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignalExtractor;
-import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
-import org.eclipse.chemclipse.swt.ui.support.Fonts;
-import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
-import org.eclipse.chemclipse.wsd.model.core.exceptions.NoExtractedWavelengthSignalStoredException;
+import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.swt.ui.components.InformationUI;
+import org.eclipse.chemclipse.swt.ui.support.Colors;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramHeatmapData;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramHeatmapSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
-import org.eclipse.chemclipse.wsd.model.xwc.ExtractedWavelengthSignalExtractor;
-import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignal;
-import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignalExtractor;
-import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignals;
 import org.eclipse.draw2d.LightweightSystem;
+import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.nebula.visualization.widgets.datadefinition.ColorMap;
 import org.eclipse.nebula.visualization.widgets.datadefinition.ColorMap.PredefinedColorMap;
 import org.eclipse.nebula.visualization.widgets.figures.IntensityGraphFigure;
-import org.eclipse.nebula.visualization.xygraph.linearscale.Range;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
 
-public class ChromatogramHeatmapUI extends Composite {
+public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI {
 
-	private static final Logger logger = Logger.getLogger(ChromatogramHeatmapUI.class);
+	private Button buttonToolbarInfo;
+	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
 	private LightweightSystem lightweightSystem;
 	private IntensityGraphFigure intensityGraphFigure;
-	private Label heatmapTitel;
-	private Composite header;
+	//
+	private ChromatogramHeatmapSupport chromatogramHeatmapSupport = new ChromatogramHeatmapSupport();
 
 	public ChromatogramHeatmapUI(Composite parent, int style) {
 
 		super(parent, style);
-		initialize(parent);
+		createControl();
 	}
 
-	public void update(IChromatogramSelection<?, ?> chromatogramSelection, boolean forceReload) {
+	public void update(IChromatogramSelection<?, ?> chromatogramSelection) {
 
-		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-			update((IChromatogramSelectionMSD)chromatogramSelection);
-		} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
-			update((IChromatogramSelectionWSD)chromatogramSelection);
-		} else {
-			clear();
+		clear();
+		toolbarInfo.get().setText(ChromatogramDataSupport.getChromatogramSelectionLabel(chromatogramSelection));
+		//
+		if(chromatogramSelection != null) {
+			/*
+			 * Data Matrix
+			 */
+			Optional<ChromatogramHeatmapData> heatmapData = chromatogramHeatmapSupport.getHeatmapData(chromatogramSelection.getChromatogram());
+			if(heatmapData.isPresent()) {
+				boolean isWavelengthData = chromatogramSelection instanceof IChromatogramSelectionWSD;
+				setHeatMap(heatmapData.get(), isWavelengthData);
+			}
 		}
 	}
 
-	private void update(IChromatogramSelectionMSD chromatogramSelection) {
+	private void setHeatMap(ChromatogramHeatmapData chromatogramHeatmap, boolean isWavelengthData) {
 
-		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogram();
-		IExtractedIonSignalExtractor extractedIonSignalExtractor;
-		try {
-			extractedIonSignalExtractor = new ExtractedIonSignalExtractor(chromatogram);
-			IExtractedIonSignals extractedIonSignals = extractedIonSignalExtractor.getExtractedIonSignals(chromatogramSelection);
-			//
-			heatmapTitel.setText("Run: " + chromatogram.getName());
-			//
-			int startScan = extractedIonSignals.getStartScan();
-			int stopScan = extractedIonSignals.getStopScan();
-			//
-			int startIon = extractedIonSignals.getStartIon();
-			int stopIon = extractedIonSignals.getStopIon();
-			//
-			int dataHeight = stopScan - startScan + 1; // y -> scans
-			int dataWidth = stopIon - startIon + 1; // x -> m/z values
-			/*
-			 * The data height and width must be >= 1!
-			 */
-			if(dataHeight < 1 || dataWidth < 1) {
-				return;
-			}
-			/*
-			 * Parse the heatmap data
-			 */
-			float maxIntensity = 0;
-			float[] heatmapData = new float[dataWidth * dataHeight * 2];
-			/*
-			 * Y-Axis: Scans
-			 */
-			for(int scan = startScan; scan <= stopScan; scan++) {
-				int xScan = scan - startScan; // xScan as zero based heatmap scan array index
-				IExtractedIonSignal extractedIonSignal;
-				try {
-					extractedIonSignal = extractedIonSignals.getExtractedIonSignal(scan);
-					for(int ion = startIon; ion <= stopIon; ion++) {
-						/*
-						 * X-Axis: m/z values
-						 */
-						int xIon = ion - startIon; // xIon as zero based heatmap ion array index
-						float abundance = extractedIonSignal.getAbundance(ion);
-						/*
-						 * Max Intensity
-						 */
-						if(abundance > maxIntensity) {
-							maxIntensity = abundance;
-						}
-						/*
-						 * XY data
-						 */
-						heatmapData[xScan * dataWidth + xIon] = abundance;
-					}
-				} catch(NoExtractedIonSignalStoredException e) {
-					logger.warn(e);
-				}
-			}
-			/*
-			 * Set the range and min/max values.
-			 */
-			intensityGraphFigure.getXAxis().setRange(new Range(startIon, stopIon));
-			intensityGraphFigure.getYAxis().setRange(new Range(stopScan, startScan));
-			//
-			intensityGraphFigure.setMin(0);
-			intensityGraphFigure.setMax(maxIntensity / (dataHeight / 5.0d)); // Important when zooming in.
-			//
-			intensityGraphFigure.setDataHeight(dataHeight);
-			intensityGraphFigure.setDataWidth(dataWidth);
-			//
-			intensityGraphFigure.getXAxis().setTitle("m/z");
-			//
-			intensityGraphFigure.setColorMap(new ColorMap(PredefinedColorMap.JET, true, true));
-			/*
-			 * Set the heatmap data
-			 */
-			lightweightSystem.setContents(intensityGraphFigure);
-			intensityGraphFigure.setDataArray(heatmapData);
-		} catch(ChromatogramIsNullException e1) {
-			logger.warn(e1);
-		}
-	}
-
-	private void update(IChromatogramSelectionWSD chromatogramSelection) {
-
-		IChromatogramWSD chromatogram = chromatogramSelection.getChromatogram();
-		IExtractedWavelengthSignalExtractor extractedWavelengthSignalExtractor;
-		try {
-			extractedWavelengthSignalExtractor = new ExtractedWavelengthSignalExtractor(chromatogram);
-			IExtractedWavelengthSignals extractedWavelengthSignals = extractedWavelengthSignalExtractor.getExtractedWavelengthSignals(chromatogramSelection);
-			//
-			heatmapTitel.setText("Run: " + chromatogram.getName());
-			//
-			int startScan = extractedWavelengthSignals.getStartScan();
-			int stopScan = extractedWavelengthSignals.getStopScan();
-			//
-			int startSignal = extractedWavelengthSignals.getStartWavelength();
-			int stopSignal = extractedWavelengthSignals.getStopWavelength();
-			//
-			int dataHeight = stopScan - startScan + 1; // y -> scans
-			int dataWidth = stopSignal - startSignal + 1; // x -> m/z values
-			/*
-			 * The data height and width must be >= 1!
-			 */
-			if(dataHeight < 1 || dataWidth < 1) {
-				return;
-			}
-			/*
-			 * Parse the heatmap data
-			 */
-			float maxIntensity = 0;
-			float[] heatmapData = new float[dataWidth * dataHeight * 2];
-			/*
-			 * Y-Axis: Scans
-			 */
-			for(int scan = startScan; scan <= stopScan; scan++) {
-				int xScan = scan - startScan; // xScan as zero based heatmap scan array index
-				IExtractedWavelengthSignal extractedWavelengthSignal;
-				try {
-					extractedWavelengthSignal = extractedWavelengthSignals.getExtractedWavelengthSignal(scan);
-					for(int signal = startSignal; signal <= stopSignal; signal++) {
-						/*
-						 * X-Axis: m/z values
-						 */
-						int xIon = signal - startSignal; // xIon as zero based heatmap ion array index
-						float abundance = extractedWavelengthSignal.getAbundance(signal);
-						/*
-						 * Max Intensity
-						 */
-						if(abundance > maxIntensity) {
-							maxIntensity = abundance;
-						}
-						/*
-						 * XY data
-						 */
-						heatmapData[xScan * dataWidth + xIon] = abundance;
-					}
-				} catch(NoExtractedWavelengthSignalStoredException e) {
-					logger.warn(e);
-				}
-			}
-			/*
-			 * Set the range and min/max values.
-			 */
-			intensityGraphFigure.getXAxis().setRange(new Range(startSignal, stopSignal));
-			intensityGraphFigure.getYAxis().setRange(new Range(stopScan, startScan));
-			//
-			intensityGraphFigure.setMin(0);
-			intensityGraphFigure.setMax(maxIntensity / (dataHeight / 5.0d)); // Important when zooming in.
-			//
-			intensityGraphFigure.setDataHeight(dataHeight);
-			intensityGraphFigure.setDataWidth(dataWidth);
-			//
-			intensityGraphFigure.getXAxis().setTitle("wavelength");
-			//
-			intensityGraphFigure.setColorMap(new ColorMap(PredefinedColorMap.JET, true, true));
-			/*
-			 * Set the heatmap data
-			 */
-			lightweightSystem.setContents(intensityGraphFigure);
-			intensityGraphFigure.setDataArray(heatmapData);
-		} catch(ChromatogramIsNullException e1) {
-			logger.warn(e1);
-		}
+		/*
+		 * Set the range and min/max values.
+		 */
+		intensityGraphFigure.getXAxis().setRange(chromatogramHeatmap.getAxisRangeWidth());
+		intensityGraphFigure.getYAxis().setRange(chromatogramHeatmap.getAxisRangeHeight());
+		//
+		intensityGraphFigure.setMin(chromatogramHeatmap.getMinimum());
+		intensityGraphFigure.setMax(chromatogramHeatmap.getMaximum());
+		//
+		intensityGraphFigure.setDataWidth(chromatogramHeatmap.getDataWidth());
+		intensityGraphFigure.setDataHeight(chromatogramHeatmap.getDataHeight());
+		//
+		intensityGraphFigure.getXAxis().setTitle("Retention Time [min]");
+		intensityGraphFigure.getYAxis().setTitle(isWavelengthData ? "Trace [nm]" : "Trace [m/z]");
+		//
+		intensityGraphFigure.setColorMap(new ColorMap(PredefinedColorMap.JET, true, true));
+		/*
+		 * Set the heatmap data
+		 */
+		lightweightSystem.setContents(intensityGraphFigure);
+		intensityGraphFigure.setDataArray(chromatogramHeatmap.getArrayWrapper());
+		intensityGraphFigure.repaint();
 	}
 
 	public void clear() {
 
 		float[] heatmapData = new float[0];
 		intensityGraphFigure.setDataArray(heatmapData);
+		intensityGraphFigure.repaint();
 	}
 
-	private void initialize(Composite parent) {
+	private void createControl() {
 
-		GridData layoutData;
-		Display display = Display.getCurrent();
 		setLayout(new FillLayout());
+		//
 		Composite composite = new Composite(this, SWT.FILL);
 		composite.setLayout(new GridLayout(1, true));
-		/*
-		 * Header
-		 */
-		layoutData = new GridData(GridData.FILL_HORIZONTAL);
-		header = new Composite(composite, SWT.NONE);
-		header.setLayout(new GridLayout(1, true));
-		header.setLayoutData(layoutData);
 		//
-		layoutData = new GridData(GridData.FILL_BOTH);
-		layoutData.grabExcessHorizontalSpace = true;
-		heatmapTitel = new Label(header, SWT.CENTER);
-		heatmapTitel.setForeground(display.getSystemColor(SWT.COLOR_BLACK));
-		heatmapTitel.setLayoutData(layoutData);
-		heatmapTitel.setFont(Fonts.getCachedFont(getDisplay(), "Arial", 12, SWT.BOLD));
-		heatmapTitel.setText("");
-		/*
-		 * Heatmap
-		 */
-		layoutData = new GridData(GridData.FILL_BOTH);
-		Canvas canvas = new Canvas(composite, SWT.FILL | SWT.BORDER);
-		canvas.setLayoutData(layoutData);
-		canvas.setBackground(display.getSystemColor(SWT.COLOR_WHITE));
+		createToolbarMain(composite);
+		createToolbarInfo(composite);
+		createCanvas(composite);
 		//
-		lightweightSystem = new LightweightSystem(canvas);
-		lightweightSystem.getRootFigure().setBackgroundColor(display.getSystemColor(SWT.COLOR_WHITE));
+		initialize();
+	}
+
+	private void initialize() {
+
+		enableToolbar(toolbarInfo, buttonToolbarInfo, IMAGE_INFO, TOOLTIP_INFO, true);
+	}
+
+	private void createToolbarMain(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalAlignment = SWT.END;
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(2, false));
 		//
-		intensityGraphFigure = new IntensityGraphFigure();
-		intensityGraphFigure.setForegroundColor(display.getSystemColor(SWT.COLOR_BLACK));
-		intensityGraphFigure.getXAxis().setTitle("signal");
-		intensityGraphFigure.getYAxis().setTitle("scan");
+		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
+		createColorMapComboViewer(composite);
+	}
+
+	private void createToolbarInfo(Composite parent) {
+
+		InformationUI informationUI = new InformationUI(parent, SWT.NONE);
+		informationUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		toolbarInfo.set(informationUI);
+	}
+
+	private ComboViewer createColorMapComboViewer(Composite parent) {
+
+		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		Combo combo = comboViewer.getCombo();
+		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
+		comboViewer.setLabelProvider(new AbstractLabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+
+				if(element instanceof ColorMap) {
+					ColorMap colorMap = (ColorMap)element;
+					return colorMap.getPredefinedColorMap().name();
+				}
+				return null;
+			}
+		});
+		//
+		combo.setToolTipText("Select a color scheme.");
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.widthHint = 150;
+		combo.setLayoutData(gridData);
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				Object object = comboViewer.getStructuredSelection().getFirstElement();
+				if(object instanceof ColorMap) {
+					ColorMap colorMap = (ColorMap)object;
+					intensityGraphFigure.setColorMap(colorMap);
+					intensityGraphFigure.repaint();
+				}
+			}
+		});
+		//
+		ColorMap[] input = new ColorMap[6];
+		input[0] = new ColorMap(PredefinedColorMap.JET, true, true);
+		input[1] = new ColorMap(PredefinedColorMap.ColorSpectrum, true, true);
+		input[2] = new ColorMap(PredefinedColorMap.Cool, true, true);
+		input[3] = new ColorMap(PredefinedColorMap.GrayScale, true, true);
+		input[4] = new ColorMap(PredefinedColorMap.Hot, true, true);
+		input[5] = new ColorMap(PredefinedColorMap.Shaded, true, true);
+		comboViewer.setInput(input);
+		combo.select(0);
+		//
+		return comboViewer;
+	}
+
+	private Canvas createCanvas(Composite parent) {
+
+		Canvas canvas = new Canvas(parent, SWT.FILL | SWT.BORDER);
+		canvas.setLayoutData(new GridData(GridData.FILL_BOTH));
+		canvas.setBackground(Colors.WHITE);
+		//
+		lightweightSystem = createLightweightSystem(canvas);
+		intensityGraphFigure = createIntensityGraphFigure();
+		//
+		return canvas;
+	}
+
+	private LightweightSystem createLightweightSystem(Canvas canvas) {
+
+		LightweightSystem lightweightSystem = new LightweightSystem(canvas);
+		lightweightSystem.getRootFigure().setBackgroundColor(Colors.WHITE);
+		//
+		return lightweightSystem;
+	}
+
+	private IntensityGraphFigure createIntensityGraphFigure() {
+
+		IntensityGraphFigure intensityGraphFigure = new IntensityGraphFigure();
+		intensityGraphFigure.setForegroundColor(Colors.BLACK);
+		intensityGraphFigure.getXAxis().setTitle("Retention Time [min]");
+		intensityGraphFigure.getYAxis().setTitle("Trace");
+		//
+		return intensityGraphFigure;
 	}
 }

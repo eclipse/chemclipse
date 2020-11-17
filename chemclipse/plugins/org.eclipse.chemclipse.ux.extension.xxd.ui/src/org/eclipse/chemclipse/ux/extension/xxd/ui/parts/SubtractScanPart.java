@@ -13,71 +13,55 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
 import java.util.List;
 
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedSubtractScanUI;
-import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class SubtractScanPart extends AbstractPart {
+public class SubtractScanPart extends AbstractPart<ExtendedSubtractScanUI> {
 
 	private static final String TOPIC = IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM;
-	//
-	private ExtendedSubtractScanUI control;
-	//
-	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
-	private IDataUpdateListener updateListener = new IDataUpdateListener() {
-
-		@Override
-		public void update(String topic, List<Object> objects) {
-
-			updateSelection(objects, topic);
-		}
-	};
 
 	@Inject
-	public SubtractScanPart(Composite parent, MPart part) {
+	public SubtractScanPart(Composite parent) {
 
-		control = new ExtendedSubtractScanUI(parent, SWT.NONE);
-		dataUpdateSupport.add(updateListener);
+		super(parent, TOPIC);
 	}
 
-	@Focus
-	public void setFocus() {
+	@Override
+	protected ExtendedSubtractScanUI createControl(Composite parent) {
 
-		updateSelection(dataUpdateSupport.getUpdates(TOPIC), TOPIC);
+		return new ExtendedSubtractScanUI(parent, SWT.NONE);
 	}
 
-	@PreDestroy
-	protected void preDestroy() {
+	@Override
+	protected boolean updateData(List<Object> objects, String topic) {
 
-		dataUpdateSupport.remove(updateListener);
-		super.preDestroy();
-	}
-
-	private void updateSelection(List<Object> objects, String topic) {
-
-		if(DataUpdateSupport.isVisible(control)) {
-			if(objects.size() == 1) {
-				Object object = objects.get(0);
-				if(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM.equals(topic)) {
-					IScanMSD scanMSD = PreferenceSupplier.getSessionSubtractMassSpectrum();
-					control.update(scanMSD);
-				} else if(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION.equals(topic)) {
-					control.update(object);
-				} else {
-					control.update(null);
-				}
+		if(objects.size() == 1) {
+			Object object = objects.get(0);
+			if(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM.equals(topic)) {
+				IScanMSD scanMSD = PreferenceSupplier.getSessionSubtractMassSpectrum();
+				getControl().update(scanMSD);
+				return true;
+			} else if(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION.equals(topic)) {
+				getControl().update(object);
+				return true;
+			} else {
+				getControl().update(null);
+				return true;
 			}
 		}
+		//
+		return false;
+	}
+
+	@Override
+	protected boolean isUpdateTopic(String topic) {
+
+		return TOPIC.equals(topic);
 	}
 }

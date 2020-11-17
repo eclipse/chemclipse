@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,32 +13,25 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.Arrays;
 import java.util.Iterator;
-
-import javax.inject.Inject;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.util.QuantReferencesListUtil;
 import org.eclipse.chemclipse.support.validators.QuantReferenceValidator;
+import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
-import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageQuantitation;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakDataSupport;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
-import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.preference.PreferenceDialog;
-import org.eclipse.jface.preference.PreferenceManager;
-import org.eclipse.jface.preference.PreferenceNode;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -49,38 +42,42 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 
-public class ExtendedPeakQuantReferencesUI {
+public class ExtendedPeakQuantReferencesUI extends Composite implements IExtendedPartUI {
 
-	private Composite toolbarInfo;
-	private Label labelInfo;
-	private Composite toolbarModify;
+	private Button buttonToolbarInfo;
+	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
+	private Button buttonToolbarEdit;
+	private AtomicReference<Composite> toolbarEdit = new AtomicReference<>();
 	private Label labelInputErrors;
 	private Combo comboQuantReferences;
 	private Button buttonAddReference;
 	private Button buttonDeleteReference;
-	private QuantReferencesListUI quantReferencesListUI;
-	private QuantReferencesListUtil quantReferencesUtil = new QuantReferencesListUtil();
+	private AtomicReference<QuantReferencesListUI> tableViewer = new AtomicReference<>();
+	private Button buttonTableEdit;
 	//
 	private QuantReferenceValidator validator;
 	private ControlDecoration controlDecoration;
 	//
 	private IPeak peak;
 	private PeakDataSupport peakDataSupport = new PeakDataSupport();
+	private QuantReferencesListUtil quantReferencesUtil = new QuantReferencesListUtil();
 
-	@Inject
-	public ExtendedPeakQuantReferencesUI(Composite parent) {
-		initialize(parent);
+	public ExtendedPeakQuantReferencesUI(Composite parent, int style) {
+
+		super(parent, style);
+		createControl();
 	}
 
-	@Focus
-	public void setFocus() {
+	public boolean setFocus() {
 
 		updatePeak();
+		return true;
 	}
 
 	public void update(IPeak peak) {
@@ -95,19 +92,24 @@ public class ExtendedPeakQuantReferencesUI {
 		updateLabel();
 	}
 
-	private void initialize(Composite parent) {
+	private void createControl() {
 
-		parent.setLayout(new GridLayout(1, true));
+		setLayout(new GridLayout(1, true));
 		//
-		createToolbarMain(parent);
-		toolbarInfo = createToolbarInfo(parent);
-		toolbarModify = createToolbarModify(parent);
-		quantReferencesListUI = createTable(parent);
+		createToolbarMain(this);
+		createToolbarInfo(this);
+		createToolbarEdit(this);
+		createTable(this);
 		//
-		PartSupport.setCompositeVisibility(toolbarInfo, true);
-		PartSupport.setCompositeVisibility(toolbarModify, false);
+		initialize();
+	}
+
+	private void initialize() {
+
+		enableToolbar(toolbarInfo, buttonToolbarInfo, IMAGE_INFO, TOOLTIP_INFO, true);
+		enableToolbar(toolbarEdit, buttonToolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT, false);
+		enableEdit(tableViewer, buttonTableEdit, IMAGE_EDIT_ENTRY, false);
 		//
-		quantReferencesListUI.setEditEnabled(false);
 		clearLabelInputErrors();
 		applySettings();
 	}
@@ -120,27 +122,21 @@ public class ExtendedPeakQuantReferencesUI {
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(4, false));
 		//
-		createButtonToggleToolbarInfo(composite);
-		createButtonToggleToolbarModify(composite);
-		createButtonToggleEditModus(composite);
+		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
+		buttonToolbarEdit = createButtonToggleToolbar(composite, toolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT);
+		buttonTableEdit = createButtonToggleEditTable(composite, tableViewer, IMAGE_EDIT_ENTRY);
 		createSettingsButton(composite);
 	}
 
-	private Composite createToolbarInfo(Composite parent) {
+	private void createToolbarInfo(Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(1, false));
+		InformationUI informationUI = new InformationUI(parent, SWT.NONE);
+		informationUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
-		labelInfo = new Label(composite, SWT.NONE);
-		labelInfo.setText("");
-		labelInfo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
-		return composite;
+		toolbarInfo.set(informationUI);
 	}
 
-	private Composite createToolbarModify(Composite parent) {
+	private void createToolbarEdit(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -154,7 +150,7 @@ public class ExtendedPeakQuantReferencesUI {
 		buttonAddReference = createButtonAdd(composite);
 		buttonDeleteReference = createButtonDelete(composite);
 		//
-		return composite;
+		toolbarEdit.set(composite);
 	}
 
 	private Label createLabel(Composite parent, int horizontalSpan) {
@@ -227,112 +223,25 @@ public class ExtendedPeakQuantReferencesUI {
 		return button;
 	}
 
-	private Button createButtonToggleToolbarInfo(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle info toolbar.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				boolean visible = PartSupport.toggleCompositeVisibility(toolbarInfo);
-				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-				}
-			}
-		});
-		//
-		return button;
-	}
-
-	private Button createButtonToggleToolbarModify(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle modify toolbar.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DEFAULT, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				boolean visible = PartSupport.toggleCompositeVisibility(toolbarModify);
-				if(visible) {
-					setComboQuantReferenceItems();
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ACTIVE, IApplicationImage.SIZE_16x16));
-				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DEFAULT, IApplicationImage.SIZE_16x16));
-				}
-			}
-		});
-		//
-		return button;
-	}
-
-	private Button createButtonToggleEditModus(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Enable/disable to edit the table.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ENTRY_DEFAULT, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				boolean editEnabled = !quantReferencesListUI.isEditEnabled();
-				quantReferencesListUI.setEditEnabled(editEnabled);
-				button.setImage(ApplicationImageFactory.getInstance().getImage((editEnabled) ? IApplicationImage.IMAGE_EDIT_ENTRY_ACTIVE : IApplicationImage.IMAGE_EDIT_ENTRY_DEFAULT, IApplicationImage.SIZE_16x16));
-				updateLabel();
-			}
-		});
-		//
-		return button;
-	}
-
 	private void createSettingsButton(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Open the Settings");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		createSettingsButton(parent, Arrays.asList(PreferencePageQuantitation.class), new ISettingsHandler() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void apply(Display display) {
 
-				IPreferencePage preferencePage = new PreferencePageQuantitation();
-				preferencePage.setTitle("Quantitiation");
-				//
-				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage));
-				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
-				preferenceDialog.create();
-				preferenceDialog.setMessage("Settings");
-				if(preferenceDialog.open() == Window.OK) {
-					try {
-						applySettings();
-					} catch(Exception e1) {
-						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
-					}
-				}
+				applySettings();
 			}
 		});
 	}
 
-	private QuantReferencesListUI createTable(Composite parent) {
+	private void createTable(Composite parent) {
 
-		QuantReferencesListUI listUI = new QuantReferencesListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
-		Table table = listUI.getTable();
+		QuantReferencesListUI quantReferencesListUI = new QuantReferencesListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		Table table = quantReferencesListUI.getTable();
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
-		return listUI;
+		tableViewer.set(quantReferencesListUI);
 	}
 
 	private void applySettings() {
@@ -366,7 +275,7 @@ public class ExtendedPeakQuantReferencesUI {
 		messageBox.setMessage("Would you like to delete the selected quantitation(s)?");
 		if(messageBox.open() == SWT.YES) {
 			//
-			Iterator iterator = quantReferencesListUI.getStructuredSelection().iterator();
+			Iterator iterator = tableViewer.get().getStructuredSelection().iterator();
 			while(iterator.hasNext()) {
 				Object object = iterator.next();
 				if(object instanceof String) {
@@ -392,9 +301,9 @@ public class ExtendedPeakQuantReferencesUI {
 		updateWidgets();
 		//
 		if(peak != null) {
-			quantReferencesListUI.setInput(peak.getQuantitationReferences());
+			tableViewer.get().setInput(peak.getQuantitationReferences());
 		} else {
-			quantReferencesListUI.clear();
+			tableViewer.get().clear();
 		}
 	}
 
@@ -416,9 +325,7 @@ public class ExtendedPeakQuantReferencesUI {
 
 	private void updateLabel() {
 
-		labelInfo.setText(peakDataSupport.getPeakLabel(peak));
-		String editInformation = quantReferencesListUI.isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
-		labelInfo.setText(labelInfo.getText() + " - " + editInformation);
+		toolbarInfo.get().setText(peakDataSupport.getPeakLabel(peak));
 	}
 
 	private void updateWidgets() {

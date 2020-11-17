@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,7 +13,9 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
@@ -28,12 +30,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.PeaksChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeaksAxes;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakChartSupport;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.preference.PreferenceDialog;
-import org.eclipse.jface.preference.PreferenceManager;
-import org.eclipse.jface.preference.PreferenceNode;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -42,20 +39,22 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 import org.eclipse.swtchart.extensions.linecharts.LineChart;
 
-public class QuantPeaksChartUI extends Composite {
+public class QuantPeaksChartUI extends Composite implements IExtendedPartUI {
 
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private PeakChartSupport peakChartSupport = new PeakChartSupport();
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
 	//
-	private PeaksChart peaksChart;
+	private AtomicReference<PeaksChart> chartControl = new AtomicReference<>();
 	private IQuantitationCompound quantitationCompound;
 
 	public QuantPeaksChartUI(Composite parent, int style) {
+
 		super(parent, style);
 		createControl();
 	}
@@ -75,6 +74,12 @@ public class QuantPeaksChartUI extends Composite {
 		//
 		createToolbarMain(composite);
 		createPeaksChart(composite);
+		//
+		initialize();
+	}
+
+	private void initialize() {
+
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -85,24 +90,9 @@ public class QuantPeaksChartUI extends Composite {
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(3, false));
 		//
-		createToggleChartSeriesLegendButton(composite);
+		createButtonToggleChartLegend(composite, chartControl, IMAGE_LEGEND);
 		createResetButton(composite);
 		createSettingsButton(composite);
-	}
-
-	private void createToggleChartSeriesLegendButton(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle the chart series legend.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TAG, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				peaksChart.toggleSeriesLegendVisibility();
-			}
-		});
 	}
 
 	private void createResetButton(Composite parent) {
@@ -123,41 +113,27 @@ public class QuantPeaksChartUI extends Composite {
 
 	private void createSettingsButton(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Open the Settings");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		createSettingsButton(parent, Arrays.asList(PreferencePagePeaksAxes.class), new ISettingsHandler() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void apply(Display display) {
 
-				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePagePeaksAxes()));
-				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
-				preferenceDialog.create();
-				preferenceDialog.setMessage("Settings");
-				if(preferenceDialog.open() == Window.OK) {
-					try {
-						applySettings();
-					} catch(Exception e1) {
-						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
-					}
-				}
+				applySettings();
 			}
 		});
 	}
 
 	private void createPeaksChart(Composite parent) {
 
-		peaksChart = new PeaksChart(parent, SWT.NONE);
+		PeaksChart peaksChart = new PeaksChart(parent, SWT.NONE);
 		peaksChart.setLayoutData(new GridData(GridData.FILL_BOTH));
+		//
+		chartControl.set(peaksChart);
 	}
 
 	private void applySettings() {
 
-		peaksChart.modifyAxes(true);
+		chartControl.get().modifyAxes(true);
 		setQuantitationCompound();
 	}
 
@@ -168,6 +144,7 @@ public class QuantPeaksChartUI extends Composite {
 
 	private void setQuantitationCompound() {
 
+		PeaksChart peaksChart = chartControl.get();
 		peaksChart.deleteSeries();
 		if(quantitationCompound != null) {
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();

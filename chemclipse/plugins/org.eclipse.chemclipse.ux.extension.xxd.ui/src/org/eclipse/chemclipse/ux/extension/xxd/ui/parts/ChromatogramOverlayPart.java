@@ -12,35 +12,29 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EditorUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedChromatogramOverlayUI;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.menu.MDirectToolItem;
-import org.eclipse.e4.ui.workbench.modeling.EModelService;
-import org.eclipse.e4.ui.workbench.modeling.EPartService;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class ChromatogramOverlayPart extends AbstractPart {
+public class ChromatogramOverlayPart extends AbstractPart<ExtendedChromatogramOverlayUI> {
 
-	private final ExtendedChromatogramOverlayUI extendedChromatogramOverlayUI;
+	private static final String TOPIC = IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION;
 	private final EditorUpdateSupport editorUpdateSupport = new EditorUpdateSupport();
 
 	@Inject
-	public ChromatogramOverlayPart(Composite parent, EModelService modelService, MApplication application, EPartService partService) {
+	public ChromatogramOverlayPart(Composite parent) {
 
-		extendedChromatogramOverlayUI = new ExtendedChromatogramOverlayUI(parent);
-		extendedChromatogramOverlayUI.update(modelService, application, partService);
-	}
-
-	@Focus
-	public void setFocus() {
-
-		extendedChromatogramOverlayUI.update(editorUpdateSupport.getChromatogramSelections());
+		super(parent, TOPIC);
 	}
 
 	public static class LockZoomHandler {
@@ -51,8 +45,34 @@ public class ChromatogramOverlayPart extends AbstractPart {
 			Object object = part.getObject();
 			if(object instanceof ChromatogramOverlayPart) {
 				ChromatogramOverlayPart overlayPart = (ChromatogramOverlayPart)object;
-				overlayPart.extendedChromatogramOverlayUI.setZoomLocked(toolItem.isSelected());
+				overlayPart.getControl().setZoomLocked(toolItem.isSelected());
 			}
 		}
+	}
+
+	@Override
+	protected ExtendedChromatogramOverlayUI createControl(Composite parent) {
+
+		return new ExtendedChromatogramOverlayUI(parent, SWT.BORDER);
+	}
+
+	@Focus
+	public void setFocus() {
+
+		getControl().update(editorUpdateSupport.getChromatogramSelections());
+	}
+
+	@Override
+	protected boolean updateData(List<Object> objects, String topic) {
+
+		// No action required. Action on Focus.
+		return true;
+	}
+
+	@Override
+	protected boolean isUpdateTopic(String topic) {
+
+		// No action required. Action on Focus.
+		return false;
 	}
 }

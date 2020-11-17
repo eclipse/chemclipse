@@ -17,60 +17,50 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedBaselineUI;
-import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class ChromatogramBaselinePart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
+public class ChromatogramBaselinePart extends AbstractPart<ExtendedBaselineUI> {
 
-	private ExtendedBaselineUI extendedBaselineUI;
+	private static final String TOPIC = IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION;
 
 	@Inject
-	public ChromatogramBaselinePart(Composite parent, MPart part) {
+	public ChromatogramBaselinePart(Composite parent) {
 
-		super(part);
-		parent.setLayout(new FillLayout());
-		extendedBaselineUI = new ExtendedBaselineUI(parent);
-	}
-
-	@Focus
-	public void setFocus() {
-
-		updateObjects(getObjects(), getTopic());
+		super(parent, TOPIC);
 	}
 
 	@Override
-	public void registerEvents() {
+	protected ExtendedBaselineUI createControl(Composite parent) {
 
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
+		return new ExtendedBaselineUI(parent, SWT.NONE);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public void updateObjects(List<Object> objects, String topic) {
+	protected boolean updateData(List<Object> objects, String topic) {
 
-		/*
-		 * 0 => because only one property was used to register the event.
-		 */
 		if(objects.size() == 1) {
 			Object object = null;
 			if(!isUnloadEvent(topic)) {
 				object = objects.get(0);
 				if(object instanceof IChromatogramSelection) {
-					extendedBaselineUI.update((IChromatogramSelection)object);
+					getControl().update((IChromatogramSelection<?, ?>)object);
+					return true;
 				}
 			} else {
-				extendedBaselineUI.update(null);
+				getControl().update(null);
+				return false;
 			}
 		}
+		//
+		return false;
+	}
+
+	@Override
+	protected boolean isUpdateTopic(String topic) {
+
+		return TOPIC.equals(topic) || isUnloadEvent(topic);
 	}
 
 	private boolean isUnloadEvent(String topic) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,6 +20,8 @@ public interface IDataModel {
 	void addProtectedKey(String key);
 
 	Map<String, String> getData();
+
+	void putData(String key, String value);
 
 	String getData(String key, String defaultValue);
 

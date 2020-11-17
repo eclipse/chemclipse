@@ -13,68 +13,53 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts;
 
 import java.util.List;
 
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt.ExtendedLoadingsPlot;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateListener;
-import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class LoadingsPlotPart {
+public class LoadingsPlotPart extends AbstractPartPCA<ExtendedLoadingsPlot> {
 
 	private static final String TOPIC = Activator.TOPIC_PCA_EVALUATION_LOAD;
-	//
-	private ExtendedLoadingsPlot control;
-	//
-	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
-	private IDataUpdateListener updateListener = new IDataUpdateListener() {
-
-		@Override
-		public void update(String topic, List<Object> objects) {
-
-			updateSelection(objects, topic);
-		}
-	};
 
 	@Inject
-	public LoadingsPlotPart(Composite parent, MPart part) {
+	public LoadingsPlotPart(Composite parent) {
 
-		control = new ExtendedLoadingsPlot(parent, SWT.NONE);
-		dataUpdateSupport.add(updateListener);
+		super(parent, TOPIC);
 	}
 
-	@Focus
-	public void setFocus() {
+	@Override
+	protected ExtendedLoadingsPlot createControl(Composite parent) {
 
-		updateSelection(dataUpdateSupport.getUpdates(TOPIC), TOPIC);
+		return new ExtendedLoadingsPlot(parent, SWT.NONE);
 	}
 
-	@PreDestroy
-	protected void preDestroy() {
+	@Override
+	protected boolean updateData(List<Object> objects, String topic) {
 
-		dataUpdateSupport.remove(updateListener);
-	}
-
-	private void updateSelection(List<Object> objects, String topic) {
-
-		if(DataUpdateSupport.isVisible(control)) {
-			if(objects.size() == 1) {
-				if(isUnloadEvent(topic)) {
-					control.setInput(null);
-				} else {
-					Object object = objects.get(0);
-					if(object instanceof EvaluationPCA) {
-						control.setInput((EvaluationPCA)object);
-					}
+		if(objects.size() == 1) {
+			if(isUnloadEvent(topic)) {
+				getControl().setInput(null);
+				return false;
+			} else {
+				Object object = objects.get(0);
+				if(object instanceof EvaluationPCA) {
+					getControl().setInput((EvaluationPCA)object);
+					return true;
 				}
 			}
 		}
+		//
+		return false;
+	}
+
+	@Override
+	protected boolean isUpdateTopic(String topic) {
+
+		return TOPIC.equals(topic) || isUnloadEvent(topic);
 	}
 
 	private boolean isUnloadEvent(String topic) {

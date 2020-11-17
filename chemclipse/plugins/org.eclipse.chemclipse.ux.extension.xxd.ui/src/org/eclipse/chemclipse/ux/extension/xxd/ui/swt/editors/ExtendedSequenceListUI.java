@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.chemclipse.converter.model.reports.ISequence;
@@ -22,6 +23,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSupplier;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
@@ -42,15 +44,13 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstant
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSequences;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.ChromatogramTypeSupportUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.SequenceListUI;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.preference.PreferenceDialog;
-import org.eclipse.jface.preference.PreferenceManager;
-import org.eclipse.jface.preference.PreferenceNode;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -61,13 +61,14 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
-public class ExtendedSequenceListUI {
+public class ExtendedSequenceListUI extends Composite implements IExtendedPartUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedSequenceListUI.class);
 	//
@@ -83,20 +84,14 @@ public class ExtendedSequenceListUI {
 	//
 	private String initialDataPath = "";
 	private ISequence<? extends ISequenceRecord> sequence;
-	private final ChromatogramTypeSupportUI chromatogramTypeSupport = new ChromatogramTypeSupportUI();
+	private final ChromatogramTypeSupportUI chromatogramTypeSupport = new ChromatogramTypeSupportUI(new DataType[]{DataType.CSD, DataType.MSD, DataType.WSD});
 	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private final ProcessSupplierContext processSupplierContext;
+	private final ProcessSupplierContext processSupplierContext = new ProcessTypeSupport();
 
-	@Deprecated
-	public ExtendedSequenceListUI(Composite parent) {
+	public ExtendedSequenceListUI(Composite parent, int style) {
 
-		this(parent, new ProcessTypeSupport());
-	}
-
-	public ExtendedSequenceListUI(Composite parent, ProcessSupplierContext processSupplierContext) {
-
-		this.processSupplierContext = processSupplierContext;
-		initialize(parent);
+		super(parent, style);
+		createControl();
 	}
 
 	public void update(ISequence<? extends ISequenceRecord> sequence) {
@@ -108,15 +103,15 @@ public class ExtendedSequenceListUI {
 		updateDataSequenceData();
 	}
 
-	private void initialize(Composite parent) {
+	private void createControl() {
 
-		parent.setLayout(new GridLayout(1, true));
+		setLayout(new GridLayout(1, true));
 		//
-		createToolbarMain(parent);
-		toolbarSearch = createToolbarSearch(parent);
-		toolbarDataPath = createToolbarDataPath(parent);
-		toolbarMethod = createToolbarMethod(parent);
-		createSequenceList(parent);
+		createToolbarMain(this);
+		toolbarSearch = createToolbarSearch(this);
+		toolbarDataPath = createToolbarDataPath(this);
+		toolbarMethod = createToolbarMethod(this);
+		createSequenceList(this);
 		//
 		PartSupport.setCompositeVisibility(toolbarSearch, false);
 		PartSupport.setCompositeVisibility(toolbarDataPath, false);
@@ -421,29 +416,12 @@ public class ExtendedSequenceListUI {
 
 	private void createSettingsButton(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Open the Settings");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		createSettingsButton(parent, Arrays.asList(PreferencePageSequences.class, PreferencePageChromatogram.class), new ISettingsHandler() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void apply(Display display) {
 
-				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePageSequences()));
-				preferenceManager.addToRoot(new PreferenceNode("2", new PreferencePageChromatogram()));
-				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
-				preferenceDialog.create();
-				preferenceDialog.setMessage("Settings");
-				if(preferenceDialog.open() == Window.OK) {
-					try {
-						applySettings();
-					} catch(Exception e1) {
-						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
-					}
-				}
+				applySettings();
 			}
 		});
 	}

@@ -12,15 +12,20 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaExtractionFiles;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Algorithm;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.AnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.DataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -40,6 +45,8 @@ import org.eclipse.swt.widgets.Text;
 
 public class FileSettingsWizardPage extends WizardPage {
 
+	private static final Logger logger = Logger.getLogger(FileSettingsWizardPage.class);
+	//
 	private Text textFile;
 	//
 	private IAnalysisSettings analysisSettings = new AnalysisSettings();
@@ -67,6 +74,8 @@ public class FileSettingsWizardPage extends WizardPage {
 		createLabel(composite, "File Data Matrix:");
 		textFile = createText(composite);
 		createButtonSelectFile(composite);
+		//
+		createButtonDemoFile(composite);
 		//
 		setControl(composite);
 	}
@@ -174,8 +183,9 @@ public class FileSettingsWizardPage extends WizardPage {
 	private void createButtonSelectFile(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setText("Select");
+		button.setText("");
 		button.setToolTipText("Select the data matrix.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_FILE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -188,6 +198,47 @@ public class FileSettingsWizardPage extends WizardPage {
 				String path = fileDialog.open();
 				if(path != null) {
 					File file = new File(path);
+					if(file.exists()) {
+						textFile.setText(file.getAbsolutePath());
+					}
+				}
+			}
+		});
+	}
+
+	private void createButtonDemoFile(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("Demo Data Matrix");
+		button.setToolTipText("Save a demo data matrix.");
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 3;
+		button.setLayoutData(gridData);
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
+				fileDialog.setText("PCA Data Matrix");
+				fileDialog.setFilterExtensions(new String[]{"*.tsv"});
+				fileDialog.setFilterNames(new String[]{"Data Matrix Tab Separated (*.tsv)"});
+				fileDialog.setOverwrite(true);
+				String path = fileDialog.open();
+				if(path != null) {
+					/*
+					 * Demo File
+					 */
+					File file = new File(path);
+					//
+					try (PrintWriter printWriter = new PrintWriter(file)) {
+						PcaExtractionFiles.getDemoContent(printWriter);
+						printWriter.flush();
+					} catch(Exception e2) {
+						logger.warn(e2);
+					}
+					//
 					if(file.exists()) {
 						textFile.setText(file.getAbsolutePath());
 					}

@@ -12,11 +12,15 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.part.support;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -25,9 +29,12 @@ import org.osgi.service.event.EventHandler;
 
 public class DataUpdateSupport {
 
+	private static final Logger logger = Logger.getLogger(DataUpdateSupport.class);
+	//
 	private IEventBroker eventBroker;
 	//
 	private Map<String, EventHandler> handlerMap = new HashMap<>();
+	private Map<String, Set<String>> propertiesMap = new HashMap<>();
 	private Map<String, List<Object>> objectMap = new HashMap<>();
 	//
 	private List<IDataUpdateListener> updateListeners = new ArrayList<>();
@@ -68,10 +75,9 @@ public class DataUpdateSupport {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public List<Object> getUpdates(String topic) {
 
-		return objectMap.getOrDefault(topic, Collections.EMPTY_LIST);
+		return objectMap.getOrDefault(topic, Collections.emptyList());
 	}
 
 	public void subscribe(String topic, String property) {
@@ -91,6 +97,10 @@ public class DataUpdateSupport {
 		EventHandler eventHandler = handlerMap.get(topic);
 		if(eventHandler != null) {
 			eventBroker.unsubscribe(eventHandler);
+			handlerMap.remove(topic);
+			propertiesMap.remove(topic);
+			objectMap.remove(topic);
+			logger.info("Subscription removed on topic '" + topic + "'.");
 		}
 	}
 
@@ -110,31 +120,51 @@ public class DataUpdateSupport {
 		}
 		//
 		handlerMap.clear();
+		propertiesMap.clear();
 		objectMap.clear();
+		//
+		logger.info("Subscriptions have been completely removed.");
 	}
 
 	private void registerEventHandler(String topic, String[] properties) {
 
-		EventHandler eventHandler = new EventHandler() {
-
-			@Override
-			public void handleEvent(Event event) {
-
-				update(event, properties);
+		/*
+		 * Register a new handler on the given topic.
+		 */
+		if(!handlerMap.containsKey(topic)) {
+			/*
+			 * Probably check additionally, that topic and properties are matching?
+			 * Normally, a topic is not registered with different properties.
+			 */
+			Set<String> propertySet = propertiesMap.get(topic);
+			if(propertySet == null) {
+				propertySet = new HashSet<>();
+				propertySet.addAll(Arrays.asList(properties));
+				propertiesMap.put(topic, propertySet);
+			} else {
+				if(properties.length != propertySet.size()) {
+					logger.warn("Subscription properties '" + Arrays.asList(properties) + "' on topic '" + topic + "' differ from existing handler properties '" + propertySet.toArray() + "'.");
+				}
 			}
-		};
-		/*
-		 * Remove an existing handler with
-		 * the same topic.
-		 */
-		if(handlerMap.containsKey(topic)) {
-			unsubscribe(topic);
+			/*
+			 * Handler
+			 */
+			EventHandler eventHandler = new EventHandler() {
+
+				@Override
+				public void handleEvent(Event event) {
+
+					update(event, properties);
+				}
+			};
+			/*
+			 * Subscribe the new handler.
+			 */
+			eventBroker.subscribe(topic, eventHandler);
+			handlerMap.put(topic, eventHandler);
+			//
+			logger.info("Subscription added on topic '" + topic + "' and properties '" + Arrays.asList(properties) + "'.");
 		}
-		/*
-		 * Subscribe the new handler.
-		 */
-		eventBroker.subscribe(topic, eventHandler);
-		handlerMap.put(topic, eventHandler);
 	}
 
 	private void update(Event event, String[] properties) {

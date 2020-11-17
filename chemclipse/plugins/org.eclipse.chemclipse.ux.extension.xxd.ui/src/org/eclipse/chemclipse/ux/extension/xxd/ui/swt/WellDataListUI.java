@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,14 +27,17 @@ import org.eclipse.swt.widgets.Composite;
 
 public class WellDataListUI extends ExtendedTableViewer {
 
+	private static final String[] TITLES = WellDataLabelProvider.TITLES;
+	private static final int[] BOUNDS = WellDataLabelProvider.BOUNDS;
+	//
 	private WellDataTableComparator tableComparator = new WellDataTableComparator();
 	private WellDataListFilter listFilter = new WellDataListFilter();
 	private WellDataLabelProvider labelProvider = new WellDataLabelProvider();
-	private String[] titles = WellDataLabelProvider.TITLES;
-	private int[] bounds = WellDataLabelProvider.BOUNDS;
+	//
 	private IWell well = null;
 
 	public WellDataListUI(Composite parent, int style) {
+
 		super(parent, style);
 		createColumns();
 	}
@@ -77,7 +80,7 @@ public class WellDataListUI extends ExtendedTableViewer {
 
 	private void createColumns() {
 
-		createColumns(titles, bounds);
+		createColumns(TITLES, BOUNDS);
 		setLabelProvider(labelProvider);
 		setContentProvider(new ListContentProvider());
 		setComparator(tableComparator);

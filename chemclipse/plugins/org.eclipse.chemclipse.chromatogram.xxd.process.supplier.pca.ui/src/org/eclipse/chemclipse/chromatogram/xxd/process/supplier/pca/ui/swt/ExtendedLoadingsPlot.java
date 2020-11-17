@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt;
 
+import java.util.Arrays;
+
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultPCA;
@@ -19,22 +21,15 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.L
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePageLoadingPlot;
 import org.eclipse.chemclipse.model.statistics.IVariable;
-import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
-import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.preference.PreferenceDialog;
-import org.eclipse.jface.preference.PreferenceManager;
-import org.eclipse.jface.preference.PreferenceNode;
-import org.eclipse.jface.window.Window;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
-public class ExtendedLoadingsPlot extends Composite {
+public class ExtendedLoadingsPlot extends Composite implements IExtendedPartUI {
 
 	private LoadingsPlot plot;
 	private PrincipalComponentUI principalComponentUI;
@@ -42,6 +37,7 @@ public class ExtendedLoadingsPlot extends Composite {
 	private EvaluationPCA evaluationPCA = null;
 
 	public ExtendedLoadingsPlot(Composite parent, int style) {
+
 		super(parent, style);
 		createControl();
 	}
@@ -97,29 +93,12 @@ public class ExtendedLoadingsPlot extends Composite {
 
 	private void createSettingsButton(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Open the Settings");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		createSettingsButton(parent, Arrays.asList(PreferencePage.class, PreferencePageLoadingPlot.class), new ISettingsHandler() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void apply(Display display) {
 
-				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePage()));
-				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePageLoadingPlot()));
-				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
-				preferenceDialog.create();
-				preferenceDialog.setMessage("Settings");
-				if(preferenceDialog.open() == Window.OK) {
-					try {
-						applySettings();
-					} catch(Exception e1) {
-						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
-					}
-				}
+				applySettings();
 			}
 		});
 	}

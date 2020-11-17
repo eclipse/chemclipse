@@ -189,4 +189,5 @@
   <addons xmi:id="_9QiAYJMJEeKS0dEiOP1gSw" elementId="org.eclipse.chemclipse.rcp.app.ui.addon.perspectiveAddon" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.addons.PerspectiveApplicationAddon"/>
   <addons xmi:id="_Z9jhkM1jEeOfr-UwE6wy8g" elementId="org.eclipse.chemclipse.rcp.app.ui.addon.modelSupport" contributionURI="bundleclass://org.eclipse.chemclipse.support.ui/org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon"/>
   <addons xmi:id="_4q-U0CGaEeutTb-F-_fKDg" elementId="org.eclipse.chemclipse.rcp.app.ui.addon.contextSupport" contributionURI="bundleclass://org.eclipse.chemclipse.support.ui/org.eclipse.chemclipse.support.ui.activator.ContextAddon"/>
+  <addons xmi:id="_rRrvoCgVEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.addons.PerspectiveSupport" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.addons.PerspectiveSupport"/>
 </application:Application>

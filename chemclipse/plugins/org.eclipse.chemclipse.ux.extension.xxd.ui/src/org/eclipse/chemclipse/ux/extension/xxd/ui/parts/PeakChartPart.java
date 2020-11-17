@@ -17,43 +17,29 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedPeakChartUI;
-import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class PeakChartPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
+public class PeakChartPart extends AbstractPart<ExtendedPeakChartUI> {
 
-	private ExtendedPeakChartUI extendedPeakChartUI;
+	private static final String TOPIC = IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION;
 
 	@Inject
-	public PeakChartPart(Composite parent, MPart part) {
+	public PeakChartPart(Composite parent) {
 
-		super(part);
-		extendedPeakChartUI = new ExtendedPeakChartUI(parent);
-	}
-
-	@Focus
-	public void setFocus() {
-
-		updateObjects(getObjects(), getTopic());
+		super(parent, TOPIC);
 	}
 
 	@Override
-	public void registerEvents() {
+	protected ExtendedPeakChartUI createControl(Composite parent) {
 
-		registerEvent(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_PEAK);
-		registerEvent(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_PEAK);
+		return new ExtendedPeakChartUI(parent, SWT.NONE);
 	}
 
 	@Override
-	public void updateObjects(List<Object> objects, String topic) {
+	protected boolean updateData(List<Object> objects, String topic) {
 
-		/*
-		 * 0 => because only one property was used to register the event.
-		 */
 		if(objects.size() == 1) {
 			IPeak peak = null;
 			if(!isUnloadEvent(topic)) {
@@ -62,8 +48,17 @@ public class PeakChartPart extends AbstractDataUpdateSupport implements IDataUpd
 					peak = (IPeak)object;
 				}
 			}
-			extendedPeakChartUI.update(peak);
+			getControl().update(peak);
+			return true;
 		}
+		//
+		return false;
+	}
+
+	@Override
+	protected boolean isUpdateTopic(String topic) {
+
+		return TOPIC.equals(topic) || isUnloadEvent(topic);
 	}
 
 	private boolean isUnloadEvent(String topic) {

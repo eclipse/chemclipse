@@ -13,6 +13,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -55,16 +56,10 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageList
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakScanListUIConfig.InteractionMode;
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.IDialogConstants;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.preference.PreferenceDialog;
-import org.eclipse.jface.preference.PreferenceManager;
-import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -81,7 +76,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swtchart.extensions.core.IKeyboardSupport;
 
 @SuppressWarnings("rawtypes")
-public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConfig> {
+public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI, ConfigurableUI<PeakScanListUIConfig> {
 
 	private static final Logger logger = Logger.getLogger(ExtendedPeakScanListUI.class);
 	//
@@ -89,8 +84,8 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 	//
 	private final ListSupport listSupport = new ListSupport();
 	private final TargetExtendedComparator comparator = new TargetExtendedComparator(SortOrder.DESC);
-	private final IPreferenceStore preferenceStore;
-	private final IEventBroker eventBroker;
+	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	private final IEventBroker eventBroker = Activator.getDefault().getEventBroker();
 	//
 	private Composite toolbarInfoTop;
 	private Composite toolbarInfoBottom;
@@ -113,11 +108,10 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 	private int currentModCount;
 	private RetentionTimeRange lastRange;
 
-	public ExtendedPeakScanListUI(Composite parent, IEventBroker eventBroker, IPreferenceStore preferenceStore) {
+	public ExtendedPeakScanListUI(Composite parent, int style) {
 
-		this.eventBroker = eventBroker;
-		this.preferenceStore = preferenceStore;
-		initialize(parent);
+		super(parent, style);
+		createControl();
 	}
 
 	private void updateFromPreferences() {
@@ -131,10 +125,10 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 		}
 	}
 
-	@Focus
-	public void setFocus() {
+	public boolean setFocus() {
 
 		updateChromatogramSelection();
+		return true;
 	}
 
 	public void updateChromatogramSelection(IChromatogramSelection chromatogramSelection) {
@@ -208,15 +202,15 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 		}
 	}
 
-	private void initialize(Composite parent) {
+	private void createControl() {
 
-		parent.setLayout(new GridLayout(1, true));
+		setLayout(new GridLayout(1, true));
 		//
-		createToolbarMain(parent);
-		toolbarInfoTop = createToolbarInfoTop(parent);
-		toolbarSearch = createToolbarSearch(parent);
-		peakScanListUI = createPeakTable(parent);
-		toolbarInfoBottom = createToolbarInfoBottom(parent);
+		createToolbarMain(this);
+		toolbarInfoTop = createToolbarInfoTop(this);
+		toolbarSearch = createToolbarSearch(this);
+		peakScanListUI = createPeakTable(this);
+		toolbarInfoBottom = createToolbarInfoBottom(this);
 		//
 		PartSupport.setCompositeVisibility(toolbarInfoTop, true);
 		PartSupport.setCompositeVisibility(toolbarSearch, false);
@@ -801,33 +795,14 @@ public class ExtendedPeakScanListUI implements ConfigurableUI<PeakScanListUIConf
 
 	private void createSettingsButton(Composite parent) {
 
-		if(preferenceStore != null) {
-			Button button = new Button(parent, SWT.PUSH);
-			button.setToolTipText("Open the Settings");
-			button.setText("");
-			button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-			button.addSelectionListener(new SelectionAdapter() {
+		createSettingsButton(parent, Arrays.asList(PreferencePageSystem.class, PreferencePageLists.class), new ISettingsHandler() {
 
-				@Override
-				public void widgetSelected(SelectionEvent e) {
+			@Override
+			public void apply(Display display) {
 
-					PreferenceManager preferenceManager = new PreferenceManager();
-					preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePageSystem()));
-					preferenceManager.addToRoot(new PreferenceNode("2", new PreferencePageLists()));
-					//
-					PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
-					preferenceDialog.create();
-					preferenceDialog.setMessage("Settings");
-					if(preferenceDialog.open() == Window.OK) {
-						try {
-							applySettings();
-						} catch(Exception e1) {
-							MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
-						}
-					}
-				}
-			});
-		}
+				applySettings();
+			}
+		});
 	}
 
 	private void updateLabel() {

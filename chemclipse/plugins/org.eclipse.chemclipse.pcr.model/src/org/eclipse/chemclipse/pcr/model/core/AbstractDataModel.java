@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.pcr.model.core;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -33,7 +32,13 @@ public abstract class AbstractDataModel implements IDataModel {
 	@Override
 	public Map<String, String> getData() {
 
-		return Collections.unmodifiableMap(data);
+		return data;
+	}
+
+	@Override
+	public void putData(String key, String value) {
+
+		data.put(key, value);
 	}
 
 	@Override

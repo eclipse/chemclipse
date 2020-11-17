@@ -12,7 +12,9 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Inject;
 
@@ -27,13 +29,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstant
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay;
 import org.eclipse.chemclipse.xir.model.core.IScanXIR;
 import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.preference.PreferenceDialog;
-import org.eclipse.jface.preference.PreferenceManager;
-import org.eclipse.jface.preference.PreferenceNode;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -42,6 +38,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
 import org.eclipse.swtchart.extensions.core.SeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
@@ -49,9 +46,9 @@ import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 import org.eclipse.swtchart.extensions.linecharts.LineChart;
 import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
 
-public class ExtendedXIROverlayUI {
+public class ExtendedXIROverlayUI extends Composite implements IExtendedPartUI {
 
-	private ChartXIR chartXIR;
+	private AtomicReference<ChartXIR> chartControl = new AtomicReference<>();
 	//
 	private EditorUpdateSupport editorUpdateSupport = new EditorUpdateSupport();
 	//
@@ -60,8 +57,10 @@ public class ExtendedXIROverlayUI {
 	private IColorScheme colorSchemeNormal = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_OVERLAY));
 
 	@Inject
-	public ExtendedXIROverlayUI(Composite parent) {
-		initialize(parent);
+	public ExtendedXIROverlayUI(Composite parent, int style) {
+
+		super(parent, style);
+		createControl();
 	}
 
 	public void update() {
@@ -70,12 +69,12 @@ public class ExtendedXIROverlayUI {
 		refreshUpdateOverlayChart();
 	}
 
-	private void initialize(Composite parent) {
+	private void createControl() {
 
-		parent.setLayout(new GridLayout(1, true));
+		setLayout(new GridLayout(1, true));
 		//
-		createToolbarMain(parent);
-		createOverlayChart(parent);
+		createToolbarMain(this);
+		createOverlayChart(this);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -86,24 +85,9 @@ public class ExtendedXIROverlayUI {
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(3, false));
 		//
-		createToggleChartLegendButton(composite);
+		createButtonToggleChartLegend(composite, chartControl, IMAGE_LEGEND);
 		createResetButton(composite);
 		createSettingsButton(composite);
-	}
-
-	private void createToggleChartLegendButton(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle the chart legend");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TAG, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				chartXIR.toggleSeriesLegendVisibility();
-			}
-		});
 	}
 
 	private void createResetButton(Composite parent) {
@@ -117,55 +101,39 @@ public class ExtendedXIROverlayUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				applyOverlaySettings();
+				applySettings();
 			}
 		});
 	}
 
 	private void createSettingsButton(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Open the Settings");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		createSettingsButton(parent, Arrays.asList(PreferencePageOverlay.class), new ISettingsHandler() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void apply(Display display) {
 
-				IPreferencePage preferencePageOverlay = new PreferencePageOverlay();
-				preferencePageOverlay.setTitle("Overlay Settings");
-				//
-				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageOverlay));
-				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
-				preferenceDialog.create();
-				preferenceDialog.setMessage("Settings");
-				if(preferenceDialog.open() == Window.OK) {
-					try {
-						applyOverlaySettings();
-					} catch(Exception e1) {
-						System.out.println(e1);
-						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the chart settings.");
-					}
-				}
+				applySettings();
 			}
 		});
 	}
 
 	private void createOverlayChart(Composite parent) {
 
-		chartXIR = new ChartXIR(parent, SWT.BORDER);
+		ChartXIR chartXIR = new ChartXIR(parent, SWT.BORDER);
 		chartXIR.setLayoutData(new GridData(GridData.FILL_BOTH));
+		//
+		chartControl.set(chartXIR);
 	}
 
-	private void applyOverlaySettings() {
+	private void applySettings() {
 
+		refreshUpdateOverlayChart();
 	}
 
 	private void refreshUpdateOverlayChart() {
 
+		ChartXIR chartXIR = chartControl.get();
 		chartXIR.deleteSeries();
 		if(scanSelections.size() > 0) {
 			//

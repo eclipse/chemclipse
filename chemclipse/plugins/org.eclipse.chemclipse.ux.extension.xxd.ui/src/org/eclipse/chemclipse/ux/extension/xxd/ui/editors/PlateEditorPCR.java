@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PreDestroy;
@@ -29,8 +28,6 @@ import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.PCRFileSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.PCRImportRunnable;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedPCRPlateUI;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
@@ -41,10 +38,11 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 
-public class PlateEditorPCR extends AbstractDataUpdateSupport implements IChemClipseEditor, IDataUpdateSupport {
+public class PlateEditorPCR implements IChemClipseEditor {
 
 	private static final Logger logger = Logger.getLogger(PlateEditorPCR.class);
 	//
@@ -67,8 +65,6 @@ public class PlateEditorPCR extends AbstractDataUpdateSupport implements IChemCl
 	@Inject
 	public PlateEditorPCR(Composite parent, MPart part, MDirtyable dirtyable, EModelService modelService, MApplication application, Shell shell) {
 
-		super(part);
-		//
 		this.part = part;
 		this.dirtyable = dirtyable;
 		this.modelService = modelService;
@@ -78,33 +74,15 @@ public class PlateEditorPCR extends AbstractDataUpdateSupport implements IChemCl
 		initialize(parent);
 	}
 
-	@Override
-	public void registerEvents() {
-
-	}
-
-	@Override
-	public void updateObjects(List<Object> objects, String topic) {
-
-		/*
-		 * 0 => because only one property was used to register the event.
-		 */
-		if(objects.size() == 1) {
-			//
-		}
-	}
-
 	@Focus
 	public void setFocus() {
 
 		updatePlate();
 	}
 
-	@Override
 	@PreDestroy
 	protected void preDestroy() {
 
-		super.preDestroy();
 		unloadPlate();
 		//
 		if(modelService != null && application != null) {
@@ -204,7 +182,7 @@ public class PlateEditorPCR extends AbstractDataUpdateSupport implements IChemCl
 
 	private void createScanPage(Composite parent) {
 
-		extendedPCRPlateUI = new ExtendedPCRPlateUI(parent);
+		extendedPCRPlateUI = new ExtendedPCRPlateUI(parent, SWT.NONE);
 	}
 
 	private void updatePlate() {

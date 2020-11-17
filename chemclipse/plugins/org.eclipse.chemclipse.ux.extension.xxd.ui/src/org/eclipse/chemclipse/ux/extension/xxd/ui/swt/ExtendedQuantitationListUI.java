@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,58 +12,52 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.Iterator;
-
-import javax.inject.Inject;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
-import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
-import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuCategories;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
-import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakDataSupport;
-import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
-public class ExtendedQuantitationListUI {
+public class ExtendedQuantitationListUI extends Composite implements IExtendedPartUI {
 
-	private Composite toolbarInfo;
-	private Label labelInfo;
+	private Button buttonToolbarInfo;
+	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
 	private QuantitationListUI quantitationListUI;
 	//
 	private IPeak peak;
 	//
 	private PeakDataSupport peakDataSupport = new PeakDataSupport();
 
-	@Inject
-	public ExtendedQuantitationListUI(Composite parent) {
-		initialize(parent);
+	public ExtendedQuantitationListUI(Composite parent, int style) {
+
+		super(parent, style);
+		createControl();
 	}
 
-	@Focus
-	public void setFocus() {
+	public boolean setFocus() {
 
 		updateObject();
+		return true;
 	}
 
 	public void update(IPeak peak) {
 
 		this.peak = peak;
-		labelInfo.setText(peakDataSupport.getPeakLabel(peak));
+		toolbarInfo.get().setText(peakDataSupport.getPeakLabel(peak));
 		updateObject();
 	}
 
@@ -76,15 +70,20 @@ public class ExtendedQuantitationListUI {
 		}
 	}
 
-	private void initialize(Composite parent) {
+	private void createControl() {
 
-		parent.setLayout(new GridLayout(1, true));
+		setLayout(new GridLayout(1, true));
 		//
-		createToolbarMain(parent);
-		toolbarInfo = createToolbarInfo(parent);
-		createQuantitationTable(parent);
+		createToolbarMain(this);
+		createToolbarInfo(this);
+		createQuantitationTable(this);
 		//
-		PartSupport.setCompositeVisibility(toolbarInfo, true);
+		initialize();
+	}
+
+	private void initialize() {
+
+		enableToolbar(toolbarInfo, buttonToolbarInfo, IMAGE_INFO, TOOLTIP_INFO, true);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -95,21 +94,15 @@ public class ExtendedQuantitationListUI {
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(1, false));
 		//
-		createButtonToggleToolbarInfo(composite);
+		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
 	}
 
-	private Composite createToolbarInfo(Composite parent) {
+	private void createToolbarInfo(Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(1, false));
+		InformationUI informationUI = new InformationUI(parent, SWT.NONE);
+		informationUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
-		labelInfo = new Label(composite, SWT.NONE);
-		labelInfo.setText("");
-		labelInfo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
-		return composite;
+		toolbarInfo.set(informationUI);
 	}
 
 	private QuantitationListUI createQuantitationTable(Composite parent) {
@@ -126,29 +119,6 @@ public class ExtendedQuantitationListUI {
 		quantitationListUI.applySettings(tableSettings);
 		//
 		return quantitationListUI;
-	}
-
-	private Button createButtonToggleToolbarInfo(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle info toolbar.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				boolean visible = PartSupport.toggleCompositeVisibility(toolbarInfo);
-				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-				}
-			}
-		});
-		//
-		return button;
 	}
 
 	private void addDeleteMenuEntry(Shell shell, ITableSettings tableSettings) {

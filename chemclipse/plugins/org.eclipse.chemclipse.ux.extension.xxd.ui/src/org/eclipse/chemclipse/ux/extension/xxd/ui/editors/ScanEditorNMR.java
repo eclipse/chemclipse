@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -57,8 +57,6 @@ import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.support.ui.workbench.PartSupport;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorNMR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.DynamicSettingsUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedMeasurementResultUI;
@@ -87,12 +85,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEditorNMR, IDataUpdateSupport {
+public class ScanEditorNMR implements IScanEditorNMR {
 
 	public static final String ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.scanEditorNMR";
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorNMR";
 	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/scan-nmr.gif";
 	public static final String TOOLTIP = "NMR Editor";
+	//
 	private final ExecutorService executorService = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(2));
 	//
 	private final MPart part;
@@ -112,7 +111,7 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 
 	@Inject
 	public ScanEditorNMR(Composite parent, IEventBroker eventBroker, MPart part, MDirtyable dirtyable, Shell shell, ProcessorFactory filterFactory, PartSupport partSupport, ProcessSupplierContext context) {
-		super(part);
+
 		this.partSupport = partSupport;
 		this.processSupplierContext = context;
 		parent.addDisposeListener(new DisposeListener() {
@@ -133,34 +132,15 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 		initialize(parent);
 	}
 
-	@Override
-	public void registerEvents() {
-
-		registerEvent(IChemClipseEvents.TOPIC_SCAN_NMR_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SCAN_SELECTION);
-	}
-
-	@Override
-	public void updateObjects(List<Object> objects, String topic) {
-
-		/*
-		 * 0 => because only one property was used to register the event.
-		 */
-		if(objects.size() == 1) {
-			//
-		}
-	}
-
 	@Focus
 	public void setFocus() {
 
-		//
+		extendedMeasurementResultUI.setFocus();
 	}
 
-	@Override
 	@PreDestroy
 	protected void preDestroy() {
 
-		super.preDestroy();
 		eventBroker.send(IChemClipseEvents.TOPIC_SCAN_NMR_UNLOAD_SELECTION, null);
 	}
 
@@ -307,13 +287,13 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 				if(measurement instanceof Filtered) {
 					FilterContext<?, ?> context = ((Filtered<?, ?>)measurement).getFilterContext();
 					Object filteredObject = context.getFilteredObject();
-					if (filteredObject instanceof IComplexSignalMeasurement<?>) {
-						IComplexSignalMeasurement<?> original = (IComplexSignalMeasurement<?>) filteredObject;
+					if(filteredObject instanceof IComplexSignalMeasurement<?>) {
+						IComplexSignalMeasurement<?> original = (IComplexSignalMeasurement<?>)filteredObject;
 						settingsUI.setActiveContext(context, new UpdatingObserver(context, measurement, original));
 						composite.layout();
 						return;
 					}
-				} 
+				}
 				settingsUI.setActiveContext(null, null);
 			}
 		});
@@ -344,6 +324,7 @@ public class ScanEditorNMR extends AbstractDataUpdateSupport implements IScanEdi
 		private IComplexSignalMeasurement<?> originalMeasurement;
 
 		public UpdatingObserver(FilterContext<FilteredType, ConfigType> context, IComplexSignalMeasurement<?> currentMeasurement, IComplexSignalMeasurement<?> originalMeasurement) {
+
 			this.context = context;
 			this.currentMeasurement = currentMeasurement;
 			this.originalMeasurement = originalMeasurement;

@@ -42,12 +42,6 @@ public class ChromatogramTypeSupport {
 	//
 	private final List<ISupplierFileIdentifier> supplierEditorSupportList = new ArrayList<>();
 
-	@Deprecated
-	public ChromatogramTypeSupport() {
-
-		this(new DataType[]{DataType.CSD, DataType.MSD, DataType.WSD});
-	}
-
 	public ChromatogramTypeSupport(DataType[] dataTypes) {
 
 		for(DataType dataType : dataTypes) {

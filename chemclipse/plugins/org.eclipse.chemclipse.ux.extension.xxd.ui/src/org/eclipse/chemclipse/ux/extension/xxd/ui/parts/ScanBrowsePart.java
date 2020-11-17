@@ -13,68 +13,50 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
 import java.util.List;
 
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedScanBrowseUI;
-import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class ScanBrowsePart extends AbstractPart {
+public class ScanBrowsePart extends AbstractPart<ExtendedScanBrowseUI> {
 
 	private static final String TOPIC = IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION;
-	//
-	private ExtendedScanBrowseUI control;
-	//
-	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
-	private IDataUpdateListener updateListener = new IDataUpdateListener() {
-
-		@Override
-		public void update(String topic, List<Object> objects) {
-
-			updateSelection(objects, topic);
-		}
-	};
 
 	@Inject
-	public ScanBrowsePart(Composite parent, MPart part) {
+	public ScanBrowsePart(Composite parent) {
 
-		control = new ExtendedScanBrowseUI(parent, SWT.NONE);
-		dataUpdateSupport.add(updateListener);
+		super(parent, TOPIC);
 	}
 
-	@Focus
-	public void setFocus() {
+	@Override
+	protected ExtendedScanBrowseUI createControl(Composite parent) {
 
-		updateSelection(dataUpdateSupport.getUpdates(TOPIC), TOPIC);
+		return new ExtendedScanBrowseUI(parent, SWT.NONE);
 	}
 
-	@PreDestroy
-	protected void preDestroy() {
+	@Override
+	protected boolean updateData(List<Object> objects, String topic) {
 
-		dataUpdateSupport.remove(updateListener);
-		super.preDestroy();
-	}
-
-	private void updateSelection(List<Object> objects, String topic) {
-
-		if(DataUpdateSupport.isVisible(control)) {
-			if(objects.size() == 1) {
-				Object object = objects.get(0);
-				if(isChromatogramTopic(topic)) {
-					if(object instanceof IChromatogramSelection) {
-						control.update((IChromatogramSelection<?, ?>)object);
-					}
+		if(objects.size() == 1) {
+			Object object = objects.get(0);
+			if(isChromatogramTopic(topic)) {
+				if(object instanceof IChromatogramSelection) {
+					getControl().update((IChromatogramSelection<?, ?>)object);
+					return true;
 				}
 			}
 		}
+		//
+		return false;
+	}
+
+	@Override
+	protected boolean isUpdateTopic(String topic) {
+
+		return isChromatogramTopic(topic);
 	}
 
 	private boolean isChromatogramTopic(String topic) {

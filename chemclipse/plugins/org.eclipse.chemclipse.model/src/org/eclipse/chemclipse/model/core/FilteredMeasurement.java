@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +9,7 @@
  * Contributors:
  * Christoph Läubrich - initial API and implementation
  * Alexander Kerner - implementation
+ * Philip Wenig - this concept should be improved
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
@@ -47,6 +48,7 @@ import org.osgi.framework.ServiceReference;
 public class FilteredMeasurement<FilteredType extends IMeasurement, ConfigType> implements IMeasurement, Filtered<FilteredType, ConfigType> {
 
 	private static final long serialVersionUID = 2L;
+	//
 	private final FilteredType measurement;
 	private String dataName;
 	private String detailedInfo;
@@ -62,14 +64,22 @@ public class FilteredMeasurement<FilteredType extends IMeasurement, ConfigType> 
 	private String operator;
 	private final Map<String, IMeasurementResult<?>> measurementResults = new HashMap<>(1);
 	private final Map<String, String> headerMap = new HashMap<>(1);
+	//
 	private transient FilterContext<FilteredType, ConfigType> context;
 
 	public FilteredMeasurement(FilterContext<FilteredType, ConfigType> context) {
+
 		this.context = context;
 		if(context == null) {
 			throw new IllegalArgumentException("filtered measurement can't be null!");
 		}
 		measurement = context.getFilteredObject();
+	}
+
+	@Override
+	public boolean isKeyProtected(String key) {
+
+		return false;
 	}
 
 	public FilteredType getFilteredObject() {
@@ -144,6 +154,14 @@ public class FilteredMeasurement<FilteredType extends IMeasurement, ConfigType> 
 	public void putHeaderData(String key, String value) {
 
 		headerMap.put(key, value);
+	}
+
+	@Override
+	public void putHeaderData(Map<String, String> headerData) {
+
+		for(Map.Entry<String, String> entry : headerData.entrySet()) {
+			putHeaderData(entry.getKey(), entry.getValue());
+		}
 	}
 
 	@Override

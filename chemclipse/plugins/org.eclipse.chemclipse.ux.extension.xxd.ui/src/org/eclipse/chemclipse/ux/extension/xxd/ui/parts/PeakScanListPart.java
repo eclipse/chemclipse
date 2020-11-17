@@ -28,6 +28,7 @@ import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.UIEventTopic;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.menu.MDirectToolItem;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 public class PeakScanListPart extends EnhancedUpdateSupport implements IUpdateSupport {
@@ -67,7 +68,7 @@ public class PeakScanListPart extends EnhancedUpdateSupport implements IUpdateSu
 	@Override
 	public void createControl(Composite parent) {
 
-		extendedPeakScanListUI = new ExtendedPeakScanListUI(parent, Activator.getDefault().getEventBroker(), Activator.getDefault().getPreferenceStore());
+		extendedPeakScanListUI = new ExtendedPeakScanListUI(parent, SWT.NONE);
 	}
 
 	@Override

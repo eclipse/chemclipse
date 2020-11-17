@@ -13,72 +13,51 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
 import java.util.List;
 
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedScanTableUI;
-import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class ScanTablePart extends AbstractPart {
+public class ScanTablePart extends AbstractPart<ExtendedScanTableUI> {
 
 	private static final String TOPIC = IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION;
-	//
-	private ExtendedScanTableUI control;
-	private boolean initialUpdate = true;
-	//
-	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
-	private IDataUpdateListener updateListener = new IDataUpdateListener() {
-
-		@Override
-		public void update(String topic, List<Object> objects) {
-
-			updateSelection(objects, topic);
-		}
-	};
 
 	@Inject
-	public ScanTablePart(Composite parent, MPart part) {
+	public ScanTablePart(Composite parent) {
 
-		control = new ExtendedScanTableUI(parent, SWT.NONE);
-		dataUpdateSupport.add(updateListener);
+		super(parent, TOPIC);
 	}
 
-	@Focus
-	public void setFocus() {
+	@Override
+	protected ExtendedScanTableUI createControl(Composite parent) {
 
-		if(initialUpdate) {
-			updateSelection(dataUpdateSupport.getUpdates(TOPIC), TOPIC);
-		}
+		return new ExtendedScanTableUI(parent, SWT.NONE);
 	}
 
-	@PreDestroy
-	protected void preDestroy() {
+	@Override
+	protected boolean updateData(List<Object> objects, String topic) {
 
-		dataUpdateSupport.remove(updateListener);
-		super.preDestroy();
-	}
-
-	private void updateSelection(List<Object> objects, String topic) {
-
-		if(DataUpdateSupport.isVisible(control)) {
-			if(objects.size() == 1) {
-				if(isLoadEvent(topic)) {
-					initialUpdate = false;
-					control.setInput(objects.get(0));
-				} else {
-					if(isUnloadEvent(topic)) {
-						control.setInput(null);
-					}
+		if(objects.size() == 1) {
+			if(isLoadEvent(topic)) {
+				getControl().setInput(objects.get(0));
+				return true;
+			} else {
+				if(isUnloadEvent(topic)) {
+					getControl().setInput(null);
+					return false;
 				}
 			}
 		}
+		//
+		return false;
+	}
+
+	@Override
+	protected boolean isUpdateTopic(String topic) {
+
+		return isLoadEvent(topic) || isUnloadEvent(topic);
 	}
 
 	private boolean isLoadEvent(String topic) {

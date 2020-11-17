@@ -122,26 +122,23 @@ public abstract class AbstractActivatorUI extends AbstractUIPlugin {
 			 */
 			eclipseContext = EclipseContextFactory.getServiceContext(getBundle().getBundleContext());
 			eclipseContext.set(Logger.class, logger);
-			//
-			// eclipseContext.set(MApplication.class, ModelSupportAddon.getApplication());
-			// eclipseContext.set(EModelService.class, ModelSupportAddon.getModelService());
-			// eclipseContext.set(EPartService.class, ModelSupportAddon.getPartService());
 			eclipseContext.set(MApplication.class, ContextAddon.getApplication());
 			eclipseContext.set(EModelService.class, ContextAddon.getModelService());
 			eclipseContext.set(EPartService.class, ContextAddon.getPartService());
 			/*
 			 * Checks
 			 */
-			if(eclipseContext.get(MApplication.class) == null) {
-				logger.warn("MApplication is null!");
-			}
+			MApplication application = eclipseContext.get(MApplication.class);
+			EModelService modelService = eclipseContext.get(EModelService.class);
+			EPartService partService = eclipseContext.get(EPartService.class);
 			//
-			if(eclipseContext.get(EModelService.class) == null) {
-				logger.warn("EModelService is null!");
-			}
-			//
-			if(eclipseContext.get(EPartService.class) == null) {
-				logger.warn("EPartService is null!");
+			if(application == null || modelService == null || partService == null) {
+				logger.warn(application == null ? "MApplication is null!" : "MApplication is set.");
+				logger.warn(modelService == null ? "EModelService is null!" : "EModelService is set.");
+				logger.warn(partService == null ? "EPartService is null!" : "EPartService is set.");
+				logger.info("Probably, getting the Eclipse context has been called too early in the Activator. Better use an Add-on.");
+			} else {
+				logger.info("The context has been initialized successfully.");
 			}
 		}
 		//

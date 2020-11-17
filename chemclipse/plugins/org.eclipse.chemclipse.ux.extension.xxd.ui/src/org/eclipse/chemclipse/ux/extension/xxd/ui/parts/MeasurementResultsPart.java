@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,30 +22,33 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.MeasurementResultNotification;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedMeasurementResultUI;
-import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class MeasurementResultsPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
+public class MeasurementResultsPart extends AbstractPart<ExtendedMeasurementResultUI> {
 
-	private final ExtendedMeasurementResultUI extendedMeasurementResultUI;
+	private static final String TOPIC = IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION;
 	@Inject
 	private MeasurementResultNotification notification;
 
 	@Inject
-	public MeasurementResultsPart(Composite parent, MPart part) {
-		super(part);
-		extendedMeasurementResultUI = new ExtendedMeasurementResultUI(parent);
+	public MeasurementResultsPart(Composite parent) {
+
+		super(parent, TOPIC);
+	}
+
+	@Override
+	protected ExtendedMeasurementResultUI createControl(Composite parent) {
+
+		ExtendedMeasurementResultUI extendedMeasurementResultUI = new ExtendedMeasurementResultUI(parent, SWT.NONE);
 		ComboViewer comboViewer = extendedMeasurementResultUI.getComboMeasurementResults();
 		comboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
@@ -63,23 +66,12 @@ public class MeasurementResultsPart extends AbstractDataUpdateSupport implements
 				notification.select(null);
 			}
 		});
-	}
-
-	@Focus
-	public void setFocus() {
-
-		updateObjects(getObjects(), getTopic());
+		//
+		return extendedMeasurementResultUI;
 	}
 
 	@Override
-	public void registerEvents() {
-
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
-	}
-
-	@Override
-	public void updateObjects(List<Object> objects, String topic) {
+	protected boolean updateData(List<Object> objects, String topic) {
 
 		Collection<IMeasurementResult<?>> results = Collections.emptyList();
 		String infoLabel = "";
@@ -95,7 +87,14 @@ public class MeasurementResultsPart extends AbstractDataUpdateSupport implements
 			}
 		}
 		notification.select(null);
-		extendedMeasurementResultUI.update(results, infoLabel);
+		getControl().update(results, infoLabel);
+		return true;
+	}
+
+	@Override
+	protected boolean isUpdateTopic(String topic) {
+
+		return TOPIC.equals(topic) || isUnloadEvent(topic);
 	}
 
 	private boolean isUnloadEvent(String topic) {

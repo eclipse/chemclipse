@@ -15,18 +15,26 @@ import java.util.List;
 
 public interface ISample {
 
+	String getName();
+
+	void setName(String name);
+
 	String getGroupName();
 
-	String getName();
+	void setGroupName(String groupName);
+
+	String getClassification();
+
+	void setClassification(String classification);
+
+	String getDescription();
+
+	void setDescription(String description);
 
 	@SuppressWarnings("rawtypes")
 	List<? extends ISampleData> getSampleData();
 
 	boolean isSelected();
-
-	void setGroupName(String groupName);
-
-	void setName(String name);
 
 	void setSelected(boolean selected);
 }

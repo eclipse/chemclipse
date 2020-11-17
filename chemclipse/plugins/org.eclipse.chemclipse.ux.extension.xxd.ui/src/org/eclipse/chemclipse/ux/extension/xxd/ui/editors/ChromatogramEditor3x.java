@@ -19,16 +19,19 @@ import java.util.Map;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramEditor;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.xxd.process.files.SupplierFileIdentifier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.workbench.modeling.EModelService;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -47,7 +50,10 @@ public class ChromatogramEditor3x extends EditorPart implements IChromatogramEdi
 	private static final String EDITOR_ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.editors.chromatogramEditor3x";
 	//
 	private ChromatogramEditor chromatogramEditor;
-	private final MPart part = PartSupport.get3xEditorPart(EDITOR_ID, ModelSupportAddon.getPartService(), ModelSupportAddon.getModelService(), ModelSupportAddon.getApplication());
+	private final EPartService partService = Activator.getDefault().getPartService();
+	private final EModelService modelService = Activator.getDefault().getModelService();
+	private final MApplication application = Activator.getDefault().getApplication();
+	private final MPart part = PartSupport.get3xEditorPart(EDITOR_ID, partService, modelService, application);
 	private final MDirtyable dirtyable = new MDirtyable() {
 
 		private boolean value = false;

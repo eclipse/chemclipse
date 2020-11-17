@@ -20,4 +20,12 @@ public class Sample extends AbstractSample<PeakSampleData> {
 		super(name);
 		setGroupName(groupName);
 	}
+
+	public Sample(String name, String groupName, String classification, String description) {
+
+		super(name);
+		setGroupName(groupName);
+		setClassification(classification);
+		setDescription(description);
+	}
 }

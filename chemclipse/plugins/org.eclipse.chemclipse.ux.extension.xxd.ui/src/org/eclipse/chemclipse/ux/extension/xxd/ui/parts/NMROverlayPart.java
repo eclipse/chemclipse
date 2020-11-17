@@ -12,27 +12,45 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedNMROverlayUI;
-import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.workbench.modeling.EPartService;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class NMROverlayPart extends AbstractPart {
+public class NMROverlayPart extends AbstractPart<ExtendedNMROverlayUI> {
 
-	private ExtendedNMROverlayUI extendedNMROverlayUI;
+	private static final String TOPIC = IChemClipseEvents.TOPIC_SCAN_NMR_UPDATE_SELECTION;
 
 	@Inject
-	public NMROverlayPart(Composite parent, EPartService partservice) {
+	public NMROverlayPart(Composite parent) {
 
-		extendedNMROverlayUI = new ExtendedNMROverlayUI(parent, partservice, Activator.getDefault().getPreferenceStore());
+		super(parent, TOPIC);
 	}
 
-	@Focus
-	public void setFocus() {
+	@Override
+	protected ExtendedNMROverlayUI createControl(Composite parent) {
 
-		extendedNMROverlayUI.update();
+		return new ExtendedNMROverlayUI(parent, SWT.NONE);
+	}
+
+	@Override
+	protected boolean updateData(List<Object> objects, String topic) {
+
+		if(objects.size() == 1) {
+			getControl().setFocus();
+			return true;
+		}
+		//
+		return false;
+	}
+
+	@Override
+	protected boolean isUpdateTopic(String topic) {
+
+		return TOPIC.equals(topic);
 	}
 }

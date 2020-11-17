@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,6 +22,8 @@ public class HeaderDataLabelProvider extends AbstractChemClipseLabelProvider {
 
 	public static final String NAME = "Name";
 	public static final String VALUE = "Value";
+	//
+	public static final int INDEX_COLUMN_NAME = 0;
 	//
 	public static final String[] TITLES = { //
 			NAME, //
@@ -63,7 +65,6 @@ public class HeaderDataLabelProvider extends AbstractChemClipseLabelProvider {
 	@Override
 	public Image getImage(Object element) {
 
-		Image image = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16);
-		return image;
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16);
 	}
 }

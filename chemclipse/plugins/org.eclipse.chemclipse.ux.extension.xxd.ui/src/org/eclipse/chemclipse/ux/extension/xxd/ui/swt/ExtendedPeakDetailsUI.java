@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,39 +12,32 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.text.DecimalFormat;
-
-import javax.inject.Inject;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.msd.model.core.AbstractChromatogramMSD;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
-import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
-import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
-import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakDataSupport;
-import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 
-public class ExtendedPeakDetailsUI {
+public class ExtendedPeakDetailsUI extends Composite implements IExtendedPartUI {
 
-	private Composite toolbarInfo;
-	private Label labelPeak;
+	private Button buttonToolbarInfo;
+	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
 	//
 	private List list;
 	private Clipboard clipboard;
@@ -55,23 +48,24 @@ public class ExtendedPeakDetailsUI {
 	//
 	private PeakDataSupport peakDataSupport = new PeakDataSupport();
 
-	@Inject
-	public ExtendedPeakDetailsUI(Composite parent) {
+	public ExtendedPeakDetailsUI(Composite parent, int style) {
+
+		super(parent, style);
 		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 		stringBuilder = new StringBuilder();
-		initialize(parent);
+		createControl();
 	}
 
-	@Focus
-	public void setFocus() {
+	public boolean setFocus() {
 
 		updatePeak();
+		return true;
 	}
 
 	public void update(IPeak peak) {
 
 		this.peak = peak;
-		labelPeak.setText(peakDataSupport.getPeakLabel(peak));
+		toolbarInfo.get().setText(peakDataSupport.getPeakLabel(peak));
 		updatePeak();
 	}
 
@@ -84,15 +78,20 @@ public class ExtendedPeakDetailsUI {
 		}
 	}
 
-	private void initialize(Composite parent) {
+	private void createControl() {
 
-		parent.setLayout(new GridLayout(1, true));
+		setLayout(new GridLayout(1, true));
 		//
-		createToolbarMain(parent);
-		toolbarInfo = createToolbarInfo(parent);
-		createPeakList(parent);
+		createToolbarMain(this);
+		createToolbarInfo(this);
+		createPeakList(this);
 		//
-		PartSupport.setCompositeVisibility(toolbarInfo, true);
+		initialize();
+	}
+
+	private void initialize() {
+
+		enableToolbar(toolbarInfo, buttonToolbarInfo, IMAGE_INFO, TOOLTIP_INFO, true);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -103,44 +102,15 @@ public class ExtendedPeakDetailsUI {
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(1, false));
 		//
-		createButtonToggleToolbarInfo(composite);
+		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
 	}
 
-	private Composite createToolbarInfo(Composite parent) {
+	private void createToolbarInfo(Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(1, false));
+		InformationUI informationUI = new InformationUI(parent, SWT.NONE);
+		informationUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
-		labelPeak = new Label(composite, SWT.NONE);
-		labelPeak.setText("");
-		labelPeak.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
-		return composite;
-	}
-
-	private Button createButtonToggleToolbarInfo(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle info toolbar.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				boolean visible = PartSupport.toggleCompositeVisibility(toolbarInfo);
-				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-				}
-			}
-		});
-		//
-		return button;
+		toolbarInfo.set(informationUI);
 	}
 
 	private void createPeakList(Composite parent) {

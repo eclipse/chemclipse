@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - this class needs refactoring
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.app.ui.handlers;
 
@@ -98,6 +99,7 @@ public class OpenSnippetHandler {
 		MApplication application = eclipseContext.get(MApplication.class);
 		EModelService modelService = eclipseContext.get(EModelService.class);
 		EPartService partService = eclipseContext.get(EPartService.class);
+		//
 		withEclipseContext(eclipseContext, childContextInitializer)//
 				.andThen(addToEditorStack(modelService, stackId, application))//
 				.andThen(openPart(partService))//
@@ -114,6 +116,7 @@ public class OpenSnippetHandler {
 		MApplication application = eclipseContext.get(MApplication.class);
 		EModelService modelService = eclipseContext.get(EModelService.class);
 		EPartService partService = eclipseContext.get(EPartService.class);
+		//
 		withEclipseContext(eclipseContext, childContextInitializer)//
 				.andThen(addToEditorStack(modelService, stackId, application))//
 				.andThen(disableMove())//

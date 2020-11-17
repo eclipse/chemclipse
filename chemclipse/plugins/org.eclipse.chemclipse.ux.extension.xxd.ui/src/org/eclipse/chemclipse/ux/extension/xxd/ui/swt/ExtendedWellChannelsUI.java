@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Inject;
 
@@ -20,14 +22,8 @@ import org.eclipse.chemclipse.pcr.model.core.IChannel;
 import org.eclipse.chemclipse.pcr.model.core.IWell;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePCR;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.preference.IPreferencePage;
-import org.eclipse.jface.preference.PreferenceDialog;
-import org.eclipse.jface.preference.PreferenceManager;
-import org.eclipse.jface.preference.PreferenceNode;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -36,13 +32,14 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-public class ExtendedWellChannelsUI {
+public class ExtendedWellChannelsUI extends Composite implements IExtendedPartUI {
 
-	private Label labelInfo;
-	private Composite toolbarInfo;
+	private Button buttonToolbarInfo;
+	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
 	private Combo comboChannels;
 	//
 	private Text textId;
@@ -55,8 +52,10 @@ public class ExtendedWellChannelsUI {
 	private IWell well = null;
 
 	@Inject
-	public ExtendedWellChannelsUI(Composite parent) {
-		initialize(parent);
+	public ExtendedWellChannelsUI(Composite parent, int style) {
+
+		super(parent, style);
+		createControl();
 	}
 
 	public void update(IWell well) {
@@ -65,16 +64,21 @@ public class ExtendedWellChannelsUI {
 		updateWidgets();
 	}
 
-	private void initialize(Composite parent) {
+	private void createControl() {
 
-		parent.setLayout(new GridLayout(1, true));
+		setLayout(new GridLayout(1, true));
 		//
-		createToolbarMain(parent);
-		toolbarInfo = createToolbarInfo(parent);
-		comboChannels = createComboChannels(parent);
-		createChannelDataSection(parent);
+		createToolbarMain(this);
+		createToolbarInfo(this);
+		comboChannels = createComboChannels(this);
+		createChannelDataSection(this);
 		//
-		PartSupport.setCompositeVisibility(toolbarInfo, true);
+		initialize();
+	}
+
+	private void initialize() {
+
+		enableToolbar(toolbarInfo, buttonToolbarInfo, IMAGE_INFO, TOOLTIP_INFO, true);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -85,32 +89,9 @@ public class ExtendedWellChannelsUI {
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(3, false));
 		//
-		createButtonToggleToolbarInfo(composite);
+		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
 		createResetButton(composite);
 		createSettingsButton(composite);
-	}
-
-	private Button createButtonToggleToolbarInfo(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle info toolbar.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				boolean visible = PartSupport.toggleCompositeVisibility(toolbarInfo);
-				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-				}
-			}
-		});
-		//
-		return button;
 	}
 
 	private void createResetButton(Composite parent) {
@@ -131,48 +112,22 @@ public class ExtendedWellChannelsUI {
 
 	private void createSettingsButton(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Open the Settings");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		createSettingsButton(parent, Arrays.asList(PreferencePagePCR.class), new ISettingsHandler() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void apply(Display display) {
 
-				IPreferencePage preferencePage = new PreferencePagePCR();
-				preferencePage.setTitle("PCR");
-				//
-				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage));
-				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
-				preferenceDialog.create();
-				preferenceDialog.setMessage("Settings");
-				if(preferenceDialog.open() == Window.OK) {
-					try {
-						updateWidgets();
-					} catch(Exception e1) {
-						System.out.println(e1);
-						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the chart settings.");
-					}
-				}
+				updateWidgets();
 			}
 		});
 	}
 
-	private Composite createToolbarInfo(Composite parent) {
+	private void createToolbarInfo(Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(1, false));
+		InformationUI informationUI = new InformationUI(parent, SWT.NONE);
+		informationUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
-		labelInfo = new Label(composite, SWT.NONE);
-		labelInfo.setText("");
-		labelInfo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
-		return composite;
+		toolbarInfo.set(informationUI);
 	}
 
 	private Combo createComboChannels(Composite parent) {
@@ -294,15 +249,6 @@ public class ExtendedWellChannelsUI {
 		}
 	}
 
-	private void updateLabel() {
-
-		if(well != null) {
-			labelInfo.setText(well.getLabel());
-		} else {
-			labelInfo.setText("");
-		}
-	}
-
 	private String[] getComboItems(IWell well) {
 
 		if(well != null) {
@@ -316,5 +262,10 @@ public class ExtendedWellChannelsUI {
 		} else {
 			return new String[]{};
 		}
+	}
+
+	private void updateLabel() {
+
+		toolbarInfo.get().setText(well != null ? well.getLabel() : "--");
 	}
 }

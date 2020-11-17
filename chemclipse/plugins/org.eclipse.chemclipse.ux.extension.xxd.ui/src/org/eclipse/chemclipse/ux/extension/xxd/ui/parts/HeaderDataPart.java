@@ -11,41 +11,54 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.core.IMeasurementInfo;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractOverviewUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IOverviewUpdateSupport;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IOverviewListener;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.OverviewSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedHeaderDataUI;
-import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class HeaderDataPart extends AbstractOverviewUpdateSupport implements IOverviewUpdateSupport {
+public class HeaderDataPart extends AbstractPart<ExtendedHeaderDataUI> {
 
-	private ExtendedHeaderDataUI extendedHeaderDataUI;
+	private static final String TOPIC = IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION;
+	private final OverviewSupport overviewSupport = new OverviewSupport();
 
 	@Inject
-	public HeaderDataPart(Composite parent, MPart part) {
+	public HeaderDataPart(Composite parent) {
 
-		super(part);
-		extendedHeaderDataUI = new ExtendedHeaderDataUI(parent);
-	}
+		super(parent, TOPIC);
+		overviewSupport.setOverviewListener(new IOverviewListener() {
 
-	@Focus
-	public void setFocus() {
+			@Override
+			public void update(Object object) {
 
-		updateObjects(getObjects(), getTopic());
+				if(object instanceof IMeasurementInfo) {
+					getControl().setInput((IMeasurementInfo)object);
+				}
+			}
+		});
 	}
 
 	@Override
-	public void update(Object object) {
+	protected ExtendedHeaderDataUI createControl(Composite parent) {
 
-		if(object instanceof IMeasurementInfo) {
-			IMeasurementInfo measurementInfo = (IMeasurementInfo)object;
-			extendedHeaderDataUI.update(measurementInfo);
-		} else {
-			extendedHeaderDataUI.update(null);
-		}
+		return new ExtendedHeaderDataUI(parent, SWT.NONE);
+	}
+
+	@Override
+	protected boolean updateData(List<Object> objects, String topic) {
+
+		return overviewSupport.process(objects, topic);
+	}
+
+	@Override
+	protected boolean isUpdateTopic(String topic) {
+
+		return overviewSupport.isUpdateTopic(topic);
 	}
 }

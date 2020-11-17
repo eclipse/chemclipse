@@ -7,18 +7,17 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - extract constants into interface, don't overwrite data from constructor
+ * Philip Wenig - initial API and implementation
+ * Philip Wenig - reverted to version from 2018 ... the map must not be replaced by other map!
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -32,82 +31,94 @@ public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 	private static final long serialVersionUID = 4247159773898302230L;
 	private static final Logger logger = Logger.getLogger(AbstractMeasurementInfo.class);
 	//
-	private Set<String> protectKeys;
-	private Map<String, String> headerDataMap;
+	private static final String OPERATOR = "Operator";
+	private static final String DATE = "Date";
+	private static final String MISC_INFO = "Misc Info";
+	private static final String MISC_INFO_SEPARATED = "Misc Info Separated";
+	private static final String SHORT_INFO = "Short Info";
+	private static final String DETAILED_INFO = "Detailed Info";
+	private static final String SAMPLE_GROUP = "Sample Group";
+	private static final String BARCODE = "Barcode";
+	private static final String BARCODE_TYPE = "Barcode Type";
+	private static final String SAMPLE_WEIGHT = "Sample Weight";
+	private static final String SAMPLE_WEIGHT_UNIT = "Sample Weight Unit";
+	private static final String DATA_NAME = "Data Name";
+	//
+	private Set<String> protectKeys = new HashSet<String>();
+	private Map<String, String> headerMap = new HashMap<String, String>();
+	//
 	private DateFormat dateFormat = ValueFormat.getDateFormatEnglish(ValueFormat.FULL_DATE_PATTERN);
-
-	public AbstractMeasurementInfo(Map<String, String> headerData) {
-
-		if(headerData != null)
-			headerDataMap = new LinkedHashMap<>(headerData);
-		else {
-			headerDataMap = new LinkedHashMap<>();
-		}
-		//
-		headerDataMap.putIfAbsent(OPERATOR, "");
-		headerDataMap.putIfAbsent(DATE, dateFormat.format(new Date()));
-		headerDataMap.putIfAbsent(MISC_INFO, "");
-		headerDataMap.putIfAbsent(MISC_INFO_SEPARATED, "");
-		headerDataMap.putIfAbsent(SHORT_INFO, "");
-		headerDataMap.putIfAbsent(DETAILED_INFO, "");
-		headerDataMap.putIfAbsent(SAMPLE_GROUP, "");
-		headerDataMap.putIfAbsent(BARCODE, "");
-		headerDataMap.putIfAbsent(BARCODE_TYPE, "");
-		headerDataMap.putIfAbsent(SAMPLE_WEIGHT, Double.valueOf(0.0d).toString());
-		headerDataMap.putIfAbsent(SAMPLE_WEIGHT_UNIT, "");
-		headerDataMap.putIfAbsent(DATA_NAME, "");
-		//
-		protectKeys = new HashSet<String>(Arrays.asList(OPERATOR, DATE, MISC_INFO, MISC_INFO_SEPARATED, SHORT_INFO, DETAILED_INFO, SAMPLE_GROUP, BARCODE, BARCODE_TYPE, SAMPLE_WEIGHT, SAMPLE_WEIGHT_UNIT, DATA_NAME));
-	}
 
 	public AbstractMeasurementInfo() {
 
-		this(null);
+		headerMap.put(OPERATOR, "");
+		headerMap.put(DATE, dateFormat.format(new Date()));
+		headerMap.put(MISC_INFO, "");
+		headerMap.put(MISC_INFO_SEPARATED, "");
+		headerMap.put(SHORT_INFO, "");
+		headerMap.put(DETAILED_INFO, "");
+		headerMap.put(SAMPLE_GROUP, "");
+		headerMap.put(BARCODE, "");
+		headerMap.put(BARCODE_TYPE, "");
+		headerMap.put(SAMPLE_WEIGHT, Double.valueOf(0.0d).toString());
+		headerMap.put(SAMPLE_WEIGHT_UNIT, "");
+		headerMap.put(DATA_NAME, "");
+		//
+		protectKeys.addAll(headerMap.keySet());
+	}
+
+	@Override
+	public boolean isKeyProtected(String key) {
+
+		return protectKeys.contains(key);
 	}
 
 	@Override
 	public String getHeaderData(String key) {
 
-		return headerDataMap.get(key);
+		return headerMap.get(key);
 	}
 
 	@Override
 	public String getHeaderDataOrDefault(String key, String defaultValue) {
 
-		return headerDataMap.getOrDefault(key, defaultValue);
+		return headerMap.getOrDefault(key, defaultValue);
 	}
 
 	@Override
 	public boolean headerDataContainsKey(String key) {
 
-		return headerDataMap.containsKey(key);
+		return headerMap.containsKey(key);
 	}
 
 	@Override
 	public void putHeaderData(String key, String value) {
 
-		headerDataMap.put(key, value);
+		headerMap.put(key, value);
+	}
+
+	@Override
+	public void putHeaderData(Map<String, String> headerData) {
+
+		for(Map.Entry<String, String> entry : headerData.entrySet()) {
+			putHeaderData(entry.getKey(), entry.getValue());
+		}
 	}
 
 	@Override
 	public void removeHeaderData(String key) throws InvalidHeaderModificationException {
 
-		if(protectKeys.contains(key)) {
+		if(isKeyProtected(key)) {
 			throw new InvalidHeaderModificationException("It's not possible to remove the following key: " + key);
 		} else {
-			headerDataMap.remove(key);
+			headerMap.remove(key);
 		}
 	}
 
 	@Override
 	public Map<String, String> getHeaderDataMap() {
 
-		return Collections.unmodifiableMap(headerDataMap);
-	}
-
-	protected void setHeaderDataMap(Map<String, String> headerDataMap) {
-
-		this.headerDataMap = headerDataMap;
+		return Collections.unmodifiableMap(headerMap);
 	}
 
 	@Override
@@ -273,13 +284,12 @@ public abstract class AbstractMeasurementInfo implements IMeasurementInfo {
 		}
 	}
 
-	@Override
 	public void setSampleWeight(double sampleWeight) {
 
 		if(sampleWeight >= 0) {
-			headerDataMap.put(SAMPLE_WEIGHT, Double.valueOf(sampleWeight).toString());
+			headerMap.put(SAMPLE_WEIGHT, Double.valueOf(sampleWeight).toString());
 		} else {
-			headerDataMap.put(SAMPLE_WEIGHT, Double.valueOf(0.0d).toString());
+			headerMap.put(SAMPLE_WEIGHT, Double.valueOf(0.0d).toString());
 		}
 	}
 

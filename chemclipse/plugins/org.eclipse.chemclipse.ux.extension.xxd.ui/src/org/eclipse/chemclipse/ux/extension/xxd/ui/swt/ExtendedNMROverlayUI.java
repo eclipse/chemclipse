@@ -13,6 +13,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -31,19 +32,14 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorNMR;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartNMR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.preference.PreferenceDialog;
-import org.eclipse.jface.preference.PreferenceManager;
-import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.viewers.IColorProvider;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -60,7 +56,7 @@ import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 import org.eclipse.swtchart.extensions.linecharts.LineChart;
 import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
 
-public class ExtendedNMROverlayUI implements Observer {
+public class ExtendedNMROverlayUI extends Composite implements Observer, IExtendedPartUI {
 
 	private enum Mode {
 		OVERLAY, STACKED
@@ -71,20 +67,21 @@ public class ExtendedNMROverlayUI implements Observer {
 	 * A mapping between (active) {@link IScanEditorNMR} and selected {@link SpectrumMeasurement}s
 	 */
 	private AtomicReference<Map<IScanEditorNMR, OverlayDataNMRSelection>> dataNMREditors = new AtomicReference<Map<IScanEditorNMR, OverlayDataNMRSelection>>(Collections.emptyMap());
-	private EPartService partservice;
+	private EPartService partservice = Activator.getDefault().getPartService();
+	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private IColorScheme colorSchemeNormal;
-	private IPreferenceStore preferenceStore;
 	private Mode mode = Mode.OVERLAY;
 
-	public ExtendedNMROverlayUI(Composite parent, EPartService partservice, IPreferenceStore preferenceStore) {
-		this.partservice = partservice;
-		this.preferenceStore = preferenceStore;
+	public ExtendedNMROverlayUI(Composite parent, int style) {
+
+		super(parent, style);
 		if(preferenceStore != null) {
 			colorSchemeNormal = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_OVERLAY));
 		} else {
 			colorSchemeNormal = Colors.getColorScheme(Colors.COLOR_SCHEME_RED);
 		}
-		initialize(parent);
+		//
+		createControl();
 	}
 
 	public void update() {
@@ -115,12 +112,12 @@ public class ExtendedNMROverlayUI implements Observer {
 		return Collections.unmodifiableCollection(dataNMREditors.get().values());
 	}
 
-	private void initialize(Composite parent) {
+	private void createControl() {
 
-		parent.setLayout(new GridLayout(1, true));
+		setLayout(new GridLayout(1, true));
 		//
-		createToolbarMain(parent);
-		createOverlayChart(parent);
+		createToolbarMain(this);
+		createOverlayChart(this);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -199,43 +196,19 @@ public class ExtendedNMROverlayUI implements Observer {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				applyOverlaySettings();
+				applySettings();
 			}
 		});
 	}
 
 	private void createSettingsButton(Composite parent) {
 
-		if(preferenceStore == null) {
-			return;
-		}
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Open the Settings");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		createSettingsButton(parent, Arrays.asList(PreferencePageOverlay.class), new ISettingsHandler() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void apply(Display display) {
 
-				IPreferencePage preferencePageOverlay = new PreferencePageOverlay();
-				preferencePageOverlay.setTitle("Overlay Settings");
-				//
-				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", preferencePageOverlay));
-				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
-				preferenceDialog.setPreferenceStore(preferenceStore);
-				preferenceDialog.create();
-				preferenceDialog.setMessage("Settings");
-				if(preferenceDialog.open() == Window.OK) {
-					try {
-						applyOverlaySettings();
-					} catch(Exception e1) {
-						System.out.println(e1);
-						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the chart settings.");
-					}
-				}
+				applySettings();
 			}
 		});
 	}
@@ -251,7 +224,7 @@ public class ExtendedNMROverlayUI implements Observer {
 		chartNMR.setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
-	private void applyOverlaySettings() {
+	private void applySettings() {
 
 	}
 
@@ -324,6 +297,7 @@ public class ExtendedNMROverlayUI implements Observer {
 		private Color color;
 
 		public OverlayDataNMRSelection(IScanEditorNMR editor) {
+
 			this.editor = editor;
 			IComplexSignalMeasurement<?>[] measurements = getMeasurements();
 			if(measurements.length > 0) {

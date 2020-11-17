@@ -35,12 +35,12 @@ public class ExplainedVarianceChart extends BarChart {
 
 	public ExplainedVarianceChart() {
 		super();
-		initialize();
+		createControl();
 	}
 
 	public ExplainedVarianceChart(Composite parent, int style) {
 		super(parent, style);
-		initialize();
+		createControl();
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -54,7 +54,7 @@ public class ExplainedVarianceChart extends BarChart {
 		}
 	}
 
-	private void initialize() {
+	private void createControl() {
 
 		IChartSettings chartSettings = getChartSettings();
 		//

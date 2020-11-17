@@ -15,6 +15,7 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -31,6 +32,8 @@ import org.eclipse.swtchart.extensions.linecharts.LineChart;
 
 public class OverviewChartUI extends LineChart {
 
+	private static final Logger logger = Logger.getLogger(OverviewChartUI.class);
+
 	public OverviewChartUI(Composite parent, int style) {
 
 		super(parent, style);
@@ -38,7 +41,7 @@ public class OverviewChartUI extends LineChart {
 		try {
 			initialize();
 		} catch(Exception e) {
-			System.out.println(e);
+			logger.warn(e);
 		}
 	}
 

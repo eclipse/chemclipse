@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - refactoring
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 
@@ -17,18 +18,19 @@ import org.eclipse.nebula.visualization.xygraph.linearscale.Range;
 public class ChromatogramHeatmapData {
 
 	private Range axisRangeWidth;
-	private Range axisRangeHight;
+	private Range axisRangeHeight;
 	private IPrimaryArrayWrapper arrayWrapper;
 	private double minimum;
 	private double maximum;
 	private int dataWidth;
 	private int dataHeight;
 
-	public ChromatogramHeatmapData(IPrimaryArrayWrapper arrayWrapper, Range axisRangeWidth, Range axisRangeHight, double minimum, double maximum, int dataWidth, int dataHeight) {
+	public ChromatogramHeatmapData(IPrimaryArrayWrapper arrayWrapper, Range axisRangeWidth, Range axisRangeHeight, double minimum, double maximum, int dataWidth, int dataHeight) {
 
 		super();
+		//
 		this.axisRangeWidth = axisRangeWidth;
-		this.axisRangeHight = axisRangeHight;
+		this.axisRangeHeight = axisRangeHeight;
 		this.arrayWrapper = arrayWrapper;
 		this.minimum = minimum;
 		this.maximum = maximum;
@@ -46,14 +48,14 @@ public class ChromatogramHeatmapData {
 		this.axisRangeWidth = axisRangeWidth;
 	}
 
-	public Range getAxisRangeHight() {
+	public Range getAxisRangeHeight() {
 
-		return axisRangeHight;
+		return axisRangeHeight;
 	}
 
-	public void setAxisRangeHight(Range axisRangeHight) {
+	public void setAxisRangeHight(Range axisRangeHeight) {
 
-		this.axisRangeHight = axisRangeHight;
+		this.axisRangeHeight = axisRangeHeight;
 	}
 
 	public IPrimaryArrayWrapper getArrayWrapper() {

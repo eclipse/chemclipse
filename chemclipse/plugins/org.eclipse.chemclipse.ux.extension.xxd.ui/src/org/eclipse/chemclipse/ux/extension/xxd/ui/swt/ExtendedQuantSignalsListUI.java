@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.util.Arrays;
 import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
@@ -21,8 +23,8 @@ import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
+import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
-import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.QuantitationSignalValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeaksAxes;
 import org.eclipse.core.databinding.validation.IValidator;
@@ -30,10 +32,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
-import org.eclipse.jface.preference.PreferenceDialog;
-import org.eclipse.jface.preference.PreferenceManager;
-import org.eclipse.jface.preference.PreferenceNode;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -44,30 +42,34 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-public class ExtendedQuantSignalsListUI extends Composite {
+public class ExtendedQuantSignalsListUI extends Composite implements IExtendedPartUI {
 
 	private static final String MENU_CATEGORY = "Signals";
 	//
 	private IQuantitationCompound quantitationCompound;
 	//
-	private Composite toolbarInfo;
-	private Label labelInfo;
-	private Composite toolbarModify;
+	private Button buttonToolbarInfo;
+	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
+	private Button buttonToolbarEdit;
+	private AtomicReference<Composite> toolbarEdit = new AtomicReference<>();
 	private Label labelInputErrors;
 	private Text textSignal;
 	private Button buttonAdd;
 	private Button buttonDelete;
-	private QuantSignalsListUI quantSignalsListUI;
+	private AtomicReference<QuantSignalsListUI> tableViewer = new AtomicReference<>();
+	private Button buttonTableEdit;
 	//
 	private QuantitationSignalValidator validator = new QuantitationSignalValidator();
 	private ControlDecoration controlDecoration;
 
 	public ExtendedQuantSignalsListUI(Composite parent, int style) {
+
 		super(parent, style);
 		createControl();
 	}
@@ -87,14 +89,18 @@ public class ExtendedQuantSignalsListUI extends Composite {
 		composite.setLayout(new GridLayout(1, true));
 		//
 		createToolbarMain(composite);
-		toolbarInfo = createToolbarInfo(composite);
-		toolbarModify = createToolbarModify(composite);
-		quantSignalsListUI = createTable(composite);
+		createToolbarInfo(composite);
+		createToolbarEdit(composite);
+		createTable(composite);
 		//
-		PartSupport.setCompositeVisibility(toolbarInfo, true);
-		PartSupport.setCompositeVisibility(toolbarModify, false);
-		//
-		quantSignalsListUI.setEditEnabled(false);
+		initialize();
+	}
+
+	private void initialize() {
+
+		enableToolbar(toolbarInfo, buttonToolbarInfo, IMAGE_INFO, TOOLTIP_INFO, true);
+		enableToolbar(toolbarEdit, buttonToolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT, false);
+		enableEdit(tableViewer, buttonTableEdit, IMAGE_EDIT_ENTRY, false);
 		clearLabelInputErrors();
 	}
 
@@ -104,100 +110,35 @@ public class ExtendedQuantSignalsListUI extends Composite {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(3, false));
+		composite.setLayout(new GridLayout(4, false));
 		//
-		createButtonToggleToolbarModify(composite);
-		createButtonToggleEditModus(composite);
+		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
+		buttonToolbarEdit = createButtonToggleToolbar(composite, toolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT);
+		buttonTableEdit = createButtonToggleEditTable(composite, tableViewer, IMAGE_EDIT_ENTRY);
 		createSettingsButton(composite);
-	}
-
-	private Button createButtonToggleToolbarModify(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle modify toolbar.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DEFAULT, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				boolean visible = PartSupport.toggleCompositeVisibility(toolbarModify);
-				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ACTIVE, IApplicationImage.SIZE_16x16));
-				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DEFAULT, IApplicationImage.SIZE_16x16));
-				}
-			}
-		});
-		//
-		return button;
-	}
-
-	private Button createButtonToggleEditModus(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Enable/disable to edit the table.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ENTRY_DEFAULT, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				boolean editEnabled = !quantSignalsListUI.isEditEnabled();
-				quantSignalsListUI.setEditEnabled(editEnabled);
-				button.setImage(ApplicationImageFactory.getInstance().getImage((editEnabled) ? IApplicationImage.IMAGE_EDIT_ENTRY_ACTIVE : IApplicationImage.IMAGE_EDIT_ENTRY_DEFAULT, IApplicationImage.SIZE_16x16));
-				updateInput();
-			}
-		});
-		//
-		return button;
 	}
 
 	private void createSettingsButton(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Open the Settings");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		createSettingsButton(parent, Arrays.asList(PreferencePagePeaksAxes.class), new ISettingsHandler() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void apply(Display display) {
 
-				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePagePeaksAxes()));
-				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
-				preferenceDialog.create();
-				preferenceDialog.setMessage("Settings");
-				if(preferenceDialog.open() == Window.OK) {
-					try {
-						applySettings();
-					} catch(Exception e1) {
-						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
-					}
-				}
+				applySettings();
 			}
 		});
 	}
 
-	private Composite createToolbarInfo(Composite parent) {
+	private void createToolbarInfo(Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(1, false));
+		InformationUI informationUI = new InformationUI(parent, SWT.NONE);
+		informationUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
-		labelInfo = new Label(composite, SWT.NONE);
-		labelInfo.setText("");
-		labelInfo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
-		return composite;
+		toolbarInfo.set(informationUI);
 	}
 
-	private Composite createToolbarModify(Composite parent) {
+	private void createToolbarEdit(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -211,7 +152,7 @@ public class ExtendedQuantSignalsListUI extends Composite {
 		buttonAdd = createButtonAdd(composite);
 		buttonDelete = createButtonDelete(composite);
 		//
-		return composite;
+		toolbarEdit.set(composite);
 	}
 
 	private Label createLabel(Composite parent, int horizontalSpan) {
@@ -284,20 +225,20 @@ public class ExtendedQuantSignalsListUI extends Composite {
 		return button;
 	}
 
-	private QuantSignalsListUI createTable(Composite parent) {
+	private void createTable(Composite parent) {
 
-		QuantSignalsListUI listUI = new QuantSignalsListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
-		listUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		QuantSignalsListUI quantSignalsListUI = new QuantSignalsListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		quantSignalsListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 		/*
 		 * Add the delete support.
 		 */
-		Shell shell = listUI.getTable().getShell();
-		ITableSettings tableSettings = listUI.getTableSettings();
+		Shell shell = quantSignalsListUI.getTable().getShell();
+		ITableSettings tableSettings = quantSignalsListUI.getTableSettings();
 		addDeleteMenuEntry(shell, tableSettings);
 		addKeyEventProcessors(shell, tableSettings);
-		listUI.applySettings(tableSettings);
+		quantSignalsListUI.applySettings(tableSettings);
 		//
-		return listUI;
+		tableViewer.set(quantSignalsListUI);
 	}
 
 	private void addDeleteMenuEntry(Shell shell, ITableSettings tableSettings) {
@@ -348,7 +289,7 @@ public class ExtendedQuantSignalsListUI extends Composite {
 			/*
 			 * Delete
 			 */
-			Iterator iterator = quantSignalsListUI.getStructuredSelection().iterator();
+			Iterator iterator = tableViewer.get().getStructuredSelection().iterator();
 			while(iterator.hasNext()) {
 				Object object = iterator.next();
 				if(object instanceof IQuantitationSignal) {
@@ -389,12 +330,11 @@ public class ExtendedQuantSignalsListUI extends Composite {
 	private void updateInput() {
 
 		if(quantitationCompound != null) {
-			String editInformation = quantSignalsListUI.isEditEnabled() ? "(Edit is enabled)" : "(Edit is disabled)";
-			labelInfo.setText("Quantitation Compound: " + quantitationCompound.getName() + " " + editInformation);
-			quantSignalsListUI.setInput(quantitationCompound.getQuantitationSignals());
+			toolbarInfo.get().setText("Quantitation Compound: " + quantitationCompound.getName());
+			tableViewer.get().setInput(quantitationCompound.getQuantitationSignals());
 		} else {
-			labelInfo.setText("");
-			quantSignalsListUI.clear();
+			toolbarInfo.get().setText("");
+			tableViewer.get().clear();
 		}
 	}
 

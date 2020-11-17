@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -37,11 +38,61 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class PcaExtractionFiles implements IExtractionData {
 
 	private static final Logger logger = Logger.getLogger(PcaExtractionFiles.class);
+	//
+	private static final String DELIMITER = "\t";
 	private final List<IDataInputEntry> dataInputEntries;
 
 	public PcaExtractionFiles(List<IDataInputEntry> dataInputEntries) {
 
 		this.dataInputEntries = dataInputEntries;
+	}
+
+	public static void getDemoContent(PrintWriter printWriter) {
+
+		int start = 65; // ASCII -> A
+		int variables = 10;
+		/*
+		 * Header
+		 */
+		printWriter.print("Sample");
+		printWriter.print(DELIMITER);
+		printWriter.print("Group Name");
+		printWriter.print(DELIMITER);
+		printWriter.print("Classification");
+		printWriter.print(DELIMITER);
+		printWriter.print("Description");
+		printWriter.print(DELIMITER);
+		for(int i = 0; i < variables; i++) {
+			printWriter.print((char)(i + start));
+			printWriter.print(DELIMITER);
+		}
+		printWriter.println();
+		/*
+		 * Data
+		 */
+		for(int j = 0; j < 20; j++) {
+			//
+			int sampleNumber = j + 1;
+			double type = Math.random();
+			//
+			printWriter.print("Sample ");
+			if(sampleNumber < 10) {
+				printWriter.print("0");
+			}
+			printWriter.print(sampleNumber);
+			printWriter.print(DELIMITER);
+			printWriter.print(type >= 0.5 ? "O" : "U");
+			printWriter.print(DELIMITER);
+			printWriter.print(type >= 0.5 ? "+" : "-");
+			printWriter.print(DELIMITER);
+			printWriter.print(type >= 0.5 ? "Over Center" : "Under Center");
+			printWriter.print(DELIMITER);
+			for(int i = 0; i < variables; i++) {
+				printWriter.print(Math.random());
+				printWriter.print(DELIMITER);
+			}
+			printWriter.println();
+		}
 	}
 
 	@Override
@@ -63,7 +114,6 @@ public class PcaExtractionFiles implements IExtractionData {
 					/*
 					 * Data
 					 */
-					// CSVFormat.EXCEL.withHeader()
 					CSVParser parser = new CSVParser(reader, CSVFormat.TDF.withHeader());
 					Map<Integer, String> indexMap = extractIndexMap(parser);
 					for(CSVRecord record : parser.getRecords()) {
@@ -72,17 +122,17 @@ public class PcaExtractionFiles implements IExtractionData {
 						 * GroupName
 						 * Classification
 						 * Description
-						 * Content...
+						 * Variables...
 						 */
 						int size = record.size();
 						if(size > 4) {
 							/*
-							 * TODO Extend the sample class.
+							 * Header
 							 */
 							String name = record.get(0).trim();
 							String groupName = record.get(1).trim();
-							// String classification = record.get(2).trim();
-							// String description = record.get(3).trim();
+							String classification = record.get(2).trim();
+							String description = record.get(3).trim();
 							//
 							if(!name.isEmpty()) {
 								/*
@@ -90,7 +140,7 @@ public class PcaExtractionFiles implements IExtractionData {
 								 */
 								Sample sample = sampleMap.get(name);
 								if(sample == null) {
-									sample = new Sample(name, groupName);
+									sample = new Sample(name, groupName, classification, description);
 									sampleMap.put(name, sample);
 								}
 								/*

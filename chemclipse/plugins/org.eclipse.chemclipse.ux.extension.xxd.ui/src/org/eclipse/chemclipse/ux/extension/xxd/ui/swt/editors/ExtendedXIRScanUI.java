@@ -13,6 +13,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -21,13 +22,10 @@ import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartXIR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
 import org.eclipse.chemclipse.xir.model.core.IScanXIR;
 import org.eclipse.chemclipse.xir.model.core.ISignalXIR;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.preference.PreferenceDialog;
-import org.eclipse.jface.preference.PreferenceManager;
-import org.eclipse.jface.preference.PreferenceNode;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -35,6 +33,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
@@ -43,7 +42,7 @@ import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
 
-public class ExtendedXIRScanUI {
+public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 
 	private ChartXIR chartXIR;
 	private IScanXIR scanXIR;
@@ -51,8 +50,10 @@ public class ExtendedXIRScanUI {
 	private Label labelDataInfo;
 	private boolean showRawData = false;
 
-	public ExtendedXIRScanUI(Composite parent) {
-		initialize(parent);
+	public ExtendedXIRScanUI(Composite parent, int style) {
+
+		super(parent, style);
+		createControl();
 	}
 
 	public void update(IScanXIR scanXIR) {
@@ -152,12 +153,12 @@ public class ExtendedXIRScanUI {
 		return new SeriesData(ySeries, id);
 	}
 
-	private void initialize(Composite parent) {
+	private void createControl() {
 
-		parent.setLayout(new GridLayout(1, true));
+		setLayout(new GridLayout(1, true));
 		//
-		createToolbarMain(parent);
-		createScanChart(parent);
+		createToolbarMain(this);
+		createScanChart(this);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -267,29 +268,12 @@ public class ExtendedXIRScanUI {
 
 	private void createSettingsButton(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Open the Settings");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		createSettingsButton(parent, Arrays.asList(PreferencePageChromatogram.class, PreferencePageSystem.class), new ISettingsHandler() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void apply(Display display) {
 
-				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePageChromatogram()));
-				preferenceManager.addToRoot(new PreferenceNode("2", new PreferencePageSystem()));
-				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
-				preferenceDialog.create();
-				preferenceDialog.setMessage("Settings");
-				if(preferenceDialog.open() == Window.OK) {
-					try {
-						applySettings();
-					} catch(Exception e1) {
-						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
-					}
-				}
+				applySettings();
 			}
 		});
 	}

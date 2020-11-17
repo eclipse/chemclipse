@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,16 +16,13 @@ import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createColumn;
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createTreeTable;
 
 import java.util.Collection;
-
-import javax.inject.Inject;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.core.IMeasurementResult;
-import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
-import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinition;
 import org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinitionProvider;
-import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -39,22 +36,19 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TreeColumn;
 
-public class ExtendedMeasurementResultUI {
+public class ExtendedMeasurementResultUI extends Composite implements IExtendedPartUI {
 
-	private Label labelChromatogramInfo;
-	private Label labelMeasurementResultInfo;
-	private Composite toolbarChromatogramInfo;
-	private Composite toolbarMeasurementResultInfo;
+	private Button buttonToolbarInfo;
+	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
+	private Button buttonToolbarResults;
+	private AtomicReference<InformationUI> toolbarResults = new AtomicReference<>();
 	private ComboViewer comboMeasurementResults;
 	private TreeViewer resultTable;
 	private ProxySelectionChangedListener selectionChangedListener;
@@ -62,9 +56,10 @@ public class ExtendedMeasurementResultUI {
 	private ProxyStructuredContentProvider contentProvider;
 	private IMeasurementResult<?> lastResult;
 
-	@Inject
-	public ExtendedMeasurementResultUI(Composite parent) {
-		initialize(parent);
+	public ExtendedMeasurementResultUI(Composite parent, int style) {
+
+		super(parent, style);
+		createControl();
 	}
 
 	/**
@@ -77,19 +72,21 @@ public class ExtendedMeasurementResultUI {
 	 */
 	public void update(Collection<IMeasurementResult<?>> results, String infoLabel) {
 
-		if(!labelChromatogramInfo.isDisposed()) {
-			labelChromatogramInfo.setText(infoLabel);
-		}
+		toolbarInfo.get().setText(infoLabel);
+		//
 		IStructuredSelection selection = comboMeasurementResults.getStructuredSelection();
 		comboMeasurementResults.setInput(results);
 		comboMeasurementResults.refresh();
+		//
 		IMeasurementResult<?> selectedElement = (IMeasurementResult<?>)selection.getFirstElement();
 		if(!results.contains(selectedElement)) {
 			selectedElement = null;
 		}
+		//
 		if(selectedElement == null && results.size() == 1) {
 			selectedElement = results.iterator().next();
 		}
+		//
 		if(selectedElement == null) {
 			comboMeasurementResults.setSelection(StructuredSelection.EMPTY);
 		} else {
@@ -97,17 +94,22 @@ public class ExtendedMeasurementResultUI {
 		}
 	}
 
-	private void initialize(Composite parent) {
+	private void createControl() {
 
-		parent.setLayout(new GridLayout(1, true));
+		setLayout(new GridLayout(1, true));
 		//
-		createToolbarMain(parent);
-		toolbarChromatogramInfo = createToolbarChromatogramInfo(parent);
-		toolbarMeasurementResultInfo = createToolbarMeasurementResultInfo(parent);
-		resultTable = createResultSection(parent);
+		createToolbarMain(this);
+		createToolbarInfo(this);
+		resultTable = createResultSection(this);
+		createToolbarResults(this);
 		//
-		PartSupport.setCompositeVisibility(toolbarChromatogramInfo, true);
-		PartSupport.setCompositeVisibility(toolbarMeasurementResultInfo, false);
+		initialize();
+	}
+
+	private void initialize() {
+
+		enableToolbar(toolbarInfo, buttonToolbarInfo, IMAGE_INFO, TOOLTIP_INFO, true);
+		enableToolbar(toolbarResults, buttonToolbarResults, IMAGE_RESULTS, TOOLTIP_RESULTS, false);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -117,9 +119,9 @@ public class ExtendedMeasurementResultUI {
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(3, false));
 		//
-		createButtonToggleChromatogramToolbarInfo(composite);
+		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
 		comboMeasurementResults = createResultCombo(composite);
-		createButtonToggleMeasurementResultToolbarInfo(composite);
+		buttonToolbarResults = createButtonToggleToolbar(composite, toolbarResults, IMAGE_RESULTS, TOOLTIP_RESULTS);
 	}
 
 	public ComboViewer getComboMeasurementResults() {
@@ -127,32 +129,22 @@ public class ExtendedMeasurementResultUI {
 		return comboMeasurementResults;
 	}
 
-	private Composite createToolbarChromatogramInfo(Composite parent) {
+	private void createToolbarInfo(Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(1, false));
-		//
-		labelChromatogramInfo = new Label(composite, SWT.NONE);
-		labelChromatogramInfo.setText("");
-		labelChromatogramInfo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
-		return composite;
+		toolbarInfo.set(createInformationUI(parent));
 	}
 
-	private Composite createToolbarMeasurementResultInfo(Composite parent) {
+	private void createToolbarResults(Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(1, false));
+		toolbarResults.set(createInformationUI(parent));
+	}
+
+	private InformationUI createInformationUI(Composite parent) {
+
+		InformationUI informationUI = new InformationUI(parent, SWT.NONE);
+		informationUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
-		labelMeasurementResultInfo = new Label(composite, SWT.NONE);
-		labelMeasurementResultInfo.setText("");
-		labelMeasurementResultInfo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
-		return composite;
+		return informationUI;
 	}
 
 	private TreeViewer createResultSection(Composite parent) {
@@ -166,52 +158,6 @@ public class ExtendedMeasurementResultUI {
 		selectionChangedListener = new ProxySelectionChangedListener();
 		treeTable.addSelectionChangedListener(selectionChangedListener);
 		return treeTable;
-	}
-
-	private Button createButtonToggleChromatogramToolbarInfo(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle info toolbar.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				boolean visible = PartSupport.toggleCompositeVisibility(toolbarChromatogramInfo);
-				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-				}
-			}
-		});
-		//
-		return button;
-	}
-
-	private Button createButtonToggleMeasurementResultToolbarInfo(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle measurement results description toolbar.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_MEASUREMENT_RESULTS_DEFAULT, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				boolean visible = PartSupport.toggleCompositeVisibility(toolbarMeasurementResultInfo);
-				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_MEASUREMENT_RESULTS_DEFAULT, IApplicationImage.SIZE_16x16));
-				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_MEASUREMENT_RESULTS_DEFAULT, IApplicationImage.SIZE_16x16));
-				}
-			}
-		});
-		//
-		return button;
 	}
 
 	private ComboViewer createResultCombo(Composite parent) {
@@ -265,6 +211,7 @@ public class ExtendedMeasurementResultUI {
 	private void updateMeasurementResult(IMeasurementResult<?> measurementResult) {
 
 		updateLabel(measurementResult);
+		//
 		if(lastResult != measurementResult) {
 			contentProvider.setProxy(adaptTo(measurementResult, IStructuredContentProvider.class));
 			selectionChangedListener.setProxy(adaptTo(measurementResult, ISelectionChangedListener.class));
@@ -294,6 +241,7 @@ public class ExtendedMeasurementResultUI {
 		if(measurementResult == null) {
 			return null;
 		}
+		//
 		T resultAdapted = Adapters.adapt(measurementResult, desiredType);
 		if(resultAdapted != null) {
 			return resultAdapted;
@@ -304,12 +252,6 @@ public class ExtendedMeasurementResultUI {
 
 	public void updateLabel(IMeasurementResult<?> measurementResult) {
 
-		if(!labelMeasurementResultInfo.isDisposed()) {
-			if(measurementResult != null) {
-				labelMeasurementResultInfo.setText(measurementResult.getDescription());
-			} else {
-				labelMeasurementResultInfo.setText("");
-			}
-		}
+		toolbarResults.get().setText(measurementResult != null ? measurementResult.getDescription() : "");
 	}
 }

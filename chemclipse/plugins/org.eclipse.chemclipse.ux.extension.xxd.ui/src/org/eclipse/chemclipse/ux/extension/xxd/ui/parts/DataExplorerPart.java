@@ -34,7 +34,7 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Composite;
 
-public class DataExplorerPart extends AbstractPart {
+public class DataExplorerPart {
 
 	@Inject
 	private IEventBroker broker;

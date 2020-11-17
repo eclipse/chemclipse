@@ -12,8 +12,8 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.text.DecimalFormat;
-
-import javax.inject.Inject;
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -28,16 +28,10 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
-import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract;
-import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.preference.PreferenceDialog;
-import org.eclipse.jface.preference.PreferenceManager;
-import org.eclipse.jface.preference.PreferenceNode;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -45,20 +39,20 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 
 @SuppressWarnings("rawtypes")
-public class ExtendedCombinedScanUI {
+public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedCombinedScanUI.class);
 	//
 	private static final int INDEX_CHART = 0;
 	private static final int INDEX_TABLE = 1;
 	//
-	private Label labelInfo;
-	private Composite toolbarInfo;
+	private Button buttonToolbarInfo;
+	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
 	private TabFolder tabFolder;
 	private ScanChartUI scanChartUI;
 	private ScanTableUI scanTableUI;
@@ -68,15 +62,16 @@ public class ExtendedCombinedScanUI {
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
 
-	@Inject
-	public ExtendedCombinedScanUI(Composite parent) {
-		initialize(parent);
+	public ExtendedCombinedScanUI(Composite parent, int style) {
+
+		super(parent, style);
+		createControl();
 	}
 
-	@Focus
-	public void setFocus() {
+	public boolean setFocus() {
 
 		updateScan();
+		return true;
 	}
 
 	public void update(Object object) {
@@ -92,7 +87,7 @@ public class ExtendedCombinedScanUI {
 			scanMSD = FilterSupport.getCombinedMassSpectrum(chromatogramSelectionMSD, null, useNormalize, calculationType);
 		}
 		//
-		labelInfo.setText(getCombinedRangeInfo(object));
+		toolbarInfo.get().setText(getCombinedRangeInfo(object));
 		updateScan();
 	}
 
@@ -101,15 +96,20 @@ public class ExtendedCombinedScanUI {
 		updateScanData();
 	}
 
-	private void initialize(Composite parent) {
+	private void createControl() {
 
-		parent.setLayout(new GridLayout(1, true));
+		setLayout(new GridLayout(1, true));
 		//
-		createToolbarMain(parent);
-		toolbarInfo = createToolbarInfo(parent);
-		createScanTabFolderSection(parent);
+		createToolbarMain(this);
+		createToolbarInfo(this);
+		createScanTabFolderSection(this);
 		//
-		PartSupport.setCompositeVisibility(toolbarInfo, true);
+		initialize();
+	}
+
+	private void initialize() {
+
+		enableToolbar(toolbarInfo, buttonToolbarInfo, IMAGE_INFO, TOOLTIP_INFO, true);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -120,23 +120,17 @@ public class ExtendedCombinedScanUI {
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(3, false));
 		//
-		createButtonToggleToolbarInfo(composite);
+		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
 		createSaveButton(composite);
 		createSettingsButton(composite);
 	}
 
-	private Composite createToolbarInfo(Composite parent) {
+	private void createToolbarInfo(Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(1, false));
+		InformationUI informationUI = new InformationUI(parent, SWT.NONE);
+		informationUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
-		labelInfo = new Label(composite, SWT.NONE);
-		labelInfo.setText("");
-		labelInfo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
-		return composite;
+		toolbarInfo.set(informationUI);
 	}
 
 	private void createScanTabFolderSection(Composite parent) {
@@ -186,29 +180,6 @@ public class ExtendedCombinedScanUI {
 		scanTableUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
-	private Button createButtonToggleToolbarInfo(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle info toolbar.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				boolean visible = PartSupport.toggleCompositeVisibility(toolbarInfo);
-				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-				}
-			}
-		});
-		//
-		return button;
-	}
-
 	private Button createSaveButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
@@ -233,29 +204,12 @@ public class ExtendedCombinedScanUI {
 
 	private void createSettingsButton(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Open the Settings");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		createSettingsButton(parent, Arrays.asList(PreferencePageScans.class, PreferencePageSubtract.class), new ISettingsHandler() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void apply(Display display) {
 
-				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePageScans()));
-				preferenceManager.addToRoot(new PreferenceNode("2", new PreferencePageSubtract()));
-				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
-				preferenceDialog.create();
-				preferenceDialog.setMessage("Settings");
-				if(preferenceDialog.open() == Window.OK) {
-					try {
-						applySettings();
-					} catch(Exception e1) {
-						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the chart settings.");
-					}
-				}
+				applySettings();
 			}
 		});
 	}

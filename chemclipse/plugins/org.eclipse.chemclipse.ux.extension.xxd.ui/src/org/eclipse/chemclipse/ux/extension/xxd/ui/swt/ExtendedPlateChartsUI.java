@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +12,9 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Inject;
 
@@ -22,20 +24,14 @@ import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.pcr.model.core.IWell;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
-import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartPCR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.model.ColorCodes;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePCR;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.preference.PreferenceDialog;
-import org.eclipse.jface.preference.PreferenceManager;
-import org.eclipse.jface.preference.PreferenceNode;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -45,28 +41,30 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
 import org.eclipse.swtchart.extensions.core.SeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
 
-public class ExtendedPlateChartsUI {
+public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedPlateChartsUI.class);
 	//
-	private Label labelInfo;
-	private Composite toolbarInfo;
+	private Button buttonToolbarInfo;
+	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
 	private Combo comboChannels;
-	private ChartPCR chartPCR;
+	private AtomicReference<ChartPCR> chartControl = new AtomicReference<>();
 	private IPlate plate = null;
 	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	@Inject
-	public ExtendedPlateChartsUI(Composite parent) {
-		initialize(parent);
+	public ExtendedPlateChartsUI(Composite parent, int style) {
+
+		super(parent, style);
+		createControl();
 	}
 
 	public void update(IPlate plate) {
@@ -79,11 +77,7 @@ public class ExtendedPlateChartsUI {
 
 	private void updateLabel() {
 
-		if(plate != null) {
-			labelInfo.setText("Plate: " + plate.getName());
-		} else {
-			labelInfo.setText("No plate data available.");
-		}
+		toolbarInfo.get().setText(plate != null ? plate.getName() : "--");
 	}
 
 	private void updateComboChannels() {
@@ -117,7 +111,7 @@ public class ExtendedPlateChartsUI {
 		if(plate != null) {
 			updateChart();
 		} else {
-			chartPCR.deleteSeries();
+			chartControl.get().deleteSeries();
 		}
 	}
 
@@ -134,16 +128,21 @@ public class ExtendedPlateChartsUI {
 		}
 	}
 
-	private void initialize(Composite parent) {
+	private void createControl() {
 
-		parent.setLayout(new GridLayout(1, true));
+		setLayout(new GridLayout(1, true));
 		//
-		createToolbarMain(parent);
-		toolbarInfo = createToolbarInfo(parent);
-		comboChannels = createComboChannels(parent);
-		chartPCR = createChart(parent);
+		createToolbarMain(this);
+		createToolbarInfo(this);
+		comboChannels = createComboChannels(this);
+		createChart(this);
 		//
-		PartSupport.setCompositeVisibility(toolbarInfo, true);
+		initialize();
+	}
+
+	private void initialize() {
+
+		enableToolbar(toolbarInfo, buttonToolbarInfo, IMAGE_INFO, TOOLTIP_INFO, true);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -154,48 +153,10 @@ public class ExtendedPlateChartsUI {
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(4, false));
 		//
-		createButtonToggleToolbarInfo(composite);
-		createToggleChartLegendButton(composite);
+		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
+		createButtonToggleChartLegend(composite, chartControl, IMAGE_LEGEND);
 		createResetButton(composite);
 		createSettingsButton(composite);
-	}
-
-	private Button createButtonToggleToolbarInfo(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle info toolbar.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				boolean visible = PartSupport.toggleCompositeVisibility(toolbarInfo);
-				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-				}
-			}
-		});
-		//
-		return button;
-	}
-
-	private void createToggleChartLegendButton(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle the chart legend");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TAG, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				chartPCR.toggleSeriesLegendVisibility();
-			}
-		});
 	}
 
 	private void createResetButton(Composite parent) {
@@ -216,48 +177,22 @@ public class ExtendedPlateChartsUI {
 
 	private void createSettingsButton(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Open the Settings");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		createSettingsButton(parent, Arrays.asList(PreferencePagePCR.class), new ISettingsHandler() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void apply(Display display) {
 
-				IPreferencePage preferencePage = new PreferencePagePCR();
-				preferencePage.setTitle("PCR");
-				//
-				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage));
-				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
-				preferenceDialog.create();
-				preferenceDialog.setMessage("Settings");
-				if(preferenceDialog.open() == Window.OK) {
-					try {
-						updateChart();
-					} catch(Exception e1) {
-						System.out.println(e1);
-						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the chart settings.");
-					}
-				}
+				updateChart();
 			}
 		});
 	}
 
-	private Composite createToolbarInfo(Composite parent) {
+	private void createToolbarInfo(Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(1, false));
+		InformationUI informationUI = new InformationUI(parent, SWT.NONE);
+		informationUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
-		labelInfo = new Label(composite, SWT.NONE);
-		labelInfo.setText("");
-		labelInfo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
-		return composite;
+		toolbarInfo.set(informationUI);
 	}
 
 	private Combo createComboChannels(Composite parent) {
@@ -276,13 +211,14 @@ public class ExtendedPlateChartsUI {
 		return combo;
 	}
 
-	private ChartPCR createChart(Composite parent) {
+	private void createChart(Composite parent) {
 
 		ChartPCR chart = new ChartPCR(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.horizontalSpan = 3;
 		chart.setLayoutData(gridData);
-		return chart;
+		//
+		chartControl.set(chart);
 	}
 
 	private void updateChart() {
@@ -290,7 +226,7 @@ public class ExtendedPlateChartsUI {
 		/*
 		 * Clear the chart and reset.
 		 */
-		chartPCR.deleteSeries();
+		chartControl.get().deleteSeries();
 		if(plate != null) {
 			ColorCodes colorCodes = new ColorCodes();
 			colorCodes.load(preferenceStore.getString(PreferenceConstants.P_PCR_COLOR_CODES));
@@ -310,7 +246,7 @@ public class ExtendedPlateChartsUI {
 				}
 			}
 			//
-			chartPCR.addSeriesData(lineSeriesDataList);
+			chartControl.get().addSeriesData(lineSeriesDataList);
 		}
 	}
 

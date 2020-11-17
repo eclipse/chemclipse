@@ -20,12 +20,12 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramEditor;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramProjectEditor;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IQuantitationDatabaseEditor;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorNMR;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorXIR;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.xir.model.core.IScanXIR;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -38,7 +38,7 @@ import org.eclipse.ui.internal.e4.compatibility.CompatibilityEditor;
 public class EditorUpdateSupport {
 
 	private static final Logger logger = Logger.getLogger(EditorUpdateSupport.class);
-	private EPartService partService = ModelSupportAddon.getPartService();
+	private EPartService partService = Activator.getDefault().getPartService();
 
 	@SuppressWarnings("rawtypes")
 	public IChromatogramSelection getActiveEditorSelection() {
@@ -81,9 +81,9 @@ public class EditorUpdateSupport {
 				 * is called by a modal dialog. In such a case, try to resolve the chromatogram
 				 * selections via the application.
 				 */
-				MApplication application = ModelSupportAddon.getApplication();
+				MApplication application = Activator.getDefault().getApplication();
 				if(application != null) {
-					EModelService service = ModelSupportAddon.getModelService();
+					EModelService service = Activator.getDefault().getModelService();
 					if(service != null) {
 						List<MPart> parts = service.findElements(application, null, MPart.class, null);
 						if(parts != null) {

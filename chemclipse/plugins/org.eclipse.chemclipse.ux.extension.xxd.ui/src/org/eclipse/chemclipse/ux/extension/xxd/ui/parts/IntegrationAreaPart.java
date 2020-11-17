@@ -17,58 +17,63 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedIntegrationAreaUI;
-import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class IntegrationAreaPart extends AbstractDataUpdateSupport implements IDataUpdateSupport {
+public class IntegrationAreaPart extends AbstractPart<ExtendedIntegrationAreaUI> {
 
-	private ExtendedIntegrationAreaUI extendedIntegrationAreaUI;
+	private static final String TOPIC = IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION;
 
 	@Inject
-	public IntegrationAreaPart(Composite parent, MPart part) {
-		super(part);
-		extendedIntegrationAreaUI = new ExtendedIntegrationAreaUI(parent);
-	}
+	public IntegrationAreaPart(Composite parent) {
 
-	@Focus
-	public void setFocus() {
-
-		updateObjects(getObjects(), getTopic());
+		super(parent, TOPIC);
 	}
 
 	@Override
-	public void registerEvents() {
+	protected ExtendedIntegrationAreaUI createControl(Composite parent) {
 
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
-		registerEvent(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_PEAK);
-		registerEvent(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_PEAK);
+		return new ExtendedIntegrationAreaUI(parent, SWT.NONE);
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public void updateObjects(List<Object> objects, String topic) {
+	protected boolean updateData(List<Object> objects, String topic) {
 
-		/*
-		 * 0 => because only one property was used to register the event.
-		 */
 		if(objects.size() == 1) {
 			Object object = null;
 			if(!isUnloadEvent(topic)) {
 				object = objects.get(0);
 				if(object instanceof IChromatogramSelection) {
-					IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
+					IChromatogramSelection<?, ?> chromatogramSelection = (IChromatogramSelection<?, ?>)object;
 					object = chromatogramSelection.getChromatogram();
 				}
 			}
-			extendedIntegrationAreaUI.update(object);
+			getControl().update(object);
+			return true;
 		}
+		//
+		return false;
+	}
+
+	@Override
+	protected boolean isUpdateTopic(String topic) {
+
+		return TOPIC.equals(topic) || isLoadEvent(topic) || isUnloadEvent(topic);
+	}
+
+	private boolean isLoadEvent(String topic) {
+
+		if(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION.equals(topic)) {
+			return true;
+		} else if(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION.equals(topic)) {
+			return true;
+		} else if(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION.equals(topic)) {
+			return true;
+		} else if(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION.equals(topic)) {
+			return true;
+		}
+		return false;
 	}
 
 	private boolean isUnloadEvent(String topic) {

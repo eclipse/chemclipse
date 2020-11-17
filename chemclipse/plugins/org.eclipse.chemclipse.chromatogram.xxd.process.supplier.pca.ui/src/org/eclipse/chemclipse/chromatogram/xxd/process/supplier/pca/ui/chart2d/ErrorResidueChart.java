@@ -35,13 +35,15 @@ import org.eclipse.swtchart.extensions.core.SeriesData;
 public class ErrorResidueChart extends BarChart {
 
 	public ErrorResidueChart() {
+
 		super();
-		initialize();
+		createControl();
 	}
 
 	public ErrorResidueChart(Composite parent, int style) {
+
 		super(parent, style);
-		initialize();
+		createControl();
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -55,7 +57,7 @@ public class ErrorResidueChart extends BarChart {
 		}
 	}
 
-	private void initialize() {
+	private void createControl() {
 
 		IChartSettings chartSettings = getChartSettings();
 		//

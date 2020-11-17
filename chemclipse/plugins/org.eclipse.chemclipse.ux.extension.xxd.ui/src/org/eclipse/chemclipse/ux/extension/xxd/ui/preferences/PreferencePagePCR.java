@@ -21,6 +21,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class PreferencePagePCR extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePagePCR() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setTitle("PCR");

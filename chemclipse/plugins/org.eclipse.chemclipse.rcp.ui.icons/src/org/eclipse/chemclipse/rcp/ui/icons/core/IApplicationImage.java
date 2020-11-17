@@ -60,7 +60,6 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_EDIT_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/editDefault.gif";
 	String IMAGE_EDIT_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/editActive.gif";
 	String IMAGE_EDIT_DISABLED = "org.eclipse.chemclipse.rcp.ui.icons/edit_disabled.gif";
-	String IMAGE_EDIT_ENTRY = "org.eclipse.chemclipse.rcp.ui.icons/edit_entry.gif";
 	String IMAGE_EDIT_SHIFT = "org.eclipse.chemclipse.rcp.ui.icons/editShift.gif";
 	String IMAGE_EDIT_PROFILE = "org.eclipse.chemclipse.rcp.ui.icons/editProfile.gif";
 	String IMAGE_CHROMATOGRAM_PROFILE = "org.eclipse.chemclipse.rcp.ui.icons/chromatogramProfile.gif";
@@ -367,6 +366,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_INTERNAL_STANDARDS_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/internalStandardsActive.gif";
 	String IMAGE_EXTERNAL_STANDARDS_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/externalStandardsDefault.gif";
 	String IMAGE_EXTERNAL_STANDARDS_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/externalStandardsActive.gif";
+	String IMAGE_EDIT_ENTRY = "org.eclipse.chemclipse.rcp.ui.icons/editEntry.gif";
 	String IMAGE_EDIT_ENTRY_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/editEntryDefault.gif";
 	String IMAGE_EDIT_ENTRY_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/editEntryActive.gif";
 	String IMAGE_CHROMATOGRAM_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/chromatogramDefault.gif";
@@ -376,6 +376,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_START_PROCESSING = "org.eclipse.chemclipse.rcp.ui.icons/startProcessing.gif";
 	String IMAGE_END_PROCESSING = "org.eclipse.chemclipse.rcp.ui.icons/endProcessing.gif";
 	//
+	String IMAGE_RESULTS = "org.eclipse.chemclipse.rcp.ui.icons/measurementResults.gif";
 	String IMAGE_MEASUREMENT_RESULTS_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/measurementResultsDefault.gif";
 	String IMAGE_MEASUREMENT_RESULTS_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/measurementResultsActive.gif";
 	//

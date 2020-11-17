@@ -41,6 +41,16 @@ public class SamplesComparator extends AbstractRecordTableComparator implements 
 					String groupName2 = sample2.getGroupName() != null ? sample2.getGroupName() : "";
 					sortOrder = groupName2.compareTo(groupName1);
 					break;
+				case 4:
+					String classification1 = sample1.getClassification() != null ? sample1.getClassification() : "";
+					String classification2 = sample2.getClassification() != null ? sample2.getClassification() : "";
+					sortOrder = classification2.compareTo(classification1);
+					break;
+				case 5:
+					String description1 = sample1.getDescription() != null ? sample1.getDescription() : "";
+					String description2 = sample2.getDescription() != null ? sample2.getDescription() : "";
+					sortOrder = description2.compareTo(description1);
+					break;
 			}
 		}
 		if(getDirection() == ASCENDING) {

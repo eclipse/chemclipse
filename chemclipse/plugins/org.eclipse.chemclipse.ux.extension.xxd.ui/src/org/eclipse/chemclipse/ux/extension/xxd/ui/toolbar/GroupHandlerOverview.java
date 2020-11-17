@@ -42,7 +42,6 @@ public class GroupHandlerOverview extends AbstractGroupHandler {
 		//
 		partHandler.add(new PartHandler("Header", PartSupport.PARTDESCRIPTOR_HEADER_DATA, PreferenceConstants.P_STACK_POSITION_HEADER_DATA));
 		partHandler.add(new PartHandler("Overview (Chromatogram)", PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_OVERVIEW, PreferenceConstants.P_STACK_POSITION_CHROMATOGRAM_OVERVIEW));
-		partHandler.add(new PartHandler("Header (Miscellaneous)", PartSupport.PARTDESCRIPTOR_MISCELLANEOUS_INFO, PreferenceConstants.P_STACK_POSITION_MISCELLANEOUS_INFO));
 		//
 		return partHandler;
 	}

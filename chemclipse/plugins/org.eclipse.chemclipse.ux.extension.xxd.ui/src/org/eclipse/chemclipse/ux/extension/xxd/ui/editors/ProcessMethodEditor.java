@@ -70,12 +70,6 @@ public class ProcessMethodEditor implements IModificationHandler, IChemClipseEdi
 		extendedMethodUI.setFocus();
 	}
 
-	@PreDestroy
-	private void preDestroy() {
-
-		partsupport.closePart(part);
-	}
-
 	@Persist
 	public void save(@Named(IServiceConstants.ACTIVE_SHELL) Shell shell) {
 
@@ -94,6 +88,51 @@ public class ProcessMethodEditor implements IModificationHandler, IChemClipseEdi
 
 		File file = getSaveFile(extendedMethodUI.getShell());
 		return save(file, true);
+	}
+
+	@PostConstruct
+	public void initialize(Composite parent, @Optional IProcessMethod processMethod, @Optional File editorInput) {
+
+		if(processMethod == null && editorInput == null) {
+			throw new IllegalStateException("No method file and no process method are specified.");
+		}
+		//
+		if(editorInput != null) {
+			currentProcessMethod = Adapters.adapt(editorInput, IProcessMethod.class);
+			processMethodFile = editorInput;
+			if(currentProcessMethod == null) {
+				throw new RuntimeException("Can't read file " + processMethodFile);
+			}
+		} else {
+			currentProcessMethod = processMethod;
+		}
+		/*
+		 * Backward compatibility
+		 */
+		DataCategory[] categories = currentProcessMethod.getDataCategories().toArray(new DataCategory[]{});
+		if(categories == null || categories.length == 0) {
+			categories = new DataCategory[]{DataCategory.CSD, DataCategory.MSD, DataCategory.WSD};
+		}
+		//
+		String label = currentProcessMethod.getName().isEmpty() ? part.getLabel() : currentProcessMethod.getName();
+		part.setLabel(label + " " + Arrays.asList(categories));
+		//
+		extendedMethodUI = new ExtendedMethodUI(parent, SWT.NONE, processSupplierContext, categories);
+		extendedMethodUI.setModificationHandler(this);
+		extendedMethodUI.setProcessMethod(currentProcessMethod);
+		extendedMethodUI.setHeaderToolbarVisible(processMethodFile == null);
+	}
+
+	@Override
+	public void setDirty(boolean dirty) {
+
+		part.setDirty(processMethodFile == null || !extendedMethodUI.getProcessMethod().contentEquals(currentProcessMethod, true));
+	}
+
+	@PreDestroy
+	private void preDestroy() {
+
+		partsupport.closePart(part);
 	}
 
 	private File getSaveFile(Shell shell) {
@@ -162,38 +201,5 @@ public class ProcessMethodEditor implements IModificationHandler, IChemClipseEdi
 		}
 		//
 		return success;
-	}
-
-	@PostConstruct
-	public void initialize(Composite parent, @Optional IProcessMethod processMethod, @Optional File editorInput) {
-
-		if(processMethod == null && editorInput == null) {
-			throw new IllegalStateException("no method file and no processmethod specified for part");
-		}
-		if(editorInput != null) {
-			currentProcessMethod = Adapters.adapt(editorInput, IProcessMethod.class);
-			processMethodFile = editorInput;
-			if(currentProcessMethod == null) {
-				throw new RuntimeException("can't read file " + processMethodFile);
-			}
-		} else {
-			currentProcessMethod = processMethod;
-		}
-		DataCategory[] categories = currentProcessMethod.getDataCategories().toArray(new DataCategory[]{});
-		if(categories == null || categories.length == 0) {
-			// for backward compatibility
-			categories = new DataCategory[]{DataCategory.CSD, DataCategory.MSD, DataCategory.WSD};
-		}
-		part.setLabel(part.getLabel() + " " + Arrays.asList(categories));
-		extendedMethodUI = new ExtendedMethodUI(parent, SWT.NONE, processSupplierContext, categories);
-		extendedMethodUI.setModificationHandler(this);
-		extendedMethodUI.setProcessMethod(currentProcessMethod);
-		extendedMethodUI.setHeaderToolbarVisible(processMethodFile == null);
-	}
-
-	@Override
-	public void setDirty(boolean dirty) {
-
-		part.setDirty(processMethodFile == null || !extendedMethodUI.getProcessMethod().contentEquals(currentProcessMethod, true));
 	}
 }

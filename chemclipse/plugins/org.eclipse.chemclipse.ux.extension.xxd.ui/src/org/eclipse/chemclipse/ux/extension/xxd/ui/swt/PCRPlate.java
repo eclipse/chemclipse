@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -47,6 +47,7 @@ public class PCRPlate extends Composite {
 	private Label wellDetailsLabel;
 
 	public PCRPlate(Composite parent, int style) {
+
 		super(parent, style);
 		createControl();
 	}
@@ -84,6 +85,11 @@ public class PCRPlate extends Composite {
 				}
 			}
 		}
+		/*
+		 * Select the first well.
+		 */
+		PCRWell pcrWell = pcrWells.get(new Position("A", 1));
+		handleSelection(pcrWell);
 	}
 
 	private void createControl() {
@@ -144,18 +150,7 @@ public class PCRPlate extends Composite {
 			@Override
 			public void handleEvent() {
 
-				showWellDetails(pcrWell.getWell());
-				well = pcrWell.getWell();
-				String topic = (well != null) ? IChemClipseEvents.TOPIC_WELL_PCR_UPDATE_SELECTION : IChemClipseEvents.TOPIC_WELL_PCR_UNLOAD_SELECTION;
-				pcrWell.getDisplay().asyncExec(new Runnable() {
-
-					@Override
-					public void run() {
-
-						IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-						eventBroker.send(topic, (well != null) ? well : null);
-					}
-				});
+				handleSelection(pcrWell);
 			}
 		});
 		//
@@ -172,6 +167,24 @@ public class PCRPlate extends Composite {
 		if(position != null) {
 			pcrWells.put(position, pcrWell);
 		}
+	}
+
+	private void handleSelection(PCRWell pcrWell) {
+
+		showWellDetails(pcrWell.getWell());
+		well = pcrWell.getWell();
+		String topic = (well != null) ? IChemClipseEvents.TOPIC_WELL_PCR_UPDATE_SELECTION : IChemClipseEvents.TOPIC_WELL_PCR_UNLOAD_SELECTION;
+		pcrWell.getDisplay().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+
+				IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+				if(eventBroker != null) {
+					eventBroker.send(topic, (well != null) ? well : null);
+				}
+			}
+		});
 	}
 
 	private Label createLabel(Composite parent) {

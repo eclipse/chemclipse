@@ -13,82 +13,60 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
 import java.util.List;
 
-import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedTargetsUI;
-import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class TargetsPart extends AbstractPart {
+public class TargetsPart extends AbstractPart<ExtendedTargetsUI> {
 
-	// private static final String TOPIC = IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION;
-	//
-	private ExtendedTargetsUI control;
-	//
-	private DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
-	private IDataUpdateListener updateListener = new IDataUpdateListener() {
-
-		@Override
-		public void update(String topic, List<Object> objects) {
-
-			updateSelection(objects, topic);
-		}
-	};
+	private static final String TOPIC = IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION;
 
 	@Inject
-	public TargetsPart(Composite parent, MPart part) {
+	public TargetsPart(Composite parent) {
 
-		control = new ExtendedTargetsUI(parent, SWT.NONE);
-		dataUpdateSupport.add(updateListener);
+		super(parent, TOPIC);
 	}
 
-	@Focus
-	public void setFocus() {
+	@Override
+	protected ExtendedTargetsUI createControl(Composite parent) {
 
-		/*
-		 * This could lead to unintended updates.
-		 */
-		// updateSelection(dataUpdateSupport.getUpdates(TOPIC), TOPIC);
+		return new ExtendedTargetsUI(parent, SWT.NONE);
 	}
 
-	@PreDestroy
-	protected void preDestroy() {
+	@Override
+	protected boolean updateData(List<Object> objects, String topic) {
 
-		dataUpdateSupport.remove(updateListener);
-		super.preDestroy();
-	}
-
-	private void updateSelection(List<Object> objects, String topic) {
-
-		if(DataUpdateSupport.isVisible(control)) {
-			/*
-			 * 0 => because only one property was used to register the event.
-			 */
-			if(objects.size() == 1) {
-				if(isChromatogramUnloadEvent(topic) || isOtherUnloadEvent(topic)) {
-					control.update(null);
-				} else {
-					Object object = objects.get(0);
-					if(isChromatogramTopic(topic)) {
-						if(object instanceof IChromatogramSelection) {
-							IChromatogramSelection<?, ?> chromatogramSelection = (IChromatogramSelection<?, ?>)object;
-							object = chromatogramSelection.getChromatogram();
-							control.update(object);
-						}
-					} else if(isScanOrPeakTopic(topic) || isIdentificationTopic(topic)) {
-						control.update(object);
+		if(objects.size() == 1) {
+			if(isChromatogramUnloadEvent(topic) || isOtherUnloadEvent(topic)) {
+				getControl().update(null);
+				return true;
+			} else {
+				Object object = objects.get(0);
+				if(isChromatogramTopic(topic)) {
+					if(object instanceof IChromatogramSelection) {
+						IChromatogramSelection<?, ?> chromatogramSelection = (IChromatogramSelection<?, ?>)object;
+						object = chromatogramSelection.getChromatogram();
+						getControl().update(object);
+						return true;
 					}
+				} else if(isScanOrPeakTopic(topic) || isIdentificationTopic(topic)) {
+					getControl().update(object);
+					return true;
 				}
 			}
 		}
+		//
+		return false;
+	}
+
+	@Override
+	protected boolean isUpdateTopic(String topic) {
+
+		return isChromatogramTopic(topic) || isScanOrPeakTopic(topic) || isIdentificationTopic(topic) || isChromatogramUnloadEvent(topic) || isOtherUnloadEvent(topic);
 	}
 
 	private boolean isChromatogramUnloadEvent(String topic) {

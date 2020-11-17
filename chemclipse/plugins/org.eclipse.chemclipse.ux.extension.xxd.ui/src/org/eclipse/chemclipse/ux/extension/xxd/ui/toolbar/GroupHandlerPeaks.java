@@ -54,6 +54,7 @@ public class GroupHandlerPeaks extends AbstractGroupHandler {
 
 		List<IPartHandler> partHandler = new ArrayList<>();
 		//
+		partHandler.add(new PartHandler("Molecule", PartSupport.PARTDESCRIPTOR_MOLECULE, PreferenceConstants.P_STACK_POSITION_MOLECULE));
 		partHandler.add(new PartHandler("Scan Comparison", PartSupport.PARTDESCRIPTOR_COMPARISON_SCAN, PreferenceConstants.P_STACK_POSITION_COMPARISON_SCAN_CHART));
 		partHandler.add(new PartHandler("Peak Quantitation List", PartSupport.PARTDESCRIPTOR_PEAK_QUANTITATION_LIST, PreferenceConstants.P_STACK_POSITION_PEAK_QUANTITATION_LIST));
 		partHandler.add(new PartHandler("Quantitation", PartSupport.PARTDESCRIPTOR_QUANTITATION, PreferenceConstants.P_STACK_POSITION_QUANTITATION));

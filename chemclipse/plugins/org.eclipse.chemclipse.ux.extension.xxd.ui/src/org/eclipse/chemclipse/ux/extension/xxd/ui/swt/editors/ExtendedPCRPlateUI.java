@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.chemclipse.pcr.model.core.IPlate;
@@ -20,14 +21,10 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePCR;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PCRPlate;
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.preference.IPreferencePage;
-import org.eclipse.jface.preference.PreferenceDialog;
-import org.eclipse.jface.preference.PreferenceManager;
-import org.eclipse.jface.preference.PreferenceNode;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -39,7 +36,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
-public class ExtendedPCRPlateUI {
+public class ExtendedPCRPlateUI extends Composite implements IExtendedPartUI {
 
 	private Label labelDataInfo;
 	private PCRPlate pcrPlate;
@@ -48,8 +45,10 @@ public class ExtendedPCRPlateUI {
 	//
 	private IPlate plate;
 
-	public ExtendedPCRPlateUI(Composite parent) {
-		initialize(parent);
+	public ExtendedPCRPlateUI(Composite parent, int style) {
+
+		super(parent, style);
+		createControl();
 	}
 
 	public void update(IPlate plate) {
@@ -58,12 +57,12 @@ public class ExtendedPCRPlateUI {
 		updateWidget();
 	}
 
-	private void initialize(Composite parent) {
+	private void createControl() {
 
-		parent.setLayout(new GridLayout(1, true));
+		setLayout(new GridLayout(1, true));
 		//
-		createToolbarMain(parent);
-		createPlateUI(parent);
+		createToolbarMain(this);
+		createPlateUI(this);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -157,32 +156,12 @@ public class ExtendedPCRPlateUI {
 
 	private void createSettingsButton(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Open the Settings");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		createSettingsButton(parent, Arrays.asList(PreferencePagePCR.class), new ISettingsHandler() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void apply(Display display) {
 
-				IPreferencePage preferencePage = new PreferencePagePCR();
-				preferencePage.setTitle("PCR");
-				//
-				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", preferencePage));
-				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
-				preferenceDialog.create();
-				preferenceDialog.setMessage("Settings");
-				if(preferenceDialog.open() == Window.OK) {
-					try {
-						applySettings();
-					} catch(Exception e1) {
-						System.out.println(e1);
-						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the chart settings.");
-					}
-				}
+				applySettings();
 			}
 		});
 	}

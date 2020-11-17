@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PreDestroy;
@@ -29,8 +28,6 @@ import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IQuantitationDatabaseEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.QuantDBImportRunnable;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedQuantCompoundListUI;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.ui.di.Focus;
@@ -41,10 +38,11 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 
-public class QuantitationDatabaseEditor extends AbstractDataUpdateSupport implements IDataUpdateSupport, IQuantitationDatabaseEditor {
+public class QuantitationDatabaseEditor implements IQuantitationDatabaseEditor {
 
 	private static final Logger logger = Logger.getLogger(QuantitationDatabaseEditor.class);
 	//
@@ -67,8 +65,6 @@ public class QuantitationDatabaseEditor extends AbstractDataUpdateSupport implem
 	@Inject
 	public QuantitationDatabaseEditor(Composite parent, MPart part, MDirtyable dirtyable, EModelService modelService, MApplication application, Shell shell) {
 
-		super(part);
-		//
 		this.part = part;
 		this.dirtyable = dirtyable;
 		this.modelService = modelService;
@@ -78,33 +74,15 @@ public class QuantitationDatabaseEditor extends AbstractDataUpdateSupport implem
 		initialize(parent);
 	}
 
-	@Override
-	public void registerEvents() {
-
-	}
-
-	@Override
-	public void updateObjects(List<Object> objects, String topic) {
-
-		/*
-		 * 0 => because only one property was used to register the event.
-		 */
-		if(objects.size() == 1) {
-			//
-		}
-	}
-
 	@Focus
 	public void setFocus() {
 
-		//
+		extendedQuantCompoundListUI.setFocus();
 	}
 
-	@Override
 	@PreDestroy
 	protected void preDestroy() {
 
-		super.preDestroy();
 		if(modelService != null && application != null) {
 			MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);
 			part.setToBeRendered(false);
@@ -160,7 +138,7 @@ public class QuantitationDatabaseEditor extends AbstractDataUpdateSupport implem
 
 	private void createPage(Composite parent) {
 
-		extendedQuantCompoundListUI = new ExtendedQuantCompoundListUI(parent);
+		extendedQuantCompoundListUI = new ExtendedQuantCompoundListUI(parent, SWT.NONE);
 		extendedQuantCompoundListUI.setModificationHandler(new IModificationHandler() {
 
 			@Override

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,6 +26,7 @@ public class WellDataEditingSupport extends EditingSupport {
 	private String column;
 
 	public WellDataEditingSupport(WellDataListUI tableViewer, String column) {
+
 		super(tableViewer);
 		this.column = column;
 		if(column.equals(WellDataLabelProvider.VALUE)) {
@@ -74,10 +75,10 @@ public class WellDataEditingSupport extends EditingSupport {
 				Map.Entry<String, String> entry = (Map.Entry<String, String>)element;
 				switch(column) {
 					case WellDataLabelProvider.VALUE:
-						well.setData(entry.getKey(), (String)value);
+						well.putData(entry.getKey(), (String)value);
 						break;
 				}
-				tableViewer.setInput(well);
+				tableViewer.refresh();
 			}
 		}
 	}

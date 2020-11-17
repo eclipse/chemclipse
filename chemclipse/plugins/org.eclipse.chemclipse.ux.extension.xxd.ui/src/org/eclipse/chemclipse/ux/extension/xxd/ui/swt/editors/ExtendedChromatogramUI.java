@@ -100,11 +100,9 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDat
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ChromatogramReferencesUI;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.HeatmapUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ToolbarConfig;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
-import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.chemclipse.xxd.process.comparators.CategoryNameComparator;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -119,12 +117,10 @@ import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -192,8 +188,6 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 	private RetentionIndexUI retentionIndexUI;
 	private ChromatogramChart chromatogramChart;
 	private ComboViewer comboViewerSeparationColumn;
-	private HeatmapUI heatmapUI;
-	private Composite heatmapArea;
 	//
 	private IChromatogramSelection<?, ?> chromatogramSelection = null;
 	private final List<IChartMenuEntry> cachedMenuEntries = new ArrayList<>();
@@ -967,10 +961,7 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		toolbars.put(TOOLBAR_METHOD, createToolbarMethod(parent));
 		toolbars.put(TOOLBAR_RETENTION_INDICES, retentionIndexUI = createToolbarRetentionIndexUI(parent));
 		//
-		SashForm chartsArea = new SashForm(parent, SWT.HORIZONTAL);
-		chartsArea.setLayoutData(new GridData(GridData.FILL_BOTH));
-		createChromatogramChart(chartsArea, style);
-		createHeatmap(chartsArea);
+		createChromatogramChart(parent, style);
 		//
 		comboViewerSeparationColumn.setInput(SeparationColumnFactory.getSeparationColumns());
 		//
@@ -979,7 +970,6 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_CHROMATOGRAM_ALIGNMENT), false);
 		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_METHOD), false);
 		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_RETENTION_INDICES), false);
-		PartSupport.setCompositeVisibility(heatmapArea, false);
 	}
 
 	private EditorToolBar createToolbarMain(Composite parent) {
@@ -1109,48 +1099,15 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(7, false));
+		composite.setLayout(new GridLayout(5, false));
 		//
 		createToggleToolbarButton(composite, "Toggle the retention index toolbar.", IApplicationImage.IMAGE_RETENION_INDEX, TOOLBAR_RETENTION_INDICES);
 		createVerticalSeparator(composite);
 		createToggleChartSeriesLegendButton(composite);
 		createToggleLegendMarkerButton(composite);
 		createToggleRangeSelectorButton(composite);
-		createVerticalSeparator(composite);
-		createButtonSignalSelection(composite);
 		//
 		return composite;
-	}
-
-	private void createButtonSignalSelection(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setText("");
-		button.setToolTipText("Select signal");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_HEATMAP_DEFAULT, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				signalSelectionHeatMap();
-			}
-		});
-	}
-
-	private void signalSelectionHeatMap() {
-
-		PartSupport.setCompositeVisibility(heatmapArea, !heatmapArea.getVisible());
-		heatmapUI.setChromatogramSelection(chromatogramSelection);
-		if(chromatogramSelection instanceof ChromatogramSelectionWSD) {
-			if(displayType.equals(DisplayType.SWC)) {
-				displayType = DisplayType.TIC;
-				update();
-			} else if(displayType.equals(DisplayType.TIC)) {
-				displayType = DisplayType.SWC;
-				update();
-			}
-		}
 	}
 
 	private void createVerticalSeparator(Composite parent) {
@@ -1211,13 +1168,6 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		chartSettings.addHandledEventProcessor(new ChromatogramMoveArrowKeyHandler(this, SWT.ARROW_DOWN));
 		//
 		chromatogramChart.applySettings(chartSettings);
-	}
-
-	private void createHeatmap(Composite composite) {
-
-		heatmapArea = new Composite(composite, SWT.None);
-		heatmapArea.setLayout(new FillLayout());
-		heatmapUI = new HeatmapUI(heatmapArea);
 	}
 
 	private Button createToggleToolbarButton(Composite parent, String tooltip, String image, String toolbar) {

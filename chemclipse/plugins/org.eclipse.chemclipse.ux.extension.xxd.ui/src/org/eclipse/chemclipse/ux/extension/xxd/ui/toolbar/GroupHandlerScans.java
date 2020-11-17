@@ -40,12 +40,9 @@ public class GroupHandlerScans extends AbstractGroupHandler {
 
 		List<IPartHandler> partHandler = new ArrayList<>();
 		//
-		partHandler.add(new PartHandler("Targets", "org.eclipse.chemclipse.ux.extension.xxd.ui.part.targetsPartDescriptor", PreferenceConstants.P_STACK_POSITION_TARGETS));
-		partHandler.add(new PartHandler("Scan Chart", "org.eclipse.chemclipse.ux.extension.xxd.ui.part.scanChartPartDescriptor", PreferenceConstants.P_STACK_POSITION_SCAN_CHART));
-		partHandler.add(new PartHandler("Scan Table", "org.eclipse.chemclipse.ux.extension.xxd.ui.part.scanTablePartDescriptor", PreferenceConstants.P_STACK_POSITION_SCAN_TABLE));
-		partHandler.add(new PartHandler("Molecule", "org.eclipse.chemclipse.ux.extension.xxd.ui.part.moleculePartDescriptor", PreferenceConstants.P_STACK_POSITION_MOLECULE));
-		partHandler.add(new PartHandler("Scan Browse", "org.eclipse.chemclipse.ux.extension.xxd.ui.part.scanBrowsePartDescriptor", PreferenceConstants.P_STACK_POSITION_SCAN_BROWSE));
-		partHandler.add(new PartHandler("Synonyms", "org.eclipse.chemclipse.ux.extension.xxd.ui.part.synonymsPartDescriptor", PreferenceConstants.P_STACK_POSITION_SYNONYMS));
+		partHandler.add(new PartHandler("Targets", PartSupport.PARTDESCRIPTOR_TARGETS, PreferenceConstants.P_STACK_POSITION_TARGETS));
+		partHandler.add(new PartHandler("Scan Chart", PartSupport.PARTDESCRIPTOR_SCAN_CHART, PreferenceConstants.P_STACK_POSITION_SCAN_CHART));
+		partHandler.add(new PartHandler("Scan Table", PartSupport.PARTDESCRIPTOR_SCAN_TABLE, PreferenceConstants.P_STACK_POSITION_SCAN_TABLE));
 		//
 		return partHandler;
 	}
@@ -55,6 +52,9 @@ public class GroupHandlerScans extends AbstractGroupHandler {
 
 		List<IPartHandler> partHandler = new ArrayList<>();
 		//
+		partHandler.add(new PartHandler("Molecule", PartSupport.PARTDESCRIPTOR_MOLECULE, PreferenceConstants.P_STACK_POSITION_MOLECULE));
+		partHandler.add(new PartHandler("Scan Browse", PartSupport.PARTDESCRIPTOR_SCAN_BROWSE, PreferenceConstants.P_STACK_POSITION_SCAN_BROWSE));
+		partHandler.add(new PartHandler("Synonyms", PartSupport.PARTDESCRIPTOR_SYNONYMS, PreferenceConstants.P_STACK_POSITION_SYNONYMS));
 		partHandler.add(new PartHandler("Scan List", PartSupport.PARTDESCRIPTOR_PEAK_SCAN_LIST, PreferenceConstants.P_STACK_POSITION_PEAK_SCAN_LIST));
 		partHandler.add(new PartHandler("Scan Subtract", PartSupport.PARTDESCRIPTOR_SUBTRACT_SCAN, PreferenceConstants.P_STACK_POSITION_SUBTRACT_SCAN_PART));
 		partHandler.add(new PartHandler("Scan Combined", PartSupport.PARTDESCRIPTOR_COMBINED_SCAN, PreferenceConstants.P_STACK_POSITION_COMBINED_SCAN_PART));

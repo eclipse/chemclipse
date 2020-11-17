@@ -21,11 +21,10 @@ import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractOverviewUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IOverviewListener;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.OverviewSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.OverviewChartUI;
-import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
@@ -34,27 +33,46 @@ import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
 
-public class ChromatogramOverviewPart extends AbstractOverviewUpdateSupport implements IDataUpdateSupport {
+public class ChromatogramOverviewPart extends AbstractPart<OverviewChartUI> {
 
-	private OverviewChartUI chromatogramOverviewChart;
+	private static final String TOPIC = IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION;
+	private final OverviewSupport overviewSupport = new OverviewSupport();
 
 	@Inject
-	public ChromatogramOverviewPart(Composite parent, MPart part) {
+	public ChromatogramOverviewPart(Composite parent) {
 
-		super(part);
-		initialize(parent);
-	}
+		super(parent, TOPIC);
+		overviewSupport.setOverviewListener(new IOverviewListener() {
 
-	@Focus
-	public void setFocus() {
+			@Override
+			public void update(Object object) {
 
-		updateObjects(getObjects(), getTopic());
+				updateChart(object);
+			}
+		});
 	}
 
 	@Override
-	public void update(Object object) {
+	protected OverviewChartUI createControl(Composite parent) {
 
-		chromatogramOverviewChart.deleteSeries();
+		return new OverviewChartUI(parent, SWT.NONE);
+	}
+
+	@Override
+	protected boolean updateData(List<Object> objects, String topic) {
+
+		return overviewSupport.process(objects, topic);
+	}
+
+	@Override
+	protected boolean isUpdateTopic(String topic) {
+
+		return overviewSupport.isUpdateTopic(topic);
+	}
+
+	private void updateChart(Object object) {
+
+		getControl().deleteSeries();
 		if(object instanceof IChromatogramOverview) {
 			/*
 			 * Create series.
@@ -68,13 +86,8 @@ public class ChromatogramOverviewPart extends AbstractOverviewUpdateSupport impl
 			ILineSeriesSettings lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSeriesSettings.getSeriesSettingsHighlight();
 			lineSeriesSettingsHighlight.setLineWidth(2);
 			lineSeriesDataList.add(lineSeriesData);
-			chromatogramOverviewChart.addSeriesData(lineSeriesDataList);
+			getControl().addSeriesData(lineSeriesDataList);
 		}
-	}
-
-	private void initialize(Composite parent) {
-
-		chromatogramOverviewChart = new OverviewChartUI(parent, SWT.NONE);
 	}
 
 	private ISeriesData getSeriesData(IChromatogramOverview chromatogramOverview) {
