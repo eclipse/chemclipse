@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Lorenz Gerber - add additional message field
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.supplier;
 
@@ -31,10 +32,12 @@ public class ProcessExecutionContext implements ProcessSupplierContext, MessageC
 	private final Map<Class<?>, Object> contextMap = new IdentityHashMap<>();
 
 	public ProcessExecutionContext(IProgressMonitor monitor, MessageConsumer rootConsumer, ProcessSupplierContext rootContext) {
+
 		this(monitor, rootConsumer, rootContext, null);
 	}
 
 	private ProcessExecutionContext(IProgressMonitor monitor, MessageConsumer rootConsumer, ProcessSupplierContext rootContext, ProcessExecutionContext parent) {
+
 		this.consumer = rootConsumer;
 		this.context = rootContext;
 		this.parent = parent;
@@ -65,9 +68,9 @@ public class ProcessExecutionContext implements ProcessSupplierContext, MessageC
 	}
 
 	@Override
-	public void addMessage(String description, String message, String details, Throwable t, MessageType type) {
+	public void addMessage(String description, String message, String details, String solution, Throwable t, MessageType type) {
 
-		consumer.addMessage(description, message, details, t, type);
+		consumer.addMessage(description, message, details, solution, t, type);
 	}
 
 	@Override

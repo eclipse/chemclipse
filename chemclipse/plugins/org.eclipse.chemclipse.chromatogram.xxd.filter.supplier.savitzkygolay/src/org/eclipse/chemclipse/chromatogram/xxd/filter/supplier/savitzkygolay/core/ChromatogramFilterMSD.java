@@ -1,3 +1,14 @@
+/*******************************************************************************
+ * Copyright (c) 2020 Lablicate GmbH.
+ * 
+ * All rights reserved.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ * Lorenz Gerber - initial API and implementation
+ *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.core;
 
 import java.util.Iterator;
@@ -34,11 +45,15 @@ public class ChromatogramFilterMSD extends AbstractChromatogramFilterMSD {
 		 */
 		IChromatogramFilterResult chromatogramFilterResult;
 		if(settings.getPerIonCalculation() == true) {
-			ExtractedMatrix extractedMatrix = new ExtractedMatrix(chromatogramSelection);
-			double[][] matrix = extractedMatrix.getMatrix();
-			SavitzkyGolayProcessor.apply(matrix, (ChromatogramFilterSettings)filterSettings, monitor);
-			extractedMatrix.updateSignal();
-			chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.OK, "The Savitzky-Golay filter has been applied successfully.");
+			try {
+				ExtractedMatrix extractedMatrix = new ExtractedMatrix(chromatogramSelection);
+				double[][] matrix = extractedMatrix.getMatrix();
+				SavitzkyGolayProcessor.apply(matrix, (ChromatogramFilterSettings)filterSettings, monitor);
+				extractedMatrix.updateSignal();
+				chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.OK, "The Savitzky-Golay filter has been applied successfully.");
+			} catch(IllegalArgumentException e) {
+				chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.EXCEPTION, "High Resolution Data is not supported.");
+			}
 		} else {
 			TotalScanSignalExtractor totalScanSignalExtractor = new TotalScanSignalExtractor(chromatogramMSD);
 			ITotalScanSignals totalSignals = totalScanSignalExtractor.getTotalScanSignals(chromatogramSelection, true);
@@ -55,6 +70,13 @@ public class ChromatogramFilterMSD extends AbstractChromatogramFilterMSD {
 
 		IProcessingInfo<IChromatogramFilterResult> processingInfo = new ProcessingInfo<IChromatogramFilterResult>();
 		processingInfo.setProcessingResult(process(chromatogramSelection, chromatogramFilterSettings, monitor));
+		if(processingInfo.getProcessingResult().getResultStatus().equals(ResultStatus.EXCEPTION)) {
+			StringBuilder proposedString = new StringBuilder("Please run the Scan Filter to nominalize chromatogram first.");
+			processingInfo.addErrorMessage(processingInfo.getProcessingResult().getResultStatus().name(), processingInfo.getProcessingResult().getDescription(), proposedString.toString());
+		}
+		if(processingInfo.getProcessingResult().getResultStatus().equals(ResultStatus.OK)) {
+			processingInfo.addInfoMessage(processingInfo.getProcessingResult().getResultStatus().name(), processingInfo.getProcessingResult().getDescription());
+		}
 		return processingInfo;
 	}
 
