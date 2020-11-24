@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - implementation, Generics
+ * Lorenz Gerber - add additional message field
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.core;
 
@@ -34,11 +35,12 @@ public interface IProcessingInfo<T> extends MessageConsumer, MessageProvider {
 	void addMessage(IProcessingMessage processingMessage);
 
 	@Override
-	default void addMessage(String description, String message, String detail, Throwable t, MessageType type) {
+	default void addMessage(String description, String message, String detail, String solution, Throwable t, MessageType type) {
 
-		ProcessingMessage msg = new ProcessingMessage(type, description, message);
+		ProcessingMessage msg = new ProcessingMessage(type, description, message, solution);
 		msg.setException(t);
 		msg.setDetails(detail);
+		msg.setProposedSolution(solution);
 		addMessage(msg);
 	}
 
