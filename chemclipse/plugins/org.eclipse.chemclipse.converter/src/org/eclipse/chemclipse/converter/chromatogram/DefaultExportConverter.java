@@ -24,9 +24,9 @@ public class DefaultExportConverter extends AbstractChromatogramExportConverter 
 	private static final String DESCRIPTION = "Chromatogram Export Converter";
 
 	@Override
-	public IProcessingInfo<?> convert(File file, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) {
+	public IProcessingInfo<File> convert(File file, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) {
 
-		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<File> processingInfo = new ProcessingInfo<>();
 		processingInfo.addErrorMessage(DESCRIPTION, "The chromatogram export is not supported yet.");
 		return processingInfo;
 	}

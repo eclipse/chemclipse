@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,10 +14,12 @@ package org.eclipse.chemclipse.converter.sequence;
 import java.io.File;
 
 import org.eclipse.chemclipse.converter.core.IImportConverter;
+import org.eclipse.chemclipse.converter.model.reports.ISequence;
+import org.eclipse.chemclipse.converter.model.reports.ISequenceRecord;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface ISequenceImportConverter extends IImportConverter {
 
-	IProcessingInfo convert(File file, IProgressMonitor monitor);
+	IProcessingInfo<ISequence<? extends ISequenceRecord>> convert(File file, IProgressMonitor monitor);
 }

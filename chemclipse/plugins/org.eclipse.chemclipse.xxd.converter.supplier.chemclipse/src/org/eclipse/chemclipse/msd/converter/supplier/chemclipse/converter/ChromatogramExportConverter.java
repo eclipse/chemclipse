@@ -30,12 +30,11 @@ public class ChromatogramExportConverter extends AbstractChromatogramExportConve
 
 	private static final Logger logger = Logger.getLogger(ChromatogramExportConverter.class);
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public IProcessingInfo convert(File file, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) {
+	public IProcessingInfo<File> convert(File file, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) {
 
 		file = SpecificationValidator.validateSpecification(file);
-		IProcessingInfo processingInfo = super.validate(file);
+		IProcessingInfo<File> processingInfo = super.validate(file);
 		/*
 		 * Don't process if errors have occurred.
 		 */

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -32,11 +32,10 @@ public class ChromatogramExportConverter extends AbstractChromatogramExportConve
 	private static final String DESCRIPTION = "XY Export Converter";
 	private static final String FILE_EXTENSION = ".xy";
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public IProcessingInfo convert(File file, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) {
+	public IProcessingInfo<File> convert(File file, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = super.validate(file);
+		IProcessingInfo<File> processingInfo = super.validate(file);
 		if(!processingInfo.hasErrorMessages() && chromatogram instanceof IChromatogramCSD) {
 			try {
 				/*

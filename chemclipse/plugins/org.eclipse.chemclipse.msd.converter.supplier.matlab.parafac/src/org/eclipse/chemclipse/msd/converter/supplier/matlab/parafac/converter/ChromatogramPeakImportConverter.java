@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,28 +14,29 @@ package org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.converter;
 import java.io.File;
 
 import org.eclipse.chemclipse.converter.chromatogram.AbstractChromatogramImportConverter;
-import org.eclipse.chemclipse.converter.chromatogram.IChromatogramImportConverter;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramPeakImportConverter extends AbstractChromatogramImportConverter implements IChromatogramImportConverter {
+public class ChromatogramPeakImportConverter extends AbstractChromatogramImportConverter<IChromatogramMSD> {
 
 	private static final String DESCRIPTION = "Matlab Parafac Chromatogram Import Converter";
 	private static final String MESSAGE = "It's only possible to import peaks using the chromatogram peak import converter.";
 
 	@Override
-	public IProcessingInfo convert(File file, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramMSD> convert(File file, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<IChromatogramMSD> processingInfo = new ProcessingInfo<>();
 		processingInfo.addErrorMessage(DESCRIPTION, MESSAGE);
 		return processingInfo;
 	}
 
 	@Override
-	public IProcessingInfo convertOverview(File file, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramOverview> convertOverview(File file, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<IChromatogramOverview> processingInfo = new ProcessingInfo<>();
 		processingInfo.addErrorMessage(DESCRIPTION, MESSAGE);
 		return processingInfo;
 	}

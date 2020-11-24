@@ -32,7 +32,7 @@ public class ChromatogramExportConverter extends AbstractChromatogramExportConve
 	private static final String DESCRIPTION = "JCAMP-DX Export Converter";
 
 	@Override
-	public IProcessingInfo<?> convert(File file, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) {
+	public IProcessingInfo<File> convert(File file, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) {
 
 		/*
 		 * Validate the file.

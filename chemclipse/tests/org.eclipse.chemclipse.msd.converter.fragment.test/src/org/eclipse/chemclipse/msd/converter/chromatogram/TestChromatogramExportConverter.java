@@ -26,7 +26,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class TestChromatogramExportConverter extends AbstractChromatogramExportConverter {
 
 	@Override
-	public IProcessingInfo<?> convert(File file, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) {
+	public IProcessingInfo<File> convert(File file, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) {
 
 		return super.validate(file);
 	}

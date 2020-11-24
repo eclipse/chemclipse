@@ -30,7 +30,7 @@ public class ChromatogramExportConverter extends AbstractChromatogramExportConve
 	private static final String DESCRIPTION = "ZIP Export Converter";
 
 	@Override
-	public IProcessingInfo<?> convert(File file, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) {
+	public IProcessingInfo<File> convert(File file, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) {
 
 		file = SpecificationValidator.validateSpecification(file);
 		IProcessingInfo<File> processingInfo = super.validate(file);
