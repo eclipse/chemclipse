@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,9 +16,6 @@ import org.eclipse.chemclipse.msd.model.core.IIon;
 
 import junit.framework.TestCase;
 
-/**
- * @author eselmeister
- */
 public class SelectedIons_3_Test extends TestCase {
 
 	private IMarkedIons selectedIons;

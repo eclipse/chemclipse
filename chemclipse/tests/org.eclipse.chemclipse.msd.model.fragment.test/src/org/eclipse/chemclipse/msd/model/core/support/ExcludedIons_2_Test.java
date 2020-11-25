@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,9 +17,6 @@ import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 
 import junit.framework.TestCase;
 
-/**
- * @author eselmeister
- */
 public class ExcludedIons_2_Test extends TestCase {
 
 	private IMarkedIons excludedIons;
@@ -40,7 +37,7 @@ public class ExcludedIons_2_Test extends TestCase {
 
 	public void testContains_1() {
 
-		assertFalse("contains", excludedIons.getIonsNominal().contains(4.9f));
+		assertFalse("contains", excludedIons.getIonsNominal().contains(AbstractIon.getIon(4.9f)));
 	}
 
 	public void testContains_2() {
@@ -53,7 +50,7 @@ public class ExcludedIons_2_Test extends TestCase {
 
 		excludedIons.add(new MarkedIon(5));
 		excludedIons.remove(new MarkedIon(5));
-		assertFalse("contains", excludedIons.getIonsNominal().contains(5.4f));
+		assertFalse("contains", excludedIons.getIonsNominal().contains(AbstractIon.getIon(5.4f)));
 	}
 
 	public void testContains_4() {

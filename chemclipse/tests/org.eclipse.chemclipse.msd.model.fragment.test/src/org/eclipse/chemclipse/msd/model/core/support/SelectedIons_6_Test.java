@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,9 +13,6 @@ package org.eclipse.chemclipse.msd.model.core.support;
 
 import junit.framework.TestCase;
 
-/**
- * @author eselmeister
- */
 public class SelectedIons_6_Test extends TestCase {
 
 	private IMarkedIons selectedIons;
@@ -37,50 +34,6 @@ public class SelectedIons_6_Test extends TestCase {
 
 	public void testContains_1() {
 
-		assertFalse("contains", selectedIons.contains(28.8f));
+		assertFalse("contains", selectedIons.contains(new MarkedIon(28.8f)));
 	}
-	// public void testContains_1() {
-	//
-	// assertFalse("contains", selectedIons.containsAccurate(28.8f, 1));
-	// }
-	//
-	// public void testContains_2() {
-	//
-	// assertFalse("contains", selectedIons.containsAccurate(28.79f, 2));
-	// }
-	//
-	// public void testContains_3() {
-	//
-	// assertFalse("contains", selectedIons.containsAccurate(28.787f, 3));
-	// }
-	//
-	// public void testContains_4() {
-	//
-	// assertFalse("contains", selectedIons.containsAccurate(28.7875f, 4));
-	// }
-	//
-	// public void testContains_5() {
-	//
-	// assertFalse("contains", selectedIons.containsAccurate(28.78749f, 5));
-	// }
-	//
-	// public void testContains_6() {
-	//
-	// assertFalse("contains", selectedIons.containsAccurate(28.787492f, 6));
-	// }
-	//
-	// public void testContains_7() {
-	//
-	// assertFalse("contains", selectedIons.containsAccurate(28.8f, 7));
-	// }
-	//
-	// public void testContains_8() {
-	//
-	// assertFalse("contains", selectedIons.containsAccurate(28.8f, 0));
-	// }
-	//
-	// public void testContains_9() {
-	//
-	// assertFalse("contains", selectedIons.containsAccurate(28.8f, -1));
-	// }
 }

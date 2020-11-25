@@ -67,7 +67,8 @@ public class CombinedMassSpectrumCalculator {
 		//
 		Set<Integer> excludedIonsNominal = excludedIons.getIonsNominal();
 		for(IIon ion : ions) {
-			if(!excludedIonsNominal.contains(ion.getIon())) {
+			int mz = (int)ion.getIon();
+			if(!excludedIonsNominal.contains(mz)) {
 				addIon(ion.getIon(), ion.getAbundance());
 			}
 		}

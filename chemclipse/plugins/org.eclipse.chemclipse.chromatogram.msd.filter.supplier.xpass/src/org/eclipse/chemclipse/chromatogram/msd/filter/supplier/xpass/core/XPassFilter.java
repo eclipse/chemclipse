@@ -14,13 +14,45 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.core;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonAbundanceComparator;
+import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
+import org.eclipse.chemclipse.msd.model.implementation.Ion;
+import org.eclipse.chemclipse.msd.model.support.CondenseMassSpectrumCalculator;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 
 public abstract class XPassFilter {
+
+	private static final Logger logger = Logger.getLogger(XPassFilter.class);
+
+	public static void nominalize(IScanMSD massSpectrum) {
+
+		CondenseMassSpectrumCalculator calculator = new CondenseMassSpectrumCalculator(true);
+		for(IIon ion : massSpectrum.getIons()) {
+			calculator.add(ion.getIon(), ion.getAbundance());
+		}
+		//
+		massSpectrum.removeAllIons();
+		/*
+		 * Create a new spectrum.
+		 */
+		for(Map.Entry<Double, Double> entry : calculator.getMappedTraces().entrySet()) {
+			try {
+				float intensity = entry.getValue().floatValue();
+				IIon vendorIon = new Ion(entry.getKey(), intensity);
+				massSpectrum.addIon(vendorIon);
+			} catch(AbundanceLimitExceededException e) {
+				logger.warn(e);
+			} catch(IonLimitExceededException e) {
+				logger.warn(e);
+			}
+		}
+	}
 
 	public static void applyHighPass(IScanMSD massSpectrum, int number) {
 

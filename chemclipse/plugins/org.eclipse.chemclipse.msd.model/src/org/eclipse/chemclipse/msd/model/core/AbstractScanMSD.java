@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -76,11 +76,13 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	private IScanMSD optimizedMassSpectrum;
 
 	public AbstractScanMSD() {
+
 		super();
 		init();
 	}
 
 	public AbstractScanMSD(final Collection<? extends IIon> ions) {
+
 		super();
 		init();
 		this.ionsList = new ArrayList<>(ions);
@@ -94,6 +96,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	 *            {@link IScanMSD scan} that is used as a template
 	 */
 	public AbstractScanMSD(IScanMSD templateScan) {
+
 		super(templateScan);
 		init();
 		this.ionsList = new ArrayList<>(templateScan.getIons());
@@ -608,7 +611,8 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		IIon ion;
 		Set<Integer> excludedIonsNominal = excludedIons.getIonsNominal();
 		for(IIon actualIon : ionsList) {
-			if(!excludedIonsNominal.contains(actualIon.getIon())) {
+			int mz = (int)actualIon.getIon();
+			if(!excludedIonsNominal.contains(mz)) {
 				try {
 					ion = new Ion(actualIon);
 					massSpectrum.addIon(ion);

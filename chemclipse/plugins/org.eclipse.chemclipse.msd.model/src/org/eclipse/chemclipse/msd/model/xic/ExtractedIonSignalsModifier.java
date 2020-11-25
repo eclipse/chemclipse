@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -39,6 +39,7 @@ public class ExtractedIonSignalsModifier {
 	 * Use the class as a singleton.
 	 */
 	private ExtractedIonSignalsModifier() {
+
 	}
 
 	/**
@@ -162,7 +163,7 @@ public class ExtractedIonSignalsModifier {
 
 		int startScan = analysisSegment.getStartScan();
 		int stopScan = analysisSegment.getStopScan();
-		int width = analysisSegment.getSegmentWidth();
+		int width = analysisSegment.getWidth();
 		float result = 0.0f;
 		// Use float to get a higher precision.
 		int transitions = calculateTransitions(startScan, stopScan, extractedIonSignals, ion);
@@ -188,7 +189,7 @@ public class ExtractedIonSignalsModifier {
 		int stopScan = analysisSegment.getStopScan();
 		// Use double to get a higher precision.
 		double transitions = calculateTransitions(startScan, stopScan, extractedIonSignals, ion);
-		int width = analysisSegment.getSegmentWidth();
+		int width = analysisSegment.getWidth();
 		if(width > 0) {
 			double transitionFraction = transitions / width;
 			/*

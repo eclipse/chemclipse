@@ -18,8 +18,15 @@
             id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.low">
       </MassSpectrumFilterSupplier>
       <MassSpectrumFilterSupplier
+            config="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.settings.NominalizeFilterSettings"
+            description="This filter condenses the scan to nominal mass."
+            filter="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.core.NominalizeScanFilter"
+            filterName="Nominalize (Unit Mass)"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.nominalize">
+      </MassSpectrumFilterSupplier>      
+      <MassSpectrumFilterSupplier
             config="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.settings.CutOfMassSpectrumFilterSettings"
-            description="Removes ions which counts are below a given threshold"
+            description="Removes ions which counts are below a given threshold."
             filter="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.core.CutOfMassSpectrumFilter"
             filterName="Min Ion Count"
             id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.threshold">

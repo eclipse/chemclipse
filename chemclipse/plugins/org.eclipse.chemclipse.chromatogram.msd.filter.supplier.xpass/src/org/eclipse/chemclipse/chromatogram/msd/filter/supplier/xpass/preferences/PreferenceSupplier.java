@@ -17,6 +17,7 @@ import java.util.Map;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.Activator;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.settings.HighPassFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.settings.LowPassFilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.settings.NominalizeFilterSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -82,6 +83,13 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		LowPassFilterSettings settings = new LowPassFilterSettings();
 		settings.setNumberLowest(getNumberLowest());
+		return settings;
+	}
+
+	public static NominalizeFilterSettings getNominalizeFilterSettings() {
+
+		NominalizeFilterSettings settings = new NominalizeFilterSettings();
+		// No settinsg available yet.
 		return settings;
 	}
 

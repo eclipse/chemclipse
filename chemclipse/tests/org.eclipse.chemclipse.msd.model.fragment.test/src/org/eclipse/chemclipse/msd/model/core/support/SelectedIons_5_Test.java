@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,9 +13,6 @@ package org.eclipse.chemclipse.msd.model.core.support;
 
 import junit.framework.TestCase;
 
-/**
- * @author eselmeister
- */
 public class SelectedIons_5_Test extends TestCase {
 
 	private IMarkedIons selectedIons;
@@ -37,6 +34,6 @@ public class SelectedIons_5_Test extends TestCase {
 
 	public void testContains_1() {
 
-		assertFalse("contains", selectedIons.contains(28.8d));
+		assertFalse("contains", selectedIons.contains(new MarkedIon(28.8d)));
 	}
 }

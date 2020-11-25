@@ -21,4 +21,5 @@ Export-Package: org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.pr
 Import-Package: org.osgi.service.component.annotations;version="[1.2.0,2.0.0)"
 Service-Component: OSGI-INF/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.core.CutOffScanFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.core.HighPassPeakFilter.xml,
- OSGI-INF/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.core.LowPassPeakFilter.xml
+ OSGI-INF/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.core.LowPassPeakFilter.xml,
+ OSGI-INF/org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.core.NominalizePeakFilter.xml
