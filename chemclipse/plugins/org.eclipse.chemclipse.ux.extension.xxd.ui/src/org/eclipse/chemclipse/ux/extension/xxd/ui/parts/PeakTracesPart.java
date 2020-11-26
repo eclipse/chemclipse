@@ -23,7 +23,7 @@ import org.eclipse.swt.widgets.Composite;
 
 public class PeakTracesPart extends AbstractPart<ExtendedPeakTracesUI> {
 
-	private static final String TOPIC = IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION;
+	private static final String TOPIC = IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION;
 
 	@Inject
 	public PeakTracesPart(Composite parent) {

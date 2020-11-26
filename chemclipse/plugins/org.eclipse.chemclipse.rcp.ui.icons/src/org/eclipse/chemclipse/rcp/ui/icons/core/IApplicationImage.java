@@ -398,6 +398,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_CHART_DATA_SHOW = "org.eclipse.chemclipse.rcp.ui.icons/chartDataShow.png";
 	String IMAGE_CHART_DATA_HIDE = "org.eclipse.chemclipse.rcp.ui.icons/chartDataHide.png";
 	//
+	String IMAGE_PERSON = "org.eclipse.chemclipse.rcp.ui.icons/person.gif";
 	String IMAGE_PERSON_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/personDefault.gif";
 	String IMAGE_PERSON_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/personActive.gif";
 	//
@@ -407,6 +408,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_CHROMATOGRAM_BLANK = "org.eclipse.chemclipse.rcp.ui.icons/chromatogramBlank.gif";
 	String IMAGE_INTERPOLATE = "org.eclipse.chemclipse.rcp.ui.icons/interpolate.png";
 	//
+	String IMAGE_OFFSET = "org.eclipse.chemclipse.rcp.ui.icons/offset.gif";
 	String IMAGE_OFFSET_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/offsetDefault.gif";
 	String IMAGE_OFFSET_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/offsetActive.gif";
 	//

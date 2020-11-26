@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.processing.ui.support;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageProvider;
@@ -23,8 +24,6 @@ import org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart;
 import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.PartSupport;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
@@ -38,6 +37,8 @@ import org.eclipse.swt.widgets.Shell;
 @Creatable
 public class ProcessingInfoViewSupport {
 
+	private static final Logger logger = Logger.getLogger(ProcessingInfoViewSupport.class);
+	//
 	private final static String TITLE = "An error/some errors occured.";
 	private final static String MESSAGE = "Please check the 'Feedback' view.";
 	@Inject
@@ -48,7 +49,9 @@ public class ProcessingInfoViewSupport {
 	private UISynchronize uiSynchronize;
 	@Inject
 	private PartSupport partSupport;
+	//
 	private static final ProcessingInfoViewSupport INSTANCE = new ProcessingInfoViewSupport();
+	//
 	static {
 		INSTANCE.eclipseContext = EclipseContextFactory.getServiceContext(Activator.getDefault().getBundle().getBundleContext());
 		INSTANCE.infoUpdateNotifier = ContextInjectionFactory.make(DynamicProcessingInfoUpdateNotifier.class, INSTANCE.eclipseContext);
@@ -241,6 +244,8 @@ public class ProcessingInfoViewSupport {
 
 	private static void logError(String description, String message, Throwable e) {
 
-		Activator.getDefault().getLog().log(new Status(IStatus.ERROR, description, message, e));
+		logger.warn(description);
+		logger.warn(message);
+		logger.warn(e);
 	}
 }

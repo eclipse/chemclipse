@@ -32,7 +32,7 @@ import org.eclipse.swt.widgets.Composite;
 
 public class PeakQuantitationListPart extends AbstractPart<ExtendedPeakQuantitationListUI> {
 
-	private static final String TOPIC = IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION;
+	private static final String TOPIC = IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION;
 	private PeakQuantitationsExtractor peakQuantitationsExtractor = new PeakQuantitationsExtractor();
 
 	@Inject
@@ -55,10 +55,8 @@ public class PeakQuantitationListPart extends AbstractPart<ExtendedPeakQuantitat
 			if(!isUnloadEvent(topic)) {
 				object = objects.get(0);
 				if(object instanceof IChromatogramSelection) {
-					@SuppressWarnings("rawtypes")
-					IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
-					@SuppressWarnings("rawtypes")
-					IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+					IChromatogramSelection<?, ?> chromatogramSelection = (IChromatogramSelection<?, ?>)object;
+					IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 					List<? extends IPeak> peaks = null;
 					if(chromatogram instanceof IChromatogramMSD) {
 						IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;

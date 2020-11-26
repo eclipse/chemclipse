@@ -53,7 +53,7 @@ public class ExtendedHeaderDataUI extends Composite implements IExtendedPartUI {
 	private Button buttonToolbarInfo;
 	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
 	private Button buttonToolbarSearch;
-	private AtomicReference<Composite> toolbarSearch = new AtomicReference<>();
+	private AtomicReference<SearchSupportUI> toolbarSearch = new AtomicReference<>();
 	private Button buttonToolbarEdit;
 	private AtomicReference<DataMapSupportUI> toolbarEdit = new AtomicReference<>();
 	private Button buttonTableEdit;

@@ -86,7 +86,7 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 	private AtomicReference<InformationUI> toolbarInfoTop = new AtomicReference<>();
 	private AtomicReference<InformationUI> toolbarInfoBottom = new AtomicReference<>();
 	private Button buttonToolbarSearch;
-	private AtomicReference<Composite> toolbarSearch = new AtomicReference<>();
+	private AtomicReference<SearchSupportUI> toolbarSearch = new AtomicReference<>();
 	private Button buttonToolbarEdit;
 	private AtomicReference<Composite> toolbarEdit = new AtomicReference<>();
 	private Button buttonCopyTraces;

@@ -86,7 +86,7 @@ public class ExtendedPeakQuantitationListUI extends Composite implements IExtend
 
 	private PeakQuantitationListUI createListUI(Composite parent) {
 
-		PeakQuantitationListUI peakQuantitationListUI = new PeakQuantitationListUI(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		PeakQuantitationListUI peakQuantitationListUI = new PeakQuantitationListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		peakQuantitationListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
 		return peakQuantitationListUI;
