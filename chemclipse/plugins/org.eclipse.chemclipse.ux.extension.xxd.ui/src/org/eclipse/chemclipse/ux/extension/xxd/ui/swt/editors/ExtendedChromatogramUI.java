@@ -147,7 +147,7 @@ import org.eclipse.swtchart.extensions.menu.IChartMenuEntry;
 import org.eclipse.swtchart.extensions.menu.ResetChartHandler;
 
 @SuppressWarnings("rawtypes")
-public class ExtendedChromatogramUI implements ToolbarConfig {
+public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 
 	public static final String PREFERENCE_SHOW_TOOLBAR_TEXT = "ChromatogramUI.showToolbarText";
 	//
@@ -231,10 +231,11 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 
 	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker, ProcessSupplierContext supplierContext, IPreferenceStore store) {
 
+		super(parent, style);
 		this.eventBroker = eventBroker;
 		processTypeSupport = supplierContext;
 		preferenceStore = store;
-		initialize(parent, style);
+		createControl();
 	}
 
 	@Override
@@ -950,18 +951,18 @@ public class ExtendedChromatogramUI implements ToolbarConfig {
 		chromatogramChart.addSeriesData(lineSeriesDataList, compressionToLength);
 	}
 
-	private void initialize(Composite parent, int style) {
+	private void createControl() {
 
-		parent.setLayout(new GridLayout(1, true));
+		setLayout(new GridLayout(1, true));
 		//
-		toolbarMain = createToolbarMain(parent);
-		toolbars.put(TOOLBAR_INFO, createToolbarInfo(parent));
-		toolbars.put(TOOLBAR_EDIT, createToolbarEdit(parent));
-		toolbars.put(TOOLBAR_CHROMATOGRAM_ALIGNMENT, createChromatogramAlignmentUI(parent));
-		toolbars.put(TOOLBAR_METHOD, createToolbarMethod(parent));
-		toolbars.put(TOOLBAR_RETENTION_INDICES, retentionIndexUI = createToolbarRetentionIndexUI(parent));
+		toolbarMain = createToolbarMain(this);
+		toolbars.put(TOOLBAR_INFO, createToolbarInfo(this));
+		toolbars.put(TOOLBAR_EDIT, createToolbarEdit(this));
+		toolbars.put(TOOLBAR_CHROMATOGRAM_ALIGNMENT, createChromatogramAlignmentUI(this));
+		toolbars.put(TOOLBAR_METHOD, createToolbarMethod(this));
+		toolbars.put(TOOLBAR_RETENTION_INDICES, retentionIndexUI = createToolbarRetentionIndexUI(this));
 		//
-		createChromatogramChart(parent, style);
+		createChromatogramChart(this, SWT.NONE);
 		//
 		comboViewerSeparationColumn.setInput(SeparationColumnFactory.getSeparationColumns());
 		//

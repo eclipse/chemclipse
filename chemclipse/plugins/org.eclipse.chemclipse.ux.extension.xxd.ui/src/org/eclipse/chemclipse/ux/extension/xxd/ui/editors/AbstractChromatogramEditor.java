@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -58,11 +58,10 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.ChromatogramFileSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ChromatogramImportRunnable;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.AbstractDataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.MeasurementResultNotification;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.ObjectChangedListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.ProcessMethodNotifications;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.parts.AbstractUpdater;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedChromatogramUI;
@@ -87,12 +86,14 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtchart.ICustomPaintListener;
 
 @SuppressWarnings("rawtypes")
-public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSupport implements IChromatogramEditor, IDataUpdateSupport {
+public abstract class AbstractChromatogramEditor extends AbstractUpdater<ExtendedChromatogramUI> implements IChromatogramEditor {
 
+	private static final Logger logger = Logger.getLogger(AbstractChromatogramEditor.class);
+	//
 	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif";
 	public static final String TOOLTIP = "Chromatogram Editor";
 	//
-	private static final Logger logger = Logger.getLogger(AbstractChromatogramEditor.class);
+	private static final String TOPIC = IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION;
 	//
 	private final DataType dataType;
 	private final MPart part;
@@ -128,7 +129,7 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 
 	public AbstractChromatogramEditor(DataType dataType, Composite parent, MPart part, MDirtyable dirtyable, ProcessSupplierContext processSupplierContext, Shell shell) {
 
-		super(part);
+		super(TOPIC);
 		//
 		this.dataType = dataType;
 		this.part = part;
@@ -140,44 +141,11 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 		initialize(parent);
 	}
 
-	@Override
-	public void registerEvents() {
-
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-		registerEvent(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-		registerEvent(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_SCAN);
-		registerEvent(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_SCAN);
-		registerEvent(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_PEAK);
-		registerEvent(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_PEAK);
-	}
-
 	@Focus
 	public void onFocus() {
 
 		if(shell != null) {
 			extendedChromatogramUI.fireUpdate(shell.getDisplay());
-		}
-	}
-
-	@Override
-	public void updateObjects(List<Object> objects, String topic) {
-
-		/*
-		 * 0 => because only one property was used to register the event.
-		 */
-		if(objects.size() == 1) {
-			Object object = objects.get(0);
-			if(object instanceof IChromatogramSelection) {
-				IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
-				if(extendedChromatogramUI.isActiveChromatogramSelection(chromatogramSelection)) {
-					extendedChromatogramUI.update();
-				}
-			} else if(object instanceof IScan) {
-				extendedChromatogramUI.updateSelectedScan();
-			} else if(object instanceof IPeak) {
-				extendedChromatogramUI.updateSelectedPeak();
-			}
 		}
 	}
 
@@ -307,12 +275,36 @@ public abstract class AbstractChromatogramEditor extends AbstractDataUpdateSuppo
 		createEditorPages(parent);
 		extendedChromatogramUI.updateChromatogramSelection(chromatogramSelection);
 		processChromatogram(chromatogramSelection);
+		setControl(extendedChromatogramUI);
 		//
 		if(chromatogramSelection != null) {
 			part.setLabel(ChromatogramDataSupport.getChromatogramEditorLabel(chromatogramSelection));
 			dirtyable.setDirty(true);
 			chromatogramSelection.update(true);
 		}
+	}
+
+	@Override
+	protected boolean updateData(List<Object> objects, String topic) {
+
+		if(objects.size() == 1) {
+			Object object = objects.get(0);
+			if(object instanceof IChromatogramSelection) {
+				IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
+				if(extendedChromatogramUI.isActiveChromatogramSelection(chromatogramSelection)) {
+					extendedChromatogramUI.update();
+					return true;
+				}
+			} else if(object instanceof IScan) {
+				extendedChromatogramUI.updateSelectedScan();
+				return true;
+			} else if(object instanceof IPeak) {
+				extendedChromatogramUI.updateSelectedPeak();
+				return true;
+			}
+		}
+		//
+		return false;
 	}
 
 	private void processChromatogram(IChromatogramSelection chromatogramSelection) {

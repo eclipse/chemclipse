@@ -64,7 +64,10 @@ public class ScanSelectionHandler extends AbstractHandledEventProcessor implemen
 			int scanNumber = chromatogram.getScanNumber(retentionTime);
 			IScan scan = chromatogram.getScan(scanNumber);
 			if(scan != null) {
+				//
 				chromatogramSelection.setSelectedScan(scan);
+				extendedChromatogramUI.updateSelectedScan();
+				//
 				IEventBroker eventBroker = Activator.getDefault().getEventBroker();
 				if(eventBroker != null) {
 					DisplayUtils.getDisplay().asyncExec(new Runnable() {

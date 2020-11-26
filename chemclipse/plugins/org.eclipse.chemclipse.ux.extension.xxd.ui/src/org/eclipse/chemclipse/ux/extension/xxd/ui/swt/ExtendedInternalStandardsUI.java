@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-
-import javax.inject.Inject;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
@@ -40,7 +38,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.ResponseFa
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakDataSupport;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -61,7 +58,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 
-public class ExtendedInternalStandardsUI {
+public class ExtendedInternalStandardsUI extends Composite implements IExtendedPartUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedInternalStandardsUI.class);
 	//
@@ -100,15 +97,16 @@ public class ExtendedInternalStandardsUI {
 	//
 	private PeakDataSupport peakDataSupport = new PeakDataSupport();
 
-	@Inject
-	public ExtendedInternalStandardsUI(Composite parent) {
-		initialize(parent);
+	public ExtendedInternalStandardsUI(Composite parent, int style) {
+
+		super(parent, style);
+		createControl();
 	}
 
-	@Focus
-	public void setFocus() {
+	public boolean setFocus() {
 
 		updatePeak();
+		return true;
 	}
 
 	public void update(IPeak peak) {
@@ -144,15 +142,15 @@ public class ExtendedInternalStandardsUI {
 		}
 	}
 
-	private void initialize(Composite parent) {
+	private void createControl() {
 
-		parent.setLayout(new GridLayout(1, true));
+		setLayout(new GridLayout(1, true));
 		//
-		createToolbarMain(parent);
-		toolbarInfo = createToolbarInfo(parent);
-		toolbarModify = createToolbarModify(parent);
-		toolbarAdd = createToolbarAdd(parent);
-		createInternalStandardsList(parent);
+		createToolbarMain(this);
+		toolbarInfo = createToolbarInfo(this);
+		toolbarModify = createToolbarModify(this);
+		toolbarAdd = createToolbarAdd(this);
+		createInternalStandardsList(this);
 		//
 		PartSupport.setCompositeVisibility(toolbarInfo, true);
 		PartSupport.setCompositeVisibility(toolbarModify, false);

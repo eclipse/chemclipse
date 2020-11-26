@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,45 +17,51 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EnhancedUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedInternalStandardsUI;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class InternalStandardsPart extends EnhancedUpdateSupport implements IUpdateSupport {
+public class InternalStandardsPart extends AbstractPart<ExtendedInternalStandardsUI> {
 
-	private ExtendedInternalStandardsUI extendedInternalStandardsUI;
+	private static final String TOPIC = IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION;
 
 	@Inject
-	public InternalStandardsPart(Composite parent, MPart part) {
-		super(parent, Activator.getDefault().getDataUpdateSupport(), IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, part);
+	public InternalStandardsPart(Composite parent) {
+
+		super(parent, TOPIC);
 	}
 
 	@Override
-	public void createControl(Composite parent) {
+	protected ExtendedInternalStandardsUI createControl(Composite parent) {
 
-		extendedInternalStandardsUI = new ExtendedInternalStandardsUI(parent);
+		return new ExtendedInternalStandardsUI(parent, SWT.NONE);
 	}
 
-	public void updateSelection(List<Object> objects, String topic) {
+	@Override
+	protected boolean updateData(List<Object> objects, String topic) {
 
-		/*
-		 * 0 => because only one property was used to register the event.
-		 */
 		if(objects.size() == 1) {
 			IPeak peak = null;
 			if(!isUnloadEvent(topic)) {
 				Object object = objects.get(0);
 				if(object instanceof IPeak) {
 					peak = (IPeak)object;
-					extendedInternalStandardsUI.update(peak);
+					getControl().update(peak);
+					return true;
 				}
 			} else {
-				extendedInternalStandardsUI.update(null);
+				getControl().update(null);
+				return false;
 			}
 		}
+		//
+		return false;
+	}
+
+	@Override
+	protected boolean isUpdateTopic(String topic) {
+
+		return TOPIC.equals(topic);
 	}
 
 	private boolean isUnloadEvent(String topic) {

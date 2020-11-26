@@ -35,9 +35,9 @@ public class PeakSelectionHandler extends AbstractHandledEventProcessor implemen
 
 	private ExtendedChromatogramUI extendedChromatogramUI;
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
 
 	public PeakSelectionHandler(ExtendedChromatogramUI extendedChromatogramUI) {
+
 		this.extendedChromatogramUI = extendedChromatogramUI;
 	}
 
@@ -77,10 +77,13 @@ public class PeakSelectionHandler extends AbstractHandledEventProcessor implemen
 				 */
 				IPeak peak = selectNearestPeak(peaks, retentionTime);
 				if(peak != null) {
+					//
 					chromatogramSelection.setSelectedPeak(peak);
+					extendedChromatogramUI.updateSelectedPeak();
+					//
 					boolean moveRetentionTimeOnPeakSelection = preferenceStore.getBoolean(PreferenceConstants.P_MOVE_RETENTION_TIME_ON_PEAK_SELECTION);
 					if(moveRetentionTimeOnPeakSelection) {
-						chromatogramDataSupport.adjustChromatogramSelection(peak, chromatogramSelection);
+						ChromatogramDataSupport.adjustChromatogramSelection(peak, chromatogramSelection);
 					}
 					//
 					extendedChromatogramUI.updateSelection();
