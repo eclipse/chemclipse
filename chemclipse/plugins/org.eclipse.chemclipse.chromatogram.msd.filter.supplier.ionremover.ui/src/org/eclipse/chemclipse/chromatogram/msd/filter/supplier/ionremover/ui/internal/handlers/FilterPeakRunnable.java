@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.core.peak.PeakFilter;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
@@ -58,7 +58,7 @@ public class FilterPeakRunnable implements IRunnableWithProgress {
 				processingInfo = PeakFilter.applyFilter(chromatogramSelectionMSD, peakFilterSettings, FILTER_ID_PEAK, monitor);
 			}
 			//
-			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
+			ProcessingInfoPartSupport.getInstance().update(processingInfo, false);
 			updateSelection();
 		} finally {
 			monitor.done();

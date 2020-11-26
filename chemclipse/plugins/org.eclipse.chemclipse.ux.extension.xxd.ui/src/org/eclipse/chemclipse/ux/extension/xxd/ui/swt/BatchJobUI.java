@@ -19,9 +19,11 @@ import java.util.List;
 import org.eclipse.chemclipse.model.handler.IModificationHandler;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.DataCategory;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
-import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedMethodUI;
@@ -202,7 +204,9 @@ public class BatchJobUI {
 				try {
 					monitor.run(true, true, executionRunnable);
 				} catch(InvocationTargetException e) {
-					ProcessingInfoViewSupport.updateProcessingInfoError("BatchJob", "Execution of the job failed", e.getCause());
+					IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+					processingInfo.addErrorMessage("BatchJob", "Execution of the job failed", e.getCause());
+					ProcessingInfoPartSupport.getInstance().update(processingInfo);
 				} catch(InterruptedException e) {
 					// canceled
 					return;

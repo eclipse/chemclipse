@@ -56,7 +56,7 @@ import org.eclipse.chemclipse.processing.supplier.IProcessSupplier.SupplierType;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
-import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
@@ -617,12 +617,9 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	public void updateResult(Shell shell, MessageProvider result) {
 
-		if(result != null) {
-			shell.getDisplay().asyncExec(() -> ProcessingInfoViewSupport.updateProcessingInfo(result, result.hasErrorMessages()));
-		}
+		ProcessingInfoPartSupport.getInstance().update(result, true);
 	}
 
 	private boolean isValidSupplier(IProcessSupplier<?> supplier) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,9 +15,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.function.Consumer;
 
 import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.filter.Filter;
-import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
@@ -36,6 +38,7 @@ public abstract class AbstractFilterAction<FilterType extends Filter<?>, ResultT
 	private Consumer<ResultType> resultConsumer;
 
 	public AbstractFilterAction(FilterType filter, Consumer<ResultType> resultConsumer) {
+
 		this.filter = filter;
 		this.resultConsumer = resultConsumer;
 		setToolTipText(filter.getDescription());
@@ -76,9 +79,11 @@ public abstract class AbstractFilterAction<FilterType extends Filter<?>, ResultT
 					}
 				}
 			});
-			ProcessingInfoViewSupport.updateProcessingInfo(consumer);
+			ProcessingInfoPartSupport.getInstance().update(consumer);
 		} catch(InvocationTargetException e) {
-			ProcessingInfoViewSupport.updateProcessingInfoError(filter.getName(), "Processing failed", e.getTargetException());
+			IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+			processingInfo.addErrorMessage(filter.getName(), "Processing failed", e.getTargetException());
+			ProcessingInfoPartSupport.getInstance().update(processingInfo);
 		} catch(InterruptedException e) {
 			// user canceled
 			return;

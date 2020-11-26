@@ -28,7 +28,7 @@ import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
-import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.support.ui.workbench.PartSupport;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.ProcessMethodNotifications;
@@ -185,9 +185,9 @@ public class ProcessMethodEditor implements IModificationHandler, IChemClipseEdi
 				newMethod.setReadOnly(editedMethod.isFinal());
 			}
 			//
-			IProcessingInfo<?> info = MethodConverter.convert(file, newMethod, MethodConverter.DEFAULT_METHOD_CONVERTER_ID, new NullProgressMonitor());
-			if(info.hasErrorMessages()) {
-				ProcessingInfoViewSupport.updateProcessingInfo(info);
+			IProcessingInfo<?> processingInfo = MethodConverter.convert(file, newMethod, MethodConverter.DEFAULT_METHOD_CONVERTER_ID, new NullProgressMonitor());
+			if(processingInfo.hasErrorMessages()) {
+				ProcessingInfoPartSupport.getInstance().update(processingInfo);
 			} else {
 				success = true;
 				if(!saveAs) {

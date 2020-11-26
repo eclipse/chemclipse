@@ -30,7 +30,7 @@ import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
-import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
@@ -170,7 +170,6 @@ public class ExtendedSequenceListUI extends Composite implements IExtendedPartUI
 		methodSupportUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		methodSupportUI.setMethodListener(new IMethodListener() {
 
-			@SuppressWarnings("deprecation")
 			@Override
 			public void execute(IProcessMethod processMethod, IProgressMonitor monitor) {
 
@@ -203,7 +202,7 @@ public class ExtendedSequenceListUI extends Composite implements IExtendedPartUI
 					}
 				}
 				//
-				ProcessingInfoViewSupport.updateProcessingInfo(methodSupportUI.getDisplay(), processingInfo, true);
+				ProcessingInfoPartSupport.getInstance().update(processingInfo, true);
 			}
 		});
 		//

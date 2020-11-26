@@ -16,7 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.chromatogram.ChromatogramCalculator;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
@@ -24,22 +24,20 @@ import org.eclipse.swt.widgets.Display;
 public class CalculatorRunnable implements IRunnableWithProgress {
 
 	private static final String CALCULATOR_ID = "org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri";
-	@SuppressWarnings("rawtypes")
-	private IChromatogramSelection chromatogramSelection;
+	private IChromatogramSelection<?, ?> chromatogramSelection;
 
-	@SuppressWarnings("rawtypes")
-	public CalculatorRunnable(IChromatogramSelection chromatogramSelection) {
+	public CalculatorRunnable(IChromatogramSelection<?, ?> chromatogramSelection) {
+
 		this.chromatogramSelection = chromatogramSelection;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		try {
 			monitor.beginTask("Retention Index Calculator", IProgressMonitor.UNKNOWN);
 			IProcessingInfo<?> processingInfo = ChromatogramCalculator.applyCalculator(chromatogramSelection, CALCULATOR_ID, monitor);
-			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
+			ProcessingInfoPartSupport.getInstance().update(processingInfo, false);
 			updateSelection();
 		} finally {
 			monitor.done();

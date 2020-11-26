@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2019 Lablicate GmbH.
+ * Copyright (c) 2010, 2020 Lablicate GmbH.
  *
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -22,7 +22,7 @@ import org.eclipse.chemclipse.model.processor.AbstractChromatogramProcessor;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
-import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -47,7 +47,7 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 				final IProcessingInfo<IChromatogramFilterResult> processingInfo = ChromatogramFilterMSD.applyFilter(chromatogramSelection, FILTER_ID, monitor);
 				IChromatogramFilterResult result = processingInfo.getProcessingResult();
 				if(result instanceof IDenoisingFilterResult) {
-					ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
+					ProcessingInfoPartSupport.getInstance().update(processingInfo, false);
 					DisplayUtils.getDisplay().asyncExec(new Runnable() {
 
 						@Override

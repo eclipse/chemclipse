@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,7 +17,7 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.Chromato
 import org.eclipse.chemclipse.model.processor.AbstractChromatogramProcessor;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
@@ -28,6 +28,7 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 	private static final String FILTER_ID = "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda";
 
 	public FilterModifier(IChromatogramSelectionMSD chromatogramSelection) {
+
 		super(chromatogramSelection);
 	}
 
@@ -36,8 +37,8 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 
 		if(getChromatogramSelection() instanceof IChromatogramSelectionMSD) {
 			IChromatogramSelectionMSD chromatogramSelection = (IChromatogramSelectionMSD)getChromatogramSelection();
-			final IProcessingInfo processingInfo = ChromatogramFilterMSD.applyFilter(chromatogramSelection, FILTER_ID, monitor);
-			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
+			final IProcessingInfo<?> processingInfo = ChromatogramFilterMSD.applyFilter(chromatogramSelection, FILTER_ID, monitor);
+			ProcessingInfoPartSupport.getInstance().update(processingInfo, false);
 			Display.getDefault().asyncExec(new Runnable() {
 
 				@Override

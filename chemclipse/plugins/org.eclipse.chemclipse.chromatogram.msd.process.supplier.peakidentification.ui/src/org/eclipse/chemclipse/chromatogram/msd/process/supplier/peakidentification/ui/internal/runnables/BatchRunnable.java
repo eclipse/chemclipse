@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,7 +28,7 @@ import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
-import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
@@ -40,9 +40,11 @@ public class BatchRunnable implements IRunnableWithProgress {
 	private PeakIdentificationBatchJobReader reader;
 
 	public BatchRunnable(String filePath) {
+
 		this.filePath = filePath;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
@@ -55,7 +57,7 @@ public class BatchRunnable implements IRunnableWithProgress {
 			final IProcessingInfo<IPeakIdentificationBatchProcessReport> processingInfo = batchProcess.execute(peakIdentificationBatchJob, monitor);
 			try {
 				final IPeakIdentificationBatchProcessReport report = processingInfo.getProcessingResult();
-				ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
+				ProcessingInfoPartSupport.getInstance().update(processingInfo, false);
 				/*
 				 * Update the peak results page
 				 */

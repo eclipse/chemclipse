@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -54,6 +54,7 @@ public class ProcessingInfoUI {
 
 	private static final int DETAILS_MAX_HEIGHT = 300;
 	private static final int DETAILS_MIN_HEIGHT = 50;
+	//
 	private TableViewer tableViewer;
 	private ProcessingInfoTableComparator processingInfoTableComparator;
 	private Clipboard clipboard;
@@ -63,6 +64,7 @@ public class ProcessingInfoUI {
 	private static final String DELIMITER = "\t";
 
 	public ProcessingInfoUI(Composite parent, int style) {
+
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout());
 		/*
@@ -70,7 +72,7 @@ public class ProcessingInfoUI {
 		 */
 		clipboard = new Clipboard(Display.getDefault());
 		Map<Long, String> substances = new HashMap<Long, String>();
-		tableViewer = new TableViewer(container, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
+		tableViewer = new TableViewer(container, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 		createColumns(tableViewer);
 		setTableProvider(substances);
 		parent.addDisposeListener(new DisposeListener() {
@@ -203,7 +205,6 @@ public class ProcessingInfoUI {
 		clipboard.setContents(data, dataTypes);
 	}
 
-	// -----------------------------------------private methods
 	private void setTableProvider(Map<Long, String> substances) {
 
 		/*
@@ -222,9 +223,6 @@ public class ProcessingInfoUI {
 	 */
 	private void createColumns(final TableViewer tableViewer) {
 
-		/*
-		 * SYNCHRONIZE: PeakListLabelProvider PeakListLabelSorter PeakListView
-		 */
 		/*
 		 * Set the titles and bounds.
 		 */

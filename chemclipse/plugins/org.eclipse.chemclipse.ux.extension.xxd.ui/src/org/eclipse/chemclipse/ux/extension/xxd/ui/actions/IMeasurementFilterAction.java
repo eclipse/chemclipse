@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,11 +20,13 @@ import java.util.function.Function;
 import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.filter.IMeasurementFilter;
 import org.eclipse.chemclipse.model.supplier.IMeasurementFilterProcessTypeSupplier;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
-import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.swt.widgets.Shell;
@@ -42,6 +44,7 @@ public class IMeasurementFilterAction extends AbstractFilterAction<IMeasurementF
 	private Object settings;
 
 	public IMeasurementFilterAction(IMeasurementFilter<?> filter, Collection<? extends IMeasurement> measurements, Consumer<Collection<? extends IMeasurement>> resultConsumer, ProcessSupplierContext processTypeSupport) {
+
 		super(filter, resultConsumer);
 		this.measurements = measurements;
 		this.processTypeSupport = processTypeSupport;
@@ -64,7 +67,9 @@ public class IMeasurementFilterAction extends AbstractFilterAction<IMeasurementF
 						settings = preferences.getSettings();
 					}
 				} catch(IOException e) {
-					ProcessingInfoViewSupport.updateProcessingInfoError(filter.getName(), "Can't process settings", e);
+					IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+					processingInfo.addErrorMessage(filter.getName(), "Can't process settings", e);
+					ProcessingInfoPartSupport.getInstance().update(processingInfo);
 				} catch(CancellationException e) {
 					return;
 				}

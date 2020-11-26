@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.setting
 import org.eclipse.chemclipse.model.processor.AbstractChromatogramProcessor;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
@@ -28,7 +28,8 @@ public class FilterModifierStretch extends AbstractChromatogramProcessor impleme
 	private static final String DESCRIPTION = "RTStretch Filter";
 	private static final String FILTER_ID = "org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtstretcher";
 
-	public FilterModifierStretch(IChromatogramSelection chromatogramSelection) {
+	public FilterModifierStretch(IChromatogramSelection<?, ?> chromatogramSelection) {
+
 		super(chromatogramSelection);
 	}
 
@@ -36,10 +37,10 @@ public class FilterModifierStretch extends AbstractChromatogramProcessor impleme
 	public void execute(IProgressMonitor monitor) {
 
 		if(getChromatogramSelection() != null) {
-			IChromatogramSelection chromatogramSelection = getChromatogramSelection();
+			IChromatogramSelection<?, ?> chromatogramSelection = getChromatogramSelection();
 			FilterSettingsStretch filterSettings = PreferenceSupplier.getFilterSettingsStretch();
-			final IProcessingInfo processingInfo = ChromatogramFilter.applyFilter(chromatogramSelection, filterSettings, FILTER_ID, monitor);
-			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
+			final IProcessingInfo<?> processingInfo = ChromatogramFilter.applyFilter(chromatogramSelection, filterSettings, FILTER_ID, monitor);
+			ProcessingInfoPartSupport.getInstance().update(processingInfo, false);
 		}
 	}
 

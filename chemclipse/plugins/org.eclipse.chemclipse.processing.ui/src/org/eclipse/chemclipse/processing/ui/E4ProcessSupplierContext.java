@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - access member variable, probably remove this context
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.ui;
 
@@ -26,9 +27,9 @@ import org.eclipse.e4.core.di.annotations.Creatable;
 public class E4ProcessSupplierContext implements ProcessSupplierContext {
 
 	@Inject
-	ProcessSupplierContext processSupplierContext;
+	private ProcessSupplierContext processSupplierContext;
 	@Inject
-	IEclipseContext eclipseContext;
+	private IEclipseContext eclipseContext;
 
 	@SuppressWarnings("unchecked")
 	@Override

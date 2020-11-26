@@ -36,7 +36,7 @@ import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
-import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.BatchJobUI;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -194,6 +194,6 @@ public class BatchJobEditor extends EditorPart implements IRunnableWithProgress 
 		DataType[] dataTypes = batchProcessJob.getDataTypes();
 		BatchProcess batchProcess = new BatchProcess(dataTypes, supplierContext);
 		IProcessingInfo<?> processingInfo = batchProcess.execute(getBatchProcessJob(), monitor);
-		ProcessingInfoViewSupport.updateProcessingInfo(processingInfo);
+		ProcessingInfoPartSupport.getInstance().update(processingInfo);
 	}
 }

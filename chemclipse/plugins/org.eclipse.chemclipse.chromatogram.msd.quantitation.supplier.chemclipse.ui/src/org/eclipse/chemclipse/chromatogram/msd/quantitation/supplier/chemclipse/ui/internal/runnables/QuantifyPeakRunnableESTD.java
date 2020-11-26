@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
@@ -28,6 +28,7 @@ public class QuantifyPeakRunnableESTD implements IRunnableWithProgress {
 	private static final String PEAK_QUANTIFIER_ID = "org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.peak";
 
 	public QuantifyPeakRunnableESTD(IChromatogramSelectionMSD chromatogramSelection) {
+
 		this.chromatogramSelection = chromatogramSelection;
 	}
 
@@ -38,8 +39,8 @@ public class QuantifyPeakRunnableESTD implements IRunnableWithProgress {
 			monitor.beginTask("Peak Quantifier (ESTD)", IProgressMonitor.UNKNOWN);
 			//
 			IPeakMSD peak = chromatogramSelection.getSelectedPeak();
-			IProcessingInfo processingInfo = PeakQuantifier.quantify(peak, PEAK_QUANTIFIER_ID, monitor);
-			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
+			IProcessingInfo<?> processingInfo = PeakQuantifier.quantify(peak, PEAK_QUANTIFIER_ID, monitor);
+			ProcessingInfoPartSupport.getInstance().update(processingInfo, true);
 			if(chromatogramSelection instanceof ChromatogramSelectionMSD) {
 				((ChromatogramSelectionMSD)chromatogramSelection).update(true);
 			}

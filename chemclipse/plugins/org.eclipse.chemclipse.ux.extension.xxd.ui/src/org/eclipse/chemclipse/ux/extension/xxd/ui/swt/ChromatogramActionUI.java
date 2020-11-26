@@ -23,7 +23,7 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
@@ -73,6 +73,7 @@ public class ChromatogramActionUI extends Composite {
 	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public ChromatogramActionUI(Composite parent, int style) {
+
 		super(parent, style);
 		initialize();
 	}
@@ -155,17 +156,16 @@ public class ChromatogramActionUI extends Composite {
 		//
 		button.addSelectionListener(new SelectionAdapter() {
 
-			@SuppressWarnings("unchecked")
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				if(chromatogramSelection != null) {
 					ChromatogramEditorActionExtension extension = actionHashMap.get(selectedActionId);
 					if(extension != null) {
-						IChromatogramEditorAction action = extension.getChromatogramEditorAction();
+						IChromatogramEditorAction<?> action = extension.getChromatogramEditorAction();
 						if(action != null) {
-							IProcessingInfo processingInfo = action.applyAction(chromatogramSelection);
-							ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, true);
+							IProcessingInfo<?> processingInfo = action.applyAction(chromatogramSelection);
+							ProcessingInfoPartSupport.getInstance().update(processingInfo, true);
 							e.display.asyncExec(new Runnable() {
 
 								@Override

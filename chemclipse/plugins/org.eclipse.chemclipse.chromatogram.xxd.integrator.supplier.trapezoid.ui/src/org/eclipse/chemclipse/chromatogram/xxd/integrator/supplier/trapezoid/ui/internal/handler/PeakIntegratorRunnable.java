@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,18 +19,17 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.pre
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.PeakIntegrationSettings;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
 public class PeakIntegratorRunnable implements IRunnableWithProgress {
 
 	private static final String PEAK_INTEGRATOR_ID = "org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.peakIntegrator";
-	@SuppressWarnings("rawtypes")
-	private IChromatogramSelection chromatogramSelection;
+	private IChromatogramSelection<?, ?> chromatogramSelection;
 
-	@SuppressWarnings("rawtypes")
-	public PeakIntegratorRunnable(IChromatogramSelection chromatogramSelection) {
+	public PeakIntegratorRunnable(IChromatogramSelection<?, ?> chromatogramSelection) {
+
 		this.chromatogramSelection = chromatogramSelection;
 	}
 
@@ -40,7 +39,7 @@ public class PeakIntegratorRunnable implements IRunnableWithProgress {
 		try {
 			PeakIntegrationSettings peakIntegrationSettings = PreferenceSupplier.getPeakIntegrationSettings();
 			IProcessingInfo<IPeakIntegrationResults> processingInfo = PeakIntegrator.integrate(chromatogramSelection, peakIntegrationSettings, PEAK_INTEGRATOR_ID, monitor);
-			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
+			ProcessingInfoPartSupport.getInstance().update(processingInfo, false);
 			chromatogramSelection.update(false);
 		} finally {
 			monitor.done();

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,18 +18,17 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIn
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.ChromatogramIntegrationSettings;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
 public class ChromatogramIntegratorRunnable implements IRunnableWithProgress {
 
 	private static final String CHROMATOGRAM_INTEGRATOR_ID = "org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.chromatogramIntegrator";
-	@SuppressWarnings("rawtypes")
-	private IChromatogramSelection chromatogramSelection;
+	private IChromatogramSelection<?, ?> chromatogramSelection;
 
-	@SuppressWarnings("rawtypes")
-	public ChromatogramIntegratorRunnable(IChromatogramSelection chromatogramSelection) {
+	public ChromatogramIntegratorRunnable(IChromatogramSelection<?, ?> chromatogramSelection) {
+
 		this.chromatogramSelection = chromatogramSelection;
 	}
 
@@ -39,7 +38,7 @@ public class ChromatogramIntegratorRunnable implements IRunnableWithProgress {
 		try {
 			ChromatogramIntegrationSettings chromatogramIntegrationSettings = new ChromatogramIntegrationSettings();
 			IProcessingInfo<IChromatogramIntegrationResults> processingInfo = ChromatogramIntegrator.integrate(chromatogramSelection, chromatogramIntegrationSettings, CHROMATOGRAM_INTEGRATOR_ID, monitor);
-			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
+			ProcessingInfoPartSupport.getInstance().update(processingInfo, false);
 			chromatogramSelection.update(false);
 		} finally {
 			monitor.done();

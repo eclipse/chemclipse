@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,30 +12,26 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.ui.support;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import org.eclipse.chemclipse.processing.core.MessageProvider;
+import org.eclipse.chemclipse.processing.ui.Activator;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.core.services.events.IEventBroker;
 
-@Creatable
-@Singleton
-public class DynamicProcessingInfoUpdateNotifier {
+public class ProcessingInfoUpdateNotifier {
 
-	@Inject
-	private IEventBroker eventBroker;
-	private MessageProvider currentValue;
+	private MessageProvider messageProvider;
 
-	public void update(MessageProvider processingInfo) {
+	public void update(MessageProvider messageProvider) {
 
-		this.currentValue = processingInfo;
-		eventBroker.post(IChemClipseEvents.TOPIC_PROCESSING_INFO_UPDATE, processingInfo);
+		this.messageProvider = messageProvider;
+		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+		if(eventBroker != null) {
+			eventBroker.post(IChemClipseEvents.TOPIC_PROCESSING_INFO_UPDATE, messageProvider);
+		}
 	}
 
 	public MessageProvider getProcessingInfo() {
 
-		return currentValue;
+		return messageProvider;
 	}
 }

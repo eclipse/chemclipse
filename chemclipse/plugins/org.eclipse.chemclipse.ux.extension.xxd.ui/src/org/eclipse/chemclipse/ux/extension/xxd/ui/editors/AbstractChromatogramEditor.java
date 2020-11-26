@@ -94,6 +94,8 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 	public static final String TOOLTIP = "Chromatogram Editor";
 	//
 	private static final String TOPIC = IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION;
+	private static final String TOPIC_SCAN = IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION;
+	private static final String TOPIC_PEAK = IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION;
 	//
 	private final DataType dataType;
 	private final MPart part;
@@ -305,6 +307,12 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 		}
 		//
 		return false;
+	}
+
+	@Override
+	protected boolean isUpdateTopic(String topic) {
+
+		return TOPIC.equals(topic) || TOPIC_SCAN.equals(topic) || TOPIC_PEAK.equals(topic);
 	}
 
 	private void processChromatogram(IChromatogramSelection chromatogramSelection) {

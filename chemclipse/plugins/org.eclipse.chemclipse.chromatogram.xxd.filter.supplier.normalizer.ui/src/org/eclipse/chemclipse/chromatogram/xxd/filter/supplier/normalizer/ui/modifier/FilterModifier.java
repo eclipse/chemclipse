@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,7 +17,7 @@ import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.Chromatogram
 import org.eclipse.chemclipse.model.processor.AbstractChromatogramProcessor;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
@@ -27,7 +27,8 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 	private static final String DESCRIPTION = "Normalizer";
 	private static final String FILTER_ID = "org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer";
 
-	public FilterModifier(IChromatogramSelection chromatogramSelection) {
+	public FilterModifier(IChromatogramSelection<?, ?> chromatogramSelection) {
+
 		super(chromatogramSelection);
 	}
 
@@ -35,9 +36,9 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 	public void execute(IProgressMonitor monitor) {
 
 		if(getChromatogramSelection() != null) {
-			IChromatogramSelection chromatogramSelection = getChromatogramSelection();
-			IProcessingInfo processingInfo = ChromatogramFilter.applyFilter(chromatogramSelection, FILTER_ID, monitor);
-			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
+			IChromatogramSelection<?, ?> chromatogramSelection = getChromatogramSelection();
+			IProcessingInfo<?> processingInfo = ChromatogramFilter.applyFilter(chromatogramSelection, FILTER_ID, monitor);
+			ProcessingInfoPartSupport.getInstance().update(processingInfo, false);
 			Display.getDefault().asyncExec(new Runnable() {
 
 				@Override

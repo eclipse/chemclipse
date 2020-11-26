@@ -50,7 +50,7 @@ import org.eclipse.chemclipse.processing.filter.Filter;
 import org.eclipse.chemclipse.processing.filter.FilterContext;
 import org.eclipse.chemclipse.processing.filter.Filtered;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
-import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.swt.EditorToolBar;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
@@ -211,7 +211,7 @@ public class ScanEditorNMR implements IScanEditorNMR {
 								@Override
 								public void run() {
 
-									ProcessingInfoViewSupport.updateProcessingInfo(convert);
+									ProcessingInfoPartSupport.getInstance().update(convert);
 									partSupport.closePart(part);
 								}
 							});

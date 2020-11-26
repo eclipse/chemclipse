@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,7 +14,10 @@ package org.eclipse.chemclipse.processing.ui;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
+import org.eclipse.e4.core.contexts.ContextInjectionFactory;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -34,6 +37,7 @@ public class Activator extends AbstractActivatorUI {
 	 * The constructor
 	 */
 	public Activator() {
+
 	}
 
 	/*
@@ -62,9 +66,22 @@ public class Activator extends AbstractActivatorUI {
 	 * 
 	 * @return the shared instance
 	 */
-	public static AbstractActivatorUI getDefault() {
+	public static Activator getDefault() {
 
 		return plugin;
+	}
+
+	public ProcessingInfoPartSupport getProcessingInfoPartSupport() {
+
+		IEclipseContext eclipseContext = getEclipseContext();
+		ProcessingInfoPartSupport processingInfoPartSupport = eclipseContext.get(ProcessingInfoPartSupport.class);
+		//
+		if(processingInfoPartSupport == null) {
+			processingInfoPartSupport = ContextInjectionFactory.make(ProcessingInfoPartSupport.class, eclipseContext);
+			eclipseContext.set(ProcessingInfoPartSupport.class, processingInfoPartSupport);
+		}
+		//
+		return processingInfoPartSupport;
 	}
 
 	private Map<String, String> getImageHashMap() {

@@ -33,9 +33,10 @@ import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
-import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.rcp.app.ui.handlers.OpenSnippetHandler;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -487,7 +488,9 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 					}
 				});
 			} catch(InvocationTargetException e) {
-				ProcessingInfoViewSupport.updateProcessingInfoError(processMethod.getName(), "Execution failed", e.getCause());
+				IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+				processingInfo.addErrorMessage(processMethod.getName(), "Execution failed", e.getCause());
+				ProcessingInfoPartSupport.getInstance().update(processingInfo);
 			} catch(InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}

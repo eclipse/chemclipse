@@ -17,7 +17,7 @@ import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.Chromatogram
 import org.eclipse.chemclipse.model.processor.AbstractChromatogramProcessor;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Display;
@@ -28,17 +28,17 @@ public class FilterModifier extends AbstractChromatogramProcessor implements IRu
 	private static final String FILTER_ID = "org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset";
 
 	public FilterModifier(@SuppressWarnings("rawtypes") IChromatogramSelection chromatogramSelection) {
+
 		super(chromatogramSelection);
 	}
 
-	@SuppressWarnings({"deprecation", "rawtypes"})
 	@Override
 	public void execute(IProgressMonitor monitor) {
 
-		IChromatogramSelection chromatogramSelection = getChromatogramSelection();
+		IChromatogramSelection<?, ?> chromatogramSelection = getChromatogramSelection();
 		if(chromatogramSelection != null) {
-			IProcessingInfo processingInfo = ChromatogramFilter.applyFilter(chromatogramSelection, FILTER_ID, monitor);
-			ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
+			IProcessingInfo<?> processingInfo = ChromatogramFilter.applyFilter(chromatogramSelection, FILTER_ID, monitor);
+			ProcessingInfoPartSupport.getInstance().update(processingInfo, false);
 			Display.getDefault().asyncExec(new Runnable() {
 
 				@Override

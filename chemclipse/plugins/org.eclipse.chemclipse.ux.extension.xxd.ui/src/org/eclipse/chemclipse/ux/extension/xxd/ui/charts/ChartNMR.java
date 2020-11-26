@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,7 +30,8 @@ import org.eclipse.chemclipse.model.core.PeakPosition;
 import org.eclipse.chemclipse.nmr.converter.core.ScanConverterNMR;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -60,10 +61,12 @@ public class ChartNMR extends LineChart {
 	private IAxisScaleConverter ppmconverter;
 
 	public ChartNMR(Composite parent, int style) {
+
 		this(parent, style, null);
 	}
 
 	public ChartNMR(Composite parent, int style, Supplier<IComplexSignalMeasurement<?>> measurementSupplier) {
+
 		super(parent, style);
 		initialize();
 		if(measurementSupplier != null) {
@@ -103,11 +106,13 @@ public class ChartNMR extends LineChart {
 									public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 										IProcessingInfo<?> export = ScanConverterNMR.export(file, measurementSupplier.get(), supplier.getId(), monitor);
-										ProcessingInfoViewSupport.updateProcessingInfo(export);
+										ProcessingInfoPartSupport.getInstance().update(export);
 									}
 								});
 							} catch(InvocationTargetException e) {
-								ProcessingInfoViewSupport.updateProcessingInfoError("NMR Export", "Export failed", e.getCause());
+								IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+								processingInfo.addErrorMessage("NMR Export", "Export failed", e.getCause());
+								ProcessingInfoPartSupport.getInstance().update(processingInfo);
 							} catch(InterruptedException e) {
 								// nothing to do
 							}

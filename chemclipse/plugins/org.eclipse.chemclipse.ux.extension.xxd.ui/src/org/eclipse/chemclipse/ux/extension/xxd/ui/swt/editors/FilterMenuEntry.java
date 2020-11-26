@@ -21,7 +21,7 @@ import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoViewSupport;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -98,7 +98,7 @@ public class FilterMenuEntry extends AbstractChartMenuEntry implements IChartMen
 							break;
 					}
 					if(processingInfo != null && !processingInfo.getMessages().isEmpty()) {
-						ProcessingInfoViewSupport.updateProcessingInfo(processingInfo, false);
+						ProcessingInfoPartSupport.getInstance().update(processingInfo, false);
 					}
 				}
 			};
