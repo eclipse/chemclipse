@@ -50,6 +50,7 @@ public class ChromatogramEditor3x extends EditorPart implements IChromatogramEdi
 	private static final String EDITOR_ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.editors.chromatogramEditor3x";
 	//
 	private ChromatogramEditor chromatogramEditor;
+	//
 	private final EPartService partService = Activator.getDefault().getPartService();
 	private final EModelService modelService = Activator.getDefault().getModelService();
 	private final MApplication application = Activator.getDefault().getApplication();
