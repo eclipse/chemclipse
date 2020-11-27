@@ -22,6 +22,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.handler.IModificationHandler;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.processing.DataCategory;
@@ -49,20 +50,20 @@ public class ProcessMethodEditor implements IModificationHandler, IChemClipseEdi
 
 	public static final String SNIPPET_ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.processMethodEditor";
 	//
+	private static final Logger logger = Logger.getLogger(ProcessMethodEditor.class);
+	//
 	@Inject
 	private MPart part;
-	//
-	private File processMethodFile;
-	private ExtendedMethodUI extendedMethodUI;
 	@Inject
 	private ProcessMethodNotifications notifications;
 	@Inject
 	private PartSupport partsupport;
-	// @Inject
-	// @Optional
-	private IProcessMethod currentProcessMethod;
 	@Inject
 	private ProcessSupplierContext processSupplierContext;
+	//
+	private File processMethodFile;
+	private ExtendedMethodUI extendedMethodUI;
+	private IProcessMethod currentProcessMethod;
 
 	@Focus
 	public void setFocus() {
@@ -93,15 +94,19 @@ public class ProcessMethodEditor implements IModificationHandler, IChemClipseEdi
 	@PostConstruct
 	public void initialize(Composite parent, @Optional IProcessMethod processMethod, @Optional File editorInput) {
 
+		//
 		if(processMethod == null && editorInput == null) {
 			throw new IllegalStateException("No method file and no process method are specified.");
 		}
 		//
 		if(editorInput != null) {
+			logger.info("Method File: " + editorInput.getAbsolutePath());
 			currentProcessMethod = Adapters.adapt(editorInput, IProcessMethod.class);
 			processMethodFile = editorInput;
 			if(currentProcessMethod == null) {
-				throw new RuntimeException("Can't read file " + processMethodFile);
+				String message = "The process method file '" + processMethodFile + "' can't be processed.";
+				logger.warn(message);
+				throw new RuntimeException(message);
 			}
 		} else {
 			currentProcessMethod = processMethod;
@@ -113,14 +118,36 @@ public class ProcessMethodEditor implements IModificationHandler, IChemClipseEdi
 		if(categories == null || categories.length == 0) {
 			categories = new DataCategory[]{DataCategory.CSD, DataCategory.MSD, DataCategory.WSD};
 		}
+		/*
+		 * Part check
+		 */
+		if(part == null) {
+			String message = "The method editor part has not been injected.";
+			logger.warn(message);
+			throw new RuntimeException(message);
+		}
 		//
-		String label = currentProcessMethod.getName().isEmpty() ? part.getLabel() : currentProcessMethod.getName();
+		String processMethodName = currentProcessMethod.getName();
+		logger.info("Process Method Name: " + processMethodName);
+		String label = processMethodName.isEmpty() ? part.getLabel() : processMethodName;
 		part.setLabel(label + " " + Arrays.asList(categories));
-		//
+		/*
+		 * It seems to happen that the process supplier context is null.
+		 * Probably, it is not initialized in time. Hence this additional check.
+		 * Further inspections are required to check why initialization has not been done yet.
+		 */
+		if(processSupplierContext == null) {
+			String message = "The process supplier context has not been injected.";
+			logger.warn(message);
+			throw new RuntimeException(message);
+		}
+		/*
+		 * Create the method editor.
+		 */
 		extendedMethodUI = new ExtendedMethodUI(parent, SWT.NONE, processSupplierContext, categories);
 		extendedMethodUI.setModificationHandler(this);
 		extendedMethodUI.setProcessMethod(currentProcessMethod);
-		extendedMethodUI.setHeaderToolbarVisible(processMethodFile == null);
+		extendedMethodUI.setToolbarHeaderVisible(processMethodFile == null);
 	}
 
 	@Override
@@ -193,7 +220,9 @@ public class ProcessMethodEditor implements IModificationHandler, IChemClipseEdi
 				if(!saveAs) {
 					part.setDirty(false);
 					currentProcessMethod = newMethod;
-					notifications.updated(newMethod, oldMethod);
+					if(notifications != null) {
+						notifications.updated(newMethod, oldMethod);
+					}
 					processMethodFile = file;
 					part.setLabel(processMethodFile.getName() + " " + currentProcessMethod.getDataCategories());
 				}

@@ -1,17 +1,16 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactoring
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.ui.adapters;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -23,7 +22,6 @@ import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsUIProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.MethodUIConfig;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedMethodUI;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IAdapterFactory;
@@ -44,6 +42,7 @@ public class MetaProcessorSettingsAdapterFactory implements IAdapterFactory, Set
 		private List<Listener> listeners = new ArrayList<>();
 
 		public SettingsUIControlImplementation(Composite parent, ProcessorPreferences<MetaProcessorSettings> preferences) throws IOException {
+
 			this.preferences = preferences;
 			settings = preferences.getSettings();
 			methodUI = new ExtendedMethodUI(parent, SWT.READ_ONLY, Activator.getProcessSupplierContext(), new BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>>() {
@@ -54,9 +53,7 @@ public class MetaProcessorSettingsAdapterFactory implements IAdapterFactory, Set
 					return settings.getProcessorPreferences(entry, entry.getPreferences(context));
 				}
 			}, settings.getMethod().getDataCategories().toArray(new DataCategory[0]));
-			MethodUIConfig config = methodUI.getConfig();
-			config.setToolbarVisible(false);
-			config.setVisibleColumns(new HashSet<>(Arrays.asList("", "Name", "Description", "Settings")));
+			//
 			methodUI.setInputs(settings.getMethod(), null);
 			methodUI.setModificationHandler(this);
 		}

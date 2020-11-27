@@ -30,7 +30,6 @@ import org.eclipse.chemclipse.converter.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.methods.ListProcessEntryContainer;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
-import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
@@ -44,9 +43,7 @@ import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.swt.ui.components.IMethodListener;
-import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorSupportFactory;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ProcessMethodEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PreferencesConfig;
 import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePageChromatogramExport;
@@ -76,7 +73,6 @@ import org.eclipse.swt.widgets.Shell;
 public class MethodSupportUI extends Composite implements PreferencesConfig {
 
 	private static final Logger logger = Logger.getLogger(MethodSupportUI.class);
-	private final ISupplierEditorSupport supplierEditorSupport = new EditorSupportFactory(DataType.MTH, () -> Activator.getDefault().getEclipseContext()).getInstanceEditorSupport();
 	//
 	private ComboViewer comboViewerMethods;
 	private Button buttonAddMethod;
@@ -97,6 +93,23 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 	public void setMethodListener(IMethodListener methodListener) {
 
 		this.methodListener = methodListener;
+	}
+
+	@Override
+	public IPreferencePage[] getPreferencePages() {
+
+		IPreferencePage preferencePageReportExport = new PreferencePageReportExport();
+		preferencePageReportExport.setTitle("Report Export");
+		IPreferencePage preferencePageChromatogramExport = new PreferencePageChromatogramExport();
+		preferencePageChromatogramExport.setTitle("Chromatogram Export");
+		//
+		return new IPreferencePage[]{preferencePageReportExport, preferencePageChromatogramExport};
+	}
+
+	@Override
+	public void applySettings() {
+
+		computeMethodComboItems();
 	}
 
 	private void createControl() {
@@ -199,23 +212,8 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 				Object object = comboViewerMethods.getStructuredSelection().getFirstElement();
 				File file = getProcessMethodFile(object);
 				if(file != null) {
-					//
-					// supplierEditorSupport.openEditor(file);
-					//
-					IEclipseContext eclipseContext = Activator.getDefault().getEclipseContext();
-					OpenSnippetHandler.openSnippet(ProcessMethodEditor.SNIPPET_ID, eclipseContext, new BiFunction<IEclipseContext, MPart, Runnable>() {
-
-						@Override
-						public Runnable apply(IEclipseContext context, MPart part) {
-
-							Set<DataCategory> dataCategories = new HashSet<>();
-							dataCategories.add(DataCategory.CSD);
-							dataCategories.add(DataCategory.MSD);
-							dataCategories.add(DataCategory.WSD);
-							context.set(File.class, file);
-							return null;
-						}
-					});
+					logger.info("Edit Method: " + file.getAbsolutePath());
+					openProcessMethodEditor(file);
 				}
 			}
 		});
@@ -282,7 +280,8 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 												 * Open the editor
 												 */
 												computeMethodComboItems();
-												supplierEditorSupport.openEditor(fileSink);
+												logger.info("Copied Method: " + fileSink.getAbsolutePath());
+												openProcessMethodEditor(fileSink);
 											}
 										}
 									} catch(IOException e1) {
@@ -422,7 +421,8 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 				PreferenceSupplier.setSelectedMethodName(file.getName());
 				if(openEditor) {
 					computeMethodComboItems();
-					supplierEditorSupport.openEditor(file);
+					logger.info("New Method: " + file.getAbsolutePath());
+					openProcessMethodEditor(file);
 				}
 			} else {
 				file = null;
@@ -524,19 +524,22 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 		return null;
 	}
 
-	@Override
-	public IPreferencePage[] getPreferencePages() {
+	private void openProcessMethodEditor(File file) {
 
-		IPreferencePage preferencePageReportExport = new PreferencePageReportExport();
-		preferencePageReportExport.setTitle("Report Export");
-		IPreferencePage preferencePageChromatogramExport = new PreferencePageChromatogramExport();
-		preferencePageChromatogramExport.setTitle("Chromatogram Export");
-		return new IPreferencePage[]{preferencePageReportExport, preferencePageChromatogramExport};
-	}
+		IEclipseContext eclipseContext = Activator.getDefault().getEclipseContext();
+		OpenSnippetHandler.openSnippet(ProcessMethodEditor.SNIPPET_ID, eclipseContext, new BiFunction<IEclipseContext, MPart, Runnable>() {
 
-	@Override
-	public void applySettings() {
+			@Override
+			public Runnable apply(IEclipseContext context, MPart part) {
 
-		computeMethodComboItems();
+				logger.info("Method File: " + file.getAbsolutePath());
+				Set<DataCategory> dataCategories = new HashSet<>();
+				dataCategories.add(DataCategory.CSD);
+				dataCategories.add(DataCategory.MSD);
+				dataCategories.add(DataCategory.WSD);
+				context.set(File.class, file);
+				return null;
+			}
+		});
 	}
 }

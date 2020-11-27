@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -30,6 +29,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 
@@ -49,22 +49,17 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.MethodListLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.TableConfigSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.ProcessingWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ConfigurableUI;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.MethodUIConfig;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
 import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePageReportExport;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ContentProposal;
 import org.eclipse.jface.fieldassist.IContentProposal;
 import org.eclipse.jface.fieldassist.IContentProposalProvider;
-import org.eclipse.jface.preference.IPreferencePage;
-import org.eclipse.jface.preference.PreferenceDialog;
-import org.eclipse.jface.preference.PreferenceManager;
-import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -73,7 +68,6 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -89,6 +83,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Menu;
@@ -98,10 +93,15 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
 import org.eclipse.swt.widgets.ToolItem;
 
-public class ExtendedMethodUI extends Composite implements ConfigurableUI<MethodUIConfig> {
+public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 
-	private Composite toolbarHeader;
-	private Label labelDataInfo;
+	private static final String IMAGE_HEADER = IApplicationImage.IMAGE_HEADER_DATA;
+	private static final String TOOLTIP_HEADER = "the header information.";
+	//
+	private AtomicReference<Composite> toolbarMain = new AtomicReference<>();
+	private Button buttonToolbarHeader;
+	private AtomicReference<Composite> toolbarHeader = new AtomicReference<>();
+	//
 	private Text textName;
 	private Text textCategory;
 	private Text textOperator;
@@ -116,9 +116,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 	//
 	private ProcessMethod processMethod;
 	private IModificationHandler modificationHandler;
-	private Composite toolbarMain;
 	private Composite buttons;
-	protected boolean showSettingsOnAdd;
 	private final ProcessSupplierContext processingSupport;
 	private Button buttonFinalize;
 	private Collection<ProcessEntryContainer> postActions;
@@ -136,10 +134,12 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 	public ExtendedMethodUI(Composite parent, int style, ProcessSupplierContext processingSupport, BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>> preferencesSupplier, DataCategory[] dataCategories) {
 
 		super(parent, style);
+		//
 		this.readonly = (style & SWT.READ_ONLY) != 0;
 		this.processingSupport = processingSupport;
 		this.preferencesSupplier = preferencesSupplier;
 		this.dataCategories = dataCategories;
+		//
 		createControl();
 	}
 
@@ -181,95 +181,51 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		composite.setLayout(new GridLayout(1, true));
 		//
 		createToolbarMain(composite);
-		toolbarHeader = createToolbarHeader(composite);
+		createToolbarHeader(composite);
 		createTable(composite);
 		buttons = createToolbarBottom(composite);
 		//
-		PartSupport.setCompositeVisibility(toolbarHeader, false);
+		initialize();
+	}
+
+	private void initialize() {
+
+		enableToolbar(toolbarHeader, buttonToolbarHeader, IMAGE_HEADER, TOOLTIP_HEADER, false);
 		updateTableButtons();
 	}
 
-	public void setHeaderToolbarVisible(boolean visible) {
+	public void setToolbarMainVisible(boolean visible) {
 
-		PartSupport.setCompositeVisibility(toolbarHeader, visible);
+		PartSupport.setCompositeVisibility(toolbarMain.get(), visible);
 	}
 
-	public Composite getToolbarMain() {
+	public void setToolbarHeaderVisible(boolean visible) {
 
-		return toolbarMain;
+		enableToolbar(toolbarHeader, buttonToolbarHeader, IMAGE_HEADER, TOOLTIP_HEADER, visible);
 	}
 
 	private void createToolbarMain(Composite parent) {
 
-		toolbarMain = new Composite(parent, SWT.NONE);
+		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		toolbarMain.setLayoutData(gridData);
-		toolbarMain.setLayout(new GridLayout(3, false));
+		gridData.horizontalAlignment = SWT.END;
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(2, false));
 		//
-		createDataInfoLabel(toolbarMain);
-		createButtonToggleToolbarHeader(toolbarMain);
-		createSettingsButton(toolbarMain);
-	}
-
-	private void createDataInfoLabel(Composite parent) {
-
-		labelDataInfo = new Label(parent, SWT.NONE);
-		labelDataInfo.setText("");
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.grabExcessHorizontalSpace = true;
-		labelDataInfo.setLayoutData(gridData);
-	}
-
-	private Button createButtonToggleToolbarHeader(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle the header toolbar.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_HEADER_DATA, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				boolean visible = PartSupport.toggleCompositeVisibility(toolbarHeader);
-				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_HEADER_DATA, IApplicationImage.SIZE_16x16));
-				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_HEADER_DATA, IApplicationImage.SIZE_16x16));
-				}
-			}
-		});
+		buttonToolbarHeader = createButtonToggleToolbar(composite, toolbarHeader, IMAGE_HEADER, TOOLTIP_HEADER);
+		createSettingsButton(composite);
 		//
-		return button;
+		toolbarMain.set(composite);
 	}
 
 	private void createSettingsButton(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Open the Settings");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		createSettingsButton(parent, Arrays.asList(PreferencePageReportExport.class), new ISettingsHandler() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void apply(Display display) {
 
-				IPreferencePage[] preferencePages = getConfig().getPreferencePages();
-				PreferenceManager preferenceManager = new PreferenceManager();
-				for(int i = 0; i < preferencePages.length; i++) {
-					preferenceManager.addToRoot(new PreferenceNode(String.valueOf(i + 1), preferencePages[i]));
-				}
-				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(parent.getShell(), preferenceManager);
-				preferenceDialog.create();
-				preferenceDialog.setMessage("Settings");
-				if(preferenceDialog.open() == Window.OK) {
-					try {
-						applySettings();
-					} catch(Exception e1) {
-						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
-					}
-				}
+				applySettings();
 			}
 		});
 	}
@@ -411,7 +367,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		return text;
 	}
 
-	private Composite createToolbarHeader(Composite parent) {
+	private void createToolbarHeader(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
@@ -424,7 +380,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		textCategory = createCategorySection(composite);
 		buttonFinalize = createFinalize(composite);
 		//
-		return composite;
+		toolbarHeader.set(composite);
 	}
 
 	private Button createFinalize(Composite parent) {
@@ -870,6 +826,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			textCategory.setText("");
 			textName.setText("");
 		}
+		//
 		boolean expand = false;
 		if(postActions == null || postActions.isEmpty()) {
 			listUI.setInput(processMethod);
@@ -880,12 +837,14 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 			listUI.setInput(list.toArray());
 			expand = true;
 		}
+		//
 		listUI.refresh();
 		if(listUI instanceof TreeViewer) {
 			if(expand) {
 				((TreeViewer)listUI).expandToLevel(1);
 			}
 		}
+		//
 		updateTableButtons();
 		setDirty(true);
 	}
@@ -904,6 +863,7 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 				writeable = false;
 			}
 		}
+		//
 		buttonCopy.setEnabled(writeable && !readonly);
 		buttonRemove.setEnabled(writeable && !readonly);
 		buttonMoveUp.setEnabled(writeable && !readonly);
@@ -926,89 +886,26 @@ public class ExtendedMethodUI extends Composite implements ConfigurableUI<Method
 		}
 	}
 
-	@Override
-	public MethodUIConfig getConfig() {
-
-		return new MethodUIConfig() {
-
-			TableConfigSupport support = new TableConfigSupport(Arrays.asList(columns));
-
-			@Override
-			public void setToolbarVisible(boolean visible) {
-
-				PartSupport.setCompositeVisibility(toolbarMain, visible);
-			}
-
-			@Override
-			public boolean isToolbarVisible() {
-
-				return toolbarMain.isVisible();
-			}
-
-			@Override
-			public void setVisibleColumns(Set<String> visibleColumns) {
-
-				support.setVisibleColumns(visibleColumns);
-			}
-
-			@Override
-			public Set<String> getColumns() {
-
-				return new HashSet<>(Arrays.asList(MethodListLabelProvider.TITLES));
-			}
-
-			@Override
-			public void setShowSettingsOnAdd(boolean showSettingsOnAdd) {
-
-				ExtendedMethodUI.this.showSettingsOnAdd = showSettingsOnAdd;
-			}
-
-			@Override
-			public IPreferencePage[] getPreferencePages() {
-
-				IPreferencePage preferencePageProcessing = new PreferencePageReportExport();
-				preferencePageProcessing.setTitle("Processing");
-				return new IPreferencePage[]{preferencePageProcessing};
-			}
-
-			@Override
-			public void applySettings() {
-
-				ExtendedMethodUI.this.applySettings();
-			}
-
-			@Override
-			public int getColumWidth(String column) {
-
-				return support.getColumWidth(column);
-			}
-
-			@Override
-			public void setColumWidth(String column, int width) {
-
-				support.setColumWidth(column, width);
-			}
-		};
-	}
-
 	private boolean modifyProcessEntry(Shell shell, IProcessEntry processEntry, ProcessSupplierContext supplierContext, boolean showHint) {
 
 		ProcessorPreferences<?> preferences = preferencesSupplier.apply(processEntry, supplierContext);
 		if(preferences == null) {
-			// handle like cancel
 			return false;
 		}
+		//
 		if(preferences.getSupplier().getSettingsParser().getInputValues().isEmpty()) {
 			if(showHint) {
-				MessageDialog.openInformation(shell, "No Settings avaiable", "This processor does not offer any options");
+				MessageDialog.openInformation(shell, "Settings", "This processor does not offer any options.");
 			}
-			// nothing to do then, like ok
+			/*
+			 * OK
+			 */
 			return true;
 		}
+		//
 		try {
 			return SettingsWizard.openEditPreferencesWizard(shell, preferences);
 		} catch(IOException e) {
-			// like cancel...
 			return false;
 		}
 	}

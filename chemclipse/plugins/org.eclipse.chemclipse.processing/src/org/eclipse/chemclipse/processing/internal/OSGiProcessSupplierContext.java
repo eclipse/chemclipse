@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactoring
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.internal;
 
@@ -34,18 +35,23 @@ public class OSGiProcessSupplierContext implements ProcessSupplierContext {
 	@Override
 	public <T> IProcessSupplier<T> getSupplier(String id) {
 
-		// fast path first
+		/*
+		 * Try to get the supplier with the mapped id.
+		 */
 		IProcessSupplier<T> mappedSupplier = (IProcessSupplier<T>)supplierMap.get(id);
 		if(mappedSupplier != null) {
 			return mappedSupplier;
 		}
-		// second try, ask the ProcessTypeSupplier if they has alternative ids
+		/*
+		 * Ask each supplier for its id.
+		 */
 		for(IProcessTypeSupplier typeSupplier : typeSupplierSet) {
 			IProcessSupplier<T> supplier = typeSupplier.getSupplier(id);
 			if(supplier != null) {
 				return supplier;
 			}
 		}
+		//
 		return null;
 	}
 

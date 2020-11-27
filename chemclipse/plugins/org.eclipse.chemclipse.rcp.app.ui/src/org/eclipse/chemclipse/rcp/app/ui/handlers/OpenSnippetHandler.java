@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
- * Philip Wenig - this class needs refactoring
+ * Philip Wenig - refactoring
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.app.ui.handlers;
 
@@ -19,6 +19,7 @@ import java.util.function.Consumer;
 
 import javax.inject.Named;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.CanExecute;
@@ -51,6 +52,7 @@ import org.osgi.service.event.EventHandler;
  */
 public class OpenSnippetHandler {
 
+	private static final Logger logger = Logger.getLogger(OpenSnippetHandler.class);
 	private static final String SNIPPT_PARAMETER = "org.eclipse.chemclipse.rcp.app.ui.commandparameter.opensnippet.snippetid";
 
 	@Execute
@@ -100,10 +102,15 @@ public class OpenSnippetHandler {
 		EModelService modelService = eclipseContext.get(EModelService.class);
 		EPartService partService = eclipseContext.get(EPartService.class);
 		//
+		logger.info("Application: " + application);
+		logger.info("Model Service: " + modelService);
+		logger.info("Part Service: " + partService);
+		//
 		withEclipseContext(eclipseContext, childContextInitializer)//
 				.andThen(addToEditorStack(modelService, stackId, application))//
 				.andThen(openPart(partService))//
 				.accept(cloneSnippet(snippetId, modelService, application));
+		//
 	}
 
 	public static void openCompositeSnippet(String snippetId, IEclipseContext eclipseContext, BiFunction<IEclipseContext, MPart, Runnable> childContextInitializer) {
@@ -116,6 +123,10 @@ public class OpenSnippetHandler {
 		MApplication application = eclipseContext.get(MApplication.class);
 		EModelService modelService = eclipseContext.get(EModelService.class);
 		EPartService partService = eclipseContext.get(EPartService.class);
+		//
+		logger.info("Application: " + application);
+		logger.info("Model Service: " + modelService);
+		logger.info("Part Service: " + partService);
 		//
 		withEclipseContext(eclipseContext, childContextInitializer)//
 				.andThen(addToEditorStack(modelService, stackId, application))//

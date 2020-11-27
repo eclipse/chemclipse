@@ -29,12 +29,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedMethodUI;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.preference.PreferenceDialog;
-import org.eclipse.jface.preference.PreferenceManager;
-import org.eclipse.jface.preference.PreferenceNode;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -123,6 +118,8 @@ public class BatchJobUI {
 		//
 		dataListUI = createDataListUI(composite);
 		extendedMethodUI = createExtendedMethodUI(composite);
+		extendedMethodUI.setToolbarHeaderVisible(false);
+		extendedMethodUI.setToolbarMainVisible(false);
 		//
 		return composite;
 	}
@@ -137,7 +134,6 @@ public class BatchJobUI {
 		//
 		createLabelInfo(toolBar);
 		createButtonExecute(toolBar, executionRunnable);
-		createButtonSettings(toolBar);
 		//
 		return toolBar;
 	}
@@ -156,7 +152,6 @@ public class BatchJobUI {
 		ExtendedMethodUI extendedMethodUI = new ExtendedMethodUI(parent, SWT.NONE, processingSupport, dataCategories);
 		extendedMethodUI.setLayoutData(new GridData(GridData.FILL_BOTH));
 		extendedMethodUI.setModificationHandler(this::setEditorDirty);
-		extendedMethodUI.getConfig().setToolbarVisible(false);
 		//
 		return extendedMethodUI;
 	}
@@ -210,42 +205,6 @@ public class BatchJobUI {
 				} catch(InterruptedException e) {
 					// canceled
 					return;
-				}
-			}
-		});
-		return toolItem;
-	}
-
-	private ToolItem createButtonSettings(ToolBar toolBar) {
-
-		final ToolItem toolItem = new ToolItem(toolBar, SWT.PUSH);
-		toolItem.setText("Settings");
-		toolItem.setToolTipText("Modify the settings.");
-		toolItem.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-		//
-		toolItem.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				PreferenceManager preferenceManager = new PreferenceManager();
-				DataListUIConfig configListUI = dataListUI.getConfig();
-				addPages("listUI", configListUI.getPreferencePages(), preferenceManager);
-				MethodUIConfig methodUIConfig = extendedMethodUI.getConfig();
-				addPages("extendedMethodUI", methodUIConfig.getPreferencePages(), preferenceManager);
-				PreferenceDialog preferenceDialog = new PreferenceDialog(toolBar.getShell(), preferenceManager);
-				preferenceDialog.create();
-				preferenceDialog.setMessage("Settings");
-				if(preferenceDialog.open() == Window.OK) {
-					configListUI.applySettings();
-					methodUIConfig.applySettings();
-				}
-			}
-
-			private void addPages(String prefix, IPreferencePage[] preferencePages, PreferenceManager preferenceManager) {
-
-				for(int i = 0; i < preferencePages.length; i++) {
-					preferenceManager.addToRoot(new PreferenceNode(prefix + "." + (i + 1), preferencePages[i]));
 				}
 			}
 		});

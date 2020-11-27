@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,7 +20,7 @@ import org.osgi.util.tracker.ServiceTracker;
 public class Activator extends AbstractActivatorUI {
 
 	private static Activator plugin;
-	private static ServiceTracker<ProcessSupplierContext, ProcessSupplierContext> tracker;
+	private static ServiceTracker<ProcessSupplierContext, ProcessSupplierContext> serviceTracker;
 
 	@Override
 	public void start(BundleContext context) throws Exception {
@@ -28,8 +28,8 @@ public class Activator extends AbstractActivatorUI {
 		super.start(context);
 		plugin = this;
 		initializePreferenceStore(PreferenceSupplier.INSTANCE());
-		tracker = new ServiceTracker<>(context, ProcessSupplierContext.class, null);
-		tracker.open();
+		serviceTracker = new ServiceTracker<>(context, ProcessSupplierContext.class, null);
+		serviceTracker.open();
 	}
 
 	@Override
@@ -37,8 +37,8 @@ public class Activator extends AbstractActivatorUI {
 
 		plugin = null;
 		super.stop(context);
-		tracker.close();
-		tracker = null;
+		serviceTracker.close();
+		serviceTracker = null;
 	}
 
 	public static AbstractActivatorUI getDefault() {
@@ -48,8 +48,8 @@ public class Activator extends AbstractActivatorUI {
 
 	public static ProcessSupplierContext getProcessSupplierContext() {
 
-		if(tracker != null) {
-			return tracker.getService();
+		if(serviceTracker != null) {
+			return serviceTracker.getService();
 		} else {
 			return null;
 		}
