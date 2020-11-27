@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<component name="org.eclipse.chemclipse.ux.extension.xxd.ui.internal.handlers.DeleteAllPeakIdentificationsHandlerWSD">
-   <implementation class="org.eclipse.chemclipse.ux.extension.xxd.ui.internal.handlers.DeleteAllPeakIdentificationsHandler" />
-   <property name="event.topics" value="chromatogram/wsd/update/chromatogramselection" />
-   <service>
-      <provide interface="org.osgi.service.event.EventHandler" />
-   </service>
-</component>
