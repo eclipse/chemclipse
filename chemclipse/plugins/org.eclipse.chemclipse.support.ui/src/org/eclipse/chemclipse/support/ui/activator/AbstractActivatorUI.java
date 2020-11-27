@@ -22,6 +22,8 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.e4.ui.internal.workbench.ApplicationPartServiceImpl;
+import org.eclipse.e4.ui.internal.workbench.PartServiceImpl;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
@@ -34,6 +36,7 @@ import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
+@SuppressWarnings("restriction")
 public abstract class AbstractActivatorUI extends AbstractUIPlugin {
 
 	private static final Logger logger = Logger.getLogger(AbstractActivatorUI.class);
@@ -114,6 +117,24 @@ public abstract class AbstractActivatorUI extends AbstractUIPlugin {
 		return eclipseContext.get(EPartService.class);
 	}
 
+	/**
+	 * See comment getEclipseContext().
+	 * Update the current part service to PartServiceImpl if possible.
+	 * 
+	 * @param partService
+	 */
+	public void updateEPartService(EPartService partService) {
+
+		EPartService currentPartService = getPartService();
+		if(currentPartService == null || currentPartService instanceof ApplicationPartServiceImpl) {
+			if(partService instanceof PartServiceImpl) {
+				IEclipseContext eclipseContext = getEclipseContext();
+				logger.info("The EPartService is updated to PartServiceImpl.");
+				eclipseContext.set(EPartService.class, partService);
+			}
+		}
+	}
+
 	public IEclipseContext getEclipseContext() {
 
 		if(eclipseContext == null) {
@@ -124,6 +145,13 @@ public abstract class AbstractActivatorUI extends AbstractUIPlugin {
 			eclipseContext.set(Logger.class, logger);
 			eclipseContext.set(MApplication.class, ContextAddon.getApplication());
 			eclipseContext.set(EModelService.class, ContextAddon.getModelService());
+			/*
+			 * Attention!
+			 * This EPartService is injected and retrieved from the ContextAddon:
+			 * -> org.eclipse.e4.ui.internal.workbench.ApplicationPartServiceImpl
+			 * Sometimes, the OTHER part service implementation is required:
+			 * -> org.eclipse.e4.ui.internal.workbench.PartServiceImpl
+			 */
 			eclipseContext.set(EPartService.class, ContextAddon.getPartService());
 			/*
 			 * Checks

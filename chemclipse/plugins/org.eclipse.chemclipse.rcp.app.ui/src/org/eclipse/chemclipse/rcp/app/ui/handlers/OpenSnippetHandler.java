@@ -25,6 +25,8 @@ import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.e4.ui.internal.workbench.ApplicationPartServiceImpl;
+import org.eclipse.e4.ui.internal.workbench.PartServiceImpl;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.MElementContainer;
 import org.eclipse.e4.ui.model.application.ui.MSnippetContainer;
@@ -50,6 +52,7 @@ import org.osgi.service.event.EventHandler;
  * @author Christoph Läubrich
  *
  */
+@SuppressWarnings("restriction")
 public class OpenSnippetHandler {
 
 	private static final Logger logger = Logger.getLogger(OpenSnippetHandler.class);
@@ -102,9 +105,7 @@ public class OpenSnippetHandler {
 		EModelService modelService = eclipseContext.get(EModelService.class);
 		EPartService partService = eclipseContext.get(EPartService.class);
 		//
-		logger.info("Application: " + application);
-		logger.info("Model Service: " + modelService);
-		logger.info("Part Service: " + partService);
+		logStatus(application, modelService, partService);
 		//
 		withEclipseContext(eclipseContext, childContextInitializer)//
 				.andThen(addToEditorStack(modelService, stackId, application))//
@@ -124,9 +125,7 @@ public class OpenSnippetHandler {
 		EModelService modelService = eclipseContext.get(EModelService.class);
 		EPartService partService = eclipseContext.get(EPartService.class);
 		//
-		logger.info("Application: " + application);
-		logger.info("Model Service: " + modelService);
-		logger.info("Part Service: " + partService);
+		logStatus(application, modelService, partService);
 		//
 		withEclipseContext(eclipseContext, childContextInitializer)//
 				.andThen(addToEditorStack(modelService, stackId, application))//
@@ -150,9 +149,11 @@ public class OpenSnippetHandler {
 		return element -> {
 			if(element instanceof MStackElement) {
 				MStackElement stackElement = (MStackElement)element;
-				MUIElement partStack = modelService.find(stackID, searchRoot);
-				if(partStack instanceof MPartStack) {
-					((MPartStack)partStack).getChildren().add(stackElement);
+				MUIElement uiElement = modelService.find(stackID, searchRoot);
+				if(uiElement instanceof MPartStack) {
+					MPartStack partStack = (MPartStack)uiElement;
+					logger.info("Part Stack: " + partStack);
+					partStack.getChildren().add(stackElement);
 				}
 			}
 		};
@@ -181,22 +182,26 @@ public class OpenSnippetHandler {
 		if(parent == null) {
 			throw new IllegalArgumentException("IEclipseContext can't be null");
 		}
+		//
 		return new Consumer<MUIElement>() {
 
 			@Override
 			public void accept(MUIElement element) {
 
-				IEclipseContext child = parent.createChild(element.getElementId() + ".composite");
+				IEclipseContext context = parent.createChild(element.getElementId() + ".composite");
 				if(element instanceof MPart) {
 					MPart part = (MPart)element;
-					part.setContext(child);
-					child.set(MPart.class, part);
+					part.setContext(context);
+					context.set(MPart.class, part);
 					Runnable runnable;
 					if(childContextInitializer != null) {
-						runnable = childContextInitializer.apply(child, part);
+						runnable = childContextInitializer.apply(context, part);
 					} else {
 						runnable = null;
 					}
+					/*
+					 * Handle Close Event
+					 */
 					onClose(parent.get(IEventBroker.class), new Runnable() {
 
 						@Override
@@ -207,7 +212,7 @@ public class OpenSnippetHandler {
 									runnable.run();
 								}
 							} finally {
-								child.dispose();
+								context.dispose();
 							}
 						}
 					});
@@ -232,6 +237,7 @@ public class OpenSnippetHandler {
 		@SuppressWarnings("unchecked")
 		T snippet = (T)modelService.cloneSnippet(snippetContainer, snippetId, null);
 		if(snippet != null) {
+			logger.info("Clone Snippet: " + snippet);
 			snippet.getTags().add(EPartService.REMOVE_ON_HIDE_TAG);
 			snippet.setElementId(snippetId + "." + UUID.randomUUID().toString());
 		} else {
@@ -314,10 +320,29 @@ public class OpenSnippetHandler {
 			if(element instanceof MPart) {
 				MPart part = (MPart)element;
 				if(partService != null) {
+					logger.info("Activate part: " + part);
 					part.setCloseable(true);
 					partService.showPart(part, PartState.ACTIVATE);
 				}
 			}
 		};
+	}
+
+	private static void logStatus(MApplication application, EModelService modelService, EPartService partService) {
+
+		/*
+		 * Track additional information.
+		 */
+		logger.info("Application: " + application);
+		logger.info("Model Service: " + modelService);
+		logger.info("Part Service: " + partService);
+		//
+		if(partService instanceof PartServiceImpl) {
+			logger.info("The correct part service is used.");
+		} else if(partService instanceof ApplicationPartServiceImpl) {
+			logger.warn("Ouch - the 'ApplicationPartServiceImpl' is used instead of the 'PartServiceImpl'. Use the EPartService injected when a part is created.");
+		} else {
+			logger.error("You are in serious troubles! The part service must be not null.");
+		}
 	}
 }

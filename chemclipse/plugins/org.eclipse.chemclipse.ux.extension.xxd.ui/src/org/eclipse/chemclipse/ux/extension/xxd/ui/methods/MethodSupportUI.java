@@ -24,6 +24,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Supplier;
 
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.converter.preferences.PreferenceSupplier;
@@ -83,6 +84,7 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 	private Button buttonMethodDirectory;
 	//
 	private IMethodListener methodListener = null;
+	private final Supplier<IEclipseContext> contextSupplier = () -> Activator.getDefault().getEclipseContext();
 
 	public MethodSupportUI(Composite parent, int style) {
 
@@ -526,17 +528,18 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 
 	private void openProcessMethodEditor(File file) {
 
-		IEclipseContext eclipseContext = Activator.getDefault().getEclipseContext();
-		OpenSnippetHandler.openSnippet(ProcessMethodEditor.SNIPPET_ID, eclipseContext, new BiFunction<IEclipseContext, MPart, Runnable>() {
+		OpenSnippetHandler.openSnippet(ProcessMethodEditor.SNIPPET_ID, contextSupplier.get(), new BiFunction<IEclipseContext, MPart, Runnable>() {
 
 			@Override
 			public Runnable apply(IEclipseContext context, MPart part) {
 
-				logger.info("Method File: " + file.getAbsolutePath());
+				logger.info("Context File: " + file.getAbsolutePath());
+				//
 				Set<DataCategory> dataCategories = new HashSet<>();
 				dataCategories.add(DataCategory.CSD);
 				dataCategories.add(DataCategory.MSD);
 				dataCategories.add(DataCategory.WSD);
+				part.setLabel(file.getName());
 				context.set(File.class, file);
 				return null;
 			}

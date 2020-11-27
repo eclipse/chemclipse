@@ -77,7 +77,7 @@ public class ChromatogramEditor3x extends EditorPart implements IChromatogramEdi
 		parent.setLayout(new FillLayout());
 		DataType dataType = getDataType();
 		if(dataType != null) {
-			chromatogramEditor = new ChromatogramEditor(dataType, parent, part, dirtyable, DisplayUtils.getShell(), new ProcessTypeSupport());
+			chromatogramEditor = new ChromatogramEditor(dataType, parent, part, dirtyable, DisplayUtils.getShell(), new ProcessTypeSupport(), null);
 		} else {
 			Label label = new Label(parent, SWT.NONE);
 			label.setText("Sorry, the chromatogram couldn't be displayed.");

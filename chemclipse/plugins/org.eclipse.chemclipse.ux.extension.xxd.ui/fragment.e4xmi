@@ -130,12 +130,14 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_3PJOcAyjEeisZuYp3s9MTg" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
     <elements xsi:type="commands:Command" xmi:id="_aoksgCWdEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.command.partHandler" commandName="Part Handler" description="This command show/hides parts."/>
+    <elements xsi:type="commands:Command" xmi:id="_y4XVADCYEeuREPdzMrDpOQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.command.createProcessMethod" commandName="Create Process Method"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_YLSfYAykEeisZuYp3s9MTg" featurename="handlers" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
     <elements xsi:type="commands:Handler" xmi:id="_haJG8CWdEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.handler.partHandler" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.toolbar.CommandPartHandler" command="_aoksgCWdEeu5Pepo04c08Q"/>
+    <elements xsi:type="commands:Handler" xmi:id="_35-0wDCYEeuREPdzMrDpOQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.handler.createProcessMethod" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.handlers.CreateProcessMethodHandler" command="_y4XVADCYEeuREPdzMrDpOQ"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_VwT2QArbEeqMVtWeZukEuw" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.file" positionInList="after:org.eclipse.chemclipse.rcp.app.ui.menuseparator.new">
-    <elements xsi:type="menu:DirectMenuItem" xmi:id="_bwM8IArbEeqMVtWeZukEuw" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.directmenuitem.createnewprocessingmethod" label="New Processing Method" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/method.gif" tooltip="Creates a new method that can be used to execute processing steps" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.handlers.CreateProcessMethodHandler"/>
+    <elements xsi:type="menu:DirectMenuItem" xmi:id="_bwM8IArbEeqMVtWeZukEuw" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.directmenuitem.createnewprocessingmethod" label="New Process Method" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/method.gif" tooltip="Creates a new method that can be used to execute processing steps" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.handlers.CreateProcessMethodHandler"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_U1HpQArvEeqMVtWeZukEuw" featurename="snippets" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
     <elements xsi:type="basic:Part" xmi:id="_ZuiPQArvEeqMVtWeZukEuw" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.processMethodEditor" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ProcessMethodEditor" label="Untitled" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/method.gif" tooltip="Process Method Editor"/>
@@ -168,5 +170,8 @@
         <menu xmi:id="_n3omMCZKEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.menu.4"/>
       </children>
     </elements>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_AXZF8DCZEeuREPdzMrDpOQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.process">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_JUb5cDCZEeuREPdzMrDpOQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.handledmenuitem.createProcessMethod" label="Create Process Method" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/batchprocess.gif" command="_y4XVADCYEeuREPdzMrDpOQ"/>
   </fragments>
 </fragment:ModelFragments>

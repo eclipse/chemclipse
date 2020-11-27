@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,8 +13,11 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
 
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 
@@ -22,8 +25,16 @@ public class ChromatogramEditor extends AbstractChromatogramEditor {
 
 	private final Composite parent;
 
-	public ChromatogramEditor(DataType dataType, Composite parent, MPart part, MDirtyable dirtyable, Shell shell, ProcessSupplierContext filterFactory) {
+	public ChromatogramEditor(DataType dataType, Composite parent, MPart part, MDirtyable dirtyable, Shell shell, ProcessSupplierContext filterFactory, IEclipseContext eclipseContext) {
+
 		super(dataType, parent, part, dirtyable, filterFactory, shell);
+		/*
+		 * Update the context to PartServiceImpl.
+		 */
+		if(eclipseContext != null) {
+			Activator.getDefault().updateEPartService(eclipseContext.get(EPartService.class));
+		}
+		//
 		this.parent = parent;
 	}
 

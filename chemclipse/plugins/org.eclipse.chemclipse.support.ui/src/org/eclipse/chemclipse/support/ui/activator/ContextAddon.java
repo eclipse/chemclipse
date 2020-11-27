@@ -58,6 +58,18 @@ public class ContextAddon {
 		return (contextAddon != null) ? contextAddon.modelService : null;
 	}
 
+	/**
+	 * Be aware, this is the 'ApplicationPartServiceImpl' instance:
+	 * org.eclipse.e4.ui.internal.workbench.ApplicationPartServiceImpl
+	 * ---
+	 * In some cases, the 'PartServiceImpl' is needed:
+	 * org.eclipse.e4.ui.internal.workbench.PartServiceImpl
+	 * ---
+	 * Inject it, when creating a part. Have a look also at:
+	 * AbstractActivatorUI.updateEPartService(EPartService partService);
+	 * 
+	 * @return {@link EPartService}
+	 */
 	public static EPartService getPartService() {
 
 		return (contextAddon != null) ? contextAddon.partService : null;
