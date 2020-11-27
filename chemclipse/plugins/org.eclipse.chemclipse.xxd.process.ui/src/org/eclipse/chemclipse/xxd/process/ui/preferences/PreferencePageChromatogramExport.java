@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -22,9 +22,11 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class PreferencePageChromatogramExport extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePageChromatogramExport() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Process Preferences");
+		setTitle("Process Preferences");
+		setDescription("");
 	}
 
 	/**

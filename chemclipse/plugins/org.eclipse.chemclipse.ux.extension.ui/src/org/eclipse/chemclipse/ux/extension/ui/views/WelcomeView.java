@@ -13,7 +13,6 @@
 package org.eclipse.chemclipse.ux.extension.ui.views;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -25,7 +24,6 @@ import org.eclipse.chemclipse.ux.extension.ui.swt.TaskTileContainer;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
@@ -40,8 +38,6 @@ public class WelcomeView {
 	private static final String PERSPECTIVE_PCA = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.perspective";
 	private static final String PERSPECTIVE_LOGGING = "org.eclipse.chemclipse.logging.ui.perspective.main";
 	private static final int DEFAULT_NUMBER_OF_COLUMNS = Integer.getInteger("chemclipse.welcome.columns", 4);
-	@Inject
-	private IEclipseContext eclipseContext;
 
 	private class Component implements TileDefinition {
 
@@ -99,13 +95,6 @@ public class WelcomeView {
 	@PostConstruct
 	public void initializeContent(Composite parent, IEclipseContext eclipseContext) {
 
-		/*
-		 * Update the context to PartServiceImpl.
-		 */
-		if(eclipseContext != null) {
-			Activator.getDefault().updateEPartService(eclipseContext.get(EPartService.class));
-		}
-		//
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		preferenceStore.setDefault(WelcomeViewExtensionHandler.PREFERENCE_MIN_TILES, DEFAULT_NUMBER_OF_COLUMNS);
 		preferenceStore.setDefault(WelcomeViewExtensionHandler.PREFERENCE_ALWAYS_CHANGE_PERSPECTIVE, true);

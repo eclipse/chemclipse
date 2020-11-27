@@ -37,7 +37,7 @@ public class MetaProcessorSettingsAdapterFactory implements IAdapterFactory, Set
 	private final class SettingsUIControlImplementation implements SettingsUIControl, IModificationHandler {
 
 		private final MetaProcessorSettings settings;
-		private final ExtendedMethodUI methodUI;
+		private final ExtendedMethodUI extendedMethodUI;
 		private ProcessorPreferences<MetaProcessorSettings> preferences;
 		private List<Listener> listeners = new ArrayList<>();
 
@@ -45,7 +45,7 @@ public class MetaProcessorSettingsAdapterFactory implements IAdapterFactory, Set
 
 			this.preferences = preferences;
 			settings = preferences.getSettings();
-			methodUI = new ExtendedMethodUI(parent, SWT.READ_ONLY, Activator.getProcessSupplierContext(), new BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>>() {
+			extendedMethodUI = new ExtendedMethodUI(parent, SWT.READ_ONLY, Activator.getProcessSupplierContext(), new BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>>() {
 
 				@Override
 				public ProcessorPreferences<?> apply(IProcessEntry entry, ProcessSupplierContext context) {
@@ -54,8 +54,9 @@ public class MetaProcessorSettingsAdapterFactory implements IAdapterFactory, Set
 				}
 			}, settings.getMethod().getDataCategories().toArray(new DataCategory[0]));
 			//
-			methodUI.setInputs(settings.getMethod(), null);
-			methodUI.setModificationHandler(this);
+			extendedMethodUI.setToolbarMainVisible(false);
+			extendedMethodUI.setInputs(settings.getMethod(), null);
+			extendedMethodUI.setModificationHandler(this);
 		}
 
 		@Override
@@ -67,7 +68,7 @@ public class MetaProcessorSettingsAdapterFactory implements IAdapterFactory, Set
 		@Override
 		public void setEnabled(boolean enabled) {
 
-			methodUI.setEnabled(enabled);
+			extendedMethodUI.setEnabled(enabled);
 		}
 
 		@Override
@@ -87,15 +88,15 @@ public class MetaProcessorSettingsAdapterFactory implements IAdapterFactory, Set
 		@Override
 		public Control getControl() {
 
-			return methodUI;
+			return extendedMethodUI;
 		}
 
 		@Override
 		public void setDirty(boolean dirty) {
 
 			Event event = new Event();
-			event.widget = methodUI;
-			event.display = methodUI.getDisplay();
+			event.widget = extendedMethodUI;
+			event.display = extendedMethodUI.getDisplay();
 			for(Listener listener : listeners) {
 				listener.handleEvent(event);
 			}

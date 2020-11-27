@@ -31,7 +31,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstant
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Composite;
 
@@ -50,13 +49,6 @@ public class DataExplorerPart {
 	@PostConstruct
 	public void init(Composite parent, MPart part, IEclipseContext eclipseContext) {
 
-		/*
-		 * Update the context to PartServiceImpl.
-		 */
-		if(eclipseContext != null) {
-			Activator.getDefault().updateEPartService(eclipseContext.get(EPartService.class));
-		}
-		//
 		dataExplorerUI = new DataExplorerUI(parent, broker, preferenceStore);
 		setSupplierFileEditorSupport();
 	}
