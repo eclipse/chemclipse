@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.converter.quantitation.QuantDBConverter;
 import org.eclipse.chemclipse.converter.sequence.SequenceConverter;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.core.IMeasurementInfo;
 import org.eclipse.chemclipse.model.types.DataType;
@@ -56,6 +57,8 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 
 public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport implements ISupplierEditorSupport {
 
+	private static final Logger logger = Logger.getLogger(SupplierEditorSupport.class);
+	//
 	private static final Object NO_EXECUTE_METHOD = new Object();
 	private String type = "";
 	//
@@ -197,7 +200,7 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 				break;
 			case MTH:
 				type = TYPE_MTH;
-				snippetId = ProcessMethodEditor.SNIPPET_ID;
+				snippetId = ProcessMethodEditor.CONTRIBUTION_URI;
 				topicUpdateRawfile = IChemClipseEvents.TOPIC_METHOD_UPDATE_RAWFILE;
 				topicUpdateOverview = IChemClipseEvents.TOPIC_METHOD_UPDATE_OVERVIEW;
 				break;
@@ -226,6 +229,10 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 
 		if(isSupplierFile(file) || isSupplierFileDirectory(file)) {
 			if(!snippetId.isEmpty()) {
+				/*
+				 * Snippet
+				 */
+				logger.info("Open the editor via a snippet.");
 				OpenSnippetHandler.openSnippet(snippetId, contextSupplier.get(), new BiFunction<IEclipseContext, MPart, Runnable>() {
 
 					@Override
@@ -237,6 +244,10 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 					}
 				});
 			} else {
+				/*
+				 * Classic
+				 */
+				logger.info("Open the editor the classical way.");
 				openEditor(file, null, elementId, contributionURI, iconURI, tooltip, batch);
 			}
 			return true;

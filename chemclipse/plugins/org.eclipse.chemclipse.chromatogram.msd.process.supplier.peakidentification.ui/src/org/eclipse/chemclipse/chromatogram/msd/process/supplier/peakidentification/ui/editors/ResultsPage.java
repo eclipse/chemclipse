@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,11 +12,11 @@
 package org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.editors;
 
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakIdentificationBatchJob;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.Activator;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.swt.ui.components.peak.PeakListUI;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.viewers.ISelection;
@@ -40,6 +40,7 @@ public class ResultsPage implements IMultiEditorPage {
 	private BatchProcessEditor editorPart;
 
 	public ResultsPage(BatchProcessEditor editorPart, Composite container) {
+
 		createPage(editorPart, container);
 		this.editorPart = editorPart;
 		selectionUpdateListener = new ResultsPage.SelectionUpdateListener();
@@ -49,7 +50,7 @@ public class ResultsPage implements IMultiEditorPage {
 	@Override
 	public void setFocus() {
 
-		IPeaks peaks = selectionUpdateListener.getPeaks();
+		IPeaks<?> peaks = selectionUpdateListener.getPeaks();
 		if(peaks != null) {
 			update(peaks, true);
 		}
@@ -77,7 +78,7 @@ public class ResultsPage implements IMultiEditorPage {
 		}
 	}
 
-	public void update(IPeaks peaks, boolean forceReload) {
+	public void update(IPeaks<?> peaks, boolean forceReload) {
 
 		if(editorPart.getActivePage() == getPageIndex() && peaks != null) {
 			peakListUI.update(peaks, forceReload);
@@ -130,8 +131,10 @@ public class ResultsPage implements IMultiEditorPage {
 					//
 					if(element instanceof IPeakMSD) {
 						IPeakMSD peakMSD = (IPeakMSD)element;
-						IEventBroker eventBroker = ModelSupportAddon.getEventBroker();
-						eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peakMSD);
+						IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+						if(eventBroker != null) {
+							eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peakMSD);
+						}
 					}
 				}
 			}
@@ -141,7 +144,7 @@ public class ResultsPage implements IMultiEditorPage {
 	public static class SelectionUpdateListener {
 
 		private static ResultsPage parentWidget;
-		private static IPeaks evaluatedPeaks = null;
+		private static IPeaks<?> evaluatedPeaks = null;
 
 		public void setParent(IMultiEditorPage parent) {
 
@@ -150,7 +153,7 @@ public class ResultsPage implements IMultiEditorPage {
 			}
 		}
 
-		public void update(IPeaks peaks, boolean forceReload) {
+		public void update(IPeaks<?> peaks, boolean forceReload) {
 
 			evaluatedPeaks = peaks;
 			if(parentWidget != null) {
@@ -165,7 +168,7 @@ public class ResultsPage implements IMultiEditorPage {
 			}
 		}
 
-		public IPeaks getPeaks() {
+		public IPeaks<?> getPeaks() {
 
 			return evaluatedPeaks;
 		}

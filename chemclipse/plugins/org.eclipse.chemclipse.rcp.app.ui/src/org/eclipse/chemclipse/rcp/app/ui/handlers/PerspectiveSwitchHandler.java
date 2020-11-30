@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,11 +16,11 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.rcp.app.ui.Activator;
 import org.eclipse.chemclipse.rcp.app.ui.dialogs.PerspectiveChooserDialog;
 import org.eclipse.chemclipse.rcp.app.ui.dialogs.PerspectiveSwitcherDialog;
 import org.eclipse.chemclipse.rcp.app.ui.internal.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.rcp.app.ui.switcher.PerspectiveSwitcher;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Execute;
@@ -98,7 +98,8 @@ public class PerspectiveSwitchHandler {
 
 	public static boolean isActivePerspective(String perspectiveId) {
 
-		return ModelSupportAddon.getActivePerspective().equals(perspectiveId);
+		String activePerspective = Activator.getDefault().getActivePerspective();
+		return activePerspective.equals(perspectiveId);
 	}
 
 	/*

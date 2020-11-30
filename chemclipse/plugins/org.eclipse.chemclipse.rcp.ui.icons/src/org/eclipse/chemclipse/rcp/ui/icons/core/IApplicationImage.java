@@ -443,4 +443,5 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	//
 	String IMAGE_PEAK_RANGE = "org.eclipse.chemclipse.rcp.ui.icons/peak-range.gif";
 	String IMAGE_PRINT = "org.eclipse.chemclipse.rcp.ui.icons/print.png";
+	String IMAGE_CLEAR = "org.eclipse.chemclipse.rcp.ui.icons/clear.gif";
 }

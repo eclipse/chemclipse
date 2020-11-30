@@ -48,7 +48,7 @@ import org.eclipse.swt.widgets.Shell;
 
 public class ProcessMethodEditor implements IModificationHandler, IChemClipseEditor {
 
-	public static final String SNIPPET_ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.processMethodEditor";
+	public static final String CONTRIBUTION_URI = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.processMethodEditor";
 	//
 	private static final Logger logger = Logger.getLogger(ProcessMethodEditor.class);
 	//

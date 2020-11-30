@@ -521,6 +521,6 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 
 	private void openProcessMethodEditor(File file) {
 
-		supplierEditorSupport.openEditor(file);
+		supplierEditorSupport.openEditor(file, false);
 	}
 }

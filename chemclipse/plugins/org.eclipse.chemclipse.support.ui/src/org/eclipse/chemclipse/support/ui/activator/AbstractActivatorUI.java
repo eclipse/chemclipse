@@ -16,9 +16,12 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
+import org.eclipse.chemclipse.support.ui.workbench.PartSupport;
+import org.eclipse.chemclipse.support.ui.workbench.PerspectiveSupport;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -114,6 +117,18 @@ public abstract class AbstractActivatorUI extends AbstractUIPlugin {
 		return eclipseContext.get(EPartService.class);
 	}
 
+	public PartSupport getPartSupport() {
+
+		IEclipseContext eclipseContext = getEclipseContext();
+		return eclipseContext.get(PartSupport.class);
+	}
+
+	public PerspectiveSupport getPerspectiveSupport() {
+
+		IEclipseContext eclipseContext = getEclipseContext();
+		return eclipseContext.get(PerspectiveSupport.class);
+	}
+
 	public IEclipseContext getEclipseContext() {
 
 		if(eclipseContext == null) {
@@ -133,16 +148,25 @@ public abstract class AbstractActivatorUI extends AbstractUIPlugin {
 			 */
 			eclipseContext.set(EPartService.class, ContextAddon.getPartService());
 			/*
+			 * Part and Perspective Support
+			 */
+			PartSupport partSupport = ContextInjectionFactory.make(PartSupport.class, eclipseContext);
+			eclipseContext.set(PartSupport.class, partSupport);
+			PerspectiveSupport perspectiveSupport = ContextInjectionFactory.make(PerspectiveSupport.class, eclipseContext);
+			eclipseContext.set(PerspectiveSupport.class, perspectiveSupport);
+			/*
 			 * Checks
 			 */
 			MApplication application = eclipseContext.get(MApplication.class);
 			EModelService modelService = eclipseContext.get(EModelService.class);
 			EPartService partService = eclipseContext.get(EPartService.class);
 			//
-			if(application == null || modelService == null || partService == null) {
+			if(application == null || modelService == null || partService == null || partSupport == null || perspectiveSupport == null) {
 				logger.warn(application == null ? "MApplication is null!" : "MApplication is set.");
 				logger.warn(modelService == null ? "EModelService is null!" : "EModelService is set.");
 				logger.warn(partService == null ? "EPartService is null!" : "EPartService is set.");
+				logger.warn(partSupport == null ? "PartSupport is null!" : "PartSupport is set.");
+				logger.warn(perspectiveSupport == null ? "PerspectiveSupport is null!" : "PerspectiveSupport is set.");
 				logger.info("Probably, getting the Eclipse context has been called too early in the Activator. Better use an Add-on.");
 			} else {
 				logger.info("The context has been initialized successfully.");
@@ -150,6 +174,16 @@ public abstract class AbstractActivatorUI extends AbstractUIPlugin {
 		}
 		//
 		return eclipseContext;
+	}
+
+	public boolean saveDirtyParts() {
+
+		return getPartSupport().saveDirtyParts();
+	}
+
+	public String getActivePerspective() {
+
+		return getPerspectiveSupport().getActivePerspective();
 	}
 
 	/**

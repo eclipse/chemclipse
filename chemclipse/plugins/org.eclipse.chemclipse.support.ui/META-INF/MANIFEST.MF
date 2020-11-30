@@ -36,7 +36,6 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.support.ui.activator,
- org.eclipse.chemclipse.support.ui.addons,
  org.eclipse.chemclipse.support.ui.editors,
  org.eclipse.chemclipse.support.ui.events,
  org.eclipse.chemclipse.support.ui.listener,

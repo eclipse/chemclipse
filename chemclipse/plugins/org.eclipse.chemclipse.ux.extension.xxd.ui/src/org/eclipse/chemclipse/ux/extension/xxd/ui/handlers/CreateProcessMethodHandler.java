@@ -33,8 +33,8 @@ public class CreateProcessMethodHandler {
 	@Execute
 	public void execute(@Named(IServiceConstants.ACTIVE_SHELL) Shell shell, IEclipseContext eclipseContext) {
 
-		DataCategoryGroup group = DataTypeTypeSelectionWizard.open(shell, "Please choose the desired categories to create a new method for", Activator.getDefault().getPreferenceStore());
-		OpenSnippetHandler.openSnippet(ProcessMethodEditor.SNIPPET_ID, eclipseContext, new BiFunction<IEclipseContext, MPart, Runnable>() {
+		DataCategoryGroup group = DataTypeTypeSelectionWizard.open(shell, "Please choose the desired categories to create a new method.", Activator.getDefault().getPreferenceStore());
+		OpenSnippetHandler.openSnippet(ProcessMethodEditor.CONTRIBUTION_URI, eclipseContext, new BiFunction<IEclipseContext, MPart, Runnable>() {
 
 			@Override
 			public Runnable apply(IEclipseContext context, MPart part) {
