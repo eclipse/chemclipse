@@ -20,24 +20,19 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.function.BiFunction;
-import java.util.function.Supplier;
 
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.converter.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.methods.ListProcessEntryContainer;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
-import org.eclipse.chemclipse.processing.DataCategory;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
-import org.eclipse.chemclipse.rcp.app.ui.handlers.OpenSnippetHandler;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.settings.UserManagement;
@@ -45,14 +40,12 @@ import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.swt.ui.components.IMethodListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ProcessMethodEditor;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PreferencesConfig;
 import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePageChromatogramExport;
 import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePageReportExport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.e4.core.contexts.IEclipseContext;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -84,7 +77,7 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 	private Button buttonMethodDirectory;
 	//
 	private IMethodListener methodListener = null;
-	private final Supplier<IEclipseContext> contextSupplier = () -> Activator.getDefault().getEclipseContext();
+	private SupplierEditorSupport supplierEditorSupport = new SupplierEditorSupport(DataType.MTH, () -> Activator.getDefault().getEclipseContext());
 
 	public MethodSupportUI(Composite parent, int style) {
 
@@ -528,21 +521,6 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 
 	private void openProcessMethodEditor(File file) {
 
-		OpenSnippetHandler.openSnippet(ProcessMethodEditor.SNIPPET_ID, contextSupplier.get(), new BiFunction<IEclipseContext, MPart, Runnable>() {
-
-			@Override
-			public Runnable apply(IEclipseContext context, MPart part) {
-
-				logger.info("Context File: " + file.getAbsolutePath());
-				//
-				Set<DataCategory> dataCategories = new HashSet<>();
-				dataCategories.add(DataCategory.CSD);
-				dataCategories.add(DataCategory.MSD);
-				dataCategories.add(DataCategory.WSD);
-				part.setLabel(file.getName());
-				context.set(File.class, file);
-				return null;
-			}
-		});
+		supplierEditorSupport.openEditor(file);
 	}
 }

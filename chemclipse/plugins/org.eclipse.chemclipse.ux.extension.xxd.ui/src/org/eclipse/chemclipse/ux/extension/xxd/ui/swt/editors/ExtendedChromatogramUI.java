@@ -959,7 +959,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		toolbars.put(TOOLBAR_METHOD, createToolbarMethod(this));
 		toolbars.put(TOOLBAR_RETENTION_INDICES, retentionIndexUI = createToolbarRetentionIndexUI(this));
 		//
-		createChromatogramChart(this, SWT.NONE);
+		createChromatogramChart(this);
 		//
 		comboViewerSeparationColumn.setInput(SeparationColumnFactory.getSeparationColumns());
 		//
@@ -1116,9 +1116,9 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		label.setLayoutData(gridData);
 	}
 
-	private void createChromatogramChart(Composite parent, int style) {
+	private void createChromatogramChart(Composite parent) {
 
-		chromatogramChart = new ChromatogramChart(parent, style);
+		chromatogramChart = new ChromatogramChart(parent, SWT.BORDER);
 		chromatogramChart.setLayoutData(new GridData(GridData.FILL_BOTH));
 		/*
 		 * Custom Selection Handler

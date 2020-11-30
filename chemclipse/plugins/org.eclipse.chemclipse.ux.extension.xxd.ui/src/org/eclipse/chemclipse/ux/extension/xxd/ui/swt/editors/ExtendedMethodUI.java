@@ -553,17 +553,12 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 				for(IProcessMethod method : userMethods) {
 					MenuItem menuItem = new MenuItem(menu, SWT.NONE);
 					menuItem.setText(method.getName());
-					menuItem.addSelectionListener(new SelectionListener() {
+					menuItem.addSelectionListener(new SelectionAdapter() {
 
 						@Override
 						public void widgetSelected(SelectionEvent e) {
 
 							loadMethodFile(method);
-						}
-
-						@Override
-						public void widgetDefaultSelected(SelectionEvent e) {
-
 						}
 					});
 				}
@@ -572,7 +567,7 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 				}
 				MenuItem loadItem = new MenuItem(menu, SWT.NONE);
 				loadItem.setText("Load from file...");
-				loadItem.addSelectionListener(new SelectionListener() {
+				loadItem.addSelectionListener(new SelectionAdapter() {
 
 					@Override
 					public void widgetSelected(SelectionEvent e) {
@@ -588,11 +583,6 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 							File file = new File(filePath);
 							loadMethodFile(Adapters.adapt(file, IProcessMethod.class));
 						}
-					}
-
-					@Override
-					public void widgetDefaultSelected(SelectionEvent e) {
-
 					}
 				});
 				menu.setLocation(pt.x, pt.y);

@@ -26,7 +26,6 @@ import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.services.IServiceConstants;
-import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.swt.widgets.Shell;
 
 public class CreateProcessMethodHandler {
@@ -34,11 +33,6 @@ public class CreateProcessMethodHandler {
 	@Execute
 	public void execute(@Named(IServiceConstants.ACTIVE_SHELL) Shell shell, IEclipseContext eclipseContext) {
 
-		/*
-		 * Update the context to PartServiceImpl.
-		 */
-		Activator.getDefault().updateEPartService(eclipseContext.get(EPartService.class));
-		//
 		DataCategoryGroup group = DataTypeTypeSelectionWizard.open(shell, "Please choose the desired categories to create a new method for", Activator.getDefault().getPreferenceStore());
 		OpenSnippetHandler.openSnippet(ProcessMethodEditor.SNIPPET_ID, eclipseContext, new BiFunction<IEclipseContext, MPart, Runnable>() {
 

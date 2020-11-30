@@ -24,11 +24,10 @@ import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
-import org.eclipse.chemclipse.support.ui.addons.ModelSupportAddon;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
+import org.eclipse.chemclipse.ux.extension.ui.Activator;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.xir.model.core.IScanXIR;
-import org.eclipse.e4.core.internal.contexts.EclipseContext;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MBasicFactory;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -38,16 +37,13 @@ import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 
-@SuppressWarnings({"restriction"})
 public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 
-	@Deprecated
 	default boolean openEditor(final File file) {
 
 		return openEditor(file, false);
 	}
 
-	@Deprecated
 	boolean openEditor(final File file, boolean batch);
 
 	boolean openEditor(File file, ISupplier supplier);
@@ -62,18 +58,17 @@ public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 	}
 
 	@SuppressWarnings("rawtypes")
-	@Deprecated
 	default void openEditor(File file, Object object, String elementId, String contributionURI, String iconURI, String tooltip, boolean batch) {
 
-		EModelService modelService = ModelSupportAddon.getModelService();
-		MApplication application = ModelSupportAddon.getApplication();
-		EPartService partService = ModelSupportAddon.getPartService();
+		EModelService modelService = Activator.getDefault().getModelService();
+		MApplication application = Activator.getDefault().getApplication();
+		EPartService partService = Activator.getDefault().getPartService();
 		/*
 		 * Fix for: "Application does not have an active window"
 		 * in org.eclipse.e4.ui.internal.workbench.ApplicationPartServiceImpl
 		 */
 		MWindow window = application.getChildren().get(0);
-		application.getContext().set(EclipseContext.ACTIVE_CHILD, window.getContext());
+		application.getContext().set("activeChildContext", window.getContext()); // EclipseContext.ACTIVE_CHILD
 		/*
 		 * Get the editor part stack.
 		 */

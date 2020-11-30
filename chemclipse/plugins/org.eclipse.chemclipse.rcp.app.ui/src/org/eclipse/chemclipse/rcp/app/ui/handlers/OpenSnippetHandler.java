@@ -177,10 +177,10 @@ public class OpenSnippetHandler {
 		};
 	}
 
-	public static Consumer<MUIElement> withEclipseContext(IEclipseContext parent, BiFunction<IEclipseContext, MPart, Runnable> childContextInitializer) {
+	public static Consumer<MUIElement> withEclipseContext(IEclipseContext parent, BiFunction<IEclipseContext, MPart, Runnable> contextInitializer) {
 
 		if(parent == null) {
-			throw new IllegalArgumentException("IEclipseContext can't be null");
+			throw new IllegalArgumentException("IEclipseContext can't be null.");
 		}
 		//
 		return new Consumer<MUIElement>() {
@@ -194,8 +194,8 @@ public class OpenSnippetHandler {
 					part.setContext(context);
 					context.set(MPart.class, part);
 					Runnable runnable;
-					if(childContextInitializer != null) {
-						runnable = childContextInitializer.apply(context, part);
+					if(contextInitializer != null) {
+						runnable = contextInitializer.apply(context, part);
 					} else {
 						runnable = null;
 					}
@@ -208,6 +208,21 @@ public class OpenSnippetHandler {
 						public void run() {
 
 							try {
+								/*
+								 * Remove the part.
+								 */
+								if(part != null) {
+									EModelService modelService = context.get(EModelService.class);
+									MApplication application = context.get(MApplication.class);
+									if(modelService != null && application != null) {
+										MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);
+										if(partStack != null) {
+											logger.info("Remove part from part stack: " + part.getElementId());
+											partStack.getChildren().remove(part);
+										}
+									}
+								}
+								//
 								if(runnable != null) {
 									runnable.run();
 								}
@@ -241,7 +256,7 @@ public class OpenSnippetHandler {
 			snippet.getTags().add(EPartService.REMOVE_ON_HIDE_TAG);
 			snippet.setElementId(snippetId + "." + UUID.randomUUID().toString());
 		} else {
-			throw new IllegalArgumentException("snippet with id " + snippetId + " was not found in container " + snippetContainer);
+			throw new IllegalArgumentException("The snippet with the id '" + snippetId + "' was not found in container '" + snippetContainer + "'.");
 		}
 		return snippet;
 	}
@@ -340,7 +355,7 @@ public class OpenSnippetHandler {
 		if(partService instanceof PartServiceImpl) {
 			logger.info("The correct part service is used.");
 		} else if(partService instanceof ApplicationPartServiceImpl) {
-			logger.warn("Ouch - the 'ApplicationPartServiceImpl' is used instead of the 'PartServiceImpl'. Use the EPartService injected when a part is created.");
+			logger.info("The 'ApplicationPartServiceImpl' is used.");
 		} else {
 			logger.error("You are in serious troubles! The part service must be not null.");
 		}
