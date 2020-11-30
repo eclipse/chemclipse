@@ -15,14 +15,12 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.part.support;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiFunction;
 import java.util.function.Supplier;
 
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.converter.quantitation.QuantDBConverter;
 import org.eclipse.chemclipse.converter.sequence.SequenceConverter;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.core.IMeasurementInfo;
 import org.eclipse.chemclipse.model.types.DataType;
@@ -30,7 +28,6 @@ import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMS
 import org.eclipse.chemclipse.nmr.converter.core.ScanConverterNMR;
 import org.eclipse.chemclipse.pcr.converter.core.PlateConverterPCR;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
-import org.eclipse.chemclipse.rcp.app.ui.handlers.OpenSnippetHandler;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.ui.editors.EditorDescriptor;
 import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileEditorSupport;
@@ -53,12 +50,9 @@ import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 
 public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport implements ISupplierEditorSupport {
 
-	private static final Logger logger = Logger.getLogger(SupplierEditorSupport.class);
-	//
 	private static final Object NO_EXECUTE_METHOD = new Object();
 	private String type = "";
 	//
@@ -68,14 +62,11 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 	private String tooltip = "";
 	private String topicUpdateRawfile = "";
 	private String topicUpdateOverview = "";
-	private String snippetId;
 	private final Supplier<IEclipseContext> contextSupplier;
-	private final DataType dataType;
 
 	public SupplierEditorSupport(DataType dataType, Supplier<IEclipseContext> contextSupplier) {
 
 		super(getSupplier(dataType));
-		this.dataType = dataType;
 		this.contextSupplier = contextSupplier;
 		initialize(dataType);
 	}
@@ -130,7 +121,7 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 		tooltip = "";
 		topicUpdateRawfile = "";
 		topicUpdateOverview = "";
-		snippetId = "";
+		//
 		switch(dataType) {
 			case MSD_NOMINAL:
 			case MSD_TANDEM:
@@ -200,7 +191,10 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 				break;
 			case MTH:
 				type = TYPE_MTH;
-				snippetId = ProcessMethodEditor.CONTRIBUTION_URI;
+				elementId = ProcessMethodEditor.ID;
+				contributionURI = ProcessMethodEditor.CONTRIBUTION_URI;
+				iconURI = ProcessMethodEditor.ICON_URI;
+				tooltip = ProcessMethodEditor.TOOLTIP;
 				topicUpdateRawfile = IChemClipseEvents.TOPIC_METHOD_UPDATE_RAWFILE;
 				topicUpdateOverview = IChemClipseEvents.TOPIC_METHOD_UPDATE_OVERVIEW;
 				break;
@@ -228,28 +222,7 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 	public boolean openEditor(final File file, boolean batch) {
 
 		if(isSupplierFile(file) || isSupplierFileDirectory(file)) {
-			if(!snippetId.isEmpty()) {
-				/*
-				 * Snippet
-				 */
-				logger.info("Open the editor via a snippet.");
-				OpenSnippetHandler.openSnippet(snippetId, contextSupplier.get(), new BiFunction<IEclipseContext, MPart, Runnable>() {
-
-					@Override
-					public Runnable apply(IEclipseContext context, MPart part) {
-
-						part.setLabel(file.getName());
-						context.set(File.class, file);
-						return null;
-					}
-				});
-			} else {
-				/*
-				 * Classic
-				 */
-				logger.info("Open the editor the classical way.");
-				openEditor(file, null, elementId, contributionURI, iconURI, tooltip, batch);
-			}
+			openEditor(file, null, elementId, contributionURI, iconURI, tooltip, batch);
 			return true;
 		} else {
 			return false;
@@ -286,25 +259,7 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 	@Override
 	public void openEditor(IMeasurement measurement) {
 
-		if(snippetId.isEmpty()) {
-			// for backward compatibility we must set the file to null here
-			openEditor(null, measurement, elementId, contributionURI, iconURI, tooltip);
-		} else {
-			OpenSnippetHandler.openSnippet(snippetId, contextSupplier.get(), new BiFunction<IEclipseContext, MPart, Runnable>() {
-
-				@Override
-				public Runnable apply(IEclipseContext context, MPart part) {
-
-					context.set(IMeasurement.class, measurement);
-					context.set(DataType.class, dataType);
-					File file = measurement.getFile();
-					if(file != null) {
-						context.set(File.class, file);
-					}
-					return null;
-				}
-			});
-		}
+		openEditor(null, measurement, elementId, contributionURI, iconURI, tooltip);
 	}
 
 	@Override

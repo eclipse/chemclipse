@@ -25,7 +25,7 @@ public class PreferencePageChromatogramExport extends FieldEditorPreferencePage 
 
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setTitle("Process Preferences");
+		setTitle("Chromatogram Settings");
 		setDescription("");
 	}
 

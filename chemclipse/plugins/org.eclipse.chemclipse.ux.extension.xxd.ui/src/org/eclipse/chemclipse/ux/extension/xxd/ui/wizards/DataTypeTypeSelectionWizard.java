@@ -35,6 +35,9 @@ import org.eclipse.swt.widgets.Shell;
 
 public class DataTypeTypeSelectionWizard {
 
+	public static final int DEFAULT_WIDTH = 200;
+	public static final int DEFAULT_HEIGHT = 300;
+	//
 	private static final String PREFIX = "DataTypeTypeSelectionWizard.";
 	private static final DataCategoryGroup[] GROUPS = DataCategoryGroup.defaultGroups();
 
@@ -46,13 +49,14 @@ public class DataTypeTypeSelectionWizard {
 				preferenceStore.setDefault(categoryPreferenceKey(group, category), true);
 			}
 		}
-		SelectionPage page = new SelectionPage(preferenceStore);
-		page.setDescription(description);
-		WizardDialog wizardDialog = new WizardDialog(shell, new SinglePageWizard("Select Data Categories", page));
-		wizardDialog.setPageSize(200, 150);
+		//
+		SelectionPage selectionPage = new SelectionPage(preferenceStore);
+		selectionPage.setDescription(description);
+		WizardDialog wizardDialog = new WizardDialog(shell, new SinglePageWizard("Select Data Categories", selectionPage));
+		wizardDialog.setPageSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		wizardDialog.create();
 		if(wizardDialog.open() == WizardDialog.OK) {
-			return page.group;
+			return selectionPage.group;
 		}
 		return null;
 	}
@@ -73,6 +77,7 @@ public class DataTypeTypeSelectionWizard {
 		private final IPreferenceStore preferenceStore;
 
 		protected SelectionPage(IPreferenceStore preferenceStore) {
+
 			super(SelectionPage.class.getName());
 			this.preferenceStore = preferenceStore;
 		}
