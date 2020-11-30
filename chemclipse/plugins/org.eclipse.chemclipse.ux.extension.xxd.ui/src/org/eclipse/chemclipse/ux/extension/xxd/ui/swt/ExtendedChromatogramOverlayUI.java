@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
@@ -83,9 +84,14 @@ import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 
 public class ExtendedChromatogramOverlayUI extends Composite implements IExtendedPartUI {
 
-	private NamedTracesUI namedTracesUI;
-	private DataShiftControllerUI dataShiftControllerUI;
-	private ChromatogramChart chromatogramChart;
+	private static final String IMAGE_SHIFT = IApplicationImage.IMAGE_SHIFT;
+	private static final String TOOLTIP_SHIFT = "the shift toolbar.";
+	//
+	// The traces toolbar is controlled by the combo overlay type.
+	private AtomicReference<NamedTracesUI> toolbarNamedTraces = new AtomicReference<>();
+	private Button buttonToolbarDataShift;
+	private AtomicReference<DataShiftControllerUI> toolbarDataShift = new AtomicReference<>();
+	private AtomicReference<ChromatogramChart> chartControl = new AtomicReference<>();
 	//
 	private Label labelStatus;
 	private Combo comboOverlayType;
@@ -121,14 +127,19 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		setLayout(new GridLayout(1, true));
 		//
 		createToolbarMain(this);
-		namedTracesUI = createNamedTraces(this);
-		dataShiftControllerUI = createDataShiftControllerUI(this);
-		chromatogramChart = createOverlayChart(this);
+		createNamedTraces(this);
+		createDataShiftControllerUI(this);
+		createOverlayChart(this);
 		//
-		PartSupport.setCompositeVisibility(namedTracesUI, false);
-		PartSupport.setCompositeVisibility(dataShiftControllerUI, false);
+		initialize();
+	}
+
+	private void initialize() {
+
+		enableToolbar(toolbarNamedTraces, false);
+		enableToolbar(toolbarDataShift, buttonToolbarDataShift, IMAGE_SHIFT, TOOLTIP_SHIFT, false);
 		//
-		dataShiftControllerUI.setScrollableChart(chromatogramChart);
+		toolbarDataShift.get().setScrollableChart(chartControl.get());
 		modifyWidgetStatus();
 		setDerivatives();
 		/*
@@ -146,8 +157,8 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		labelStatus = createLabelStatus(composite);
 		comboOverlayType = createOverlayTypeCombo(composite);
 		comboViewerDerivative = createDerivativeComboViewer(composite);
-		createToggleToolbarShiftButton(composite);
-		createToggleChartLegendButton(composite);
+		buttonToolbarDataShift = createButtonToggleToolbar(composite, toolbarDataShift, IMAGE_SHIFT, TOOLTIP_SHIFT);
+		createButtonToggleChartLegend(composite, chartControl, IMAGE_LEGEND);
 		createResetButton(composite);
 		createNewOverlayPartButton(composite);
 		createSettingsButton(composite);
@@ -155,7 +166,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		return composite;
 	}
 
-	private NamedTracesUI createNamedTraces(Composite parent) {
+	private void createNamedTraces(Composite parent) {
 
 		NamedTracesUI namedTracesUI = new NamedTracesUI(parent, SWT.NONE);
 		namedTracesUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -168,20 +179,21 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 				NamedTraces namedTraces = namedTracesUI.getNamedTraces();
 				if(namedTraces != null) {
 					preferenceStore.putValue(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_NAMED_TRACES, namedTraces.save());
-					chromatogramChart.deleteSeries();
+					chartControl.get().deleteSeries();
 					refreshUpdateOverlayChart();
 				}
 			}
 		});
-		return namedTracesUI;
+		//
+		toolbarNamedTraces.set(namedTracesUI);
 	}
 
-	private DataShiftControllerUI createDataShiftControllerUI(Composite parent) {
+	private void createDataShiftControllerUI(Composite parent) {
 
 		DataShiftControllerUI dataShiftControllerUI = new DataShiftControllerUI(parent, SWT.NONE);
 		dataShiftControllerUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
-		return dataShiftControllerUI;
+		toolbarDataShift.set(dataShiftControllerUI);
 	}
 
 	private Label createLabelStatus(Composite parent) {
@@ -252,44 +264,6 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		});
 		//
 		return comboViewer;
-	}
-
-	private Button createToggleToolbarShiftButton(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle the data shift toolbar.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SHIFT_DEFAULT, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				boolean visible = PartSupport.toggleCompositeVisibility(dataShiftControllerUI);
-				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SHIFT_ACTIVE, IApplicationImage.SIZE_16x16));
-				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SHIFT_DEFAULT, IApplicationImage.SIZE_16x16));
-				}
-			}
-		});
-		//
-		return button;
-	}
-
-	private void createToggleChartLegendButton(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle the chart legend");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TAG, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				chromatogramChart.toggleSeriesLegendVisibility();
-			}
-		});
 	}
 
 	private void createResetButton(Composite parent) {
@@ -370,7 +344,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 	private void modifyDataStatusLabel() {
 
-		if(chromatogramChart.getBaseChart().isDataShifted()) {
+		if(chartControl.get().getBaseChart().isDataShifted()) {
 			labelStatus.setText("The displayed data is shifted.");
 			labelStatus.setBackground(Colors.YELLOW);
 		} else {
@@ -388,12 +362,13 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		comboOverlayType.setToolTipText(DisplayType.toDescription(types));
 		if(preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_AUTOFOCUS_PROFILE_SETTINGS)) {
 			if(isExtractedIonsModusEnabled() || isExtractedWavelengthsModusEnabled()) {
-				PartSupport.setCompositeVisibility(namedTracesUI, true);
+				enableToolbar(toolbarNamedTraces, true);
 			} else {
-				PartSupport.setCompositeVisibility(namedTracesUI, false);
+				enableToolbar(toolbarNamedTraces, false);
 			}
 		}
 		//
+		NamedTracesUI namedTracesUI = toolbarNamedTraces.get();
 		if(isExtractedIonsModusEnabled()) {
 			namedTracesUI.setEnabled(true);
 		} else if(isExtractedWavelengthsModusEnabled()) {
@@ -402,7 +377,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			namedTracesUI.setEnabled(false);
 		}
 		//
-		dataShiftControllerUI.update();
+		toolbarDataShift.get().update();
 	}
 
 	private void setDerivatives() {
@@ -418,7 +393,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 		updateNamedTraces();
 		chromatogramChartSupport.loadUserSettings();
-		chromatogramChart.deleteSeries();
+		chartControl.get().deleteSeries();
 		refreshUpdateOverlayChart();
 		modifyWidgetStatus();
 		modifyDataStatusLabel();
@@ -426,12 +401,12 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 	private void updateNamedTraces() {
 
-		namedTracesUI.setInput(new NamedTraces(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_NAMED_TRACES)));
+		toolbarNamedTraces.get().setInput(new NamedTraces(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_NAMED_TRACES)));
 	}
 
-	private ChromatogramChart createOverlayChart(Composite parent) {
+	private void createOverlayChart(Composite parent) {
 
-		ChromatogramChart chromatogramChart = new ChromatogramChart(parent, SWT.NONE);
+		ChromatogramChart chromatogramChart = new ChromatogramChart(parent, SWT.BORDER);
 		chromatogramChart.setLayoutData(new GridData(GridData.FILL_BOTH));
 		/*
 		 * Chart Settings
@@ -455,12 +430,13 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			}
 		});
 		//
-		return chromatogramChart;
+		chartControl.set(chromatogramChart);
 	}
 
 	@SuppressWarnings("rawtypes")
 	private void refreshUpdateOverlayChart() {
 
+		ChromatogramChart chromatogramChart = chartControl.get();
 		if(chromatogramSelections.size() > 0) {
 			/*
 			 * Reset the range restriction
@@ -526,7 +502,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			/*
 			 * Reset the selected series selection.
 			 */
-			dataShiftControllerUI.reset();
+			toolbarDataShift.get().reset();
 			modifyDataStatusLabel();
 			chromatogramChart.adjustRange(true);
 			if(lockZoom) {
@@ -541,7 +517,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		String seriesId;
 		Color color;
 		//
-		BaseChart baseChart = chromatogramChart.getBaseChart();
+		BaseChart baseChart = chartControl.get().getBaseChart();
 		Derivative derivative = getSelectedDerivative();
 		/*
 		 * SIC
@@ -596,7 +572,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		String seriesId;
 		Color color;
 		//
-		BaseChart baseChart = chromatogramChart.getBaseChart();
+		BaseChart baseChart = chartControl.get().getBaseChart();
 		Derivative derivative = getSelectedDerivative();
 		/*
 		 * SWC
@@ -656,7 +632,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		String seriesId;
 		Color color;
 		//
-		BaseChart baseChart = chromatogramChart.getBaseChart();
+		BaseChart baseChart = chartControl.get().getBaseChart();
 		Derivative derivative = getSelectedDerivative();
 		/*
 		 * XWC
@@ -710,7 +686,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 	private void appendXXC(Set<String> availableSeriesIds, List<String> selectionSeries, List<ILineSeriesData> lineSeriesDataList, IChromatogram<?> chromatogram, DisplayType displayType, String chromatogramName) {
 
-		BaseChart baseChart = chromatogramChart.getBaseChart();
+		BaseChart baseChart = chartControl.get().getBaseChart();
 		Derivative derivative = getSelectedDerivative();
 		String seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.OVERLAY_STOP_MARKER;
 		Color color = chromatogramChartSupport.getSeriesColor(chromatogramName, displayType);
@@ -757,7 +733,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 	private void appendTIC(Set<String> availableSeriesIds, List<String> selectionSeries, List<ILineSeriesData> lineSeriesDataList, IChromatogram<?> chromatogram, DisplayType displayType, String chromatogramName) {
 
-		BaseChart baseChart = chromatogramChart.getBaseChart();
+		BaseChart baseChart = chartControl.get().getBaseChart();
 		Derivative derivative = getSelectedDerivative();
 		String seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.OVERLAY_STOP_MARKER;
 		Color color = chromatogramChartSupport.getSeriesColor(chromatogramName, displayType);
@@ -812,7 +788,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 	private List<Number> getSelectedTraces(boolean isNominal) {
 
 		List<Number> traceList = new ArrayList<>();
-		NamedTrace namedTrace = namedTracesUI.getNamedTrace();
+		NamedTrace namedTrace = toolbarNamedTraces.get().getNamedTrace();
 		if(namedTrace != null) {
 			TraceValidator traceValidator = new TraceValidator();
 			IStatus status = traceValidator.validate(namedTrace.getTraces());

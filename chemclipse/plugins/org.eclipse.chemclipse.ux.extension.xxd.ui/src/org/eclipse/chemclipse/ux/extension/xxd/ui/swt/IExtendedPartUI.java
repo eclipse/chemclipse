@@ -220,6 +220,14 @@ public interface IExtendedPartUI {
 		return button;
 	}
 
+	default void enableToolbar(AtomicReference<? extends Composite> toolbar, boolean active) {
+
+		Composite composite = toolbar.get();
+		if(composite != null) {
+			PartSupport.setCompositeVisibility(composite, active);
+		}
+	}
+
 	default void enableToolbar(AtomicReference<? extends Composite> toolbar, Button button, String image, String tooltip, boolean active) {
 
 		Composite composite = toolbar.get();
