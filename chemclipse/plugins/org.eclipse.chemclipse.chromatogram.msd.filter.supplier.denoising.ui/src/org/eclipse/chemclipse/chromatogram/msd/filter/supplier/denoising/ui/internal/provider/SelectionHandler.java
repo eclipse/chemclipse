@@ -12,14 +12,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.internal.provider;
 
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.Activator;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.swt.widgets.Display;
 
 public class SelectionHandler implements ISelectionChangedListener {
 
@@ -31,10 +30,7 @@ public class SelectionHandler implements ISelectionChangedListener {
 			Object element = ((IStructuredSelection)selection).getFirstElement();
 			if(element instanceof ICombinedMassSpectrum) {
 				ICombinedMassSpectrum combinedMassSpectrum = (ICombinedMassSpectrum)element;
-				IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-				if(eventBroker != null) {
-					eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, combinedMassSpectrum);
-				}
+				UpdateNotifierUI.update(Display.getDefault(), combinedMassSpectrum);
 			}
 		}
 	}

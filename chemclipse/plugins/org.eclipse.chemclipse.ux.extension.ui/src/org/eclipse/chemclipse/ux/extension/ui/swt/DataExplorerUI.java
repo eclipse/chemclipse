@@ -22,6 +22,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.eclipse.chemclipse.model.notifier.UpdateNotifier;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -30,7 +31,6 @@ import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerContentProvider;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -48,12 +48,9 @@ import org.eclipse.swt.widgets.Menu;
 
 public class DataExplorerUI extends MultiDataExplorerTreeUI {
 
-	private final IEventBroker eventBroker;
-
-	public DataExplorerUI(Composite parent, IEventBroker eventBroker, IPreferenceStore preferenceStore) {
+	public DataExplorerUI(Composite parent, IPreferenceStore preferenceStore) {
 
 		super(parent, preferenceStore);
-		this.eventBroker = eventBroker;
 	}
 
 	@Override
@@ -237,9 +234,7 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI {
 				}
 			}
 			//
-			if(eventBroker != null) {
-				eventBroker.post(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_NONE, null);
-			}
+			UpdateNotifier.update(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_NONE, null);
 		}
 	}
 

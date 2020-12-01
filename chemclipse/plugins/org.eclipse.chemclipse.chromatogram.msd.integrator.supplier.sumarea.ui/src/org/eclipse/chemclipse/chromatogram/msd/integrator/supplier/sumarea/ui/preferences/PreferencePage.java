@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -21,9 +21,11 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePage() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("The sumarea integrator supports the functionality to integrates ions.");
+		setTitle("Sumarea Integrator");
+		setDescription("");
 	}
 
 	/**

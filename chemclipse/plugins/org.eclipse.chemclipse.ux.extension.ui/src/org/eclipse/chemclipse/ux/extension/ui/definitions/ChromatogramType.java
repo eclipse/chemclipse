@@ -40,26 +40,8 @@ public class ChromatogramType implements EventHandler {
 		IChromatogramSelection chromatogramSelection = null;
 		String chromatogramType = CHROMATOGRAM_TYPE_NONE;
 		//
-		if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION)) {
-			Object object = event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-			if(object instanceof IChromatogramSelectionMSD) {
-				chromatogramSelection = (IChromatogramSelectionMSD)object;
-				chromatogramType = CHROMATOGRAM_TYPE_MSD;
-			}
-		} else if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION)) {
-			Object object = event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-			if(object instanceof IChromatogramSelectionCSD) {
-				chromatogramSelection = (IChromatogramSelectionCSD)object;
-				chromatogramType = CHROMATOGRAM_TYPE_CSD;
-			}
-		} else if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION)) {
-			Object object = event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-			if(object instanceof IChromatogramSelectionWSD) {
-				chromatogramSelection = (IChromatogramSelectionWSD)object;
-				chromatogramType = CHROMATOGRAM_TYPE_WSD;
-			}
-		} else if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION)) {
-			Object object = event.getProperty(IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
+		if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION)) {
+			Object object = event.getProperty(IChemClipseEvents.EVENT_BROKER_DATA);
 			if(object instanceof IChromatogramSelection) {
 				chromatogramSelection = (IChromatogramSelection)object;
 				if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
@@ -91,15 +73,14 @@ public class ChromatogramType implements EventHandler {
 	 * 
 	 * @return {@link IChromatogramSelection}
 	 */
-	@SuppressWarnings("rawtypes")
-	public static IChromatogramSelection getChromatogramSelection() {
+	public static IChromatogramSelection<?, ?> getChromatogramSelection() {
 
 		IEclipseContext eclipseContext = Activator.getDefault().getEclipseContext();
 		Object object = eclipseContext.get(ChromatogramType.CHROMATOGRAM_SELECTION);
 		//
-		IChromatogramSelection chromatogramSelection = null;
+		IChromatogramSelection<?, ?> chromatogramSelection = null;
 		if(object != null && object instanceof IChromatogramSelection) {
-			chromatogramSelection = (IChromatogramSelection)object;
+			chromatogramSelection = (IChromatogramSelection<?, ?>)object;
 		}
 		//
 		return chromatogramSelection;

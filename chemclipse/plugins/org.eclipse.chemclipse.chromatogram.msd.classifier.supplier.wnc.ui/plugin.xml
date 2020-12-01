@@ -2,13 +2,6 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         id="org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.modelContribution"
-         point="org.eclipse.e4.workbench.model">
-      <fragment
-            uri="fragment.e4xmi">
-      </fragment>
-   </extension>
-   <extension
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.chemclipse.chromatogram.msd.classifier.ui.preferences.classifierPreferencePage"
@@ -16,12 +9,6 @@
             id="org.eclipse.chemclipse.chromatogram.msd.classifier.supplier.wnc.ui.preferences.wncClassifierPreferencePage"
             name="WNC">
       </page>
-   </extension>
-   <extension
-         point="org.eclipse.help.toc">
-      <toc
-            file="toc_classifier.xml">
-      </toc>
    </extension>
    <extension
          point="org.eclipse.core.runtime.adapters">
@@ -39,5 +26,4 @@
          </adapter>
       </factory>
    </extension>
-
 </plugin>

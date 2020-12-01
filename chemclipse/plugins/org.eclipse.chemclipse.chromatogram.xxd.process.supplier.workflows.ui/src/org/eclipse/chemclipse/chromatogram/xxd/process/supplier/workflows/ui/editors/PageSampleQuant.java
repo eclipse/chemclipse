@@ -19,16 +19,14 @@ import java.lang.reflect.InvocationTargetException;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.model.ISampleQuantReport;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.model.ISampleQuantSubstance;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.runnables.ImportChromatogramRunnable;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.swt.SampleQuantTableViewerUI;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
@@ -200,16 +198,7 @@ public class PageSampleQuant {
 						IScan scan = chromatogramMSD.getScan(maxScan);
 						if(scan instanceof IScanMSD) {
 							editorSampleQuant.setDirty(true);
-							IScanMSD scanMSD = (IScanMSD)scan;
-							/*
-							 * Send the mass spectrum update, e.g. used by the comparison part.
-							 */
-							if(scanMSD != null) {
-								IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-								if(eventBroker != null) {
-									eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scanMSD);
-								}
-							}
+							UpdateNotifierUI.update(e.display, scan);
 						}
 					}
 				}

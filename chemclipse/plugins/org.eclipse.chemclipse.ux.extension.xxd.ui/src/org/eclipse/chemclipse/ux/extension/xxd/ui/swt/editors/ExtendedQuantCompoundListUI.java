@@ -21,16 +21,15 @@ import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.QuantitationCompoundValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageQuantitation;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageQuantitationAxes;
@@ -39,7 +38,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.QuantCompoundListUI;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
@@ -604,15 +602,7 @@ public class ExtendedQuantCompoundListUI extends Composite implements IExtendedP
 				Object object = listUI.getStructuredSelection().getFirstElement();
 				if(object instanceof IQuantitationCompound) {
 					IQuantitationCompound quantitationCompound = (IQuantitationCompound)object;
-					IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-					parent.getDisplay().asyncExec(new Runnable() {
-
-						@Override
-						public void run() {
-
-							eventBroker.send(IChemClipseEvents.TOPIC_QUANT_DB_COMPOUND_UPDATE, quantitationCompound);
-						}
-					});
+					UpdateNotifierUI.update(getDisplay(), quantitationCompound);
 				}
 			}
 		});

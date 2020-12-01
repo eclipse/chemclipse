@@ -17,11 +17,10 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
@@ -87,12 +86,10 @@ public class PeakSelectionHandler extends AbstractHandledEventProcessor implemen
 					}
 					//
 					extendedChromatogramUI.updateSelection();
-					IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-					if(eventBroker != null) {
-						eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
-						IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets());
-						eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
-					}
+					//
+					UpdateNotifierUI.update(event.display, peak);
+					IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets());
+					UpdateNotifierUI.update(event.display, identificationTarget);
 				}
 			}
 		}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,10 +12,10 @@
 package org.eclipse.chemclipse.msd.swt.ui.components.massspectrum;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.notifier.UpdateNotifier;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
-import org.eclipse.chemclipse.msd.model.notifier.MassSpectrumSelectionUpdateNotifier;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.swt.SWT;
@@ -57,6 +57,7 @@ public class MassSpectrumEditListUI extends Composite {
 	private IScanMSD massSpectrum;
 
 	public MassSpectrumEditListUI(Composite parent, int style) {
+
 		super(parent, style);
 		initialize();
 	}
@@ -127,7 +128,7 @@ public class MassSpectrumEditListUI extends Composite {
 							massSpectrum.addIon(ion);
 							textMz.setText("");
 							textIntensity.setText("");
-							MassSpectrumSelectionUpdateNotifier.fireUpdateChange(massSpectrum, true);
+							UpdateNotifier.update(massSpectrum);
 							enableButtonFields(ACTION_INITIALIZE);
 						}
 					} catch(Exception e1) {

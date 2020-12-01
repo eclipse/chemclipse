@@ -3,7 +3,6 @@
   <imports xsi:type="advanced:Area" xmi:id="_qjvtkCskEeakPPc3RJFSAg" elementId="org.eclipse.chemclipse.rcp.app.ui.editor"/>
   <imports xsi:type="basic:Part" xmi:id="_e2-fQCs2Eea9JYQkIDiHKQ" elementId="org.eclipse.ui.navigator.ProjectExplorer"/>
   <imports xsi:type="basic:Part" xmi:id="_hAOqwCs2Eea9JYQkIDiHKQ" elementId="org.eclipse.ui.console.ConsoleView"/>
-  <imports xsi:type="basic:Part" xmi:id="_5dOqACyHEeakko_bfjza1A" elementId="org.eclipse.chemclipse.ux.extension.ui.part.editHistory"/>
   <imports xsi:type="basic:Part" xmi:id="_fXQxQCyIEeakko_bfjza1A" elementId="org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart"/>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_TxCZIKuHEeSKQ7OYnQVHjQ" featurename="sharedElements" parentElementId="org.eclipse.chemclipse.rcp.app.ui.trimmedwindow.main">
     <elements xsi:type="basic:Part" xmi:id="_qtur4Cf2EeafjOXnfHSw0Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.dataexplorer" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.parts.DataExplorerPart" label="Data Explorer" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramFileExplorer.gif">
@@ -24,6 +23,7 @@
     <elements xsi:type="basic:Part" xmi:id="_3pxoICfdEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.wellchart" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.parts.WellChartPart" label="Well Chart" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/pcrDefault.gif"/>
     <elements xsi:type="basic:Part" xmi:id="_4El74CfdEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.platedata" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.parts.PlateDataPart" label="Plate Data" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/pcrDefault.gif"/>
     <elements xsi:type="basic:Part" xmi:id="_4fuYsCfdEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.wellchannels" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.parts.WellChannelsPart" label="Well Channels" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/pcrDefault.gif"/>
+    <elements xsi:type="basic:Part" xmi:id="_XKgwsDU0EeuREPdzMrDpOQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.edithistory" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.parts.EditHistoryPart" label="Edit History" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/info.gif"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_NOrRACskEeakPPc3RJFSAg" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
     <elements xsi:type="advanced:Perspective" xmi:id="_PjP7sCskEeakPPc3RJFSAg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.main" label="Data Analysis (Main)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif">
@@ -44,7 +44,7 @@
         </children>
         <children xsi:type="basic:PartSashContainer" xmi:id="_rvP3ECyHEeakko_bfjza1A" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partsashcontainer.4" containerData="4180" selectedElement="_v9YrcCyHEeakko_bfjza1A" horizontal="true">
           <children xsi:type="basic:PartStack" xmi:id="_v9YrcCyHEeakko_bfjza1A" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.bottom.left">
-            <children xsi:type="advanced:Placeholder" xmi:id="_6Zv8oCyHEeakko_bfjza1A" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.placeholder.6" ref="_5dOqACyHEeakko_bfjza1A"/>
+            <children xsi:type="advanced:Placeholder" xmi:id="_6Zv8oCyHEeakko_bfjza1A" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.placeholder.6" ref="_XKgwsDU0EeuREPdzMrDpOQ"/>
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_wRFDgCyHEeakko_bfjza1A" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.bottom.center">
             <children xsi:type="advanced:Placeholder" xmi:id="_7-OnICyHEeakko_bfjza1A" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.placeholder.7" ref="_hAOqwCs2Eea9JYQkIDiHKQ"/>
@@ -131,10 +131,14 @@
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_3PJOcAyjEeisZuYp3s9MTg" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
     <elements xsi:type="commands:Command" xmi:id="_aoksgCWdEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.command.partHandler" commandName="Part Handler" description="This command show/hides parts."/>
     <elements xsi:type="commands:Command" xmi:id="_y4XVADCYEeuREPdzMrDpOQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.command.createProcessMethod" commandName="Create Process Method"/>
+    <elements xsi:type="commands:Command" xmi:id="_9e0bQDOWEeuREPdzMrDpOQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.command.undo" commandName="Undo"/>
+    <elements xsi:type="commands:Command" xmi:id="_9wG_kDOWEeuREPdzMrDpOQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.command.redo" commandName="Redo"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_YLSfYAykEeisZuYp3s9MTg" featurename="handlers" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
     <elements xsi:type="commands:Handler" xmi:id="_haJG8CWdEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.handler.partHandler" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.toolbar.CommandPartHandler" command="_aoksgCWdEeu5Pepo04c08Q"/>
     <elements xsi:type="commands:Handler" xmi:id="_35-0wDCYEeuREPdzMrDpOQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.handler.createProcessMethod" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.handlers.CreateProcessMethodHandler" command="_y4XVADCYEeuREPdzMrDpOQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_B1mOQDOXEeuREPdzMrDpOQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.handler.undo" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.internal.handlers.UndoOperationHandler" command="_9e0bQDOWEeuREPdzMrDpOQ"/>
+    <elements xsi:type="commands:Handler" xmi:id="_CJFK8DOXEeuREPdzMrDpOQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.handler.redo" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.internal.handlers.RedoOperationHandler" command="_9wG_kDOWEeuREPdzMrDpOQ"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_VwT2QArbEeqMVtWeZukEuw" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.file" positionInList="after:org.eclipse.chemclipse.rcp.app.ui.menuseparator.new">
     <elements xsi:type="menu:DirectMenuItem" xmi:id="_bwM8IArbEeqMVtWeZukEuw" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.directmenuitem.createnewprocessingmethod" label="New Process Method" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/method.gif" tooltip="Creates a new method that can be used to execute processing steps" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.handlers.CreateProcessMethodHandler"/>
@@ -172,5 +176,10 @@
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_AXZF8DCZEeuREPdzMrDpOQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.process">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_JUb5cDCZEeuREPdzMrDpOQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.handledmenuitem.createProcessMethod" label="Create Process Method" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/batchprocess.gif" command="_y4XVADCYEeuREPdzMrDpOQ"/>
+  </fragments>
+  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Jtia4DOXEeuREPdzMrDpOQ" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.toolbar.main">
+    <elements xsi:type="menu:HandledToolItem" xmi:id="_L8rzADOXEeuREPdzMrDpOQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.handledtoolitem.undo" label="Undo" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/undo.gif" command="_9e0bQDOWEeuREPdzMrDpOQ"/>
+    <elements xsi:type="menu:HandledToolItem" xmi:id="_MROfoDOXEeuREPdzMrDpOQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.handledtoolitem.redo" label="Redo" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/redo.gif" command="_9wG_kDOWEeuREPdzMrDpOQ"/>
+    <elements xsi:type="menu:ToolBarSeparator" xmi:id="_Mz2EgDOXEeuREPdzMrDpOQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.toolbarseparator.0"/>
   </fragments>
 </fragment:ModelFragments>

@@ -24,13 +24,12 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -300,11 +299,8 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-				if(eventBroker != null) {
-					eventBroker.post(IChemClipseEvents.TOPIC_RI_LIBRARY_ADD_ADD_TO_PROCESS, retentionIndexFile);
-					MessageDialog.openConfirm(e.display.getActiveShell(), "RI Calculator", "The RI library has been added.");
-				}
+				UpdateNotifierUI.update(e.display, IChemClipseEvents.TOPIC_RI_LIBRARY_ADD_ADD_TO_PROCESS, retentionIndexFile);
+				MessageDialog.openConfirm(e.display.getActiveShell(), "RI Calculator", "The RI library has been added.");
 			}
 		});
 		//
@@ -322,11 +318,8 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-				if(eventBroker != null) {
-					eventBroker.post(IChemClipseEvents.TOPIC_RI_LIBRARY_REMOVE_FROM_PROCESS, retentionIndexFile);
-					MessageDialog.openConfirm(e.display.getActiveShell(), "RI Calculator", "The RI library has been removed.");
-				}
+				UpdateNotifierUI.update(e.display, IChemClipseEvents.TOPIC_RI_LIBRARY_REMOVE_FROM_PROCESS, retentionIndexFile);
+				MessageDialog.openConfirm(e.display.getActiveShell(), "RI Calculator", "The RI library has been removed.");
 			}
 		});
 		//
@@ -368,7 +361,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 		retentionIndexUI.setUpdateListener(new IUpdateListener() {
 
 			@Override
-			public void update() {
+			public void update(Display display) {
 
 				updateLabel();
 			}

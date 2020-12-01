@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.manual.ui
 Bundle-ManifestVersion: 2
-Bundle-Name: Ui
+Bundle-Name: Manual Peak Identification UI
 Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.manual.ui;singleton:=true
 Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.manual.ui.Activator
@@ -31,5 +31,3 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: org.osgi.service.event;version="1.3.0"
-Service-Component: OSGI-INF/identifyPeakHandlerMSD.xml,
- OSGI-INF/identifyPeakHandlerCSD.xml

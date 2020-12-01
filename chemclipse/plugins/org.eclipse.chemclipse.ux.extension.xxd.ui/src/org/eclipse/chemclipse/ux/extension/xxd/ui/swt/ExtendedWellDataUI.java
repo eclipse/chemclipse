@@ -57,9 +57,9 @@ public class ExtendedWellDataUI extends Composite implements IExtendedPartUI {
 	private AtomicReference<Composite> toolbarSearch = new AtomicReference<>();
 	private Button buttonToolbarEdit;
 	private AtomicReference<DataMapSupportUI> toolbarEdit = new AtomicReference<>();
-	private Button buttonTableEdit;
 	private Button buttonDelete;
 	//
+	private Button buttonTableEdit;
 	private AtomicReference<WellDataListUI> tableViewer = new AtomicReference<>();
 	//
 	private IWell well;
@@ -104,9 +104,8 @@ public class ExtendedWellDataUI extends Composite implements IExtendedPartUI {
 		enableToolbar(toolbarSearch, buttonToolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH, false);
 		enableToolbar(toolbarEdit, buttonToolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT, false);
 		enableToolbar(toolbarInfoBottom, buttonToolbarInfo, IApplicationImage.IMAGE_INFO, TOOLTIP_INFO, true);
-		enableEdit(tableViewer, buttonTableEdit, IMAGE_EDIT_ENTRY, false);
 		//
-		tableViewer.get().setEditEnabled(false);
+		enableEdit(tableViewer, buttonTableEdit, IMAGE_EDIT_ENTRY, false);
 	}
 
 	private void createToolbarMain(Composite parent) {

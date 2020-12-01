@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<component name="org.eclipse.chemclipse.ux.extension.ui.handlers.DeleteChromatogramIntegrationsHandlerCSD">
-   <implementation class="org.eclipse.chemclipse.ux.extension.ui.handlers.DeleteChromatogramIntegrationsHandler" />
-   <property name="event.topics" value="chromatogram/csd/update/chromatogramselection" />
-   <service>
-      <provide interface="org.osgi.service.event.EventHandler" />
-   </service>
-</component>

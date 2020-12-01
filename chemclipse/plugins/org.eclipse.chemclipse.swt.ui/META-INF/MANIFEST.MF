@@ -24,6 +24,7 @@ Export-Package: org.eclipse.chemclipse.swt.ui.browser,
  org.eclipse.chemclipse.swt.ui.comparator,
  org.eclipse.chemclipse.swt.ui.components,
  org.eclipse.chemclipse.swt.ui.components.peaks,
+ org.eclipse.chemclipse.swt.ui.notifier,
  org.eclipse.chemclipse.swt.ui.preferences,
  org.eclipse.chemclipse.swt.ui.services,
  org.eclipse.chemclipse.swt.ui.support

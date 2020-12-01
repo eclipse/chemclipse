@@ -5,39 +5,16 @@
     <elements xsi:type="basic:Part" xmi:id="_CZYU8CnOEeSLt4vR48x5qQ" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectrumLibraryExplorerView" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.views.MassSpectrumLibraryExplorer" label="Mass Spectrum Library Explorer (MSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/massSpectrumFileExplorer.gif"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_3ZvP8DhjEeKHL-DfrT7KNQ" featurename="commands" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
-    <elements xsi:type="commands:Command" xmi:id="_ZxnzMDhxEeKLl-NzluZ-Gg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.command.undo" commandName="Undo"/>
-    <elements xsi:type="commands:Command" xmi:id="_o2GBgDh9EeKLl-NzluZ-Gg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.command.redo" commandName="Redo"/>
     <elements xsi:type="commands:Command" xmi:id="_JewTwL7bEeKcwbn54SGPtA" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.command.openChromatogram" commandName="Open Chromatogram(s) [MSD]"/>
     <elements xsi:type="commands:Command" xmi:id="_R-Nt0D6iEeaZw7wlcv9jBg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.command.resetDatabaseCacheMSD" commandName="Reset Database Cache (MSD)"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Cvu30DhkEeKHL-DfrT7KNQ" featurename="handlers" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
-    <elements xsi:type="commands:Handler" xmi:id="_dO6ZcDhxEeKLl-NzluZ-Gg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handler.undo" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.handlers.UndoOperationHandler" command="_ZxnzMDhxEeKLl-NzluZ-Gg"/>
-    <elements xsi:type="commands:Handler" xmi:id="_rluQgDh9EeKLl-NzluZ-Gg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handler.redo" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.handlers.RedoOperationHandler" command="_o2GBgDh9EeKLl-NzluZ-Gg"/>
     <elements xsi:type="commands:Handler" xmi:id="_T8rEIL7bEeKcwbn54SGPtA" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handler.openChromatogram" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.handlers.OpenHandlerMSD" command="_JewTwL7bEeKcwbn54SGPtA"/>
     <elements xsi:type="commands:Handler" xmi:id="_a_b2sD6iEeaZw7wlcv9jBg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handler.resetDatabaseCacheMSD" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.handlers.ResetDatabaseHandler" command="_R-Nt0D6iEeaZw7wlcv9jBg"/>
-  </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_pHZ9UDhkEeKHL-DfrT7KNQ" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.toolbar.main" positionInList="">
-    <elements xsi:type="menu:HandledToolItem" xmi:id="_hKwj8DhxEeKLl-NzluZ-Gg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handledtoolitem.undo" label="Undo" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/undo.gif" command="_ZxnzMDhxEeKLl-NzluZ-Gg"/>
-    <elements xsi:type="menu:HandledToolItem" xmi:id="_waBtADh9EeKLl-NzluZ-Gg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handledtoolitem.redo" label="Redo" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/redo.gif" command="_o2GBgDh9EeKLl-NzluZ-Gg"/>
-    <elements xsi:type="menu:ToolBarSeparator" xmi:id="_2_LboJiHEeOBdeuz4rhR6Q" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.toolbarseparator.4"/>
-  </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_nArOcDhxEeKLl-NzluZ-Gg" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu" positionInList="first">
-    <elements xsi:type="menu:HandledMenuItem" xmi:id="_tZ6ocDhxEeKLl-NzluZ-Gg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handledmenuitem.undo" label="Undo" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/undo.gif" command="_ZxnzMDhxEeKLl-NzluZ-Gg">
-      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_OQ-AYCaCEeaSrd6hmtuX-w" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
-    </elements>
-    <elements xsi:type="menu:HandledMenuItem" xmi:id="_-CFdsJiHEeOBdeuz4rhR6Q" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handledmenuitem.redo" label="Redo" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/redo.gif" command="_o2GBgDh9EeKLl-NzluZ-Gg">
-      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_PnoRUCaCEeaSrd6hmtuX-w" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
-    </elements>
-    <elements xsi:type="menu:MenuSeparator" xmi:id="_Hu8kkJiIEeOBdeuz4rhR6Q" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.menuseparator.1"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_ABSHADiEEeKLl-NzluZ-Gg" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.identifier" positionInList="before:org.eclipse.chemclipse.ux.extension.ui.menu.identifier.separator.misc">
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_DnBwYD6jEeaZw7wlcv9jBg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handledmenuitem.resetDatabaseCacheMSD" label="Reset Database Cache (MSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/reset.gif" command="_R-Nt0D6iEeaZw7wlcv9jBg">
       <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_68-0kD6mEeaZw7wlcv9jBg" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeXXD"/>
-    </elements>
-  </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_tec7sDpJEeKA5v4GDoyzvg" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu" positionInList="after:org.eclipse.chemclipse.ux.extension.msd.ui.handledmenuitem.undo">
-    <elements xsi:type="menu:HandledMenuItem" xmi:id="_0VakgDh9EeKLl-NzluZ-Gg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handledmenuitem.redo" label="Redo" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/redo.gif" command="_o2GBgDh9EeKLl-NzluZ-Gg">
-      <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_SWGpwCaCEeaSrd6hmtuX-w" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeMSD"/>
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_uImZ8L7lEeKcwbn54SGPtA" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.file" positionInList="after:org.eclipse.chemclipse.rcp.app.ui.menuseparator.openChromatogram">

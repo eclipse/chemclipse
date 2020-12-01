@@ -23,12 +23,11 @@ import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorXIR;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ScanXIRImportRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedXIRScanUI;
 import org.eclipse.chemclipse.xir.model.core.IScanXIR;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.model.application.MApplication;
@@ -39,6 +38,7 @@ import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 public class ScanEditorXIR implements IScanEditorXIR {
@@ -83,10 +83,7 @@ public class ScanEditorXIR implements IScanEditorXIR {
 	@PreDestroy
 	protected void preDestroy() {
 
-		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-		if(eventBroker != null) {
-			eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XIR_UNLOAD_SELECTION, null);
-		}
+		UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_SCAN_XIR_UNLOAD_SELECTION, null);
 		//
 		if(modelService != null && application != null) {
 			MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);

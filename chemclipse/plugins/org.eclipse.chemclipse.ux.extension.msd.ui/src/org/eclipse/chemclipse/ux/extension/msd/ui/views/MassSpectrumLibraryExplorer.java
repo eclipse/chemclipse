@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2019 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -28,7 +28,8 @@ public class MassSpectrumLibraryExplorer {
 
 	@Inject
 	public MassSpectrumLibraryExplorer(Composite parent) {
-		explorerUI = new DataExplorerUI(parent, null, Activator.getDefault().getPreferenceStore());
+
+		explorerUI = new DataExplorerUI(parent, Activator.getDefault().getPreferenceStore());
 		explorerUI.setSupplierFileIdentifier((Collections.singleton(DatabaseSupport.getInstanceEditorSupport())));
 		explorerUI.expandLastDirectoryPath();
 	}

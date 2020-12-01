@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.calibration;
 
+import org.eclipse.swt.widgets.Display;
+
 public interface IUpdateListener {
 
-	void update();
+	void update(Display display);
 }

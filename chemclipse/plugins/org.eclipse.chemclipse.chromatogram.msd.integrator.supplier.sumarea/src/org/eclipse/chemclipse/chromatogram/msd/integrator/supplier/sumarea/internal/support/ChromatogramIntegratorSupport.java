@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -45,7 +45,7 @@ public class ChromatogramIntegratorSupport {
 	public IChromatogramIntegrationResults calculateChromatogramIntegrationResults(IChromatogramSelectionMSD chromatogramSelection, ChromatogramIntegrationSettings chromatogramIntegrationSettings, IProgressMonitor monitor) {
 
 		boolean integrateAll = false;
-		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogramMSD();
+		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogram();
 		IExtractedIonSignalExtractor extractedIonSignalExtractor;
 		try {
 			extractedIonSignalExtractor = new ExtractedIonSignalExtractor(chromatogram);

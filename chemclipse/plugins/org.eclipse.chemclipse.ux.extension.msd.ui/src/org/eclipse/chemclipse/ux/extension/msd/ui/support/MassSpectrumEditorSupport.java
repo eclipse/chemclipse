@@ -15,12 +15,9 @@ import java.io.File;
 
 import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.ux.extension.msd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.msd.ui.editors.MassSpectrumEditor;
 import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
-import org.eclipse.e4.core.services.events.IEventBroker;
 
 public class MassSpectrumEditorSupport extends AbstractSupplierFileEditorSupport implements ISupplierFileEditorSupport {
 
@@ -59,16 +56,12 @@ public class MassSpectrumEditorSupport extends AbstractSupplierFileEditorSupport
 	public void openOverview(final File file) {
 
 		/*
-		 * Check that the selected file or directory is a valid database.
+		 * Check that the selected file or directory is a valid mass spectrum.
 		 */
 		if(isSupplierFile(file) || isSupplierFileDirectory(file)) {
 			/*
-			 * Push an event
+			 * TODO - Probably show an abstract overview like the chromatogram overview part.
 			 */
-			IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-			if(eventBroker != null) {
-				eventBroker.send(IChemClipseEvents.TOPIC_FILE_MSD_UPDATE_SELECTION, file);
-			}
 		}
 	}
 

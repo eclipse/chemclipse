@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,6 +27,7 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
@@ -41,6 +42,7 @@ public class RetentionIndexUI extends Composite {
 	private ISeparationColumnIndices separationColumnIndices = null;
 
 	public RetentionIndexUI(Composite parent, int style) {
+
 		super(parent, style);
 		createControl();
 	}
@@ -128,7 +130,7 @@ public class RetentionIndexUI extends Composite {
 			public void performSearch(String searchText, boolean caseSensitive) {
 
 				retentionIndexListUI.setSearchText(searchText, caseSensitive);
-				fireUpdate();
+				fireUpdate(Display.getDefault());
 			}
 		});
 		//
@@ -168,7 +170,7 @@ public class RetentionIndexUI extends Composite {
 								separationColumnIndices.remove(key);
 							}
 							retentionIndexListUI.setInput(separationColumnIndices);
-							fireUpdate();
+							fireUpdate(Display.getDefault());
 						}
 					}
 				}
@@ -180,7 +182,7 @@ public class RetentionIndexUI extends Composite {
 				if(retentionIndexEntry != null && separationColumnIndices != null) {
 					separationColumnIndices.put(retentionIndexEntry);
 					retentionIndexListUI.setInput(separationColumnIndices);
-					fireUpdate();
+					fireUpdate(Display.getDefault());
 				}
 			}
 		});
@@ -198,17 +200,17 @@ public class RetentionIndexUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				calibrationEditUI.selectRetentionIndices();
-				fireUpdate();
+				fireUpdate(e.display);
 			}
 		});
 		//
 		return tableViewer;
 	}
 
-	private void fireUpdate() {
+	private void fireUpdate(Display display) {
 
 		if(updateListener != null) {
-			updateListener.update();
+			updateListener.update(display);
 		}
 	}
 }

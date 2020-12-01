@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -22,13 +22,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
-@SuppressWarnings("rawtypes")
 public abstract class AbstractIdentificationsHandler {
 
-	private static IChromatogramSelection chromatogramSelection;
-	private ChromatogramDataSupport chromatogramDataSupport = new ChromatogramDataSupport();
+	private static IChromatogramSelection<?, ?> chromatogramSelection;
 
-	public void setChromatogramSelection(IChromatogramSelection chromatogramSelectionX) {
+	public void setChromatogramSelection(IChromatogramSelection<?, ?> chromatogramSelectionX) {
 
 		chromatogramSelection = chromatogramSelectionX;
 	}
@@ -36,7 +34,7 @@ public abstract class AbstractIdentificationsHandler {
 	public void deleteIdentifications(Shell shell, String text, boolean deleteChromatogramIdentifications, boolean deletePeakIdentifications, boolean deleteScanIdentifications) {
 
 		if(chromatogramSelection != null) {
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			if(chromatogram != null) {
 				MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING | SWT.YES | SWT.NO | SWT.CANCEL);
 				messageBox.setText(text);
@@ -53,7 +51,7 @@ public abstract class AbstractIdentificationsHandler {
 					 * Peaks
 					 */
 					if(deletePeakIdentifications) {
-						List<? extends IPeak> peaks = chromatogramDataSupport.getPeaks(chromatogram);
+						List<? extends IPeak> peaks = ChromatogramDataSupport.getPeaks(chromatogram);
 						for(IPeak peak : peaks) {
 							peak.getTargets().clear();
 						}
@@ -62,7 +60,7 @@ public abstract class AbstractIdentificationsHandler {
 					 * Scans
 					 */
 					if(deleteScanIdentifications) {
-						List<IScan> scans = chromatogramDataSupport.getIdentifiedScans(chromatogramSelection.getChromatogram());
+						List<IScan> scans = ChromatogramDataSupport.getIdentifiedScans(chromatogramSelection.getChromatogram());
 						for(IScan scan : scans) {
 							scan.getTargets().clear();
 						}

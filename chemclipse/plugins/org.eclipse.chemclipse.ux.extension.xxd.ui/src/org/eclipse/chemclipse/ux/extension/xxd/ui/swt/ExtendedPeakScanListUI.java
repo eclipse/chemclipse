@@ -14,11 +14,10 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -37,14 +36,15 @@ import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.IColumnMoveListener;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
+import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -55,7 +55,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstant
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakScanListUIConfig.InteractionMode;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -69,7 +68,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
@@ -85,20 +83,19 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 	private final ListSupport listSupport = new ListSupport();
 	private final TargetExtendedComparator comparator = new TargetExtendedComparator(SortOrder.DESC);
 	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private final IEventBroker eventBroker = Activator.getDefault().getEventBroker();
 	//
-	private Composite toolbarInfoTop;
-	private Composite toolbarInfoBottom;
-	private Composite toolbarSearch;
+	private AtomicReference<Composite> toolbarMain = new AtomicReference<>();
+	private Button buttonToolbarInfo;
+	private AtomicReference<InformationUI> toolbarInfoTop = new AtomicReference<>();
+	private AtomicReference<InformationUI> toolbarInfoBottom = new AtomicReference<>();
+	private Button buttonToolbarSearch;
+	private AtomicReference<SearchSupportUI> toolbarSearch = new AtomicReference<>();
 	private Button buttonSave;
-	private Label labelChromatogramName;
-	private Label labelChromatogramInfo;
-	private SearchSupportUI searchSupportUI;
-	private PeakScanListUI peakScanListUI;
+	private Button buttonComparison;
+	private Button buttonTableEdit;
+	private AtomicReference<PeakScanListUI> tableViewer = new AtomicReference<>();
 	private IChromatogramSelection chromatogramSelection;
 	//
-	private Composite toolbarMain;
-	private Composite toolbarLabel;
 	private boolean showScans;
 	private boolean showPeaks;
 	private boolean showScansInRange;
@@ -160,12 +157,12 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		buttonSave.setEnabled(false);
 		//
 		if(chromatogramSelection == null) {
-			peakScanListUI.clear();
+			tableViewer.get().clear();
 			currentModCount = -1;
 		} else {
 			currentModCount = chromatogramSelection.getChromatogram().getModCount();
 			lastRange = new RetentionTimeRange(chromatogramSelection);
-			peakScanListUI.setInput(chromatogramSelection, showPeaks, showPeaksInRange, showScans, showScansInRange);
+			tableViewer.get().setInput(chromatogramSelection, showPeaks, showPeaksInRange, showScans, showScansInRange);
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			if(chromatogram instanceof IChromatogramMSD) {
 				buttonSave.setEnabled(true);
@@ -196,7 +193,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 					}
 				}
 			}
-			peakScanListUI.setSelection(new StructuredSelection(selection), true);
+			tableViewer.get().setSelection(new StructuredSelection(selection), true);
 		} finally {
 			interactionMode = oldMode;
 		}
@@ -207,68 +204,81 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		setLayout(new GridLayout(1, true));
 		//
 		createToolbarMain(this);
-		toolbarInfoTop = createToolbarInfoTop(this);
-		toolbarSearch = createToolbarSearch(this);
-		peakScanListUI = createPeakTable(this);
-		toolbarInfoBottom = createToolbarInfoBottom(this);
+		createToolbarInfoTop(this);
+		createToolbarSearch(this);
+		createPeakTable(this);
+		createToolbarInfoBottom(this);
 		//
-		PartSupport.setCompositeVisibility(toolbarInfoTop, true);
-		PartSupport.setCompositeVisibility(toolbarSearch, false);
-		PartSupport.setCompositeVisibility(toolbarInfoBottom, true);
+		initialize();
+	}
+
+	private void initialize() {
+
+		enableToolbar(toolbarInfoTop, buttonToolbarInfo, IApplicationImage.IMAGE_INFO, TOOLTIP_INFO, true);
+		enableToolbar(toolbarSearch, buttonToolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH, false);
+		enableToolbar(toolbarInfoBottom, buttonToolbarInfo, IApplicationImage.IMAGE_INFO, TOOLTIP_INFO, true);
 		//
-		peakScanListUI.setEditEnabled(false);
+		enableEdit(tableViewer, buttonTableEdit, IMAGE_EDIT_ENTRY, false);
+		buttonComparison.setEnabled(false);
 	}
 
 	private void createToolbarMain(Composite parent) {
 
-		toolbarMain = new Composite(parent, SWT.NONE);
+		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
-		toolbarMain.setLayoutData(gridData);
-		toolbarMain.setLayout(new GridLayout(6, false));
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(7, false));
 		//
-		createButtonToggleToolbarInfo(toolbarMain);
-		createButtonToggleToolbarSearch(toolbarMain);
-		createButtonToggleEditModus(toolbarMain);
-		createResetButton(toolbarMain);
-		buttonSave = createSaveButton(toolbarMain);
-		createSettingsButton(toolbarMain);
+		buttonToolbarInfo = createButtonToggleToolbar(composite, Arrays.asList(toolbarInfoTop, toolbarInfoBottom), IMAGE_INFO, TOOLTIP_INFO);
+		buttonToolbarSearch = createButtonToggleToolbar(composite, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
+		buttonTableEdit = createButtonToggleEditTable(composite, tableViewer, IMAGE_EDIT_ENTRY);
+		buttonComparison = createButtonComparison(composite);
+		createButtonReset(composite);
+		buttonSave = createButtonSave(composite);
+		createButtonSettings(composite);
+		//
+		toolbarMain.set(composite);
 	}
 
-	private Composite createToolbarInfoTop(Composite parent) {
+	private void createToolbarInfoTop(Composite parent) {
 
-		toolbarLabel = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		toolbarLabel.setLayoutData(gridData);
-		toolbarLabel.setLayout(new GridLayout(1, false));
-		//
-		labelChromatogramName = new Label(toolbarLabel, SWT.NONE);
-		labelChromatogramName.setText("");
-		labelChromatogramName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
-		return toolbarLabel;
+		toolbarInfoTop.set(createToolbarInfo(parent));
 	}
 
-	private Composite createToolbarSearch(Composite parent) {
+	private void createToolbarInfoBottom(Composite parent) {
 
-		searchSupportUI = new SearchSupportUI(parent, SWT.NONE);
+		toolbarInfoBottom.set(createToolbarInfo(parent));
+	}
+
+	private InformationUI createToolbarInfo(Composite parent) {
+
+		InformationUI informationUI = new InformationUI(parent, SWT.NONE);
+		informationUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		return informationUI;
+	}
+
+	private void createToolbarSearch(Composite parent) {
+
+		SearchSupportUI searchSupportUI = new SearchSupportUI(parent, SWT.NONE);
 		searchSupportUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		searchSupportUI.setSearchListener(new ISearchListener() {
 
 			@Override
 			public void performSearch(String searchText, boolean caseSensitive) {
 
-				peakScanListUI.setSearchText(searchText, caseSensitive);
+				tableViewer.get().setSearchText(searchText, caseSensitive);
 			}
 		});
 		//
-		return searchSupportUI;
+		toolbarSearch.set(searchSupportUI);
 	}
 
-	private PeakScanListUI createPeakTable(Composite parent) {
+	private void createPeakTable(Composite parent) {
 
-		PeakScanListUI listUI = new PeakScanListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
-		Table table = listUI.getTable();
+		PeakScanListUI peakScanListUI = new PeakScanListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		Table table = peakScanListUI.getTable();
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
 		table.addSelectionListener(new SelectionAdapter() {
 
@@ -284,7 +294,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		String preferenceName = PreferenceConstants.P_COLUMN_ORDER_PEAK_SCAN_LIST;
 		listSupport.setColumnOrder(table, preferenceStore.getString(preferenceName));
-		listUI.addColumnMoveListener(new IColumnMoveListener() {
+		peakScanListUI.addColumnMoveListener(new IColumnMoveListener() {
 
 			@Override
 			public void handle() {
@@ -296,8 +306,8 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		/*
 		 * Add the delete targets support.
 		 */
-		Display display = listUI.getTable().getDisplay();
-		ITableSettings tableSettings = listUI.getTableSettings();
+		Display display = peakScanListUI.getTable().getDisplay();
+		ITableSettings tableSettings = peakScanListUI.getTableSettings();
 		//
 		addDeleteMenuEntry(display, tableSettings);
 		addVerifyTargetsMenuEntry(tableSettings);
@@ -305,9 +315,9 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		modifyInternalStandardsMenuEntry(display, tableSettings);
 		//
 		addKeyEventProcessors(display, tableSettings);
-		listUI.applySettings(tableSettings);
+		peakScanListUI.applySettings(tableSettings);
 		//
-		return listUI;
+		tableViewer.set(peakScanListUI);
 	}
 
 	private void addDeleteMenuEntry(Display display, ITableSettings tableSettings) {
@@ -451,7 +461,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			/*
 			 * Selected Items.
 			 */
-			Iterator iterator = peakScanListUI.getStructuredSelection().iterator();
+			Iterator iterator = tableViewer.get().getStructuredSelection().iterator();
 			List<IScan> scansToClear = new ArrayList<>();
 			List<IPeak> peaksToDelete = new ArrayList<>();
 			/*
@@ -479,14 +489,14 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 				}
 			}
 			//
-			sendEvent(display, IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION, chromatogramSelection);
+			UpdateNotifierUI.update(display, chromatogramSelection);
 			updateChromatogramSelection();
 		}
 	}
 
 	private void setPeaksActiveForAnalysis(boolean activeForAnalysis) {
 
-		Iterator iterator = peakScanListUI.getStructuredSelection().iterator();
+		Iterator iterator = tableViewer.get().getStructuredSelection().iterator();
 		while(iterator.hasNext()) {
 			Object object = iterator.next();
 			if(object instanceof IPeak) {
@@ -532,7 +542,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		messageBox.setText("Internal Standard (ISTD)");
 		messageBox.setMessage("Would you like to modify the ISTD(s)?");
 		if(messageBox.open() == SWT.YES) {
-			Iterator iterator = peakScanListUI.getStructuredSelection().iterator();
+			Iterator iterator = tableViewer.get().getStructuredSelection().iterator();
 			while(iterator.hasNext()) {
 				Object object = iterator.next();
 				if(object instanceof IPeak) {
@@ -548,7 +558,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			/*
 			 * Send update.
 			 */
-			sendEvent(display, IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION, chromatogramSelection);
+			UpdateNotifierUI.update(display, chromatogramSelection);
 		}
 	}
 
@@ -558,169 +568,104 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		if(interactionMode != InteractionMode.SOURCE && interactionMode != InteractionMode.BIDIRECTIONAL) {
 			return;
 		}
-		IStructuredSelection selection = peakScanListUI.getStructuredSelection();
+		//
+		IStructuredSelection selection = tableViewer.get().getStructuredSelection();
 		if(!selection.isEmpty()) {
 			List list = selection.toList();
 			if(list.size() > 1) {
-				// we can't select more than one item at once for now
+				/*
+				 * Add in the future to select/display more than one peak.
+				 */
+				buttonComparison.setEnabled(list.size() == 2);
 				return;
-			}
-			for(Object object : list) {
-				if(object instanceof IPeak) {
-					/*
-					 * Fire updates
-					 */
-					IPeak peak = (IPeak)object;
-					IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets(), comparator);
-					if(moveRetentionTimeOnPeakSelection) {
-						ChromatogramDataSupport.adjustChromatogramSelection(peak, chromatogramSelection);
-					}
-					//
-					chromatogramSelection.setSelectedPeak(peak);
-					sendEvent(display, IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
-					sendEvent(display, IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
-					//
-					if(peak instanceof IPeakMSD) {
+			} else {
+				for(Object object : list) {
+					if(object instanceof IPeak) {
 						/*
-						 * Send the mass spectrum update, e.g. used by the comparison part.
+						 * Fire updates
 						 */
-						IPeakMSD peakMSD = (IPeakMSD)peak;
-						Map<String, Object> map = new HashMap<String, Object>();
-						map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN, peakMSD.getExtractedMassSpectrum());
-						map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY, target);
-						sendEvent(display, IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
-					}
-				} else if(object instanceof IScan) {
-					/*
-					 * Fire updates
-					 */
-					IScan scan = (IScan)object;
-					IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(scan.getTargets(), comparator);
-					//
-					chromatogramSelection.setSelectedIdentifiedScan(scan);
-					sendEvent(display, IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scan);
-					sendEvent(display, IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, target);
-					//
-					if(scan instanceof IScanMSD) {
+						IPeak peak = (IPeak)object;
+						IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets(), comparator);
+						if(moveRetentionTimeOnPeakSelection) {
+							ChromatogramDataSupport.adjustChromatogramSelection(peak, chromatogramSelection);
+						}
+						//
+						chromatogramSelection.setSelectedPeak(peak);
+						UpdateNotifierUI.update(display, peak);
+						UpdateNotifierUI.update(display, identificationTarget);
+						if(peak instanceof IPeakMSD) {
+							IPeakMSD peakMSD = (IPeakMSD)peak;
+							UpdateNotifierUI.update(display, peakMSD.getPeakModel().getPeakMassSpectrum(), identificationTarget);
+						}
+					} else if(object instanceof IScan) {
 						/*
-						 * Send the identification target update to let e.g. the molecule renderer react on an update.
+						 * Fire updates
 						 */
-						IScanMSD scanMSD = (IScanMSD)scan;
-						Map<String, Object> map = new HashMap<String, Object>();
-						map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN, scanMSD);
-						map.put(IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY, target);
-						sendEvent(display, IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, map);
+						IScan scan = (IScan)object;
+						IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(scan.getTargets(), comparator);
+						//
+						chromatogramSelection.setSelectedIdentifiedScan(scan);
+						UpdateNotifierUI.update(display, scan);
+						UpdateNotifierUI.update(display, identificationTarget);
+						if(scan instanceof IScanMSD) {
+							IScanMSD scanMSD = (IScanMSD)scan;
+							UpdateNotifierUI.update(display, scanMSD, identificationTarget);
+						}
 					}
 				}
 			}
 		}
-	}
-
-	private void sendEvent(Display display, String topic, Object data) {
-
-		if(display != null) {
-			if(eventBroker != null) {
-				display.asyncExec(new Runnable() {
-
-					@Override
-					public void run() {
-
-						eventBroker.send(topic, data);
-					}
-				});
-			}
-		}
-	}
-
-	private Composite createToolbarInfoBottom(Composite parent) {
-
-		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(1, false));
-		//
-		labelChromatogramInfo = new Label(composite, SWT.NONE);
-		labelChromatogramInfo.setText("");
-		labelChromatogramInfo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
-		return composite;
-	}
-
-	private Button createButtonToggleToolbarInfo(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle info toolbar.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				boolean visible = PartSupport.toggleCompositeVisibility(toolbarInfoTop);
-				PartSupport.toggleCompositeVisibility(toolbarInfoBottom);
-				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-				}
-			}
-		});
-		//
-		return button;
-	}
-
-	private Button createButtonToggleToolbarSearch(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle search toolbar.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				boolean visible = PartSupport.toggleCompositeVisibility(toolbarSearch);
-				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
-				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
-				}
-			}
-		});
-		//
-		return button;
-	}
-
-	private Button createButtonToggleEditModus(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Enable/disable to edit the table.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ENTRY_DEFAULT, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				boolean editEnabled = !peakScanListUI.isEditEnabled();
-				peakScanListUI.setEditEnabled(editEnabled);
-				button.setImage(ApplicationImageFactory.getInstance().getImage((editEnabled) ? IApplicationImage.IMAGE_EDIT_ENTRY_ACTIVE : IApplicationImage.IMAGE_EDIT_ENTRY_DEFAULT, IApplicationImage.SIZE_16x16));
-				updateLabel();
-			}
-		});
-		//
-		return button;
 	}
 
 	public void setEditEnabled(boolean editEnabled) {
 
-		peakScanListUI.setEditEnabled(editEnabled);
+		tableViewer.get().setEditEnabled(editEnabled);
 		updateLabel();
 	}
 
-	private void createResetButton(Composite parent) {
+	private Button createButtonComparison(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Compare two selected scans/peaks.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_COMPARISON_SCAN, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				IStructuredSelection selection = tableViewer.get().getStructuredSelection();
+				if(!selection.isEmpty()) {
+					List list = selection.toList();
+					if(list.size() == 2) {
+						IScanMSD massSpectrum1 = getScanMSD(list.get(0));
+						IScanMSD massSpectrum2 = getScanMSD(list.get(1));
+						UpdateNotifierUI.update(e.display, massSpectrum1, massSpectrum2);
+					}
+				}
+			}
+		});
+		//
+		return button;
+	}
+
+	private IScanMSD getScanMSD(Object object) {
+
+		IScanMSD massSpectrum;
+		//
+		if(object instanceof IPeakMSD) {
+			IPeakMSD peak = (IPeakMSD)object;
+			massSpectrum = peak.getPeakModel().getPeakMassSpectrum();
+		} else if(object instanceof IScanMSD) {
+			massSpectrum = (IScanMSD)object;
+		} else {
+			massSpectrum = null;
+		}
+		//
+		return massSpectrum;
+	}
+
+	private void createButtonReset(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Reset the peak/scan list.");
@@ -736,7 +681,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		});
 	}
 
-	private Button createSaveButton(Composite parent) {
+	private Button createButtonSave(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Save the peak/scan list.");
@@ -752,7 +697,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 						 * Peaks
 						 */
 						IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-						Table table = peakScanListUI.getTable();
+						Table table = tableViewer.get().getTable();
 						int[] indices = table.getSelectionIndices();
 						List<IPeak> peaks;
 						if(indices.length == 0) {
@@ -793,7 +738,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		return button;
 	}
 
-	private void createSettingsButton(Composite parent) {
+	private void createButtonSettings(Composite parent) {
 
 		createSettingsButton(parent, Arrays.asList(PreferencePageSystem.class, PreferencePageLists.class), new ISettingsHandler() {
 
@@ -807,27 +752,23 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 
 	private void updateLabel() {
 
-		if(labelChromatogramName.isDisposed() || labelChromatogramInfo.isDisposed()) {
-			return;
-		}
 		if(chromatogramSelection == null || chromatogramSelection.getChromatogram() == null) {
-			labelChromatogramName.setText(ChromatogramDataSupport.getChromatogramLabel(null));
-			labelChromatogramInfo.setText("");
+			toolbarInfoTop.get().setText(ChromatogramDataSupport.getChromatogramLabel(null));
+			toolbarInfoBottom.get().setText("");
 		} else {
-			String editInformation = peakScanListUI.isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			String chromatogramLabel = ChromatogramDataSupport.getChromatogramLabel(chromatogram);
 			int identifiedPeaks = chromatogram.getNumberOfPeaks();
 			int identifiedScans = ChromatogramDataSupport.getIdentifiedScans(chromatogram).size();
 			//
-			labelChromatogramName.setText(chromatogramLabel + " - " + editInformation);
-			labelChromatogramInfo.setText("Number of Peaks: " + identifiedPeaks + " | Scans: " + identifiedScans);
+			toolbarInfoTop.get().setText(chromatogramLabel);
+			toolbarInfoBottom.get().setText("Number of Peaks: " + identifiedPeaks + " | Scans: " + identifiedScans);
 		}
 	}
 
 	private void applySettings() {
 
-		searchSupportUI.reset();
+		toolbarSearch.get().reset();
 		updateChromatogramSelection();
 	}
 
@@ -891,24 +832,25 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 
 		return new PeakScanListUIConfig() {
 
-			TableConfigSupport tableConfig = new TableConfigSupport(peakScanListUI::getTableViewerColumns);
+			TableConfigSupport tableConfig = new TableConfigSupport(tableViewer.get()::getTableViewerColumns);
 
 			@Override
 			public void setToolbarVisible(boolean visible) {
 
-				PartSupport.setCompositeVisibility(toolbarMain, visible);
+				PartSupport.setCompositeVisibility(toolbarMain.get(), visible);
 			}
 
 			@Override
 			public boolean isToolbarVisible() {
 
-				return toolbarMain.isVisible();
+				return toolbarMain.get().isVisible();
 			}
 
 			@Override
 			public void setToolbarInfoVisible(boolean visible) {
 
-				PartSupport.setCompositeVisibility(toolbarLabel, visible);
+				enableToolbar(toolbarInfoTop, buttonToolbarInfo, IApplicationImage.IMAGE_INFO, TOOLTIP_INFO, visible);
+				enableToolbar(toolbarInfoBottom, buttonToolbarInfo, IApplicationImage.IMAGE_INFO, TOOLTIP_INFO, visible);
 			}
 
 			@Override

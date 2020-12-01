@@ -15,12 +15,9 @@ import java.io.File;
 
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.ux.extension.msd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.msd.ui.editors.DatabaseEditor;
 import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierFileEditorSupport;
-import org.eclipse.e4.core.services.events.IEventBroker;
 
 public class DatabaseEditorSupport extends AbstractSupplierFileEditorSupport implements ISupplierFileEditorSupport {
 
@@ -63,12 +60,8 @@ public class DatabaseEditorSupport extends AbstractSupplierFileEditorSupport imp
 		 */
 		if(isSupplierFile(file) || isSupplierFileDirectory(file)) {
 			/*
-			 * Push an event
+			 * TODO - Probably show an abstract overview like the chromatogram overview part.
 			 */
-			IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-			if(eventBroker != null) {
-				eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_MASSSPECTRA, file);
-			}
 		}
 	}
 

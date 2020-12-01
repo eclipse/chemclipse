@@ -34,9 +34,9 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
@@ -51,7 +51,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakChartSuppor
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -131,7 +130,7 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 	private Button buttonDetectionTypeBoxBV;
 	private Button buttonDetectionTypeBoxVB;
 	private Button buttonAddPeak;
-	private ChromatogramChart chromatogramChart;
+	private AtomicReference<ChromatogramChart> chartControl = new AtomicReference<>();
 	//
 	private IChromatogramSelection chromatogramSelection;
 	private IPeak peak;
@@ -328,7 +327,7 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 
 	private void updateChromatogramAndPeak() {
 
-		chromatogramChart.deleteSeries();
+		chartControl.get().deleteSeries();
 		buttonAddPeak.setEnabled(false);
 		enableButtons(DETECTION_TYPE_NONE);
 		//
@@ -368,7 +367,7 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 				}
 			}
 			//
-			chromatogramChart.addSeriesData(lineSeriesDataList, LineChart.LOW_COMPRESSION);
+			chartControl.get().addSeriesData(lineSeriesDataList, LineChart.LOW_COMPRESSION);
 		}
 	}
 
@@ -404,7 +403,7 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 		buttonDetectionTypeBoxBV = createDetectionTypeButton(composite, DETECTION_TYPE_BOX_BV, IApplicationImage.IMAGE_DETECTION_TYPE_SCAN_BV);
 		buttonDetectionTypeBoxVB = createDetectionTypeButton(composite, DETECTION_TYPE_BOX_VB, IApplicationImage.IMAGE_DETECTION_TYPE_SCAN_VB);
 		buttonAddPeak = createAddPeakButton(composite);
-		createToggleChartLegendButton(composite);
+		createButtonToggleChartLegend(composite, chartControl, IMAGE_LEGEND);
 		createDetectionTypeButton(composite, DETECTION_TYPE_NONE, IApplicationImage.IMAGE_RESET);
 		createSettingsButton(composite);
 	}
@@ -495,21 +494,6 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 		return button;
 	}
 
-	private void createToggleChartLegendButton(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle the chart legend");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TAG, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				chromatogramChart.toggleSeriesLegendVisibility();
-			}
-		});
-	}
-
 	private void createSettingsButton(Composite parent) {
 
 		createSettingsButton(parent, Arrays.asList(PreferencePagePeaks.class), new ISettingsHandler() {
@@ -524,7 +508,7 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 
 	private void createChromatogramChart(Composite parent) {
 
-		chromatogramChart = new ChromatogramChart(parent, SWT.BORDER);
+		ChromatogramChart chromatogramChart = new ChromatogramChart(parent, SWT.BORDER);
 		chromatogramChart.setLayoutData(new GridData(GridData.FILL_BOTH));
 		/*
 		 * Get the default cursor.
@@ -558,6 +542,8 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 		boxSelectionPaintListener = new BoxSelectionPaintListener();
 		plotArea.addCustomPaintListener(baselineSelectionPaintListener);
 		plotArea.addCustomPaintListener(boxSelectionPaintListener);
+		//
+		chartControl.set(chromatogramChart);
 	}
 
 	private void setDetectionType(String detectionType) {
@@ -802,7 +788,7 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 
 	private IPlotArea getPlotArea() {
 
-		return chromatogramChart.getBaseChart().getPlotArea();
+		return chartControl.get().getBaseChart().getPlotArea();
 	}
 
 	private void applySettings() {
@@ -812,17 +798,17 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 
 	public void redraw() {
 
-		chromatogramChart.getBaseChart().redraw();
+		chartControl.get().getBaseChart().redraw();
 	}
 
 	private void setCursor(int cursorId) {
 
-		chromatogramChart.getBaseChart().setCursor(DisplayUtils.getDisplay().getSystemCursor(cursorId));
+		chartControl.get().getBaseChart().setCursor(DisplayUtils.getDisplay().getSystemCursor(cursorId));
 	}
 
 	private void setCursorDefault() {
 
-		chromatogramChart.getBaseChart().setCursor(defaultCursor);
+		chartControl.get().getBaseChart().setCursor(defaultCursor);
 	}
 
 	private String getDetectionBox(int x) {
@@ -955,14 +941,11 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 	private void extractPeak(String detectionType) {
 
 		this.peak = extractPeakFromUserSelection(xStart, yStart, xStop, yStop);
-		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-		if(eventBroker != null) {
-			eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
-		}
+		UpdateNotifierUI.update(getDisplay(), peak);
 		/*
 		 * Get the selected range.
 		 */
-		BaseChart baseChart = chromatogramChart.getBaseChart();
+		BaseChart baseChart = chartControl.get().getBaseChart();
 		IAxisSet axisSet = baseChart.getAxisSet();
 		IAxis xAxis = axisSet.getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
 		Range xRange = xAxis.getRange();
@@ -1008,7 +991,7 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 		/*
 		 * Calculate the start and end points.
 		 */
-		BaseChart baseChart = chromatogramChart.getBaseChart();
+		BaseChart baseChart = chartControl.get().getBaseChart();
 		IAxis retentionTime = baseChart.getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
 		Range millisecondsRange = retentionTime.getRange();
 		IAxis intensity = baseChart.getAxisSet().getYAxis(BaseChart.ID_PRIMARY_Y_AXIS);

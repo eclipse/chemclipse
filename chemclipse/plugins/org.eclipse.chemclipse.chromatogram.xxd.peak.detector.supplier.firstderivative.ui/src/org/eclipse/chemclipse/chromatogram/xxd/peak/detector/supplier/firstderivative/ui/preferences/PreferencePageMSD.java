@@ -26,9 +26,11 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class PreferencePageMSD extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePageMSD() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("MSD");
+		setTitle("MSD");
+		setDescription("");
 	}
 
 	/**

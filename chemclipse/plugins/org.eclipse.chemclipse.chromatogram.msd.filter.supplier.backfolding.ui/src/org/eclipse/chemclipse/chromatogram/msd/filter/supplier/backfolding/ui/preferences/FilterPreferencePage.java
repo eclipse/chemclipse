@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -22,9 +22,11 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class FilterPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public FilterPreferencePage() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Set the Backfolding filter settings.");
+		setTitle("Backfolding");
+		setDescription("");
 	}
 
 	/**

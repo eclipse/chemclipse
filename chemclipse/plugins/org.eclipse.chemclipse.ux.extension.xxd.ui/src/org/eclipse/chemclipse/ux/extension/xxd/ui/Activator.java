@@ -21,7 +21,6 @@ import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 import org.eclipse.chemclipse.swt.ui.services.IMoleculeImageService;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.osgi.framework.BundleContext;
@@ -111,67 +110,53 @@ public class Activator extends AbstractActivatorUI {
 
 	private void initialize(DataUpdateSupport dataUpdateSupport) {
 
-		/*
-		 * The specific events will be removed soon.
-		 */
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION);
-		/*
-		 * Register the data update support early to get all recent selections.
-		 */
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_SCAN);
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_PEAK);
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_IDENTIFICATION_TARGET_SUPPLIER);
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET);
-		/*
-		 * Subtract MS
-		 */
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, IChemClipseEvents.PROPERTY_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM);
-		/*
-		 * Perspective / Parts
-		 */
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_APPLICATION_SELECT_PERSPECTIVE, IChemClipseEvents.IEVENTBROKER_DATA);
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_PART_CLOSED, IChemClipseEvents.IEVENTBROKER_DATA);
-		/*
-		 * Unload needed?
-		 */
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_CHROMATOGRAM_SELECTION_XXD);
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_SCAN);
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_PEAK);
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UNLOAD_SELECTION, IChemClipseEvents.PROPERTY_SELECTED_IDENTIFICATION_TARGET_SUPPLIER);
-		/*
-		 * Raw files
-		 */
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_RAWFILE, IChemClipseEvents.PROPERTY_CHROMATOGRAM_MSD_RAWFILE);
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_RAWFILE, IChemClipseEvents.PROPERTY_CHROMATOGRAM_CSD_RAWFILE);
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_RAWFILE, IChemClipseEvents.PROPERTY_CHROMATOGRAM_WSD_RAWFILE);
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_NMR_UPDATE_RAWFILE, IChemClipseEvents.PROPERTY_SCAN_NMR_RAWFILE);
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_XIR_UPDATE_RAWFILE, IChemClipseEvents.PROPERTY_SCAN_XIR_RAWFILE);
-		/*
-		 * Overview
-		 */
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_OVERVIEW, IChemClipseEvents.PROPERTY_CHROMATOGRAM_MSD_OVERVIEW);
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_OVERVIEW, IChemClipseEvents.PROPERTY_CHROMATOGRAM_CSD_OVERVIEW);
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_OVERVIEW, IChemClipseEvents.PROPERTY_CHROMATOGRAM_WSD_OVERVIEW);
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_NMR_UPDATE_OVERVIEW, IChemClipseEvents.PROPERTY_SCAN_NMR_OVERVIEW);
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_XIR_UPDATE_OVERVIEW, IChemClipseEvents.PROPERTY_SCAN_XIR_OVERVIEW);
-		/*
-		 * Quantitation
-		 */
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_QUANT_DB_COMPOUND_UPDATE, IChemClipseEvents.PROPERTY_QUANT_DB_COMPOUND);
-		/*
-		 * PCR
-		 */
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_WELL_PCR_UPDATE_SELECTION, IEventBroker.DATA);
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_WELL_PCR_UNLOAD_SELECTION, IEventBroker.DATA);
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_PLATE_PCR_UPDATE_SELECTION, IEventBroker.DATA);
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_PLATE_PCR_UNLOAD_SELECTION, IEventBroker.DATA);
-		/*
-		 * Unload
-		 */
-		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_NONE, IChemClipseEvents.PROPERTY_CHROMATOGRAM_XXD_RAWFILE);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_RAWFILE, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_RAWFILE, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_RAWFILE, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_NMR_UPDATE_RAWFILE, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_XIR_UPDATE_RAWFILE, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_NONE, IChemClipseEvents.EVENT_BROKER_DATA);
+		//
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_OVERVIEW, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_OVERVIEW, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_OVERVIEW, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_NMR_UPDATE_OVERVIEW, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_XIR_UPDATE_OVERVIEW, IChemClipseEvents.EVENT_BROKER_DATA);
+		//
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_XIR_UPDATE_SELECTION, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_NMR_UPDATE_SELECTION, IChemClipseEvents.EVENT_BROKER_DATA);
+		//
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_SELECTION, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_XIR_UNLOAD_SELECTION, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_NMR_UNLOAD_SELECTION, IChemClipseEvents.EVENT_BROKER_DATA);
+		//
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_APPLICATION_SELECT_PERSPECTIVE, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_PART_CLOSED, IChemClipseEvents.EVENT_BROKER_DATA);
+		//
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_WELL_PCR_UPDATE_SELECTION, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_PLATE_PCR_UPDATE_SELECTION, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_WELL_PCR_UNLOAD_SELECTION, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_PLATE_PCR_UNLOAD_SELECTION, IChemClipseEvents.EVENT_BROKER_DATA);
+		//
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UNLOAD_SELECTION, IChemClipseEvents.EVENT_BROKER_DATA);
+		//
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, IChemClipseEvents.EVENT_BROKER_DATA);
+		//
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_QUANT_DB_COMPOUND_UPDATE, IChemClipseEvents.EVENT_BROKER_DATA);
+		//
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_TARGET_UPDATE_COMPARISON, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_REFERENCE_UPDATE_COMPARISON, IChemClipseEvents.EVENT_BROKER_DATA);
+		//
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_EDIT_HISTORY_UPDATE, IChemClipseEvents.EVENT_BROKER_DATA);
+		//
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, IChemClipseEvents.EVENT_BROKER_DATA);
 	}
 
 	private void initializePreferenceStoreSubtract(IPreferenceSupplier preferenceSupplier) {

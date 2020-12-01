@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -46,6 +46,7 @@ public class PeakDetectorCSD {
 	 * This class offers only static methods.
 	 */
 	private PeakDetectorCSD() {
+
 	}
 
 	/**
@@ -57,9 +58,9 @@ public class PeakDetectorCSD {
 	 * @param monitor
 	 * @return IProcessingInfo
 	 */
-	public static IProcessingInfo detect(IChromatogramSelectionCSD chromatogramSelection, IPeakDetectorSettingsCSD peakDetectorSettings, String peakDetectorId, IProgressMonitor monitor) {
+	public static IProcessingInfo<?> detect(IChromatogramSelectionCSD chromatogramSelection, IPeakDetectorSettingsCSD peakDetectorSettings, String peakDetectorId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<?> processingInfo;
 		IPeakDetectorCSD peakDetector = getPeakDetector(peakDetectorId);
 		if(peakDetector != null) {
 			processingInfo = peakDetector.detect(chromatogramSelection, peakDetectorSettings, monitor);
@@ -78,9 +79,9 @@ public class PeakDetectorCSD {
 	 * @param monitor
 	 * @return IProcessingInfo
 	 */
-	public static IProcessingInfo detect(IChromatogramSelectionCSD chromatogramSelection, String peakDetectorId, IProgressMonitor monitor) {
+	public static IProcessingInfo<?> detect(IChromatogramSelectionCSD chromatogramSelection, String peakDetectorId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<?> processingInfo;
 		IPeakDetectorCSD peakDetector = getPeakDetector(peakDetectorId);
 		if(peakDetector != null) {
 			processingInfo = peakDetector.detect(chromatogramSelection, monitor);
@@ -90,7 +91,6 @@ public class PeakDetectorCSD {
 		return processingInfo;
 	}
 
-	// ---------------------------------------------------
 	public static IPeakDetectorCSDSupport getPeakDetectorSupport() {
 
 		PeakDetectorCSDSupplier supplier;
@@ -157,9 +157,9 @@ public class PeakDetectorCSD {
 		return null;
 	}
 
-	private static IProcessingInfo getNoPeakDetectorAvailableProcessingInfo() {
+	private static IProcessingInfo<?> getNoPeakDetectorAvailableProcessingInfo() {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Peak Detector FID", NO_PEAK_DETECTOR_AVAILABLE);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;

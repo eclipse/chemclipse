@@ -36,22 +36,27 @@ public class ScanType implements EventHandler {
 	public void handleEvent(Event event) {
 
 		String topic = event.getTopic();
-		Object property = event.getProperty(IChemClipseEvents.PROPERTY_SCAN_SELECTION);
+		Object property = event.getProperty(IChemClipseEvents.EVENT_BROKER_DATA);
 		/*
 		 * Get the scan type.
 		 */
 		IScan scanSelection = null;
 		String scanType = SCAN_TYPE_NONE;
 		//
-		if(topic.equals(IChemClipseEvents.TOPIC_SCAN_MSD_UPDATE_SELECTION)) {
-			scanSelection = (IScanMSD)property;
-			scanType = SCAN_TYPE_MSD;
-		} else if(topic.equals(IChemClipseEvents.TOPIC_SCAN_CSD_UPDATE_SELECTION)) {
-			scanSelection = (IScanCSD)property;
-			scanType = SCAN_TYPE_CSD;
-		} else if(topic.equals(IChemClipseEvents.TOPIC_SCAN_WSD_UPDATE_SELECTION)) {
-			scanSelection = (IScanWSD)property;
-			scanType = SCAN_TYPE_WSD;
+		if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION)) {
+			if(property instanceof IScanMSD) {
+				scanSelection = (IScanMSD)property;
+				scanType = SCAN_TYPE_MSD;
+			} else if(property instanceof IScanCSD) {
+				scanSelection = (IScanCSD)property;
+				scanType = SCAN_TYPE_CSD;
+			} else if(property instanceof IScanWSD) {
+				scanSelection = (IScanWSD)property;
+				scanType = SCAN_TYPE_WSD;
+			} else {
+				scanSelection = null;
+				scanType = SCAN_TYPE_NONE;
+			}
 		} else if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION)) {
 			scanSelection = null;
 			scanType = SCAN_TYPE_NONE;

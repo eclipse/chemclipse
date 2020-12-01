@@ -168,9 +168,6 @@ public class OverviewSupport {
 
 	private void initializeTopics() {
 
-		topics.add(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION);
-		topics.add(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION);
-		topics.add(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION);
 		topics.add(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION);
 		topics.add(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_RAWFILE);
 		topics.add(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_RAWFILE);

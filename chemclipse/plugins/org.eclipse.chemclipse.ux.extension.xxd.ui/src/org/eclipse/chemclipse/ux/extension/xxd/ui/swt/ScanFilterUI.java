@@ -35,6 +35,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 public class ScanFilterUI extends Composite {
 
@@ -47,6 +48,7 @@ public class ScanFilterUI extends Composite {
 	private IUpdateListener updateListener = null;
 
 	public ScanFilterUI(Composite parent, int style) {
+
 		super(parent, style);
 		createControl();
 	}
@@ -153,7 +155,7 @@ public class ScanFilterUI extends Composite {
 							 */
 							optimizedMassSpectrum.getTargets().clear();
 							MassSpectrumFilter.applyFilter(optimizedMassSpectrum, supplier.getId(), new NullProgressMonitor());
-							fireUpdate();
+							fireUpdate(e.display);
 						}
 					}
 				}
@@ -162,10 +164,10 @@ public class ScanFilterUI extends Composite {
 		return button;
 	}
 
-	private void fireUpdate() {
+	private void fireUpdate(Display display) {
 
 		if(updateListener != null) {
-			updateListener.update();
+			updateListener.update(display);
 		}
 	}
 }

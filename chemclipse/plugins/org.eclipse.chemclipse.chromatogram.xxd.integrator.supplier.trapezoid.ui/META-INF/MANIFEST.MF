@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.ui
 Bundle-ManifestVersion: 2
-Bundle-Name: Ui Plug-in
+Bundle-Name: Trapezoid Integrator UI
 Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.ui;singleton:=true
 Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.ui.Activator
@@ -32,10 +32,3 @@ Require-Bundle: org.eclipse.ui,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Import-Package: org.osgi.service.event;version="1.3.0"
-Service-Component: OSGI-INF/chromatogramIntegratorHandlerMSD.xml,
- OSGI-INF/combinedIntegratorHandlerMSD.xml,
- OSGI-INF/peakIntegratorHandlerMSD.xml,
- OSGI-INF/chromatogramIntegratorHandlerCSD.xml,
- OSGI-INF/combinedIntegratorHandlerCSD.xml,
- OSGI-INF/peakIntegratorHandlerCSD.xml,
- OSGI-INF/peakIntegratorHandlerWSD.xml

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -64,11 +64,7 @@ public class IntegrationAreaPart extends AbstractPart<ExtendedIntegrationAreaUI>
 
 	private boolean isLoadEvent(String topic) {
 
-		if(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION.equals(topic)) {
-			return true;
-		} else if(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION.equals(topic)) {
-			return true;
-		} else if(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION.equals(topic)) {
+		if(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION.equals(topic)) {
 			return true;
 		} else if(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION.equals(topic)) {
 			return true;

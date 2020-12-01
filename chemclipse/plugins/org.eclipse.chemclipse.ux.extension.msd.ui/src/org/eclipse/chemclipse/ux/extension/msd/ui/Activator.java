@@ -12,18 +12,18 @@
 package org.eclipse.chemclipse.ux.extension.msd.ui;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.osgi.service.datalocation.Location;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends AbstractUIPlugin {
+public class Activator extends AbstractActivatorUI {
 
 	// The shared instance
 	private static Activator plugin;

@@ -30,7 +30,6 @@ import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuCategories;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
@@ -39,6 +38,7 @@ import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.parts.ScanTablePart;
@@ -48,7 +48,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.ScanSignalWSD;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -115,7 +114,6 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 	//
 	private final ScanDataSupport scanDataSupport = new ScanDataSupport();
 	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private IEventBroker eventBroker = Activator.getDefault().getEventBroker();
 	private EditListener editListener = null;
 	//
 	private Color backgroundDefault;
@@ -816,12 +814,10 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 		 * Fire an update.
 		 */
 		if(fireUpdate) {
-			if(eventBroker != null) {
-				if(object instanceof IScan) {
-					eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, object);
-				} else if(object instanceof IPeak) {
-					eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, object);
-				}
+			if(object instanceof IScan) {
+				UpdateNotifierUI.update(getDisplay(), (IScan)object);
+			} else if(object instanceof IPeak) {
+				UpdateNotifierUI.update(getDisplay(), (IPeak)object);
 			}
 		}
 	}

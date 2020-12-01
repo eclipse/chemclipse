@@ -2,13 +2,6 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         id="org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.ui.modelContribution"
-         point="org.eclipse.e4.workbench.model">
-      <fragment
-            uri="fragment.e4xmi">
-      </fragment>
-   </extension>
-   <extension
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.preferences.integratorPreferencePage"
@@ -16,11 +9,5 @@
             id="org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.ui.ui.preferences.sumareaIntegratorPreferencePage"
             name="Sumarea Integrator">
       </page>
-   </extension>
-   <extension
-         point="org.eclipse.help.toc">
-      <toc
-            file="toc_integrator.xml">
-      </toc>
    </extension>
 </plugin>

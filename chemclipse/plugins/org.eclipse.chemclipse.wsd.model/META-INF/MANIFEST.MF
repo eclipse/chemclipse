@@ -24,6 +24,5 @@ Export-Package: org.eclipse.chemclipse.wsd.model.comparator,
  org.eclipse.chemclipse.wsd.model.core.implementation,
  org.eclipse.chemclipse.wsd.model.core.selection,
  org.eclipse.chemclipse.wsd.model.core.support,
- org.eclipse.chemclipse.wsd.model.notifier,
  org.eclipse.chemclipse.wsd.model.xwc
 Import-Package: javax.annotation;version="1.1.0"

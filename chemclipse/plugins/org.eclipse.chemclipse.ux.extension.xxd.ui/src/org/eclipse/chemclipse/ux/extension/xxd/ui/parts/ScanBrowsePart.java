@@ -61,16 +61,6 @@ public class ScanBrowsePart extends AbstractPart<ExtendedScanBrowseUI> {
 
 	private boolean isChromatogramTopic(String topic) {
 
-		if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION)) {
-			return true;
-		} else if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION)) {
-			return true;
-		} else if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_CSD_UPDATE_CHROMATOGRAM_SELECTION)) {
-			return true;
-		} else if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_CHROMATOGRAM_SELECTION)) {
-			return true;
-		} else {
-			return false;
-		}
+		return topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION);
 	}
 }

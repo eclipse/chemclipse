@@ -22,7 +22,7 @@ import org.eclipse.swt.widgets.Composite;
 
 public class CombinedScanPart extends AbstractPart<ExtendedCombinedScanUI> {
 
-	private static final String TOPIC = IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION;
+	private static final String TOPIC = IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION;
 
 	@Inject
 	public CombinedScanPart(Composite parent) {

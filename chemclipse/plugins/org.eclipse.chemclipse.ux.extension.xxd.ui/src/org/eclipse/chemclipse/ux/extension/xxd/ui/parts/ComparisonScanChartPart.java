@@ -27,9 +27,6 @@ import org.eclipse.swt.widgets.Composite;
 public class ComparisonScanChartPart extends AbstractPart<ExtendedComparisonScanUI> {
 
 	private static final String TOPIC = IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION;
-	//
-	private static final int TARGET_MASS_SPECTRUM_UNKNOWN = 0;
-	private static final int TARGET_ENTRY = 1;
 
 	@Inject
 	public ComparisonScanChartPart(Composite parent) {
@@ -44,46 +41,56 @@ public class ComparisonScanChartPart extends AbstractPart<ExtendedComparisonScan
 	}
 
 	@Override
-	protected void subscribeAdditionalTopics() {
-
-		String[] properties = new String[2];
-		properties[TARGET_MASS_SPECTRUM_UNKNOWN] = IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN;
-		properties[TARGET_ENTRY] = IChemClipseEvents.PROPERTY_IDENTIFICATION_TARGET_ENTRY;
-		subscribeAdditionalTopic(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE, properties);
-	}
-
-	@Override
 	protected boolean updateData(List<Object> objects, String topic) {
 
 		if(isUnloadEvent(topic)) {
-			getControl().update(null);
+			getControl().clear();
 			return false;
-		} else if(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_MASS_SPECTRUM_UNKNOWN_UPDATE.equals(topic)) {
-			IScanMSD unknownMassSpectrum = (IScanMSD)objects.get(TARGET_MASS_SPECTRUM_UNKNOWN);
-			IIdentificationTarget identificationTarget = (IIdentificationTarget)objects.get(TARGET_ENTRY);
-			getControl().update(unknownMassSpectrum, identificationTarget);
-			return true;
-		} else if(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION.equals(topic) || IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION.equals(topic)) {
+		} else if(isPeakUpdateEvent(topic) || isScanUpdateEvent(topic)) {
 			Object object = objects.get(0);
-			IScanMSD scan;
-			IIdentificationTarget target = null;
+			IScanMSD scan = null;
+			IIdentificationTarget identificationTarget = null;
 			if(object instanceof IScanMSD) {
 				scan = (IScanMSD)object;
-				target = IIdentificationTarget.getBestIdentificationTarget(scan.getTargets());
+				identificationTarget = IIdentificationTarget.getBestIdentificationTarget(scan.getTargets());
 			} else if(object instanceof IPeakMSD) {
 				IPeakMSD peakMSD = (IPeakMSD)object;
 				scan = peakMSD.getExtractedMassSpectrum();
-				target = IIdentificationTarget.getBestIdentificationTarget(peakMSD.getTargets());
-			} else {
-				return false;
+				identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peakMSD.getTargets());
 			}
 			//
-			if(target != null) {
-				getControl().update(scan, target);
+			if(identificationTarget != null) {
+				getControl().update(scan, identificationTarget);
 				return true;
 			} else {
 				getControl().update(scan);
 				return true;
+			}
+		} else if(isScanTargetComparisonEvent(topic)) {
+			Object object = objects.get(0);
+			if(object instanceof Object[]) {
+				Object[] values = (Object[])object;
+				Object object1 = values[0];
+				Object object2 = values[1];
+				//
+				if(object1 instanceof IScanMSD && object2 instanceof IIdentificationTarget) {
+					IScanMSD unknownMassSpectrum = (IScanMSD)object1;
+					IIdentificationTarget identificationTarget = (IIdentificationTarget)object2;
+					getControl().update(unknownMassSpectrum, identificationTarget);
+				}
+			}
+		} else if(isScanReferenceComparisonEvent(topic)) {
+			Object object = objects.get(0);
+			if(object instanceof Object[]) {
+				Object[] values = (Object[])object;
+				Object object1 = values[0];
+				Object object2 = values[1];
+				//
+				if(object1 instanceof IScanMSD && object2 instanceof IScanMSD) {
+					IScanMSD unknownMassSpectrum = (IScanMSD)object1;
+					IScanMSD referenceMassSpectrum = (IScanMSD)object2;
+					getControl().update(unknownMassSpectrum, referenceMassSpectrum);
+				}
 			}
 		}
 		//
@@ -93,12 +100,27 @@ public class ComparisonScanChartPart extends AbstractPart<ExtendedComparisonScan
 	@Override
 	protected boolean isUpdateTopic(String topic) {
 
-		return TOPIC.equals(topic) || isScanUpdateEvent(topic) || isUnloadEvent(topic);
+		return isPeakUpdateEvent(topic) || isScanUpdateEvent(topic) || isScanTargetComparisonEvent(topic) || isScanReferenceComparisonEvent(topic) || isUnloadEvent(topic);
 	}
 
 	private boolean isScanUpdateEvent(String topic) {
 
 		return IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION.equals(topic);
+	}
+
+	private boolean isPeakUpdateEvent(String topic) {
+
+		return IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION.equals(topic);
+	}
+
+	private boolean isScanTargetComparisonEvent(String topic) {
+
+		return IChemClipseEvents.TOPIC_SCAN_TARGET_UPDATE_COMPARISON.equals(topic);
+	}
+
+	private boolean isScanReferenceComparisonEvent(String topic) {
+
+		return IChemClipseEvents.TOPIC_SCAN_REFERENCE_UPDATE_COMPARISON.equals(topic);
 	}
 
 	private boolean isUnloadEvent(String topic) {

@@ -31,7 +31,7 @@ public class LibraryType implements EventHandler {
 	public void handleEvent(Event event) {
 
 		String topic = event.getTopic();
-		Object property = event.getProperty(IChemClipseEvents.PROPERTY_LIBRARY_SELECTION);
+		Object property = event.getProperty(IChemClipseEvents.EVENT_BROKER_DATA);
 		/*
 		 * Get the library selection.
 		 */

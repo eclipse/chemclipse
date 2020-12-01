@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<component name="org.eclipse.chemclipse.ux.extension.xxd.ui.internal.handlers.RedoOperationHandler">
+   <implementation class="org.eclipse.chemclipse.ux.extension.xxd.ui.internal.handlers.RedoOperationHandler" />
+   <property name="event.topics" value="chromatogram/xxd/load/chromatogramselection" />
+   <service>
+      <provide interface="org.osgi.service.event.EventHandler" />
+   </service>
+</component>

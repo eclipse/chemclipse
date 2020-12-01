@@ -36,22 +36,27 @@ public class PeakType implements EventHandler {
 	public void handleEvent(Event event) {
 
 		String topic = event.getTopic();
-		Object property = event.getProperty(IChemClipseEvents.PROPERTY_PEAK_SELECTION);
+		Object property = event.getProperty(IChemClipseEvents.EVENT_BROKER_DATA);
 		/*
 		 * Get the peak type.
 		 */
 		IPeak peakSelection = null;
 		String peakType = PEAK_TYPE_NONE;
 		//
-		if(topic.equals(IChemClipseEvents.TOPIC_PEAK_MSD_UPDATE_SELECTION)) {
-			peakSelection = (IPeakMSD)property;
-			peakType = PEAK_TYPE_MSD;
-		} else if(topic.equals(IChemClipseEvents.TOPIC_PEAK_CSD_UPDATE_SELECTION)) {
-			peakSelection = (IPeakCSD)property;
-			peakType = PEAK_TYPE_CSD;
-		} else if(topic.equals(IChemClipseEvents.TOPIC_PEAK_WSD_UPDATE_SELECTION)) {
-			peakSelection = (IPeakWSD)property;
-			peakType = PEAK_TYPE_WSD;
+		if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION)) {
+			if(property instanceof IPeakMSD) {
+				peakSelection = (IPeakMSD)property;
+				peakType = PEAK_TYPE_MSD;
+			} else if(property instanceof IPeakCSD) {
+				peakSelection = (IPeakCSD)property;
+				peakType = PEAK_TYPE_CSD;
+			} else if(property instanceof IPeakWSD) {
+				peakSelection = (IPeakWSD)property;
+				peakType = PEAK_TYPE_WSD;
+			} else {
+				peakSelection = null;
+				peakType = PEAK_TYPE_NONE;
+			}
 		} else if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION)) {
 			peakSelection = null;
 			peakType = PEAK_TYPE_NONE;

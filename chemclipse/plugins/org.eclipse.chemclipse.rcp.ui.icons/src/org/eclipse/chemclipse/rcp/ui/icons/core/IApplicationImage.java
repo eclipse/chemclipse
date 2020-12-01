@@ -350,6 +350,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_SUBTRACT_SCAN_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/subtractScanActive.gif";
 	String IMAGE_COMBINED_SCAN_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/combinedScanDefault.gif";
 	String IMAGE_COMBINED_SCAN_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/combinedScanActive.gif";
+	String IMAGE_COMPARISON_SCAN = "org.eclipse.chemclipse.rcp.ui.icons/comparisonScan.gif";
 	String IMAGE_COMPARISON_SCAN_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/comparisonScanDefault.gif";
 	String IMAGE_COMPARISON_SCAN_ACTIVE = "org.eclipse.chemclipse.rcp.ui.icons/comparisonScanActive.gif";
 	String IMAGE_QUANTITATION_DEFAULT = "org.eclipse.chemclipse.rcp.ui.icons/quantitationDefault.gif";

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.internal.core;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -19,7 +20,6 @@ import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
-import org.eclipse.chemclipse.logging.core.Logger;
 
 public class ChromatogramIntegrator extends AbstractSumareaIntegrator implements ISumareaIntegrator {
 
@@ -35,7 +35,7 @@ public class ChromatogramIntegrator extends AbstractSumareaIntegrator implements
 	public double integrate(IChromatogramSelectionMSD chromatogramSelection, int ion) {
 
 		double chromatogramArea = 0.0d;
-		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogramMSD();
+		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogram();
 		/*
 		 * Try to integrate the signals.
 		 */

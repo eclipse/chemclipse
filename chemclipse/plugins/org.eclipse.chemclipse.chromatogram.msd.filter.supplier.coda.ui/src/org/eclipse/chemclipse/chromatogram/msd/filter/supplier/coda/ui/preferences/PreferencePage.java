@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,19 +11,20 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.ui.preferences;
 
-import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.ui.IWorkbenchPreferencePage;
-import org.eclipse.ui.IWorkbench;
-
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.ui.Activator;
+import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePage() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Set the CODA filter settings.");
+		setTitle("CODA Filter");
+		setDescription("");
 	}
 
 	/**

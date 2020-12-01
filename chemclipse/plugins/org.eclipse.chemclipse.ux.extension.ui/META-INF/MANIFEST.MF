@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.eclipse.chemclipse.ux.extension.ui
 Bundle-ManifestVersion: 2
-Bundle-Name: Ui
+Bundle-Name: ChemClipse UX
 Bundle-SymbolicName: org.eclipse.chemclipse.ux.extension.ui;singleton:=true
 Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.ux.extension.ui.Activator
@@ -57,22 +57,11 @@ Export-Package: org.eclipse.chemclipse.ux.extension.ui.definitions,
 Import-Package: javax.annotation;version="[1.0.0,2.0.0)",
  org.osgi.framework;version="[1.0.0,2.0.0)",
  org.osgi.service.event;version="[1.0.0,2.0.0)"
-Service-Component: OSGI-INF/chromatogramTypeMSD.xml,
- OSGI-INF/chromatogramTypeCSD.xml,
- OSGI-INF/chromatogramTypeWSD.xml,
- OSGI-INF/chromatogramTypeXXD.xml, 
+Service-Component: OSGI-INF/chromatogramTypeXXD.xml, 
  OSGI-INF/chromatogramTypeUNLOAD.xml,
- OSGI-INF/unzoomChromatogramHandlerMSD.xml,
- OSGI-INF/unzoomChromatogramHandlerCSD.xml,
- OSGI-INF/deleteSelectedPeakHandlerMSD.xml,
- OSGI-INF/deleteSelectedPeakHandlerCSD.xml,
- OSGI-INF/deleteAllPeaksHandlerMSD.xml,
- OSGI-INF/deleteAllPeaksHandlerCSD.xml,
- OSGI-INF/deleteAllPeakIntegrationsHandlerHandlerCSD.xml,
- OSGI-INF/deleteAllPeakIntegrationsHandlerHandlerMSD.xml,
- OSGI-INF/deleteChromatogramIntegrationsHandlerCSD.xml,
- OSGI-INF/deleteChromatogramIntegrationsHandlerMSD.xml,
  OSGI-INF/libraryTypeMSD.xml,
  OSGI-INF/libraryTypeUNLOAD.xml,
- OSGI-INF/scanTypeMSD.xml,
- OSGI-INF/scanTypeUNLOAD.xml  
+ OSGI-INF/scanTypeXXD.xml,
+ OSGI-INF/scanTypeUNLOAD.xml,
+ OSGI-INF/peakTypeXXD.xml,
+ OSGI-INF/peakTypeUNLOAD.xml

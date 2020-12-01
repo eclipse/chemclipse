@@ -20,10 +20,10 @@ import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
+import org.eclipse.chemclipse.model.notifier.UpdateNotifier;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.notifier.MassSpectrumSelectionUpdateNotifier;
 import org.eclipse.chemclipse.msd.swt.ui.components.LibraryModifySupportUI;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumListUI;
 import org.eclipse.chemclipse.msd.swt.ui.preferences.PreferencePage;
@@ -33,11 +33,10 @@ import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
-import org.eclipse.chemclipse.ux.extension.msd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.PreferenceDialog;
@@ -225,11 +224,8 @@ public class MassSpectrumLibraryUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-				if(eventBroker != null) {
-					eventBroker.post(IChemClipseEvents.TOPIC_LIBRARY_MSD_ADD_TO_DB_SEARCH, massSpectrumFile);
-					MessageDialog.openConfirm(DisplayUtils.getShell(), "DB Search", "The library has been added.");
-				}
+				UpdateNotifierUI.update(e.display, IChemClipseEvents.TOPIC_LIBRARY_MSD_ADD_TO_DB_SEARCH, massSpectrumFile);
+				MessageDialog.openConfirm(DisplayUtils.getShell(), "DB Search", "The library has been added.");
 			}
 		});
 		//
@@ -247,11 +243,8 @@ public class MassSpectrumLibraryUI extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-				if(eventBroker != null) {
-					eventBroker.post(IChemClipseEvents.TOPIC_LIBRARY_MSD_REMOVE_FROM_DB_SEARCH, massSpectrumFile);
-					MessageDialog.openConfirm(DisplayUtils.getShell(), "DB Search", "The library has been removed.");
-				}
+				UpdateNotifierUI.update(e.display, IChemClipseEvents.TOPIC_LIBRARY_MSD_REMOVE_FROM_DB_SEARCH, massSpectrumFile);
+				MessageDialog.openConfirm(DisplayUtils.getShell(), "DB Search", "The library has been removed.");
 			}
 		});
 		//
@@ -350,13 +343,10 @@ public class MassSpectrumLibraryUI extends Composite {
 					 * Fire an update if an identified scan has been selected.
 					 */
 					IScanMSD massSpectrum = (IScanMSD)firstElement;
-					MassSpectrumSelectionUpdateNotifier.fireUpdateChange(massSpectrum, true);
+					IIdentificationTarget identificationTarget = getIdentificationTarget(massSpectrum);
 					//
-					IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-					if(eventBroker != null) {
-						IIdentificationTarget identificationTarget = getIdentificationTarget(massSpectrum);
-						eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, identificationTarget);
-					}
+					UpdateNotifier.update(massSpectrum);
+					UpdateNotifier.update(identificationTarget);
 					/*
 					 * It's important to set the focus here.
 					 * The PerspectiveSwitchHandler.focusPerspectiveAndView activates other views and sets the

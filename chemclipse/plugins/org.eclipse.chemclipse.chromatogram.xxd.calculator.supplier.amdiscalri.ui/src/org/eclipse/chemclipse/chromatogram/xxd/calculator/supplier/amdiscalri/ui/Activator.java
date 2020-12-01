@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -77,8 +77,8 @@ public class Activator extends AbstractActivatorUI {
 
 		IEventBroker eventBroker = getEventBroker(bundleContext);
 		if(eventBroker != null) {
-			registeredEventHandler.add(registerEventHandler(eventBroker, IChemClipseEvents.PROPERTY_RI_CALIBRATION_LIBRARY, IChemClipseEvents.TOPIC_RI_LIBRARY_ADD_ADD_TO_PROCESS));
-			registeredEventHandler.add(registerEventHandler(eventBroker, IChemClipseEvents.PROPERTY_RI_CALIBRATION_LIBRARY, IChemClipseEvents.TOPIC_RI_LIBRARY_REMOVE_FROM_PROCESS));
+			registeredEventHandler.add(registerEventHandler(eventBroker, IChemClipseEvents.EVENT_BROKER_DATA, IChemClipseEvents.TOPIC_RI_LIBRARY_ADD_ADD_TO_PROCESS));
+			registeredEventHandler.add(registerEventHandler(eventBroker, IChemClipseEvents.EVENT_BROKER_DATA, IChemClipseEvents.TOPIC_RI_LIBRARY_REMOVE_FROM_PROCESS));
 		}
 	}
 

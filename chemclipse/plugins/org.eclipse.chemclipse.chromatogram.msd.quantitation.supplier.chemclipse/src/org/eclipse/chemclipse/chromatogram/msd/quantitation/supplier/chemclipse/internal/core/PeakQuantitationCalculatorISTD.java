@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -35,11 +35,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakQuantitationCalculatorISTD extends AbstractPeakQuantitationCalculator {
 
-	@SuppressWarnings("rawtypes")
-	public IProcessingInfo quantifySelectedPeak(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<?> quantifySelectedPeak(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 		List<? extends IPeak> internalStandardPeaks = getInternalStandardPeaks(chromatogram);
 		IPeak peakToQuantify = chromatogramSelection.getSelectedPeak();
 		//
@@ -48,11 +47,10 @@ public class PeakQuantitationCalculatorISTD extends AbstractPeakQuantitationCalc
 		return processingInfo;
 	}
 
-	@SuppressWarnings("rawtypes")
-	public IProcessingInfo quantifyAllPeaks(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<?> quantifyAllPeaks(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 		List<? extends IPeak> internalStandardPeaks = getInternalStandardPeaks(chromatogram);
 		List<? extends IPeak> peaksToQuantify = getPeaksToQuantify(chromatogramSelection);
 		//
@@ -63,9 +61,9 @@ public class PeakQuantitationCalculatorISTD extends AbstractPeakQuantitationCalc
 		return processingInfo;
 	}
 
-	public IProcessingInfo quantify(List<IPeak> peaks, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<?> quantify(List<IPeak> peaks, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		/*
 		 * Collect the internal standards.
 		 */
@@ -151,8 +149,7 @@ public class PeakQuantitationCalculatorISTD extends AbstractPeakQuantitationCalc
 		return new ArrayList<IPeak>();
 	}
 
-	@SuppressWarnings("rawtypes")
-	private List<IPeak> getPeaksToQuantify(IChromatogramSelection chromatogramSelection) {
+	private List<IPeak> getPeaksToQuantify(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		List<IPeak> peaksToQuantify = new ArrayList<IPeak>();
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
@@ -160,7 +157,7 @@ public class PeakQuantitationCalculatorISTD extends AbstractPeakQuantitationCalc
 			 * MSD
 			 */
 			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
-			for(IChromatogramPeakMSD peak : chromatogramSelectionMSD.getChromatogramMSD().getPeaks(chromatogramSelectionMSD)) {
+			for(IChromatogramPeakMSD peak : chromatogramSelectionMSD.getChromatogram().getPeaks(chromatogramSelectionMSD)) {
 				peaksToQuantify.add(peak);
 			}
 		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
@@ -168,7 +165,7 @@ public class PeakQuantitationCalculatorISTD extends AbstractPeakQuantitationCalc
 			 * CSD
 			 */
 			IChromatogramSelectionCSD chromatogramSelectionCSD = (IChromatogramSelectionCSD)chromatogramSelection;
-			for(IChromatogramPeakCSD peak : chromatogramSelectionCSD.getChromatogramCSD().getPeaks(chromatogramSelectionCSD)) {
+			for(IChromatogramPeakCSD peak : chromatogramSelectionCSD.getChromatogram().getPeaks(chromatogramSelectionCSD)) {
 				peaksToQuantify.add(peak);
 			}
 		}

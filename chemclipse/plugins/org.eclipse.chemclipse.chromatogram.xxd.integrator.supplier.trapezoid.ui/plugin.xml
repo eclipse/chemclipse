@@ -2,13 +2,6 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension
-         id="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.ui.modelContribution"
-         point="org.eclipse.e4.workbench.model">
-      <fragment
-            uri="fragment.e4xmi">
-      </fragment>
-   </extension>
-   <extension
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.chemclipse.chromatogram.xxd.integrator.ui.preferences.integratorPreferencePage"
@@ -17,11 +10,4 @@
             name="Peak Integrator Trapezoid">
       </page>
    </extension>
-   <extension
-         point="org.eclipse.help.toc">
-      <toc
-            file="toc_integrator.xml">
-      </toc>
-   </extension>
-
 </plugin>

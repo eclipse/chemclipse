@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,9 +24,11 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePage() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Standard integrator\n\nThe peak integrator aims to support functions as known from the FirstDerivative peak integrator.");
+		setTitle("Trapezoid Integrator");
+		setDescription("");
 	}
 
 	/**

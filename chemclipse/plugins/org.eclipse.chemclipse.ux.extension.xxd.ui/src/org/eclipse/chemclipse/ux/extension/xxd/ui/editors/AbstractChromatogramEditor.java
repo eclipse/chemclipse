@@ -50,9 +50,9 @@ import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.settings.UserManagement;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.support.ui.workbench.PartSupport;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
@@ -93,9 +93,10 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif";
 	public static final String TOOLTIP = "Chromatogram Editor";
 	//
-	private static final String TOPIC = IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION;
+	private static final String TOPIC_CHROMATOGRAM = IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION;
 	private static final String TOPIC_SCAN = IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION;
 	private static final String TOPIC_PEAK = IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION;
+	private static final String TOPIC_EDITOR_UPDATE = IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE;
 	//
 	private final DataType dataType;
 	private final MPart part;
@@ -131,7 +132,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 
 	public AbstractChromatogramEditor(DataType dataType, Composite parent, MPart part, MDirtyable dirtyable, ProcessSupplierContext processSupplierContext, Shell shell) {
 
-		super(TOPIC);
+		super(TOPIC_CHROMATOGRAM);
 		//
 		this.dataType = dataType;
 		this.part = part;
@@ -164,34 +165,15 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 		notifications.removeObjectChangedListener(updateMenuListener);
 		measurementNotification.removeObjectChangedListener(updateMeasurementResult);
 		//
-		if(eventBroker != null) {
-			DisplayUtils.getDisplay().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-
-					eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION, null);
-				}
-			});
-			//
-			DisplayUtils.getDisplay().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-
-					eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION, null);
-				}
-			});
-			//
-			DisplayUtils.getDisplay().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-
-					eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_SELECTION, null);
-				}
-			});
-		}
+		IChromatogramSelection<?, ?> chromatogramSelection = null;
+		UpdateNotifierUI.update(Display.getDefault(), chromatogramSelection);
+		//
+		IPeak peak = null;
+		UpdateNotifierUI.update(Display.getDefault(), peak);
+		//
+		IScan scan = null;
+		UpdateNotifierUI.update(Display.getDefault(), scan);
+		//
 		partSupport.closePart(part);
 	}
 
@@ -303,6 +285,12 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 			} else if(object instanceof IPeak) {
 				extendedChromatogramUI.updateSelectedPeak();
 				return true;
+			} else {
+				if(TOPIC_EDITOR_UPDATE.equals(topic)) {
+					logger.info("Update the chromatogram editor: " + object);
+					extendedChromatogramUI.update();
+					return true;
+				}
 			}
 		}
 		//
@@ -312,7 +300,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 	@Override
 	protected boolean isUpdateTopic(String topic) {
 
-		return TOPIC.equals(topic) || TOPIC_SCAN.equals(topic) || TOPIC_PEAK.equals(topic);
+		return TOPIC_CHROMATOGRAM.equals(topic) || TOPIC_SCAN.equals(topic) || TOPIC_PEAK.equals(topic) || TOPIC_EDITOR_UPDATE.equals(topic);
 	}
 
 	private void processChromatogram(IChromatogramSelection chromatogramSelection) {

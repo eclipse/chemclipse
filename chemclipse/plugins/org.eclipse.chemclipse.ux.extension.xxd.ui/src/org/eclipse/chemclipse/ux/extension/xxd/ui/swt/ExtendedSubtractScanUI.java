@@ -27,12 +27,11 @@ import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
@@ -355,16 +354,6 @@ public class ExtendedSubtractScanUI extends Composite implements IExtendedPartUI
 
 	private void fireUpdateEvent(Display display) {
 
-		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-		if(eventBroker != null) {
-			display.asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-
-					eventBroker.send(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, true);
-				}
-			});
-		}
+		UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, true);
 	}
 }

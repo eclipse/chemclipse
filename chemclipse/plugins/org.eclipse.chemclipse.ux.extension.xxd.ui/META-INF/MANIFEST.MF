@@ -91,9 +91,12 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.chemclipse.xxd.model;bundle-version="0.8.0",
  org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract;bundle-version="0.8.0",
  org.apache.commons.lang3;bundle-version="3.1.0",
- org.eclipse.emf.ecore;bundle-version="2.14.0"
+ org.eclipse.emf.ecore;bundle-version="2.14.0",
+ org.eclipse.chemclipse.progress;bundle-version="0.9.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Service-Component: OSGI-INF/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorProcessTypeSupplier.xml
+Service-Component: OSGI-INF/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorProcessTypeSupplier.xml,
+ OSGI-INF/undoOperationHandler.xml,
+ OSGI-INF/redoOperationHandler.xml
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.annotation;version="[1.0.0,2.0.0)",
  javax.inject;version="1.0.0",

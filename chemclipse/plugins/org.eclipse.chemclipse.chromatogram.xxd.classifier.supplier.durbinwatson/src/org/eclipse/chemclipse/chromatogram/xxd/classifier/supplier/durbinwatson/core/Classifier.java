@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2019 Lablicate GmbH.
+ * Copyright (c) 2015, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -32,6 +32,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class Classifier extends AbstractChromatogramClassifier {
 
 	public Classifier() {
+
 		super(DataType.MSD, DataType.WSD, DataType.CSD);
 	}
 
@@ -49,7 +50,7 @@ public class Classifier extends AbstractChromatogramClassifier {
 			DurbinWatsonProcessor durbinWatsonProcessor = new DurbinWatsonProcessor();
 			IDurbinWatsonClassifierResult durbinWatsonClassifierResult = new DurbinWatsonClassifierResult(ResultStatus.OK, "The chromatogram has been classified.");
 			durbinWatsonProcessor.run(chromatogramSelection, classifierSettings, durbinWatsonClassifierResult, monitor);
-			IMeasurementResult measurementResult = new MeasurementResult(IChromatogramResultDurbinWatson.NAME, IChromatogramResultDurbinWatson.IDENTIFIER, "This is the Durbin-Watson classifier result.", durbinWatsonClassifierResult);
+			IMeasurementResult<?> measurementResult = new MeasurementResult(IChromatogramResultDurbinWatson.NAME, IChromatogramResultDurbinWatson.IDENTIFIER, "This is the Durbin-Watson classifier result.", durbinWatsonClassifierResult);
 			chromatogramSelection.getChromatogram().addMeasurementResult(measurementResult);
 			processingInfo.setProcessingResult(durbinWatsonClassifierResult);
 		}

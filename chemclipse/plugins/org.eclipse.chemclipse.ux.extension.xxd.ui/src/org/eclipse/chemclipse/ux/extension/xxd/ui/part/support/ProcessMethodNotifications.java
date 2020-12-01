@@ -30,7 +30,7 @@ public class ProcessMethodNotifications extends AbstractNotifications<IProcessMe
 		@Override
 		public void handleEvent(Event event) {
 
-			created((IProcessMethod)event.getProperty(IChemClipseEvents.IEVENTBROKER_DATA));
+			created((IProcessMethod)event.getProperty(IChemClipseEvents.EVENT_BROKER_DATA));
 		}
 	};
 	//
@@ -39,7 +39,7 @@ public class ProcessMethodNotifications extends AbstractNotifications<IProcessMe
 		@Override
 		public void handleEvent(Event event) {
 
-			select((IProcessMethod)event.getProperty(IChemClipseEvents.IEVENTBROKER_DATA));
+			select((IProcessMethod)event.getProperty(IChemClipseEvents.EVENT_BROKER_DATA));
 		}
 	};
 	//
@@ -48,7 +48,7 @@ public class ProcessMethodNotifications extends AbstractNotifications<IProcessMe
 		@Override
 		public void handleEvent(Event event) {
 
-			updated((IProcessMethod)event.getProperty(IChemClipseEvents.IEVENTBROKER_DATA), (IProcessMethod)event.getProperty(IChemClipseEvents.PROPERTY_METHOD_OLD_OBJECT));
+			updated((IProcessMethod)event.getProperty(IChemClipseEvents.EVENT_BROKER_DATA), (IProcessMethod)event.getProperty(IChemClipseEvents.PROPERTY_METHOD_OLD_OBJECT));
 		}
 	};
 

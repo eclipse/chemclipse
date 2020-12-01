@@ -15,10 +15,9 @@ import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.ChromatogramSelectionSupport;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.selection.MoveDirection;
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.IKeyboardSupport;
@@ -57,13 +56,12 @@ public class ScanSelectionArrowKeyHandler extends AbstractHandledEventProcessor 
 	@Override
 	public void handleEvent(BaseChart baseChart, Event event) {
 
-		handleControlScanSelection(keyCode);
+		handleControlScanSelection(event.display, keyCode);
 	}
 
-	@SuppressWarnings("rawtypes")
-	protected void handleControlScanSelection(int keyCode) {
+	protected void handleControlScanSelection(Display display, int keyCode) {
 
-		IChromatogramSelection chromatogramSelection = extendedChromatogramUI.getChromatogramSelection();
+		IChromatogramSelection<?, ?> chromatogramSelection = extendedChromatogramUI.getChromatogramSelection();
 		if(chromatogramSelection != null) {
 			/*
 			 * Select the next or previous scan.
@@ -78,11 +76,7 @@ public class ScanSelectionArrowKeyHandler extends AbstractHandledEventProcessor 
 			 * Set and fire an update.
 			 */
 			IScan selectedScan = chromatogramSelection.getChromatogram().getScan(scanNumber);
-			//
-			IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-			if(eventBroker != null) {
-				eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, selectedScan);
-			}
+			UpdateNotifierUI.update(display, selectedScan);
 			//
 			if(selectedScan != null) {
 				/*

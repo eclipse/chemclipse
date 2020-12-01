@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.manual
 Bundle-ManifestVersion: 2
-Bundle-Name: Manual
+Bundle-Name: Manual Peak Identification
 Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.manual
 Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.manual.Activator

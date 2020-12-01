@@ -29,15 +29,12 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.GenericSupplierEd
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.e4.core.contexts.IEclipseContext;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Composite;
 
 public class DataExplorerPart {
 
-	@Inject
-	private IEventBroker broker;
 	@Inject
 	private IEclipseContext context;
 	@Inject
@@ -49,7 +46,7 @@ public class DataExplorerPart {
 	@PostConstruct
 	public void init(Composite parent, MPart part, IEclipseContext eclipseContext) {
 
-		dataExplorerUI = new DataExplorerUI(parent, broker, preferenceStore);
+		dataExplorerUI = new DataExplorerUI(parent, preferenceStore);
 		setSupplierFileEditorSupport();
 	}
 

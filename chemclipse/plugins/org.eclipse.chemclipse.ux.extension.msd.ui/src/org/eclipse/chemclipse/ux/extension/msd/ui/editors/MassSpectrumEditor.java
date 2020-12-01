@@ -28,8 +28,10 @@ import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.converter.exceptions.NoChromatogramConverterAvailableException;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.notifier.UpdateNotifier;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
 import org.eclipse.chemclipse.msd.converter.exceptions.NoMassSpectrumConverterAvailableException;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
@@ -37,7 +39,6 @@ import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
-import org.eclipse.chemclipse.msd.model.notifier.MassSpectrumSelectionUpdateNotifier;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
@@ -45,6 +46,7 @@ import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.MassSpectrumImportRunnable;
 import org.eclipse.chemclipse.ux.extension.msd.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.ux.extension.msd.ui.swt.IMassSpectrumChart;
@@ -65,6 +67,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.osgi.service.event.Event;
@@ -117,15 +120,15 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 		 * Fire an update if a loaded mass spectrum has been selected.
 		 */
 		if(massSpectrum != null) {
-			eventBroker.post(IChemClipseEvents.TOPIC_SCAN_MSD_UPDATE_SELECTION, massSpectrum);
-			MassSpectrumSelectionUpdateNotifier.fireUpdateChange(massSpectrum, true);
+			UpdateNotifier.update(massSpectrum);
 		}
 	}
 
 	@PreDestroy
 	private void preDestroy() {
 
-		eventBroker.post(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION, null);
+		IScan scan = null;
+		UpdateNotifierUI.update(Display.getDefault(), scan);
 		/*
 		 * Remove the editor from the listed parts.
 		 */
@@ -376,7 +379,7 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 
 	public void registerEvents() {
 
-		registerEvent(IChemClipseEvents.TOPIC_SCAN_MSD_UPDATE_SELECTION, IChemClipseEvents.PROPERTY_SCAN_SELECTION);
+		registerEvent(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, IChemClipseEvents.EVENT_BROKER_DATA);
 	}
 
 	public void updateObjects(List<Object> objects, String topic) {

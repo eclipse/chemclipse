@@ -65,6 +65,9 @@ public class ScanIdentifierUI extends Composite {
 	public void runIdentification(Display display, IScanMSD scanMSD, boolean update) {
 
 		if(scanMSD != null) {
+			/*
+			 * Get mass spectrum.
+			 */
 			IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
 			IScanMSD massSpectrum = (optimizedMassSpectrum != null) ? optimizedMassSpectrum : scanMSD;
 			/*
@@ -78,7 +81,7 @@ public class ScanIdentifierUI extends Composite {
 				try {
 					monitor.run(true, true, runnable);
 					if(update) {
-						fireUpdate();
+						fireUpdate(display);
 					}
 				} catch(InvocationTargetException e1) {
 					logger.warn(e1);
@@ -171,10 +174,10 @@ public class ScanIdentifierUI extends Composite {
 		return button;
 	}
 
-	private void fireUpdate() {
+	private void fireUpdate(Display display) {
 
 		if(updateListener != null) {
-			updateListener.update();
+			updateListener.update(display);
 		}
 	}
 }

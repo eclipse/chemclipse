@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -26,9 +26,11 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class PreferencePageWSD extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePageWSD() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("WSD");
+		setTitle("WSD");
+		setDescription("");
 	}
 
 	/**

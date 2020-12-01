@@ -56,7 +56,7 @@ public class PeakDetectorCSD extends BasePeakDetector implements IPeakDetectorCS
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
-	public IProcessingInfo detect(IChromatogramSelectionCSD chromatogramSelection, IPeakDetectorSettingsCSD detectorSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<?> detect(IChromatogramSelectionCSD chromatogramSelection, IPeakDetectorSettingsCSD detectorSettings, IProgressMonitor monitor) {
 
 		/*
 		 * Check whether the chromatogram selection is null or not.
@@ -89,9 +89,8 @@ public class PeakDetectorCSD extends BasePeakDetector implements IPeakDetectorCS
 		return processingInfo;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public IProcessingInfo detect(IChromatogramSelectionCSD chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<?> detect(IChromatogramSelectionCSD chromatogramSelection, IProgressMonitor monitor) {
 
 		PeakDetectorSettingsCSD peakDetectorSettings = PreferenceSupplier.getPeakDetectorSettingsCSD();
 		return detect(chromatogramSelection, peakDetectorSettings, monitor);

@@ -18,13 +18,6 @@
       </page>
    </extension>
    <extension
-         point="org.eclipse.help.toc">
-      <toc
-            file="toc_peakquantifier.xml">
-      </toc>
-   </extension>
-   
-   <extension
          point="org.eclipse.chemclipse.chromatogram.msd.quantifier.peakQuantifierSupplier">
       <PeakQuantifierSupplier
             description="Add peaks to the DB (ESTD)"
@@ -33,6 +26,5 @@
             peakQuantifierName="Add Peaks to DB (ESTD)"
             peakQuantifierSettings="org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.settings.PeakDatabaseSettings">
       </PeakQuantifierSupplier>           
-   </extension>   
-   
+   </extension>
 </plugin>

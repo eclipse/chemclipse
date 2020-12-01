@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -32,7 +32,7 @@ public class PathResolver {
 	 */
 	public static String getAbsolutePath(String string) {
 
-		Bundle bundle = Platform.getBundle(Activator.getContext().getBundle().getSymbolicName());
+		Bundle bundle = Platform.getBundle(Activator.getDefault().getBundle().getSymbolicName());
 		IPath path = new Path(string);
 		URL url = FileLocator.find(bundle, path, null);
 		try {

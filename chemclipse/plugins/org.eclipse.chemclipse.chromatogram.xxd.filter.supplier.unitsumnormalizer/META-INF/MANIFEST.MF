@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer
 Bundle-ManifestVersion: 2
-Bundle-Name: Unitsumnormalizer
+Bundle-Name: Unit Sum Normalizer
 Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer;singleton:=true
 Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer.Activator

@@ -14,10 +14,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swtchart.extensions.core.BaseChart;
@@ -67,18 +64,7 @@ public class ScanSelectionHandler extends AbstractHandledEventProcessor implemen
 				//
 				chromatogramSelection.setSelectedScan(scan);
 				extendedChromatogramUI.updateSelectedScan();
-				//
-				IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-				if(eventBroker != null) {
-					DisplayUtils.getDisplay().asyncExec(new Runnable() {
-
-						@Override
-						public void run() {
-
-							eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scan);
-						}
-					});
-				}
+				UpdateNotifierUI.update(event.display, scan);
 			}
 		}
 	}

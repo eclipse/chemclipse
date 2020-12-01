@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -23,7 +23,7 @@ public class WncResultsContentProvider implements IStructuredContentProvider {
 	public Object[] getElements(Object inputElement) {
 
 		if(inputElement instanceof IMeasurementResult) {
-			IMeasurementResult measurementResult = (IMeasurementResult)inputElement;
+			IMeasurementResult<?> measurementResult = (IMeasurementResult<?>)inputElement;
 			Object object = measurementResult.getResult();
 			if(object instanceof IWncClassifierResult) {
 				IWncIons wncIons = ((IWncClassifierResult)object).getWNCIons();

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -37,10 +37,11 @@ public class AddPeaksESTD extends AbstractPeakQuantifier implements IPeakQuantif
 
 	private class WizardRunnable implements Runnable {
 
-		private IProcessingInfo processingInfo;
+		private IProcessingInfo<?> processingInfo;
 		private List<IPeak> peaks;
 
-		public WizardRunnable(IProcessingInfo processingInfo, List<IPeak> peaks) {
+		public WizardRunnable(IProcessingInfo<?> processingInfo, List<IPeak> peaks) {
+
 			this.processingInfo = processingInfo;
 			this.peaks = peaks;
 		}
@@ -62,9 +63,9 @@ public class AddPeaksESTD extends AbstractPeakQuantifier implements IPeakQuantif
 	}
 
 	@Override
-	public IProcessingInfo quantify(List<IPeak> peaks, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<?> quantify(List<IPeak> peaks, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		if(peakQuantifierSettings instanceof PeakDatabaseSettings) {
 			Shell shell = DisplayUtils.getShell();
 			if(shell != null) {
@@ -85,7 +86,7 @@ public class AddPeaksESTD extends AbstractPeakQuantifier implements IPeakQuantif
 	}
 
 	@Override
-	public IProcessingInfo quantify(IPeak peak, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<?> quantify(IPeak peak, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor) {
 
 		List<IPeak> peaks = new ArrayList<IPeak>();
 		peaks.add(peak);
@@ -93,7 +94,7 @@ public class AddPeaksESTD extends AbstractPeakQuantifier implements IPeakQuantif
 	}
 
 	@Override
-	public IProcessingInfo quantify(IPeak peak, IProgressMonitor monitor) {
+	public IProcessingInfo<?> quantify(IPeak peak, IProgressMonitor monitor) {
 
 		List<IPeak> peaks = new ArrayList<IPeak>();
 		peaks.add(peak);
@@ -102,13 +103,13 @@ public class AddPeaksESTD extends AbstractPeakQuantifier implements IPeakQuantif
 	}
 
 	@Override
-	public IProcessingInfo quantify(List<IPeak> peaks, IProgressMonitor monitor) {
+	public IProcessingInfo<?> quantify(List<IPeak> peaks, IProgressMonitor monitor) {
 
 		PeakDatabaseSettings peakDatabaseSettings = PreferenceSupplier.getPeakDatabaseSettings();
 		return quantify(peaks, peakDatabaseSettings, monitor);
 	}
 
-	private void addPeaks(List<IPeak> peaks, Shell shell, IProcessingInfo processingInfo) {
+	private void addPeaks(List<IPeak> peaks, Shell shell, IProcessingInfo<?> processingInfo) {
 
 		AddPeaksWizardESTD wizard = new AddPeaksWizardESTD(peaks);
 		WizardDialog dialog = new WizardDialog(shell, wizard);

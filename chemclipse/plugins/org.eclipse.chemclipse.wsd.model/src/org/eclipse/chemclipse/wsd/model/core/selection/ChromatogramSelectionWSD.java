@@ -16,13 +16,13 @@ package org.eclipse.chemclipse.wsd.model.core.selection;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
+import org.eclipse.chemclipse.model.notifier.UpdateNotifier;
 import org.eclipse.chemclipse.model.selection.AbstractChromatogramSelection;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.core.support.MarkedWavelengths;
-import org.eclipse.chemclipse.wsd.model.notifier.ChromatogramSelectionWSDUpdateNotifier;
 
 @SuppressWarnings("rawtypes")
 public class ChromatogramSelectionWSD extends AbstractChromatogramSelection<IChromatogramPeakWSD, IChromatogramWSD> implements IChromatogramSelectionWSD {
@@ -113,7 +113,7 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection<IChr
 		 * Fire an update.
 		 */
 		if(fireUpdate) {
-			ChromatogramSelectionWSDUpdateNotifier.fireUpdateChange(this, false);
+			UpdateNotifier.update(this);
 		}
 	}
 
@@ -151,7 +151,7 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection<IChr
 			 * Fire update change if necessary.
 			 */
 			if(update) {
-				ChromatogramSelectionWSDUpdateNotifier.fireUpdateChange(this, false);
+				UpdateNotifier.update(this);
 			}
 		}
 	}
@@ -179,7 +179,7 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection<IChr
 	@Override
 	public void fireUpdateChange(boolean forceReload) {
 
-		ChromatogramSelectionWSDUpdateNotifier.fireUpdateChange(this, forceReload);
+		UpdateNotifier.update(this);
 	}
 
 	@Override

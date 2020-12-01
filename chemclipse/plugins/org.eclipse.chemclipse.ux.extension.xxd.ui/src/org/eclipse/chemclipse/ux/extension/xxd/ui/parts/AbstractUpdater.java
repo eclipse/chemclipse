@@ -15,11 +15,11 @@ import java.util.List;
 
 import javax.annotation.PreDestroy;
 
+import org.eclipse.chemclipse.model.notifier.UpdateNotifier;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.IDataUpdateListener;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.swt.widgets.Composite;
 
@@ -78,10 +78,7 @@ public abstract class AbstractUpdater<T extends Composite> {
 	protected void preDestroy() {
 
 		dataUpdateSupport.remove(updateListener);
-		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-		if(eventBroker != null) {
-			eventBroker.send(IChemClipseEvents.TOPIC_PART_CLOSED, getClass().getSimpleName());
-		}
+		UpdateNotifier.update(IChemClipseEvents.TOPIC_PART_CLOSED, getClass().getSimpleName());
 	}
 
 	protected void setControl(T control) {

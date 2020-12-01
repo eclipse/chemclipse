@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui
 Bundle-ManifestVersion: 2
-Bundle-Name: Ui
+Bundle-Name: Peak Quantitation UI
 Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui;singleton:=true
 Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.chromatogram.msd.quantitation.supplier.chemclipse.ui.Activator
@@ -43,11 +43,3 @@ Bundle-ActivationPolicy: lazy
 Bundle-Vendor: ChemClipse
 Import-Package: javax.annotation;version="1.1.0",
  org.osgi.service.event;version="1.3.0"
-Service-Component: OSGI-INF/quantifyPeakHandlerESTD.xml,
- OSGI-INF/quantifyPeaksHandlerESTD.xml,
- OSGI-INF/quantifyPeakHandlerISTD_MSD.xml,
- OSGI-INF/quantifyPeaksHandlerISTD_MSD.xml,
- OSGI-INF/quantifyPeakHandlerISTD_CSD.xml,
- OSGI-INF/quantifyPeaksHandlerISTD_CSD.xml, 
- OSGI-INF/addPeakHandlerESTD.xml,
- OSGI-INF/addPeaksHandlerESTD.xml

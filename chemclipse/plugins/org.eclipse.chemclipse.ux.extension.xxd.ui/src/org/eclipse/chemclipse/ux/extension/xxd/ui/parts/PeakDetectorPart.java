@@ -23,7 +23,7 @@ import org.eclipse.swt.widgets.Composite;
 
 public class PeakDetectorPart extends AbstractPart<ExtendedPeakDetectorUI> {
 
-	private static final String TOPIC = IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION;
+	private static final String TOPIC = IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION;
 
 	@Inject
 	public PeakDetectorPart(Composite parent) {
@@ -65,7 +65,7 @@ public class PeakDetectorPart extends AbstractPart<ExtendedPeakDetectorUI> {
 
 	private boolean isUnloadEvent(String topic) {
 
-		if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION)) {
+		if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_SELECTION)) {
 			return true;
 		}
 		return false;

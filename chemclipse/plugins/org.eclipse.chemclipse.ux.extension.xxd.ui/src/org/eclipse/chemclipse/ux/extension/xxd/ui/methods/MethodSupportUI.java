@@ -35,10 +35,12 @@ import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.swt.ui.components.IMethodListener;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PreferencesConfig;
@@ -70,11 +72,11 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 	//
 	private ComboViewer comboViewerMethods;
 	private Button buttonAddMethod;
-	private Button buttonCopyMethod;
 	private Button buttonEditMethod;
-	private Button buttonExecuteMethod;
+	private Button buttonCopyMethod;
 	private Button buttonDeleteMethod;
 	private Button buttonMethodDirectory;
+	private Button buttonExecuteMethod;
 	//
 	private IMethodListener methodListener = null;
 	private SupplierEditorSupport supplierEditorSupport = new SupplierEditorSupport(DataType.MTH, () -> Activator.getDefault().getEclipseContext());
@@ -349,6 +351,7 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 				Object object = comboViewerMethods.getStructuredSelection().getFirstElement();
 				if(object instanceof IProcessMethod) {
 					runMethod((IProcessMethod)object, e.display.getActiveShell());
+					UpdateNotifierUI.update(e.display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "The process method has been applied.");
 				}
 			}
 		});
@@ -474,7 +477,7 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 		if(methodListener != null && processMethod != null) {
 			try {
 				ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
-				dialog.run(false, false, new IRunnableWithProgress() {
+				dialog.run(true, false, new IRunnableWithProgress() {
 
 					@Override
 					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {

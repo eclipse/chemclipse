@@ -1,8 +1,0 @@
-<?xml version="1.0"?>
-<component name="org.eclipse.chemclipse.ux.extension.ui.definitions.ChromatogramTypeWSD">
-   <implementation class="org.eclipse.chemclipse.ux.extension.ui.definitions.ChromatogramType" />
-   <property name="event.topics" value="chromatogram/wsd/update/chromatogramselection" />
-   <service>
-      <provide interface="org.osgi.service.event.EventHandler" />
-   </service>
-</component>

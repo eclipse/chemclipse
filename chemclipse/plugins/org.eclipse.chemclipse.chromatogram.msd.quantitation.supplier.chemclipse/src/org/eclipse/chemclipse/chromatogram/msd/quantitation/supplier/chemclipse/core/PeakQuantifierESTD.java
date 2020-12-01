@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -29,13 +29,13 @@ public class PeakQuantifierESTD extends AbstractPeakQuantifier implements IPeakQ
 	private PeakQuantitationCalculatorESTD calculatorESTD = new PeakQuantitationCalculatorESTD();
 
 	@Override
-	public IProcessingInfo quantify(List<IPeak> peaks, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<?> quantify(List<IPeak> peaks, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor) {
 
 		return calculatorESTD.quantify(peaks, peakQuantifierSettings, monitor);
 	}
 
 	@Override
-	public IProcessingInfo quantify(IPeak peak, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<?> quantify(IPeak peak, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor) {
 
 		List<IPeak> peaks = new ArrayList<IPeak>();
 		peaks.add(peak);
@@ -43,7 +43,7 @@ public class PeakQuantifierESTD extends AbstractPeakQuantifier implements IPeakQ
 	}
 
 	@Override
-	public IProcessingInfo quantify(IPeak peak, IProgressMonitor monitor) {
+	public IProcessingInfo<?> quantify(IPeak peak, IProgressMonitor monitor) {
 
 		List<IPeak> peaks = new ArrayList<IPeak>();
 		peaks.add(peak);
@@ -52,7 +52,7 @@ public class PeakQuantifierESTD extends AbstractPeakQuantifier implements IPeakQ
 	}
 
 	@Override
-	public IProcessingInfo quantify(List<IPeak> peaks, IProgressMonitor monitor) {
+	public IProcessingInfo<?> quantify(List<IPeak> peaks, IProgressMonitor monitor) {
 
 		PeakQuantifierSettings peakQuantifierSettings = PreferenceSupplier.getPeakQuantifierSettings();
 		return quantify(peaks, peakQuantifierSettings, monitor);

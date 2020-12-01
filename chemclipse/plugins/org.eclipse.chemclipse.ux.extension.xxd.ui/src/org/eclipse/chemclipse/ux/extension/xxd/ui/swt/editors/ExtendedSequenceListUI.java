@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSupplier;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.MessageProvider;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
@@ -174,7 +175,6 @@ public class ExtendedSequenceListUI extends Composite implements IExtendedPartUI
 			public void execute(IProcessMethod processMethod, IProgressMonitor monitor) {
 
 				IProcessingInfo<IChromatogramSelection<?, ?>> processingInfo = new ProcessingInfo<>();
-				//
 				TableItem[] tableItems = sequenceListUI.getTable().getItems();
 				//
 				for(TableItem tableItem : tableItems) {
@@ -202,11 +202,23 @@ public class ExtendedSequenceListUI extends Composite implements IExtendedPartUI
 					}
 				}
 				//
-				ProcessingInfoPartSupport.getInstance().update(processingInfo, true);
+				updateResult(processingInfo);
 			}
 		});
 		//
 		return methodSupportUI;
+	}
+
+	public void updateResult(MessageProvider processingInfo) {
+
+		getDisplay().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+
+				ProcessingInfoPartSupport.getInstance().update(processingInfo, true);
+			}
+		});
 	}
 
 	private void addSequenceRecordInformation(ISequenceRecord sequenceRecord, IMeasurement measurement) {

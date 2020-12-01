@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding
 Bundle-ManifestVersion: 2
-Bundle-Name: Backfolding Plug-in
+Bundle-Name: Backfolding
 Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding;singleton:=true
 Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.Activator

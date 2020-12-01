@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda
 Bundle-ManifestVersion: 2
-Bundle-Name: Coda Plug-in
+Bundle-Name: CODA
 Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda;singleton:=true
 Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.Activator

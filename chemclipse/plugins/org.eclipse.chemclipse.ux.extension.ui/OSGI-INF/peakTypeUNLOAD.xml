@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<component name="org.eclipse.chemclipse.ux.extension.ui.definitions.PeakTypeUNLOAD">
+   <implementation class="org.eclipse.chemclipse.ux.extension.ui.definitions.PeakType" />
+   <property name="event.topics" value="peak/xxd/unload/selection" />
+   <service>
+      <provide interface="org.osgi.service.event.EventHandler" />
+   </service>
+</component>

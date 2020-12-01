@@ -20,11 +20,9 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -42,8 +40,6 @@ public class ExtendedScanInfoUI extends Composite implements IExtendedPartUI {
 	private Composite toolbarInfo;
 	private Label labelInfo;
 	private ScanInfoListUI scanListUI;
-	//
-	private IEventBroker eventBroker = Activator.getDefault().getEventBroker();
 
 	public ExtendedScanInfoUI(Composite parent, int style) {
 
@@ -147,16 +143,7 @@ public class ExtendedScanInfoUI extends Composite implements IExtendedPartUI {
 				IStructuredSelection structuredSelection = scanInfoListUI.getStructuredSelection();
 				Object object = structuredSelection.getFirstElement();
 				if(object instanceof IScanMSD) {
-					if(eventBroker != null) {
-						table.getDisplay().asyncExec(new Runnable() {
-
-							@Override
-							public void run() {
-
-								eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, object);
-							}
-						});
-					}
+					UpdateNotifierUI.update(e.display, (IScanMSD)object);
 				}
 			}
 		});

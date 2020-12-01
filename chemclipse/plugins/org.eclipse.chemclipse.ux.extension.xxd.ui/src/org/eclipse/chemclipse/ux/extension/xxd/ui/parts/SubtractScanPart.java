@@ -16,6 +16,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedSubtractScanUI;
@@ -47,9 +48,11 @@ public class SubtractScanPart extends AbstractPart<ExtendedSubtractScanUI> {
 				IScanMSD scanMSD = PreferenceSupplier.getSessionSubtractMassSpectrum();
 				getControl().update(scanMSD);
 				return true;
-			} else if(IChemClipseEvents.TOPIC_CHROMATOGRAM_MSD_UPDATE_CHROMATOGRAM_SELECTION.equals(topic)) {
-				getControl().update(object);
-				return true;
+			} else if(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION.equals(topic)) {
+				if(object instanceof IChromatogramSelectionMSD) {
+					getControl().update(object);
+					return true;
+				}
 			} else {
 				getControl().update(null);
 				return true;

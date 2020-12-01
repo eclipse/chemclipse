@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -42,7 +42,7 @@ public class FirstDerivativePeakDetector_1_ITest extends TestCase {
 		super.setUp();
 		file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_OP17760));
 		IProcessingInfo<IChromatogramMSD> processingInfo = ChromatogramConverterMSD.getInstance().convert(file, new NullProgressMonitor());
-		chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
+		chromatogram = processingInfo.getProcessingResult();
 		peakDetector = new PeakDetectorMSD();
 		chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
 		peakDetectorSettings = new PeakDetectorSettingsMSD();

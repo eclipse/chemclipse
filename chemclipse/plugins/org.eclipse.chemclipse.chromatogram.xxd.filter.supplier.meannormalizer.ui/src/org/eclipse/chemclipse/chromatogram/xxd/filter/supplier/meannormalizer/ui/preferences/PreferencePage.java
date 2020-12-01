@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,9 +19,11 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePage() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Mean Normalizer Filter");
+		setTitle("Mean Normalizer");
+		setDescription("");
 	}
 
 	/**

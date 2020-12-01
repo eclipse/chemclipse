@@ -52,9 +52,9 @@ public class MoleculePart extends AbstractPart<ExtendedMoleculeUI> {
 				if(object instanceof ILibraryMassSpectrum) {
 					ILibraryMassSpectrum libraryMassSpectrum = (ILibraryMassSpectrum)object;
 					libraryInformation = libraryMassSpectrum.getLibraryInformation();
+					getControl().setInput(libraryInformation);
+					return true;
 				}
-				getControl().setInput(libraryInformation);
-				return true;
 			} else if(isIdentificationTargetTopic(topic)) {
 				/*
 				 * Identification Target

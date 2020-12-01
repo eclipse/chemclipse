@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin>
    <extension
-         id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.unitsumnormalizer.ui.modelContribution"
-         point="org.eclipse.e4.workbench.model">
-      <fragment
-            uri="fragment.e4xmi">
-      </fragment>
-   </extension>
-   <extension
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.chemclipse.chromatogram.filter.ui.preferences.filterPreferencePage"
@@ -16,11 +9,4 @@
             name="Unit Sum Normalizer">
       </page>
    </extension>
-   <extension
-         point="org.eclipse.help.toc">
-      <toc
-            file="toc_filter.xml">
-      </toc>
-   </extension>
-
 </plugin>

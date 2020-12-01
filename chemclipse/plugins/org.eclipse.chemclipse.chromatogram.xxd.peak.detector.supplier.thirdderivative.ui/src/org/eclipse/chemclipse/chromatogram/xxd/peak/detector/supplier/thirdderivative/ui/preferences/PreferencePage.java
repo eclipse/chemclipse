@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,19 +13,20 @@ package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderi
 
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative.ui.Activator;
-
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
-import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePage() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Third derivative peak detector.");
+		setTitle("Third Derivative Peak Detector");
+		setDescription("");
 	}
 
 	/**

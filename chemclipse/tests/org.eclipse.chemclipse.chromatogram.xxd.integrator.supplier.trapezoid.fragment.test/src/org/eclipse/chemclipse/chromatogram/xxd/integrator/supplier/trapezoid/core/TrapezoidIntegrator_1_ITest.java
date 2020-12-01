@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2020 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -58,7 +58,7 @@ public class TrapezoidIntegrator_1_ITest extends ChromatogramImportTestCase {
 		//
 		processingInfo = integrator.integrate(chromatogramSelection, combinedIntegrationSettings, new NullProgressMonitor());
 		try {
-			result = processingInfo.getProcessingResult(ICombinedIntegrationResult.class);
+			result = processingInfo.getProcessingResult();
 			results = result.getChromatogramIntegrationResults();
 			integrationResult = results.getChromatogramIntegrationResult(0);
 			assertEquals("Ion", AbstractIon.TIC_ION, integrationResult.getIon());

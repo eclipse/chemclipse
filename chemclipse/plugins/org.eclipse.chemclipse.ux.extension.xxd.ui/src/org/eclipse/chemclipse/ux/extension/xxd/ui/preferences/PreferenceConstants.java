@@ -367,11 +367,6 @@ public class PreferenceConstants extends ChartOptions {
 	/*
 	 * Chromatogram
 	 */
-	public static final String P_LEGACY_UPDATE_CHROMATOGRAM_MODUS = "legacyUpdateChromatogramModus";
-	public static final boolean DEF_LEGACY_UPDATE_CHROMATOGRAM_MODUS = true;
-	public static final String P_LEGACY_UPDATE_PEAK_MODUS = "legacyUpdatePeakModus";
-	public static final boolean DEF_LEGACY_UPDATE_PEAK_MODUS = true;
-	//
 	public static final String P_SHOW_RETENTION_INDEX_WITHOUT_DECIMALS = "showRetentionIndexWithoutDecimals";
 	public static final boolean DEF_SHOW_RETENTION_INDEX_WITHOUT_DECIMALS = true;
 	public static final String P_SHOW_AREA_WITHOUT_DECIMALS = "showAreaWithoutDecimals";

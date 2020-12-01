@@ -24,12 +24,11 @@ import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.PCRFileSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.PCRImportRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedPCRPlateUI;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.model.application.MApplication;
@@ -40,6 +39,7 @@ import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 public class PlateEditorPCR implements IChemClipseEditor {
@@ -188,32 +188,11 @@ public class PlateEditorPCR implements IChemClipseEditor {
 	private void updatePlate() {
 
 		extendedPCRPlateUI.update(plate);
-		//
-		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-		if(eventBroker != null) {
-			DisplayUtils.getDisplay().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-
-					eventBroker.send(IChemClipseEvents.TOPIC_PLATE_PCR_UPDATE_SELECTION, plate);
-				}
-			});
-		}
+		UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_PLATE_PCR_UPDATE_SELECTION, plate);
 	}
 
 	private void unloadPlate() {
 
-		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-		if(eventBroker != null) {
-			DisplayUtils.getDisplay().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-
-					eventBroker.send(IChemClipseEvents.TOPIC_PLATE_PCR_UNLOAD_SELECTION, null);
-				}
-			});
-		}
+		UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_PLATE_PCR_UNLOAD_SELECTION, null);
 	}
 }

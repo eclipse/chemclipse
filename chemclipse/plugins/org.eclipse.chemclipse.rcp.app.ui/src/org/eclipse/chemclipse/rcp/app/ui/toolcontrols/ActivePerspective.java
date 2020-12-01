@@ -54,7 +54,7 @@ public class ActivePerspective {
 
 				public void handleEvent(Event event) {
 
-					String perspectiveName = (String)event.getProperty(IChemClipseEvents.PROPERTY_PERSPECTIVE_NAME);
+					String perspectiveName = (String)event.getProperty(IChemClipseEvents.EVENT_BROKER_DATA);
 					setPerspectiveLabel(label, perspectiveName);
 				}
 			};

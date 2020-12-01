@@ -18,6 +18,7 @@ import java.util.List;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
+import org.eclipse.chemclipse.model.notifier.UpdateNotifier;
 import org.eclipse.chemclipse.model.selection.AbstractChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
@@ -27,7 +28,6 @@ import org.eclipse.chemclipse.msd.model.core.support.IMarkedIonTransitions;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIonTransitions;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
-import org.eclipse.chemclipse.msd.model.notifier.ChromatogramSelectionMSDUpdateNotifier;
 
 /**
  * You can define within a {@link ChromatogramSelectionMSD} instance a certain view
@@ -283,7 +283,7 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChr
 	public void fireUpdateChange(boolean forceReload) {
 
 		try {
-			ChromatogramSelectionMSDUpdateNotifier.fireUpdateChange(this, forceReload);
+			UpdateNotifier.update(this);
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

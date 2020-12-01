@@ -12,13 +12,11 @@
 package org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.editors;
 
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakIdentificationBatchJob;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.Activator;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.swt.ui.components.peak.PeakListUI;
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
-import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -131,10 +129,7 @@ public class ResultsPage implements IMultiEditorPage {
 					//
 					if(element instanceof IPeakMSD) {
 						IPeakMSD peakMSD = (IPeakMSD)element;
-						IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-						if(eventBroker != null) {
-							eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peakMSD);
-						}
+						UpdateNotifierUI.update(Display.getDefault(), peakMSD);
 					}
 				}
 			}

@@ -2,13 +2,6 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         id="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.thirdderivative.ui.modelContribution"
-         point="org.eclipse.e4.workbench.model">
-      <fragment
-            uri="fragment.e4xmi">
-      </fragment>
-   </extension>
-   <extension
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.chemclipse.chromatogram.msd.peak.detector.ui.preferences.peakDetectorPreferencePage"
@@ -17,11 +10,4 @@
             name="Third Derivative Peak Detector">
       </page>
    </extension>
-   <extension
-         point="org.eclipse.help.toc">
-      <toc
-            file="toc_peakdetector.xml">
-      </toc>
-   </extension>
-
 </plugin>
