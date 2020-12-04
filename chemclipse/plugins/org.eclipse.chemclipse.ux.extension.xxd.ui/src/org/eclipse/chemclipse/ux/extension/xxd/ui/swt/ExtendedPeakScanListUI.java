@@ -199,6 +199,11 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		}
 	}
 
+	public void refreshTableViewer() {
+
+		tableViewer.get().refresh(true);
+	}
+
 	private void createControl() {
 
 		setLayout(new GridLayout(1, true));

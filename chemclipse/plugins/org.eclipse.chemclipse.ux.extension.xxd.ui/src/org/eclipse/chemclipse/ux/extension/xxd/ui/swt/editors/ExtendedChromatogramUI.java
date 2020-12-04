@@ -545,9 +545,11 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		for(String key : peakLabelMarkerMap.keySet()) {
 			removeIdentificationLabelMarker(peakLabelMarkerMap, key);
 		}
+		//
 		for(String key : scanLabelMarkerMap.keySet()) {
 			removeIdentificationLabelMarker(scanLabelMarkerMap, key);
 		}
+		//
 		peakLabelMarkerMap.clear();
 		scanLabelMarkerMap.clear();
 	}

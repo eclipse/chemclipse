@@ -77,6 +77,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 	 */
 	private IEventBroker eventBroker;
 	//
+	private AtomicReference<Composite> toolbarMain = new AtomicReference<>();
 	private Button buttonToolbarInfo;
 	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
 	private Button buttonToolbarEdit;
@@ -88,7 +89,6 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 	private CLabel labelSubtract;
 	private CLabel labelOptimized;
 	//
-	private Button buttonIdentify;
 	private Button buttonCopyTraces;
 	private Button buttonSave;
 	private Button buttonDeleteOptimized;
@@ -221,7 +221,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		updateButtons();
 	}
 
-	private Composite createToolbarMain(Composite parent) {
+	private void createToolbarMain(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -233,15 +233,13 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
 		buttonToolbarTypes = createButtonToggleToolbar(composite, toolbarTypes, IMAGE_TYPES, TOOLTIP_TYPES);
 		buttonToolbarEdit = createButtonToggleToolbar(composite, toolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT);
-		buttonIdentify = createButtonIdentify(composite);
+		scanIdentifierUI = createScanIdentifierUI(composite);
 		buttonCopyTraces = createButtonCopyTracesClipboard(composite);
 		createResetButton(composite);
 		buttonSave = createSaveButton(composite);
 		buttonDeleteOptimized = createDeleteOptimizedButton(composite);
 		createSettingsButton(composite);
-		/*
-		 * TODO Move
-		 */
+		//
 		buttonToolbarEdit.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -253,7 +251,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 			}
 		});
 		//
-		return composite;
+		toolbarMain.set(composite);
 	}
 
 	private CLabel createInfoLabelEdit(Composite parent) {
@@ -332,11 +330,10 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		composite.setLayout(new GridLayout(3, false));
+		composite.setLayout(new GridLayout(2, false));
 		//
 		buttonSubtractOption = createButtonSubtractOption(composite);
 		scanFilterUI = createScanFilterUI(composite);
-		scanIdentifierUI = createScanIdentifierUI(composite);
 		//
 		toolbarEdit.set(composite);
 	}
@@ -392,19 +389,11 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 	private ScanIdentifierUI createScanIdentifierUI(Composite parent) {
 
 		ScanIdentifierUI scanIdentifierUI = new ScanIdentifierUI(parent, SWT.NONE);
-		scanIdentifierUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		//
 		scanIdentifierUI.setUpdateListener(new IUpdateListener() {
 
 			@Override
 			public void update(Display display) {
 
-				if(preferenceStore.getBoolean(PreferenceConstants.P_LEAVE_EDIT_AFTER_IDENTIFICATION)) {
-					setEditToolbarStatus(false);
-					setSubtractModus(display, false, false);
-					updateInfoLabels();
-				}
-				//
 				updateScan(scan);
 				UpdateNotifierUI.update(display, scan);
 				UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Scan Chart identification has been performed.");
@@ -543,34 +532,13 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 	private void updateButtons() {
 
 		boolean enabled = isMassSpectrum();
-		buttonIdentify.setEnabled(enabled);
+		//
+		scanIdentifierUI.setEnabled(enabled);
 		buttonCopyTraces.setEnabled(enabled);
 		buttonSave.setEnabled(enabled);
 		buttonDeleteOptimized.setEnabled(enabled && isOptimizedScan() ? true : false);
 		buttonSubtractOption.setEnabled(enabled);
 		scanFilterUI.setEnabled(enabled);
-		scanIdentifierUI.setEnabled(enabled);
-	}
-
-	private Button createButtonIdentify(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Identify the currently selected scan.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IDENTIFY_MASS_SPECTRUM, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				IScanMSD scanMSD = getScanMSD();
-				if(scanMSD != null) {
-					scanIdentifierUI.runIdentification(e.display, scanMSD, true);
-				}
-			}
-		});
-		//
-		return button;
 	}
 
 	private Button createButtonCopyTracesClipboard(Composite parent) {
@@ -627,6 +595,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 			public void apply(Display display) {
 
 				updateScan(scan);
+				scanIdentifierUI.updateIdentifier();
 			}
 		});
 	}

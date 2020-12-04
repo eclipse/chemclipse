@@ -25,7 +25,7 @@ import org.eclipse.swtchart.extensions.linecharts.LineChart;
 
 public class PreferenceConstants extends ChartOptions {
 
-	public static final String[][] PART_STACKS = new String[][]{//
+	public static final String[][] PART_STACKS = new String[][]{ //
 			{"--", PartSupport.PARTSTACK_NONE}, //
 			{"Left Top", PartSupport.PARTSTACK_LEFT_TOP}, //
 			{"Left Center", PartSupport.PARTSTACK_LEFT_CENTER}, //
@@ -35,7 +35,7 @@ public class PreferenceConstants extends ChartOptions {
 			{"Bottom Right", PartSupport.PARTSTACK_BOTTOM_RIGHT}//
 	};
 	//
-	public static final String[][] REFERENCE_LABELS = new String[][]{//
+	public static final String[][] REFERENCE_LABELS = new String[][]{ //
 			{ReferencesLabel.DEFAULT.getLabel(), ReferencesLabel.DEFAULT.name()}, //
 			{ReferencesLabel.NAME.getLabel(), ReferencesLabel.NAME.name()}, //
 			{ReferencesLabel.DATA_NAME.getLabel(), ReferencesLabel.DATA_NAME.name()}, //
@@ -211,12 +211,12 @@ public class PreferenceConstants extends ChartOptions {
 	public static final boolean DEF_SCAN_CHART_ENABLE_COMPRESS = false;
 	public static final String P_MAX_COPY_SCAN_TRACES = "maxCopyScanTraces";
 	public static final int DEF_MAX_COPY_SCAN_TRACES = DEF_SCAN_TRACES;
+	public static final String P_SCAN_IDENTIFER_MSD = "scanIdentifierMSD";
+	public static final String DEF_SCAN_IDENTIFER_MSD = "org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.unknown.massSpectrum"; // see -> org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file/plugin.xml
 	public static final String P_ENABLE_MULTI_SUBTRACT = "enableMultiSubtract";
 	public static final boolean DEF_ENABLE_MULTI_SUBTRACT = false;
 	public static final String P_SHOW_SUBTRACT_DIALOG = "showSubtractDialog";
 	public static final boolean DEF_SHOW_SUBTRACT_DIALOG = true;
-	public static final String P_LEAVE_EDIT_AFTER_IDENTIFICATION = "leaveEditAfterIdentification";
-	public static final boolean DEF_LEAVE_EDIT_AFTER_IDENTIFICATION = true;
 	//
 	public static final String P_TITLE_X_AXIS_MZ = "titleXAxisMZ";
 	public static final String DEF_TITLE_X_AXIS_MZ = "Ion [m/z]";

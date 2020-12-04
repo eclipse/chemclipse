@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2019 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +12,9 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
@@ -25,6 +27,7 @@ public class TargetsEditingSupport extends EditingSupport {
 	private String column;
 
 	public TargetsEditingSupport(ExtendedTableViewer tableViewer, String column) {
+
 		super(tableViewer);
 		this.column = column;
 		if(column.equals(TargetsLabelProvider.VERIFIED_MANUALLY)) {
@@ -115,6 +118,7 @@ public class TargetsEditingSupport extends EditingSupport {
 					break;
 			}
 			tableViewer.refresh();
+			UpdateNotifierUI.update(tableViewer.getTable().getDisplay(), IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "The target has been edited.");
 		}
 	}
 }

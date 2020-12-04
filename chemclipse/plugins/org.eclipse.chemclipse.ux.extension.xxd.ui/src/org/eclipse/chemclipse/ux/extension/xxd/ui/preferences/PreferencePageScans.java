@@ -16,6 +16,7 @@ import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEdit
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpinnerFieldEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ScanIdentifierUI;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
@@ -66,8 +67,8 @@ public class PreferencePageScans extends FieldEditorPreferencePage implements IW
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SCAN_CHART_ENABLE_COMPRESS, "Enable Compress", getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_SCAN_IDENTIFER_MSD, "Scan Identifier (MSD):", ScanIdentifierUI.getScanIdentifierMSD(), getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_ENABLE_MULTI_SUBTRACT, "Enable multi subtract modus", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_LEAVE_EDIT_AFTER_IDENTIFICATION, "Leave edit after identification", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_SUBTRACT_DIALOG, "Show subtract scan preferences dialog", getFieldEditorParent()));
 		addField(new SpinnerFieldEditor(PreferenceConstants.P_MAX_COPY_SCAN_TRACES, "Copy Traces", PreferenceConstants.MIN_TRACES, PreferenceConstants.MAX_TRACES, getFieldEditorParent()));
 		//

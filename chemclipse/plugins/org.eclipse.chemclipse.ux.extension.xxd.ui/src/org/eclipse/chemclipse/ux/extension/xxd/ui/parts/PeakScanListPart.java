@@ -16,6 +16,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
@@ -30,6 +31,7 @@ import org.eclipse.swt.widgets.Composite;
 
 public class PeakScanListPart extends AbstractPart<ExtendedPeakScanListUI> {
 
+	private static final Logger logger = Logger.getLogger(PeakScanListPart.class);
 	private static final String TOPIC = IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION;
 	private boolean linkWithEditor = true;
 
@@ -72,17 +74,21 @@ public class PeakScanListPart extends AbstractPart<ExtendedPeakScanListUI> {
 	protected boolean updateData(List<Object> objects, String topic) {
 
 		if(objects.size() == 1) {
+			Object object = objects.get(0);
 			if(isChromatogramUnloadEvent(topic)) {
 				getControl().updateChromatogramSelection(null);
 				return false;
 			} else {
 				if(isChromatogramTopic(topic)) {
-					Object object = objects.get(0);
 					if(object instanceof IChromatogramSelection) {
 						IChromatogramSelection<?, ?> chromatogramSelection = (IChromatogramSelection<?, ?>)object;
 						getControl().updateChromatogramSelection(chromatogramSelection);
 						return true;
 					}
+				} else if(isUpdateEditorTopic(topic)) {
+					logger.info(object);
+					getControl().refreshTableViewer();
+					return true;
 				}
 			}
 		}
@@ -93,7 +99,7 @@ public class PeakScanListPart extends AbstractPart<ExtendedPeakScanListUI> {
 	@Override
 	protected boolean isUpdateTopic(String topic) {
 
-		return TOPIC.equals(topic) || isChromatogramUnloadEvent(topic) || isChromatogramTopic(topic);
+		return TOPIC.equals(topic) || isChromatogramUnloadEvent(topic) || isChromatogramTopic(topic) || isUpdateEditorTopic(topic);
 	}
 
 	private boolean isChromatogramUnloadEvent(String topic) {
@@ -107,5 +113,10 @@ public class PeakScanListPart extends AbstractPart<ExtendedPeakScanListUI> {
 	private boolean isChromatogramTopic(String topic) {
 
 		return topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION);
+	}
+
+	private boolean isUpdateEditorTopic(String topic) {
+
+		return topic.equals(IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE);
 	}
 }

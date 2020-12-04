@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
@@ -75,6 +76,7 @@ public abstract class AbstractWriter {
 	private TargetExtendedComparator targetExtendedComparator;
 
 	public AbstractWriter() {
+
 		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
 	}
@@ -443,11 +445,21 @@ public abstract class AbstractWriter {
 		massSpectrumCopy.setRetentionTime(massSpectrum.getRetentionTime());
 		massSpectrumCopy.setRelativeRetentionTime(massSpectrum.getRelativeRetentionTime());
 		massSpectrumCopy.setRetentionIndex(massSpectrum.getRetentionIndex());
+		//
+		massSpectrumCopy.getTargets().addAll(massSpectrum.getTargets());
 		if(massSpectrum instanceof IRegularLibraryMassSpectrum) {
+			/*
+			 * Transfer the library information.
+			 */
 			IRegularLibraryMassSpectrum regularMassSpectrum = (IRegularLibraryMassSpectrum)massSpectrum;
 			massSpectrumCopy.setLibraryInformation(regularMassSpectrum.getLibraryInformation());
+		} else {
+			/*
+			 * Set the library information.
+			 */
+			ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(massSpectrum.getTargets());
+			massSpectrumCopy.setLibraryInformation(libraryInformation);
 		}
-		massSpectrumCopy.getTargets().addAll(massSpectrum.getTargets());
 		//
 		if(copyIons) {
 			for(IIon ion : massSpectrum.getIons()) {

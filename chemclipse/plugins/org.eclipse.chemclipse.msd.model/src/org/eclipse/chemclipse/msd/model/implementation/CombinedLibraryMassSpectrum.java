@@ -1,27 +1,27 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
- * 
- * All rights reserved.
- * This program and the accompanying materials are made available under the
- * terms of the Eclipse Public License v1.0 which accompanies this distribution,
- * and is available at http://www.eclipse.org/legal/epl-v10.html
+ * Copyright (c) 2020 Lablicate GmbH.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
-import org.eclipse.chemclipse.msd.model.core.AbstractCombinedMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.AbstractCombinedLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 
-public class CombinedMassSpectrum extends AbstractCombinedMassSpectrum implements ICombinedMassSpectrum {
+public class CombinedLibraryMassSpectrum extends AbstractCombinedLibraryMassSpectrum {
 
-	private static final long serialVersionUID = 7845524326973176571L;
+	private static final long serialVersionUID = 892855578774838614L;
 	private static final Logger logger = Logger.getLogger(CombinedMassSpectrum.class);
 
 	@Override

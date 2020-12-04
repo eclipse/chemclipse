@@ -26,11 +26,14 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverterSupport;
+import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
+import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
 import org.eclipse.chemclipse.msd.swt.ui.Activator;
 import org.eclipse.chemclipse.msd.swt.ui.internal.support.DatabaseExportRunnable;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
@@ -128,31 +131,37 @@ public class DatabaseFileSupport {
 
 		IMassSpectra massSpectra = new MassSpectra();
 		for(IPeakMSD peak : peaks) {
-			try {
-				/*
-				 * Make a deep copy.
-				 */
-				IPeakMassSpectrum peakMassSpectrum = peak.getExtractedMassSpectrum();
-				IScanMSD massSpectrum = peakMassSpectrum.makeDeepCopy();
-				for(IIdentificationTarget peakTarget : peak.getTargets()) {
-					try {
-						/*
-						 * Transfer the targets.
-						 */
-						ILibraryInformation libraryInformation = peakTarget.getLibraryInformation();
-						IComparisonResult comparisonResult = peakTarget.getComparisonResult();
-						IIdentificationTarget massSpectrumTarget = new IdentificationTarget(libraryInformation, comparisonResult);
-						massSpectrumTarget.setIdentifier(peakTarget.getIdentifier());
-						massSpectrumTarget.setManuallyVerified(peakTarget.isManuallyVerified());
-						massSpectrum.getTargets().add(massSpectrumTarget);
-					} catch(ReferenceMustNotBeNullException e1) {
-						logger.warn(e1);
-					}
+			/*
+			 * Make a deep copy.
+			 */
+			IPeakMassSpectrum peakMassSpectrum = peak.getExtractedMassSpectrum();
+			IScanMSD massSpectrum = new ScanMSD();
+			massSpectrum.setRetentionTime(peakMassSpectrum.getRetentionTime());
+			massSpectrum.setRetentionIndex(peakMassSpectrum.getRetentionIndex());
+			for(IIon ion : peakMassSpectrum.getIons()) {
+				try {
+					massSpectrum.addIon(new Ion(ion.getIon(), ion.getAbundance()));
+				} catch(Exception e) {
+					logger.warn(e);
 				}
-				massSpectra.addMassSpectrum(massSpectrum);
-			} catch(CloneNotSupportedException e) {
-				logger.warn(e);
 			}
+			//
+			for(IIdentificationTarget peakTarget : peak.getTargets()) {
+				try {
+					/*
+					 * Transfer the targets.
+					 */
+					ILibraryInformation libraryInformation = peakTarget.getLibraryInformation();
+					IComparisonResult comparisonResult = peakTarget.getComparisonResult();
+					IIdentificationTarget massSpectrumTarget = new IdentificationTarget(libraryInformation, comparisonResult);
+					massSpectrumTarget.setIdentifier(peakTarget.getIdentifier());
+					massSpectrumTarget.setManuallyVerified(peakTarget.isManuallyVerified());
+					massSpectrum.getTargets().add(massSpectrumTarget);
+				} catch(ReferenceMustNotBeNullException e1) {
+					logger.warn(e1);
+				}
+			}
+			massSpectra.addMassSpectrum(massSpectrum);
 		}
 		/*
 		 * Export the mass spectra.
@@ -181,10 +190,10 @@ public class DatabaseFileSupport {
 		if(massSpectra == null || massSpectra.size() == 0) {
 			return;
 		}
-		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
 		/*
 		 * Create the dialogue.
 		 */
+		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
 		dialog.setFilterPath(Activator.getDefault().getSettingsPath());
 		dialog.setFileName(fileName);
 		dialog.setText("Save Mass Spectra As...");

@@ -18,6 +18,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
@@ -26,13 +27,21 @@ import org.eclipse.chemclipse.msd.model.support.FilterSupport;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.IUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -42,23 +51,30 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableItem;
 
-@SuppressWarnings("rawtypes")
 public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedCombinedScanUI.class);
 	//
 	private static final int INDEX_CHART = 0;
 	private static final int INDEX_TABLE = 1;
+	private static final int INDEX_TARGETS = 2;
 	//
 	private Button buttonToolbarInfo;
 	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
 	private TabFolder tabFolder;
 	private ScanChartUI scanChartUI;
 	private ScanTableUI scanTableUI;
+	private AtomicReference<TargetsListUI> tableViewer = new AtomicReference<>();
+	private CLabel labelEdit;
+	private Button buttonLocked;
+	private ScanIdentifierUI scanIdentifierUI;
 	//
 	private IChromatogramSelectionMSD chromatogramSelection = null;
-	private IScanMSD scanMSD = null;
+	private IScanMSD combinedMassSpectrum = null;
+	private boolean locked = false;
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
 
@@ -76,24 +92,22 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 
 	public void update(Object object) {
 
-		chromatogramSelection = null;
-		scanMSD = null;
-		//
-		if(object instanceof IChromatogramSelectionMSD) {
-			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)object;
-			this.chromatogramSelection = chromatogramSelectionMSD;
-			boolean useNormalize = PreferenceSupplier.isUseNormalizedScan();
-			CalculationType calculationType = PreferenceSupplier.getCalculationType();
-			scanMSD = FilterSupport.getCombinedMassSpectrum(chromatogramSelectionMSD, null, useNormalize, calculationType);
+		if(!locked) {
+			chromatogramSelection = null;
+			combinedMassSpectrum = null;
+			//
+			if(object instanceof IChromatogramSelectionMSD) {
+				IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)object;
+				this.chromatogramSelection = chromatogramSelectionMSD;
+				boolean useNormalize = PreferenceSupplier.isUseNormalizedScan();
+				CalculationType calculationType = PreferenceSupplier.getCalculationType();
+				combinedMassSpectrum = FilterSupport.getCombinedMassSpectrum(chromatogramSelectionMSD, null, useNormalize, calculationType);
+			}
+			//
+			toolbarInfo.get().setText(getCombinedRangeInfo(object));
+			scanIdentifierUI.setInput(combinedMassSpectrum);
+			updateScan();
 		}
-		//
-		toolbarInfo.get().setText(getCombinedRangeInfo(object));
-		updateScan();
-	}
-
-	private void updateScan() {
-
-		updateScanData();
 	}
 
 	private void createControl() {
@@ -102,27 +116,34 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 		//
 		createToolbarMain(this);
 		createToolbarInfo(this);
-		createScanTabFolderSection(this);
+		createTabFolderSection(this);
 		//
 		initialize();
 	}
 
 	private void initialize() {
 
-		enableToolbar(toolbarInfo, buttonToolbarInfo, IMAGE_INFO, TOOLTIP_INFO, true);
+		/*
+		 * The space is limited, hence deactivate the info toolbar by default.
+		 */
+		enableToolbar(toolbarInfo, buttonToolbarInfo, IApplicationImage.IMAGE_INFO, TOOLTIP_INFO, false);
+		locked = false;
+		updateStatus();
 	}
 
 	private void createToolbarMain(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalAlignment = SWT.END;
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(3, false));
+		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		composite.setLayout(new GridLayout(7, false));
 		//
+		labelEdit = createInfoLabelEdit(composite);
 		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
-		createSaveButton(composite);
-		createSettingsButton(composite);
+		buttonLocked = createButtonLocked(composite);
+		scanIdentifierUI = createScanIdentifierUI(composite);
+		createButtonAddSubstract(composite);
+		createButtonSave(composite);
+		createButtonSettings(composite);
 	}
 
 	private void createToolbarInfo(Composite parent) {
@@ -133,7 +154,7 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 		toolbarInfo.set(informationUI);
 	}
 
-	private void createScanTabFolderSection(Composite parent) {
+	private void createTabFolderSection(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -147,12 +168,13 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				updateScanData();
+				updateScan();
 			}
 		});
 		//
 		createScanChart(tabFolder);
 		createScanTable(tabFolder);
+		createTargetsTable(tabFolder);
 	}
 
 	private void createScanChart(TabFolder tabFolder) {
@@ -180,7 +202,173 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 		scanTableUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
-	private Button createSaveButton(Composite parent) {
+	private void createTargetsTable(TabFolder tabFolder) {
+
+		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
+		tabItem.setText("Targets");
+		Composite composite = new Composite(tabFolder, SWT.NONE);
+		composite.setBackground(Colors.WHITE);
+		composite.setLayout(new GridLayout(1, true));
+		tabItem.setControl(composite);
+		//
+		TargetsListUI targetsListUI = new TargetsListUI(composite, SWT.BORDER);
+		targetsListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		targetsListUI.getControl().addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+
+				propagateTarget(e.display);
+			}
+		});
+		//
+		tableViewer.set(targetsListUI);
+	}
+
+	private void propagateTarget(Display display) {
+
+		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+		if(eventBroker != null) {
+			Table table = tableViewer.get().getTable();
+			int index = table.getSelectionIndex();
+			if(index >= 0) {
+				TableItem tableItem = table.getItem(index);
+				Object object = tableItem.getData();
+				if(object instanceof IIdentificationTarget) {
+					/*
+					 * First update the mass spectrum.
+					 */
+					IIdentificationTarget identificationTarget = (IIdentificationTarget)object;
+					if(combinedMassSpectrum != null) {
+						UpdateNotifierUI.update(display, combinedMassSpectrum, identificationTarget);
+					}
+					UpdateNotifierUI.update(display, identificationTarget);
+				}
+			}
+		}
+	}
+
+	private CLabel createInfoLabelEdit(Composite parent) {
+
+		CLabel label = createInfoLabel(parent);
+		label.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+
+				if(!"".equals(label.getText())) {
+					locked = false;
+					updateStatus();
+				}
+			}
+		});
+		return label;
+	}
+
+	private CLabel createInfoLabel(Composite parent) {
+
+		CLabel label = new CLabel(parent, SWT.CENTER);
+		label.setForeground(Colors.RED);
+		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		return label;
+	}
+
+	private Button createButtonLocked(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Lock the combined scan.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				locked = !locked;
+				updateStatus();
+			}
+		});
+		return button;
+	}
+
+	private void updateStatus() {
+
+		buttonLocked.setToolTipText(locked ? "Edit modus: on" : "Edit modus: off");
+		buttonLocked.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16, locked));
+		updateLabel(labelEdit, locked ? "Edit On" : "");
+	}
+
+	private void updateLabel(CLabel label, String message) {
+
+		label.setText(message);
+		if("".equals(message)) {
+			label.setBackground(getBackground());
+		} else {
+			label.setBackground(Colors.YELLOW);
+		}
+	}
+
+	private ScanIdentifierUI createScanIdentifierUI(Composite parent) {
+
+		ScanIdentifierUI scanIdentifierUI = new ScanIdentifierUI(parent, SWT.NONE);
+		scanIdentifierUI.setUpdateListener(new IUpdateListener() {
+
+			@Override
+			public void update(Display display) {
+
+				if(combinedMassSpectrum != null) {
+					tabFolder.setSelection(INDEX_TARGETS);
+					updateScan();
+				}
+			}
+		});
+		//
+		return scanIdentifierUI;
+	}
+
+	private void createButtonAddSubstract(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Add combined scan to the subtract spectrum.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SUBTRACT_ADD_COMBINED_SCAN, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(combinedMassSpectrum != null) {
+					boolean useNormalize = PreferenceSupplier.isUseNormalizedScan();
+					CalculationType calculationType = PreferenceSupplier.getCalculationType();
+					IScanMSD massSpectrum1 = PreferenceSupplier.getSessionSubtractMassSpectrum();
+					IScanMSD massSpectrum2 = combinedMassSpectrum;
+					IScanMSD subtractMassSpectrum = FilterSupport.getCombinedMassSpectrum(massSpectrum1, massSpectrum2, null, useNormalize, calculationType);
+					saveSessionMassSpectrum(e.display, subtractMassSpectrum);
+				}
+			}
+		});
+	}
+
+	/**
+	 * If the display is set to null, no event is fired.
+	 * 
+	 * @param display
+	 * @param scanMSD
+	 */
+	private void saveSessionMassSpectrum(Display display, IScanMSD scanMSD) {
+
+		PreferenceSupplier.setSessionSubtractMassSpectrum(scanMSD);
+		PreferenceSupplier.storeSessionSubtractMassSpectrum();
+		//
+		if(display != null) {
+			fireUpdateEvent(display);
+		}
+	}
+
+	private void fireUpdateEvent(Display display) {
+
+		UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM, true);
+	}
+
+	private Button createButtonSave(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Save the combined scan.");
@@ -191,8 +379,8 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 			public void widgetSelected(SelectionEvent e) {
 
 				try {
-					if(scanMSD != null) {
-						DatabaseFileSupport.saveMassSpectrum(DisplayUtils.getShell(), scanMSD, "CombinedScan");
+					if(combinedMassSpectrum != null) {
+						DatabaseFileSupport.saveMassSpectrum(DisplayUtils.getShell(), combinedMassSpectrum, "CombinedScan");
 					}
 				} catch(NoConverterAvailableException e1) {
 					logger.warn(e1);
@@ -202,7 +390,7 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 		return button;
 	}
 
-	private void createSettingsButton(Composite parent) {
+	private void createButtonSettings(Composite parent) {
 
 		createSettingsButton(parent, Arrays.asList(PreferencePageScans.class, PreferencePageSubtract.class), new ISettingsHandler() {
 
@@ -217,19 +405,25 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 	private void applySettings() {
 
 		update(chromatogramSelection);
+		scanIdentifierUI.updateIdentifier();
 	}
 
-	private void updateScanData() {
+	private void updateScan() {
 
 		switch(tabFolder.getSelectionIndex()) {
 			case INDEX_CHART:
 				if(scanChartUI != null) {
-					scanChartUI.setInput(scanMSD);
+					scanChartUI.setInput(combinedMassSpectrum);
 				}
 				break;
 			case INDEX_TABLE:
 				if(scanTableUI != null) {
-					scanTableUI.setInput(scanMSD);
+					scanTableUI.setInput(combinedMassSpectrum);
+				}
+				break;
+			case INDEX_TARGETS:
+				if(tableViewer.get() != null) {
+					tableViewer.get().setInput(combinedMassSpectrum.getTargets());
 				}
 				break;
 		}
@@ -242,7 +436,7 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)object;
 			int startRetentionTime = chromatogramSelectionMSD.getStartRetentionTime();
 			int stopRetentionTime = chromatogramSelectionMSD.getStopRetentionTime();
-			IChromatogram chromatogram = chromatogramSelectionMSD.getChromatogram();
+			IChromatogram<?> chromatogram = chromatogramSelectionMSD.getChromatogram();
 			builder.append("Scan range: ");
 			builder.append(chromatogram.getScanNumber(startRetentionTime));
 			builder.append("–");

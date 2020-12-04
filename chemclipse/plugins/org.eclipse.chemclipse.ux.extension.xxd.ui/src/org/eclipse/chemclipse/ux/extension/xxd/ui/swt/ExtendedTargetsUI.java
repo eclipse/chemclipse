@@ -29,6 +29,7 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
@@ -49,7 +50,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDat
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.targets.ComboTarget;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -546,30 +546,6 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		updateTargets(display);
 	}
 
-	private void propagateTarget(Display display) {
-
-		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-		if(eventBroker != null) {
-			Table table = tableViewer.get().getTable();
-			int index = table.getSelectionIndex();
-			if(index >= 0) {
-				TableItem tableItem = table.getItem(index);
-				Object object = tableItem.getData();
-				if(object instanceof IIdentificationTarget) {
-					/*
-					 * First update the mass spectrum.
-					 */
-					IIdentificationTarget identificationTarget = (IIdentificationTarget)object;
-					IScanMSD massSpectrum = getMassSpectrum();
-					if(massSpectrum != null) {
-						UpdateNotifierUI.update(display, massSpectrum, identificationTarget);
-					}
-					UpdateNotifierUI.update(display, identificationTarget);
-				}
-			}
-		}
-	}
-
 	private void applySettings() {
 
 		comboTarget.updateContentProposals();
@@ -708,6 +684,29 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 			boolean propagateTargetOnUpdate = preferenceStore.getBoolean(PreferenceConstants.P_PROPAGATE_TARGET_ON_UPDATE);
 			if(propagateTargetOnUpdate) {
 				propagateTarget(display);
+			}
+		}
+		//
+		UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Target(s) have been modified (deleted/updated).");
+	}
+
+	private void propagateTarget(Display display) {
+
+		Table table = tableViewer.get().getTable();
+		int index = table.getSelectionIndex();
+		if(index >= 0) {
+			TableItem tableItem = table.getItem(index);
+			Object object = tableItem.getData();
+			if(object instanceof IIdentificationTarget) {
+				/*
+				 * First update the mass spectrum.
+				 */
+				IIdentificationTarget identificationTarget = (IIdentificationTarget)object;
+				IScanMSD massSpectrum = getMassSpectrum();
+				if(massSpectrum != null) {
+					UpdateNotifierUI.update(display, massSpectrum, identificationTarget);
+				}
+				UpdateNotifierUI.update(display, identificationTarget);
 			}
 		}
 	}
