@@ -5,10 +5,17 @@
          point="org.eclipse.chemclipse.chromatogram.filter.chromatogramFilterSupplier">
       <ChromatogramFilterSupplier
             description="This filter multiplies all signals of a chromatogram."
-            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.core.ChromatogramFilter"
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.core.MultiplierChromatogramFilter"
             filterName="Multiplier Filter"
-            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.settings.FilterSettings"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.settings.MultiplierSettings"
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier">
+      </ChromatogramFilterSupplier>
+      <ChromatogramFilterSupplier
+            description="This filter divides all signals of a chromatogram."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.core.MultiplierChromatogramFilter"
+            filterName="Divisor Filter"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.settings.DivisorSettings"
+            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.divisor">
       </ChromatogramFilterSupplier>
    </extension>
    <extension

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,26 +18,12 @@ import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class FilterSettings extends AbstractChromatogramFilterSettings {
+public class DivisorSettings extends AbstractChromatogramFilterSettings {
 
-	@JsonProperty(value = "Multiplier", defaultValue = "1")
-	@JsonPropertyDescription(value = "The factor to multiply the signals.")
-	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_MULTIPLIER, maxValue = PreferenceSupplier.MAX_MULTIPLIER)
-	private float multiplier = 1.0f;
 	@JsonProperty(value = "Divisor", defaultValue = "1")
-	@JsonPropertyDescription(value = "The factor to divede the signals.")
-	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_MULTIPLIER, maxValue = PreferenceSupplier.MAX_MULTIPLIER)
+	@JsonPropertyDescription(value = "The factor to divide the signals.")
+	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_DIVISOR, maxValue = PreferenceSupplier.MAX_DIVISOR)
 	private float divisor = 1.0f;
-
-	public float getMultiplier() {
-
-		return multiplier;
-	}
-
-	public void setMultiplier(float multiplier) {
-
-		this.multiplier = multiplier;
-	}
 
 	public float getDivisor() {
 

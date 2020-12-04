@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
+ * Copyright (c) 2010, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,7 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.Activator;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.settings.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.settings.DivisorSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.multiplier.settings.MultiplierSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -69,11 +70,18 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static FilterSettings getFilterSettings() {
+	public static MultiplierSettings getFilterSettingsMultiplier() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		FilterSettings filterSettings = new FilterSettings();
+		MultiplierSettings filterSettings = new MultiplierSettings();
 		filterSettings.setMultiplier(preferences.getFloat(P_MULTIPLIER, DEF_MULTIPLIER));
+		return filterSettings;
+	}
+
+	public static DivisorSettings getFilterSettingsDivisor() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		DivisorSettings filterSettings = new DivisorSettings();
 		filterSettings.setDivisor(preferences.getFloat(P_DIVISOR, DEF_DIVISOR));
 		return filterSettings;
 	}
