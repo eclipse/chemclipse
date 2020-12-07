@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,18 +12,18 @@
 package org.eclipse.chemclipse.chromatogram.filter.ui;
 
 import org.eclipse.chemclipse.chromatogram.filter.impl.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.numeric.services.IMaximaDetectorService;
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 import org.osgi.framework.BundleContext;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * The activator class controls the plug-in life cycle
  */
 public class Activator extends AbstractActivatorUI {
 
-	/*
-	 * Instance
-	 */
 	private static Activator plugin;
+	private ServiceTracker<IMaximaDetectorService, IMaximaDetectorService> maximaDetectorServiceTracker = null;
 
 	/*
 	 * (non-Javadoc)
@@ -34,6 +34,8 @@ public class Activator extends AbstractActivatorUI {
 		super.start(context);
 		plugin = this;
 		initializePreferenceStore(PreferenceSupplier.INSTANCE());
+		maximaDetectorServiceTracker = new ServiceTracker<>(context, IMaximaDetectorService.class, null);
+		maximaDetectorServiceTracker.open();
 	}
 
 	/*
@@ -43,6 +45,7 @@ public class Activator extends AbstractActivatorUI {
 	public void stop(BundleContext context) throws Exception {
 
 		plugin = null;
+		maximaDetectorServiceTracker.close();
 		super.stop(context);
 	}
 
@@ -54,5 +57,10 @@ public class Activator extends AbstractActivatorUI {
 	public static Activator getDefault() {
 
 		return plugin;
+	}
+
+	public Object[] getMaximaDetectorServices() {
+
+		return maximaDetectorServiceTracker.getServices();
 	}
 }

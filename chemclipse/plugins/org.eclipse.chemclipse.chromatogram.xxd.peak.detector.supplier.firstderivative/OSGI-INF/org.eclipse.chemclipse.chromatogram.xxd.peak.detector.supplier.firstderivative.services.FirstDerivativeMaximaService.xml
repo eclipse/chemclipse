@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" activate="start" configuration-policy="optional" name="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.services.FirstDerivativeMaximaService">
+   <service>
+      <provide interface="org.eclipse.chemclipse.numeric.services.IMaximaDetectorService"/>
+   </service>
+   <implementation class="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.services.FirstDerivativeMaximaService"/>
+</scr:component>

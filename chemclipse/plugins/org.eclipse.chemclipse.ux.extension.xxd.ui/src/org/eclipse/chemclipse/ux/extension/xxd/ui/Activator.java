@@ -70,6 +70,7 @@ public class Activator extends AbstractActivatorUI {
 
 		plugin = null;
 		dataUpdateSupport = null;
+		moleculeImageServiceTracker.close();
 		super.stop(context);
 	}
 

@@ -259,7 +259,7 @@
       <ChromatogramFilterSupplier
             description="This filter adjuts the chromatogram editor range."
             filter="org.eclipse.chemclipse.ux.extension.xxd.ui.filter.ChromatogramFilterAdjust"
-            filterName="Chromatogram Selection (Adjust)[UI]"
+            filterName="Chromatogram Editor UI (Adjust)"
             filterSettings="org.eclipse.chemclipse.ux.extension.xxd.ui.filter.FilterSettingsAdjust"
             id="org.eclipse.chemclipse.ux.extension.xxd.ui.filter.adjustChromatogramSelection">
       </ChromatogramFilterSupplier>                

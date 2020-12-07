@@ -10,4 +10,14 @@
             name="Filter">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.filter.chromatogramFilterSupplier">
+      <ChromatogramFilterSupplier
+            description="This filter tries to detect maxima in the chromatogram range."
+            filter="org.eclipse.chemclipse.chromatogram.filter.ui.core.ChromatogramFilter"
+            filterName="Scan Maxima Detector UI"
+            filterSettings="org.eclipse.chemclipse.chromatogram.filter.ui.core.FilterSettings"
+            id="org.eclipse.chemclipse.chromatogram.filter.ui.scanMaximaChromatogramSelection">
+      </ChromatogramFilterSupplier>
+   </extension>   
 </plugin>
