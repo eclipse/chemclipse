@@ -247,6 +247,14 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		return toolbarMain.isVisible();
 	}
 
+	/**
+	 * Resets the chart ranges 1:1.
+	 */
+	public void adjustChromatogramChart() {
+
+		chromatogramChart.adjustRange(true);
+	}
+
 	public void fireUpdate(Display display) {
 
 		fireUpdateChromatogram(display);

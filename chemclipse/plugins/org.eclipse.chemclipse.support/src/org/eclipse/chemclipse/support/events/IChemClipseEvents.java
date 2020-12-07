@@ -91,4 +91,5 @@ public interface IChemClipseEvents {
 	String TOPIC_EDIT_HISTORY_UPDATE = "edithistory/update"; // $NON-NLS-1$
 	//
 	String TOPIC_EDITOR_CHROMATOGRAM_UPDATE = "editor/chromatogram/update";
+	String TOPIC_EDITOR_CHROMATOGRAM_ADJUST = "editor/chromatogram/adjust";
 }

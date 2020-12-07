@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -81,7 +81,7 @@ public abstract class AbstractChromatogramSignalFilter extends AbstractChromatog
 
 	private IChromatogramFilterResult process(IChromatogramSelectionCSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IChromatogramCSD chromatogramCSD = chromatogramSelection.getChromatogramCSD();
+		IChromatogramCSD chromatogramCSD = chromatogramSelection.getChromatogram();
 		/*
 		 * 1. step - export signal from chromatogram
 		 */
@@ -111,7 +111,7 @@ public abstract class AbstractChromatogramSignalFilter extends AbstractChromatog
 
 	public IChromatogramFilterResult process(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IChromatogramMSD chromatogramMSD = chromatogramSelection.getChromatogramMSD();
+		IChromatogramMSD chromatogramMSD = chromatogramSelection.getChromatogram();
 		/*
 		 * 1. step - export signal from chromatogram
 		 */
@@ -145,7 +145,7 @@ public abstract class AbstractChromatogramSignalFilter extends AbstractChromatog
 
 	private IChromatogramFilterResult process(IChromatogramSelectionWSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IChromatogramWSD chromatogramWSD = chromatogramSelection.getChromatogramWSD();
+		IChromatogramWSD chromatogramWSD = chromatogramSelection.getChromatogram();
 		/*
 		 * 1. step - export signals from chromatogram
 		 */
