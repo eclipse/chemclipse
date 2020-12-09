@@ -43,6 +43,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -177,8 +179,8 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 		/*
 		 * Auto-Complete
 		 */
-		enableAuotComplete(comboStartIndex);
-		enableAuotComplete(comboStopIndex);
+		enableAutoComplete(comboStartIndex);
+		enableAutoComplete(comboStopIndex);
 	}
 
 	private Combo createComboStartIndex(Composite parent) {
@@ -186,21 +188,12 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 		Combo combo = new Combo(parent, SWT.NONE);
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.setItems(availableStandards);
-		combo.setToolTipText("Start Index.");
+		combo.setToolTipText("Start Index");
 		//
-		combo.addSelectionListener(new SelectionAdapter() {
+		combo.addModifyListener(new ModifyListener() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				setStartIndexName(combo);
-			}
-		});
-		//
-		combo.addKeyListener(new KeyAdapter() {
-
-			@Override
-			public void keyReleased(KeyEvent e) {
+			public void modifyText(ModifyEvent arg0) {
 
 				setStartIndexName(combo);
 			}
@@ -212,8 +205,7 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 	private void setStartIndexName(Combo combo) {
 
 		wizardElements.setStartIndexName(combo.getText().trim());
-		validateIndexSelection();
-		updateLabel();
+		validateIndices();
 	}
 
 	private Combo createComboStopIndex(Composite parent) {
@@ -221,20 +213,12 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 		Combo combo = new Combo(parent, SWT.NONE);
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.setItems(availableStandards);
-		combo.setToolTipText("Stop Index.");
-		combo.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				setStopIndexName(combo);
-			}
-		});
+		combo.setToolTipText("Stop Index");
 		//
-		combo.addKeyListener(new KeyAdapter() {
+		combo.addModifyListener(new ModifyListener() {
 
 			@Override
-			public void keyReleased(KeyEvent e) {
+			public void modifyText(ModifyEvent arg0) {
 
 				setStopIndexName(combo);
 			}
@@ -246,8 +230,7 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 	private void setStopIndexName(Combo combo) {
 
 		wizardElements.setStopIndexName(combo.getText().trim());
-		validateIndexSelection();
-		updateLabel();
+		validateIndices();
 	}
 
 	private Label createLabelIndexRange(Composite parent) {
@@ -533,6 +516,12 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 		updateStatus(message);
 	}
 
+	private void validateIndices() {
+
+		validateIndexSelection();
+		updateLabel();
+	}
+
 	private void updateLabel() {
 
 		List<String> selectedIndices = wizardElements.getSelectedIndices();
@@ -585,7 +574,7 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 		return -1;
 	}
 
-	private void enableAuotComplete(Combo combo) {
+	private void enableAutoComplete(Combo combo) {
 
 		IContentProposalProvider proposalProvider = new IContentProposalProvider() {
 
