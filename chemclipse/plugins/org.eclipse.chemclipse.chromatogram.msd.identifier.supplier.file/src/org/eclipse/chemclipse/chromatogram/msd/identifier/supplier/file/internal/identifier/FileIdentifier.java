@@ -25,6 +25,7 @@ import java.util.concurrent.RecursiveTask;
 import java.util.function.Function;
 
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.IMassSpectrumComparator;
+import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.IMassSpectrumComparisonSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IFileIdentifierSettings;
@@ -33,6 +34,7 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings
 import org.eclipse.chemclipse.chromatogram.msd.identifier.support.DatabasesCache;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.support.PenaltyCalculationSupport;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.support.TargetBuilder;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.IPeakIdentificationResults;
@@ -52,17 +54,14 @@ import org.eclipse.core.runtime.SubMonitor;
 
 public class FileIdentifier {
 
+	private static final Logger logger = Logger.getLogger(FileIdentifier.class);
+	//
 	public static final String IDENTIFIER = "File Identifier";
 	//
 	private static final Comparator<IComparisonResult> RESULT_COMPARATOR = Collections.reverseOrder(IComparisonResult.MATCH_FACTOR_COMPARATOR);
 	private static final TargetBuilder TARGETBUILDER = new TargetBuilder();
-	private final DatabasesCache databasesCache;
-
-	public FileIdentifier() {
-
-		//
-		databasesCache = new DatabasesCache(PreferenceSupplier.getMassSpectraFiles());
-	}
+	//
+	private final DatabasesCache databasesCache = new DatabasesCache(PreferenceSupplier.getMassSpectraFiles());
 
 	public IMassSpectra runIdentification(List<IScanMSD> massSpectraList, MassSpectrumIdentifierSettings fileIdentifierSettings, IProgressMonitor monitor) throws FileNotFoundException {
 
@@ -80,10 +79,10 @@ public class FileIdentifier {
 			identifier = alternateIdentifierId;
 		}
 		/*
-		 * Try to identify the mass spectra.
+		 * Load the mass spectra database only if the raw file or its content has changed.
 		 */
-		FileListUtil fileListUtil = new FileListUtil();
-		Map<String, IMassSpectra> databases = databasesCache.getDatabases(fileListUtil.getFiles(fileIdentifierSettings.getMassSpectraFiles()), subMonitor.split(10));
+		List<String> files = extractFiles(fileIdentifierSettings.getMassSpectraFiles());
+		Map<String, IMassSpectra> databases = databasesCache.getDatabases(files, subMonitor.split(10));
 		subMonitor.setWorkRemaining(databases.size() * 100);
 		for(Map.Entry<String, IMassSpectra> database : databases.entrySet()) {
 			compareMassSpectraAgainstDatabase(massSpectra.getList(), database.getValue().getList(), fileIdentifierSettings, identifier, database.getKey(), subMonitor.split(100, SubMonitor.SUPPRESS_NONE));
@@ -119,9 +118,7 @@ public class FileIdentifier {
 		/*
 		 * Load the mass spectra database only if the raw file or its content has changed.
 		 */
-		FileListUtil fileListUtil = new FileListUtil();
-		String massSpectraFiles = peakIdentifierSettings.getMassSpectraFiles();
-		List<String> files = fileListUtil.getFiles(massSpectraFiles);
+		List<String> files = extractFiles(peakIdentifierSettings.getMassSpectraFiles());
 		Map<String, IMassSpectra> databases = databasesCache.getDatabases(files, subMonitor.split(10));
 		subMonitor.setWorkRemaining(databases.size() * 100);
 		for(Map.Entry<String, IMassSpectra> database : databases.entrySet()) {
@@ -129,6 +126,19 @@ public class FileIdentifier {
 		}
 		//
 		return identificationResults;
+	}
+
+	private List<String> extractFiles(String massSpectraFiles) {
+
+		FileListUtil fileListUtil = new FileListUtil();
+		List<String> files = fileListUtil.getFiles(massSpectraFiles);
+		//
+		logger.info(IDENTIFIER);
+		for(String file : files) {
+			logger.info("Use: " + file);
+		}
+		//
+		return files;
 	}
 
 	/**
@@ -181,15 +191,25 @@ public class FileIdentifier {
 
 		int matched = 0;
 		long start = System.currentTimeMillis();
+		//
 		SubMonitor subMonitor = SubMonitor.convert(monitor, "Comparing against database " + databaseName + " with " + references.size() + " massspectra", unknownList.size());
 		IMassSpectrumComparator massSpectrumComparator = fileIdentifierSettings.getMassSpectrumComparator();
+		IMassSpectrumComparisonSupplier comparisonSupplier = massSpectrumComparator.getMassSpectrumComparisonSupplier();
+		String comparatorName = comparisonSupplier != null ? comparisonSupplier.getComparatorName() : "";
+		//
 		int count = 1;
 		int total = unknownList.size();
 		//
 		for(T item : unknownList) {
+			/*
+			 * Abort condition.
+			 */
 			if(subMonitor.isCanceled()) {
 				throw new OperationCanceledException();
 			}
+			/*
+			 * Do the match.
+			 */
 			subMonitor.subTask("Reference " + count + "/" + total + " (matches found: " + matched + ")");
 			IScanMSD unknown = extractor.apply(item);
 			Map<IComparisonResult, IScanMSD> matches = new FindMatchingSpectras(unknown, references, fileIdentifierSettings, massSpectrumComparator).invoke();
@@ -201,9 +221,11 @@ public class FileIdentifier {
 				for(int i = 0; i < size; i++) {
 					IComparisonResult comparisonResult = resultList.get(i);
 					IIdentificationTarget massSpectrumTarget = TARGETBUILDER.getMassSpectrumTarget(matches.get(comparisonResult), comparisonResult, identifier, databaseName);
+					massSpectrumTarget.getLibraryInformation().setMiscellaneous(comparatorName); // e.g. Cosine, Cosine Binary (0|1), ...
 					unknown.getTargets().add(massSpectrumTarget);
 				}
 			}
+			//
 			count++;
 			subMonitor.worked(1);
 		}

@@ -27,7 +27,7 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 
-public class CosineMassSpectrumComparator extends AbstractMassSpectrumComparator implements IMassSpectrumComparator {
+public abstract class AbstractCosineComparator extends AbstractMassSpectrumComparator implements IMassSpectrumComparator {
 
 	@Override
 	public IProcessingInfo<IComparisonResult> compare(IScanMSD unknown, IScanMSD reference, MatchConstraints matchConstraints) {
@@ -47,6 +47,7 @@ public class CosineMassSpectrumComparator extends AbstractMassSpectrumComparator
 					() -> calculateCosinePhiDirect(referenceSignal, unknownSignal), //
 					matchConstraints //
 			);
+			//
 			processingInfo.setProcessingResult(massSpectrumComparisonResult);
 		}
 		return processingInfo;
@@ -115,8 +116,13 @@ public class CosineMassSpectrumComparator extends AbstractMassSpectrumComparator
 		}
 	}
 
-	protected double getVectorValue(IExtractedIonSignal signal, int i) {
-
-		return signal.getAbundance(i);
-	}
-};
+	/**
+	 * This method returns the intensity value.
+	 * Override it in subclasses to enabled a specific behavior.
+	 * 
+	 * @param signal
+	 * @param i
+	 * @return double
+	 */
+	abstract double getVectorValue(IExtractedIonSignal signal, int i);
+}

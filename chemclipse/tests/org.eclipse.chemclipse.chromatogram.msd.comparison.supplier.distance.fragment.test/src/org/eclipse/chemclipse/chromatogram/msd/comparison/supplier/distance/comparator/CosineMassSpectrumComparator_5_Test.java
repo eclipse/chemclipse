@@ -19,7 +19,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 
 public class CosineMassSpectrumComparator_5_Test extends MassSpectrumSetTestCase {
 
-	private CosineMassSpectrumComparator comparator;
+	private CosineComparator comparator;
 	private IProcessingInfo<IComparisonResult> processingInfo;
 	private IComparisonResult result;
 
@@ -31,7 +31,7 @@ public class CosineMassSpectrumComparator_5_Test extends MassSpectrumSetTestCase
 		IScanMSD unknown = noMatchA1.getMassSpectrum();
 		IScanMSD reference = noMatchA2.getMassSpectrum();
 		//
-		comparator = new CosineMassSpectrumComparator();
+		comparator = new CosineComparator();
 		processingInfo = comparator.compare(unknown, reference, new MatchConstraints());
 		result = processingInfo.getProcessingResult();
 	}

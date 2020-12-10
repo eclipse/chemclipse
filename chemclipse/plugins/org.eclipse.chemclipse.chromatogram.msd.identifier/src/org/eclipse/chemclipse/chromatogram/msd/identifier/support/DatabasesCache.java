@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2019 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -42,23 +42,23 @@ public class DatabasesCache {
 	/*
 	 * Don't reload the database on each request, only if it is necessary.
 	 */
-	private static Map<String, Long> fileSizes;
-	private static Map<String, Long> fileModifications;
-	private static Set<String> fileNames;
-	private static Map<String, IMassSpectra> massSpectraDatabases;
-	private static Map<String, Map<String, IScanMSD>> allDatabaseNames = null;
-	private static Map<String, Map<String, IScanMSD>> allDatabaseCasNumbers = null;
+	private static Map<String, Long> fileSizes = new HashMap<>();
+	private static Map<String, Long> fileModifications = new HashMap<>();
+	private static Set<String> fileNames = new HashSet<>();
+	private static Map<String, IMassSpectra> massSpectraDatabases = new HashMap<>();
+	private static Map<String, Map<String, IScanMSD>> allDatabaseNames = new HashMap<>();
+	private static Map<String, Map<String, IScanMSD>> allDatabaseCasNumbers = new HashMap<>();
 	//
 	private final IonAbundanceComparator ionAbundanceComparator;
 	private final List<String> massSpectraFiles;
 
 	public DatabasesCache(List<String> massSpectraFiles) {
+
 		/*
 		 * Initialize the static maps once.
 		 */
 		ionAbundanceComparator = new IonAbundanceComparator(SortOrder.DESC);
 		this.massSpectraFiles = massSpectraFiles;
-		initializeDatabaseMaps();
 	}
 
 	/**
@@ -66,7 +66,12 @@ public class DatabasesCache {
 	 */
 	public static void resetCache() {
 
-		initializeDatabaseMaps();
+		fileSizes.clear();
+		fileModifications.clear();
+		fileNames.clear();
+		massSpectraDatabases.clear();
+		allDatabaseNames.clear();
+		allDatabaseCasNumbers.clear();
 	}
 
 	/**
@@ -110,12 +115,18 @@ public class DatabasesCache {
 		 * Remove unused databases and info maps.
 		 */
 		Set<String> databaseKeys = massSpectraDatabases.keySet();
+		Set<String> removeKeys = new HashSet<>();
+		//
 		for(String databaseKey : databaseKeys) {
 			if(!databaseNames.contains(databaseKey)) {
-				massSpectraDatabases.remove(databaseKey);
-				allDatabaseNames.remove(databaseKey);
-				allDatabaseCasNumbers.remove(databaseKey);
+				removeKeys.add(databaseKey);
 			}
+		}
+		//
+		for(String databaseKey : removeKeys) {
+			massSpectraDatabases.remove(databaseKey);
+			allDatabaseNames.remove(databaseKey);
+			allDatabaseCasNumbers.remove(databaseKey);
 		}
 		/*
 		 * Post-check
@@ -203,7 +214,7 @@ public class DatabasesCache {
 		IMassSpectra massSpectraDatabase = processingInfo.getProcessingResult();
 		if(massSpectraDatabase == null) {
 			massSpectraDatabase = new MassSpectra();
-			logger.error("Loading MassSpectraFromFile " + file + " failed (" + processingInfo.getMessages() + ")");
+			logger.error("Loading MassSpectra from file '" + file + "' failed (" + processingInfo.getMessages() + ")");
 		}
 		/*
 		 * Add the database to databases.
@@ -229,40 +240,12 @@ public class DatabasesCache {
 		}
 		//
 		for(IScanMSD reference : massSpectraDatabase.getList()) {
-			//
 			if(reference instanceof IRegularLibraryMassSpectrum) {
 				IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)reference;
 				ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
 				databaseNames.put(libraryInformation.getName(), reference);
 				databaseCasNumbers.put(libraryInformation.getCasNumber(), reference);
 			}
-		}
-	}
-
-	private static void initializeDatabaseMaps() {
-
-		if(fileSizes == null) {
-			fileSizes = new HashMap<>();
-		}
-		//
-		if(fileModifications == null) {
-			fileModifications = new HashMap<>();
-		}
-		//
-		if(fileNames == null) {
-			fileNames = new HashSet<>();
-		}
-		//
-		if(massSpectraDatabases == null) {
-			massSpectraDatabases = new HashMap<>();
-		}
-		//
-		if(allDatabaseNames == null) {
-			allDatabaseNames = new HashMap<>();
-		}
-		//
-		if(allDatabaseCasNumbers == null) {
-			allDatabaseCasNumbers = new HashMap<>();
 		}
 	}
 }
