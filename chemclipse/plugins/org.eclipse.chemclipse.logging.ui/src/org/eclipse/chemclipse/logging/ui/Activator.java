@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -32,6 +33,10 @@ import org.osgi.framework.BundleContext;
 public class Activator extends AbstractUIPlugin {
 
 	public static final String ICON_LOG = "ICON_LOG"; // $NON-NLS-1$
+	public static final String ICON_DELETE = "ICON_DELETE"; // $NON-NLS-1$
+	public static final String ICON_DELETE_ALL = "ICON_DELETE_ALL"; // $NON-NLS-1$
+	public static final String ICON_RESET = "ICON_RESET"; // $NON-NLS-1$
+	public static final String ICON_FOLDER_OPENED = "ICON_FOLDER_OPENED"; // $NON-NLS-1$
 	//
 	private static Activator plugin;
 
@@ -39,6 +44,7 @@ public class Activator extends AbstractUIPlugin {
 	 * The constructor
 	 */
 	public Activator() {
+
 	}
 
 	/*
@@ -49,9 +55,14 @@ public class Activator extends AbstractUIPlugin {
 
 		super.start(context);
 		plugin = this;
+		//
 		ImageRegistry imageRegistry = getImageRegistry();
 		if(imageRegistry != null) {
 			imageRegistry.put(ICON_LOG, createImageDescriptor(getBundle(), "icons/16x16/log.gif"));
+			imageRegistry.put(ICON_DELETE, createImageDescriptor(getBundle(), "icons/16x16/delete.gif"));
+			imageRegistry.put(ICON_DELETE_ALL, createImageDescriptor(getBundle(), "icons/16x16/delete_all.png"));
+			imageRegistry.put(ICON_RESET, createImageDescriptor(getBundle(), "icons/16x16/reset.gif"));
+			imageRegistry.put(ICON_FOLDER_OPENED, createImageDescriptor(getBundle(), "icons/16x16/folder_opened.gif"));
 		}
 		initLogger();
 	}
@@ -74,6 +85,16 @@ public class Activator extends AbstractUIPlugin {
 	public static Activator getDefault() {
 
 		return plugin;
+	}
+
+	public Image getImage(String key) {
+
+		ImageRegistry imageRegistry = Activator.getDefault().getImageRegistry();
+		if(imageRegistry != null) {
+			return imageRegistry.get(key);
+		} else {
+			return null;
+		}
 	}
 
 	/**

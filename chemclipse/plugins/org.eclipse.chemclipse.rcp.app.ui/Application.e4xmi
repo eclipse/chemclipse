@@ -5,12 +5,14 @@
     <children xsi:type="advanced:PerspectiveStack" xmi:id="_6h3_kDPDEeKN2qL8NSaklg" elementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
       <children xsi:type="advanced:Perspective" xmi:id="_L8vjcFeLEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.perspective.main" label="Logging" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/log.gif">
         <children xsi:type="basic:PartSashContainer" xmi:id="_S0qdgFeLEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.partsashcontainer.main.0" horizontal="true">
-          <children xsi:type="basic:PartStack" xmi:id="_WjeRkFeLEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.partstack.main.files" containerData="2000"/>
+          <children xsi:type="basic:PartSashContainer" xmi:id="_0g7_cDrXEeuPxtDVu2UVxg" elementId="org.eclipse.chemclipse.rcp.app.ui.partsashcontainer.0" containerData="2000">
+            <children xsi:type="basic:PartStack" xmi:id="_WjeRkFeLEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.partstack.main.files" containerData=""/>
+            <children xsi:type="basic:PartStack" xmi:id="_2FpTcDrXEeuPxtDVu2UVxg" elementId="org.eclipse.chemclipse.logging.ui.partstack.main.charts"/>
+          </children>
           <children xsi:type="basic:PartSashContainer" xmi:id="_YOgQAFeLEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.partsashcontainer.main.1" containerData="8000">
             <children xsi:type="advanced:Placeholder" xmi:id="_bnx48FeLEeWJDdTjy0i2HA" elementId="org.eclipse.ui.editorss" containerData="15000" ref="_Jqg8MEnJEeKP49-EnXatSw"/>
             <children xsi:type="basic:PartStack" xmi:id="_jR9WYFeLEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.partstack.main.consoles" containerData="5000">
               <children xsi:type="advanced:Placeholder" xmi:id="_lQTSYFeLEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.placeholder.main.1" ref="_Sq1foEd4EeKhRMzT2OpX0g"/>
-              <children xsi:type="advanced:Placeholder" xmi:id="_0jDjAHcBEeWs9YprkfnL3Q" elementId="org.eclipse.chemclipse.rcp.app.ui.placeholder.0" ref="_V3EBsHb_EeWs9YprkfnL3Q"/>
             </children>
           </children>
         </children>
@@ -105,7 +107,6 @@
       <toolbar xmi:id="_hl6gQI1zEeKgaYcpx_IhbQ" elementId="org.eclipse.ui.internal.introview" visible="false"/>
     </sharedElements>
     <sharedElements xsi:type="basic:Part" xmi:id="_T2mREFeKEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart" contributionURI="bundleclass://org.eclipse.chemclipse.processing.ui/org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart" label="Feedback" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/info.gif"/>
-    <sharedElements xsi:type="basic:Part" xmi:id="_qY-R0FeKEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.LogFileView" contributionURI="bundleclass://org.eclipse.chemclipse.logging.ui/org.eclipse.chemclipse.logging.ui.views.LogFileView" label="Log Files" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/log.gif"/>
     <sharedElements xsi:type="basic:Part" xmi:id="_W8FzsFuuEeWKQYKM0-fotA" elementId="org.eclipse.chemclipse.rcp.app.ui.part.editHistory" contributionURI="bundleclass://org.eclipse.chemclipse.support.ui/org.eclipse.chemclipse.support.ui.parts.EditHistoryPart" label="Edit History" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/info.gif"/>
     <sharedElements xsi:type="basic:Part" xmi:id="_V3EBsHb_EeWs9YprkfnL3Q" elementId="org.eclipse.ease.ui.views.scriptShell" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Script Shell" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/script_shell.png"/>
     <trimBars xmi:id="_h0BcTDLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.trimbar.top">

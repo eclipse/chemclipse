@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,9 +12,8 @@
 package org.eclipse.chemclipse.logging.ui.internal.support;
 
 import java.io.File;
-import java.io.FilenameFilter;
 
-import org.eclipse.chemclipse.logging.support.PropertiesUtil;
+import org.eclipse.chemclipse.logging.ui.support.FilesSupport;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -34,23 +33,7 @@ public class LogFileContentProvider implements IStructuredContentProvider {
 	public Object[] getElements(Object inputElement) {
 
 		if(inputElement instanceof File) {
-			File directory = (File)inputElement;
-			if(directory.isDirectory()) {
-				/*
-				 * Return only *.log files.
-				 */
-				return directory.listFiles(new FilenameFilter() {
-
-					@Override
-					public boolean accept(File directory, String file) {
-
-						if(file.contains(PropertiesUtil.LOG_EXTENSION)) {
-							return true;
-						}
-						return false;
-					}
-				});
-			}
+			return FilesSupport.getSortedLogFiles((File)inputElement).toArray();
 		}
 		return null;
 	}
