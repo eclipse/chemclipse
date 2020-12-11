@@ -43,12 +43,6 @@ public interface IChemClipseEvents {
 	String TOPIC_SCAN_XIR_UPDATE_SELECTION = "scan/xir/update/selection";
 	String TOPIC_SCAN_NMR_UPDATE_SELECTION = "scan/nmr/update/selection";
 	//
-	String TOPIC_CHROMATOGRAM_XXD_UNLOAD_SELECTION = "chromatogram/xxd/unload/chromatogramselection";
-	String TOPIC_SCAN_XXD_UNLOAD_SELECTION = "scan/xxd/unload/selection";
-	String TOPIC_PEAK_XXD_UNLOAD_SELECTION = "peak/xxd/unload/selection";
-	String TOPIC_SCAN_XIR_UNLOAD_SELECTION = "scan/xir/unload/selection";
-	String TOPIC_SCAN_NMR_UNLOAD_SELECTION = "scan/nmr/unload/selection";
-	//
 	String TOPIC_APPLICATION_SELECT_PERSPECTIVE = "application/select/perspective";
 	String TOPIC_APPLICATION_SELECT_VIEW = "application/select/view";
 	String TOPIC_PART_CLOSED = "part/closed";
@@ -56,8 +50,6 @@ public interface IChemClipseEvents {
 	String TOPIC_PLATE_PCR_UPDATE_OVERVIEW = "plate/pcr/update/overview";
 	String TOPIC_WELL_PCR_UPDATE_SELECTION = "well/pcr/update/selection";
 	String TOPIC_PLATE_PCR_UPDATE_SELECTION = "plate/pcr/update/selection";
-	String TOPIC_WELL_PCR_UNLOAD_SELECTION = "well/pcr/unload/selection";
-	String TOPIC_PLATE_PCR_UNLOAD_SELECTION = "plate/pcr/unload/selection";
 	//
 	String TOPIC_LIBRARY_MSD_ADD_TO_DB_SEARCH = "library/msd/add/dbsearch";
 	String TOPIC_LIBRARY_MSD_REMOVE_FROM_DB_SEARCH = "library/msd/remove/dbsearch";
@@ -72,12 +64,10 @@ public interface IChemClipseEvents {
 	//
 	String TOPIC_IDENTIFICATION_TARGET_UPDATE = "identification/target/update";
 	String TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION = "identification/targets/update/selection";
-	String TOPIC_IDENTIFICATION_TARGETS_UNLOAD_SELECTION = "identification/targets/unload/selection";
 	//
 	String TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM = "filter/supplier/subtract/update/session/subtractmassspectrum";
 	//
 	String TOPIC_QUANT_DB_COMPOUND_UPDATE = "quantitation/database/compound/update";
-	String TOPIC_QUANT_DB_COMPOUND_UNLOAD = "quantitation/database/compound/unload";
 	//
 	String TOPIC_CHROMATOGRAM_CONVERTER = "chromatogram/update/converter/status";
 	//
@@ -85,11 +75,16 @@ public interface IChemClipseEvents {
 	String TOPIC_SCAN_REFERENCE_UPDATE_COMPARISON = "scan/update/comparison"; // Object[]{scan1, scan2}
 	//
 	String TOPIC_LIBRARY_MSD_UPDATE_SELECTION = "library/msd/update/selection";
-	String TOPIC_LIBRARY_MSD_UNLOAD_SELECTION = "library/msd/unload/selection";
 	//
 	String TOPIC_PROCESSING_INFO_UPDATE = "processinginfo/update";
 	String TOPIC_EDIT_HISTORY_UPDATE = "edithistory/update"; // $NON-NLS-1$
 	//
 	String TOPIC_EDITOR_CHROMATOGRAM_UPDATE = "editor/chromatogram/update";
 	String TOPIC_EDITOR_CHROMATOGRAM_ADJUST = "editor/chromatogram/adjust";
+	//
+	String TOPIC_EDITOR_CHROMATOGRAM_CLOSE = "editor/chromatogram/close";
+	String TOPIC_EDITOR_LIBRARY_CLOSE = "editor/library/close";
+	String TOPIC_EDITOR_PCR_CLOSE = "editor/pcr/close";
+	String TOPIC_EDITOR_NMR_CLOSE = "editor/nmr/close";
+	String TOPIC_EDITOR_XIR_CLOSE = "editor/xir/close";
 }

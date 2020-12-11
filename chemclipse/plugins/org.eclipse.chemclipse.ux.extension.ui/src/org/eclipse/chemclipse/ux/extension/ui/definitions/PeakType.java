@@ -57,7 +57,7 @@ public class PeakType implements EventHandler {
 				peakSelection = null;
 				peakType = PEAK_TYPE_NONE;
 			}
-		} else if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION)) {
+		} else if(topic.equals(IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_CLOSE)) {
 			peakSelection = null;
 			peakType = PEAK_TYPE_NONE;
 		}

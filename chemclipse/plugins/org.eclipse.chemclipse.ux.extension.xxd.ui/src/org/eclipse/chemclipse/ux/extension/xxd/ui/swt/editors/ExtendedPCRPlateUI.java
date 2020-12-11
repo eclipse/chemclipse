@@ -19,12 +19,11 @@ import org.eclipse.chemclipse.pcr.model.core.IWell;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePCR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PCRPlate;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -182,21 +181,9 @@ public class ExtendedPCRPlateUI extends Composite implements IExtendedPartUI {
 		pcrPlate.setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
-	private void fireUpdate(Display display, Object data) {
+	private void fireUpdate(Display display, IWell well) {
 
-		if(display != null) {
-			//
-			String topic = (data instanceof IWell) ? IChemClipseEvents.TOPIC_WELL_PCR_UPDATE_SELECTION : IChemClipseEvents.TOPIC_WELL_PCR_UNLOAD_SELECTION;
-			display.asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-
-					IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-					eventBroker.send(topic, (data instanceof IWell) ? data : null);
-				}
-			});
-		}
+		UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_WELL_PCR_UPDATE_SELECTION, well);
 	}
 
 	private void updateWidget() {

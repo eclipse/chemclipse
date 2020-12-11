@@ -57,7 +57,7 @@ public class ScanType implements EventHandler {
 				scanSelection = null;
 				scanType = SCAN_TYPE_NONE;
 			}
-		} else if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION)) {
+		} else if(IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_CLOSE.equals(topic) || IChemClipseEvents.TOPIC_EDITOR_LIBRARY_CLOSE.equals(topic)) {
 			scanSelection = null;
 			scanType = SCAN_TYPE_NONE;
 		}

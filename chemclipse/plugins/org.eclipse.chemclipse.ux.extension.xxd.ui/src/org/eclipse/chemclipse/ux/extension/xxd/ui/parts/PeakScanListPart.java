@@ -33,6 +33,7 @@ public class PeakScanListPart extends AbstractPart<ExtendedPeakScanListUI> {
 
 	private static final Logger logger = Logger.getLogger(PeakScanListPart.class);
 	private static final String TOPIC = IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION;
+	//
 	private boolean linkWithEditor = true;
 
 	@Inject
@@ -75,17 +76,17 @@ public class PeakScanListPart extends AbstractPart<ExtendedPeakScanListUI> {
 
 		if(objects.size() == 1) {
 			Object object = objects.get(0);
-			if(isChromatogramUnloadEvent(topic)) {
+			if(isCloseEvent(topic)) {
 				getControl().updateChromatogramSelection(null);
 				return false;
 			} else {
-				if(isChromatogramTopic(topic)) {
+				if(isChromatogramEvent(topic)) {
 					if(object instanceof IChromatogramSelection) {
 						IChromatogramSelection<?, ?> chromatogramSelection = (IChromatogramSelection<?, ?>)object;
 						getControl().updateChromatogramSelection(chromatogramSelection);
 						return true;
 					}
-				} else if(isUpdateEditorTopic(topic)) {
+				} else if(isUpdateEditorEvent(topic)) {
 					logger.info(object);
 					getControl().refreshTableViewer();
 					return true;
@@ -99,24 +100,21 @@ public class PeakScanListPart extends AbstractPart<ExtendedPeakScanListUI> {
 	@Override
 	protected boolean isUpdateTopic(String topic) {
 
-		return TOPIC.equals(topic) || isChromatogramUnloadEvent(topic) || isChromatogramTopic(topic) || isUpdateEditorTopic(topic);
+		return isChromatogramEvent(topic) || isUpdateEditorEvent(topic) || isCloseEvent(topic);
 	}
 
-	private boolean isChromatogramUnloadEvent(String topic) {
+	private boolean isChromatogramEvent(String topic) {
 
-		if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_SELECTION)) {
-			return true;
-		}
-		return false;
+		return IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION.equals(topic);
 	}
 
-	private boolean isChromatogramTopic(String topic) {
+	private boolean isUpdateEditorEvent(String topic) {
 
-		return topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION);
+		return IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE.equals(topic);
 	}
 
-	private boolean isUpdateEditorTopic(String topic) {
+	private boolean isCloseEvent(String topic) {
 
-		return topic.equals(IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE);
+		return IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_CLOSE.equals(topic);
 	}
 }

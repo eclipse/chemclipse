@@ -41,14 +41,13 @@ public class ChromtogramScanInfoPart extends AbstractPart<ExtendedScanInfoUI> {
 	protected boolean updateData(List<Object> objects, String topic) {
 
 		if(objects.size() == 1) {
-			Object object = null;
-			if(!isUnloadEvent(topic)) {
-				object = objects.get(0);
+			Object object = objects.get(0);
+			if(isUpdateEvent(topic)) {
 				if(object instanceof IChromatogramSelectionMSD) {
 					getControl().setInput(object);
 					return true;
 				}
-			} else {
+			} else if(isCloseEvent(topic)) {
 				getControl().setInput(null);
 				return false;
 			}
@@ -60,14 +59,16 @@ public class ChromtogramScanInfoPart extends AbstractPart<ExtendedScanInfoUI> {
 	@Override
 	protected boolean isUpdateTopic(String topic) {
 
+		return isUpdateEvent(topic) || isCloseEvent(topic);
+	}
+
+	private boolean isUpdateEvent(String topic) {
+
 		return TOPIC.equals(topic);
 	}
 
-	private boolean isUnloadEvent(String topic) {
+	private boolean isCloseEvent(String topic) {
 
-		if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_SELECTION)) {
-			return true;
-		}
-		return false;
+		return IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_CLOSE.equals(topic);
 	}
 }

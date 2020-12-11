@@ -112,7 +112,7 @@ public class DatabaseEditor implements IChemClipseEditor {
 		/*
 		 * Remove the editor from the listed parts.
 		 */
-		UpdateNotifier.update(IChemClipseEvents.TOPIC_LIBRARY_MSD_UNLOAD_SELECTION, null);
+		UpdateNotifier.update(IChemClipseEvents.TOPIC_EDITOR_LIBRARY_CLOSE, null);
 		//
 		if(modelService != null) {
 			MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);

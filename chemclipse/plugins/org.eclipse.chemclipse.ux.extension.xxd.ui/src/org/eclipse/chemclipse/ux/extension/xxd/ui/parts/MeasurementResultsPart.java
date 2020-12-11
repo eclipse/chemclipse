@@ -75,9 +75,10 @@ public class MeasurementResultsPart extends AbstractPart<ExtendedMeasurementResu
 
 		Collection<IMeasurementResult<?>> results = Collections.emptyList();
 		String infoLabel = "";
-		if(!isUnloadEvent(topic)) {
-			if(objects.size() == 1) {
-				Object object = objects.get(0);
+		//
+		if(objects.size() == 1) {
+			Object object = objects.get(0);
+			if(isUpdateEvent(topic)) {
 				if(object instanceof IChromatogramSelection<?, ?>) {
 					IChromatogramSelection<?, ?> selection = (IChromatogramSelection<?, ?>)object;
 					IChromatogram<?> chromatogram = selection.getChromatogram();
@@ -86,6 +87,7 @@ public class MeasurementResultsPart extends AbstractPart<ExtendedMeasurementResu
 				}
 			}
 		}
+		//
 		notification.select(null);
 		getControl().update(results, infoLabel);
 		return true;
@@ -94,14 +96,16 @@ public class MeasurementResultsPart extends AbstractPart<ExtendedMeasurementResu
 	@Override
 	protected boolean isUpdateTopic(String topic) {
 
-		return TOPIC.equals(topic) || isUnloadEvent(topic);
+		return isUpdateEvent(topic) || isCloseEvent(topic);
 	}
 
-	private boolean isUnloadEvent(String topic) {
+	private boolean isUpdateEvent(String topic) {
 
-		if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_SELECTION)) {
-			return true;
-		}
-		return false;
+		return TOPIC.equals(topic);
+	}
+
+	private boolean isCloseEvent(String topic) {
+
+		return IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_CLOSE.equals(topic);
 	}
 }

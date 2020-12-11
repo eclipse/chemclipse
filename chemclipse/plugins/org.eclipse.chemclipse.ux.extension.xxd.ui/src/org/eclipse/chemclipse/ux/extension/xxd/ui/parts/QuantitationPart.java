@@ -42,7 +42,7 @@ public class QuantitationPart extends AbstractPart<ExtendedQuantitationListUI> {
 
 		if(objects.size() == 1) {
 			IPeak peak = null;
-			if(!isUnloadEvent(topic)) {
+			if(isUpdateEvent(topic)) {
 				peak = (IPeak)objects.get(0);
 			}
 			getControl().update(peak);
@@ -55,14 +55,16 @@ public class QuantitationPart extends AbstractPart<ExtendedQuantitationListUI> {
 	@Override
 	protected boolean isUpdateTopic(String topic) {
 
+		return isUpdateEvent(topic) || isCloseEvent(topic);
+	}
+
+	private boolean isUpdateEvent(String topic) {
+
 		return TOPIC.equals(topic);
 	}
 
-	private boolean isUnloadEvent(String topic) {
+	private boolean isCloseEvent(String topic) {
 
-		if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION)) {
-			return true;
-		}
-		return false;
+		return IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_CLOSE.equals(topic);
 	}
 }

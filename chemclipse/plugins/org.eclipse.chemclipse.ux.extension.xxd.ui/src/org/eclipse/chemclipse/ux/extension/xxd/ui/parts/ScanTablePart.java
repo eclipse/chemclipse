@@ -40,14 +40,12 @@ public class ScanTablePart extends AbstractPart<ExtendedScanTableUI> {
 	protected boolean updateData(List<Object> objects, String topic) {
 
 		if(objects.size() == 1) {
-			if(isLoadEvent(topic)) {
+			if(isScanEvent(topic) || isPeakEvent(topic)) {
 				getControl().setInput(objects.get(0));
 				return true;
-			} else {
-				if(isUnloadEvent(topic)) {
-					getControl().setInput(null);
-					return false;
-				}
+			} else if(isCloseEvent(topic)) {
+				getControl().setInput(null);
+				return false;
 			}
 		}
 		//
@@ -57,28 +55,21 @@ public class ScanTablePart extends AbstractPart<ExtendedScanTableUI> {
 	@Override
 	protected boolean isUpdateTopic(String topic) {
 
-		return isLoadEvent(topic) || isUnloadEvent(topic);
+		return isScanEvent(topic) || isPeakEvent(topic) || isCloseEvent(topic);
 	}
 
-	private boolean isLoadEvent(String topic) {
+	private boolean isScanEvent(String topic) {
 
-		if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION)) {
-			return true;
-		} else if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION)) {
-			return true;
-		} else {
-			return false;
-		}
+		return IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION.equals(topic);
 	}
 
-	private boolean isUnloadEvent(String topic) {
+	private boolean isPeakEvent(String topic) {
 
-		if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION)) {
-			return true;
-		} else if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION)) {
-			return true;
-		} else {
-			return false;
-		}
+		return IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION.equals(topic);
+	}
+
+	private boolean isCloseEvent(String topic) {
+
+		return IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_CLOSE.equals(topic);
 	}
 }

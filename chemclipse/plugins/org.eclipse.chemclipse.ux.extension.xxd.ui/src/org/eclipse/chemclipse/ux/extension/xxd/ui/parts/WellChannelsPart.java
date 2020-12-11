@@ -41,7 +41,7 @@ public class WellChannelsPart extends AbstractPart<ExtendedWellChannelsUI> {
 	protected boolean updateData(List<Object> objects, String topic) {
 
 		if(objects.size() == 1) {
-			if(isUnloadEvent(topic)) {
+			if(isCloseEvent(topic)) {
 				getControl().update(null);
 				return false;
 			} else {
@@ -62,14 +62,16 @@ public class WellChannelsPart extends AbstractPart<ExtendedWellChannelsUI> {
 	@Override
 	protected boolean isUpdateTopic(String topic) {
 
-		return TOPIC.equals(topic) || isUnloadEvent(topic);
+		return isUpdateEvent(topic) || isCloseEvent(topic);
 	}
 
-	private boolean isUnloadEvent(String topic) {
+	private boolean isUpdateEvent(String topic) {
 
-		if(topic.equals(IChemClipseEvents.TOPIC_WELL_PCR_UNLOAD_SELECTION) || topic.equals(IChemClipseEvents.TOPIC_PLATE_PCR_UNLOAD_SELECTION)) {
-			return true;
-		}
-		return false;
+		return TOPIC.equals(topic);
+	}
+
+	private boolean isCloseEvent(String topic) {
+
+		return IChemClipseEvents.TOPIC_EDITOR_PCR_CLOSE.equals(topic);
 	}
 }

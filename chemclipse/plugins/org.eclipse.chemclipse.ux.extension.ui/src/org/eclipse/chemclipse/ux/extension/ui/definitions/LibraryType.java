@@ -38,10 +38,10 @@ public class LibraryType implements EventHandler {
 		IMassSpectra librarySelection = null;
 		String libraryType = LIBRARY_TYPE_NONE;
 		//
-		if(topic.equals(IChemClipseEvents.TOPIC_LIBRARY_MSD_UPDATE_SELECTION)) {
+		if(IChemClipseEvents.TOPIC_LIBRARY_MSD_UPDATE_SELECTION.equals(topic)) {
 			librarySelection = (IMassSpectra)property;
 			libraryType = LIBRARY_TYPE_MSD;
-		} else if(topic.equals(IChemClipseEvents.TOPIC_LIBRARY_MSD_UNLOAD_SELECTION)) {
+		} else if(IChemClipseEvents.TOPIC_EDITOR_LIBRARY_CLOSE.equals(topic)) {
 			librarySelection = null;
 			libraryType = LIBRARY_TYPE_NONE;
 		}

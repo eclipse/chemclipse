@@ -193,6 +193,6 @@ public class PlateEditorPCR implements IChemClipseEditor {
 
 	private void unloadPlate() {
 
-		UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_PLATE_PCR_UNLOAD_SELECTION, null);
+		UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_EDITOR_PCR_CLOSE, null);
 	}
 }

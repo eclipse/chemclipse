@@ -42,7 +42,7 @@ public class PeakDetailsPart extends AbstractPart<ExtendedPeakDetailsUI> {
 
 		if(objects.size() == 1) {
 			IPeak peak = null;
-			if(!isUnloadEvent(topic)) {
+			if(isUpdateEvent(topic)) {
 				Object object = objects.get(0);
 				if(object instanceof IPeak) {
 					peak = (IPeak)object;
@@ -58,14 +58,16 @@ public class PeakDetailsPart extends AbstractPart<ExtendedPeakDetailsUI> {
 	@Override
 	protected boolean isUpdateTopic(String topic) {
 
-		return TOPIC.equals(topic) || isUnloadEvent(topic);
+		return isUpdateEvent(topic) || isCloseEvent(topic);
 	}
 
-	private boolean isUnloadEvent(String topic) {
+	private boolean isUpdateEvent(String topic) {
 
-		if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION)) {
-			return true;
-		}
-		return false;
+		return TOPIC.equals(topic);
+	}
+
+	private boolean isCloseEvent(String topic) {
+
+		return IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_CLOSE.equals(topic);
 	}
 }

@@ -83,7 +83,7 @@ public class ScanEditorXIR implements IScanEditorXIR {
 	@PreDestroy
 	protected void preDestroy() {
 
-		UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_SCAN_XIR_UNLOAD_SELECTION, null);
+		UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_EDITOR_XIR_CLOSE, null);
 		//
 		if(modelService != null && application != null) {
 			MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);

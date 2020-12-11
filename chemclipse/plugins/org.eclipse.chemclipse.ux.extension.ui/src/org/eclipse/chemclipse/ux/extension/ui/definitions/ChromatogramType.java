@@ -32,18 +32,17 @@ public class ChromatogramType implements EventHandler {
 	public static final String CHROMATOGRAM_TYPE_XXD = "CHROMATOGRAM_TYPE_XXD";
 	public static final String CHROMATOGRAM_TYPE_NONE = "CHROMATOGRAM_TYPE_NONE";
 
-	@SuppressWarnings("rawtypes")
 	@Override
 	public void handleEvent(Event event) {
 
 		String topic = event.getTopic();
-		IChromatogramSelection chromatogramSelection = null;
+		IChromatogramSelection<?, ?> chromatogramSelection = null;
 		String chromatogramType = CHROMATOGRAM_TYPE_NONE;
 		//
 		if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION)) {
 			Object object = event.getProperty(IChemClipseEvents.EVENT_BROKER_DATA);
 			if(object instanceof IChromatogramSelection) {
-				chromatogramSelection = (IChromatogramSelection)object;
+				chromatogramSelection = (IChromatogramSelection<?, ?>)object;
 				if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
 					chromatogramType = CHROMATOGRAM_TYPE_CSD;
 				} else if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
@@ -52,7 +51,7 @@ public class ChromatogramType implements EventHandler {
 					chromatogramType = CHROMATOGRAM_TYPE_WSD;
 				}
 			}
-		} else if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_SELECTION)) {
+		} else if(topic.equals(IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_CLOSE)) {
 			chromatogramSelection = null;
 			chromatogramType = CHROMATOGRAM_TYPE_NONE;
 		}

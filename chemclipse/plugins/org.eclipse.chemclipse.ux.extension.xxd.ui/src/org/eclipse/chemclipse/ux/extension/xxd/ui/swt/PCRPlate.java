@@ -24,10 +24,9 @@ import org.eclipse.chemclipse.pcr.model.core.IWell;
 import org.eclipse.chemclipse.pcr.model.core.Position;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.swt.ISelectionHandler;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseMoveListener;
@@ -173,18 +172,7 @@ public class PCRPlate extends Composite {
 
 		showWellDetails(pcrWell.getWell());
 		well = pcrWell.getWell();
-		String topic = (well != null) ? IChemClipseEvents.TOPIC_WELL_PCR_UPDATE_SELECTION : IChemClipseEvents.TOPIC_WELL_PCR_UNLOAD_SELECTION;
-		pcrWell.getDisplay().asyncExec(new Runnable() {
-
-			@Override
-			public void run() {
-
-				IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-				if(eventBroker != null) {
-					eventBroker.send(topic, (well != null) ? well : null);
-				}
-			}
-		});
+		UpdateNotifierUI.update(pcrWell.getDisplay(), IChemClipseEvents.TOPIC_WELL_PCR_UPDATE_SELECTION, well);
 	}
 
 	private Label createLabel(Composite parent) {

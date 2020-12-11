@@ -166,14 +166,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 		notifications.removeObjectChangedListener(updateMenuListener);
 		measurementNotification.removeObjectChangedListener(updateMeasurementResult);
 		//
-		IChromatogramSelection<?, ?> chromatogramSelection = null;
-		UpdateNotifierUI.update(Display.getDefault(), chromatogramSelection);
-		//
-		IPeak peak = null;
-		UpdateNotifierUI.update(Display.getDefault(), peak);
-		//
-		IScan scan = null;
-		UpdateNotifierUI.update(Display.getDefault(), scan);
+		UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_CLOSE, null);
 		//
 		partSupport.closePart(part);
 	}

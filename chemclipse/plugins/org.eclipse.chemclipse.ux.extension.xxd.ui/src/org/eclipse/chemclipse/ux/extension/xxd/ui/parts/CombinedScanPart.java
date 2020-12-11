@@ -40,12 +40,14 @@ public class CombinedScanPart extends AbstractPart<ExtendedCombinedScanUI> {
 	protected boolean updateData(List<Object> objects, String topic) {
 
 		if(objects.size() == 1) {
-			Object object = null;
-			if(!isUnloadEvent(topic)) {
-				object = objects.get(0);
+			Object object = objects.get(0);
+			if(isUpdateEvent(topic)) {
+				getControl().update(object);
+				return true;
+			} else if(isCloseEvent(topic)) {
+				getControl().update(null);
+				return false;
 			}
-			getControl().update(object);
-			return true;
 		}
 		//
 		return false;
@@ -54,14 +56,16 @@ public class CombinedScanPart extends AbstractPart<ExtendedCombinedScanUI> {
 	@Override
 	protected boolean isUpdateTopic(String topic) {
 
-		return TOPIC.equals(topic) || isUnloadEvent(topic);
+		return isUpdateEvent(topic) || isCloseEvent(topic);
 	}
 
-	private boolean isUnloadEvent(String topic) {
+	private boolean isUpdateEvent(String topic) {
 
-		if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_SELECTION)) {
-			return true;
-		}
-		return false;
+		return TOPIC.equals(topic);
+	}
+
+	private boolean isCloseEvent(String topic) {
+
+		return IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_CLOSE.equals(topic);
 	}
 }

@@ -41,7 +41,7 @@ public class PlateChartsPart extends AbstractPart<ExtendedPlateChartsUI> {
 	protected boolean updateData(List<Object> objects, String topic) {
 
 		if(objects.size() == 1) {
-			if(topic.equals(IChemClipseEvents.TOPIC_PLATE_PCR_UNLOAD_SELECTION)) {
+			if(isCloseEvent(topic)) {
 				getControl().update(null);
 				return false;
 			} else {
@@ -62,6 +62,16 @@ public class PlateChartsPart extends AbstractPart<ExtendedPlateChartsUI> {
 	@Override
 	protected boolean isUpdateTopic(String topic) {
 
-		return TOPIC.equals(topic) || TOPIC.equals(IChemClipseEvents.TOPIC_PLATE_PCR_UNLOAD_SELECTION);
+		return isUpdateEvent(topic) || isCloseEvent(topic);
+	}
+
+	private boolean isUpdateEvent(String topic) {
+
+		return TOPIC.equals(topic);
+	}
+
+	private boolean isCloseEvent(String topic) {
+
+		return IChemClipseEvents.TOPIC_EDITOR_PCR_CLOSE.equals(topic);
 	}
 }

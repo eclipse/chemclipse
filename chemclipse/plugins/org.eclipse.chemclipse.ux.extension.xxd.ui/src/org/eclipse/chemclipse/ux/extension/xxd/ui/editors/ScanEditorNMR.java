@@ -97,8 +97,6 @@ public class ScanEditorNMR implements IScanEditorNMR {
 	private final MPart part;
 	private final MDirtyable dirtyable;
 	//
-	private final IEventBroker eventBroker;
-	//
 	private ExtendedNMRScanUI extendedNMRScanUI;
 	//
 	private final Shell shell;
@@ -124,7 +122,6 @@ public class ScanEditorNMR implements IScanEditorNMR {
 		//
 		this.part = part;
 		this.dirtyable = dirtyable;
-		this.eventBroker = eventBroker;
 		this.shell = shell;
 		this.filterFactory = filterFactory;
 		//
@@ -140,7 +137,7 @@ public class ScanEditorNMR implements IScanEditorNMR {
 	@PreDestroy
 	protected void preDestroy() {
 
-		UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_SCAN_NMR_UNLOAD_SELECTION, null);
+		UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_EDITOR_NMR_CLOSE, null);
 	}
 
 	@Persist

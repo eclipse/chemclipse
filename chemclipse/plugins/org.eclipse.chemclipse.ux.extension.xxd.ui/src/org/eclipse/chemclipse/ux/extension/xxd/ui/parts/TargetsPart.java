@@ -41,7 +41,7 @@ public class TargetsPart extends AbstractPart<ExtendedTargetsUI> {
 	protected boolean updateData(List<Object> objects, String topic) {
 
 		if(objects.size() == 1) {
-			if(isChromatogramUnloadEvent(topic) || isOtherUnloadEvent(topic)) {
+			if(isCloseEvent(topic)) {
 				getControl().update(null);
 				return true;
 			} else {
@@ -53,7 +53,7 @@ public class TargetsPart extends AbstractPart<ExtendedTargetsUI> {
 						getControl().update(object);
 						return true;
 					}
-				} else if(isScanOrPeakTopic(topic) || isIdentificationTopic(topic)) {
+				} else if(isScanTopic(topic) || isPeakTopic(topic) || isIdentificationTopic(topic)) {
 					getControl().update(object);
 					return true;
 				}
@@ -66,49 +66,31 @@ public class TargetsPart extends AbstractPart<ExtendedTargetsUI> {
 	@Override
 	protected boolean isUpdateTopic(String topic) {
 
-		return isChromatogramTopic(topic) || isScanOrPeakTopic(topic) || isIdentificationTopic(topic) || isChromatogramUnloadEvent(topic) || isOtherUnloadEvent(topic);
-	}
-
-	private boolean isChromatogramUnloadEvent(String topic) {
-
-		if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_SELECTION)) {
-			return true;
-		}
-		return false;
+		return isChromatogramTopic(topic) || isScanTopic(topic) || isPeakTopic(topic) || isIdentificationTopic(topic) || isCloseEvent(topic);
 	}
 
 	private boolean isChromatogramTopic(String topic) {
 
-		return topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION);
+		return IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION.equals(topic);
 	}
 
-	private boolean isOtherUnloadEvent(String topic) {
+	private boolean isScanTopic(String topic) {
 
-		if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION)) {
-			return true;
-		} else if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION)) {
-			return true;
-		} else if(topic.equals(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UNLOAD_SELECTION)) {
-			return true;
-		}
-		return false;
+		return IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION.equals(topic);
 	}
 
-	private boolean isScanOrPeakTopic(String topic) {
+	private boolean isPeakTopic(String topic) {
 
-		if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION)) {
-			return true;
-		} else if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION)) {
-			return true;
-		}
-		return false;
+		return IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION.equals(topic);
 	}
 
 	private boolean isIdentificationTopic(String topic) {
 
-		if(topic.equals(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION)) {
-			return true;
-		}
-		return false;
+		return IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION.equals(topic);
+	}
+
+	private boolean isCloseEvent(String topic) {
+
+		return IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_CLOSE.equals(topic);
 	}
 }

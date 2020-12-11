@@ -36,11 +36,7 @@ public class UpdateNotifier {
 
 		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
 		if(eventBroker != null) {
-			if(chromatogramSelection != null) {
-				eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION, chromatogramSelection);
-			} else {
-				eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_SELECTION, null);
-			}
+			eventBroker.send(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION, chromatogramSelection);
 		}
 	}
 
@@ -48,11 +44,7 @@ public class UpdateNotifier {
 
 		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
 		if(eventBroker != null) {
-			if(peak != null) {
-				eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
-			} else {
-				eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION, null);
-			}
+			eventBroker.send(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION, peak);
 		}
 	}
 
@@ -60,11 +52,7 @@ public class UpdateNotifier {
 
 		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
 		if(eventBroker != null) {
-			if(scan != null) {
-				eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scan);
-			} else {
-				eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION, null);
-			}
+			eventBroker.send(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION, scan);
 		}
 	}
 
@@ -72,9 +60,7 @@ public class UpdateNotifier {
 
 		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
 		if(eventBroker != null) {
-			if(identificationTarget != null) {
-				eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, identificationTarget);
-			}
+			eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGET_UPDATE, identificationTarget);
 		}
 	}
 
@@ -82,9 +68,7 @@ public class UpdateNotifier {
 
 		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
 		if(eventBroker != null) {
-			if(targetSupplier != null) {
-				eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION, targetSupplier);
-			}
+			eventBroker.send(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION, targetSupplier);
 		}
 	}
 
@@ -92,9 +76,7 @@ public class UpdateNotifier {
 
 		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
 		if(eventBroker != null) {
-			if(scan1 != null && identificationTarget != null) {
-				eventBroker.send(IChemClipseEvents.TOPIC_SCAN_TARGET_UPDATE_COMPARISON, new Object[]{scan1, identificationTarget});
-			}
+			eventBroker.send(IChemClipseEvents.TOPIC_SCAN_TARGET_UPDATE_COMPARISON, new Object[]{scan1, identificationTarget});
 		}
 	}
 
@@ -102,9 +84,7 @@ public class UpdateNotifier {
 
 		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
 		if(eventBroker != null) {
-			if(scan1 != null && scan2 != null) {
-				eventBroker.send(IChemClipseEvents.TOPIC_SCAN_REFERENCE_UPDATE_COMPARISON, new Object[]{scan1, scan2});
-			}
+			eventBroker.send(IChemClipseEvents.TOPIC_SCAN_REFERENCE_UPDATE_COMPARISON, new Object[]{scan1, scan2});
 		}
 	}
 
@@ -112,9 +92,7 @@ public class UpdateNotifier {
 
 		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
 		if(eventBroker != null) {
-			if(editHistory != null) {
-				eventBroker.send(IChemClipseEvents.TOPIC_EDIT_HISTORY_UPDATE, editHistory);
-			}
+			eventBroker.send(IChemClipseEvents.TOPIC_EDIT_HISTORY_UPDATE, editHistory);
 		}
 	}
 
@@ -122,9 +100,7 @@ public class UpdateNotifier {
 
 		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
 		if(eventBroker != null) {
-			if(quantitationCompound != null) {
-				eventBroker.send(IChemClipseEvents.TOPIC_QUANT_DB_COMPOUND_UPDATE, quantitationCompound);
-			}
+			eventBroker.send(IChemClipseEvents.TOPIC_QUANT_DB_COMPOUND_UPDATE, quantitationCompound);
 		}
 	}
 }

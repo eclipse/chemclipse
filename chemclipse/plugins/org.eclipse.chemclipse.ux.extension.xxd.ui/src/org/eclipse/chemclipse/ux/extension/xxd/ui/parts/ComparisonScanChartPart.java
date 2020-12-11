@@ -43,7 +43,7 @@ public class ComparisonScanChartPart extends AbstractPart<ExtendedComparisonScan
 	@Override
 	protected boolean updateData(List<Object> objects, String topic) {
 
-		if(isUnloadEvent(topic)) {
+		if(isChromatogramCloseEvent(topic) || isLibraryCloseEvent(topic)) {
 			getControl().clear();
 			return false;
 		} else {
@@ -102,7 +102,7 @@ public class ComparisonScanChartPart extends AbstractPart<ExtendedComparisonScan
 	@Override
 	protected boolean isUpdateTopic(String topic) {
 
-		return isPeakUpdateEvent(topic) || isScanUpdateEvent(topic) || isScanTargetComparisonEvent(topic) || isScanReferenceComparisonEvent(topic) || isUnloadEvent(topic);
+		return isPeakUpdateEvent(topic) || isScanUpdateEvent(topic) || isScanTargetComparisonEvent(topic) || isScanReferenceComparisonEvent(topic) || isChromatogramCloseEvent(topic) || isLibraryCloseEvent(topic);
 	}
 
 	private boolean isScanUpdateEvent(String topic) {
@@ -125,13 +125,13 @@ public class ComparisonScanChartPart extends AbstractPart<ExtendedComparisonScan
 		return IChemClipseEvents.TOPIC_SCAN_REFERENCE_UPDATE_COMPARISON.equals(topic);
 	}
 
-	private boolean isUnloadEvent(String topic) {
+	private boolean isChromatogramCloseEvent(String topic) {
 
-		if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UNLOAD_SELECTION)) {
-			return true;
-		} else if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UNLOAD_SELECTION)) {
-			return true;
-		}
-		return false;
+		return IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_CLOSE.equals(topic);
+	}
+
+	private boolean isLibraryCloseEvent(String topic) {
+
+		return IChemClipseEvents.TOPIC_EDITOR_LIBRARY_CLOSE.equals(topic);
 	}
 }

@@ -41,7 +41,7 @@ public class PeakDetectorPart extends AbstractPart<ExtendedPeakDetectorUI> {
 	protected boolean updateData(List<Object> objects, String topic) {
 
 		if(objects.size() == 1) {
-			if(isUnloadEvent(topic)) {
+			if(isCloseEvent(topic)) {
 				getControl().update(null);
 				return false;
 			} else {
@@ -60,14 +60,16 @@ public class PeakDetectorPart extends AbstractPart<ExtendedPeakDetectorUI> {
 	@Override
 	protected boolean isUpdateTopic(String topic) {
 
-		return TOPIC.equals(topic) || isUnloadEvent(topic);
+		return isUpdateEvent(topic) || isCloseEvent(topic);
 	}
 
-	private boolean isUnloadEvent(String topic) {
+	private boolean isUpdateEvent(String topic) {
 
-		if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UNLOAD_SELECTION)) {
-			return true;
-		}
-		return false;
+		return TOPIC.equals(topic);
+	}
+
+	private boolean isCloseEvent(String topic) {
+
+		return IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_CLOSE.equals(topic);
 	}
 }
