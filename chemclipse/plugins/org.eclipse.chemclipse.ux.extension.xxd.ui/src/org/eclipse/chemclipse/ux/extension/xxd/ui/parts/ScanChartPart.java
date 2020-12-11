@@ -61,11 +61,21 @@ public class ScanChartPart extends AbstractPart<ExtendedScanChartUI> {
 	@Override
 	protected boolean isUpdateTopic(String topic) {
 
-		if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION)) {
-			return true;
-		} else if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION)) {
-			return true;
-		}
-		return false;
+		return isScanTopic(topic) || isPeakTopic(topic) || isCloseEvent(topic);
+	}
+
+	private boolean isScanTopic(String topic) {
+
+		return IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION.equals(topic);
+	}
+
+	private boolean isPeakTopic(String topic) {
+
+		return TOPIC.equals(topic);
+	}
+
+	private boolean isCloseEvent(String topic) {
+
+		return IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_CLOSE.equals(topic);
 	}
 }

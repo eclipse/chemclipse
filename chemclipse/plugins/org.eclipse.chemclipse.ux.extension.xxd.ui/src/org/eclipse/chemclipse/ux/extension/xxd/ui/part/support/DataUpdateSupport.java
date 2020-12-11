@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -195,6 +196,14 @@ public class DataUpdateSupport {
 		 */
 		objectMap.put(topic, objects);
 		fireUpdate(topic, objects);
+		/*
+		 * Editor close event
+		 */
+		if(topic.matches(IChemClipseEvents.EDITOR_CLOSE_MATCHER)) {
+			logger.info("Editor close event: " + topic);
+			objectMap.clear();
+			logger.info("Object map has been cleared.");
+		}
 	}
 
 	private void fireUpdate(String topic, List<Object> objects) {

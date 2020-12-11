@@ -166,7 +166,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 		notifications.removeObjectChangedListener(updateMenuListener);
 		measurementNotification.removeObjectChangedListener(updateMeasurementResult);
 		//
-		UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_CLOSE, null);
+		UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_CLOSE, "The chromatogram Editor has been closed.");
 		//
 		partSupport.closePart(part);
 	}

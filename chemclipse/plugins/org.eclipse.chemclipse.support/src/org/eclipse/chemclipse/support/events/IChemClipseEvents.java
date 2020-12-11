@@ -82,6 +82,7 @@ public interface IChemClipseEvents {
 	String TOPIC_EDITOR_CHROMATOGRAM_UPDATE = "editor/chromatogram/update";
 	String TOPIC_EDITOR_CHROMATOGRAM_ADJUST = "editor/chromatogram/adjust";
 	//
+	String EDITOR_CLOSE_MATCHER = "(editor/)(.*)(/close)";
 	String TOPIC_EDITOR_CHROMATOGRAM_CLOSE = "editor/chromatogram/close";
 	String TOPIC_EDITOR_LIBRARY_CLOSE = "editor/library/close";
 	String TOPIC_EDITOR_PCR_CLOSE = "editor/pcr/close";

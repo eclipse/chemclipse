@@ -81,7 +81,7 @@ public class TargetsPart extends AbstractPart<ExtendedTargetsUI> {
 
 	private boolean isPeakTopic(String topic) {
 
-		return IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION.equals(topic);
+		return TOPIC.equals(topic);
 	}
 
 	private boolean isIdentificationTopic(String topic) {
