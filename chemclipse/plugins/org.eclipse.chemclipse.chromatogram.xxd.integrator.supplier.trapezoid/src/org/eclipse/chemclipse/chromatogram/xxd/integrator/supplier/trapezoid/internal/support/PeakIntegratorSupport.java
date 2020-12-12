@@ -56,15 +56,15 @@ public class PeakIntegratorSupport {
 		List<? extends IPeak> peaks = null;
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
 			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
-			IChromatogramMSD chromatogramMSD = chromatogramSelectionMSD.getChromatogramMSD();
+			IChromatogramMSD chromatogramMSD = chromatogramSelectionMSD.getChromatogram();
 			peaks = chromatogramMSD.getPeaks(chromatogramSelectionMSD);
 		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
 			IChromatogramSelectionCSD chromatogramSelectionCSD = (IChromatogramSelectionCSD)chromatogramSelection;
-			IChromatogramCSD chromatogramFID = chromatogramSelectionCSD.getChromatogramCSD();
+			IChromatogramCSD chromatogramFID = chromatogramSelectionCSD.getChromatogram();
 			peaks = chromatogramFID.getPeaks(chromatogramSelectionCSD);
 		} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
 			IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
-			IChromatogramWSD chromatogramWSD = chromatogramSelectionWSD.getChromatogramWSD();
+			IChromatogramWSD chromatogramWSD = chromatogramSelectionWSD.getChromatogram();
 			peaks = chromatogramWSD.getPeaks(chromatogramSelectionWSD);
 		}
 		//

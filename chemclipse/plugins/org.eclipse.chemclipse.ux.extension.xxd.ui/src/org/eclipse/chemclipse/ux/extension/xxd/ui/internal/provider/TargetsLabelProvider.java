@@ -19,7 +19,9 @@ import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
+import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.swt.graphics.Image;
 
 public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
@@ -200,7 +202,12 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 					text = decimalFormat.format(libraryInformation.getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
 					break;
 				case 21:
-					text = decimalFormat.format(libraryInformation.getRetentionIndex());
+					if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
+						DecimalFormat decimalFormatInteger = ValueFormat.getDecimalFormatEnglish("0");
+						text = decimalFormatInteger.format(libraryInformation.getRetentionIndex());
+					} else {
+						text = decimalFormat.format(libraryInformation.getRetentionIndex());
+					}
 					break;
 				default:
 					text = "n.v.";

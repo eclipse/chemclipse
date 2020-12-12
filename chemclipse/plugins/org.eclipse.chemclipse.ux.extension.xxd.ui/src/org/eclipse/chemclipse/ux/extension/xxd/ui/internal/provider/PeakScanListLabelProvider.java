@@ -27,12 +27,11 @@ import org.eclipse.chemclipse.model.identifier.IPeakComparisonResult;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 
@@ -183,7 +182,6 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 
 		IPeakModel peakModel = peak.getPeakModel();
 		DecimalFormat decimalFormat = getDecimalFormat();
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		String text = BLANK;
 		//
 		switch(columnIndex) {
@@ -200,18 +198,16 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 				text = decimalFormat.format(peakModel.getPeakMaximum().getRelativeRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 				break;
 			case 4:
-				boolean showRetentionIndexWithoutDecimals = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_RETENTION_INDEX_WITHOUT_DECIMALS);
-				if(showRetentionIndexWithoutDecimals) {
-					DecimalFormat integerFormat = createIntegerDecimalFormatInstance();
+				if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
+					DecimalFormat integerFormat = getIntegerDecimalFormatInstance();
 					text = integerFormat.format(peakModel.getPeakMaximum().getRetentionIndex());
 				} else {
 					text = decimalFormat.format(peakModel.getPeakMaximum().getRetentionIndex());
 				}
 				break;
 			case 5:
-				boolean showAreaWithoutDecimals = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_AREA_WITHOUT_DECIMALS);
-				if(showAreaWithoutDecimals) {
-					DecimalFormat integerFormat = createIntegerDecimalFormatInstance();
+				if(PreferenceSupplier.showAreaWithoutDecimals()) {
+					DecimalFormat integerFormat = getIntegerDecimalFormatInstance();
 					text = integerFormat.format(peak.getIntegratedArea());
 				} else {
 					text = decimalFormat.format(peak.getIntegratedArea());
@@ -283,8 +279,9 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 				break;
 			case 18:
 				if(chromatogramPeakArea > 0) {
+					DecimalFormat decimalFormatPercent = ValueFormat.getDecimalFormatEnglish("0.000");
 					double peakAreaPercent = (100.0d / chromatogramPeakArea) * peak.getIntegratedArea();
-					text = decimalFormat.format(peakAreaPercent);
+					text = decimalFormatPercent.format(peakAreaPercent);
 				} else {
 					text = NO_VALUE;
 				}
@@ -303,7 +300,6 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 	private String getScanText(IScan scan, int columnIndex) {
 
 		DecimalFormat decimalFormat = getDecimalFormat();
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 		String text = BLANK;
 		//
 		switch(columnIndex) {
@@ -320,9 +316,9 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 				text = decimalFormat.format(scan.getRelativeRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 				break;
 			case 4:
-				boolean showRetentionIndexWithoutDecimals = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_RETENTION_INDEX_WITHOUT_DECIMALS);
-				if(showRetentionIndexWithoutDecimals) {
-					text = Integer.toString((int)scan.getRetentionIndex());
+				if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
+					DecimalFormat integerFormat = getIntegerDecimalFormatInstance();
+					text = integerFormat.format(scan.getRetentionIndex());
 				} else {
 					text = decimalFormat.format(scan.getRetentionIndex());
 				}

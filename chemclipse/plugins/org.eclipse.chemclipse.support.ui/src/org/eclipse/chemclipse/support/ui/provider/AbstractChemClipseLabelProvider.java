@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2020 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,7 +27,8 @@ public abstract class AbstractChemClipseLabelProvider extends ColumnLabelProvide
 	 * The pattern "0.000" is used by default.
 	 */
 	public AbstractChemClipseLabelProvider() {
-		createDecimalFormatInstance("0.000");
+
+		getDecimalFormatInstance("0.000");
 	}
 
 	/**
@@ -36,20 +37,21 @@ public abstract class AbstractChemClipseLabelProvider extends ColumnLabelProvide
 	 * @param pattern
 	 */
 	public AbstractChemClipseLabelProvider(String pattern) {
-		createDecimalFormatInstance(pattern);
+
+		getDecimalFormatInstance(pattern);
 	}
 
-	private void createDecimalFormatInstance(String pattern) {
+	private void getDecimalFormatInstance(String pattern) {
 
 		decimalFormat = ValueFormat.getDecimalFormatEnglish(pattern);
 	}
 
-	public DecimalFormat createScientificDecimalFormatInstance() {
+	public DecimalFormat getScientificDecimalFormatInstance() {
 
 		return ValueFormat.getDecimalFormatEnglish("0.###E0");
 	}
 
-	public DecimalFormat createIntegerDecimalFormatInstance() {
+	public DecimalFormat getIntegerDecimalFormatInstance() {
 
 		return ValueFormat.getDecimalFormatEnglish("0");
 	}

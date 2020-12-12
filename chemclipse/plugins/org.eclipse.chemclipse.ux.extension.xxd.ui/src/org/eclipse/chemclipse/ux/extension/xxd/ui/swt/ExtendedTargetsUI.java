@@ -549,6 +549,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 	private void applySettings() {
 
 		comboTarget.updateContentProposals();
+		tableViewer.get().refresh();
 	}
 
 	private void updateInput() {

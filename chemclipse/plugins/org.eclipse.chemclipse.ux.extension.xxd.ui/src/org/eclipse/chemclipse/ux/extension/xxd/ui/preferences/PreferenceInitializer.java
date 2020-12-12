@@ -238,8 +238,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		/*
 		 * Chromatogram
 		 */
-		store.setDefault(PreferenceConstants.P_SHOW_RETENTION_INDEX_WITHOUT_DECIMALS, PreferenceConstants.DEF_SHOW_RETENTION_INDEX_WITHOUT_DECIMALS);
-		store.setDefault(PreferenceConstants.P_SHOW_AREA_WITHOUT_DECIMALS, PreferenceConstants.DEF_SHOW_AREA_WITHOUT_DECIMALS);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_CHART_COMPRESSION_TYPE, PreferenceConstants.DEF_CHROMATOGRAM_CHART_COMPRESSION_TYPE);
 		store.setDefault(PreferenceConstants.P_COLOR_CHROMATOGRAM, PreferenceConstants.DEF_COLOR_CHROMATOGRAM);
 		store.setDefault(PreferenceConstants.P_COLOR_CHROMATOGRAM_INACTIVE, PreferenceConstants.DEF_COLOR_CHROMATOGRAM_INACTIVE);

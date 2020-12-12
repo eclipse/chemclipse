@@ -162,7 +162,6 @@ public class PeakIntegrator {
 		return peakIntegrationResults;
 	}
 
-	// ------------------------------------------------private methods
 	/**
 	 * Checks that the peak list is not null.
 	 * 
@@ -549,5 +548,4 @@ public class PeakIntegrator {
 		}
 		return result;
 	}
-	// ------------------------------------------private methods
 }
