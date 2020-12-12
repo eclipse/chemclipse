@@ -13,6 +13,8 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PreDestroy;
@@ -83,7 +85,8 @@ public class ScanEditorXIR implements IScanEditorXIR {
 	@PreDestroy
 	protected void preDestroy() {
 
-		UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_EDITOR_XIR_CLOSE, null);
+		List<String> clearTopics = Arrays.asList();
+		UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_EDITOR_XIR_CLOSE, clearTopics);
 		//
 		if(modelService != null && application != null) {
 			MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);

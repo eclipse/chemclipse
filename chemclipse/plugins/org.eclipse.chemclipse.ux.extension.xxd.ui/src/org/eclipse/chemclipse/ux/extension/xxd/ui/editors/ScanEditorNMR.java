@@ -17,6 +17,7 @@ import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.maximize;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -137,7 +138,8 @@ public class ScanEditorNMR implements IScanEditorNMR {
 	@PreDestroy
 	protected void preDestroy() {
 
-		UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_EDITOR_NMR_CLOSE, null);
+		List<String> clearTopics = Arrays.asList();
+		UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_EDITOR_NMR_CLOSE, clearTopics);
 	}
 
 	@Persist

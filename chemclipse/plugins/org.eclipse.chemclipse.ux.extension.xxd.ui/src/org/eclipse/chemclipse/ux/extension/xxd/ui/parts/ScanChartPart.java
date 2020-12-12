@@ -43,16 +43,21 @@ public class ScanChartPart extends AbstractPart<ExtendedScanChartUI> {
 	protected boolean updateData(List<Object> objects, String topic) {
 
 		if(objects.size() == 1) {
-			Object object = objects.get(0);
-			IScan scan = null;
-			if(object instanceof IScan) {
-				scan = (IScan)object;
-			} else if(object instanceof IPeak) {
-				IPeak peak = (IPeak)object;
-				scan = peak.getPeakModel().getPeakMaximum();
+			if(isCloseEvent(topic)) {
+				getControl().update(null);
+				return true;
+			} else {
+				Object object = objects.get(0);
+				IScan scan = null;
+				if(object instanceof IScan) {
+					scan = (IScan)object;
+				} else if(object instanceof IPeak) {
+					IPeak peak = (IPeak)object;
+					scan = peak.getPeakModel().getPeakMaximum();
+				}
+				getControl().update(scan);
+				return true;
 			}
-			getControl().update(scan);
-			return true;
 		}
 		//
 		return false;
@@ -66,12 +71,12 @@ public class ScanChartPart extends AbstractPart<ExtendedScanChartUI> {
 
 	private boolean isScanTopic(String topic) {
 
-		return IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION.equals(topic);
+		return TOPIC.equals(topic);
 	}
 
 	private boolean isPeakTopic(String topic) {
 
-		return TOPIC.equals(topic);
+		return IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION.equals(topic);
 	}
 
 	private boolean isCloseEvent(String topic) {

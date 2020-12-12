@@ -13,6 +13,8 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PreDestroy;
@@ -193,6 +195,7 @@ public class PlateEditorPCR implements IChemClipseEditor {
 
 	private void unloadPlate() {
 
-		UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_EDITOR_PCR_CLOSE, null);
+		List<String> clearTopics = Arrays.asList(IChemClipseEvents.TOPIC_PLATE_PCR_UPDATE_SELECTION, IChemClipseEvents.TOPIC_WELL_PCR_UPDATE_SELECTION);
+		UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_EDITOR_PCR_CLOSE, clearTopics);
 	}
 }

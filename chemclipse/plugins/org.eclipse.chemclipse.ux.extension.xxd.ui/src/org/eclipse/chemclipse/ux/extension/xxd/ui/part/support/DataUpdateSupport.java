@@ -170,22 +170,31 @@ public class DataUpdateSupport {
 
 	private void update(Event event, String[] properties) {
 
-		String topic = event.getTopic();
+		updateObjects(event, properties);
+		handleCloseEvent(event, properties);
+	}
+
+	private void updateObjects(Event event, String[] properties) {
+
 		/*
-		 * Create a new topic entry.
+		 * Create a new topic entry on demand.
 		 */
+		String topic = event.getTopic();
 		if(!objectMap.containsKey(topic)) {
 			objectMap.put(topic, new ArrayList<Object>());
 		}
-		/*
-		 * Get the list and re-evaluate.
-		 */
+		//
 		List<Object> objects = objectMap.get(topic);
 		objects.clear();
 		//
 		if(properties != null) {
 			for(String property : properties) {
 				Object object = event.getProperty(property);
+				/*
+				 * The UpdateNotifier doesn't perform a null check.
+				 * This is done here. Only update topics with valid objects.
+				 * org.eclipse.chemclipse.model.notifier.UpdateNotifier
+				 */
 				if(object != null) {
 					objects.add(object);
 				}
@@ -196,13 +205,33 @@ public class DataUpdateSupport {
 		 */
 		objectMap.put(topic, objects);
 		fireUpdate(topic, objects);
+	}
+
+	@SuppressWarnings("rawtypes")
+	private void handleCloseEvent(Event event, String[] properties) {
+
 		/*
 		 * Editor close event
 		 */
-		if(topic.matches(IChemClipseEvents.EDITOR_CLOSE_MATCHER)) {
-			logger.info("Editor close event: " + topic);
-			objectMap.clear();
-			logger.info("Object map has been cleared.");
+		String topic = event.getTopic();
+		if(topic.matches(IChemClipseEvents.EDITOR_CLOSE_REGEX)) {
+			logger.info("Handle editor close event: " + topic);
+			/*
+			 * Clear the given topics.
+			 */
+			if(properties != null) {
+				Object object = event.getProperty(IChemClipseEvents.EVENT_BROKER_DATA);
+				if(object instanceof List) {
+					List elements = (List)object;
+					for(Object element : elements) {
+						if(element instanceof String) {
+							String topicToBeCleared = (String)element;
+							logger.info("Clear mapped objects of topic: " + topicToBeCleared);
+							objectMap.remove(topicToBeCleared);
+						}
+					}
+				}
+			}
 		}
 	}
 

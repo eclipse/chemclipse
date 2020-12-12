@@ -217,6 +217,9 @@ public class ScanChartUI extends ScrollableChart {
 				barSeriesDataList.add(barSeriesData);
 				addBarSeriesData(barSeriesDataList);
 			}
+		} else {
+			redraw();
+			getBaseChart().redraw();
 		}
 	}
 
