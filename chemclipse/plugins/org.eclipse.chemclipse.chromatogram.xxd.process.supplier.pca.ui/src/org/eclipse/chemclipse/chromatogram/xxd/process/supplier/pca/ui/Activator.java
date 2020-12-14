@@ -17,7 +17,6 @@ import java.util.Map;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -47,10 +46,8 @@ public class Activator extends AbstractActivatorUI {
 	//
 	public static final String TOPIC_PCA_EVALUATION_LOAD = "pca/evaluation/load";
 	public static final String TOPIC_PCA_EVALUATION_CLEAR = "pca/evaluation/clear";
-	public static final String PROPERTY_PCA_EVALUATION = IEventBroker.DATA;
 	//
 	private static Activator plugin;
-	private DataUpdateSupport dataUpdateSupport;
 
 	/**
 	 * Returns the shared instance
@@ -66,6 +63,7 @@ public class Activator extends AbstractActivatorUI {
 	 * The constructor
 	 */
 	public Activator() {
+
 	}
 
 	/*
@@ -79,8 +77,6 @@ public class Activator extends AbstractActivatorUI {
 		plugin = this;
 		initializePreferenceStore(PreferenceSupplier.INSTANCE());
 		initializeImageRegistry(getImageHashMap());
-		dataUpdateSupport = new DataUpdateSupport(getEventBroker());
-		initialize(dataUpdateSupport);
 	}
 
 	/*
@@ -124,19 +120,5 @@ public class Activator extends AbstractActivatorUI {
 		imageHashMap.put(ICON_NORM_TRANS_POWER, "icons/trans_power.jpg"); // $NON-NLS-1$
 		//
 		return imageHashMap;
-	}
-
-	public DataUpdateSupport getDataUpdateSupport() {
-
-		if(dataUpdateSupport == null) {
-			dataUpdateSupport = new DataUpdateSupport(getEventBroker());
-			initialize(dataUpdateSupport);
-		}
-		return dataUpdateSupport;
-	}
-
-	private void initialize(DataUpdateSupport dataUpdateSupport) {
-
-		dataUpdateSupport.subscribe(TOPIC_PCA_EVALUATION_LOAD, PROPERTY_PCA_EVALUATION);
 	}
 }
