@@ -11,6 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt;
 
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Algorithm;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
@@ -30,17 +33,13 @@ import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
-import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.preference.PreferenceDialog;
-import org.eclipse.jface.preference.PreferenceManager;
-import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -57,14 +56,15 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 
-public class AnalysisEditorUI extends Composite {
+public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 
 	private static final Logger logger = Logger.getLogger(AnalysisEditorUI.class);
 	//
 	private ISamplesPCA<IVariable, ISample> samples = null;
 	private EvaluationPCA evaluationPCA = null;
 	//
-	private Composite toolbarSearch;
+	private Button buttonToolbarSearch;
+	private AtomicReference<SearchSupportUI> toolbarSearch = new AtomicReference<>();
 	private Spinner spinnerPCs;
 	private ComboViewer comboViewerAlgorithm;
 	private SamplesListUI sampleListUI;
@@ -98,10 +98,15 @@ public class AnalysisEditorUI extends Composite {
 		setLayout(new GridLayout(1, true));
 		//
 		createToolbarMain(this);
-		toolbarSearch = createToolbarSearch(this);
+		createToolbarSearch(this);
 		createDataTab(this);
 		//
-		PartSupport.setCompositeVisibility(toolbarSearch, false);
+		initialize();
+	}
+
+	private void initialize() {
+
+		enableToolbar(toolbarSearch, buttonToolbarSearch, IMAGE_SEARCH, TOOLTIP_EDIT, false);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -112,36 +117,13 @@ public class AnalysisEditorUI extends Composite {
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(7, false));
 		//
-		createButtonToggleToolbarSearch(composite);
+		buttonToolbarSearch = createButtonToggleToolbar(composite, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
 		createLabel(composite, "Number of PCs:");
 		spinnerPCs = createSpinnerPrincipleComponents(composite);
 		createLabel(composite, "Algorithm:");
 		comboViewerAlgorithm = createComboViewerAlgorithm(composite);
 		createButtonRun(composite);
 		createSettingsButton(composite);
-	}
-
-	private Button createButtonToggleToolbarSearch(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle search toolbar.");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				boolean visible = PartSupport.toggleCompositeVisibility(toolbarSearch);
-				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
-				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
-				}
-			}
-		});
-		//
-		return button;
 	}
 
 	private Label createLabel(Composite parent, String text) {
@@ -239,35 +221,17 @@ public class AnalysisEditorUI extends Composite {
 
 	private void createSettingsButton(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Open the Settings");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		createSettingsButton(parent, Arrays.asList(PreferencePage.class, PreferencePageScorePlot.class, PreferencePageLoadingPlot.class), new ISettingsHandler() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void apply(Display display) {
 
-				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePage()));
-				preferenceManager.addToRoot(new PreferenceNode("2", new PreferencePageScorePlot()));
-				preferenceManager.addToRoot(new PreferenceNode("3", new PreferencePageLoadingPlot()));
-				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
-				preferenceDialog.create();
-				preferenceDialog.setMessage("Settings");
-				if(preferenceDialog.open() == Window.OK) {
-					try {
-						applySettings();
-					} catch(Exception e1) {
-						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
-					}
-				}
+				applySettings();
 			}
 		});
 	}
 
-	private Composite createToolbarSearch(Composite parent) {
+	private void createToolbarSearch(Composite parent) {
 
 		SearchSupportUI searchSupportUI = new SearchSupportUI(parent, SWT.NONE);
 		searchSupportUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -280,7 +244,7 @@ public class AnalysisEditorUI extends Composite {
 			}
 		});
 		//
-		return searchSupportUI;
+		toolbarSearch.set(searchSupportUI);
 	}
 
 	private TabFolder createDataTab(Composite parent) {
