@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -54,7 +54,7 @@ public class MassSpectrumComparator_4_Test extends TestCase {
 
 	public void test_5() {
 
-		assertEquals("This comparator calculates the similarity between two mass spectra with the Cosine value.", supplier.getDescription());
+		assertEquals("The comparator uses the cosine match.", supplier.getDescription());
 	}
 
 	public void test_6() {
