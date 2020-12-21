@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2020 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,6 +18,12 @@ import java.io.IOException;
 public class DataArrayReader extends AbstractArrayReader implements IDataArrayReader {
 
 	public DataArrayReader(File file) throws FileNotFoundException, IOException {
+
 		super(file);
+	}
+
+	public DataArrayReader(byte[] data) {
+
+		super(data);
 	}
 }
