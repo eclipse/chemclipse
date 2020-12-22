@@ -58,35 +58,34 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 	//
 	private DataType dataType;
 	//
-	private DecimalFormat dfNominalMSD;
-	private DecimalFormat dfTandemMSD;
-	private DecimalFormat dfHighResMSD;
-	private DecimalFormat dfCSD;
-	private DecimalFormat dfWSD;
+	private DecimalFormat decimalFormatNominalMSD;
+	private DecimalFormat decimalFormatTandemMSD;
+	private DecimalFormat decimalFormatHighResMSD;
+	private DecimalFormat decimalFormatCSD;
+	private DecimalFormat decimalFormatWSD;
 	//
-	private DecimalFormat dfIntensity;
-	private DecimalFormat dfRelativeIntensity;
+	private DecimalFormat decimalFormatIntensity;
+	private DecimalFormat decimalFormatRelativeIntensity;
 	//
-	private double relativeIntensityFactor = 0.0d;
+	private double relativeIntensityFactorPositive = 0.0d;
+	private double relativeIntensityFactorNegative = 0.0d;
 
 	public ScanLabelProvider(DataType dataType) {
+
 		this.dataType = dataType;
-		dfNominalMSD = ValueFormat.getDecimalFormatEnglish("0.0");
-		dfTandemMSD = ValueFormat.getDecimalFormatEnglish("0.0");
-		dfHighResMSD = ValueFormat.getDecimalFormatEnglish("0.000###");
-		dfCSD = ValueFormat.getDecimalFormatEnglish("0.0000");
-		dfWSD = ValueFormat.getDecimalFormatEnglish("0.0");
-		dfIntensity = ValueFormat.getDecimalFormatEnglish("0.0###");
-		dfRelativeIntensity = ValueFormat.getDecimalFormatEnglish("0.0000");
+		decimalFormatNominalMSD = ValueFormat.getDecimalFormatEnglish("0.0");
+		decimalFormatTandemMSD = ValueFormat.getDecimalFormatEnglish("0.0");
+		decimalFormatHighResMSD = ValueFormat.getDecimalFormatEnglish("0.000###");
+		decimalFormatCSD = ValueFormat.getDecimalFormatEnglish("0.0000");
+		decimalFormatWSD = ValueFormat.getDecimalFormatEnglish("0.0");
+		decimalFormatIntensity = ValueFormat.getDecimalFormatEnglish("0.0###");
+		decimalFormatRelativeIntensity = ValueFormat.getDecimalFormatEnglish("0.0000");
 	}
 
-	public void setTotalIntensity(float totalIntensity) {
+	public void setTotalIntensity(double minIntensity, double maxIntensity) {
 
-		if(totalIntensity != 0) {
-			relativeIntensityFactor = 100.0d / totalIntensity;
-		} else {
-			relativeIntensityFactor = 0.0d;
-		}
+		relativeIntensityFactorNegative = (minIntensity < 0) ? 100.0d / minIntensity : 0.0d;
+		relativeIntensityFactorPositive = (maxIntensity > 0) ? 100.0d / maxIntensity : 0.0d;
 	}
 
 	@Override
@@ -132,13 +131,13 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 			IIon ion = (IIon)element;
 			switch(columnIndex) {
 				case 0:
-					text = dfNominalMSD.format(ion.getIon());
+					text = decimalFormatNominalMSD.format(ion.getIon());
 					break;
 				case 1:
-					text = dfIntensity.format(ion.getAbundance());
+					text = decimalFormatIntensity.format(ion.getAbundance());
 					break;
 				case 2:
-					text = dfRelativeIntensity.format(relativeIntensityFactor * ion.getAbundance());
+					text = decimalFormatRelativeIntensity.format(relativeIntensityFactorPositive * ion.getAbundance());
 					break;
 				default:
 					text = NO_VALUE;
@@ -155,29 +154,29 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 			IIonTransition ionTransition = ion.getIonTransition();
 			switch(columnIndex) {
 				case 0: // m/z (normal 28.3 or with Transition 128 > 78.4)
-					String mz = dfTandemMSD.format(ion.getIon());
+					String mz = decimalFormatTandemMSD.format(ion.getIon());
 					text = (ionTransition == null) ? mz : Integer.toString((int)ionTransition.getQ1StartIon()) + " > " + mz;
 					break;
 				case 1:
-					text = dfIntensity.format(ion.getAbundance());
+					text = decimalFormatIntensity.format(ion.getAbundance());
 					break;
 				case 2:
-					text = dfRelativeIntensity.format(relativeIntensityFactor * ion.getAbundance());
+					text = decimalFormatRelativeIntensity.format(relativeIntensityFactorPositive * ion.getAbundance());
 					break;
 				case 3: // parent m/z
-					text = (ionTransition == null) ? "" : dfTandemMSD.format(ionTransition.getQ1Ion());
+					text = (ionTransition == null) ? "" : decimalFormatTandemMSD.format(ionTransition.getQ1Ion());
 					break;
 				case 4: // parent resolution
-					text = (ionTransition == null) ? "" : dfTandemMSD.format(ionTransition.getQ1Resolution());
+					text = (ionTransition == null) ? "" : decimalFormatTandemMSD.format(ionTransition.getQ1Resolution());
 					break;
 				case 5: // daughter m/z
-					text = (ionTransition == null) ? "" : dfTandemMSD.format(ionTransition.getQ3Ion());
+					text = (ionTransition == null) ? "" : decimalFormatTandemMSD.format(ionTransition.getQ3Ion());
 					break;
 				case 6: // daughter resolution
-					text = (ionTransition == null) ? "" : dfTandemMSD.format(ionTransition.getQ3Resolution());
+					text = (ionTransition == null) ? "" : decimalFormatTandemMSD.format(ionTransition.getQ3Resolution());
 					break;
 				case 7: // collision energy
-					text = (ionTransition == null) ? "" : dfTandemMSD.format(ionTransition.getCollisionEnergy());
+					text = (ionTransition == null) ? "" : decimalFormatTandemMSD.format(ionTransition.getCollisionEnergy());
 					break;
 				default:
 					text = NO_VALUE;
@@ -193,13 +192,13 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 			IIon ion = (IIon)element;
 			switch(columnIndex) {
 				case 0:
-					text = dfHighResMSD.format(ion.getIon());
+					text = decimalFormatHighResMSD.format(ion.getIon());
 					break;
 				case 1:
-					text = dfIntensity.format(ion.getAbundance());
+					text = decimalFormatIntensity.format(ion.getAbundance());
 					break;
 				case 2:
-					text = dfRelativeIntensity.format(relativeIntensityFactor * ion.getAbundance());
+					text = decimalFormatRelativeIntensity.format(relativeIntensityFactorPositive * ion.getAbundance());
 					break;
 				default:
 					text = NO_VALUE;
@@ -215,13 +214,18 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 			IScanCSD scanCSD = (IScanCSD)element;
 			switch(columnIndex) {
 				case 0:
-					text = dfCSD.format(scanCSD.getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+					text = decimalFormatCSD.format(scanCSD.getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
 					break;
 				case 1:
-					text = dfIntensity.format(scanCSD.getTotalSignal());
+					text = decimalFormatIntensity.format(scanCSD.getTotalSignal());
 					break;
 				case 2:
-					text = dfRelativeIntensity.format(relativeIntensityFactor * scanCSD.getTotalSignal());
+					float signal = scanCSD.getTotalSignal();
+					if(signal < 0) {
+						text = "-" + decimalFormatRelativeIntensity.format(relativeIntensityFactorNegative * signal);
+					} else {
+						text = decimalFormatRelativeIntensity.format(relativeIntensityFactorPositive * signal);
+					}
 					break;
 				default:
 					text = NO_VALUE;
@@ -237,13 +241,18 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 			IScanSignalWSD scanSignal = (IScanSignalWSD)element;
 			switch(columnIndex) {
 				case 0:
-					text = dfWSD.format(scanSignal.getWavelength());
+					text = decimalFormatWSD.format(scanSignal.getWavelength());
 					break;
 				case 1:
-					text = dfIntensity.format(scanSignal.getAbundance());
+					text = decimalFormatIntensity.format(scanSignal.getAbundance());
 					break;
 				case 2:
-					text = dfRelativeIntensity.format(relativeIntensityFactor * scanSignal.getAbundance());
+					float signal = scanSignal.getAbundance();
+					if(signal < 0) {
+						text = "-" + decimalFormatRelativeIntensity.format(relativeIntensityFactorNegative * signal);
+					} else {
+						text = decimalFormatRelativeIntensity.format(relativeIntensityFactorPositive * signal);
+					}
 					break;
 				default:
 					text = NO_VALUE;

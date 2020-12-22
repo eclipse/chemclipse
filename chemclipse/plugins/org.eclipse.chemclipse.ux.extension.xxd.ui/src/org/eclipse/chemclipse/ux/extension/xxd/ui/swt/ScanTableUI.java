@@ -150,9 +150,30 @@ public class ScanTableUI extends ExtendedTableViewer {
 		ITableLabelProvider labelProvider = getTableLabelProvider(dataType);
 		setLabelProvider(labelProvider);
 		if(labelProvider instanceof ScanLabelProvider) {
+			//
 			ScanLabelProvider scanLabelProvider = (ScanLabelProvider)labelProvider;
-			float totalIntensity = (scan != null) ? scan.getTotalSignal() : 0.0f;
-			scanLabelProvider.setTotalIntensity(totalIntensity);
+			double minIntensity = 0.0f;
+			double maxIntensity = 0.0f;
+			//
+			if(scan instanceof IScanCSD) {
+				float intensity = scan.getTotalSignal();
+				if(intensity >= 0) {
+					minIntensity = 0.0f;
+					maxIntensity = intensity;
+				} else {
+					minIntensity = intensity;
+					maxIntensity = 0.0f;
+				}
+			} else if(scan instanceof IScanMSD) {
+				minIntensity = 0.0f;
+				maxIntensity = scan.getTotalSignal();
+			} else if(scan instanceof IScanWSD) {
+				IScanWSD scanWSD = (IScanWSD)scan;
+				minIntensity = scanWSD.getScanSignals().stream().mapToDouble(s -> s.getAbundance()).min().getAsDouble();
+				maxIntensity = scanWSD.getScanSignals().stream().mapToDouble(s -> s.getAbundance()).max().getAsDouble();
+			}
+			//
+			scanLabelProvider.setTotalIntensity(minIntensity, maxIntensity);
 		}
 		//
 		IContentProvider contentProvider = getContentProvider(dataType);
