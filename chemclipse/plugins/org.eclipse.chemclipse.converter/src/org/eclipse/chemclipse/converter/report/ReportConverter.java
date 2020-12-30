@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2019 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -41,12 +41,13 @@ public class ReportConverter {
 	 * This class has only static methods.
 	 */
 	private ReportConverter() {
+
 	}
 
 	public static <T> IProcessingInfo<T> convert(final File file, final String converterId, IProgressMonitor monitor) {
 
 		IProcessingInfo<T> processingInfo;
-		IReportImportConverter importConverter = getReportImportConverter(converterId);
+		IReportImportConverter<T> importConverter = getReportImportConverter(converterId);
 		if(importConverter != null) {
 			processingInfo = importConverter.convert(file, monitor);
 		} else {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -46,6 +46,7 @@ public abstract class AbstractChromatogramConverter<P extends IPeak, T extends I
 	private final DataCategory dataCategory;
 
 	public AbstractChromatogramConverter(String extensionPoint, Class<T> type, DataCategory dataCategory) {
+
 		this.extensionPoint = extensionPoint;
 		this.type = type;
 		this.dataCategory = dataCategory;
@@ -96,7 +97,7 @@ public abstract class AbstractChromatogramConverter<P extends IPeak, T extends I
 	}
 
 	@Override
-	public IProcessingInfo convertOverview(File file, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramOverview> convertOverview(File file, IProgressMonitor monitor) {
 
 		return getChromatogram(file, true, monitor);
 	}
@@ -113,12 +114,12 @@ public abstract class AbstractChromatogramConverter<P extends IPeak, T extends I
 	 * @return {@link IProcessingInfo}
 	 */
 	@Override
-	public IProcessingInfo convertOverview(File file, String converterId, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramOverview> convertOverview(File file, String converterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<IChromatogramOverview> processingInfo;
 		Object converter = getChromatogramConverter(converterId, Converter.IMPORT_CONVERTER);
 		if(converter instanceof IChromatogramImportConverter) {
-			processingInfo = ((IChromatogramImportConverter)converter).convertOverview(file, monitor);
+			processingInfo = ((IChromatogramImportConverter<?>)converter).convertOverview(file, monitor);
 		} else {
 			processingInfo = getNoOverviewImportConverterAvailableProcessingInfo(file);
 		}
@@ -126,7 +127,7 @@ public abstract class AbstractChromatogramConverter<P extends IPeak, T extends I
 	}
 
 	@Override
-	public IProcessingInfo convert(File file, IProgressMonitor monitor) {
+	public IProcessingInfo<T> convert(File file, IProgressMonitor monitor) {
 
 		return getChromatogram(file, false, monitor);
 	}
@@ -145,12 +146,12 @@ public abstract class AbstractChromatogramConverter<P extends IPeak, T extends I
 	 * @return {@link IProcessingInfo}
 	 */
 	@Override
-	public IProcessingInfo convert(File file, String converterId, IProgressMonitor monitor) {
+	public IProcessingInfo<T> convert(File file, String converterId, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo;
 		Object converter = getChromatogramConverter(converterId, Converter.IMPORT_CONVERTER);
 		if(converter instanceof IChromatogramImportConverter) {
-			processingInfo = ((IChromatogramImportConverter)converter).convert(file, monitor);
+			processingInfo = ((IChromatogramImportConverter<?>)converter).convert(file, monitor);
 		} else {
 			processingInfo = getNoImportConverterAvailableProcessingInfo(file);
 		}
@@ -203,12 +204,12 @@ public abstract class AbstractChromatogramConverter<P extends IPeak, T extends I
 					 * approaches have failed null will be returned.<br/><br/> I
 					 * hope it's a little bit more clear now.<br/> eselmeister
 					 */
-					IChromatogramImportConverter importConverter = (IChromatogramImportConverter)converter;
+					IChromatogramImportConverter<?> importConverter = (IChromatogramImportConverter<?>)converter;
 					if(overview) {
 						/*
 						 * OVERVIEW
 						 */
-						IProcessingInfo processingInfox = importConverter.convertOverview(file, monitor);
+						IProcessingInfo<IChromatogramOverview> processingInfox = importConverter.convertOverview(file, monitor);
 						if(!processingInfox.hasErrorMessages()) {
 							/*
 							 * File OK, but converter failed if
@@ -231,7 +232,7 @@ public abstract class AbstractChromatogramConverter<P extends IPeak, T extends I
 						/*
 						 * NORMAL
 						 */
-						IProcessingInfo processingInfox = importConverter.convert(file, monitor);
+						IProcessingInfo<?> processingInfox = importConverter.convert(file, monitor);
 						if(!processingInfox.hasErrorMessages()) {
 							/*
 							 * File OK, but converter failed if
@@ -272,9 +273,9 @@ public abstract class AbstractChromatogramConverter<P extends IPeak, T extends I
 	}
 
 	@Override
-	public IProcessingInfo convert(File file, T chromatogram, String converterId, IProgressMonitor monitor) {
+	public IProcessingInfo<File> convert(File file, T chromatogram, String converterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<File> processingInfo;
 		Object converter = getChromatogramConverter(converterId, Converter.EXPORT_CONVERTER);
 		if(converter instanceof IChromatogramExportConverter) {
 			processingInfo = ((IChromatogramExportConverter)converter).convert(file, chromatogram, monitor);
@@ -321,23 +322,23 @@ public abstract class AbstractChromatogramConverter<P extends IPeak, T extends I
 		return instance;
 	}
 
-	private IProcessingInfo getNoExportConverterAvailableProcessingInfo(File file) {
+	private IProcessingInfo<File> getNoExportConverterAvailableProcessingInfo(File file) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<File> processingInfo = new ProcessingInfo<>();
 		processingInfo.addErrorMessage(DESCRIPTION_EXPORT, "There is no suitable converter available to save the chromatogram to the file: " + getFileName(file));
 		return processingInfo;
 	}
 
-	private IProcessingInfo getNoImportConverterAvailableProcessingInfo(File file) {
+	private IProcessingInfo<IChromatogram<?>> getNoImportConverterAvailableProcessingInfo(File file) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<IChromatogram<?>> processingInfo = new ProcessingInfo<>();
 		processingInfo.addErrorMessage(DESCRIPTION_IMPORT, "There is no suitable converter available to load the chromatogram from the file: " + getFileName(file));
 		return processingInfo;
 	}
 
-	private IProcessingInfo getNoOverviewImportConverterAvailableProcessingInfo(File file) {
+	private IProcessingInfo<IChromatogramOverview> getNoOverviewImportConverterAvailableProcessingInfo(File file) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<IChromatogramOverview> processingInfo = new ProcessingInfo<>();
 		processingInfo.addErrorMessage(DESCRIPTION_IMPORT, "There is no suitable converter available to load the chromatogram overview from the file: " + getFileName(file));
 		return processingInfo;
 	}

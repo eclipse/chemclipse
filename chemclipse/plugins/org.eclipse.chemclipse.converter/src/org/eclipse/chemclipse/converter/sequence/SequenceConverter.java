@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -63,9 +63,9 @@ public class SequenceConverter {
 		return getNoImportConverterAvailableProcessingInfo(file);
 	}
 
-	public static IProcessingInfo convert(final File file, final String converterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<ISequence<?>> convert(final File file, final String converterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<ISequence<?>> processingInfo;
 		ISequenceImportConverter importConverter = getSequenceImportConverter(converterId);
 		if(importConverter != null) {
 			processingInfo = importConverter.convert(file, monitor);
@@ -125,9 +125,9 @@ public class SequenceConverter {
 		return sequenceConverterSupport;
 	}
 
-	private static IProcessingInfo getNoImportConverterAvailableProcessingInfo(File file) {
+	private static IProcessingInfo<ISequence<?>> getNoImportConverterAvailableProcessingInfo(File file) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<ISequence<?>> processingInfo = new ProcessingInfo<>();
 		processingInfo.addErrorMessage("Sequence Import Converter", "There is no suitable converter available to load the sequence from the file: " + file.getAbsolutePath());
 		return processingInfo;
 	}

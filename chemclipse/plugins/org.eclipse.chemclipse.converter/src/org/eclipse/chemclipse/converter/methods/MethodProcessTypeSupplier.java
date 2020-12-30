@@ -24,8 +24,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.logging.support.Settings;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -55,9 +55,10 @@ import org.osgi.util.tracker.BundleTrackerCustomizer;
 @Component(service = {IProcessTypeSupplier.class})
 public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTrackerCustomizer<Collection<IProcessSupplier<?>>> {
 
+	private static final Logger logger = Logger.getLogger(MethodProcessTypeSupplier.class);
+	//
 	private static final String PROCESSORS_ENTRY_PATH = "/OSGI-INF/processors/";
 	private BundleTracker<Collection<IProcessSupplier<?>>> bundleTracker;
-	private final AtomicReference<LogService> logService = new AtomicReference<>();
 	private final List<IProcessSupplier<?>> systemMethods = new ArrayList<>();
 
 	@Override
@@ -75,10 +76,7 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 		for(IProcessMethod processMethod : userMethods) {
 			UserMethodProcessSupplier supplier = new UserMethodProcessSupplier(processMethod, this);
 			if(ids.contains(supplier.getId())) {
-				LogService log = logService.get();
-				if(log != null) {
-					log.log(LogService.LOG_WARNING, "Duplicate id for method " + processMethod.getName() + " (id: " + supplier.getId() + ")");
-				}
+				logger.warn("Duplicate id for method " + processMethod.getName() + " (id: " + supplier.getId() + ")");
 				continue;
 			}
 			list.add(supplier);
@@ -138,6 +136,7 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 		private final IProcessMethod method;
 
 		public UserMethodProcessSupplier(IProcessMethod method, MethodProcessTypeSupplier parent) {
+
 			super(getUserMethodID(method), method.getName(), method.getDescription(), null, parent, getDataTypes(method));
 			this.method = method;
 		}
@@ -206,10 +205,7 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 								}
 							}
 						} catch(IOException e) {
-							LogService log = logService.get();
-							if(log != null) {
-								log.log(LogService.LOG_ERROR, "loading of method from system path " + file.getAbsolutePath() + " failed", e);
-							}
+							logger.error("Loading of method from system path " + file.getAbsolutePath() + " failed", e);
 						}
 					}
 				}
@@ -226,12 +222,12 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 	@Reference(policy = ReferencePolicy.DYNAMIC, cardinality = ReferenceCardinality.OPTIONAL)
 	public void setLogService(LogService logService) {
 
-		this.logService.set(logService);
+		// Not used
 	}
 
 	public void unsetLogService(LogService logService) {
 
-		this.logService.compareAndSet(logService, null);
+		// Not used
 	}
 
 	@Override
@@ -253,10 +249,7 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 						}
 					}
 				} catch(IOException e) {
-					LogService log = logService.get();
-					if(log != null) {
-						log.log(LogService.LOG_ERROR, "loading of method from URL " + url + " failed", e);
-					}
+					logger.error("Loading of method from URL " + url + " failed", e);
 				}
 			}
 		}
