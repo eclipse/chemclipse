@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -42,14 +42,15 @@ public class MatlabParafacPeakWriter implements IPeakWriter {
 	private DecimalFormat decimalFormat;
 
 	public MatlabParafacPeakWriter() {
+
 		setLineSeparator();
 		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 	}
 
 	@Override
-	public IProcessingInfo write(File file, IPeakMSD peak, boolean append) throws FileNotFoundException, FileIsNotWriteableException, IOException {
+	public IProcessingInfo<File> write(File file, IPeakMSD peak, boolean append) throws FileNotFoundException, FileIsNotWriteableException, IOException {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<File> processingInfo = new ProcessingInfo<>();
 		FileWriter fileWriter = new FileWriter(file, append);
 		writePeak(fileWriter, peak, processingInfo);
 		fileWriter.close();
@@ -61,9 +62,9 @@ public class MatlabParafacPeakWriter implements IPeakWriter {
 	}
 
 	@Override
-	public IProcessingInfo write(File file, IPeaks peaks, boolean append) throws FileNotFoundException, FileIsNotWriteableException, IOException {
+	public IProcessingInfo<File> write(File file, IPeaks<?> peaks, boolean append) throws FileNotFoundException, FileIsNotWriteableException, IOException {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<File> processingInfo = new ProcessingInfo<>();
 		FileWriter fileWriter = new FileWriter(file, append);
 		writePeaks(fileWriter, peaks, processingInfo);
 		fileWriter.close();
@@ -74,12 +75,12 @@ public class MatlabParafacPeakWriter implements IPeakWriter {
 		return processingInfo;
 	}
 
-	private void writePeaks(FileWriter fileWriter, IPeaks peaks, IProcessingInfo processingInfo) throws IOException {
+	private void writePeaks(FileWriter fileWriter, IPeaks<?> peaks, IProcessingInfo<File> processingInfo) throws IOException {
 
 		IPeak peak;
-		int size = peaks.size();
-		for(int i = 1; i <= size; i++) {
-			peak = peaks.getPeak(i);
+		int size = peaks.getPeaks().size();
+		for(int i = 0; i < size; i++) {
+			peak = peaks.getPeaks().get(i);
 			if(peak instanceof IPeakMSD) {
 				IPeakMSD peakMSD = (IPeakMSD)peak;
 				writePeak(fileWriter, peakMSD, processingInfo);
@@ -87,7 +88,7 @@ public class MatlabParafacPeakWriter implements IPeakWriter {
 		}
 	}
 
-	private void writePeak(FileWriter fileWriter, IPeakMSD peak, IProcessingInfo processingInfo) throws IOException {
+	private void writePeak(FileWriter fileWriter, IPeakMSD peak, IProcessingInfo<?> processingInfo) throws IOException {
 
 		fileWriter.write(getPeakHeader());
 		fileWriter.write(getDescription(peak));

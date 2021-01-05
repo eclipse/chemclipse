@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2019 Lablicate GmbH.
+ * Copyright (c) 2014, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -52,7 +52,7 @@ public class ELUReader_2_ITest extends TestCase {
 
 		try {
 			IPeaks peaks = (IPeaks)processingInfo.getProcessingResult();
-			assertEquals(1132, peaks.size());
+			assertEquals(1132, peaks.getPeaks().size());
 		} catch(TypeCastException e) {
 			assertTrue(false);
 		}

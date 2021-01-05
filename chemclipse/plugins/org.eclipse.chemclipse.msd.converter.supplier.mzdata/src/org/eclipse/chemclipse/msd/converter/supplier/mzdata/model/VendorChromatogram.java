@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,6 +14,8 @@ package org.eclipse.chemclipse.msd.converter.supplier.mzdata.model;
 import org.eclipse.chemclipse.msd.model.core.AbstractChromatogramMSD;
 
 public class VendorChromatogram extends AbstractChromatogramMSD implements IVendorChromatogram {
+
+	private static final long serialVersionUID = 8267483147300795558L;
 
 	@Override
 	public String getName() {

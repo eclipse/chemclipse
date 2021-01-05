@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Dr. Janko Diminic, Dr. Philip Wenig.
+ * Copyright (c) 2016, 2021 Dr. Janko Diminic, Dr. Philip Wenig.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -33,7 +33,7 @@ public class ProteomsChart implements DisposeListener {
 
 	private Chart chart;
 	private Composite composite;
-	private IBarSeries barSeries;
+	private IBarSeries<?> barSeries;
 	private ChartLabelDrawer chartLabelDrawer;
 	private ChartLeftRightMotion chartLeftRightMotion;
 	private ChartZoom chartZoom;
@@ -43,6 +43,7 @@ public class ProteomsChart implements DisposeListener {
 	private String yOStitle = "Intensity";
 
 	public ProteomsChart(Composite composite) {
+
 		this.composite = composite;
 		createBaseChart();
 	}
@@ -59,7 +60,7 @@ public class ProteomsChart implements DisposeListener {
 			IAxis y = axisSet.getYAxis(0);
 			x.getTitle().setText(getxOStitle());
 			y.getTitle().setText(getyOStitle());
-			barSeries = (IBarSeries)chart.getSeriesSet().createSeries(SeriesType.BAR, "Series1");
+			barSeries = (IBarSeries<?>)chart.getSeriesSet().createSeries(SeriesType.BAR, "Series1");
 			barSeries.setBarWidth(1);
 			barSeries.setVisibleInLegend(false);
 			barSeries.setBarWidthStyle(BarWidthStyle.FIXED);

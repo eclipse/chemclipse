@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Dr. Janko Diminic, Dr. Philip Wenig.
+ * Copyright (c) 2016, 2021 Dr. Janko Diminic, Dr. Philip Wenig.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -37,6 +37,7 @@ public class Activator extends AbstractActivatorUI {
 	 * The constructor
 	 */
 	public Activator() {
+
 	}
 
 	/*
@@ -51,6 +52,7 @@ public class Activator extends AbstractActivatorUI {
 		initializePreferenceStore(PreferenceSupplier.INSTANCE());
 	}
 
+	@SuppressWarnings("unused")
 	private void initProjectManagerx() {
 
 		try {

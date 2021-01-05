@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.msd.converter.core;
 
 import org.eclipse.chemclipse.converter.core.IConverterSupportSetter;
-import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 
 public class AbstractConverterSupport_2_Test extends AbstractConverterTestCase {
 
@@ -35,8 +34,8 @@ public class AbstractConverterSupport_2_Test extends AbstractConverterTestCase {
 
 		String converterId = "org.eclipse.chemclipse.msd.converter.supplier.agilent";
 		try {
-			assertEquals(converterId, converterSupport.getConverterId(0));
-		} catch(NoConverterAvailableException e) {
+			assertEquals(converterId, converterSupport.getSupplier().get(0).getId());
+		} catch(Exception e) {
 			assertTrue("The failure NoConverterAvailableException should not be thrown here.", false);
 		}
 	}
@@ -45,8 +44,8 @@ public class AbstractConverterSupport_2_Test extends AbstractConverterTestCase {
 
 		String converterId = "org.eclipse.chemclipse.msd.converter.supplier.agilent.msd1";
 		try {
-			assertEquals(converterId, converterSupport.getConverterId(1));
-		} catch(NoConverterAvailableException e) {
+			assertEquals(converterId, converterSupport.getSupplier().get(1).getId());
+		} catch(Exception e) {
 			assertTrue("The failure NoConverterAvailableException should not be thrown here.", false);
 		}
 	}
@@ -55,8 +54,8 @@ public class AbstractConverterSupport_2_Test extends AbstractConverterTestCase {
 
 		String converterId = "net.openchrom.msd.converter.supplier.cdf";
 		try {
-			assertEquals(converterId, converterSupport.getConverterId(2));
-		} catch(NoConverterAvailableException e) {
+			assertEquals(converterId, converterSupport.getSupplier().get(2).getId());
+		} catch(Exception e) {
 			assertTrue("The failure NoConverterAvailableException should not be thrown here.", false);
 		}
 	}
@@ -65,8 +64,8 @@ public class AbstractConverterSupport_2_Test extends AbstractConverterTestCase {
 
 		String converterId = "org.eclipse.chemclipse.msd.converter.supplier.excel";
 		try {
-			assertEquals(converterId, converterSupport.getConverterId(3));
-		} catch(NoConverterAvailableException e) {
+			assertEquals(converterId, converterSupport.getSupplier().get(3).getId());
+		} catch(Exception e) {
 			assertTrue("The failure NoConverterAvailableException should not be thrown here.", false);
 		}
 	}
@@ -75,8 +74,8 @@ public class AbstractConverterSupport_2_Test extends AbstractConverterTestCase {
 
 		String converterId = "org.eclipse.chemclipse.msd.converter.supplier.test";
 		try {
-			assertEquals(converterId, converterSupport.getConverterId(4));
-		} catch(NoConverterAvailableException e) {
+			assertEquals(converterId, converterSupport.getSupplier().get(4).getId());
+		} catch(Exception e) {
 			assertTrue("The failure NoConverterAvailableException should not be thrown here.", false);
 		}
 	}
@@ -85,8 +84,8 @@ public class AbstractConverterSupport_2_Test extends AbstractConverterTestCase {
 
 		try {
 			@SuppressWarnings("unused")
-			String converterId = converterSupport.getConverterId(-1);
-		} catch(NoConverterAvailableException e) {
+			String converterId = converterSupport.getSupplier().get(-1).getId();
+		} catch(Exception e) {
 			assertTrue(true);
 		}
 	}
@@ -95,8 +94,8 @@ public class AbstractConverterSupport_2_Test extends AbstractConverterTestCase {
 
 		try {
 			@SuppressWarnings("unused")
-			String converterId = converterSupport.getConverterId(5);
-		} catch(NoConverterAvailableException e) {
+			String converterId = converterSupport.getSupplier().get(5).getId();
+		} catch(Exception e) {
 			assertTrue(true);
 		}
 	}

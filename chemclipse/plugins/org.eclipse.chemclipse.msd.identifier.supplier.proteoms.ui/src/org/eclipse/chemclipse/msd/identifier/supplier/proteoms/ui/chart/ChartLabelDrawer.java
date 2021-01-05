@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2019 Dr. Janko Diminic, Dr. Philip Wenig.
+ * Copyright (c) 2016, 2021 Dr. Janko Diminic, Dr. Philip Wenig.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,7 +18,6 @@ import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Scrollable;
 import org.eclipse.swtchart.Chart;
 import org.eclipse.swtchart.IAxis;
@@ -35,6 +34,7 @@ public class ChartLabelDrawer implements ICustomPaintListener, DisposeListener {
 	private int firstIntesitiyPeak = 30;
 
 	public ChartLabelDrawer(Chart chart) {
+
 		this.chart = chart;
 		IAxisSet axisSet = chart.getAxisSet();
 		xAxis = axisSet.getXAxis(0);
@@ -50,8 +50,8 @@ public class ChartLabelDrawer implements ICustomPaintListener, DisposeListener {
 	public void setFirstIntesitiyPeak(int firstIntesitiyPeak) {
 
 		this.firstIntesitiyPeak = firstIntesitiyPeak;
-		double maxIntensity = findMostIntensityPeaks();
-		ISeries series = chart.getSeriesSet().getSeries()[0];
+		findMostIntensityPeaks();
+		// ISeries<?> series = chart.getSeriesSet().getSeries()[0];
 	}
 
 	public int getFirstIntesitiyPeak() {
@@ -61,7 +61,7 @@ public class ChartLabelDrawer implements ICustomPaintListener, DisposeListener {
 
 	private double findMostIntensityPeaks() {
 
-		ISeries ser = chart.getSeriesSet().getSeries()[0];
+		ISeries<?> ser = chart.getSeriesSet().getSeries()[0];
 		double[] ySeries = ser.getYSeries();
 		return ChartUtil.getMaxValue(ySeries);
 	}
@@ -69,7 +69,7 @@ public class ChartLabelDrawer implements ICustomPaintListener, DisposeListener {
 	@Override
 	public void paintControl(PaintEvent e) {
 
-		ISeries ser = chart.getSeriesSet().getSeries()[0];
+		ISeries<?> ser = chart.getSeriesSet().getSeries()[0];
 		Random r = new Random();
 		for(double mz : ser.getXSeries()) {
 			if(r.nextFloat() < 0.96F) {
@@ -81,12 +81,12 @@ public class ChartLabelDrawer implements ICustomPaintListener, DisposeListener {
 			String mzString = mz + "";
 			Point textExtent = e.gc.textExtent(mzString);
 			IPlotArea area = chart.getPlotArea();
-			Rectangle clientArea;
+			Point clientArea;
 			if(area instanceof Scrollable) {
 				Scrollable scrollable = (Scrollable)area;
-				clientArea = scrollable.getClientArea();
+				clientArea = scrollable.getSize();
 			} else {
-				clientArea = area.getBounds();
+				clientArea = area.getSize();
 			}
 			// System.out.println(textExtent);
 			int xPosText = xPos - textExtent.x / 2;
@@ -97,7 +97,7 @@ public class ChartLabelDrawer implements ICustomPaintListener, DisposeListener {
 			if(yPosText < 0) {
 				yPosText = textExtent.y;
 			}
-			if(yPosText == clientArea.width) {
+			if(yPosText == clientArea.x) {
 				yPosText -= textExtent.y;
 			}
 			// if(xPosText == clientArea.width) {

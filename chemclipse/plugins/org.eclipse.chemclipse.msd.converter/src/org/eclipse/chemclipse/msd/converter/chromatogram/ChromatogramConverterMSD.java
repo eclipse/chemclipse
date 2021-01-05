@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -48,6 +48,7 @@ public final class ChromatogramConverterMSD extends AbstractChromatogramConverte
 	private static IChromatogramConverter<IChromatogramPeakMSD, IChromatogramMSD> instance = null;
 
 	public ChromatogramConverterMSD() {
+
 		super("org.eclipse.chemclipse.msd.converter.chromatogramSupplier", IChromatogramMSD.class, DataCategory.MSD);
 	}
 
@@ -163,7 +164,6 @@ public final class ChromatogramConverterMSD extends AbstractChromatogramConverte
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	private void parseCalibrationAMDIS(IChromatogramMSD chromatogramMSD, File directory) {
 
 		if(PreferenceSupplier.isParseRetentionIndexDataAMDIS()) {

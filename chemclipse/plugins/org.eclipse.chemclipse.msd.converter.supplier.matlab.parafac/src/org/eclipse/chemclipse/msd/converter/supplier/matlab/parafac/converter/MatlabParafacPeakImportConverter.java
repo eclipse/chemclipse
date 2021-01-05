@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,6 +18,7 @@ import java.io.IOException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.msd.converter.io.IPeakReader;
 import org.eclipse.chemclipse.msd.converter.peak.AbstractPeakImportConverter;
 import org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.internal.converter.IConstants;
@@ -35,10 +36,10 @@ public class MatlabParafacPeakImportConverter extends AbstractPeakImportConverte
 	private static final Logger logger = Logger.getLogger(MatlabParafacPeakImportConverter.class);
 
 	@Override
-	public IProcessingInfo convert(File file, IProgressMonitor monitor) {
+	public IProcessingInfo<IPeaks<?>> convert(File file, IProgressMonitor monitor) {
 
 		IProcessingMessage processingMessage;
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<IPeaks<?>> processingInfo = new ProcessingInfo<>();
 		try {
 			super.validate(file);
 			file = SpecificationValidator.validateSpecification(file);

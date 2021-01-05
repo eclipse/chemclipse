@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Dr. Janko Diminic, Dr. Philip Wenig.
+ * Copyright (c) 2016, 2021 Dr. Janko Diminic, Dr. Philip Wenig.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -48,6 +48,7 @@ public class CreateProjectWizard extends Wizard implements INewWizard {
 
 	private static final Logger log = Logger.getLogger(CreateProjectWizard.class);
 	private CreateProjectPage page;
+	@SuppressWarnings("unused")
 	private ISelection selection;
 	private IProject createdProject;
 
@@ -55,6 +56,7 @@ public class CreateProjectWizard extends Wizard implements INewWizard {
 	 * Constructor for SampleNewWizard.
 	 */
 	public CreateProjectWizard() {
+
 		super();
 		setNeedsProgressMonitor(true);
 	}

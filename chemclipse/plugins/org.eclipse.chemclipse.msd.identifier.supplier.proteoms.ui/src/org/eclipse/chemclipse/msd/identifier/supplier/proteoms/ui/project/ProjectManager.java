@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Dr. Janko Diminic, Dr. Philip Wenig.
+ * Copyright (c) 2016, 2021 Dr. Janko Diminic, Dr. Philip Wenig.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,25 +17,26 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.identifier.supplier.proteoms.ui.model.ProteomsProject;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
 
 public class ProjectManager {
 
-	private static final Logger log = Logger.getLogger(ProjectManager.class);
 	public static final String DEFAULT_PROJECT_NAME = "Proteoms project";
 	private Path projectsDir;
+	@SuppressWarnings("unused")
 	private IProject project;
 
 	public ProjectManager(IProject project) {
+
 		this.project = project;
 		IPath fullPath = project.getFullPath();
 		projectsDir = fullPath.toFile().toPath();
 	}
 
 	public ProjectManager(Path dir) {
+
 		projectsDir = dir;
 	}
 

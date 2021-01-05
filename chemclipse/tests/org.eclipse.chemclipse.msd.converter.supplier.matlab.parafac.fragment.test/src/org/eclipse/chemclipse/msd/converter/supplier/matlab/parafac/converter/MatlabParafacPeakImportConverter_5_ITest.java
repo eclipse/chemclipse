@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,8 +23,8 @@ import junit.framework.TestCase;
 
 public class MatlabParafacPeakImportConverter_5_ITest extends TestCase {
 
-	private IPeaks peaks;
-	private IProcessingInfo<IPeaks> processingInfo;
+	private IPeaks<?> peaks;
+	private IProcessingInfo<IPeaks<?>> processingInfo;
 	private MatlabParafacPeakImportConverter converter;
 
 	@Override
@@ -45,6 +45,6 @@ public class MatlabParafacPeakImportConverter_5_ITest extends TestCase {
 
 	public void testImport_1() {
 
-		assertEquals(1, peaks.size());
+		assertEquals(1, peaks.getPeaks().size());
 	}
 }

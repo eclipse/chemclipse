@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Dr. Janko Diminic, Dr. Philip Wenig.
+ * Copyright (c) 2016, 2021 Dr. Janko Diminic, Dr. Philip Wenig.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -27,8 +27,6 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.ListViewer;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
@@ -50,6 +48,7 @@ public class ParametersWizardPage extends WizardPage {
 	private ListViewer listViewer;
 
 	public ParametersWizardPage(ImportParameters parameters, IStructuredSelection selection) {
+
 		super(PAGE_NAME);
 		setTitle("Import MS data"); // NON-NLS-1
 		setDescription("Select parameters"); // NON-NLS-1
@@ -185,17 +184,19 @@ public class ParametersWizardPage extends WizardPage {
 				return "???";
 			}
 		});
-		listViewer.setSorter(new ViewerSorter() {
-
-			@Override
-			public int compare(Viewer viewer, Object e1, Object e2) {
-
-				IProject p1 = (IProject)e1;
-				IProject p2 = (IProject)e2;
-				return Long.compare(p1.getLocalTimeStamp(), p2.getLocalTimeStamp());
-				// return super.compare(viewer, e1, e2);
-			}
-		});
+		//
+		// listViewer.setSorter(new ViewerSorter() {
+		//
+		// @Override
+		// public int compare(Viewer viewer, Object e1, Object e2) {
+		//
+		// IProject p1 = (IProject)e1;
+		// IProject p2 = (IProject)e2;
+		// return Long.compare(p1.getLocalTimeStamp(), p2.getLocalTimeStamp());
+		// // return super.compare(viewer, e1, e2);
+		// }
+		// });
+		//
 		listViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			@Override

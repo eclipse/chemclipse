@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Dr. Janko Diminic, Dr. Philip Wenig.
+ * Copyright (c) 2016, 2021 Dr. Janko Diminic, Dr. Philip Wenig.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Janko Diminic - initial API and implementation
+ * Philp Wenig - refactoring
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.identifier.supplier.proteoms.db;
 
@@ -25,7 +26,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.io.IOUtils;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.identifier.supplier.proteoms.model.Peak;
 import org.eclipse.chemclipse.msd.identifier.supplier.proteoms.model.SpectrumMS;
@@ -38,6 +38,7 @@ public class ProteomsDB {
 	private PathManager pathManager;
 
 	public ProteomsDB(Path projectDir) {
+
 		this.projectDir = projectDir;
 		pathManager = new PathManager(projectDir);
 	}
@@ -71,14 +72,12 @@ public class ProteomsDB {
 		}
 		Path msDataFile = pathManager.getMSpeaksFile(msId);
 		// Path msDataFile = Paths.get(msDir.toString(), "ms_data_peaks.bin");
-		DataOutputStream out = null;
-		try {
-			out = getDataOutStream(msDataFile);
+		try (DataOutputStream out = getDataOutStream(msDataFile)) {
 			writePeaks(peaks, out);
 		} catch(IOException e) {
 			log.error("Error: " + e.getMessage(), e);
 		} finally {
-			IOUtils.closeQuietly(out);
+			//
 		}
 	}
 
@@ -86,14 +85,12 @@ public class ProteomsDB {
 
 		Path msDataFile = pathManager.getMSdataFile(msId);
 		// Path msDataFile = Paths.get(msDir.toString(), "ms_data.bin");
-		DataOutputStream out = null;
-		try {
-			out = getDataOutStream(msDataFile);
+		try (DataOutputStream out = getDataOutStream(msDataFile)) {
 			write(ms, out);
 		} catch(IOException e) {
 			log.error("Error: " + e.getMessage(), e);
 		} finally {
-			IOUtils.closeQuietly(out);
+			//
 		}
 	}
 
@@ -110,9 +107,7 @@ public class ProteomsDB {
 	private void saveSpectrumMSMS(SpectrumMSMS msms, long msId, boolean withPeaks) throws IOException {
 
 		Path msmsDataFile = pathManager.getMSMSdataFile(msId, msms.getId());
-		DataOutputStream out = null;
-		try {
-			out = getDataOutStream(msmsDataFile);
+		try (DataOutputStream out = getDataOutStream(msmsDataFile)) {
 			writeMSMS(msms, out);
 			if(withPeaks) {
 				Path peaksPath = pathManager.getMSMSpeaksFile(msId, msms.getId());
@@ -121,7 +116,7 @@ public class ProteomsDB {
 		} catch(IOException e) {
 			log.error("Error: " + e.getMessage(), e);
 		} finally {
-			IOUtils.closeQuietly(out);
+			//
 		}
 	}
 
@@ -157,14 +152,12 @@ public class ProteomsDB {
 	private SpectrumMS getSpectrumMS(long msId) throws IOException {
 
 		Path msDataFile = pathManager.getMSdataFile(msId);
-		DataInputStream in = null;
 		SpectrumMS ms = new SpectrumMS();
-		try {
-			in = getDataInStream(msDataFile);
+		try (DataInputStream in = getDataInStream(msDataFile)) {
 			readSpectrumMS(ms, in);
 			return ms;
 		} finally {
-			IOUtils.closeQuietly(in);
+			//
 		}
 	}
 
@@ -185,18 +178,16 @@ public class ProteomsDB {
 
 	private List<Peak> getSpectrumMSMSpeaks(long msId, long msmsId) throws NotSerializableException, IOException {
 
-		DataInputStream in = null;
-		try {
-			Path msmsPeaksFile = pathManager.getMSMSpeaksFile(msId, msmsId);
-			if(Files.exists(msmsPeaksFile)) {
-				in = getDataInStream(msmsPeaksFile);
+		Path msmsPeaksFile = pathManager.getMSMSpeaksFile(msId, msmsId);
+		if(Files.exists(msmsPeaksFile)) {
+			try (DataInputStream in = getDataInStream(msmsPeaksFile)) {
 				List<Peak> peaks = readPeaks(in);
 				return peaks;
-			} else {
-				return null;
+			} finally {
+				//
 			}
-		} finally {
-			IOUtils.closeQuietly(in);
+		} else {
+			return null;
 		}
 	}
 
@@ -208,13 +199,11 @@ public class ProteomsDB {
 	private SpectrumMSMS getSpectrumMSMS(long msId, long msmsId) throws IOException {
 
 		Path msmsDataFile = pathManager.getMSMSdataFile(msId, msmsId);
-		DataInputStream in = null;
-		try {
-			in = getDataInStream(msmsDataFile);
+		try (DataInputStream in = getDataInStream(msmsDataFile)) {
 			SpectrumMSMS msms = readSpectrumMSMS(in);
 			return msms;
 		} finally {
-			IOUtils.closeQuietly(in);
+			//
 		}
 	}
 
@@ -224,14 +213,13 @@ public class ProteomsDB {
 		if(!Files.isRegularFile(msDataFile)) {
 			return null;
 		}
-		DataInputStream in = null;
+		//
 		List<Peak> peaks = null;
-		try {
-			in = getDataInStream(msDataFile);
+		try (DataInputStream in = getDataInStream(msDataFile)) {
 			peaks = readPeaks(in);
 			return peaks;
 		} finally {
-			IOUtils.closeQuietly(in);
+			//
 		}
 	}
 
@@ -266,14 +254,12 @@ public class ProteomsDB {
 	private void writePeaks(List<Peak> peaks, Path peaksPath) throws FileNotFoundException {
 
 		if(peaks != null && !peaks.isEmpty()) {
-			DataOutputStream outPeaks = null;
-			try {
-				outPeaks = getDataOutStream(peaksPath);
+			try (DataOutputStream outPeaks = getDataOutStream(peaksPath)) {
 				writePeaks(peaks, outPeaks);
 			} catch(IOException e) {
 				log.error("Error: " + e.getMessage(), e);
 			} finally {
-				IOUtils.closeQuietly(outPeaks);
+				//
 			}
 		}
 	}

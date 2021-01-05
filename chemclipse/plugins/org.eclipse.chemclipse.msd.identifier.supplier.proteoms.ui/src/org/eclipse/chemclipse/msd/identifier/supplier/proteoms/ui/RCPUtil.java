@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Dr. Janko Diminic, Dr. Philip Wenig.
+ * Copyright (c) 2016, 2021 Dr. Janko Diminic, Dr. Philip Wenig.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -41,6 +41,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.wizards.IWizardDescriptor;
 import org.eclipse.ui.wizards.IWizardRegistry;
 
+@SuppressWarnings("restriction")
 public class RCPUtil {
 
 	private static final Logger log = Logger.getLogger(RCPUtil.class);
@@ -95,6 +96,7 @@ public class RCPUtil {
 	 * @param natureIds
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	private static boolean contatinProteomsNature(String[] natureIds) {
 
 		for(String id : natureIds) {
@@ -295,6 +297,7 @@ public class RCPUtil {
 					if(flags == 0) {
 						b.append(" resource type=" + resDelta.getType() + " ");
 						if(resDelta instanceof WorkspaceRoot) {
+							@SuppressWarnings("unused")
 							WorkspaceRoot p = (WorkspaceRoot)resDelta;
 							IResourceDelta[] affectedChildren = delta.getAffectedChildren();
 							for(IResourceDelta iResourceDelta : affectedChildren) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -36,7 +36,8 @@ public class TestPathHelper extends PathResolver {
 	/*
 	 * EXPORT
 	 */
-	public static final String TESTFILE_EXPORT_MATLAB_PEAKS = "testData/files/export/matlab-peaks.mpl";
+	public static final String TESTFILE_EXPORT_FOLDER = "testData/files/export";
+	public static final String TESTFILE_EXPORT_MATLAB_PEAKS = "matlab-peaks.mpl";
 	public static final String TESTFILE_EXPORT_TEST = "testData/files/export/Test.mpl";
 	/*
 	 * SPECIFICATION VALIDATOR TEST

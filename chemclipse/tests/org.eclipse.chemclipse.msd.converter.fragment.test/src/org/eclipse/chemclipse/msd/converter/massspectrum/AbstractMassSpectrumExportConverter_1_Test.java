@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -54,7 +54,7 @@ public class AbstractMassSpectrumExportConverter_1_Test extends TestCase {
 
 		File file = null;
 		massSpectrum = null;
-		IProcessingInfo processingInfo = ec.convert(file, massSpectrum, false, new NullProgressMonitor());
+		IProcessingInfo<?> processingInfo = ec.convert(file, massSpectrum, false, new NullProgressMonitor());
 		assertTrue(processingInfo.hasErrorMessages());
 	}
 
@@ -64,7 +64,7 @@ public class AbstractMassSpectrumExportConverter_1_Test extends TestCase {
 		try {
 			file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_EXPORT_MASSSPECTRUM_NOT_WRITEABLE));
 			file.setWritable(false);
-			IProcessingInfo processingInfo = ec.convert(file, massSpectrum, false, new NullProgressMonitor());
+			IProcessingInfo<?> processingInfo = ec.convert(file, massSpectrum, false, new NullProgressMonitor());
 			assertTrue(processingInfo.hasErrorMessages());
 		} catch(IOException e) {
 			assertTrue("IOException", false);

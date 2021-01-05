@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2019 Lablicate GmbH.
+ * Copyright (c) 2013, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -39,6 +39,7 @@ public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChro
 	private final Map<Double, IBaselineModel> baselineModels;
 
 	public AbstractChromatogramWSD() {
+
 		baselineModels = new HashMap<>();
 		updateNoiseCalculator();
 	}
@@ -137,7 +138,7 @@ public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChro
 	@Override
 	public boolean containsBaseline(double wavelength) {
 
-		return baselineModels.containsValue(wavelength);
+		return baselineModels.containsKey(wavelength);
 	}
 
 	@Override

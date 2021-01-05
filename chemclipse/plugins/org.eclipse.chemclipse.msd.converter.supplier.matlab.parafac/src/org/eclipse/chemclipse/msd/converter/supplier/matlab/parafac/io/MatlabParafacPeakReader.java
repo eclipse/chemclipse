@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -44,15 +44,15 @@ public class MatlabParafacPeakReader implements IPeakReader {
 	private ParseStatus parseStatus;
 
 	@Override
-	public IProcessingInfo read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IProcessingInfo<IPeaks<?>> read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<IPeaks<?>> processingInfo = new ProcessingInfo<>();
 		validateContent(file, processingInfo);
 		readPeaks(file, processingInfo);
 		return processingInfo;
 	}
 
-	private void validateContent(File file, IProcessingInfo processingInfo) throws FileIsNotReadableException, IOException {
+	private void validateContent(File file, IProcessingInfo<?> processingInfo) throws FileIsNotReadableException, IOException {
 
 		FileReader fileReader = new FileReader(file);
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -65,12 +65,12 @@ public class MatlabParafacPeakReader implements IPeakReader {
 		}
 	}
 
-	private void readPeaks(File file, IProcessingInfo processingInfo) throws FileIsNotReadableException, IOException, IllegalArgumentException {
+	private void readPeaks(File file, IProcessingInfo<IPeaks<?>> processingInfo) throws FileIsNotReadableException, IOException, IllegalArgumentException {
 
 		FileReader fileReader = new FileReader(file);
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
 		String line;
-		IPeaks peaks = new Peaks();
+		IPeaks<?> peaks = new Peaks();
 		PeakSupport peakSupport = null;
 		/*
 		 * Parse each line the file
@@ -109,7 +109,7 @@ public class MatlabParafacPeakReader implements IPeakReader {
 		fileReader.close();
 	}
 
-	private void addPeak(IPeaks peaks, PeakSupport peakSupport, IProcessingInfo processingInfo, File file) {
+	private void addPeak(IPeaks<?> peaks, PeakSupport peakSupport, IProcessingInfo<?> processingInfo, File file) {
 
 		IProcessingMessage processingMessage;
 		try {
@@ -141,7 +141,7 @@ public class MatlabParafacPeakReader implements IPeakReader {
 	 * @param line
 	 * @param peakSupport
 	 */
-	private void parseLine(String line, PeakSupport peakSupport, IProcessingInfo processingInfo) {
+	private void parseLine(String line, PeakSupport peakSupport, IProcessingInfo<?> processingInfo) {
 
 		IProcessingMessage processingMessage;
 		/*

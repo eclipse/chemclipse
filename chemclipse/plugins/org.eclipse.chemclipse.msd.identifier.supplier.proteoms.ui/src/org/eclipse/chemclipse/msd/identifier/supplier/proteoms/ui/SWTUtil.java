@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Dr. Janko Diminic, Dr. Philip Wenig.
+ * Copyright (c) 2016, 2021 Dr. Janko Diminic, Dr. Philip Wenig.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -38,6 +38,7 @@ public class SWTUtil {
 
 	public void asyncRun(Runnable r) {
 
+		@SuppressWarnings("unused")
 		SafeRunnable sr = new SafeRunnable() {
 
 			@Override

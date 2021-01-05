@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.core;
 
+import org.eclipse.chemclipse.converter.core.IConverterSupport;
 import org.eclipse.chemclipse.converter.core.IConverterSupportSetter;
 
 public class AbstractConverterSupport_4_Test extends AbstractConverterTestCase {
@@ -23,7 +24,7 @@ public class AbstractConverterSupport_4_Test extends AbstractConverterTestCase {
 
 		super.setUp();
 		converterSupport = getConverterSupport();
-		filterNames = converterSupport.getExportableFilterNames();
+		filterNames = converterSupport.getFilterNames(IConverterSupport.EXPORT_SUPPLIER);
 	}
 
 	@Override

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Dr. Janko Diminic, Dr. Philip Wenig.
+ * Copyright (c) 2016, 2021 Dr. Janko Diminic, Dr. Philip Wenig.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -41,6 +41,7 @@ public class CreateProjectPage extends WizardPage {
 	 * @param pageName
 	 */
 	public CreateProjectPage() {
+
 		super("wizardPage");
 		setTitle("New Peptide Tandem Mass Spectra project");
 		setDescription("This wizard creates a new Peptide Tandem Mass Spectra project.");
@@ -110,6 +111,7 @@ public class CreateProjectPage extends WizardPage {
 		updateStatus(null);
 	}
 
+	@SuppressWarnings("unused")
 	private void dialogChanged2() {
 
 		IResource container = ResourcesPlugin.getWorkspace().getRoot().findMember(new Path(getProjectName()));

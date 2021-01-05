@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Dr. Janko Diminic.
+ * Copyright (c) 2016, 2021 Dr. Janko Diminic.
  * 
  * 
  * All rights reserved.
@@ -9,6 +9,7 @@
  * 
  * Contributors:
  * Dr. Janko Diminic - initial API and implementation
+ * Philip Wenig - refactoring
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.identifier.supplier.proteoms.parser;
 
@@ -16,6 +17,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -112,7 +114,7 @@ public class MGFParser {
 
 		File f = new File(mgfFilePath);
 		try (FileInputStream input = new FileInputStream(f)) {
-			List<String> lines = IOUtils.readLines(input);
+			List<String> lines = IOUtils.readLines(input, Charset.forName("UTF-8"));
 			SpectrumMS ms1 = parseMGFLines(lines);
 			return ms1;
 		}

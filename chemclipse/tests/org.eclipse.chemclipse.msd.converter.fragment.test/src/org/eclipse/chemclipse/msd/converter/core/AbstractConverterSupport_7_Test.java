@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,8 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.core;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.converter.core.IConverterSupport;
 import org.eclipse.chemclipse.converter.core.IConverterSupportSetter;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
@@ -28,7 +30,7 @@ public class AbstractConverterSupport_7_Test extends AbstractConverterTestCase {
 
 		super.setUp();
 		converterSupport = getConverterSupport();
-		supplier = converterSupport.getExportSupplier();
+		supplier = new ArrayList<>(converterSupport.getSupplier(IConverterSupport.EXPORT_SUPPLIER));
 	}
 
 	@Override

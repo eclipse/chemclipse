@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Dr. Janko Diminic, Dr. Philip Wenig.
+ * Copyright (c) 2016, 2021 Dr. Janko Diminic, Dr. Philip Wenig.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -65,7 +65,6 @@ public class ProteomSpectraPart implements IResourceChangeListener {
 	IEventBroker eventBroker;
 	private TreeViewer treeViewer;
 	private ContentProvider contentProvider;
-	private Composite composite;
 
 	@Inject
 	@Optional
@@ -96,7 +95,6 @@ public class ProteomSpectraPart implements IResourceChangeListener {
 	@PostConstruct
 	public void createControls(Composite composite) {
 
-		this.composite = composite;
 		composite.setLayout(new FillLayout());
 		// List<IProject> proteomsProjects = RCPUtil.findProteomsProjects();
 		// if(proteomsProjects.isEmpty()) {
@@ -215,6 +213,7 @@ public class ProteomSpectraPart implements IResourceChangeListener {
 		treeViewer.setInput(projectsWrapperArray);
 	}
 
+	@SuppressWarnings("unused")
 	private void setUpButtonAddData(Composite composite) {
 
 		Button button = new Button(composite, SWT.PUSH);
