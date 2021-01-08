@@ -10,15 +10,19 @@
 			filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsShift"                     
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter">
       </ChromatogramFilterSupplier>
-   </extension>
-   <extension
-         point="org.eclipse.chemclipse.chromatogram.filter.chromatogramFilterSupplier">
       <ChromatogramFilterSupplier
             description="This filter stretches retention times."
             filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.core.ChromatogramFilterStretch"
             filterName="Retention Time Stretcher"
 			filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsStretch"            
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtstretcher">
+      </ChromatogramFilterSupplier>
+      <ChromatogramFilterSupplier
+            description="This filter add scans to fill too large gaps."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.core.ChromatogramFilterGapFiller"
+            filterName="Gap Filler"
+			filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsGapFiller"            
+            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.gapfiller">
       </ChromatogramFilterSupplier>
    </extension>   
    <extension

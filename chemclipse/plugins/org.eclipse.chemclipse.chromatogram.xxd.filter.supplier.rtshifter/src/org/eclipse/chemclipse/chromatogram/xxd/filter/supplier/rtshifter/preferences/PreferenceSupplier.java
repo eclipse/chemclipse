@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.Activator;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsGapFiller;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsShift;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.FilterSettingsStretch;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.ShiftDirection;
@@ -46,6 +47,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final int MIN_RETENTION_TIME = 0; // = 0.0 minutes
 	public static final int MAX_RETENTION_TIME = 6000000; // = 100.0 minutes;
 	//
+	public static final int MIN_LIMIT_FACTOR = 4;
+	public static final int MAX_LIMIT_FACTOR = 10000000;
+	//
 	public static final String P_OVERLAY_X_OFFSET = "overlayXOffset";
 	public static final int DEF_OVERLAY_X_OFFSET = 0;
 	public static final String P_OVERLAY_Y_OFFSET = "overlayYOffset";
@@ -68,6 +72,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final int DEF_STRETCH_MILLISECONDS_LENGTH = 6000000; // = 100.0 minutes;
 	public static final int STRETCH_MILLISECONDS_LENGTH_MIN = 0;
 	public static final int STRETCH_MILLISECONDS_LENGTH_MAX = Integer.MAX_VALUE;
+	//
+	public static final String P_LIMIT_FACTOR = "limitFactor";
+	public static final int DEF_LIMIT_FACTOR = 4;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -129,6 +136,14 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		boolean isShiftAllScans = getIsShiftAllScans();
 		int millisecondsToShift = getMillisecondsToShift(preferences, defaultShiftDirection);
 		FilterSettingsShift filterSettings = new FilterSettingsShift(millisecondsToShift, isShiftAllScans);
+		return filterSettings;
+	}
+
+	public static FilterSettingsGapFiller getFilterSettingsFillGaps() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		FilterSettingsGapFiller filterSettings = new FilterSettingsGapFiller();
+		filterSettings.setLimitFactor(preferences.getInt(P_LIMIT_FACTOR, DEF_LIMIT_FACTOR));
 		return filterSettings;
 	}
 

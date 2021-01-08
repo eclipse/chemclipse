@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2020 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -14,12 +14,12 @@ package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.ui.pre
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.settings.ShiftDirection;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.ui.Activator;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.IntegerFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.RetentionTimeMinutesFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -64,6 +64,9 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_STRETCH_MILLISECONDS_SCAN_DELAY, "Stretch Scan Delay (minutes)", PreferenceSupplier.STRETCH_MILLISECONDS_SCAN_DELAY_MIN, PreferenceSupplier.STRETCH_MILLISECONDS_SCAN_DELAY_MAX, getFieldEditorParent()));
 		addField(new RetentionTimeMinutesFieldEditor(PreferenceSupplier.P_STRETCH_MILLISECONDS_LENGTH, "Stretch Length (minutes)", PreferenceSupplier.STRETCH_MILLISECONDS_LENGTH_MIN, PreferenceSupplier.STRETCH_MILLISECONDS_LENGTH_MAX, getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new IntegerFieldEditor(PreferenceSupplier.P_LIMIT_FACTOR, "Limit Factor (Gap Filler):", PreferenceSupplier.MIN_LIMIT_FACTOR, PreferenceSupplier.MAX_LIMIT_FACTOR, getFieldEditorParent()));
 	}
 
 	/*
