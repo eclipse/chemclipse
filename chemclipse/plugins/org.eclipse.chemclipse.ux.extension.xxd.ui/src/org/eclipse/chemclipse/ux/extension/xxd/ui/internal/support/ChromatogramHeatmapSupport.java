@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2020 Lablicate GmbH.
+ * Copyright (c) 2012, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,6 +15,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support;
 import java.util.List;
 import java.util.Optional;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.NoExtractedIonSignalStoredException;
@@ -32,18 +33,31 @@ import org.eclipse.nebula.visualization.xygraph.linearscale.Range;
 
 public class ChromatogramHeatmapSupport {
 
-	public Optional<ChromatogramHeatmapData> getHeatmapData(IChromatogram<?> chromatogram) {
+	private static final Logger logger = Logger.getLogger(ChromatogramHeatmapSupport.class);
 
-		if(chromatogram instanceof IChromatogramMSD) {
-			return getHeatmap((IChromatogramMSD)chromatogram);
-		} else if(chromatogram instanceof IChromatogramWSD) {
-			return getHeatmap((IChromatogramWSD)chromatogram);
-		} else {
-			return Optional.empty();
+	public Optional<ChromatogramHeatmapData> getHeatmapData(IChromatogram<?> chromatogram, double scaleIntensityMin, double scaleIntensityMax) {
+
+		/*
+		 * Validation
+		 * The validation must be not lower than 1.
+		 */
+		try {
+			scaleIntensityMin = (scaleIntensityMin < 1.0d) ? 1.0d : scaleIntensityMin;
+			scaleIntensityMax = (scaleIntensityMax < 1.0d) ? 1.0d : scaleIntensityMax;
+			//
+			if(chromatogram instanceof IChromatogramMSD) {
+				return getHeatmap((IChromatogramMSD)chromatogram, scaleIntensityMin, scaleIntensityMax);
+			} else if(chromatogram instanceof IChromatogramWSD) {
+				return getHeatmap((IChromatogramWSD)chromatogram, scaleIntensityMin, scaleIntensityMax);
+			}
+		} catch(Exception e) {
+			logger.warn(e);
 		}
+		//
+		return Optional.empty();
 	}
 
-	private Optional<ChromatogramHeatmapData> getHeatmap(IChromatogramWSD chromatogram) {
+	private Optional<ChromatogramHeatmapData> getHeatmap(IChromatogramWSD chromatogram, double scaleIntensityMin, double scaleIntensityMax) {
 
 		IExtractedSingleWavelengthSignalExtractor extractor = new ExtractedSingleWavelengthSignalExtractor(chromatogram, true);
 		List<IExtractedSingleWavelengthSignals> signals = extractor.getExtractedWavelengthSignals();
@@ -78,22 +92,22 @@ public class ChromatogramHeatmapSupport {
 			float maxAbudance = -Float.MAX_VALUE;
 			float minAbudance = Float.MAX_VALUE;
 			for(float value : heatmapData) {
-				maxAbudance = Float.max(maxAbudance, value);
 				minAbudance = Float.min(minAbudance, value);
+				maxAbudance = Float.max(maxAbudance, value);
 			}
 			//
 			IPrimaryArrayWrapper arrayWrapper = new FloatArrayWrapper(heatmapData);
 			Range axisRangeWidth = new Range(startRetentionTime, stopRetentionTime);
 			Range axisRangeHeight = new Range(startWavelength, stopWavelength);
-			double minimum = minAbudance;
-			double maximum = maxAbudance;
+			double minimum = minAbudance * scaleIntensityMin;
+			double maximum = maxAbudance / scaleIntensityMax;
 			//
 			return Optional.of(new ChromatogramHeatmapData(arrayWrapper, axisRangeWidth, axisRangeHeight, minimum, maximum, dataWidth, dataHeight));
 		}
 		return Optional.empty();
 	}
 
-	private Optional<ChromatogramHeatmapData> getHeatmap(IChromatogramMSD chromatogram) {
+	private Optional<ChromatogramHeatmapData> getHeatmap(IChromatogramMSD chromatogram, double scaleIntensityMin, double scaleIntensityMax) {
 
 		IExtractedIonSignalExtractor extractor = new ExtractedIonSignalExtractor(chromatogram);
 		IExtractedIonSignals signals = extractor.getExtractedIonSignals();
@@ -137,15 +151,15 @@ public class ChromatogramHeatmapSupport {
 		float maxAbudance = -Float.MAX_VALUE;
 		float minAbudance = Float.MAX_VALUE;
 		for(float value : heatmapData) {
-			maxAbudance = Float.max(maxAbudance, value);
 			minAbudance = Float.min(minAbudance, value);
+			maxAbudance = Float.max(maxAbudance, value);
 		}
 		//
 		IPrimaryArrayWrapper arrayWrapper = new FloatArrayWrapper(heatmapData);
 		Range axisRangeWidth = new Range(startRetentionTime, stopRetentionTime);
 		Range axisRangeHeight = new Range(startIon, stopIon);
-		double minimum = minAbudance;
-		double maximum = (float)(maxAbudance / (dataWidth / 5.0d));
+		double minimum = minAbudance * scaleIntensityMin;
+		double maximum = maxAbudance / scaleIntensityMax;
 		//
 		return Optional.of(new ChromatogramHeatmapData(arrayWrapper, axisRangeWidth, axisRangeHeight, minimum, maximum, dataWidth, dataHeight));
 	}

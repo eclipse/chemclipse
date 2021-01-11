@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -79,6 +79,12 @@ public class PreferencePageChromatogram extends FieldEditorPreferencePage implem
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addIntegerField(PreferenceConstants.P_LIMIT_SIM_TRACES, "If the scan contains less than ... it's SIM.", PreferenceConstants.MIN_SIM_IONS, PreferenceConstants.MAX_SIM_IONS);
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addIntegerField(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MIN_MSD, "Scale Intensity Min (MSD)", PreferenceConstants.MIN_HEATMAP_SCALE_INTENSITY, PreferenceConstants.MAX_HEATMAP_SCALE_INTENSITY);
+		addIntegerField(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MAX_MSD, "Scale Intensity Max (MSD)", PreferenceConstants.MIN_HEATMAP_SCALE_INTENSITY, PreferenceConstants.MAX_HEATMAP_SCALE_INTENSITY);
+		addIntegerField(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MIN_WSD, "Scale Intensity Min (WSD)", PreferenceConstants.MIN_HEATMAP_SCALE_INTENSITY, PreferenceConstants.MAX_HEATMAP_SCALE_INTENSITY);
+		addIntegerField(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MAX_WSD, "Scale Intensity Max (WSD)", PreferenceConstants.MIN_HEATMAP_SCALE_INTENSITY, PreferenceConstants.MAX_HEATMAP_SCALE_INTENSITY);
 	}
 
 	private void addIntegerField(String name, String labelText, int min, int max) {

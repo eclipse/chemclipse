@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -68,6 +68,9 @@ public class PreferenceConstants extends ChartOptions {
 	//
 	public static final int MIN_LENGTH_NAME_EXPORT = 1;
 	public static final int MAX_LENGTH_NAME_EXPORT = 1000;
+	//
+	public static final int MIN_HEATMAP_SCALE_INTENSITY = 1;
+	public static final int MAX_HEATMAP_SCALE_INTENSITY = 10000;
 	/*
 	 * General / Task Quick Access
 	 */
@@ -237,6 +240,15 @@ public class PreferenceConstants extends ChartOptions {
 	public static final int DEF_TRACES_VIRTUAL_TABLE = 5000;
 	public static final String P_LIMIT_SIM_TRACES = "limitSimTraces";
 	public static final int DEF_LIMIT_SIM_TRACES = 5;
+	//
+	public static final String P_HEATMAP_SCALE_INTENSITY_MIN_MSD = "heatmapScaleIntensityMinMSD";
+	public static final int DEF_HEATMAP_SCALE_INTENSITY_MIN_MSD = 1;
+	public static final String P_HEATMAP_SCALE_INTENSITY_MAX_MSD = "heatmapScaleIntensityMaxMSD";
+	public static final int DEF_HEATMAP_SCALE_INTENSITY_MAX_MSD = 2500;
+	public static final String P_HEATMAP_SCALE_INTENSITY_MIN_WSD = "heatmapScaleIntensityMinWSD";
+	public static final int DEF_HEATMAP_SCALE_INTENSITY_MIN_WSD = 1;
+	public static final String P_HEATMAP_SCALE_INTENSITY_MAX_WSD = "heatmapScaleIntensityMaxWSD";
+	public static final int DEF_HEATMAP_SCALE_INTENSITY_MAX_WSD = 1;
 	/*
 	 * Peaks
 	 */

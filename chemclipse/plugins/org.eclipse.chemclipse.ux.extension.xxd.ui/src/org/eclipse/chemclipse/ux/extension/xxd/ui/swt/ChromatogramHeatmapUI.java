@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2020 Lablicate GmbH.
+ * Copyright (c) 2012, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,18 +11,27 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramHeatmapData;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramHeatmapSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IntensityScaleUI.IScaleUpdateListener;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.draw2d.LightweightSystem;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.nebula.visualization.widgets.datadefinition.ColorMap;
@@ -38,15 +47,22 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 
 public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI {
 
 	private Button buttonToolbarInfo;
 	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
+	private Button buttonToolbarEdit;
+	private AtomicReference<Composite> toolbarEdit = new AtomicReference<>();
+	private IntensityScaleUI intensityScaleMin;
+	private IntensityScaleUI intensityScaleMax;
 	private LightweightSystem lightweightSystem;
 	private IntensityGraphFigure intensityGraphFigure;
 	//
 	private ChromatogramHeatmapSupport chromatogramHeatmapSupport = new ChromatogramHeatmapSupport();
+	private IChromatogramSelection<?, ?> chromatogramSelection = null;
+	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public ChromatogramHeatmapUI(Composite parent, int style) {
 
@@ -56,18 +72,63 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 
 	public void update(IChromatogramSelection<?, ?> chromatogramSelection) {
 
-		clear();
-		toolbarInfo.get().setText(ChromatogramDataSupport.getChromatogramSelectionLabel(chromatogramSelection));
-		//
+		this.chromatogramSelection = chromatogramSelection;
+		setScaleValues();
+		updateHeatmap();
+	}
+
+	private void updateHeatmap() {
+
 		if(chromatogramSelection != null) {
 			/*
 			 * Data Matrix
 			 */
-			Optional<ChromatogramHeatmapData> heatmapData = chromatogramHeatmapSupport.getHeatmapData(chromatogramSelection.getChromatogram());
+			int scaleMin = intensityScaleMin.getSelection();
+			int scaleMax = intensityScaleMax.getSelection();
+			Optional<ChromatogramHeatmapData> heatmapData = chromatogramHeatmapSupport.getHeatmapData(chromatogramSelection.getChromatogram(), scaleMin, scaleMax);
 			if(heatmapData.isPresent()) {
+				saveScaleValues(scaleMin, scaleMax);
+				toolbarInfo.get().setText(ChromatogramDataSupport.getChromatogramSelectionLabel(chromatogramSelection));
 				boolean isWavelengthData = chromatogramSelection instanceof IChromatogramSelectionWSD;
 				setHeatMap(heatmapData.get(), isWavelengthData);
+			} else {
+				clear();
 			}
+		} else {
+			clear();
+		}
+	}
+
+	private void setScaleValues() {
+
+		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+			intensityScaleMin.setSelection(preferenceStore.getInt(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MIN_MSD));
+			intensityScaleMax.setSelection(preferenceStore.getInt(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MAX_MSD));
+		} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
+			intensityScaleMin.setSelection(preferenceStore.getInt(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MIN_WSD));
+			intensityScaleMax.setSelection(preferenceStore.getInt(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MAX_WSD));
+		}
+	}
+
+	private void resetScaleValues() {
+
+		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+			intensityScaleMin.setSelection(PreferenceConstants.DEF_HEATMAP_SCALE_INTENSITY_MIN_MSD);
+			intensityScaleMax.setSelection(PreferenceConstants.DEF_HEATMAP_SCALE_INTENSITY_MAX_MSD);
+		} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
+			intensityScaleMin.setSelection(PreferenceConstants.DEF_HEATMAP_SCALE_INTENSITY_MIN_WSD);
+			intensityScaleMax.setSelection(PreferenceConstants.DEF_HEATMAP_SCALE_INTENSITY_MAX_WSD);
+		}
+	}
+
+	private void saveScaleValues(int scaleMin, int scaleMax) {
+
+		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+			preferenceStore.setValue(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MIN_MSD, scaleMin);
+			preferenceStore.setValue(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MAX_MSD, scaleMax);
+		} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
+			preferenceStore.setValue(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MIN_WSD, scaleMin);
+			preferenceStore.setValue(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MAX_WSD, scaleMax);
 		}
 	}
 
@@ -113,6 +174,7 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 		//
 		createToolbarMain(composite);
 		createToolbarInfo(composite);
+		createToolbarEdit(composite);
 		createCanvas(composite);
 		//
 		initialize();
@@ -121,6 +183,7 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 	private void initialize() {
 
 		enableToolbar(toolbarInfo, buttonToolbarInfo, IMAGE_INFO, TOOLTIP_INFO, true);
+		enableToolbar(toolbarEdit, buttonToolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT, false);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -129,10 +192,45 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(2, false));
+		composite.setLayout(new GridLayout(5, false));
 		//
 		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
+		buttonToolbarEdit = createButtonToggleToolbar(composite, toolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT);
 		createColorMapComboViewer(composite);
+		createButtonReset(composite);
+		createButtonSettings(composite);
+	}
+
+	private Button createButtonReset(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Reset the heatmap settings.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				resetScaleValues();
+				updateHeatmap();
+			}
+		});
+		//
+		return button;
+	}
+
+	private void createButtonSettings(Composite parent) {
+
+		createSettingsButton(parent, Arrays.asList(PreferencePageChromatogram.class), new ISettingsHandler() {
+
+			@Override
+			public void apply(Display display) {
+
+				setScaleValues();
+				updateHeatmap();
+			}
+		});
 	}
 
 	private void createToolbarInfo(Composite parent) {
@@ -141,6 +239,37 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 		informationUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		toolbarInfo.set(informationUI);
+	}
+
+	private void createToolbarEdit(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		composite.setLayout(new GridLayout(2, true));
+		//
+		intensityScaleMin = createIntensityScale(composite, "Min Scale Intensity");
+		intensityScaleMax = createIntensityScale(composite, "Max Scale Intensity");
+		//
+		toolbarEdit.set(composite);
+	}
+
+	private IntensityScaleUI createIntensityScale(Composite parent, String tooltip) {
+
+		IntensityScaleUI intensityScaleUI = new IntensityScaleUI(parent, SWT.NONE);
+		intensityScaleUI.setMinimum(PreferenceConstants.MIN_HEATMAP_SCALE_INTENSITY);
+		intensityScaleUI.setMaximum(PreferenceConstants.MAX_HEATMAP_SCALE_INTENSITY);
+		intensityScaleUI.setToolTipText(tooltip);
+		intensityScaleUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		intensityScaleUI.setUpdateListener(new IScaleUpdateListener() {
+
+			@Override
+			public void update(int selection) {
+
+				updateHeatmap();
+			}
+		});
+		//
+		return intensityScaleUI;
 	}
 
 	private ComboViewer createColorMapComboViewer(Composite parent) {

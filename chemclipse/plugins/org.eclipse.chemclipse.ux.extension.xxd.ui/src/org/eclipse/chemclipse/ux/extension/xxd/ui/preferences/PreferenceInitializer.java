@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -96,6 +96,11 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		//
 		store.setDefault(PreferenceConstants.P_TRACES_VIRTUAL_TABLE, PreferenceConstants.DEF_TRACES_VIRTUAL_TABLE);
 		store.setDefault(PreferenceConstants.P_LIMIT_SIM_TRACES, PreferenceConstants.DEF_LIMIT_SIM_TRACES);
+		//
+		store.setDefault(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MIN_MSD, PreferenceConstants.DEF_HEATMAP_SCALE_INTENSITY_MIN_MSD);
+		store.setDefault(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MAX_MSD, PreferenceConstants.DEF_HEATMAP_SCALE_INTENSITY_MAX_MSD);
+		store.setDefault(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MIN_WSD, PreferenceConstants.DEF_HEATMAP_SCALE_INTENSITY_MIN_WSD);
+		store.setDefault(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MAX_WSD, PreferenceConstants.DEF_HEATMAP_SCALE_INTENSITY_MAX_WSD);
 		/*
 		 * Peaks
 		 */
