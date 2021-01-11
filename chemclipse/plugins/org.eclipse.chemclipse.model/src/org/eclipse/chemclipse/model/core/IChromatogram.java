@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2020 Lablicate GmbH.
+ * Copyright (c) 2012, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -115,6 +115,12 @@ public interface IChromatogram<T extends IPeak> extends SegmentedMeasurement, IM
 	 * @param to
 	 */
 	void removeScans(int from, int to);
+
+	/**
+	 * Replace all scans with the given list.
+	 * Handle with care!
+	 */
+	void replaceAllScans(List<IScan> scans);
 
 	/**
 	 * Recalculates the noise factor.

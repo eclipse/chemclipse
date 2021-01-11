@@ -27,11 +27,9 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.ScanMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
-import org.eclipse.chemclipse.wsd.model.core.implementation.ScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.ScanWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -70,7 +68,7 @@ public class ChromatogramFilterGapFiller extends AbstractChromatogramFilter {
 			/*
 			 * Settings
 			 */
-			List<IScan> scansFillGaps = new ArrayList<>();
+			List<IScan> gapFillerScans = new ArrayList<>();
 			/*
 			 * At least 3 * scan interval, because two scans are added in case of a gap, each with a delta of scan interval.
 			 */
@@ -83,77 +81,89 @@ public class ChromatogramFilterGapFiller extends AbstractChromatogramFilter {
 				/*
 				 * Try to detect the gap.
 				 */
-				IScan scan0 = chromatogram.getScan(i - 1);
-				IScan scan1 = chromatogram.getScan(i);
+				IScan scanGapStart = chromatogram.getScan(i - 1);
+				IScan scanGapEnd = chromatogram.getScan(i);
 				//
-				int retentionTime0 = scan0.getRetentionTime();
-				int retentionTime1 = scan1.getRetentionTime();
-				int interval = retentionTime1 - retentionTime0;
+				int retentionTimeGapStart = scanGapStart.getRetentionTime();
+				int retentionTimeGapEnd = scanGapEnd.getRetentionTime();
+				int intervalGap = retentionTimeGapEnd - retentionTimeGapStart;
 				//
-				if(interval > limit) {
+				if(intervalGap > limit) {
 					/*
-					 * Full
+					 * Start/Stop of the gap.
 					 */
-					retentionTime0 += scanInterval;
-					retentionTime1 -= scanInterval;
-					float intensity0 = scan0.getTotalSignal() >= 0 ? Float.MIN_VALUE : -Float.MIN_VALUE;
-					float intensity1 = scan1.getTotalSignal() >= 0 ? Float.MIN_VALUE : -Float.MIN_VALUE;
-					//
-					if(scan0 instanceof IScanCSD) {
-						scansFillGaps.add(new ScanCSD(retentionTime0, intensity0));
-						int deltaStep = (retentionTime1 - retentionTime0) / scanInterval;
-						if(deltaStep > 0) {
-							int retentionTime = retentionTime0;
-							int next = retentionTime1 - deltaStep;
-							while(retentionTime < next) {
-								retentionTime += deltaStep;
-								scansFillGaps.add(new ScanCSD(retentionTime, intensity0));
-							}
-						}
-						scansFillGaps.add(new ScanCSD(retentionTime1, intensity1));
-					} else if(scan0 instanceof IScanMSD) {
-						try {
-							IScanMSD scanAdd0 = new ScanMSD();
-							scanAdd0.setRetentionTime(retentionTime0);
-							scanAdd0.addIon(new Ion(1, intensity0));
-							scansFillGaps.add(scanAdd0);
-							//
-							IScanMSD scanAdd1 = new ScanMSD();
-							scanAdd1.setRetentionTime(retentionTime1);
-							scanAdd1.addIon(new Ion(1, intensity1));
-							scansFillGaps.add(scanAdd1);
-						} catch(Exception e) {
-							//
-						}
-					} else if(scan0 instanceof IScanWSD) {
-						try {
-							IScanWSD scanAdd0 = new ScanWSD();
-							scanAdd0.setRetentionTime(retentionTime0);
-							scanAdd0.addScanSignal(new ScanSignalWSD(1, intensity0));
-							scansFillGaps.add(scanAdd0);
-							//
-							IScanWSD scanAdd1 = new ScanWSD();
-							scanAdd1.setRetentionTime(retentionTime1);
-							scanAdd1.addScanSignal(new ScanSignalWSD(1, intensity1));
-							scansFillGaps.add(scanAdd1);
-						} catch(Exception e) {
-							//
+					retentionTimeGapStart += scanInterval;
+					retentionTimeGapEnd -= scanInterval;
+					/*
+					 * First
+					 */
+					addScan(scanGapStart, gapFillerScans, retentionTimeGapStart);
+					/*
+					 * Middle
+					 */
+					int deltaStep = (retentionTimeGapEnd - retentionTimeGapStart) / scanInterval;
+					if(deltaStep > 0) {
+						int retentionTime = retentionTimeGapStart;
+						int next = retentionTimeGapEnd - deltaStep;
+						while(retentionTime < next) {
+							retentionTime += deltaStep;
+							addScan(scanGapStart, gapFillerScans, retentionTime);
 						}
 					}
+					/*
+					 * Last
+					 */
+					addScan(scanGapStart, gapFillerScans, retentionTimeGapEnd);
 				}
 			}
 			/*
 			 * Insert new scans and sort them by retention time.
 			 */
-			if(scansFillGaps.size() > 0) {
+			if(gapFillerScans.size() > 0) {
 				List<IScan> scans = new ArrayList<>(chromatogram.getScans());
-				scans.addAll(scansFillGaps);
+				scans.addAll(gapFillerScans);
 				Collections.sort(scans, (s1, s2) -> Integer.compare(s1.getRetentionTime(), s2.getRetentionTime()));
-				int from = 1;
-				int to = chromatogram.getNumberOfScans();
-				chromatogram.removeScans(from, to);
-				chromatogram.addScans(scans);
+				chromatogram.replaceAllScans(scans);
 			}
 		}
+	}
+
+	/**
+	 * Create an empty scan and add it to the list.
+	 * 
+	 * @param scanReference
+	 * @param gapFillerScans
+	 * @param retentionTime
+	 */
+	private void addScan(IScan scanReference, List<IScan> gapFillerScans, int retentionTime) {
+
+		IScan scan = createScan(scanReference, retentionTime);
+		if(scan != null) {
+			gapFillerScans.add(scan);
+		}
+	}
+
+	/**
+	 * Create an empty scan.
+	 * 
+	 * @param scanReference
+	 * @param retentionTime
+	 * @return IScan
+	 */
+	private IScan createScan(IScan scanReference, int retentionTime) {
+
+		IScan scan = null;
+		//
+		if(scanReference instanceof IScanCSD) {
+			scan = new ScanCSD(retentionTime, 0);
+		} else if(scanReference instanceof IScanMSD) {
+			scan = new ScanMSD();
+			scan.setRetentionTime(retentionTime);
+		} else if(scanReference instanceof IScanWSD) {
+			scan = new ScanWSD();
+			scan.setRetentionTime(retentionTime);
+		}
+		//
+		return scan;
 	}
 }
