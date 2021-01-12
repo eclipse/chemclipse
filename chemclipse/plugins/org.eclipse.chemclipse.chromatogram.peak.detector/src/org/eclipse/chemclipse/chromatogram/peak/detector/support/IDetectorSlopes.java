@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Lorenz Gerber - add additional smooth method
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.peak.detector.support;
 
@@ -40,6 +41,14 @@ public interface IDetectorSlopes {
 	 * @param windowSize
 	 */
 	void calculateMovingAverage(WindowSize windowSize);
+
+	/**
+	 * Calculates for each stored slope value a Savitzky-Golay smooothed value.<br/>
+	 * The window size declares the filter width of the Savitzky-Golay filter.
+	 * 
+	 * @param windowSize
+	 */
+	void calculateSavitzkyGolaySmooth(WindowSize windowSize);
 
 	/**
 	 * Returns the size of the slope list.
