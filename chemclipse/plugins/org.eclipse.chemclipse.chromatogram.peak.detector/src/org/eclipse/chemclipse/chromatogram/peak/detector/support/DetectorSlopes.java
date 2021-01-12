@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -9,12 +9,14 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Christoph Läubrich - add constructor
+ * Lorenz Gerber - implement additional smooth method
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.peak.detector.support;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.processor.SavitzkyGolayFilter;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.numeric.statistics.Calculations;
 import org.eclipse.chemclipse.numeric.statistics.WindowSize;
@@ -29,10 +31,12 @@ public class DetectorSlopes implements IDetectorSlopes {
 	private int stopScan;
 
 	public DetectorSlopes(ITotalScanSignals totalIonSignals) {
+
 		this(totalIonSignals.getStartScan(), totalIonSignals.getStopScan() - 1);
 	}
 
 	protected DetectorSlopes(int startScan, int stopScan) {
+
 		this.startScan = startScan;
 		this.stopScan = stopScan;
 		int amount = stopScan - startScan + 1;
@@ -92,6 +96,19 @@ public class DetectorSlopes implements IDetectorSlopes {
 			 */
 			slopes.get(i).setSlope(Calculations.getMean(values));
 		}
+	}
+
+	public void calculateSavitzkyGolaySmooth(WindowSize windowSize) {
+
+		int filterWidth = windowSize.getSize();
+		double[] initialSlopes = new double[slopes.size()];
+		double[] smoothedSlopes = new double[slopes.size()];
+		for(int i = 0; i < slopes.size(); i++)
+			initialSlopes[i] = slopes.get(i).getSlope();
+		SavitzkyGolayFilter filter = new SavitzkyGolayFilter(1, filterWidth, 2);
+		smoothedSlopes = filter.apply(initialSlopes);
+		for(int i = 0; i < slopes.size(); i++)
+			slopes.get(i).setSlope(smoothedSlopes[i]);
 	}
 
 	@Override
