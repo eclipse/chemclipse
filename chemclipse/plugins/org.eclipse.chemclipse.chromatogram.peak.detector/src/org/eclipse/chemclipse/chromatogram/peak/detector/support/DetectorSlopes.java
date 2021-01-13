@@ -100,12 +100,14 @@ public class DetectorSlopes implements IDetectorSlopes {
 
 	public void calculateSavitzkyGolaySmooth(WindowSize windowSize) {
 
+		int SAVITZKYGOLAY_DERIVATIVE = 0;
+		int SAVITZKYGOLAY_ORDER = 3;
 		int filterWidth = windowSize.getSize();
 		double[] initialSlopes = new double[slopes.size()];
 		double[] smoothedSlopes = new double[slopes.size()];
 		for(int i = 0; i < slopes.size(); i++)
 			initialSlopes[i] = slopes.get(i).getSlope();
-		SavitzkyGolayFilter filter = new SavitzkyGolayFilter(1, filterWidth, 2);
+		SavitzkyGolayFilter filter = new SavitzkyGolayFilter(SAVITZKYGOLAY_ORDER, filterWidth, SAVITZKYGOLAY_DERIVATIVE);
 		smoothedSlopes = filter.apply(initialSlopes);
 		for(int i = 0; i < slopes.size(); i++)
 			slopes.get(i).setSlope(smoothedSlopes[i]);
