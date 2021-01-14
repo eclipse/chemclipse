@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -39,10 +39,10 @@ public enum ModelPeakOption {
 	public static String[][] getItems() {
 
 		return new String[][]{//
-				{ALL.getLabel(), Integer.toString(ALL.getValue())}, //
-				{MP1.getLabel(), Integer.toString(MP1.getValue())}, //
-				{MP2.getLabel(), Integer.toString(MP2.getValue())}, //
-				{MP3.getLabel(), Integer.toString(MP3.getValue())} //
+				{ALL.getLabel(), ALL.name()}, //
+				{MP1.getLabel(), MP1.name()}, //
+				{MP2.getLabel(), MP2.name()}, //
+				{MP3.getLabel(), MP3.name()} //
 		};
 	}
 }

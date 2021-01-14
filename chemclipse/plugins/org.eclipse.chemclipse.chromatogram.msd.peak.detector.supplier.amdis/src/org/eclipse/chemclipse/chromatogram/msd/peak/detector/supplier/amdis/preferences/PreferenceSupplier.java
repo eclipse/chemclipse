@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2020 Lablicate GmbH.
+ * Copyright (c) 2010, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.sett
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.ModelPeakOption;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.SettingsAMDIS;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.SettingsELU;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -35,6 +36,8 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
+	private static final Logger logger = Logger.getLogger(PreferenceSupplier.class);
+	//
 	public static final String IDENTIFIER = "AMDIS Identifier";
 	public static final String CONVERTER_ID = "net.openchrom.msd.converter.supplier.cdf"; // Exchange CDF with AMDIS
 	/*
@@ -287,17 +290,21 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static File getFolder(String key) {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		String path = preferences.get(key, "");
-		//
-		if(path != null && !path.isEmpty()) {
+		try {
+			IEclipsePreferences preferences = INSTANCE().getPreferences();
+			String path = preferences.get(key, "");
 			//
-			File file = new File(path);
-			if(file.isFile()) {
-				file.getParentFile();
-			} else {
-				return file;
+			if(path != null && !path.isEmpty()) {
+				//
+				File file = new File(path);
+				if(file.isFile()) {
+					file.getParentFile();
+				} else {
+					return file;
+				}
 			}
+		} catch(Exception e) {
+			logger.warn(e);
 		}
 		//
 		return null;

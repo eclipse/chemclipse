@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -41,7 +41,7 @@ public class SettingsAMDIS extends AbstractProcessSettings {
 	@JsonProperty(value = "Data Folder (tmp)", defaultValue = "")
 	@JsonPropertyDescription("Select the data folder, normally called tmp.")
 	@FileSettingProperty(dialogType = DialogType.OPEN_DIALOG, onlyDirectory = true)
-	private File tmpFolder = PreferenceSupplier.getInstallationFolder();
+	private File tmpFolder = PreferenceSupplier.getDataFolder();
 	//
 	@JsonProperty(value = "Autodetect low m/z", defaultValue = "true")
 	private boolean lowMzAuto = true;
