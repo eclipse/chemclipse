@@ -63,4 +63,5 @@ Service-Component: OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.Classi
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.DeleteStandardsFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.DeleteIntegrationsFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.HighPassPeaksFilter.xml,
- OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.LowPassPeaksFilter.xml
+ OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.LowPassPeaksFilter.xml,
+ OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.DeletePeaksByTargetFilter.xml
