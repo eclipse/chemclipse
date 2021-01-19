@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -47,6 +47,7 @@ public class ChromatogramEditorDialog extends Dialog {
 	private EditorUpdateSupport editorUpdateSupport = new EditorUpdateSupport();
 
 	public ChromatogramEditorDialog(Shell parentShell) {
+
 		this(parentShell, null);
 	}
 
@@ -58,6 +59,7 @@ public class ChromatogramEditorDialog extends Dialog {
 	 * @param chromatogramMaster
 	 */
 	public ChromatogramEditorDialog(Shell parentShell, IChromatogram chromatogramMaster) {
+
 		super(parentShell);
 		this.chromatogramMaster = chromatogramMaster;
 	}
@@ -67,6 +69,12 @@ public class ChromatogramEditorDialog extends Dialog {
 
 		super.configureShell(newShell);
 		newShell.setText("Chromatogram Editor");
+	}
+
+	@Override
+	protected boolean isResizable() {
+
+		return true;
 	}
 
 	public IChromatogramSelection getChromatogramSelection() {
@@ -98,7 +106,7 @@ public class ChromatogramEditorDialog extends Dialog {
 	private void createLabel(Composite parent) {
 
 		Label label = new Label(parent, SWT.NONE);
-		label.setText("Select an editor chromatogam.");
+		label.setText("Select an editor chromatogram.");
 	}
 
 	private void createComboViewer(Composite parent) {
