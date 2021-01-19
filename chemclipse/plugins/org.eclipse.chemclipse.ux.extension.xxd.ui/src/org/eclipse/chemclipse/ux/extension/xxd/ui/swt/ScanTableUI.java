@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -116,7 +116,7 @@ public class ScanTableUI extends ExtendedTableViewer {
 			super.setInput(null);
 			IScanCSD scanCSD = (IScanCSD)scan;
 			setLabelAndContentProviders(DataType.CSD);
-			List<IScanCSD> list = new ArrayList<IScanCSD>();
+			List<IScanCSD> list = new ArrayList<>();
 			list.add(scanCSD);
 			super.setInput(list);
 		} else if(scan instanceof IScanWSD) {
@@ -166,7 +166,7 @@ public class ScanTableUI extends ExtendedTableViewer {
 				}
 			} else if(scan instanceof IScanMSD) {
 				minIntensity = 0.0f;
-				maxIntensity = scan.getTotalSignal();
+				maxIntensity = ((IScanMSD)scan).getHighestAbundance().getAbundance();
 			} else if(scan instanceof IScanWSD) {
 				IScanWSD scanWSD = (IScanWSD)scan;
 				minIntensity = scanWSD.getScanSignals().stream().mapToDouble(s -> s.getAbundance()).min().getAsDouble();
