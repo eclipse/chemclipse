@@ -71,6 +71,9 @@ public class PreferenceConstants extends ChartOptions {
 	//
 	public static final int MIN_HEATMAP_SCALE_INTENSITY = 1;
 	public static final int MAX_HEATMAP_SCALE_INTENSITY = 10000;
+	//
+	public static final float MIN_DEVIATION = 0.0f;
+	public static final float MAX_DEVIATION = 100.0f;
 	/*
 	 * General / Task Quick Access
 	 */
@@ -354,6 +357,14 @@ public class PreferenceConstants extends ChartOptions {
 	public static final boolean DEF_PROPAGATE_TARGET_ON_UPDATE = false;
 	public static final String P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER = "targetTemplateLibraryImportFolder";
 	public static final String DEF_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER = "";
+	public static final String P_RETENTION_TIME_DEVIATION_OK = "retentionTimeDeviationOK";
+	public static final float DEF_RETENTION_TIME_DEVIATION_OK = 20.0f;
+	public static final String P_RETENTION_TIME_DEVIATION_WARN = "retentionTimeDeviationWARN";
+	public static final float DEF_RETENTION_TIME_DEVIATION_WARN = 40.0f;
+	public static final String P_RETENTION_INDEX_DEVIATION_OK = "retentionIndexDeviationOK";
+	public static final float DEF_RETENTION_INDEX_DEVIATION_OK = 20.0f;
+	public static final String P_RETENTION_INDEX_DEVIATION_WARN = "retentionIndexDeviationWARN";
+	public static final float DEF_RETENTION_INDEX_DEVIATION_WARN = 40.0f;
 	/*
 	 * Time Ranges
 	 */

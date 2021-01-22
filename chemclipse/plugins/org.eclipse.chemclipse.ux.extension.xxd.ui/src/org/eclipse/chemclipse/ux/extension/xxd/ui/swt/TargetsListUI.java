@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,15 +12,27 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
+import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.swt.ui.support.Colors;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TargetListFilter;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TargetsComparator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TargetsEditingSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TargetsLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.viewers.StyledCellLabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -33,24 +45,41 @@ public class TargetsListUI extends ExtendedTableViewer {
 	private final TargetsLabelProvider labelProvider = new TargetsLabelProvider();
 	private final TargetsComparator targetsTableComparator = new TargetsComparator();
 	private final TargetListFilter targetListFilter = new TargetListFilter();
+	//
+	private Integer retentionTime = null;
+	private Float retentionIndex = null;
+	//
+	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
+	private DecimalFormat decimalFormatInteger = ValueFormat.getDecimalFormatEnglish("0");
+	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public TargetsListUI(Composite parent, int style) {
+
 		this(parent, TITLES, style);
 	}
 
 	public TargetsListUI(Composite parent, String[] alternativeTitles, int style) {
+
 		super(parent, style | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		//
 		createColumns(alternativeTitles, BOUNDS);
 		setLabelProvider(labelProvider);
 		setContentProvider(new ListContentProvider());
 		setComparator(targetsTableComparator);
 		setFilters(new ViewerFilter[]{targetListFilter});
+		setCellColorProvider();
 	}
 
 	public void setSearchText(String searchText, boolean caseSensitive) {
 
 		targetListFilter.setSearchText(searchText, caseSensitive);
 		refresh();
+	}
+
+	public void updateSourceRange(Integer retentionTime, Float retentionIndex) {
+
+		this.retentionTime = retentionTime;
+		this.retentionIndex = retentionIndex;
 	}
 
 	public void clear() {
@@ -95,6 +124,107 @@ public class TargetsListUI extends ExtendedTableViewer {
 			} else if(label.equals(TargetsLabelProvider.REFERENCE_ID)) {
 				tableViewerColumn.setEditingSupport(new TargetsEditingSupport(this, label));
 			}
+		}
+	}
+
+	private void setCellColorProvider() {
+
+		setColorProviderRetentionTime();
+		setColorProviderRetentionIndex();
+	}
+
+	private void setColorProviderRetentionTime() {
+
+		List<TableViewerColumn> tableViewerColumns = getTableViewerColumns();
+		TableViewerColumn tableViewerColumn = tableViewerColumns.get(TargetsLabelProvider.INDEX_RETENTION_TIME);
+		if(tableViewerColumn != null) {
+			tableViewerColumn.setLabelProvider(new StyledCellLabelProvider() {
+
+				@Override
+				public void update(ViewerCell cell) {
+
+					if(cell != null) {
+						Object element = cell.getElement();
+						if(element instanceof IIdentificationTarget) {
+							IIdentificationTarget identificationTarget = (IIdentificationTarget)element;
+							ILibraryInformation libraryInformation = identificationTarget.getLibraryInformation();
+							int retentionTimeTarget = libraryInformation.getRetentionTime();
+							//
+							if(retentionTime != null && retentionTimeTarget != 0) {
+								double deviation = (Math.abs(retentionTime - retentionTimeTarget) / retentionTimeTarget) * 100.0d;
+								double deviationWarn = preferenceStore.getFloat(PreferenceConstants.P_RETENTION_TIME_DEVIATION_OK);
+								double deviationError = preferenceStore.getFloat(PreferenceConstants.P_RETENTION_TIME_DEVIATION_WARN);
+								//
+								if(deviation < deviationWarn) {
+									cell.setBackground(Colors.GREEN);
+									cell.setForeground(Colors.BLACK);
+								} else if(deviation >= deviationWarn && deviation < deviationError) {
+									cell.setBackground(Colors.YELLOW);
+									cell.setForeground(Colors.BLACK);
+								} else if(deviation >= deviationError) {
+									cell.setBackground(Colors.RED);
+									cell.setForeground(Colors.BLACK);
+								}
+							}
+							//
+							String text = decimalFormat.format(libraryInformation.getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+							//
+							cell.setText(text);
+							super.update(cell);
+						}
+					}
+				}
+			});
+		}
+	}
+
+	private void setColorProviderRetentionIndex() {
+
+		List<TableViewerColumn> tableViewerColumns = getTableViewerColumns();
+		TableViewerColumn tableViewerColumn = tableViewerColumns.get(TargetsLabelProvider.INDEX_RETENTION_INDEX);
+		if(tableViewerColumn != null) {
+			tableViewerColumn.setLabelProvider(new StyledCellLabelProvider() {
+
+				@Override
+				public void update(ViewerCell cell) {
+
+					if(cell != null) {
+						Object element = cell.getElement();
+						if(element instanceof IIdentificationTarget) {
+							IIdentificationTarget identificationTarget = (IIdentificationTarget)element;
+							ILibraryInformation libraryInformation = identificationTarget.getLibraryInformation();
+							float retentionIndexTarget = libraryInformation.getRetentionIndex();
+							//
+							if(retentionIndex != null && retentionIndexTarget != 0) {
+								double deviation = (Math.abs(retentionIndex - retentionIndexTarget) / retentionIndexTarget) * 100.0d;
+								double deviationWarn = preferenceStore.getFloat(PreferenceConstants.P_RETENTION_INDEX_DEVIATION_OK);
+								double deviationError = preferenceStore.getFloat(PreferenceConstants.P_RETENTION_INDEX_DEVIATION_WARN);
+								//
+								if(deviation < deviationWarn) {
+									cell.setBackground(Colors.GREEN);
+									cell.setForeground(Colors.BLACK);
+								} else if(deviation >= deviationWarn && deviation < deviationError) {
+									cell.setBackground(Colors.YELLOW);
+									cell.setForeground(Colors.BLACK);
+								} else if(deviation >= deviationError) {
+									cell.setBackground(Colors.RED);
+									cell.setForeground(Colors.BLACK);
+								}
+							}
+							//
+							String text;
+							if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
+								text = decimalFormatInteger.format(libraryInformation.getRetentionIndex());
+							} else {
+								text = decimalFormat.format(libraryInformation.getRetentionIndex());
+							}
+							//
+							cell.setText(text);
+							super.update(cell);
+						}
+					}
+				}
+			});
 		}
 	}
 }

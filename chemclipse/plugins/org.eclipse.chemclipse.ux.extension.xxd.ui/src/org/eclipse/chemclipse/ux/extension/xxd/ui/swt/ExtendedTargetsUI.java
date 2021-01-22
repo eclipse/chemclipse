@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -565,6 +565,25 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		updateLabelInfo();
 	}
 
+	private void updateRetentionInfo() {
+
+		if(object instanceof ITargetSupplier) {
+			if(object instanceof IChromatogram) {
+				tableViewer.get().updateSourceRange(null, null);
+			} else if(object instanceof IPeak) {
+				IScan scan = ((IPeak)object).getPeakModel().getPeakMaximum();
+				tableViewer.get().updateSourceRange(scan.getRetentionTime(), scan.getRetentionIndex());
+			} else if(object instanceof IScan) {
+				IScan scan = ((IScan)object);
+				tableViewer.get().updateSourceRange(scan.getRetentionTime(), scan.getRetentionIndex());
+			} else {
+				tableViewer.get().updateSourceRange(null, null);
+			}
+		} else {
+			tableViewer.get().updateSourceRange(null, null);
+		}
+	}
+
 	private void updateLabelInfo() {
 
 		if(object instanceof ITargetSupplier) {
@@ -673,6 +692,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 
 	private void updateTargets(Display display) {
 
+		updateRetentionInfo();
 		updateInput();
 		updateWidgets();
 		//

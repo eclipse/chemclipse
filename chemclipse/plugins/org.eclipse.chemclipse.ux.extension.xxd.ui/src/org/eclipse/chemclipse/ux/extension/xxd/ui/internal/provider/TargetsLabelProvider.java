@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2020 Lablicate GmbH.
+ * Copyright (c) 2012, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,6 +28,16 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 
 	public static final String VERIFIED_MANUALLY = "Verified (manually)";
 	public static final String NAME = "Name";
+	public static final String MATCH_FACTOR = "Match Factor";
+	public static final String REVERSE_MATCH_FACTOR = "Reverse Match Factor";
+	public static final String MATCH_FACTOR_DIRECT = "Match Factor Direct";
+	public static final String REVERSE_MATCH_FACTOR_DIRECT = "Reverse Match Factor Direct";
+	public static final String PROBABILITY = "Probability";
+	public static final String MOL_WEIGHT = "Mol Weight";
+	public static final String ADVISE = "Advise";
+	public static final String IDENTIFIER = "Identifier";
+	public static final String MISCELLANEOUS = "Miscellaneous";
+	public static final String DATABASE = "Database";
 	public static final String RATING = "Rating";
 	public static final String CAS = "CAS";
 	public static final String COMMENTS = "Comments";
@@ -35,31 +45,36 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 	public static final String SMILES = "SMILES";
 	public static final String INCHI = "InChI";
 	public static final String CONTRIBUTOR = "Contributor";
+	public static final String RETENTION_TIME = "Retention Time";
+	public static final String RETENTION_INDEX = "Retention Index";
 	public static final String REFERENCE_ID = "Reference ID";
+	//
+	public static final int INDEX_RETENTION_TIME = 20;
+	public static final int INDEX_RETENTION_INDEX = 21;
 	//
 	public static final String[] TITLES = { //
 			VERIFIED_MANUALLY, //
 			RATING, //
 			NAME, //
 			CAS, //
-			"Match Factor", //
-			"Reverse Factor", //
-			"Match Factor Direct", //
-			"Reverse Factor Direct", //
-			"Probability", //
+			MATCH_FACTOR, //
+			REVERSE_MATCH_FACTOR, //
+			MATCH_FACTOR_DIRECT, //
+			REVERSE_MATCH_FACTOR_DIRECT, //
+			PROBABILITY, //
 			FORMULA, //
 			SMILES, //
 			INCHI, //
-			"Mol Weight", //
-			"Advise", //
-			"Identifier", //
-			"Miscellaneous", //
+			MOL_WEIGHT, //
+			ADVISE, //
+			IDENTIFIER, //
+			MISCELLANEOUS, //
 			COMMENTS, //
-			"Database", //
+			DATABASE, //
 			CONTRIBUTOR, //
 			REFERENCE_ID, //
-			"Retention Time", //
-			"Retention Index"//
+			RETENTION_TIME, //
+			RETENTION_INDEX //
 	};
 	public static final int[] BOUNDS = { //
 			30, //
