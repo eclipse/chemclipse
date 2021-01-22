@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,7 +13,13 @@ package org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime;
 
 public interface INistSupport {
 
-	String NIST_IDENTIFIER = "NIST";
+	/*
+	 * Note: The LibraryService requires the legacy label to load spectra for target(s).
+	 * If one loads an old file, containing the "NIST" label, the library service shall be
+	 * able to locate the mass spectrum.
+	 */
+	String NIST_IDENTIFIER_LEGACY = "NIST";
+	String NIST_IDENTIFIER = "NIST (extern)";
 	String NIST_DESCRIPTION = "NIST-DB Identifier";
 	/*
 	 * The parameter is used to run the NIST-DB in batch mode.
