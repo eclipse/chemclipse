@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -45,6 +45,7 @@ public class GroupHandlerPeaks extends AbstractGroupHandler {
 		partHandler.add(new PartHandler("Peak Detector", PartSupport.PARTDESCRIPTOR_PEAK_DETECTOR, PreferenceConstants.P_STACK_POSITION_PEAK_DETECTOR));
 		partHandler.add(new PartHandler("Peak List", PartSupport.PARTDESCRIPTOR_PEAK_SCAN_LIST, PreferenceConstants.P_STACK_POSITION_PEAK_SCAN_LIST));
 		partHandler.add(new PartHandler("Peak Traces", PartSupport.PARTDESCRIPTOR_PEAK_TRACES, PreferenceConstants.P_STACK_POSITION_PEAK_TRACES));
+		partHandler.add(new PartHandler("Peak Scan Comparison", PartSupport.PARTDESCRIPTOR_COMPARISON_SCAN, PreferenceConstants.P_STACK_POSITION_COMPARISON_SCAN_CHART));
 		//
 		return partHandler;
 	}
@@ -55,7 +56,6 @@ public class GroupHandlerPeaks extends AbstractGroupHandler {
 		List<IPartHandler> partHandler = new ArrayList<>();
 		//
 		partHandler.add(new PartHandler("Molecule", PartSupport.PARTDESCRIPTOR_MOLECULE, PreferenceConstants.P_STACK_POSITION_MOLECULE));
-		partHandler.add(new PartHandler("Scan Comparison", PartSupport.PARTDESCRIPTOR_COMPARISON_SCAN, PreferenceConstants.P_STACK_POSITION_COMPARISON_SCAN_CHART));
 		partHandler.add(new PartHandler("Peak Quantitation List", PartSupport.PARTDESCRIPTOR_PEAK_QUANTITATION_LIST, PreferenceConstants.P_STACK_POSITION_PEAK_QUANTITATION_LIST));
 		partHandler.add(new PartHandler("Quantitation", PartSupport.PARTDESCRIPTOR_QUANTITATION, PreferenceConstants.P_STACK_POSITION_QUANTITATION));
 		partHandler.add(new PartHandler("Integration", PartSupport.PARTDESCRIPTOR_INTEGRATION_AREA, PreferenceConstants.P_STACK_POSITION_INTEGRATION_AREA));
