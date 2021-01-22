@@ -11,6 +11,16 @@
       </page>
    </extension>
    <extension
+         point="org.eclipse.chemclipse.chromatogram.filter.chromatogramFilterSupplier">
+      <ChromatogramFilterSupplier
+            description="This filter tries to identify the maxima scans in the chromatogram range."
+            filter="org.eclipse.chemclipse.chromatogram.msd.identifier.ui.core.ChromatogramFilter"
+            filterName="Scan Maxima Identifier UI"
+            filterSettings="org.eclipse.chemclipse.chromatogram.msd.identifier.ui.core.FilterSettings"
+            id="org.eclipse.chemclipse.chromatogram.msd.identifier.ui.scanMaximaIdentifier">
+      </ChromatogramFilterSupplier>
+   </extension>      
+   <extension
          point="org.eclipse.ui.exportWizards">
       <category
             name="Database"
