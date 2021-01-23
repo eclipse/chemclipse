@@ -31,22 +31,22 @@ public class PeakDataSupport {
 
 		StringBuilder builder = new StringBuilder();
 		if(peak != null) {
+			//
 			IPeakModel peakModel = peak.getPeakModel();
+			IScan scan = peakModel.getPeakMaximum();
+			//
 			builder.append("Peak");
 			builder.append(" | ");
-			builder.append("Start RT: ");
-			builder.append(decimalFormat.format(peakModel.getStartRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR));
-			builder.append(" | ");
-			builder.append("Stop RT: ");
-			builder.append(decimalFormat.format(peakModel.getStopRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR));
+			builder.append("Center RT: ");
+			builder.append(decimalFormat.format(scan.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR));
 			builder.append(" | ");
 			builder.append("Center RI: ");
-			IScan scan = peakModel.getPeakMaximum();
 			if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
 				builder.append(Integer.toString((int)scan.getRetentionIndex()));
 			} else {
 				builder.append(decimalFormat.format(scan.getRetentionIndex()));
 			}
+			//
 			builder.append(" | ");
 			builder.append("Signal: ");
 			builder.append((int)peak.getIntegratedArea());

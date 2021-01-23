@@ -151,9 +151,21 @@ public class TargetsListUI extends ExtendedTableViewer {
 							int retentionTimeTarget = libraryInformation.getRetentionTime();
 							//
 							if(retentionTime != null && retentionTimeTarget != 0) {
-								double deviation = (Math.abs(retentionTime - retentionTimeTarget) / retentionTimeTarget) * 100.0d;
-								double deviationWarn = preferenceStore.getFloat(PreferenceConstants.P_RETENTION_TIME_DEVIATION_OK);
-								double deviationError = preferenceStore.getFloat(PreferenceConstants.P_RETENTION_TIME_DEVIATION_WARN);
+								//
+								boolean useAbsoluteDeviation = preferenceStore.getBoolean(PreferenceConstants.P_USE_ABSOLUTE_DEVIATION_RETENTION_TIME);
+								double deviation;
+								double deviationWarn;
+								double deviationError;
+								//
+								if(useAbsoluteDeviation) {
+									deviation = Math.abs(retentionTime - retentionTimeTarget);
+									deviationWarn = preferenceStore.getInt(PreferenceConstants.P_RETENTION_TIME_DEVIATION_ABS_OK);
+									deviationError = preferenceStore.getInt(PreferenceConstants.P_RETENTION_TIME_DEVIATION_ABS_WARN);
+								} else {
+									deviation = (Math.abs(retentionTime - retentionTimeTarget) / retentionTimeTarget) * 100.0d;
+									deviationWarn = preferenceStore.getFloat(PreferenceConstants.P_RETENTION_TIME_DEVIATION_REL_OK);
+									deviationError = preferenceStore.getFloat(PreferenceConstants.P_RETENTION_TIME_DEVIATION_REL_WARN);
+								}
 								//
 								if(deviation < deviationWarn) {
 									cell.setBackground(Colors.GREEN);
@@ -196,9 +208,21 @@ public class TargetsListUI extends ExtendedTableViewer {
 							float retentionIndexTarget = libraryInformation.getRetentionIndex();
 							//
 							if(retentionIndex != null && retentionIndexTarget != 0) {
-								double deviation = (Math.abs(retentionIndex - retentionIndexTarget) / retentionIndexTarget) * 100.0d;
-								double deviationWarn = preferenceStore.getFloat(PreferenceConstants.P_RETENTION_INDEX_DEVIATION_OK);
-								double deviationError = preferenceStore.getFloat(PreferenceConstants.P_RETENTION_INDEX_DEVIATION_WARN);
+								//
+								boolean useAbsoluteDeviation = preferenceStore.getBoolean(PreferenceConstants.P_USE_ABSOLUTE_DEVIATION_RETENTION_INDEX);
+								double deviation;
+								double deviationWarn;
+								double deviationError;
+								//
+								if(useAbsoluteDeviation) {
+									deviation = Math.abs(retentionIndex - retentionIndexTarget);
+									deviationWarn = preferenceStore.getFloat(PreferenceConstants.P_RETENTION_INDEX_DEVIATION_ABS_OK);
+									deviationError = preferenceStore.getFloat(PreferenceConstants.P_RETENTION_INDEX_DEVIATION_ABS_WARN);
+								} else {
+									deviation = (Math.abs(retentionIndex - retentionIndexTarget) / retentionIndexTarget) * 100.0d;
+									deviationWarn = preferenceStore.getFloat(PreferenceConstants.P_RETENTION_INDEX_DEVIATION_REL_OK);
+									deviationError = preferenceStore.getFloat(PreferenceConstants.P_RETENTION_INDEX_DEVIATION_REL_WARN);
+								}
 								//
 								if(deviation < deviationWarn) {
 									cell.setBackground(Colors.GREEN);

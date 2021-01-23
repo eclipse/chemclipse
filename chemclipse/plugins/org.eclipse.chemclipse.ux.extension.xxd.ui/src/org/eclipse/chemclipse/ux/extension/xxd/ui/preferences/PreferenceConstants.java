@@ -72,8 +72,12 @@ public class PreferenceConstants extends ChartOptions {
 	public static final int MIN_HEATMAP_SCALE_INTENSITY = 1;
 	public static final int MAX_HEATMAP_SCALE_INTENSITY = 10000;
 	//
-	public static final float MIN_DEVIATION = 0.0f;
-	public static final float MAX_DEVIATION = 100.0f;
+	public static final float MIN_DEVIATION_RELATIVE = 0.0f;
+	public static final float MAX_DEVIATION_RELATIVE = 100.0f;
+	public static final int MIN_DEVIATION_RETENTION_TIME = 0;
+	public static final int MAX_DEVIATION_RETENTION_TIME = Integer.MAX_VALUE;
+	public static final float MIN_DEVIATION_RETENTION_INDEX = 0.0f;
+	public static final float MAX_DEVIATION_RETENTION_INDEX = Float.MAX_VALUE;
 	/*
 	 * General / Task Quick Access
 	 */
@@ -357,14 +361,26 @@ public class PreferenceConstants extends ChartOptions {
 	public static final boolean DEF_PROPAGATE_TARGET_ON_UPDATE = false;
 	public static final String P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER = "targetTemplateLibraryImportFolder";
 	public static final String DEF_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER = "";
-	public static final String P_RETENTION_TIME_DEVIATION_OK = "retentionTimeDeviationOK";
-	public static final float DEF_RETENTION_TIME_DEVIATION_OK = 20.0f;
-	public static final String P_RETENTION_TIME_DEVIATION_WARN = "retentionTimeDeviationWARN";
-	public static final float DEF_RETENTION_TIME_DEVIATION_WARN = 40.0f;
-	public static final String P_RETENTION_INDEX_DEVIATION_OK = "retentionIndexDeviationOK";
-	public static final float DEF_RETENTION_INDEX_DEVIATION_OK = 20.0f;
-	public static final String P_RETENTION_INDEX_DEVIATION_WARN = "retentionIndexDeviationWARN";
-	public static final float DEF_RETENTION_INDEX_DEVIATION_WARN = 40.0f;
+	public static final String P_USE_ABSOLUTE_DEVIATION_RETENTION_TIME = "useAbsoluteDeviationRetentionTime";
+	public static final boolean DEF_USE_ABSOLUTE_DEVIATION_RETENTION_TIME = false;
+	public static final String P_RETENTION_TIME_DEVIATION_REL_OK = "retentionTimeDeviationRelativeOK";
+	public static final float DEF_RETENTION_TIME_DEVIATION_REL_OK = 20.0f;
+	public static final String P_RETENTION_TIME_DEVIATION_REL_WARN = "retentionTimeDeviationRelativeWARN";
+	public static final float DEF_RETENTION_TIME_DEVIATION_REL_WARN = 40.0f;
+	public static final String P_RETENTION_TIME_DEVIATION_ABS_OK = "retentionTimeDeviationAbsoluteOK";
+	public static final int DEF_RETENTION_TIME_DEVIATION_ABS_OK = 1000;
+	public static final String P_RETENTION_TIME_DEVIATION_ABS_WARN = "retentionTimeDeviationAbsoluteWARN";
+	public static final int DEF_RETENTION_TIME_DEVIATION_ABS_WARN = 2000;
+	public static final String P_USE_ABSOLUTE_DEVIATION_RETENTION_INDEX = "useAbsoluteDeviationRetentionIndex";
+	public static final boolean DEF_USE_ABSOLUTE_DEVIATION_RETENTION_INDEX = false;
+	public static final String P_RETENTION_INDEX_DEVIATION_REL_OK = "retentionIndexDeviationRelativeOK";
+	public static final float DEF_RETENTION_INDEX_DEVIATION_REL_OK = 20.0f;
+	public static final String P_RETENTION_INDEX_DEVIATION_REL_WARN = "retentionIndexDeviationRelativeWARN";
+	public static final float DEF_RETENTION_INDEX_DEVIATION_REL_WARN = 40.0f;
+	public static final String P_RETENTION_INDEX_DEVIATION_ABS_OK = "retentionIndexDeviationAbsoluteOK";
+	public static final float DEF_RETENTION_INDEX_DEVIATION_ABS_OK = 20.0f;
+	public static final String P_RETENTION_INDEX_DEVIATION_ABS_WARN = "retentionIndexDeviationAbsoluteWARN";
+	public static final float DEF_RETENTION_INDEX_DEVIATION_ABS_WARN = 40.0f;
 	/*
 	 * Time Ranges
 	 */

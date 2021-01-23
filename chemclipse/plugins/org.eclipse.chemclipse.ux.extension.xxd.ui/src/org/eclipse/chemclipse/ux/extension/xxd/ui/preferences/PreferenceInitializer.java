@@ -160,10 +160,16 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_TARGET_LIST, PreferenceConstants.DEF_TARGET_LIST);
 		store.setDefault(PreferenceConstants.P_PROPAGATE_TARGET_ON_UPDATE, PreferenceConstants.DEF_PROPAGATE_TARGET_ON_UPDATE);
 		store.setDefault(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER, PreferenceConstants.DEF_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER);
-		store.setDefault(PreferenceConstants.P_RETENTION_TIME_DEVIATION_OK, PreferenceConstants.DEF_RETENTION_TIME_DEVIATION_OK);
-		store.setDefault(PreferenceConstants.P_RETENTION_TIME_DEVIATION_WARN, PreferenceConstants.DEF_RETENTION_TIME_DEVIATION_WARN);
-		store.setDefault(PreferenceConstants.P_RETENTION_INDEX_DEVIATION_OK, PreferenceConstants.DEF_RETENTION_INDEX_DEVIATION_OK);
-		store.setDefault(PreferenceConstants.P_RETENTION_INDEX_DEVIATION_WARN, PreferenceConstants.DEF_RETENTION_INDEX_DEVIATION_WARN);
+		store.setDefault(PreferenceConstants.P_USE_ABSOLUTE_DEVIATION_RETENTION_TIME, PreferenceConstants.DEF_USE_ABSOLUTE_DEVIATION_RETENTION_TIME);
+		store.setDefault(PreferenceConstants.P_RETENTION_TIME_DEVIATION_REL_OK, PreferenceConstants.DEF_RETENTION_TIME_DEVIATION_REL_OK);
+		store.setDefault(PreferenceConstants.P_RETENTION_TIME_DEVIATION_REL_WARN, PreferenceConstants.DEF_RETENTION_TIME_DEVIATION_REL_WARN);
+		store.setDefault(PreferenceConstants.P_RETENTION_TIME_DEVIATION_ABS_OK, PreferenceConstants.DEF_RETENTION_TIME_DEVIATION_ABS_OK);
+		store.setDefault(PreferenceConstants.P_RETENTION_TIME_DEVIATION_ABS_WARN, PreferenceConstants.DEF_RETENTION_TIME_DEVIATION_ABS_WARN);
+		store.setDefault(PreferenceConstants.P_USE_ABSOLUTE_DEVIATION_RETENTION_INDEX, PreferenceConstants.DEF_USE_ABSOLUTE_DEVIATION_RETENTION_INDEX);
+		store.setDefault(PreferenceConstants.P_RETENTION_INDEX_DEVIATION_REL_OK, PreferenceConstants.DEF_RETENTION_INDEX_DEVIATION_REL_OK);
+		store.setDefault(PreferenceConstants.P_RETENTION_INDEX_DEVIATION_REL_WARN, PreferenceConstants.DEF_RETENTION_INDEX_DEVIATION_REL_WARN);
+		store.setDefault(PreferenceConstants.P_RETENTION_INDEX_DEVIATION_ABS_OK, PreferenceConstants.DEF_RETENTION_INDEX_DEVIATION_ABS_OK);
+		store.setDefault(PreferenceConstants.P_RETENTION_INDEX_DEVIATION_ABS_WARN, PreferenceConstants.DEF_RETENTION_INDEX_DEVIATION_ABS_WARN);
 		//
 		initializeChromatogramDefaults(store);
 		/*
