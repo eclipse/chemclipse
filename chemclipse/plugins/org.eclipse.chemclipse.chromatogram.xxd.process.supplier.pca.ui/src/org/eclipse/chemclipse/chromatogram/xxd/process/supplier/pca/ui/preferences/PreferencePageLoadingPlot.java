@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -22,6 +22,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class PreferencePageLoadingPlot extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePageLoadingPlot() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setTitle("Loading Plot");
