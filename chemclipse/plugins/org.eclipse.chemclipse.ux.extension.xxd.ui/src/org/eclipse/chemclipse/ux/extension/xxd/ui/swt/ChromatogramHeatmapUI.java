@@ -132,36 +132,50 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 		}
 	}
 
-	private void setHeatMap(ChromatogramHeatmapData chromatogramHeatmap, boolean isWavelengthData) {
+	private void setHeatMap(ChromatogramHeatmapData chromatogramHeatmapData, boolean isWavelengthData) {
 
-		/*
-		 * Set the range and min/max values.
-		 */
-		intensityGraphFigure.getXAxis().setRange(chromatogramHeatmap.getAxisRangeWidth());
-		intensityGraphFigure.getYAxis().setRange(chromatogramHeatmap.getAxisRangeHeight());
-		//
-		intensityGraphFigure.setMin(chromatogramHeatmap.getMinimum());
-		intensityGraphFigure.setMax(chromatogramHeatmap.getMaximum());
-		//
-		intensityGraphFigure.setDataWidth(chromatogramHeatmap.getDataWidth());
-		intensityGraphFigure.setDataHeight(chromatogramHeatmap.getDataHeight());
-		//
-		intensityGraphFigure.getXAxis().setTitle("Retention Time [min]");
-		intensityGraphFigure.getYAxis().setTitle(isWavelengthData ? "Trace [nm]" : "Trace [m/z]");
-		//
-		intensityGraphFigure.setColorMap(new ColorMap(PredefinedColorMap.JET, true, true));
-		/*
-		 * Set the heatmap data
-		 */
-		lightweightSystem.setContents(intensityGraphFigure);
-		intensityGraphFigure.setDataArray(chromatogramHeatmap.getArrayWrapper());
-		intensityGraphFigure.repaint();
+		try {
+			/*
+			 * First clear the graph figure.
+			 * If a previous data width or height is lower than the newer data, it could crash.
+			 */
+			clear();
+			/*
+			 * Set the range and min/max values.
+			 */
+			intensityGraphFigure.getXAxis().setRange(chromatogramHeatmapData.getAxisRangeWidth());
+			intensityGraphFigure.getYAxis().setRange(chromatogramHeatmapData.getAxisRangeHeight());
+			//
+			intensityGraphFigure.setMin(chromatogramHeatmapData.getMinimum());
+			intensityGraphFigure.setMax(chromatogramHeatmapData.getMaximum());
+			//
+			intensityGraphFigure.setDataWidth(chromatogramHeatmapData.getDataWidth());
+			intensityGraphFigure.setDataHeight(chromatogramHeatmapData.getDataHeight());
+			//
+			intensityGraphFigure.getXAxis().setTitle("Retention Time [min]");
+			intensityGraphFigure.getYAxis().setTitle(isWavelengthData ? "Trace [nm]" : "Trace [m/z]");
+			//
+			intensityGraphFigure.setColorMap(new ColorMap(PredefinedColorMap.JET, true, true));
+			/*
+			 * Set the heatmap data
+			 */
+			lightweightSystem.setContents(intensityGraphFigure);
+			intensityGraphFigure.setDataArray(chromatogramHeatmapData.getArrayWrapper());
+			intensityGraphFigure.repaint();
+		} catch(Exception e) {
+			clear();
+		}
 	}
 
 	public void clear() {
 
 		float[] heatmapData = new float[0];
+		intensityGraphFigure.setMin(0);
+		intensityGraphFigure.setMax(0);
+		intensityGraphFigure.setDataWidth(0);
+		intensityGraphFigure.setDataHeight(0);
 		intensityGraphFigure.setDataArray(heatmapData);
+		lightweightSystem.setContents(intensityGraphFigure);
 		intensityGraphFigure.repaint();
 	}
 
