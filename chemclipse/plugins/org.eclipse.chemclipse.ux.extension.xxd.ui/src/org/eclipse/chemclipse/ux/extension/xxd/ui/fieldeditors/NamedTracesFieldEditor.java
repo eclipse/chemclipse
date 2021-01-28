@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,6 +24,12 @@ public class NamedTracesFieldEditor extends FieldEditor {
 
 		init(name, labelText);
 		createControl(parent);
+	}
+
+	@Override
+	public int getNumberOfControls() {
+
+		return 1;
 	}
 
 	@Override
@@ -53,12 +59,6 @@ public class NamedTracesFieldEditor extends FieldEditor {
 	protected void doStore() {
 
 		getPreferenceStore().setValue(getPreferenceName(), editor.getValues());
-	}
-
-	@Override
-	public int getNumberOfControls() {
-
-		return 1;
 	}
 
 	@Override

@@ -46,6 +46,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.ListSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTargets;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTargetsList;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
@@ -274,7 +275,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 
 	private void createButtonSettings(Composite parent) {
 
-		createSettingsButton(parent, Arrays.asList(PreferencePageTargets.class, PreferencePageSystem.class, PreferencePageLists.class), new ISettingsHandler() {
+		createSettingsButton(parent, Arrays.asList(PreferencePageTargets.class, PreferencePageTargetsList.class, PreferencePageSystem.class, PreferencePageLists.class), new ISettingsHandler() {
 
 			@Override
 			public void apply(Display display) {

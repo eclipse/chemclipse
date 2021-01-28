@@ -120,6 +120,12 @@
             name="Targets">
       </page>
       <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTargets"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTargetsList"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTargetsList"
+            name="Targets List">
+      </page>      
+      <page
             category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract"
             id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageSubtract"
