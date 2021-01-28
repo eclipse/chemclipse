@@ -51,7 +51,7 @@ public class TargetLabelEditAction extends Action {
 
 		super("Labels", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_LABELS, IApplicationImage.SIZE_16x16));
 		this.labelEditSettings = labelEditSettings;
-		setToolTipText("Mange the labels to display in the chromatogram");
+		setToolTipText("Manage the labels to display in the chromatogram");
 		setShowPreviewDefault(DEF_SHOW_PREVIEW);
 	}
 
