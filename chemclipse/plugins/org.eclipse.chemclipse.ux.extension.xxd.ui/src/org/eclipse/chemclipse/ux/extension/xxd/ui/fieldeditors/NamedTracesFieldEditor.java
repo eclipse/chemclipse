@@ -15,6 +15,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTracesSettingsEdit
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 
 public class NamedTracesFieldEditor extends FieldEditor {
 
@@ -37,8 +38,7 @@ public class NamedTracesFieldEditor extends FieldEditor {
 
 		getLabelControl(parent);
 		editor = new NamedTracesSettingsEditor(parent, null, null);
-		GridData gridData = new GridData(GridData.FILL_BOTH);
-		editor.getControl().setLayoutData(gridData);
+		editor.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 	}
 
 	@Override
@@ -64,10 +64,9 @@ public class NamedTracesFieldEditor extends FieldEditor {
 	@Override
 	protected void adjustForNumColumns(int numColumns) {
 
-		if(numColumns >= 2) {
-			GridData gridData = (GridData)editor.getControl().getLayoutData();
-			gridData.horizontalSpan = numColumns - 1;
-			gridData.grabExcessHorizontalSpace = true;
-		}
+		Control control = editor.getControl();
+		GridData gridData = (GridData)control.getLayoutData();
+		gridData.grabExcessHorizontalSpace = true;
+		gridData.horizontalSpan = (numColumns >= 2) ? numColumns - 1 : 1;
 	}
 }

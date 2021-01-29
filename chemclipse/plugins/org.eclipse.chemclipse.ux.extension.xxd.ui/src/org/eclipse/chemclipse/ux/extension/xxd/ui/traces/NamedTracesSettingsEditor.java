@@ -92,7 +92,7 @@ public class NamedTracesSettingsEditor implements SettingsUIProvider.SettingsUIC
 		}
 		//
 		Composite composite = new Composite(parent, SWT.NONE);
-		GridLayout gridLayout = new GridLayout(1, false);
+		GridLayout gridLayout = new GridLayout(1, true);
 		gridLayout.marginWidth = 0;
 		gridLayout.marginHeight = 0;
 		composite.setLayout(gridLayout);
