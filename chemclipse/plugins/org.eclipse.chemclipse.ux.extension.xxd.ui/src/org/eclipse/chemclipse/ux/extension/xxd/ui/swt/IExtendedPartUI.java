@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -188,11 +187,7 @@ public interface IExtendedPartUI {
 							Class<? extends IPreferencePage> page = preferencePages.get(i);
 							IPreferencePage preferencePage = page.getConstructor().newInstance();
 							preferenceManager.addToRoot(new PreferenceNode(Integer.toString(i + 1), preferencePage));
-						} catch(InstantiationException | IllegalAccessException
-								| IllegalArgumentException
-								| InvocationTargetException
-								| NoSuchMethodException
-								| SecurityException e1) {
+						} catch(Exception e1) {
 							logger.warn(e1);
 						}
 					}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.ranges;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,15 +26,13 @@ import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.TimeRangeInputValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTimeRanges;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.preference.PreferenceDialog;
-import org.eclipse.jface.preference.PreferenceManager;
-import org.eclipse.jface.preference.PreferenceNode;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -42,17 +41,15 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 
-public class TimeRangesUI extends Composite {
+public class TimeRangesUI extends Composite implements IExtendedPartUI {
 
 	private ComboViewer comboViewer;
-	private TimeSpinner timeSpinnerStart;
-	private TimeSpinner timeSpinnerCenter;
-	private TimeSpinner timeSpinnerStop;
+	private TimeRangeUI timeRangeUI;
 	private Button buttonAdd;
 	private Button buttonDelete;
-	private Button buttonSettings;
 	/*
 	 * TimeRanges is the object, that contains a map of ranges.
 	 * TimeRange is the currently selected time range.
@@ -63,6 +60,7 @@ public class TimeRangesUI extends Composite {
 	private IUpdateListener updateListener = null;
 
 	public TimeRangesUI(Composite parent, int style) {
+
 		super(parent, style);
 		createControl();
 	}
@@ -108,20 +106,18 @@ public class TimeRangesUI extends Composite {
 
 	private void createControl() {
 
-		GridLayout gridLayout = new GridLayout(8, false);
+		GridLayout gridLayout = new GridLayout(6, false);
 		gridLayout.marginWidth = 0;
 		gridLayout.marginLeft = 0;
 		gridLayout.marginRight = 0;
 		setLayout(gridLayout);
 		//
 		comboViewer = createComboViewer(this);
-		timeSpinnerStart = createSpinner(this, TimeRange.Marker.START);
-		timeSpinnerCenter = createSpinner(this, TimeRange.Marker.CENTER);
-		timeSpinnerStop = createSpinner(this, TimeRange.Marker.STOP);
+		timeRangeUI = createTimeRangeUI(this);
 		createSeparator(this);
 		buttonAdd = createButtonAdd(this);
 		buttonDelete = createButtonDelete(this);
-		buttonSettings = createButtonSettings(this);
+		createButtonSettings(this);
 	}
 
 	private ComboViewer createComboViewer(Composite composite) {
@@ -164,11 +160,11 @@ public class TimeRangesUI extends Composite {
 		return comboViewer;
 	}
 
-	private TimeSpinner createSpinner(Composite composite, TimeRange.Marker marker) {
+	private TimeRangeUI createTimeRangeUI(Composite parent) {
 
-		TimeSpinner timeSpinner = new TimeSpinner(composite, SWT.NONE, marker);
-		timeSpinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		timeSpinner.setUpdateListener(new IUpdateListener() {
+		TimeRangeUI timeRangeUI = new TimeRangeUI(parent, SWT.NONE);
+		timeRangeUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		timeRangeUI.setUpdateListener(new IUpdateListener() {
 
 			@Override
 			public void update() {
@@ -176,7 +172,8 @@ public class TimeRangesUI extends Composite {
 				fireUpdate();
 			}
 		});
-		return timeSpinner;
+		//
+		return timeRangeUI;
 	}
 
 	private Button createButtonAdd(Composite parent) {
@@ -241,33 +238,16 @@ public class TimeRangesUI extends Composite {
 		return button;
 	}
 
-	private Button createButtonSettings(Composite parent) {
+	private void createButtonSettings(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setText("");
-		button.setToolTipText("Settings");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		createSettingsButton(parent, Arrays.asList(PreferencePageTimeRanges.class), new ISettingsHandler() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void apply(Display display) {
 
-				PreferenceManager preferenceManager = new PreferenceManager();
-				preferenceManager.addToRoot(new PreferenceNode("1", new PreferencePageTimeRanges()));
-				//
-				PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
-				preferenceDialog.create();
-				preferenceDialog.setMessage("Settings");
-				if(preferenceDialog.open() == Window.OK) {
-					try {
-						applySettings();
-					} catch(Exception e1) {
-						MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
-					}
-				}
+				applySettings();
 			}
 		});
-		return button;
 	}
 
 	private void applySettings() {
@@ -277,9 +257,7 @@ public class TimeRangesUI extends Composite {
 
 	private void updateLabels() {
 
-		timeSpinnerStart.update();
-		timeSpinnerCenter.update();
-		timeSpinnerStop.update();
+		timeRangeUI.update();
 		/*
 		 * Layout the outer composites to
 		 * enable more space for the labels.
@@ -332,11 +310,8 @@ public class TimeRangesUI extends Composite {
 
 	private void updateTimeRange() {
 
-		timeSpinnerStart.update(timeRange);
-		timeSpinnerCenter.update(timeRange);
-		timeSpinnerStop.update(timeRange);
+		timeRangeUI.update(timeRange);
 		buttonDelete.setEnabled(timeRange != null);
-		buttonSettings.setEnabled(true);
 	}
 
 	private void fireUpdate() {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -35,6 +35,8 @@ public class NamedTracesEditor extends Composite {
 	private NamedTracesListUI namedTracesListUI;
 	//
 	private NamedTraces namedTraces;
+	//
+	private IUpdateListener updateListener = null;
 
 	public NamedTracesEditor(Composite parent, int style) {
 
@@ -47,6 +49,17 @@ public class NamedTracesEditor extends Composite {
 		this.namedTraces = namedTraces;
 		updateNamedTracesUI();
 		updateNamedTracesTable();
+		fireUpdate();
+	}
+
+	public void setUpdateListener(IUpdateListener updateListener) {
+
+		this.updateListener = updateListener;
+	}
+
+	public NamedTrace getNamedTrace() {
+
+		return namedTracesUI.getNamedTrace();
 	}
 
 	private void createControl() {
@@ -71,6 +84,7 @@ public class NamedTracesEditor extends Composite {
 			public void update() {
 
 				updateNamedTracesTable();
+				fireUpdate();
 			}
 		});
 		return namedTracesUI;
@@ -138,6 +152,7 @@ public class NamedTracesEditor extends Composite {
 							 */
 							updateNamedTracesUI();
 							updateNamedTracesTable();
+							fireUpdate();
 						}
 					}
 				}
@@ -169,6 +184,20 @@ public class NamedTracesEditor extends Composite {
 			namedTracesListUI.setInput(list);
 		} else {
 			namedTracesListUI.setInput(null);
+		}
+	}
+
+	private void fireUpdate() {
+
+		if(updateListener != null) {
+			getDisplay().asyncExec(new Runnable() {
+
+				@Override
+				public void run() {
+
+					updateListener.update();
+				}
+			});
 		}
 	}
 }
