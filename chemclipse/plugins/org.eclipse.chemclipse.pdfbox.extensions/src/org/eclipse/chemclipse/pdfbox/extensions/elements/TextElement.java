@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,6 +28,7 @@ public class TextElement extends AbstractReferenceElement<TextElement> {
 	private TextOption textOption = TextOption.NONE;
 
 	public TextElement(float x, float y, float maxWidth) {
+
 		setX(x);
 		setY(y);
 		this.maxWidth = maxWidth;
@@ -95,7 +96,16 @@ public class TextElement extends AbstractReferenceElement<TextElement> {
 
 	public TextElement setText(String text) {
 
-		this.text = text;
+		/*
+		 * Tabs shall be eliminated.
+		 * https://issues.apache.org/jira/browse/PDFBOX-3805
+		 * java.lang.IllegalArgumentException: U+0009 ('controlHT') is not available in this font Helvetica encoding: WinAnsiEncoding
+		 */
+		if(text != null) {
+			this.text = text.replaceAll("\t", " ");
+		} else {
+			this.text = "";
+		}
 		return this;
 	}
 

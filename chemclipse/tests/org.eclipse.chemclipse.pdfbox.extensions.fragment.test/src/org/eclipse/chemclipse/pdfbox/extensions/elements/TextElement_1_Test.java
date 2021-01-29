@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -140,6 +140,18 @@ public class TextElement_1_Test extends TestCase {
 
 		element.setText("Hello World");
 		assertEquals("Hello World", element.getText());
+	}
+
+	public void test9b() {
+
+		element.setText("Hello\tWorld");
+		assertEquals("Hello World", element.getText());
+	}
+
+	public void test9c() {
+
+		element.setText(null);
+		assertEquals("", element.getText());
 	}
 
 	public void test10() {
