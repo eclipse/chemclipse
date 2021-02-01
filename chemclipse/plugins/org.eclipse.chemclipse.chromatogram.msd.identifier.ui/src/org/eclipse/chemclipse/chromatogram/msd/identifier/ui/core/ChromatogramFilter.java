@@ -42,7 +42,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 		if(!processingInfo.hasErrorMessages()) {
 			Shell shell = DisplayUtils.getShell();
 			if(shell != null) {
-				detectScanMaxima(shell, chromatogramSelection, Display.getDefault(), monitor);
+				identifyScanMaxima(shell, chromatogramSelection, Display.getDefault(), monitor);
 			} else {
 				DisplayUtils.getDisplay().syncExec(new Runnable() {
 
@@ -58,7 +58,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 						shell.setSize(0, 0);
 						shell.open();
 						//
-						detectScanMaxima(shell, chromatogramSelection, Display.getDefault(), monitor);
+						identifyScanMaxima(shell, chromatogramSelection, Display.getDefault(), monitor);
 						shell.close();
 					}
 				});
@@ -75,7 +75,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 		return applyFilter(chromatogramSelection, filterSettings, monitor);
 	}
 
-	private void detectScanMaxima(Shell shell, IChromatogramSelection chromatogramSelection, Display display, IProgressMonitor monitor) {
+	private void identifyScanMaxima(Shell shell, IChromatogramSelection chromatogramSelection, Display display, IProgressMonitor monitor) {
 
 		ChromatogramFilterDialog dialog = new ChromatogramFilterDialog(shell);
 		if(IDialogConstants.OK_ID == dialog.open()) {
@@ -104,7 +104,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 					@Override
 					public void run() {
 
-						MassSpectrumIdentifier.identify(massSpectra, massSpectrumIdentifierSupplier.getId(), monitor); // TODO monitor
+						MassSpectrumIdentifier.identify(massSpectra, massSpectrumIdentifierSupplier.getId(), monitor);
 					}
 				});
 			}

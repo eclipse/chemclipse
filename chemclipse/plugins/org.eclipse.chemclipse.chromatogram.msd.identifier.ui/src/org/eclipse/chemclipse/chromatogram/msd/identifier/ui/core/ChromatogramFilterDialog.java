@@ -11,6 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.ui.core;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.IMassSpectrumIdentifierSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.MassSpectrumIdentifier;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
@@ -51,6 +55,12 @@ public class ChromatogramFilterDialog extends Dialog {
 
 		super.configureShell(newShell);
 		newShell.setText("Scan Maxima Identifier");
+	}
+
+	@Override
+	protected boolean isResizable() {
+
+		return true;
 	}
 
 	@Override
@@ -115,7 +125,11 @@ public class ChromatogramFilterDialog extends Dialog {
 			}
 		});
 		//
-		comboViewer.setInput(MassSpectrumIdentifier.getMassSpectrumIdentifierSupport().getSuppliers());
+		List<IMassSpectrumIdentifierSupplier> suppliers = new ArrayList<>();
+		suppliers.addAll(MassSpectrumIdentifier.getMassSpectrumIdentifierSupport().getSuppliers());
+		Collections.sort(suppliers, (s1, s2) -> s1.getIdentifierName().compareTo(s2.getIdentifierName()));
+		comboViewer.setInput(suppliers);
+		//
 		return comboViewer;
 	}
 }
