@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,13 +11,18 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.filter.ui.core;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.AbstractChromatogramFilter;
+import org.eclipse.chemclipse.chromatogram.filter.impl.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
+import org.eclipse.chemclipse.chromatogram.filter.settings.MaxDetectorFilterSettings;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
@@ -37,15 +42,26 @@ import org.eclipse.swt.widgets.Shell;
 @SuppressWarnings("rawtypes")
 public class ChromatogramFilter extends AbstractChromatogramFilter {
 
+	private static final String IDENTIFIER = "Scan Maxima Detector UI";
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
+		//
+		final MaxDetectorFilterSettings filterSettings;
+		if(chromatogramFilterSettings instanceof MaxDetectorFilterSettings) {
+			filterSettings = (MaxDetectorFilterSettings)chromatogramFilterSettings;
+		} else {
+			filterSettings = PreferenceSupplier.getMaxDetectorFilterSettings();
+			processingInfo.addWarnMessage(IDENTIFIER, "The settings are not of type: " + MaxDetectorFilterSettings.class + ". Default settings have been choosen instead.");
+		}
+		//
 		if(!processingInfo.hasErrorMessages()) {
 			Shell shell = DisplayUtils.getShell();
 			if(shell != null) {
-				detectScanMaxima(shell, chromatogramSelection);
+				detectScanMaxima(shell, chromatogramSelection, filterSettings);
 			} else {
 				DisplayUtils.getDisplay().syncExec(new Runnable() {
 
@@ -61,7 +77,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 						shell.setSize(0, 0);
 						shell.open();
 						//
-						detectScanMaxima(shell, chromatogramSelection);
+						detectScanMaxima(shell, chromatogramSelection, filterSettings);
 						shell.close();
 					}
 				});
@@ -74,11 +90,11 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
-		IChromatogramFilterSettings filterSettings = new FilterSettings();
+		IChromatogramFilterSettings filterSettings = new MaxDetectorFilterSettings();
 		return applyFilter(chromatogramSelection, filterSettings, monitor);
 	}
 
-	private void detectScanMaxima(Shell shell, IChromatogramSelection chromatogramSelection) {
+	private void detectScanMaxima(Shell shell, IChromatogramSelection chromatogramSelection, MaxDetectorFilterSettings filterSettings) {
 
 		ChromatogramFilterDialog dialog = new ChromatogramFilterDialog(shell);
 		if(IDialogConstants.OK_ID == dialog.open()) {
@@ -103,22 +119,68 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 					scanMap.put(scan.getX(), scan);
 					j++;
 				}
-				/*
-				 * Detect the maxima.
-				 * TODO - service settings could be displayed dynamically via JsonAnnotations in the dialog page.
-				 */
-				IMaximaDetectorSettings maximaDetectorSettings = maximaDetectorService.getSettings();
-				double[] maxima = maximaDetectorService.calculate(xValues, yValues, maximaDetectorSettings);
-				for(double maximum : maxima) {
-					IScan scan = scanMap.get(maximum);
-					if(scan != null) {
-						ILibraryInformation libraryInformation = new LibraryInformation();
-						libraryInformation.setName("M");
-						ComparisonResult comparisonResult = ComparisonResult.createBestMatchComparisonResult();
-						IIdentificationTarget identificationTarget = new IdentificationTarget(libraryInformation, comparisonResult);
-						scan.getTargets().add(identificationTarget);
-					}
-				}
+				//
+				List<IScan> scans = extractScanMarker(maximaDetectorService, scanMap, xValues, yValues);
+				scans = sortMarker(scans, filterSettings);
+				markScans(scans, filterSettings);
+			}
+		}
+	}
+
+	private List<IScan> extractScanMarker(IMaximaDetectorService maximaDetectorService, Map<Double, IScan> scanMap, double[] xValues, double[] yValues) {
+
+		/*
+		 * Detect the maxima.
+		 * TODO - service settings could be displayed dynamically via JsonAnnotations in the dialog page.
+		 */
+		IMaximaDetectorSettings maximaDetectorSettings = maximaDetectorService.getSettings();
+		double[] positionsX = maximaDetectorService.calculate(xValues, yValues, maximaDetectorSettings);
+		//
+		List<IScan> scans = new ArrayList<>();
+		for(double positionX : positionsX) {
+			IScan scan = scanMap.get(positionX);
+			if(scan != null) {
+				scans.add(scan);
+			}
+		}
+		//
+		return scans;
+	}
+
+	private List<IScan> sortMarker(List<IScan> scans, MaxDetectorFilterSettings filterSettings) {
+
+		int count = filterSettings.getCount();
+		if(count > 0) {
+			/*
+			 * Filter maximia/minima
+			 */
+			if(filterSettings.isDetectMinima()) {
+				Collections.sort(scans, (s1, s2) -> Float.compare(s1.getTotalSignal(), s2.getTotalSignal()));
+			} else {
+				Collections.sort(scans, (s1, s2) -> Float.compare(s2.getTotalSignal(), s1.getTotalSignal()));
+			}
+			//
+			int toIndex = scans.size() > count ? count : scans.size();
+			return scans.subList(0, toIndex);
+		} else {
+			/*
+			 * Mark all
+			 */
+			return scans;
+		}
+	}
+
+	private void markScans(List<IScan> scans, MaxDetectorFilterSettings filterSettings) {
+
+		for(IScan scan : scans) {
+			if(scan != null) {
+				ILibraryInformation libraryInformation = new LibraryInformation();
+				libraryInformation.setName(filterSettings.getTargetName());
+				float matchFactor = filterSettings.getMatchFactor();
+				ComparisonResult comparisonResult = new ComparisonResult(matchFactor, 0.0f, 0.0f, 0.0f);
+				IIdentificationTarget identificationTarget = new IdentificationTarget(libraryInformation, comparisonResult);
+				identificationTarget.setIdentifier(IDENTIFIER);
+				scan.getTargets().add(identificationTarget);
 			}
 		}
 	}

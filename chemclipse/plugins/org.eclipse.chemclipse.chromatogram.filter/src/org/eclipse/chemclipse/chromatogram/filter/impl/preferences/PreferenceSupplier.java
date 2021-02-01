@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -20,6 +20,7 @@ import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsSe
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.PeakTargetsToReferencesSettings;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.ScanTargetsToPeakSettings;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.ScanTargetsToReferencesSettings;
+import org.eclipse.chemclipse.chromatogram.filter.settings.MaxDetectorFilterSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -29,6 +30,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static final double MIN_RETENTION_TIME_MINUTES = 0.0d;
 	public static final double MAX_RETENTION_TIME_MINUTES = Double.MAX_VALUE;
+	public static final float MIN_FACTOR = 0.0f;
+	public static final float MAX_FACTOR = 100.0f;
+	public static final int MIN_COUNT_MARKER = 0;
+	public static final int MAX_COUNT_MARKER = Integer.MAX_VALUE;
 	//
 	public static final String P_START_RETENTION_TIME_MINUTES = "startRetentionTimeMinutes";
 	public static final double DEF_START_RETENTION_TIME_MINUTES = 1;
@@ -47,6 +52,17 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	//
 	public static final String P_STTR_USE_BEST_TARGET_ONLY = "scanTargetsToReferencesUseBestTargetOnly";
 	public static final boolean DEF_STTR_USE_BEST_TARGET_ONLY = false;
+	/*
+	 * Max Detector UI
+	 */
+	public static final String P_MAX_DETECTOR_TARGET_NAME = "maxDetectorTargetName";
+	public static final String DEF_MAX_DETECTOR_TARGET_NAME = "M";
+	public static final String P_MAX_DETECTOR_MATCH_FACTOR = "maxDetectorMatchFactor";
+	public static final float DEF_MAX_DETECTOR_MATCH_FACTOR = 80.0f;
+	public static final String P_MAX_DETECTOR_MINIMA = "maxDetectorMinima";
+	public static final boolean DEF_MAX_DETECTOR_MINIMA = false;
+	public static final String P_MAX_DETECTOR_COUNT = "maxDetectorCount";
+	public static final int DEF_MAX_DETECTOR_COUNT = 0;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -84,6 +100,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_DELTA_RETENTION_TIME_MINUTES, Double.toString(DEF_DELTA_RETENTION_TIME_MINUTES));
 		//
 		defaultValues.put(P_STTR_USE_BEST_TARGET_ONLY, Boolean.toString(DEF_STTR_USE_BEST_TARGET_ONLY));
+		//
+		defaultValues.put(P_MAX_DETECTOR_TARGET_NAME, DEF_MAX_DETECTOR_TARGET_NAME);
+		defaultValues.put(P_MAX_DETECTOR_MATCH_FACTOR, Float.toString(DEF_MAX_DETECTOR_MATCH_FACTOR));
+		defaultValues.put(P_MAX_DETECTOR_MINIMA, Boolean.toString(DEF_MAX_DETECTOR_MINIMA));
+		defaultValues.put(P_MAX_DETECTOR_COUNT, Integer.toString(DEF_MAX_DETECTOR_COUNT));
 		//
 		return defaultValues;
 	}
@@ -131,6 +152,19 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		ScanTargetsToReferencesSettings settings = new ScanTargetsToReferencesSettings();
 		settings.setUseBestTargetOnly(preferences.getBoolean(P_STTR_USE_BEST_TARGET_ONLY, DEF_STTR_USE_BEST_TARGET_ONLY));
+		return settings;
+	}
+
+	public static MaxDetectorFilterSettings getMaxDetectorFilterSettings() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		//
+		MaxDetectorFilterSettings settings = new MaxDetectorFilterSettings();
+		settings.setTargetName(preferences.get(P_MAX_DETECTOR_TARGET_NAME, DEF_MAX_DETECTOR_TARGET_NAME));
+		settings.setMatchFactor(preferences.getFloat(P_MAX_DETECTOR_MATCH_FACTOR, DEF_MAX_DETECTOR_MATCH_FACTOR));
+		settings.setDetectMinima(preferences.getBoolean(P_MAX_DETECTOR_MINIMA, DEF_MAX_DETECTOR_MINIMA));
+		settings.setCount(preferences.getInt(P_MAX_DETECTOR_COUNT, DEF_MAX_DETECTOR_COUNT));
+		//
 		return settings;
 	}
 }

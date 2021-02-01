@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2019 Lablicate GmbH.
+ * Copyright (c) 2015, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,19 +14,24 @@ package org.eclipse.chemclipse.chromatogram.filter.ui.preferences;
 import org.eclipse.chemclipse.chromatogram.filter.impl.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.filter.ui.Activator;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.DoubleFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.FloatFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.IntegerFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class FilterPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public FilterPreferencePage() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Filter");
+		setTitle("Filter");
+		setDescription("");
 	}
 
 	/**
@@ -54,6 +59,13 @@ public class FilterPreferencePage extends FieldEditorPreferencePage implements I
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Scan Targets -> Reference Chromatograms Transfer", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_STTR_USE_BEST_TARGET_ONLY, "Use Best Target Only", getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("Scan Maxima Detector UI", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceSupplier.P_MAX_DETECTOR_TARGET_NAME, "Target Name", getFieldEditorParent()));
+		addField(new FloatFieldEditor(PreferenceSupplier.P_MAX_DETECTOR_MATCH_FACTOR, "Match Factor", PreferenceSupplier.MIN_FACTOR, PreferenceSupplier.MAX_FACTOR, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_MAX_DETECTOR_MINIMA, "Detect Minima", getFieldEditorParent()));
+		addField(new IntegerFieldEditor(PreferenceSupplier.P_MAX_DETECTOR_COUNT, "Count (0 = All)", PreferenceSupplier.MIN_COUNT_MARKER, PreferenceSupplier.MAX_COUNT_MARKER, getFieldEditorParent()));
 	}
 
 	/*

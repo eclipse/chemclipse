@@ -16,7 +16,7 @@
             description="This filter tries to detect maxima in the chromatogram range."
             filter="org.eclipse.chemclipse.chromatogram.filter.ui.core.ChromatogramFilter"
             filterName="Scan Maxima Detector UI"
-            filterSettings="org.eclipse.chemclipse.chromatogram.filter.ui.core.FilterSettings"
+            filterSettings="org.eclipse.chemclipse.chromatogram.filter.settings.MaxDetectorFilterSettings"
             id="org.eclipse.chemclipse.chromatogram.filter.ui.scanMaximaDetector">
       </ChromatogramFilterSupplier>
    </extension>   
