@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,21 +17,20 @@ import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSe
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.AbstractChromatogramFilterMSD;
 import org.eclipse.chemclipse.chromatogram.msd.filter.impl.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.filter.impl.settings.FilterSettingsAdjust;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.matrix.ExtractedMatrix;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-@SuppressWarnings("rawtypes")
 public class ChromatogramFilterZeroValueRemoval extends AbstractChromatogramFilterMSD {
 
-	private static final Logger logger = Logger.getLogger(ChromatogramFilterZeroValueRemoval.class);
-
 	@Override
-	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<?> applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
+		IProcessingInfo<Object> processingInfo = new ProcessingInfo<>();
+		processingInfo.addMessages(validate(chromatogramSelection, chromatogramFilterSettings));
+		//
 		if(!processingInfo.hasErrorMessages()) {
 			if(chromatogramFilterSettings instanceof FilterSettingsAdjust) {
 				/*
@@ -87,7 +86,7 @@ public class ChromatogramFilterZeroValueRemoval extends AbstractChromatogramFilt
 	}
 
 	@Override
-	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<?> applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
 		FilterSettingsAdjust filterSettings = PreferenceSupplier.getFilterSettingsAdjust();
 		return applyFilter(chromatogramSelection, filterSettings, monitor);
