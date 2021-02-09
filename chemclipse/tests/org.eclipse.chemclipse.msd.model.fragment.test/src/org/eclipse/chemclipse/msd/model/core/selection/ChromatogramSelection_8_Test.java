@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,13 +12,12 @@
 package org.eclipse.chemclipse.msd.model.core.selection;
 
 import org.easymock.EasyMock;
-
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
-import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.implementation.ScanIon;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
+
 import junit.framework.TestCase;
 
 public class ChromatogramSelection_8_Test extends TestCase {
@@ -40,6 +39,7 @@ public class ChromatogramSelection_8_Test extends TestCase {
 		EasyMock.expect(chromatogram.getStartRetentionTime()).andStubReturn(1);
 		EasyMock.expect(chromatogram.getStopRetentionTime()).andStubReturn(100);
 		EasyMock.expect(chromatogram.getMaxSignal()).andStubReturn(127500.0f);
+		EasyMock.expect(chromatogram.getNumberOfPeaks()).andStubReturn(1); // see additional check in selection.getSelectedPeak();
 		scan = new VendorMassSpectrum();
 		scan.setRetentionTime(4500);
 		scan.addIon(new ScanIon(45.0f, 2883.9f));

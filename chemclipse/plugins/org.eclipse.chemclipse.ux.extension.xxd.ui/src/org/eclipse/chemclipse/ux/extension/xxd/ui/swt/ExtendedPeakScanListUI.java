@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -36,6 +36,7 @@ import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
@@ -519,7 +520,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			 * Remove the selected identified scan.
 			 */
 			if(chromatogramSelection != null) {
-				chromatogramSelection.removeSelectedIdentifiedScan();
+				chromatogramSelection.setSelectedIdentifiedScan(null);
 			}
 			/*
 			 * Clear the targets.
@@ -582,40 +583,60 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 				 * Add in the future to select/display more than one peak.
 				 */
 				buttonComparison.setEnabled(list.size() == 2);
+				/*
+				 * Selection Events
+				 */
+				List<IPeak> selectedPeaks = new ArrayList<>();
+				List<IScan> selectedIdentifiedScans = new ArrayList<>();
+				//
+				for(Object item : list) {
+					if(item instanceof IPeak) {
+						selectedPeaks.add((IPeak)item);
+					} else if(item instanceof IScan) {
+						selectedIdentifiedScans.add((IScan)item);
+					}
+				}
+				//
+				chromatogramSelection.setSelectedPeaks(selectedPeaks);
+				chromatogramSelection.setSelectedIdentifiedScans(selectedIdentifiedScans);
+				UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Peak(s)/Scan(s) selection via the list.");
+				//
 				return;
 			} else {
-				for(Object object : list) {
-					if(object instanceof IPeak) {
-						/*
-						 * Fire updates
-						 */
-						IPeak peak = (IPeak)object;
-						IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets(), comparator);
-						if(moveRetentionTimeOnPeakSelection) {
-							ChromatogramDataSupport.adjustChromatogramSelection(peak, chromatogramSelection);
-						}
-						//
-						chromatogramSelection.setSelectedPeak(peak);
-						UpdateNotifierUI.update(display, peak);
-						UpdateNotifierUI.update(display, identificationTarget);
-						if(peak instanceof IPeakMSD) {
-							IPeakMSD peakMSD = (IPeakMSD)peak;
-							UpdateNotifierUI.update(display, peakMSD.getPeakModel().getPeakMassSpectrum(), identificationTarget);
-						}
-					} else if(object instanceof IScan) {
-						/*
-						 * Fire updates
-						 */
-						IScan scan = (IScan)object;
-						IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(scan.getTargets(), comparator);
-						//
-						chromatogramSelection.setSelectedIdentifiedScan(scan);
-						UpdateNotifierUI.update(display, scan);
-						UpdateNotifierUI.update(display, identificationTarget);
-						if(scan instanceof IScanMSD) {
-							IScanMSD scanMSD = (IScanMSD)scan;
-							UpdateNotifierUI.update(display, scanMSD, identificationTarget);
-						}
+				/*
+				 * Only one object.
+				 */
+				Object object = list.size() == 1 ? list.get(0) : null;
+				if(object instanceof IPeak) {
+					/*
+					 * Fire updates
+					 */
+					IPeak peak = (IPeak)object;
+					IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets(), comparator);
+					if(moveRetentionTimeOnPeakSelection) {
+						ChromatogramDataSupport.adjustChromatogramSelection(peak, chromatogramSelection);
+					}
+					//
+					chromatogramSelection.setSelectedPeak(peak);
+					UpdateNotifierUI.update(display, peak);
+					UpdateNotifierUI.update(display, identificationTarget);
+					if(peak instanceof IPeakMSD) {
+						IPeakMSD peakMSD = (IPeakMSD)peak;
+						UpdateNotifierUI.update(display, peakMSD.getPeakModel().getPeakMassSpectrum(), identificationTarget);
+					}
+				} else if(object instanceof IScan) {
+					/*
+					 * Fire updates
+					 */
+					IScan scan = (IScan)object;
+					IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(scan.getTargets(), comparator);
+					//
+					chromatogramSelection.setSelectedIdentifiedScan(scan);
+					UpdateNotifierUI.update(display, scan);
+					UpdateNotifierUI.update(display, identificationTarget);
+					if(scan instanceof IScanMSD) {
+						IScanMSD scanMSD = (IScanMSD)scan;
+						UpdateNotifierUI.update(display, scanMSD, identificationTarget);
 					}
 				}
 			}

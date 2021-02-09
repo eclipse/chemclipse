@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2020 Lablicate GmbH.
+ * Copyright (c) 2012, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,8 +12,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.selection;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramPeak;
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.numeric.core.Point;
 
@@ -24,6 +29,9 @@ public abstract class AbstractChromatogramSelection<T extends IChromatogramPeak,
 	private int stopRetentionTime;
 	private float startAbundance;
 	private float stopAbundance;
+	//
+	private List<T> selectedPeaks = new ArrayList<>();
+	private List<IScan> selectedIdentifiedScans = new ArrayList<>();
 	/*
 	 * UI fields
 	 */
@@ -59,6 +67,8 @@ public abstract class AbstractChromatogramSelection<T extends IChromatogramPeak,
 	public void dispose() {
 
 		chromatogram = null;
+		selectedPeaks = null;
+		selectedIdentifiedScans = null;
 	}
 
 	@Override
@@ -232,6 +242,70 @@ public abstract class AbstractChromatogramSelection<T extends IChromatogramPeak,
 		setStartAbundance(startAbundance, false);
 		setStartAbundance(startAbundance, false);
 		setStopAbundance(stopAbundance, false);
+	}
+
+	@Override
+	public T getSelectedPeak() {
+
+		if(selectedPeaks.size() > 0) {
+			return validatePeak(selectedPeaks.get(0));
+		}
+		//
+		return null;
+	}
+
+	@Override
+	public List<T> getSelectedPeaks() {
+
+		return Collections.unmodifiableList(selectedPeaks);
+	}
+
+	@Override
+	public void setSelectedPeak(T selectedPeak) {
+
+		selectedPeaks.clear();
+		if(selectedPeak != null) {
+			selectedPeaks.add(selectedPeak);
+		}
+	}
+
+	@Override
+	public void setSelectedPeaks(List<T> selectedPeaks) {
+
+		this.selectedPeaks.clear();
+		this.selectedPeaks.addAll(selectedPeaks);
+	}
+
+	@Override
+	public IScan getSelectedIdentifiedScan() {
+
+		if(selectedIdentifiedScans.size() > 0) {
+			return selectedIdentifiedScans.get(0);
+		}
+		//
+		return null;
+	}
+
+	@Override
+	public List<IScan> getSelectedIdentifiedScans() {
+
+		return Collections.unmodifiableList(selectedIdentifiedScans);
+	}
+
+	@Override
+	public void setSelectedIdentifiedScan(IScan selectedIdentifiedScan) {
+
+		selectedIdentifiedScans.clear();
+		if(selectedIdentifiedScan != null) {
+			selectedIdentifiedScans.add(selectedIdentifiedScan);
+		}
+	}
+
+	@Override
+	public void setSelectedIdentifiedScans(List<IScan> selectedIdentifiedScans) {
+
+		this.selectedIdentifiedScans.clear();
+		this.selectedIdentifiedScans.addAll(selectedIdentifiedScans);
 	}
 
 	@Override

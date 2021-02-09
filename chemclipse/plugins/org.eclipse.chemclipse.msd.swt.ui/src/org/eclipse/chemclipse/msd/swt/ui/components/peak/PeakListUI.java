@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -75,6 +75,7 @@ public class PeakListUI {
 	private final TargetExtendedComparator targetExtendedComparator;
 
 	public PeakListUI(Composite parent, int style) {
+
 		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
 		initialize(parent);
@@ -95,9 +96,9 @@ public class PeakListUI {
 
 		if(peaks != null) {
 			if(chromatogramSelection != null && chromatogramSelection.getChromatogram() != null) {
-				labelPeaks.setText(chromatogramSelection.getChromatogram().getNumberOfPeaks() + " chromatogram peaks - " + peaks.size() + " displayed peaks");
+				labelPeaks.setText(chromatogramSelection.getChromatogram().getNumberOfPeaks() + " chromatogram peaks - " + peaks.getPeaks().size() + " displayed peaks");
 			} else {
-				labelPeaks.setText(peaks.size() + " displayed peaks");
+				labelPeaks.setText(peaks.getPeaks().size() + " displayed peaks");
 			}
 			//
 			tableViewer.setInput(peaks);
@@ -156,7 +157,7 @@ public class PeakListUI {
 			/*
 			 * Delete peak in chromatogram.
 			 */
-			IChromatogramMSD chromatogram = chromatogramSelection.getChromatogramMSD();
+			IChromatogramMSD chromatogram = chromatogramSelection.getChromatogram();
 			chromatogram.removePeaks(chromatogramPeaksToDelete);
 			/*
 			 * Is the chromatogram updatable? IChromatogramSelection

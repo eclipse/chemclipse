@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2020 Lablicate GmbH.
+ * Copyright (c) 2013, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,8 +26,6 @@ import org.eclipse.chemclipse.model.selection.AbstractChromatogramSelection;
 public class ChromatogramSelectionCSD extends AbstractChromatogramSelection<IChromatogramPeakCSD, IChromatogramCSD> implements IChromatogramSelectionCSD {
 
 	private IScanCSD selectedScan;
-	private IChromatogramPeakCSD selectedPeak;
-	private IScan identifiedScan;
 
 	public ChromatogramSelectionCSD(IChromatogramCSD chromatogram) throws ChromatogramIsNullException {
 
@@ -49,7 +47,6 @@ public class ChromatogramSelectionCSD extends AbstractChromatogramSelection<IChr
 
 		super.dispose();
 		selectedScan = null;
-		selectedPeak = null;
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -67,12 +64,6 @@ public class ChromatogramSelectionCSD extends AbstractChromatogramSelection<IChr
 	public IScanCSD getSelectedScan() {
 
 		return selectedScan;
-	}
-
-	@Override
-	public IChromatogramPeakCSD getSelectedPeak() {
-
-		return selectedPeak;
 	}
 
 	@Override
@@ -106,9 +97,9 @@ public class ChromatogramSelectionCSD extends AbstractChromatogramSelection<IChr
 		if(chromatogram instanceof IChromatogramCSD) {
 			List<IChromatogramPeakCSD> peaks = ((IChromatogramCSD)chromatogram).getPeaks();
 			if(peaks != null && peaks.size() >= 1) {
-				selectedPeak = peaks.get(0);
+				setSelectedPeak(peaks.get(0));
 			} else {
-				selectedPeak = null;
+				setSelectedPeak(null);
 			}
 		}
 		/*
@@ -159,30 +150,6 @@ public class ChromatogramSelectionCSD extends AbstractChromatogramSelection<IChr
 	}
 
 	@Override
-	public void setSelectedPeak(IChromatogramPeakCSD selectedPeak) {
-
-		setSelectedPeak(selectedPeak, true);
-	}
-
-	@Override
-	public void setSelectedPeak(IChromatogramPeakCSD selectedPeak, boolean update) {
-
-		/*
-		 * It shall be possible to set the peak to null,
-		 * e.g. if all peaks are removed.
-		 */
-		this.selectedPeak = selectedPeak;
-		if(selectedPeak != null) {
-			/*
-			 * Fire update change if neccessary.
-			 */
-			if(update) {
-				UpdateNotifier.update(this);
-			}
-		}
-	}
-
-	@Override
 	public void fireUpdateChange(boolean forceReload) {
 
 		UpdateNotifier.update(this);
@@ -191,30 +158,10 @@ public class ChromatogramSelectionCSD extends AbstractChromatogramSelection<IChr
 	@Override
 	public void update(boolean forceReload) {
 
-		selectedPeak = validatePeak(selectedPeak);
 		super.update(forceReload);
 		//
 		setSelectedScan(selectedScan, false);
-		setSelectedPeak(selectedPeak, false);
 		//
 		fireUpdateChange(forceReload);
-	}
-
-	@Override
-	public IScan getSelectedIdentifiedScan() {
-
-		return identifiedScan;
-	}
-
-	@Override
-	public void setSelectedIdentifiedScan(IScan identifiedScan) {
-
-		this.identifiedScan = identifiedScan;
-	}
-
-	@Override
-	public void removeSelectedIdentifiedScan() {
-
-		identifiedScan = null;
 	}
 }

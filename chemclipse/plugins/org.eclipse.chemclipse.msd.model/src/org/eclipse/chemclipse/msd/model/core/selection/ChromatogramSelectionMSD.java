@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -40,8 +40,6 @@ import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChromatogramPeakMSD, IChromatogramMSD> implements IChromatogramSelectionMSD {
 
 	private IVendorMassSpectrum selectedScan;
-	private IVendorMassSpectrum selectedIdentifiedScan;
-	private IChromatogramPeakMSD selectedPeak;
 	private IMarkedIons selectedIons;
 	private IMarkedIons excludedIons;
 	private IMarkedIonTransitions markedIonTransitions;
@@ -84,8 +82,6 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChr
 
 		super.dispose();
 		selectedScan = null;
-		selectedIdentifiedScan = null;
-		selectedPeak = null;
 		selectedIons = null;
 		excludedIons = null;
 	}
@@ -105,18 +101,6 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChr
 	public IVendorMassSpectrum getSelectedScan() {
 
 		return selectedScan;
-	}
-
-	@Override
-	public IVendorMassSpectrum getSelectedIdentifiedScan() {
-
-		return selectedIdentifiedScan;
-	}
-
-	@Override
-	public IChromatogramPeakMSD getSelectedPeak() {
-
-		return selectedPeak;
 	}
 
 	@Override
@@ -165,16 +149,16 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChr
 		/*
 		 * Selected Identified Scan
 		 */
-		selectedIdentifiedScan = null;
+		setSelectedIdentifiedScan(null);
 		/*
 		 * Peak
 		 */
 		if(chromatogram instanceof IChromatogramMSD) {
 			List<IChromatogramPeakMSD> peaks = ((IChromatogramMSD)chromatogram).getPeaks();
 			if(peaks != null && peaks.size() >= 1) {
-				selectedPeak = peaks.get(0);
+				setSelectedPeak(peaks.get(0));
 			} else {
-				selectedPeak = null;
+				setSelectedPeak(null);
 			}
 		}
 		/*
@@ -211,65 +195,10 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChr
 	}
 
 	@Override
-	public void setSelectedIdentifiedScan(IScan identifiedScan) {
-
-		if(identifiedScan instanceof IVendorMassSpectrum) {
-			setSelectedIdentifiedScan((IVendorMassSpectrum)identifiedScan);
-		}
-	}
-
-	@Override
-	public void setSelectedIdentifiedScan(IVendorMassSpectrum selectedIdentifiedScan) {
-
-		/*
-		 * FireUpdateChange will be called in the validate method.
-		 */
-		setSelectedIdentifiedScan(selectedIdentifiedScan, true);
-	}
-
-	@Override
 	public void setSelectedScan(IVendorMassSpectrum selectedScan, boolean update) {
 
 		if(selectedScan != null) {
 			this.selectedScan = selectedScan;
-			/*
-			 * Fire update change if neccessary.
-			 */
-			if(update) {
-				fireUpdateChange(false);
-			}
-		}
-	}
-
-	@Override
-	public void setSelectedIdentifiedScan(IVendorMassSpectrum selectedIdentifiedScan, boolean update) {
-
-		if(selectedIdentifiedScan != null) {
-			this.selectedIdentifiedScan = selectedIdentifiedScan;
-			/*
-			 * Fire update change if neccessary.
-			 */
-			if(update) {
-				fireUpdateChange(false);
-			}
-		}
-	}
-
-	@Override
-	public void setSelectedPeak(IChromatogramPeakMSD selectedPeak) {
-
-		setSelectedPeak(selectedPeak, true);
-	}
-
-	@Override
-	public void setSelectedPeak(IChromatogramPeakMSD selectedPeak, boolean update) {
-
-		/*
-		 * It shall be possible to set the peak to null,
-		 * e.g. if all peaks are removed.
-		 */
-		this.selectedPeak = selectedPeak;
-		if(selectedPeak != null) {
 			/*
 			 * Fire update change if neccessary.
 			 */
@@ -292,19 +221,10 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChr
 	@Override
 	public void update(boolean forceReload) {
 
-		selectedPeak = validatePeak(selectedPeak);
 		super.update(forceReload);
 		//
 		setSelectedScan(selectedScan, false);
-		setSelectedIdentifiedScan(selectedIdentifiedScan, false);
-		setSelectedPeak(selectedPeak, false);
 		//
 		fireUpdateChange(forceReload);
-	}
-
-	@Override
-	public void removeSelectedIdentifiedScan() {
-
-		selectedIdentifiedScan = null;
 	}
 }

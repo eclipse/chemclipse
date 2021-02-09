@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -169,7 +170,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 	private static final String SERIES_ID_SELECTED_PEAK_BACKGROUND = "Selected Peak Background";
 	private static final String SERIES_ID_SELECTED_SCAN = "Selected Scan";
 	private static final String SERIES_ID_IDENTIFIED_SCANS = "Identified Scans";
-	private static final String SERIES_ID_IDENTIFIED_SCAN_SELECTED = "Identified Scan Selected";
+	private static final String SERIES_ID_IDENTIFIED_SCAN_SELECTED = "Identified Scans Selected";
 	//
 	private static final String TOOLBAR_INFO = "TOOLBAR_INFO";
 	private static final String TOOLBAR_RETENTION_INDICES = "TOOLBAR_RETENTION_INDICES";
@@ -380,9 +381,16 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 
 	public void updateSelectedPeak() {
 
+		Set<String> seriesIds = chromatogramChart.getBaseChart().getSeriesIds();
+		//
 		chromatogramChart.deleteSeries(SERIES_ID_SELECTED_PEAK_MARKER);
-		chromatogramChart.deleteSeries(SERIES_ID_SELECTED_PEAK_SHAPE);
-		chromatogramChart.deleteSeries(SERIES_ID_SELECTED_PEAK_BACKGROUND);
+		for(String seriesId : seriesIds) {
+			if(seriesId.startsWith(SERIES_ID_SELECTED_PEAK_SHAPE)) {
+				chromatogramChart.deleteSeries(seriesId);
+			} else if(seriesId.startsWith(SERIES_ID_SELECTED_PEAK_BACKGROUND)) {
+				chromatogramChart.deleteSeries(seriesId);
+			}
+		}
 		//
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 		addSelectedPeakData(lineSeriesDataList, getTargetSettings());
@@ -688,7 +696,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		}
 	}
 
-	private void addPeaks(List<ILineSeriesData> lineSeriesDataList, List<IPeak> peaks, PlotSymbolType plotSymbolType, int symbolSize, Color symbolColor, String seriesId, ITargetDisplaySettings displaySettings) {
+	private void addPeaks(List<ILineSeriesData> lineSeriesDataList, List<? extends IPeak> peaks, PlotSymbolType plotSymbolType, int symbolSize, Color symbolColor, String seriesId, ITargetDisplaySettings displaySettings) {
 
 		if(peaks.size() > 0) {
 			//
@@ -758,23 +766,21 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 	private void addSelectedIdentifiedScanData(List<ILineSeriesData> lineSeriesDataList) {
 
 		if(chromatogramSelection != null) {
-			IScan scan = chromatogramSelection.getSelectedIdentifiedScan();
-			if(scan != null) {
+			List<IScan> selectedIdentifiedScans = chromatogramSelection.getSelectedIdentifiedScans();
+			if(selectedIdentifiedScans.size() > 0) {
 				String seriesId = SERIES_ID_IDENTIFIED_SCAN_SELECTED;
 				Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_IDENTIFIED_SCAN));
 				PlotSymbolType symbolType = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_IDENTIFIED_SCAN_MARKER_TYPE));
 				int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE);
-				List<IScan> scans = new ArrayList<>();
-				scans.add(scan);
-				addIdentifiedScansData(lineSeriesDataList, scans, symbolType, symbolSize, color, seriesId);
+				addIdentifiedScansData(lineSeriesDataList, selectedIdentifiedScans, symbolType, symbolSize, color, seriesId);
 			}
 		}
 	}
 
 	private void addSelectedPeakData(List<ILineSeriesData> lineSeriesDataList, ITargetDisplaySettings settings) {
 
-		IPeak peak = chromatogramSelection.getSelectedPeak();
-		if(peak != null) {
+		List<? extends IPeak> peaks = new ArrayList<>(chromatogramSelection.getSelectedPeaks());
+		if(peaks.size() > 0) {
 			/*
 			 * Settings
 			 */
@@ -788,24 +794,28 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 			/*
 			 * Peak Marker
 			 */
-			List<IPeak> peaks = new ArrayList<>();
-			peaks.add(peak);
 			addPeaks(lineSeriesDataList, peaks, symbolTypePeakMarker, symbolSize, colorPeak, SERIES_ID_SELECTED_PEAK_MARKER, settings);
-			/*
-			 * Peak
-			 */
-			lineSeriesData = peakChartSupport.getPeak(peak, true, mirrored, colorPeak, SERIES_ID_SELECTED_PEAK_SHAPE);
-			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
-			lineSeriesSettings.setSymbolType(symbolTypeScanMarker);
-			lineSeriesSettings.setSymbolColor(colorPeak);
-			lineSeriesSettings.setSymbolSize(scanMarkerSize);
-			lineSeriesDataList.add(lineSeriesData);
-			/*
-			 * Background
-			 */
-			Color colorBackground = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_PEAK_BACKGROUND));
-			lineSeriesData = peakChartSupport.getPeakBackground(peak, mirrored, colorBackground, SERIES_ID_SELECTED_PEAK_BACKGROUND);
-			lineSeriesDataList.add(lineSeriesData);
+			//
+			int i = 0;
+			for(IPeak peak : peaks) {
+				/*
+				 * Peak
+				 */
+				lineSeriesData = peakChartSupport.getPeak(peak, true, mirrored, colorPeak, SERIES_ID_SELECTED_PEAK_SHAPE + i);
+				ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
+				lineSeriesSettings.setSymbolType(symbolTypeScanMarker);
+				lineSeriesSettings.setSymbolColor(colorPeak);
+				lineSeriesSettings.setSymbolSize(scanMarkerSize);
+				lineSeriesDataList.add(lineSeriesData);
+				/*
+				 * Background
+				 */
+				Color colorBackground = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_PEAK_BACKGROUND));
+				lineSeriesData = peakChartSupport.getPeakBackground(peak, mirrored, colorBackground, SERIES_ID_SELECTED_PEAK_BACKGROUND + i);
+				lineSeriesDataList.add(lineSeriesData);
+				//
+				i++;
+			}
 		}
 	}
 

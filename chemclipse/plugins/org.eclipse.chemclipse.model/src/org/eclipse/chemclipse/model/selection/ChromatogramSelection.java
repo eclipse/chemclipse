@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2020 Lablicate GmbH.
+ * Copyright (c) 2013, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -32,6 +32,7 @@ public class ChromatogramSelection<T extends IChromatogramPeak, C extends IChrom
 	private static final Logger logger = Logger.getLogger(ChromatogramSelection.class);
 
 	public ChromatogramSelection(C chromatogram, boolean fireUpdate) throws ChromatogramIsNullException {
+
 		super(chromatogram, fireUpdate);
 		/*
 		 * Set all members to default values.<br/> This includes also to set a
@@ -41,6 +42,7 @@ public class ChromatogramSelection<T extends IChromatogramPeak, C extends IChrom
 	}
 
 	public ChromatogramSelection(C chromatogram) throws ChromatogramIsNullException {
+
 		this(chromatogram, true);
 	}
 
@@ -89,12 +91,6 @@ public class ChromatogramSelection<T extends IChromatogramPeak, C extends IChrom
 	}
 
 	@Override
-	public void setSelectedPeak(T selectedPeak, boolean update) {
-
-		logger.warn("Bad boy - setSelectedPeak(IPeak selectedPeak): don't use the ChromatogramSelection implementation");
-	}
-
-	@Override
 	public IScan getSelectedIdentifiedScan() {
 
 		logger.warn("Bad boy - getSelectedIdentifiedScan(): don't use the ChromatogramSelection implementation");
@@ -105,11 +101,5 @@ public class ChromatogramSelection<T extends IChromatogramPeak, C extends IChrom
 	public void setSelectedIdentifiedScan(IScan identifiedScan) {
 
 		logger.warn("Bad boy - setSelectedIdentifiedScan: don't use the ChromatogramSelection implementation");
-	}
-
-	@Override
-	public void removeSelectedIdentifiedScan() {
-
-		logger.warn("Bad boy - removeSelectedIdentifiedScan: don't use the ChromatogramSelection implementation");
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2020 Lablicate GmbH.
+ * Copyright (c) 2013, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,9 +28,7 @@ import org.eclipse.chemclipse.wsd.model.core.support.MarkedWavelengths;
 public class ChromatogramSelectionWSD extends AbstractChromatogramSelection<IChromatogramPeakWSD, IChromatogramWSD> implements IChromatogramSelectionWSD {
 
 	private IScanWSD selectedScan;
-	private IChromatogramPeakWSD selectedPeak;
 	private IMarkedWavelengths selectedWavelengths;
-	private IScan identifiedScan;
 
 	public ChromatogramSelectionWSD(IChromatogramWSD chromatogram) throws ChromatogramIsNullException {
 
@@ -59,7 +57,6 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection<IChr
 	public void dispose() {
 
 		selectedScan = null;
-		selectedPeak = null;
 		super.dispose();
 	}
 
@@ -77,12 +74,6 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection<IChr
 	public IScanWSD getSelectedScan() {
 
 		return selectedScan;
-	}
-
-	@Override
-	public IChromatogramPeakWSD getSelectedPeak() {
-
-		return selectedPeak;
 	}
 
 	@Override
@@ -157,26 +148,6 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection<IChr
 	}
 
 	@Override
-	public void setSelectedPeak(IChromatogramPeakWSD selectedPeak) {
-
-		this.selectedPeak = selectedPeak;
-	}
-
-	@Override
-	public void setSelectedPeak(IChromatogramPeakWSD selectedPeak, boolean update) {
-
-		this.selectedPeak = selectedPeak;
-		if(selectedPeak != null) {
-			/*
-			 * Fire update change if neccessary.
-			 */
-			if(update) {
-				fireUpdateChange(false);
-			}
-		}
-	}
-
-	@Override
 	public void fireUpdateChange(boolean forceReload) {
 
 		UpdateNotifier.update(this);
@@ -185,11 +156,9 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection<IChr
 	@Override
 	public void update(boolean forceReload) {
 
-		selectedPeak = validatePeak(selectedPeak);
 		super.update(forceReload);
 		//
 		setSelectedScan(selectedScan, false);
-		setSelectedPeak(selectedPeak, false);
 		//
 		fireUpdateChange(forceReload);
 	}
@@ -198,23 +167,5 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection<IChr
 	public IMarkedWavelengths getSelectedWavelengths() {
 
 		return selectedWavelengths;
-	}
-
-	@Override
-	public IScan getSelectedIdentifiedScan() {
-
-		return identifiedScan;
-	}
-
-	@Override
-	public void setSelectedIdentifiedScan(IScan identifiedScan) {
-
-		this.identifiedScan = identifiedScan;
-	}
-
-	@Override
-	public void removeSelectedIdentifiedScan() {
-
-		// No seleted and identifed scan available yet.
 	}
 }

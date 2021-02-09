@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -52,15 +52,6 @@ public interface IChromatogramSelectionMSD extends IChromatogramSelection<IChrom
 	IVendorMassSpectrum getSelectedScan();
 
 	/**
-	 * Returns the selected identified scan of the current chromatogram or null,
-	 * if none is stored.
-	 *
-	 * @return {@link IVendorMassSpectrum}
-	 */
-	@Override
-	IVendorMassSpectrum getSelectedIdentifiedScan();
-
-	/**
 	 * Sets the selected scan of the current chromatogram.<br/>
 	 * The scan must not be null.
 	 */
@@ -73,20 +64,6 @@ public interface IChromatogramSelectionMSD extends IChromatogramSelection<IChrom
 	 * @param update
 	 */
 	void setSelectedScan(IVendorMassSpectrum selectedScan, boolean update);
-
-	/**
-	 * Sets the selected identified scan of the current chromatogram.<br/>
-	 * The scan must not be null.
-	 */
-	void setSelectedIdentifiedScan(IVendorMassSpectrum selectedIdentifiedScan);
-
-	/**
-	 * Use this convenient method, if you don't want to fire and update.
-	 *
-	 * @param selectedScan
-	 * @param update
-	 */
-	void setSelectedIdentifiedScan(IVendorMassSpectrum selectedIdentifiedScan, boolean update);
 
 	/**
 	 * Returns a list of selected ions.

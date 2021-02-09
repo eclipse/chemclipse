@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2020 Lablicate GmbH.
+ * Copyright (c) 2012, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,6 +11,8 @@
  * Alexander Kerner - Generics
  *******************************************************************************/
 package org.eclipse.chemclipse.model.selection;
+
+import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -167,15 +169,19 @@ public interface IChromatogramSelection<P extends IPeak, C extends IChromatogram
 	 */
 	P getSelectedPeak();
 
+	List<P> getSelectedPeaks();
+
 	void setSelectedPeak(P selectedPeak);
 
-	void setSelectedPeak(P selectedPeak, boolean update);
+	void setSelectedPeaks(List<P> selectedPeaks);
 
 	IScan getSelectedIdentifiedScan();
 
-	void removeSelectedIdentifiedScan();
+	List<IScan> getSelectedIdentifiedScans();
 
-	void setSelectedIdentifiedScan(IScan identifiedScan);
+	void setSelectedIdentifiedScan(IScan selectedIdentifiedScan);
+
+	void setSelectedIdentifiedScans(List<IScan> selectedIdentifiedScans);
 
 	boolean isOverlaySelected();
 
