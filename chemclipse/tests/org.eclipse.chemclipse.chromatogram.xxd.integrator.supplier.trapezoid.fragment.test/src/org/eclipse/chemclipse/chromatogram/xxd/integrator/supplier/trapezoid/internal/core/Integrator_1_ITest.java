@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2020 Lablicate GmbH.
+ * Copyright (c) 2013, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -63,7 +63,7 @@ public class Integrator_1_ITest extends ChromatogramImportOCBTestCase {
 
 	public void testPeakIntegrate_1() {
 
-		List<IChromatogramPeakMSD> peaksChromatogram = chromatogramSelection.getChromatogramMSD().getPeaks();
+		List<IChromatogramPeakMSD> peaksChromatogram = chromatogramSelection.getChromatogram().getPeaks();
 		List<IPeakMSD> peaks = new ArrayList<IPeakMSD>();
 		for(IChromatogramPeakMSD peak : peaksChromatogram) {
 			peaks.add(peak);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -56,7 +56,6 @@ public class BackfoldingShifter implements IBackfoldingShifter {
 
 	private static final Logger logger = Logger.getLogger(BackfoldingShifter.class);
 
-	// ---------------------------------------------------IBackfoldingShifter
 	@Override
 	public IExtractedIonSignals shiftIons(IChromatogramSelectionMSD chromatogramSelection, ChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
 
@@ -65,7 +64,7 @@ public class BackfoldingShifter implements IBackfoldingShifter {
 		 * selection.
 		 */
 		IExtractedIonSignals extractedIonSignalsShifted = null;
-		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogramMSD();
+		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogram();
 		try {
 			IExtractedIonSignalExtractor extractedIonSignalExtractor = new ExtractedIonSignalExtractor(chromatogram);
 			extractedIonSignalsShifted = extractedIonSignalExtractor.getExtractedIonSignals(chromatogramSelection);
@@ -85,8 +84,6 @@ public class BackfoldingShifter implements IBackfoldingShifter {
 		return extractedIonSignalsShifted;
 	}
 
-	// ---------------------------------------------------IBackfoldingShifter
-	// ---------------------------------------------------private methods
 	/**
 	 * Returns an shifted extracted ion signals instance.<br/>
 	 * The
@@ -423,5 +420,4 @@ public class BackfoldingShifter implements IBackfoldingShifter {
 		}
 		return result;
 	}
-	// ---------------------------------------------------private methods
 }

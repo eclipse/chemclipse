@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -42,6 +42,7 @@ public class MassChromatographicQualityResult implements IMassChromatographicQua
 	 * @throws CodaCalculatorException
 	 */
 	public MassChromatographicQualityResult(IChromatogramSelectionMSD chromatogramSelection, float codaThreshold, WindowSize windowSize) throws CodaCalculatorException {
+
 		validateChromatogramSelection(chromatogramSelection);
 		validateWindowSize(windowSize);
 		/*
@@ -78,7 +79,7 @@ public class MassChromatographicQualityResult implements IMassChromatographicQua
 		assert (excludedIons != null) : "The excluded ions must not be null.";
 		List<Float> mcqs = new ArrayList<Float>();
 		float mcq;
-		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogramMSD();
+		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogram();
 		try {
 			IExtractedIonSignalExtractor extractedIonSignalExtractor = new ExtractedIonSignalExtractor(chromatogram);
 			IExtractedIonSignals extractedIonSignals = extractedIonSignalExtractor.getExtractedIonSignals(chromatogramSelection);
@@ -150,9 +151,8 @@ public class MassChromatographicQualityResult implements IMassChromatographicQua
 		if(chromatogramSelection == null) {
 			throw new CodaCalculatorException("The chromatogram selection must not be null.");
 		}
-		if(chromatogramSelection.getChromatogramMSD() == null) {
+		if(chromatogramSelection.getChromatogram() == null) {
 			throw new CodaCalculatorException("The chromatogram must not be null.");
 		}
 	}
-	// ---------------------------------private methods
 }
