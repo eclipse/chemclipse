@@ -257,6 +257,10 @@ public abstract class AbstractChromatogramSelection<T extends IChromatogramPeak,
 	@Override
 	public List<T> getSelectedPeaks() {
 
+		if(chromatogram.getNumberOfPeaks() == 0) {
+			selectedPeaks.clear();
+		}
+		//
 		return Collections.unmodifiableList(selectedPeaks);
 	}
 
