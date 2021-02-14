@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2019 Lablicate GmbH.
+ * Copyright (c) 2015, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,6 +22,11 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
 public class ListContentProvider implements IStructuredContentProvider {
+
+	public static ListContentProvider getInstance() {
+
+		return new ListContentProvider();
+	}
 
 	@Override
 	public Object[] getElements(Object inputElement) {
