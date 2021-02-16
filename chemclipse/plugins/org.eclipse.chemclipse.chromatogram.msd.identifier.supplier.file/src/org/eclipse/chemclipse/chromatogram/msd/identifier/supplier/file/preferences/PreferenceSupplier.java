@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2020 Lablicate GmbH.
+ * Copyright (c) 2014, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -38,6 +38,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	//
 	public static final float MIN_FACTOR = 0.0f;
 	public static final float MAX_FACTOR = 100.0f;
+	public static final int MIN_NUMBER_OF_TARGETS = 1;
+	public static final int MAX_NUMBER_OF_TARGETS = 100;
+	public static final int MIN_NUMBER_OF_MZ = 0;
+	public static final int MAX_NUMBER_OF_MZ = Integer.MAX_VALUE;
 	//
 	public static final String P_MASS_SPECTRA_FILES = "massSpectraFiles";
 	public static final String DEF_MASS_SPECTRA_FILES = "";
@@ -53,8 +57,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	//
 	public static final String P_NUMBER_OF_TARGETS = "numberOfTargets";
 	public static final int DEF_NUMBER_OF_TARGETS = 3;
-	public static final int MIN_NUMBER_OF_TARGETS = 1;
-	public static final int MAX_NUMBER_OF_TARGETS = 100;
 	/*
 	 * File
 	 */
@@ -69,6 +71,20 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final float DEF_MIN_MATCH_FACTOR_UNKNOWN = 80.0f;
 	public static final String P_MIN_REVERSE_MATCH_FACTOR_UNKNOWN = "minReverseMatchFactorUnknown";
 	public static final float DEF_MIN_REVERSE_MATCH_FACTOR_UNKNOWN = 80.0f;
+	public static final String P_TARGET_NAME_UNKNOWN = "targetNameUnknown";
+	public static final String DEF_TARGET_NAME_UNKNOWN = "Unknown";
+	public static final String P_NUMBER_OF_MZ_UNKNOWN = "numberOfMzUnknown";
+	public static final int DEF_NUMBER_OF_MZ_UNKNOWN = 5;
+	public static final String P_INCLUDE_INTENSITY_PERCENT_UNKNOWN = "includeIntensityPercentUnknown";
+	public static final boolean DEF_INCLUDE_INTENSITY_PERCENT_UNKNOWN = false;
+	public static final String P_MARKER_START_UNKNOWN = "markerStartUnknown";
+	public static final String DEF_MARKER_START_UNKNOWN = "[";
+	public static final String P_MARKER_STOP_UNKNOWN = "markerStopUnknown";
+	public static final String DEF_MARKER_STOP_UNKNOWN = "]";
+	public static final String P_INCLUDE_RETENTION_TIME_UNKNOWN = "includeRetentionTimeUnknown";
+	public static final boolean DEF_INCLUDE_RETENTION_TIME_UNKNOWN = false;
+	public static final String P_INCLUDE_RETENTION_INDEX_UNKNOWN = "includeRetentionIndexUnknown";
+	public static final boolean DEF_INCLUDE_RETENTION_INDEX_UNKNOWN = true;
 	/*
 	 * RI / RT penalty calculation.
 	 */
@@ -126,6 +142,13 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_MIN_REVERSE_MATCH_FACTOR, Float.toString(DEF_MIN_REVERSE_MATCH_FACTOR));
 		defaultValues.put(P_MIN_MATCH_FACTOR_UNKNOWN, Float.toString(DEF_MIN_MATCH_FACTOR_UNKNOWN));
 		defaultValues.put(P_MIN_REVERSE_MATCH_FACTOR_UNKNOWN, Float.toString(DEF_MIN_REVERSE_MATCH_FACTOR_UNKNOWN));
+		defaultValues.put(P_TARGET_NAME_UNKNOWN, DEF_TARGET_NAME_UNKNOWN);
+		defaultValues.put(P_NUMBER_OF_MZ_UNKNOWN, Integer.toString(DEF_NUMBER_OF_MZ_UNKNOWN));
+		defaultValues.put(P_INCLUDE_INTENSITY_PERCENT_UNKNOWN, Boolean.toString(DEF_INCLUDE_INTENSITY_PERCENT_UNKNOWN));
+		defaultValues.put(P_MARKER_START_UNKNOWN, DEF_MARKER_START_UNKNOWN);
+		defaultValues.put(P_MARKER_STOP_UNKNOWN, DEF_MARKER_STOP_UNKNOWN);
+		defaultValues.put(P_INCLUDE_RETENTION_TIME_UNKNOWN, Boolean.toString(DEF_INCLUDE_RETENTION_TIME_UNKNOWN));
+		defaultValues.put(P_INCLUDE_RETENTION_INDEX_UNKNOWN, Boolean.toString(DEF_INCLUDE_RETENTION_INDEX_UNKNOWN));
 		defaultValues.put(P_PENALTY_CALCULATION, DEF_PENALTY_CALCULATION);
 		defaultValues.put(P_PENALTY_CALCULATION_LEVEL_FACTOR, Float.toString(IIdentifierSettingsMSD.DEF_PENALTY_CALCULATION_LEVEL_FACTOR));
 		defaultValues.put(P_MAX_PENALTY, Float.toString(IComparisonResult.DEF_MAX_PENALTY));
@@ -186,10 +209,18 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static PeakUnknownSettings getPeakUnknownSettings() {
 
 		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
+		//
 		PeakUnknownSettings settings = new PeakUnknownSettings();
 		settings.setMassSpectrumComparatorId("");
 		settings.setMinMatchFactor(preferences.getFloat(P_MIN_MATCH_FACTOR_UNKNOWN, DEF_MIN_MATCH_FACTOR_UNKNOWN));
 		settings.setMinReverseMatchFactor(preferences.getFloat(P_MIN_REVERSE_MATCH_FACTOR_UNKNOWN, DEF_MIN_REVERSE_MATCH_FACTOR_UNKNOWN));
+		settings.setTargetName(preferences.get(P_TARGET_NAME_UNKNOWN, DEF_TARGET_NAME_UNKNOWN));
+		settings.setNumberOfMZ(preferences.getInt(P_NUMBER_OF_MZ_UNKNOWN, DEF_NUMBER_OF_MZ_UNKNOWN));
+		settings.setIncludeIntensityPercent(preferences.getBoolean(P_INCLUDE_INTENSITY_PERCENT_UNKNOWN, DEF_INCLUDE_INTENSITY_PERCENT_UNKNOWN));
+		settings.setMarkerStart(preferences.get(P_MARKER_START_UNKNOWN, DEF_MARKER_START_UNKNOWN));
+		settings.setMarkerStop(preferences.get(P_MARKER_STOP_UNKNOWN, DEF_MARKER_STOP_UNKNOWN));
+		settings.setIncludeRetentionTime(preferences.getBoolean(P_INCLUDE_RETENTION_TIME_UNKNOWN, DEF_INCLUDE_RETENTION_TIME_UNKNOWN));
+		settings.setIncludeRetentionIndex(preferences.getBoolean(P_INCLUDE_RETENTION_INDEX_UNKNOWN, DEF_INCLUDE_RETENTION_INDEX_UNKNOWN));
 		//
 		return settings;
 	}
@@ -197,10 +228,18 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static MassSpectrumUnknownSettings getMassSpectrumUnknownSettings() {
 
 		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
+		//
 		MassSpectrumUnknownSettings settings = new MassSpectrumUnknownSettings();
 		settings.setMassSpectrumComparatorId("");
 		settings.setMinMatchFactor(preferences.getFloat(P_MIN_MATCH_FACTOR_UNKNOWN, DEF_MIN_MATCH_FACTOR_UNKNOWN));
 		settings.setMinReverseMatchFactor(preferences.getFloat(P_MIN_REVERSE_MATCH_FACTOR_UNKNOWN, DEF_MIN_REVERSE_MATCH_FACTOR_UNKNOWN));
+		settings.setTargetName(preferences.get(P_TARGET_NAME_UNKNOWN, DEF_TARGET_NAME_UNKNOWN));
+		settings.setNumberOfMZ(preferences.getInt(P_NUMBER_OF_MZ_UNKNOWN, DEF_NUMBER_OF_MZ_UNKNOWN));
+		settings.setIncludeIntensityPercent(preferences.getBoolean(P_INCLUDE_INTENSITY_PERCENT_UNKNOWN, DEF_INCLUDE_INTENSITY_PERCENT_UNKNOWN));
+		settings.setMarkerStart(preferences.get(P_MARKER_START_UNKNOWN, DEF_MARKER_START_UNKNOWN));
+		settings.setMarkerStop(preferences.get(P_MARKER_STOP_UNKNOWN, DEF_MARKER_STOP_UNKNOWN));
+		settings.setIncludeRetentionTime(preferences.getBoolean(P_INCLUDE_RETENTION_TIME_UNKNOWN, DEF_INCLUDE_RETENTION_TIME_UNKNOWN));
+		settings.setIncludeRetentionIndex(preferences.getBoolean(P_INCLUDE_RETENTION_INDEX_UNKNOWN, DEF_INCLUDE_RETENTION_INDEX_UNKNOWN));
 		//
 		return settings;
 	}

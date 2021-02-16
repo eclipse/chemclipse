@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,11 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.identifier.support;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.TargetUnknownSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
@@ -24,12 +27,14 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 import org.eclipse.chemclipse.model.identifier.PeakLibraryInformation;
 import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
+import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonAbundanceComparator;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 
 public class TargetBuilder {
 
@@ -39,6 +44,7 @@ public class TargetBuilder {
 	private final IonAbundanceComparator ionAbundanceComparator;
 
 	public TargetBuilder() {
+
 		ionAbundanceComparator = new IonAbundanceComparator(SortOrder.DESC);
 	}
 
@@ -74,11 +80,11 @@ public class TargetBuilder {
 		return peakTarget;
 	}
 
-	public void setPeakTargetUnknown(IPeakMSD peakMSD, String identifier) {
+	public void setPeakTargetUnknown(IPeakMSD peakMSD, String identifier, TargetUnknownSettings targetUnknownSettings) {
 
 		try {
 			IScanMSD unknown = peakMSD.getExtractedMassSpectrum();
-			ILibraryInformation libraryInformation = getLibraryInformationUnknown(unknown.getIons());
+			ILibraryInformation libraryInformation = getLibraryInformationUnknown(unknown, targetUnknownSettings);
 			IComparisonResult comparisonResult = getComparisonResultUnknown();
 			IIdentificationTarget peakTarget = new IdentificationTarget(libraryInformation, comparisonResult);
 			peakTarget.setIdentifier(identifier);
@@ -110,10 +116,10 @@ public class TargetBuilder {
 		return identificationEntry;
 	}
 
-	public void setMassSpectrumTargetUnknown(IScanMSD unknown, String identifier) {
+	public void setMassSpectrumTargetUnknown(IScanMSD unknown, String identifier, TargetUnknownSettings targetUnknownSettings) {
 
 		try {
-			ILibraryInformation libraryInformation = getLibraryInformationUnknown(unknown.getIons());
+			ILibraryInformation libraryInformation = getLibraryInformationUnknown(unknown, targetUnknownSettings);
 			IComparisonResult comparisonResult = getComparisonResultUnknown();
 			IIdentificationTarget massSpectrumTarget = new IdentificationTarget(libraryInformation, comparisonResult);
 			massSpectrumTarget.setIdentifier(identifier);
@@ -157,22 +163,70 @@ public class TargetBuilder {
 		libraryInformation.setRetentionIndex(reference.getRetentionIndex());
 	}
 
-	private ILibraryInformation getLibraryInformationUnknown(List<IIon> ions) {
+	private ILibraryInformation getLibraryInformationUnknown(IScanMSD unknown, TargetUnknownSettings targetUnknownSettings) {
 
-		ions = new ArrayList<>(ions);
+		/*
+		 * Unknown [57,71,43,85,41]
+		 * Unknown [57,71,43,85,41 RI 782]
+		 * Unknown [57,71,43,85,41 RT 4.34]
+		 */
+		List<IIon> ionsSorted = new ArrayList<>(unknown.getIons());
 		ILibraryInformation libraryInformation = new LibraryInformation();
-		Collections.sort(ions, ionAbundanceComparator);
+		Collections.sort(ionsSorted, ionAbundanceComparator);
+		boolean includeIntensityPercent = targetUnknownSettings.isIncludeIntensityPercent();
+		//
 		StringBuilder builder = new StringBuilder();
-		builder.append("Unknown [");
-		int size = (ions.size() >= 5) ? 5 : ions.size();
+		builder.append(targetUnknownSettings.getTargetName());
+		builder.append(" ");
+		builder.append(targetUnknownSettings.getMarkerStart());
+		//
+		int numberMZ = targetUnknownSettings.getNumberMZ();
+		int size = (ionsSorted.size() >= numberMZ) ? numberMZ : ionsSorted.size();
+		double maxIntensity = ionsSorted.size() > 0 ? ionsSorted.get(0).getAbundance() : 0;
+		double factorMax = maxIntensity > 0 ? (100 / maxIntensity) : 0;
+		DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0");
+		/*
+		 * Ion(s)
+		 */
 		for(int i = 0; i < size; i++) {
-			builder.append((int)ions.get(i).getIon());
+			IIon ion = ionsSorted.get(i);
+			builder.append(AbstractIon.getIon(ion.getIon()));
+			if(includeIntensityPercent) {
+				builder.append("|");
+				double percent = factorMax * ion.getAbundance();
+				builder.append(decimalFormat.format(percent));
+			}
+			/*
+			 * Next entry available?
+			 */
 			if(i < size - 1) {
 				builder.append(",");
 			}
 		}
-		builder.append("]");
+		/*
+		 * Retention Time
+		 */
+		if(targetUnknownSettings.isIncludeRetentionTime()) {
+			builder.append(" ");
+			builder.append("RT");
+			builder.append(" ");
+			double retentionTimeInMinutes = unknown.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR;
+			builder.append(ValueFormat.getDecimalFormatEnglish("0.000").format(retentionTimeInMinutes));
+		}
+		/*
+		 * Retention Index
+		 */
+		if(targetUnknownSettings.isIncludeRetentionIndex()) {
+			builder.append(" ");
+			builder.append("RI");
+			builder.append(" ");
+			float retentionIndex = unknown.getRetentionIndex();
+			builder.append(ValueFormat.getDecimalFormatEnglish("0").format(retentionIndex));
+		}
+		//
+		builder.append(targetUnknownSettings.getMarkerStop());
 		libraryInformation.setName(builder.toString());
+		//
 		return libraryInformation;
 	}
 

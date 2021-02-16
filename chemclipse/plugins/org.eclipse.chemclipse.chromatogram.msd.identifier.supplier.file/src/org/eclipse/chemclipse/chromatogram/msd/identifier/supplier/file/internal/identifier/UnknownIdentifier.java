@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.interna
 
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.TargetUnknownSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.MassSpectrumUnknownSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.PeakUnknownSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.support.TargetBuilder;
@@ -33,9 +34,18 @@ public class UnknownIdentifier {
 		float minMatchFactor = settings.getMinMatchFactor();
 		float minReverseMatchFactor = settings.getMinReverseMatchFactor();
 		//
+		TargetUnknownSettings targetUnknownSettings = new TargetUnknownSettings();
+		targetUnknownSettings.setTargetName(settings.getTargetName());
+		targetUnknownSettings.setNumberMZ(settings.getNumberOfMZ());
+		targetUnknownSettings.setIncludeIntensityPercent(settings.isIncludeIntensityPercent());
+		targetUnknownSettings.setMarkerStart(settings.getMarkerStart());
+		targetUnknownSettings.setMarkerStop(settings.getMarkerStop());
+		targetUnknownSettings.setIncludeRetentionTime(settings.isIncludeRetentionTime());
+		targetUnknownSettings.setIncludeRetentionIndex(settings.isIncludeRetentionIndex());
+		//
 		for(IPeakMSD peak : peaks) {
 			if(identifyPeak(peak, minMatchFactor, minReverseMatchFactor)) {
-				TARGETBUILDER.setPeakTargetUnknown(peak, IDENTIFIER);
+				TARGETBUILDER.setPeakTargetUnknown(peak, IDENTIFIER, targetUnknownSettings);
 			}
 		}
 	}
@@ -45,9 +55,18 @@ public class UnknownIdentifier {
 		float minMatchFactor = settings.getMinMatchFactor();
 		float minReverseMatchFactor = settings.getMinReverseMatchFactor();
 		//
+		TargetUnknownSettings targetUnknownSettings = new TargetUnknownSettings();
+		targetUnknownSettings.setTargetName(settings.getTargetName());
+		targetUnknownSettings.setNumberMZ(settings.getNumberOfMZ());
+		targetUnknownSettings.setIncludeIntensityPercent(settings.isIncludeIntensityPercent());
+		targetUnknownSettings.setMarkerStart(settings.getMarkerStart());
+		targetUnknownSettings.setMarkerStop(settings.getMarkerStop());
+		targetUnknownSettings.setIncludeRetentionTime(settings.isIncludeRetentionTime());
+		targetUnknownSettings.setIncludeRetentionIndex(settings.isIncludeRetentionIndex());
+		//
 		for(IScanMSD scan : massSpectraList) {
 			if(identifyScan(scan, minMatchFactor, minReverseMatchFactor)) {
-				TARGETBUILDER.setMassSpectrumTargetUnknown(scan, IDENTIFIER);
+				TARGETBUILDER.setMassSpectrumTargetUnknown(scan, IDENTIFIER, targetUnknownSettings);
 			}
 		}
 	}
