@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,10 +17,13 @@ import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.core.ITargetSupplier;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.support.comparator.SortOrder;
 
 public class PeakScanListSupport {
 
@@ -50,7 +53,20 @@ public class PeakScanListSupport {
 	public static String getName(Object object) {
 
 		if(object instanceof ITargetSupplier) {
-			ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(((ITargetSupplier)object).getTargets());
+			/*
+			 * Sort by Manually Verified, Delta RI, ...
+			 */
+			float retentionIndex = 0;
+			if(object instanceof IPeak) {
+				retentionIndex = ((IPeak)object).getPeakModel().getPeakMaximum().getRetentionIndex();
+			} else if(object instanceof IScan) {
+				retentionIndex = ((IScan)object).getRetentionIndex();
+			}
+			IdentificationTargetComparator comparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
+			/*
+			 * Best Match
+			 */
+			ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(((ITargetSupplier)object).getTargets(), comparator);
 			if(libraryInformation != null) {
 				return libraryInformation.getName();
 			}
