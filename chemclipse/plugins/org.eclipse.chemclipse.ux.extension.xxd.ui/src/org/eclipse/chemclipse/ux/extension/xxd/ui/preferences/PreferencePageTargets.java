@@ -35,6 +35,7 @@ public class PreferencePageTargets extends FieldEditorPreferencePage implements 
 
 		addField(new BooleanFieldEditor(PreferenceConstants.P_USE_TARGET_LIST, "Use Target List", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_PROPAGATE_TARGET_ON_UPDATE, "Propagate Target on Update", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_TARGETS_TABLES_SORTABLE, "Targets Table Sortable", getFieldEditorParent()));
 		addField(new DirectoryFieldEditor(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER, "Library Path", getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));

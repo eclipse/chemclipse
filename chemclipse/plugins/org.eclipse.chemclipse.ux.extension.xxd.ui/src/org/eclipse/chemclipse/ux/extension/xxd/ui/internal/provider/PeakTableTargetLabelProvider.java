@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
-import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
+import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
@@ -35,13 +35,7 @@ import org.eclipse.swt.graphics.Image;
 
 public class PeakTableTargetLabelProvider extends LabelProvider implements ITableLabelProvider {
 
-	private DecimalFormat decimalFormat;
-	private TargetExtendedComparator targetExtendedComparator;
-
-	public PeakTableTargetLabelProvider() {
-		decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
-		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
-	}
+	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
 
 	@Override
 	public Image getColumnImage(Object element, int columnIndex) {
@@ -70,7 +64,9 @@ public class PeakTableTargetLabelProvider extends LabelProvider implements ITabl
 			//
 			String peakTarget = "";
 			if(peakTargets != null && peakTargets.size() > 0) {
-				Collections.sort(peakTargets, targetExtendedComparator);
+				float retentionIndex = peakMaximum.getRetentionIndex();
+				IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
+				Collections.sort(peakTargets, identificationTargetComparator);
 				peakTarget = peakTargets.get(0).getLibraryInformation().getName();
 			}
 			//

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 
-import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
+import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
@@ -22,12 +22,6 @@ import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
 import org.eclipse.jface.viewers.Viewer;
 
 public class MassSpectrumListTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
-
-	private TargetExtendedComparator targetExtendedComparator;
-
-	public MassSpectrumListTableComparator() {
-		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
-	}
 
 	@Override
 	public int compare(Viewer viewer, Object e1, Object e2) {
@@ -44,8 +38,13 @@ public class MassSpectrumListTableComparator extends AbstractRecordTableComparat
 			IScanMSD massSpectrum1 = (IScanMSD)e1;
 			IScanMSD massSpectrum2 = (IScanMSD)e2;
 			//
-			ILibraryInformation libraryInformation1 = IIdentificationTarget.getBestLibraryInformation(massSpectrum1.getTargets(), targetExtendedComparator);
-			ILibraryInformation libraryInformation2 = IIdentificationTarget.getBestLibraryInformation(massSpectrum2.getTargets(), targetExtendedComparator);
+			float retentionIndex1 = massSpectrum1.getRetentionIndex();
+			IdentificationTargetComparator identificationTargetComparator1 = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex1);
+			float retentionIndex2 = massSpectrum2.getRetentionIndex();
+			IdentificationTargetComparator identificationTargetComparator2 = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex2);
+			//
+			ILibraryInformation libraryInformation1 = IIdentificationTarget.getBestLibraryInformation(massSpectrum1.getTargets(), identificationTargetComparator1);
+			ILibraryInformation libraryInformation2 = IIdentificationTarget.getBestLibraryInformation(massSpectrum2.getTargets(), identificationTargetComparator2);
 			/*
 			 * Show the optimized mass spectrum if available.
 			 */

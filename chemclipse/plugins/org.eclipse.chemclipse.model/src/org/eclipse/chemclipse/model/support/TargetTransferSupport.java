@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.model.support;
 
 import java.util.List;
 
-import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
+import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -42,9 +42,6 @@ public class TargetTransferSupport {
 
 		if(peaksSource.size() > 0) {
 			if(peaksSink.size() > 0) {
-				//
-				TargetExtendedComparator comparator = new TargetExtendedComparator(SortOrder.DESC);
-				//
 				for(IPeak peakSink : peaksSink) {
 					for(IPeak peakSource : peaksSource) {
 						int retentionTimePeakSink = peakSink.getPeakModel().getRetentionTimeAtPeakMaximum();
@@ -54,7 +51,9 @@ public class TargetTransferSupport {
 							 * Best target or all?
 							 */
 							if(useBestTargetOnly) {
-								IIdentificationTarget peakTarget = IIdentificationTarget.getBestIdentificationTarget(peakSource.getTargets(), comparator);
+								float retentionIndex = peakSource.getPeakModel().getPeakMaximum().getRetentionIndex();
+								IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
+								IIdentificationTarget peakTarget = IIdentificationTarget.getBestIdentificationTarget(peakSource.getTargets(), identificationTargetComparator);
 								transferPeakTarget(peakTarget, peakSink);
 							} else {
 								for(IIdentificationTarget peakTarget : peakSource.getTargets()) {
@@ -78,16 +77,15 @@ public class TargetTransferSupport {
 	public String transferScanTargets(List<IScan> scansSource, IChromatogram chromatogramSink, boolean useBestTargetOnly) {
 
 		if(scansSource.size() > 0) {
-			//
-			TargetExtendedComparator comparator = new TargetExtendedComparator(SortOrder.DESC);
-			//
 			for(IScan scanSource : scansSource) {
 				int scanNumber = chromatogramSink.getScanNumber(scanSource.getRetentionTime());
 				if(scanNumber > 0) {
 					IScan scanSink = chromatogramSink.getScan(scanNumber);
 					if(scanSink != null) {
 						if(useBestTargetOnly) {
-							IIdentificationTarget peakTarget = IIdentificationTarget.getBestIdentificationTarget(scanSource.getTargets(), comparator);
+							float retentionIndex = scanSource.getRetentionIndex();
+							IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
+							IIdentificationTarget peakTarget = IIdentificationTarget.getBestIdentificationTarget(scanSource.getTargets(), identificationTargetComparator);
 							transferScanTarget(peakTarget, scanSink);
 						} else {
 							for(IIdentificationTarget scanTarget : scanSource.getTargets()) {

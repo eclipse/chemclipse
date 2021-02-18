@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 
 import java.text.DecimalFormat;
 
-import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
+import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
@@ -27,12 +27,6 @@ import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.swt.graphics.Image;
 
 public class MassSpectrumListLabelProvider extends AbstractChemClipseLabelProvider {
-
-	private TargetExtendedComparator targetExtendedComparator;
-
-	public MassSpectrumListLabelProvider() {
-		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
-	}
 
 	@Override
 	public Image getColumnImage(Object element, int columnIndex) {
@@ -59,7 +53,9 @@ public class MassSpectrumListLabelProvider extends AbstractChemClipseLabelProvid
 			 * Scan
 			 */
 			IScanMSD massSpectrum = (IScanMSD)element;
-			ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(massSpectrum.getTargets(), targetExtendedComparator);
+			float retentionIndex = massSpectrum.getRetentionIndex();
+			IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
+			ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(massSpectrum.getTargets(), identificationTargetComparator);
 			if(massSpectrum.getOptimizedMassSpectrum() != null) {
 				massSpectrum = massSpectrum.getOptimizedMassSpectrum();
 			}

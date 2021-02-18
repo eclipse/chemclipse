@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,7 +23,7 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings2;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
-import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
+import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -45,7 +45,6 @@ public class ReportWriter2 {
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0000");
 	private DateFormat dateFormat = ValueFormat.getDateFormatEnglish();
-	private TargetExtendedComparator targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
 
 	public void generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, ReportSettings2 reportSettings, IProgressMonitor monitor) throws IOException {
 
@@ -120,7 +119,10 @@ public class ReportWriter2 {
 			 * are available.
 			 */
 			if(peakTargetsSource.size() > 0) {
-				ILibraryInformation libraryInformationSource = IIdentificationTarget.getBestLibraryInformation(peakTargetsSource, targetExtendedComparator);
+				float retentionIndex = peakModelSource.getPeakMaximum().getRetentionIndex();
+				IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
+				ILibraryInformation libraryInformationSource = IIdentificationTarget.getBestLibraryInformation(peakTargetsSource, identificationTargetComparator);
+				//
 				if(libraryInformationSource != null) {
 					printWriter.print((libraryInformationSource != null) ? libraryInformationSource.getName() : "");
 					printWriter.print(DELIMITER);

@@ -43,7 +43,7 @@ public class TargetsListUI extends ExtendedTableViewer {
 	private static final int[] BOUNDS = TargetsLabelProvider.BOUNDS;
 	//
 	private final TargetsLabelProvider labelProvider = new TargetsLabelProvider();
-	private final TargetsComparator targetsTableComparator = new TargetsComparator();
+	private final TargetsComparator targetsComparator = new TargetsComparator();
 	private final TargetListFilter targetListFilter = new TargetListFilter();
 	//
 	private Integer retentionTime = null;
@@ -58,6 +58,17 @@ public class TargetsListUI extends ExtendedTableViewer {
 		this(parent, TITLES, style);
 	}
 
+	public void setComparator(boolean active) {
+
+		if(active) {
+			setComparator(targetsComparator);
+			sortTable();
+		} else {
+			setComparator(null);
+			refresh();
+		}
+	}
+
 	public TargetsListUI(Composite parent, String[] alternativeTitles, int style) {
 
 		super(parent, style | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
@@ -65,7 +76,7 @@ public class TargetsListUI extends ExtendedTableViewer {
 		createColumns(alternativeTitles, BOUNDS);
 		setLabelProvider(labelProvider);
 		setContentProvider(new ListContentProvider());
-		setComparator(targetsTableComparator);
+		setComparator(false);
 		setFilters(new ViewerFilter[]{targetListFilter});
 		setCellColorProvider();
 	}
@@ -89,14 +100,16 @@ public class TargetsListUI extends ExtendedTableViewer {
 
 	public void sortTable() {
 
-		int column = 0;
-		int sortOrder = TargetsComparator.DESCENDING;
-		//
-		targetsTableComparator.setColumn(column);
-		targetsTableComparator.setDirection(sortOrder);
-		refresh();
-		targetsTableComparator.setDirection(1 - sortOrder);
-		targetsTableComparator.setColumn(column);
+		if(getComparator() != null) {
+			int column = 0;
+			int sortOrder = TargetsComparator.DESCENDING;
+			//
+			targetsComparator.setColumn(column);
+			targetsComparator.setDirection(sortOrder);
+			refresh();
+			targetsComparator.setDirection(1 - sortOrder);
+			targetsComparator.setColumn(column);
+		}
 	}
 
 	public void setEditingSupport() {

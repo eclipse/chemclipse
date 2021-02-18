@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,12 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.targets;
 
-import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
-import org.eclipse.chemclipse.support.comparator.SortOrder;
-
 public interface ITargetDisplaySettings {
-
-	static final TargetExtendedComparator COMPARATOR = new TargetExtendedComparator(SortOrder.DESC);
 
 	boolean isShowPeakLabels();
 

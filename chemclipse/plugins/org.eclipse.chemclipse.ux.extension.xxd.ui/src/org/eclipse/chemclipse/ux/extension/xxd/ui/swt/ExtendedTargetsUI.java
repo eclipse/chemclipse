@@ -12,12 +12,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -29,6 +33,7 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
@@ -105,6 +110,8 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 	private final ListSupport listSupport = new ListSupport();
 	private ScanDataSupport scanDataSupport = new ScanDataSupport();
 	private PeakDataSupport peakDataSupport = new PeakDataSupport();
+	//
+	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	@Inject
 	public ExtendedTargetsUI(Composite parent, int style) {
@@ -416,6 +423,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 				preferenceStore.setValue(preferenceName, columnOrder);
 			}
 		});
+		targetListUI.setComparator(preferenceStore.getBoolean(PreferenceConstants.P_TARGETS_TABLES_SORTABLE));
 		/*
 		 * Add the delete targets support.
 		 */
@@ -550,14 +558,18 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 	private void applySettings() {
 
 		comboTarget.updateContentProposals();
-		tableViewer.get().refresh();
+		TargetsListUI targetListUI = tableViewer.get();
+		targetListUI.setComparator(preferenceStore.getBoolean(PreferenceConstants.P_TARGETS_TABLES_SORTABLE));
 	}
 
-	private void updateInput() {
+	private void updateInput(float retentionIndex) {
 
 		if(object instanceof ITargetSupplier) {
 			ITargetSupplier targetSupplier = (ITargetSupplier)object;
-			tableViewer.get().setInput(targetSupplier.getTargets());
+			List<IIdentificationTarget> identificationTargets = new ArrayList<>(targetSupplier.getTargets());
+			IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
+			Collections.sort(identificationTargets, identificationTargetComparator);
+			tableViewer.get().setInput(identificationTargets);
 		} else {
 			tableViewer.get().setInput(null);
 			enableToolbar(toolbarEdit, buttonToolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT, false);
@@ -582,6 +594,19 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 			}
 		} else {
 			tableViewer.get().updateSourceRange(null, null);
+		}
+	}
+
+	private float getRetentionIndex() {
+
+		if(object instanceof IPeak) {
+			IScan scan = ((IPeak)object).getPeakModel().getPeakMaximum();
+			return scan.getRetentionIndex();
+		} else if(object instanceof IScan) {
+			IScan scan = ((IScan)object);
+			return scan.getRetentionIndex();
+		} else {
+			return 0.0f;
 		}
 	}
 
@@ -694,7 +719,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 	private void updateTargets(Display display) {
 
 		updateRetentionInfo();
-		updateInput();
+		updateInput(getRetentionIndex());
 		updateWidgets();
 		//
 		TargetsListUI targetListUI = tableViewer.get();
@@ -702,7 +727,6 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		Table table = targetListUI.getTable();
 		if(table.getItemCount() > 0) {
 			table.setSelection(0);
-			IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 			boolean propagateTargetOnUpdate = preferenceStore.getBoolean(PreferenceConstants.P_PROPAGATE_TARGET_ON_UPDATE);
 			if(propagateTargetOnUpdate) {
 				propagateTarget(display);

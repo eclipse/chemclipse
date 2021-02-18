@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2020 Lablicate GmbH.
+ * Copyright (c) 2010, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -18,14 +18,14 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
+import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.model.targets.ITarget;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 
 public interface IIdentificationTarget extends ITarget {
 
-	public static final TargetExtendedComparator DEFAULT_COMPARATOR = new TargetExtendedComparator(SortOrder.DESC);
+	public static final IdentificationTargetComparator DEFAULT_COMPARATOR = new IdentificationTargetComparator(SortOrder.DESC);
 
 	static IIdentificationTarget createDefaultTarget(String name, String casNumber, String identifier) {
 

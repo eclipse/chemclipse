@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,7 +20,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings3;
-import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
+import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -40,7 +40,6 @@ public class ReportWriter3 {
 	private DecimalFormat decimalFormatAreaNormal = ValueFormat.getDecimalFormatEnglish("0.0#E0");
 	private DecimalFormat decimalFormatConcentration = ValueFormat.getDecimalFormatEnglish("0.000");
 	private DateFormat dateFormat = ValueFormat.getDateFormatEnglish();
-	private TargetExtendedComparator targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
 
 	public void generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, ReportSettings3 reportSettings, IProgressMonitor monitor) throws IOException {
 
@@ -97,7 +96,9 @@ public class ReportWriter3 {
 		for(IPeak peak : chromatogram.getPeaks()) {
 			//
 			IPeakModel peakModel = peak.getPeakModel();
-			ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(peak.getTargets(), targetExtendedComparator);
+			float retentionIndex = peakModel.getPeakMaximum().getRetentionIndex();
+			IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
+			ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(peak.getTargets(), identificationTargetComparator);
 			String identification = (libraryInformation != null) ? libraryInformation.getName() : "";
 			String retentionTime = decimalFormatRetentionTime.format(peakModel.getRetentionTimeAtPeakMaximum() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
 			//

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 
-import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
+import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
@@ -24,12 +24,6 @@ import org.eclipse.jface.viewers.Viewer;
 
 public class PeakListTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
 
-	private TargetExtendedComparator targetExtendedComparator;
-
-	public PeakListTableComparator() {
-		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
-	}
-
 	@Override
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
@@ -40,10 +34,14 @@ public class PeakListTableComparator extends AbstractRecordTableComparator imple
 		if(e1 instanceof IPeakMSD && e2 instanceof IPeakMSD) {
 			IPeakMSD peak1 = (IPeakMSD)e1;
 			IPeakModelMSD peakModel1 = peak1.getPeakModel();
-			ILibraryInformation libraryInformation1 = IIdentificationTarget.getBestLibraryInformation(peak1.getTargets(), targetExtendedComparator);
+			float retentionIndex1 = peakModel1.getPeakMaximum().getRetentionIndex();
+			IdentificationTargetComparator identificationTargetComparator1 = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex1);
+			ILibraryInformation libraryInformation1 = IIdentificationTarget.getBestLibraryInformation(peak1.getTargets(), identificationTargetComparator1);
 			IPeakMSD peak2 = (IPeakMSD)e2;
 			IPeakModelMSD peakModel2 = peak2.getPeakModel();
-			ILibraryInformation libraryInformation2 = IIdentificationTarget.getBestLibraryInformation(peak2.getTargets(), targetExtendedComparator);
+			float retentionIndex2 = peakModel2.getPeakMaximum().getRetentionIndex();
+			IdentificationTargetComparator identificationTargetComparator2 = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex2);
+			ILibraryInformation libraryInformation2 = IIdentificationTarget.getBestLibraryInformation(peak2.getTargets(), identificationTargetComparator2);
 			//
 			switch(getPropertyIndex()) {
 				case 0:

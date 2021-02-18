@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -27,8 +27,9 @@ import java.util.concurrent.TimeUnit;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.comparator.TargetCombinedComparator;
+import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
@@ -80,9 +81,6 @@ public class Identifier {
 	private static final String DESCRIPTION = "NIST Peak Identifier";
 	private static final String LIBRARY = "NIST";
 	private static final String COMPOUND_IN_LIB_FACTOR = "InLib Factor: ";
-	//
-	private final TargetCombinedComparator targetCombinedComparator = new TargetCombinedComparator(SortOrder.DESC);
-	//
 	/*
 	 * Mass Spectrum/Peak Identifier
 	 */
@@ -667,7 +665,10 @@ public class Identifier {
 				/*
 				 * Assign only the best hits.
 				 */
-				Collections.sort(peakTargets, targetCombinedComparator);
+				IPeakModel peakModel = peak.getPeakModel();
+				float retentionIndex = peakModel.getPeakMaximum().getRetentionIndex();
+				IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
+				Collections.sort(peakTargets, identificationTargetComparator);
 				int size = numberOfTargets <= peakTargets.size() ? numberOfTargets : peakTargets.size();
 				for(int i = 0; i < size; i++) {
 					peak.getTargets().add(peakTargets.get(i));
@@ -813,7 +814,9 @@ public class Identifier {
 		/*
 		 * Assign only the best hits.
 		 */
-		Collections.sort(massSpectrumTargets, targetCombinedComparator);
+		float retentionIndex = massSpectrum.getRetentionIndex();
+		IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
+		Collections.sort(massSpectrumTargets, identificationTargetComparator);
 		int size = numberOfTargets <= massSpectrumTargets.size() ? numberOfTargets : massSpectrumTargets.size();
 		for(int i = 0; i < size; i++) {
 			massSpectrum.getTargets().add(massSpectrumTargets.get(i));

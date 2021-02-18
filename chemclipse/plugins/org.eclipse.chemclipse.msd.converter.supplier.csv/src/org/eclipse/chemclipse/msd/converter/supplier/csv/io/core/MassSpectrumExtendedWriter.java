@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Matthias Mailänder.
+ * Copyright (c) 2016, 2021 Matthias Mailänder.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Matthias Mailänder - initial API and implementation
+ * Philip Wenig - identification target comparator
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.csv.io.core;
 
@@ -21,7 +22,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
+import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
@@ -44,11 +45,6 @@ public class MassSpectrumExtendedWriter implements IMassSpectraWriter {
 	 * Don't modify this instance.
 	 */
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
-	private TargetExtendedComparator targetExtendedComparator;
-
-	public MassSpectrumExtendedWriter() {
-		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
-	}
 
 	@Override
 	public void writeMassSpectrum(FileWriter fileWriter, IScanMSD massSpectrum, IProgressMonitor monitor) throws IOException {
@@ -94,7 +90,9 @@ public class MassSpectrumExtendedWriter implements IMassSpectraWriter {
 						IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)massSpectrum;
 						libraryInformation = libraryMassSpectrum.getLibraryInformation();
 					} else {
-						libraryInformation = IIdentificationTarget.getBestLibraryInformation(massSpectrum.getTargets(), targetExtendedComparator);
+						float retentionIndex = massSpectrum.getRetentionIndex();
+						IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
+						libraryInformation = IIdentificationTarget.getBestLibraryInformation(massSpectrum.getTargets(), identificationTargetComparator);
 					}
 					/*
 					 * Try to make a deep copy and normalize.

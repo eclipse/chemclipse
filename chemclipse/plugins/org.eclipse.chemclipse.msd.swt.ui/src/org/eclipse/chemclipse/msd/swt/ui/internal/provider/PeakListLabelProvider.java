@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,7 +18,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
+import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
@@ -38,12 +38,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
 public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
-
-	private TargetExtendedComparator targetExtendedComparator;
-
-	public PeakListLabelProvider() {
-		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
-	}
 
 	@Override
 	public Color getBackground(final Object element) {
@@ -94,7 +88,7 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 		if(element instanceof IPeakMSD) {
 			IPeakMSD peak = (IPeakMSD)element;
 			IPeakModelMSD peakModel = peak.getPeakModel();
-			ILibraryInformation libraryInformation = getLibraryInformation(new ArrayList<>(peak.getTargets()));
+			ILibraryInformation libraryInformation = getLibraryInformation(peak);
 			//
 			switch(columnIndex) {
 				case 0:
@@ -170,11 +164,13 @@ public class PeakListLabelProvider extends AbstractChemClipseLabelProvider {
 		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAK, IApplicationImage.SIZE_16x16);
 	}
 
-	private ILibraryInformation getLibraryInformation(List<IIdentificationTarget> targets) {
+	private ILibraryInformation getLibraryInformation(IPeak peak) {
 
 		ILibraryInformation libraryInformation = null;
-		targets = new ArrayList<>(targets);
-		Collections.sort(targets, targetExtendedComparator);
+		List<IIdentificationTarget> targets = new ArrayList<>(peak.getTargets());
+		float retentionIndex = peak.getPeakModel().getPeakMaximum().getRetentionIndex();
+		IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
+		Collections.sort(targets, identificationTargetComparator);
 		if(targets.size() >= 1) {
 			libraryInformation = targets.get(0).getLibraryInformation();
 		}

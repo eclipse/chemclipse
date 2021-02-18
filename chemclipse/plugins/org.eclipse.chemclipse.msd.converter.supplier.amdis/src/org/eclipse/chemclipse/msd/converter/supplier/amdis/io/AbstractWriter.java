@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2020 Lablicate GmbH.
+ * Copyright (c) 2012, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
+import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
@@ -51,7 +51,7 @@ public abstract class AbstractWriter {
 	//
 	private static final Logger logger = Logger.getLogger(AbstractWriter.class);
 	//
-	private DecimalFormat decimalFormat;
+	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
 	//
 	private static final String RT = "RT: ";
 	private static final String RRT = "RRT: ";
@@ -72,14 +72,6 @@ public abstract class AbstractWriter {
 	private static final String AREA = "AREA: ";
 	//
 	private static final String NO_IDENTIFIER = "NO IDENTIFIER AVAILABLE";
-	//
-	private TargetExtendedComparator targetExtendedComparator;
-
-	public AbstractWriter() {
-
-		decimalFormat = ValueFormat.getDecimalFormatEnglish();
-		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
-	}
 
 	/**
 	 * Makes a deep copy of the mass spectrum, normalizes it and removes too low abundances.
@@ -194,7 +186,9 @@ public abstract class AbstractWriter {
 			 * Scan MS
 			 */
 			List<IIdentificationTarget> targets = new ArrayList<IIdentificationTarget>(massSpectrum.getTargets());
-			Collections.sort(targets, targetExtendedComparator);
+			float retentionIndex = massSpectrum.getRetentionIndex();
+			IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
+			Collections.sort(targets, identificationTargetComparator);
 			if(targets.size() >= 1) {
 				identificationTarget = targets.get(0);
 			}
@@ -206,7 +200,9 @@ public abstract class AbstractWriter {
 
 		IIdentificationTarget identificationTarget = null;
 		List<IIdentificationTarget> targets = new ArrayList<>(peak.getTargets());
-		Collections.sort(targets, targetExtendedComparator);
+		float retentionIndex = peak.getPeakModel().getPeakMaximum().getRetentionIndex();
+		IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
+		Collections.sort(targets, identificationTargetComparator);
 		if(targets.size() >= 1) {
 			identificationTarget = targets.get(0);
 		}

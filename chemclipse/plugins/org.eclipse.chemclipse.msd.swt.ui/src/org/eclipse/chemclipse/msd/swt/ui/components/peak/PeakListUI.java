@@ -18,7 +18,7 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
+import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
@@ -61,7 +61,7 @@ public class PeakListUI {
 	@SuppressWarnings("rawtypes")
 	private IChromatogramSelection chromatogramSelection;
 	//
-	private final DecimalFormat decimalFormat;
+	private final DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
 	//
 	private ExtendedTableViewer tableViewer;
 	private Label labelSelectedPeak;
@@ -71,13 +71,9 @@ public class PeakListUI {
 	private static final String PEAK_IS_ACTIVE_FOR_ANALYSIS = "Active for Analysis";
 	private final String[] titles = {PEAK_IS_ACTIVE_FOR_ANALYSIS, "RT (min)", "RI", "Area", "Start RT", "Stop RT", "Width", "Scan# at Peak Maximum", "S/N", "Leading", "Tailing", "Model Description", "Suggested Components", "Name"};
 	private final int bounds[] = {30, 100, 60, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100};
-	//
-	private final TargetExtendedComparator targetExtendedComparator;
 
 	public PeakListUI(Composite parent, int style) {
 
-		decimalFormat = ValueFormat.getDecimalFormatEnglish();
-		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
 		initialize(parent);
 	}
 
@@ -111,7 +107,7 @@ public class PeakListUI {
 
 		if(selectedPeakMSD != null && selectedPeakMSD.getPeakModel() != null) {
 			IPeakModelMSD peakModel = selectedPeakMSD.getPeakModel();
-			String name = getName(selectedPeakMSD.getTargets());
+			String name = getName(selectedPeakMSD.getTargets(), peakModel.getPeakMaximum().getRetentionIndex());
 			labelSelectedPeak.setText("Selected Peak: " + decimalFormat.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR) + " min - Name: " + name);
 		} else {
 			labelSelectedPeak.setText("Selected Peak: none selected yet");
@@ -357,9 +353,10 @@ public class PeakListUI {
 		}
 	}
 
-	private String getName(Set<IIdentificationTarget> targets) {
+	private String getName(Set<IIdentificationTarget> targets, float retentionIndex) {
 
-		ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(targets, targetExtendedComparator);
+		IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
+		ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(targets, identificationTargetComparator);
 		if(libraryInformation != null) {
 			return libraryInformation.getName();
 		} else {

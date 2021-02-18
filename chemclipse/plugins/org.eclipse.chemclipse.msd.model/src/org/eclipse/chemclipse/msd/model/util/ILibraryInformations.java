@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Dr. Alexander Kerner - initial API and implementation
+ * Philip Wenig - identification target comparator
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.util;
 
@@ -17,7 +18,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
+import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
@@ -30,7 +31,7 @@ import org.eclipse.chemclipse.support.comparator.SortOrder;
  */
 public class ILibraryInformations {
 
-	public static final Comparator<? super IIdentificationTarget> DEFAULT_TARGET_COMPARATOR = new TargetExtendedComparator(SortOrder.DESC);
+	public static final Comparator<? super IIdentificationTarget> DEFAULT_TARGET_COMPARATOR = new IdentificationTargetComparator(SortOrder.DESC);
 
 	/**
 	 * Same as {@link #selectLibraryInformation(Collection, Comparator)}, using {@link #DEFAULT_TARGET_COMPARATOR}.

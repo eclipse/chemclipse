@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
-import org.eclipse.chemclipse.model.comparator.TargetExtendedComparator;
+import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -29,12 +29,6 @@ import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
 import org.eclipse.jface.viewers.Viewer;
 
 public class PeakTableTargetComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
-
-	private TargetExtendedComparator targetExtendedComparator;
-
-	public PeakTableTargetComparator() {
-		targetExtendedComparator = new TargetExtendedComparator(SortOrder.DESC);
-	}
 
 	@Override
 	public int compare(Viewer viewer, Object e1, Object e2) {
@@ -56,7 +50,9 @@ public class PeakTableTargetComparator extends AbstractRecordTableComparator imp
 			//
 			String peakTarget1 = "";
 			if(peakTargets1 != null && peakTargets1.size() > 0) {
-				Collections.sort(peakTargets1, targetExtendedComparator);
+				float retentionIndex = peakMaximum1.getRetentionIndex();
+				IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
+				Collections.sort(peakTargets1, identificationTargetComparator);
 				peakTarget1 = peakTargets1.get(0).getLibraryInformation().getName();
 			}
 			/*
@@ -74,7 +70,9 @@ public class PeakTableTargetComparator extends AbstractRecordTableComparator imp
 			//
 			String peakTarget2 = "";
 			if(peakTargets2 != null && peakTargets2.size() > 0) {
-				Collections.sort(peakTargets2, targetExtendedComparator);
+				float retentionIndex = peakMaximum2.getRetentionIndex();
+				IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
+				Collections.sort(peakTargets2, identificationTargetComparator);
 				peakTarget2 = peakTargets2.get(0).getLibraryInformation().getName();
 			}
 			//

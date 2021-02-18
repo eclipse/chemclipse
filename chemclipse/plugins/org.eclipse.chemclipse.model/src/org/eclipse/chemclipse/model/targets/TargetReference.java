@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.targets;
 
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -22,6 +22,7 @@ import java.util.function.Predicate;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.model.core.ITargetSupplier;
@@ -30,21 +31,23 @@ import org.eclipse.chemclipse.support.text.ValueFormat;
 
 public class TargetReference implements ITargetReference {
 
-	private static final NumberFormat FORMAT = ValueFormat.getDecimalFormatEnglish("0.000");
+	private static final DecimalFormat FORMAT = ValueFormat.getDecimalFormatEnglish("0.000");
 	//
 	private ISignal signal = null;
 	private String name = "";
 	private String id = "";
+	private float retentionIndex = 0.0f;
 	private TargetReferenceType type = TargetReferenceType.NONE;
 	//
 	private ITargetSupplier supplier = null;
 
-	public <X extends ISignal & ITargetSupplier> TargetReference(X item, TargetReferenceType type, String name) {
+	public <X extends ISignal & ITargetSupplier> TargetReference(X item, TargetReferenceType type, String name, float retentionIndex) {
 
 		this.signal = item;
 		this.supplier = item;
 		this.type = type;
 		this.name = name;
+		this.retentionIndex = retentionIndex;
 		//
 		id = type.getLabel() + "." + name;
 	}
@@ -72,6 +75,12 @@ public class TargetReference implements ITargetReference {
 	}
 
 	@Override
+	public float getRetentionIndex() {
+
+		return retentionIndex;
+	}
+
+	@Override
 	public String getID() {
 
 		return id;
@@ -89,7 +98,7 @@ public class TargetReference implements ITargetReference {
 		for(IScan scan : scans) {
 			if(scan != null && !scan.getTargets().isEmpty()) {
 				String name = FORMAT.format(scan.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR);
-				TargetReference targetReference = new TargetReference(scan, TargetReferenceType.SCAN, name);
+				TargetReference targetReference = new TargetReference(scan, TargetReferenceType.SCAN, name, scan.getRetentionIndex());
 				targetReferences.add(targetReference);
 				if(!targetDisplaySettings.isMapped(targetReference)) {
 					targetDisplaySettings.setVisible(targetReference, true);
@@ -105,8 +114,10 @@ public class TargetReference implements ITargetReference {
 		for(IPeak peak : peaks) {
 			Set<IIdentificationTarget> targets = peak.getTargets();
 			if(peak != null && (targets.size() > 0 || peak.getClassifier().size() > 0)) {
-				String name = FORMAT.format(peak.getPeakModel().getRetentionTimeAtPeakMaximum() / IChromatogram.MINUTE_CORRELATION_FACTOR);
-				TargetReference targetReference = new TargetReference(peak, TargetReferenceType.PEAK, name);
+				IPeakModel peakModel = peak.getPeakModel();
+				String name = FORMAT.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogram.MINUTE_CORRELATION_FACTOR);
+				float retentionIndex = peakModel.getPeakMaximum().getRetentionIndex();
+				TargetReference targetReference = new TargetReference(peak, TargetReferenceType.PEAK, name, retentionIndex);
 				targetReferences.add(targetReference);
 				if(!targetDisplaySettings.isMapped(targetReference)) {
 					targetDisplaySettings.setVisible(targetReference, true);
