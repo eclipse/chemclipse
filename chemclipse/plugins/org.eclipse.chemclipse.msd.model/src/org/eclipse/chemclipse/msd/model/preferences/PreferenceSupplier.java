@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2020 Lablicate GmbH.
+ * Copyright (c) 2013, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -43,7 +43,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_USE_NORMALIZED_SCAN = "useNormalizedScan";
 	public static final boolean DEF_USE_NORMALIZED_SCAN = true;
 	public static final String P_CALCULATION_TYPE = "calculationType";
-	public static final String DEF_CALCULATION_TYPE = CalculationType.SUM.toString();
+	public static final String DEF_CALCULATION_TYPE = CalculationType.SUM.name();
 	public static final String P_COPY_TRACES_CLIPBOARD = "copyTracesClipboard";
 	public static final int DEF_COPY_TRACES_CLIPBOARD = 5;
 	//
@@ -55,23 +55,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	private static IScanMSD sessionSubtractMassSpectrum;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
-
-	public static String[][] getCalculationTypes() {
-
-		int types = 3;
-		String[][] elements = new String[types][2];
-		//
-		elements[0][0] = "Sum";
-		elements[0][1] = CalculationType.SUM.toString();
-		//
-		elements[1][0] = "Mean";
-		elements[1][1] = CalculationType.MEAN.toString();
-		//
-		elements[2][0] = "Median";
-		elements[2][1] = CalculationType.MEDIAN.toString();
-		//
-		return elements;
-	}
 
 	public static IPreferenceSupplier INSTANCE() {
 
