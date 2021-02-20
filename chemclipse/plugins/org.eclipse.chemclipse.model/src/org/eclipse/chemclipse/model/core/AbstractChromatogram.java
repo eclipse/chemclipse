@@ -480,8 +480,17 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	@Override
 	public void replaceAllScans(List<IScan> scans) {
 
-		this.scans.clear();
-		this.scans.addAll(scans);
+		List<IScan> list = getScans();
+		list.clear();
+		//
+		int scanNumber = 1;
+		for(IScan scan : scans) {
+			scan.setParentChromatogram(this);
+			scan.setScanNumber(scanNumber);
+			scanNumber++;
+		}
+		//
+		list.addAll(scans);
 	}
 
 	@Override
