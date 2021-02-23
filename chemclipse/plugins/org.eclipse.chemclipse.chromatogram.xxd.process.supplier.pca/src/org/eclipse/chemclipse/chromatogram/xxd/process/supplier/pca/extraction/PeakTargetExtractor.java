@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataI
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PeakSampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Sample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
+import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
@@ -71,7 +72,9 @@ public class PeakTargetExtractor {
 		//
 		for(IPeaks<?> peaks : peaksCollection) {
 			for(IPeak peak : peaks.getPeaks()) {
-				IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets());
+				float retentionIndex = peak.getPeakModel().getPeakMaximum().getRetentionIndex();
+				IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
+				IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets(), identificationTargetComparator);
 				if(identificationTarget != null) {
 					ILibraryInformation libraryInformation = identificationTarget.getLibraryInformation();
 					targets.add(libraryInformation.getName());
@@ -92,7 +95,9 @@ public class PeakTargetExtractor {
 			TreeMap<String, IPeak> peakTree = new TreeMap<>();
 			//
 			for(IPeak peak : peaks.getPeaks()) {
-				IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets());
+				float retentionIndex = peak.getPeakModel().getPeakMaximum().getRetentionIndex();
+				IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
+				IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets(), identificationTargetComparator);
 				String target;
 				if(identificationTarget != null) {
 					target = identificationTarget.getLibraryInformation().getName();

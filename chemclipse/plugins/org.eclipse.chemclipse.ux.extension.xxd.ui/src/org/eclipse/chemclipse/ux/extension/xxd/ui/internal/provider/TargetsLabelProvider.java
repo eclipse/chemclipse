@@ -17,11 +17,14 @@ import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
-import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Image;
 
 public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
@@ -52,6 +55,8 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 	public static final int INDEX_RETENTION_TIME = 20;
 	public static final int INDEX_RETENTION_INDEX = 21;
 	//
+	private static final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+	//
 	public static final String[] TITLES = { //
 			VERIFIED_MANUALLY, //
 			RATING, //
@@ -76,6 +81,7 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 			RETENTION_TIME, //
 			RETENTION_INDEX //
 	};
+	//
 	public static final int[] BOUNDS = { //
 			30, //
 			30, //
@@ -100,6 +106,53 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 			100, //
 			100 //
 	};
+
+	public static String getRetentionTimeText(ILibraryInformation libraryInformation, Integer retentionTime) {
+
+		DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
+		String deltaRetentionTime = "";
+		if(retentionTime != null) {
+			if(preferenceStore.getBoolean(PreferenceConstants.P_TARGETS_TABLE_SHOW_DEVIATION_RT)) {
+				int delta = libraryInformation.getRetentionTime() - retentionTime;
+				deltaRetentionTime = " [" + decimalFormat.format(delta / AbstractChromatogram.MINUTE_CORRELATION_FACTOR) + "]";
+			}
+		}
+		/*
+		 * Label
+		 */
+		String libraryRetentionTime = decimalFormat.format(libraryInformation.getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+		return libraryRetentionTime + deltaRetentionTime;
+	}
+
+	public static String getRetentionIndexText(ILibraryInformation libraryInformation, Float retentionIndex) {
+
+		DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
+		DecimalFormat decimalFormatInteger = ValueFormat.getDecimalFormatEnglish("0");
+		boolean showRetentionIndexWithoutDecimals = PreferenceSupplier.showRetentionIndexWithoutDecimals();
+		//
+		String deltaRetentionIndex = "";
+		if(retentionIndex != null) {
+			if(preferenceStore.getBoolean(PreferenceConstants.P_TARGETS_TABLE_SHOW_DEVIATION_RI)) {
+				float delta = libraryInformation.getRetentionIndex() - retentionIndex;
+				if(showRetentionIndexWithoutDecimals) {
+					deltaRetentionIndex = " [" + decimalFormatInteger.format(delta) + "]";
+				} else {
+					deltaRetentionIndex = " [" + decimalFormat.format(delta) + "]";
+				}
+			}
+		}
+		/*
+		 * Label
+		 */
+		String libraryRetentionIndex = "";
+		if(showRetentionIndexWithoutDecimals) {
+			libraryRetentionIndex = decimalFormatInteger.format(libraryInformation.getRetentionIndex());
+		} else {
+			libraryRetentionIndex = decimalFormat.format(libraryInformation.getRetentionIndex());
+		}
+		//
+		return libraryRetentionIndex + deltaRetentionIndex;
+	}
 
 	@Override
 	public Image getColumnImage(Object element, int columnIndex) {
@@ -143,15 +196,14 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 	@Override
 	public String getColumnText(Object element, int columnIndex) {
 
-		/*
-		 * SYNCHRONIZE: PeakListLabelProvider PeakListLabelComparator PeakListView
-		 */
 		DecimalFormat decimalFormat = getDecimalFormat();
+		//
 		String text = "";
 		if(element instanceof IIdentificationTarget) {
 			IIdentificationTarget identificationTarget = (IIdentificationTarget)element;
 			ILibraryInformation libraryInformation = identificationTarget.getLibraryInformation();
 			IComparisonResult comparisonResult = identificationTarget.getComparisonResult();
+			//
 			switch(columnIndex) {
 				case 0:
 					text = "";
@@ -214,15 +266,10 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 					text = libraryInformation.getReferenceIdentifier();
 					break;
 				case 20:
-					text = decimalFormat.format(libraryInformation.getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+					text = getRetentionIndexText(libraryInformation, null);
 					break;
 				case 21:
-					if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
-						DecimalFormat decimalFormatInteger = ValueFormat.getDecimalFormatEnglish("0");
-						text = decimalFormatInteger.format(libraryInformation.getRetentionIndex());
-					} else {
-						text = decimalFormat.format(libraryInformation.getRetentionIndex());
-					}
+					text = getRetentionIndexText(libraryInformation, null);
 					break;
 				default:
 					text = "n.v.";
@@ -234,7 +281,6 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 	@Override
 	public Image getImage(Object element) {
 
-		Image image = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TARGETS, IApplicationImage.SIZE_16x16);
-		return image;
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TARGETS, IApplicationImage.SIZE_16x16);
 	}
 }

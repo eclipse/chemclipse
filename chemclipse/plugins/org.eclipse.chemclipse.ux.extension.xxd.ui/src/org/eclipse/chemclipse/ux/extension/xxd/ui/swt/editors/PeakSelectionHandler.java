@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
@@ -88,7 +89,9 @@ public class PeakSelectionHandler extends AbstractHandledEventProcessor implemen
 					extendedChromatogramUI.updateSelection();
 					//
 					UpdateNotifierUI.update(event.display, peak);
-					IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets());
+					float retentionIndex = peak.getPeakModel().getPeakMaximum().getRetentionIndex();
+					IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
+					IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets(), identificationTargetComparator);
 					UpdateNotifierUI.update(event.display, identificationTarget);
 				}
 			}

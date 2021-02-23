@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -29,6 +29,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataI
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PeakSampleData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Sample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
+import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
@@ -252,7 +253,10 @@ public class PeakRetentionTimeExtractor {
 					/*
 					 * Descriptions
 					 */
-					ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(peak.get().getTargets());
+					float retentionIndex = peak.get().getPeakModel().getPeakMaximum().getRetentionIndex();
+					IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
+					ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(peak.get().getTargets(), identificationTargetComparator);
+					//
 					if(libraryInformation != null) {
 						descriptions.add(libraryInformation.getName());
 					}

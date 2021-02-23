@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
+import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 
 import junit.framework.TestCase;
@@ -28,11 +29,14 @@ import junit.framework.TestCase;
 public class IdentificationTargetComparator_1_Test extends TestCase {
 
 	private List<IIdentificationTarget> identificationTargets;
+	private boolean useRetentionIndexQC;
 
 	@Override
 	protected void setUp() throws Exception {
 
 		super.setUp();
+		//
+		useRetentionIndexQC = PreferenceSupplier.isUseRetentionIndexQC();
 		//
 		identificationTargets = new ArrayList<>();
 		identificationTargets.add(createIdentificationTarget("A", 1316, 99.878f, 99.878f, 99.88f, 99.88f, 70.93f));
@@ -55,12 +59,14 @@ public class IdentificationTargetComparator_1_Test extends TestCase {
 	@Override
 	protected void tearDown() throws Exception {
 
+		PreferenceSupplier.setUseRetentionIndexQC(useRetentionIndexQC);
 		identificationTargets.clear();
 		super.tearDown();
 	}
 
 	public void test1() {
 
+		PreferenceSupplier.setUseRetentionIndexQC(true);
 		Collections.sort(identificationTargets, new IdentificationTargetComparator(SortOrder.DESC, 1315));
 		assertEquals("E", getName(identificationTargets.get(0)));
 		assertEquals("F", getName(identificationTargets.get(1)));
@@ -69,8 +75,20 @@ public class IdentificationTargetComparator_1_Test extends TestCase {
 		assertEquals("B", getName(identificationTargets.get(14)));
 	}
 
+	public void test1a() {
+
+		PreferenceSupplier.setUseRetentionIndexQC(false);
+		Collections.sort(identificationTargets, new IdentificationTargetComparator(SortOrder.DESC, 1315));
+		assertEquals("E", getName(identificationTargets.get(0)));
+		assertEquals("A", getName(identificationTargets.get(1)));
+		assertEquals("K", getName(identificationTargets.get(8)));
+		assertEquals("I", getName(identificationTargets.get(13)));
+		assertEquals("J", getName(identificationTargets.get(14)));
+	}
+
 	public void test2() {
 
+		PreferenceSupplier.setUseRetentionIndexQC(true);
 		Collections.sort(identificationTargets, new IdentificationTargetComparator(SortOrder.ASC, 1315));
 		assertEquals("B", getName(identificationTargets.get(0)));
 		assertEquals("M", getName(identificationTargets.get(1)));
@@ -79,8 +97,31 @@ public class IdentificationTargetComparator_1_Test extends TestCase {
 		assertEquals("E", getName(identificationTargets.get(14)));
 	}
 
+	public void test2a() {
+
+		PreferenceSupplier.setUseRetentionIndexQC(false);
+		Collections.sort(identificationTargets, new IdentificationTargetComparator(SortOrder.ASC, 1315));
+		assertEquals("J", getName(identificationTargets.get(0)));
+		assertEquals("I", getName(identificationTargets.get(1)));
+		assertEquals("N", getName(identificationTargets.get(8)));
+		assertEquals("A", getName(identificationTargets.get(13)));
+		assertEquals("E", getName(identificationTargets.get(14)));
+	}
+
 	public void test3() {
 
+		PreferenceSupplier.setUseRetentionIndexQC(true);
+		Collections.sort(identificationTargets, new IdentificationTargetComparator(SortOrder.DESC, 0));
+		assertEquals("E", getName(identificationTargets.get(0)));
+		assertEquals("A", getName(identificationTargets.get(1)));
+		assertEquals("K", getName(identificationTargets.get(8)));
+		assertEquals("I", getName(identificationTargets.get(13)));
+		assertEquals("J", getName(identificationTargets.get(14)));
+	}
+
+	public void test3a() {
+
+		PreferenceSupplier.setUseRetentionIndexQC(false);
 		Collections.sort(identificationTargets, new IdentificationTargetComparator(SortOrder.DESC, 0));
 		assertEquals("E", getName(identificationTargets.get(0)));
 		assertEquals("A", getName(identificationTargets.get(1)));
@@ -91,6 +132,18 @@ public class IdentificationTargetComparator_1_Test extends TestCase {
 
 	public void test4() {
 
+		PreferenceSupplier.setUseRetentionIndexQC(true);
+		Collections.sort(identificationTargets, new IdentificationTargetComparator(SortOrder.ASC, 0));
+		assertEquals("J", getName(identificationTargets.get(0)));
+		assertEquals("I", getName(identificationTargets.get(1)));
+		assertEquals("N", getName(identificationTargets.get(8)));
+		assertEquals("A", getName(identificationTargets.get(13)));
+		assertEquals("E", getName(identificationTargets.get(14)));
+	}
+
+	public void test4a() {
+
+		PreferenceSupplier.setUseRetentionIndexQC(false);
 		Collections.sort(identificationTargets, new IdentificationTargetComparator(SortOrder.ASC, 0));
 		assertEquals("J", getName(identificationTargets.get(0)));
 		assertEquals("I", getName(identificationTargets.get(1)));
@@ -101,6 +154,18 @@ public class IdentificationTargetComparator_1_Test extends TestCase {
 
 	public void test5() {
 
+		PreferenceSupplier.setUseRetentionIndexQC(true);
+		Collections.sort(identificationTargets, new IdentificationTargetComparator(SortOrder.DESC));
+		assertEquals("E", getName(identificationTargets.get(0)));
+		assertEquals("A", getName(identificationTargets.get(1)));
+		assertEquals("K", getName(identificationTargets.get(8)));
+		assertEquals("I", getName(identificationTargets.get(13)));
+		assertEquals("J", getName(identificationTargets.get(14)));
+	}
+
+	public void test5a() {
+
+		PreferenceSupplier.setUseRetentionIndexQC(false);
 		Collections.sort(identificationTargets, new IdentificationTargetComparator(SortOrder.DESC));
 		assertEquals("E", getName(identificationTargets.get(0)));
 		assertEquals("A", getName(identificationTargets.get(1)));
@@ -111,6 +176,18 @@ public class IdentificationTargetComparator_1_Test extends TestCase {
 
 	public void test6() {
 
+		PreferenceSupplier.setUseRetentionIndexQC(true);
+		Collections.sort(identificationTargets, new IdentificationTargetComparator(SortOrder.ASC));
+		assertEquals("J", getName(identificationTargets.get(0)));
+		assertEquals("I", getName(identificationTargets.get(1)));
+		assertEquals("N", getName(identificationTargets.get(8)));
+		assertEquals("A", getName(identificationTargets.get(13)));
+		assertEquals("E", getName(identificationTargets.get(14)));
+	}
+
+	public void test6a() {
+
+		PreferenceSupplier.setUseRetentionIndexQC(false);
 		Collections.sort(identificationTargets, new IdentificationTargetComparator(SortOrder.ASC));
 		assertEquals("J", getName(identificationTargets.get(0)));
 		assertEquals("I", getName(identificationTargets.get(1)));
@@ -121,6 +198,7 @@ public class IdentificationTargetComparator_1_Test extends TestCase {
 
 	public void test7() {
 
+		PreferenceSupplier.setUseRetentionIndexQC(true);
 		Collections.sort(identificationTargets, new IdentificationTargetComparator(1315));
 		assertEquals("E", getName(identificationTargets.get(0)));
 		assertEquals("F", getName(identificationTargets.get(1)));
@@ -129,8 +207,31 @@ public class IdentificationTargetComparator_1_Test extends TestCase {
 		assertEquals("B", getName(identificationTargets.get(14)));
 	}
 
+	public void test7a() {
+
+		PreferenceSupplier.setUseRetentionIndexQC(false);
+		Collections.sort(identificationTargets, new IdentificationTargetComparator(1315));
+		assertEquals("E", getName(identificationTargets.get(0)));
+		assertEquals("A", getName(identificationTargets.get(1)));
+		assertEquals("K", getName(identificationTargets.get(8)));
+		assertEquals("I", getName(identificationTargets.get(13)));
+		assertEquals("J", getName(identificationTargets.get(14)));
+	}
+
 	public void test8() {
 
+		PreferenceSupplier.setUseRetentionIndexQC(true);
+		Collections.sort(identificationTargets, new IdentificationTargetComparator());
+		assertEquals("E", getName(identificationTargets.get(0)));
+		assertEquals("A", getName(identificationTargets.get(1)));
+		assertEquals("K", getName(identificationTargets.get(8)));
+		assertEquals("I", getName(identificationTargets.get(13)));
+		assertEquals("J", getName(identificationTargets.get(14)));
+	}
+
+	public void test8a() {
+
+		PreferenceSupplier.setUseRetentionIndexQC(false);
 		Collections.sort(identificationTargets, new IdentificationTargetComparator());
 		assertEquals("E", getName(identificationTargets.get(0)));
 		assertEquals("A", getName(identificationTargets.get(1)));
@@ -141,6 +242,7 @@ public class IdentificationTargetComparator_1_Test extends TestCase {
 
 	public void test9() {
 
+		PreferenceSupplier.setUseRetentionIndexQC(true);
 		IIdentificationTarget identificationTarget = getIdentificationTarget(identificationTargets, "J");
 		identificationTarget.setManuallyVerified(true);
 		//
@@ -152,8 +254,23 @@ public class IdentificationTargetComparator_1_Test extends TestCase {
 		assertEquals("B", getName(identificationTargets.get(14)));
 	}
 
+	public void test9a() {
+
+		PreferenceSupplier.setUseRetentionIndexQC(false);
+		IIdentificationTarget identificationTarget = getIdentificationTarget(identificationTargets, "J");
+		identificationTarget.setManuallyVerified(true);
+		//
+		Collections.sort(identificationTargets, new IdentificationTargetComparator(SortOrder.DESC, 1315));
+		assertEquals("J", getName(identificationTargets.get(0)));
+		assertEquals("E", getName(identificationTargets.get(1)));
+		assertEquals("B", getName(identificationTargets.get(8)));
+		assertEquals("H", getName(identificationTargets.get(13)));
+		assertEquals("I", getName(identificationTargets.get(14)));
+	}
+
 	public void test10() {
 
+		PreferenceSupplier.setUseRetentionIndexQC(true);
 		IIdentificationTarget identificationTarget;
 		identificationTarget = getIdentificationTarget(identificationTargets, "J");
 		identificationTarget.setManuallyVerified(true);
@@ -166,6 +283,57 @@ public class IdentificationTargetComparator_1_Test extends TestCase {
 		assertEquals("G", getName(identificationTargets.get(8)));
 		assertEquals("M", getName(identificationTargets.get(13)));
 		assertEquals("B", getName(identificationTargets.get(14)));
+	}
+
+	public void test10a() {
+
+		PreferenceSupplier.setUseRetentionIndexQC(false);
+		IIdentificationTarget identificationTarget;
+		identificationTarget = getIdentificationTarget(identificationTargets, "J");
+		identificationTarget.setManuallyVerified(true);
+		identificationTarget = getIdentificationTarget(identificationTargets, "K");
+		identificationTarget.setManuallyVerified(true);
+		//
+		Collections.sort(identificationTargets, new IdentificationTargetComparator(SortOrder.DESC, 1315));
+		assertEquals("K", getName(identificationTargets.get(0)));
+		assertEquals("J", getName(identificationTargets.get(1)));
+		assertEquals("N", getName(identificationTargets.get(8)));
+		assertEquals("H", getName(identificationTargets.get(13)));
+		assertEquals("I", getName(identificationTargets.get(14)));
+	}
+
+	public void test11() {
+
+		PreferenceSupplier.setUseRetentionIndexQC(true);
+		IIdentificationTarget identificationTarget;
+		identificationTarget = getIdentificationTarget(identificationTargets, "J");
+		identificationTarget.setManuallyVerified(true);
+		identificationTarget = getIdentificationTarget(identificationTargets, "K");
+		identificationTarget.setManuallyVerified(true);
+		//
+		Collections.sort(identificationTargets, new IdentificationTargetComparator(SortOrder.ASC, 1315));
+		assertEquals("B", getName(identificationTargets.get(0)));
+		assertEquals("M", getName(identificationTargets.get(1)));
+		assertEquals("N", getName(identificationTargets.get(8)));
+		assertEquals("J", getName(identificationTargets.get(13)));
+		assertEquals("K", getName(identificationTargets.get(14)));
+	}
+
+	public void test11a() {
+
+		PreferenceSupplier.setUseRetentionIndexQC(false);
+		IIdentificationTarget identificationTarget;
+		identificationTarget = getIdentificationTarget(identificationTargets, "J");
+		identificationTarget.setManuallyVerified(true);
+		identificationTarget = getIdentificationTarget(identificationTargets, "K");
+		identificationTarget.setManuallyVerified(true);
+		//
+		Collections.sort(identificationTargets, new IdentificationTargetComparator(SortOrder.ASC, 1315));
+		assertEquals("I", getName(identificationTargets.get(0)));
+		assertEquals("H", getName(identificationTargets.get(1)));
+		assertEquals("F", getName(identificationTargets.get(8)));
+		assertEquals("J", getName(identificationTargets.get(13)));
+		assertEquals("K", getName(identificationTargets.get(14)));
 	}
 
 	private IIdentificationTarget createIdentificationTarget(String name, float retentionIndex, float matchFactor, float reverseMatchFactor, float matchFactorDirect, float reverseMatchFactorDirect, float probability) {

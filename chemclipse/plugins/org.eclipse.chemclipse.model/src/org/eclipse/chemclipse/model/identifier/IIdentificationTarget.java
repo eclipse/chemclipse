@@ -18,14 +18,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.model.targets.ITarget;
-import org.eclipse.chemclipse.support.comparator.SortOrder;
 
 public interface IIdentificationTarget extends ITarget {
-
-	public static final IdentificationTargetComparator DEFAULT_COMPARATOR = new IdentificationTargetComparator(SortOrder.DESC);
 
 	static IIdentificationTarget createDefaultTarget(String name, String casNumber, String identifier) {
 
@@ -41,11 +37,6 @@ public interface IIdentificationTarget extends ITarget {
 		identificationTarget.setIdentifier(identifier);
 		//
 		return identificationTarget;
-	}
-
-	static IIdentificationTarget getBestIdentificationTarget(Set<IIdentificationTarget> targets) {
-
-		return getBestIdentificationTarget(targets, DEFAULT_COMPARATOR);
 	}
 
 	/**
@@ -71,11 +62,6 @@ public interface IIdentificationTarget extends ITarget {
 			}
 		}
 		return identificationTarget;
-	}
-
-	static ILibraryInformation getBestLibraryInformation(Set<IIdentificationTarget> targets) {
-
-		return getBestLibraryInformation(targets, DEFAULT_COMPARATOR);
 	}
 
 	/**

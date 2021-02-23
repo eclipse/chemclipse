@@ -16,6 +16,7 @@ import java.util.Comparator;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 
 public class IdentificationTargetComparator implements Comparator<IIdentificationTarget> {
@@ -116,8 +117,11 @@ public class IdentificationTargetComparator implements Comparator<IIdentificatio
 	private float calculateDeltaRetentionIndex(ILibraryInformation libraryInformation) {
 
 		float deltaRI = 0.0f;
-		if(retentionIndexSource != 0.0f) {
-			deltaRI = Math.abs(retentionIndexSource - libraryInformation.getRetentionIndex());
+		//
+		if(PreferenceSupplier.isUseRetentionIndexQC()) {
+			if(retentionIndexSource != 0.0f) {
+				deltaRI = Math.abs(retentionIndexSource - libraryInformation.getRetentionIndex());
+			}
 		}
 		//
 		return deltaRI;

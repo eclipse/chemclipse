@@ -159,7 +159,9 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_USE_TARGET_LIST, PreferenceConstants.DEF_USE_TARGET_LIST);
 		store.setDefault(PreferenceConstants.P_TARGET_LIST, PreferenceConstants.DEF_TARGET_LIST);
 		store.setDefault(PreferenceConstants.P_PROPAGATE_TARGET_ON_UPDATE, PreferenceConstants.DEF_PROPAGATE_TARGET_ON_UPDATE);
-		store.setDefault(PreferenceConstants.P_TARGETS_TABLES_SORTABLE, PreferenceConstants.DEF_TARGETS_TABLES_SORTABLE);
+		store.setDefault(PreferenceConstants.P_TARGETS_TABLE_SORTABLE, PreferenceConstants.DEF_TARGETS_TABLE_SORTABLE);
+		store.setDefault(PreferenceConstants.P_TARGETS_TABLE_SHOW_DEVIATION_RT, PreferenceConstants.DEF_TARGETS_TABLE_SHOW_DEVIATION_RT);
+		store.setDefault(PreferenceConstants.P_TARGETS_TABLE_SHOW_DEVIATION_RI, PreferenceConstants.DEF_TARGETS_TABLE_SHOW_DEVIATION_RI);
 		store.setDefault(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER, PreferenceConstants.DEF_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER);
 		store.setDefault(PreferenceConstants.P_USE_ABSOLUTE_DEVIATION_RETENTION_TIME, PreferenceConstants.DEF_USE_ABSOLUTE_DEVIATION_RETENTION_TIME);
 		store.setDefault(PreferenceConstants.P_RETENTION_TIME_DEVIATION_REL_OK, PreferenceConstants.DEF_RETENTION_TIME_DEVIATION_REL_OK);

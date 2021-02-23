@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,6 +16,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -54,11 +55,15 @@ public class ComparisonScanChartPart extends AbstractPart<ExtendedComparisonScan
 					IIdentificationTarget identificationTarget = null;
 					if(object instanceof IScanMSD) {
 						scan = (IScanMSD)object;
-						identificationTarget = IIdentificationTarget.getBestIdentificationTarget(scan.getTargets());
+						float retentionIndex = scan.getRetentionIndex();
+						IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
+						identificationTarget = IIdentificationTarget.getBestIdentificationTarget(scan.getTargets(), identificationTargetComparator);
 					} else if(object instanceof IPeakMSD) {
 						IPeakMSD peakMSD = (IPeakMSD)object;
 						scan = peakMSD.getExtractedMassSpectrum();
-						identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peakMSD.getTargets());
+						float retentionIndex = scan.getRetentionIndex();
+						IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
+						identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peakMSD.getTargets(), identificationTargetComparator);
 					}
 					//
 					if(identificationTarget != null) {

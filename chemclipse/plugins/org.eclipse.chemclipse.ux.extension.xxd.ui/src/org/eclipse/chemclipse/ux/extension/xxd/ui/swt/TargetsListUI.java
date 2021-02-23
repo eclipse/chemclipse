@@ -12,16 +12,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
-import java.text.DecimalFormat;
 import java.util.List;
 
-import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
-import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
-import org.eclipse.chemclipse.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.TargetListFilter;
@@ -49,8 +45,6 @@ public class TargetsListUI extends ExtendedTableViewer {
 	private Integer retentionTime = null;
 	private Float retentionIndex = null;
 	//
-	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
-	private DecimalFormat decimalFormatInteger = ValueFormat.getDecimalFormatEnglish("0");
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public TargetsListUI(Composite parent, int style) {
@@ -91,11 +85,13 @@ public class TargetsListUI extends ExtendedTableViewer {
 
 		this.retentionTime = retentionTime;
 		this.retentionIndex = retentionIndex;
+		refresh();
 	}
 
 	public void clear() {
 
 		setInput(null);
+		updateSourceRange(null, null);
 	}
 
 	public void sortTable() {
@@ -192,8 +188,7 @@ public class TargetsListUI extends ExtendedTableViewer {
 								}
 							}
 							//
-							String text = decimalFormat.format(libraryInformation.getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
-							//
+							String text = TargetsLabelProvider.getRetentionTimeText(libraryInformation, retentionTime);
 							cell.setText(text);
 							super.update(cell);
 						}
@@ -249,13 +244,7 @@ public class TargetsListUI extends ExtendedTableViewer {
 								}
 							}
 							//
-							String text;
-							if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
-								text = decimalFormatInteger.format(libraryInformation.getRetentionIndex());
-							} else {
-								text = decimalFormat.format(libraryInformation.getRetentionIndex());
-							}
-							//
+							String text = TargetsLabelProvider.getRetentionIndexText(libraryInformation, retentionIndex);
 							cell.setText(text);
 							super.update(cell);
 						}

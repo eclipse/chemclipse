@@ -453,7 +453,9 @@ public abstract class AbstractWriter {
 			/*
 			 * Set the library information.
 			 */
-			ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(massSpectrum.getTargets());
+			float retentionIndex = massSpectrum.getRetentionIndex();
+			IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
+			ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(massSpectrum.getTargets(), identificationTargetComparator);
 			massSpectrumCopy.setLibraryInformation(libraryInformation);
 		}
 		//

@@ -282,7 +282,12 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 
 	private void createButtonSettings(Composite parent) {
 
-		createSettingsButton(parent, Arrays.asList(PreferencePageTargets.class, PreferencePageTargetsList.class, PreferencePageSystem.class, PreferencePageLists.class), new ISettingsHandler() {
+		createSettingsButton(parent, Arrays.asList( //
+				PreferencePageTargets.class, //
+				PreferencePageTargetsList.class, //
+				PreferencePageSystem.class, //
+				PreferencePageLists.class //
+		), new ISettingsHandler() {
 
 			@Override
 			public void apply(Display display) {
@@ -423,7 +428,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 				preferenceStore.setValue(preferenceName, columnOrder);
 			}
 		});
-		targetListUI.setComparator(preferenceStore.getBoolean(PreferenceConstants.P_TARGETS_TABLES_SORTABLE));
+		targetListUI.setComparator(preferenceStore.getBoolean(PreferenceConstants.P_TARGETS_TABLE_SORTABLE));
 		/*
 		 * Add the delete targets support.
 		 */
@@ -559,7 +564,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 
 		comboTarget.updateContentProposals();
 		TargetsListUI targetListUI = tableViewer.get();
-		targetListUI.setComparator(preferenceStore.getBoolean(PreferenceConstants.P_TARGETS_TABLES_SORTABLE));
+		targetListUI.setComparator(preferenceStore.getBoolean(PreferenceConstants.P_TARGETS_TABLE_SORTABLE));
 	}
 
 	private void updateInput(float retentionIndex) {

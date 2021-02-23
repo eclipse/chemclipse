@@ -359,8 +359,12 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_TARGET_LIST = "";
 	public static final String P_PROPAGATE_TARGET_ON_UPDATE = "propagateTargetOnUpdate";
 	public static final boolean DEF_PROPAGATE_TARGET_ON_UPDATE = false;
-	public static final String P_TARGETS_TABLES_SORTABLE = "targetsTableSortable";
-	public static final boolean DEF_TARGETS_TABLES_SORTABLE = false;
+	public static final String P_TARGETS_TABLE_SORTABLE = "targetsTableSortable";
+	public static final boolean DEF_TARGETS_TABLE_SORTABLE = false;
+	public static final String P_TARGETS_TABLE_SHOW_DEVIATION_RT = "targetsTableShowDeviationRetentionTime";
+	public static final boolean DEF_TARGETS_TABLE_SHOW_DEVIATION_RT = false;
+	public static final String P_TARGETS_TABLE_SHOW_DEVIATION_RI = "targetsTableShowDeviationRetentionIndex";
+	public static final boolean DEF_TARGETS_TABLE_SHOW_DEVIATION_RI = false;
 	public static final String P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER = "targetTemplateLibraryImportFolder";
 	public static final String DEF_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER = "";
 	public static final String P_USE_ABSOLUTE_DEVIATION_RETENTION_TIME = "useAbsoluteDeviationRetentionTime";

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -38,6 +38,7 @@ import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.csv.QuoteMode;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
+import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IChromatogramPeak;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -76,11 +77,11 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 	public static final Charset CHARSET = StandardCharsets.UTF_8;
 	private static final String HEADER_NAME = "Name";
 	private static final String HEADER_AREA = "Area";
-	private static final String HEADER_RRT = "RRT (min)";
+	private static final String HEADER_RRT = "RRT [min]";
 	private static final String HEADER_RI = "RI";
 	private static final String HEADER_INTENSITIES = "intensities";
 	private static final String HEADER_MZ = "m/z";
-	private static final String HEADER_RT = "RT (min)";
+	private static final String HEADER_RT = "RT [min]";
 	private static final char SEPERATOR_VALUE = ':';
 	private static final char SEPERATOR_RECORD = ' ';
 	private static final Pattern SEPERATOR_VALUE_PATTERN = Pattern.compile(String.valueOf(SEPERATOR_VALUE), Pattern.LITERAL);
@@ -173,8 +174,13 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 				nf = (NumberFormat)NUMBER_FORMAT.clone();
 			}
 			for(IPeak peak : peaks.getPeaks()) {
-				IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets());
+				/*
+				 * Sort
+				 */
 				IPeakModel peakModel = peak.getPeakModel();
+				float retentionIndex = peak.getPeakModel().getPeakMaximum().getRetentionIndex();
+				IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
+				IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets(), identificationTargetComparator);
 				// Name
 				csv.print(getName(peak));
 				// RT
@@ -295,7 +301,10 @@ public class CSVPeakConverter implements IPeakExportConverter, IPeakImportConver
 	 */
 	public static String getName(IPeak peak) {
 
-		ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(peak.getTargets());
+		float retentionIndex = peak.getPeakModel().getPeakMaximum().getRetentionIndex();
+		IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
+		ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(peak.getTargets(), identificationTargetComparator);
+		//
 		if(libraryInformation != null) {
 			return libraryInformation.getName();
 		}

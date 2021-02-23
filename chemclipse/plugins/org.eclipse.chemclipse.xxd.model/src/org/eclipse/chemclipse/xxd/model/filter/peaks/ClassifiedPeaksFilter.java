@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,12 +8,14 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactorings
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.model.filter.peaks;
 
 import java.util.Collection;
 import java.util.Set;
 
+import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.filter.IPeakFilter;
@@ -60,7 +62,9 @@ public class ClassifiedPeaksFilter implements IPeakFilter<ClassifiedPeaksFilterS
 		SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
 		for(X peak : read) {
 			Set<IIdentificationTarget> targets = peak.getTargets();
-			IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(targets);
+			float retentionIndex = peak.getPeakModel().getPeakMaximum().getRetentionIndex();
+			IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
+			IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(targets, identificationTargetComparator);
 			if(target != null) {
 				ILibraryInformation information = target.getLibraryInformation();
 				if(information != null) {
