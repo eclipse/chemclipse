@@ -64,4 +64,5 @@ Import-Package: javax.annotation;version="1.0.0";resolution:=optional,
 Bundle-ActivationPolicy: lazy
 Service-Component: OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.quickstart.PeakTileDefinition.xml,
  OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.quickstart.ScanTileDefinition.xml,
- OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.quickstart.FileTileDefinition.xml
+ OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.quickstart.FileTileDefinition.xml,
+ OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.quickstart.SpectraTileDefinition.xml

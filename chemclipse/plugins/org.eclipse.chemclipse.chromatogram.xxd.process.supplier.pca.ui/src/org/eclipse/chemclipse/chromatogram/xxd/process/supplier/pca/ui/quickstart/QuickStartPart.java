@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Matthias Mailänder - add a tile for MALDI-TOF MS spectra
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.quickstart;
 
@@ -37,12 +38,13 @@ public class QuickStartPart {
 		tileContainer.addTaskTile(new PeakTileDefinition());
 		tileContainer.addTaskTile(new ScanTileDefinition());
 		tileContainer.addTaskTile(new FileTileDefinition());
+		tileContainer.addTaskTile(new SpectraTileDefinition());
 		/*
 		 * Additional
 		 */
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		store.setDefault(WelcomeViewExtensionHandler.PREFERENCE_MAX_TILES, 9);
-		store.setDefault(WelcomeViewExtensionHandler.PREFERENCE_MIN_TILES, 3);
+		store.setDefault(WelcomeViewExtensionHandler.PREFERENCE_MAX_TILES, 3);
+		store.setDefault(WelcomeViewExtensionHandler.PREFERENCE_MIN_TILES, 2);
 		//
 		new WelcomeViewExtensionHandler(tileContainer, store, CreatePcaEvaluation.PCA_PERSPECTIVE);
 	}

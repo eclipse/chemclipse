@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2020 Lablicate GmbH.
+ * Copyright (c) 2012, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,8 +7,9 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * chemclipse - initial API and implementation
+ * Dr. Philip Wenig - initial API and implementation
  * Christoph Läubrich - remove dependency on IEventbroker
+ * Matthias Mailänder - add MALDI support
  *******************************************************************************/
 package org.eclipse.chemclipse.support.events;
 
@@ -24,6 +25,7 @@ public interface IChemClipseEvents {
 	String TOPIC_SCAN_NMR_UPDATE_RAWFILE = "scan/nmr/update/rawfile";
 	String TOPIC_PLATE_PCR_UPDATE_RAWFILE = "plate/pcr/update/rawfile";
 	String TOPIC_SEQUENCE_UPDATE_RAWFILE = "sequence/update/rawfile";
+	String TOPIC_MASS_SPECTRUM_UPDATE_RAWFILE = "spectrum/ms/update/rawfile";
 	String TOPIC_METHOD_UPDATE_RAWFILE = "method/update/rawfile";
 	String TOPIC_QUANTIATION_DATABASE_UPDATE_RAWFILE = "quantitation/database/update/rawfile";
 	String TOPIC_CHROMATOGRAM_XXD_UPDATE_NONE = "chromatogram/xxd/update/none";
@@ -34,6 +36,7 @@ public interface IChemClipseEvents {
 	String TOPIC_SCAN_NMR_UPDATE_OVERVIEW = "scan/nmr/update/overview";
 	String TOPIC_SCAN_XIR_UPDATE_OVERVIEW = "scan/xir/update/overview";
 	String TOPIC_SEQUENCE_UPDATE_OVERVIEW = "sequence/update/overview";
+	String TOPIC_MASS_SPECTRUM_UPDATE_OVERVIEW = "spectrum/ms/update/overview";
 	String TOPIC_METHOD_UPDATE_OVERVIEW = "method/update/overview";
 	String TOPIC_QUANTIATION_DATABASE_UPDATE_OVERVIEW = "quantitation/database/update/overview";
 	//

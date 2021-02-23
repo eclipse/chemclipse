@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Matthias Mailänder - add MALDI support
  *******************************************************************************/
 package org.eclipse.chemclipse.processing;
 
@@ -23,14 +24,16 @@ public final class DataCategoryGroup {
 	private final Set<DataCategory> dataCategories;
 	private static final DataCategoryGroup[] DEFAULT_GROUPS = new DataCategoryGroup[]{ //
 			new DataCategoryGroup("Chromatography", DataCategory.CSD, DataCategory.MSD, DataCategory.WSD), //
-			new DataCategoryGroup("Spectroscopy", DataCategory.FID, DataCategory.NMR)//
-	};
+			new DataCategoryGroup("Spectroscopy", DataCategory.FID, DataCategory.NMR), //
+			new DataCategoryGroup("Spectrometry", DataCategory.MALDI)};
 
 	public DataCategoryGroup(String name, DataCategory... dataCategories) {
+
 		this(name, Arrays.asList(dataCategories));
 	}
 
 	public DataCategoryGroup(String name, Collection<DataCategory> dataCategories) {
+
 		this.name = name;
 		this.dataCategories = Collections.unmodifiableSet(new LinkedHashSet<>(dataCategories));
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,12 +8,14 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Matthias Mailänder - add MALDI support
  *******************************************************************************/
 package org.eclipse.chemclipse.model.types;
 
 import org.eclipse.chemclipse.processing.DataCategory;
 
 public enum DataType {
+
 	NONE, // Used e.g. as an initial value for the Scan Table
 	AUTO_DETECT, // Auto-Detect
 	MSD_NOMINAL, // Quadrupole, Ion Trap
@@ -28,7 +30,8 @@ public enum DataType {
 	PCR, // Polymerase Chain Reaction
 	SEQ, // Sequences
 	MTH, // Methods
-	QDB; // Quantitation Databases
+	QDB, // Quantitation Databases
+	MALDI; // MALDI-TOF MS
 
 	public static DataType fromDataCategory(DataCategory category) {
 
@@ -42,6 +45,8 @@ public enum DataType {
 			case FID:
 			case NMR:
 				return DataType.NMR;
+			case MALDI:
+				return DataType.MALDI;
 			default:
 				return DataType.AUTO_DETECT;
 		}
@@ -58,6 +63,8 @@ public enum DataType {
 				return DataCategory.CSD;
 			case NMR:
 				return DataCategory.NMR;
+			case MALDI:
+				return DataCategory.MALDI;
 			default:
 				return DataCategory.AUTO_DETECT;
 		}
