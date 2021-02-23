@@ -138,17 +138,17 @@ public class PeakRetentionTimeExtractor {
 	private Integer getClosestCondensedRetentionTime(TreeSet<Integer> condensedRetentionTimes, int retentionTime) {
 
 		Integer peakRetentionTimeCeil = condensedRetentionTimes.ceiling(retentionTime);
-		Integer peakRetentionTimeFlour = condensedRetentionTimes.floor(retentionTime);
-		if(peakRetentionTimeCeil != null && peakRetentionTimeFlour != null) {
-			if((peakRetentionTimeCeil - retentionTime) < (retentionTime - peakRetentionTimeFlour)) {
+		Integer peakRetentionTimeFloor = condensedRetentionTimes.floor(retentionTime);
+		if(peakRetentionTimeCeil != null && peakRetentionTimeFloor != null) {
+			if((peakRetentionTimeCeil - retentionTime) < (retentionTime - peakRetentionTimeFloor)) {
 				return peakRetentionTimeCeil;
 			} else {
-				return peakRetentionTimeFlour;
+				return peakRetentionTimeFloor;
 			}
 		} else if(peakRetentionTimeCeil != null) {
 			return peakRetentionTimeCeil;
-		} else if(peakRetentionTimeFlour != null) {
-			return peakRetentionTimeFlour;
+		} else if(peakRetentionTimeFloor != null) {
+			return peakRetentionTimeFloor;
 		}
 		return null;
 	}

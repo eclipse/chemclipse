@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings;
 public class ScanFilesWizardPage extends DataInputPageWizard {
 
 	public ScanFilesWizardPage() {
+
 		super("DataInputFiles");
 		setTitle("Chromatogram MSD Input Files");
 		setDescription("This wizard lets you select chromatogram MSD input files and set bulk group name.");
@@ -38,7 +39,7 @@ public class ScanFilesWizardPage extends DataInputPageWizard {
 
 		InputWizardSettings inputWizardSettings = InputWizardSettings.create(Activator.getDefault().getPreferenceStore(), PreferenceSupplier.N_INPUT_FILE, DataType.MSD);
 		inputWizardSettings.setTitle("Chromatogram MSD Input Files");
-		inputWizardSettings.setDescription("This wizard lets you select several chormatogram MSD input files.");
+		inputWizardSettings.setDescription("This wizard lets you select several chromatogram MSD input files.");
 		//
 		List<IDataInputEntry> dataInputEntries = new ArrayList<>();
 		for(File file : InputEntriesWizard.openWizard(getShell(), inputWizardSettings).keySet()) {

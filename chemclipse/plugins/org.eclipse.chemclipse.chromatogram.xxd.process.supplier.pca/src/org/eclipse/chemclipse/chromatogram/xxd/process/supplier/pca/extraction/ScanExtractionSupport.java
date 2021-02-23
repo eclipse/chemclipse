@@ -144,17 +144,17 @@ public class ScanExtractionSupport {
 	private Float getClosestScans(NavigableMap<Integer, Float> peakTree, int retentionTime) {
 
 		Map.Entry<Integer, Float> peakRetentionTimeCeil = peakTree.ceilingEntry(retentionTime);
-		Map.Entry<Integer, Float> peakRetentionTimeFlour = peakTree.floorEntry(retentionTime);
-		if(peakRetentionTimeCeil != null && peakRetentionTimeFlour != null) {
-			if((peakRetentionTimeCeil.getKey() - retentionTime) < (retentionTime - peakRetentionTimeFlour.getKey())) {
+		Map.Entry<Integer, Float> peakRetentionTimeFloor = peakTree.floorEntry(retentionTime);
+		if(peakRetentionTimeCeil != null && peakRetentionTimeFloor != null) {
+			if((peakRetentionTimeCeil.getKey() - retentionTime) < (retentionTime - peakRetentionTimeFloor.getKey())) {
 				return peakRetentionTimeCeil.getValue();
 			} else {
-				return peakRetentionTimeFlour.getValue();
+				return peakRetentionTimeFloor.getValue();
 			}
 		} else if(peakRetentionTimeCeil != null) {
 			return peakRetentionTimeCeil.getValue();
-		} else if(peakRetentionTimeFlour != null) {
-			return peakRetentionTimeFlour.getValue();
+		} else if(peakRetentionTimeFloor != null) {
+			return peakRetentionTimeFloor.getValue();
 		}
 		return null;
 	}
