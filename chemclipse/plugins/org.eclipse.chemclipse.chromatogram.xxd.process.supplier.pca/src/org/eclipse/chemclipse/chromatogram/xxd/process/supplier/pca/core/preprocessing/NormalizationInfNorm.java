@@ -28,7 +28,7 @@ public class NormalizationInfNorm extends AbstractDataModificator implements INo
 	@Override
 	public String getDescription() {
 
-		return "Normalization Inf-Norm";
+		return "The uniform norm (or sup norm) also called the supremum norm, the Chebyshev norm or the infinity norm.";
 	}
 
 	@Override
