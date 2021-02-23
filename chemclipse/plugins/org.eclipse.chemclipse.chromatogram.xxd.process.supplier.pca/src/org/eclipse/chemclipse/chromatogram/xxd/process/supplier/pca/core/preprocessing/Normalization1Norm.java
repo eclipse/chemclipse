@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.model.statistics.IVariable;
 public class Normalization1Norm extends AbstractDataModificator implements INormalization {
 
 	public Normalization1Norm() {
+
 		super();
 	}
 
@@ -44,7 +45,6 @@ public class Normalization1Norm extends AbstractDataModificator implements INorm
 		for(ISample sample : samples.getSampleList()) {
 			if(sample.isSelected() || !isOnlySelected()) {
 				List<? extends ISampleData> sampleData = sample.getSampleData();
-				// System.out.println(sample.getName());
 				double sum = IntStream.range(0, sampleData.size()).filter(i -> !sampleData.get(i).isEmpty()).filter(i -> !skipVariable(samples, i))//
 						.mapToDouble(i -> Math.abs(getData(sampleData.get(i)))).sum();
 				IntStream.range(0, sampleData.size()).filter(i -> !sampleData.get(i).isEmpty()).filter(i -> !skipVariable(samples, i))//
