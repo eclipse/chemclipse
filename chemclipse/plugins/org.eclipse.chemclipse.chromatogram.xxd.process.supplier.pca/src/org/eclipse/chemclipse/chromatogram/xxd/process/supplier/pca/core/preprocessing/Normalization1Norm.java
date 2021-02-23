@@ -28,7 +28,7 @@ public class Normalization1Norm extends AbstractDataModificator implements INorm
 	@Override
 	public String getDescription() {
 
-		return "Normalization 1-Norm";
+		return "Taxicab norm or Manhattan norm or simply 1-norm is the sum of absolute values";
 	}
 
 	@Override

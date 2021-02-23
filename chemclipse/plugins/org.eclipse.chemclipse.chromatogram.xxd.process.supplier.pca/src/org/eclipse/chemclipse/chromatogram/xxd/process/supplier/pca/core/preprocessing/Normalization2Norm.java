@@ -28,7 +28,7 @@ public class Normalization2Norm extends AbstractDataModificator implements INorm
 	@Override
 	public String getDescription() {
 
-		return "Normalization 2-Norm";
+		return "Euclidean norm, standard norm or 2-norm is the square root of the sum of the squares of the values.";
 	}
 
 	@Override
