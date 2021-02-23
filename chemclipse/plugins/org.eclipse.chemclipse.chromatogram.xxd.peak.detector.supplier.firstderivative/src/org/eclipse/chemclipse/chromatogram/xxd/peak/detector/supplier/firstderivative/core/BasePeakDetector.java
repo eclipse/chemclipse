@@ -36,8 +36,7 @@ import org.eclipse.chemclipse.numeric.miscellaneous.Evaluation;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 
-@SuppressWarnings("rawtypes")
-public class BasePeakDetector extends AbstractPeakDetector {
+public class BasePeakDetector<P extends IPeak, C extends IChromatogram<P>, R> extends AbstractPeakDetector<P, C, R> {
 
 	protected static final float NORMALIZATION_BASE = 100000.0f;
 	protected static final int CONSECUTIVE_SCAN_STEPS = 3;

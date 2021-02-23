@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2020 Lablicate GmbH.
+ * Copyright (c) 2014, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -61,7 +61,7 @@ public class PeakDetectorCSD {
 	public static IProcessingInfo<?> detect(IChromatogramSelectionCSD chromatogramSelection, IPeakDetectorSettingsCSD peakDetectorSettings, String peakDetectorId, IProgressMonitor monitor) {
 
 		IProcessingInfo<?> processingInfo;
-		IPeakDetectorCSD peakDetector = getPeakDetector(peakDetectorId);
+		IPeakDetectorCSD<?, ?, ?> peakDetector = getPeakDetector(peakDetectorId);
 		if(peakDetector != null) {
 			processingInfo = peakDetector.detect(chromatogramSelection, peakDetectorSettings, monitor);
 		} else {
@@ -82,7 +82,7 @@ public class PeakDetectorCSD {
 	public static IProcessingInfo<?> detect(IChromatogramSelectionCSD chromatogramSelection, String peakDetectorId, IProgressMonitor monitor) {
 
 		IProcessingInfo<?> processingInfo;
-		IPeakDetectorCSD peakDetector = getPeakDetector(peakDetectorId);
+		IPeakDetectorCSD<?, ?, ?> peakDetector = getPeakDetector(peakDetectorId);
 		if(peakDetector != null) {
 			processingInfo = peakDetector.detect(chromatogramSelection, monitor);
 		} else {
@@ -121,14 +121,14 @@ public class PeakDetectorCSD {
 		return peakDetectorSupport;
 	}
 
-	private static IPeakDetectorCSD getPeakDetector(final String peakDetectorId) {
+	private static IPeakDetectorCSD<?, ?, ?> getPeakDetector(final String peakDetectorId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(peakDetectorId);
-		IPeakDetectorCSD instance = null;
+		IPeakDetectorCSD<?, ?, ?> instance = null;
 		if(element != null) {
 			try {
-				instance = (IPeakDetectorCSD)element.createExecutableExtension(PEAK_DETECTOR);
+				instance = (IPeakDetectorCSD<?, ?, ?>)element.createExecutableExtension(PEAK_DETECTOR);
 			} catch(CoreException e) {
 				logger.warn(e);
 			}

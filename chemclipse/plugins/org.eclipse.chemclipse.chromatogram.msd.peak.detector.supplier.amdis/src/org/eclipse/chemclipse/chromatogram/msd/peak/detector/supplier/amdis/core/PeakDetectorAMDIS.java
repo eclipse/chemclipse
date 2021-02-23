@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2020 Lablicate GmbH.
+ * Copyright (c) 2014, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,6 +17,8 @@ import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.inte
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.SettingsAMDIS;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
@@ -25,18 +27,17 @@ import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class PeakDetectorAMDIS extends AbstractPeakDetectorMSD {
+public class PeakDetectorAMDIS<P extends IPeak, C extends IChromatogram<P>, R> extends AbstractPeakDetectorMSD<P, C, R> {
 
 	private static final Logger logger = Logger.getLogger(PeakDetectorAMDIS.class);
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public IProcessingInfo<?> detect(IChromatogramSelectionMSD chromatogramSelection, IPeakDetectorSettingsMSD peakDetectorSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<R> detect(IChromatogramSelectionMSD chromatogramSelection, IPeakDetectorSettingsMSD peakDetectorSettings, IProgressMonitor monitor) {
 
 		/*
 		 * Validate
 		 */
-		IProcessingInfo<?> processingInfo = validate(chromatogramSelection, peakDetectorSettings, monitor);
+		IProcessingInfo<R> processingInfo = validate(chromatogramSelection, peakDetectorSettings, monitor);
 		if(!processingInfo.hasErrorMessages()) {
 			if(peakDetectorSettings instanceof SettingsAMDIS) {
 				SettingsAMDIS settingsAMDIS = (SettingsAMDIS)peakDetectorSettings;
@@ -61,7 +62,7 @@ public class PeakDetectorAMDIS extends AbstractPeakDetectorMSD {
 	}
 
 	@Override
-	public IProcessingInfo<?> detect(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<R> detect(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
 		SettingsAMDIS settingsAMDIS = PreferenceSupplier.getSettingsAMDIS();
 		return detect(chromatogramSelection, settingsAMDIS, monitor);

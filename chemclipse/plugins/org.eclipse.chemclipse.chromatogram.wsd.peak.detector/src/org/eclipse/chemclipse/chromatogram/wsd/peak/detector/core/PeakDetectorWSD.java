@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -47,6 +47,7 @@ public class PeakDetectorWSD {
 	 * This class offers only static methods.
 	 */
 	private PeakDetectorWSD() {
+
 	}
 
 	/**
@@ -58,10 +59,10 @@ public class PeakDetectorWSD {
 	 * @param monitor
 	 * @return IProcessingInfo
 	 */
-	public static IProcessingInfo detect(IChromatogramSelectionWSD chromatogramSelection, IPeakDetectorSettingsWSD peakDetectorSettings, String peakDetectorId, IProgressMonitor monitor) {
+	public static IProcessingInfo<?> detect(IChromatogramSelectionWSD chromatogramSelection, IPeakDetectorSettingsWSD peakDetectorSettings, String peakDetectorId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
-		IPeakDetectorWSD peakDetector = getPeakDetector(peakDetectorId);
+		IProcessingInfo<?> processingInfo;
+		IPeakDetectorWSD<?, ?, ?> peakDetector = getPeakDetector(peakDetectorId);
 		if(peakDetector != null) {
 			processingInfo = peakDetector.detect(chromatogramSelection, peakDetectorSettings, monitor);
 		} else {
@@ -79,10 +80,10 @@ public class PeakDetectorWSD {
 	 * @param monitor
 	 * @return IProcessingInfo
 	 */
-	public static IProcessingInfo detect(IChromatogramSelectionWSD chromatogramSelection, String peakDetectorId, IProgressMonitor monitor) {
+	public static IProcessingInfo<?> detect(IChromatogramSelectionWSD chromatogramSelection, String peakDetectorId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
-		IPeakDetectorWSD peakDetector = getPeakDetector(peakDetectorId);
+		IProcessingInfo<?> processingInfo;
+		IPeakDetectorWSD<?, ?, ?> peakDetector = getPeakDetector(peakDetectorId);
 		if(peakDetector != null) {
 			processingInfo = peakDetector.detect(chromatogramSelection, monitor);
 		} else {
@@ -91,7 +92,6 @@ public class PeakDetectorWSD {
 		return processingInfo;
 	}
 
-	// ---------------------------------------------------
 	public static IPeakDetectorWSDSupport getPeakDetectorSupport() {
 
 		PeakDetectorWSDSupplier supplier;
@@ -122,14 +122,14 @@ public class PeakDetectorWSD {
 		return peakDetectorSupport;
 	}
 
-	private static IPeakDetectorWSD getPeakDetector(final String peakDetectorId) {
+	private static IPeakDetectorWSD<?, ?, ?> getPeakDetector(final String peakDetectorId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(peakDetectorId);
-		IPeakDetectorWSD instance = null;
+		IPeakDetectorWSD<?, ?, ?> instance = null;
 		if(element != null) {
 			try {
-				instance = (IPeakDetectorWSD)element.createExecutableExtension(PEAK_DETECTOR);
+				instance = (IPeakDetectorWSD<?, ?, ?>)element.createExecutableExtension(PEAK_DETECTOR);
 			} catch(CoreException e) {
 				logger.warn(e);
 			}
@@ -158,9 +158,9 @@ public class PeakDetectorWSD {
 		return null;
 	}
 
-	private static IProcessingInfo getNoPeakDetectorAvailableProcessingInfo() {
+	private static IProcessingInfo<?> getNoPeakDetectorAvailableProcessingInfo() {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Peak Detector WSD", NO_PEAK_DETECTOR_AVAILABLE);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2020 Lablicate GmbH.
+ * Copyright (c) 2014, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,15 +23,17 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public abstract class AbstractPeakDetector<P extends IPeak, C extends IChromatogram<P>, R> implements IPeakDetector<P, C, R> {
 
 	@Override
-	public IProcessingInfo<R> validate(IChromatogramSelection<P, C> chromatogramSelection, IPeakDetectorSettings peakDetectorSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<R> validate(IChromatogramSelection<?, ?> chromatogramSelection, IPeakDetectorSettings peakDetectorSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo<R> processingInfo = new ProcessingInfo<>();
 		if(chromatogramSelection == null) {
 			processingInfo.addErrorMessage("Peak Detector", "The chromatogram selection must not be null.");
 		}
+		//
 		if(peakDetectorSettings == null) {
 			processingInfo.addErrorMessage("Peak Detector", "The peak detector settings must not be null.");
 		}
+		//
 		return processingInfo;
 	}
 }

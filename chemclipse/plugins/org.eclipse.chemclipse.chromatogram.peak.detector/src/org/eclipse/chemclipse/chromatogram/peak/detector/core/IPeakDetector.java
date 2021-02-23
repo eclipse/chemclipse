@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2019 Lablicate GmbH.
+ * Copyright (c) 2014, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,5 +21,5 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IPeakDetector<P extends IPeak, C extends IChromatogram<P>, R> {
 
-	IProcessingInfo<R> validate(IChromatogramSelection<P, C> chromatogramSelection, IPeakDetectorSettings peakDetectorSettings, IProgressMonitor monitor);
+	IProcessingInfo<R> validate(IChromatogramSelection<?, ?> chromatogramSelection, IPeakDetectorSettings peakDetectorSettings, IProgressMonitor monitor);
 }

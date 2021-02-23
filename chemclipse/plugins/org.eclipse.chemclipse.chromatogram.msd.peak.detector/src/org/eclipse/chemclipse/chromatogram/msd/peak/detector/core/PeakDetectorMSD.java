@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -60,6 +60,7 @@ public class PeakDetectorMSD {
 	 * This class offers only static methods.
 	 */
 	private PeakDetectorMSD() {
+
 	}
 
 	/**
@@ -71,10 +72,10 @@ public class PeakDetectorMSD {
 	 * @param monitor
 	 * @return IProcessingInfo
 	 */
-	public static IProcessingInfo detect(IChromatogramSelectionMSD chromatogramSelection, IPeakDetectorSettingsMSD peakDetectorSettings, String peakDetectorId, IProgressMonitor monitor) {
+	public static IProcessingInfo<?> detect(IChromatogramSelectionMSD chromatogramSelection, IPeakDetectorSettingsMSD peakDetectorSettings, String peakDetectorId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
-		IPeakDetectorMSD peakDetector = getPeakDetector(peakDetectorId);
+		IProcessingInfo<?> processingInfo;
+		IPeakDetectorMSD<?, ?, ?> peakDetector = getPeakDetector(peakDetectorId);
 		if(peakDetector != null) {
 			processingInfo = peakDetector.detect(chromatogramSelection, peakDetectorSettings, monitor);
 		} else {
@@ -92,14 +93,14 @@ public class PeakDetectorMSD {
 	 * @param monitor
 	 * @return IProcessingInfo
 	 */
-	public static IProcessingInfo detect(IChromatogramSelectionMSD chromatogramSelection, String peakDetectorId, IProgressMonitor monitor) {
+	public static IProcessingInfo<?> detect(IChromatogramSelectionMSD chromatogramSelection, String peakDetectorId, IProgressMonitor monitor) {
 
 		return detect(chromatogramSelection, getPeakDetector(peakDetectorId), monitor);
 	}
 
-	public static IProcessingInfo detect(IChromatogramSelectionMSD chromatogramSelection, IPeakDetectorMSD peakDetector, IProgressMonitor monitor) {
+	public static IProcessingInfo<?> detect(IChromatogramSelectionMSD chromatogramSelection, IPeakDetectorMSD<?, ?, ?> peakDetector, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<?> processingInfo;
 		if(peakDetector != null) {
 			processingInfo = peakDetector.detect(chromatogramSelection, monitor);
 		} else {
@@ -108,7 +109,6 @@ public class PeakDetectorMSD {
 		return processingInfo;
 	}
 
-	// ---------------------------------------------------
 	public static IPeakDetectorMSDSupport getPeakDetectorSupport() {
 
 		PeakDetectorMSDSupplier supplier;
@@ -139,14 +139,14 @@ public class PeakDetectorMSD {
 		return peakDetectorSupport;
 	}
 
-	private static IPeakDetectorMSD getPeakDetector(final String peakDetectorId) {
+	private static IPeakDetectorMSD<?, ?, ?> getPeakDetector(final String peakDetectorId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(peakDetectorId);
-		IPeakDetectorMSD instance = null;
+		IPeakDetectorMSD<?, ?, ?> instance = null;
 		if(element != null) {
 			try {
-				instance = (IPeakDetectorMSD)element.createExecutableExtension(PEAK_DETECTOR);
+				instance = (IPeakDetectorMSD<?, ?, ?>)element.createExecutableExtension(PEAK_DETECTOR);
 			} catch(CoreException e) {
 				logger.error(e.getLocalizedMessage(), e);
 			}
@@ -175,9 +175,9 @@ public class PeakDetectorMSD {
 		return null;
 	}
 
-	private static IProcessingInfo getNoPeakDetectorAvailableProcessingInfo() {
+	private static IProcessingInfo<?> getNoPeakDetectorAvailableProcessingInfo() {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Peak Detector MSD", NO_PEAK_DETECTOR_AVAILABLE);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;

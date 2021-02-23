@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -85,6 +85,28 @@ public class PeakBuilderWSD {
 		LinearEquation backgroundEquation = getBackgroundEquation(totalScanSignals, scanRange, backgroundAbundanceRange);
 		ITotalScanSignals peakIntensityTotalScanSignals = adjustTotalScanSignals(totalScanSignals, backgroundEquation);
 		IPeakIntensityValues peakIntensityValues = getPeakIntensityValues(peakIntensityTotalScanSignals);
+		/*
+		 * Create the peak.
+		 */
+		IScanWSD peakScanWSD = getPeakScan(chromatogram, totalScanSignals, backgroundEquation);
+		IPeakModelWSD peakModel = new PeakModelWSD(peakScanWSD, peakIntensityValues, backgroundAbundanceRange.getStartBackgroundAbundance(), backgroundAbundanceRange.getStopBackgroundAbundance());
+		IChromatogramPeakWSD peak = new ChromatogramPeakWSD(peakModel, chromatogram);
+		return peak;
+	}
+
+	public static IChromatogramPeakWSD createPeak(IChromatogramWSD chromatogram, IScanRange scanRange, float startIntensity, float stopIntensity) throws PeakException {
+
+		BackgroundAbundanceRange backgroundAbundanceRange = new BackgroundAbundanceRange(startIntensity, stopIntensity);
+		validateChromatogram(chromatogram);
+		validateScanRange(scanRange);
+		validateBackgroundAbundanceRange(backgroundAbundanceRange);
+		ITotalScanSignals totalScanSignals = getTotalScanSignals(chromatogram, scanRange);
+		/*
+		 * Adjust and correct the background abundance range, if needed.
+		 */
+		LinearEquation backgroundEquation = getBackgroundEquation(totalScanSignals, scanRange, backgroundAbundanceRange);
+		ITotalScanSignals peakIntensityTotalIonSignals = adjustTotalScanSignals(totalScanSignals, backgroundEquation);
+		IPeakIntensityValues peakIntensityValues = getPeakIntensityValues(peakIntensityTotalIonSignals);
 		/*
 		 * Create the peak.
 		 */
