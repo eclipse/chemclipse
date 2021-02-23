@@ -27,6 +27,9 @@ import org.osgi.framework.BundleContext;
  */
 public class Activator extends AbstractActivatorUI {
 
+	public static final String ICON_NORM_1NORM = "ICON_NORM_1NORM"; // $NON-NLS-1$
+	public static final String ICON_NORM_2NORM = "ICON_NORM_2NORM"; // $NON-NLS-1$
+	public static final String ICON_NORM_INFNORM = "ICON_NORM_INFNORM"; // $NON-NLS-1$
 	public static final String ICON_CENTER_MEAN = "ICON_CENTER_MEAN"; // $NON-NLS-1$
 	public static final String ICON_CENTER_MEDIAN = "ICON_CENTER_MEDIAN"; // $NON-NLS-1$
 	public static final String ICON_DEVIATION = "ICON_DEVIATION"; // $NON-NLS-1$
@@ -102,6 +105,9 @@ public class Activator extends AbstractActivatorUI {
 
 		Map<String, String> imageHashMap = new HashMap<String, String>();
 		//
+		imageHashMap.put(ICON_NORM_1NORM, "icons/1norm.jpg"); // $NON-NLS-1$
+		imageHashMap.put(ICON_NORM_2NORM, "icons/2norm.jpg"); // $NON-NLS-1$
+		imageHashMap.put(ICON_NORM_INFNORM, "icons/infnorm.jpg"); // $NON-NLS-1$
 		imageHashMap.put(ICON_CENTER_MEAN, "icons/center_mean.jpg"); // $NON-NLS-1$
 		imageHashMap.put(ICON_CENTER_MEDIAN, "icons/center_median.jpg"); // $NON-NLS-1$
 		imageHashMap.put(ICON_DEVIATION, "icons/deviation.jpg"); // $NON-NLS-1$

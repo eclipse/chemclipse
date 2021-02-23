@@ -475,11 +475,11 @@ public class PreprocessingSettingsUI extends Composite {
 		//
 		if(comboViewer == comboViewerNormalize) {
 			if(object instanceof Normalization1Norm) {
-				// TODO Formula
+				image = Activator.getDefault().getImage(Activator.ICON_NORM_1NORM);
 			} else if(object instanceof Normalization2Norm) {
-				// TODO Formula
+				image = Activator.getDefault().getImage(Activator.ICON_NORM_2NORM);
 			} else if(object instanceof NormalizationInfNorm) {
-				// TODO Formula
+				image = Activator.getDefault().getImage(Activator.ICON_NORM_INFNORM);
 			}
 		} else if(comboViewer == comboViewerReplacer) {
 			if(object instanceof MeanValuesReplacer) {
