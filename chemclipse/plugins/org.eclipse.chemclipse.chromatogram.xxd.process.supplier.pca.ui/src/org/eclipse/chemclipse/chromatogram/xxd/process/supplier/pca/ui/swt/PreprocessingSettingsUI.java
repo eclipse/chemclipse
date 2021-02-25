@@ -86,6 +86,7 @@ public class PreprocessingSettingsUI extends Composite {
 	private Object[] scalingInputMedian = createScaleElements(ICentering.MEDIAN);
 
 	public PreprocessingSettingsUI(Composite parent, int style) {
+
 		super(parent, style);
 		createControl();
 	}
@@ -130,6 +131,8 @@ public class PreprocessingSettingsUI extends Composite {
 		//
 		labelFormula = createLabelFormula(this);
 		canvasFormula = createCanvas(this);
+		// this combo always comes with a default
+		updateFormulaDescription(comboViewerReplacer);
 	}
 
 	private Label createLabelFormula(Composite parent) {
@@ -374,7 +377,7 @@ public class PreprocessingSettingsUI extends Composite {
 		Canvas canvas = new Canvas(parent, SWT.BORDER);
 		canvas.setToolTipText("Formula");
 		canvas.setBackground(Colors.WHITE);
-		canvas.setData(KEY_IMAGE, Activator.getDefault().getImage(Activator.ICON_DEVIATION));
+		canvas.setData(KEY_IMAGE, null);
 		//
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.horizontalSpan = 3;
@@ -483,11 +486,11 @@ public class PreprocessingSettingsUI extends Composite {
 			}
 		} else if(comboViewer == comboViewerReplacer) {
 			if(object instanceof MeanValuesReplacer) {
-				// TODO Formula
+				image = Activator.getDefault().getImage(Activator.ICON_REPLACE_MEAN);
 			} else if(object instanceof MedianValuesReplacer) {
-				// TODO Formula
+				image = Activator.getDefault().getImage(Activator.ICON_REPLACE_MEDIAN);
 			} else if(object instanceof SmallValuesReplacer) {
-				// TODO Formula
+				image = Activator.getDefault().getImage(Activator.ICON_REPLACE_RANDOM);
 			}
 		} else if(comboViewer == comboViewerTransformation) {
 			if(object instanceof TransformationLOG10) {
