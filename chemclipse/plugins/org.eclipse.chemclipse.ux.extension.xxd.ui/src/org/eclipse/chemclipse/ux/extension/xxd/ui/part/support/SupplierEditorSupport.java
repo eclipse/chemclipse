@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Christoph Läubrich - E4/support snippet launching
+ * Matthias Mailänder - add MS converter for MALDI
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.part.support;
 
@@ -25,10 +26,12 @@ import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.core.IMeasurementInfo;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
+import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
 import org.eclipse.chemclipse.nmr.converter.core.ScanConverterNMR;
 import org.eclipse.chemclipse.pcr.converter.core.PlateConverterPCR;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.ux.extension.msd.ui.editors.MassSpectrumEditor;
 import org.eclipse.chemclipse.ux.extension.ui.editors.EditorDescriptor;
 import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
@@ -104,6 +107,9 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 				break;
 			case QDB:
 				supplier = QuantDBConverter.getQuantDBConverterSupport().getSupplier();
+				break;
+			case MALDI:
+				supplier = MassSpectrumConverter.getMassSpectrumConverterSupport().getSupplier();
 				break;
 			default:
 				// No action
@@ -206,6 +212,15 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 				tooltip = QuantitationDatabaseEditor.TOOLTIP;
 				topicUpdateRawfile = IChemClipseEvents.TOPIC_QUANTIATION_DATABASE_UPDATE_RAWFILE;
 				topicUpdateOverview = IChemClipseEvents.TOPIC_QUANTIATION_DATABASE_UPDATE_OVERVIEW;
+				break;
+			case MALDI:
+				type = TYPE_SCAN_MSD;
+				elementId = MassSpectrumEditor.ID;
+				contributionURI = MassSpectrumEditor.CONTRIBUTION_URI;
+				iconURI = MassSpectrumEditor.ICON_URI;
+				tooltip = MassSpectrumEditor.TOOLTIP;
+				topicUpdateRawfile = IChemClipseEvents.TOPIC_MASS_SPECTRUM_UPDATE_RAWFILE;
+				topicUpdateOverview = IChemClipseEvents.TOPIC_MASS_SPECTRUM_UPDATE_OVERVIEW;
 				break;
 			default:
 				break;
