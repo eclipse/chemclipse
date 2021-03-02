@@ -109,14 +109,14 @@ public interface IChromatogramSelection<P extends IPeak, C extends IChromatogram
 	void setRanges(int startRetentionTime, int stopRetentionTime, float startAbundance, float stopAbundance);
 
 	/**
-	 * Sets the stop abundance.<br/>
-	 * The stopAbundance must be >= 0.
+	 * Sets the stop retention time.<br/>
+	 * The stopRetentionTime must be >= 0.
 	 */
 	void setRangeRetentionTime(int startRetentionTime, int stopRetentionTime, boolean validate);
 
 	/**
-	 * Sets the stop abundance.<br/>
-	 * The stopAbundance must be >= 0.
+	 * Sets the stop retention time.<br/>
+	 * The stopRetentionTime must be >= 0.
 	 */
 	void setRangeRetentionTime(int startRetentionTime, int stopRetentionTime);
 
