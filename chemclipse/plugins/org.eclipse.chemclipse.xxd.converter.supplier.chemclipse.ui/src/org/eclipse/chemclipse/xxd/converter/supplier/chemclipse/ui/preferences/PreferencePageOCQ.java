@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,6 +22,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class PreferencePageOCQ extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePageOCQ() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setTitle("Quantitation Data (*.ocq)");
@@ -35,7 +36,7 @@ public class PreferencePageOCQ extends FieldEditorPreferencePage implements IWor
 	 */
 	public void createFieldEditors() {
 
-		addField(new ComboFieldEditor(PreferenceSupplier.P_QUANTITATION_DB_VERSION_SAVE, "Save (*.ocq) as version:", PreferenceSupplier.getMethodVersions(), getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_QUANTITATION_DB_VERSION_SAVE, "Save (*.ocq) as version:", PreferenceSupplier.getQuantDatabaseVersions(), getFieldEditorParent()));
 		addField(new SpinnerFieldEditor(PreferenceSupplier.P_QUANTITATION_DB_COMPRESSION_LEVEL, "Compression 0 = off, 9 = best", PreferenceSupplier.MIN_COMPRESSION_LEVEL, PreferenceSupplier.MAX_COMPRESSION_LEVEL, getFieldEditorParent()));
 	}
 

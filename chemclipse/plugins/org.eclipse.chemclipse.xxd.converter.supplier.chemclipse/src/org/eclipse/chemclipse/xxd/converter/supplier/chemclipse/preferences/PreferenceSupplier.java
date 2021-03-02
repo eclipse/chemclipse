@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2020 Lablicate GmbH.
+ * Copyright (c) 2013, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,6 +18,10 @@ import java.util.Map;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.Activator;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
+import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.versions.ChromatogramVersion;
+import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.versions.IFormatVersion;
+import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.versions.MethodVersion;
+import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.versions.QuantDatabaseVersion;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -34,14 +38,14 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_CHROMATOGRAM_COMPRESSION_LEVEL = "chromatogramCompressionLevel";
 	public static final int DEF_CHROMATOGRAM_COMPRESSION_LEVEL = IFormat.CHROMATOGRAM_COMPRESSION_LEVEL;
 	//
-	public static final String P_FORCE_LOAD_ALTERNATE_DETECTOR = "forceLoadAlternateDetector";
+	public static final String P_FORCE_LOAD_ALTERNATE_DETECTOR = "forceLoadAlternateDetector"; // TODO REMOVE
 	public static final boolean DEF_FORCE_LOAD_ALTERNATE_DETECTOR = false;
 	//
-	public static final String P_USE_SCAN_PROXIES = "useScanProxies";
+	public static final String P_USE_SCAN_PROXIES = "useScanProxies"; // TODO CHECK
 	public static final boolean DEF_USE_SCAN_PROXIES = false;
-	public static final String P_LOAD_SCAN_PROXIES_IN_BACKGROUND = "loadScanProxiesInBackground";
+	public static final String P_LOAD_SCAN_PROXIES_IN_BACKGROUND = "loadScanProxiesInBackground"; // TODO REMOVE
 	public static final boolean DEF_LOAD_SCAN_PROXIES_IN_BACKGROUND = false; // This could lead java.util.ConcurrentModificationException if true
-	public static final String P_MIN_BYTES_TO_LOAD_IN_BACKGROUND = "minBytesToLoadInBackground";
+	public static final String P_MIN_BYTES_TO_LOAD_IN_BACKGROUND = "minBytesToLoadInBackground"; // TODO REMOVE
 	public static final int DEF_MIN_BYTES_TO_LOAD_IN_BACKGROUND = 2000000; // 2 MB
 	/*
 	 * *.ocm
@@ -145,42 +149,29 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static String[][] getChromatogramVersions() {
 
-		// TODO optimize the version handling!
-		int versions = 7;
-		String[][] elements = new String[versions][2];
-		//
-		elements[0][0] = IFormat.CHROMATOGRAM_VERSION_0701 + " (Nernst)";
-		elements[0][1] = IFormat.CHROMATOGRAM_VERSION_0701;
-		//
-		elements[1][0] = IFormat.CHROMATOGRAM_VERSION_0803 + " (Dempster)";
-		elements[1][1] = IFormat.CHROMATOGRAM_VERSION_0803;
-		//
-		elements[2][0] = IFormat.CHROMATOGRAM_VERSION_0903 + " (Mattauch)";
-		elements[2][1] = IFormat.CHROMATOGRAM_VERSION_0903;
-		//
-		elements[3][0] = IFormat.CHROMATOGRAM_VERSION_1004 + " (Aston)";
-		elements[3][1] = IFormat.CHROMATOGRAM_VERSION_1004;
-		//
-		elements[4][0] = IFormat.CHROMATOGRAM_VERSION_1100 + " (Diels)";
-		elements[4][1] = IFormat.CHROMATOGRAM_VERSION_1100;
-		//
-		elements[5][0] = IFormat.CHROMATOGRAM_VERSION_1300 + " (Dalton v1)";
-		elements[5][1] = IFormat.CHROMATOGRAM_VERSION_1300;
-		//
-		elements[6][0] = IFormat.CHROMATOGRAM_VERSION_1301 + " (Dalton v2)";
-		elements[6][1] = IFormat.CHROMATOGRAM_VERSION_1301;
-		//
-		return elements;
+		return getFormatVersions(ChromatogramVersion.values());
 	}
 
 	public static String[][] getMethodVersions() {
 
-		// TODO optimize the version handling!
-		int versions = 1;
-		String[][] elements = new String[versions][2];
+		return getFormatVersions(MethodVersion.values());
+	}
+
+	public static String[][] getQuantDatabaseVersions() {
+
+		return getFormatVersions(QuantDatabaseVersion.values());
+	}
+
+	public static String[][] getFormatVersions(IFormatVersion[] versions) {
+
+		String[][] elements = new String[versions.length][2];
 		//
-		elements[0][0] = IFormat.METHOD_VERSION_0001 + " (Test)";
-		elements[0][1] = IFormat.METHOD_VERSION_0001;
+		int counter = 0;
+		for(IFormatVersion version : versions) {
+			elements[counter][0] = version.getLabel();
+			elements[counter][1] = version.getVersion();
+			counter++;
+		}
 		//
 		return elements;
 	}
