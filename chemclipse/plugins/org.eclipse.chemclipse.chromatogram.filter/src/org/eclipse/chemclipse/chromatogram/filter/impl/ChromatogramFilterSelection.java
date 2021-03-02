@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Matthias Mailänder - more feedback for invalid inputs
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.filter.impl;
 
@@ -21,6 +22,8 @@ import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSe
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.MessageType;
+import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 @SuppressWarnings("rawtypes")
@@ -45,6 +48,12 @@ public class ChromatogramFilterSelection extends AbstractChromatogramFilter impl
 					stopRT = chromatogramSelection.getChromatogram().getStopRetentionTime() * Math.signum(startRT);
 				} else if(filterSettings.isStopRelative()) {
 					stopRT = chromatogramSelection.getStopRetentionTime() + stopRT;
+				}
+				if(startRT < chromatogramSelection.getChromatogram().getStartRetentionTime()) {
+					processingInfo.addMessage(new ProcessingMessage(MessageType.ERROR, "Select Range", "Start RT is outside chromatogram range."));
+				}
+				if(stopRT > chromatogramSelection.getChromatogram().getStopRetentionTime()) {
+					processingInfo.addMessage(new ProcessingMessage(MessageType.WARN, "Select Range", "Stop RT is outside chromatogram range."));
 				}
 				chromatogramSelection.setRangeRetentionTime((int)startRT, (int)stopRT);
 				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "Chromatogram Selection applied"));
