@@ -36,26 +36,41 @@ public class ChromatogramFilterSelection extends AbstractChromatogramFilter impl
 		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
 		if(!processingInfo.hasErrorMessages()) {
 			if(chromatogramFilterSettings instanceof FilterSettingsSelection) {
+				/*
+				 * Settings
+				 */
 				FilterSettingsSelection filterSettings = (FilterSettingsSelection)chromatogramFilterSettings;
-				double startRT = filterSettings.getStartRetentionTimeMinutes() * AbstractChromatogram.MINUTE_CORRELATION_FACTOR;
-				double stopRT = filterSettings.getStopRetentionTimeMinutes() * AbstractChromatogram.MINUTE_CORRELATION_FACTOR;
-				if(Double.isInfinite(startRT)) {
-					startRT = chromatogramSelection.getChromatogram().getStartRetentionTime() * Math.signum(startRT);
+				double startRetentionTime = filterSettings.getStartRetentionTimeMinutes() * AbstractChromatogram.MINUTE_CORRELATION_FACTOR;
+				double stopRetentionTime = filterSettings.getStopRetentionTimeMinutes() * AbstractChromatogram.MINUTE_CORRELATION_FACTOR;
+				/*
+				 * Start Retention Time
+				 */
+				if(Double.isInfinite(startRetentionTime)) {
+					startRetentionTime = chromatogramSelection.getChromatogram().getStartRetentionTime() * Math.signum(startRetentionTime);
 				} else if(filterSettings.isStartRelative()) {
-					startRT = chromatogramSelection.getStartRetentionTime() + startRT;
+					startRetentionTime = chromatogramSelection.getStartRetentionTime() + startRetentionTime;
 				}
-				if(Double.isInfinite(stopRT)) {
-					stopRT = chromatogramSelection.getChromatogram().getStopRetentionTime() * Math.signum(startRT);
+				/*
+				 * Stop Retention Time
+				 */
+				if(Double.isInfinite(stopRetentionTime)) {
+					stopRetentionTime = chromatogramSelection.getChromatogram().getStopRetentionTime() * Math.signum(startRetentionTime);
 				} else if(filterSettings.isStopRelative()) {
-					stopRT = chromatogramSelection.getStopRetentionTime() + stopRT;
+					stopRetentionTime = chromatogramSelection.getStopRetentionTime() + stopRetentionTime;
 				}
-				if(startRT < chromatogramSelection.getChromatogram().getStartRetentionTime()) {
-					processingInfo.addMessage(new ProcessingMessage(MessageType.ERROR, "Select Range", "Start RT is outside chromatogram range."));
+				/*
+				 * Validations
+				 * Start Retention Time: 0 is allowed. It is implicit a start from the beginning of the chromatogram.
+				 */
+				if(startRetentionTime >= chromatogramSelection.getChromatogram().getStopRetentionTime()) {
+					processingInfo.addMessage(new ProcessingMessage(MessageType.ERROR, "Select Range", "Start Retention Time is outside chromatogram range."));
 				}
-				if(stopRT > chromatogramSelection.getChromatogram().getStopRetentionTime()) {
-					processingInfo.addMessage(new ProcessingMessage(MessageType.WARN, "Select Range", "Stop RT is outside chromatogram range."));
+				//
+				if(stopRetentionTime <= chromatogramSelection.getChromatogram().getStartRetentionTime()) {
+					processingInfo.addMessage(new ProcessingMessage(MessageType.WARN, "Select Range", "Stop Retention Time is outside chromatogram range."));
 				}
-				chromatogramSelection.setRangeRetentionTime((int)startRT, (int)stopRT);
+				//
+				chromatogramSelection.setRangeRetentionTime((int)startRetentionTime, (int)stopRetentionTime);
 				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "Chromatogram Selection applied"));
 			}
 		}
