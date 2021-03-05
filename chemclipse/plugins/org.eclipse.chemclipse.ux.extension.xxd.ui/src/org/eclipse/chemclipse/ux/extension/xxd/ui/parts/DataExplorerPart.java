@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -29,6 +29,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.GenericSupplierEd
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.e4.core.contexts.IEclipseContext;
+import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Composite;
@@ -134,5 +135,11 @@ public class DataExplorerPart {
 	public DataExplorerUI getDataExplorerUI() {
 
 		return dataExplorerUI;
+	}
+
+	@Focus
+	public void focus() {
+
+		dataExplorerUI.setFocus();
 	}
 }
