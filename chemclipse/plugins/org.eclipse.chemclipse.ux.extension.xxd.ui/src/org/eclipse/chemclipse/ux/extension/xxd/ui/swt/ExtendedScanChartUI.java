@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -144,10 +144,13 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 						 * to subsequent subtractions.
 						 */
 						IScanMSD scanSubtract = (IScanMSD)scan;
-						if(scanSource.getScanNumber() != scanSubtract.getScanNumber()) {
+						int scanNumberSource = scanSource.getScanNumber();
+						int scanNumberSubtract = scanSubtract.getScanNumber();
+						if(scanNumberSubtract > 0 && scanNumberSource != scanNumberSubtract) {
 							/*
 							 * Prevent the scan is subtracted from itself.
 							 */
+							logger.info("Subtract Scan: " + scanNumberSource + " - " + scanNumberSubtract);
 							subtractScanMSD(scanSource, scanSubtract);
 							if(!preferenceStore.getBoolean(PreferenceConstants.P_ENABLE_MULTI_SUBTRACT)) {
 								setSubtractModus(display, false, false);
@@ -405,6 +408,9 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 
 	private void subtractScanMSD(IScanMSD scanSource, IScanMSD scanSubtract) {
 
+		/*
+		 * Settings
+		 */
 		MassSpectrumFilterSettings settings = new MassSpectrumFilterSettings();
 		settings.setUseNominalMasses(PreferenceSupplier.isUseNominalMZ());
 		settings.setUseNormalize(PreferenceSupplier.isUseNormalizedScan());
@@ -412,21 +418,24 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		/*
 		 * Subtract
 		 */
-		try {
-			/*
-			 * Work on the optimized scan.
-			 */
-			IScanMSD optimizedMassSpectrum = scanSource.getOptimizedMassSpectrum();
-			if(optimizedMassSpectrum == null) {
-				optimizedMassSpectrum = scanSource.makeDeepCopy();
-				scanSource.setOptimizedMassSpectrum(optimizedMassSpectrum);
+		IScanMSD optimizedMassSpectrum = getOptimizedMassSpectrum(scanSource);
+		SubtractCalculator subtractCalculator = new SubtractCalculator();
+		subtractCalculator.subtractMassSpectrum(optimizedMassSpectrum, settings);
+	}
+
+	private IScanMSD getOptimizedMassSpectrum(IScanMSD scanMSD) {
+
+		IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
+		if(optimizedMassSpectrum == null) {
+			try {
+				optimizedMassSpectrum = scanMSD.makeDeepCopy();
+				scanMSD.setOptimizedMassSpectrum(optimizedMassSpectrum);
+			} catch(CloneNotSupportedException e) {
+				logger.warn(e);
 			}
-			//
-			SubtractCalculator subtractCalculator = new SubtractCalculator();
-			subtractCalculator.subtractMassSpectrum(optimizedMassSpectrum, settings);
-		} catch(CloneNotSupportedException e) {
-			logger.warn(e);
 		}
+		//
+		return optimizedMassSpectrum;
 	}
 
 	private Combo createDataType(Composite parent) {
