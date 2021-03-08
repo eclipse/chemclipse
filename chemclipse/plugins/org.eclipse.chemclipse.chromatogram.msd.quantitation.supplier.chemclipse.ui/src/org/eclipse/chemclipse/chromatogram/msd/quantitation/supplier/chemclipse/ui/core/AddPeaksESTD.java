@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2020 Lablicate GmbH.
+ * Copyright (c) 2013, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -115,7 +115,7 @@ public class AddPeaksESTD extends AbstractPeakQuantifier implements IPeakQuantif
 		WizardDialog dialog = new WizardDialog(shell, wizard);
 		if(dialog.open() == Dialog.OK) {
 			StatusLineLogger.setInfo(InfoType.MESSAGE, "Done: The peaks have been added to the quantitation table.");
-			processingInfo.addErrorMessage(DESCRIPTION, "Successfully added the peaks to the database.");
+			processingInfo.addInfoMessage(DESCRIPTION, "Successfully added the peaks to the database.");
 		} else {
 			processingInfo.addErrorMessage(DESCRIPTION, "Something went wrong to add the peaks.");
 		}
