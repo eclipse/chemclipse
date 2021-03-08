@@ -220,7 +220,13 @@
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageNamedTraces"
             id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageNamedTraces"
             name="Named Trace(s)">
-      </page>                                                                             
+      </page>
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMolecule"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageMolecule"
+            name="Molecule">
+      </page>                                                                                   
    </extension> 
    <extension
          point="org.eclipse.ui.editors">  

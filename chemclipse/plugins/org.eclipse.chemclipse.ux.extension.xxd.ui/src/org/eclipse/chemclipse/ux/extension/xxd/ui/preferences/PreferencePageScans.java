@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -20,7 +20,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ScanIdentifierUI;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
-import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
@@ -74,10 +73,6 @@ public class PreferencePageScans extends FieldEditorPreferencePage implements IW
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new IntegerFieldEditor(PreferenceConstants.P_TRACES_VIRTUAL_TABLE, "Traces Virtual Table", PreferenceConstants.MIN_TRACES_VIRTUAL_TABLE, PreferenceConstants.MAX_TRACES_VIRTUAL_TABLE, getFieldEditorParent()));
-		//
-		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new DirectoryFieldEditor(PreferenceConstants.P_MOLECULE_PATH_EXPORT, "Molecule Path Export", getFieldEditorParent()));
-		addField(new IntegerFieldEditor(PreferenceConstants.P_LENGTH_MOLECULE_NAME_EXPORT, "Molecule Name Length", PreferenceConstants.MIN_LENGTH_NAME_EXPORT, PreferenceConstants.MAX_LENGTH_NAME_EXPORT, getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -26,7 +27,8 @@ import org.eclipse.chemclipse.swt.ui.services.ImageServiceInput;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMolecule;
+import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -60,6 +62,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
@@ -439,7 +442,26 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 	private void createSettingsButton(Composite parent) {
 
-		createSettingsButton(parent, Arrays.asList(PreferencePageScans.class), new ISettingsHandler() {
+		/*
+		 * Default page
+		 */
+		List<Class<? extends IPreferencePage>> preferencePages = new ArrayList<>();
+		preferencePages.add(PreferencePageMolecule.class);
+		/*
+		 * Additional pages.
+		 */
+		Object[] moleculeImageServices = Activator.getDefault().getMoleculeImageServices();
+		for(Object object : moleculeImageServices) {
+			if(object instanceof IMoleculeImageService) {
+				IMoleculeImageService moleculeImageService = (IMoleculeImageService)object;
+				Class<? extends IWorkbenchPreferencePage> preferencePage = moleculeImageService.getPreferencePage();
+				if(preferencePage != null) {
+					preferencePages.add(preferencePage);
+				}
+			}
+		}
+		//
+		createSettingsButton(parent, preferencePages, new ISettingsHandler() {
 
 			@Override
 			public void apply(Display display) {
