@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,10 +12,10 @@
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.model;
 
 public enum Threshold {
-	HIGH("High", "4"), //
-	MEDIUM("Medium", "3"), //
-	LOW("Low", "2"), //
-	OFF("Off", "1");
+	HIGH("High", "3"), //
+	MEDIUM("Medium", "2"), //
+	LOW("Low", "1"), //
+	OFF("Off", "0");
 
 	private String label = "";
 	private String value = "";
