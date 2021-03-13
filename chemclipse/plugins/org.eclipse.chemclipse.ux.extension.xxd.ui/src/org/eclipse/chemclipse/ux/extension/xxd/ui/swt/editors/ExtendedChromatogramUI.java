@@ -496,7 +496,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 
 		Shell shell = getChromatogramChart().getShell();
 		try {
-			ProcessorPreferences<C> settings = SettingsWizard.getSettings(shell, SettingsWizard.getWorkspacePreferences(processSupplier));
+			ProcessorPreferences<C> settings = SettingsWizard.getSettings(shell, SettingsWizard.getWorkspacePreferences(processSupplier), true);
 			if(settings == null) {
 				return;
 			}

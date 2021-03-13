@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -58,12 +58,12 @@ public class SettingsWizard extends Wizard {
 	 * @return <code>true</code> if user has confirmed, <code>false</code> otherwise
 	 * @throws IOException
 	 */
-	public static <T> boolean openEditPreferencesWizard(Shell shell, ProcessorPreferences<T> preferences) throws IOException {
+	public static <T> boolean openEditPreferencesWizard(Shell shell, ProcessorPreferences<T> preferences, boolean showProfileToolbar) throws IOException {
 
 		IProcessSupplier<T> processorSupplier = preferences.getSupplier();
 		SettingsWizard wizard = new SettingsWizard("Edit Processor Options");
 		//
-		SettingsPreferencesPage<T> page = new SettingsPreferencesPage<>(preferences);
+		SettingsPreferencesPage<T> page = new SettingsPreferencesPage<>(preferences, showProfileToolbar);
 		page.setTitle("Select the options for " + processorSupplier.getName());
 		page.setMessage(processorSupplier.getDescription());
 		wizard.addPage(page);
@@ -131,7 +131,7 @@ public class SettingsWizard extends Wizard {
 	 * @throws IOException
 	 *             if reading the settings failed
 	 */
-	public static <T> ProcessorPreferences<T> getSettings(Shell shell, ProcessorPreferences<T> preferences) throws IOException {
+	public static <T> ProcessorPreferences<T> getSettings(Shell shell, ProcessorPreferences<T> preferences, boolean showProfileToolbar) throws IOException {
 
 		IProcessSupplier<T> processSupplier = preferences.getSupplier();
 		Class<T> settingsClass = processSupplier.getSettingsClass();
@@ -140,7 +140,7 @@ public class SettingsWizard extends Wizard {
 		} else {
 			if(preferences.getDialogBehaviour() == DialogBehavior.SHOW) {
 				if(!processSupplier.getSettingsParser().getInputValues().isEmpty()) {
-					if(!openEditPreferencesWizard(shell, preferences)) {
+					if(!openEditPreferencesWizard(shell, preferences, showProfileToolbar)) {
 						return null;
 					}
 				}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -31,7 +31,6 @@ import org.eclipse.swt.graphics.Image;
 
 public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 
-	//
 	public static final String[] TITLES = {//
 			"", //
 			"Name", //
@@ -90,6 +89,7 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 	private BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>> preferencesSupplier;
 
 	public MethodListLabelProvider(ProcessSupplierContext processTypeSupport, BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>> preferencesSupplier) {
+
 		this.processTypeSupport = processTypeSupport;
 		this.preferencesSupplier = preferencesSupplier;
 	}
@@ -166,13 +166,16 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 		if(processEntry == null) {
 			return ValidationStatus.error("Entry is null");
 		}
+		//
 		ProcessorPreferences<?> preferences = processEntry.getPreferences(IProcessEntry.getContext(processEntry, processTypeSupport));
 		if(preferences == null) {
 			return ValidationStatus.error("Processor " + processEntry.getName() + " not avaiable");
 		}
+		//
 		if(preferences.getSupplier().getSettingsClass() == null) {
 			return ValidationStatus.warning("Processor " + processEntry.getName() + " has no settingsclass");
 		}
+		//
 		if(preferences.isUseSystemDefaults()) {
 			return ValidationStatus.info("Processor " + processEntry.getName() + " uses system default settings");
 		} else {

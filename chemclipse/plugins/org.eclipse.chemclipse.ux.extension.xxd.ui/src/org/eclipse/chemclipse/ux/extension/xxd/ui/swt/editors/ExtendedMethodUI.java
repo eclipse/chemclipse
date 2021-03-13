@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,120 +12,68 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
-import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.autoComplete;
-import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createColumn;
-import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createTreeTable;
-
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 
-import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.model.handler.IModificationHandler;
-import org.eclipse.chemclipse.model.methods.ListProcessEntryContainer;
-import org.eclipse.chemclipse.model.methods.ProcessEntry;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
+import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
-import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
-import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.MethodListLabelProvider;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.ProcessingWizard;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.MethodTreeViewer;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ProcessMethodHeader;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ProcessMethodProfiles;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ProcessMethodToolbar;
 import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePageChromatogramExport;
 import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePageReportExport;
-import org.eclipse.core.runtime.Adapters;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.fieldassist.ContentProposal;
-import org.eclipse.jface.fieldassist.IContentProposal;
-import org.eclipse.jface.fieldassist.IContentProposalProvider;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.DisposeEvent;
-import org.eclipse.swt.events.DisposeListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.swt.widgets.ToolBar;
-import org.eclipse.swt.widgets.ToolItem;
 
 public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 
 	private static final String IMAGE_HEADER = IApplicationImage.IMAGE_HEADER_DATA;
 	private static final String TOOLTIP_HEADER = "the header information.";
+	private static final String IMAGE_PROFILE = IApplicationImage.IMAGE_INSTRUMENT;
+	private static final String TOOLTIP_PROFILE = "the profile selection.";
+	//
+	private final ProcessSupplierContext processingSupport;
+	private final DataCategory[] dataCategories;
+	private final BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>> preferencesSupplier;
 	//
 	private AtomicReference<Composite> toolbarMain = new AtomicReference<>();
 	private Button buttonToolbarHeader;
-	private AtomicReference<Composite> toolbarHeader = new AtomicReference<>();
-	//
-	private Text textName;
-	private Text textCategory;
-	private Text textOperator;
-	private Text textDescription;
-	private ToolItem buttonAdd;
-	private ToolItem buttonCopy;
-	private ToolItem buttonRemove;
-	private ToolItem buttonMoveUp;
-	private ToolItem buttonMoveDown;
-	private ToolItem buttonModifySettings;
-	private StructuredViewer listUI;
+	private AtomicReference<ProcessMethodHeader> toolbarHeader = new AtomicReference<>();
+	private Button buttonToolbarProfile;
+	private AtomicReference<ProcessMethodProfiles> toolbarProfile = new AtomicReference<>();
+	private AtomicReference<ProcessMethodToolbar> toolbarButtons = new AtomicReference<>();
+	private AtomicReference<MethodTreeViewer> treeViewer = new AtomicReference<>();
 	//
 	private ProcessMethod processMethod;
 	private IModificationHandler modificationHandler;
-	private Composite buttons;
-	private final ProcessSupplierContext processingSupport;
-	private Button buttonFinalize;
 	private Collection<ProcessEntryContainer> postActions;
-	private final TreeViewerColumn[] columns = new TreeViewerColumn[MethodListLabelProvider.TITLES.length];
-	private final DataCategory[] dataCategories;
-	private final BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>> preferencesSupplier;
-	private final boolean readonly;
-	private String[] knownCategories;
+	//
+	private boolean readOnly = false;
 
 	public ExtendedMethodUI(Composite parent, int style, ProcessSupplierContext processingSupport, DataCategory[] dataCategories) {
 
@@ -136,7 +84,7 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 
 		super(parent, style);
 		//
-		this.readonly = (style & SWT.READ_ONLY) != 0;
+		this.readOnly = (style & SWT.READ_ONLY) != 0;
 		this.processingSupport = processingSupport;
 		this.preferencesSupplier = preferencesSupplier;
 		this.dataCategories = dataCategories;
@@ -153,20 +101,17 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 
 		this.postActions = postActions;
 		this.processMethod = new ProcessMethod(processMethod);
+		//
+		toolbarHeader.get().setInput(this.processMethod);
+		toolbarProfile.get().setInput(this.processMethod);
+		toolbarButtons.get().setInput(this.processMethod);
+		//
 		updateProcessMethod();
 	}
 
 	public IProcessMethod getProcessMethod() {
 
 		return processMethod;
-	}
-
-	public String getMethodName() {
-
-		if(!textName.isDisposed()) {
-			return textName.getText();
-		}
-		return "";
 	}
 
 	public void setModificationHandler(IModificationHandler modificationHandler) {
@@ -183,8 +128,9 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 		//
 		createToolbarMain(composite);
 		createToolbarHeader(composite);
-		createTable(composite);
-		buttons = createToolbarBottom(composite);
+		createToolbarProfile(composite);
+		createTreeViewer(composite);
+		createToolbarBottom(composite);
 		//
 		initialize();
 	}
@@ -192,12 +138,23 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 	private void initialize() {
 
 		enableToolbar(toolbarHeader, buttonToolbarHeader, IMAGE_HEADER, TOOLTIP_HEADER, false);
-		updateTableButtons();
+		enableToolbar(toolbarProfile, buttonToolbarProfile, IMAGE_PROFILE, TOOLTIP_PROFILE, true);
+		toolbarButtons.get().updateTableButtons();
 	}
 
 	public void setToolbarMainVisible(boolean visible) {
 
 		PartSupport.setCompositeVisibility(toolbarMain.get(), visible);
+	}
+
+	public void setToolbarProfileVisible(boolean visible) {
+
+		enableToolbar(toolbarProfile, buttonToolbarProfile, IMAGE_PROFILE, TOOLTIP_PROFILE, visible);
+	}
+
+	public void setToolbarProfileEnableEdit(boolean enabledEdit) {
+
+		toolbarProfile.get().setEnabledEdit(enabledEdit);
 	}
 
 	public void setToolbarHeaderVisible(boolean visible) {
@@ -211,9 +168,10 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(2, false));
+		composite.setLayout(new GridLayout(3, false));
 		//
 		buttonToolbarHeader = createButtonToggleToolbar(composite, toolbarHeader, IMAGE_HEADER, TOOLTIP_HEADER);
+		buttonToolbarProfile = createButtonToggleToolbar(composite, toolbarProfile, IMAGE_PROFILE, TOOLTIP_PROFILE);
 		createSettingsButton(composite);
 		//
 		toolbarMain.set(composite);
@@ -236,397 +194,82 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 		setDirty(true);
 	}
 
-	private Text createNameSection(Composite parent) {
-
-		Label label = new Label(parent, SWT.NONE);
-		label.setText("Name:");
-		//
-		Text text = new Text(parent, SWT.BORDER);
-		text.setText("");
-		text.setToolTipText("The name of this method that is used for display");
-		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		text.addModifyListener(new ModifyListener() {
-
-			@Override
-			public void modifyText(ModifyEvent e) {
-
-				if(processMethod != null) {
-					processMethod.setName(text.getText().trim());
-					setDirty(true);
-				}
-			}
-		});
-		//
-		return text;
-	}
-
-	private Text createCategorySection(Composite parent) {
-
-		Label label = new Label(parent, SWT.NONE);
-		label.setText("Category:");
-		//
-		Text text = new Text(parent, SWT.BORDER);
-		text.setText("");
-		text.setToolTipText("The category groups similar methods under a common name");
-		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		text.addModifyListener(new ModifyListener() {
-
-			@Override
-			public void modifyText(ModifyEvent e) {
-
-				if(processMethod != null) {
-					processMethod.setCategory(text.getText().trim());
-					setDirty(true);
-				}
-			}
-		});
-		autoComplete(text, new IContentProposalProvider() {
-
-			@Override
-			public IContentProposal[] getProposals(String contents, int position) {
-
-				List<ContentProposal> list = new ArrayList<>();
-				if(contents != null) {
-					String[] items = getItems();
-					for(String item : items) {
-						if(item.toLowerCase().contains(contents.toLowerCase())) {
-							list.add(new ContentProposal(item));
-						}
-					}
-				}
-				return list.toArray(new IContentProposal[0]);
-			}
-
-			private String[] getItems() {
-
-				if(knownCategories == null) {
-					Set<String> categories = new TreeSet<>();
-					processingSupport.visitSupplier(new Consumer<IProcessSupplier<?>>() {
-
-						@Override
-						public void accept(IProcessSupplier<?> supplier) {
-
-							String category = supplier.getCategory();
-							if(category != null && !category.isEmpty()) {
-								categories.add(category);
-							}
-						}
-					});
-					knownCategories = categories.toArray(new String[0]);
-				}
-				return knownCategories;
-			}
-		});
-		return text;
-	}
-
-	private Text createOperatorSection(Composite parent) {
-
-		Label label = new Label(parent, SWT.NONE);
-		label.setText("Operator:");
-		//
-		Text text = new Text(parent, SWT.BORDER);
-		text.setText("");
-		text.setToolTipText("The operator is the person who has created / currently manages this method");
-		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		text.addModifyListener(new ModifyListener() {
-
-			@Override
-			public void modifyText(ModifyEvent e) {
-
-				if(processMethod != null) {
-					processMethod.setOperator(text.getText().trim());
-					setDirty(true);
-				}
-			}
-		});
-		//
-		return text;
-	}
-
-	private Text createDescriptionSection(Composite parent) {
-
-		Label label = new Label(parent, SWT.NONE);
-		label.setText("Description:");
-		//
-		Text text = new Text(parent, SWT.BORDER);
-		text.setText("");
-		text.setToolTipText("Description");
-		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		text.addModifyListener(new ModifyListener() {
-
-			@Override
-			public void modifyText(ModifyEvent e) {
-
-				if(processMethod != null) {
-					processMethod.setDescription(text.getText().trim());
-					setDirty(true);
-				}
-			}
-		});
-		//
-		return text;
-	}
-
 	private void createToolbarHeader(Composite parent) {
 
-		Composite composite = new Composite(parent, SWT.NONE);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(2, false));
+		ProcessMethodHeader processMethodHeader = new ProcessMethodHeader(parent, SWT.NONE);
+		processMethodHeader.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		processMethodHeader.setModificationHandler(modificationHandler);
+		processMethodHeader.setProcessingSupport(processingSupport);
+		processMethodHeader.setUpdateListener(new IUpdateListener() {
+
+			@Override
+			public void update() {
+
+				updateProcessMethod();
+			}
+		});
 		//
-		textName = createNameSection(composite);
-		textOperator = createOperatorSection(composite);
-		textDescription = createDescriptionSection(composite);
-		textCategory = createCategorySection(composite);
-		buttonFinalize = createFinalize(composite);
+		toolbarHeader.set(processMethodHeader);
+	}
+
+	private void createToolbarProfile(Composite parent) {
+
+		ProcessMethodProfiles processMethodProfiles = new ProcessMethodProfiles(parent, SWT.NONE);
+		processMethodProfiles.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
-		toolbarHeader.set(composite);
-	}
-
-	private Button createFinalize(Composite parent) {
-
-		Label label = new Label(parent, SWT.NONE);
-		label.setText("Finalized:");
-		Button button = new Button(parent, SWT.CHECK);
-		button.addSelectionListener(new SelectionListener() {
+		processMethodProfiles.setUpdateListener(new IUpdateListener() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void update() {
 
-				if(MessageDialog.openConfirm(parent.getShell(), "Finalize Process Method", "Finalize a method prevents further modifications to this method, are you sure?")) {
-					updateProcessMethod();
-				} else {
-					button.setSelection(false);
-				}
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-
+				updateProcessMethod();
+				setDirty(true);
 			}
 		});
-		return button;
+		//
+		toolbarProfile.set(processMethodProfiles);
 	}
 
-	private void createTable(Composite parent) {
+	private void createTreeViewer(Composite parent) {
 
-		TreeViewer treeViewer = createTreeTable(parent, false);
-		for(int i = 0; i < MethodListLabelProvider.TITLES.length; i++) {
-			columns[i] = createColumn(treeViewer, MethodListLabelProvider.TITLES[i], MethodListLabelProvider.BOUNDS[i], null);
-		}
-		treeViewer.setLabelProvider(new MethodListLabelProvider(processingSupport, preferencesSupplier));
-		treeViewer.setContentProvider(new ITreeContentProvider() {
+		MethodTreeViewer methodTreeViewer = new MethodTreeViewer(parent, SWT.BORDER);
+		methodTreeViewer.createControl(processingSupport, preferencesSupplier, toolbarButtons, false);
+		methodTreeViewer.setUpdateListener(new IUpdateListener() {
 
 			@Override
-			public boolean hasChildren(Object element) {
+			public void update() {
 
-				if(element instanceof IProcessEntry) {
-					IProcessEntry entry = (IProcessEntry)element;
-					IProcessSupplier<?> supplier = processingSupport.getSupplier(entry.getProcessorId());
-					if(supplier instanceof ProcessEntryContainer) {
-						return ((ProcessEntryContainer)supplier).getNumberOfEntries() > 0;
-					}
-				}
-				if(element instanceof ProcessEntryContainer) {
-					return ((ProcessEntryContainer)element).getNumberOfEntries() > 0;
-				}
-				return false;
-			}
-
-			@Override
-			public Object getParent(Object element) {
-
-				if(element instanceof IProcessEntry) {
-					return ((IProcessEntry)element).getParent();
-				}
-				return null;
-			}
-
-			@Override
-			public Object[] getElements(Object inputElement) {
-
-				if(inputElement instanceof ProcessEntryContainer) {
-					ProcessEntryContainer container = (ProcessEntryContainer)inputElement;
-					return entryList(container, false);
-				}
-				if(inputElement instanceof Object[]) {
-					return (Object[])inputElement;
-				}
-				return new Object[0];
-			}
-
-			private Object[] entryList(Iterable<? extends IProcessEntry> iterable, boolean detatch) {
-
-				List<Object> list = new ArrayList<>();
-				if(detatch) {
-					iterable.forEach(new Consumer<IProcessEntry>() {
-
-						@Override
-						public void accept(IProcessEntry entry) {
-
-							list.add(new ProcessEntry(entry, null));
-						}
-					});
-				} else {
-					iterable.forEach(list::add);
-				}
-				return list.toArray();
-			}
-
-			@Override
-			public Object[] getChildren(Object parentElement) {
-
-				if(parentElement instanceof IProcessEntry) {
-					IProcessEntry entry = (IProcessEntry)parentElement;
-					IProcessSupplier<?> supplier = processingSupport.getSupplier(entry.getProcessorId());
-					if(supplier instanceof ProcessEntryContainer) {
-						return entryList((ProcessEntryContainer)supplier, true);
-					}
-				}
-				if(parentElement instanceof ProcessEntryContainer) {
-					return entryList((ProcessEntryContainer)parentElement, false);
-				}
-				return new Object[0];
+				updateProcessMethod();
+				setDirty(true);
 			}
 		});
-		treeViewer.getTree();
-		treeViewer.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
-		treeViewer.addSelectionChangedListener(event -> updateTableButtons());
-		treeViewer.addDoubleClickListener(new IDoubleClickListener() {
-
-			@Override
-			public void doubleClick(DoubleClickEvent event) {
-
-				if(preferencesSupplier == null) {
-					return;
-				}
-				Object firstElement = treeViewer.getStructuredSelection().getFirstElement();
-				if(firstElement instanceof IProcessEntry) {
-					IProcessEntry entry = (IProcessEntry)firstElement;
-					if(modifyProcessEntry(treeViewer.getControl().getShell(), entry, IProcessEntry.getContext(entry, processingSupport), true)) {
-						updateProcessMethod();
-					}
-				}
-			}
-		});
-		listUI = treeViewer;
+		//
+		treeViewer.set(methodTreeViewer);
 	}
 
-	private ToolBar createToolbarBottom(Composite parent) {
+	private void createToolbarBottom(Composite parent) {
 
-		ToolBar toolBar = new ToolBar(parent, SWT.FLAT);
+		ProcessMethodToolbar processMethodToolbar = new ProcessMethodToolbar(parent, SWT.FLAT);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
-		toolBar.setLayoutData(gridData);
-		buttonAdd = createAddButton(toolBar);
-		buttonRemove = createRemoveButton(toolBar);
-		buttonCopy = createCopyButton(toolBar);
-		buttonMoveUp = createMoveUpButton(toolBar);
-		buttonMoveDown = createMoveDownButton(toolBar);
-		buttonModifySettings = createModifySettingsButton(toolBar);
-		return toolBar;
-	}
-
-	private ToolItem createAddButton(ToolBar toolBar) {
-
-		final ToolItem item = new ToolItem(toolBar, SWT.DROP_DOWN);
-		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
-		item.setToolTipText("Add a process method.");
-		final Menu menu = new Menu(toolBar.getShell(), SWT.POP_UP);
-		toolBar.addDisposeListener(new DisposeListener() {
+		processMethodToolbar.setLayoutData(gridData);
+		//
+		processMethodToolbar.setStructuredViewer(treeViewer.get());
+		processMethodToolbar.setProcessingSupport(processingSupport);
+		processMethodToolbar.setPreferencesSupplier(preferencesSupplier);
+		processMethodToolbar.setDataCategories(dataCategories);
+		processMethodToolbar.setReadOnly(readOnly);
+		processMethodToolbar.setUpdateListener(new IUpdateListener() {
 
 			@Override
-			public void widgetDisposed(DisposeEvent e) {
+			public void update() {
 
-				menu.dispose();
+				updateProcessMethod();
+				setDirty(true);
 			}
 		});
-		item.addListener(SWT.Selection, event -> {
-			if(event.detail == SWT.ARROW) {
-				Rectangle rect = item.getBounds();
-				Point pt = new Point(rect.x, rect.y + rect.height);
-				pt = toolBar.toDisplay(pt);
-				for(MenuItem menuItem : menu.getItems()) {
-					menuItem.dispose();
-				}
-				Collection<IProcessMethod> userMethods = MethodConverter.getUserMethods();
-				for(IProcessMethod method : userMethods) {
-					MenuItem menuItem = new MenuItem(menu, SWT.NONE);
-					menuItem.setText(method.getName());
-					menuItem.addSelectionListener(new SelectionAdapter() {
-
-						@Override
-						public void widgetSelected(SelectionEvent e) {
-
-							loadMethodFile(method);
-						}
-					});
-				}
-				if(!userMethods.isEmpty()) {
-					new MenuItem(menu, SWT.SEPARATOR);
-				}
-				MenuItem loadItem = new MenuItem(menu, SWT.NONE);
-				loadItem.setText("Load from file...");
-				loadItem.addSelectionListener(new SelectionAdapter() {
-
-					@Override
-					public void widgetSelected(SelectionEvent e) {
-
-						FileDialog fileDialog = new FileDialog(toolBar.getShell(), SWT.OPEN);
-						fileDialog.setText("Select Process Method file");
-						fileDialog.setFileName(MethodConverter.DEFAULT_METHOD_FILE_NAME);
-						fileDialog.setFilterExtensions(MethodConverter.DEFAULT_METHOD_FILE_EXTENSIONS);
-						fileDialog.setFilterNames(MethodConverter.DEFAULT_METHOD_FILE_NAMES);
-						//
-						String filePath = fileDialog.open();
-						if(filePath != null) {
-							File file = new File(filePath);
-							loadMethodFile(Adapters.adapt(file, IProcessMethod.class));
-						}
-					}
-				});
-				menu.setLocation(pt.x, pt.y);
-				menu.setVisible(true);
-			} else {
-				if(processMethod != null) {
-					Map<ProcessSupplierContext, String> contextList = new LinkedHashMap<>();
-					Object element = listUI.getStructuredSelection().getFirstElement();
-					ProcessEntry selectedEntry = null;
-					if(element instanceof ProcessEntry) {
-						selectedEntry = (ProcessEntry)element;
-						String id = selectedEntry.getProcessorId();
-						IProcessSupplier<?> supplier = processingSupport.getSupplier(id);
-						if(supplier instanceof ProcessSupplierContext) {
-							contextList.put((ProcessSupplierContext)supplier, supplier.getName());
-						}
-					}
-					contextList.put(processingSupport, processMethod.getName());
-					Map<ProcessSupplierContext, IProcessEntry> map = ProcessingWizard.open(getShell(), contextList, dataCategories);
-					if(map != null) {
-						for(Entry<ProcessSupplierContext, IProcessEntry> entry : map.entrySet()) {
-							ProcessSupplierContext supplierContext = entry.getKey();
-							IProcessEntry editedEntry = entry.getValue();
-							boolean edit = modifyProcessEntry(getShell(), editedEntry, supplierContext, false);
-							if(!edit) {
-								continue;
-							}
-							IProcessEntry newEntry;
-							if(supplierContext == processingSupport) {
-								// add to global context
-								newEntry = processMethod.addProcessEntry(editedEntry);
-							} else {
-								// add to local context
-								newEntry = selectedEntry.addProcessEntry(editedEntry);
-							}
-							updateProcessMethod();
-							select(Collections.singletonList(newEntry));
-						}
-					}
-				}
-			}
-		});
-		return item;
+		//
+		toolbarButtons.set(processMethodToolbar);
 	}
 
 	public void loadMethodFile(IProcessMethod method) {
@@ -646,258 +289,53 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 		ArrayList<IProcessEntry> list = new ArrayList<>();
 		entries.forEach(list::add);
 		StructuredSelection structuredSelection = new StructuredSelection(list);
-		listUI.setSelection(structuredSelection);
+		treeViewer.get().setSelection(structuredSelection);
 		Object firstElement = structuredSelection.getFirstElement();
 		if(firstElement != null) {
-			listUI.reveal(firstElement);
+			treeViewer.get().reveal(firstElement);
 		}
-	}
-
-	private ToolItem createCopyButton(ToolBar toolBar) {
-
-		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
-		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_COPY, IApplicationImage.SIZE_16x16));
-		item.setToolTipText("Copy a process method.");
-		item.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				Iterator<?> selection = listUI.getStructuredSelection().iterator();
-				while(selection.hasNext()) {
-					Object object = selection.next();
-					ListProcessEntryContainer container = MethodSupport.getContainer(object);
-					if(container != null) {
-						List<IProcessEntry> entries = container.getEntries();
-						int index = entries.indexOf(object);
-						if(index > -1) {
-							IProcessEntry processEntry = entries.get(index);
-							IProcessEntry processEntryCopy = new ProcessEntry(processEntry, container);
-							entries.add(index, processEntryCopy);
-						}
-					}
-				}
-				updateProcessMethod();
-			}
-		});
-		//
-		return item;
-	}
-
-	private ToolItem createRemoveButton(ToolBar toolBar) {
-
-		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
-		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
-		item.setToolTipText("Remove the selected process method(s).");
-		item.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				if(MessageDialog.openQuestion(toolBar.getShell(), "Delete Process Method(s)", "Would you like to delete the selected processor(s)?")) {
-					for(Object object : listUI.getStructuredSelection().toArray()) {
-						ListProcessEntryContainer container = MethodSupport.getContainer(object);
-						if(container != null) {
-							container.removeProcessEntry((IProcessEntry)object);
-						}
-					}
-					updateProcessMethod();
-					select(Collections.emptyList());
-				}
-			}
-		});
-		return item;
-	}
-
-	private ToolItem createMoveUpButton(ToolBar toolBar) {
-
-		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
-		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_UP_2, IApplicationImage.SIZE_16x16));
-		item.setToolTipText("Move the process method(s) up.");
-		item.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				IStructuredSelection selection = listUI.getStructuredSelection();
-				Iterator<?> iterator = selection.iterator();
-				while(iterator.hasNext()) {
-					Object object = iterator.next();
-					ListProcessEntryContainer container = MethodSupport.getContainer(object);
-					if(container != null) {
-						List<IProcessEntry> entries = container.getEntries();
-						int index = entries.indexOf(object);
-						if(index > 0) {
-							Collections.swap(entries, index, index - 1);
-						}
-					}
-				}
-				updateProcessMethod();
-				listUI.setSelection(selection);
-			}
-		});
-		//
-		return item;
-	}
-
-	private ToolItem createMoveDownButton(ToolBar toolBar) {
-
-		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
-		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_DOWN_2, IApplicationImage.SIZE_16x16));
-		item.setToolTipText("Move the process method(s) down.");
-		item.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				IStructuredSelection selection = listUI.getStructuredSelection();
-				Iterator<?> iterator = selection.iterator();
-				while(iterator.hasNext()) {
-					Object object = iterator.next();
-					ListProcessEntryContainer container = MethodSupport.getContainer(object);
-					if(container != null) {
-						List<IProcessEntry> entries = container.getEntries();
-						int index = entries.indexOf(object);
-						if(index > -1 && index < entries.size() - 1) {
-							Collections.swap(entries, index, index + 1);
-						}
-					}
-				}
-				updateProcessMethod();
-				listUI.setSelection(selection);
-			}
-		});
-		//
-		return item;
-	}
-
-	private ToolItem createModifySettingsButton(ToolBar toolBar) {
-
-		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
-		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-		item.setToolTipText("Modify the process method settings.");
-		item.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				if(processMethod != null) {
-					Object object = listUI.getStructuredSelection().getFirstElement();
-					if(object instanceof IProcessEntry) {
-						IProcessEntry processEntry = (IProcessEntry)object;
-						modifyProcessEntry(toolBar.getShell(), processEntry, IProcessEntry.getContext(processEntry, processingSupport), true);
-						updateProcessMethod();
-					}
-				}
-			}
-		});
-		//
-		return item;
 	}
 
 	private void updateProcessMethod() {
 
-		if(processMethod != null) {
-			textOperator.setText(processMethod.getOperator());
-			textDescription.setText(processMethod.getDescription());
-			textCategory.setText(processMethod.getCategory());
-			textName.setText(processMethod.getName());
-			boolean readOnly = buttonFinalize.getSelection();
-			if(readOnly) {
-				processMethod.setReadOnly(readOnly);
-				textOperator.setEnabled(false);
-				textDescription.setEnabled(false);
-				textCategory.setEnabled(false);
-				textName.setEnabled(false);
-				buttonFinalize.setEnabled(false);
-			}
-		} else {
-			textOperator.setText("");
-			textDescription.setText("");
-			textCategory.setText("");
-			textName.setText("");
-		}
-		//
+		StructuredViewer structuredViewer = treeViewer.get();
+		/*
+		 * Update the process method list.
+		 */
 		boolean expand = false;
 		if(postActions == null || postActions.isEmpty()) {
-			listUI.setInput(processMethod);
+			structuredViewer.setInput(processMethod);
 		} else {
 			ArrayList<Object> list = new ArrayList<>();
 			list.add(processMethod);
 			list.addAll(postActions);
-			listUI.setInput(list.toArray());
+			structuredViewer.setInput(list.toArray());
 			expand = true;
 		}
 		//
-		listUI.refresh();
-		if(listUI instanceof TreeViewer) {
+		structuredViewer.refresh();
+		if(structuredViewer instanceof TreeViewer) {
 			if(expand) {
-				((TreeViewer)listUI).expandToLevel(1);
+				((TreeViewer)structuredViewer).expandToLevel(1);
 			}
 		}
 		//
-		updateTableButtons();
+		toolbarButtons.get().updateTableButtons();
 		setDirty(true);
-	}
-
-	private void updateTableButtons() {
-
-		buttonAdd.setEnabled(processMethod != null && !processMethod.isFinal() && !readonly);
-		//
-		IStructuredSelection selection = listUI.getStructuredSelection();
-		boolean writeable = processMethod != null && !processMethod.isFinal() && !selection.isEmpty();
-		Iterator<?> iterator = selection.iterator();
-		while(iterator.hasNext() && writeable) {
-			Object object = iterator.next();
-			ListProcessEntryContainer container = MethodSupport.getContainer(object);
-			if(container == null) {
-				writeable = false;
-			}
-		}
-		//
-		buttonCopy.setEnabled(writeable && !readonly);
-		buttonRemove.setEnabled(writeable && !readonly);
-		buttonMoveUp.setEnabled(writeable && !readonly);
-		buttonMoveDown.setEnabled(writeable && !readonly);
-		buttonModifySettings.setEnabled(writeable && preferencesSupplier != null);
 	}
 
 	@Override
 	public void setEnabled(boolean enabled) {
 
 		super.setEnabled(enabled);
-		listUI.getControl().setEnabled(enabled);
-		PartSupport.setCompositeVisibility(buttons, enabled);
+		treeViewer.get().getControl().setEnabled(enabled);
+		PartSupport.setCompositeVisibility(toolbarButtons.get(), enabled);
 	}
 
 	private void setDirty(boolean dirty) {
 
 		if(modificationHandler != null) {
 			modificationHandler.setDirty(dirty);
-		}
-	}
-
-	private boolean modifyProcessEntry(Shell shell, IProcessEntry processEntry, ProcessSupplierContext supplierContext, boolean showHint) {
-
-		ProcessorPreferences<?> preferences = preferencesSupplier.apply(processEntry, supplierContext);
-		if(preferences == null) {
-			return false;
-		}
-		//
-		if(preferences.getSupplier().getSettingsParser().getInputValues().isEmpty()) {
-			if(showHint) {
-				MessageDialog.openInformation(shell, "Settings", "This processor does not offer any options.");
-			}
-			/*
-			 * OK
-			 */
-			return true;
-		}
-		//
-		try {
-			return SettingsWizard.openEditPreferencesWizard(shell, preferences);
-		} catch(IOException e) {
-			return false;
 		}
 	}
 }

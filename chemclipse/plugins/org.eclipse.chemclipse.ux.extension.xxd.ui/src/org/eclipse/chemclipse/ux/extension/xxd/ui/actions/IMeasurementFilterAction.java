@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - enable profiles
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.actions;
 
@@ -58,7 +59,7 @@ public class IMeasurementFilterAction extends AbstractFilterAction<IMeasurementF
 			IProcessSupplier<?> processSupplier = processTypeSupport.getSupplier(IMeasurementFilterProcessTypeSupplier.getID(filter));
 			if(processSupplier != null) {
 				try {
-					ProcessorPreferences<?> preferences = SettingsWizard.getSettings(shell, SettingsWizard.getWorkspacePreferences(processSupplier));
+					ProcessorPreferences<?> preferences = SettingsWizard.getSettings(shell, SettingsWizard.getWorkspacePreferences(processSupplier), true);
 					if(preferences == null) {
 						// user canceled
 						return;

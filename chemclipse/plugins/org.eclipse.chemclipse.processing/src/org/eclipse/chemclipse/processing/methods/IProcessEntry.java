@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.methods;
 
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.chemclipse.processing.DataCategory;
@@ -42,10 +43,45 @@ public interface IProcessEntry extends ProcessEntryContainer {
 	String getDescription();
 
 	/**
+	 * Returns the active profile.
+	 * 
+	 * @return String
+	 */
+	String getActiveProfile();
+
+	/**
+	 * Set the active profile.
+	 * 
+	 * @param activeProfile
+	 */
+	void setActiveProfile(String activeProfile);
+
+	/**
+	 * Deletes the profile.
+	 * 
+	 * @param profile
+	 */
+	void deleteProfile(String profile);
+
+	/**
 	 * 
 	 * @return the current settings of the {@link IProcessEntry} might be <code>null</code>
 	 */
 	String getSettings();
+
+	/**
+	 * 
+	 * @return the current settings of the {@link IProcessEntry} might be <code>null</code>
+	 */
+	String getSettings(String profile);
+
+	/**
+	 * The settings map contains the default "" and instrument specific settings.
+	 * Returns an unmodifiable map.
+	 * 
+	 * @return {@link Map}
+	 */
+	Map<String, String> getSettingsMap();
 
 	/**
 	 * 
@@ -61,6 +97,14 @@ public interface IProcessEntry extends ProcessEntryContainer {
 	 *             if the entry is readonly
 	 */
 	void setSettings(String settings) throws IllegalArgumentException;
+
+	/**
+	 * Copy the settings from the given profile.
+	 * 
+	 * @param profile
+	 * @throws IllegalArgumentException
+	 */
+	void copySettings(String profile) throws IllegalArgumentException;
 
 	boolean isReadOnly();
 
@@ -92,32 +136,45 @@ public interface IProcessEntry extends ProcessEntryContainer {
 		if(other == null) {
 			return false;
 		}
+		//
 		if(other == this) {
 			return true;
 		}
+		//
 		if(isReadOnly() != other.isReadOnly()) {
 			return false;
 		}
+		//
 		if(!getName().equals(other.getName())) {
 			return false;
 		}
+		//
 		if(!getDescription().equals(other.getDescription())) {
 			return false;
 		}
-		String settings = getSettings();
-		if(settings == null) {
-			settings = "";
+		//
+		Map<String, String> settingsMap = getSettingsMap();
+		for(Map.Entry<String, String> entry : settingsMap.entrySet()) {
+			//
+			String settings = entry.getValue();
+			if(settings == null) {
+				settings = "";
+			}
+			//
+			String otherSettings = other.getSettings(entry.getKey());
+			if(otherSettings == null) {
+				otherSettings = "";
+			}
+			//
+			if(!otherSettings.equals(settings)) {
+				return false;
+			}
 		}
-		String otherSettings = other.getSettings();
-		if(otherSettings == null) {
-			otherSettings = "";
-		}
-		if(!otherSettings.equals(settings)) {
-			return false;
-		}
+		//
 		if(!getProcessorId().equals(other.getProcessorId())) {
 			return false;
 		}
+		//
 		return entriesEquals(other);
 	}
 

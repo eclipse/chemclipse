@@ -14,7 +14,10 @@ package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.versions;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 
 public enum MethodVersion implements IFormatVersion {
-	V_0001(IFormat.METHOD_VERSION_0001, "Lawrence");
+	V_0001(IFormat.METHOD_VERSION_0001, "Lawrence v1"), //
+	V_0002(IFormat.METHOD_VERSION_0002, "Lawrence v2"), //
+	V_0003(IFormat.METHOD_VERSION_0003, "Lawrence v3"), //
+	V_1400(IFormat.METHOD_VERSION_1400, "Lawrence v4");
 
 	private String version = "";
 	private String release = "";

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - next version
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods;
 
@@ -15,6 +16,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.LinkedHashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.chemclipse.model.methods.ProcessEntry;
@@ -27,10 +29,11 @@ import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class MethodFormat_0003 extends ObjectStreamMethodFormat {
+public class MethodReaderWriter_1004 extends ObjectStreamMethodFormat {
 
-	public MethodFormat_0003() {
-		super(IFormat.METHOD_VERSION_0003);
+	public MethodReaderWriter_1004() {
+
+		super(IFormat.METHOD_VERSION_1400);
 	}
 
 	@Override
@@ -42,6 +45,7 @@ public class MethodFormat_0003 extends ObjectStreamMethodFormat {
 		writeString(processMethod.getDescription(), stream);
 		writeString(processMethod.getCategory(), stream);
 		writeString(processMethod.getOperator(), stream);
+		writeMethodProfiles(processMethod, stream);
 		writeMap(processMethod.getMetaData(), stream, ObjectStreamMethodFormat::writeString, ObjectStreamMethodFormat::writeString);
 		writeIterable(processMethod, stream, this::writeProcessEntry);
 		stream.writeBoolean(processMethod.isFinal());
@@ -58,9 +62,11 @@ public class MethodFormat_0003 extends ObjectStreamMethodFormat {
 		processMethod.setDescription(readString(stream));
 		processMethod.setCategory(readString(stream));
 		processMethod.setOperator(readString(stream));
+		readMethodProfiles(processMethod, stream);
 		readMap(stream, ObjectStreamMethodFormat::readString, ObjectStreamMethodFormat::readString, processMethod.getMetaData()::put);
 		readItems(stream, processEntryDeserialization(processMethod), processMethod.getEntries()::add);
 		processMethod.setReadOnly(stream.readBoolean());
+		//
 		return processMethod;
 	}
 
@@ -69,7 +75,7 @@ public class MethodFormat_0003 extends ObjectStreamMethodFormat {
 		writeString(entry.getProcessorId(), stream);
 		writeString(entry.getName(), stream);
 		writeString(entry.getDescription(), stream);
-		writeString(entry.getSettings(), stream);
+		writeProcessSettings(entry, stream);
 		writeIterable(entry.getDataCategories(), stream, ObjectStreamMethodFormat::writeEnum);
 		// write child entries if there are any...
 		ProcessEntryContainer container;
@@ -89,11 +95,53 @@ public class MethodFormat_0003 extends ObjectStreamMethodFormat {
 			processEntry.setProcessorId(readString(stream));
 			processEntry.setName(readString(stream));
 			processEntry.setDescription(readString(stream));
-			processEntry.setSettings(readString(stream));
+			readProcessSettings(processEntry, stream);
 			readItems(stream, enumDeserialization(DataCategory.class, DataCategory.AUTO_DETECT), processEntry::addDataCategory);
 			readItems(stream, processEntryDeserialization(processEntry), processEntry.getEntries()::add);
 			processEntry.setReadOnly(stream.readBoolean());
 			return processEntry;
 		};
+	}
+
+	private void writeMethodProfiles(IProcessMethod processMethod, ObjectOutputStream stream) throws IOException {
+
+		Set<String> profiles = processMethod.getProfiles();
+		stream.writeInt(profiles.size());
+		for(String profile : profiles) {
+			writeString(profile, stream);
+		}
+		writeString(processMethod.getActiveProfile(), stream);
+	}
+
+	private void readMethodProfiles(ProcessMethod processMethod, ObjectInputStream stream) throws IOException, ClassNotFoundException {
+
+		int size = stream.readInt();
+		for(int i = 0; i < size; i++) {
+			processMethod.addProfile(readString(stream));
+		}
+		processMethod.setActiveProfile(readString(stream));
+	}
+
+	private void writeProcessSettings(IProcessEntry entry, ObjectOutputStream stream) throws IOException {
+
+		Map<String, String> settingsMap = entry.getSettingsMap();
+		stream.writeInt(settingsMap.size());
+		for(Map.Entry<String, String> settingsEntry : settingsMap.entrySet()) {
+			writeString(settingsEntry.getKey(), stream);
+			writeString(settingsEntry.getValue(), stream);
+		}
+		writeString(entry.getActiveProfile(), stream);
+	}
+
+	private void readProcessSettings(ProcessEntry processEntry, ObjectInputStream stream) throws IOException, ClassNotFoundException {
+
+		int size = stream.readInt();
+		for(int i = 0; i < size; i++) {
+			String profile = readString(stream);
+			String settings = readString(stream);
+			processEntry.setActiveProfile(profile);
+			processEntry.setSettings(settings);
+		}
+		processEntry.setActiveProfile(readString(stream));
 	}
 }

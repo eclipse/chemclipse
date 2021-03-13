@@ -1,11 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- * 
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
@@ -45,11 +44,13 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 	//
 	private String jsonSettings;
 	private final ProcessorPreferences<T> preferences;
+	private final boolean showProfileToolbar;
 
-	public SettingsPreferencesPage(ProcessorPreferences<T> preferences) {
+	public SettingsPreferencesPage(ProcessorPreferences<T> preferences, boolean showProfileToolbar) {
 
 		super(SettingsPreferencesPage.class.getName());
 		this.preferences = preferences;
+		this.showProfileToolbar = showProfileToolbar;
 	}
 
 	@Override
@@ -144,7 +145,7 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 		SettingsUI<?> settingsUI = null;
 		//
 		try {
-			settingsUI = new SettingsUI<>(parent, preferences);
+			settingsUI = new SettingsUI<>(parent, preferences, showProfileToolbar);
 			settingsUI.setLayoutData(new GridData(GridData.FILL_BOTH));
 		} catch(IOException e1) {
 			throw new RuntimeException("Reading the settings failed.", e1);

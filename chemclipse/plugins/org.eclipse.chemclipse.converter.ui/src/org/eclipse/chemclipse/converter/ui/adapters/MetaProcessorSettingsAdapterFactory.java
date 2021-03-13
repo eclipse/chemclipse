@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved.
  * 
@@ -41,7 +41,7 @@ public class MetaProcessorSettingsAdapterFactory implements IAdapterFactory, Set
 		private ProcessorPreferences<MetaProcessorSettings> preferences;
 		private List<Listener> listeners = new ArrayList<>();
 
-		public SettingsUIControlImplementation(Composite parent, ProcessorPreferences<MetaProcessorSettings> preferences) throws IOException {
+		public SettingsUIControlImplementation(Composite parent, ProcessorPreferences<MetaProcessorSettings> preferences, boolean showProfileToolbar) throws IOException {
 
 			this.preferences = preferences;
 			settings = preferences.getSettings();
@@ -53,8 +53,12 @@ public class MetaProcessorSettingsAdapterFactory implements IAdapterFactory, Set
 					return settings.getProcessorPreferences(entry, entry.getPreferences(context));
 				}
 			}, settings.getMethod().getDataCategories().toArray(new DataCategory[0]));
-			//
+			/*
+			 * Modify the method UI.
+			 */
 			extendedMethodUI.setToolbarMainVisible(false);
+			extendedMethodUI.setToolbarProfileVisible(showProfileToolbar);
+			extendedMethodUI.setToolbarProfileEnableEdit(false);
 			extendedMethodUI.setInputs(settings.getMethod(), null);
 			extendedMethodUI.setModificationHandler(this);
 		}
@@ -74,8 +78,7 @@ public class MetaProcessorSettingsAdapterFactory implements IAdapterFactory, Set
 		@Override
 		public String getSettings() throws IOException {
 
-			String string = preferences.getSerialization().toString(settings);
-			return string;
+			return preferences.getSerialization().toString(settings);
 		}
 
 		@Override
@@ -121,8 +124,8 @@ public class MetaProcessorSettingsAdapterFactory implements IAdapterFactory, Set
 	}
 
 	@Override
-	public SettingsUIControl createUI(Composite parent, ProcessorPreferences<MetaProcessorSettings> preferences) throws IOException {
+	public SettingsUIControl createUI(Composite parent, ProcessorPreferences<MetaProcessorSettings> preferences, boolean showProfileToolbar) throws IOException {
 
-		return new SettingsUIControlImplementation(parent, preferences);
+		return new SettingsUIControlImplementation(parent, preferences, showProfileToolbar);
 	}
 }

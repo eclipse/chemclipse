@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2020 Lablicate GmbH.
+ * Copyright (c) 2010, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -238,6 +238,7 @@ public class JobReader {
 			processEntry.setName(name);
 			processEntry.setDescription(description);
 			processEntry.setSettings(jsonSettings);
+			processEntry.setActiveProfile(method.getActiveProfile());
 			method.getEntries().add(processEntry);
 		}
 		/*

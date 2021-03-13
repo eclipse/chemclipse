@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,14 +8,17 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - support instruments
  *******************************************************************************/
 package org.eclipse.chemclipse.model.methods;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
@@ -25,18 +28,35 @@ public class ListProcessEntryContainer implements ProcessEntryContainer {
 
 	private final List<IProcessEntry> entries = new ArrayList<>();
 	private final List<IProcessEntry> view = Collections.unmodifiableList(entries);
+	//
 	private boolean readOnly;
 	private String description;
 	private String name;
+	//
+	/*
+	 * The default instrument is used for backward compatibility purposes.
+	 */
+	private final Set<String> profiles = new HashSet<>();
+	private String activeProfile = DEFAULT_PROFILE;
 
 	public ListProcessEntryContainer() {
+
 		this(null);
+		addDefaultProfile();
 	}
 
 	public ListProcessEntryContainer(ProcessEntryContainer other) {
+
 		if(other != null) {
+			profiles.addAll(other.getProfiles());
+			activeProfile = other.getActiveProfile();
 			other.forEach(this::addProcessEntry);
 		}
+		/*
+		 * Add the default profile to be sure, that at least
+		 * the "" profile is set for legacy purposes.
+		 */
+		addDefaultProfile();
 	}
 
 	@Override
@@ -103,10 +123,12 @@ public class ListProcessEntryContainer implements ProcessEntryContainer {
 				try {
 					entry.setSettings(entry.getPreferences(supplier).getSerialization().toString(settings));
 				} catch(IOException e) {
-					throw new RuntimeException("creation of setings failed", e);
+					throw new RuntimeException("The creation of settings failed", e);
 				}
 			}
 		}
+		//
+		entry.setActiveProfile(getActiveProfile());
 		getEntries().add(entry);
 		return entry;
 	}
@@ -128,6 +150,7 @@ public class ListProcessEntryContainer implements ProcessEntryContainer {
 	public IProcessEntry addProcessEntry(IProcessEntry processEntry) {
 
 		ProcessEntry newEntry = new ProcessEntry(processEntry, this);
+		newEntry.setActiveProfile(getActiveProfile());
 		getEntries().add(newEntry);
 		return newEntry;
 	}
@@ -145,5 +168,53 @@ public class ListProcessEntryContainer implements ProcessEntryContainer {
 	public void setReadOnly(boolean readOnly) {
 
 		this.readOnly = readOnly;
+	}
+
+	@Override
+	public String getActiveProfile() {
+
+		return activeProfile;
+	}
+
+	@Override
+	public void setActiveProfile(String activeProfile) {
+
+		this.activeProfile = (activeProfile == null) ? DEFAULT_PROFILE : activeProfile;
+		this.profiles.add(this.activeProfile);
+		//
+		for(IProcessEntry processEntry : getEntries()) {
+			processEntry.setActiveProfile(this.activeProfile);
+		}
+	}
+
+	@Override
+	public void addProfile(String profile) {
+
+		if(profile != null) {
+			profiles.add(profile);
+		}
+	}
+
+	@Override
+	public void deleteProfile(String profile) {
+
+		if(profile != null && !DEFAULT_PROFILE.equals(profile)) {
+			profiles.remove(profile);
+			for(IProcessEntry processEntry : getEntries()) {
+				processEntry.deleteProfile(profile);
+			}
+			setActiveProfile(DEFAULT_PROFILE);
+		}
+	}
+
+	@Override
+	public Set<String> getProfiles() {
+
+		return Collections.unmodifiableSet(profiles);
+	}
+
+	private void addDefaultProfile() {
+
+		this.profiles.add(DEFAULT_PROFILE);
 	}
 }

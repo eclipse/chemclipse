@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,6 +14,8 @@ package org.eclipse.chemclipse.model.methods;
 
 import java.util.Collections;
 import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.chemclipse.processing.DataCategory;
@@ -22,25 +24,35 @@ import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 
 public final class ProcessEntry extends ListProcessEntryContainer implements IProcessEntry {
 
-	private String processorId;
-	private String jsonSettings;
 	private final ProcessEntryContainer parent;
 	private final EnumSet<DataCategory> categories = EnumSet.noneOf(DataCategory.class);
+	private final Map<String, String> jsonSettingsMap = new HashMap<>();
+	//
+	private String processorId;
+	private String activeProfile = DEFAULT_PROFILE;
 
 	public ProcessEntry(ProcessEntryContainer parent) {
+
 		this(null, parent);
 	}
 
 	public ProcessEntry(IProcessEntry other, ProcessEntryContainer newParent) {
+
 		super(other);
 		parent = newParent;
 		if(other != null) {
+			/*
+			 * Transfer the items.
+			 */
 			processorId = other.getProcessorId();
 			setName(other.getName());
 			setDescription(other.getDescription());
-			jsonSettings = other.getSettings();
+			jsonSettingsMap.clear();
+			jsonSettingsMap.putAll(other.getSettingsMap());
 			categories.addAll(other.getDataCategories());
-			// read-only must be set at the end!
+			/*
+			 * read-only must be set at the end!
+			 */
 			setReadOnly(other.isReadOnly());
 		}
 	}
@@ -60,18 +72,59 @@ public final class ProcessEntry extends ListProcessEntryContainer implements IPr
 	}
 
 	@Override
+	public String getActiveProfile() {
+
+		return activeProfile;
+	}
+
+	@Override
+	public void setActiveProfile(String activeProfile) {
+
+		this.activeProfile = (activeProfile == null) ? DEFAULT_PROFILE : activeProfile;
+	}
+
+	@Override
+	public void deleteProfile(String profile) {
+
+		if(profile != null && !DEFAULT_PROFILE.equals(profile)) {
+			jsonSettingsMap.remove(profile);
+			setActiveProfile(DEFAULT_PROFILE);
+		}
+	}
+
+	@Override
 	public String getSettings() {
 
-		if(jsonSettings == null) {
-			return "";
-		}
-		return jsonSettings;
+		return jsonSettingsMap.getOrDefault(activeProfile, "");
+	}
+
+	@Override
+	public String getSettings(String profile) {
+
+		return jsonSettingsMap.getOrDefault(profile, "");
+	}
+
+	@Override
+	public Map<String, String> getSettingsMap() {
+
+		return Collections.unmodifiableMap(jsonSettingsMap);
 	}
 
 	@Override
 	public void setSettings(String jsonSettings) {
 
-		this.jsonSettings = jsonSettings;
+		jsonSettingsMap.put(activeProfile, jsonSettings);
+	}
+
+	@Override
+	public void copySettings(String profile) {
+
+		if(profile != null && !profile.isEmpty()) {
+			String jsonSettings = jsonSettingsMap.get(profile);
+			if(jsonSettings != null) {
+				jsonSettingsMap.put(activeProfile, jsonSettings);
+			}
+		}
 	}
 
 	@Override
@@ -90,9 +143,14 @@ public final class ProcessEntry extends ListProcessEntryContainer implements IPr
 		builder.append(getName());
 		builder.append(", description=");
 		builder.append(getDescription());
-		builder.append(", jsonSettings=");
-		builder.append(jsonSettings);
-		builder.append(", parent=");
+		builder.append(", jsonSettingsMap=");
+		for(Map.Entry<String, String> entry : jsonSettingsMap.entrySet()) {
+			builder.append(entry.getKey());
+			builder.append("=");
+			builder.append(entry.getValue());
+			builder.append(",");
+		}
+		builder.append("parent=");
 		builder.append(parent);
 		builder.append("]");
 		return builder.toString();

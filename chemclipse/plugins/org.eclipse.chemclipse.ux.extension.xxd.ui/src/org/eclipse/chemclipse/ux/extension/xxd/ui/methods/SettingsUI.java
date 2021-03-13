@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - enable profiles
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
@@ -42,10 +43,11 @@ public class SettingsUI<T> extends Composite {
 
 	private final SettingsUIControl control;
 
-	public SettingsUI(Composite parent, ProcessorPreferences<T> preferences) throws IOException {
+	public SettingsUI(Composite parent, ProcessorPreferences<T> preferences, boolean showProfileToolbar) throws IOException {
+
 		super(parent, SWT.NONE);
 		setLayout(new FillLayout());
-		control = loadSettingsUIProvider(preferences).createUI(this, preferences);
+		control = loadSettingsUIProvider(preferences).createUI(this, preferences, showProfileToolbar);
 	}
 
 	@Override
@@ -87,9 +89,9 @@ public class SettingsUI<T> extends Composite {
 	private static final class DefaultSettingsUIProvider<T> implements SettingsUIProvider<T> {
 
 		@Override
-		public SettingsUIControl createUI(Composite parent, ProcessorPreferences<T> preferences) throws IOException {
+		public SettingsUIControl createUI(Composite parent, ProcessorPreferences<T> preferences, boolean showProfileToolbar) throws IOException {
 
-			return new SettingsUIControlImplementation<T>(parent, preferences);
+			return new SettingsUIControlImplementation<T>(parent, preferences, showProfileToolbar);
 		}
 	}
 
@@ -100,7 +102,8 @@ public class SettingsUI<T> extends Composite {
 		private final ProcessorPreferences<T> preferences;
 		private final Composite container;
 
-		public SettingsUIControlImplementation(Composite parent, ProcessorPreferences<T> preferences) throws IOException {
+		public SettingsUIControlImplementation(Composite parent, ProcessorPreferences<T> preferences, boolean showProfileToolbar) throws IOException {
+
 			container = createContainer(parent);
 			this.preferences = preferences;
 			container.setLayout(new GridLayout(2, false));

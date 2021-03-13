@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - enable profiles
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.methods;
 
@@ -26,6 +27,10 @@ import org.eclipse.chemclipse.support.settings.SystemSettingsStrategy;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/*
+ * TODO
+ * Adjust this settings to support profiles.
+ */
 @SystemSettings(SystemSettingsStrategy.NEW_INSTANCE)
 public class MetaProcessorSettings {
 
@@ -37,7 +42,9 @@ public class MetaProcessorSettings {
 	private final IProcessMethod method;
 
 	public MetaProcessorSettings(MetaProcessorProcessSupplier processSupplier) {
-		this.method = processSupplier.getMethod();
+
+		IProcessMethod processMethod = processSupplier.getMethod();
+		this.method = processMethod;
 	}
 
 	private Map<String, String> getSettingsMap() {

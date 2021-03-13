@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -33,9 +33,9 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 	private final Set<DataCategory> catgories;
 	//
 	private String UUID = java.util.UUID.randomUUID().toString();
-	private String operator;
-	private String category;
-	private File sourceFile;
+	private String operator = "";
+	private String category = "";
+	private File sourceFile = null;
 
 	public ProcessMethod(Set<DataCategory> categories) {
 
@@ -51,6 +51,9 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 
 		super(other);
 		if(other != null) {
+			/*
+			 * Settings
+			 */
 			this.operator = other.getOperator();
 			setDescription(other.getDescription());
 			this.category = other.getCategory();
@@ -59,8 +62,10 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 				this.sourceFile = ((ProcessMethod)other).sourceFile;
 			}
 			metadata.putAll(other.getMetaData());
-			this.catgories = Collections.unmodifiableSet(new HashSet<>(other.getDataCategories()));
-			// read-only must be set at the end!
+			catgories = Collections.unmodifiableSet(new HashSet<>(other.getDataCategories()));
+			/*
+			 * read-only must be set at the end!
+			 */
 			setReadOnly(other.isFinal());
 		} else {
 			this.catgories = Collections.emptySet();

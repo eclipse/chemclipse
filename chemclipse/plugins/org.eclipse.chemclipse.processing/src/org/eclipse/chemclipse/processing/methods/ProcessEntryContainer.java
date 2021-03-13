@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,10 +8,12 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - support instruments
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.methods;
 
 import java.util.Iterator;
+import java.util.Set;
 import java.util.function.BiFunction;
 
 import org.eclipse.chemclipse.processing.methods.SubProcessExecutionConsumer.SubProcess;
@@ -27,10 +29,41 @@ import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 public interface ProcessEntryContainer extends Iterable<IProcessEntry> {
 
 	/**
+	 * Empty string "" is used for backward compatibility.
+	 * Don't change this.
+	 */
+	String DEFAULT_PROFILE = "Default Profile";
+
+	/**
 	 * 
 	 * @return an informative name describing the container
 	 */
 	String getName();
+
+	/**
+	 * Returns the active profile.
+	 * 
+	 * @return String
+	 */
+	String getActiveProfile();
+
+	/**
+	 * Sets the active profile.
+	 * 
+	 * @param activeProfile
+	 */
+	void setActiveProfile(String activeProfile);
+
+	void addProfile(String profile);
+
+	void deleteProfile(String profile);
+
+	/**
+	 * Returns the unmodifiable set of profiles.
+	 * 
+	 * @return Set<String>
+	 */
+	Set<String> getProfiles();
 
 	/**
 	 * return an informative description of this container

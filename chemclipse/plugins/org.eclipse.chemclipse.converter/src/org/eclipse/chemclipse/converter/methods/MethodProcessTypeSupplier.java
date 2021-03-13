@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - add profile support
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.methods;
 
@@ -18,6 +19,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Enumeration;
 import java.util.HashSet;
@@ -56,6 +58,7 @@ import org.osgi.util.tracker.BundleTrackerCustomizer;
 public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTrackerCustomizer<Collection<IProcessSupplier<?>>> {
 
 	private static final Logger logger = Logger.getLogger(MethodProcessTypeSupplier.class);
+	private static final String SKIP_MESSAGE = "SKIP CHECK: Is this method used?";
 	//
 	private static final String PROCESSORS_ENTRY_PATH = "/OSGI-INF/processors/";
 	private BundleTracker<Collection<IProcessSupplier<?>>> bundleTracker;
@@ -158,6 +161,38 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 
 			ProcessExecutionConsumer<?> consumer = context.getContextObject(ProcessExecutionConsumer.class);
 			ProcessEntryContainer.applyProcessEntries(method, context, consumer);
+		}
+
+		@Override
+		public String getActiveProfile() {
+
+			System.out.println(SKIP_MESSAGE);
+			return "";
+		}
+
+		@Override
+		public void setActiveProfile(String activeProfile) {
+
+			System.out.println(SKIP_MESSAGE);
+		}
+
+		@Override
+		public void addProfile(String profile) {
+
+			System.out.println(SKIP_MESSAGE);
+		}
+
+		@Override
+		public void deleteProfile(String profile) {
+
+			System.out.println(SKIP_MESSAGE);
+		}
+
+		@Override
+		public Set<String> getProfiles() {
+
+			System.out.println(SKIP_MESSAGE);
+			return Collections.emptySet();
 		}
 	}
 
