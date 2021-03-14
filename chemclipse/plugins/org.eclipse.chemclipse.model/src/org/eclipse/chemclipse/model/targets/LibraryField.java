@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,6 +20,7 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 public enum LibraryField {
 	NAME("Name", getLibraryExtractor(ILibraryInformation::getName)), //
 	CAS("CAS", getLibraryExtractor(ILibraryInformation::getCasNumber)), //
+	NAME_CAS("Name (CAS)", getNameAndCasExtractor()), //
 	FORMULA("Formula", getLibraryExtractor(ILibraryInformation::getFormula)), //
 	SMILES("SMILES", getLibraryExtractor(ILibraryInformation::getSmiles)), //
 	SYNONYMS("Synonyms", getLibraryExtractor(ILibraryInformation::getSynonyms).andThen(elements -> elements != null ? String.join("; ", elements) : null));
@@ -34,7 +35,6 @@ public enum LibraryField {
 	}
 
 	/**
-	 * 
 	 * @return a transformer that can transform the given target into an ordinary String
 	 */
 	public Function<IIdentificationTarget, String> stringTransformer() {
@@ -60,12 +60,34 @@ public enum LibraryField {
 			/*
 			 * No library information.
 			 */
-			ILibraryInformation information = target.getLibraryInformation();
-			if(information == null) {
+			ILibraryInformation libraryInformation = target.getLibraryInformation();
+			if(libraryInformation == null) {
 				return null;
 			}
 			//
-			return extractor.apply(information);
+			return extractor.apply(libraryInformation);
+		};
+	}
+
+	private static Function<IIdentificationTarget, String> getNameAndCasExtractor() {
+
+		return target -> {
+			/*
+			 * No target.
+			 */
+			if(target == null) {
+				return null;
+			}
+			/*
+			 * No library information.
+			 */
+			ILibraryInformation libraryInformation = target.getLibraryInformation();
+			if(libraryInformation == null) {
+				return null;
+			}
+			//
+			String result = libraryInformation.getName() + " (" + libraryInformation.getCasNumber() + ")";
+			return result.trim();
 		};
 	}
 }
