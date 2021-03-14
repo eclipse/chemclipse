@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - update version
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse;
 
@@ -36,6 +37,7 @@ import org.osgi.service.component.annotations.Component;
 public class ChromatogramProcedure implements Procedure<ChromatogramProcedureSettings> {
 
 	private static final String NAME = "Copy Chromatogram Selection";
+	//
 	private final IChromatogramImportConverter<IChromatogramMSD> MSD_IMPORT = new org.eclipse.chemclipse.msd.converter.supplier.chemclipse.converter.ChromatogramImportConverter();
 	private final IChromatogramImportConverter<IChromatogramCSD> CSD_IMPORT = new org.eclipse.chemclipse.csd.converter.supplier.chemclipse.converter.ChromatogramImportConverter();
 	private final IChromatogramImportConverter<IChromatogramWSD> WSD_IMPORT = new org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.converter.ChromatogramImportConverter();
@@ -69,6 +71,7 @@ public class ChromatogramProcedure implements Procedure<ChromatogramProcedureSet
 			IChromatogramSelection<?, ?> originalSelection = (IChromatogramSelection<?, ?>)result;
 			IChromatogram<?> chromatogram = originalSelection.getChromatogram();
 			IChromatogramSelection<?, ?> copiedSelection;
+			//
 			if(chromatogram instanceof IChromatogramMSD) {
 				IChromatogramMSD chromatogramMSD = copyChromatogram(chromatogram, MSD_EXPORT, MSD_IMPORT, context);
 				if(chromatogramMSD == null) {
@@ -91,15 +94,18 @@ public class ChromatogramProcedure implements Procedure<ChromatogramProcedureSet
 				context.addErrorMessage(NAME, "Unsupported chromatogramtype: " + chromatogram.getClass().getSimpleName());
 				return null;
 			}
+			//
 			IChromatogram<?> copiedChromatogram = copiedSelection.getChromatogram();
 			if(settings.isAddAsReferenceChromatogram()) {
 				chromatogram.addReferencedChromatogram(copiedChromatogram);
 			}
+			//
 			if(settings.isCopyChromatogramSelectionRange()) {
 				copiedSelection.setRangeRetentionTime(originalSelection.getStartRetentionTime(), originalSelection.getStopRetentionTime());
 			}
 			copiedChromatogram.setFile(null);
 			copiedChromatogram.setDataName(settings.getName().replace(ChromatogramProcedureSettings.PARAM_CHROMATOGRAM_NAME, chromatogram.getName()));
+			//
 			return currentConsumer.withResult(copiedSelection);
 		}
 		return null;

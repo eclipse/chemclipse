@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -38,6 +38,8 @@ public class TestPathHelper extends PathResolver {
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_1_MSD_1007 = "testData/files/import/Chromatogram1-1007.ocb";
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_1_MSD_1100 = "testData/files/import/Chromatogram1-1100.ocb";
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_1_MSD_1300 = "testData/files/import/Chromatogram1-1300.ocb";
+	public static final String TESTFILE_IMPORT_CHROMATOGRAM_1_MSD_1301 = "testData/files/import/Chromatogram1-1301.ocb";
+	public static final String TESTFILE_IMPORT_CHROMATOGRAM_1_MSD_1400 = "testData/files/import/Chromatogram1-1400.ocb";
 	//
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_2_MSD_0701 = "testData/files/import/Chromatogram2-0701.ocb";
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_2_MSD_0801 = "testData/files/import/Chromatogram2-0801.ocb";
@@ -55,6 +57,8 @@ public class TestPathHelper extends PathResolver {
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_2_MSD_1007 = "testData/files/import/Chromatogram2-1007.ocb";
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_2_MSD_1100 = "testData/files/import/Chromatogram2-1100.ocb";
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_2_MSD_1300 = "testData/files/import/Chromatogram2-1300.ocb";
+	public static final String TESTFILE_IMPORT_CHROMATOGRAM_2_MSD_1301 = "testData/files/import/Chromatogram2-1301.ocb";
+	public static final String TESTFILE_IMPORT_CHROMATOGRAM_2_MSD_1400 = "testData/files/import/Chromatogram2-1400.ocb";
 	/*
 	 * IMPORT FID
 	 */
@@ -67,6 +71,8 @@ public class TestPathHelper extends PathResolver {
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_3_FID_1007 = "testData/files/import/Chromatogram3-1007.ocb";
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_3_FID_1100 = "testData/files/import/Chromatogram3-1100.ocb";
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_3_FID_1300 = "testData/files/import/Chromatogram3-1300.ocb";
+	public static final String TESTFILE_IMPORT_CHROMATOGRAM_3_FID_1301 = "testData/files/import/Chromatogram3-1301.ocb";
+	public static final String TESTFILE_IMPORT_CHROMATOGRAM_3_FID_1400 = "testData/files/import/Chromatogram3-1400.ocb";
 	/*
 	 * Import WSD
 	 */

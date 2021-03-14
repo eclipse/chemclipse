@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -114,5 +115,19 @@ public class AbstractMeasurementTarget extends AbstractMeasurement implements IT
 		}
 		//
 		return visibilityMap.containsKey(targetReference.getID());
+	}
+
+	@Override
+	public Map<String, Boolean> getVisibilityMap() {
+
+		return Collections.unmodifiableMap(visibilityMap);
+	}
+
+	@Override
+	public void putAll(Map<String, Boolean> visibilityMap) {
+
+		if(visibilityMap != null) {
+			this.visibilityMap.putAll(visibilityMap);
+		}
 	}
 }

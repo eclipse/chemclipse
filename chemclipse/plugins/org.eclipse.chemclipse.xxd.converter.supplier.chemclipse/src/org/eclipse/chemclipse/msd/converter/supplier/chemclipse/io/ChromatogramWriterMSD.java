@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2020 Lablicate GmbH.
+ * Copyright (c) 2013, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -36,6 +36,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.Chro
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.ChromatogramWriter_1100;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.ChromatogramWriter_1300;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.ChromatogramWriter_1301;
+import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.ChromatogramWriter_1400;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
@@ -97,8 +98,10 @@ public class ChromatogramWriterMSD extends AbstractChromatogramWriter implements
 			chromatogramWriter = new ChromatogramWriter_1100();
 		} else if(versionSave.equals(IFormat.CHROMATOGRAM_VERSION_1300)) {
 			chromatogramWriter = new ChromatogramWriter_1300();
-		} else {
+		} else if(versionSave.equals(IFormat.CHROMATOGRAM_VERSION_1301)) {
 			chromatogramWriter = new ChromatogramWriter_1301();
+		} else {
+			chromatogramWriter = new ChromatogramWriter_1400();
 		}
 		/*
 		 * Load all scan proxies before exporting the file.

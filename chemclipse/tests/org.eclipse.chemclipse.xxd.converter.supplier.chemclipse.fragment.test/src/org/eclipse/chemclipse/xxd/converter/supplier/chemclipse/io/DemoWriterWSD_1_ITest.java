@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2020 Lablicate GmbH.
+ * Copyright (c) 2015, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -35,11 +35,9 @@ public class DemoWriterWSD_1_ITest extends TestCase {
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		//
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked", "deprecation"})
-	@Ignore
 	public void testReader_1() throws Exception {
 
 		// tests the reader & writer for wsd

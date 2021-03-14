@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.targets;
 
+import java.util.Map;
+
 public interface ITargetDisplaySettings {
 
 	boolean isShowPeakLabels();
@@ -44,4 +46,14 @@ public interface ITargetDisplaySettings {
 	void setVisible(ITargetReference targetReference, boolean visible);
 
 	boolean isMapped(ITargetReference targetReference);
+
+	/**
+	 * Returns the visibility map.
+	 * It's unmodifiable.
+	 * 
+	 * @return Map<String, Boolean>
+	 */
+	Map<String, Boolean> getVisibilityMap();
+
+	void putAll(Map<String, Boolean> visibilityMap);
 }

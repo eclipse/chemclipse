@@ -18,8 +18,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
@@ -62,6 +64,8 @@ import org.eclipse.chemclipse.model.implementation.QuantitationEntry;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.model.quantitation.InternalStandard;
+import org.eclipse.chemclipse.model.targets.ITargetDisplaySettings;
+import org.eclipse.chemclipse.model.targets.LibraryField;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.ChromatogramReaderMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.support.history.EditInformation;
@@ -92,9 +96,9 @@ import org.eclipse.core.runtime.SubMonitor;
  * Methods are copied to ensure that file formats are kept readable even if they contain errors.
  * This is suitable but I know, it's not the best way to achieve long term support for older formats.
  */
-public class ChromatogramReader_1301 extends AbstractChromatogramReader implements IChromatogramWSDZipReader {
+public class ChromatogramReader_1400 extends AbstractChromatogramReader implements IChromatogramWSDZipReader {
 
-	private static final Logger logger = Logger.getLogger(ChromatogramReader_1301.class);
+	private static final Logger logger = Logger.getLogger(ChromatogramReader_1400.class);
 
 	@Override
 	public IChromatogramWSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
@@ -310,34 +314,42 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 
 	private void readBaseline(DataInputStream dataInputStream, boolean closeStream, IChromatogramWSD chromatogram) throws IOException {
 
-		int scans = dataInputStream.readInt();
-		List<IBaselineElement> baselineElements = new ArrayList<IBaselineElement>();
-		for(int scan = 1; scan <= scans; ++scan) {
-			// monitor.subTask(IConstants.IMPORT_SCAN + scan);
-			int retentionTime = dataInputStream.readInt();
-			float backgroundAbundance = dataInputStream.readFloat();
-			IBaselineElement baselineElement = new BaselineElement(retentionTime, backgroundAbundance);
-			baselineElements.add(baselineElement);
-		}
-		//
-		IBaselineModel baselineModel = chromatogram.getBaselineModel();
-		for(int index = 0; index < (scans - 1); ++index) {
+		/*
+		 * Get the Baseline Models
+		 */
+		int scans = dataInputStream.readInt(); // Number of Scans
+		int models = dataInputStream.readInt(); // Number of Models
+		for(int i = 0; i < models; i++) {
+			String baselineId = readString(dataInputStream);
+			chromatogram.setActiveBaseline(baselineId); // Baseline Id
+			List<IBaselineElement> baselineElements = new ArrayList<IBaselineElement>();
+			for(int scan = 1; scan <= scans; scan++) {
+				int retentionTime = dataInputStream.readInt(); // Retention Time
+				float backgroundAbundance = dataInputStream.readFloat(); // Background Abundance
+				IBaselineElement baselineElement = new BaselineElement(retentionTime, backgroundAbundance);
+				baselineElements.add(baselineElement);
+			}
 			/*
-			 * Retention times and background abundances.
-			 * Set the baseline.
+			 * Set the Baseline
 			 */
-			// monitor.subTask(IConstants.IMPORT_BASELINE + index);
-			IBaselineElement baselineElement = baselineElements.get(index);
-			IBaselineElement baselineElementNext = baselineElements.get(index + 1);
-			int startRetentionTime = baselineElement.getRetentionTime();
-			float startBackgroundAbundance = baselineElement.getBackgroundAbundance();
-			int stopRetentionTime = baselineElementNext.getRetentionTime();
-			float stopBackgroundAbundance = baselineElementNext.getBackgroundAbundance();
-			/*
-			 * Found all baseline & next baseline elements.
-			 */
-			baselineModel.addBaseline(startRetentionTime, stopRetentionTime, startBackgroundAbundance, stopBackgroundAbundance, false);
+			IBaselineModel baselineModel = chromatogram.getBaselineModel();
+			for(int index = 0; index < (scans - 1); index++) {
+				/*
+				 * Retention times and background abundances.
+				 */
+				IBaselineElement baselineElement = baselineElements.get(index);
+				IBaselineElement baselineElementNext = baselineElements.get(index + 1);
+				int startRetentionTime = baselineElement.getRetentionTime();
+				float startBackgroundAbundance = baselineElement.getBackgroundAbundance();
+				int stopRetentionTime = baselineElementNext.getRetentionTime();
+				float stopBackgroundAbundance = baselineElementNext.getBackgroundAbundance();
+				/*
+				 * Set the baseline.
+				 */
+				baselineModel.addBaseline(startRetentionTime, stopRetentionTime, startBackgroundAbundance, stopBackgroundAbundance, false);
+			}
 		}
+		chromatogram.setActiveBaselineDefault();
 		//
 		if(closeStream) {
 			dataInputStream.close();
@@ -438,9 +450,16 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 		 * Quantitation Results
 		 */
 		readPeakQuantitationEntries(dataInputStream, peak);
-		//
+		/*
+		 * Internal Standards
+		 */
 		List<IInternalStandard> internalStandards = readInternalStandards(dataInputStream);
 		peak.addInternalStandards(internalStandards);
+		/*
+		 * Quantitation References
+		 */
+		List<String> quantitationReferences = readQuantitationReferences(dataInputStream);
+		peak.addQuantitationReferences(quantitationReferences);
 		//
 		return peak;
 	}
@@ -491,6 +510,7 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 			String smiles = readString(dataInputStream); // SMILES
 			String inChI = readString(dataInputStream); // InChI
 			double molWeight = dataInputStream.readDouble(); // Mol Weight
+			String moleculeStructure = readString(dataInputStream);
 			float matchFactor = dataInputStream.readFloat(); // Match Factor
 			float matchFactorDirect = dataInputStream.readFloat(); // Match Factor Direct
 			float reverseMatchFactor = dataInputStream.readFloat(); // Reverse Match Factor
@@ -513,6 +533,7 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 			libraryInformation.setSmiles(smiles);
 			libraryInformation.setInChI(inChI);
 			libraryInformation.setMolWeight(molWeight);
+			libraryInformation.setMoleculeStructure(moleculeStructure);
 			//
 			IComparisonResult comparisonResult = new PeakComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect, probability);
 			comparisonResult.setMatch(isMatch);
@@ -543,6 +564,17 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 			internalStandards.add(internalStandard);
 		}
 		return internalStandards;
+	}
+
+	private List<String> readQuantitationReferences(DataInputStream dataInputStream) throws IOException {
+
+		List<String> quanitationReferences = new ArrayList<>();
+		int size = dataInputStream.readInt();
+		for(int i = 0; i < size; i++) {
+			quanitationReferences.add(readString(dataInputStream));
+		}
+		//
+		return quanitationReferences;
 	}
 
 	private void readPeakQuantitationEntries(DataInputStream dataInputStream, IPeakWSD peak) throws IOException {
@@ -616,6 +648,7 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 			String smiles = readString(dataInputStream); // SMILES
 			String inChI = readString(dataInputStream); // InChI
 			double molWeight = dataInputStream.readDouble(); // Mol Weight
+			String moleculeStructure = readString(dataInputStream);
 			float matchFactor = dataInputStream.readFloat(); // Match Factor
 			float matchFactorDirect = dataInputStream.readFloat(); // Match Factor Direct
 			float reverseMatchFactor = dataInputStream.readFloat(); // Reverse Match Factor
@@ -638,6 +671,7 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 			libraryInformation.setSmiles(smiles);
 			libraryInformation.setInChI(inChI);
 			libraryInformation.setMolWeight(molWeight);
+			libraryInformation.setMoleculeStructure(moleculeStructure);
 			//
 			IComparisonResult comparisonResult = new ChromatogramComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect, probability);
 			comparisonResult.setMatch(isMatch);
@@ -683,8 +717,38 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 			String value = readString(dataInputStream);
 			chromatogram.putHeaderData(key, value);
 		}
+		/*
+		 * Peak/Scan Target Label Visibility
+		 */
+		readTargetDisplaySettings(dataInputStream, chromatogram);
 		//
 		dataInputStream.close();
+	}
+
+	private void readTargetDisplaySettings(DataInputStream dataInputStream, ITargetDisplaySettings targetDisplaySettings) throws IOException {
+
+		targetDisplaySettings.setShowPeakLabels(dataInputStream.readBoolean());
+		targetDisplaySettings.setShowScanLabels(dataInputStream.readBoolean());
+		targetDisplaySettings.setCollisionDetectionDepth(dataInputStream.readInt());
+		targetDisplaySettings.setRotation(dataInputStream.readInt());
+		targetDisplaySettings.setLibraryField(readLibraryField(dataInputStream));
+		Map<String, Boolean> visibilityMap = new HashMap<>();
+		int size = dataInputStream.readInt();
+		for(int i = 0; i < size; i++) {
+			String key = readString(dataInputStream);
+			boolean value = dataInputStream.readBoolean();
+			visibilityMap.put(key, value);
+		}
+		targetDisplaySettings.putAll(visibilityMap);
+	}
+
+	private LibraryField readLibraryField(DataInputStream dataInputStream) {
+
+		try {
+			return LibraryField.valueOf(readString(dataInputStream));
+		} catch(Exception e) {
+			return LibraryField.NAME;
+		}
 	}
 
 	private boolean isValidFileFormat(ZipFile zipFile) throws IOException {
@@ -692,7 +756,7 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 		boolean isValid = false;
 		DataInputStream dataInputStream = getDataInputStream(zipFile, IFormat.FILE_VERSION);
 		String version = readString(dataInputStream);
-		if(version.equals(IFormat.CHROMATOGRAM_VERSION_1301)) {
+		if(version.equals(IFormat.CHROMATOGRAM_VERSION_1400)) {
 			isValid = true;
 		}
 		//
@@ -822,6 +886,7 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 			String smiles = readString(dataInputStream); // SMILES
 			String inChI = readString(dataInputStream); // InChI
 			double molWeight = dataInputStream.readDouble(); // Mol Weight
+			String moleculeStructure = readString(dataInputStream);
 			float matchFactor = dataInputStream.readFloat(); // Match Factor
 			float matchFactorDirect = dataInputStream.readFloat(); // Match Factor Direct
 			float reverseMatchFactor = dataInputStream.readFloat(); // Reverse Match Factor
@@ -844,6 +909,7 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 			libraryInformation.setSmiles(smiles);
 			libraryInformation.setInChI(inChI);
 			libraryInformation.setMolWeight(molWeight);
+			libraryInformation.setMoleculeStructure(moleculeStructure);
 			//
 			IComparisonResult comparisonResult = new ComparisonResult(matchFactor, reverseMatchFactor, matchFactorDirect, reverseMatchFactorDirect, probability);
 			comparisonResult.setMatch(isMatch);

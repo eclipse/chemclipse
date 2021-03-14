@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -33,12 +33,7 @@ public class Activator implements BundleActivator {
 
 		Activator.context = bundleContext;
 		//
-		System.out.println("TODO Additions: v1400");
-		System.out.println("\tPeak Quantitation References");
-		System.out.println("\tBaseline Model Changes");
-		System.out.println("\tILibraryInformation - Molecule Structure");
-		System.out.println("\tChromatogram - peak/scan target visibility");
-		System.out.println("\tChromatogram - baseline map");
+		System.out.println("TODOS next version: v1401");
 		System.out.println("\tCheck (Scan) - are additional RI values stored? RetentionIndexType.POLAR, ...");
 		//
 		logger.info("-------------------------------------------------");

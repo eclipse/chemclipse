@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2020 Lablicate GmbH.
+ * Copyright (c) 2010, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -41,7 +41,7 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	private final Set<String> classification = new LinkedHashSet<>();
 	private int retentionTime = 0;
 	private float retentionIndex = 0.0f;
-	private String moleculeStructure = ""; // TODO
+	private String moleculeStructure = "";
 
 	public AbstractLibraryInformation() {
 
