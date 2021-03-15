@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2020 Lablicate GmbH.
+ * Copyright (c) 2012, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,13 +23,16 @@ public class ReportSettings2 extends DefaultChromatogramReportSettings {
 	@JsonProperty(value = "Delta Retention Time Left [ms]", defaultValue = "0")
 	@JsonPropertyDescription(value = "This is the left delta retention time in milliseconds.")
 	private int deltaRetentionTimeLeft = 0;
-	//
 	@JsonProperty(value = "Delta Retention Time Right [ms]", defaultValue = "0")
 	@JsonPropertyDescription(value = "This is the right delta retention time in milliseconds.")
 	private int deltaRetentionTimeRight = 0;
-	//
 	@JsonProperty(value = "Use Best Match", defaultValue = "" + PreferenceSupplier.DEF_USE_BEST_MATCH)
 	private boolean useBestMatch;
+	@JsonProperty(value = "Use Retention Index QC", defaultValue = "" + PreferenceSupplier.DEF_ADD_PEAK_AREA)
+	@JsonPropertyDescription(value = "When trying to get the best target, additionally use the min retention index delta.")
+	private boolean useRetentionIndexQC;
+	@JsonProperty(value = "Add Peak Area", defaultValue = "" + PreferenceSupplier.DEF_ADD_PEAK_AREA)
+	private boolean addPeakArea;
 
 	public int getDeltaRetentionTimeLeft() {
 
@@ -59,5 +62,25 @@ public class ReportSettings2 extends DefaultChromatogramReportSettings {
 	public void setUseBestMatch(boolean useBestMatch) {
 
 		this.useBestMatch = useBestMatch;
+	}
+
+	public boolean isUseRetentionIndexQC() {
+
+		return useRetentionIndexQC;
+	}
+
+	public void setUseRetentionIndexQC(boolean useRetentionIndexQC) {
+
+		this.useRetentionIndexQC = useRetentionIndexQC;
+	}
+
+	public boolean isAddPeakArea() {
+
+		return addPeakArea;
+	}
+
+	public void setAddPeakArea(boolean addPeakArea) {
+
+		this.addPeakArea = addPeakArea;
 	}
 }

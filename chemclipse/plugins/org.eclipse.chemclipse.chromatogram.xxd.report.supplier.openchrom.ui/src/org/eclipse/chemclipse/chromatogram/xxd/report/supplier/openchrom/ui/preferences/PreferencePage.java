@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2020 Lablicate GmbH.
+ * Copyright (c) 2012, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -46,6 +46,8 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		addField(new LabelFieldEditor("Area% Report", getFieldEditorParent()));
 		addField(new IntegerFieldEditor(PreferenceSupplier.P_DELTA_RETENTION_TIME_LEFT, "Delta Retention Time Left [ms]", getFieldEditorParent()));
 		addField(new IntegerFieldEditor(PreferenceSupplier.P_DELTA_RETENTION_TIME_LEFT, "Delta Retention Time Right [ms]", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_RETENTION_INDEX_QC, "Use Retention Index QC", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_ADD_PEAK_AREA, "Add Peak Area", getFieldEditorParent()));
 	}
 
 	/*

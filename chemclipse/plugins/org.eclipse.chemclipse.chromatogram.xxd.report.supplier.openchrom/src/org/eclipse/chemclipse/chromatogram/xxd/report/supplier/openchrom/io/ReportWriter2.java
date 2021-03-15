@@ -18,7 +18,9 @@ import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.settings.ReportSettings2;
@@ -45,25 +47,25 @@ public class ReportWriter2 {
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0000");
 	private DateFormat dateFormat = ValueFormat.getDateFormatEnglish();
+	/*
+	 * This map is used to store the summed area result instead
+	 * of calculating it again and again.
+	 */
+	private Map<IChromatogram<?>, Double> chromatogramAreaMap = new HashMap<>();
 
 	public void generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, ReportSettings2 reportSettings, IProgressMonitor monitor) throws IOException {
 
-		FileWriter fileWriter = new FileWriter(file, append);
-		PrintWriter printWriter = new PrintWriter(fileWriter);
-		//
-		for(IChromatogram<? extends IPeak> chromatogram : chromatograms) {
-			printHeader(printWriter, chromatogram);
-			printWriter.println("");
-			printAreaPercentList(printWriter, chromatogram, reportSettings);
-			printWriter.println("");
+		try (PrintWriter printWriter = new PrintWriter(new FileWriter(file, append))) {
+			for(IChromatogram<? extends IPeak> chromatogram : chromatograms) {
+				printHeader(printWriter, chromatogram);
+				printWriter.println("");
+				printAreaPercentList(printWriter, chromatogram, reportSettings);
+				printWriter.println("");
+			}
+			printWriter.flush();
+		} finally {
+			// Auto-closable
 		}
-		/*
-		 * Be sure to flush and close the stream.
-		 */
-		printWriter.flush();
-		fileWriter.flush();
-		printWriter.close();
-		fileWriter.close();
 	}
 
 	private void printHeader(PrintWriter printWriter, IChromatogram<? extends IPeak> chromatogram) {
@@ -80,6 +82,7 @@ public class ReportWriter2 {
 
 		double[] chromatogramAreaSumArray = getChromatogramAreaSumArray(chromatogramSource);
 		double[] peakAreaSumArray = initializePeakAreaSumArray(chromatogramSource);
+		boolean addPeakArea = reportSettings.isAddPeakArea();
 		/*
 		 * Headline
 		 */
@@ -91,18 +94,24 @@ public class ReportWriter2 {
 		printWriter.print(DELIMITER);
 		printWriter.print("TIC%");
 		printWriter.print(DELIMITER);
+		if(addPeakArea) {
+			printWriter.print("TIC");
+			printWriter.print(DELIMITER);
+		}
 		/*
 		 * Variable length depending on referenced chromatograms
 		 */
-		printAreaPercentHeadlines(printWriter, chromatogramSource); // FID1%, ...
-		//
+		printAreaPercentHeadlines(printWriter, chromatogramSource, reportSettings); // FID1%, ...
+		/*
+		 * Additional Entries
+		 */
 		printWriter.print("RI Library");
 		printWriter.print(DELIMITER);
 		printWriter.print("RI DA");
 		printWriter.print(DELIMITER);
 		printWriter.print("Scan#");
 		printWriter.print(DELIMITER);
-		printWriter.print("Retention Time (Minutes)");
+		printWriter.print("Retention Time [Minutes]");
 		printWriter.print(DELIMITER);
 		printWriter.print("Purity");
 		printWriter.println("");
@@ -119,7 +128,10 @@ public class ReportWriter2 {
 			 * are available.
 			 */
 			if(peakTargetsSource.size() > 0) {
-				float retentionIndex = peakModelSource.getPeakMaximum().getRetentionIndex();
+				/*
+				 * Get the best target
+				 */
+				float retentionIndex = reportSettings.isUseRetentionIndexQC() ? peakModelSource.getPeakMaximum().getRetentionIndex() : 0.0f;
 				IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
 				ILibraryInformation libraryInformationSource = IIdentificationTarget.getBestLibraryInformation(peakTargetsSource, identificationTargetComparator);
 				//
@@ -134,7 +146,9 @@ public class ReportWriter2 {
 					 * Variable length depending on referenced chromatograms
 					 */
 					peakAreaSumArray = printAreaPercentData(printWriter, chromatogramSource, peakSource, libraryInformationSource, peakAreaSumArray, reportSettings); // FID1%, ...
-					//
+					/*
+					 * Additional Entries
+					 */
 					printWriter.print(decimalFormat.format(libraryInformationSource.getRetentionIndex())); // "RI Library"
 					printWriter.print(DELIMITER);
 					printWriter.print(getRetentionIndex(peakModelSource)); // "RI DA"
@@ -158,7 +172,7 @@ public class ReportWriter2 {
 		printWriter.print(DELIMITER);
 		printWriter.print("");
 		printWriter.print(DELIMITER);
-		printAreaPercentSum(printWriter, chromatogramAreaSumArray, peakAreaSumArray); // Sum FID1%, ...
+		printAreaPercentSum(printWriter, chromatogramAreaSumArray, peakAreaSumArray, reportSettings); // Sum FID1%, ...
 		printWriter.print("");
 		printWriter.print(DELIMITER);
 		printWriter.print("");
@@ -171,83 +185,105 @@ public class ReportWriter2 {
 		printWriter.println("");
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	private void printAreaPercentHeadlines(PrintWriter printWriter, IChromatogram chromatogramSource) {
+	private void printAreaPercentHeadlines(PrintWriter printWriter, IChromatogram<?> chromatogramSource, ReportSettings2 reportSettings) {
 
-		List<IChromatogram> referencedChromatograms = chromatogramSource.getReferencedChromatograms();
+		List<IChromatogram<?>> referencedChromatograms = chromatogramSource.getReferencedChromatograms();
+		boolean addPeakArea = reportSettings.isAddPeakArea();
 		//
 		int i = 1;
-		for(IChromatogram referencedChromatogram : referencedChromatograms) {
-			String label;
+		for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
+			String labelArea;
 			if(referencedChromatogram instanceof IChromatogramMSD) {
-				label = "MSD" + i + "%";
+				labelArea = "MSD" + i;
 			} else if(referencedChromatogram instanceof IChromatogramCSD) {
-				label = "CSD" + i + "%";
+				labelArea = "CSD" + i;
 			} else if(referencedChromatogram instanceof IChromatogramWSD) {
-				label = "WSD" + i + "%";
+				labelArea = "WSD" + i;
 			} else {
-				label = "???" + i + "%";
+				labelArea = "???" + i;
 			}
-			printWriter.print(label);
+			//
+			printWriter.print(labelArea + "%");
 			printWriter.print(DELIMITER);
+			if(addPeakArea) {
+				printWriter.print(labelArea);
+				printWriter.print(DELIMITER);
+			}
+			//
 			i++;
 		}
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	private double[] printAreaPercentData(PrintWriter printWriter, IChromatogram chromatogramSource, IPeak peakSource, ILibraryInformation libraryInformationSource, double[] peakAreaSumArray, ReportSettings2 reportSettings) {
+	private double[] printAreaPercentData(PrintWriter printWriter, IChromatogram<?> chromatogramSource, IPeak peakSource, ILibraryInformation libraryInformationSource, double[] peakAreaSumArray, ReportSettings2 reportSettings) {
 
-		List<IChromatogram> referencedChromatograms = chromatogramSource.getReferencedChromatograms();
-		//
+		List<IChromatogram<?>> referencedChromatograms = chromatogramSource.getReferencedChromatograms();
+		boolean addPeakArea = reportSettings.isAddPeakArea();
+		/*
+		 * Master Peak
+		 */
 		peakAreaSumArray[0] += peakSource.getIntegratedArea();
 		printWriter.print(decimalFormat.format(getPercentagePeakArea(chromatogramSource, peakSource))); // "TIC%"
 		printWriter.print(DELIMITER);
-		//
+		if(addPeakArea) {
+			printWriter.print(decimalFormat.format(peakSource.getIntegratedArea())); // "TIC"
+			printWriter.print(DELIMITER);
+		}
+		/*
+		 * Reference Peak
+		 */
 		int i = 1;
-		for(IChromatogram referencedChromatogram : referencedChromatograms) {
+		for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
 			IPeak referencedPeak = getReferencedPeak(peakSource, libraryInformationSource, referencedChromatogram, reportSettings);
 			double peakArea = (referencedPeak != null) ? referencedPeak.getIntegratedArea() : 0.0d;
 			peakAreaSumArray[i] += peakArea;
 			printWriter.print(decimalFormat.format(getPercentagePeakArea(referencedChromatogram, referencedPeak))); // "FID1A%"
 			printWriter.print(DELIMITER);
+			if(addPeakArea) {
+				printWriter.print(decimalFormat.format(referencedPeak != null ? referencedPeak.getIntegratedArea() : 0)); // "FID1A"
+				printWriter.print(DELIMITER);
+			}
 			i++;
 		}
 		//
 		return peakAreaSumArray;
 	}
 
-	private void printAreaPercentSum(PrintWriter printWriter, double[] chromatogramAreaSumArray, double[] peakAreaSumArray) {
+	private void printAreaPercentSum(PrintWriter printWriter, double[] chromatogramAreaSumArray, double[] peakAreaSumArray, ReportSettings2 reportSettings) {
 
+		boolean addPeakArea = reportSettings.isAddPeakArea();
+		//
 		if(chromatogramAreaSumArray.length == peakAreaSumArray.length) {
 			int size = chromatogramAreaSumArray.length;
 			for(int i = 0; i < size; i++) {
 				printWriter.print(decimalFormat.format(getPercentagePeakArea(chromatogramAreaSumArray[i], peakAreaSumArray[i])));
 				printWriter.print(DELIMITER);
+				if(addPeakArea) {
+					printWriter.print("");
+					printWriter.print(DELIMITER);
+				}
 			}
 		}
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	private double[] getChromatogramAreaSumArray(IChromatogram chromatogram) {
+	private double[] getChromatogramAreaSumArray(IChromatogram<?> chromatogram) {
 
-		List<IChromatogram> referencedChromatograms = chromatogram.getReferencedChromatograms();
+		List<IChromatogram<?>> referencedChromatograms = chromatogram.getReferencedChromatograms();
 		int size = 1 + referencedChromatograms.size();
 		double[] chromatogramAreaSumArray = new double[size];
 		//
 		chromatogramAreaSumArray[0] = chromatogram.getPeakIntegratedArea();
 		//
 		int i = 1;
-		for(IChromatogram referencedChromatogram : referencedChromatograms) {
+		for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
 			chromatogramAreaSumArray[i++] = referencedChromatogram.getPeakIntegratedArea();
 		}
 		//
 		return chromatogramAreaSumArray;
 	}
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	private double[] initializePeakAreaSumArray(IChromatogram chromatogram) {
+	private double[] initializePeakAreaSumArray(IChromatogram<?> chromatogram) {
 
-		List<IChromatogram> referencedChromatograms = chromatogram.getReferencedChromatograms();
+		List<IChromatogram<?>> referencedChromatograms = chromatogram.getReferencedChromatograms();
 		int size = 1 + referencedChromatograms.size();
 		return new double[size];
 	}
@@ -372,12 +408,15 @@ public class ReportWriter2 {
 		return purity;
 	}
 
-	@SuppressWarnings("rawtypes")
-	private double getPercentagePeakArea(IChromatogram chromatogram, IPeak peak) {
+	private double getPercentagePeakArea(IChromatogram<?> chromatogram, IPeak peak) {
 
 		double peakAreaPercent = 0.0d;
 		if(chromatogram != null && peak != null) {
-			double chromatogramPeakArea = chromatogram.getPeakIntegratedArea();
+			Double chromatogramPeakArea = chromatogramAreaMap.get(chromatogram);
+			if(chromatogramPeakArea == null) {
+				chromatogramPeakArea = chromatogram.getPeakIntegratedArea();
+				chromatogramAreaMap.put(chromatogram, chromatogramPeakArea);
+			}
 			peakAreaPercent = getPercentagePeakArea(chromatogramPeakArea, peak.getIntegratedArea());
 		}
 		//

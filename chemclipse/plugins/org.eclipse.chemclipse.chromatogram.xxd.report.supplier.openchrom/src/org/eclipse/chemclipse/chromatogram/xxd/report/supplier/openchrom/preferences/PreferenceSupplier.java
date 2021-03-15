@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -36,6 +36,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final int DEF_DELTA_RETENTION_TIME_RIGHT = 0;
 	public static final String P_USE_BEST_MATCH = "useBestMatch";
 	public static final boolean DEF_USE_BEST_MATCH = true;
+	public static final String P_USE_RETENTION_INDEX_QC = "useRetentionIndexQC";
+	public static final boolean DEF_USE_RETENTION_INDEX_QC = false;
+	public static final String P_ADD_PEAK_AREA = "addPeakArea";
+	public static final boolean DEF_ADD_PEAK_AREA = false;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -67,6 +71,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_DELTA_RETENTION_TIME_LEFT, Integer.toString(DEF_DELTA_RETENTION_TIME_LEFT));
 		defaultValues.put(P_DELTA_RETENTION_TIME_RIGHT, Integer.toString(DEF_DELTA_RETENTION_TIME_RIGHT));
 		defaultValues.put(P_USE_BEST_MATCH, Boolean.toString(DEF_USE_BEST_MATCH));
+		defaultValues.put(P_USE_RETENTION_INDEX_QC, Boolean.toString(DEF_USE_RETENTION_INDEX_QC));
+		defaultValues.put(P_ADD_PEAK_AREA, Boolean.toString(DEF_ADD_PEAK_AREA));
 		return defaultValues;
 	}
 
@@ -87,6 +93,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		settings.setDeltaRetentionTimeLeft(getDeltaRetentionTimeLeft());
 		settings.setDeltaRetentionTimeRight(getDeltaRetentionTimeRight());
 		settings.setUseBestMatch(isUseBestMatch());
+		settings.setUseRetentionIndexQC(isUseRetentionIndexQC());
+		settings.setAddPeakArea(isAddPeakArea());
 		return settings;
 	}
 
@@ -122,5 +130,17 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.getBoolean(P_USE_BEST_MATCH, DEF_USE_BEST_MATCH);
+	}
+
+	public static boolean isUseRetentionIndexQC() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getBoolean(P_USE_RETENTION_INDEX_QC, DEF_USE_RETENTION_INDEX_QC);
+	}
+
+	public static boolean isAddPeakArea() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getBoolean(P_ADD_PEAK_AREA, DEF_ADD_PEAK_AREA);
 	}
 }
