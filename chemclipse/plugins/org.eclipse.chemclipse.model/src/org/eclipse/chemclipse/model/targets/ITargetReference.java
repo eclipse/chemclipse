@@ -60,7 +60,7 @@ public interface ITargetReference extends ITargetSupplier {
 
 		IIdentificationTarget identificationTarget = getBestIdentificationTarget();
 		if(identificationTarget != null) {
-			return libraryField.stringTransformer().apply(identificationTarget);
+			return libraryField.getTransformer().apply(identificationTarget);
 		}
 		//
 		return null;

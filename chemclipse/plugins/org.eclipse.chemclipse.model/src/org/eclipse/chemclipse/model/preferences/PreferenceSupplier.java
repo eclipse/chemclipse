@@ -16,6 +16,7 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.Activator;
+import org.eclipse.chemclipse.model.targets.LibraryField;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -43,6 +44,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final boolean DEF_SORT_CASE_SENSITIVE = true;
 	public static final String P_SEARCH_CASE_SENSITIVE = "searchCaseSensitive";
 	public static final boolean DEF_SEARCH_CASE_SENSITIVE = true;
+	public static final String P_BEST_TARGET_LIBRARY_FIELD = "bestTargetLibraryField";
+	public static final String DEF_BEST_TARGET_LIBRARY_FIELD = LibraryField.NAME.name();
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -79,6 +82,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_SORT_CASE_SENSITIVE, Boolean.toString(DEF_SORT_CASE_SENSITIVE));
 		defaultValues.put(P_SEARCH_CASE_SENSITIVE, Boolean.toString(DEF_SEARCH_CASE_SENSITIVE));
 		defaultValues.put(P_USE_RETENTION_INDEX_QC, Boolean.toString(DEF_USE_RETENTION_INDEX_QC));
+		defaultValues.put(P_BEST_TARGET_LIBRARY_FIELD, DEF_BEST_TARGET_LIBRARY_FIELD);
 		//
 		return defaultValues;
 	}
@@ -144,6 +148,19 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static void setUseRetentionIndexQC(boolean value) {
 
 		putBoolean(P_USE_RETENTION_INDEX_QC, value);
+	}
+
+	public static LibraryField getBestTargetLibraryField() {
+
+		try {
+			IEclipsePreferences preferences = INSTANCE().getPreferences();
+			return LibraryField.valueOf(preferences.get(P_BEST_TARGET_LIBRARY_FIELD, DEF_BEST_TARGET_LIBRARY_FIELD));
+		} catch(Exception e) {
+			/*
+			 * Default if something went wrong.
+			 */
+			return LibraryField.NAME;
+		}
 	}
 
 	private static boolean getBoolean(String key, boolean def) {

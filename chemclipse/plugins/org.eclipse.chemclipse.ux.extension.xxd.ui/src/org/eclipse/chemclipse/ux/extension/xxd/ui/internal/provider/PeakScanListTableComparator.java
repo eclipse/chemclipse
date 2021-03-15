@@ -145,8 +145,8 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 				sortOrder = Integer.compare(getSuggestedNumberOfComponents(object2), getSuggestedNumberOfComponents(object1));
 				break;
 			case 17:
-				String name1 = PeakScanListSupport.getName(object1);
-				String name2 = PeakScanListSupport.getName(object2);
+				String name1 = PeakScanListSupport.getBestTargetLibraryField(object1);
+				String name2 = PeakScanListSupport.getBestTargetLibraryField(object2);
 				sortOrder = PreferenceSupplier.isSortCaseSensitive() ? name2.compareTo(name1) : name2.compareToIgnoreCase(name1);
 				break;
 			case 18:

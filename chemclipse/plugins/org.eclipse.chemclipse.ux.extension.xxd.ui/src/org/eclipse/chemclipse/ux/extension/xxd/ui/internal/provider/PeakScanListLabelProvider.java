@@ -16,14 +16,12 @@ import java.text.DecimalFormat;
 import java.util.Set;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
-import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.IPeakComparisonResult;
 import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
@@ -38,7 +36,7 @@ import org.eclipse.swt.graphics.Image;
 
 public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String NAME = "Name";
+	public static final String BEST_TARGET = "Best Target";
 	public static final String ACTIVE_FOR_ANALYSIS = "Active for Analysis";
 	public static final String TYPE = "Type";
 	public static final String RETENTION_TIME = "RT [min]";
@@ -86,7 +84,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 			DETECTOR, //
 			INTEGRATOR, //
 			SUGGESTED_COMPONENTS, //
-			NAME, //
+			BEST_TARGET, //
 			AREA_PERCENT, //
 			QUANTIFIER, //
 			CLASSIFIER //
@@ -276,7 +274,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 				text = Integer.toString(peak.getSuggestedNumberOfComponents());
 				break;
 			case 17:
-				text = PeakScanListSupport.getName(peak);
+				text = PeakScanListSupport.getBestTargetLibraryField(peak);
 				break;
 			case 18:
 				if(chromatogramPeakArea > 0) {
@@ -347,12 +345,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 				text = NO_VALUE;
 				break;
 			case 17:
-				float retentionIndex = scan.getRetentionIndex();
-				IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
-				ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(scan.getTargets(), identificationTargetComparator);
-				if(libraryInformation != null) {
-					text = libraryInformation.getName();
-				}
+				text = PeakScanListSupport.getBestTargetLibraryField(scan);
 				break;
 			case 18:
 				text = NO_VALUE;

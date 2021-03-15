@@ -34,10 +34,15 @@ public enum LibraryField {
 		this.transformer = transformer;
 	}
 
+	public String getLabel() {
+
+		return label;
+	}
+
 	/**
 	 * @return a transformer that can transform the given target into an ordinary String
 	 */
-	public Function<IIdentificationTarget, String> stringTransformer() {
+	public Function<IIdentificationTarget, String> getTransformer() {
 
 		return transformer;
 	}
@@ -46,6 +51,21 @@ public enum LibraryField {
 	public String toString() {
 
 		return label;
+	}
+
+	public static String[][] getLibraryFields() {
+
+		LibraryField[] libraryFields = values();
+		String[][] elements = new String[libraryFields.length][2];
+		//
+		int counter = 0;
+		for(LibraryField libraryField : libraryFields) {
+			elements[counter][0] = libraryField.getLabel();
+			elements[counter][1] = libraryField.name();
+			counter++;
+		}
+		//
+		return elements;
 	}
 
 	private static <T> Function<IIdentificationTarget, T> getLibraryExtractor(Function<ILibraryInformation, T> extractor) {

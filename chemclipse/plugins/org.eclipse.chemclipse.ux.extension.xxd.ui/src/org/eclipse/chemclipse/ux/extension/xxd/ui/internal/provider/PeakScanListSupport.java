@@ -22,7 +22,8 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.core.ITargetSupplier;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
-import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.model.targets.LibraryField;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 
 public class PeakScanListSupport {
@@ -45,30 +46,34 @@ public class PeakScanListSupport {
 	}
 
 	/**
-	 * Returns the name or "" if none is available.
+	 * Returns the best target string representation or "" if none is available.
 	 * 
 	 * @param object
 	 * @return {@link String}
 	 */
-	public static String getName(Object object) {
+	public static String getBestTargetLibraryField(Object object) {
 
 		if(object instanceof ITargetSupplier) {
 			/*
-			 * Sort by Manually Verified, Delta RI, ...
+			 * Is Retention Index used for QC?
 			 */
 			float retentionIndex = 0;
-			if(object instanceof IPeak) {
-				retentionIndex = ((IPeak)object).getPeakModel().getPeakMaximum().getRetentionIndex();
-			} else if(object instanceof IScan) {
-				retentionIndex = ((IScan)object).getRetentionIndex();
+			if(PreferenceSupplier.isUseRetentionIndexQC()) {
+				if(object instanceof IPeak) {
+					retentionIndex = ((IPeak)object).getPeakModel().getPeakMaximum().getRetentionIndex();
+				} else if(object instanceof IScan) {
+					retentionIndex = ((IScan)object).getRetentionIndex();
+				}
 			}
 			IdentificationTargetComparator comparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
 			/*
 			 * Best Match
 			 */
-			ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(((ITargetSupplier)object).getTargets(), comparator);
-			if(libraryInformation != null) {
-				return libraryInformation.getName();
+			IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(((ITargetSupplier)object).getTargets(), comparator);
+			LibraryField libraryField = PreferenceSupplier.getBestTargetLibraryField();
+			String name = libraryField.getTransformer().apply(identificationTarget);
+			if(name != null) {
+				return name;
 			}
 		}
 		//
