@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2020 Lablicate GmbH.
+ * Copyright (c) 2013, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -132,7 +132,8 @@ public class DatabaseEditor implements IChemClipseEditor {
 	@Persist
 	public void save() {
 
-		ProgressMonitorDialog dialog = new ProgressMonitorDialog(DisplayUtils.getShell());
+		Shell shell = DisplayUtils.getShell();
+		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
 		IRunnableWithProgress runnable = new IRunnableWithProgress() {
 
 			@Override
@@ -141,7 +142,7 @@ public class DatabaseEditor implements IChemClipseEditor {
 				try {
 					monitor.beginTask("Save Mass Spectra", IProgressMonitor.UNKNOWN);
 					try {
-						saveMassSpectra(monitor, DisplayUtils.getShell());
+						saveMassSpectra(monitor, shell);
 					} catch(NoMassSpectrumConverterAvailableException e) {
 						throw new InvocationTargetException(e);
 					}
