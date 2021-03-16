@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -32,9 +32,12 @@ public class MagicNumberMatcher extends AbstractMagicNumberMatcher implements IM
 				Enumeration<? extends ZipEntry> entries = zipFile.entries();
 				while(entries.hasMoreElements()) {
 					ZipEntry entry = entries.nextElement();
-					if(entry.getName().startsWith("MassBank-data-")) {
+					String name = entry.getName();
+					if(name.startsWith("MassBank-data-")) {
 						return true;
-					} else if(entry.getName().endsWith("List_of_Contributors_Prefixes_and_Projects.md")) {
+					} else if(name.endsWith("List_of_Contributors_Prefixes_and_Projects.md")) {
+						return true;
+					} else if(name.endsWith("MassBank.txt")) {
 						return true;
 					}
 				}
