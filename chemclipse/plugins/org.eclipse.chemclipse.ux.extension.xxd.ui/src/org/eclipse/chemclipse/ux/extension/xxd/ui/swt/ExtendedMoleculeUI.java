@@ -474,6 +474,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 	private void applySettings(Display display) {
 
 		createMoleculeImage(display);
+		updateContent(display);
 	}
 
 	private boolean isEnterPressed(KeyEvent e) {
