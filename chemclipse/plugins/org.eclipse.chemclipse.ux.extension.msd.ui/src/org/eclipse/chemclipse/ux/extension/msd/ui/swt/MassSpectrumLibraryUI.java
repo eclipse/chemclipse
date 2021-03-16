@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -225,7 +225,7 @@ public class MassSpectrumLibraryUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				UpdateNotifierUI.update(e.display, IChemClipseEvents.TOPIC_LIBRARY_MSD_ADD_TO_DB_SEARCH, massSpectrumFile);
-				MessageDialog.openConfirm(DisplayUtils.getShell(), "DB Search", "The library has been added.");
+				MessageDialog.openConfirm(DisplayUtils.getShell(), "DB Search", "The library has been added to the list of searched databases.");
 			}
 		});
 		//
@@ -244,7 +244,7 @@ public class MassSpectrumLibraryUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				UpdateNotifierUI.update(e.display, IChemClipseEvents.TOPIC_LIBRARY_MSD_REMOVE_FROM_DB_SEARCH, massSpectrumFile);
-				MessageDialog.openConfirm(DisplayUtils.getShell(), "DB Search", "The library has been removed.");
+				MessageDialog.openConfirm(DisplayUtils.getShell(), "DB Search", "The library has been removed from the list of searched databases.");
 			}
 		});
 		//
