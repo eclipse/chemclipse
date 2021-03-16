@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2020 Lablicate GmbH.
+ * Copyright (c) 2014, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,7 +30,7 @@ public class MassSpectrumIdentifierSettings extends AbstractMassSpectrumIdentifi
 
 	@JsonProperty(value = "Library File", defaultValue = "")
 	@JsonPropertyDescription("Select the library file.")
-	@FileSettingProperty(dialogType = DialogType.OPEN_DIALOG, extensionNames = {"AMDIS (*.msl)", "AMDIS (*.msp)"}, validExtensions = {"*.msl", "*.msp"}, onlyDirectory = false)
+	@FileSettingProperty(dialogType = DialogType.OPEN_DIALOG, extensionNames = {"AMDIS (*.msl)", "AMDIS (*.MSL)", "NIST (*.msp)", "NIST (*.MSP)", "MassBank (.zip)", "MassBank (.ZIP)"}, validExtensions = {"*.msl", "*.MSL", "*.msp", "*.MSP", "*.zip", "*.ZIP"}, onlyDirectory = false)
 	private File libraryFile;
 	@JsonProperty(value = "Pre-Optimization", defaultValue = "false")
 	private boolean usePreOptimization = false;
