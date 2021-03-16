@@ -59,6 +59,11 @@ public class SearchSupportUI extends Composite {
 		return text.getText().trim();
 	}
 
+	public boolean isSearchCaseSensitive() {
+
+		return checkbox.getSelection();
+	}
+
 	private void createControl() {
 
 		setLayout(new FillLayout());
