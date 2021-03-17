@@ -68,7 +68,8 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 	private static final String XYDATA_MARKER_SPACE_TYPE2 = "##XYDATA=(XY..XY)";
 	private static final String XYDATA_MARKER_SHORT = "##XYDATA=(X,Y)";
 	private static final String XYDATA_MARKER_NOMINAL = "##XYDATA=(X Y)";
-	private static final String PEAK_TABLE_MARKER = "##PEAK TABLE=(XY..XY)";
+	private static final String PEAK_TABLE_MARKER_TYPE1 = "##PEAK TABLE=(XY..XY)";
+	private static final String PEAK_TABLE_MARKER_TYPE2 = "##PEAK TABLE= (XY..XY)";
 	//
 	private static final Pattern ionPattern = Pattern.compile("(\\d+\\.?\\d{0,5})(.*?)(\\d+\\.?\\d{0,5})");
 
@@ -242,7 +243,7 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 
 	private boolean isReadIons(String line) {
 
-		return (line.startsWith(XYDATA_MARKER_SPACE_TYPE1) || line.startsWith(XYDATA_MARKER_SPACE_TYPE2) || line.startsWith(XYDATA_MARKER_SHORT) || line.startsWith(XYDATA_MARKER_NOMINAL) || line.startsWith(PEAK_TABLE_MARKER));
+		return (line.startsWith(XYDATA_MARKER_SPACE_TYPE1) || line.startsWith(XYDATA_MARKER_SPACE_TYPE2) || line.startsWith(XYDATA_MARKER_SHORT) || line.startsWith(XYDATA_MARKER_NOMINAL) || line.startsWith(PEAK_TABLE_MARKER_TYPE1) || line.startsWith(PEAK_TABLE_MARKER_TYPE2));
 	}
 
 	private boolean addNewMassSpectrum(String line, boolean isNameMarkerAvailable) {
