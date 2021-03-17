@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,6 +16,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -42,6 +44,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class MassSpectraReader extends AbstractMassSpectraReader implements IMassSpectraReader {
 
 	private static final Logger logger = Logger.getLogger(MassSpectraReader.class);
+	private static final String COMMENT_MARKER = "$$";
 	private static final String HEADER_MARKER = "##";
 	private static final String HEADER_TITLE = "##TITLE=";
 	private static final String HEADER_VERSION = "##VERSION=";
@@ -67,7 +70,8 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 	private static final String XYDATA_MARKER_SPACE_TYPE2 = "##XYDATA=(XY..XY)";
 	private static final String XYDATA_MARKER_SHORT = "##XYDATA=(X,Y)";
 	private static final String XYDATA_MARKER_NOMINAL = "##XYDATA=(X Y)";
-	private static final String PEAK_TABLE_MARKER = "##PEAK TABLE=(XY..XY)";
+	private static final String PEAK_TABLE_MARKER_TYPE1 = "##PEAK TABLE=(XY..XY)";
+	private static final String PEAK_TABLE_MARKER_TYPE2 = "##PEAK TABLE= (XY..XY)";
 	//
 	private static final Pattern ionPattern = Pattern.compile("(\\d+\\.?\\d{0,5})(.*?)(\\d+\\.?\\d{0,5})");
 
@@ -94,10 +98,17 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
 		String line;
 		boolean readIons = false;
+		Set<String> synonyms = null;
 		/*
 		 * Parse each line
 		 */
 		while((line = bufferedReader.readLine()) != null) {
+			/*
+			 * Strip line comments
+			 */
+			if(line.contains(COMMENT_MARKER)) {
+				line = line.substring(0, line.indexOf(COMMENT_MARKER));
+			}
 			/*
 			 * Each scan starts with the marker:
 			 * ##SCAN_NUMBER= 1
@@ -119,6 +130,7 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 						name = line.replace(NAME_MARKER, "").trim();
 					} else {
 						name = line.replace(NAMES_MARKER, "").trim();
+						synonyms = new HashSet<String>();
 					}
 				} else {
 					name = line.replace(TITLE_MARKER, "").trim();
@@ -195,7 +207,6 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 					 * Parse the ions.
 					 */
 					try {
-						line = line.trim();
 						Matcher ions = ionPattern.matcher(line.trim());
 						while(ions.find()) {
 							double mz = Double.parseDouble(ions.group(1));
@@ -212,8 +223,13 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 					} catch(NumberFormatException e) {
 						logger.warn(e);
 					}
+				} else if(!line.startsWith(HEADER_MARKER) && synonyms != null) {
+					synonyms.add(line.trim());
 				}
 			}
+		}
+		if(synonyms != null) {
+			massSpectrum.getLibraryInformation().setSynonyms(synonyms);
 		}
 		/*
 		 * Add the last scan.
@@ -235,7 +251,7 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 
 	private boolean isReadIons(String line) {
 
-		return (line.startsWith(XYDATA_MARKER_SPACE_TYPE1) || line.startsWith(XYDATA_MARKER_SPACE_TYPE2) || line.startsWith(XYDATA_MARKER_SHORT) || line.startsWith(XYDATA_MARKER_NOMINAL) || line.startsWith(PEAK_TABLE_MARKER));
+		return (line.startsWith(XYDATA_MARKER_SPACE_TYPE1) || line.startsWith(XYDATA_MARKER_SPACE_TYPE2) || line.startsWith(XYDATA_MARKER_SHORT) || line.startsWith(XYDATA_MARKER_NOMINAL) || line.startsWith(PEAK_TABLE_MARKER_TYPE1) || line.startsWith(PEAK_TABLE_MARKER_TYPE2));
 	}
 
 	private boolean addNewMassSpectrum(String line, boolean isNameMarkerAvailable) {
