@@ -16,6 +16,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -96,6 +98,7 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
 		String line;
 		boolean readIons = false;
+		Set<String> synonyms = null;
 		/*
 		 * Parse each line
 		 */
@@ -127,6 +130,7 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 						name = line.replace(NAME_MARKER, "").trim();
 					} else {
 						name = line.replace(NAMES_MARKER, "").trim();
+						synonyms = new HashSet<String>();
 					}
 				} else {
 					name = line.replace(TITLE_MARKER, "").trim();
@@ -219,8 +223,13 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 					} catch(NumberFormatException e) {
 						logger.warn(e);
 					}
+				} else if(!line.startsWith(HEADER_MARKER) && synonyms != null) {
+					synonyms.add(line.trim());
 				}
 			}
+		}
+		if(synonyms != null) {
+			massSpectrum.getLibraryInformation().setSynonyms(synonyms);
 		}
 		/*
 		 * Add the last scan.
