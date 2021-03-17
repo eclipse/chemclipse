@@ -13,6 +13,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
 import org.eclipse.chemclipse.model.traces.NamedTraceUtil;
+import org.eclipse.chemclipse.msd.model.support.CalculationType;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.ReferencesLabel;
@@ -781,4 +782,13 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_MOLECULE_PATH_EXPORT = "";
 	public static final String P_LENGTH_MOLECULE_NAME_EXPORT = "lengthMoleculeNameExport";
 	public static final int DEF_LENGTH_MOLECULE_NAME_EXPORT = 40;
+	/*
+	 * Peaks Merge
+	 */
+	public static final String P_MERGE_PEAKS_CALCULATION_TYPE = "mergePeaksCalculationType";
+	public static final String DEF_MERGE_PEAKS_CALCULATION_TYPE = CalculationType.SUM.name();
+	public static final String P_MERGE_PEAKS_IDENTIFICATION_TARGETS = "mergePeaksIdentificationTargets";
+	public static final boolean DEF_MERGE_PEAKS_IDENTIFICATION_TARGETS = true;
+	public static final String P_MERGE_PEAKS_DELETE_ORIGINS = "mergePeaksDeleteOrigins";
+	public static final boolean DEF_MERGE_PEAKS_DELETE_ORIGINS = true;
 }

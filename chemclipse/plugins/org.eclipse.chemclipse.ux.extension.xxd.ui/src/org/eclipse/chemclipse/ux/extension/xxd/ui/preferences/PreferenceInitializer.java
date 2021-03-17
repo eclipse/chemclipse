@@ -249,6 +249,12 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		 */
 		store.setDefault(PreferenceConstants.P_MOLECULE_PATH_EXPORT, PreferenceConstants.DEF_MOLECULE_PATH_EXPORT);
 		store.setDefault(PreferenceConstants.P_LENGTH_MOLECULE_NAME_EXPORT, PreferenceConstants.DEF_LENGTH_MOLECULE_NAME_EXPORT);
+		/*
+		 * Merge Peaks
+		 */
+		store.setDefault(PreferenceConstants.P_MERGE_PEAKS_CALCULATION_TYPE, PreferenceConstants.DEF_MERGE_PEAKS_CALCULATION_TYPE);
+		store.setDefault(PreferenceConstants.P_MERGE_PEAKS_IDENTIFICATION_TARGETS, PreferenceConstants.DEF_MERGE_PEAKS_IDENTIFICATION_TARGETS);
+		store.setDefault(PreferenceConstants.P_MERGE_PEAKS_DELETE_ORIGINS, PreferenceConstants.DEF_MERGE_PEAKS_DELETE_ORIGINS);
 	}
 
 	public static IPreferenceStore initializeChromatogramDefaults(IPreferenceStore store) {

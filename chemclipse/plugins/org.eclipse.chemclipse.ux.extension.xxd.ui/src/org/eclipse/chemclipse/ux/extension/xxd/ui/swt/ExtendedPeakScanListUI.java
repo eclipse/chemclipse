@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -29,9 +30,14 @@ import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.support.RetentionTimeRange;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
+import org.eclipse.chemclipse.msd.model.core.support.PeakMergerMSD;
+import org.eclipse.chemclipse.msd.model.implementation.ChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
+import org.eclipse.chemclipse.msd.model.support.CalculationType;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -54,6 +60,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.TableConfigSu
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.ListSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMergePeaks;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakScanListUIConfig.InteractionMode;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -92,6 +99,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 	private AtomicReference<SearchSupportUI> toolbarSearch = new AtomicReference<>();
 	private Button buttonSave;
 	private Button buttonComparison;
+	private Button buttonMerge;
 	private Button buttonTableEdit;
 	private AtomicReference<PeakScanListUI> tableViewer = new AtomicReference<>();
 	private IChromatogramSelection chromatogramSelection;
@@ -225,6 +233,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		//
 		enableEdit(tableViewer, buttonTableEdit, IMAGE_EDIT_ENTRY, false);
 		buttonComparison.setEnabled(false);
+		buttonMerge.setEnabled(false);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -233,12 +242,13 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(7, false));
+		composite.setLayout(new GridLayout(8, false));
 		//
 		buttonToolbarInfo = createButtonToggleToolbar(composite, Arrays.asList(toolbarInfoTop, toolbarInfoBottom), IMAGE_INFO, TOOLTIP_INFO);
 		buttonToolbarSearch = createButtonToggleToolbar(composite, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
 		buttonTableEdit = createButtonToggleEditTable(composite, tableViewer, IMAGE_EDIT_ENTRY);
 		buttonComparison = createButtonComparison(composite);
+		buttonMerge = createButtonMerge(composite);
 		createButtonReset(composite);
 		buttonSave = createButtonSave(composite);
 		createButtonSettings(composite);
@@ -575,6 +585,9 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		}
 		//
 		IStructuredSelection selection = tableViewer.get().getStructuredSelection();
+		buttonComparison.setEnabled(false);
+		buttonMerge.setEnabled(false);
+		//
 		if(!selection.isEmpty()) {
 			List list = selection.toList();
 			if(list.size() > 1) {
@@ -582,6 +595,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 				 * Add in the future to select/display more than one peak.
 				 */
 				buttonComparison.setEnabled(list.size() == 2);
+				buttonMerge.setEnabled(getSelectedPeaksMSD().size() >= 2);
 				/*
 				 * Selection Events
 				 */
@@ -676,6 +690,65 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		return button;
 	}
 
+	private Button createButtonMerge(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Merge the selected peaks into a new peak.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_MERGE, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				List<IChromatogramPeakMSD> peaksToMerge = getSelectedPeaksMSD();
+				if(peaksToMerge.size() >= 2) {
+					if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+						/*
+						 * Merge Peaks
+						 */
+						CalculationType calculationType = getCalculationTypeMerge();
+						boolean mergeIdentificationTargets = preferenceStore.getBoolean(PreferenceConstants.P_MERGE_PEAKS_IDENTIFICATION_TARGETS);
+						IPeakMSD peakMSD = PeakMergerMSD.mergePeaks(peaksToMerge, calculationType, mergeIdentificationTargets);
+						/*
+						 * Modify the chromatogram
+						 */
+						IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
+						IChromatogramMSD chromatogramMSD = chromatogramSelectionMSD.getChromatogram();
+						IChromatogramPeakMSD chromatogramPeakMSD = new ChromatogramPeakMSD(peakMSD.getPeakModel(), chromatogramMSD);
+						/*
+						 * Delete Origins on demand
+						 */
+						if(preferenceStore.getBoolean(PreferenceConstants.P_MERGE_PEAKS_DELETE_ORIGINS)) {
+							chromatogramMSD.removePeaks(peaksToMerge);
+						}
+						/*
+						 * Set and update the new peak.
+						 */
+						chromatogramMSD.addPeak(chromatogramPeakMSD);
+						chromatogramSelectionMSD.setSelectedPeak(chromatogramPeakMSD);
+						//
+						UpdateNotifierUI.update(e.display, chromatogramPeakMSD);
+					}
+				}
+			}
+		});
+		//
+		return button;
+	}
+
+	private CalculationType getCalculationTypeMerge() {
+
+		try {
+			return CalculationType.valueOf(preferenceStore.getString(PreferenceConstants.P_MERGE_PEAKS_CALCULATION_TYPE));
+		} catch(Exception e) {
+			/*
+			 * Default SUM on error
+			 */
+			return CalculationType.SUM;
+		}
+	}
+
 	private IScanMSD getScanMSD(Object object) {
 
 		IScanMSD massSpectrum;
@@ -767,7 +840,11 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 
 	private void createButtonSettings(Composite parent) {
 
-		createSettingsButton(parent, Arrays.asList(PreferencePageSystem.class, PreferencePageLists.class), new ISettingsHandler() {
+		createSettingsButton(parent, Arrays.asList( //
+				PreferencePageSystem.class, //
+				PreferencePageMergePeaks.class, //
+				PreferencePageLists.class //
+		), new ISettingsHandler() {
 
 			@Override
 			public void apply(Display display) {
@@ -827,6 +904,26 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			}
 		}
 		return peakList;
+	}
+
+	List<IChromatogramPeakMSD> getSelectedPeaksMSD() {
+
+		Table table = tableViewer.get().getTable();
+		int[] indices = table.getSelectionIndices();
+		List<IChromatogramPeakMSD> peaksMSD;
+		//
+		if(indices.length >= 2) {
+			peaksMSD = new ArrayList<>();
+			for(IPeak peak : getPeakList(table, indices)) {
+				if(peak instanceof IChromatogramPeakMSD) {
+					peaksMSD.add((IChromatogramPeakMSD)peak);
+				}
+			}
+		} else {
+			peaksMSD = Collections.emptyList();
+		}
+		//
+		return peaksMSD;
 	}
 
 	private List<IScan> getScanList(Table table) {

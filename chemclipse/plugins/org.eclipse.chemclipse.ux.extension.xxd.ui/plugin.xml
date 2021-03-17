@@ -226,7 +226,13 @@
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMolecule"
             id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageMolecule"
             name="Molecule">
-      </page>                                                                                   
+      </page>
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMergePeaks"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageMergePeaks"
+            name="Merge Peaks">
+      </page>                                                                                           
    </extension> 
    <extension
          point="org.eclipse.ui.editors">  
