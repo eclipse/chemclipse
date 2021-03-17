@@ -203,7 +203,6 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 					 * Parse the ions.
 					 */
 					try {
-						line = line.trim();
 						Matcher ions = ionPattern.matcher(line.trim());
 						while(ions.find()) {
 							double mz = Double.parseDouble(ions.group(1));
