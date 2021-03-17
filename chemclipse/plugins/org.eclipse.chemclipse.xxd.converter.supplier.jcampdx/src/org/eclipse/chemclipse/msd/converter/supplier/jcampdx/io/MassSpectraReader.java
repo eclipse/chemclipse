@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -42,6 +42,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class MassSpectraReader extends AbstractMassSpectraReader implements IMassSpectraReader {
 
 	private static final Logger logger = Logger.getLogger(MassSpectraReader.class);
+	private static final String COMMENT_MARKER = "$$";
 	private static final String HEADER_MARKER = "##";
 	private static final String HEADER_TITLE = "##TITLE=";
 	private static final String HEADER_VERSION = "##VERSION=";
@@ -98,6 +99,12 @@ public class MassSpectraReader extends AbstractMassSpectraReader implements IMas
 		 * Parse each line
 		 */
 		while((line = bufferedReader.readLine()) != null) {
+			/*
+			 * Strip line comments
+			 */
+			if(line.contains(COMMENT_MARKER)) {
+				line = line.substring(0, line.indexOf(COMMENT_MARKER));
+			}
 			/*
 			 * Each scan starts with the marker:
 			 * ##SCAN_NUMBER= 1
