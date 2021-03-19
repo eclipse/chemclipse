@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,6 +25,7 @@ public class CasSupport {
 	public static final int MAX_ID = 1000000000;
 	private static final String SEPARATOR = "-";
 	private static final char SEPARATOR_CHAR = '-';
+	private static final String CAS_DEFAULT = "0-00-0";
 
 	public static boolean verifyChecksum(String cas) {
 
@@ -75,5 +76,46 @@ public class CasSupport {
 		}
 		//
 		return false;
+	}
+
+	/**
+	 * Returns a formatted CAS# if cas
+	 * - doesn't contain "-"
+	 * - consists only of digits
+	 * - has a length of >= 4
+	 * There is one special case. If cas == "0", then "0-00-0" is returned.
+	 * 
+	 * @param cas
+	 * @return String
+	 */
+	public static String format(String cas) {
+
+		/*
+		 * 0-00-0
+		 */
+		if(cas != null) {
+			if("0".equals(cas)) {
+				cas = CAS_DEFAULT;
+			} else if(!cas.contains(SEPARATOR)) {
+				if(cas.matches("(\\d+)")) {
+					int length = cas.length();
+					if(length >= 4) {
+						StringBuilder builder = new StringBuilder();
+						//
+						builder.append(cas.substring(0, length - 3));
+						builder.append(SEPARATOR);
+						builder.append(cas.substring(length - 3, length - 1));
+						builder.append(SEPARATOR);
+						builder.append(cas.substring(length - 1, length));
+						//
+						cas = builder.toString();
+					}
+				}
+			}
+		} else {
+			cas = CAS_DEFAULT;
+		}
+		//
+		return cas;
 	}
 }
