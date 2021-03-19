@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -58,12 +58,20 @@ public abstract class AbstractMassSpectraReader extends AbstractFileHelper imple
 		}
 	}
 
+	// Allow missing retention indices if the DB doesn't provide them.
 	private float parseFloat(String value) {
 
 		float result = 0.0f;
+		if(value == null) {
+			return result;
+		}
+		value = value.trim();
+		if(value.isEmpty()) {
+			return result;
+		}
 		try {
-			result = Float.parseFloat(value.trim());
-		} catch(Exception e) {
+			result = Float.parseFloat(value);
+		} catch(NumberFormatException e) {
 			logger.warn(e);
 		}
 		return result;
