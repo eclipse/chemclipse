@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.eclipse.chemclipse.msd.converter.supplier.mzxml.ui
 Bundle-ManifestVersion: 2
-Bundle-Name: Ui
+Bundle-Name: mzXML UI
 Bundle-SymbolicName: org.eclipse.chemclipse.msd.converter.supplier.mzxml.ui
 Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.msd.converter.supplier.mzxml.ui.Activator
