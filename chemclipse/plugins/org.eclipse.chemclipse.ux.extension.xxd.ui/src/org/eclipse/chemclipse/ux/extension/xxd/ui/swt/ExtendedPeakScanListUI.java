@@ -508,6 +508,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			}
 			//
 			UpdateNotifierUI.update(display, chromatogramSelection);
+			UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION, "A peak or scan was deleted.");
 			updateChromatogramSelection();
 		}
 	}
