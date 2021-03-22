@@ -29,7 +29,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class ChromatogramExportConverter extends AbstractChromatogramExportConverter implements IChromatogramExportConverter {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramExportConverter.class);
-	private static final String DESCRIPTION = "mzXML Export Converter";
+	private static final String DESCRIPTION = "mzXML Chromatogram Export Converter";
 
 	@Override
 	public IProcessingInfo<File> convert(File file, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) {

@@ -28,7 +28,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class ChromatogramImportConverter extends AbstractChromatogramImportConverter<IChromatogramMSD> {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramImportConverter.class);
-	private static final String DESCRIPTION = "mzXML Import Converter";
+	private static final String DESCRIPTION = "mzXML Chromatogram Import Converter";
 
 	@Override
 	public IProcessingInfo<IChromatogramMSD> convert(File file, IProgressMonitor monitor) {
