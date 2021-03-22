@@ -332,6 +332,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		tabItem.setText("Content");
 		//
 		Text text = createTextMolecule(tabFolder);
+		text.setEditable(false);
 		tabItem.setControl(text);
 		//
 		return text;
