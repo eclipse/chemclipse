@@ -271,7 +271,8 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 			Object object = objects.get(0);
 			if(object instanceof IChromatogramSelection) {
 				IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
-				if(extendedChromatogramUI.isActiveChromatogramSelection(chromatogramSelection)) {
+				if(!extendedChromatogramUI.isActiveChromatogramSelection(chromatogramSelection)) {
+					logger.info("Update chromatogram selection: " + object);
 					extendedChromatogramUI.update();
 					return true;
 				}
