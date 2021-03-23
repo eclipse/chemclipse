@@ -15,12 +15,9 @@ package org.eclipse.chemclipse.xxd.model.filter.peaks;
 import java.util.Collection;
 import java.util.Set;
 
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.filter.IPeakFilter;
-import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
-import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.processing.Processor;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.filter.CRUDListener;
@@ -54,40 +51,24 @@ public class ClassifiedPeaksFilter implements IPeakFilter<ClassifiedPeaksFilterS
 	@Override
 	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, ClassifiedPeaksFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
 
-		Collection<X> read = listener.read();
+		Collection<X> peaks = listener.read();
 		if(configuration == null) {
-			configuration = createConfiguration(read);
+			configuration = createConfiguration(peaks);
 		}
 		Set<String> classifications = configuration.getClassificationSet();
-		SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
-		for(X peak : read) {
-			Set<IIdentificationTarget> targets = peak.getTargets();
-			float retentionIndex = peak.getPeakModel().getPeakMaximum().getRetentionIndex();
-			IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
-			IIdentificationTarget target = IIdentificationTarget.getBestIdentificationTarget(targets, identificationTargetComparator);
-			if(target != null) {
-				ILibraryInformation information = target.getLibraryInformation();
-				if(information != null) {
-					boolean disable;
-					if(classifications.isEmpty()) {
-						disable = information.getClassifier().size() > 0;
-					} else {
-						disable = false;
-						for(String classifier : information.getClassifier()) {
-							if(classifications.contains(classifier)) {
-								disable = true;
-								break;
-							}
-						}
-					}
-					if(disable) {
-						peak.setActiveForAnalysis(false);
-						listener.updated(peak);
-					}
+		SubMonitor subMonitor = SubMonitor.convert(monitor, peaks.size());
+		for(X peak : peaks) {
+			Collection<String> classifier = peak.getClassifier();
+			for(String classification : classifications) {
+				if(classifier.contains(classification)) {
+					peak.setActiveForAnalysis(false);
+					listener.updated(peak);
+					break;
 				}
 			}
 			subMonitor.worked(1);
 		}
+		subMonitor.done();
 	}
 
 	@Override
