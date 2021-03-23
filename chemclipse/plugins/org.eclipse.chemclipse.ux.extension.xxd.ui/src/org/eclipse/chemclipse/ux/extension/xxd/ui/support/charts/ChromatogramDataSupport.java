@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts;
 
+import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,8 +33,12 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.ReferencesLabel;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
+import org.eclipse.jface.preference.IPreferenceStore;
 
 public class ChromatogramDataSupport {
 
@@ -274,6 +279,71 @@ public class ChromatogramDataSupport {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Index == 0 is the master, > 0 is the reference. -1 is the default.
+	 * Use addTypeInfo to append MSD, CSD, WSD.
+	 * 
+	 * @param chromatogram
+	 * @param index
+	 * @param addTypeInfo
+	 * @return
+	 */
+	public static String getReferenceLabel(IChromatogram<?> chromatogram, int index, boolean addTypeInfo) {
+
+		/*
+		 * Get the information to display.
+		 */
+		String type = ChromatogramDataSupport.getChromatogramType(chromatogram);
+		String description = null;
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		ReferencesLabel referencesLabel = ReferencesLabel.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_REFERENCE_LABEL));
+		//
+		switch(referencesLabel) {
+			case NAME:
+				String name = chromatogram.getName();
+				if(name != null && !name.isEmpty()) {
+					description = name;
+				}
+				break;
+			case DATA_NAME:
+				String dataName = chromatogram.getDataName();
+				if(dataName != null && !dataName.isEmpty()) {
+					description = dataName;
+				}
+				break;
+			case SHORT_INFO:
+				String shortInfo = chromatogram.getShortInfo();
+				if(shortInfo != null && !shortInfo.isEmpty()) {
+					description = shortInfo;
+				}
+				break;
+			case SAMPLE_GROUP:
+				String sampleGroup = chromatogram.getSampleGroup();
+				if(sampleGroup != null && !sampleGroup.isEmpty()) {
+					description = sampleGroup;
+				}
+				break;
+			default:
+				/*
+				 * Default:
+				 * Generic Name
+				 */
+				if(index == -1) {
+					File file = chromatogram.getFile();
+					description = file != null ? file.getName() : "Chromatogram";
+				} else if(index == 0) {
+					description = "Master Chromatogram";
+				} else {
+					description = "Referenced Chromatogram (" + index + ")";
+				}
+				break;
+		}
+		/*
+		 * Add Type Info
+		 */
+		return description + " " + type;
 	}
 
 	private static boolean scanIsInSelectedRange(IScan scan, int startRetentionTime, int stopRetentionTime) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,17 +30,13 @@ import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.swt.EditorToolBar;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.ChromatogramEditorDialog;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.ReferencesLabel;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -67,7 +63,6 @@ public class ChromatogramReferencesUI {
 	private Action buttonRemoveAll;
 	//
 	private HashMap<IChromatogram<?>, IChromatogramSelection<?, ?>> referenceSelections = new HashMap<>();
-	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public ChromatogramReferencesUI(EditorToolBar editorToolBar, Consumer<IChromatogramSelection<?, ?>> chromatogramReferencesListener) {
 
@@ -218,59 +213,13 @@ public class ChromatogramReferencesUI {
 
 					if(element instanceof IChromatogramSelection<?, ?>) {
 						IChromatogramSelection<?, ?> selection = (IChromatogramSelection<?, ?>)element;
-						String type = ChromatogramDataSupport.getChromatogramType(selection);
 						int index = comboChromatograms.indexOf(selection);
 						if(index > -1) {
 							/*
 							 * Get the information to display.
 							 */
-							String description = null;
-							ReferencesLabel referencesLabel = ReferencesLabel.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_REFERENCE_LABEL));
 							IChromatogram<?> chromatogram = selection.getChromatogram();
-							switch(referencesLabel) {
-								case NAME:
-									String name = chromatogram.getName();
-									if(name != null && !name.isEmpty()) {
-										description = name;
-									}
-									break;
-								case DATA_NAME:
-									String dataName = chromatogram.getDataName();
-									if(dataName != null && !dataName.isEmpty()) {
-										description = dataName;
-									}
-									break;
-								case SHORT_INFO:
-									String shortInfo = chromatogram.getShortInfo();
-									if(shortInfo != null && !shortInfo.isEmpty()) {
-										description = shortInfo;
-									}
-									break;
-								case SAMPLE_GROUP:
-									String sampleGroup = chromatogram.getSampleGroup();
-									if(sampleGroup != null && !sampleGroup.isEmpty()) {
-										description = sampleGroup;
-									}
-									break;
-								default:
-									// No action, the Default: takes care of it.
-									break;
-							}
-							/*
-							 * Default:
-							 * Generic Name
-							 */
-							if(description == null) {
-								if(index == 0) {
-									description = "Master Chromatogram";
-								} else {
-									description = "Referenced Chromatogram (" + index + ")";
-								}
-							}
-							/*
-							 * Add Type Info
-							 */
-							return description + " " + type;
+							return ChromatogramDataSupport.getReferenceLabel(chromatogram, index, true);
 						}
 					}
 					return "N/A";

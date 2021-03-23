@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,6 +24,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EditorUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -189,12 +190,7 @@ public class ExtendedScanBrowseUI extends Composite implements IExtendedPartUI {
 				if(element instanceof IChromatogramSelection) {
 					IChromatogramSelection chromatogramSelection = (IChromatogramSelection)element;
 					IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-					String dataName = chromatogram.getDataName();
-					if(dataName != null && !"".equals(dataName)) {
-						label = dataName;
-					} else {
-						label = chromatogram.getName();
-					}
+					label = ChromatogramDataSupport.getReferenceLabel(chromatogram, -1, false);
 				}
 				return label;
 			}
