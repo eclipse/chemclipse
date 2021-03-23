@@ -66,8 +66,8 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 	private AtomicReference<ProcessMethodHeader> toolbarHeader = new AtomicReference<>();
 	private Button buttonToolbarProfile;
 	private AtomicReference<ProcessMethodProfiles> toolbarProfile = new AtomicReference<>();
-	private AtomicReference<ProcessMethodToolbar> toolbarButtons = new AtomicReference<>();
 	private AtomicReference<MethodTreeViewer> treeViewer = new AtomicReference<>();
+	private AtomicReference<ProcessMethodToolbar> toolbarButtons = new AtomicReference<>();
 	//
 	private ProcessMethod processMethod;
 	private IModificationHandler modificationHandler;

@@ -148,7 +148,7 @@ public class ProcessMethodToolbar extends ToolBar {
 			}
 		}
 		//
-		boolean readOnly = processMethod != null && processMethod.isReadOnly();
+		boolean readOnly = processMethod != null && (processMethod.isReadOnly() || this.readOnly);
 		buttonCopy.setEnabled(writeable && !readOnly);
 		buttonRemove.setEnabled(writeable && !readOnly);
 		buttonMoveUp.setEnabled(writeable && !readOnly);
