@@ -16,8 +16,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedScanChartUI;
 import org.eclipse.swt.SWT;
@@ -26,6 +28,7 @@ import org.eclipse.swt.widgets.Composite;
 public class ScanChartPart extends AbstractPart<ExtendedScanChartUI> {
 
 	private static final String TOPIC = IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION;
+	private IChromatogram cachedChromatogram = null;
 
 	@Inject
 	public ScanChartPart(Composite parent) {
@@ -37,6 +40,16 @@ public class ScanChartPart extends AbstractPart<ExtendedScanChartUI> {
 	protected ExtendedScanChartUI createControl(Composite parent) {
 
 		return new ExtendedScanChartUI(parent, SWT.NONE);
+	}
+
+	private boolean hasChanged(IChromatogramSelection chromatogramSelection) {
+
+		if(chromatogramSelection != null) {
+			if(chromatogramSelection.getChromatogram() != cachedChromatogram) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -54,6 +67,11 @@ public class ScanChartPart extends AbstractPart<ExtendedScanChartUI> {
 				} else if(object instanceof IPeak) {
 					IPeak peak = (IPeak)object;
 					scan = peak.getPeakModel().getPeakMaximum();
+				} else if(isChromatogramTopic(topic)) {
+					IChromatogramSelection<?, ?> chromatogramSelection = (IChromatogramSelection<?, ?>)object;
+					if(hasChanged(chromatogramSelection)) {
+						scan = chromatogramSelection.getSelectedScan();
+					}
 				}
 				getControl().update(scan);
 				return true;
@@ -66,7 +84,12 @@ public class ScanChartPart extends AbstractPart<ExtendedScanChartUI> {
 	@Override
 	protected boolean isUpdateTopic(String topic) {
 
-		return isScanTopic(topic) || isPeakTopic(topic) || isCloseEvent(topic);
+		return isChromatogramTopic(topic) || isScanTopic(topic) || isPeakTopic(topic) || isCloseEvent(topic);
+	}
+
+	private boolean isChromatogramTopic(String topic) {
+
+		return IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION.equals(topic);
 	}
 
 	private boolean isScanTopic(String topic) {
