@@ -467,6 +467,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		});
 	}
 
+	@SuppressWarnings("unchecked")
 	private void deletePeaksOrIdentifications(Display display) {
 
 		MessageBox messageBox = new MessageBox(display.getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
@@ -731,6 +732,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 						 */
 						chromatogramMSD.addPeak(chromatogramPeakMSD);
 						chromatogramSelectionMSD.setSelectedPeak(chromatogramPeakMSD);
+						updateChromatogramSelection();
 						//
 						UpdateNotifierUI.update(e.display, chromatogramPeakMSD);
 					}
