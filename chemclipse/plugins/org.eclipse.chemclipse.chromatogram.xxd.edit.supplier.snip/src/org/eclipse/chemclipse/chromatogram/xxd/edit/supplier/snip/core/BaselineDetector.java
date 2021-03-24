@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2020 Lablicate GmbH.
+ * Copyright (c) 2013, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -68,11 +68,11 @@ public class BaselineDetector extends AbstractBaselineDetector {
 		 * Iterations
 		 */
 		int iterations = detectorSettings.getIterations();
-		int windowSize = detectorSettings.getWindowSize().getSize();
+		WindowSize windowSize = detectorSettings.getWindowSize();
 		/*
 		 * If the scan range is lower than the given window size, do nothing.
 		 */
-		if(WindowSize.NONE.equals(windowSize) || scanRange.getWidth() <= windowSize) {
+		if(WindowSize.NONE.equals(windowSize) || scanRange.getWidth() <= windowSize.getSize()) {
 			return;
 		}
 		/*
