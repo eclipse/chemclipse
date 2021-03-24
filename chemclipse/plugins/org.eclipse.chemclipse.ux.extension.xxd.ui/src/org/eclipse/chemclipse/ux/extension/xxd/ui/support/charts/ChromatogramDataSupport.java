@@ -13,7 +13,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts;
 
-import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -288,17 +287,32 @@ public class ChromatogramDataSupport {
 	 * @param chromatogram
 	 * @param index
 	 * @param addTypeInfo
-	 * @return
+	 * @return String
 	 */
 	public static String getReferenceLabel(IChromatogram<?> chromatogram, int index, boolean addTypeInfo) {
+
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		ReferencesLabel referencesLabel = ReferencesLabel.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_REFERENCE_LABEL));
+		return getReferenceLabel(chromatogram, referencesLabel, index, addTypeInfo);
+	}
+
+	/**
+	 * Index == 0 is the master, > 0 is the reference. -1 is the default.
+	 * Use addTypeInfo to append MSD, CSD, WSD.
+	 * 
+	 * @param chromatogram
+	 * @param referencesLabel
+	 * @param index
+	 * @param addTypeInfo
+	 * @return String
+	 */
+	public static String getReferenceLabel(IChromatogram<?> chromatogram, ReferencesLabel referencesLabel, int index, boolean addTypeInfo) {
 
 		/*
 		 * Get the information to display.
 		 */
 		String type = ChromatogramDataSupport.getChromatogramType(chromatogram);
 		String description = null;
-		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		ReferencesLabel referencesLabel = ReferencesLabel.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_REFERENCE_LABEL));
 		//
 		switch(referencesLabel) {
 			case NAME:
@@ -326,24 +340,29 @@ public class ChromatogramDataSupport {
 				}
 				break;
 			default:
-				/*
-				 * Default:
-				 * Generic Name
-				 */
-				if(index == -1) {
-					File file = chromatogram.getFile();
-					description = file != null ? file.getName() : "Chromatogram";
-				} else if(index == 0) {
-					description = "Master Chromatogram";
-				} else {
-					description = "Referenced Chromatogram (" + index + ")";
-				}
+				// Do nothing, see check default.
 				break;
+		}
+		/*
+		 * Check default
+		 */
+		if(description == null) {
+			if(index == -1) {
+				description = "Chromatogram";
+			} else if(index == 0) {
+				description = "Master Chromatogram";
+			} else {
+				description = "Referenced Chromatogram (" + index + ")";
+			}
 		}
 		/*
 		 * Add Type Info
 		 */
-		return description + " " + type;
+		if(addTypeInfo) {
+			return description + " " + type;
+		} else {
+			return description;
+		}
 	}
 
 	private static boolean scanIsInSelectedRange(IScan scan, int startRetentionTime, int stopRetentionTime) {

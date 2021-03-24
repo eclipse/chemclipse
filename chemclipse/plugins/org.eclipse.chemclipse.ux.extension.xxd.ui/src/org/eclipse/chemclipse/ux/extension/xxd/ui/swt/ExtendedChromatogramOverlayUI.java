@@ -41,6 +41,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlayChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageNamedTraces;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
@@ -333,7 +334,11 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 	private void createSettingsButton(Composite parent) {
 
-		createSettingsButton(parent, Arrays.asList(PreferencePageOverlay.class, PreferencePageNamedTraces.class), new ISettingsHandler() {
+		createSettingsButton(parent, Arrays.asList( //
+				PreferencePageOverlay.class, //
+				PreferencePageNamedTraces.class, //
+				PreferencePageChromatogram.class //
+		), new ISettingsHandler() {
 
 			@Override
 			public void apply(Display display) {
