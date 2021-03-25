@@ -115,6 +115,8 @@ import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MenuEvent;
+import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -209,6 +211,9 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 	private ITargetDisplaySettings targetDisplaySettings;
 	private Predicate<IProcessSupplier<?>> dataCategoryPredicate;
 	private ProcessorToolbar processorToolbar;
+	//
+	private Object menuCache = null;
+	private boolean menuActive = false;
 
 	@Deprecated
 	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker) {
@@ -253,7 +258,9 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 	 */
 	public void adjustChromatogramChart() {
 
-		chromatogramChart.adjustRange(true);
+		if(!menuActive) {
+			chromatogramChart.adjustRange(true);
+		}
 	}
 
 	public void fireUpdate(Display display) {
@@ -361,41 +368,47 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 	public void update() {
 
 		if(!suspendUpdate) {
-			updateChromatogram();
-			adjustChromatogramSelectionRange();
-			setSeparationColumnSelection();
+			if(!menuActive) {
+				updateChromatogram();
+				adjustChromatogramSelectionRange();
+				setSeparationColumnSelection();
+			}
 		}
 	}
 
 	public void updateSelectedScan() {
 
-		chromatogramChart.deleteSeries(SERIES_ID_SELECTED_SCAN);
-		chromatogramChart.deleteSeries(SERIES_ID_IDENTIFIED_SCAN_SELECTED);
-		//
-		List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
-		addSelectedScanData(lineSeriesDataList);
-		addSelectedIdentifiedScanData(lineSeriesDataList);
-		addLineSeriesData(lineSeriesDataList);
-		adjustChromatogramSelectionRange();
+		if(!menuActive) {
+			chromatogramChart.deleteSeries(SERIES_ID_SELECTED_SCAN);
+			chromatogramChart.deleteSeries(SERIES_ID_IDENTIFIED_SCAN_SELECTED);
+			//
+			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
+			addSelectedScanData(lineSeriesDataList);
+			addSelectedIdentifiedScanData(lineSeriesDataList);
+			addLineSeriesData(lineSeriesDataList);
+			adjustChromatogramSelectionRange();
+		}
 	}
 
 	public void updateSelectedPeak() {
 
-		Set<String> seriesIds = chromatogramChart.getBaseChart().getSeriesIds();
-		//
-		chromatogramChart.deleteSeries(SERIES_ID_SELECTED_PEAK_MARKER);
-		for(String seriesId : seriesIds) {
-			if(seriesId.startsWith(SERIES_ID_SELECTED_PEAK_SHAPE)) {
-				chromatogramChart.deleteSeries(seriesId);
-			} else if(seriesId.startsWith(SERIES_ID_SELECTED_PEAK_BACKGROUND)) {
-				chromatogramChart.deleteSeries(seriesId);
+		if(!menuActive) {
+			Set<String> seriesIds = chromatogramChart.getBaseChart().getSeriesIds();
+			//
+			chromatogramChart.deleteSeries(SERIES_ID_SELECTED_PEAK_MARKER);
+			for(String seriesId : seriesIds) {
+				if(seriesId.startsWith(SERIES_ID_SELECTED_PEAK_SHAPE)) {
+					chromatogramChart.deleteSeries(seriesId);
+				} else if(seriesId.startsWith(SERIES_ID_SELECTED_PEAK_BACKGROUND)) {
+					chromatogramChart.deleteSeries(seriesId);
+				}
 			}
+			//
+			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
+			addSelectedPeakData(lineSeriesDataList, getTargetSettings());
+			addLineSeriesData(lineSeriesDataList);
+			adjustChromatogramSelectionRange();
 		}
-		//
-		List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
-		addSelectedPeakData(lineSeriesDataList, getTargetSettings());
-		addLineSeriesData(lineSeriesDataList);
-		adjustChromatogramSelectionRange();
 	}
 
 	public IChromatogramSelection getChromatogramSelection() {
@@ -467,28 +480,31 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 	public void updateMenu(boolean force) {
 
 		if(processTypeSupport != null) {
-			/*
-			 * Clean the Menu
-			 */
-			IChartSettings chartSettings = chromatogramChart.getChartSettings();
-			for(IChartMenuEntry cachedEntry : cachedMenuEntries) {
-				chartSettings.removeMenuEntry(cachedEntry);
+			if(menuCache != chromatogramSelection) {
+				/*
+				 * Clean the Menu
+				 */
+				IChartSettings chartSettings = chromatogramChart.getChartSettings();
+				for(IChartMenuEntry cachedEntry : cachedMenuEntries) {
+					chartSettings.removeMenuEntry(cachedEntry);
+				}
+				cachedMenuEntries.clear();
+				/*
+				 * Dynamic Menu Items
+				 */
+				List<IProcessSupplier<?>> suplierList = new ArrayList<>(processTypeSupport.getSupplier(this::isValidSupplier));
+				Collections.sort(suplierList, new CategoryNameComparator());
+				for(IProcessSupplier<?> supplier : suplierList) {
+					IChartMenuEntry cachedEntry = new ProcessorSupplierMenuEntry<>(supplier, processTypeSupport, this::executeSupplier);
+					cachedMenuEntries.add(cachedEntry);
+					chartSettings.addMenuEntry(cachedEntry);
+				}
+				/*
+				 * Apply the menu items.
+				 */
+				chromatogramChart.applySettings(chartSettings);
+				menuCache = chromatogramSelection;
 			}
-			cachedMenuEntries.clear();
-			/*
-			 * Dynamic Menu Items
-			 */
-			List<IProcessSupplier<?>> suplierList = new ArrayList<>(processTypeSupport.getSupplier(this::isValidSupplier));
-			Collections.sort(suplierList, new CategoryNameComparator());
-			for(IProcessSupplier<?> supplier : suplierList) {
-				IChartMenuEntry cachedEntry = new ProcessorSupplierMenuEntry<>(supplier, processTypeSupport, this::executeSupplier);
-				cachedMenuEntries.add(cachedEntry);
-				chartSettings.addMenuEntry(cachedEntry);
-			}
-			/*
-			 * Apply the menu items.
-			 */
-			chromatogramChart.applySettings(chartSettings);
 		}
 	}
 
@@ -1065,9 +1081,14 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		chartSettings.setRangeSelectorDefaultAxisX(1); // Minutes
 		chartSettings.setRangeSelectorDefaultAxisY(1); // Relative Abundance
 		chartSettings.setShowRangeSelectorInitially(false);
+		/*
+		 * Replace the existing reset handler with a specific
+		 * chromatogram reset handler.
+		 */
 		IChartMenuEntry chartMenuEntry = chartSettings.getChartMenuEntry(new ResetChartHandler().getName());
 		chartSettings.removeMenuEntry(chartMenuEntry);
 		chartSettings.addMenuEntry(new ChromatogramResetHandler(this));
+		//
 		chartSettings.addHandledEventProcessor(new ScanSelectionHandler(this));
 		chartSettings.addHandledEventProcessor(new PeakSelectionHandler(this));
 		chartSettings.addHandledEventProcessor(new ScanSelectionArrowKeyHandler(this, SWT.ARROW_LEFT));
@@ -1078,6 +1099,23 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		chartSettings.addHandledEventProcessor(new ChromatogramMoveArrowKeyHandler(this, SWT.ARROW_DOWN));
 		//
 		chromatogramChart.applySettings(chartSettings);
+		/*
+		 * Add listener to check if the menu has been opened/closed.
+		 */
+		chromatogramChart.setMenuListener(new MenuListener() {
+
+			@Override
+			public void menuShown(MenuEvent menuEvent) {
+
+				menuActive = true;
+			}
+
+			@Override
+			public void menuHidden(MenuEvent menuEvent) {
+
+				menuActive = false;
+			}
+		});
 	}
 
 	private Button createToggleToolbarButton(Composite parent, String tooltip, String image, String toolbar) {
