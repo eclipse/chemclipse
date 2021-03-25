@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -43,19 +43,24 @@ public class SubtractScanPart extends AbstractPart<ExtendedSubtractScanUI> {
 	protected boolean updateData(List<Object> objects, String topic) {
 
 		if(objects.size() == 1) {
-			Object object = objects.get(0);
-			if(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM.equals(topic)) {
-				IScanMSD scanMSD = PreferenceSupplier.getSessionSubtractMassSpectrum();
-				getControl().update(scanMSD);
-				return true;
-			} else if(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION.equals(topic)) {
-				if(object instanceof IChromatogramSelectionMSD) {
-					getControl().update(object);
-					return true;
-				}
-			} else {
+			if(isCloseEvent(topic)) {
 				getControl().update(null);
 				return true;
+			} else {
+				Object object = objects.get(0);
+				if(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM.equals(topic)) {
+					IScanMSD scanMSD = PreferenceSupplier.getSessionSubtractMassSpectrum();
+					getControl().update(scanMSD);
+					return true;
+				} else if(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION.equals(topic)) {
+					if(object instanceof IChromatogramSelectionMSD) {
+						getControl().update(object);
+						return true;
+					}
+				} else {
+					getControl().update(null);
+					return true;
+				}
 			}
 		}
 		//
@@ -65,6 +70,21 @@ public class SubtractScanPart extends AbstractPart<ExtendedSubtractScanUI> {
 	@Override
 	protected boolean isUpdateTopic(String topic) {
 
+		return isSessionSubtractTopic(topic) || isChromatogramTopic(topic) || isCloseEvent(topic);
+	}
+
+	private boolean isSessionSubtractTopic(String topic) {
+
 		return TOPIC.equals(topic);
+	}
+
+	private boolean isChromatogramTopic(String topic) {
+
+		return IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION.equals(topic);
+	}
+
+	private boolean isCloseEvent(String topic) {
+
+		return IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_CLOSE.equals(topic);
 	}
 }
