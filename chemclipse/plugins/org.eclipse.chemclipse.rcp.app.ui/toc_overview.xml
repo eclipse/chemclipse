@@ -4,8 +4,6 @@
 <toc label="Overview" link_to="toc.xml#overview"> 
 	<topic label="Chromatogram File Explorer"  href="html/overview/chromatogramFileExplorer.html"> 
 	</topic>
-	<topic label="Chromatogram Edit Menu"  href="html/overview/chromatogramEditMenu.html"> 
-	</topic>
 	<topic label="Views and Editors"  href="html/overview/viewsandeditors.html"> 
 	</topic>
 	<topic label="Perspectives"  href="html/overview/perspectives.html"> 

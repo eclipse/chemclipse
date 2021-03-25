@@ -34,12 +34,6 @@
       </page>      
    </extension>
    <extension
-         point="org.eclipse.help.toc">
-      <toc
-            file="toc_filter.xml">
-      </toc>
-   </extension>
-   <extension
          point="org.eclipse.ui.newWizards">
       <category
             name="Processors"

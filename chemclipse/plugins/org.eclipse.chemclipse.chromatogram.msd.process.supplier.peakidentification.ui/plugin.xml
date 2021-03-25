@@ -28,12 +28,6 @@
             id="org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.editors.PeakIdentificationBatchJobEditor"
             name="Peak Identification Batch Job Editor">
       </editor>
-   </extension>   
-   <extension
-         point="org.eclipse.help.toc">
-      <toc
-            file="toc_plugin.xml">
-      </toc>
    </extension>
    
 </plugin>
