@@ -10,10 +10,4 @@
             name="Manual Peak Detector">
       </page>
    </extension>
-   <extension
-         point="org.eclipse.help.toc">
-      <toc
-            file="toc_peakdetector.xml">
-      </toc>
-   </extension>
 </plugin>
