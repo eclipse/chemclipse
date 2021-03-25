@@ -35,13 +35,7 @@
             id="org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.editors.MicrosoftWordEditor2003"
             name="Microsoft Word Editor doc">
       </editor>              
-   </extension>
-   <extension
-         point="org.eclipse.help.toc">
-      <toc
-            file="toc_plugin.xml">
-      </toc>
-   </extension>  
+   </extension> 
    <extension
          point="org.eclipse.ui.newWizards">
       <category
