@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,7 +19,6 @@ import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.FloatFieldEdit
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.RadioGroupFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -40,11 +39,10 @@ public class PreferencePageWSD extends FieldEditorPreferencePage implements IWor
 	 */
 	public void createFieldEditors() {
 
-		String[][] options = new String[][]{{"&OFF", Threshold.OFF.toString()}, {"&LOW", Threshold.LOW.toString()}, {"&MEDIUM", Threshold.MEDIUM.toString()}, {"&HIGH", Threshold.HIGH.toString()}};
-		addField(new RadioGroupFieldEditor(PreferenceSupplier.P_THRESHOLD_WSD, "Set a threshold level", 1, options, getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceSupplier.P_INCLUDE_BACKGROUND_WSD, "Selected: Use VV - Deselected: Use BV or VB", getFieldEditorParent()));
-		addField(new FloatFieldEditor(PreferenceSupplier.P_MIN_SN_RATIO_WSD, "Minimum S/N ratio (0 = add all peaks)", 0.0f, Float.MAX_VALUE, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceSupplier.P_MOVING_AVERAGE_WINDOW_SIZE_WSD, "Moving average window size", WindowSize.getElements(), getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_THRESHOLD_MSD, "Threshold", Threshold.getElements(), getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_INCLUDE_BACKGROUND_WSD, "Include Background (VV: true, BV|VB: false)", getFieldEditorParent()));
+		addField(new FloatFieldEditor(PreferenceSupplier.P_MIN_SN_RATIO_WSD, "Min S/N Ratio", 0.0f, Float.MAX_VALUE, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_MOVING_AVERAGE_WINDOW_SIZE_WSD, "Window Size", WindowSize.getElements(), getFieldEditorParent()));
 	}
 
 	/*

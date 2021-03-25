@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.preferences;
 
+import org.eclipse.chemclipse.chromatogram.peak.detector.core.FilterMode;
 import org.eclipse.chemclipse.chromatogram.peak.detector.model.Threshold;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.Activator;
@@ -19,7 +20,7 @@ import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.FloatFieldEdit
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.RadioGroupFieldEditor;
+import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -40,12 +41,14 @@ public class PreferencePageMSD extends FieldEditorPreferencePage implements IWor
 	 */
 	public void createFieldEditors() {
 
-		String[][] options = new String[][]{{"&OFF", Threshold.OFF.toString()}, {"&LOW", Threshold.LOW.toString()}, {"&MEDIUM", Threshold.MEDIUM.toString()}, {"&HIGH", Threshold.HIGH.toString()}};
-		addField(new RadioGroupFieldEditor(PreferenceSupplier.P_THRESHOLD_MSD, "Set a threshold level", 1, options, getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceSupplier.P_INCLUDE_BACKGROUND_MSD, "Selected: Use VV - Deselected: Use BV or VB", getFieldEditorParent()));
-		addField(new FloatFieldEditor(PreferenceSupplier.P_MIN_SN_RATIO_MSD, "Minimum S/N ratio (0 = add all peaks)", 0.0f, Float.MAX_VALUE, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceSupplier.P_MOVING_AVERAGE_WINDOW_SIZE_MSD, "Moving average window size", WindowSize.getElements(), getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_THRESHOLD_MSD, "Threshold", Threshold.getElements(), getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_INCLUDE_BACKGROUND_MSD, "Include Background (VV: true, BV|VB: false)", getFieldEditorParent()));
+		addField(new FloatFieldEditor(PreferenceSupplier.P_MIN_SN_RATIO_MSD, "Min S/N Ratio", 0.0f, Float.MAX_VALUE, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_MOVING_AVERAGE_WINDOW_SIZE_MSD, "Window Size", WindowSize.getElements(), getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_NOISE_SEGMENTS_MSD, "Use Noise-Segments", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_FILTER_MODE_MSD, "Filter Mode", FilterMode.getElements(), getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceSupplier.P_MZ_VALUES_TO_FILTER_MSD, "m/z values to filter", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_INDIVIDUAL_TRACES_MSD, "Use Individual Traces", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_OPTIMIZE_BASELINE_MSD, "Optimize Baseline (VV)", getFieldEditorParent()));
 	}
 
