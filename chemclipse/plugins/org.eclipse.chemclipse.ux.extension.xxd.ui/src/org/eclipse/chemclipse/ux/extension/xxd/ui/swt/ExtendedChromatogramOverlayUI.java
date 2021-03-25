@@ -83,6 +83,7 @@ import org.eclipse.swtchart.extensions.core.ISeriesModificationListener;
 import org.eclipse.swtchart.extensions.core.RangeRestriction;
 import org.eclipse.swtchart.extensions.core.RangeRestriction.ExtendType;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
+import org.eclipse.swtchart.extensions.preferences.PreferencePage;
 
 public class ExtendedChromatogramOverlayUI extends Composite implements IExtendedPartUI {
 
@@ -337,7 +338,8 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		createSettingsButton(parent, Arrays.asList( //
 				PreferencePageOverlay.class, //
 				PreferencePageNamedTraces.class, //
-				PreferencePageChromatogram.class //
+				PreferencePageChromatogram.class, //
+				PreferencePage.class //
 		), new ISettingsHandler() {
 
 			@Override
@@ -423,7 +425,6 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		chartSettings.setShowRangeSelectorInitially(false);
 		chartSettings.setSupportDataShift(true);
 		chartSettings.getRangeRestriction().setZeroY(false);
-		chartSettings.setBufferSelection(preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_BUFFERED_SELECTION));
 		chromatogramChart.applySettings(chartSettings);
 		//
 		BaseChart baseChart = chromatogramChart.getBaseChart();
@@ -453,7 +454,6 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			rangeRestriction.setExtendMaxX(0.0d);
 			rangeRestriction.setExtendTypeY(ExtendType.ABSOLUTE);
 			rangeRestriction.setExtendMaxY(0.0d);
-			chartSettings.setBufferSelection(preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_BUFFERED_SELECTION));
 			chromatogramChart.applySettings(chartSettings);
 			//
 			IAxisSet axisSet = chromatogramChart.getBaseChart().getAxisSet();

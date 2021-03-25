@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -27,6 +27,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class PreferencePageOverlay extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePageOverlay() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setTitle("Overlay");
@@ -37,7 +38,6 @@ public class PreferencePageOverlay extends FieldEditorPreferencePage implements 
 	public void createFieldEditors() {
 
 		addField(new ComboFieldEditor(PreferenceConstants.P_OVERLAY_CHART_COMPRESSION_TYPE, "Compression Type:", PreferenceConstants.COMPRESSION_TYPES, getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_OVERLAY_BUFFERED_SELECTION, "Buffered Selection", getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_OVERLAY, "Display Color Scheme", Colors.getAvailableColorSchemes(), getFieldEditorParent()));

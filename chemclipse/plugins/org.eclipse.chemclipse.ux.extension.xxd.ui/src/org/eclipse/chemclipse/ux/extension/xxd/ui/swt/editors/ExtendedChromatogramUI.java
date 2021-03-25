@@ -145,6 +145,7 @@ import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 import org.eclipse.swtchart.extensions.menu.IChartMenuEntry;
 import org.eclipse.swtchart.extensions.menu.ResetChartHandler;
+import org.eclipse.swtchart.extensions.preferences.PreferencePage;
 
 @SuppressWarnings("rawtypes")
 public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
@@ -930,6 +931,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 				preferencePages.add(new PreferencePageChromatogramPeaks());
 				preferencePages.add(new PreferencePageChromatogramScans());
 				preferencePages.add(new PreferencePageSystem());
+				preferencePages.add(new PreferencePage());
 				return preferencePages;
 			}
 		}, this::applySettings);
