@@ -25,12 +25,16 @@ import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.swt.EditorToolBar;
+import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.ChromatogramEditorDialog;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
@@ -61,6 +65,7 @@ public class ChromatogramReferencesUI {
 	private Action buttonAdd;
 	private Action buttonRemove;
 	private Action buttonRemoveAll;
+	private Action buttonOpen;
 	//
 	private HashMap<IChromatogram<?>, IChromatogramSelection<?, ?>> referenceSelections = new HashMap<>();
 
@@ -162,6 +167,7 @@ public class ChromatogramReferencesUI {
 		buttonRemove = createButtonRemoveReference(toolBar);
 		buttonRemoveAll = createButtonRemoveReferenceAll(toolBar);
 		buttonAdd = createButtonAddReference(toolBar);
+		buttonOpen = createButtonOpenReference(toolBar);
 		toolBar.addSeparator();
 	}
 
@@ -343,6 +349,47 @@ public class ChromatogramReferencesUI {
 		return action;
 	}
 
+	private Action createButtonOpenReference(EditorToolBar toolBar) {
+
+		Action action = new Action("Open", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16)) {
+
+			{
+				setToolTipText("Open the chromatogram in a separate editor.");
+			}
+
+			@Override
+			public void runWithEvent(Event event) {
+
+				int index = comboChromatograms.currentIndex();
+				IChromatogramSelection<?, ?> chromatogramSelection = comboChromatograms.data.get(index);
+				IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
+				//
+				DataType dataType = null;
+				if(chromatogram instanceof IChromatogramMSD) {
+					dataType = DataType.MSD;
+				} else if(chromatogram instanceof IChromatogramCSD) {
+					dataType = DataType.CSD;
+				} else if(chromatogram instanceof IChromatogramWSD) {
+					dataType = DataType.WSD;
+				}
+				//
+				if(dataType != null) {
+					ISupplierEditorSupport supplierEditorSupport = new SupplierEditorSupport(dataType, () -> Activator.getDefault().getEclipseContext());
+					event.display.asyncExec(new Runnable() {
+
+						@Override
+						public void run() {
+
+							supplierEditorSupport.openEditor(chromatogram);
+						}
+					});
+				}
+			}
+		};
+		toolBar.addAction(action);
+		return action;
+	}
+
 	private void updateButtons() {
 
 		try {
@@ -355,6 +402,7 @@ public class ChromatogramReferencesUI {
 				buttonRemove.setEnabled(selectionIndex > 0); // 0 is the master can't be removed
 				buttonRemoveAll.setEnabled(selectionIndex == 0 && size > 1); // Remove all when in master modus
 				buttonAdd.setEnabled(selectionIndex == 0); // 0 references can be added only to master
+				buttonOpen.setEnabled(true); // Always true
 			}
 		} catch(Exception e) {
 			logger.warn(e);
