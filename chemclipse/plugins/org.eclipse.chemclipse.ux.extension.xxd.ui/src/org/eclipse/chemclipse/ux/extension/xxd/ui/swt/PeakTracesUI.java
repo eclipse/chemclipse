@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -121,7 +121,7 @@ public class PeakTracesUI extends ScrollableChart {
 			chromatogramSelection.setRangeRetentionTime(startRetentionTime, stopRetentionTime, false);
 			//
 			IColorScheme colors = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_PEAK_TRACES));
-			extractTraces(massSpectrum);
+			traces.addAll(extractTraces(massSpectrum));
 			//
 			for(Integer trace : traces) {
 				IMarkedIons markedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
@@ -141,8 +141,10 @@ public class PeakTracesUI extends ScrollableChart {
 		addLineSeriesData(lineSeriesDataList);
 	}
 
-	private void extractTraces(IScanMSD scanMSD) {
+	private List<Integer> extractTraces(IScanMSD scanMSD) {
 
+		List<Integer> traces = new ArrayList<>();
+		//
 		List<IIon> ions = new ArrayList<>(scanMSD.getIons());
 		Collections.sort(ions, (i1, i2) -> Float.compare(i2.getAbundance(), i1.getAbundance()));
 		int maxDisplayTraces = preferenceStore.getInt(PreferenceConstants.P_MAX_DISPLAY_PEAK_TRACES);
@@ -165,6 +167,7 @@ public class PeakTracesUI extends ScrollableChart {
 		 * Sort the traces ascending.
 		 */
 		Collections.sort(traces);
+		return traces;
 	}
 
 	private void modifyChart() {
