@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,20 +20,22 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class FilterSettingsStretch extends AbstractChromatogramFilterSettings {
 
-	@JsonProperty(value = "Scan Delay (Milliseconds)", defaultValue = "0")
+	@JsonProperty(value = "Scan Delay [ms]", defaultValue = "0")
 	@JsonPropertyDescription(value = "Set the scan delay.")
 	@IntSettingsProperty(minValue = PreferenceSupplier.STRETCH_MILLISECONDS_SCAN_DELAY_MIN, maxValue = PreferenceSupplier.STRETCH_MILLISECONDS_SCAN_DELAY_MAX)
 	private int scanDelay = 0;
-	@JsonProperty(value = "Chromatogram Runtime (Milliseconds)", defaultValue = "300000")
+	@JsonProperty(value = "Chromatogram Runtime [ms]", defaultValue = "300000")
 	@JsonPropertyDescription(value = "Set the length of the chromatogram.")
 	@IntSettingsProperty(minValue = PreferenceSupplier.STRETCH_MILLISECONDS_LENGTH_MIN, maxValue = PreferenceSupplier.STRETCH_MILLISECONDS_LENGTH_MAX)
 	private int chromatogramLength = 300000;
 
 	public FilterSettingsStretch() {
+
 		// Default constructor is needed, see filter extension point: filterSettings=
 	}
 
 	public FilterSettingsStretch(int chromatogramLength) {
+
 		this.chromatogramLength = chromatogramLength;
 	}
 

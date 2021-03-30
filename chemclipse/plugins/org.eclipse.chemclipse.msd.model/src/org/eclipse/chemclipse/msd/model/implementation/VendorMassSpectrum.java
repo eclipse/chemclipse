@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -37,7 +37,6 @@ public class VendorMassSpectrum extends AbstractVendorMassSpectrum implements IV
 	public static final int MIN_RETENTION_TIME = 0;
 	public static final int MAX_RETENTION_TIME = Integer.MAX_VALUE;
 
-	// -------------------------------------------ISupplierMassSpectrum
 	@Override
 	public int getMaxPossibleIons() {
 
@@ -56,8 +55,6 @@ public class VendorMassSpectrum extends AbstractVendorMassSpectrum implements IV
 		return MIN_RETENTION_TIME;
 	}
 
-	// -------------------------------------------ISupplierMassSpectrum
-	// -------------------------------IMassSpectrumCloneable
 	/**
 	 * Keep in mind, it is a covariant return.<br/>
 	 * IMassSpectrum is needed. ISupplierMassSpectrum is a subtype of
@@ -99,5 +96,4 @@ public class VendorMassSpectrum extends AbstractVendorMassSpectrum implements IV
 
 		return makeDeepCopy();
 	}
-	// -------------------------------IMassSpectrumCloneable
 }

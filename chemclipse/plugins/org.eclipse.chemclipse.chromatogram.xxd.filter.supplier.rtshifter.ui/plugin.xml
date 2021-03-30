@@ -7,7 +7,7 @@
             category="org.eclipse.chemclipse.chromatogram.filter.ui.preferences.filterPreferencePage"
             class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.ui.preferences.PreferencePage"
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.rtshifter.ui.preferences.preferencePage"
-            name="Retention Time Shifter">
+            name="Retention Time Filter">
       </page>
    </extension>
 </plugin>

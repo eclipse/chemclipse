@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,6 +27,7 @@ public class RetentionTimeShifter extends AbstractRetentionTimeModifier {
 	 * Use only static methods.
 	 */
 	private RetentionTimeShifter() {
+
 	}
 
 	public static void shiftRetentionTimes(IChromatogramSelection chromatogramSelection, FilterSettingsShift filterSettings) throws FilterException {
@@ -43,7 +44,7 @@ public class RetentionTimeShifter extends AbstractRetentionTimeModifier {
 	private static List<Integer> adjustRetentionTimesAndReturnScansToRemove(IChromatogramSelection chromatogramSelection, FilterSettingsShift filterSettings) {
 
 		boolean isShiftAllScans = filterSettings.isShiftAllScans();
-		int millisecondToShift = filterSettings.getMillisecondsToShift();
+		int millisecondToShift = filterSettings.getMillisecondsShift();
 		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 		//
 		int startScan;
