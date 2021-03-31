@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.filter.Activator;
+import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsQC;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsReset;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsSelection;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.PeakTargetsToReferencesSettings;
@@ -52,6 +53,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	//
 	public static final String P_STTR_USE_BEST_TARGET_ONLY = "scanTargetsToReferencesUseBestTargetOnly";
 	public static final boolean DEF_STTR_USE_BEST_TARGET_ONLY = false;
+	//
+	public static final String P_USE_RETENTION_INDEX_QC = "qcUseRetentionIndex";
+	public static final boolean DEF_USE_RETENTION_INDEX_QC = false;
 	/*
 	 * Max Detector UI
 	 */
@@ -101,6 +105,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		//
 		defaultValues.put(P_STTR_USE_BEST_TARGET_ONLY, Boolean.toString(DEF_STTR_USE_BEST_TARGET_ONLY));
 		//
+		defaultValues.put(P_USE_RETENTION_INDEX_QC, Boolean.toString(DEF_USE_RETENTION_INDEX_QC));
+		//
 		defaultValues.put(P_MAX_DETECTOR_TARGET_NAME, DEF_MAX_DETECTOR_TARGET_NAME);
 		defaultValues.put(P_MAX_DETECTOR_MATCH_FACTOR, Float.toString(DEF_MAX_DETECTOR_MATCH_FACTOR));
 		defaultValues.put(P_MAX_DETECTOR_MINIMA, Boolean.toString(DEF_MAX_DETECTOR_MINIMA));
@@ -127,6 +133,14 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static FilterSettingsReset getFilterSettingsReset() {
 
 		return new FilterSettingsReset();
+	}
+
+	public static FilterSettingsQC getFilterSettingsQC() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		FilterSettingsQC settings = new FilterSettingsQC();
+		settings.setUseRetentionIndexQC(preferences.getBoolean(P_USE_RETENTION_INDEX_QC, DEF_USE_RETENTION_INDEX_QC));
+		return settings;
 	}
 
 	public static ScanTargetsToPeakSettings getScanToPeakTargetTransferSettings() {
