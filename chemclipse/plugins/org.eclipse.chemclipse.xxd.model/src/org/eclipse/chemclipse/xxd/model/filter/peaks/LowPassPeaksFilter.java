@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,7 +25,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = {IPeakFilter.class, Filter.class, Processor.class})
-public class LowPassPeaksFilter implements IPeakFilter<LowPassPeaksFilterSettings> {
+public class LowPassPeaksFilter extends AbstractPeakFilter<LowPassPeaksFilterSettings> {
 
 	@Override
 	public String getName() {
@@ -48,13 +48,16 @@ public class LowPassPeaksFilter implements IPeakFilter<LowPassPeaksFilterSetting
 	@Override
 	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, LowPassPeaksFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
 
-		Collection<X> read = listener.read();
+		Collection<X> peaks = listener.read();
+		//
 		if(configuration == null) {
-			configuration = createConfiguration(read);
+			configuration = createConfiguration(peaks);
 		}
 		//
 		int numberLowest = configuration.getNumberLowest();
 		XPassPeaksFilter.filterPeaks(listener, messageConsumer, numberLowest, false, monitor);
+		//
+		resetPeakSelection(listener.getDataContainer());
 	}
 
 	@Override

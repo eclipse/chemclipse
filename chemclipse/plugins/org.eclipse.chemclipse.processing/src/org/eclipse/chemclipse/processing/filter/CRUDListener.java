@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - enable access to the data container
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.filter;
 
@@ -72,5 +73,17 @@ public interface CRUDListener<ItemType, CreationContext> {
 	default boolean delete(ItemType item) {
 
 		return false;
+	}
+
+	/**
+	 * Returns the container of the list if available.
+	 * It could be a chromatogram selection or something else.
+	 * Watch out, it could be also null.
+	 * 
+	 * @return Object
+	 */
+	default Object getDataContainer() {
+
+		return null;
 	}
 }

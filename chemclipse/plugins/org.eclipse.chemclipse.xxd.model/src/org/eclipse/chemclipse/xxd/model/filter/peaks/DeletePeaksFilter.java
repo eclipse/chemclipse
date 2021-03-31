@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - improvement update process
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.model.filter.peaks;
 
@@ -26,7 +27,7 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = {IPeakFilter.class, Filter.class, Processor.class})
-public class DeletePeaksFilter implements IPeakFilter<DeletePeaksFilterSettings> {
+public class DeletePeaksFilter extends AbstractPeakFilter<DeletePeaksFilterSettings> {
 
 	@Override
 	public String getName() {
@@ -43,24 +44,31 @@ public class DeletePeaksFilter implements IPeakFilter<DeletePeaksFilterSettings>
 	@Override
 	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, DeletePeaksFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
 
-		Collection<X> read = listener.read();
+		Collection<X> peaks = listener.read();
+		/*
+		 * Settings
+		 */
 		if(configuration == null) {
-			configuration = createConfiguration(read);
+			configuration = createConfiguration(peaks);
 		}
-		//
+		/*
+		 * Delete the peaks.
+		 */
 		if(configuration.isDeletePeaks()) {
-			SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
-			for(X x : read) {
+			SubMonitor subMonitor = SubMonitor.convert(monitor, peaks.size());
+			for(X peak : peaks) {
 				if(configuration.isDeleteUnidentifiedOnly()) {
-					if(x.getTargets().size() == 0) {
-						listener.delete(x);
+					if(peak.getTargets().size() == 0) {
+						listener.delete(peak);
 					}
 				} else {
-					listener.delete(x);
+					listener.delete(peak);
 				}
 				subMonitor.worked(1);
 			}
 		}
+		//
+		resetPeakSelection(listener.getDataContainer());
 	}
 
 	@Override

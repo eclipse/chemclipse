@@ -29,7 +29,7 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = {IPeakFilter.class, Filter.class, Processor.class})
-public class DeletePeaksByTargetFilter implements IPeakFilter<DeletePeaksByTargetFilterSettings> {
+public class DeletePeaksByTargetFilter extends AbstractPeakFilter<DeletePeaksByTargetFilterSettings> {
 
 	@Override
 	public String getName() {
@@ -47,6 +47,7 @@ public class DeletePeaksByTargetFilter implements IPeakFilter<DeletePeaksByTarge
 	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, DeletePeaksByTargetFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
 
 		Collection<X> peaks = listener.read();
+		//
 		if(configuration == null) {
 			configuration = createConfiguration(peaks);
 		}
@@ -60,6 +61,8 @@ public class DeletePeaksByTargetFilter implements IPeakFilter<DeletePeaksByTarge
 				subMonitor.worked(1);
 			}
 		}
+		//
+		resetPeakSelection(listener.getDataContainer());
 	}
 
 	@Override

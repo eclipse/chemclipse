@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Alexander Stark - initial API and implementation
+ * Philip Wenig - improvement update process
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.model.filter.peaks;
 
@@ -27,7 +28,7 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = {IPeakFilter.class, Filter.class, Processor.class})
-public class ShapeFilter implements IPeakFilter<ShapeFilterSettings> {
+public class ShapeFilter extends AbstractPeakFilter<ShapeFilterSettings> {
 
 	private static BiPredicate<RangeContainer, Double> LEADING_SMALLER_THAN_LIMIT_COMPARATOR = (container, shapeSetting) -> (container.leading < shapeSetting);
 	private static BiPredicate<RangeContainer, Double> TAILING_GREATER_THAN_LIMIT_COMPARATOR = (container, shapeSetting) -> (container.tailing > shapeSetting);
@@ -39,6 +40,7 @@ public class ShapeFilter implements IPeakFilter<ShapeFilterSettings> {
 		double tailing = 0.0d;
 
 		public RangeContainer(double leading, double tailing) {
+
 			super();
 			this.leading = leading;
 			this.tailing = tailing;
@@ -56,6 +58,7 @@ public class ShapeFilter implements IPeakFilter<ShapeFilterSettings> {
 		private final T shapeSetting;
 
 		public ShapePredicate(BiPredicate<RangeContainer, T> predicate, T shapeSetting) {
+
 			super();
 			this.predicate = predicate;
 			this.shapeSetting = shapeSetting;
@@ -100,16 +103,19 @@ public class ShapeFilter implements IPeakFilter<ShapeFilterSettings> {
 	@Override
 	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, ShapeFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
 
-		Collection<X> read = listener.read();
+		Collection<X> peaks = listener.read();
+		//
 		if(configuration == null) {
-			configuration = createConfiguration(read);
+			configuration = createConfiguration(peaks);
 		}
-		SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
+		SubMonitor subMonitor = SubMonitor.convert(monitor, peaks.size());
 		ShapePredicate<?> predicate = getPredicate(configuration);
-		for(X peak : read) {
+		for(X peak : peaks) {
 			processPeakSuperRange(configuration, listener, peak, predicate);
 			subMonitor.worked(1);
 		}
+		//
+		resetPeakSelection(listener.getDataContainer());
 	}
 
 	private static ShapePredicate<?> getPredicate(ShapeFilterSettings configuration) {

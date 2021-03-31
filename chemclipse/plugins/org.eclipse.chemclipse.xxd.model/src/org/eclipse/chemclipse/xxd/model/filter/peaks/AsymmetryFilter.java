@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Alexander Stark - initial API and implementation
+ * Philip Wenig - improvement update process
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.model.filter.peaks;
 
@@ -27,7 +28,7 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = {IPeakFilter.class, Filter.class, Processor.class})
-public class AsymmetryFilter implements IPeakFilter<AsymmetryFilterSettings> {
+public class AsymmetryFilter extends AbstractPeakFilter<AsymmetryFilterSettings> {
 
 	private static BiPredicate<Double, Double> ASYMMETRY_FACTOR_SMALLER_THAN_LIMIT_COMPARATOR = (factor, factorSetting) -> (factor < factorSetting);
 	private static BiPredicate<Double, Double> ASYMMETRY_FACTOR_GREATER_THAN_LIMIT_COMPARATOR = (factor, factorSetting) -> (factor > factorSetting);
@@ -38,6 +39,7 @@ public class AsymmetryFilter implements IPeakFilter<AsymmetryFilterSettings> {
 		private final T factorSetting;
 
 		public FactorPredicate(BiPredicate<Double, T> predicate, T factorSetting) {
+
 			super();
 			this.predicate = predicate;
 			this.factorSetting = factorSetting;
@@ -82,16 +84,20 @@ public class AsymmetryFilter implements IPeakFilter<AsymmetryFilterSettings> {
 	@Override
 	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, AsymmetryFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
 
-		Collection<X> read = listener.read();
+		Collection<X> peaks = listener.read();
+		//
 		if(configuration == null) {
-			configuration = createConfiguration(read);
+			configuration = createConfiguration(peaks);
 		}
-		SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
+		//
+		SubMonitor subMonitor = SubMonitor.convert(monitor, peaks.size());
 		FactorPredicate<?> predicate = getPredicate(configuration);
-		for(X peak : read) {
+		for(X peak : peaks) {
 			processPeak(configuration, listener, peak, predicate);
 			subMonitor.worked(1);
 		}
+		//
+		resetPeakSelection(listener.getDataContainer());
 	}
 
 	private static FactorPredicate<?> getPredicate(AsymmetryFilterSettings configuration) {

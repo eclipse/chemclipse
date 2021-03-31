@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - improvement update process
  *******************************************************************************/
 package org.eclipse.chemclipse.model.supplier;
 
@@ -69,6 +70,7 @@ public class IPeakFilterProcessTypeSupplier implements IProcessTypeSupplier {
 		private final IPeakFilter<ConfigType> filter;
 
 		PeakFilterProcessSupplier(IPeakFilter<ConfigType> filter, IProcessTypeSupplier parent) {
+
 			super(getID(filter), filter.getName(), filter.getDescription(), filter.getConfigClass(), parent, filter.getDataCategories());
 			this.filter = filter;
 		}
@@ -98,6 +100,12 @@ public class IPeakFilterProcessTypeSupplier implements IProcessTypeSupplier {
 					public Collection<P> read() {
 
 						return Collections.unmodifiableCollection(peaks);
+					}
+
+					@Override
+					public Object getDataContainer() {
+
+						return chromatogramSelection;
 					}
 				}, processSettings, context, context.getProgressMonitor());
 			}

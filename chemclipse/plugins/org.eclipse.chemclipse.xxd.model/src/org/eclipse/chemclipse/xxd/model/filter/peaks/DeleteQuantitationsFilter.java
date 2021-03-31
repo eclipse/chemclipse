@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -49,14 +49,15 @@ public class DeleteQuantitationsFilter implements IPeakFilter<DeleteQuantitation
 	@Override
 	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, DeleteQuantitationsFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
 
-		Collection<X> read = listener.read();
+		Collection<X> peaks = listener.read();
+		//
 		if(configuration == null) {
-			configuration = createConfiguration(read);
+			configuration = createConfiguration(peaks);
 		}
 		//
 		if(configuration.isDeleteQuantitations()) {
-			SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
-			for(X peak : read) {
+			SubMonitor subMonitor = SubMonitor.convert(monitor, peaks.size());
+			for(X peak : peaks) {
 				peak.removeAllQuantitationEntries();
 				subMonitor.worked(1);
 			}

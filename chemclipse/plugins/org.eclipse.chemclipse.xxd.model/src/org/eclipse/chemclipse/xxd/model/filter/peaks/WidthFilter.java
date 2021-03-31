@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Alexander Stark - initial API and implementation
+ * Philip Wenig - improvement update process
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.model.filter.peaks;
 
@@ -27,7 +28,7 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = {IPeakFilter.class, Filter.class, Processor.class})
-public class WidthFilter implements IPeakFilter<WidthFilterSettings> {
+public class WidthFilter extends AbstractPeakFilter<WidthFilterSettings> {
 
 	private static BiPredicate<Integer, Integer> WIDTH_SMALLER_THAN_LIMIT_COMPARATOR = (width, widthSetting) -> (width < widthSetting);
 	private static BiPredicate<Integer, Integer> WIDTH_GREATER_THAN_LIMIT_COMPARATOR = (width, widthSetting) -> (width > widthSetting);
@@ -38,6 +39,7 @@ public class WidthFilter implements IPeakFilter<WidthFilterSettings> {
 		private final T widthSetting;
 
 		public WidthPredicate(BiPredicate<Integer, T> predicate, T widthSetting) {
+
 			super();
 			this.predicate = predicate;
 			this.widthSetting = widthSetting;
@@ -82,16 +84,19 @@ public class WidthFilter implements IPeakFilter<WidthFilterSettings> {
 	@Override
 	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, WidthFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
 
-		Collection<X> read = listener.read();
+		Collection<X> peaks = listener.read();
+		//
 		if(configuration == null) {
-			configuration = createConfiguration(read);
+			configuration = createConfiguration(peaks);
 		}
-		SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
+		SubMonitor subMonitor = SubMonitor.convert(monitor, peaks.size());
 		WidthPredicate<?> predicate = getPredicate(configuration);
-		for(X peak : read) {
+		for(X peak : peaks) {
 			processPeak(configuration, listener, peak, predicate);
 			subMonitor.worked(1);
 		}
+		//
+		resetPeakSelection(listener.getDataContainer());
 	}
 
 	private static WidthPredicate<?> getPredicate(WidthFilterSettings configuration) {

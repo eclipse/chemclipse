@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - improvement update process
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.model.filter.peaks;
 
@@ -29,7 +30,7 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = {IPeakFilter.class, Filter.class, Processor.class})
-public class MinimumTracesFilter implements IPeakFilter<MinimumTracesFilterSettings> {
+public class MinimumTracesFilter extends AbstractPeakFilter<MinimumTracesFilterSettings> {
 
 	@Override
 	public String getName() {
@@ -52,13 +53,15 @@ public class MinimumTracesFilter implements IPeakFilter<MinimumTracesFilterSetti
 	@Override
 	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, MinimumTracesFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
 
-		Collection<X> read = listener.read();
+		Collection<X> peaks = listener.read();
+		//
 		if(configuration == null) {
-			configuration = createConfiguration(read);
+			configuration = createConfiguration(peaks);
 		}
-		SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
+		//
+		SubMonitor subMonitor = SubMonitor.convert(monitor, peaks.size());
 		int minIons = configuration.getMinNumberOfIons();
-		for(X peak : read) {
+		for(X peak : peaks) {
 			if(peak instanceof IPeakMSD) {
 				IPeakMassSpectrum massSpectrum = ((IPeakMSD)peak).getExtractedMassSpectrum();
 				if(massSpectrum.getIons().size() < minIons) {
@@ -69,6 +72,8 @@ public class MinimumTracesFilter implements IPeakFilter<MinimumTracesFilterSetti
 			}
 			subMonitor.worked(1);
 		}
+		//
+		resetPeakSelection(listener.getDataContainer());
 	}
 
 	@Override

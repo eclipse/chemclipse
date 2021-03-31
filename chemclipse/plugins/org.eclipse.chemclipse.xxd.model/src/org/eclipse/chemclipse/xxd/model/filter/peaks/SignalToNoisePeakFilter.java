@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,7 +7,9 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Christoph Läubrich, Dr. Philip Wenig, Dr. Alexander Kerner - initial API and implementation
+ * Christoph Läubrich - initial API and implementation
+ * Dr. Philip Wenig - initial API and implementation
+ * Dr. Alexander Kerner - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.model.filter.peaks;
 
@@ -26,7 +28,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = {IPeakFilter.class, Filter.class, Processor.class})
-public class SignalToNoisePeakFilter implements IPeakFilter<SignalToNoisePeakFilterSettings> {
+public class SignalToNoisePeakFilter extends AbstractPeakFilter<SignalToNoisePeakFilterSettings> {
 
 	@Override
 	public String getName() {
@@ -43,12 +45,15 @@ public class SignalToNoisePeakFilter implements IPeakFilter<SignalToNoisePeakFil
 	@Override
 	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, SignalToNoisePeakFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
 
+		Collection<X> peaks = listener.read();
+		//
 		if(configuration == null) {
 			configuration = new SignalToNoisePeakFilterSettings();
 		}
+		//
 		float maxSignalToNoise = configuration.getMaxSignalToNoise();
 		float minSignalToNoise = configuration.getMinSignalToNoise();
-		for(X peak : listener.read()) {
+		for(X peak : peaks) {
 			if(peak instanceof IChromatogramPeak) {
 				float sn = ((IChromatogramPeak)peak).getSignalToNoiseRatio();
 				if(Float.isFinite(sn)) {
@@ -58,6 +63,8 @@ public class SignalToNoisePeakFilter implements IPeakFilter<SignalToNoisePeakFil
 				}
 			}
 		}
+		//
+		resetPeakSelection(listener.getDataContainer());
 	}
 
 	@Override

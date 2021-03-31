@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Alexander Stark - initial API and implementation
+ * Philip Wenig - improvement update process
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.model.filter.peaks;
 
@@ -29,7 +30,7 @@ import org.osgi.service.component.annotations.Component;
 import com.google.common.collect.Range;
 
 @Component(service = {IPeakFilter.class, Filter.class, Processor.class})
-public class AreaPercentFilter implements IPeakFilter<AreaPercentFilterSettings> {
+public class AreaPercentFilter extends AbstractPeakFilter<AreaPercentFilterSettings> {
 
 	private static BiPredicate<Double, Double> AREA_LESS_THAN_MINIMUM_COMPARATOR = (peakArea, areaSetting) -> (peakArea < areaSetting);
 	private static BiPredicate<Double, Double> AREA_GREATER_THAN_MAXIMUM_COMPARATOR = (peakArea, areaSetting) -> (peakArea > areaSetting);
@@ -41,6 +42,7 @@ public class AreaPercentFilter implements IPeakFilter<AreaPercentFilterSettings>
 		private final T areaSetting;
 
 		public AreaPredicate(BiPredicate<Double, T> predicate, T areaSetting) {
+
 			super();
 			this.predicate = predicate;
 			this.areaSetting = areaSetting;
@@ -85,24 +87,28 @@ public class AreaPercentFilter implements IPeakFilter<AreaPercentFilterSettings>
 	@Override
 	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, AreaPercentFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
 
-		Collection<X> read = listener.read();
+		Collection<X> peaks = listener.read();
+		//
 		if(configuration == null) {
-			configuration = createConfiguration(read);
+			configuration = createConfiguration(peaks);
 		}
-		SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
-		double areaSum = calculateAreaSum(read);
+		//
+		SubMonitor subMonitor = SubMonitor.convert(monitor, peaks.size());
+		double areaSum = calculateAreaSum(peaks);
 		AreaPredicate<?> predicate = getPredicate(configuration);
-		for(X peak : read) {
+		for(X peak : peaks) {
 			double compareAreaValue = calculatePercentageAreaCompareValue(peak, areaSum);
 			processPeak(listener, configuration, peak, compareAreaValue, predicate);
 			subMonitor.worked(1);
 		}
+		//
+		resetPeakSelection(listener.getDataContainer());
 	}
 
-	private static <X extends IPeak> double calculateAreaSum(Collection<X> read) {
+	private static <X extends IPeak> double calculateAreaSum(Collection<X> peaks) {
 
 		double areaSum = 0;
-		for(X peak : read) {
+		for(X peak : peaks) {
 			areaSum = areaSum + peak.getIntegratedArea();
 		}
 		return areaSum;
@@ -110,7 +116,11 @@ public class AreaPercentFilter implements IPeakFilter<AreaPercentFilterSettings>
 
 	private static <X extends IPeak> double calculatePercentageAreaCompareValue(X peak, double areaSum) {
 
-		return (100 / areaSum) * peak.getIntegratedArea();
+		if(areaSum != 0) {
+			return (100 / areaSum) * peak.getIntegratedArea();
+		} else {
+			return 0.0d;
+		}
 	}
 
 	private static AreaPredicate<?> getPredicate(AreaPercentFilterSettings configuration) {
