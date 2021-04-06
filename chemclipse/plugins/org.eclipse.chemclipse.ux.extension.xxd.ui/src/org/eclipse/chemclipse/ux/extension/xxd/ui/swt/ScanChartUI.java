@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -195,7 +195,7 @@ public class ScanChartUI extends ScrollableChart {
 			DataType usedDataType = determineDataType(scan);
 			SignalType usedSignalType = determineSignalType(scan);
 			//
-			modifyChart(usedDataType);
+			modifyChart(usedDataType, usedSignalType);
 			determineLabelOption(usedDataType);
 			modifyChart(scan, null);
 			//
@@ -234,7 +234,7 @@ public class ScanChartUI extends ScrollableChart {
 			DataType usedDataType = determineDataType(scan1);
 			SignalType usedSignalType = determineSignalType(scan1);
 			//
-			modifyChart(usedDataType);
+			modifyChart(usedDataType, usedSignalType);
 			determineLabelOption(usedDataType);
 			modifyChart(mirrored);
 			modifyChart(scan1, scan2);
@@ -342,7 +342,7 @@ public class ScanChartUI extends ScrollableChart {
 
 		dataType = DataType.AUTO_DETECT;
 		signalType = SignalType.AUTO_DETECT;
-		modifyChart(DataType.MSD_NOMINAL);
+		modifyChart(DataType.MSD_NOMINAL, signalType);
 	}
 
 	private DataType determineDataType(IScan scan) {
@@ -448,7 +448,7 @@ public class ScanChartUI extends ScrollableChart {
 		}
 	}
 
-	private void modifyChart(DataType dataType) {
+	private void modifyChart(DataType dataType, SignalType signalType) {
 
 		/*
 		 * Preferences
@@ -502,6 +502,12 @@ public class ScanChartUI extends ScrollableChart {
 				scanDataSupport.setDataTypeCSD(chartSettings);
 				break;
 			case WSD:
+				/*
+				 * No display of wavelengths when DAD is shown.
+				 */
+				if(signalType == SignalType.PROFILE) {
+					labelPaintListener = null;
+				}
 				scanDataSupport.setDataTypeWSD(chartSettings);
 				rangeRestriction.setZeroY(false);
 				break;
@@ -593,7 +599,10 @@ public class ScanChartUI extends ScrollableChart {
 		IPlotArea plotArea = (IPlotArea)getBaseChart().getPlotArea();
 		plotArea.removeCustomPaintListener(labelPaintListenerX);
 		plotArea.removeCustomPaintListener(labelPaintListenerY);
-		plotArea.addCustomPaintListener(labelPaintListener);
+		//
+		if(labelPaintListener != null) {
+			plotArea.addCustomPaintListener(labelPaintListener);
+		}
 	}
 
 	private void printLabel(BarSeriesValue barSeriesValue, boolean useX, PaintEvent e) {
