@@ -15,7 +15,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.IMassSpectrumIdentifierSupplier;
@@ -230,17 +229,17 @@ public class ScanIdentifierUI extends Composite {
 		List<IScanMSD> scansMSD = new ArrayList<>();
 		for(IScan scan : scans) {
 			if(scan instanceof IScanMSD) {
-				scansMSD.add((IScanMSD)scan);
+				IScanMSD scanMSD = (IScanMSD)scan;
+				/*
+				 * Get the optimized mass spectrum if available.
+				 */
+				IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
+				IScanMSD massSpectrum = (optimizedMassSpectrum != null) ? optimizedMassSpectrum : scanMSD;
+				scansMSD.add(massSpectrum);
 			}
 		}
-		/*
-		 * Fire an update when processing the last element.
-		 */
-		Iterator<IScanMSD> iterator = scansMSD.iterator();
-		while(iterator.hasNext()) {
-			IScanMSD scanMSD = iterator.next();
-			runIdentification(display, scanMSD, !iterator.hasNext());
-		}
+		//
+		runIdentification(display, scansMSD, true);
 	}
 
 	/**
@@ -249,19 +248,11 @@ public class ScanIdentifierUI extends Composite {
 	 * @param display
 	 * @param scanMSD
 	 */
-	private void runIdentification(Display display, IScanMSD scanMSD, boolean update) {
+	private void runIdentification(Display display, List<IScanMSD> massSpectra, boolean update) {
 
-		if(scanMSD != null) {
-			/*
-			 * Get mass spectrum.
-			 */
-			IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
-			IScanMSD massSpectrum = (optimizedMassSpectrum != null) ? optimizedMassSpectrum : scanMSD;
-			/*
-			 * Identification
-			 */
+		if(scans.size() > 0) {
 			if(massSpectrumIdentifierSupplier != null) {
-				IRunnableWithProgress runnable = new MassSpectrumIdentifierRunnable(massSpectrum, massSpectrumIdentifierSupplier.getId());
+				IRunnableWithProgress runnable = new MassSpectrumIdentifierRunnable(massSpectra, massSpectrumIdentifierSupplier.getId());
 				ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
 				try {
 					monitor.run(true, true, runnable);
