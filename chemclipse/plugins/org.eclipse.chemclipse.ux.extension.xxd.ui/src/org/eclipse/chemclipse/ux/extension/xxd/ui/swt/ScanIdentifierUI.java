@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,7 +13,9 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.IMassSpectrumIdentifierSupplier;
@@ -48,7 +50,7 @@ public class ScanIdentifierUI extends Composite {
 	//
 	private Button button;
 	//
-	private IScan scan = null;
+	private List<IScan> scans = new ArrayList<>();
 	private IUpdateListener updateListener = null;
 	//
 	private IMassSpectrumIdentifierSupplier massSpectrumIdentifierSupplier;
@@ -58,15 +60,6 @@ public class ScanIdentifierUI extends Composite {
 
 		super(parent, style);
 		createControl();
-	}
-
-	public static List<IMassSpectrumIdentifierSupplier> getIdentifierSuppliersMSD() {
-
-		IMassSpectrumIdentifierSupport massSpectrumIdentifierSupport = MassSpectrumIdentifier.getMassSpectrumIdentifierSupport();
-		List<IMassSpectrumIdentifierSupplier> identifierSuppliers = new ArrayList<>(massSpectrumIdentifierSupport.getSuppliers());
-		Collections.sort(identifierSuppliers, (s1, s2) -> s1.getIdentifierName().compareTo(s2.getIdentifierName()));
-		//
-		return identifierSuppliers;
 	}
 
 	public static String[][] getScanIdentifierMSD() {
@@ -88,45 +81,16 @@ public class ScanIdentifierUI extends Composite {
 		button.setEnabled(enabled);
 	}
 
-	/**
-	 * Identify the scan by calling the selected identifier.
-	 * 
-	 * @param display
-	 * @param scanMSD
-	 */
-	public void runIdentification(Display display, IScanMSD scanMSD, boolean update) {
-
-		if(scanMSD != null) {
-			/*
-			 * Get mass spectrum.
-			 */
-			IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
-			IScanMSD massSpectrum = (optimizedMassSpectrum != null) ? optimizedMassSpectrum : scanMSD;
-			/*
-			 * Identification
-			 */
-			if(massSpectrumIdentifierSupplier != null) {
-				IRunnableWithProgress runnable = new MassSpectrumIdentifierRunnable(massSpectrum, massSpectrumIdentifierSupplier.getId());
-				ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
-				try {
-					monitor.run(true, true, runnable);
-					if(update) {
-						fireUpdate(display);
-					}
-				} catch(InvocationTargetException e1) {
-					logger.warn(e1);
-				} catch(InterruptedException e1) {
-					logger.warn(e1);
-				}
-			}
-		}
-	}
-
 	public void setInput(IScan scan) {
 
-		this.scan = scan;
-		boolean enabled = scan instanceof IScanMSD;
-		setEnabled(enabled);
+		setInput(Arrays.asList(scan));
+	}
+
+	public void setInput(List<IScan> scans) {
+
+		this.scans.clear();
+		this.scans.addAll(scans);
+		setEnabled(isDataAvailable());
 	}
 
 	public void setUpdateListener(IUpdateListener updateListener) {
@@ -181,6 +145,7 @@ public class ScanIdentifierUI extends Composite {
 				runIdentification(e.display);
 			}
 		});
+		//
 		return button;
 	}
 
@@ -240,10 +205,75 @@ public class ScanIdentifierUI extends Composite {
 		button.setMenu(menu);
 	}
 
+	private static List<IMassSpectrumIdentifierSupplier> getIdentifierSuppliersMSD() {
+
+		IMassSpectrumIdentifierSupport massSpectrumIdentifierSupport = MassSpectrumIdentifier.getMassSpectrumIdentifierSupport();
+		List<IMassSpectrumIdentifierSupplier> identifierSuppliers = new ArrayList<>(massSpectrumIdentifierSupport.getSuppliers());
+		Collections.sort(identifierSuppliers, (s1, s2) -> s1.getIdentifierName().compareTo(s2.getIdentifierName()));
+		//
+		return identifierSuppliers;
+	}
+
+	private boolean isDataAvailable() {
+
+		for(IScan scan : scans) {
+			if(scan instanceof IScanMSD) {
+				return true;
+			}
+		}
+		//
+		return false;
+	}
+
 	private void runIdentification(Display display) {
 
-		if(scan instanceof IScanMSD) {
-			runIdentification(display, (IScanMSD)scan, true);
+		List<IScanMSD> scansMSD = new ArrayList<>();
+		for(IScan scan : scans) {
+			if(scan instanceof IScanMSD) {
+				scansMSD.add((IScanMSD)scan);
+			}
+		}
+		/*
+		 * Fire an update when processing the last element.
+		 */
+		Iterator<IScanMSD> iterator = scansMSD.iterator();
+		while(iterator.hasNext()) {
+			IScanMSD scanMSD = iterator.next();
+			runIdentification(display, scanMSD, !iterator.hasNext());
+		}
+	}
+
+	/**
+	 * Identify the scan by calling the selected identifier.
+	 * 
+	 * @param display
+	 * @param scanMSD
+	 */
+	private void runIdentification(Display display, IScanMSD scanMSD, boolean update) {
+
+		if(scanMSD != null) {
+			/*
+			 * Get mass spectrum.
+			 */
+			IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
+			IScanMSD massSpectrum = (optimizedMassSpectrum != null) ? optimizedMassSpectrum : scanMSD;
+			/*
+			 * Identification
+			 */
+			if(massSpectrumIdentifierSupplier != null) {
+				IRunnableWithProgress runnable = new MassSpectrumIdentifierRunnable(massSpectrum, massSpectrumIdentifierSupplier.getId());
+				ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
+				try {
+					monitor.run(true, true, runnable);
+					if(update) {
+						fireUpdate(display);
+					}
+				} catch(InvocationTargetException e1) {
+					logger.warn(e1);
+				} catch(InterruptedException e1) {
+					logger.warn(e1);
+				}
+			}
 		}
 	}
 

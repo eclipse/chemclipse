@@ -55,12 +55,14 @@ import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.IUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.InternalStandardDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.TableConfigSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.ListSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMergePeaks;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakScanListUIConfig.InteractionMode;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -100,6 +102,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 	private Button buttonSave;
 	private Button buttonComparison;
 	private Button buttonMerge;
+	private ScanIdentifierUI scanIdentifierUI;
 	private Button buttonTableEdit;
 	private AtomicReference<PeakScanListUI> tableViewer = new AtomicReference<>();
 	private IChromatogramSelection chromatogramSelection;
@@ -234,6 +237,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		enableEdit(tableViewer, buttonTableEdit, IMAGE_EDIT_ENTRY, false);
 		buttonComparison.setEnabled(false);
 		buttonMerge.setEnabled(false);
+		scanIdentifierUI.setEnabled(false);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -242,13 +246,14 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(8, false));
+		composite.setLayout(new GridLayout(9, false));
 		//
 		buttonToolbarInfo = createButtonToggleToolbar(composite, Arrays.asList(toolbarInfoTop, toolbarInfoBottom), IMAGE_INFO, TOOLTIP_INFO);
 		buttonToolbarSearch = createButtonToggleToolbar(composite, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
 		buttonTableEdit = createButtonToggleEditTable(composite, tableViewer, IMAGE_EDIT_ENTRY);
 		buttonComparison = createButtonComparison(composite);
 		buttonMerge = createButtonMerge(composite);
+		scanIdentifierUI = createScanIdentifierUI(composite);
 		createButtonReset(composite);
 		buttonSave = createButtonSave(composite);
 		createButtonSettings(composite);
@@ -592,6 +597,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		IStructuredSelection selection = tableViewer.get().getStructuredSelection();
 		buttonComparison.setEnabled(false);
 		buttonMerge.setEnabled(false);
+		scanIdentifierUI.setEnabled(false); // setInput enables/disables the control.
 		//
 		if(!selection.isEmpty()) {
 			List list = selection.toList();
@@ -606,14 +612,21 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 				 */
 				List<IPeak> selectedPeaks = new ArrayList<>();
 				List<IScan> selectedIdentifiedScans = new ArrayList<>();
+				List<IScan> scansIdentify = new ArrayList<>();
 				//
 				for(Object item : list) {
 					if(item instanceof IPeak) {
-						selectedPeaks.add((IPeak)item);
+						IPeak peak = (IPeak)item;
+						selectedPeaks.add(peak);
+						scansIdentify.add(peak.getPeakModel().getPeakMaximum());
 					} else if(item instanceof IScan) {
-						selectedIdentifiedScans.add((IScan)item);
+						IScan scan = (IScan)item;
+						selectedIdentifiedScans.add(scan);
+						scansIdentify.add(scan);
 					}
 				}
+				//
+				scanIdentifierUI.setInput(scansIdentify);
 				//
 				chromatogramSelection.setSelectedPeaks(selectedPeaks);
 				chromatogramSelection.setSelectedIdentifiedScans(selectedIdentifiedScans);
@@ -636,7 +649,9 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 						ChromatogramDataSupport.adjustChromatogramSelection(peak, chromatogramSelection);
 					}
 					//
+					scanIdentifierUI.setInput(peak.getPeakModel().getPeakMaximum());
 					chromatogramSelection.setSelectedPeak(peak);
+					//
 					UpdateNotifierUI.update(display, peak);
 					UpdateNotifierUI.update(display, identificationTarget);
 					if(peak instanceof IPeakMSD) {
@@ -651,7 +666,9 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 					IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, scan.getRetentionIndex());
 					IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(scan.getTargets(), identificationTargetComparator);
 					//
+					scanIdentifierUI.setInput(scan);
 					chromatogramSelection.setSelectedIdentifiedScan(scan);
+					//
 					UpdateNotifierUI.update(display, scan);
 					UpdateNotifierUI.update(display, identificationTarget);
 					if(scan instanceof IScanMSD) {
@@ -741,6 +758,23 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		});
 		//
 		return button;
+	}
+
+	private ScanIdentifierUI createScanIdentifierUI(Composite parent) {
+
+		ScanIdentifierUI scanIdentifierUI = new ScanIdentifierUI(parent, SWT.NONE);
+		scanIdentifierUI.setUpdateListener(new IUpdateListener() {
+
+			@Override
+			public void update(Display display) {
+
+				if(chromatogramSelection != null) {
+					UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Peaks/Scans have been identified.");
+				}
+			}
+		});
+		//
+		return scanIdentifierUI;
 	}
 
 	private CalculationType getCalculationTypeMerge() {
@@ -849,6 +883,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		createSettingsButton(parent, Arrays.asList( //
 				PreferencePageSystem.class, //
 				PreferencePageMergePeaks.class, //
+				PreferencePageScans.class, //
 				PreferencePageLists.class //
 		), new ISettingsHandler() {
 
