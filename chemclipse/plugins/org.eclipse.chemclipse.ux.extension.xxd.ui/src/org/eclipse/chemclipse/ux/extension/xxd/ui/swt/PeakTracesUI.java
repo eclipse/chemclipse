@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.ChromatogramSelection;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
@@ -37,6 +38,13 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.Derivative;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakChartSupport;
+import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
+import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
+import org.eclipse.chemclipse.wsd.model.core.IPeakModelWSD;
+import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
+import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
+import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
+import org.eclipse.chemclipse.wsd.model.core.support.MarkedWavelengths;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swtchart.ILineSeries;
@@ -97,7 +105,6 @@ public class PeakTracesUI extends ScrollableChart {
 		updateChart();
 	}
 
-	@SuppressWarnings("rawtypes")
 	public void updateChart() {
 
 		deleteSeries();
@@ -107,26 +114,73 @@ public class PeakTracesUI extends ScrollableChart {
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 		//
 		if(peak instanceof IChromatogramPeakMSD) {
-			IChromatogramPeakMSD chromatogramPeak = (IChromatogramPeakMSD)peak;
-			IChromatogramMSD chromatogram = chromatogramPeak.getChromatogram();
-			IPeakModelMSD peakModel = chromatogramPeak.getPeakModel();
-			//
-			int offsetRetentionTime = preferenceStore.getInt(PreferenceConstants.P_PEAK_TRACES_OFFSET_RETENTION_TIME);
-			peakTracesOffsetListener.setOffsetRetentionTime(offsetRetentionTime);
-			//
-			int startRetentionTime = peakModel.getStartRetentionTime() - offsetRetentionTime;
-			int stopRetentionTime = peakModel.getStopRetentionTime() + offsetRetentionTime;
-			IPeakMassSpectrum massSpectrum = peakModel.getPeakMassSpectrum();
-			IChromatogramSelection chromatogramSelection = new ChromatogramSelection<>(chromatogram);
+			lineSeriesDataList.addAll(extractSIC((IChromatogramPeakMSD)peak));
+		} else if(peak instanceof IChromatogramPeakWSD) {
+			lineSeriesDataList.addAll(extractSWC((IChromatogramPeakWSD)peak));
+		} else if(peak != null) {
+			lineSeriesDataList.add(extractTIC(peak));
+		}
+		//
+		addLineSeriesData(lineSeriesDataList);
+	}
+
+	private List<ILineSeriesData> extractSIC(IChromatogramPeakMSD chromatogramPeak) {
+
+		List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
+		IChromatogramMSD chromatogram = chromatogramPeak.getChromatogram();
+		IPeakModelMSD peakModel = chromatogramPeak.getPeakModel();
+		//
+		int offsetRetentionTime = preferenceStore.getInt(PreferenceConstants.P_PEAK_TRACES_OFFSET_RETENTION_TIME);
+		peakTracesOffsetListener.setOffsetRetentionTime(offsetRetentionTime);
+		//
+		int startRetentionTime = peakModel.getStartRetentionTime() - offsetRetentionTime;
+		int stopRetentionTime = peakModel.getStopRetentionTime() + offsetRetentionTime;
+		IPeakMassSpectrum massSpectrum = peakModel.getPeakMassSpectrum();
+		IChromatogramSelection<?, ?> chromatogramSelection = new ChromatogramSelection<>(chromatogram);
+		chromatogramSelection.setRangeRetentionTime(startRetentionTime, stopRetentionTime, false);
+		//
+		IColorScheme colors = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_PEAK_TRACES));
+		traces.addAll(extractTraces(massSpectrum));
+		//
+		for(Integer trace : traces) {
+			IMarkedIons markedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+			markedIons.add(trace);
+			ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogramSelection, Integer.toString(trace), DisplayType.SIC, Derivative.NONE, colors.getColor(), markedIons, false);
+			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
+			if(trace == selectedTrace) {
+				lineSeriesSettings.setLineWidth(2);
+			}
+			lineSeriesDataList.add(lineSeriesData);
+			colors.incrementColor();
+		}
+		//
+		return lineSeriesDataList;
+	}
+
+	private List<ILineSeriesData> extractSWC(IChromatogramPeakWSD chromatogramPeak) {
+
+		List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
+		IChromatogramWSD chromatogram = chromatogramPeak.getChromatogram();
+		IPeakModelWSD peakModel = chromatogramPeak.getPeakModel();
+		//
+		int offsetRetentionTime = preferenceStore.getInt(PreferenceConstants.P_PEAK_TRACES_OFFSET_RETENTION_TIME);
+		peakTracesOffsetListener.setOffsetRetentionTime(offsetRetentionTime);
+		//
+		int startRetentionTime = peakModel.getStartRetentionTime() - offsetRetentionTime;
+		int stopRetentionTime = peakModel.getStopRetentionTime() + offsetRetentionTime;
+		IScan peakMaximum = peakModel.getPeakMaximum();
+		if(peakMaximum instanceof IScanWSD) {
+			IScanWSD scanWSD = (IScanWSD)peakMaximum;
+			IChromatogramSelection<?, ?> chromatogramSelection = new ChromatogramSelection<>(chromatogram);
 			chromatogramSelection.setRangeRetentionTime(startRetentionTime, stopRetentionTime, false);
 			//
 			IColorScheme colors = Colors.getColorScheme(preferenceStore.getString(PreferenceConstants.P_COLOR_SCHEME_PEAK_TRACES));
-			traces.addAll(extractTraces(massSpectrum));
+			traces.addAll(extractTraces(scanWSD));
 			//
 			for(Integer trace : traces) {
-				IMarkedIons markedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
-				markedIons.add(trace);
-				ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogramSelection, Integer.toString(trace), DisplayType.SIC, Derivative.NONE, colors.getColor(), markedIons, false);
+				IMarkedWavelengths markedWavelengths = new MarkedWavelengths();
+				markedWavelengths.add(trace);
+				ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogramSelection, Integer.toString(trace), DisplayType.SWC, Derivative.NONE, colors.getColor(), markedWavelengths, false);
 				ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 				if(trace == selectedTrace) {
 					lineSeriesSettings.setLineWidth(2);
@@ -134,11 +188,14 @@ public class PeakTracesUI extends ScrollableChart {
 				lineSeriesDataList.add(lineSeriesData);
 				colors.incrementColor();
 			}
-		} else if(peak != null) {
-			lineSeriesDataList.add(peakChartSupport.getPeak(peak, false, false, Colors.RED, "Peak"));
 		}
 		//
-		addLineSeriesData(lineSeriesDataList);
+		return lineSeriesDataList;
+	}
+
+	private ILineSeriesData extractTIC(IPeak peak) {
+
+		return peakChartSupport.getPeak(peak, false, false, Colors.RED, "Peak");
 	}
 
 	private List<Integer> extractTraces(IScanMSD scanMSD) {
@@ -155,6 +212,35 @@ public class PeakTracesUI extends ScrollableChart {
 			 * Add the trace.
 			 */
 			int trace = AbstractIon.getIon(ion.getIon());
+			if(!traces.contains(trace)) {
+				traces.add(trace);
+			}
+			//
+			if(traces.size() >= maxDisplayTraces) {
+				break exitloop;
+			}
+		}
+		/*
+		 * Sort the traces ascending.
+		 */
+		Collections.sort(traces);
+		return traces;
+	}
+
+	private List<Integer> extractTraces(IScanWSD scanWSD) {
+
+		List<Integer> traces = new ArrayList<>();
+		//
+		List<IScanSignalWSD> scanSignals = new ArrayList<>(scanWSD.getScanSignals());
+		Collections.sort(scanSignals, (s1, s2) -> Float.compare(s2.getAbundance(), s1.getAbundance()));
+		int maxDisplayTraces = preferenceStore.getInt(PreferenceConstants.P_MAX_DISPLAY_PEAK_TRACES);
+		//
+		exitloop:
+		for(IScanSignalWSD scanSignal : scanSignals) {
+			/*
+			 * Add the trace.
+			 */
+			int trace = (int)Math.round(scanSignal.getWavelength());
 			if(!traces.contains(trace)) {
 				traces.add(trace);
 			}
