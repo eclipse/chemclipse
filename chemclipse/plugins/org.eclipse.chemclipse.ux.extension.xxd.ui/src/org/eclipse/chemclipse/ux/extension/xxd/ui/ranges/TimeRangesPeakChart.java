@@ -53,6 +53,19 @@ public class TimeRangesPeakChart extends ChromatogramPeakChart {
 		createControl();
 	}
 
+	public void update(TimeRange timeRange) {
+
+		TimeRangeSelector.updateTimeRangeUI(timeRangesUI, timeRange, getBaseChart());
+	}
+
+	public void update(TimeRanges timeRanges) {
+
+		if(timeRangesUI != null) {
+			timeRangesUI.setInput(timeRanges);
+		}
+		update(timeRangesUI, timeRanges);
+	}
+
 	public void update(TimeRangesUI timeRangesUI, TimeRanges timeRanges) {
 
 		this.timeRangesUI = timeRangesUI;
