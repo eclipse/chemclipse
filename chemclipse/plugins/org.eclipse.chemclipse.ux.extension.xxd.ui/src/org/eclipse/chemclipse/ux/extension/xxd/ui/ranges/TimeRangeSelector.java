@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,28 +21,14 @@ public class TimeRangeSelector {
 
 	public TimeRange adjustRange(BaseChart baseChart, Event event, TimeRanges timeRanges) {
 
-		String identifier = "";
-		int minDelta = Integer.MAX_VALUE;
-		double x = baseChart.getSelectedPrimaryAxisValue(event.x, IExtendedChart.X_AXIS);
-		int selection = (int)x;
-		/*
-		 * Try to get the closest identifier of the user x selection.
-		 */
-		for(TimeRange timeRange : timeRanges.values()) {
-			int deltaStart = Math.abs(selection - timeRange.getStart());
-			int deltaStop = Math.abs(selection - timeRange.getStop());
-			int delta = Math.min(deltaStart, deltaStop);
-			//
-			if(delta < minDelta) {
-				minDelta = delta;
-				identifier = timeRange.getIdentifier();
-			}
-		}
 		/*
 		 * Try to get the time range and adjust the start | stop value.
 		 */
-		TimeRange timeRange = timeRanges.get(identifier);
+		TimeRange timeRange = selectRange(baseChart, event, timeRanges);
 		if(timeRange != null) {
+			double x = baseChart.getSelectedPrimaryAxisValue(event.x, IExtendedChart.X_AXIS);
+			int selection = (int)x;
+			//
 			int deltaStart = Math.abs(selection - timeRange.getStart());
 			int deltaStop = Math.abs(selection - timeRange.getStop());
 			//
@@ -54,5 +40,44 @@ public class TimeRangeSelector {
 		}
 		//
 		return timeRange;
+	}
+
+	/**
+	 * This method may return null.
+	 * 
+	 * @param baseChart
+	 * @param event
+	 * @param timeRanges
+	 * @return TimeRange
+	 */
+	public TimeRange selectRange(BaseChart baseChart, Event event, TimeRanges timeRanges) {
+
+		/*
+		 * Try to get the closest identifier of the user x selection.
+		 */
+		if(timeRanges != null) {
+			String identifier = "";
+			int minDelta = Integer.MAX_VALUE;
+			double x = baseChart.getSelectedPrimaryAxisValue(event.x, IExtendedChart.X_AXIS);
+			int selection = (int)x;
+			//
+			for(TimeRange timeRange : timeRanges.values()) {
+				int deltaStart = Math.abs(selection - timeRange.getStart());
+				int deltaStop = Math.abs(selection - timeRange.getStop());
+				int delta = Math.min(deltaStart, deltaStop);
+				//
+				if(delta < minDelta) {
+					minDelta = delta;
+					identifier = timeRange.getIdentifier();
+				}
+			}
+			/*
+			 * Try to get the time range and adjust the start | stop value.
+			 * This could be also null if no time range was matched.
+			 */
+			return timeRanges.get(identifier);
+		}
+		//
+		return null;
 	}
 }

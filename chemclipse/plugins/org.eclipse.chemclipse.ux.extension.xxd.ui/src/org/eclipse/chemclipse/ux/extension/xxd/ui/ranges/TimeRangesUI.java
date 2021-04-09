@@ -269,7 +269,7 @@ public class TimeRangesUI extends Composite implements IExtendedPartUI {
 			}
 		}
 		//
-		if(parent != null) {
+		if(parent != null && !parent.isDisposed()) {
 			parent.layout(true);
 			parent.redraw();
 		}
