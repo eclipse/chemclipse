@@ -24,8 +24,6 @@ public class TimeRangeAdjustmentHandler extends AbstractHandledEventProcessor im
 
 	private TimeRangesUI timeRangesUI;
 	private TimeRanges timeRanges;
-	//
-	private TimeRangeSelector timeRangeSelector = new TimeRangeSelector();
 
 	public void update(TimeRangesUI timeRangesUI, TimeRanges timeRanges) {
 
@@ -55,17 +53,9 @@ public class TimeRangeAdjustmentHandler extends AbstractHandledEventProcessor im
 	public void handleEvent(BaseChart baseChart, Event event) {
 
 		if(timeRangesUI != null && timeRanges != null) {
-			TimeRange timeRange = timeRangeSelector.adjustRange(baseChart, event, timeRanges);
+			TimeRange timeRange = TimeRangeSelector.adjustRange(baseChart, event, timeRanges);
 			if(timeRange != null) {
-				String[] items = timeRangesUI.getItems();
-				exitloop:
-				for(int i = 0; i < items.length; i++) {
-					if(items[i].equals(timeRange.getIdentifier())) {
-						timeRangesUI.select(i);
-						break exitloop;
-					}
-				}
-				baseChart.redraw();
+				TimeRangeSelector.updateTimeRangeUI(timeRangesUI, timeRange, baseChart);
 			}
 		}
 	}

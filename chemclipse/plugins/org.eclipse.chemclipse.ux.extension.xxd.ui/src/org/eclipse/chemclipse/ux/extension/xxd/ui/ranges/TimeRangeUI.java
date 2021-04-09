@@ -37,10 +37,12 @@ public class TimeRangeUI extends Composite {
 	@Override
 	public void update() {
 
-		super.update();
-		timeSpinnerStart.update();
-		timeSpinnerCenter.update();
-		timeSpinnerStop.update();
+		if(isDisposed()) {
+			super.update();
+			timeSpinnerStart.update();
+			timeSpinnerCenter.update();
+			timeSpinnerStop.update();
+		}
 	}
 
 	public void update(TimeRange timeRange) {

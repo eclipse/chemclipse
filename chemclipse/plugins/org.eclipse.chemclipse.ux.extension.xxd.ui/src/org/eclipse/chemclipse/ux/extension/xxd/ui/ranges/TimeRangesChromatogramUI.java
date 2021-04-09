@@ -13,23 +13,15 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.ranges;
 
 import org.eclipse.chemclipse.model.ranges.TimeRanges;
 import org.eclipse.chemclipse.model.updates.IUpdateListener;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.custom.ChromatogramPeakChart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swtchart.IPlotArea;
-import org.eclipse.swtchart.extensions.core.BaseChart;
-import org.eclipse.swtchart.extensions.core.IChartSettings;
-import org.eclipse.swtchart.extensions.core.ScrollableChart;
 
 public class TimeRangesChromatogramUI extends Composite {
 
 	private TimeRangesUI timeRangesUI;
-	private ChromatogramPeakChart chromatogramChart;
-	private TimeRangeMarker timeRangeMarker;
-	private TimeRangeAdjustmentHandler timeRangeAdjustmentHandler = new TimeRangeAdjustmentHandler();
-	private TimeRangeSelectionHandler timeRangeSelectionHandler = new TimeRangeSelectionHandler();
+	private TimeRangesPeakChart timeRangesPeakChart;
 	//
 	private TimeRanges timeRanges = null;
 
@@ -43,14 +35,12 @@ public class TimeRangesChromatogramUI extends Composite {
 
 		this.timeRanges = timeRanges;
 		this.timeRangesUI.setInput(timeRanges);
-		timeRangeAdjustmentHandler.update(this.timeRangesUI, this.timeRanges);
-		timeRangeSelectionHandler.update(this.timeRangesUI, this.timeRanges);
-		updateTimeRangeMarker();
+		timeRangesPeakChart.update(this.timeRangesUI, this.timeRanges);
 	}
 
-	public ChromatogramPeakChart getChromatogramChart() {
+	public TimeRangesPeakChart getChromatogramChart() {
 
-		return chromatogramChart;
+		return timeRangesPeakChart;
 	}
 
 	private void createControl() {
@@ -62,7 +52,7 @@ public class TimeRangesChromatogramUI extends Composite {
 		setLayout(gridLayout);
 		//
 		timeRangesUI = createTimeRangesUI(this);
-		chromatogramChart = createChromatogram(this);
+		timeRangesPeakChart = createChromatogram(this);
 	}
 
 	private TimeRangesUI createTimeRangesUI(Composite parent) {
@@ -75,7 +65,7 @@ public class TimeRangesChromatogramUI extends Composite {
 			public void update() {
 
 				if(timeRanges != null) {
-					updateTimeRangeMarker();
+					timeRangesPeakChart.updateTimeRangeMarker();
 				}
 			}
 		});
@@ -83,58 +73,11 @@ public class TimeRangesChromatogramUI extends Composite {
 		return timeRangesUI;
 	}
 
-	private ChromatogramPeakChart createChromatogram(Composite parent) {
+	private TimeRangesPeakChart createChromatogram(Composite parent) {
 
-		ChromatogramPeakChart chromatogramChart = new ChromatogramPeakChart(parent, SWT.NONE);
-		chromatogramChart.setLayoutData(new GridData(GridData.FILL_BOTH));
+		TimeRangesPeakChart timeRangesPeakChart = new TimeRangesPeakChart(parent, SWT.NONE);
+		timeRangesPeakChart.setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
-		timeRangeMarker = addTimeRangeMarker(chromatogramChart);
-		//
-		IChartSettings chartSettings = chromatogramChart.getChartSettings();
-		chartSettings.addHandledEventProcessor(timeRangeAdjustmentHandler);
-		chartSettings.addHandledEventProcessor(timeRangeSelectionHandler);
-		chromatogramChart.applySettings(chartSettings);
-		//
-		return chromatogramChart;
-	}
-
-	private TimeRangeMarker addTimeRangeMarker(ScrollableChart scrollableChart) {
-
-		BaseChart baseChart = scrollableChart.getBaseChart();
-		IPlotArea plotArea = baseChart.getPlotArea();
-		TimeRangeMarker timeRangeMarker = new TimeRangeMarker(baseChart);
-		plotArea.addCustomPaintListener(timeRangeMarker);
-		return timeRangeMarker;
-	}
-
-	private void updateTimeRangeMarker() {
-
-		timeRangeMarker.getTimeRanges().clear();
-		if(timeRanges != null) {
-			/*
-			 * Show the time range composite.
-			 */
-			setTimeRangesVisible(true);
-			timeRangeMarker.getTimeRanges().addAll(timeRanges.values());
-		} else {
-			/*
-			 * Hide the time range composite.
-			 */
-			setTimeRangesVisible(false);
-		}
-		chromatogramChart.getBaseChart().redraw();
-	}
-
-	private void setTimeRangesVisible(boolean visible) {
-
-		timeRangesUI.setVisible(visible);
-		Object layoutData = timeRangesUI.getLayoutData();
-		if(layoutData instanceof GridData) {
-			GridData gridData = (GridData)layoutData;
-			gridData.exclude = !visible;
-		}
-		Composite parent = timeRangesUI.getParent();
-		parent.layout(true);
-		parent.redraw();
+		return timeRangesPeakChart;
 	}
 }

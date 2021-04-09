@@ -11,15 +11,21 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.ranges;
 
+import java.util.concurrent.ExecutionException;
+
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.ranges.TimeRange;
 import org.eclipse.chemclipse.model.ranges.TimeRanges;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.IExtendedChart;
 
 public class TimeRangeSelector {
 
-	public TimeRange adjustRange(BaseChart baseChart, Event event, TimeRanges timeRanges) {
+	private static final Logger logger = Logger.getLogger(TimeRangeSelector.class);
+
+	public static TimeRange adjustRange(BaseChart baseChart, Event event, TimeRanges timeRanges) {
 
 		/*
 		 * Try to get the time range and adjust the start | stop value.
@@ -50,7 +56,7 @@ public class TimeRangeSelector {
 	 * @param timeRanges
 	 * @return TimeRange
 	 */
-	public TimeRange selectRange(BaseChart baseChart, Event event, TimeRanges timeRanges) {
+	public static TimeRange selectRange(BaseChart baseChart, Event event, TimeRanges timeRanges) {
 
 		/*
 		 * Try to get the closest identifier of the user x selection.
@@ -79,5 +85,31 @@ public class TimeRangeSelector {
 		}
 		//
 		return null;
+	}
+
+	public static void updateTimeRangeUI(TimeRangesUI timeRangesUI, TimeRange timeRange, BaseChart baseChart) {
+
+		if(timeRangesUI != null && timeRange != null) {
+			try {
+				DisplayUtils.executeInUserInterfaceThread(new Runnable() {
+
+					@Override
+					public void run() {
+
+						String[] items = timeRangesUI.getItems();
+						exitloop:
+						for(int i = 0; i < items.length; i++) {
+							if(items[i].equals(timeRange.getIdentifier())) {
+								timeRangesUI.select(i);
+								baseChart.redraw();
+								break exitloop;
+							}
+						}
+					}
+				});
+			} catch(InterruptedException | ExecutionException e) {
+				logger.warn(e);
+			}
+		}
 	}
 }

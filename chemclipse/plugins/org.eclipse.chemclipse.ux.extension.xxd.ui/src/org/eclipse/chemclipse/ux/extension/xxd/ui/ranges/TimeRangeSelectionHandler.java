@@ -24,8 +24,6 @@ public class TimeRangeSelectionHandler extends AbstractHandledEventProcessor imp
 
 	private TimeRangesUI timeRangesUI;
 	private TimeRanges timeRanges;
-	//
-	private TimeRangeSelector timeRangeSelector = new TimeRangeSelector();
 
 	public void update(TimeRangesUI timeRangesUI, TimeRanges timeRanges) {
 
@@ -48,24 +46,16 @@ public class TimeRangeSelectionHandler extends AbstractHandledEventProcessor imp
 	@Override
 	public int getStateMask() {
 
-		return SWT.CTRL;
+		return SWT.ALT;
 	}
 
 	@Override
 	public void handleEvent(BaseChart baseChart, Event event) {
 
 		if(timeRangesUI != null && timeRanges != null) {
-			TimeRange timeRange = timeRangeSelector.selectRange(baseChart, event, timeRanges);
+			TimeRange timeRange = TimeRangeSelector.selectRange(baseChart, event, timeRanges);
 			if(timeRange != null) {
-				String[] items = timeRangesUI.getItems();
-				exitloop:
-				for(int i = 0; i < items.length; i++) {
-					if(items[i].equals(timeRange.getIdentifier())) {
-						timeRangesUI.select(i);
-						break exitloop;
-					}
-				}
-				baseChart.redraw();
+				TimeRangeSelector.updateTimeRangeUI(timeRangesUI, timeRange, baseChart);
 			}
 		}
 	}
