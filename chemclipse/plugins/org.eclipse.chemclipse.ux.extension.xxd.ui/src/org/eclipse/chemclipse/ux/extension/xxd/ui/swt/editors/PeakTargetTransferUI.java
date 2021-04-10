@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -80,6 +80,7 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public PeakTargetTransferUI(Composite parent, int style) {
+
 		super(parent, style);
 		createControl();
 	}
@@ -245,6 +246,8 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		RetentionTimeValidator retentionTimeValidator = new RetentionTimeValidator();
+		ControlDecoration controlDecoration = new ControlDecoration(text, SWT.LEFT | SWT.TOP);
+		//
 		text.addKeyListener(new KeyAdapter() {
 
 			@Override
@@ -255,7 +258,6 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 				 * more than one chromatogram is opened simultaneously via the
 				 * open selected files button in the supplier file explorer.
 				 */
-				ControlDecoration controlDecoration = new ControlDecoration(text, SWT.LEFT | SWT.TOP);
 				if(validate(retentionTimeValidator, controlDecoration, text)) {
 					preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME, retentionTimeValidator.getRetentionTime());
 				}
