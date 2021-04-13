@@ -38,9 +38,9 @@
         </children>
       </children>
       <children xsi:type="menu:Menu" xmi:id="_DSko4DiVEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.window" label="Window">
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_lA-LQDiXEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.perspectiveSwitcher" label="Perspective Switcher" command="_XUgbQDiXEeKDEdWQrkwLnQ"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_lA-LQDiXEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.perspectiveSwitcher" label="Perspective Switcher" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/perspectives.gif" command="_XUgbQDiXEeKDEdWQrkwLnQ"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_MBtwADilEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.selectView" label="Select View" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/view.gif" command="_ASbeYDilEeKDEdWQrkwLnQ"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_nz0_UDiVEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.preferences" label="Preferences" command="_XevnQDiVEeKDEdWQrkwLnQ"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_nz0_UDiVEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.preferences" label="Preferences" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/preferences.gif" command="_XevnQDiVEeKDEdWQrkwLnQ"/>
       </children>
       <children xsi:type="menu:Menu" xmi:id="_h0BcRjLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.help" label="Help">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_h0BcRzLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.item.about" label="About" command="_h0A1RDLzEeKMEOdllHiEaA"/>
