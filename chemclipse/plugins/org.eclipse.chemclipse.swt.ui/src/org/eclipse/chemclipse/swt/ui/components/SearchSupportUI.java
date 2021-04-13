@@ -54,6 +54,17 @@ public class SearchSupportUI extends Composite {
 		runSearch();
 	}
 
+	/**
+	 * Use this e.g. for content proposal listeners.
+	 * The search text shall be set via the setSearchText method.
+	 * 
+	 * @return Text
+	 */
+	public Text getText() {
+
+		return text;
+	}
+
 	public String getSearchText() {
 
 		return text.getText().trim();
