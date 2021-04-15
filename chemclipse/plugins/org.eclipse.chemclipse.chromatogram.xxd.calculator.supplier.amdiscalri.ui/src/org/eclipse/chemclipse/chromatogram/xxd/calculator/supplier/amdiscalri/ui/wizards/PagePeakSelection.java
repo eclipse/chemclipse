@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -237,6 +237,7 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 			logger.warn(e);
 		} catch(InvocationTargetException e) {
 			logger.warn(e);
+			logger.warn(e.getCause());
 		} catch(ChromatogramIsNullException e) {
 			logger.warn(e);
 		}

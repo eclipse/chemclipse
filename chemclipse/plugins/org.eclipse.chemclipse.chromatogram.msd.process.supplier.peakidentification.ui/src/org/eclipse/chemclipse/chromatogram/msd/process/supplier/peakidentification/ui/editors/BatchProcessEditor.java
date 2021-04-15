@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,6 +21,12 @@ import java.util.List;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.io.PeakIdentificationBatchJobWriter;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakIdentificationBatchJob;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.internal.runnables.BatchJobExportRunnable;
+import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.internal.runnables.BatchJobImportRunnable;
+import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -35,13 +41,6 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.MultiPageEditorPart;
-
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.io.PeakIdentificationBatchJobWriter;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakIdentificationBatchJob;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.internal.runnables.BatchJobExportRunnable;
-import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.internal.runnables.BatchJobImportRunnable;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
-import org.eclipse.chemclipse.logging.core.Logger;
 
 public class BatchProcessEditor extends MultiPageEditorPart {
 
@@ -143,6 +142,7 @@ public class BatchProcessEditor extends MultiPageEditorPart {
 				peakIdentificationBatchJob = runnable.getPeakIdentificationBatchJob();
 			} catch(InvocationTargetException e) {
 				logger.warn(e);
+				logger.warn(e.getCause());
 			} catch(InterruptedException e) {
 				logger.warn(e);
 			}
@@ -198,6 +198,7 @@ public class BatchProcessEditor extends MultiPageEditorPart {
 				monitor.run(true, true, runnable);
 			} catch(InvocationTargetException e) {
 				logger.warn(e);
+				logger.warn(e.getCause());
 			} catch(InterruptedException e) {
 				logger.warn(e);
 			}

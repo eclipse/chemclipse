@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -75,6 +75,7 @@ public class LibraryModifySupportUI extends Composite {
 	private IMassSpectra massSpectra;
 
 	public LibraryModifySupportUI(Composite parent, int style) {
+
 		super(parent, style);
 		createControl();
 	}
@@ -216,6 +217,7 @@ public class LibraryModifySupportUI extends Composite {
 						monitor.run(true, true, runnable);
 					} catch(InvocationTargetException e1) {
 						logger.warn(e1);
+						logger.warn(e1.getCause());
 					} catch(InterruptedException e1) {
 						logger.warn(e1);
 					}
