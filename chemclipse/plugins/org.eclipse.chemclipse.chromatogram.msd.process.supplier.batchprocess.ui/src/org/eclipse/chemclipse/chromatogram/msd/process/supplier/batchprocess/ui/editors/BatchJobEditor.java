@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -108,7 +108,7 @@ public class BatchJobEditor extends EditorPart implements IRunnableWithProgress 
 				monitor.run(false, false, runnable);
 				batchProcessJob = runnable.getBatchProcessJob();
 			} catch(InvocationTargetException e) {
-				throw new PartInitException("The file could't be loaded.", e);
+				throw new PartInitException("The file could't be loaded.", e.getTargetException());
 			} catch(InterruptedException e) {
 				return;
 			}

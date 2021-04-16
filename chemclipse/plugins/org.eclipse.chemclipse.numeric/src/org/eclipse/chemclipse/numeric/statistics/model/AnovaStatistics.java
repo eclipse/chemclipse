@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,6 +24,7 @@ public class AnovaStatistics implements IAnovaStatistics {
 	Collection<double[]> anovaInput;
 
 	public <T> AnovaStatistics(IStatisticsElement<IStatisticsElement<T>> groupedStatisticsElement, Method getdata) {
+
 		List<IStatisticsElement<T>> groupedStatisticsElements = groupedStatisticsElement.getIncludedSourceElements();
 		this.anovaInput = new ArrayList<double[]>(groupedStatisticsElements.size());
 		if(groupedStatisticsElements.size() > 1) {
@@ -43,6 +44,7 @@ public class AnovaStatistics implements IAnovaStatistics {
 							e.printStackTrace();
 						} catch(InvocationTargetException e) {
 							e.printStackTrace();
+							e.getTargetException().printStackTrace();
 						}
 					}
 					anovaInput.add(values);

@@ -241,6 +241,7 @@ public class DatabaseEditor implements IChemClipseEditor {
 			dialog.run(fork, false, runnable);
 		} catch(InvocationTargetException e) {
 			logger.warn(e);
+			logger.warn(e.getCause());
 		} catch(InterruptedException e) {
 			logger.warn(e);
 		}

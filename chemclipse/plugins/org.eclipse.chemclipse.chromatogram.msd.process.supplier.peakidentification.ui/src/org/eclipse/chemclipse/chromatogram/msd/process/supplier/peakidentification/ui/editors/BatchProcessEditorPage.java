@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -75,6 +75,7 @@ public class BatchProcessEditorPage implements IMultiEditorPage {
 	private IdentificationSupport identifiationSupport;
 
 	public BatchProcessEditorPage(BatchProcessEditor editorPart, Composite container) {
+
 		integrationSupport = new IntegrationSupport();
 		identifiationSupport = new IdentificationSupport();
 		createPage(editorPart, container);
@@ -653,6 +654,7 @@ public class BatchProcessEditorPage implements IMultiEditorPage {
 						refreshWorkspace(path);
 					} catch(InvocationTargetException ex) {
 						logger.warn(ex);
+						logger.warn(ex.getCause());
 					} catch(InterruptedException ex) {
 						logger.warn(ex);
 					}
