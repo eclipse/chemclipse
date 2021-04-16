@@ -7,7 +7,7 @@
             category="org.eclipse.chemclipse.rcp.app.ui.preferences.settingsPreferencePage"
             class="org.eclipse.chemclipse.support.ui.preferences.PreferencePage"
             id="org.eclipse.chemclipse.support.ui.supportPreferencePage"
-            name="General Settings">
+            name="General">
       </page>
       <page
             category="org.eclipse.chemclipse.rcp.app.ui.preferences.settingsPreferencePage"

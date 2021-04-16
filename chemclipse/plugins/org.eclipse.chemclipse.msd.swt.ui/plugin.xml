@@ -7,7 +7,7 @@
             category="org.eclipse.chemclipse.rcp.app.ui.preferences.settingsPreferencePage"
             class="org.eclipse.chemclipse.msd.swt.ui.preferences.PreferencePage"
             id="org.eclipse.chemclipse.msd.swt.ui.preferences.preferencePage"
-            name="Mass Spectrum View Settings">
+            name="Mass Spectrum View">
       </page>
    </extension>
    <extension
