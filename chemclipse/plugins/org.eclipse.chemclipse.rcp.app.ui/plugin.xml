@@ -54,9 +54,5 @@
             file="toc.xml"
             primary="true">
       </toc>
-      <toc
-            file="toc_overview.xml">
-      </toc>     
    </extension>
-
 </plugin>
