@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extensions>
+        <tocOrder>
+                <toc id="/org.eclipse.chemclipse.rcp.app.ui/toc.xml"/>
+        </tocOrder>
+        <hidden>
+                <toc id="/org.eclipse.jdt.doc.user/toc.xml"/>
+                <toc id="/org.eclipse.platform.doc.user/toc.xml"/>
+        </hidden>
+</extensions>
