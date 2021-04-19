@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2020 Lablicate GmbH.
+ * Copyright (c) 2013, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -445,4 +445,5 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_PEAK_RANGE = "org.eclipse.chemclipse.rcp.ui.icons/peak-range.gif";
 	String IMAGE_PRINT = "org.eclipse.chemclipse.rcp.ui.icons/print.png";
 	String IMAGE_CLEAR = "org.eclipse.chemclipse.rcp.ui.icons/clear.gif";
+	String IMAGE_RULER = "org.eclipse.chemclipse.rcp.ui.icons/ruler.gif";
 }

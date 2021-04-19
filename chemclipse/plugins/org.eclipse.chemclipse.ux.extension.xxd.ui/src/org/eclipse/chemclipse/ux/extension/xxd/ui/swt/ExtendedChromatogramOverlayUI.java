@@ -39,6 +39,9 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramRulerChart;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.IRulerUpdateNotifier;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.RulerEvent;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlayChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
@@ -89,12 +92,17 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 	private static final String IMAGE_SHIFT = IApplicationImage.IMAGE_SHIFT;
 	private static final String TOOLTIP_SHIFT = "the shift toolbar.";
+	private static final String IMAGE_RULER = IApplicationImage.IMAGE_RULER;
+	private static final String TOOLTIP_RULER = "the ruler toolbar.";
 	//
 	// The traces toolbar is controlled by the combo overlay type.
+	//
 	private AtomicReference<NamedTracesUI> toolbarNamedTraces = new AtomicReference<>();
 	private Button buttonToolbarDataShift;
 	private AtomicReference<DataShiftControllerUI> toolbarDataShift = new AtomicReference<>();
-	private AtomicReference<ChromatogramChart> chartControl = new AtomicReference<>();
+	private Button buttonToolbarRulerDetails;
+	private AtomicReference<RulerDetailsUI> toolbarRulerDetails = new AtomicReference<>();
+	private AtomicReference<ChromatogramRulerChart> chartControl = new AtomicReference<>();
 	//
 	private Label labelStatus;
 	private Combo comboOverlayType;
@@ -132,6 +140,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		createToolbarMain(this);
 		createNamedTraces(this);
 		createDataShiftControllerUI(this);
+		createRulerDetailsUI(this);
 		createOverlayChart(this);
 		//
 		initialize();
@@ -141,8 +150,10 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 		enableToolbar(toolbarNamedTraces, false);
 		enableToolbar(toolbarDataShift, buttonToolbarDataShift, IMAGE_SHIFT, TOOLTIP_SHIFT, false);
+		enableToolbar(toolbarRulerDetails, buttonToolbarRulerDetails, IMAGE_RULER, TOOLTIP_RULER, false);
 		//
 		toolbarDataShift.get().setScrollableChart(chartControl.get());
+		toolbarRulerDetails.get().setScrollableChart(chartControl.get());
 		modifyWidgetStatus();
 		setDerivatives();
 		/*
@@ -155,12 +166,13 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		composite.setLayout(new GridLayout(8, false));
+		composite.setLayout(new GridLayout(9, false));
 		//
 		labelStatus = createLabelStatus(composite);
 		comboOverlayType = createOverlayTypeCombo(composite);
 		comboViewerDerivative = createDerivativeComboViewer(composite);
 		buttonToolbarDataShift = createButtonToggleToolbar(composite, toolbarDataShift, IMAGE_SHIFT, TOOLTIP_SHIFT);
+		buttonToolbarRulerDetails = createButtonToggleToolbar(composite, toolbarRulerDetails, IMAGE_RULER, TOOLTIP_RULER);
 		createButtonToggleChartLegend(composite, chartControl, IMAGE_LEGEND);
 		createResetButton(composite);
 		createNewOverlayPartButton(composite);
@@ -197,6 +209,14 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		dataShiftControllerUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		toolbarDataShift.set(dataShiftControllerUI);
+	}
+
+	private void createRulerDetailsUI(Composite parent) {
+
+		RulerDetailsUI rulerDetailsUI = new RulerDetailsUI(parent, SWT.NONE);
+		rulerDetailsUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		toolbarRulerDetails.set(rulerDetailsUI);
 	}
 
 	private Label createLabelStatus(Composite parent) {
@@ -414,20 +434,20 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 	private void createOverlayChart(Composite parent) {
 
-		ChromatogramChart chromatogramChart = new ChromatogramChart(parent, SWT.BORDER);
-		chromatogramChart.setLayoutData(new GridData(GridData.FILL_BOTH));
+		ChromatogramRulerChart chromatogramRulerChart = new ChromatogramRulerChart(parent, SWT.BORDER);
+		chromatogramRulerChart.setLayoutData(new GridData(GridData.FILL_BOTH));
 		/*
 		 * Chart Settings
 		 */
-		IChartSettings chartSettings = chromatogramChart.getChartSettings();
+		IChartSettings chartSettings = chromatogramRulerChart.getChartSettings();
 		chartSettings.setCreateMenu(true);
 		chartSettings.setEnableRangeSelector(true);
 		chartSettings.setShowRangeSelectorInitially(false);
 		chartSettings.setSupportDataShift(true);
 		chartSettings.getRangeRestriction().setZeroY(false);
-		chromatogramChart.applySettings(chartSettings);
+		chromatogramRulerChart.applySettings(chartSettings);
 		//
-		BaseChart baseChart = chromatogramChart.getBaseChart();
+		BaseChart baseChart = chromatogramRulerChart.getBaseChart();
 		baseChart.addSeriesModificationListener(new ISeriesModificationListener() {
 
 			@Override
@@ -437,7 +457,16 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			}
 		});
 		//
-		chartControl.set(chromatogramChart);
+		chromatogramRulerChart.setRulerUpdateNotifier(new IRulerUpdateNotifier() {
+
+			@Override
+			public void update(RulerEvent rulerEvent) {
+
+				toolbarRulerDetails.get().setInput(rulerEvent);
+			}
+		});
+		//
+		chartControl.set(chromatogramRulerChart);
 	}
 
 	@SuppressWarnings("rawtypes")

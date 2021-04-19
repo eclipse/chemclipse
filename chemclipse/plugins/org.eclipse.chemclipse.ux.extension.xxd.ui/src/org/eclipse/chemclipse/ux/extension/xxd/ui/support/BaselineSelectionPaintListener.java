@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,6 +19,8 @@ import org.eclipse.swtchart.ICustomPaintListener;
 
 public class BaselineSelectionPaintListener implements ICustomPaintListener {
 
+	private final static int VERTICAL_MARKER_SIZE = 10;
+	//
 	private int x1;
 	private int y1;
 	private int x2;
@@ -31,7 +33,9 @@ public class BaselineSelectionPaintListener implements ICustomPaintListener {
 		Color foreground = e.gc.getForeground();
 		Color background = e.gc.getBackground();
 		e.gc.setForeground(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
+		e.gc.drawLine(x1, y1 - VERTICAL_MARKER_SIZE, x1, y1 + VERTICAL_MARKER_SIZE); // vertical start
 		e.gc.drawLine(x1, y1, x2, y2);
+		e.gc.drawLine(x2, y2 - VERTICAL_MARKER_SIZE, x2, y2 + VERTICAL_MARKER_SIZE); // vertical stop
 		e.gc.setForeground(foreground);
 		e.gc.setBackground(background);
 	}
