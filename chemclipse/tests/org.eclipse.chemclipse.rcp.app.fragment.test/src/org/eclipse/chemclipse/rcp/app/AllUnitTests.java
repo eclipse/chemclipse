@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.app;
 
-import org.eclipse.chemclipse.rcp.app.Activator;
 import org.eclipse.chemclipse.rcp.app.test.TestAssembler;
 
 import junit.framework.Test;

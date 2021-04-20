@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.msd.model.core;
 
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
+import org.eclipse.chemclipse.model.math.IonRoundMethod;
 import org.eclipse.chemclipse.msd.model.exceptions.IonIsNullException;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.exceptions.IonTransitionIsNullException;
@@ -34,16 +35,19 @@ public abstract class AbstractIon implements IIon {
 	 * methods.
 	 */
 	private static final long serialVersionUID = -2481473608026036078L;
+	private static final int MAX_PRECISION = 6;
+	//
 	private double ion = 0.0d;
 	private float abundance = 0.0f;
-	private static final int MAX_PRECISION = 6;
 	private IIonTransition ionTransition;
 
 	public AbstractIon(double ion) throws IonLimitExceededException {
+
 		setIon(ion);
 	}
 
 	public AbstractIon(double ion, float abundance) throws AbundanceLimitExceededException, IonLimitExceededException {
+
 		/*
 		 * Why is setIon(ion) ... used here instead of this.ion = ion?<br/> The
 		 * methods setIon(float ion) and setAbundance(float abundance) are
@@ -59,6 +63,7 @@ public abstract class AbstractIon implements IIon {
 	}
 
 	public AbstractIon(double ion, float abundance, IIonTransition ionTransition) throws AbundanceLimitExceededException, IonLimitExceededException, IonTransitionIsNullException {
+
 		/*
 		 * Why is setIon(ion) ... used here instead of this.ion = ion?<br/> The
 		 * methods setIon(float ion) and setAbundance(float abundance) are
@@ -79,6 +84,7 @@ public abstract class AbstractIon implements IIon {
 	}
 
 	public AbstractIon(IIon ion) throws AbundanceLimitExceededException, IonLimitExceededException, IonIsNullException {
+
 		/*
 		 * Why is setIon(ion) ... used here instead of this.ion = ion?<br/> The
 		 * methods setIon(float ion) and setAbundance(float abundance) are
@@ -98,6 +104,7 @@ public abstract class AbstractIon implements IIon {
 	}
 
 	public AbstractIon(IIon ion, IIonTransition ionTransition) throws AbundanceLimitExceededException, IonLimitExceededException, IonIsNullException, IonTransitionIsNullException {
+
 		/*
 		 * Why is setIon(ion) ... used here instead of this.ion = ion?<br/> The
 		 * methods setIon(float ion) and setAbundance(float abundance) are
@@ -116,19 +123,15 @@ public abstract class AbstractIon implements IIon {
 		}
 	}
 
-	// -----------------------------static
 	/**
 	 * Returns the given ion as an integer value.
+	 * The rounding is based on the selected rounding method in the system.
 	 */
-	public static int getIon(double ion) {
+	public static int getIon(double mz) {
 
-		/*
-		 * Should another rounding range be used? E.g 0.7 - 1.7?
-		 */
-		return (int)Math.round(ion);
+		return IonRoundMethod.getActive().round(mz);
 	}
 
-	// TODO JUnit
 	/**
 	 * Returns the given ion as an value rounded to the given precision.
 	 * E.g.:
@@ -145,12 +148,12 @@ public abstract class AbstractIon implements IIon {
 	 */
 	public static double getIon(double ion, int precision) {
 
-		/*
-		 * Should another rounding range be used? E.g 0.7 - 1.7?
-		 */
 		if(precision <= 0 || precision > MAX_PRECISION) {
 			precision = 1;
 		}
+		/*
+		 * Math.round() - OK
+		 */
 		double factor = Math.pow(10, precision);
 		return Math.round(ion * factor) / factor;
 	}
@@ -161,12 +164,11 @@ public abstract class AbstractIon implements IIon {
 	public static int getAbundance(float abundance) {
 
 		/*
-		 * Should another rounding range be used? E.g 0.7 - 1.7?
+		 * Math.round() - OK
 		 */
 		return Math.round(abundance);
 	}
 
-	// -----------------------------static
 	@Override
 	public float getAbundance() {
 

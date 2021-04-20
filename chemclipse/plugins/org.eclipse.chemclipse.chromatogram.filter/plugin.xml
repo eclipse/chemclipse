@@ -45,7 +45,14 @@
             filterName="Quality Control (System)"
             filterSettings="org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsQC"
             id="org.eclipse.chemclipse.chromatogram.filter.setSettingsQC">
-      </ChromatogramFilterSupplier>                 
+      </ChromatogramFilterSupplier>
+      <ChromatogramFilterSupplier
+            description="This filter sets the system ion round method settings."
+            filter="org.eclipse.chemclipse.chromatogram.filter.impl.ChromatogramFilterIonRounding"
+            filterName="Ion Round Method (System)"
+            filterSettings="org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsIonRounding"
+            id="org.eclipse.chemclipse.chromatogram.filter.setSettingsIonRounding">
+      </ChromatogramFilterSupplier>      
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">

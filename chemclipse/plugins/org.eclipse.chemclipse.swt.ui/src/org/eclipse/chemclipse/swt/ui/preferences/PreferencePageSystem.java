@@ -11,21 +11,28 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.swt.ui.preferences;
 
+import org.eclipse.chemclipse.model.math.IonRoundMethod;
 import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.model.targets.LibraryField;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.chemclipse.swt.ui.Activator;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class PreferencePageSystem extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
+	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+
 	public PreferencePageSystem() {
 
 		super(GRID);
-		setPreferenceStore(Activator.getDefault().getPreferenceStore());
+		setPreferenceStore(preferenceStore);
 		setTitle("System");
 		setDescription("");
 	}
@@ -47,7 +54,22 @@ public class PreferencePageSystem extends FieldEditorPreferencePage implements I
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_SHOW_AREA_WITHOUT_DECIMALS, "Show area without decimals", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_SORT_CASE_SENSITIVE, "Sort: Case Sensitive", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_SEARCH_CASE_SENSITIVE, "Search: Case sensitive", getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_RETENTION_INDEX_QC, "QC: Use Retention Index", getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceSupplier.P_BEST_TARGET_LIBRARY_FIELD, "Best Target", LibraryField.getLibraryFields(), getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_ION_ROUND_METHOD, "Ion Round Method", IonRoundMethod.getOptions(), getFieldEditorParent()));
+		//
+		preferenceStore.addPropertyChangeListener(new IPropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent event) {
+
+				if(event.getProperty().equals(PreferenceSupplier.P_ION_ROUND_METHOD)) {
+					System.out.println("CLEAR");
+					PreferenceSupplier.clearCacheActiveIonRoundMethod();
+				}
+			}
+		});
 	}
 }

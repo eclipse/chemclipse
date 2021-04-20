@@ -16,6 +16,7 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.Activator;
+import org.eclipse.chemclipse.model.math.IonRoundMethod;
 import org.eclipse.chemclipse.model.targets.LibraryField;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -46,6 +47,13 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final boolean DEF_SEARCH_CASE_SENSITIVE = true;
 	public static final String P_BEST_TARGET_LIBRARY_FIELD = "bestTargetLibraryField";
 	public static final String DEF_BEST_TARGET_LIBRARY_FIELD = LibraryField.NAME.name();
+	public static final String P_ION_ROUND_METHOD = "ionRoundMethod"; // When changing this value, call clearCacheActiveIonRoundMethod.
+	public static final String DEF_ION_ROUND_METHOD = IonRoundMethod.DEFAULT.name();
+	/*
+	 * Used to cache the round method.
+	 * Call clearCacheActiveIonRoundMethod to force a reload.
+	 */
+	private static IonRoundMethod activeIonRoundMethod = null;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -83,6 +91,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_SEARCH_CASE_SENSITIVE, Boolean.toString(DEF_SEARCH_CASE_SENSITIVE));
 		defaultValues.put(P_USE_RETENTION_INDEX_QC, Boolean.toString(DEF_USE_RETENTION_INDEX_QC));
 		defaultValues.put(P_BEST_TARGET_LIBRARY_FIELD, DEF_BEST_TARGET_LIBRARY_FIELD);
+		defaultValues.put(P_ION_ROUND_METHOD, DEF_ION_ROUND_METHOD);
 		//
 		return defaultValues;
 	}
@@ -163,6 +172,50 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		}
 	}
 
+	/**
+	 * For a better performance, the active round method is cached.
+	 * Clear the cache if the settings value has been changed, e.g.
+	 * by the preference page.
+	 */
+	public static void clearCacheActiveIonRoundMethod() {
+
+		activeIonRoundMethod = null;
+	}
+
+	/**
+	 * Get the active ion round method.
+	 * 
+	 * @return
+	 */
+	public static IonRoundMethod getIonRoundMethod() {
+
+		if(activeIonRoundMethod == null) {
+			/*
+			 * Try to get the currently used ion round method.
+			 */
+			try {
+				IEclipsePreferences preferences = INSTANCE().getPreferences();
+				activeIonRoundMethod = IonRoundMethod.valueOf(preferences.get(P_ION_ROUND_METHOD, DEF_ION_ROUND_METHOD));
+			} catch(Exception e) {
+				activeIonRoundMethod = IonRoundMethod.DEFAULT;
+			}
+		}
+		//
+		return activeIonRoundMethod;
+	}
+
+	/**
+	 * Set the active ion round method.
+	 * 
+	 * @param ionRoundMethod
+	 */
+	public static void setIonRoundMethod(IonRoundMethod ionRoundMethod) {
+
+		ionRoundMethod = (ionRoundMethod == null) ? IonRoundMethod.DEFAULT : ionRoundMethod;
+		putString(P_ION_ROUND_METHOD, ionRoundMethod.name());
+		activeIonRoundMethod = ionRoundMethod;
+	}
+
 	private static boolean getBoolean(String key, boolean def) {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
@@ -171,9 +224,20 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	private static void putBoolean(String key, boolean value) {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		try {
+			IEclipsePreferences preferences = INSTANCE().getPreferences();
 			preferences.putBoolean(key, value);
+			preferences.flush();
+		} catch(Exception e) {
+			logger.warn(e);
+		}
+	}
+
+	private static void putString(String key, String value) {
+
+		try {
+			IEclipsePreferences preferences = INSTANCE().getPreferences();
+			preferences.put(key, value);
 			preferences.flush();
 		} catch(Exception e) {
 			logger.warn(e);

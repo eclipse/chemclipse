@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Lorenz Gerber - initial API and implementation
+ * Philip Wenig - add ion round call
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.matrix;
 
@@ -48,7 +49,7 @@ public class ExtractedMatrix {
 			for(int scanIndex = 0; scanIndex < numberOfScans; scanIndex++) {
 				currentIons = scans.get(scanIndex).getIons();
 				for(IIon ion : currentIons) {
-					signal[scanIndex][((int)Math.round(ion.getIon() - this.startIon))] = ion.getAbundance();
+					signal[scanIndex][AbstractIon.getIon(ion.getIon() - this.startIon)] = ion.getAbundance();
 				}
 			}
 		}

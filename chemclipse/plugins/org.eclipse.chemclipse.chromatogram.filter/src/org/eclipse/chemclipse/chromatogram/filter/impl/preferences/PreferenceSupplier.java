@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.filter.Activator;
+import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsIonRounding;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsQC;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsReset;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsSelection;
@@ -22,6 +23,7 @@ import org.eclipse.chemclipse.chromatogram.filter.impl.settings.PeakTargetsToRef
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.ScanTargetsToPeakSettings;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.ScanTargetsToReferencesSettings;
 import org.eclipse.chemclipse.chromatogram.filter.settings.MaxDetectorFilterSettings;
+import org.eclipse.chemclipse.model.math.IonRoundMethod;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -56,6 +58,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	//
 	public static final String P_USE_RETENTION_INDEX_QC = "qcUseRetentionIndex";
 	public static final boolean DEF_USE_RETENTION_INDEX_QC = false;
+	public static final String P_ION_ROUND_METHOD = "ionRoundMethod";
+	public static final String DEF_ION_ROUND_METHOD = IonRoundMethod.DEFAULT.name();
 	/*
 	 * Max Detector UI
 	 */
@@ -106,6 +110,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_STTR_USE_BEST_TARGET_ONLY, Boolean.toString(DEF_STTR_USE_BEST_TARGET_ONLY));
 		//
 		defaultValues.put(P_USE_RETENTION_INDEX_QC, Boolean.toString(DEF_USE_RETENTION_INDEX_QC));
+		defaultValues.put(P_ION_ROUND_METHOD, DEF_ION_ROUND_METHOD);
 		//
 		defaultValues.put(P_MAX_DETECTOR_TARGET_NAME, DEF_MAX_DETECTOR_TARGET_NAME);
 		defaultValues.put(P_MAX_DETECTOR_MATCH_FACTOR, Float.toString(DEF_MAX_DETECTOR_MATCH_FACTOR));
@@ -133,6 +138,18 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static FilterSettingsReset getFilterSettingsReset() {
 
 		return new FilterSettingsReset();
+	}
+
+	public static FilterSettingsIonRounding getFilterSettingsIonRounding() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		FilterSettingsIonRounding settings = new FilterSettingsIonRounding();
+		try {
+			settings.setIonRoundMethod(IonRoundMethod.valueOf(preferences.get(P_ION_ROUND_METHOD, DEF_ION_ROUND_METHOD)));
+		} catch(Exception e) {
+			settings.setIonRoundMethod(IonRoundMethod.DEFAULT);
+		}
+		return settings;
 	}
 
 	public static FilterSettingsQC getFilterSettingsQC() {
