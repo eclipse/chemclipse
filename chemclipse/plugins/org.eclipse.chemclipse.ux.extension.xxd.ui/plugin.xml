@@ -275,5 +275,11 @@
             filterSettings="org.eclipse.chemclipse.ux.extension.xxd.ui.filter.FilterSettingsAdjust"
             id="org.eclipse.chemclipse.ux.extension.xxd.ui.filter.adjustChromatogramSelection">
       </ChromatogramFilterSupplier>                
+   </extension>
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            file="controls.xml">
+      </toc>
    </extension>   
 </plugin>

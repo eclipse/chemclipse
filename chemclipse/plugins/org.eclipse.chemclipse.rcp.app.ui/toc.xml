@@ -2,37 +2,25 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="Chromatography/Spectrometry">
+   <topic label="Controls">
+      <anchor id="controls"/>
+   </topic>
    <topic label="Overview">
       <anchor id="overview"/>
    </topic>
-   <topic label="Baseline Detectors">
-      <anchor id="baselinedetectors"/>
+   <topic label="Concepts">
+      <anchor id="concepts"/>
    </topic>
-   <topic label="Classifier">
-      <anchor id="classifier"/>
+   <topic label="Functionality">
+      <anchor id="functionality"/>
    </topic>
-   <topic label="Filter">
-      <anchor id="filter"/>
+   <topic label="Workflows">
+      <anchor id="workflows"/>
    </topic>
-   <topic label="Peak Detectors">
-      <anchor id="peakdetectors"/>
-   </topic>
-   <topic label="Integrators">
-      <anchor id="integrators"/>
-   </topic>   
-   <topic label="Identifier">
-      <anchor id="identifier"/>
-   </topic>
-   <topic label="Quantifier">
-      <anchor id="quantifier"/>
-   </topic>
-   <topic label="Process">
-      <anchor id="process"/>
-   </topic>  
-   <topic label="Miscellaneous">
-      <anchor id="miscellaneous"/>
+   <topic label="Preferences">
+      <anchor id="preferences"/>
    </topic>  
    <topic label="Legal">
       <anchor id="legal"/>
-   </topic>   
+   </topic>
 </toc>

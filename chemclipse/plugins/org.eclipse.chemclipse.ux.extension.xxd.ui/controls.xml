@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Controls" link_to="/org.eclipse.chemclipse.rcp.app.ui/toc.xml#controls">
+	<topic label="Chromatogram Editor" href="html/controls/chromatogram_editor.html">
+	</topic>
+	<topic label="Peak / Scan List" href="html/controls/peak_scan_list.html">
+	</topic>
+	<topic label="Chromatogram Overlay" href="html/controls/chromatogram_overlay.html">
+	</topic>
+</toc>

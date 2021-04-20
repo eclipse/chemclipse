@@ -43,8 +43,8 @@
         <children xsi:type="menu:HandledMenuItem" xmi:id="_nz0_UDiVEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.preferences" label="Preferences" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/preferences.gif" command="_XevnQDiVEeKDEdWQrkwLnQ"/>
       </children>
       <children xsi:type="menu:Menu" xmi:id="_h0BcRjLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.help" label="Help">
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_h0BcRzLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.item.about" label="About" command="_h0A1RDLzEeKMEOdllHiEaA"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_-y9BQCaJEeOrR5M2kqmSOQ" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.item.help" label="Documentation" command="_zeEzsCaJEeOrR5M2kqmSOQ"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_h0BcRzLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.item.about" label="About" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/info.gif" command="_h0A1RDLzEeKMEOdllHiEaA"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_-y9BQCaJEeOrR5M2kqmSOQ" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.item.help" label="Documentation" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/question.gif" command="_zeEzsCaJEeOrR5M2kqmSOQ"/>
       </children>
     </mainMenu>
     <sharedElements xsi:type="basic:Part" xmi:id="_Sq1foEd4EeKhRMzT2OpX0g" elementId="org.eclipse.ui.console.ConsoleView" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Console" iconURI="platform:/plugin/org.eclipse.ui.console/icons/full/cview16/console_view.gif">
