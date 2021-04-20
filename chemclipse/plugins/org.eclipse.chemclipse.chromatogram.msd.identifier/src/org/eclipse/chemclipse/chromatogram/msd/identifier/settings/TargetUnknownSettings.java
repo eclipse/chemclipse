@@ -17,6 +17,7 @@ public class TargetUnknownSettings {
 	 * Unknown [57,71,43,85,41]
 	 */
 	private String targetName = "Unknown";
+	private float matchQuality = 100.0f;
 	private int numberMZ = 5;
 	private boolean includeIntensityPercent = false;
 	private String markerStart = "[";
@@ -32,6 +33,16 @@ public class TargetUnknownSettings {
 	public void setTargetName(String targetName) {
 
 		this.targetName = (targetName == null) ? "" : targetName;
+	}
+
+	public float getMatchQuality() {
+
+		return matchQuality;
+	}
+
+	public void setMatchQuality(float matchQuality) {
+
+		this.matchQuality = matchQuality;
 	}
 
 	public int getNumberMZ() {

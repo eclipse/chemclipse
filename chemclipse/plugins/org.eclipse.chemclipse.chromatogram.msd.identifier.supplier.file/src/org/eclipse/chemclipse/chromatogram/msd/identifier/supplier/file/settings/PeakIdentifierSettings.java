@@ -34,6 +34,10 @@ public class PeakIdentifierSettings extends AbstractPeakIdentifierSettingsMSD im
 	@JsonPropertyDescription("Select the library file.")
 	@FileSettingProperty(dialogType = DialogType.OPEN_DIALOG, extensionNames = {"AMDIS (*.msl)", "AMDIS (*.MSL)", "NIST (*.msp)", "NIST (*.MSP)", "MassBank (.zip)", "MassBank (.ZIP)"}, validExtensions = {"*.msl", "*.MSL", "*.msp", "*.MSP", "*.zip", "*.ZIP"}, onlyDirectory = false)
 	private File libraryFile;
+	@JsonProperty(value = "Limit Match Factor", defaultValue = "80.0")
+	@JsonPropertyDescription(value = "Run an identification if no target exists with a Match Factor >= the given limit.")
+	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_FACTOR, maxValue = PreferenceSupplier.MAX_FACTOR)
+	private float limitMatchFactor = 80.0f;
 	@JsonProperty(value = "Pre-Optimization", defaultValue = "false")
 	private boolean usePreOptimization = false;
 	@JsonProperty(value = "Threshold Pre-Optimization", defaultValue = "0.12")
@@ -42,10 +46,10 @@ public class PeakIdentifierSettings extends AbstractPeakIdentifierSettingsMSD im
 	@JsonProperty(value = "Number of Targets", defaultValue = "15")
 	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_NUMBER_OF_TARGETS, maxValue = PreferenceSupplier.MAX_NUMBER_OF_TARGETS)
 	private int numberOfTargets = 15;
-	@JsonProperty(value = "Min Match Factor", defaultValue = "80.0")
+	@JsonProperty(value = "Min. Match Factor", defaultValue = "80.0")
 	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_FACTOR, maxValue = PreferenceSupplier.MAX_FACTOR)
 	private float minMatchFactor = 80.0f;
-	@JsonProperty(value = "Min Reverse Match Factor", defaultValue = "80.0")
+	@JsonProperty(value = "Min. Reverse Match Factor", defaultValue = "80.0")
 	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_FACTOR, maxValue = PreferenceSupplier.MAX_FACTOR)
 	private float minReverseMatchFactor = 80.0f;
 	//
@@ -78,6 +82,16 @@ public class PeakIdentifierSettings extends AbstractPeakIdentifierSettingsMSD im
 	public void setLibraryFile(File libraryFile) {
 
 		this.libraryFile = libraryFile;
+	}
+
+	public float getLimitMatchFactor() {
+
+		return limitMatchFactor;
+	}
+
+	public void setLimitMatchFactor(float limitMatchFactor) {
+
+		this.limitMatchFactor = limitMatchFactor;
 	}
 
 	@Override

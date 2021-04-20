@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,11 +14,13 @@
 package org.eclipse.chemclipse.msd.identifier.supplier.nist.core;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.peak.AbstractPeakIdentifierMSD;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifierSettingsMSD;
 import org.eclipse.chemclipse.model.identifier.IPeakIdentificationResults;
+import org.eclipse.chemclipse.model.support.LimitSupport;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.core.support.Identifier;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime.INistSupport;
@@ -42,8 +44,19 @@ public class PeakIdentifier extends AbstractPeakIdentifierMSD<IPeakIdentificatio
 		if(identifierSettings instanceof PeakIdentifierSettings) {
 			try {
 				PeakIdentifierSettings peakIdentifierSettings = (PeakIdentifierSettings)identifierSettings;
+				/*
+				 * Pre-filter
+				 */
+				float limitMatchFactor = peakIdentifierSettings.getLimitMatchFactor();
+				List<IPeakMSD> peaksToIdentify = new ArrayList<>();
+				for(IPeakMSD peakMSD : peaks) {
+					if(LimitSupport.doIdentify(peakMSD.getTargets(), limitMatchFactor)) {
+						peaksToIdentify.add(peakMSD);
+					}
+				}
+				//
 				Identifier identifier = new Identifier();
-				IPeakIdentificationResults peakIdentificationResults = identifier.runPeakIdentification(peaks, peakIdentifierSettings, processingInfo, monitor);
+				IPeakIdentificationResults peakIdentificationResults = identifier.runPeakIdentification(peaksToIdentify, peakIdentifierSettings, processingInfo, monitor);
 				processingInfo.setProcessingResult(peakIdentificationResults);
 			} catch(FileNotFoundException e) {
 				processingInfo.addErrorMessage(INistSupport.NIST_DESCRIPTION, "An I/O error ocurred.");

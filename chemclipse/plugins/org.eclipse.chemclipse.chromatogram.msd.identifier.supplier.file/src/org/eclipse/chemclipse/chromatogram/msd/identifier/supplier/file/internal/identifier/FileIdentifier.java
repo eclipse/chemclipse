@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2020 Lablicate GmbH.
+ * Copyright (c) 2015, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -40,6 +40,7 @@ import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.IPeakIdentificationResults;
 import org.eclipse.chemclipse.model.identifier.MatchConstraints;
 import org.eclipse.chemclipse.model.identifier.PeakIdentificationResults;
+import org.eclipse.chemclipse.model.support.LimitSupport;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -66,8 +67,16 @@ public class FileIdentifier {
 	public IMassSpectra runIdentification(List<IScanMSD> massSpectraList, MassSpectrumIdentifierSettings fileIdentifierSettings, IProgressMonitor monitor) throws FileNotFoundException {
 
 		SubMonitor subMonitor = SubMonitor.convert(monitor, "Running mass spectra identification", 100);
+		/*
+		 * Pre-filter the mass spectra to identify.
+		 */
+		float limitMatchFactor = fileIdentifierSettings.getLimitMatchFactor();
 		IMassSpectra massSpectra = new MassSpectra();
-		massSpectra.addMassSpectra(massSpectraList);
+		for(IScanMSD scanMSD : massSpectraList) {
+			if(LimitSupport.doIdentify(scanMSD.getTargets(), limitMatchFactor)) {
+				massSpectra.addMassSpectrum(scanMSD);
+			}
+		}
 		/*
 		 * The alternate identifier is used, when another plugin tries to use this file identification process.
 		 * The LibraryService uses the identifier to get a mass spectrum of a given target.
@@ -105,6 +114,16 @@ public class FileIdentifier {
 
 		SubMonitor subMonitor = SubMonitor.convert(monitor, "Running mass spectra identification", 100);
 		/*
+		 * Pre-filter the mass spectra to identify.
+		 */
+		float limitMatchFactor = peakIdentifierSettings.getLimitMatchFactor();
+		List<IPeakMSD> peaksToIdentify = new ArrayList<>();
+		for(IPeakMSD peak : peaks) {
+			if(LimitSupport.doIdentify(peak.getTargets(), limitMatchFactor)) {
+				peaksToIdentify.add(peak);
+			}
+		}
+		/*
 		 * The alternate identifier is used, when another plugin tries to use this file identification process.
 		 * The LibraryService uses the identifier to get a mass spectrum of a given target.
 		 * It would then use this plugin instead of the plugin who used this identifier.
@@ -122,7 +141,7 @@ public class FileIdentifier {
 		Map<String, IMassSpectra> databases = databasesCache.getDatabases(files, subMonitor.split(10));
 		subMonitor.setWorkRemaining(databases.size() * 100);
 		for(Map.Entry<String, IMassSpectra> database : databases.entrySet()) {
-			comparePeaksAgainstDatabase(peaks, database.getValue().getList(), peakIdentifierSettings, identifier, database.getKey(), subMonitor.split(100, SubMonitor.SUPPRESS_NONE));
+			comparePeaksAgainstDatabase(peaksToIdentify, database.getValue().getList(), peakIdentifierSettings, identifier, database.getKey(), subMonitor.split(100, SubMonitor.SUPPRESS_NONE));
 		}
 		//
 		return identificationResults;

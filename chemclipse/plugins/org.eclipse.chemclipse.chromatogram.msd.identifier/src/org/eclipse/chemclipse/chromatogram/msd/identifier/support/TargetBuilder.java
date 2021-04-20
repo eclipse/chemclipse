@@ -39,14 +39,12 @@ import org.eclipse.chemclipse.support.text.ValueFormat;
 public class TargetBuilder {
 
 	private static final Logger logger = Logger.getLogger(TargetBuilder.class);
+	//
 	private static final String UNKNOWN = "???";
+	private static final float MIN_FACTOR = 0.0f;
 	private static final float MAX_FACTOR = 100.0f;
-	private final IonAbundanceComparator ionAbundanceComparator;
-
-	public TargetBuilder() {
-
-		ionAbundanceComparator = new IonAbundanceComparator(SortOrder.DESC);
-	}
+	//
+	private final IonAbundanceComparator ionAbundanceComparator = new IonAbundanceComparator(SortOrder.DESC);
 
 	public IIdentificationTarget getPeakTarget(IScanMSD reference, IComparisonResult comparisonResult, String identifier) {
 
@@ -85,7 +83,7 @@ public class TargetBuilder {
 		try {
 			IScanMSD unknown = peakMSD.getExtractedMassSpectrum();
 			ILibraryInformation libraryInformation = getLibraryInformationUnknown(unknown, targetUnknownSettings);
-			IComparisonResult comparisonResult = getComparisonResultUnknown();
+			IComparisonResult comparisonResult = getComparisonResultUnknown(targetUnknownSettings.getMatchQuality());
 			IIdentificationTarget peakTarget = new IdentificationTarget(libraryInformation, comparisonResult);
 			peakTarget.setIdentifier(identifier);
 			peakMSD.getTargets().add(peakTarget);
@@ -120,7 +118,7 @@ public class TargetBuilder {
 
 		try {
 			ILibraryInformation libraryInformation = getLibraryInformationUnknown(unknown, targetUnknownSettings);
-			IComparisonResult comparisonResult = getComparisonResultUnknown();
+			IComparisonResult comparisonResult = getComparisonResultUnknown(targetUnknownSettings.getMatchQuality());
 			IIdentificationTarget massSpectrumTarget = new IdentificationTarget(libraryInformation, comparisonResult);
 			massSpectrumTarget.setIdentifier(identifier);
 			unknown.getTargets().add(massSpectrumTarget);
@@ -230,8 +228,11 @@ public class TargetBuilder {
 		return libraryInformation;
 	}
 
-	private IComparisonResult getComparisonResultUnknown() {
+	private IComparisonResult getComparisonResultUnknown(float matchQuality) {
 
-		return new ComparisonResult(MAX_FACTOR, MAX_FACTOR, MAX_FACTOR, MAX_FACTOR);
+		if(matchQuality < MIN_FACTOR || matchQuality > MAX_FACTOR) {
+			matchQuality = MAX_FACTOR;
+		}
+		return new ComparisonResult(matchQuality, 0.0f, 0.0f, 0.0f);
 	}
 }

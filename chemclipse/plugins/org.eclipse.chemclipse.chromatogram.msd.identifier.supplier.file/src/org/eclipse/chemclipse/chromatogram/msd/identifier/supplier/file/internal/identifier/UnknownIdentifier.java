@@ -17,9 +17,7 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.TargetUnknown
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.MassSpectrumUnknownSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.PeakUnknownSettings;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.support.TargetBuilder;
-import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.model.identifier.IComparisonResult;
-import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.model.support.LimitSupport;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 
@@ -31,11 +29,12 @@ public class UnknownIdentifier {
 
 	public void runIdentification(List<? extends IPeakMSD> peaks, PeakUnknownSettings settings) {
 
-		float minMatchFactor = settings.getMinMatchFactor();
-		float minReverseMatchFactor = settings.getMinReverseMatchFactor();
+		float limitMatchFactor = settings.getLimitMatchFactor();
+		float matchQuality = settings.getMatchQuality();
 		//
 		TargetUnknownSettings targetUnknownSettings = new TargetUnknownSettings();
 		targetUnknownSettings.setTargetName(settings.getTargetName());
+		targetUnknownSettings.setMatchQuality(matchQuality);
 		targetUnknownSettings.setNumberMZ(settings.getNumberOfMZ());
 		targetUnknownSettings.setIncludeIntensityPercent(settings.isIncludeIntensityPercent());
 		targetUnknownSettings.setMarkerStart(settings.getMarkerStart());
@@ -44,7 +43,7 @@ public class UnknownIdentifier {
 		targetUnknownSettings.setIncludeRetentionIndex(settings.isIncludeRetentionIndex());
 		//
 		for(IPeakMSD peak : peaks) {
-			if(identifyPeak(peak, minMatchFactor, minReverseMatchFactor)) {
+			if(LimitSupport.doIdentify(peak.getTargets(), limitMatchFactor)) {
 				TARGETBUILDER.setPeakTargetUnknown(peak, IDENTIFIER, targetUnknownSettings);
 			}
 		}
@@ -52,11 +51,12 @@ public class UnknownIdentifier {
 
 	public void runIdentification(List<IScanMSD> massSpectraList, MassSpectrumUnknownSettings settings) {
 
-		float minMatchFactor = settings.getMinMatchFactor();
-		float minReverseMatchFactor = settings.getMinReverseMatchFactor();
+		float limitMatchFactor = settings.getLimitMatchFactor();
+		float matchQuality = settings.getMatchQuality();
 		//
 		TargetUnknownSettings targetUnknownSettings = new TargetUnknownSettings();
 		targetUnknownSettings.setTargetName(settings.getTargetName());
+		targetUnknownSettings.setMatchQuality(matchQuality);
 		targetUnknownSettings.setNumberMZ(settings.getNumberOfMZ());
 		targetUnknownSettings.setIncludeIntensityPercent(settings.isIncludeIntensityPercent());
 		targetUnknownSettings.setMarkerStart(settings.getMarkerStart());
@@ -65,31 +65,9 @@ public class UnknownIdentifier {
 		targetUnknownSettings.setIncludeRetentionIndex(settings.isIncludeRetentionIndex());
 		//
 		for(IScanMSD scan : massSpectraList) {
-			if(identifyScan(scan, minMatchFactor, minReverseMatchFactor)) {
+			if(LimitSupport.doIdentify(scan.getTargets(), limitMatchFactor)) {
 				TARGETBUILDER.setMassSpectrumTargetUnknown(scan, IDENTIFIER, targetUnknownSettings);
 			}
 		}
-	}
-
-	private boolean identifyPeak(IPeak peak, float minMatchFactor, float minReverseMatchFactor) {
-
-		for(IIdentificationTarget target : peak.getTargets()) {
-			IComparisonResult comparisonResult = target.getComparisonResult();
-			if(comparisonResult.getMatchFactor() >= minMatchFactor && comparisonResult.getReverseMatchFactor() >= minReverseMatchFactor) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	private boolean identifyScan(IScanMSD scan, float minMatchFactor, float minReverseMatchFactor) {
-
-		for(IIdentificationTarget target : scan.getTargets()) {
-			IComparisonResult comparisonResult = target.getComparisonResult();
-			if(comparisonResult.getMatchFactor() >= minMatchFactor && comparisonResult.getReverseMatchFactor() >= minReverseMatchFactor) {
-				return false;
-			}
-		}
-		return true;
 	}
 }

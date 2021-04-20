@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2020 Lablicate GmbH.
+ * Copyright (c) 2010, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,10 +13,12 @@
 package org.eclipse.chemclipse.msd.identifier.supplier.nist.core;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.AbstractMassSpectrumIdentifier;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IMassSpectrumIdentifierSettings;
+import org.eclipse.chemclipse.model.support.LimitSupport;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.core.support.Identifier;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime.INistSupport;
@@ -41,8 +43,19 @@ public class ScanIdentifier extends AbstractMassSpectrumIdentifier {
 		if(identifierSettings instanceof ScanIdentifierSettings) {
 			try {
 				ScanIdentifierSettings scanIdentifierSettings = (ScanIdentifierSettings)identifierSettings;
+				/*
+				 * Pre-filter
+				 */
+				float limitMatchFactor = scanIdentifierSettings.getLimitMatchFactor();
+				List<IScanMSD> scansToIdentify = new ArrayList<>();
+				for(IScanMSD scanMSD : massSpectrumList) {
+					if(LimitSupport.doIdentify(scanMSD.getTargets(), limitMatchFactor)) {
+						scansToIdentify.add(scanMSD);
+					}
+				}
+				//
 				Identifier identifier = new Identifier();
-				IMassSpectra massSpectra = identifier.runMassSpectrumIdentification(massSpectrumList, scanIdentifierSettings, monitor);
+				IMassSpectra massSpectra = identifier.runMassSpectrumIdentification(scansToIdentify, scanIdentifierSettings, monitor);
 				processingInfo.setProcessingResult(massSpectra);
 			} catch(FileNotFoundException e) {
 				processingInfo.addErrorMessage(INistSupport.NIST_DESCRIPTION, "An I/O error ocurred.");

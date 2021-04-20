@@ -21,14 +21,16 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class MassSpectrumUnknownSettings extends MassSpectrumIdentifierAdapterSettings {
 
-	@JsonProperty(value = "Min Match Factor", defaultValue = "80.0")
+	@JsonProperty(value = "Limit Match Factor", defaultValue = "80.0")
+	@JsonPropertyDescription(value = "Run an identification if no target exists with a Match Factor >= the given limit.")
 	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_FACTOR, maxValue = PreferenceSupplier.MAX_FACTOR)
-	private float minMatchFactor = 80.0f;
-	@JsonProperty(value = "Min Reverse Match Factor", defaultValue = "80.0")
-	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_FACTOR, maxValue = PreferenceSupplier.MAX_FACTOR)
-	private float minReverseMatchFactor = 80.0f;
+	private float limitMatchFactor = 80.0f;
 	@JsonProperty(value = "Target Name", defaultValue = PreferenceSupplier.DEF_TARGET_NAME_UNKNOWN)
 	private String targetName = "Unknown";
+	@JsonProperty(value = "Match Quality", defaultValue = "80.0")
+	@JsonPropertyDescription(value = "The match quality is set as the Match Factor.")
+	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_FACTOR, maxValue = PreferenceSupplier.MAX_FACTOR)
+	private float matchQuality = 80.0f;
 	@JsonProperty(value = "Number of m/z", defaultValue = "5")
 	@JsonPropertyDescription(value = "This is the number of m/z printed, sorted asc by intensity.")
 	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_NUMBER_OF_MZ, maxValue = PreferenceSupplier.MAX_NUMBER_OF_MZ)
@@ -46,24 +48,14 @@ public class MassSpectrumUnknownSettings extends MassSpectrumIdentifierAdapterSe
 	@JsonProperty(value = "Include Retention Index", defaultValue = "false")
 	private boolean includeRetentionIndex = false;
 
-	public float getMinMatchFactor() {
+	public float getLimitMatchFactor() {
 
-		return minMatchFactor;
+		return limitMatchFactor;
 	}
 
-	public void setMinMatchFactor(float minMatchFactor) {
+	public void setLimitMatchFactor(float limitMatchFactor) {
 
-		this.minMatchFactor = minMatchFactor;
-	}
-
-	public float getMinReverseMatchFactor() {
-
-		return minReverseMatchFactor;
-	}
-
-	public void setMinReverseMatchFactor(float minReverseMatchFactor) {
-
-		this.minReverseMatchFactor = minReverseMatchFactor;
+		this.limitMatchFactor = limitMatchFactor;
 	}
 
 	public String getTargetName() {
@@ -74,6 +66,16 @@ public class MassSpectrumUnknownSettings extends MassSpectrumIdentifierAdapterSe
 	public void setTargetName(String targetName) {
 
 		this.targetName = targetName;
+	}
+
+	public float getMatchQuality() {
+
+		return matchQuality;
+	}
+
+	public void setMatchQuality(float matchQuality) {
+
+		this.matchQuality = matchQuality;
 	}
 
 	public int getNumberOfMZ() {

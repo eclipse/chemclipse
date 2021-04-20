@@ -60,6 +60,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	/*
 	 * File
 	 */
+	public static final String P_LIMIT_MATCH_FACTOR_FILE = "limitMatchFactorFile";
+	public static final float DEF_LIMIT_MATCH_FACTOR_FILE = 80.0f;
 	public static final String P_MIN_MATCH_FACTOR = "minMatchFactor";
 	public static final float DEF_MIN_MATCH_FACTOR = 80.0f;
 	public static final String P_MIN_REVERSE_MATCH_FACTOR = "minReverseMatchFactor";
@@ -67,12 +69,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	/*
 	 * Unknown
 	 */
-	public static final String P_MIN_MATCH_FACTOR_UNKNOWN = "minMatchFactorUnknown";
-	public static final float DEF_MIN_MATCH_FACTOR_UNKNOWN = 80.0f;
-	public static final String P_MIN_REVERSE_MATCH_FACTOR_UNKNOWN = "minReverseMatchFactorUnknown";
-	public static final float DEF_MIN_REVERSE_MATCH_FACTOR_UNKNOWN = 80.0f;
+	public static final String P_LIMIT_MATCH_FACTOR_UNKNOWN = "limitMatchFactorUnknown";
+	public static final float DEF_LIMIT_MATCH_FACTOR_UNKOWN = 80.0f;
 	public static final String P_TARGET_NAME_UNKNOWN = "targetNameUnknown";
 	public static final String DEF_TARGET_NAME_UNKNOWN = "Unknown";
+	public static final String P_MATCH_QUALITY = "matchQuality";
+	public static final float DEF_MATCH_QUALITY = 80.0f;
 	public static final String P_NUMBER_OF_MZ_UNKNOWN = "numberOfMzUnknown";
 	public static final int DEF_NUMBER_OF_MZ_UNKNOWN = 5;
 	public static final String P_INCLUDE_INTENSITY_PERCENT_UNKNOWN = "includeIntensityPercentUnknown";
@@ -138,10 +140,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_USE_PRE_OPTIMIZATION, Boolean.toString(DEF_USE_PRE_OPTIMIZATION));
 		defaultValues.put(P_THRESHOLD_PRE_OPTIMIZATION, Double.toString(DEF_THRESHOLD_PRE_OPTIMIZATION));
 		defaultValues.put(P_NUMBER_OF_TARGETS, Integer.toString(DEF_NUMBER_OF_TARGETS));
+		defaultValues.put(P_LIMIT_MATCH_FACTOR_FILE, Float.toString(DEF_LIMIT_MATCH_FACTOR_FILE));
 		defaultValues.put(P_MIN_MATCH_FACTOR, Float.toString(DEF_MIN_MATCH_FACTOR));
 		defaultValues.put(P_MIN_REVERSE_MATCH_FACTOR, Float.toString(DEF_MIN_REVERSE_MATCH_FACTOR));
-		defaultValues.put(P_MIN_MATCH_FACTOR_UNKNOWN, Float.toString(DEF_MIN_MATCH_FACTOR_UNKNOWN));
-		defaultValues.put(P_MIN_REVERSE_MATCH_FACTOR_UNKNOWN, Float.toString(DEF_MIN_REVERSE_MATCH_FACTOR_UNKNOWN));
+		defaultValues.put(P_LIMIT_MATCH_FACTOR_UNKNOWN, Float.toString(DEF_LIMIT_MATCH_FACTOR_UNKOWN));
+		defaultValues.put(P_MATCH_QUALITY, Float.toString(DEF_MATCH_QUALITY));
 		defaultValues.put(P_TARGET_NAME_UNKNOWN, DEF_TARGET_NAME_UNKNOWN);
 		defaultValues.put(P_NUMBER_OF_MZ_UNKNOWN, Integer.toString(DEF_NUMBER_OF_MZ_UNKNOWN));
 		defaultValues.put(P_INCLUDE_INTENSITY_PERCENT_UNKNOWN, Boolean.toString(DEF_INCLUDE_INTENSITY_PERCENT_UNKNOWN));
@@ -173,6 +176,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		settings.setThresholdPreOptimization(preferences.getDouble(P_THRESHOLD_PRE_OPTIMIZATION, DEF_THRESHOLD_PRE_OPTIMIZATION));
 		settings.setMassSpectrumComparatorId(preferences.get(P_MASS_SPECTRUM_COMPARATOR_ID, DEF_MASS_SPECTRUM_COMPARATOR_ID));
 		settings.setNumberOfTargets(preferences.getInt(P_NUMBER_OF_TARGETS, DEF_NUMBER_OF_TARGETS));
+		settings.setLimitMatchFactor(preferences.getFloat(P_LIMIT_MATCH_FACTOR_FILE, DEF_LIMIT_MATCH_FACTOR_FILE));
 		settings.setMinMatchFactor(preferences.getFloat(P_MIN_MATCH_FACTOR, DEF_MIN_MATCH_FACTOR));
 		settings.setMinReverseMatchFactor(preferences.getFloat(P_MIN_REVERSE_MATCH_FACTOR, DEF_MIN_REVERSE_MATCH_FACTOR));
 		//
@@ -194,6 +198,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		settings.setThresholdPreOptimization(preferences.getDouble(P_THRESHOLD_PRE_OPTIMIZATION, DEF_THRESHOLD_PRE_OPTIMIZATION));
 		settings.setMassSpectrumComparatorId(preferences.get(P_MASS_SPECTRUM_COMPARATOR_ID, DEF_MASS_SPECTRUM_COMPARATOR_ID));
 		settings.setNumberOfTargets(preferences.getInt(P_NUMBER_OF_TARGETS, DEF_NUMBER_OF_TARGETS));
+		settings.setLimitMatchFactor(preferences.getFloat(P_LIMIT_MATCH_FACTOR_FILE, DEF_LIMIT_MATCH_FACTOR_FILE));
 		settings.setMinMatchFactor(preferences.getFloat(P_MIN_MATCH_FACTOR, DEF_MIN_MATCH_FACTOR));
 		settings.setMinReverseMatchFactor(preferences.getFloat(P_MIN_REVERSE_MATCH_FACTOR, DEF_MIN_REVERSE_MATCH_FACTOR));
 		//
@@ -212,9 +217,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		//
 		PeakUnknownSettings settings = new PeakUnknownSettings();
 		settings.setMassSpectrumComparatorId("");
-		settings.setMinMatchFactor(preferences.getFloat(P_MIN_MATCH_FACTOR_UNKNOWN, DEF_MIN_MATCH_FACTOR_UNKNOWN));
-		settings.setMinReverseMatchFactor(preferences.getFloat(P_MIN_REVERSE_MATCH_FACTOR_UNKNOWN, DEF_MIN_REVERSE_MATCH_FACTOR_UNKNOWN));
+		settings.setLimitMatchFactor(preferences.getFloat(P_LIMIT_MATCH_FACTOR_UNKNOWN, DEF_LIMIT_MATCH_FACTOR_UNKOWN));
 		settings.setTargetName(preferences.get(P_TARGET_NAME_UNKNOWN, DEF_TARGET_NAME_UNKNOWN));
+		settings.setMatchQuality(preferences.getFloat(P_MATCH_QUALITY, DEF_MATCH_QUALITY));
 		settings.setNumberOfMZ(preferences.getInt(P_NUMBER_OF_MZ_UNKNOWN, DEF_NUMBER_OF_MZ_UNKNOWN));
 		settings.setIncludeIntensityPercent(preferences.getBoolean(P_INCLUDE_INTENSITY_PERCENT_UNKNOWN, DEF_INCLUDE_INTENSITY_PERCENT_UNKNOWN));
 		settings.setMarkerStart(preferences.get(P_MARKER_START_UNKNOWN, DEF_MARKER_START_UNKNOWN));
@@ -231,9 +236,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		//
 		MassSpectrumUnknownSettings settings = new MassSpectrumUnknownSettings();
 		settings.setMassSpectrumComparatorId("");
-		settings.setMinMatchFactor(preferences.getFloat(P_MIN_MATCH_FACTOR_UNKNOWN, DEF_MIN_MATCH_FACTOR_UNKNOWN));
-		settings.setMinReverseMatchFactor(preferences.getFloat(P_MIN_REVERSE_MATCH_FACTOR_UNKNOWN, DEF_MIN_REVERSE_MATCH_FACTOR_UNKNOWN));
+		settings.setLimitMatchFactor(preferences.getFloat(P_LIMIT_MATCH_FACTOR_UNKNOWN, DEF_LIMIT_MATCH_FACTOR_UNKOWN));
 		settings.setTargetName(preferences.get(P_TARGET_NAME_UNKNOWN, DEF_TARGET_NAME_UNKNOWN));
+		settings.setMatchQuality(preferences.getFloat(P_MATCH_QUALITY, DEF_MATCH_QUALITY));
 		settings.setNumberOfMZ(preferences.getInt(P_NUMBER_OF_MZ_UNKNOWN, DEF_NUMBER_OF_MZ_UNKNOWN));
 		settings.setIncludeIntensityPercent(preferences.getBoolean(P_INCLUDE_INTENSITY_PERCENT_UNKNOWN, DEF_INCLUDE_INTENSITY_PERCENT_UNKNOWN));
 		settings.setMarkerStart(preferences.get(P_MARKER_START_UNKNOWN, DEF_MARKER_START_UNKNOWN));

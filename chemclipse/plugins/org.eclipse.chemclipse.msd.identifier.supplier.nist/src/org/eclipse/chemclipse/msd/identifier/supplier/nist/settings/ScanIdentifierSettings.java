@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2020 Lablicate GmbH.
+ * Copyright (c) 2010, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -29,6 +29,10 @@ public class ScanIdentifierSettings extends AbstractScanSearchSettings {
 	@JsonPropertyDescription("Select the NIST-DB folder, called MSSEARCH.")
 	@FileSettingProperty(dialogType = DialogType.OPEN_DIALOG, onlyDirectory = true)
 	private File nistFolder = PreferenceSupplier.getNistInstallationFolder();
+	@JsonProperty(value = "Limit Match Factor", defaultValue = "80.0")
+	@JsonPropertyDescription(value = "Run an identification if no target exists with a Match Factor >= the given limit.")
+	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_FACTOR, maxValue = PreferenceSupplier.MAX_FACTOR)
+	private float limitMatchFactor = 80.0f;
 	@JsonProperty(value = "Number of Targets", defaultValue = "3")
 	@JsonPropertyDescription(value = "The number of iterations to targets to store.")
 	@IntSettingsProperty
@@ -56,6 +60,16 @@ public class ScanIdentifierSettings extends AbstractScanSearchSettings {
 	public void setNistFolder(File nistFolder) {
 
 		this.nistFolder = nistFolder;
+	}
+
+	public float getLimitMatchFactor() {
+
+		return limitMatchFactor;
+	}
+
+	public void setLimitMatchFactor(float limitMatchFactor) {
+
+		this.limitMatchFactor = limitMatchFactor;
 	}
 
 	@Override

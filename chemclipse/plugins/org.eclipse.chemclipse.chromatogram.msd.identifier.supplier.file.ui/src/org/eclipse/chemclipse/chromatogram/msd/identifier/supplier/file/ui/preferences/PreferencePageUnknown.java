@@ -44,9 +44,9 @@ public class PreferencePageUnknown extends FieldEditorPreferencePage implements 
 		 * Display all available import converter.
 		 */
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new FloatFieldEditor(PreferenceSupplier.P_MIN_MATCH_FACTOR_UNKNOWN, "Min Match Factor", PreferenceSupplier.MIN_FACTOR, PreferenceSupplier.MAX_FACTOR, getFieldEditorParent()));
-		addField(new FloatFieldEditor(PreferenceSupplier.P_MIN_REVERSE_MATCH_FACTOR_UNKNOWN, "Min Reverse Match Factor", PreferenceSupplier.MIN_FACTOR, PreferenceSupplier.MAX_FACTOR, getFieldEditorParent()));
+		addField(new FloatFieldEditor(PreferenceSupplier.P_LIMIT_MATCH_FACTOR_UNKNOWN, "Limit Match Factor", PreferenceSupplier.MIN_FACTOR, PreferenceSupplier.MAX_FACTOR, getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceSupplier.P_TARGET_NAME_UNKNOWN, "Target Name", getFieldEditorParent()));
+		addField(new FloatFieldEditor(PreferenceSupplier.P_MATCH_QUALITY, "Match Quality", PreferenceSupplier.MIN_FACTOR, PreferenceSupplier.MAX_FACTOR, getFieldEditorParent()));
 		addField(new IntegerFieldEditor(PreferenceSupplier.P_NUMBER_OF_MZ_UNKNOWN, "Number of m/z", PreferenceSupplier.MIN_NUMBER_OF_MZ, PreferenceSupplier.MAX_NUMBER_OF_MZ, getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_INCLUDE_INTENSITY_PERCENT_UNKNOWN, "Include Intensity [%]", getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceSupplier.P_MARKER_START_UNKNOWN, "Marker Start", getFieldEditorParent()));
