@@ -30,14 +30,16 @@ public class BaselineSelectionPaintListener implements ICustomPaintListener {
 	@Override
 	public void paintControl(PaintEvent e) {
 
-		Color foreground = e.gc.getForeground();
-		Color background = e.gc.getBackground();
-		e.gc.setForeground(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-		e.gc.drawLine(x1, y1 - VERTICAL_MARKER_SIZE, x1, y1 + VERTICAL_MARKER_SIZE); // vertical start
-		e.gc.drawLine(x1, y1, x2, y2);
-		e.gc.drawLine(x2, y2 - VERTICAL_MARKER_SIZE, x2, y2 + VERTICAL_MARKER_SIZE); // vertical stop
-		e.gc.setForeground(foreground);
-		e.gc.setBackground(background);
+		if(x1 != x2) {
+			Color foreground = e.gc.getForeground();
+			Color background = e.gc.getBackground();
+			e.gc.setForeground(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
+			e.gc.drawLine(x1, y1 - VERTICAL_MARKER_SIZE, x1, y1 + VERTICAL_MARKER_SIZE); // vertical start
+			e.gc.drawLine(x1, y1, x2, y2);
+			e.gc.drawLine(x2, y2 - VERTICAL_MARKER_SIZE, x2, y2 + VERTICAL_MARKER_SIZE); // vertical stop
+			e.gc.setForeground(foreground);
+			e.gc.setBackground(background);
+		}
 	}
 
 	@Override
