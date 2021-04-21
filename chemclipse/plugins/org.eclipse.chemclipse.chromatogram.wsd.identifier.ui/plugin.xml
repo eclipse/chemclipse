@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            name="Identifier (WSD)"
+            category="org.eclipse.chemclipse.chromatogram.ui.swt.preferencePageIdentifier"
+            class="org.eclipse.chemclipse.chromatogram.wsd.identifier.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.chromatogram.wsd.identifier.ui.preferences.preferencePage">
+      </page>
+   </extension>
+</plugin>
