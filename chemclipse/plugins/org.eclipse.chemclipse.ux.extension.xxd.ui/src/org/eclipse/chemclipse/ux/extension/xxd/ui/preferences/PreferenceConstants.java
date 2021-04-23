@@ -221,7 +221,9 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String P_MAX_COPY_SCAN_TRACES = "maxCopyScanTraces";
 	public static final int DEF_MAX_COPY_SCAN_TRACES = DEF_SCAN_TRACES;
 	public static final String P_SCAN_IDENTIFER_MSD = "scanIdentifierMSD";
-	public static final String DEF_SCAN_IDENTIFER_MSD = "org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.unknown.massSpectrum"; // see -> org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file/plugin.xml
+	public static final String DEF_SCAN_IDENTIFER_MSD = "org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.unknown.massSpectrum"; // see -> org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file/plugin.xml
+	public static final String P_SCAN_IDENTIFER_WSD = "scanIdentifierWSD";
+	public static final String DEF_SCAN_IDENTIFER_WSD = "org.eclipse.chemclipse.chromatogram.wsd.identifier.supplier.unknown.waveSpectrum"; // see -> org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file/plugin.xml
 	public static final String P_ENABLE_MULTI_SUBTRACT = "enableMultiSubtract";
 	public static final boolean DEF_ENABLE_MULTI_SUBTRACT = false;
 	public static final String P_SHOW_SUBTRACT_DIALOG = "showSubtractDialog";

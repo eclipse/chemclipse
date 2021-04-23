@@ -53,6 +53,20 @@ public class TargetBuilderWSD {
 		}
 	}
 
+	public void setWaveSpectrumTargetUnknown(IScanWSD unknown, String identifier, TargetUnknownSettings targetUnknownSettings) {
+
+		try {
+			String traces = extractTraces(unknown, targetUnknownSettings);
+			ILibraryInformation libraryInformation = UnknownTargetBuilder.getLibraryInformationUnknown(unknown, targetUnknownSettings, traces);
+			IComparisonResult comparisonResult = UnknownTargetBuilder.getComparisonResultUnknown(targetUnknownSettings.getMatchQuality());
+			IIdentificationTarget waveSpectrumTarget = new IdentificationTarget(libraryInformation, comparisonResult);
+			waveSpectrumTarget.setIdentifier(identifier);
+			unknown.getTargets().add(waveSpectrumTarget);
+		} catch(ReferenceMustNotBeNullException e) {
+			logger.warn(e);
+		}
+	}
+
 	private String extractTraces(IScanWSD unknown, TargetUnknownSettings targetUnknownSettings) {
 
 		String traces = "";

@@ -20,6 +20,7 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IPeakIdentifi
 import org.eclipse.chemclipse.chromatogram.wsd.identifier.peak.IPeakIdentifierWSD;
 import org.eclipse.chemclipse.chromatogram.wsd.identifier.settings.IPeakIdentifierSettingsWSD;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.internal.identifier.UnknownIdentifier;
+import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.model.UnknownSettingsSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.IUnknownSettings;
 import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
@@ -73,12 +74,10 @@ public class PeakIdentifierUnknown implements IPeakIdentifierMSD<IPeakIdentifica
 		IProcessingInfo<IPeakIdentificationResults> processingInfo = new ProcessingInfo<>();
 		//
 		if(unknownSettings != null) {
-			TargetUnknownSettings targetUnknownSettings = getTargetUnknownSettings(unknownSettings);
+			TargetUnknownSettings targetUnknownSettings = UnknownSettingsSupport.getTargetUnknownSettings(unknownSettings);
 			float limitMatchFactor = unknownSettings.getLimitMatchFactor();
-			//
 			UnknownIdentifier unknownIdentifier = new UnknownIdentifier();
-			unknownIdentifier.runIdentification(peaks, limitMatchFactor, targetUnknownSettings);
-			//
+			unknownIdentifier.runIdentificationPeak(peaks, limitMatchFactor, targetUnknownSettings);
 			IPeakIdentificationResults peakIdentificationResults = new PeakIdentificationResults();
 			processingInfo.setProcessingResult(peakIdentificationResults);
 			processingInfo.addInfoMessage(UnknownIdentifier.IDENTIFIER, "Done - peaks have been identified.");
@@ -87,21 +86,5 @@ public class PeakIdentifierUnknown implements IPeakIdentifierMSD<IPeakIdentifica
 		}
 		//
 		return processingInfo;
-	}
-
-	private TargetUnknownSettings getTargetUnknownSettings(IUnknownSettings unknownSettings) {
-
-		TargetUnknownSettings targetUnknownSettings = new TargetUnknownSettings();
-		//
-		targetUnknownSettings.setTargetName(unknownSettings.getTargetName());
-		targetUnknownSettings.setMatchQuality(unknownSettings.getMatchQuality());
-		targetUnknownSettings.setNumberTraces(unknownSettings.getNumberOfTraces());
-		targetUnknownSettings.setIncludeIntensityPercent(unknownSettings.isIncludeIntensityPercent());
-		targetUnknownSettings.setMarkerStart(unknownSettings.getMarkerStart());
-		targetUnknownSettings.setMarkerStop(unknownSettings.getMarkerStop());
-		targetUnknownSettings.setIncludeRetentionTime(unknownSettings.isIncludeRetentionTime());
-		targetUnknownSettings.setIncludeRetentionIndex(unknownSettings.isIncludeRetentionIndex());
-		//
-		return targetUnknownSettings;
 	}
 }

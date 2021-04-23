@@ -16,14 +16,15 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.csd.identifier.support.TargetBuilderCSD;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.support.TargetBuilderMSD;
 import org.eclipse.chemclipse.chromatogram.wsd.identifier.support.TargetBuilderWSD;
-import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.MassSpectrumUnknownSettings;
 import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.support.LimitSupport;
 import org.eclipse.chemclipse.model.targets.TargetUnknownSettings;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
+import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 
 public class UnknownIdentifier {
 
@@ -33,7 +34,7 @@ public class UnknownIdentifier {
 	private static final TargetBuilderCSD TARGETBUILDER_CSD = new TargetBuilderCSD();
 	private static final TargetBuilderWSD TARGETBUILDER_WSD = new TargetBuilderWSD();
 
-	public void runIdentification(List<? extends IPeak> peaks, float limitMatchFactor, TargetUnknownSettings targetUnknownSettings) {
+	public void runIdentificationPeak(List<? extends IPeak> peaks, float limitMatchFactor, TargetUnknownSettings targetUnknownSettings) {
 
 		for(IPeak peak : peaks) {
 			if(LimitSupport.doIdentify(peak.getTargets(), limitMatchFactor)) {
@@ -48,24 +49,15 @@ public class UnknownIdentifier {
 		}
 	}
 
-	public void runIdentification(List<IScanMSD> massSpectraList, MassSpectrumUnknownSettings settings) {
+	public void runIdentificationScan(List<? extends IScan> spectraList, float limitMatchFactor, TargetUnknownSettings targetUnknownSettings) {
 
-		float limitMatchFactor = settings.getLimitMatchFactor();
-		float matchQuality = settings.getMatchQuality();
-		//
-		TargetUnknownSettings targetUnknownSettings = new TargetUnknownSettings();
-		targetUnknownSettings.setTargetName(settings.getTargetName());
-		targetUnknownSettings.setMatchQuality(matchQuality);
-		targetUnknownSettings.setNumberTraces(settings.getNumberOfMZ());
-		targetUnknownSettings.setIncludeIntensityPercent(settings.isIncludeIntensityPercent());
-		targetUnknownSettings.setMarkerStart(settings.getMarkerStart());
-		targetUnknownSettings.setMarkerStop(settings.getMarkerStop());
-		targetUnknownSettings.setIncludeRetentionTime(settings.isIncludeRetentionTime());
-		targetUnknownSettings.setIncludeRetentionIndex(settings.isIncludeRetentionIndex());
-		//
-		for(IScanMSD scan : massSpectraList) {
+		for(IScan scan : spectraList) {
 			if(LimitSupport.doIdentify(scan.getTargets(), limitMatchFactor)) {
-				TARGETBUILDER_MSD.setMassSpectrumTargetUnknown(scan, IDENTIFIER, targetUnknownSettings);
+				if(scan instanceof IScanMSD) {
+					TARGETBUILDER_MSD.setMassSpectrumTargetUnknown((IScanMSD)scan, IDENTIFIER, targetUnknownSettings);
+				} else if(scan instanceof IScanWSD) {
+					TARGETBUILDER_WSD.setWaveSpectrumTargetUnknown((IScanWSD)scan, IDENTIFIER, targetUnknownSettings);
+				}
 			}
 		}
 	}

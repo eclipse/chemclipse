@@ -14,38 +14,39 @@ package org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.core;
 
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.msd.identifier.massspectrum.AbstractMassSpectrumIdentifier;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IMassSpectrumIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.wsd.identifier.settings.IWaveSpectrumIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.wsd.identifier.wavespectrum.AbstractWaveSpectrumIdentifier;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.internal.identifier.FileIdentifier;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.internal.identifier.UnknownIdentifier;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.model.UnknownSettingsSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.MassSpectrumUnknownSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.WaveSpectrumUnknownSettings;
 import org.eclipse.chemclipse.model.targets.TargetUnknownSettings;
-import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
+import org.eclipse.chemclipse.wsd.model.core.WaveSpectra;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class MassSpectrumIdentifierUnknown extends AbstractMassSpectrumIdentifier {
+public class WaveSpectrumIdentifierUnknown extends AbstractWaveSpectrumIdentifier {
 
 	@Override
-	public IProcessingInfo<IMassSpectra> identify(List<IScanMSD> massSpectraList, IMassSpectrumIdentifierSettings identifierSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<WaveSpectra> identify(List<IScanWSD> waveSpectraList, IWaveSpectrumIdentifierSettings identifierSettings, IProgressMonitor monitor) {
 
-		MassSpectrumUnknownSettings unknownSettings;
-		if(identifierSettings instanceof MassSpectrumUnknownSettings) {
-			unknownSettings = (MassSpectrumUnknownSettings)identifierSettings;
+		WaveSpectrumUnknownSettings unknownSettings;
+		if(identifierSettings instanceof WaveSpectrumUnknownSettings) {
+			unknownSettings = (WaveSpectrumUnknownSettings)identifierSettings;
 		} else {
-			unknownSettings = PreferenceSupplier.getMassSpectrumUnknownSettings();
+			unknownSettings = PreferenceSupplier.getWaveSpectrumUnknownSettings();
 		}
 		//
-		IProcessingInfo<IMassSpectra> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<WaveSpectra> processingInfo = new ProcessingInfo<>();
 		TargetUnknownSettings targetUnknownSettings = UnknownSettingsSupport.getTargetUnknownSettings(unknownSettings);
 		float limitMatchFactor = unknownSettings.getLimitMatchFactor();
 		UnknownIdentifier unknownIdentifier = new UnknownIdentifier();
-		unknownIdentifier.runIdentificationScan(massSpectraList, limitMatchFactor, targetUnknownSettings);
-		processingInfo.addInfoMessage(FileIdentifier.IDENTIFIER, "Mass spectra have been identified.");
+		unknownIdentifier.runIdentificationScan(waveSpectraList, limitMatchFactor, targetUnknownSettings);
+		processingInfo.addInfoMessage(FileIdentifier.IDENTIFIER, "Wave spectra have been identified.");
+		//
 		return processingInfo;
 	}
 }

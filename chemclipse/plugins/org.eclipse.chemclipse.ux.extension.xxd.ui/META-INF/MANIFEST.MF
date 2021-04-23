@@ -93,7 +93,8 @@ Require-Bundle: org.eclipse.ui,
  org.apache.commons.lang3;bundle-version="3.1.0",
  org.eclipse.emf.ecore;bundle-version="2.14.0",
  org.eclipse.chemclipse.progress;bundle-version="0.9.0",
- org.eclipse.help;bundle-version="3.8.100"
+ org.eclipse.help;bundle-version="3.8.100",
+ org.eclipse.chemclipse.chromatogram.wsd.identifier;bundle-version="0.9.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Service-Component: OSGI-INF/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorProcessTypeSupplier.xml,
  OSGI-INF/undoOperationHandler.xml,

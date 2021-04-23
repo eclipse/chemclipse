@@ -502,6 +502,11 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		return scan instanceof IScanMSD;
 	}
 
+	private boolean isWaveSpectrum() {
+
+		return scan instanceof IScanWSD;
+	}
+
 	private boolean isOptimizedScan() {
 
 		IScanMSD optimizedMassSpectrum = getOptimizedScanMSD();
@@ -542,7 +547,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 
 		boolean enabled = isMassSpectrum();
 		//
-		scanIdentifierUI.setEnabled(enabled);
+		scanIdentifierUI.setEnabled(enabled || isWaveSpectrum());
 		buttonCopyTraces.setEnabled(enabled);
 		buttonSave.setEnabled(enabled);
 		buttonDeleteOptimized.setEnabled(enabled && isOptimizedScan() ? true : false);

@@ -67,6 +67,7 @@ public class PreferencePageScans extends FieldEditorPreferencePage implements IW
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_SCAN_IDENTIFER_MSD, "Scan Identifier (MSD):", ScanIdentifierUI.getScanIdentifierMSD(), getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_SCAN_IDENTIFER_WSD, "Scan Identifier (WSD):", ScanIdentifierUI.getScanIdentifierWSD(), getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_ENABLE_MULTI_SUBTRACT, "Enable multi subtract modus", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_SUBTRACT_DIALOG, "Show subtract scan preferences dialog", getFieldEditorParent()));
 		addField(new SpinnerFieldEditor(PreferenceConstants.P_MAX_COPY_SCAN_TRACES, "Copy Traces", PreferenceConstants.MIN_TRACES, PreferenceConstants.MAX_TRACES, getFieldEditorParent()));

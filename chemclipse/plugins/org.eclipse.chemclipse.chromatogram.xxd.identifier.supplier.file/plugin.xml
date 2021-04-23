@@ -56,6 +56,16 @@
       </MassSpectrumIdentificationSupplier>        
    </extension>
    <extension
+         point="org.eclipse.chemclipse.chromatogram.wsd.identifier.waveSpectrumIdentifier">
+      <WaveSpectrumIdentificationSupplier
+            description="This plugin sets a wave spectrum identification using the highest intensity nm values."
+            id="org.eclipse.chemclipse.chromatogram.wsd.identifier.supplier.unknown.waveSpectrum"
+            identifier="org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.core.WaveSpectrumIdentifierUnknown"
+            identifierName="Unknown Marker"
+            identifierSettings="org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.WaveSpectrumUnknownSettings">
+      </WaveSpectrumIdentificationSupplier>        
+   </extension>   
+   <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
             class="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences.PreferenceInitializer">

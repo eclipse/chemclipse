@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.PeakUnknownSettingsCSD;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.PeakUnknownSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.PeakUnknownSettingsWSD;
+import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.WaveSpectrumUnknownSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.PenaltyCalculation;
@@ -275,6 +276,17 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		settings.setMassSpectrumComparatorId("");
 		initalizeUnknownSettings(settings, POSTFIX_MSD);
 		settings.setNumberOfMZ(preferences.getInt(P_NUMBER_OF_MZ_UNKNOWN, DEF_NUMBER_OF_MZ_UNKNOWN));
+		//
+		return settings;
+	}
+
+	public static WaveSpectrumUnknownSettings getWaveSpectrumUnknownSettings() {
+
+		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
+		//
+		WaveSpectrumUnknownSettings settings = new WaveSpectrumUnknownSettings();
+		initalizeUnknownSettings(settings, POSTFIX_WSD);
+		settings.setNumberOfWavelengths(preferences.getInt(P_NUMBER_OF_WAVELENGTH_UNKNOWN, DEF_NUMBER_OF_WAVELENGTH_UNKNOWN));
 		//
 		return settings;
 	}
