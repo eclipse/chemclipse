@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,12 +20,12 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettingsMSD;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.MassSpectrumIdentifierFile;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.core.PeakIdentifierFile;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.IFileIdentifierSettings;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.MassSpectrumIdentifierSettings;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.settings.PeakIdentifierSettings;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.support.TargetBuilder;
+import org.eclipse.chemclipse.chromatogram.msd.identifier.support.TargetBuilderMSD;
+import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.core.MassSpectrumIdentifierFile;
+import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.core.PeakIdentifierFile;
+import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.IFileIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.MassSpectrumIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.PeakIdentifierSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
@@ -64,7 +64,7 @@ public class BasePeakIdentifier {
 	private static final ArrayList<Integer> PHYDROXYPHENYL_BASE = new ArrayList<>();
 	private static final ArrayList<Integer> CARBOHYDRATE_BASE = new ArrayList<>();
 	//
-	private final TargetBuilder targetBuilder;
+	private final TargetBuilderMSD targetBuilder;
 	// These one's are run when initializing the class
 	private static final IMassSpectra references = getStandardsMassSpectra();
 	private static final IScanMSD syringyl = getSyringyl();
@@ -95,7 +95,7 @@ public class BasePeakIdentifier {
 
 	public BasePeakIdentifier() {
 
-		targetBuilder = new TargetBuilder();
+		targetBuilder = new TargetBuilderMSD();
 		massSpectraFiles = PathResolver.getAbsolutePath(PathResolver.GERBER_ET_AL_2012);
 	}
 
