@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -58,7 +58,10 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 	public static final String SERIES_ID_CHROMATOGRAM_TIC = "Chromatogram";
 	public static final String SERIES_ID_CHROMATOGRAM_XIC = "Chromatogram (XIC)";
 	public static final String SERIES_ID_BASELINE = "Baseline";
-	public static final String SERIES_ID_PEAKS_NORMAL = "Peaks Normal";
+	private static final String SERIES_ID_PEAKS_NORMAL_ACTIVE = "Peak(s) [Active]";
+	private static final String SERIES_ID_PEAKS_NORMAL_INACTIVE = "Peak(s) [Inactive]";
+	private static final String SERIES_ID_PEAKS_ISTD_ACTIVE = "Peak(s) ISTD [Active]";
+	private static final String SERIES_ID_PEAKS_ISTD_INACTIVE = "Peak(s) ISTD [Inactive]";
 	public static final String SERIES_ID_PEAKS_SELECTED_MARKER = "Peaks Selected Marker";
 	public static final String SERIES_ID_PEAKS_SELECTED_SHAPE = "Peaks Selected Shape";
 	public static final String SERIES_ID_PEAKS_SELECTED_BACKGROUND = "Peaks Selected Background";
@@ -310,7 +313,37 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 	private void addPeakData(List<IPeak> peaks, List<ILineSeriesData> lineSeriesDataList) {
 
 		int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
-		addPeaks(lineSeriesDataList, peaks, PlotSymbolType.INVERTED_TRIANGLE, symbolSize, Colors.DARK_GRAY, SERIES_ID_PEAKS_NORMAL, true);
+		PlotSymbolType symbolTypeActiveNormal = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAKS_ACTIVE_NORMAL_MARKER_TYPE));
+		PlotSymbolType symbolTypeInactiveNormal = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAKS_INACTIVE_NORMAL_MARKER_TYPE));
+		PlotSymbolType symbolTypeActiveIstd = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAKS_ACTIVE_ISTD_MARKER_TYPE));
+		PlotSymbolType symbolTypeInactiveIstd = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAKS_INACTIVE_ISTD_MARKER_TYPE));
+		//
+		List<IPeak> peaksActiveNormal = new ArrayList<>();
+		List<IPeak> peaksInactiveNormal = new ArrayList<>();
+		List<IPeak> peaksActiveISTD = new ArrayList<>();
+		List<IPeak> peaksInactiveISTD = new ArrayList<>();
+		//
+		for(IPeak peak : peaks) {
+			if(peak.getInternalStandards().size() > 0) {
+				if(peak.isActiveForAnalysis()) {
+					peaksActiveISTD.add(peak);
+				} else {
+					peaksInactiveISTD.add(peak);
+				}
+			} else {
+				if(peak.isActiveForAnalysis()) {
+					peaksActiveNormal.add(peak);
+				} else {
+					peaksInactiveNormal.add(peak);
+				}
+			}
+		}
+		//
+		boolean addLabelMarker = true;
+		addPeaks(lineSeriesDataList, peaksActiveNormal, symbolTypeActiveNormal, symbolSize, Colors.DARK_GRAY, SERIES_ID_PEAKS_NORMAL_ACTIVE, addLabelMarker);
+		addPeaks(lineSeriesDataList, peaksInactiveNormal, symbolTypeInactiveNormal, symbolSize, Colors.GRAY, SERIES_ID_PEAKS_NORMAL_INACTIVE, addLabelMarker);
+		addPeaks(lineSeriesDataList, peaksActiveISTD, symbolTypeActiveIstd, symbolSize, Colors.RED, SERIES_ID_PEAKS_ISTD_ACTIVE, addLabelMarker);
+		addPeaks(lineSeriesDataList, peaksInactiveISTD, symbolTypeInactiveIstd, symbolSize, Colors.GRAY, SERIES_ID_PEAKS_ISTD_INACTIVE, addLabelMarker);
 	}
 
 	private void addPeaks(List<ILineSeriesData> lineSeriesDataList, List<IPeak> peaks, PlotSymbolType plotSymbolType, int symbolSize, Color symbolColor, String seriesId, boolean addLabelMarker) {
@@ -406,7 +439,10 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 		deleteSeries(SERIES_ID_CHROMATOGRAM_TIC);
 		deleteSeries(SERIES_ID_CHROMATOGRAM_XIC);
 		deleteSeries(SERIES_ID_BASELINE);
-		deleteSeries(SERIES_ID_PEAKS_NORMAL);
+		deleteSeries(SERIES_ID_PEAKS_NORMAL_ACTIVE);
+		deleteSeries(SERIES_ID_PEAKS_NORMAL_INACTIVE);
+		deleteSeries(SERIES_ID_PEAKS_ISTD_ACTIVE);
+		deleteSeries(SERIES_ID_PEAKS_ISTD_INACTIVE);
 	}
 
 	private void clearSelectedPeakSeries() {
