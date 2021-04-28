@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Matthias Mailänder - read precision as integer
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model;
 
@@ -66,7 +67,7 @@ public class SupDataBinaryType {
 		@XmlValue
 		private byte[] value;
 		@XmlAttribute(name = "precision", required = true)
-		private String precision;
+		private int precision;
 		@XmlAttribute(name = "endian", required = true)
 		private String endian;
 		@XmlAttribute(name = "length", required = true)
@@ -82,12 +83,12 @@ public class SupDataBinaryType {
 			this.value = value;
 		}
 
-		public String getPrecision() {
+		public int getPrecision() {
 
 			return precision;
 		}
 
-		public void setPrecision(String value) {
+		public void setPrecision(int value) {
 
 			this.precision = value;
 		}

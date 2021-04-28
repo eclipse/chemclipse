@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Matthias Mailänder - add top node
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.support;
 
@@ -19,4 +20,5 @@ public interface IConstants {
 	String EXPORT_CHROMATOGRAM = "Export mzData Chromatogram";
 	String EXPORT_SCANS = "Export Scans";
 	String SCAN = "Scan";
+	String NODE_MZ_DATA = "mzData";
 }
