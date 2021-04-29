@@ -9,17 +9,9 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter;
+package org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model;
 
-public interface IConstants {
+import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 
-	String IMPORT_CHROMATOGRAM = "Import mzML Chromatogram";
-	String IMPORT_CHROMATOGRAM_OVERVIEW = "Import mzML Chromatogram Overview";
-	String PARSE_SCANS = "Parse Scans";
-	String EXPORT_CHROMATOGRAM = "Export mzML Chromatogram";
-	String EXPORT_SCANS = "Export Scans";
-	String SCAN = "Scan";
-	//
-	String NODE_RUN = "run";
-	String NODE_MZML = "mzML";
+public interface IVendorMassSpectra extends IMassSpectra {
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,22 +11,18 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model;
 
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.XmlElementDecl;
 import javax.xml.bind.annotation.XmlRegistry;
-import javax.xml.namespace.QName;
 
 @XmlRegistry
 public class ObjectFactory {
 
-	private final static QName _MzML_QNAME = new QName("http://psi.hupo.org/ms/mzml", "mzML");
-
 	public ObjectFactory() {
+
 	}
 
-	public MzMLType createMzMLType() {
+	public MzML createMzMLType() {
 
-		return new MzMLType();
+		return new MzML();
 	}
 
 	public AnalyzerComponentType createAnalyzerComponentType() {
@@ -259,9 +255,8 @@ public class ObjectFactory {
 		return new InstrumentConfigurationType();
 	}
 
-	@XmlElementDecl(namespace = "http://psi.hupo.org/ms/mzml", name = "mzML")
-	public JAXBElement<MzMLType> createMzML(MzMLType value) {
+	public MzML createMzML() {
 
-		return new JAXBElement<MzMLType>(_MzML_QNAME, MzMLType.class, null, value);
+		return new MzML();
 	}
 }
