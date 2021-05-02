@@ -261,4 +261,8 @@ http://www.eclipse.org/legal/epl-v10.html
          id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.feature"
          version="0.0.0"/>
 
+   <includes
+         id="org.eclipse.chemclipse.msd.converter.supplier.sirius.feature"
+         version="0.0.0"/>
+
 </feature>

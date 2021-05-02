@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.msd.converter.massSpectrumSupplier">
+      <MassSpectrumSupplier
+            description="Reads SIRIUS mass spectra."
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.sirius.converter.SiriusExportConverter"
+            fileExtension=".ms"
+            filterName="SIRIUS Mass Spectrum (*.ms)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.sirius"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.sirius.converter.SiriusImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.sirius.converter.MagicNumberMatcher"
+            isExportable="false"
+            isImportable="true">
+      </MassSpectrumSupplier>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.msd.converter.databaseSupplier">
+      <DatabaseSupplier
+            description="Reads SIRIUS mass spectra"
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.sirius.converter.SiriusExportConverter"
+            fileExtension=".zip"
+            filterName="Compressed SIRIUS Mass Spectrum Database (*.zip)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.sirius.DatabaseSupplier"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.sirius.converter.SiriusImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.sirius.converter.MagicNumberMatcher"
+            isExportable="false"
+            isImportable="true">
+      </DatabaseSupplier>
+   </extension>
+</plugin>
