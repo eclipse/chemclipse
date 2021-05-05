@@ -16,18 +16,18 @@
             <children xsi:type="basic:Part" xmi:id="_7FrxYOclEem5MISSB9DEbQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.part.actions" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.quickstart.QuickStartPart" label="Actions" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/execute.gif"/>
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_OmacwPRvEeeapKw7g2Cagg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.partstack.1">
-            <children xsi:type="advanced:Placeholder" xmi:id="_ZAXTIPRvEeeapKw7g2Cagg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.placeholder.2" ref="_f3a8cPRtEeeapKw7g2Cagg"/>
+            <children xsi:type="advanced:Placeholder" xmi:id="_ZAXTIPRvEeeapKw7g2Cagg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.part.pcadatatable" ref="_f3a8cPRtEeeapKw7g2Cagg"/>
           </children>
         </children>
         <children xsi:type="basic:PartSashContainer" xmi:id="_J7oIoPRvEeeapKw7g2Cagg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.partsashcontainer.2" horizontal="true">
           <children xsi:type="basic:PartStack" xmi:id="_PJ0EwPRvEeeapKw7g2Cagg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.partstack.2">
-            <children xsi:type="advanced:Placeholder" xmi:id="_uQXGAPRvEeeapKw7g2Cagg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.placeholder.5" ref="_pUF1wPRuEeeapKw7g2Cagg"/>
-            <children xsi:type="advanced:Placeholder" xmi:id="_yyAsQPRvEeeapKw7g2Cagg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.placeholder.6" ref="_0om28PRuEeeapKw7g2Cagg"/>
+            <children xsi:type="advanced:Placeholder" xmi:id="_uQXGAPRvEeeapKw7g2Cagg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.part.pca2dscoreplot" ref="_pUF1wPRuEeeapKw7g2Cagg"/>
+            <children xsi:type="advanced:Placeholder" xmi:id="_yyAsQPRvEeeapKw7g2Cagg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.part.pca3dscoreplot" ref="_0om28PRuEeeapKw7g2Cagg"/>
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_Pvp8wPRvEeeapKw7g2Cagg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.partstack.3">
-            <children xsi:type="advanced:Placeholder" xmi:id="_3G8FIPRvEeeapKw7g2Cagg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.placeholder.7" ref="_yHnWUPRtEeeapKw7g2Cagg"/>
-            <children xsi:type="advanced:Placeholder" xmi:id="_4yTawPRvEeeapKw7g2Cagg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.placeholder.8" ref="_6x9QQPRtEeeapKw7g2Cagg"/>
-            <children xsi:type="advanced:Placeholder" xmi:id="_jHao4D7wEeiZJpBc4U-l1A" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.placeholder.9" ref="_T6DG0D7wEeiZJpBc4U-l1A"/>
+            <children xsi:type="advanced:Placeholder" xmi:id="_3G8FIPRvEeeapKw7g2Cagg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.part.pcaerrorresiduepart" ref="_yHnWUPRtEeeapKw7g2Cagg"/>
+            <children xsi:type="advanced:Placeholder" xmi:id="_4yTawPRvEeeapKw7g2Cagg" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.part.pcaloadingplot" ref="_6x9QQPRtEeeapKw7g2Cagg"/>
+            <children xsi:type="advanced:Placeholder" xmi:id="_jHao4D7wEeiZJpBc4U-l1A" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.part.explainedvariance" ref="_T6DG0D7wEeiZJpBc4U-l1A"/>
           </children>
         </children>
       </children>

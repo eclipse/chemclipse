@@ -40,6 +40,7 @@
       <children xsi:type="menu:Menu" xmi:id="_DSko4DiVEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.window" label="Window">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_lA-LQDiXEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.perspectiveSwitcher" label="Perspective Switcher" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/perspectives.gif" command="_XUgbQDiXEeKDEdWQrkwLnQ"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_MBtwADilEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.selectView" label="Select View" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/view.gif" command="_ASbeYDilEeKDEdWQrkwLnQ"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_oDZQ8K2nEeuLFPgaKUTizg" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.resetperspective" label="Reset Perspective" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/reset.gif" command="_X4T0YKzhEeu9gOO-5hThuA"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_nz0_UDiVEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.preferences" label="Preferences" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/preferences.gif" command="_XevnQDiVEeKDEdWQrkwLnQ"/>
       </children>
       <children xsi:type="menu:Menu" xmi:id="_h0BcRjLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.help" label="Help">
@@ -122,6 +123,7 @@
         <children xsi:type="menu:HandledToolItem" xmi:id="_G9eogOToEeK3p9M57zVYqQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.updates" label="Updates" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/updates.gif" command="_LrC6QDiWEeKDEdWQrkwLnQ"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_0oR3UDiXEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.perspectiveSwitcher" label="Perspective Switcher" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/perspectives.gif" command="_XUgbQDiXEeKDEdWQrkwLnQ"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_dnrPMDinEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.selectView" label="Select View" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/view.gif" command="_ASbeYDilEeKDEdWQrkwLnQ"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_tLbzwKzhEeu9gOO-5hThuA" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.resetperspective" label="Reset Perspective" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/reset.gif" tooltip="" command="_X4T0YKzhEeu9gOO-5hThuA"/>
         <children xsi:type="menu:ToolBarSeparator" xmi:id="_wvMhsINGEeOuPY34hxPAxA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbarseparator.5"/>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_2GIJsMDJEeOKxaD_PtepsA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbar.window">
@@ -153,6 +155,7 @@
   <handlers xmi:id="_NeEKMIgsEemJaOKd7Cy7Ww" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.opensnippet" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.OpenSnippetHandler" command="_-eZF4IgrEemJaOKd7Cy7Ww"/>
   <handlers xmi:id="_XLWkMLgWEemNgNx3khJk0g" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.opentoolmenu" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.OpenMenuHandler" command="_mZc7gLgVEemNgNx3khJk0g"/>
   <handlers xmi:id="_-CiPIMzGEeqoZ6zANnMIXQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.installassets" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.InstallAssetsHandler" command="_wrYAwMzGEeqoZ6zANnMIXQ"/>
+  <handlers xmi:id="_b_Jt8KzhEeu9gOO-5hThuA" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.resetperspective" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.ResetPerspectiveHandler" command="_X4T0YKzhEeu9gOO-5hThuA"/>
   <bindingTables xmi:id="_h0A1PDLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.bindingtable" bindingContext="_h0A1MTLzEeKMEOdllHiEaA">
     <bindings xmi:id="_h0A1PTLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.keybinding.quit" keySequence="M1+Q" command="_h0A1OjLzEeKMEOdllHiEaA"/>
     <bindings xmi:id="_h0A1RjLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.keybinding.about" keySequence="M1+A" command="_h0A1RDLzEeKMEOdllHiEaA"/>
@@ -177,6 +180,7 @@
   </commands>
   <commands xmi:id="_mZc7gLgVEemNgNx3khJk0g" elementId="chemclipse.command.opentoolmenu" commandName="Open Tool Menu" description="Open the Tool menu"/>
   <commands xmi:id="_wrYAwMzGEeqoZ6zANnMIXQ" elementId="org.eclipse.chemclipse.rcp.app.ui.command.installassets" commandName="Install Assets" description="Installs additional assets"/>
+  <commands xmi:id="_X4T0YKzhEeu9gOO-5hThuA" elementId="org.eclipse.chemclipse.rcp.app.ui.command.resetperspective" commandName="Reset Perspective"/>
   <addons xmi:id="_h0A1NDLzEeKMEOdllHiEaA" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_h0A1NTLzEeKMEOdllHiEaA" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_h0A1NjLzEeKMEOdllHiEaA" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>

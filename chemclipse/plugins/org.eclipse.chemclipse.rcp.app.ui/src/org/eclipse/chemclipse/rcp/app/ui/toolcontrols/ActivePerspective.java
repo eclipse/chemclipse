@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2020 Lablicate GmbH.
+ * Copyright (c) 2015, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -59,6 +59,7 @@ public class ActivePerspective {
 				}
 			};
 			eventBroker.subscribe(IChemClipseEvents.TOPIC_APPLICATION_SELECT_PERSPECTIVE, eventHandler);
+			eventBroker.subscribe(IChemClipseEvents.TOPIC_APPLICATION_RESET_PERSPECTIVE, eventHandler);
 		}
 	}
 

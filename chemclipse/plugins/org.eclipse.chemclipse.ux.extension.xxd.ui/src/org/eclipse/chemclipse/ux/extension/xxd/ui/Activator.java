@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2020 Lablicate GmbH.
+ * Copyright (c) 2015, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -131,6 +131,7 @@ public class Activator extends AbstractActivatorUI {
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_SCAN_NMR_UPDATE_SELECTION, IChemClipseEvents.EVENT_BROKER_DATA);
 		//
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_APPLICATION_SELECT_PERSPECTIVE, IChemClipseEvents.EVENT_BROKER_DATA);
+		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_APPLICATION_RESET_PERSPECTIVE, IChemClipseEvents.EVENT_BROKER_DATA);
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_PART_CLOSED, IChemClipseEvents.EVENT_BROKER_DATA);
 		//
 		dataUpdateSupport.subscribe(IChemClipseEvents.TOPIC_WELL_PCR_UPDATE_SELECTION, IChemClipseEvents.EVENT_BROKER_DATA);
