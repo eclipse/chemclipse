@@ -22,6 +22,7 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.targets.ITargetDisplaySettings;
 import org.eclipse.chemclipse.model.targets.TargetReference;
@@ -35,7 +36,9 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.TargetReferenc
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakChartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanChartSupport;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
@@ -55,22 +58,27 @@ import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 
 public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSupport {
 
-	public static final String SERIES_ID_CHROMATOGRAM_TIC = "Chromatogram";
-	public static final String SERIES_ID_CHROMATOGRAM_XIC = "Chromatogram (XIC)";
-	public static final String SERIES_ID_BASELINE = "Baseline";
+	private static final String SERIES_ID_CHROMATOGRAM_TIC = "Chromatogram";
+	private static final String SERIES_ID_CHROMATOGRAM_XIC = "Chromatogram (XIC)";
+	private static final String SERIES_ID_BASELINE = "Baseline";
 	private static final String SERIES_ID_PEAKS_NORMAL_ACTIVE = "Peak(s) [Active]";
 	private static final String SERIES_ID_PEAKS_NORMAL_INACTIVE = "Peak(s) [Inactive]";
 	private static final String SERIES_ID_PEAKS_ISTD_ACTIVE = "Peak(s) ISTD [Active]";
 	private static final String SERIES_ID_PEAKS_ISTD_INACTIVE = "Peak(s) ISTD [Inactive]";
-	public static final String SERIES_ID_PEAKS_SELECTED_MARKER = "Peaks Selected Marker";
-	public static final String SERIES_ID_PEAKS_SELECTED_SHAPE = "Peaks Selected Shape";
-	public static final String SERIES_ID_PEAKS_SELECTED_BACKGROUND = "Peaks Selected Background";
+	private static final String SERIES_ID_PEAKS_SELECTED_MARKER = "Peaks Selected Marker";
+	private static final String SERIES_ID_PEAKS_SELECTED_SHAPE = "Peaks Selected Shape";
+	private static final String SERIES_ID_PEAKS_SELECTED_BACKGROUND = "Peaks Selected Background";
+	private static final String SERIES_ID_SELECTED_SCAN = "Selected Scan";
+	private static final String SERIES_ID_IDENTIFIED_SCANS = "Identified Scans";
+	private static final String SERIES_ID_IDENTIFIED_SCAN_SELECTED = "Identified Scans Selected";
 	//
 	private final PeakRetentionTimeComparator peakRetentionTimeComparator = new PeakRetentionTimeComparator(SortOrder.ASC);
 	private final PeakChartSupport peakChartSupport = new PeakChartSupport();
 	private final ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
+	private final ScanChartSupport scanChartSupport = new ScanChartSupport();
 	//
 	private final Map<String, ICustomPaintListener> peakLabelMarkerMap = new HashMap<>();
+	private final Map<String, TargetReferenceLabelMarker> scanLabelMarkerMap = new HashMap<>();
 	private final Set<String> selectedPeakIds = new HashSet<>();
 	//
 	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
@@ -80,6 +88,9 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 	private Range selectedRangeY = null;
 	//
 	private ITargetDisplaySettings targetDisplaySettings = null;
+	private DisplayType displayType = DisplayType.TIC;
+	//
+	private IChromatogramSelection<?, ?> chromatogramSelection;
 
 	public ChromatogramPeakChart() {
 
@@ -101,6 +112,8 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public void updateChromatogram(IChromatogramSelection chromatogramSelection, PeakChartSettings peakChartSettings) {
 
+		this.chromatogramSelection = chromatogramSelection;
+		//
 		clearChromatogramSeries();
 		clearSelectedPeakSeries();
 		clearPeakLabelMarker();
@@ -112,10 +125,14 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 			 */
 			targetDisplaySettings = chromatogramSelection.getChromatogram();
 			List<IPeak> peaks = chromatogramSelection.getChromatogram().getPeaks(chromatogramSelection);
+			//
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
-			addChromatogramData(chromatogramSelection, lineSeriesDataList, peakChartSettings);
-			addBaselineData(chromatogramSelection, lineSeriesDataList, peakChartSettings);
+			addChromatogramData(lineSeriesDataList, peakChartSettings);
+			addBaselineData(lineSeriesDataList, peakChartSettings);
 			addPeakData(peaks, lineSeriesDataList);
+			addIdentifiedScansData(lineSeriesDataList, targetDisplaySettings);
+			addSelectedScanData(lineSeriesDataList);
+			addSelectedIdentifiedScanData(lineSeriesDataList);
 			addLineSeriesData(lineSeriesDataList);
 		}
 	}
@@ -132,6 +149,21 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 			}
 			addLineSeriesData(lineSeriesDataList);
 		}
+	}
+
+	public void updateSelectedScan() {
+
+		deleteSeries(SERIES_ID_SELECTED_SCAN);
+		deleteSeries(SERIES_ID_IDENTIFIED_SCANS);
+		deleteSeries(SERIES_ID_IDENTIFIED_SCAN_SELECTED);
+		//
+		assignCurrentRangeSelection();
+		List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
+		addIdentifiedScansData(lineSeriesDataList, targetDisplaySettings);
+		addSelectedScanData(lineSeriesDataList);
+		addSelectedIdentifiedScanData(lineSeriesDataList);
+		addLineSeriesData(lineSeriesDataList);
+		adjustChartRange();
 	}
 
 	@Override
@@ -252,32 +284,33 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 		addSeriesData(lineSeriesDataList, compressionToLength);
 	}
 
-	@SuppressWarnings("rawtypes")
-	private void addChromatogramData(IChromatogramSelection chromatogramSelection, List<ILineSeriesData> lineSeriesDataList, PeakChartSettings peakChartSettings) {
+	private void addChromatogramData(List<ILineSeriesData> lineSeriesDataList, PeakChartSettings peakChartSettings) {
 
-		boolean containsXIC = containsXIC(chromatogramSelection);
-		Color colorActive = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM));
-		Color colorInactive = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_INACTIVE));
-		Color colorTIC = containsXIC ? colorInactive : colorActive;
-		boolean enableChromatogramArea = preferenceStore.getBoolean(PreferenceConstants.P_ENABLE_CHROMATOGRAM_AREA);
-		/*
-		 * TIC
-		 */
-		ILineSeriesData lineSeriesDataTIC = chromatogramChartSupport.getLineSeriesData(chromatogramSelection, SERIES_ID_CHROMATOGRAM_TIC, DisplayType.TIC, colorTIC, false);
-		ILineSeriesSettings settingsTIC = lineSeriesDataTIC.getSettings();
-		settingsTIC.setEnableArea(enableChromatogramArea);
-		settingsTIC.setVisible(peakChartSettings.isShowChromatogramTIC());
-		lineSeriesDataList.add(lineSeriesDataTIC);
-		//
-		if(containsXIC) {
+		if(chromatogramSelection != null) {
+			boolean containsXIC = containsXIC(chromatogramSelection);
+			Color colorActive = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM));
+			Color colorInactive = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_INACTIVE));
+			Color colorTIC = containsXIC ? colorInactive : colorActive;
+			boolean enableChromatogramArea = preferenceStore.getBoolean(PreferenceConstants.P_ENABLE_CHROMATOGRAM_AREA);
 			/*
-			 * XIC
+			 * TIC
 			 */
-			ILineSeriesData lineSeriesDataXIC = chromatogramChartSupport.getLineSeriesData((IChromatogramSelectionMSD)chromatogramSelection, SERIES_ID_CHROMATOGRAM_XIC, DisplayType.XIC, colorActive, false);
-			ILineSeriesSettings settingsXIC = lineSeriesDataXIC.getSettings();
-			settingsXIC.setEnableArea(enableChromatogramArea);
-			settingsXIC.setVisible(peakChartSettings.isShowChromatogramXIC());
-			lineSeriesDataList.add(lineSeriesDataXIC);
+			ILineSeriesData lineSeriesDataTIC = chromatogramChartSupport.getLineSeriesData(chromatogramSelection, SERIES_ID_CHROMATOGRAM_TIC, DisplayType.TIC, colorTIC, false);
+			ILineSeriesSettings settingsTIC = lineSeriesDataTIC.getSettings();
+			settingsTIC.setEnableArea(enableChromatogramArea);
+			settingsTIC.setVisible(peakChartSettings.isShowChromatogramTIC());
+			lineSeriesDataList.add(lineSeriesDataTIC);
+			//
+			if(containsXIC) {
+				/*
+				 * XIC
+				 */
+				ILineSeriesData lineSeriesDataXIC = chromatogramChartSupport.getLineSeriesData((IChromatogramSelectionMSD)chromatogramSelection, SERIES_ID_CHROMATOGRAM_XIC, DisplayType.XIC, colorActive, false);
+				ILineSeriesSettings settingsXIC = lineSeriesDataXIC.getSettings();
+				settingsXIC.setEnableArea(enableChromatogramArea);
+				settingsXIC.setVisible(peakChartSettings.isShowChromatogramXIC());
+				lineSeriesDataList.add(lineSeriesDataXIC);
+			}
 		}
 	}
 
@@ -293,8 +326,7 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 		return false;
 	}
 
-	@SuppressWarnings("rawtypes")
-	private void addBaselineData(IChromatogramSelection chromatogramSelection, List<ILineSeriesData> lineSeriesDataList, PeakChartSettings peakChartSettings) {
+	private void addBaselineData(List<ILineSeriesData> lineSeriesDataList, PeakChartSettings peakChartSettings) {
 
 		boolean showChromatogramBaseline = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_CHROMATOGRAM_BASELINE);
 		//
@@ -417,6 +449,76 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 		}
 	}
 
+	private void addIdentifiedScansData(List<ILineSeriesData> lineSeriesDataList, ITargetDisplaySettings displaySettings) {
+
+		if(chromatogramSelection != null) {
+			String seriesId = SERIES_ID_IDENTIFIED_SCANS;
+			List<IScan> scans = ChromatogramDataSupport.getIdentifiedScans(chromatogramSelection.getChromatogram());
+			int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE);
+			PlotSymbolType symbolType = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SCAN_MARKER_TYPE));
+			addIdentifiedScansData(chromatogramSelection, lineSeriesDataList, scans, symbolType, symbolSize, Colors.DARK_GRAY, seriesId);
+			/*
+			 * Add the labels.
+			 */
+			removeIdentificationLabelMarker(scanLabelMarkerMap, seriesId);
+			if(displaySettings.isShowScanLabels()) {
+				ITargetDisplaySettings targetDisplaySettings = chromatogramSelection.getChromatogram();
+				BaseChart baseChart = getBaseChart();
+				IPlotArea plotArea = baseChart.getPlotArea();
+				TargetReferenceLabelMarker scanLabelMarker = new TargetReferenceLabelMarker(TargetReference.getScanReferences(scans, targetDisplaySettings), displaySettings, symbolSize * 2);
+				plotArea.addCustomPaintListener(scanLabelMarker);
+				scanLabelMarkerMap.put(seriesId, scanLabelMarker);
+			}
+		}
+	}
+
+	private void addIdentifiedScansData(IChromatogramSelection<?, ?> chromatogramSelection, List<ILineSeriesData> lineSeriesDataList, List<IScan> scans, PlotSymbolType plotSymbolType, int symbolSize, Color symbolColor, String seriesId) {
+
+		if(scans.size() > 0) {
+			ILineSeriesData lineSeriesData = null;
+			lineSeriesData = scanChartSupport.getLineSeriesDataPoint(scans, false, seriesId, displayType, chromatogramSelection);
+			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
+			lineSeriesSettings.setLineStyle(LineStyle.NONE);
+			lineSeriesSettings.setSymbolType(plotSymbolType);
+			lineSeriesSettings.setSymbolSize(symbolSize);
+			lineSeriesSettings.setSymbolColor(symbolColor);
+			lineSeriesDataList.add(lineSeriesData);
+		}
+	}
+
+	private void addSelectedScanData(List<ILineSeriesData> lineSeriesDataList) {
+
+		if(chromatogramSelection != null) {
+			IScan scan = chromatogramSelection.getSelectedScan();
+			if(scan != null) {
+				Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_SELECTED_SCAN));
+				int markerSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_SIZE);
+				PlotSymbolType symbolType = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SELECTED_SCAN_MARKER_TYPE));
+				ILineSeriesData lineSeriesData = scanChartSupport.getLineSeriesDataPoint(scan, false, SERIES_ID_SELECTED_SCAN, displayType, chromatogramSelection);
+				ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
+				lineSeriesSettings.setLineStyle(LineStyle.NONE);
+				lineSeriesSettings.setSymbolType(symbolType);
+				lineSeriesSettings.setSymbolSize(markerSize);
+				lineSeriesSettings.setSymbolColor(color);
+				lineSeriesDataList.add(lineSeriesData);
+			}
+		}
+	}
+
+	private void addSelectedIdentifiedScanData(List<ILineSeriesData> lineSeriesDataList) {
+
+		if(chromatogramSelection != null) {
+			List<IScan> selectedIdentifiedScans = chromatogramSelection.getSelectedIdentifiedScans();
+			if(selectedIdentifiedScans.size() > 0) {
+				String seriesId = SERIES_ID_IDENTIFIED_SCAN_SELECTED;
+				Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_IDENTIFIED_SCAN));
+				PlotSymbolType symbolType = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_IDENTIFIED_SCAN_MARKER_TYPE));
+				int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE);
+				addIdentifiedScansData(chromatogramSelection, lineSeriesDataList, selectedIdentifiedScans, symbolType, symbolSize, color, seriesId);
+			}
+		}
+	}
+
 	private void removeIdentificationLabelMarker(Map<String, ? extends ICustomPaintListener> markerMap, String seriesId) {
 
 		IPlotArea plotArea = getBaseChart().getPlotArea();
@@ -443,6 +545,9 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 		deleteSeries(SERIES_ID_PEAKS_NORMAL_INACTIVE);
 		deleteSeries(SERIES_ID_PEAKS_ISTD_ACTIVE);
 		deleteSeries(SERIES_ID_PEAKS_ISTD_INACTIVE);
+		deleteSeries(SERIES_ID_SELECTED_SCAN);
+		deleteSeries(SERIES_ID_IDENTIFIED_SCANS);
+		deleteSeries(SERIES_ID_IDENTIFIED_SCAN_SELECTED);
 	}
 
 	private void clearSelectedPeakSeries() {
