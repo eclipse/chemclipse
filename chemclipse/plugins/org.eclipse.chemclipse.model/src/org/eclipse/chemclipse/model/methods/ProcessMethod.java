@@ -58,6 +58,8 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 			setDescription(other.getDescription());
 			this.category = other.getCategory();
 			setName(other.getName());
+			setSupportResume(other.isSupportResume());
+			setResumeIndex(other.getResumeIndex());
 			if(other instanceof ProcessMethod) {
 				this.sourceFile = ((ProcessMethod)other).sourceFile;
 			}

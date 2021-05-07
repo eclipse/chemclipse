@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.converter.ui.Activator;
 import org.eclipse.chemclipse.model.handler.IModificationHandler;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
+import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsUIProvider;
@@ -56,10 +57,11 @@ public class MetaProcessorSettingsAdapterFactory implements IAdapterFactory, Set
 			/*
 			 * Modify the method UI.
 			 */
+			IProcessMethod processMethod = settings.getMethod();
 			extendedMethodUI.setToolbarMainVisible(false);
 			extendedMethodUI.setToolbarProfileVisible(showProfileToolbar);
 			extendedMethodUI.setToolbarProfileEnableEdit(false);
-			extendedMethodUI.setInputs(settings.getMethod(), null);
+			extendedMethodUI.setInputs(processMethod, null);
 			extendedMethodUI.setModificationHandler(this);
 		}
 

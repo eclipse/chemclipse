@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +9,7 @@
  * Contributors:
  * Christoph Läubrich - initial API and implementation
  * Lorenz Gerber - add additional message field
+ * Philip Wenig - support process method resume option
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.supplier;
 
@@ -25,10 +26,12 @@ import org.eclipse.core.runtime.SubMonitor;
 public class ProcessExecutionContext implements ProcessSupplierContext, MessageConsumer {
 
 	private static final int WORK_UNIT = 100;
+	//
 	private final SubMonitor subMonitor;
 	private final ProcessSupplierContext context;
 	private final MessageConsumer consumer;
 	private ProcessExecutionContext parent;
+	//
 	private final Map<Class<?>, Object> contextMap = new IdentityHashMap<>();
 
 	public ProcessExecutionContext(IProgressMonitor monitor, MessageConsumer rootConsumer, ProcessSupplierContext rootContext) {
@@ -41,6 +44,7 @@ public class ProcessExecutionContext implements ProcessSupplierContext, MessageC
 		this.consumer = rootConsumer;
 		this.context = rootContext;
 		this.parent = parent;
+		//
 		subMonitor = SubMonitor.convert(monitor, WORK_UNIT);
 	}
 

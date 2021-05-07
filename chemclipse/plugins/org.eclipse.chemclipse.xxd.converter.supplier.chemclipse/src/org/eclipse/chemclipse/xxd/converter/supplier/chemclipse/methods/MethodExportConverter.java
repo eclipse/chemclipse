@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods.IMethodWriter;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods.MethodReaderWriter_1003;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods.MethodReaderWriter_1004;
+import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods.MethodReaderWriter_1401;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods.MethodWriter_1000;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods.MethodWriter_1001;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
@@ -55,8 +56,10 @@ public class MethodExportConverter extends AbstractExportConverter implements IM
 				return new MethodWriter_1001();
 			case IFormat.METHOD_VERSION_0003:
 				return new MethodReaderWriter_1003();
-			default:
+			case IFormat.METHOD_VERSION_1400:
 				return new MethodReaderWriter_1004();
+			default:
+				return new MethodReaderWriter_1401();
 		}
 	}
 }

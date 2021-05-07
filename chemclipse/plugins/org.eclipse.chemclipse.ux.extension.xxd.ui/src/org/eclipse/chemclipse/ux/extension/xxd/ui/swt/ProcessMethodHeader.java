@@ -47,6 +47,7 @@ public class ProcessMethodHeader extends Composite {
 	private Text textCategory;
 	private Text textOperator;
 	private Text textDescription;
+	private Button buttonResume;
 	private Button buttonFinalize;
 	//
 	private ProcessMethod processMethod = null;
@@ -95,6 +96,7 @@ public class ProcessMethodHeader extends Composite {
 		textName = createNameSection(this);
 		textOperator = createOperatorSection(this);
 		textDescription = createDescriptionSection(this);
+		buttonResume = createSupportResumeSection(this);
 		textCategory = createCategorySection(this);
 		buttonFinalize = createFinalize(this);
 	}
@@ -169,6 +171,31 @@ public class ProcessMethodHeader extends Composite {
 		});
 		//
 		return text;
+	}
+
+	private Button createSupportResumeSection(Composite parent) {
+
+		Label label = new Label(parent, SWT.NONE);
+		label.setText("Enable Resume:");
+		//
+		Button button = new Button(parent, SWT.CHECK);
+		button.setText("");
+		button.setToolTipText("This option allows to resume the method at a selected entry.");
+		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(processMethod != null) {
+					boolean resume = button.getSelection();
+					processMethod.setSupportResume(resume);
+					setDirty(true);
+				}
+			}
+		});
+		//
+		return button;
 	}
 
 	private Text createCategorySection(Composite parent) {
@@ -267,6 +294,7 @@ public class ProcessMethodHeader extends Composite {
 		if(processMethod != null) {
 			textOperator.setText(processMethod.getOperator());
 			textDescription.setText(processMethod.getDescription());
+			buttonResume.setSelection(processMethod.isSupportResume());
 			textCategory.setText(processMethod.getCategory());
 			textName.setText(processMethod.getName());
 			boolean readOnly = buttonFinalize.getSelection();
@@ -274,6 +302,7 @@ public class ProcessMethodHeader extends Composite {
 				processMethod.setReadOnly(readOnly);
 				textOperator.setEnabled(false);
 				textDescription.setEnabled(false);
+				buttonResume.setEnabled(false);
 				textCategory.setEnabled(false);
 				textName.setEnabled(false);
 				buttonFinalize.setEnabled(false);
@@ -281,6 +310,7 @@ public class ProcessMethodHeader extends Composite {
 		} else {
 			textOperator.setText("");
 			textDescription.setText("");
+			buttonResume.setEnabled(false);
 			textCategory.setText("");
 			textName.setText("");
 		}

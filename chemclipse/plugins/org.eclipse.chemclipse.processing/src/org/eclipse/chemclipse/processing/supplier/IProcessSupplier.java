@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - support process method resume option
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.supplier;
 
@@ -137,6 +138,7 @@ public interface IProcessSupplier<SettingType> {
 			if(transformer != null) {
 				consumer = transformer.transform(consumer, processorPreferences, mustSplit ? context.split() : context);
 			}
+			//
 			context.setContextObject(ProcessExecutionConsumer.class, consumer);
 			if(canDirectExecute) {
 				consumer.execute(processorPreferences, mustSplit ? context.split() : context);

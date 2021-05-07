@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - header was missing
+ *******************************************************************************/
 package org.eclipse.chemclipse.converter.methods;
 
 import java.util.function.BiFunction;
@@ -12,11 +24,12 @@ import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutor;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 
-final class MetaProcessorProcessSupplier extends AbstractProcessSupplier<MetaProcessorSettings> implements ProcessExecutor {
+public final class MetaProcessorProcessSupplier extends AbstractProcessSupplier<MetaProcessorSettings> implements ProcessExecutor {
 
 	private final IProcessMethod method;
 
-	MetaProcessorProcessSupplier(String id, IProcessMethod method, MethodProcessTypeSupplier parent) {
+	public MetaProcessorProcessSupplier(String id, IProcessMethod method, MethodProcessTypeSupplier parent) {
+
 		super(id, method.getName(), method.getDescription(), method.isFinal() ? null : MetaProcessorSettings.class, parent, MethodProcessTypeSupplier.getDataTypes(method));
 		this.method = method;
 	}
@@ -27,7 +40,7 @@ final class MetaProcessorProcessSupplier extends AbstractProcessSupplier<MetaPro
 		return method.getCategory();
 	}
 
-	public IProcessMethod getMethod() {
+	public IProcessMethod getProcessMethod() {
 
 		return method;
 	}

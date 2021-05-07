@@ -20,18 +20,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.chemclipse.processing.methods.AbstractProcessEntryContainer;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 
-public class ListProcessEntryContainer implements ProcessEntryContainer {
+public class ListProcessEntryContainer extends AbstractProcessEntryContainer {
 
 	private final List<IProcessEntry> entries = new ArrayList<>();
 	private final List<IProcessEntry> view = Collections.unmodifiableList(entries);
 	//
-	private boolean readOnly;
-	private String description;
-	private String name;
+	private boolean readOnly = false;
+	private String description = "";
+	private String name = "";
 	//
 	/*
 	 * The default instrument is used for backward compatibility purposes.

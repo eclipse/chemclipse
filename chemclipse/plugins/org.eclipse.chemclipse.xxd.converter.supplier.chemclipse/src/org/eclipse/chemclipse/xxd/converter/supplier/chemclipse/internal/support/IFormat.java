@@ -57,7 +57,8 @@ public interface IFormat {
 	String METHOD_VERSION_0002 = "0.0.0.2";
 	String METHOD_VERSION_0003 = "0.0.0.3";
 	String METHOD_VERSION_1400 = "1.4.0.0";
-	String METHOD_VERSION_LATEST = METHOD_VERSION_1400;
+	String METHOD_VERSION_1401 = "1.4.0.1";
+	String METHOD_VERSION_LATEST = METHOD_VERSION_1401;
 	/*
 	 * Quantitation DB (*.ocq)
 	 */

@@ -194,6 +194,30 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 			System.out.println(SKIP_MESSAGE);
 			return Collections.emptySet();
 		}
+
+		@Override
+		public boolean isSupportResume() {
+
+			return method.isSupportResume();
+		}
+
+		@Override
+		public void setSupportResume(boolean supportResume) {
+
+			System.out.println(SKIP_MESSAGE);
+		}
+
+		@Override
+		public int getResumeIndex() {
+
+			return method.getResumeIndex();
+		}
+
+		@Override
+		public void setResumeIndex(int resumeIndex) {
+
+			System.out.println(SKIP_MESSAGE);
+		}
 	}
 
 	public static DataCategory[] getDataTypes(IProcessMethod method) {

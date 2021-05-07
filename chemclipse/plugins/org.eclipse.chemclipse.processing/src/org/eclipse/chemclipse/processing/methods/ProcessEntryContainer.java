@@ -33,6 +33,7 @@ public interface ProcessEntryContainer extends Iterable<IProcessEntry> {
 	 * Don't change this.
 	 */
 	String DEFAULT_PROFILE = "Default Profile";
+	int DEFAULT_RESUME_INDEX = 0; // Process all items.
 
 	/**
 	 * 
@@ -72,6 +73,20 @@ public interface ProcessEntryContainer extends Iterable<IProcessEntry> {
 
 		return "";
 	}
+
+	/**
+	 * This flag defines if the process method supports the resume operation.
+	 * This option needs to be activated on purpose.
+	 * 
+	 * @return boolean
+	 */
+	boolean isSupportResume();
+
+	void setSupportResume(boolean supportResume);
+
+	int getResumeIndex();
+
+	void setResumeIndex(int resumeIndex);
 
 	int getNumberOfEntries();
 
@@ -124,13 +139,29 @@ public interface ProcessEntryContainer extends Iterable<IProcessEntry> {
 
 	static <X, T> T applyProcessEntries(ProcessEntryContainer container, ProcessExecutionContext context, BiFunction<IProcessEntry, IProcessSupplier<X>, ProcessorPreferences<X>> preferenceSupplier, ProcessExecutionConsumer<T> consumer) {
 
+		int resumeIndex = container.isSupportResume() ? container.getResumeIndex() : DEFAULT_RESUME_INDEX;
 		context.setWorkRemaining(container.getNumberOfEntries());
+		//
+		int index = -1;
 		for(IProcessEntry processEntry : container) {
-			IProcessSupplier<X> processor = context.getSupplier(processEntry.getProcessorId());
-			if(processor == null) {
-				context.addWarnMessage(processEntry.getName(), "processor not found, will be skipped");
+			/*
+			 * Resume method at a given position?
+			 */
+			index++;
+			if(index < resumeIndex) {
 				continue;
 			}
+			/*
+			 * Validation
+			 */
+			IProcessSupplier<X> processor = context.getSupplier(processEntry.getProcessorId());
+			if(processor == null) {
+				context.addWarnMessage(processEntry.getName(), "The processor was not found, the execution wil be skipped.");
+				continue;
+			}
+			/*
+			 * Process
+			 */
 			try {
 				ProcessorPreferences<X> processorPreferences = preferenceSupplier.apply(processEntry, processor);
 				context.setContextObject(IProcessEntry.class, processEntry);
@@ -138,8 +169,12 @@ public interface ProcessEntryContainer extends Iterable<IProcessEntry> {
 				context.setContextObject(ProcessExecutionConsumer.class, consumer);
 				context.setContextObject(ProcessorPreferences.class, processorPreferences);
 				ProcessExecutionContext entryContext = context.split(processor.getContext());
+				//
 				try {
 					if(processEntry.getNumberOfEntries() > 0) {
+						/*
+						 * Combined method
+						 */
 						IProcessSupplier.applyProcessor(processorPreferences, new SubProcessExecutionConsumer<T>(consumer, new SubProcess<T>() {
 
 							@Override
@@ -149,6 +184,9 @@ public interface ProcessEntryContainer extends Iterable<IProcessEntry> {
 							}
 						}), entryContext);
 					} else {
+						/*
+						 * Simple method
+						 */
 						IProcessSupplier.applyProcessor(processorPreferences, consumer, entryContext);
 					}
 				} finally {
@@ -158,10 +196,12 @@ public interface ProcessEntryContainer extends Iterable<IProcessEntry> {
 					context.setContextObject(ProcessorPreferences.class, null);
 				}
 			} catch(RuntimeException e) {
-				context.addErrorMessage(processEntry.getName(), "internal error", e);
+				context.addErrorMessage(processEntry.getName(), "Internal error when running the process method.", e);
 			}
 		}
-		// return the final result
+		/*
+		 * Result
+		 */
 		return consumer.getResult();
 	}
 }

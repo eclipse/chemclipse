@@ -43,7 +43,7 @@ public class MetaProcessorSettings {
 
 	public MetaProcessorSettings(MetaProcessorProcessSupplier processSupplier) {
 
-		IProcessMethod processMethod = processSupplier.getMethod();
+		IProcessMethod processMethod = processSupplier.getProcessMethod();
 		this.method = processMethod;
 	}
 

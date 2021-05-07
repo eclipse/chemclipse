@@ -26,6 +26,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+import org.eclipse.chemclipse.converter.methods.MetaProcessorProcessSupplier;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -78,6 +79,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorProcessTypeSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.TargetReferenceLabelMarker;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupportUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.ResumeMethodSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.ChromatogramAxisIntensity;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.ChromatogramAxisMilliseconds;
@@ -516,6 +518,13 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 			ProcessorPreferences<C> settings = SettingsWizard.getSettings(shell, SettingsWizard.getWorkspacePreferences(processSupplier), true);
 			if(settings == null) {
 				return;
+			}
+			//
+			if(processSupplier instanceof MetaProcessorProcessSupplier) {
+				MetaProcessorProcessSupplier metaProcessorProcessSupplier = (MetaProcessorProcessSupplier)processSupplier;
+				IProcessMethod processMethod = metaProcessorProcessSupplier.getProcessMethod();
+				int resumeIndex = ResumeMethodSupport.selectResumeIndex(shell, processMethod);
+				processMethod.setResumeIndex(resumeIndex);
 			}
 			//
 			processChromatogram(new IRunnableWithProgress() {
