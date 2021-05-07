@@ -17,3 +17,5 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.support;bundle-version="0.8.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
+Import-Package: org.apache.commons.lang3.tuple;version="3.1.0",
+ org.eclipse.chemclipse.xxd.converter.supplier.io.exception

@@ -11,8 +11,21 @@
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.ChromatogramImportConverter"
             importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.MagicNumberMatcher"
             isExportable="false"
-            isImportable="false">
+            isImportable="true">
       </ChromatogramSupplier>
    </extension>
-
+   <extension
+         point="org.eclipse.chemclipse.msd.converter.massSpectrumSupplier">
+      <MassSpectrumSupplier
+            description="Reads mzML Mass Spectra"
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.MassSpectrumExportConverter"
+            fileExtension=".mzML"
+            filterName="mzML Mass Spectra (*.mzML)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.mzml.ms"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.MassSpectrumImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.MagicNumberMatcher"
+            isExportable="false"
+            isImportable="true">
+      </MassSpectrumSupplier>
+   </extension>
 </plugin>

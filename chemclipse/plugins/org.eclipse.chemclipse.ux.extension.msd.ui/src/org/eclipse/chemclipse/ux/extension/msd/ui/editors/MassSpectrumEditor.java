@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2020 Lablicate GmbH.
+ * Copyright (c) 2014, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -275,6 +275,7 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 			dialog.run(fork, false, runnable);
 		} catch(InvocationTargetException e) {
 			logger.warn(e);
+			logger.warn(e.getCause());
 		} catch(InterruptedException e) {
 			logger.warn(e);
 		}
