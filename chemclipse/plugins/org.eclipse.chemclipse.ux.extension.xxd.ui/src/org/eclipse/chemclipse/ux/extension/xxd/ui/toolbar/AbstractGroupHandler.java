@@ -133,7 +133,7 @@ public abstract class AbstractGroupHandler implements IGroupHandler {
 
 		adjustIcon(directToolItem, show);
 		/*
-		 * If parts are activated, only activate the manadatory parts.
+		 * If parts are activated, only activate the mandatory parts.
 		 * When disable parts, disable all parts.
 		 */
 		List<IPartHandler> partHandlers;

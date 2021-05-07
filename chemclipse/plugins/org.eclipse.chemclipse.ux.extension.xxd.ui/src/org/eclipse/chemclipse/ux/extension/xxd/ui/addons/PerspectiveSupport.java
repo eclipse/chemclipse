@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -66,6 +66,18 @@ public class PerspectiveSupport {
 								GroupHandler.activateReferencedParts();
 								activatePartsInitially = false;
 							}
+						} else {
+							enableToolBar(false);
+						}
+						GroupHandler.updateGroupHandlerMenu();
+					}
+				} else if(topic.equals(IChemClipseEvents.TOPIC_APPLICATION_RESET_PERSPECTIVE)) {
+					Object object = objects.get(0);
+					if(object instanceof String) {
+						String label = (String)object;
+						if(DATA_ANALYSIS_PERSPECTIVE_LABEL.equals(label)) {
+							enableToolBar(true);
+							GroupHandler.activateReferencedParts();
 						} else {
 							enableToolBar(false);
 						}

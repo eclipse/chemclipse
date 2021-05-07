@@ -49,6 +49,7 @@ public interface IChemClipseEvents {
 	String TOPIC_APPLICATION_SELECT_PERSPECTIVE = "application/select/perspective";
 	String TOPIC_APPLICATION_SELECT_VIEW = "application/select/view";
 	String TOPIC_PART_CLOSED = "part/closed";
+	String TOPIC_APPLICATION_RESET_PERSPECTIVE = "application/reset/perspective";
 	//
 	String TOPIC_PLATE_PCR_UPDATE_OVERVIEW = "plate/pcr/update/overview";
 	String TOPIC_WELL_PCR_UPDATE_SELECTION = "well/pcr/update/selection";
