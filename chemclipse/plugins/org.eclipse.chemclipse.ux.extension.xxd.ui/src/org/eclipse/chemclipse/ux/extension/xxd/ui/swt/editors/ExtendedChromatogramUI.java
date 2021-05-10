@@ -1001,6 +1001,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 	private void initComboViewerSeparationColumn(ComboViewer comboViewer) {
 
 		comboViewerSeparationColumn = comboViewer;
+		//
 		Control combo = comboViewer.getControl();
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {
 
@@ -1014,7 +1015,8 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 				return null;
 			}
 		});
-		combo.setToolTipText("Select a chromatogram column.");
+		//
+		combo.setToolTipText("Select a separation column.");
 		comboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			@Override
@@ -1022,8 +1024,21 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
 				if(object instanceof ISeparationColumn && chromatogramSelection != null) {
+					/*
+					 * Set the column
+					 */
 					ISeparationColumn separationColumn = (ISeparationColumn)object;
-					chromatogramSelection.getChromatogram().getSeparationColumnIndices().setSeparationColumn(separationColumn);
+					IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
+					chromatogram.getSeparationColumnIndices().setSeparationColumn(separationColumn);
+					/*
+					 * Transfer to references?
+					 */
+					if(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_COLUMN_TYPE_TO_REFERENCES)) {
+						for(IChromatogram chromatogramReference : chromatogram.getReferencedChromatograms()) {
+							chromatogramReference.getSeparationColumnIndices().setSeparationColumn(separationColumn);
+						}
+					}
+					//
 					updateLabel();
 				}
 			}

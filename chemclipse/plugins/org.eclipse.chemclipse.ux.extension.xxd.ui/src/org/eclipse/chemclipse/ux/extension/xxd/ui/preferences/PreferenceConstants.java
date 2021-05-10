@@ -509,6 +509,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final boolean DEF_CHROMATOGRAM_RESTRICT_ZOOM_Y = true;
 	public static final String P_CHROMATOGRAM_REFERENCE_LABEL = "chromatogramReferenceLabel";
 	public static final String DEF_CHROMATOGRAM_REFERENCE_LABEL = ReferencesLabel.DEFAULT.name();
+	public static final String P_CHROMATOGRAM_TRANSFER_COLUMN_TYPE_TO_REFERENCES = "chromatogramTransferColumnTypeToReferences";
+	public static final boolean DEF_CHROMATOGRAM_TRANSFER_COLUMN_TYPE_TO_REFERENCES = true;
 	//
 	public static final String P_TITLE_X_AXIS_MILLISECONDS = "titleXAxisMilliseconds";
 	public static final String DEF_TITLE_X_AXIS_MILLISECONDS = "Time [ms]";
