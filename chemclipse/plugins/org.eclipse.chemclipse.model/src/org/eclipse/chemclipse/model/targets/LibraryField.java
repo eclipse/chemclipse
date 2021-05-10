@@ -20,10 +20,13 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 public enum LibraryField {
 	NAME("Name", getLibraryExtractor(ILibraryInformation::getName)), //
 	CAS("CAS", getLibraryExtractor(ILibraryInformation::getCasNumber)), //
-	NAME_CAS("Name (CAS)", getNameAndCasExtractor()), //
+	NAME_CAS("Name (CAS)", getLibraryExtractor(ILibraryInformation::getName, ILibraryInformation::getCasNumber)), //
 	FORMULA("Formula", getLibraryExtractor(ILibraryInformation::getFormula)), //
 	SMILES("SMILES", getLibraryExtractor(ILibraryInformation::getSmiles)), //
-	SYNONYMS("Synonyms", getLibraryExtractor(ILibraryInformation::getSynonyms).andThen(elements -> elements != null ? String.join("; ", elements) : null));
+	SYNONYMS("Synonyms", getLibraryExtractor(ILibraryInformation::getSynonyms).andThen(elements -> elements != null ? String.join("; ", elements) : null)), //
+	INCHI("InChI", getLibraryExtractor(ILibraryInformation::getInChI)), //
+	REFID("RefID", getLibraryExtractor(ILibraryInformation::getReferenceIdentifier)), //
+	NAME_REFID("Name (RefID)", getLibraryExtractor(ILibraryInformation::getName, ILibraryInformation::getReferenceIdentifier)); //
 
 	private final Function<IIdentificationTarget, String> transformer;
 	private final String label;
@@ -89,7 +92,7 @@ public enum LibraryField {
 		};
 	}
 
-	private static Function<IIdentificationTarget, String> getNameAndCasExtractor() {
+	private static <T> Function<IIdentificationTarget, String> getLibraryExtractor(Function<ILibraryInformation, T> extractor1, Function<ILibraryInformation, T> extractor2) {
 
 		return target -> {
 			/*
@@ -106,7 +109,7 @@ public enum LibraryField {
 				return null;
 			}
 			//
-			String result = libraryInformation.getName() + " (" + libraryInformation.getCasNumber() + ")";
+			String result = extractor1.apply(libraryInformation) + " (" + extractor2.apply(libraryInformation) + ")";
 			return result.trim();
 		};
 	}

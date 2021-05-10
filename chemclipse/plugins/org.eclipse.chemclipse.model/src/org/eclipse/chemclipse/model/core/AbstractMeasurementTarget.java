@@ -88,7 +88,9 @@ public class AbstractMeasurementTarget extends AbstractMeasurement implements IT
 	@Override
 	public void setLibraryField(LibraryField libraryField) {
 
-		this.libraryField = libraryField;
+		if(libraryField != null) {
+			this.libraryField = libraryField;
+		}
 	}
 
 	@Override
