@@ -173,7 +173,7 @@ public class ImageDialog extends Dialog {
 	private Table createTableImages(Composite parent) {
 
 		Table table = new Table(parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL);
-		table.setHeaderVisible(true);
+		table.setHeaderVisible(false);
 		table.setLinesVisible(true);
 		//
 		GridData gridData = new GridData(GridData.FILL_BOTH);
