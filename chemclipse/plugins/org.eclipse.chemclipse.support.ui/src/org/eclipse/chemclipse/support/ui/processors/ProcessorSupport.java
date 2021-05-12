@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.support.ui.processors;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -21,14 +22,21 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.support.ui.internal.provider.Tuple;
 
 public class ProcessorSupport {
 
-	private static final String VALUE_DELIMITER = ";";
-	private static final String PROCESSOR_DELIMITER = ":";
+	private static final Logger logger = Logger.getLogger(ProcessorSupport.class);
+	/*
+	 * The processors must not contain the following persistence delimiters.
+	 * : can't be used as it could be part of the id. Regex keywords can be also
+	 * not used, like $.
+	 */
+	private static final String VALUE_DELIMITER = "§";
+	private static final String PROCESSOR_DELIMITER = "%";
 
 	public static List<Processor> getActiveProcessors(ProcessSupplierContext context, String preference) {
 
@@ -43,10 +51,12 @@ public class ProcessorSupport {
 					String imageFileName = values[1];
 					boolean isActive = Boolean.valueOf(values[2]);
 					IProcessSupplier<?> processSupplier = context.getSupplier(id);
-					Processor activeProcessor = new Processor(processSupplier);
-					activeProcessor.setImageFileName(imageFileName);
-					activeProcessor.setActive(isActive);
-					activeProcessors.add(activeProcessor);
+					if(processSupplier != null) {
+						Processor activeProcessor = new Processor(processSupplier);
+						activeProcessor.setImageFileName(imageFileName);
+						activeProcessor.setActive(isActive);
+						activeProcessors.add(activeProcessor);
+					}
 				}
 			}
 		}
@@ -63,16 +73,20 @@ public class ProcessorSupport {
 			Iterator<Processor> iterator = activeProcessors.iterator();
 			while(iterator.hasNext()) {
 				Processor processor = iterator.next();
-				IProcessSupplier<?> processSupplier = processor.getProcessSupplier();
-				//
-				builder.append(processSupplier.getId());
-				builder.append(VALUE_DELIMITER);
-				builder.append(processor.getImageFileName());
-				builder.append(VALUE_DELIMITER);
-				builder.append(processor.isActive());
-				//
-				if(iterator.hasNext()) {
-					builder.append(PROCESSOR_DELIMITER);
+				if(isValid(processor)) {
+					IProcessSupplier<?> processSupplier = processor.getProcessSupplier();
+					//
+					builder.append(processSupplier.getId());
+					builder.append(VALUE_DELIMITER);
+					builder.append(processor.getImageFileName());
+					builder.append(VALUE_DELIMITER);
+					builder.append(processor.isActive());
+					//
+					if(iterator.hasNext()) {
+						builder.append(PROCESSOR_DELIMITER);
+					}
+				} else {
+					logger.warn("The processor is null or contains at least one unvalid char: " + processor);
 				}
 			}
 		}
@@ -126,20 +140,26 @@ public class ProcessorSupport {
 			processors.add(processor);
 		}
 		/*
-		 * Swap elements on demand.
+		 * Swap elements, bases on the order of the persisted processors.
 		 */
 		List<Tuple> activeProcessorSwapList = getActiveProcessorSwapList(processors, preference);
 		int sizeSwapList = activeProcessorSwapList.size();
+		Set<Integer> swappedIndices = new HashSet<>();
+		//
 		for(int i = 0; i < sizeSwapList; i++) {
-			Tuple tupleActive = activeProcessorSwapList.get(i);
-			int delta = tupleActive.getIndex() - i;
-			if(delta != 0) {
-				int deltaIndex = i + delta;
-				if(deltaIndex >= 0 && deltaIndex < sizeSwapList) {
-					Tuple tupleSwitch = activeProcessorSwapList.get(deltaIndex);
-					int indexActive = tupleActive.getPosition();
-					int indexSwitch = tupleSwitch.getPosition();
-					Collections.swap(processors, indexActive, indexSwitch);
+			if(!swappedIndices.contains(i)) {
+				Tuple tupleActive = activeProcessorSwapList.get(i);
+				int delta = tupleActive.getIndex() - i;
+				if(delta != 0) {
+					int deltaIndex = i + delta;
+					if(deltaIndex >= 0 && deltaIndex < sizeSwapList) {
+						Tuple tupleSwap = activeProcessorSwapList.get(deltaIndex);
+						int indexActive = tupleActive.getPosition();
+						int indexSwap = tupleSwap.getPosition();
+						Collections.swap(processors, indexActive, indexSwap);
+						swappedIndices.add(tupleActive.getIndex());
+						swappedIndices.add(tupleSwap.getIndex());
+					}
 				}
 			}
 		}
@@ -216,5 +236,25 @@ public class ProcessorSupport {
 		}
 		//
 		return activeProcessorIds;
+	}
+
+	private static boolean isValid(Processor processor) {
+
+		if(processor == null) {
+			return false;
+		}
+		//
+		IProcessSupplier<?> processSupplier = processor.getProcessSupplier();
+		String id = processSupplier.getId();
+		if(id.contains(VALUE_DELIMITER) || id.contains(PROCESSOR_DELIMITER)) {
+			return false;
+		}
+		//
+		String imageFileName = processor.getImageFileName();
+		if(imageFileName.contains(VALUE_DELIMITER) || imageFileName.contains(PROCESSOR_DELIMITER)) {
+			return false;
+		}
+		//
+		return true;
 	}
 }

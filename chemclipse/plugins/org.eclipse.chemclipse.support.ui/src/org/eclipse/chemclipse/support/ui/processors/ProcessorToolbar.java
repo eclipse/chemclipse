@@ -32,6 +32,7 @@ public class ProcessorToolbar {
 	private EditorToolBar toolBar;
 	private final Predicate<IProcessSupplier<?>> isVisible;
 	private List<Processor> processors = new ArrayList<>();
+	private PreferencesSupport preferencesSupport;
 
 	public ProcessorToolbar(EditorToolBar editorToolBar, ProcessSupplierContext context, Predicate<IProcessSupplier<?>> isVisible, BiConsumer<IProcessSupplier<?>, ProcessSupplierContext> executionListener) {
 
@@ -44,19 +45,21 @@ public class ProcessorToolbar {
 	public void enablePreferencePage(IPreferenceStore preferenceStore, String key) {
 
 		if(preferenceStore != null) {
-			editorToolBar.addPreferencePages(() -> Collections.singleton(new ProcessorToolbarPreferencePage(context, isVisible, preferenceStore, key)), () -> updateProcessors(preferenceStore.getString(key)));
+			preferencesSupport = new PreferencesSupport(preferenceStore, key, context, isVisible);
+			editorToolBar.addPreferencePages(() -> Collections.singleton(new ProcessorToolbarPreferencePage(preferencesSupport)), () -> update()); // Callback
+			update(); // Initialize
 		}
-	}
-
-	public void updateProcessors(String preference) {
-
-		processors.clear();
-		processors.addAll(ProcessorSupport.getActiveProcessors(context, preference));
-		update();
 	}
 
 	public void update() {
 
+		/*
+		 * Reload the processor list.
+		 */
+		processors.clear();
+		if(preferencesSupport != null) {
+			processors.addAll(preferencesSupport.getStoredProcessors());
+		}
 		/*
 		 * TODO due to strange behaviour of Toolbarmanager we need to create a
 		 * new toolbar everytime and clear the old one, we should check if this

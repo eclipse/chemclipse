@@ -99,14 +99,7 @@ public class ProcessorToolbarSelectionUI extends Composite {
 			@Override
 			public void keyReleased(KeyEvent e) {
 
-				if(e.keyCode == SWT.LF || e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) {
-					runSearch();
-				} else if(text.getText().trim().equals("")) {
-					/*
-					 * Reset when empty.
-					 */
-					runSearch();
-				}
+				runSearch();
 			}
 		});
 		/*
@@ -158,8 +151,8 @@ public class ProcessorToolbarSelectionUI extends Composite {
 
 		ProcessSupplierListUI processSupplierListUI = new ProcessSupplierListUI(parent, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
-		gridData.heightHint = 320;
-		gridData.widthHint = 120;
+		gridData.heightHint = 300;
+		gridData.widthHint = 100;
 		processSupplierListUI.enableSorting(enableSorting);
 		Table table = processSupplierListUI.getTable();
 		table.setLayoutData(gridData);

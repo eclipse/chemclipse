@@ -42,7 +42,10 @@ public class ImageDialog extends Dialog {
 	public static final int DEFAULT_WIDTH = 400;
 	public static final int DEFAULT_HEIGHT = 450;
 	//
+	private static final String FILE_NAME = "FileName";
 	private static final String PATH_PREFIX = IApplicationImage.PATH_PREFIX;
+	private static final String EXTENSION_GIF = ".gif";
+	private static final String EXTENSION_PNG = ".png";
 	//
 	private Text textSearch;
 	private Table tableImages;
@@ -126,14 +129,7 @@ public class ImageDialog extends Dialog {
 			@Override
 			public void keyReleased(KeyEvent e) {
 
-				if(e.keyCode == SWT.LF || e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) {
-					runSearch();
-				} else if(text.getText().trim().equals("")) {
-					/*
-					 * Reset when empty.
-					 */
-					runSearch();
-				}
+				runSearch();
 			}
 		});
 		/*
@@ -234,7 +230,8 @@ public class ImageDialog extends Dialog {
 				if(imageMatchesSearch(image, searchTerm)) {
 					String fileName = image.replace(PATH_PREFIX, "");
 					TableItem tableItem = new TableItem(tableImages, SWT.NONE);
-					tableItem.setText(fileName);
+					tableItem.setData(FILE_NAME, fileName);
+					tableItem.setText(fileName.replace(EXTENSION_GIF, "").replace(EXTENSION_PNG, "").toLowerCase());
 					tableItem.setImage(ApplicationImageFactory.getInstance().getImage(PATH_PREFIX + fileName, IApplicationImage.SIZE_16x16));
 				}
 			}
@@ -243,7 +240,7 @@ public class ImageDialog extends Dialog {
 
 	private boolean isValidImage(String image) {
 
-		return image.startsWith(PATH_PREFIX) && (image.endsWith(".gif") || image.endsWith(".png"));
+		return image.startsWith(PATH_PREFIX) && (image.endsWith(EXTENSION_GIF) || image.endsWith(EXTENSION_PNG));
 	}
 
 	private boolean imageMatchesSearch(String image, String searchTerm) {
@@ -260,7 +257,7 @@ public class ImageDialog extends Dialog {
 		int index = tableImages.getSelectionIndex();
 		TableItem tableItem = tableImages.getItem(index);
 		if(tableItem != null) {
-			imageFileName = PATH_PREFIX + tableItem.getText();
+			imageFileName = PATH_PREFIX + tableItem.getData(FILE_NAME);
 			return true;
 		} else {
 			imageFileName = null;
