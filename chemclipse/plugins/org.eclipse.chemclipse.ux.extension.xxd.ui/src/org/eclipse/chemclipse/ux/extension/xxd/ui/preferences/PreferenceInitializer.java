@@ -310,6 +310,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_RESTRICT_ZOOM_Y, PreferenceConstants.DEF_CHROMATOGRAM_RESTRICT_ZOOM_Y);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_REFERENCE_LABEL, PreferenceConstants.DEF_CHROMATOGRAM_REFERENCE_LABEL);
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_COLUMN_TYPE_TO_REFERENCES, PreferenceConstants.DEF_CHROMATOGRAM_TRANSFER_COLUMN_TYPE_TO_REFERENCES);
+		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_PROCESSOR_TOOLBAR, PreferenceConstants.DEF_CHROMATOGRAM_PROCESSOR_TOOLBAR);
 		//
 		store.setDefault(PreferenceConstants.P_TITLE_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_TITLE_X_AXIS_MILLISECONDS);
 		store.setDefault(PreferenceConstants.P_FORMAT_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_FORMAT_X_AXIS_MILLISECONDS);

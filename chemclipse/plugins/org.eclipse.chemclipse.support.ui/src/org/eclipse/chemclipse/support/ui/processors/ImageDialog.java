@@ -1,0 +1,275 @@
+/*******************************************************************************
+ * Copyright (c) 2021 Lablicate GmbH.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
+ * Contributors:
+ * Philip Wenig - initial API and implementation
+ *******************************************************************************/
+package org.eclipse.chemclipse.support.ui.processors;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Text;
+
+public class ImageDialog extends Dialog {
+
+	public static final int DEFAULT_WIDTH = 400;
+	public static final int DEFAULT_HEIGHT = 450;
+	//
+	private static final String PATH_PREFIX = IApplicationImage.PATH_PREFIX;
+	//
+	private Text textSearch;
+	private Table tableImages;
+	private String imageFileName = null;
+	//
+	private List<String> images = new ArrayList<>();
+
+	public ImageDialog(Shell parent) {
+
+		super(parent);
+	}
+
+	public String getImageFileName() {
+
+		return imageFileName;
+	}
+
+	@Override
+	protected void configureShell(Shell shell) {
+
+		super.configureShell(shell);
+		shell.setText("Processor Image");
+	}
+
+	@Override
+	protected Point getInitialSize() {
+
+		return new Point(DEFAULT_WIDTH, DEFAULT_HEIGHT);
+	}
+
+	@Override
+	protected boolean isResizable() {
+
+		return true;
+	}
+
+	@Override
+	protected Control createDialogArea(Composite parent) {
+
+		Composite composite = (Composite)super.createDialogArea(parent);
+		composite.setLayout(new GridLayout(2, false));
+		//
+		createToolbarTop(composite);
+		tableImages = createTableImages(composite);
+		//
+		initialize();
+		updateTable("");
+		//
+		return composite;
+	}
+
+	private void initialize() {
+
+		images.addAll(ApplicationImageFactory.getInstance().listImages(IApplicationImage.SIZE_16x16));
+		Collections.sort(images);
+	}
+
+	private void createToolbarTop(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalSpan = 3;
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(2, false));
+		//
+		textSearch = createTextSearch(composite);
+		createButtonSearch(composite);
+	}
+
+	private Text createTextSearch(Composite parent) {
+
+		Text text = new Text(parent, SWT.BORDER | SWT.SEARCH | SWT.ICON_CANCEL | SWT.ICON_SEARCH);
+		text.setText("");
+		text.setToolTipText("Search the available processor items.");
+		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		/*
+		 * Listen to search key event.
+		 */
+		text.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+
+				if(e.keyCode == SWT.LF || e.keyCode == SWT.CR || e.keyCode == SWT.KEYPAD_CR) {
+					runSearch();
+				} else if(text.getText().trim().equals("")) {
+					/*
+					 * Reset when empty.
+					 */
+					runSearch();
+				}
+			}
+		});
+		/*
+		 * Click on the icons.
+		 */
+		text.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+
+				if(e.detail == SWT.ICON_CANCEL) {
+					text.setText("");
+					runSearch();
+				} else if(e.detail == SWT.ICON_SEARCH) {
+					runSearch();
+				}
+			}
+		});
+		//
+		return text;
+	}
+
+	private Button createButtonSearch(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
+		//
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				runSearch();
+			}
+		});
+		//
+		return button;
+	}
+
+	private Table createTableImages(Composite parent) {
+
+		Table table = new Table(parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.V_SCROLL);
+		table.setHeaderVisible(true);
+		table.setLinesVisible(true);
+		//
+		GridData gridData = new GridData(GridData.FILL_BOTH);
+		gridData.horizontalSpan = 2;
+		table.setLayoutData(gridData);
+		//
+		TableColumn tableColumn = new TableColumn(table, SWT.CENTER);
+		tableColumn.setWidth(DEFAULT_WIDTH - 50);
+		//
+		table.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				selectImage();
+			}
+		});
+		//
+		table.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseUp(MouseEvent e) {
+
+				selectImage();
+			}
+
+			@Override
+			public void mouseDoubleClick(MouseEvent e) {
+
+				if(selectImage()) {
+					closeDialog();
+				}
+			}
+		});
+		//
+		return table;
+	}
+
+	private void runSearch() {
+
+		String searchText = textSearch.getText().trim();
+		updateTable(searchText);
+	}
+
+	private void updateTable(String searchTerm) {
+
+		tableImages.clearAll();
+		for(TableItem tableItem : tableImages.getItems()) {
+			tableItem.dispose();
+		}
+		//
+		for(String image : images) {
+			if(isValidImage(image)) {
+				if(imageMatchesSearch(image, searchTerm)) {
+					String fileName = image.replace(PATH_PREFIX, "");
+					TableItem tableItem = new TableItem(tableImages, SWT.NONE);
+					tableItem.setText(fileName);
+					tableItem.setImage(ApplicationImageFactory.getInstance().getImage(PATH_PREFIX + fileName, IApplicationImage.SIZE_16x16));
+				}
+			}
+		}
+	}
+
+	private boolean isValidImage(String image) {
+
+		return image.startsWith(PATH_PREFIX) && (image.endsWith(".gif") || image.endsWith(".png"));
+	}
+
+	private boolean imageMatchesSearch(String image, String searchTerm) {
+
+		if(searchTerm == null || searchTerm.isEmpty()) {
+			return true;
+		}
+		//
+		return image.toLowerCase().contains(searchTerm.toLowerCase());
+	}
+
+	private boolean selectImage() {
+
+		int index = tableImages.getSelectionIndex();
+		TableItem tableItem = tableImages.getItem(index);
+		if(tableItem != null) {
+			imageFileName = PATH_PREFIX + tableItem.getText();
+			return true;
+		} else {
+			imageFileName = null;
+			return false;
+		}
+	}
+
+	private void closeDialog() {
+
+		super.okPressed();
+	}
+}

@@ -60,9 +60,9 @@ import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
+import org.eclipse.chemclipse.support.ui.processors.ProcessorToolbar;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EditorToolBar;
-import org.eclipse.chemclipse.support.ui.swt.ProcessorToolbar;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.IMethodListener;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
@@ -922,7 +922,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		//
 		createResetButton(editorToolBar);
 		editorToolBar.enableToolbarTextPage(preferenceStore, PREFERENCE_SHOW_TOOLBAR_TEXT);
-		processorToolbar.enablePreferencePage(preferenceStore, "ProcessorToolbar.Processors");
+		processorToolbar.enablePreferencePage(preferenceStore, PreferenceConstants.P_CHROMATOGRAM_PROCESSOR_TOOLBAR);
 		editorToolBar.addPreferencePages(new Supplier<Collection<? extends IPreferencePage>>() {
 
 			@Override
