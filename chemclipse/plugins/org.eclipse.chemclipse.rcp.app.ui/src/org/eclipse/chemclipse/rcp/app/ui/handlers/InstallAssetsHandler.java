@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Christoph Läubrich.
+ * Copyright (c) 2020, 2021 Christoph Läubrich.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,13 +30,16 @@ import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.di.extensions.Service;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.services.IServiceConstants;
+import org.eclipse.e4.ui.workbench.IWorkbench;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 
 @SuppressWarnings("restriction")
 public class InstallAssetsHandler {
 
 	@Execute
-	public void execute(@Named(IServiceConstants.ACTIVE_SHELL) Shell shell, @Service(filterExpression = "(action=ConfigReader)") Runnable configReader, @Service(filterExpression = "(action=BundleReader)") Runnable bundleReader, IEventBroker eventBroker) throws IOException {
+	public void execute(IWorkbench workbench, @Named(IServiceConstants.ACTIVE_SHELL) Shell shell, @Service(filterExpression = "(action=ConfigReader)") Runnable configReader, @Service(filterExpression = "(action=BundleReader)") Runnable bundleReader, IEventBroker eventBroker) throws IOException {
 
 		AssetInstallPage assetInstallPage = new AssetInstallPage();
 		SinglePageWizard wizard = new SinglePageWizard("Install / Manage Assets", true, assetInstallPage);
@@ -68,6 +71,13 @@ public class InstallAssetsHandler {
 			eventBroker.post(IChemClipseEvents.TOPIC_METHOD_UPDATE, null);
 			configReader.run();
 			bundleReader.run();
+			//
+			MessageBox messageBox = new MessageBox(shell, SWT.YES | SWT.NO);
+			messageBox.setText("Update Assets");
+			messageBox.setMessage("A restart is required. Restart now?");
+			if(SWT.YES == messageBox.open()) {
+				workbench.restart();
+			}
 		}
 	}
 
