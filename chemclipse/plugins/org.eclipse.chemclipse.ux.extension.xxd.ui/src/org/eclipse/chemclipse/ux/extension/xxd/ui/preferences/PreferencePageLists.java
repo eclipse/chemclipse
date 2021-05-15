@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -23,6 +23,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class PreferencePageLists extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePageLists() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
 		setTitle("Lists Column Order (do not edit)");
@@ -39,8 +40,15 @@ public class PreferencePageLists extends FieldEditorPreferencePage implements IW
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Do not edit the following fields if not explicit neccessary.", getFieldEditorParent()));
 		//
-		addField(new StringFieldEditor(PreferenceConstants.P_COLUMN_ORDER_PEAK_SCAN_LIST, "Peak/Scan List", getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.P_COLUMN_ORDER_TARGET_LIST, "Target List", getFieldEditorParent()));
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("Peak/Scan List", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_COLUMN_ORDER_PEAK_SCAN_LIST, "Column Order", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_COLUMN_WIDTH_PEAK_SCAN_LIST, "Column Width", getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("Targets", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_COLUMN_ORDER_TARGET_LIST, "Column Order", getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceConstants.P_COLUMN_WIDTH_TARGET_LIST, "Column Width", getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

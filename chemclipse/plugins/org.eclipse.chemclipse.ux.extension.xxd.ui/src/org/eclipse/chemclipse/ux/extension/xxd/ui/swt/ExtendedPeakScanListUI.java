@@ -46,7 +46,6 @@ import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
-import org.eclipse.chemclipse.support.ui.swt.IColumnMoveListener;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
@@ -58,7 +57,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.IUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.InternalStandardDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.TableConfigSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.ListSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMergePeaks;
@@ -90,7 +88,6 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 	//
 	private static final String MENU_CATEGORY = "Peaks/Scans";
 	//
-	private final ListSupport listSupport = new ListSupport();
 	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	//
 	private AtomicReference<Composite> toolbarMain = new AtomicReference<>();
@@ -312,17 +309,9 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		 * Set/Save the column order.
 		 */
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		String preferenceName = PreferenceConstants.P_COLUMN_ORDER_PEAK_SCAN_LIST;
-		listSupport.setColumnOrder(table, preferenceStore.getString(preferenceName));
-		peakScanListUI.addColumnMoveListener(new IColumnMoveListener() {
-
-			@Override
-			public void handle() {
-
-				String columnOrder = listSupport.getColumnOrder(table);
-				preferenceStore.setValue(preferenceName, columnOrder);
-			}
-		});
+		String preferenceColumnOrder = PreferenceConstants.P_COLUMN_ORDER_PEAK_SCAN_LIST;
+		String preferenceColumnWidth = PreferenceConstants.P_COLUMN_WIDTH_PEAK_SCAN_LIST;
+		peakScanListUI.setColumnMoveWidthSupport(preferenceStore, preferenceColumnOrder, preferenceColumnWidth);
 		/*
 		 * Add the delete targets support.
 		 */

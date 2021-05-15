@@ -39,7 +39,6 @@ import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
-import org.eclipse.chemclipse.support.ui.swt.IColumnMoveListener;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
@@ -47,7 +46,6 @@ import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.ListSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTargets;
@@ -107,7 +105,6 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 	private Object objectCacheChromatogram = null;
 	private Object objectCacheOther = null;
 	//
-	private final ListSupport listSupport = new ListSupport();
 	private ScanDataSupport scanDataSupport = new ScanDataSupport();
 	private PeakDataSupport peakDataSupport = new PeakDataSupport();
 	//
@@ -417,17 +414,10 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		 * Set/Save the column order.
 		 */
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		String preferenceName = PreferenceConstants.P_COLUMN_ORDER_TARGET_LIST;
-		listSupport.setColumnOrder(table, preferenceStore.getString(preferenceName));
-		targetListUI.addColumnMoveListener(new IColumnMoveListener() {
-
-			@Override
-			public void handle() {
-
-				String columnOrder = listSupport.getColumnOrder(table);
-				preferenceStore.setValue(preferenceName, columnOrder);
-			}
-		});
+		String preferenceColumnOrder = PreferenceConstants.P_COLUMN_ORDER_TARGET_LIST;
+		String preferenceColumnWidth = PreferenceConstants.P_COLUMN_WIDTH_TARGET_LIST;
+		targetListUI.setColumnMoveWidthSupport(preferenceStore, preferenceColumnOrder, preferenceColumnWidth);
+		//
 		targetListUI.setComparator(preferenceStore.getBoolean(PreferenceConstants.P_TARGETS_TABLE_SORTABLE));
 		/*
 		 * Add the delete targets support.

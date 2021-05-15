@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2019 Lablicate GmbH.
+ * Copyright (c) 2015, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -37,12 +37,16 @@ import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.ControlListener;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
@@ -74,12 +78,16 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 	private final Set<KeyListener> userDefinedKeyListeners;
 	private final List<IColumnMoveListener> columnMoveListeners;
 	private boolean editEnabled;
+	//
+	private ControlListener controlListener = null;
 
 	public ExtendedTableViewer(Composite parent) {
+
 		this(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 	}
 
 	public ExtendedTableViewer(Composite parent, int style) {
+
 		super(parent, style);
 		tableSettings = new TableSettings();
 		tableViewerColumns = new ArrayList<TableViewerColumn>();
@@ -92,6 +100,44 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 		editEnabled = true;
 		registerMenuListener();
 		setContentProvider(ArrayContentProvider.getInstance());
+	}
+
+	public void setColumnMoveWidthSupport(IPreferenceStore preferenceStore, String preferenceColumnOrder, String preferenceColumnWidth) {
+
+		Table table = getTable();
+		if(preferenceColumnOrder != null) {
+			TableSupport.setColumnOrder(table, preferenceStore.getString(preferenceColumnOrder));
+		}
+		//
+		if(preferenceColumnWidth != null) {
+			TableSupport.setColumnWidth(table, preferenceStore.getString(preferenceColumnWidth));
+		}
+		//
+		setControlListener(new ControlAdapter() {
+
+			@Override
+			public void controlMoved(ControlEvent e) {
+
+				if(preferenceColumnOrder != null) {
+					String columnOrder = TableSupport.getColumnOrder(table);
+					preferenceStore.setValue(preferenceColumnOrder, columnOrder);
+				}
+			}
+
+			@Override
+			public void controlResized(ControlEvent e) {
+
+				if(preferenceColumnWidth != null) {
+					String columnWidth = TableSupport.getColumnWidth(table);
+					preferenceStore.setValue(preferenceColumnWidth, columnWidth);
+				}
+			}
+		});
+	}
+
+	public void setControlListener(ControlListener controlListener) {
+
+		this.controlListener = controlListener;
 	}
 
 	@Override
@@ -178,6 +224,7 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 				final int index = i;
 				final TableViewerColumn tableViewerColumn = createTableColumn(titles[i], bounds[i]);
 				final TableColumn tableColumn = tableViewerColumn.getColumn();
+				//
 				tableColumn.addSelectionListener(new SelectionAdapter() {
 
 					@Override
@@ -186,6 +233,26 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 						sortColumn(table, index, tableColumn);
 					}
 				});
+				//
+				tableColumn.addControlListener(new ControlAdapter() {
+
+					@Override
+					public void controlMoved(ControlEvent e) {
+
+						if(controlListener != null) {
+							controlListener.controlMoved(e);
+						}
+					}
+
+					@Override
+					public void controlResized(ControlEvent e) {
+
+						if(controlListener != null) {
+							controlListener.controlResized(e);
+						}
+					}
+				});
+				//
 				tableViewerColumns.add(tableViewerColumn);
 			}
 		}

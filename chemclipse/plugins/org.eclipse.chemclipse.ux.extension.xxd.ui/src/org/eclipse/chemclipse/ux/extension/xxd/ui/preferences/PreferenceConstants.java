@@ -738,8 +738,12 @@ public class PreferenceConstants extends ChartOptions {
 	public static final boolean DEF_SHOW_SCANS_IN_SELECTED_RANGE = true;
 	public static final String P_COLUMN_ORDER_PEAK_SCAN_LIST = "columnOrderPeakScanList";
 	public static final String DEF_COLUMN_ORDER_PEAK_SCAN_LIST = "";
+	public static final String P_COLUMN_WIDTH_PEAK_SCAN_LIST = "columnWidthPeakScanList";
+	public static final String DEF_COLUMN_WIDTH_PEAK_SCAN_LIST = "";
 	public static final String P_COLUMN_ORDER_TARGET_LIST = "columnOrderTargetList";
 	public static final String DEF_COLUMN_ORDER_TARGET_LIST = "";
+	public static final String P_COLUMN_WIDTH_TARGET_LIST = "columnWidthTargetList";
+	public static final String DEF_COLUMN_WIDTH_TARGET_LIST = "";
 	/*
 	 * Baseline
 	 */
