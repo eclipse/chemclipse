@@ -5,9 +5,9 @@
     <elements xsi:type="basic:Part" xmi:id="_U-lgEDrkEeuPxtDVu2UVxg" elementId="org.eclipse.chemclipse.logging.ui.part.logfileschart" contributionURI="bundleclass://org.eclipse.chemclipse.logging.ui/org.eclipse.chemclipse.logging.ui.parts.FilesChartPart" label="Log Files Chart" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/swtchart.gif"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_w4jgcIjREeinUb0EwJIC5g" featurename="children" parentElementId="org.eclipse.chemclipse.logging.ui.partstack.main.files">
-    <elements xsi:type="advanced:Placeholder" xmi:id="_LCGcMIjSEeinUb0EwJIC5g" elementId="org.eclipse.chemclipse.logging.ui.placeholder.0" ref="_4FlH0IjREeinUb0EwJIC5g"/>
+    <elements xsi:type="advanced:Placeholder" xmi:id="_LCGcMIjSEeinUb0EwJIC5g" elementId="org.eclipse.chemclipse.logging.ui.part.logfiles" ref="_4FlH0IjREeinUb0EwJIC5g"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_SXP08DrlEeuPxtDVu2UVxg" featurename="children" parentElementId="org.eclipse.chemclipse.logging.ui.partstack.main.charts">
-    <elements xsi:type="advanced:Placeholder" xmi:id="_V3VQgDrlEeuPxtDVu2UVxg" elementId="org.eclipse.chemclipse.logging.ui.placeholder.1" ref="_U-lgEDrkEeuPxtDVu2UVxg"/>
+    <elements xsi:type="advanced:Placeholder" xmi:id="_V3VQgDrlEeuPxtDVu2UVxg" elementId="org.eclipse.chemclipse.logging.ui.part.logfileschart" ref="_U-lgEDrkEeuPxtDVu2UVxg"/>
   </fragments>
 </fragment:ModelFragments>
