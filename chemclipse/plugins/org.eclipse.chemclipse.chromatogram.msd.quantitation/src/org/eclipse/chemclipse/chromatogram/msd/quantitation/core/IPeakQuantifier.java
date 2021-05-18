@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,7 +28,7 @@ public interface IPeakQuantifier {
 	 * @param monitor
 	 * @return IProcessingInfo
 	 */
-	IProcessingInfo quantify(IPeak peak, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor);
+	IProcessingInfo<?> quantify(IPeak peak, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor);
 
 	/**
 	 * Quantifies the peak.
@@ -37,7 +37,7 @@ public interface IPeakQuantifier {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo quantify(IPeak peak, IProgressMonitor monitor);
+	IProcessingInfo<?> quantify(IPeak peak, IProgressMonitor monitor);
 
 	/**
 	 * Quantifies the list of peaks.
@@ -47,7 +47,7 @@ public interface IPeakQuantifier {
 	 * @param monitor
 	 * @return IProcessingInfo
 	 */
-	IProcessingInfo quantify(List<IPeak> peaks, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor);
+	IProcessingInfo<?> quantify(List<IPeak> peaks, IPeakQuantifierSettings peakQuantifierSettings, IProgressMonitor monitor);
 
 	/**
 	 * Quantifies the list of peaks.
@@ -56,5 +56,5 @@ public interface IPeakQuantifier {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	IProcessingInfo quantify(List<IPeak> peaks, IProgressMonitor monitor);
+	IProcessingInfo<?> quantify(List<IPeak> peaks, IProgressMonitor monitor);
 }

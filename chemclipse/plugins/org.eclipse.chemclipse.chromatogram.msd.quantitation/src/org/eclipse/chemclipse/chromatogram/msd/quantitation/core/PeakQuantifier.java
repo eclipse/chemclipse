@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -48,6 +48,7 @@ public class PeakQuantifier {
 	 * This class has only static methods.
 	 */
 	private PeakQuantifier() {
+
 	}
 
 	/**
@@ -59,9 +60,9 @@ public class PeakQuantifier {
 	 * @param monitor
 	 * @return IProcessingInfo
 	 */
-	public static IProcessingInfo quantify(IPeak peak, IPeakQuantifierSettings peakQuantifierSettings, final String peakQuantifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo<?> quantify(IPeak peak, IPeakQuantifierSettings peakQuantifierSettings, final String peakQuantifierId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<?> processingInfo;
 		IPeakQuantifier peakQuantifier = getPeakQuantifier(peakQuantifierId);
 		if(peakQuantifier != null) {
 			processingInfo = peakQuantifier.quantify(peak, peakQuantifierSettings, monitor);
@@ -79,9 +80,9 @@ public class PeakQuantifier {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo quantify(IPeak peak, final String peakQuantifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo<?> quantify(IPeak peak, final String peakQuantifierId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<?> processingInfo;
 		IPeakQuantifier peakQuantifier = getPeakQuantifier(peakQuantifierId);
 		if(peakQuantifier != null) {
 			processingInfo = peakQuantifier.quantify(peak, monitor);
@@ -100,9 +101,9 @@ public class PeakQuantifier {
 	 * @param monitor
 	 * @return IProcessingInfo
 	 */
-	public static IProcessingInfo quantify(List<IPeak> peaks, IPeakQuantifierSettings peakQuantifierSettings, final String peakQuantifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo<?> quantify(List<IPeak> peaks, IPeakQuantifierSettings peakQuantifierSettings, final String peakQuantifierId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<?> processingInfo;
 		IPeakQuantifier peakQuantifier = getPeakQuantifier(peakQuantifierId);
 		if(peakQuantifier != null) {
 			processingInfo = peakQuantifier.quantify(peaks, peakQuantifierSettings, monitor);
@@ -120,9 +121,9 @@ public class PeakQuantifier {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo quantify(List<IPeak> peaks, final String peakQuantifierId, IProgressMonitor monitor) {
+	public static IProcessingInfo<?> quantify(List<IPeak> peaks, final String peakQuantifierId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<?> processingInfo;
 		IPeakQuantifier peakQuantifier = getPeakQuantifier(peakQuantifierId);
 		if(peakQuantifier != null) {
 			processingInfo = peakQuantifier.quantify(peaks, monitor);
@@ -199,10 +200,9 @@ public class PeakQuantifier {
 		return null;
 	}
 
-	// --------------------------------------------private methods
-	private static IProcessingInfo getNoPeakQuantifierProcessingInfo() {
+	private static IProcessingInfo<?> getNoPeakQuantifierProcessingInfo() {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Peak Quantifier", NO_PEAK_QUANTIFIER_AVAILABLE);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;
