@@ -28,7 +28,10 @@
         <children xsi:type="menu:MenuSeparator" xmi:id="_08BOgL7lEeKcwbn54SGPtA" elementId="org.eclipse.chemclipse.rcp.app.ui.menuseparator.1"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_q2y48EaqEeKL9t3RgmYB_g" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.item.import" label="Import" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/import.png" command="_w-HcgEaqEeKL9t3RgmYB_g"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_tZ1dcEaqEeKL9t3RgmYB_g" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.item.export" label="Export" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/export.png" command="_zmfM8EaqEeKL9t3RgmYB_g"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_oiu1oLiaEeu05KeOzWexnw" elementId="org.eclipse.chemclipse.rcp.app.ui.menuseparator.2"/>
         <children xsi:type="menu:MenuSeparator" xmi:id="_pliscEaqEeKL9t3RgmYB_g" elementId="org.eclipse.chemclipse.rcp.app.ui.menuseparator.file.2"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_KMcBILfgEeuq4LYKjrje2g" elementId="org.eclipse.chemclipse.rcp.app.ui.menuseparator.file.3"/>
+        <children xsi:type="menu:MenuSeparator" xmi:id="_ky5jULiZEeu05KeOzWexnw" elementId="org.eclipse.chemclipse.rcp.app.ui.menuseparator.file.4"/>
         <children xsi:type="menu:HandledMenuItem" xmi:id="_h0BcRTLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.item.quit" label="Quit" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/quit.gif" command="_h0A1OjLzEeKMEOdllHiEaA"/>
       </children>
       <children xsi:type="menu:Menu" xmi:id="_QrQhQDiVEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.plugins" label="Plug-ins">
