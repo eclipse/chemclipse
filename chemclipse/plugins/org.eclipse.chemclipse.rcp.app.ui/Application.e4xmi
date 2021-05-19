@@ -12,7 +12,7 @@
           <children xsi:type="basic:PartSashContainer" xmi:id="_YOgQAFeLEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.partsashcontainer.main.1" containerData="8000">
             <children xsi:type="advanced:Placeholder" xmi:id="_bnx48FeLEeWJDdTjy0i2HA" elementId="org.eclipse.ui.editorss" containerData="15000" ref="_Jqg8MEnJEeKP49-EnXatSw"/>
             <children xsi:type="basic:PartStack" xmi:id="_jR9WYFeLEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.partstack.main.consoles" containerData="5000">
-              <children xsi:type="advanced:Placeholder" xmi:id="_lQTSYFeLEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.logging.ui.placeholder.main.1" ref="_Sq1foEd4EeKhRMzT2OpX0g"/>
+              <children xsi:type="advanced:Placeholder" xmi:id="_lQTSYFeLEeWJDdTjy0i2HA" elementId="org.eclipse.ui.console.ConsoleView" ref="_Sq1foEd4EeKhRMzT2OpX0g"/>
             </children>
           </children>
         </children>
