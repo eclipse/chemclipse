@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.core.support.HeaderField;
 import org.eclipse.chemclipse.model.selection.ChromatogramSelectionSupport;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.selection.MoveDirection;
@@ -34,7 +35,6 @@ import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.ReferencesLabel;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -292,7 +292,7 @@ public class ChromatogramDataSupport {
 	public static String getReferenceLabel(IChromatogram<?> chromatogram, int index, boolean addTypeInfo) {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		ReferencesLabel referencesLabel = ReferencesLabel.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_REFERENCE_LABEL));
+		HeaderField referencesLabel = HeaderField.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_REFERENCE_LABEL));
 		return getReferenceLabel(chromatogram, referencesLabel, index, addTypeInfo);
 	}
 
@@ -301,12 +301,12 @@ public class ChromatogramDataSupport {
 	 * Use addTypeInfo to append MSD, CSD, WSD.
 	 * 
 	 * @param chromatogram
-	 * @param referencesLabel
+	 * @param headerReferences
 	 * @param index
 	 * @param addTypeInfo
 	 * @return String
 	 */
-	public static String getReferenceLabel(IChromatogram<?> chromatogram, ReferencesLabel referencesLabel, int index, boolean addTypeInfo) {
+	public static String getReferenceLabel(IChromatogram<?> chromatogram, HeaderField headerReferences, int index, boolean addTypeInfo) {
 
 		/*
 		 * Get the information to display.
@@ -314,7 +314,7 @@ public class ChromatogramDataSupport {
 		String type = ChromatogramDataSupport.getChromatogramType(chromatogram);
 		String description = null;
 		//
-		switch(referencesLabel) {
+		switch(headerReferences) {
 			case NAME:
 				String name = chromatogram.getName();
 				if(name != null && !name.isEmpty()) {

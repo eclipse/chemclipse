@@ -12,11 +12,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
+import org.eclipse.chemclipse.model.core.support.HeaderField;
 import org.eclipse.chemclipse.model.traces.NamedTraceUtil;
 import org.eclipse.chemclipse.msd.model.support.CalculationType;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.ReferencesLabel;
 import org.eclipse.swt.SWT;
 import org.eclipse.swtchart.IAxis.Position;
 import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
@@ -34,14 +34,6 @@ public class PreferenceConstants extends ChartOptions {
 			{"Bottom Left", PartSupport.PARTSTACK_BOTTOM_LEFT}, //
 			{"Bottom Center", PartSupport.PARTSTACK_BOTTOM_CENTER}, //
 			{"Bottom Right", PartSupport.PARTSTACK_BOTTOM_RIGHT}//
-	};
-	//
-	public static final String[][] REFERENCE_LABELS = new String[][]{ //
-			{ReferencesLabel.DEFAULT.getLabel(), ReferencesLabel.DEFAULT.name()}, //
-			{ReferencesLabel.NAME.getLabel(), ReferencesLabel.NAME.name()}, //
-			{ReferencesLabel.DATA_NAME.getLabel(), ReferencesLabel.DATA_NAME.name()}, //
-			{ReferencesLabel.SAMPLE_GROUP.getLabel(), ReferencesLabel.SAMPLE_GROUP.name()}, //
-			{ReferencesLabel.SHORT_INFO.getLabel(), ReferencesLabel.SHORT_INFO.name()} //
 	};
 	//
 	public static final int MIN_SYMBOL_SIZE = 1;
@@ -508,7 +500,7 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String P_CHROMATOGRAM_RESTRICT_ZOOM_Y = "chromatogramRestrictZoomY";
 	public static final boolean DEF_CHROMATOGRAM_RESTRICT_ZOOM_Y = true;
 	public static final String P_CHROMATOGRAM_REFERENCE_LABEL = "chromatogramReferenceLabel";
-	public static final String DEF_CHROMATOGRAM_REFERENCE_LABEL = ReferencesLabel.DEFAULT.name();
+	public static final String DEF_CHROMATOGRAM_REFERENCE_LABEL = HeaderField.DEFAULT.name();
 	public static final String P_CHROMATOGRAM_TRANSFER_COLUMN_TYPE_TO_REFERENCES = "chromatogramTransferColumnTypeToReferences";
 	public static final boolean DEF_CHROMATOGRAM_TRANSFER_COLUMN_TYPE_TO_REFERENCES = true;
 	public static final String P_CHROMATOGRAM_PROCESSOR_TOOLBAR = "chromatogramProcessorToolbar";

@@ -16,7 +16,7 @@ import java.io.File;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.implementation.ChromatogramCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.support.ReferencesLabel;
+import org.eclipse.chemclipse.model.core.support.HeaderField;
 
 import junit.framework.TestCase;
 
@@ -47,91 +47,91 @@ public class ChromatogramDataSupport_1_Test extends TestCase {
 
 	public void test1() {
 
-		assertEquals("Chromatogram", ChromatogramDataSupport.getReferenceLabel(chromatogram, ReferencesLabel.DEFAULT, -1, false));
+		assertEquals("Chromatogram", ChromatogramDataSupport.getReferenceLabel(chromatogram, HeaderField.DEFAULT, -1, false));
 	}
 
 	public void test2() {
 
-		assertEquals("Master Chromatogram", ChromatogramDataSupport.getReferenceLabel(chromatogram, ReferencesLabel.DEFAULT, 0, false));
+		assertEquals("Master Chromatogram", ChromatogramDataSupport.getReferenceLabel(chromatogram, HeaderField.DEFAULT, 0, false));
 	}
 
 	public void test3() {
 
-		assertEquals("Referenced Chromatogram (1)", ChromatogramDataSupport.getReferenceLabel(chromatogram, ReferencesLabel.DEFAULT, 1, false));
+		assertEquals("Referenced Chromatogram (1)", ChromatogramDataSupport.getReferenceLabel(chromatogram, HeaderField.DEFAULT, 1, false));
 	}
 
 	public void test4() {
 
-		assertEquals("Chromatogram [CSD]", ChromatogramDataSupport.getReferenceLabel(chromatogram, ReferencesLabel.DEFAULT, -1, true));
+		assertEquals("Chromatogram [CSD]", ChromatogramDataSupport.getReferenceLabel(chromatogram, HeaderField.DEFAULT, -1, true));
 	}
 
 	public void test5() {
 
-		assertEquals("Master Chromatogram [CSD]", ChromatogramDataSupport.getReferenceLabel(chromatogram, ReferencesLabel.DEFAULT, 0, true));
+		assertEquals("Master Chromatogram [CSD]", ChromatogramDataSupport.getReferenceLabel(chromatogram, HeaderField.DEFAULT, 0, true));
 	}
 
 	public void test6() {
 
-		assertEquals("Referenced Chromatogram (1) [CSD]", ChromatogramDataSupport.getReferenceLabel(chromatogram, ReferencesLabel.DEFAULT, 1, true));
+		assertEquals("Referenced Chromatogram (1) [CSD]", ChromatogramDataSupport.getReferenceLabel(chromatogram, HeaderField.DEFAULT, 1, true));
 	}
 
 	public void test7() {
 
-		assertEquals("This", ChromatogramDataSupport.getReferenceLabel(chromatogram, ReferencesLabel.NAME, -1, false));
+		assertEquals("This", ChromatogramDataSupport.getReferenceLabel(chromatogram, HeaderField.NAME, -1, false));
 	}
 
 	public void test8() {
 
-		assertEquals("This", ChromatogramDataSupport.getReferenceLabel(chromatogram, ReferencesLabel.NAME, 0, false));
+		assertEquals("This", ChromatogramDataSupport.getReferenceLabel(chromatogram, HeaderField.NAME, 0, false));
 	}
 
 	public void test9() {
 
-		assertEquals("This", ChromatogramDataSupport.getReferenceLabel(chromatogram, ReferencesLabel.NAME, 1, false));
+		assertEquals("This", ChromatogramDataSupport.getReferenceLabel(chromatogram, HeaderField.NAME, 1, false));
 	}
 
 	public void test10() {
 
-		assertEquals("This [CSD]", ChromatogramDataSupport.getReferenceLabel(chromatogram, ReferencesLabel.NAME, -1, true));
+		assertEquals("This [CSD]", ChromatogramDataSupport.getReferenceLabel(chromatogram, HeaderField.NAME, -1, true));
 	}
 
 	public void test11() {
 
-		assertEquals("This [CSD]", ChromatogramDataSupport.getReferenceLabel(chromatogram, ReferencesLabel.NAME, 0, true));
+		assertEquals("This [CSD]", ChromatogramDataSupport.getReferenceLabel(chromatogram, HeaderField.NAME, 0, true));
 	}
 
 	public void test12() {
 
-		assertEquals("This [CSD]", ChromatogramDataSupport.getReferenceLabel(chromatogram, ReferencesLabel.NAME, 1, true));
+		assertEquals("This [CSD]", ChromatogramDataSupport.getReferenceLabel(chromatogram, HeaderField.NAME, 1, true));
 	}
 
 	public void test13() {
 
-		assertEquals("is", ChromatogramDataSupport.getReferenceLabel(chromatogram, ReferencesLabel.DATA_NAME, -1, false));
+		assertEquals("is", ChromatogramDataSupport.getReferenceLabel(chromatogram, HeaderField.DATA_NAME, -1, false));
 	}
 
 	public void test14() {
 
-		assertEquals("is [CSD]", ChromatogramDataSupport.getReferenceLabel(chromatogram, ReferencesLabel.DATA_NAME, -1, true));
+		assertEquals("is [CSD]", ChromatogramDataSupport.getReferenceLabel(chromatogram, HeaderField.DATA_NAME, -1, true));
 	}
 
 	public void test15() {
 
-		assertEquals("a", ChromatogramDataSupport.getReferenceLabel(chromatogram, ReferencesLabel.SAMPLE_GROUP, -1, false));
+		assertEquals("a", ChromatogramDataSupport.getReferenceLabel(chromatogram, HeaderField.SAMPLE_GROUP, -1, false));
 	}
 
 	public void test16() {
 
-		assertEquals("a [CSD]", ChromatogramDataSupport.getReferenceLabel(chromatogram, ReferencesLabel.SAMPLE_GROUP, -1, true));
+		assertEquals("a [CSD]", ChromatogramDataSupport.getReferenceLabel(chromatogram, HeaderField.SAMPLE_GROUP, -1, true));
 	}
 
 	public void test17() {
 
-		assertEquals("test.", ChromatogramDataSupport.getReferenceLabel(chromatogram, ReferencesLabel.SHORT_INFO, -1, false));
+		assertEquals("test.", ChromatogramDataSupport.getReferenceLabel(chromatogram, HeaderField.SHORT_INFO, -1, false));
 	}
 
 	public void test18() {
 
-		assertEquals("test. [CSD]", ChromatogramDataSupport.getReferenceLabel(chromatogram, ReferencesLabel.SHORT_INFO, -1, true));
+		assertEquals("test. [CSD]", ChromatogramDataSupport.getReferenceLabel(chromatogram, HeaderField.SHORT_INFO, -1, true));
 	}
 }
