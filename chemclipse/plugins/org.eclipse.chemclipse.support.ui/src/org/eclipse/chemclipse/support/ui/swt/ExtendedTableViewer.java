@@ -120,7 +120,7 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 
 				if(preferenceColumnOrder != null) {
 					String columnOrder = TableSupport.getColumnOrder(table);
-					preferenceStore.setValue(preferenceColumnOrder, columnOrder);
+					preferenceStore.putValue(preferenceColumnOrder, columnOrder);
 				}
 			}
 
@@ -129,7 +129,7 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 
 				if(preferenceColumnWidth != null) {
 					String columnWidth = TableSupport.getColumnWidth(table);
-					preferenceStore.setValue(preferenceColumnWidth, columnWidth);
+					preferenceStore.putValue(preferenceColumnWidth, columnWidth);
 				}
 			}
 		});
