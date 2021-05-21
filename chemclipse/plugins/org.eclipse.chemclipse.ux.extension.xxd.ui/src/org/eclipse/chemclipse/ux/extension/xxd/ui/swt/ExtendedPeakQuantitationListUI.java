@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,10 +13,17 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.support.PeakQuantitation;
 import org.eclipse.chemclipse.model.support.PeakQuantitations;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.components.peaks.PeakQuantitationListUI;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -26,7 +33,7 @@ public class ExtendedPeakQuantitationListUI extends Composite implements IExtend
 
 	private Button buttonToolbarInfo;
 	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
-	private PeakQuantitationListUI peakQuantitationListUI;
+	private AtomicReference<PeakQuantitationListUI> tableViewer = new AtomicReference<>();
 	//
 	private PeakQuantitations peakQuantitations;
 
@@ -38,14 +45,14 @@ public class ExtendedPeakQuantitationListUI extends Composite implements IExtend
 
 	public boolean setFocus() {
 
-		peakQuantitationListUI.getTable().setFocus();
+		tableViewer.get().getTable().setFocus();
 		return true;
 	}
 
 	public void update(PeakQuantitations peakQuantitations) {
 
 		this.peakQuantitations = peakQuantitations;
-		peakQuantitationListUI.update(peakQuantitations);
+		tableViewer.get().update(peakQuantitations);
 		updateLabel();
 	}
 
@@ -55,7 +62,7 @@ public class ExtendedPeakQuantitationListUI extends Composite implements IExtend
 		//
 		createToolbarMain(this);
 		createToolbarInfo(this);
-		peakQuantitationListUI = createListUI(this);
+		createListUI(this);
 		//
 		initialize();
 	}
@@ -84,12 +91,37 @@ public class ExtendedPeakQuantitationListUI extends Composite implements IExtend
 		toolbarInfo.set(informationUI);
 	}
 
-	private PeakQuantitationListUI createListUI(Composite parent) {
+	private void createListUI(Composite parent) {
 
 		PeakQuantitationListUI peakQuantitationListUI = new PeakQuantitationListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		peakQuantitationListUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
-		return peakQuantitationListUI;
+		peakQuantitationListUI.getTable().addSelectionListener(new SelectionAdapter() {
+
+			@SuppressWarnings({"rawtypes", "unchecked"})
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				Object object = peakQuantitationListUI.getStructuredSelection().getFirstElement();
+				if(object instanceof PeakQuantitation) {
+					PeakQuantitation peakQuantitation = (PeakQuantitation)object;
+					IChromatogramSelection chromatogramSelection = peakQuantitation.getChromatogramSelection();
+					IPeak peak = peakQuantitation.getPeak();
+					//
+					if(chromatogramSelection != null) {
+						if(peak != null) {
+							chromatogramSelection.setSelectedPeak(peak);
+							UpdateNotifierUI.update(e.display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "The quanititation peak has been selected.");
+							UpdateNotifierUI.update(e.display, peak);
+						}
+					} else if(peak != null) {
+						UpdateNotifierUI.update(e.display, peak);
+					}
+				}
+			}
+		});
+		//
+		tableViewer.set(peakQuantitationListUI);
 	}
 
 	private void updateLabel() {

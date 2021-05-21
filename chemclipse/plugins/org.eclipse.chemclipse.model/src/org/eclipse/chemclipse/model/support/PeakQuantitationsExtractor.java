@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.model.core.Classifiable;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 
 public class PeakQuantitationsExtractor {
@@ -30,6 +31,11 @@ public class PeakQuantitationsExtractor {
 	private PeakRetentionTimeComparator peakRetentionTimeComparator = new PeakRetentionTimeComparator(SortOrder.ASC);
 
 	public PeakQuantitations extract(List<? extends IPeak> peaks) {
+
+		return extract(peaks, null);
+	}
+
+	public PeakQuantitations extract(List<? extends IPeak> peaks, IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		PeakQuantitations peakQuantitations = new PeakQuantitations();
 		//
@@ -71,6 +77,9 @@ public class PeakQuantitationsExtractor {
 				for(String quantitationColumn : quantitationColumns) {
 					peakQuantitation.getConcentrations().add(getConcentration(peak, quantitationColumn));
 				}
+				//
+				peakQuantitation.setChromatogramSelection(chromatogramSelection);
+				peakQuantitation.setPeak(peak);
 				peakQuantitations.getQuantitationEntries().add(peakQuantitation);
 			}
 		}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,6 +14,9 @@ package org.eclipse.chemclipse.model.support;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+
 public class PeakQuantitation {
 
 	private int retentionTime = 0;
@@ -21,11 +24,12 @@ public class PeakQuantitation {
 	private String name = "";
 	private String classifier = "";
 	private String quantifier = "";
-	private List<Double> concentrations;
-
-	public PeakQuantitation() {
-		concentrations = new ArrayList<Double>();
-	}
+	private List<Double> concentrations = new ArrayList<Double>();
+	/*
+	 * Used as a reference
+	 */
+	private IChromatogramSelection<?, ?> chromatogramSelection;
+	private IPeak peak;
 
 	public int getRetentionTime() {
 
@@ -80,5 +84,25 @@ public class PeakQuantitation {
 	public List<Double> getConcentrations() {
 
 		return concentrations;
+	}
+
+	public IChromatogramSelection<?, ?> getChromatogramSelection() {
+
+		return chromatogramSelection;
+	}
+
+	public void setChromatogramSelection(IChromatogramSelection<?, ?> chromatogramSelection) {
+
+		this.chromatogramSelection = chromatogramSelection;
+	}
+
+	public IPeak getPeak() {
+
+		return peak;
+	}
+
+	public void setPeak(IPeak peak) {
+
+		this.peak = peak;
 	}
 }

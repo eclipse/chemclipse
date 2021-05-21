@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -55,19 +55,8 @@ public class PeakQuantitationListPart extends AbstractPart<ExtendedPeakQuantitat
 			if(isUpdateEvent(topic)) {
 				if(object instanceof IChromatogramSelection) {
 					IChromatogramSelection<?, ?> chromatogramSelection = (IChromatogramSelection<?, ?>)object;
-					IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
-					List<? extends IPeak> peaks = null;
-					if(chromatogram instanceof IChromatogramMSD) {
-						IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
-						peaks = chromatogramMSD.getPeaks((IChromatogramSelectionMSD)chromatogramSelection);
-					} else if(chromatogram instanceof IChromatogramCSD) {
-						IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
-						peaks = chromatogramCSD.getPeaks((IChromatogramSelectionCSD)chromatogramSelection);
-					} else if(chromatogram instanceof IChromatogramWSD) {
-						IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
-						peaks = chromatogramWSD.getPeaks((IChromatogramSelectionWSD)chromatogramSelection);
-					}
-					getControl().update(peakQuantitationsExtractor.extract(peaks));
+					List<? extends IPeak> peaks = extractPeaks(chromatogramSelection);
+					getControl().update(peakQuantitationsExtractor.extract(peaks, chromatogramSelection));
 					return true;
 				} else {
 					getControl().update(null);
@@ -96,5 +85,23 @@ public class PeakQuantitationListPart extends AbstractPart<ExtendedPeakQuantitat
 	private boolean isCloseEvent(String topic) {
 
 		return IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_CLOSE.equals(topic);
+	}
+
+	private List<? extends IPeak> extractPeaks(IChromatogramSelection<?, ?> chromatogramSelection) {
+
+		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
+		List<? extends IPeak> peaks = null;
+		if(chromatogram instanceof IChromatogramMSD) {
+			IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
+			peaks = chromatogramMSD.getPeaks((IChromatogramSelectionMSD)chromatogramSelection);
+		} else if(chromatogram instanceof IChromatogramCSD) {
+			IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
+			peaks = chromatogramCSD.getPeaks((IChromatogramSelectionCSD)chromatogramSelection);
+		} else if(chromatogram instanceof IChromatogramWSD) {
+			IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
+			peaks = chromatogramWSD.getPeaks((IChromatogramSelectionWSD)chromatogramSelection);
+		}
+		//
+		return peaks;
 	}
 }
