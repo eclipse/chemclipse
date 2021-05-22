@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -22,6 +22,16 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
+	public static final String P_NUMBER_LOWEST = "numberLowest";
+	public static final int DEF_NUMBER_LOWEST = 5;
+	public static final int MIN_NUMBER_LOWEST = 2;
+	public static final int MAX_NUMBER_LOWEST = Integer.MAX_VALUE;
+	//
+	public static final String P_NUMBER_HIGHEST = "numberHighest";
+	public static final int DEF_NUMBER_HIGHEST = 5;
+	public static final int MIN_NUMBER_HIGHEST = 2;
+	public static final int MAX_NUMBER_HIGHEST = Integer.MAX_VALUE;
+	//
 	private static IPreferenceSupplier preferenceSupplier;
 
 	public static IPreferenceSupplier INSTANCE() {
@@ -48,6 +58,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public Map<String, String> getDefaultValues() {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
+		defaultValues.put(P_NUMBER_LOWEST, Integer.toString(DEF_NUMBER_LOWEST));
+		defaultValues.put(P_NUMBER_HIGHEST, Integer.toString(DEF_NUMBER_HIGHEST));
 		return defaultValues;
 	}
 
