@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -43,6 +43,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swtchart.ISeries;
 import org.eclipse.swtchart.ISeriesSet;
+import org.eclipse.swtchart.Range;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.IAxisScaleConverter;
 import org.eclipse.swtchart.extensions.core.IAxisSettings;
@@ -86,6 +87,7 @@ public class DataShiftControllerUI extends Composite {
 	private final Set<String> mirroredSeries = new HashSet<>();
 
 	public DataShiftControllerUI(Composite parent, int style) {
+
 		super(parent, style);
 		createControl();
 	}
@@ -777,6 +779,11 @@ public class DataShiftControllerUI extends Composite {
 
 		if(scrollableChart != null) {
 			/*
+			 * Selected Range
+			 */
+			Range selectedRangeX = baseChart.getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS).getRange();
+			Range selectedRangeY = baseChart.getAxisSet().getYAxis(BaseChart.ID_PRIMARY_Y_AXIS).getRange();
+			/*
 			 * Shift the series.
 			 */
 			baseChart.suspendUpdate(true);
@@ -811,9 +818,12 @@ public class DataShiftControllerUI extends Composite {
 			scrollableChart.applySettings(chartSettings);
 			baseChart.suspendUpdate(false);
 			/*
-			 * Update
+			 * Update the chart and adjust the ranges.
 			 */
-			scrollableChart.redraw();
+			scrollableChart.adjustRange(true);
+			scrollableChart.setRange(IExtendedChart.X_AXIS, selectedRangeX);
+			scrollableChart.setRange(IExtendedChart.Y_AXIS, selectedRangeY);
+			//
 			persistOverlayShiftX();
 			persistOverlayShiftY();
 		}
