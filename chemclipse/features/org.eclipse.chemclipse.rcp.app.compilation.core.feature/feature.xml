@@ -265,4 +265,8 @@ http://www.eclipse.org/legal/epl-v10.html
          id="org.eclipse.chemclipse.msd.converter.supplier.sirius.feature"
          version="0.0.0"/>
 
+   <includes
+         id="org.eclipse.chemclipse.msd.converter.supplier.gaml.feature"
+         version="0.0.0"/>
+
 </feature>
