@@ -240,6 +240,10 @@ http://www.eclipse.org/legal/epl-v10.html
    <includes
          id="org.eclipse.chemclipse.csd.converter.supplier.arw.feature"
          version="0.0.0"/>
+         
+   <includes
+         id="org.eclipse.chemclipse.wsd.converter.supplier.arw.feature"
+         version="0.0.0"/>         
 
    <includes
          id="org.eclipse.chemclipse.xxd.converter.supplier.zip.feature"
