@@ -117,7 +117,7 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI {
 				});
 				//
 				for(ISupplier activeFileSupplier : supplierSet) {
-					contextMenu.add(new Action("Open as: " + activeFileSupplier.getFilterName()) {
+					contextMenu.add(new Action("Open as: " + activeFileSupplier.getFilterName(), ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FILE, IApplicationImage.SIZE_16x16)) {
 
 						@Override
 						public void run() {
@@ -151,7 +151,7 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI {
 				}
 				//
 				if(selection.length == 1 && selection[0] instanceof File && ((File)selection[0]).isDirectory()) {
-					contextMenu.add(new Action("Open all contained measurements in this folder") {
+					contextMenu.add(new Action("Open all contained measurements in this folder", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FOLDER, IApplicationImage.SIZE_16x16)) {
 
 						@Override
 						public void run() {
