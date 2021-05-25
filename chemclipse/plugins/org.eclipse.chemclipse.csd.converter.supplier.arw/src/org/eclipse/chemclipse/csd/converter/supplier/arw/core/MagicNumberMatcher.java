@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2021 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,22 +15,18 @@ import java.io.File;
 
 import org.eclipse.chemclipse.converter.core.AbstractMagicNumberMatcher;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
-import org.eclipse.chemclipse.csd.converter.supplier.arw.internal.support.SpecificationValidator;
 
 public class MagicNumberMatcher extends AbstractMagicNumberMatcher implements IMagicNumberMatcher {
+
+	private static final byte[] MAGIC_CODE_DAD = new byte[]{0x57, 0x61, 0x76, 0x65, 0x6C, 0x65, 0x6E, 0x67, 0x74, 0x68};
 
 	@Override
 	public boolean checkFileFormat(File file) {
 
-		boolean isValidFormat = false;
-		try {
-			file = SpecificationValidator.validateSpecification(file);
-			if(file.exists()) {
-				isValidFormat = true;
-			}
-		} catch(Exception e) {
-			// Print no exception.
+		if(checkFileExtension(file, ".arw")) {
+			return !checkMagicCode(file, MAGIC_CODE_DAD);
 		}
-		return isValidFormat;
+		//
+		return false;
 	}
 }
