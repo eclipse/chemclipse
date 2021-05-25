@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Christoph Läubrich - performance optimization and cleanup, refactor handling of Suppliers
+ * Matthias Mailänder - right-click refresh option
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.swt;
 
@@ -106,6 +107,14 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI {
 						}
 					}
 				}
+				contextMenu.add(new Action("Scan for file and folder updates", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_REFRESH, IApplicationImage.SIZE_16x16)) {
+
+					@Override
+					public void run() {
+
+						treeViewer.refresh();
+					}
+				});
 				//
 				for(ISupplier activeFileSupplier : supplierSet) {
 					contextMenu.add(new Action("Open as: " + activeFileSupplier.getFilterName()) {

@@ -54,6 +54,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	 */
 	String IMAGE_ADD = PATH_PREFIX + "add.gif";
 	String IMAGE_COPY = PATH_PREFIX + "copy.png";
+	String IMAGE_REFRESH = PATH_PREFIX + "refresh.png";
 	String IMAGE_CANCEL = PATH_PREFIX + "cancel.gif";
 	String IMAGE_DELETE = PATH_PREFIX + "delete.gif";
 	String IMAGE_DELETE_ALL = PATH_PREFIX + "delete_all.png";;
