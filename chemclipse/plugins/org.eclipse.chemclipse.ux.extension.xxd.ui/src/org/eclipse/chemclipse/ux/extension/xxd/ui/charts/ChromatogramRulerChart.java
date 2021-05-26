@@ -60,7 +60,7 @@ public class ChromatogramRulerChart extends ChromatogramChart {
 	public void handleMouseDownEvent(Event event) {
 
 		super.handleMouseDownEvent(event);
-		if(isControlKeyPressed(event)) {
+		if(isControlKeyPressed(event) && event.count == 1) {
 			startBaselineSelection(event.x, event.y);
 			setCursor(SWT.CURSOR_CROSS);
 		}
