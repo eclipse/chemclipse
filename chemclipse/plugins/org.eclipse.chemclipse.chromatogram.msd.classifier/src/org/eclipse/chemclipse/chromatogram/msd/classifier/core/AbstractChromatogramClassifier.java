@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -10,6 +10,7 @@
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
  * Christoph Läubrich - adjust to new API
+ * Lorenz Gerber - allow WSD
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.classifier.core;
 
@@ -27,10 +28,12 @@ public abstract class AbstractChromatogramClassifier implements IChromatogramCla
 
 	@Deprecated
 	public AbstractChromatogramClassifier() {
-		this(DataType.MSD);
+
+		this(DataType.MSD, DataType.WSD);
 	}
 
 	protected AbstractChromatogramClassifier(DataType... dataTypes) {
+
 		this.dataTypes = dataTypes;
 	}
 
