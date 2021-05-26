@@ -54,6 +54,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	 */
 	String IMAGE_ADD = PATH_PREFIX + "add.gif";
 	String IMAGE_COPY = PATH_PREFIX + "copy.png";
+	String IMAGE_REFRESH = PATH_PREFIX + "refresh.png";
 	String IMAGE_CANCEL = PATH_PREFIX + "cancel.gif";
 	String IMAGE_DELETE = PATH_PREFIX + "delete.gif";
 	String IMAGE_DELETE_ALL = PATH_PREFIX + "delete_all.png";;
@@ -104,6 +105,8 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_FOLDER_OPENED = PATH_PREFIX + "folder_opened.gif";
 	String IMAGE_FOLDER_CLOSED = PATH_PREFIX + "folder_closed.gif";
 	String IMAGE_FILE = PATH_PREFIX + "file.gif";
+	String IMAGE_FOLDER = PATH_PREFIX + "folder.png";
+	String IMAGE_OPEN_FOLDER = PATH_PREFIX + "open-folder.png";
 	String IMAGE_PEAK = PATH_PREFIX + "peak.gif";
 	String IMAGE_PEAK_ADD = PATH_PREFIX + "peakAdd.gif";
 	String IMAGE_PEAK_REPLACE = PATH_PREFIX + "peakReplace.gif";
