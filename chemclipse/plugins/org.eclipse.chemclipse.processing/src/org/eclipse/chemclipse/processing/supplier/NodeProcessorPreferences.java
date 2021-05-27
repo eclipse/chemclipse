@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - improvements
+ *******************************************************************************/
 package org.eclipse.chemclipse.processing.supplier;
 
 import org.osgi.service.prefs.BackingStoreException;
@@ -8,10 +20,12 @@ public final class NodeProcessorPreferences<T> implements ProcessorPreferences<T
 	private static final String KEY_USE_SYSTEM_DEFAULTS = "useSystemDefaults";
 	private static final String KEY_USER_SETTINGS = "userSettings";
 	private static final String KEY_ASK_FOR_SETTINGS = "askForSettings";
+	//
 	private Preferences node;
 	private IProcessSupplier<T> supplier;
 
 	public NodeProcessorPreferences(IProcessSupplier<T> supplier, Preferences node) {
+
 		this.supplier = supplier;
 		this.node = node;
 	}

@@ -27,10 +27,6 @@ import org.eclipse.chemclipse.support.settings.SystemSettingsStrategy;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/*
- * TODO
- * Adjust this settings to support profiles.
- */
 @SystemSettings(SystemSettingsStrategy.NEW_INSTANCE)
 public class MetaProcessorSettings {
 
@@ -78,7 +74,11 @@ public class MetaProcessorSettings {
 		if(delegate == null) {
 			return null;
 		}
+		/*
+		 * Get the specific element position and active profile marker.
+		 */
 		String entryId = getId(entry);
+		//
 		return new ProcessorPreferences<T>() {
 
 			@Override
@@ -136,18 +136,26 @@ public class MetaProcessorSettings {
 		};
 	}
 
-	public static String getId(IProcessEntry entry) {
+	/**
+	 * Create an unique id. The active profile is tracked too.
+	 * 
+	 * @param entry
+	 * @return String
+	 */
+	private static String getId(IProcessEntry entry) {
 
 		ProcessEntryContainer parent = entry.getParent();
+		String activeProfile = parent.getActiveProfile().replaceAll(" ", "").replaceAll("\\P{InBasic_Latin}", "");
+		//
 		if(parent instanceof ListProcessEntryContainer) {
 			String id = String.valueOf(((ListProcessEntryContainer)parent).getEntries().indexOf(entry));
 			if(parent instanceof IProcessEntry) {
-				return getId((IProcessEntry)parent) + "." + id;
+				return getId((IProcessEntry)parent) + "." + activeProfile + "." + id;
 			} else {
-				return id;
+				return id + "." + activeProfile;
 			}
 		} else {
-			throw new IllegalArgumentException("unsupported parent type");
+			throw new IllegalArgumentException("The parent processor type is not supported.");
 		}
 	}
 }

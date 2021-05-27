@@ -35,6 +35,9 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 	private String UUID = java.util.UUID.randomUUID().toString();
 	private String operator = "";
 	private String category = "";
+	/*
+	 * Transient
+	 */
 	private File sourceFile = null;
 
 	public ProcessMethod(Set<DataCategory> categories) {
@@ -61,7 +64,8 @@ public class ProcessMethod extends ListProcessEntryContainer implements IProcess
 			setSupportResume(other.isSupportResume());
 			setResumeIndex(other.getResumeIndex());
 			if(other instanceof ProcessMethod) {
-				this.sourceFile = ((ProcessMethod)other).sourceFile;
+				ProcessMethod processMethod = (ProcessMethod)other;
+				this.sourceFile = processMethod.getSourceFile();
 			}
 			metadata.putAll(other.getMetaData());
 			catgories = Collections.unmodifiableSet(new HashSet<>(other.getDataCategories()));

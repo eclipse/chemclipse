@@ -37,6 +37,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.MessageBox;
 
 public class ProcessMethodProfiles extends Composite {
 
@@ -197,9 +198,15 @@ public class ProcessMethodProfiles extends Composite {
 				if(processMethod != null) {
 					String activeProfile = getActiveProfile();
 					if(!ProcessEntryContainer.DEFAULT_PROFILE.equals(activeProfile)) {
-						processMethod.deleteProfile(activeProfile);
-						updateProfiles();
-						fireUpdate();
+						MessageBox messageBox = new MessageBox(e.display.getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+						messageBox.setText("Delete Profile");
+						messageBox.setMessage("Do you really want to delete the selected profile?");
+						int decision = messageBox.open();
+						if(SWT.YES == decision) {
+							processMethod.deleteProfile(activeProfile);
+							updateProfiles();
+							fireUpdate();
+						}
 					}
 				}
 			}

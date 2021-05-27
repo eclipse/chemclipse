@@ -27,8 +27,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.chemclipse.converter.PathResolver;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.logging.support.Settings;
+import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
@@ -249,6 +251,7 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 
 		bundleTracker = new BundleTracker<>(bundleContext, Bundle.ACTIVE, this);
 		bundleTracker.open();
+		//
 		File systemMethodFolder = Settings.getSystemMethodDirectory();
 		if(systemMethodFolder.isDirectory()) {
 			File[] listFiles = systemMethodFolder.listFiles();
@@ -258,9 +261,15 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 						try {
 							try (InputStream inputStream = new FileInputStream(file)) {
 								IProcessingInfo<IProcessMethod> load = MethodConverter.load(inputStream, file.getAbsolutePath(), null);
-								IProcessMethod result = load.getProcessingResult();
-								if(result != null) {
-									systemMethods.add(new MetaProcessorProcessSupplier(getID(result, "system:" + file.getName()), result, this));
+								IProcessMethod processMethod = load.getProcessingResult();
+								if(processMethod != null) {
+									/*
+									 * Set the File to allow editing the profiles.
+									 */
+									if(processMethod instanceof ProcessMethod) {
+										((ProcessMethod)processMethod).setSourceFile(file);
+									}
+									systemMethods.add(new MetaProcessorProcessSupplier(getID(processMethod, "system:" + file.getName()), processMethod, this));
 								}
 							}
 						} catch(IOException e) {
@@ -292,19 +301,34 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 	@Override
 	public Collection<IProcessSupplier<?>> addingBundle(Bundle bundle, BundleEvent event) {
 
-		List<IProcessSupplier<?>> list = new ArrayList<>();
+		List<IProcessSupplier<?>> processSupplierList = new ArrayList<>();
 		Enumeration<URL> entries = bundle.findEntries(PROCESSORS_ENTRY_PATH, "*." + MethodConverter.DEFAULT_METHOD_FILE_NAME_EXTENSION, true);
 		if(entries != null) {
 			while(entries.hasMoreElements()) {
 				URL url = entries.nextElement();
 				try {
 					try (InputStream inputStream = url.openStream()) {
+						/*
+						 * Try to resolve the file.
+						 */
+						String urlPath = url.getPath().toString();
+						String absolutePath = PathResolver.getAbsolutePath(bundle, urlPath);
+						File sourceFile = new File(absolutePath);
+						//
 						String path = url.getPath().replace(PROCESSORS_ENTRY_PATH, "").replace("." + MethodConverter.DEFAULT_METHOD_FILE_NAME_EXTENSION, "");
 						String externalForm = url.toExternalForm();
-						IProcessingInfo<IProcessMethod> load = MethodConverter.load(inputStream, externalForm, null);
-						IProcessMethod result = load.getProcessingResult();
-						if(result != null) {
-							list.add(new MetaProcessorProcessSupplier(getID(result, "bundle:" + bundle.getSymbolicName() + ":" + path), result, this));
+						IProcessingInfo<IProcessMethod> processingInfo = MethodConverter.load(inputStream, externalForm, null);
+						IProcessMethod processMethod = processingInfo.getProcessingResult();
+						if(processMethod != null) {
+							/*
+							 * Set the File (if available) to allow editing the profiles.
+							 * The containing bundle should define in the MANIFEST.MF:
+							 * Eclipse-BundleShape: dir
+							 */
+							if(processMethod instanceof ProcessMethod && sourceFile.exists()) {
+								((ProcessMethod)processMethod).setSourceFile(sourceFile);
+							}
+							processSupplierList.add(new MetaProcessorProcessSupplier(getID(processMethod, "bundle:" + bundle.getSymbolicName() + ":" + path), processMethod, this));
 						}
 					}
 				} catch(IOException e) {
@@ -312,7 +336,7 @@ public class MethodProcessTypeSupplier implements IProcessTypeSupplier, BundleTr
 				}
 			}
 		}
-		return list;
+		return processSupplierList;
 	}
 
 	@Override
