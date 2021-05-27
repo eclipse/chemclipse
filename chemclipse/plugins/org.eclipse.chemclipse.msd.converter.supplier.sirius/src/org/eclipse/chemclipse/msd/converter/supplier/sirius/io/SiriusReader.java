@@ -39,12 +39,16 @@ public class SiriusReader extends AbstractMassSpectraReader implements IMassSpec
 	private static final String COMPOUND = ">compound";
 	private static final String FORMULA = ">formula";
 	private static final String PARENTMASS = ">parentmass";
+	@SuppressWarnings("unused")
 	private static final String IONIZATION = ">ionization";
 	private static final String COLLISION = ">collision";
+	@SuppressWarnings("unused")
 	private static final String MS1PEAKS = ">ms1peaks";
 	private static final String INCHI = "#inchi";
+	@SuppressWarnings("unused")
 	private static final String INCHIKEY = "#inchikey";
 	private static final String CASNUMBER = "#CAS_Number";
+	@SuppressWarnings("unused")
 	private static final String PUBMED = "#Pubmed_ID";
 	private static final String SMILES = "#Smiles";
 	private static final String PRECURSORMZ = "#Precursor_MZ";

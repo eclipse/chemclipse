@@ -12,19 +12,14 @@
 package org.eclipse.chemclipse.msd.converter.supplier.sirius.converter;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import org.eclipse.chemclipse.converter.core.AbstractMagicNumberMatcher;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.msd.converter.supplier.sirius.io.SiriusReader;
 
 public class MagicNumberMatcher extends AbstractMagicNumberMatcher implements IMagicNumberMatcher {
-
-	private static final Logger logger = Logger.getLogger(SiriusReader.class);
 
 	@Override
 	public boolean checkFileFormat(File file) {
@@ -40,10 +35,12 @@ public class MagicNumberMatcher extends AbstractMagicNumberMatcher implements IM
 						return true;
 					}
 				}
-			} catch(IllegalArgumentException e) {
-				logger.warn("Non UTF-8 entry in " + file.getName(), e);
-			} catch(IOException e) {
-				logger.warn(e);
+			} catch(Exception e) {
+				/*
+				 * Logging is expensive and slows the performance.
+				 * Hence, deactivate logging here.
+				 */
+				// logger.warn("Non UTF-8 entry in " + file.getName(), e);
 			}
 		}
 		//

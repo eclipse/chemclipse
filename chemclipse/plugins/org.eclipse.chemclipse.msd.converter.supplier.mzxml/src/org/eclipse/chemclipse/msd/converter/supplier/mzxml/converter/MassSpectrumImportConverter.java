@@ -34,9 +34,9 @@ public class MassSpectrumImportConverter extends AbstractMassSpectrumImportConve
 	private static final String DESCRIPTION = "mzXML Mass Spectrum Import";
 
 	@Override
-	public IProcessingInfo convert(File file, IProgressMonitor monitor) {
+	public IProcessingInfo<IMassSpectra> convert(File file, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = super.validate(file);
+		IProcessingInfo<IMassSpectra> processingInfo = super.validate(file);
 		if(!processingInfo.hasErrorMessages()) {
 			try {
 				file = SpecificationValidator.validateSpecification(file);
