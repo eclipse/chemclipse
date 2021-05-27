@@ -250,7 +250,8 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 							text = Integer.toString(chromatogramPeak.getScanMax());
 							break;
 						case 10:
-							text = decimalFormat.format(chromatogramPeak.getSignalToNoiseRatio());
+							float sn = chromatogramPeak.getSignalToNoiseRatio();
+							text = Float.isNaN(sn) ? "--" : decimalFormat.format(sn);
 							break;
 					}
 				}

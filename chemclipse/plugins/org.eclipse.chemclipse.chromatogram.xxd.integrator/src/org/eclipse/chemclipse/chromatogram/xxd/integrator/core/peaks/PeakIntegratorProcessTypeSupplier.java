@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -56,7 +56,8 @@ public class PeakIntegratorProcessTypeSupplier implements IProcessTypeSupplier {
 
 		@SuppressWarnings("unchecked")
 		public PeakIntegratorProcessorSupplier(IPeakIntegratorSupplier supplier, IProcessTypeSupplier parent) {
-			super(supplier.getId(), supplier.getIntegratorName(), supplier.getDescription(), (Class<IPeakIntegrationSettings>)supplier.getSettingsClass(), parent, DataType.MSD, DataType.CSD);
+
+			super(supplier.getId(), supplier.getIntegratorName(), supplier.getDescription(), (Class<IPeakIntegrationSettings>)supplier.getSettingsClass(), parent, DataType.MSD, DataType.CSD, DataType.WSD);
 		}
 
 		@Override

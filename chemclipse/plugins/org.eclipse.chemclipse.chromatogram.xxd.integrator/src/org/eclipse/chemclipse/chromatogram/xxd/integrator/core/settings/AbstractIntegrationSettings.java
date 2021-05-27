@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -21,6 +21,7 @@ public abstract class AbstractIntegrationSettings extends AbstractProcessSetting
 	private IBaselineSupport baselineSupport;
 
 	public AbstractIntegrationSettings() {
+
 		baselineSupport = new BaselineSupport();
 	}
 
