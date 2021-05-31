@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,16 +8,12 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Matthias Mailänder - add color compensation
  *******************************************************************************/
 package org.eclipse.chemclipse.pcr.model.core;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.eclipse.chemclipse.numeric.core.IPoint;
-import org.eclipse.chemclipse.numeric.core.Point;
-import org.eclipse.chemclipse.numeric.equations.Equations;
-import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 
 public class Channel implements IChannel {
 
@@ -26,8 +22,9 @@ public class Channel implements IChannel {
 	private int time = 0;
 	private double temperature = 0.0d;
 	private boolean valid = false;
-	private List<Double> points = new ArrayList<>();
-	private IPoint crossingPoint = null;
+	private List<Double> fluorescence = new ArrayList<>();
+	private List<Double> colorCompensatedFluorescence = new ArrayList<>();
+	private double crossingPoint = 0.0d;
 	private String detectionName = "";
 
 	@Override
@@ -91,47 +88,39 @@ public class Channel implements IChannel {
 	}
 
 	@Override
-	public List<Double> getPoints() {
+	public List<Double> getFluorescence() {
 
-		return points;
+		return fluorescence;
 	}
 
 	@Override
-	public void setPoints(List<Double> points) {
+	public void setFluorescence(List<Double> flurorescence) {
 
-		this.points = points;
+		this.fluorescence = flurorescence;
 	}
 
 	@Override
-	public IPoint getCrossingPoint() {
+	public List<Double> getColorCompensatedFluorescence() {
+
+		return colorCompensatedFluorescence;
+	}
+
+	@Override
+	public void setColorCompensatedFluorescence(List<Double> colorCompensations) {
+
+		this.colorCompensatedFluorescence = colorCompensations;
+	}
+
+	@Override
+	public double getCrossingPoint() {
 
 		return crossingPoint;
 	}
 
 	@Override
-	public void setCrossingPoint(IPoint crossingPoint) {
+	public void setCrossingPoint(double crossingPoint) {
 
 		this.crossingPoint = crossingPoint;
-	}
-
-	@Override
-	public void setCrossingPoint(double crossingPointX) {
-
-		int floor = (int)Math.floor(crossingPointX);
-		int ceil = (int)Math.ceil(crossingPointX);
-		//
-		if(floor >= 0 && floor < points.size() && ceil >= 0 && ceil < points.size()) {
-			if(floor == ceil) {
-				double y = points.get(floor);
-				crossingPoint = new Point(crossingPointX, y);
-			} else {
-				IPoint p1 = new Point(floor, points.get(floor));
-				IPoint p2 = new Point(ceil, points.get(ceil));
-				LinearEquation equation = Equations.createLinearEquation(p1, p2);
-				double y = equation.calculateY(crossingPointX);
-				crossingPoint = new Point(crossingPointX, y);
-			}
-		}
 	}
 
 	@Override
