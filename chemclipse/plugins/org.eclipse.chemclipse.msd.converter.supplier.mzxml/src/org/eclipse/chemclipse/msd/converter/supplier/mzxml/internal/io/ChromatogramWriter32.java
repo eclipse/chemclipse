@@ -107,8 +107,6 @@ public class ChromatogramWriter32 extends AbstractChromatogramWriter implements 
 			logger.warn(e);
 		} catch(DatatypeConfigurationException e) {
 			logger.warn(e);
-		} catch(Exception e) {
-			e.printStackTrace();
 		}
 	}
 }

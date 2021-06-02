@@ -18,9 +18,9 @@ import org.eclipse.chemclipse.converter.chromatogram.AbstractChromatogramImportC
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.io.ChromatogramReader;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.IConstants;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.SpecificationValidator;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.io.ChromatogramReader;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
