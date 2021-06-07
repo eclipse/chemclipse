@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -48,9 +48,10 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 
 	private static final Logger logger = Logger.getLogger(ChromatogramReader.class);
 	private static final String ZERO_VALUE = "0.0";
-	private static final int Ion_COLUMN_START = 3;
+	private static final int ION_COLUMN_START = 3;
 
 	public ChromatogramReader() {
+
 	}
 
 	@Override
@@ -120,10 +121,10 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 		Map<Integer, Float> ions = new HashMap<Integer, Float>();
 		Map<String, Integer> headerMap = parser.getHeaderMap();
 		for(Map.Entry<String, Integer> entry : headerMap.entrySet()) {
-			int index = entry.getValue();
 			try {
+				int index = entry.getValue();
 				ions.put(index, Float.valueOf(entry.getKey()));
-			} catch(NumberFormatException e) {
+			} catch(Exception e) {
 				logger.warn(e);
 			}
 		}
@@ -147,9 +148,7 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 			try {
 				IIon ion = getIonsOverview(csvRecord);
 				massSpectrum.addIon(ion);
-			} catch(AbundanceLimitExceededException e) {
-				logger.warn(e);
-			} catch(IonLimitExceededException e) {
+			} catch(Exception e) {
 				logger.warn(e);
 			}
 		} else {
@@ -158,41 +157,41 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 				massSpectrum.addIon(ion);
 			}
 		}
+		//
 		return massSpectrum;
 	}
 
 	private IIon getIonsOverview(CSVRecord csvRecord) throws AbundanceLimitExceededException, IonLimitExceededException {
 
 		float abundanceTotalSignal = 0.0f;
-		for(int index = Ion_COLUMN_START; index < csvRecord.size(); index++) {
+		for(int index = ION_COLUMN_START; index < csvRecord.size(); index++) {
 			String abundanceValue = csvRecord.get(index);
 			if(!abundanceValue.equals(ZERO_VALUE)) {
 				float abundance = Float.valueOf(abundanceValue);
 				abundanceTotalSignal += abundance;
 			}
 		}
-		IIon ion = new VendorIon(AbstractIon.TIC_ION, abundanceTotalSignal);
-		return ion;
+		//
+		return new VendorIon(AbstractIon.TIC_ION, abundanceTotalSignal);
 	}
 
 	private List<IIon> getIons(CSVRecord csvRecord, Map<Integer, Float> ionsMap) {
 
 		List<IIon> ions = new ArrayList<IIon>();
-		for(int index = Ion_COLUMN_START; index < csvRecord.size(); index++) {
+		for(int index = ION_COLUMN_START; index < csvRecord.size(); index++) {
 			String abundanceValue = csvRecord.get(index);
 			if(!abundanceValue.equals(ZERO_VALUE)) {
-				float abundance = Float.valueOf(abundanceValue);
-				float ion = ionsMap.get(index);
 				try {
+					float abundance = Float.valueOf(abundanceValue);
+					float ion = ionsMap.get(index);
 					IIon csvIon = new VendorIon(ion, abundance);
 					ions.add(csvIon);
-				} catch(AbundanceLimitExceededException e) {
-					logger.warn(e);
-				} catch(IonLimitExceededException e) {
+				} catch(Exception e) {
 					logger.warn(e);
 				}
 			}
 		}
+		//
 		return ions;
 	}
 }
