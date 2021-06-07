@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,6 +16,8 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedInternalStandardsU
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
@@ -48,8 +50,19 @@ public class InternalStandardDialog extends Dialog {
 	protected Control createDialogArea(Composite parent) {
 
 		Composite composite = (Composite)super.createDialogArea(parent);
-		extendedInternalStandardsUI = new ExtendedInternalStandardsUI(composite, SWT.NONE);
+		composite.setLayout(new GridLayout(1, true));
+		//
+		extendedInternalStandardsUI = createExtendedInternalStandardsUI(composite);
 		extendedInternalStandardsUI.update(peak);
+		//
 		return composite;
+	}
+
+	private ExtendedInternalStandardsUI createExtendedInternalStandardsUI(Composite parent) {
+
+		ExtendedInternalStandardsUI extendedInternalStandardsUI = new ExtendedInternalStandardsUI(parent, SWT.NONE);
+		extendedInternalStandardsUI.setLayoutData(new GridData(GridData.FILL_BOTH));
+		//
+		return extendedInternalStandardsUI;
 	}
 }

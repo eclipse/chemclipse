@@ -55,6 +55,7 @@ import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.IUpdateListener;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.ClassifierDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.InternalStandardDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.TableConfigSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
@@ -63,10 +64,10 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMerg
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakScanListUIConfig.InteractionMode;
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -318,10 +319,11 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		Display display = peakScanListUI.getTable().getDisplay();
 		ITableSettings tableSettings = peakScanListUI.getTableSettings();
 		//
-		addDeleteMenuEntry(display, tableSettings);
-		addVerifyTargetsMenuEntry(tableSettings);
-		addUnverifyTargetsMenuEntry(tableSettings);
-		modifyInternalStandardsMenuEntry(display, tableSettings);
+		addDeleteMenuItem(display, tableSettings, "Peak/Scan (Delete Identifications)");
+		addAnalysisActiveMenuItem(tableSettings, "Peaks (Activate for Analysis)", true);
+		addAnalysisActiveMenuItem(tableSettings, "Peaks (Deactivate for Analysis)", false);
+		addInternalStandardsMenuItem(display, tableSettings, "Peaks (Edit Internal Standard)");
+		addClassifierMenuItem(display, tableSettings, "Peaks (Edit Classifier)");
 		//
 		addKeyEventProcessors(display, tableSettings);
 		peakScanListUI.applySettings(tableSettings);
@@ -329,14 +331,14 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		tableViewer.set(peakScanListUI);
 	}
 
-	private void addDeleteMenuEntry(Display display, ITableSettings tableSettings) {
+	private void addDeleteMenuItem(Display display, ITableSettings tableSettings, String label) {
 
 		tableSettings.addMenuEntry(new ITableMenuEntry() {
 
 			@Override
 			public String getName() {
 
-				return "Delete Peak(s)/Scan Identification(s)";
+				return label;
 			}
 
 			@Override
@@ -353,14 +355,14 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		});
 	}
 
-	private void addVerifyTargetsMenuEntry(ITableSettings tableSettings) {
+	private void addAnalysisActiveMenuItem(ITableSettings tableSettings, String label, boolean activeForAnalysis) {
 
 		tableSettings.addMenuEntry(new ITableMenuEntry() {
 
 			@Override
 			public String getName() {
 
-				return "Select Peak(s) for Analysis";
+				return label;
 			}
 
 			@Override
@@ -372,43 +374,19 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			@Override
 			public void execute(ExtendedTableViewer extendedTableViewer) {
 
-				setPeaksActiveForAnalysis(true);
+				setPeaksActiveForAnalysis(activeForAnalysis);
 			}
 		});
 	}
 
-	private void addUnverifyTargetsMenuEntry(ITableSettings tableSettings) {
+	private void addInternalStandardsMenuItem(Display display, ITableSettings tableSettings, String label) {
 
 		tableSettings.addMenuEntry(new ITableMenuEntry() {
 
 			@Override
 			public String getName() {
 
-				return "Deselect Peak(s) for Analysis";
-			}
-
-			@Override
-			public String getCategory() {
-
-				return MENU_CATEGORY;
-			}
-
-			@Override
-			public void execute(ExtendedTableViewer extendedTableViewer) {
-
-				setPeaksActiveForAnalysis(false);
-			}
-		});
-	}
-
-	private void modifyInternalStandardsMenuEntry(Display display, ITableSettings tableSettings) {
-
-		tableSettings.addMenuEntry(new ITableMenuEntry() {
-
-			@Override
-			public String getName() {
-
-				return "Modify ISTDs (Internal Standards)";
+				return label;
 			}
 
 			@Override
@@ -421,6 +399,30 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			public void execute(ExtendedTableViewer extendedTableViewer) {
 
 				modifyInternalStandards(display);
+			}
+		});
+	}
+
+	private void addClassifierMenuItem(Display display, ITableSettings tableSettings, String label) {
+
+		tableSettings.addMenuEntry(new ITableMenuEntry() {
+
+			@Override
+			public String getName() {
+
+				return label;
+			}
+
+			@Override
+			public String getCategory() {
+
+				return MENU_CATEGORY;
+			}
+
+			@Override
+			public void execute(ExtendedTableViewer extendedTableViewer) {
+
+				modifyClassifier(display);
 			}
 		});
 	}
@@ -454,6 +456,11 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 					 * CTRL + s
 					 */
 					modifyInternalStandards(display);
+				} else if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_D && (e.stateMask & SWT.CTRL) == SWT.CTRL) {
+					/*
+					 * CTRL + d
+					 */
+					modifyClassifier(display);
 				} else {
 					propagateSelection(display);
 				}
@@ -554,17 +561,18 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 
 		MessageBox messageBox = new MessageBox(display.getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText("Internal Standard (ISTD)");
-		messageBox.setMessage("Would you like to modify the ISTD(s)?");
+		messageBox.setMessage("Would you like to modify the internal standards?");
 		if(messageBox.open() == SWT.YES) {
 			Iterator iterator = tableViewer.get().getStructuredSelection().iterator();
+			exitloop:
 			while(iterator.hasNext()) {
 				Object object = iterator.next();
 				if(object instanceof IPeak) {
 					IPeak peak = (IPeak)object;
 					if(peak.getIntegratedArea() > 0) {
 						InternalStandardDialog dialog = new InternalStandardDialog(display.getActiveShell(), peak);
-						if(IDialogConstants.OK_ID == dialog.open()) {
-							logger.info("Successfully modified ISTDs.");
+						if(dialog.open() == Window.OK) {
+							break exitloop; // Cancel
 						}
 					}
 				}
@@ -572,6 +580,38 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			/*
 			 * Send update.
 			 */
+			UpdateNotifierUI.update(display, chromatogramSelection);
+		}
+	}
+
+	private void modifyClassifier(Display display) {
+
+		MessageBox messageBox = new MessageBox(display.getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
+		messageBox.setText("Classifier");
+		messageBox.setMessage("Would you like to modify the classifier?");
+		if(messageBox.open() == SWT.YES) {
+			Iterator iterator = tableViewer.get().getStructuredSelection().iterator();
+			exitloop:
+			while(iterator.hasNext()) {
+				Object object = iterator.next();
+				if(object instanceof IPeak) {
+					IPeak peak = (IPeak)object;
+					ClassifierDialog dialog = new ClassifierDialog(display.getActiveShell(), peak);
+					if(dialog.open() == Window.OK) {
+						peak.removeClassifier();
+						List<String> classifiers = dialog.getValue();
+						for(String classifier : classifiers) {
+							peak.addClassifier(classifier);
+						}
+					} else {
+						break exitloop; // Cancel
+					}
+				}
+			}
+			/*
+			 * Send update.
+			 */
+			tableViewer.get().refresh();
 			UpdateNotifierUI.update(display, chromatogramSelection);
 		}
 	}
