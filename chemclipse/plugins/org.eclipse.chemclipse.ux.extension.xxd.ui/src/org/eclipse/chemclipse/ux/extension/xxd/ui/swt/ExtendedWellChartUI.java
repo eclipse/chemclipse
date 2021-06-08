@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,7 +8,6 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Matthias Mailänder - add color compensation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -19,9 +18,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.numeric.core.IPoint;
-import org.eclipse.chemclipse.numeric.core.Point;
-import org.eclipse.chemclipse.numeric.equations.Equations;
-import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 import org.eclipse.chemclipse.pcr.model.core.IChannel;
 import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.pcr.model.core.IWell;
@@ -63,7 +59,6 @@ public class ExtendedWellChartUI extends Composite implements IExtendedPartUI {
 	//
 	private IWell well = null;
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private boolean colorCompensation = true;
 
 	public ExtendedWellChartUI(Composite parent, int style) {
 
@@ -143,31 +138,12 @@ public class ExtendedWellChartUI extends Composite implements IExtendedPartUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(5, false));
+		composite.setLayout(new GridLayout(4, false));
 		//
 		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
 		createButtonToggleChartLegend(composite, chartControl, IMAGE_LEGEND);
 		createResetButton(composite);
 		createSettingsButton(composite);
-		createColorCompensationButton(composite);
-	}
-
-	private void createColorCompensationButton(Composite parent) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle Color Compensation");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_BAR_CHART, IApplicationImage.SIZE_16x16, colorCompensation));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				colorCompensation = !colorCompensation;
-				button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_BAR_CHART, IApplicationImage.SIZE_16x16, colorCompensation));
-				updateChart();
-			}
-		});
 	}
 
 	private void createResetButton(Composite parent) {
@@ -295,7 +271,7 @@ public class ExtendedWellChartUI extends Composite implements IExtendedPartUI {
 
 		ILineSeriesData lineSeriesData = null;
 		if(channel != null) {
-			List<Double> pointList = colorCompensation ? channel.getColorCompensatedFluorescence() : channel.getFluorescence();
+			List<Double> pointList = channel.getPoints();
 			double[] points = new double[pointList.size()];
 			for(int index = 0; index < pointList.size(); index++) {
 				points[index] = pointList.get(index);
@@ -316,7 +292,7 @@ public class ExtendedWellChartUI extends Composite implements IExtendedPartUI {
 
 		ILineSeriesData lineSeriesData = null;
 		if(channel != null) {
-			IPoint crossingPoint = getCrossingPoint(channel);
+			IPoint crossingPoint = channel.getCrossingPoint();
 			if(crossingPoint != null) {
 				double[] xSeries = new double[]{crossingPoint.getX()};
 				double[] ySeries = new double[]{crossingPoint.getY()};
@@ -330,28 +306,6 @@ public class ExtendedWellChartUI extends Composite implements IExtendedPartUI {
 			}
 		}
 		return lineSeriesData;
-	}
-
-	private IPoint getCrossingPoint(IChannel channel) {
-
-		double crossingPointX = channel.getCrossingPoint();
-		int floor = (int)Math.floor(crossingPointX);
-		int ceil = (int)Math.ceil(crossingPointX);
-		//
-		List<Double> pointList = colorCompensation ? channel.getColorCompensatedFluorescence() : channel.getFluorescence();
-		if(floor >= 0 && floor < pointList.size() && ceil >= 0 && ceil < pointList.size()) {
-			if(floor == ceil) {
-				double y = pointList.get(floor);
-				return new Point(crossingPointX, y);
-			} else {
-				IPoint p1 = new Point(floor, pointList.get(floor));
-				IPoint p2 = new Point(ceil, pointList.get(ceil));
-				LinearEquation equation = Equations.createLinearEquation(p1, p2);
-				double y = equation.calculateY(crossingPointX);
-				return new Point(crossingPointX, y);
-			}
-		}
-		return null;
 	}
 
 	private void updateLabel() {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,7 +8,6 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Matthias Mailänder - add color compensation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -60,7 +59,6 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 	private IPlate plate = null;
 	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private boolean colorCompensation = true;
 
 	@Inject
 	public ExtendedPlateChartsUI(Composite parent, int style) {
@@ -153,25 +151,12 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(5, false));
+		composite.setLayout(new GridLayout(4, false));
 		//
 		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
 		createButtonToggleChartLegend(composite, chartControl, IMAGE_LEGEND);
 		createResetButton(composite);
 		createSettingsButton(composite);
-		createColorCompensationButton(composite);
-	}
-
-	private void createSettingsButton(Composite parent) {
-
-		createSettingsButton(parent, Arrays.asList(PreferencePagePCR.class), new ISettingsHandler() {
-
-			@Override
-			public void apply(Display display) {
-
-				updateChart();
-			}
-		});
 	}
 
 	private void createResetButton(Composite parent) {
@@ -190,19 +175,13 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 		});
 	}
 
-	private void createColorCompensationButton(Composite parent) {
+	private void createSettingsButton(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Toggle Color Compensation");
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_BAR_CHART, IApplicationImage.SIZE_16x16, colorCompensation));
-		button.addSelectionListener(new SelectionAdapter() {
+		createSettingsButton(parent, Arrays.asList(PreferencePagePCR.class), new ISettingsHandler() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void apply(Display display) {
 
-				colorCompensation = !colorCompensation;
-				button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_BAR_CHART, IApplicationImage.SIZE_16x16, colorCompensation));
 				updateChart();
 			}
 		});
@@ -288,7 +267,7 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 
 		ILineSeriesData lineSeriesData = null;
 		if(channel != null) {
-			List<Double> pointList = colorCompensation ? channel.getColorCompensatedFluorescence() : channel.getFluorescence();
+			List<Double> pointList = channel.getPoints();
 			double[] points = new double[pointList.size()];
 			for(int index = 0; index < pointList.size(); index++) {
 				points[index] = pointList.get(index);
