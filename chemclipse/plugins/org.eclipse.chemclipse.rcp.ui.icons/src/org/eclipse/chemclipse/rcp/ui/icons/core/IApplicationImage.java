@@ -368,6 +368,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_SEQUENCE_LIST_ACTIVE = PATH_PREFIX + "sequenceListActive.gif";
 	String IMAGE_PCR_ACTIVE = PATH_PREFIX + "pcrActive.gif";
 	String IMAGE_PCR_DEFAULT = PATH_PREFIX + "pcrDefault.gif";
+	String IMAGE_BAR_CHART = PATH_PREFIX + "barchart.png";
 	String IMAGE_INTERNAL_STANDARDS_DEFAULT = PATH_PREFIX + "internalStandardsDefault.gif";
 	String IMAGE_INTERNAL_STANDARDS_ACTIVE = PATH_PREFIX + "internalStandardsActive.gif";
 	String IMAGE_EXTERNAL_STANDARDS_DEFAULT = PATH_PREFIX + "externalStandardsDefault.gif";
