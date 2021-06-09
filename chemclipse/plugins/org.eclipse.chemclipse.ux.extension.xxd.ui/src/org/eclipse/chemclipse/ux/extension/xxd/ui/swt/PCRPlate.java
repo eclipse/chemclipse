@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Matthias Mailänder - add color compensation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -17,7 +18,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.pcr.model.core.IChannel;
 import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.pcr.model.core.IWell;
@@ -242,10 +242,10 @@ public class PCRPlate extends Composite {
 	private void appendChannelCrossingPoint(IChannel channel, StringBuilder builder) {
 
 		if(channel != null) {
-			IPoint crossingPoint = channel.getCrossingPoint();
-			if(crossingPoint != null && crossingPoint.getX() > 0.0d) {
+			double crossingPoint = channel.getCrossingPoint();
+			if(crossingPoint > 0.0d) {
 				DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
-				builder.append(decimalFormat.format(crossingPoint.getX()));
+				builder.append(decimalFormat.format(crossingPoint));
 			} else {
 				builder.append("--");
 			}

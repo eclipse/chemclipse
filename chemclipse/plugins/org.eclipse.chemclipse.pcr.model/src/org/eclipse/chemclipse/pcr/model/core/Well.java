@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Matthias Mailänder - add color compensation
  *******************************************************************************/
 package org.eclipse.chemclipse.pcr.model.core;
 
@@ -31,6 +32,7 @@ public class Well extends AbstractDataModel implements IWell {
 	private Map<Integer, IChannel> channels = new HashMap<>();
 
 	public Well() {
+
 		addProtectedKey(SAMPLE_ID);
 		addProtectedKey(TARGET_NAME);
 		addProtectedKey(CROSSING_POINT);
@@ -193,6 +195,6 @@ public class Well extends AbstractDataModel implements IWell {
 
 	private boolean isChannelPositive(IChannel channel) {
 
-		return (channel != null && channel.getCrossingPoint() != null && channel.getCrossingPoint().getX() > 0.0d);
+		return (channel != null && channel.getCrossingPoint() > 0.0d);
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,10 +14,11 @@ package org.eclipse.chemclipse.pcr.converter.core;
 import java.io.File;
 
 import org.eclipse.chemclipse.converter.core.IImportConverter;
+import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IPlateImportConverter extends IImportConverter {
 
-	IProcessingInfo convert(File file, IProgressMonitor monitor);
+	IProcessingInfo<IPlate> convert(File file, IProgressMonitor monitor);
 }

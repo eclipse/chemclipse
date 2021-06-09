@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 , 2019Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -41,11 +41,12 @@ public class PlateConverterPCR {
 	 * This class has only static methods.
 	 */
 	private PlateConverterPCR() {
+
 	}
 
-	public static IProcessingInfo convert(final File file, final String converterId, final IProgressMonitor monitor) {
+	public static IProcessingInfo<IPlate> convert(final File file, final String converterId, final IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<IPlate> processingInfo;
 		/*
 		 * Do not use a safe runnable here, because an object must
 		 * be returned or null.
@@ -54,12 +55,12 @@ public class PlateConverterPCR {
 		if(importConverter != null) {
 			processingInfo = importConverter.convert(file, monitor);
 		} else {
-			processingInfo = getProcessingError(file);
+			processingInfo = getProcessingErrorImport(file);
 		}
 		return processingInfo;
 	}
 
-	public static IProcessingInfo convert(final File file, final IProgressMonitor monitor) {
+	public static IProcessingInfo<IPlate> convert(final File file, final IProgressMonitor monitor) {
 
 		return getPlate(file, false, monitor);
 	}
@@ -72,9 +73,9 @@ public class PlateConverterPCR {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	private static IProcessingInfo getPlate(final File file, boolean overview, IProgressMonitor monitor) {
+	private static IProcessingInfo<IPlate> getPlate(final File file, boolean overview, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<IPlate> processingInfo;
 		IScanConverterSupport converterSupport = getScanConverterSupport();
 		try {
 			List<String> availableConverterIds = converterSupport.getAvailableConverterIds(file);
@@ -97,12 +98,13 @@ public class PlateConverterPCR {
 		} catch(NoConverterAvailableException e) {
 			logger.info(e);
 		}
-		return getProcessingError(file);
+		//
+		return getProcessingErrorImport(file);
 	}
 
-	public static IProcessingInfo convert(final File file, final IPlate plate, final String converterId, final IProgressMonitor monitor) {
+	public static IProcessingInfo<File> convert(final File file, final IPlate plate, final String converterId, final IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<File> processingInfo;
 		/*
 		 * Do not use a safe runnable here, because an object must
 		 * be returned or null.
@@ -111,7 +113,7 @@ public class PlateConverterPCR {
 		if(exportConverter != null) {
 			processingInfo = exportConverter.convert(file, plate, monitor);
 		} else {
-			processingInfo = getProcessingError(file);
+			processingInfo = getProcessingErrorExport(file);
 		}
 		return processingInfo;
 	}
@@ -207,10 +209,22 @@ public class PlateConverterPCR {
 		return magicNumberMatcher;
 	}
 
-	private static IProcessingInfo getProcessingError(File file) {
+	private static IProcessingInfo<File> getProcessingErrorExport(File file) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
-		processingInfo.addErrorMessage("Plate Converter", "No suitable converter was found for: " + file);
+		IProcessingInfo<File> processingInfo = new ProcessingInfo<>();
+		addErrorMessage(processingInfo, file);
 		return processingInfo;
+	}
+
+	private static IProcessingInfo<IPlate> getProcessingErrorImport(File file) {
+
+		IProcessingInfo<IPlate> processingInfo = new ProcessingInfo<>();
+		addErrorMessage(processingInfo, file);
+		return processingInfo;
+	}
+
+	private static void addErrorMessage(IProcessingInfo<?> processingInfo, File file) {
+
+		processingInfo.addErrorMessage("Plate Converter", "No suitable converter was found for: " + file);
 	}
 }

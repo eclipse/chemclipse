@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Matthias Mailänder - add color compensation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -17,7 +18,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.pcr.model.core.IChannel;
 import org.eclipse.chemclipse.pcr.model.core.IWell;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -213,9 +213,9 @@ public class ExtendedWellChannelsUI extends Composite implements IExtendedPartUI
 					textName.setText(channel.getName());
 					textTime.setText(Integer.toString(channel.getTime()));
 					textTemperature.setText(Double.toString(channel.getTemperature()));
-					IPoint crossingPoint = channel.getCrossingPoint();
-					if(crossingPoint != null) {
-						textCrossingPoint.setText(Double.toString(crossingPoint.getX()));
+					double crossingPoint = channel.getCrossingPoint();
+					if(crossingPoint > 0) {
+						textCrossingPoint.setText(Double.toString(crossingPoint));
 					}
 				}
 			}
