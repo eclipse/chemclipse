@@ -100,6 +100,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 	private Button buttonSave;
 	private Button buttonComparison;
 	private Button buttonMerge;
+	private Button buttonDelete;
 	private ScanIdentifierUI scanIdentifierUI;
 	private Button buttonTableEdit;
 	private AtomicReference<PeakScanListUI> tableViewer = new AtomicReference<>();
@@ -235,6 +236,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		enableEdit(tableViewer, buttonTableEdit, IMAGE_EDIT_ENTRY, false);
 		buttonComparison.setEnabled(false);
 		buttonMerge.setEnabled(false);
+		buttonDelete.setEnabled(false);
 		scanIdentifierUI.setEnabled(false);
 	}
 
@@ -244,13 +246,14 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(9, false));
+		composite.setLayout(new GridLayout(10, false));
 		//
 		buttonToolbarInfo = createButtonToggleToolbar(composite, Arrays.asList(toolbarInfoTop, toolbarInfoBottom), IMAGE_INFO, TOOLTIP_INFO);
 		buttonToolbarSearch = createButtonToggleToolbar(composite, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
 		buttonTableEdit = createButtonToggleEditTable(composite, tableViewer, IMAGE_EDIT_ENTRY);
 		buttonComparison = createButtonComparison(composite);
 		buttonMerge = createButtonMerge(composite);
+		buttonDelete = createButtonDelete(composite);
 		scanIdentifierUI = createScanIdentifierUI(composite);
 		createButtonReset(composite);
 		buttonSave = createButtonSave(composite);
@@ -626,9 +629,11 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		IStructuredSelection selection = tableViewer.get().getStructuredSelection();
 		buttonComparison.setEnabled(false);
 		buttonMerge.setEnabled(false);
+		buttonDelete.setEnabled(false);
 		scanIdentifierUI.setEnabled(false); // setInput enables/disables the control.
 		//
 		if(!selection.isEmpty()) {
+			buttonDelete.setEnabled(true);
 			List list = selection.toList();
 			if(list.size() > 1) {
 				/*
@@ -783,6 +788,24 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 						UpdateNotifierUI.update(e.display, chromatogramPeakMSD);
 					}
 				}
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonDelete(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Delete the selected peaks.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				deletePeaksOrIdentifications(parent.getDisplay());
 			}
 		});
 		//
