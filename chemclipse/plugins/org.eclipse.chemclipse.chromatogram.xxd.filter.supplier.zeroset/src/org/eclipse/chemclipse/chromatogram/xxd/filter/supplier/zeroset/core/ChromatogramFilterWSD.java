@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Lorenz Gerber - DAD signal shift
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.zeroset.core;
 
@@ -54,9 +55,6 @@ public class ChromatogramFilterWSD extends AbstractChromatogramFilterWSD {
 
 	private void applyFilter(IChromatogramSelectionWSD chromatogramSelection) {
 
-		/*
-		 * TODO - explore if it's possible to set DAD data to zero.
-		 */
 		IChromatogram<? extends IPeak> chromatogram = chromatogramSelection.getChromatogram();
 		adjustMinSignalByWavelength(chromatogram);
 	}
@@ -64,8 +62,8 @@ public class ChromatogramFilterWSD extends AbstractChromatogramFilterWSD {
 	private void adjustMinSignalByWavelength(IChromatogram<? extends IPeak> chromatogram) {
 
 		List<IExtractedWavelengthSignal> extractedSignals = new ArrayList<>();
-		int startWavelength = Integer.MIN_VALUE;
-		int stopWavelength = Integer.MAX_VALUE;
+		int startWavelength = Integer.MAX_VALUE;
+		int stopWavelength = Integer.MIN_VALUE;
 		/*
 		 * Extract
 		 */
@@ -79,13 +77,17 @@ public class ChromatogramFilterWSD extends AbstractChromatogramFilterWSD {
 			}
 		}
 		/*
-		 * Detect min signals
+		 * Detect global min signal
+		 */
+		float minSignal = 0;
+		for(int wavelength = startWavelength; wavelength <= stopWavelength; wavelength++) {
+			minSignal = Math.min(getMinSignal(extractedSignals, wavelength), minSignal);
+		}
+		/*
+		 * Shift Signal
 		 */
 		for(int wavelength = startWavelength; wavelength <= stopWavelength; wavelength++) {
-			float minSignal = getMinSignal(extractedSignals, wavelength);
-			if(minSignal < 0) {
-				adjustMinSignal(extractedSignals, wavelength, minSignal);
-			}
+			adjustMinSignal(extractedSignals, wavelength, minSignal);
 		}
 		/*
 		 * Transfer the data
