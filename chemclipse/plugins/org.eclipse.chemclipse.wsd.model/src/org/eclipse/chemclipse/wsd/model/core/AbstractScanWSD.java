@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -36,9 +36,11 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 	private List<IScanSignalWSD> scanSignals = new ArrayList<IScanSignalWSD>();
 
 	public AbstractScanWSD() {
+
 	}
 
 	public AbstractScanWSD(IScanWSD scanWSD, float actualPercentageIntensity) throws IllegalArgumentException {
+
 		if(scanWSD == null) {
 			throw new IllegalArgumentException("The scanWSD must not be null");
 		}
@@ -61,14 +63,20 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 	}
 
 	@Override
-	public Optional<IScanSignalWSD> getScanSignal(double wavelengt) {
+	public Optional<IScanSignalWSD> getScanSignal(double wavelength) {
 
 		for(IScanSignalWSD scanSignal : scanSignals) {
-			if(scanSignal.getWavelength() == wavelengt) {
+			if(scanSignal.getWavelength() == wavelength) {
 				return Optional.of(scanSignal);
 			}
 		}
 		return Optional.empty();
+	}
+
+	@Override
+	public void deleteScanSignals() {
+
+		scanSignals.clear();
 	}
 
 	@Override

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.csd.filter.chromatogramFilterSupplier">
+      <ChromatogramFilterSupplier
+            description="This filters sets the lowest value to zero."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.zeroset.core.ChromatogramFilterCSD"
+            filterName="ZeroSet"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.zeroset.core.settings.FilterSettingsCSD"
+            id="org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset">
+      </ChromatogramFilterSupplier>
+   </extension>
+   <!--<extension
+         point="org.eclipse.chemclipse.chromatogram.wsd.filter.chromatogramFilterSupplier">
+      <ChromatogramFilterSupplier
+            description="This filters sets the lowest value to zero."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.zeroset.core.ChromatogramFilterWSD"
+            filterName="ZeroSet"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.zeroset.core.settings.FilterSettingsWSD"
+            id="org.eclipse.chemclipse.chromatogram.wsd.filter.supplier.zeroset">
+      </ChromatogramFilterSupplier>
+   </extension>-->
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.zeroset.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+</plugin>
