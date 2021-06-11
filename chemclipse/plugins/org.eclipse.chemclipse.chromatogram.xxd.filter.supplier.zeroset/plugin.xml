@@ -11,7 +11,7 @@
             id="org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset">
       </ChromatogramFilterSupplier>
    </extension>
-   <!--<extension
+   <extension
          point="org.eclipse.chemclipse.chromatogram.wsd.filter.chromatogramFilterSupplier">
       <ChromatogramFilterSupplier
             description="This filters sets the lowest value to zero."
@@ -20,7 +20,7 @@
             filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.zeroset.core.settings.FilterSettingsWSD"
             id="org.eclipse.chemclipse.chromatogram.wsd.filter.supplier.zeroset">
       </ChromatogramFilterSupplier>
-   </extension>-->
+   </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
