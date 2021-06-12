@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2020 Lablicate GmbH.
+ * Copyright (c) 2015, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Lorenz Gerber - Ion-wise msd chromatogram filter
+ * Philip Wenig - return type generics
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.core;
 
@@ -62,16 +63,14 @@ public class ChromatogramFilterWSD extends AbstractChromatogramFilterWSD {
 		return chromatogramFilterResult;
 	}
 
-	@SuppressWarnings("rawtypes")
-	public IProcessingInfo applyFilter(IChromatogramSelectionWSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelectionWSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo<IChromatogramFilterResult> processingInfo = new ProcessingInfo<IChromatogramFilterResult>();
 		processingInfo.setProcessingResult(process(chromatogramSelection, chromatogramFilterSettings, monitor));
 		return processingInfo;
 	}
 
-	@SuppressWarnings("rawtypes")
-	public IProcessingInfo applyFilter(IChromatogramSelectionWSD chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelectionWSD chromatogramSelection, IProgressMonitor monitor) {
 
 		ChromatogramFilterSettings chromatogramFilterSettings = PreferenceSupplier.getFilterSettings();
 		IProcessingInfo<IChromatogramFilterResult> processingInfo = new ProcessingInfo<IChromatogramFilterResult>();

@@ -13,6 +13,7 @@
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.zeroset.core;
 
 import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResult;
+import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.wsd.filter.core.chromatogram.AbstractChromatogramFilterWSD;
@@ -27,14 +28,12 @@ import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-@SuppressWarnings("rawtypes")
 public class ChromatogramFilterWSD extends AbstractChromatogramFilterWSD {
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public IProcessingInfo applyFilter(IChromatogramSelectionWSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelectionWSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
+		IProcessingInfo<IChromatogramFilterResult> processingInfo = validate(chromatogramSelection, chromatogramFilterSettings);
 		if(!processingInfo.hasErrorMessages()) {
 			applyFilter(chromatogramSelection);
 			processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "The chromatogram selection was successfully set to zero"));
@@ -43,7 +42,7 @@ public class ChromatogramFilterWSD extends AbstractChromatogramFilterWSD {
 	}
 
 	@Override
-	public IProcessingInfo applyFilter(IChromatogramSelectionWSD chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelectionWSD chromatogramSelection, IProgressMonitor monitor) {
 
 		FilterSettingsWSD filterSettings = PreferenceSupplier.getFilterSettingsWSD();
 		return applyFilter(chromatogramSelection, filterSettings, monitor);

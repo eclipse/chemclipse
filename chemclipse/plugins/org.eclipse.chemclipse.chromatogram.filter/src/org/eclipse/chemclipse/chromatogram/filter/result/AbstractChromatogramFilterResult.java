@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,9 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.filter.result;
 
-/**
- * @author eselmeister
- */
 public abstract class AbstractChromatogramFilterResult implements IChromatogramFilterResult {
 
 	private ResultStatus resultStatus = ResultStatus.UNDEFINED;
@@ -29,6 +26,7 @@ public abstract class AbstractChromatogramFilterResult implements IChromatogramF
 	 * @param description
 	 */
 	public AbstractChromatogramFilterResult(ResultStatus resultStatus, String description) {
+
 		if(resultStatus != null) {
 			this.resultStatus = resultStatus;
 		}
