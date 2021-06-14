@@ -172,9 +172,11 @@ public class MethodTreeViewer extends TreeViewer {
 						return entryList((ProcessEntryContainer)supplier, true);
 					}
 				}
+				//
 				if(parentElement instanceof ProcessEntryContainer) {
 					return entryList((ProcessEntryContainer)parentElement, false);
 				}
+				//
 				return new Object[0];
 			}
 		});

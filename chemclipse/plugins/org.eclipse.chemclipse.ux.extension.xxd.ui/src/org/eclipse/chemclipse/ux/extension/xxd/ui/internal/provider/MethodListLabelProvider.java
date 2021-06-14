@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.function.BiFunction;
 
@@ -31,6 +30,9 @@ import org.eclipse.swt.graphics.Image;
 
 public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 
+	private final ProcessSupplierContext processTypeSupport;
+	private BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>> preferencesSupplier;
+	//
 	public static final String[] TITLES = {//
 			"", //
 			"Name", //
@@ -49,12 +51,23 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 			110 //
 	};
 
+	public MethodListLabelProvider(ProcessSupplierContext processTypeSupport, BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>> preferencesSupplier) {
+
+		this.processTypeSupport = processTypeSupport;
+		this.preferencesSupplier = preferencesSupplier;
+	}
+
 	@Override
 	public Image getColumnImage(Object element, int columnIndex) {
 
 		if(columnIndex == 0) {
 			if(element instanceof IProcessEntry) {
-				IStatus status = validate((IProcessEntry)element);
+				/*
+				 * Validate
+				 */
+				IProcessEntry processEntry = (IProcessEntry)element;
+				IStatus status = validate(processEntry);
+				//
 				if(status.matches(IStatus.ERROR)) {
 					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_ERROR, IApplicationImage.SIZE_16x16);
 				} else if(status.matches(IStatus.WARNING)) {
@@ -85,42 +98,34 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 		return super.getToolTipText(element);
 	}
 
-	private final ProcessSupplierContext processTypeSupport;
-	private BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>> preferencesSupplier;
-
-	public MethodListLabelProvider(ProcessSupplierContext processTypeSupport, BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>> preferencesSupplier) {
-
-		this.processTypeSupport = processTypeSupport;
-		this.preferencesSupplier = preferencesSupplier;
-	}
-
 	@Override
 	public String getColumnText(Object element, int columnIndex) {
 
 		if(columnIndex == 0) {
 			return "";
 		}
+		//
 		if(element instanceof IProcessEntry) {
-			IProcessEntry entry = (IProcessEntry)element;
-			ProcessSupplierContext supplierContext = IProcessEntry.getContext(entry, processTypeSupport);
-			IProcessSupplier<?> supplier = supplierContext.getSupplier(entry.getProcessorId());
+			IProcessEntry processEntry = (IProcessEntry)element;
+			ProcessSupplierContext supplierContext = IProcessEntry.getContext(processEntry, processTypeSupport);
+			IProcessSupplier<?> processSupplier = supplierContext.getSupplier(processEntry.getProcessorId());
 			switch(columnIndex) {
 				case 1:
-					return entry.getName();
+					return processEntry.getName();
 				case 2:
-					return entry.getDescription();
+					return processEntry.getDescription();
 				case 3: {
-					if(supplier != null) {
-						return Arrays.toString(supplier.getSupportedDataTypes().toArray());
+					if(processSupplier != null) {
+						return Arrays.toString(processSupplier.getSupportedDataTypes().toArray());
 					}
 				}
 					break;
 				case 4:
-					if(supplier != null) {
-						if(supplier.getSettingsParser().getInputValues().isEmpty() || preferencesSupplier == null) {
+					if(processSupplier != null) {
+						if(processSupplier.getSettingsParser().getInputValues().isEmpty() || preferencesSupplier == null) {
 							return "not configurable";
 						} else {
-							ProcessorPreferences<?> preferences = preferencesSupplier.apply(entry, supplierContext);
+							ProcessorPreferences<?> preferences = preferencesSupplier.apply(processEntry, supplierContext);
 							if(preferences.isUseSystemDefaults()) {
 								return "defaults";
 							} else {
@@ -137,7 +142,7 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 					}
 					break;
 				case 5:
-					return entry.getProcessorId();
+					return processEntry.getProcessorId();
 				default:
 					break;
 			}
@@ -152,6 +157,7 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 					return "";
 			}
 		}
+		//
 		return "n/a";
 	}
 
@@ -163,28 +169,42 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 
 	private IStatus validate(IProcessEntry processEntry) {
 
+		/*
+		 * Validation
+		 */
 		if(processEntry == null) {
-			return ValidationStatus.error("Entry is null");
+			return ValidationStatus.error("The processor is not available.");
 		}
 		//
-		ProcessorPreferences<?> preferences = processEntry.getPreferences(IProcessEntry.getContext(processEntry, processTypeSupport));
-		if(preferences == null) {
-			return ValidationStatus.error("Processor " + processEntry.getName() + " not avaiable");
+		if(preferencesSupplier == null) {
+			return ValidationStatus.error("The preference supplier is not available.");
 		}
 		//
-		if(preferences.getSupplier().getSettingsClass() == null) {
-			return ValidationStatus.warning("Processor " + processEntry.getName() + " has no settingsclass");
+		if(processTypeSupport == null) {
+			return ValidationStatus.error("The process type support is not available.");
+		}
+		/*
+		 * Checks
+		 */
+		ProcessorPreferences<?> processorPreferences = preferencesSupplier.apply(processEntry, processTypeSupport);
+		//
+		if(processorPreferences == null) {
+			return ValidationStatus.error("The processor " + processEntry.getName() + " preferences are not available.");
 		}
 		//
-		if(preferences.isUseSystemDefaults()) {
-			return ValidationStatus.info("Processor " + processEntry.getName() + " uses system default settings");
+		if(processorPreferences.getSupplier().getSettingsClass() == null) {
+			return ValidationStatus.warning("The processor " + processEntry.getName() + " has no settings class.");
+		}
+		//
+		if(processorPreferences.isUseSystemDefaults()) {
+			return ValidationStatus.info("The processor " + processEntry.getName() + " uses system default settings.");
 		} else {
 			try {
-				preferences.getUserSettings();
-			} catch(IOException e) {
-				return ValidationStatus.error("Loading settings for Processor " + processEntry.getName() + "failed", e);
+				processorPreferences.getUserSettings();
+				return ValidationStatus.ok();
+			} catch(Exception e) {
+				return ValidationStatus.error("The processor " + processEntry.getName() + " settings can't be parsed.", e);
 			}
-			return ValidationStatus.ok();
 		}
 	}
 }

@@ -12,11 +12,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.supplier;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
 public final class NodeProcessorPreferences<T> implements ProcessorPreferences<T> {
 
+	private static final Logger logger = Logger.getLogger(NodeProcessorPreferences.class);
+	//
 	private static final String KEY_USE_SYSTEM_DEFAULTS = "useSystemDefaults";
 	private static final String KEY_USER_SETTINGS = "userSettings";
 	private static final String KEY_ASK_FOR_SETTINGS = "askForSettings";
@@ -36,6 +39,7 @@ public final class NodeProcessorPreferences<T> implements ProcessorPreferences<T
 		if(supplier.getSettingsClass() == null) {
 			return DialogBehavior.NONE;
 		}
+		//
 		trySync();
 		boolean askForSettings = node.getBoolean(KEY_ASK_FOR_SETTINGS, true);
 		if(askForSettings) {
@@ -45,27 +49,11 @@ public final class NodeProcessorPreferences<T> implements ProcessorPreferences<T
 		}
 	}
 
-	public void trySync() {
-
-		try {
-			node.sync();
-		} catch(BackingStoreException e) {
-		}
-	}
-
 	@Override
 	public void setAskForSettings(boolean askForSettings) {
 
 		node.putBoolean(KEY_ASK_FOR_SETTINGS, askForSettings);
 		tryFlush();
-	}
-
-	private void tryFlush() {
-
-		try {
-			node.flush();
-		} catch(BackingStoreException e) {
-		}
 	}
 
 	@Override
@@ -82,6 +70,7 @@ public final class NodeProcessorPreferences<T> implements ProcessorPreferences<T
 			node.clear();
 			tryFlush();
 		} catch(BackingStoreException e) {
+			logger.warn(e);
 		}
 	}
 
@@ -91,6 +80,7 @@ public final class NodeProcessorPreferences<T> implements ProcessorPreferences<T
 		if(supplier.getSettingsClass() == null) {
 			return true;
 		}
+		//
 		trySync();
 		return node.getBoolean(KEY_USE_SYSTEM_DEFAULTS, true);
 	}
@@ -113,5 +103,23 @@ public final class NodeProcessorPreferences<T> implements ProcessorPreferences<T
 	public IProcessSupplier<T> getSupplier() {
 
 		return supplier;
+	}
+
+	public void trySync() {
+
+		try {
+			node.sync();
+		} catch(BackingStoreException e) {
+			logger.warn(e);
+		}
+	}
+
+	private void tryFlush() {
+
+		try {
+			node.flush();
+		} catch(BackingStoreException e) {
+			logger.warn(e);
+		}
 	}
 }

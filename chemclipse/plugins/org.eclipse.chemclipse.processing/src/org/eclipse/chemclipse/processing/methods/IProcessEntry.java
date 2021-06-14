@@ -120,6 +120,7 @@ public interface IProcessEntry extends ProcessEntryContainer {
 		if(supplier == null) {
 			return null;
 		}
+		//
 		return new ProcessEntryProcessorPreferences<>(supplier, this);
 	}
 
@@ -178,16 +179,18 @@ public interface IProcessEntry extends ProcessEntryContainer {
 		return entriesEquals(other);
 	}
 
-	public static ProcessSupplierContext getContext(IProcessEntry entry, ProcessSupplierContext defaultContext) {
+	public static ProcessSupplierContext getContext(IProcessEntry processEntry, ProcessSupplierContext defaultContext) {
 
-		ProcessEntryContainer container = entry.getParent();
-		if(container instanceof IProcessEntry) {
-			IProcessEntry parent = (IProcessEntry)container;
-			IProcessSupplier<?> supplier = getContext(parent, defaultContext).getSupplier(parent.getProcessorId());
-			if(supplier instanceof ProcessSupplierContext) {
-				return (ProcessSupplierContext)supplier;
+		ProcessEntryContainer processEntryContainer = processEntry.getParent();
+		//
+		if(processEntryContainer instanceof IProcessEntry) {
+			IProcessEntry processEntryParent = (IProcessEntry)processEntryContainer;
+			IProcessSupplier<?> processSupplier = getContext(processEntryParent, defaultContext).getSupplier(processEntryParent.getProcessorId());
+			if(processSupplier instanceof ProcessSupplierContext) {
+				return (ProcessSupplierContext)processSupplier;
 			}
 		}
+		//
 		return defaultContext;
 	}
 }

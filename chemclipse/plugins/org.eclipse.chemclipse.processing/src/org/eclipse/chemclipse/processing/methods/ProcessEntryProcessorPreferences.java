@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactorings
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.methods;
 
@@ -17,10 +18,11 @@ import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 public final class ProcessEntryProcessorPreferences<T> implements ProcessorPreferences<T> {
 
 	private final IProcessEntry processEntry;
-	private final IProcessSupplier<T> supplier;
+	private final IProcessSupplier<T> processSupplier;
 
-	public ProcessEntryProcessorPreferences(IProcessSupplier<T> supplier, IProcessEntry processEntry) {
-		this.supplier = supplier;
+	public ProcessEntryProcessorPreferences(IProcessSupplier<T> processSupplier, IProcessEntry processEntry) {
+
+		this.processSupplier = processSupplier;
 		this.processEntry = processEntry;
 	}
 
@@ -33,7 +35,9 @@ public final class ProcessEntryProcessorPreferences<T> implements ProcessorPrefe
 	@Override
 	public void setAskForSettings(boolean askForSettings) {
 
-		// no-op
+		/*
+		 * Don't track this setting.
+		 */
 	}
 
 	@Override
@@ -45,9 +49,10 @@ public final class ProcessEntryProcessorPreferences<T> implements ProcessorPrefe
 	@Override
 	public boolean isUseSystemDefaults() {
 
-		if(supplier.getSettingsClass() == null) {
+		if(processSupplier.getSettingsClass() == null) {
 			return true;
 		}
+		//
 		String jsonSettings = processEntry.getSettings();
 		return jsonSettings == null || jsonSettings.isEmpty() || "{}".equals(jsonSettings);
 	}
@@ -69,7 +74,7 @@ public final class ProcessEntryProcessorPreferences<T> implements ProcessorPrefe
 	@Override
 	public IProcessSupplier<T> getSupplier() {
 
-		return supplier;
+		return processSupplier;
 	}
 
 	@Override

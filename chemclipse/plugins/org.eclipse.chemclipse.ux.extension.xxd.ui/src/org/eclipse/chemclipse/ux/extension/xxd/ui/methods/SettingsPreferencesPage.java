@@ -14,11 +14,10 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
 import java.io.IOException;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences.DialogBehavior;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.ScrolledComposite;
@@ -35,6 +34,8 @@ import org.eclipse.swt.widgets.Listener;
 
 public class SettingsPreferencesPage<T> extends WizardPage {
 
+	private static final Logger logger = Logger.getLogger(SettingsPreferencesPage.class);
+	//
 	private boolean isDontAskAgain;
 	private boolean isUseSystemDefaults;
 	//
@@ -178,7 +179,8 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 				try {
 					jsonSettings = settingsUI.getControl().getSettings();
 				} catch(Exception e) {
-					Activator.getDefault().getLog().log(new Status(IStatus.ERROR, getClass().getName(), "Error while fetching the settings.", e));
+					logger.warn("Error while fetching the settings.");
+					logger.warn(e);
 					setErrorMessage(e.toString());
 					setPageComplete(false);
 				}

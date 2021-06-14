@@ -31,32 +31,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class MetaProcessorSettings {
 
 	@JsonProperty(value = "Settings", defaultValue = "")
-	private Map<String, String> settingsMap;
+	private Map<String, String> settingsMap = new HashMap<>();
 	@JsonProperty(value = "Defaults", defaultValue = "")
-	private Map<String, Boolean> useDefaultMap;
+	private Map<String, Boolean> defaultMap = new HashMap<>();
 	@JsonIgnore
-	private final IProcessMethod method;
+	private final IProcessMethod processMethod;
 
 	public MetaProcessorSettings(MetaProcessorProcessSupplier processSupplier) {
 
-		IProcessMethod processMethod = processSupplier.getProcessMethod();
-		this.method = processMethod;
-	}
-
-	private Map<String, String> getSettingsMap() {
-
-		if(settingsMap == null) {
-			settingsMap = new HashMap<>();
-		}
-		return settingsMap;
-	}
-
-	private Map<String, Boolean> getUseDefaultMap() {
-
-		if(useDefaultMap == null) {
-			useDefaultMap = new HashMap<>();
-		}
-		return useDefaultMap;
+		this.processMethod = processSupplier.getProcessMethod();
 	}
 
 	/**
@@ -64,95 +47,99 @@ public class MetaProcessorSettings {
 	 * @return the {@link IProcessMethod} this settings are meant for
 	 */
 	@JsonIgnore
-	public IProcessMethod getMethod() {
+	public IProcessMethod getProcessMethod() {
 
-		return method;
+		return processMethod;
 	}
 
-	public <T> ProcessorPreferences<T> getProcessorPreferences(IProcessEntry entry, ProcessorPreferences<T> delegate) {
+	public <T> ProcessorPreferences<T> getProcessorPreferences(IProcessEntry processEntry, ProcessorPreferences<T> processorPreferences) {
 
-		if(delegate == null) {
+		if(processorPreferences == null) {
 			return null;
 		}
 		/*
 		 * Get the specific element position and active profile marker.
+		 * .metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.chemclipse.processing.supplier.IProcessSupplier.prefs
 		 */
-		String entryId = getId(entry);
-		//
-		return new ProcessorPreferences<T>() {
+		String processEntryIdentifier = getProcessEntryIdentifier(processEntry);
+		ProcessorPreferences<T> metaProcessorPreferences = new ProcessorPreferences<T>() {
 
 			@Override
 			public DialogBehavior getDialogBehaviour() {
 
-				// show only on explicit request
 				return DialogBehavior.NONE;
 			}
 
 			@Override
 			public void setAskForSettings(boolean askForSettings) {
 
+				/*
+				 * Ignore this setting.
+				 */
 			}
 
 			@Override
 			public void setUserSettings(String settings) {
 
 				if(settings == null || settings.isEmpty()) {
-					getSettingsMap().remove(entryId);
+					settingsMap.remove(processEntryIdentifier);
 				} else {
-					getSettingsMap().put(entryId, settings);
+					settingsMap.put(processEntryIdentifier, settings);
 				}
 			}
 
 			@Override
 			public boolean isUseSystemDefaults() {
 
-				return getUseDefaultMap().getOrDefault(entryId, delegate.isUseSystemDefaults());
+				return defaultMap.getOrDefault(processEntryIdentifier, processorPreferences.isUseSystemDefaults());
 			}
 
 			@Override
 			public void setUseSystemDefaults(boolean useSystemDefaults) {
 
-				getUseDefaultMap().put(entryId, useSystemDefaults);
+				defaultMap.put(processEntryIdentifier, useSystemDefaults);
 			}
 
 			@Override
 			public void reset() {
 
-				getSettingsMap().remove(entryId);
-				getUseDefaultMap().remove(entryId);
+				settingsMap.remove(processEntryIdentifier);
+				defaultMap.remove(processEntryIdentifier);
 			}
 
 			@Override
 			public IProcessSupplier<T> getSupplier() {
 
-				return delegate.getSupplier();
+				return processorPreferences.getSupplier();
 			}
 
 			@Override
 			public String getUserSettingsAsString() {
 
-				return getSettingsMap().getOrDefault(entryId, delegate.getUserSettingsAsString());
+				return settingsMap.getOrDefault(processEntryIdentifier, processorPreferences.getUserSettingsAsString());
 			}
 		};
+		//
+		return metaProcessorPreferences;
 	}
 
 	/**
 	 * Create an unique id. The active profile is tracked too.
 	 * 
-	 * @param entry
+	 * @param processEntry
 	 * @return String
 	 */
-	private static String getId(IProcessEntry entry) {
+	private static String getProcessEntryIdentifier(IProcessEntry processEntry) {
 
-		ProcessEntryContainer parent = entry.getParent();
+		ProcessEntryContainer parent = processEntry.getParent();
 		String activeProfile = parent.getActiveProfile().replaceAll(" ", "").replaceAll("\\P{InBasic_Latin}", "");
 		//
 		if(parent instanceof ListProcessEntryContainer) {
-			String id = String.valueOf(((ListProcessEntryContainer)parent).getEntries().indexOf(entry));
+			String identifier = String.valueOf(((ListProcessEntryContainer)parent).getEntries().indexOf(processEntry));
 			if(parent instanceof IProcessEntry) {
-				return getId((IProcessEntry)parent) + "." + activeProfile + "." + id;
+				return getProcessEntryIdentifier((IProcessEntry)parent) + "." + activeProfile + "." + identifier;
 			} else {
-				return id + "." + activeProfile;
+				return identifier + "." + activeProfile;
 			}
 		} else {
 			throw new IllegalArgumentException("The parent processor type is not supported.");

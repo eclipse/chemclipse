@@ -49,7 +49,7 @@ public class MetaProcessorSettingsAdapterFactory implements IAdapterFactory, Set
 
 	private final class SettingsUIControlImplementation implements SettingsUIControl, IModificationHandler {
 
-		private final MetaProcessorSettings settings;
+		private final MetaProcessorSettings processorSettings;
 		private final ExtendedMethodUI extendedMethodUI;
 		//
 		private ProcessorPreferences<MetaProcessorSettings> preferences;
@@ -61,19 +61,20 @@ public class MetaProcessorSettingsAdapterFactory implements IAdapterFactory, Set
 		public SettingsUIControlImplementation(Composite parent, ProcessorPreferences<MetaProcessorSettings> preferences, boolean showProfileToolbar) throws IOException {
 
 			this.preferences = preferences;
-			settings = preferences.getSettings();
+			//
+			processorSettings = preferences.getSettings();
 			extendedMethodUI = new ExtendedMethodUI(parent, SWT.READ_ONLY, Activator.getProcessSupplierContext(), new BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>>() {
 
 				@Override
-				public ProcessorPreferences<?> apply(IProcessEntry entry, ProcessSupplierContext context) {
+				public ProcessorPreferences<?> apply(IProcessEntry processEntry, ProcessSupplierContext supplierContext) {
 
-					return settings.getProcessorPreferences(entry, entry.getPreferences(context));
+					return processorSettings.getProcessorPreferences(processEntry, processEntry.getPreferences(supplierContext));
 				}
-			}, settings.getMethod().getDataCategories().toArray(new DataCategory[0]));
+			}, processorSettings.getProcessMethod().getDataCategories().toArray(new DataCategory[0]));
 			/*
 			 * Process Method and Settings
 			 */
-			IProcessMethod processMethod = settings.getMethod();
+			IProcessMethod processMethod = processorSettings.getProcessMethod();
 			sizeProfiles = processMethod.getProfiles().size();
 			enableEditProfiles = isEnableEditProfiles(processMethod, showProfileToolbar);
 			/*
@@ -82,7 +83,7 @@ public class MetaProcessorSettingsAdapterFactory implements IAdapterFactory, Set
 			extendedMethodUI.setToolbarMainVisible(false);
 			extendedMethodUI.setToolbarProfileVisible(showProfileToolbar);
 			extendedMethodUI.setToolbarProfileEnableEdit(enableEditProfiles);
-			extendedMethodUI.setInputs(processMethod, null);
+			extendedMethodUI.setProcessMethod(processMethod);
 			extendedMethodUI.setModificationHandler(this);
 		}
 
@@ -101,7 +102,7 @@ public class MetaProcessorSettingsAdapterFactory implements IAdapterFactory, Set
 		@Override
 		public String getSettings() throws IOException {
 
-			return preferences.getSerialization().toString(settings);
+			return preferences.getSerialization().toString(processorSettings);
 		}
 
 		@Override
@@ -129,7 +130,7 @@ public class MetaProcessorSettingsAdapterFactory implements IAdapterFactory, Set
 			 * the selected profile.
 			 */
 			IProcessMethod processMethodEditor = extendedMethodUI.getProcessMethod();
-			IProcessMethod processMethodSettings = settings.getMethod();
+			IProcessMethod processMethodSettings = processorSettings.getProcessMethod();
 			processMethodSettings.setActiveProfile(processMethodEditor.getActiveProfile());
 			/*
 			 * Save the method on demand, if the profiles have been edited.

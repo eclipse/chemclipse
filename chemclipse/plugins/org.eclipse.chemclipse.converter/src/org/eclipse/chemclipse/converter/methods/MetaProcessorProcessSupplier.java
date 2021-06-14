@@ -26,23 +26,23 @@ import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 
 public final class MetaProcessorProcessSupplier extends AbstractProcessSupplier<MetaProcessorSettings> implements ProcessExecutor {
 
-	private final IProcessMethod method;
+	private final IProcessMethod processMethod;
 
-	public MetaProcessorProcessSupplier(String id, IProcessMethod method, MethodProcessTypeSupplier parent) {
+	public MetaProcessorProcessSupplier(String id, IProcessMethod processMethod, MethodProcessTypeSupplier parent) {
 
-		super(id, method.getName(), method.getDescription(), method.isFinal() ? null : MetaProcessorSettings.class, parent, MethodProcessTypeSupplier.getDataTypes(method));
-		this.method = method;
+		super(id, processMethod.getName(), processMethod.getDescription(), processMethod.isFinal() ? null : MetaProcessorSettings.class, parent, MethodProcessSupport.getDataTypes(processMethod));
+		this.processMethod = processMethod;
 	}
 
 	@Override
 	public String getCategory() {
 
-		return method.getCategory();
+		return processMethod.getCategory();
 	}
 
 	public IProcessMethod getProcessMethod() {
 
-		return method;
+		return processMethod;
 	}
 
 	@Override
@@ -53,12 +53,12 @@ public final class MetaProcessorProcessSupplier extends AbstractProcessSupplier<
 			MetaProcessorSettings processorSettings = (MetaProcessorSettings)settings;
 			ProcessExecutionConsumer<?> callerDelegate = context.getContextObject(ProcessExecutionConsumer.class);
 			if(callerDelegate != null) {
-				ProcessEntryContainer.applyProcessEntries(method, context, new BiFunction<IProcessEntry, IProcessSupplier<X>, ProcessorPreferences<X>>() {
+				ProcessEntryContainer.applyProcessEntries(processMethod, context, new BiFunction<IProcessEntry, IProcessSupplier<X>, ProcessorPreferences<X>>() {
 
 					@Override
-					public ProcessorPreferences<X> apply(IProcessEntry entry, IProcessSupplier<X> supplier) {
+					public ProcessorPreferences<X> apply(IProcessEntry processEntry, IProcessSupplier<X> processSupplier) {
 
-						return processorSettings.getProcessorPreferences(entry, entry.getPreferences(supplier));
+						return processorSettings.getProcessorPreferences(processEntry, processEntry.getPreferences(processSupplier));
 					}
 				}, callerDelegate);
 			}
