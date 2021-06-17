@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,6 +19,13 @@ import org.osgi.framework.BundleContext;
  */
 public class Activator extends AbstractUIPlugin {
 
+	private static BundleContext context;
+
+	public static BundleContext getContext() {
+
+		return context;
+	}
+
 	// The shared instance
 	private static Activator plugin;
 
@@ -26,6 +33,7 @@ public class Activator extends AbstractUIPlugin {
 	 * The constructor
 	 */
 	public Activator() {
+
 	}
 
 	/*
@@ -36,6 +44,7 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public void start(BundleContext context) throws Exception {
 
+		Activator.context = context;
 		super.start(context);
 		plugin = this;
 	}

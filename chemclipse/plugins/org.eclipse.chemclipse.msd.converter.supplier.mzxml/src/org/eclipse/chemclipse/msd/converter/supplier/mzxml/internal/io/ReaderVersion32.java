@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2019 Lablicate GmbH.
+ * Copyright (c) 2015, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,6 +19,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
+import java.util.Date;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
@@ -57,6 +58,7 @@ public class ReaderVersion32 extends AbstractReaderVersion implements IChromatog
 	private String contextPath;
 
 	public ReaderVersion32(String contextPath) {
+
 		this.contextPath = contextPath;
 	}
 
@@ -85,7 +87,7 @@ public class ReaderVersion32 extends AbstractReaderVersion implements IChromatog
 				 * Get the mass spectra.
 				 */
 				IVendorScan massSpectrum = new VendorScan();
-				int retentionTime = scan.getRetentionTime().multiply(1000).getSeconds(); // milliseconds
+				long retentionTime = scan.getRetentionTime().getTimeInMillis(new Date());
 				// MS, MS/MS
 				short msLevel = scan.getMsLevel().shortValue();
 				massSpectrum.setMassSpectrometer(msLevel);
@@ -104,7 +106,7 @@ public class ReaderVersion32 extends AbstractReaderVersion implements IChromatog
 				if(cycleNumber >= 1) {
 					massSpectrum.setCycleNumber(cycleNumber);
 				}
-				massSpectrum.setRetentionTime(retentionTime);
+				massSpectrum.setRetentionTime((int)retentionTime);
 				/*
 				 * Get the ions.
 				 */
