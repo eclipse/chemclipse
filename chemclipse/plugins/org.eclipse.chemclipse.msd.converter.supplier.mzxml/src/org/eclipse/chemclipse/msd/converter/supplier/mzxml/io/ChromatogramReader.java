@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.converter.io.AbstractChromatogramMSDReader;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.IFormat;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.ReaderVersion20;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.ReaderVersion21;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.ReaderVersion30;
@@ -33,19 +34,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramReader extends AbstractChromatogramMSDReader implements IChromatogramMSDReader {
 
-	private static final String CONTEXT_PATH_V_200 = "org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v20.model";
-	private static final String CONTEXT_PATH_V_210 = "org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v21.model";
-	private static final String CONTEXT_PATH_V_220 = "org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v22.model";
-	private static final String CONTEXT_PATH_V_300 = "org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v30.model";
-	private static final String CONTEXT_PATH_V_310 = "org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v31.model";
-	private static final String CONTEXT_PATH_V_320 = "org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v32.model";
-	private static final String MZXML_V_200 = "mzXML_2.0";
-	private static final String MZXML_V_210 = "mzXML_2.1";
-	private static final String MZXML_V_220 = "mzXML_2.2";
-	private static final String MZXML_V_300 = "mzXML_3.0";
-	private static final String MZXML_V_310 = "mzXML_3.1";
-	private static final String MZXML_V_320 = "mzXML_3.2";
-
 	public static IChromatogramMSDReader getReader(final File file) throws IOException {
 
 		IChromatogramMSDReader chromatogramReader = null;
@@ -56,18 +44,18 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 		fileReader.close();
 		//
 		final String header = new String(charBuffer);
-		if(header.contains(MZXML_V_200)) {
-			chromatogramReader = new ReaderVersion20(CONTEXT_PATH_V_200);
-		} else if(header.contains(MZXML_V_210)) {
-			chromatogramReader = new ReaderVersion21(CONTEXT_PATH_V_210);
-		} else if(header.contains(MZXML_V_220)) {
-			chromatogramReader = new ReaderVersion21(CONTEXT_PATH_V_220);
-		} else if(header.contains(MZXML_V_300)) {
-			chromatogramReader = new ReaderVersion30(CONTEXT_PATH_V_300);
-		} else if(header.contains(MZXML_V_310)) {
-			chromatogramReader = new ReaderVersion31(CONTEXT_PATH_V_310);
-		} else if(header.contains(MZXML_V_320)) {
-			chromatogramReader = new ReaderVersion32(CONTEXT_PATH_V_320);
+		if(header.contains(IFormat.MZXML_V_200)) {
+			chromatogramReader = new ReaderVersion20(IFormat.CONTEXT_PATH_V_200);
+		} else if(header.contains(IFormat.MZXML_V_210)) {
+			chromatogramReader = new ReaderVersion21(IFormat.CONTEXT_PATH_V_210);
+		} else if(header.contains(IFormat.MZXML_V_220)) {
+			chromatogramReader = new ReaderVersion21(IFormat.CONTEXT_PATH_V_220);
+		} else if(header.contains(IFormat.MZXML_V_300)) {
+			chromatogramReader = new ReaderVersion30(IFormat.CONTEXT_PATH_V_300);
+		} else if(header.contains(IFormat.MZXML_V_310)) {
+			chromatogramReader = new ReaderVersion31(IFormat.CONTEXT_PATH_V_310);
+		} else if(header.contains(IFormat.MZXML_V_320)) {
+			chromatogramReader = new ReaderVersion32(IFormat.CONTEXT_PATH_V_320);
 		} else {
 			throw new UnknownVersionException();
 		}

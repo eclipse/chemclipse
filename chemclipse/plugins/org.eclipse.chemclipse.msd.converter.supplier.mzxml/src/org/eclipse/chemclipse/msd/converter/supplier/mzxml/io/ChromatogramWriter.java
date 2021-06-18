@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Matthias Mailänder - add support for saving version 3.2
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.mzxml.io;
 
@@ -17,18 +18,30 @@ import java.io.IOException;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.io.AbstractChromatogramWriter;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDWriter;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.ChromatogramWriter32;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.IFormat;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramWriter extends AbstractChromatogramWriter implements IChromatogramMSDWriter {
 
-	private static final Logger logger = Logger.getLogger(ChromatogramWriter.class);
-
 	@Override
 	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
 
-		logger.info("The mzXML writer needs to be re-implemented.");
+		final IChromatogramMSDWriter chromatogramWriter = getChromatogramWriter();
+		if(chromatogramWriter != null) {
+			chromatogramWriter.writeChromatogram(file, chromatogram, monitor);
+		}
+	}
+
+	private IChromatogramMSDWriter getChromatogramWriter() {
+
+		String versionSave = PreferenceSupplier.getChromatogramVersionSave();
+		if(versionSave.equals(IFormat.MZXML_V_320)) {
+			return new ChromatogramWriter32();
+		}
+		return null;
 	}
 }

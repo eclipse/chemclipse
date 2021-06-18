@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v32.model;
 
-import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,9 +27,8 @@ import javax.xml.datatype.Duration;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {"parentFile", "msInstrument", "dataProcessing", "separation", "spotting", "scan", "sha1"})
 @XmlRootElement(name = "msRun")
-public class MsRun implements Serializable {
+public class MsRun {
 
-	private final static long serialVersionUID = 320L;
 	@XmlElement(required = true)
 	private List<ParentFile> parentFile;
 	private List<MsInstrument> msInstrument;
