@@ -24,12 +24,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_NUMBER_LOWEST = "numberLowest";
 	public static final int DEF_NUMBER_LOWEST = 5;
-	public static final int MIN_NUMBER_LOWEST = 2;
+	public static final int MIN_NUMBER_LOWEST = 1;
 	public static final int MAX_NUMBER_LOWEST = Integer.MAX_VALUE;
 	//
 	public static final String P_NUMBER_HIGHEST = "numberHighest";
 	public static final int DEF_NUMBER_HIGHEST = 5;
-	public static final int MIN_NUMBER_HIGHEST = 2;
+	public static final int MIN_NUMBER_HIGHEST = 1;
 	public static final int MAX_NUMBER_HIGHEST = Integer.MAX_VALUE;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
