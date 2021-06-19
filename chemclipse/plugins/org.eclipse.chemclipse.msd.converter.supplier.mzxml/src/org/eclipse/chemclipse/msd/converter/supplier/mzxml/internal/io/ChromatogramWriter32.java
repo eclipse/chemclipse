@@ -73,7 +73,7 @@ public class ChromatogramWriter32 extends AbstractChromatogramWriter implements 
 				ByteBuffer byteBuffer = ByteBuffer.allocate(doubleBuffer.capacity() * Double.BYTES);
 				peaks.setPrecision(BigInteger.valueOf(64));
 				peaks.setByteOrder("network");
-				byteBuffer.order(ByteOrder.BIG_ENDIAN); // TODO: preferences
+				byteBuffer.order(ByteOrder.BIG_ENDIAN);
 				byteBuffer.asDoubleBuffer().put(doubleBuffer);
 				boolean compression = PreferenceSupplier.getChromatogramSaveCompression();
 				if(compression) {
@@ -86,8 +86,8 @@ public class ChromatogramWriter32 extends AbstractChromatogramWriter implements 
 					int compressedDataLength = 0;
 					while(!compresser.finished()) {
 						int compressCount = compresser.deflate(readBuffer);
-						compressedDataLength += compressCount;
 						if(compressCount > 0) {
+							compressedDataLength += compressCount;
 							outputStream.write(readBuffer, 0, compressCount);
 						}
 					}

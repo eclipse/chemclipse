@@ -26,7 +26,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_CHROMATOGRAM_VERSION_SAVE = "chromatogramVersionSave";
 	public static final String DEF_CHROMATOGRAM_VERSION_SAVE = IFormat.CHROMATOGRAM_VERSION_LATEST;
 	public static final String P_CHROMATOGRAM_SAVE_COMPRESSION = "chromatogramSaveCompression";
-	public static final boolean DEF_CHROMATOGRAM_SAVE_COMPRESSION = false;
+	public static final boolean DEF_CHROMATOGRAM_SAVE_COMPRESSION = true;
 	private static IPreferenceSupplier preferenceSupplier;
 
 	public static IPreferenceSupplier INSTANCE() {
