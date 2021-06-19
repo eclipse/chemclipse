@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -19,6 +20,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.DoubleBuffer;
 import java.util.List;
+import java.util.zip.Deflater;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -35,6 +37,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v32.model.Ms
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v32.model.MzXML;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v32.model.Peaks;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v32.model.Scan;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -71,9 +74,29 @@ public class ChromatogramWriter32 extends AbstractChromatogramWriter implements 
 				peaks.setPrecision(BigInteger.valueOf(64));
 				peaks.setByteOrder("network");
 				byteBuffer.order(ByteOrder.BIG_ENDIAN); // TODO: preferences
-				// TODO: compression
 				byteBuffer.asDoubleBuffer().put(doubleBuffer);
-				peaks.setValue(byteBuffer.array());
+				boolean compression = PreferenceSupplier.getChromatogramSaveCompression();
+				if(compression) {
+					peaks.setCompressionType("zlib");
+					Deflater compresser = new Deflater();
+					compresser.setInput(byteBuffer.array());
+					compresser.finish();
+					ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+					byte[] readBuffer = new byte[1024];
+					int compressedDataLength = 0;
+					while(!compresser.finished()) {
+						int compressCount = compresser.deflate(readBuffer);
+						compressedDataLength += compressCount;
+						if(compressCount > 0) {
+							outputStream.write(readBuffer, 0, compressCount);
+						}
+					}
+					peaks.setCompressedLen(compressedDataLength);
+					peaks.setValue(outputStream.toByteArray());
+					compresser.end();
+				} else {
+					peaks.setValue(byteBuffer.array());
+				}
 				exportScan.getPeaks().add(peaks);
 				msRun.getScan().add(exportScan);
 			}
