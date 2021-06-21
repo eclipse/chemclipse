@@ -22,14 +22,13 @@ import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.converter.io.AbstractChromatogramMSDReader;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
+import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.io.ChromatogramReaderVersion105;
+import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.io.IFormat;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.io.exception.UnknownVersionException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramReader extends AbstractChromatogramMSDReader implements IChromatogramMSDReader {
-
-	private static final String MZDATA_V_105 = "1.05";
-	private static final String CONTEXT_PATH_V_105 = "org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model";
 
 	public static IChromatogramMSDReader getReader(final File file) throws IOException {
 
@@ -41,8 +40,8 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 		fileReader.close();
 		//
 		final String header = new String(charBuffer);
-		if(header.contains(MZDATA_V_105)) {
-			chromatogramReader = new ChromatogramReaderVersion105(CONTEXT_PATH_V_105);
+		if(header.contains(IFormat.V_105)) {
+			chromatogramReader = new ChromatogramReaderVersion105(IFormat.CONTEXT_PATH_V_105);
 		} else {
 			throw new UnknownVersionException();
 		}

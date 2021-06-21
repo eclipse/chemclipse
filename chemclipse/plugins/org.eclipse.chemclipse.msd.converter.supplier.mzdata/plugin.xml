@@ -5,14 +5,20 @@
          point="org.eclipse.chemclipse.msd.converter.chromatogramSupplier">
       <ChromatogramSupplier
             description="Reads mzData Chromatograms"
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.mzdata.converter.ChromatogramExportConverter"
             fileExtension=".mzData"
             filterName="mzData Chromatogram (*.mzData)"
             id="org.eclipse.chemclipse.msd.converter.supplier.mzdata"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.mzdata.converter.ChromatogramImportConverter"
             importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.mzdata.converter.MagicNumberMatcher"
-            isExportable="false"
+            isExportable="true"
             isImportable="true">
       </ChromatogramSupplier>
    </extension>
-
+      <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.msd.converter.supplier.mzdata.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
 </plugin>

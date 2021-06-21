@@ -9,7 +9,7 @@
  * Contributors:
  * Matthias Mailänder - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.msd.converter.supplier.mzdata.io;
+package org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.io;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -37,6 +37,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.MzData;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.MzData.SpectrumList.Spectrum;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.SupDataBinaryType.Data;
+import org.eclipse.chemclipse.msd.converter.supplier.mzdata.io.AbstractChromatogramReader;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.model.IVendorChromatogram;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.model.IVendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.model.IVendorScan;
