@@ -66,9 +66,10 @@ public class BinaryReader {
 		}
 		if(compressed) {
 			Inflater inflater = new Inflater();
-			inflater.setInput(binary);
-			byte[] byteArray = new byte[binaryDataArrayType.getEncodedLength().intValue()];
-			byteBuffer = ByteBuffer.wrap(byteArray, 0, inflater.inflate(byteArray));
+			inflater.setInput(byteBuffer.array());
+			byte[] byteArray = new byte[byteBuffer.capacity() * 10];
+			int decodedLength = inflater.inflate(byteArray);
+			byteBuffer = ByteBuffer.wrap(byteArray, 0, decodedLength);
 		}
 		byteBuffer.order(ByteOrder.LITTLE_ENDIAN); // this is always the case
 		if(doublePrecision) {
