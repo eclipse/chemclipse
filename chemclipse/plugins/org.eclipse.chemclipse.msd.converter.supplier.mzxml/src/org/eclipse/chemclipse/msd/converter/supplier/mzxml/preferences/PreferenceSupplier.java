@@ -25,6 +25,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_CHROMATOGRAM_VERSION_SAVE = "chromatogramVersionSave";
 	public static final String DEF_CHROMATOGRAM_VERSION_SAVE = IFormat.CHROMATOGRAM_VERSION_LATEST;
+	public static final String P_CHROMATOGRAM_SAVE_COMPRESSION = "chromatogramSaveCompression";
+	public static final boolean DEF_CHROMATOGRAM_SAVE_COMPRESSION = true;
 	private static IPreferenceSupplier preferenceSupplier;
 
 	public static IPreferenceSupplier INSTANCE() {
@@ -52,6 +54,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
 		defaultValues.put(P_CHROMATOGRAM_VERSION_SAVE, DEF_CHROMATOGRAM_VERSION_SAVE);
+		defaultValues.put(P_CHROMATOGRAM_SAVE_COMPRESSION, Boolean.toString(DEF_CHROMATOGRAM_SAVE_COMPRESSION));
 		return defaultValues;
 	}
 
@@ -73,5 +76,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		elements[0][0] = IFormat.MZXML_V_320.split("_")[1];
 		elements[0][1] = IFormat.MZXML_V_320;
 		return elements;
+	}
+
+	public static boolean getChromatogramSaveCompression() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getBoolean(P_CHROMATOGRAM_SAVE_COMPRESSION, DEF_CHROMATOGRAM_SAVE_COMPRESSION);
 	}
 }
