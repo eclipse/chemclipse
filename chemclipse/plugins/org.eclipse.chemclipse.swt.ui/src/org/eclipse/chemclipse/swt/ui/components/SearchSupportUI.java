@@ -29,13 +29,22 @@ import org.eclipse.swt.widgets.Text;
 public class SearchSupportUI extends Composite {
 
 	private Text text;
-	private Button checkbox;
+	private Button buttonCaseSensitive;
+	//
 	private ISearchListener searchListener;
+	private boolean caseSensitive = PreferenceSupplier.isSearchCaseSensitive();
 
 	public SearchSupportUI(Composite parent, int style) {
 
 		super(parent, style);
 		createControl();
+	}
+
+	@Override
+	public void setVisible(boolean visible) {
+
+		super.setVisible(visible);
+		updateButtonCaseSensitive();
 	}
 
 	public void reset() {
@@ -72,7 +81,7 @@ public class SearchSupportUI extends Composite {
 
 	public boolean isSearchCaseSensitive() {
 
-		return checkbox.getSelection();
+		return caseSensitive;
 	}
 
 	private void createControl() {
@@ -87,7 +96,7 @@ public class SearchSupportUI extends Composite {
 		//
 		createButtonSearch(composite);
 		text = createTextSearch(composite);
-		checkbox = createCheckBoxCaseSensitive(composite);
+		buttonCaseSensitive = createButtonCaseSensitive(composite);
 	}
 
 	private Button createButtonSearch(Composite parent) {
@@ -152,18 +161,20 @@ public class SearchSupportUI extends Composite {
 		return text;
 	}
 
-	private Button createCheckBoxCaseSensitive(Composite parent) {
+	private Button createButtonCaseSensitive(Composite parent) {
 
-		Button button = new Button(parent, SWT.CHECK);
+		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Search Case Sensitive");
-		button.setSelection(PreferenceSupplier.isSearchCaseSensitive());
+		button.setToolTipText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CASE_SENSITIVE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				PreferenceSupplier.setSearchCaseSensitive(button.getSelection());
+				caseSensitive = !caseSensitive;
+				PreferenceSupplier.setSearchCaseSensitive(caseSensitive);
+				updateButtonCaseSensitive();
 				runSearch();
 			}
 		});
@@ -171,11 +182,16 @@ public class SearchSupportUI extends Composite {
 		return button;
 	}
 
+	private void updateButtonCaseSensitive() {
+
+		buttonCaseSensitive.setToolTipText(caseSensitive ? "Search Case Sensitive" : "Search Case Insensitive");
+		buttonCaseSensitive.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CASE_SENSITIVE, IApplicationImage.SIZE_16x16, caseSensitive));
+	}
+
 	private void runSearch() {
 
 		if(searchListener != null) {
 			String searchText = text.getText().trim();
-			boolean caseSensitive = checkbox.getSelection();
 			searchListener.performSearch(searchText, caseSensitive);
 		}
 	}
