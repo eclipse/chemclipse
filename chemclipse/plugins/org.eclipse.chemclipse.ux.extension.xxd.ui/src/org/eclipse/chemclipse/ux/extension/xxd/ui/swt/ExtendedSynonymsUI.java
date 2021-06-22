@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
-import org.eclipse.chemclipse.msd.model.core.ILibraryMassSpectrum;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -28,10 +27,9 @@ public class ExtendedSynonymsUI extends Composite {
 		createControl();
 	}
 
-	public void setInput(ILibraryMassSpectrum libraryMassSpectrum) {
+	public void setInput(ILibraryInformation libraryInformation) {
 
-		if(libraryMassSpectrum != null) {
-			ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
+		if(libraryInformation != null) {
 			StringBuilder builder = new StringBuilder();
 			for(String synonym : libraryInformation.getSynonyms()) {
 				builder.append(synonym);
