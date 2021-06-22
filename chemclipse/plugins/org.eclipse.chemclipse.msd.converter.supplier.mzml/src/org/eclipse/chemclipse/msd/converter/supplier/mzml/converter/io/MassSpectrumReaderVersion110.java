@@ -126,8 +126,6 @@ public class MassSpectrumReaderVersion110 extends AbstractMassSpectraReader impl
 			logger.warn(e);
 		} catch(DataFormatException e) {
 			logger.warn(e);
-		} catch(NullPointerException e) {
-			logger.warn(e, e.fillInStackTrace());
 		}
 		//
 		IVendorMassSpectra massSpectra = new VendorMassSpectra();
