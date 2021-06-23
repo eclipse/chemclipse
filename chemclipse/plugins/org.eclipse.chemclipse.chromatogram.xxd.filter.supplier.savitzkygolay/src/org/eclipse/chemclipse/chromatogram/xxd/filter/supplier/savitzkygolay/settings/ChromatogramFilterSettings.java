@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2020 Lablicate GmbH.
+ * Copyright (c) 2015, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,12 +9,14 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Lorenz Gerber - Ion-wise savitzky-golay on msd data
+ * Matthias Mailänder - validate the width
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings;
 
 import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
+import org.eclipse.chemclipse.support.settings.IntSettingsProperty.Validation;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -28,7 +30,7 @@ public class ChromatogramFilterSettings extends AbstractChromatogramFilterSettin
 	private int order = 2;
 	@JsonProperty(value = "Width", defaultValue = "5")
 	@JsonPropertyDescription(value = "Filter width, uneven integer in the range from 5 to 51")
-	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_WIDTH, maxValue = PreferenceSupplier.MAX_WIDTH)
+	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_WIDTH, maxValue = PreferenceSupplier.MAX_WIDTH, validation = Validation.ODD_NUMBER)
 	private int width = 5;
 	@JsonIgnore
 	private int derivative = 0;
