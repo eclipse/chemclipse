@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.calculator;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.exceptions.CodaCalculatorException;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
-import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 
 /**
  * @author eselmeister
@@ -24,6 +23,7 @@ public class MassChromatographicQualityCalculator {
 	 * Use only static methods.
 	 */
 	private MassChromatographicQualityCalculator() {
+
 	}
 
 	/**
@@ -36,7 +36,7 @@ public class MassChromatographicQualityCalculator {
 	 * @return {@link IMassChromatographicQualityResult}
 	 * @throws CodaCalculatorException
 	 */
-	public static IMassChromatographicQualityResult calculate(IChromatogramSelectionMSD chromatogramSelection, float codaThreshold, WindowSize windowSize) throws CodaCalculatorException {
+	public static IMassChromatographicQualityResult calculate(IChromatogramSelectionMSD chromatogramSelection, float codaThreshold, int windowSize) throws CodaCalculatorException {
 
 		IMassChromatographicQualityResult result = new MassChromatographicQualityResult(chromatogramSelection, codaThreshold, windowSize);
 		return result;

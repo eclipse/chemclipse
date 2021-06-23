@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,19 +8,22 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Matthias Mailänder - remove the window size enum
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings;
 
 import org.eclipse.chemclipse.chromatogram.peak.detector.model.Threshold;
 import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.settings.AbstractPeakDetectorWSDSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.chemclipse.support.settings.EnumSelectionRadioButtonsSettingProperty;
-import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
+import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
+import org.eclipse.chemclipse.support.settings.IntSettingsProperty.Validation;
+import org.eclipse.chemclipse.support.settings.serialization.WindowSizeDeserializer;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 public class PeakDetectorSettingsWSD extends AbstractPeakDetectorWSDSettings {
 
@@ -32,13 +35,15 @@ public class PeakDetectorSettingsWSD extends AbstractPeakDetectorWSDSettings {
 	@JsonProperty(value = "Min S/N Ratio", defaultValue = "0")
 	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_SN_RATIO_MIN, maxValue = PreferenceSupplier.MIN_SN_RATIO_MAX)
 	private float minimumSignalToNoiseRatio;
-	@JsonProperty(value = "Window Size", defaultValue = "WIDTH_5")
+	@JsonProperty(value = "Window Size", defaultValue = "5")
 	@JsonPropertyDescription(value = "Window Size: 3, 5, 7, ..., 45")
-	@EnumSelectionSettingProperty
-	private WindowSize windowSize;
+	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_WINDOW_SIZE, maxValue = PreferenceSupplier.MAX_WINDOW_SIZE, validation = Validation.ODD_NUMBER_INCLUDING_ZERO)
+	@JsonDeserialize(using = WindowSizeDeserializer.class)
+	private int windowSize;
 
 	public PeakDetectorSettingsWSD() {
-		windowSize = WindowSize.WIDTH_5;
+
+		windowSize = 5;
 	}
 
 	public Threshold getThreshold() {
@@ -73,12 +78,12 @@ public class PeakDetectorSettingsWSD extends AbstractPeakDetectorWSDSettings {
 		this.minimumSignalToNoiseRatio = minimumSignalToNoiseRatio;
 	}
 
-	public WindowSize getMovingAverageWindowSize() {
+	public int getMovingAverageWindowSize() {
 
 		return windowSize;
 	}
 
-	public void setMovingAverageWindowSize(WindowSize windowSize) {
+	public void setMovingAverageWindowSize(int windowSize) {
 
 		this.windowSize = windowSize;
 	}

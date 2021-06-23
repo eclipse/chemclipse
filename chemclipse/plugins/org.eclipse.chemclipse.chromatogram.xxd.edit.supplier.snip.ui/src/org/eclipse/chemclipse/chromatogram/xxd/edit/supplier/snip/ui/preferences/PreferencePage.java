@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2020 Lablicate GmbH.
+ * Copyright (c) 2013, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,11 +13,10 @@ package org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.preference
 
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.Activator;
-import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.DoubleFieldEditor;
-import org.eclipse.jface.preference.ComboFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.IntegerFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.WindowSizeFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -36,12 +35,13 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 * GUI blocks needed to manipulate various types of preferences. Each field
 	 * editor knows how to save and restore itself.
 	 */
+	@Override
 	public void createFieldEditors() {
 
 		IntegerFieldEditor iterationsFieldEditor = new IntegerFieldEditor(PreferenceSupplier.P_ITERATIONS, "Iterations", getFieldEditorParent());
 		iterationsFieldEditor.setValidRange(PreferenceSupplier.MIN_ITERATIONS, PreferenceSupplier.MAX_ITERATIONS);
 		addField(iterationsFieldEditor);
-		addField(new ComboFieldEditor(PreferenceSupplier.P_WINDOW_SIZE, "Window size (Detector)", WindowSize.getElements(), getFieldEditorParent()));
+		addField(new WindowSizeFieldEditor(PreferenceSupplier.P_WINDOW_SIZE, "Window Size (Detector)", getFieldEditorParent()));
 		addField(new DoubleFieldEditor(PreferenceSupplier.P_MAGNIFICATION_FACTOR, "Magnification factor (Filter)", PreferenceSupplier.MIN_MAGNIFICATION_FACTOR, PreferenceSupplier.MAX_MAGNIFICATION_FACTOR, getFieldEditorParent()));
 		IntegerFieldEditor transitionsFieldEditor = new IntegerFieldEditor(PreferenceSupplier.P_TRANSITIONS, "Transitions (Filter)", getFieldEditorParent());
 		transitionsFieldEditor.setValidRange(PreferenceSupplier.MIN_TRANSITIONS, PreferenceSupplier.MAX_TRANSITIONS);
@@ -53,6 +53,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	 * @see
 	 * org.eclipse.ui.IWorkbenchPreferencePage#init(org.eclipse.ui.IWorkbench)
 	 */
+	@Override
 	public void init(IWorkbench workbench) {
 
 	}

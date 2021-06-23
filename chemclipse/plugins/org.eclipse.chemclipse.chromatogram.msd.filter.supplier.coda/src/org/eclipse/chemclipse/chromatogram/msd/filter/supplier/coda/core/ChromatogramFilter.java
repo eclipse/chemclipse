@@ -25,14 +25,13 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 
-	private static WindowSize MOVING_AVERAGE_WINDOW = WindowSize.WIDTH_5;
+	private static int MOVING_AVERAGE_WINDOW = 5;
 
 	@Override
 	public IProcessingInfo<?> applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {

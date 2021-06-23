@@ -12,10 +12,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.peak.detector.support;
 
-import org.eclipse.chemclipse.numeric.statistics.WindowSize;
-
 /**
- * @author eselmeister
+ * @author Philip Wenig
  */
 public interface IDetectorSlopes {
 
@@ -38,17 +36,17 @@ public interface IDetectorSlopes {
 	 * Calculates for each stored slope value a smoothed moving average value.<br/>
 	 * The window size declares the width of the moving window.
 	 * 
-	 * @param windowSize
+	 * @param int
 	 */
-	void calculateMovingAverage(WindowSize windowSize);
+	void calculateMovingAverage(int windowSize);
 
 	/**
 	 * Calculates for each stored slope value a Savitzky-Golay smooothed value.<br/>
 	 * The window size declares the filter width of the Savitzky-Golay filter.
 	 * 
-	 * @param windowSize
+	 * @param int
 	 */
-	void calculateSavitzkyGolaySmooth(WindowSize windowSize);
+	void calculateSavitzkyGolaySmooth(int windowSize);
 
 	/**
 	 * Returns the size of the slope list.

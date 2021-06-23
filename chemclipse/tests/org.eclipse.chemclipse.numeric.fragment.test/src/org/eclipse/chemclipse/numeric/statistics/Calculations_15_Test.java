@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,7 +16,7 @@ import junit.framework.TestCase;
 /**
  * Testing median.
  * 
- * @author eselmeister
+ * @author Philip Wenig
  */
 public class Calculations_15_Test extends TestCase {
 
@@ -51,7 +51,7 @@ public class Calculations_15_Test extends TestCase {
 
 	public void testGetWindowReducedLength_1() {
 
-		Calculations.smooth(values, WindowSize.WIDTH_3);
+		Calculations.smooth(values, 3);
 		double[] smoothed;
 		smoothed = new double[13];
 		smoothed[0] = 600.0d;

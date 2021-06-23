@@ -25,7 +25,6 @@ import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
-import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 
 public class MassChromatographicQualityResult implements IMassChromatographicQualityResult {
 
@@ -41,10 +40,9 @@ public class MassChromatographicQualityResult implements IMassChromatographicQua
 	 * @param windowSize
 	 * @throws CodaCalculatorException
 	 */
-	public MassChromatographicQualityResult(IChromatogramSelectionMSD chromatogramSelection, float codaThreshold, WindowSize windowSize) throws CodaCalculatorException {
+	public MassChromatographicQualityResult(IChromatogramSelectionMSD chromatogramSelection, float codaThreshold, int windowSize) throws CodaCalculatorException {
 
 		validateChromatogramSelection(chromatogramSelection);
-		validateWindowSize(windowSize);
 		/*
 		 * Create a new excluded ions object.
 		 */
@@ -71,11 +69,10 @@ public class MassChromatographicQualityResult implements IMassChromatographicQua
 	 * DataReductionValue<br/>
 	 * ExcludedIons
 	 */
-	private void calculateMassChromatographicQuality(IChromatogramSelectionMSD chromatogramSelection, float codaThreshold, WindowSize windowSize, IMarkedIons excludedIons) {
+	private void calculateMassChromatographicQuality(IChromatogramSelectionMSD chromatogramSelection, float codaThreshold, int windowSize, IMarkedIons excludedIons) {
 
 		assert (chromatogramSelection != null) : "The chromatogram selection must not be null.";
 		assert (chromatogramSelection.getChromatogram() != null) : "The chromatogram must not be null.";
-		assert (windowSize != null) : "The window size must not be null.";
 		assert (excludedIons != null) : "The excluded ions must not be null.";
 		List<Float> mcqs = new ArrayList<Float>();
 		float mcq;
@@ -125,19 +122,6 @@ public class MassChromatographicQualityResult implements IMassChromatographicQua
 		 * Calculate the data reduction value.
 		 */
 		return selected / mcqs.size();
-	}
-
-	/**
-	 * Validates the window size.
-	 * 
-	 * @param windowSize
-	 * @throws CodaCalculatorException
-	 */
-	private void validateWindowSize(WindowSize windowSize) throws CodaCalculatorException {
-
-		if(windowSize == null) {
-			throw new CodaCalculatorException("The window size must not be null.");
-		}
 	}
 
 	/**

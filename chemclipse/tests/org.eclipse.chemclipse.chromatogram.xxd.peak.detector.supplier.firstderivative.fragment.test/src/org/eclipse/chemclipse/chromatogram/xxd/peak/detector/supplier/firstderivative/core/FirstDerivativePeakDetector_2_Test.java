@@ -15,7 +15,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.IFirstDerivativeDetectorSlopes;
-import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 
 /**
  * peakDetectorSettings.getThreshold() is MEDIUM > threshold = 0.05d;
@@ -37,7 +36,7 @@ public class FirstDerivativePeakDetector_2_Test extends FirstDerivativeSlopesTes
 		firstDerivativePeakDetector = new PeakDetectorMSD();
 		firstDerivativePeakDetectorClass = BasePeakDetector.class;
 		slopes = getFirstDerivativeSlopes();
-		slopes.calculateMovingAverage(WindowSize.WIDTH_5);
+		slopes.calculateMovingAverage(5);
 	}
 
 	@Override

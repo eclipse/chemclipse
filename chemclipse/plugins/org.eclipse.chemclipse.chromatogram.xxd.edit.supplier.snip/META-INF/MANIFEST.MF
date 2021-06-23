@@ -23,3 +23,4 @@ Export-Package: org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.calcu
  org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.core,
  org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.preferences,
  org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings
+Import-Package: com.fasterxml.jackson.databind.annotation

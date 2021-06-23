@@ -33,6 +33,6 @@ public @interface IntSettingsProperty {
 	Validation validation() default Validation.NONE;
 
 	public enum Validation {
-		ODD_NUMBER, EVEN_NUMBER, NONE;
+		ODD_NUMBER_INCLUDING_ZERO, ODD_NUMBER, EVEN_NUMBER, NONE;
 	}
 }

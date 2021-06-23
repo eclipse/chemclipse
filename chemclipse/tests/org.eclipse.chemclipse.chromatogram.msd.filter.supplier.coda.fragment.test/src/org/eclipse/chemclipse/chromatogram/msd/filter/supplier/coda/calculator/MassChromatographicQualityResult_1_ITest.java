@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -21,7 +21,6 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
@@ -40,7 +39,7 @@ public class MassChromatographicQualityResult_1_ITest extends TestCase {
 		super.setUp();
 		importFile = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_CHROMATOGRAM_1));
 		IProcessingInfo<IChromatogramMSD> processingInfo = ChromatogramConverterMSD.getInstance().convert(importFile, new NullProgressMonitor());
-		chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
+		chromatogram = processingInfo.getProcessingResult();
 		chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
 	}
 
@@ -59,7 +58,7 @@ public class MassChromatographicQualityResult_1_ITest extends TestCase {
 	public void testConstructor_1() {
 
 		try {
-			result = new MassChromatographicQualityResult(chromatogramSelection, 0.7f, WindowSize.WIDTH_3);
+			result = new MassChromatographicQualityResult(chromatogramSelection, 0.7f, 3);
 			float drv = result.getDataReductionValue();
 			assertEquals("Data reduction value", 0.8737201f, drv);
 			IMarkedIons exludedIons = result.getExcludedIons();
@@ -72,7 +71,7 @@ public class MassChromatographicQualityResult_1_ITest extends TestCase {
 	public void testConstructor_2() {
 
 		try {
-			result = new MassChromatographicQualityResult(chromatogramSelection, 0.7f, WindowSize.WIDTH_5);
+			result = new MassChromatographicQualityResult(chromatogramSelection, 0.7f, 5);
 			float drv = result.getDataReductionValue();
 			assertEquals("Data reduction value", 0.78327644f, drv);
 			IMarkedIons exludedIons = result.getExcludedIons();
@@ -85,7 +84,7 @@ public class MassChromatographicQualityResult_1_ITest extends TestCase {
 	public void testConstructor_3() {
 
 		try {
-			result = new MassChromatographicQualityResult(chromatogramSelection, 0.7f, WindowSize.WIDTH_7);
+			result = new MassChromatographicQualityResult(chromatogramSelection, 0.7f, 7);
 			float drv = result.getDataReductionValue();
 			assertEquals("Data reduction value", 0.721843f, drv);
 			IMarkedIons exludedIons = result.getExcludedIons();

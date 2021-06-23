@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Christoph Läubrich - use static {@link SnipCalculator} method, remove warnings and make method static for reuse
+ * Matthias Mailänder - remove the window size enum
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.core;
 
@@ -27,7 +28,6 @@ import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.support.IScanRange;
 import org.eclipse.chemclipse.model.support.ScanRange;
-import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
@@ -68,11 +68,11 @@ public class BaselineDetector extends AbstractBaselineDetector {
 		 * Iterations
 		 */
 		int iterations = detectorSettings.getIterations();
-		WindowSize windowSize = detectorSettings.getWindowSize();
+		int windowSize = detectorSettings.getWindowSize();
 		/*
 		 * If the scan range is lower than the given window size, do nothing.
 		 */
-		if(WindowSize.NONE.equals(windowSize) || scanRange.getWidth() <= windowSize.getSize()) {
+		if(windowSize == 0 || scanRange.getWidth() <= windowSize) {
 			return;
 		}
 		/*

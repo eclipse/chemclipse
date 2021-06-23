@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,12 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.calculator;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.model.exceptions.NoExtractedIonSignalStoredException;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.numeric.statistics.Calculations;
-import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 
 // TODO JUnit
 /**
@@ -32,6 +31,7 @@ public class CodaCalculator {
 	 * Use it a singleton.
 	 */
 	private CodaCalculator() {
+
 	}
 
 	/**
@@ -43,7 +43,7 @@ public class CodaCalculator {
 	 * @param ion
 	 * @return float
 	 */
-	public static float getMCQValue(IExtractedIonSignals extractedIonSignals, WindowSize windowSize, int ion) {
+	public static float getMCQValue(IExtractedIonSignals extractedIonSignals, int windowSize, int ion) {
 
 		IExtractedIonSignal extractedIonSignal;
 		int startScan = extractedIonSignals.getStartScan();
@@ -91,11 +91,10 @@ public class CodaCalculator {
 	 * @param windowSize
 	 * @return float
 	 */
-	private static float calculateMCQValue(double[] euclidianLengthValues, double[] standardizedSmoothedValues, WindowSize windowSize) {
+	private static float calculateMCQValue(double[] euclidianLengthValues, double[] standardizedSmoothedValues, int windowSize) {
 
-		assert (windowSize != null) : "The window size must not be null.";
 		float mcq = 0.0f;
-		int lastScan = Calculations.getWindowReducedLength(euclidianLengthValues, windowSize.getSize());
+		int lastScan = Calculations.getWindowReducedLength(euclidianLengthValues, windowSize);
 		int scans = euclidianLengthValues.length;
 		double sumSignals = 0.0f;
 		/*
@@ -107,7 +106,7 @@ public class CodaCalculator {
 		for(int i = 0; i < lastScan; i++) {
 			sumSignals += euclidianLengthValues[i] * standardizedSmoothedValues[i];
 		}
-		mcq = (float)((1.0d / Math.sqrt((scans - windowSize.getSize()))) * sumSignals);
+		mcq = (float)((1.0d / Math.sqrt((scans - windowSize))) * sumSignals);
 		/*
 		 * Give a warning if something tries to run out of order.
 		 */
