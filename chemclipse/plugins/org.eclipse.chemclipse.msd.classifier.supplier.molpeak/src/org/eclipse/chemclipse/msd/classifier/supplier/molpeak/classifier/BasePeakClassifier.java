@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -10,6 +10,7 @@
  * Dr. Lorenz Gerber - initial API and implementation
  * Dr. Philip Wenig - initial API and implementation
  * Christoph Läubrich - Adjust to new API
+ * Matthias Mailänder - work together with other targets
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.classifier.supplier.molpeak.classifier;
 
@@ -103,6 +104,9 @@ public class BasePeakClassifier {
 			double count = countArea ? peak.getIntegratedArea() : 1;
 			exitloop:
 			for(IIdentificationTarget peakTarget : peak.getTargets()) {
+				if(!peakTarget.getIdentifier().equals(BasePeakIdentifier.IDENTIFIER)) {
+					continue;
+				}
 				String name = peakTarget.getLibraryInformation().getName();
 				if(name.equals(BasePeakIdentifier.SYRINGYL)) {
 					counterS += count;
