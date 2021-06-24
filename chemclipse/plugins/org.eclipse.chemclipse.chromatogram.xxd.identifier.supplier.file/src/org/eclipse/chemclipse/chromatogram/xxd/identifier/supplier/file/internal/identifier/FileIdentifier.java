@@ -253,7 +253,7 @@ public class FileIdentifier {
 			long end = System.currentTimeMillis();
 			NumberFormat integerFormat = ValueFormat.getDecimalFormatEnglish("0");
 			NumberFormat timeFormat = ValueFormat.getDecimalFormatEnglish("0.000");
-			System.out.println("#PERF# Identifaction of " + integerFormat.format(unknownList.size()) + " unknown items against database " + databaseName + " with " + integerFormat.format(references.size()) + " massspectra took " + timeFormat.format((end - start) / 1000.0d) + " seconds and yields " + matched + " matches");
+			logger.info("Identification of " + integerFormat.format(unknownList.size()) + " unknown items against database " + databaseName + " with " + integerFormat.format(references.size()) + " mass spectra took " + timeFormat.format((end - start) / 1000.0d) + " seconds and yields " + matched + " matches");
 		}
 		//
 		return matched;

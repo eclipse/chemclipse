@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2020 Lablicate GmbH.
+ * Copyright (c) 2013, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,13 +13,19 @@
 package org.eclipse.chemclipse.processing.converter;
 
 import java.io.File;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.support.text.ValueFormat;
+
 public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIdentifier {
 
+	private static final Logger logger = Logger.getLogger(AbstractSupplierFileIdentifier.class);
 	private final List<ISupplier> suppliers;
+	private final NumberFormat timeFormat = ValueFormat.getDecimalFormatEnglish("0.000");
 
 	public AbstractSupplierFileIdentifier(List<ISupplier> suppliers) {
 
@@ -159,7 +165,14 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 	public boolean isMatchMagicNumber(File file) {
 
 		for(ISupplier supplier : getSupplier()) {
-			if(supplier.isMatchMagicNumber(file)) {
+			long start = System.currentTimeMillis();
+			boolean matched = supplier.isMatchMagicNumber(file);
+			long end = System.currentTimeMillis();
+			long spent = end - start;
+			if(spent > 0) {
+				logger.info("Magic number check of " + file.getName() + " by " + supplier.getFilterName() + " took " + timeFormat.format(spent / 1000.0d) + " seconds.");
+			}
+			if(matched) {
 				return true;
 			}
 		}
