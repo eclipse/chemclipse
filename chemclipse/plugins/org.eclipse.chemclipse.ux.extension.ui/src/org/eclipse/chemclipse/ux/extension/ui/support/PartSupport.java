@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -43,6 +43,7 @@ public class PartSupport {
 	 * Parts
 	 */
 	public static final String PART_OVERLAY_CHROMATOGRAM = "org.eclipse.chemclipse.ux.extension.xxd.ui.parts.ChromatogramOverlayPart";
+	public static final String PART_OVERLAY_MASS_SPECTRUM = "org.eclipse.chemclipse.ux.extension.xxd.ui.parts.MassSpectrumOverlayPart";
 	/*
 	 * Part Descriptors
 	 */

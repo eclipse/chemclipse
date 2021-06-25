@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Christoph Läubrich - Fix method for NMR
+ * Matthias Mailänder - add support for MS
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.part.support;
 
@@ -19,7 +20,9 @@ import java.util.List;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection;
+import org.eclipse.chemclipse.ux.extension.msd.ui.editors.IMassSpectrumEditor;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramEditor;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramProjectEditor;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IQuantitationDatabaseEditor;
@@ -102,6 +105,43 @@ public class EditorUpdateSupport {
 		 * contains 0 elements.
 		 */
 		return chromatogramSelections;
+	}
+
+	public List<IScanMSD> getMassSpectrumSelections() {
+
+		List<IScanMSD> dataSelections = new ArrayList<IScanMSD>();
+		if(partService != null) {
+			/*
+			 * TODO: see message
+			 */
+			try {
+				Collection<MPart> parts = partService.getParts();
+				for(MPart part : parts) {
+					Object object = part.getObject();
+					if(object != null) {
+						/*
+						 * MALDI
+						 */
+						IScanMSD selection = null;
+						if(object instanceof IMassSpectrumEditor) {
+							IMassSpectrumEditor editor = (IMassSpectrumEditor)object;
+							selection = editor.getScanSelection();
+						}
+						//
+						if(selection != null) {
+							dataSelections.add(selection);
+						}
+					}
+				}
+			} catch(Exception e) {
+				logger.warn(e);
+			}
+		}
+		/*
+		 * If the window was null and there was no open editor, the list will
+		 * contains 0 elements.
+		 */
+		return dataSelections;
 	}
 
 	public List<IScanXIR> getScanSelectionsXIR() {
