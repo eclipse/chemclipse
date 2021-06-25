@@ -26,11 +26,20 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
-import org.eclipse.chemclipse.ux.extension.msd.ui.swt.MassSpectrumChartProfile;
+import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.IRulerUpdateNotifier;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.MassSpectrumRulerChart;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.RulerEvent;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EditorUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay;
+import org.eclipse.e4.ui.model.application.MApplication;
+import org.eclipse.e4.ui.model.application.ui.basic.MBasicFactory;
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
+import org.eclipse.e4.ui.workbench.modeling.EModelService;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -41,7 +50,11 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swtchart.extensions.core.BaseChart;
+import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
+import org.eclipse.swtchart.extensions.core.ISeriesModificationListener;
 import org.eclipse.swtchart.extensions.core.SeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
@@ -50,7 +63,18 @@ import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
 
 public class ExtendedMassSpectrumOverlayUI extends Composite implements IExtendedPartUI {
 
-	private AtomicReference<MassSpectrumChartProfile> chartControl = new AtomicReference<>();
+	private static final String IMAGE_SHIFT = IApplicationImage.IMAGE_SHIFT;
+	private static final String TOOLTIP_SHIFT = "the shift toolbar.";
+	private Button buttonToolbarDataShift;
+	private AtomicReference<DataShiftControllerUI> toolbarDataShift = new AtomicReference<>();
+	private Label labelStatus;
+	//
+	private static final String IMAGE_RULER = IApplicationImage.IMAGE_RULER;
+	private static final String TOOLTIP_RULER = "the ruler toolbar.";
+	private Button buttonToolbarRulerDetails;
+	private AtomicReference<RulerDetailsUI> toolbarRulerDetails = new AtomicReference<>();
+	//
+	private AtomicReference<MassSpectrumRulerChart> chartControl = new AtomicReference<>();
 	//
 	private EditorUpdateSupport editorUpdateSupport = new EditorUpdateSupport();
 	//
@@ -76,7 +100,15 @@ public class ExtendedMassSpectrumOverlayUI extends Composite implements IExtende
 		setLayout(new GridLayout(1, true));
 		//
 		createToolbarMain(this);
+		createRulerDetailsUI(this);
+		createDataShiftControllerUI(this);
 		createOverlayChart(this);
+		//
+		enableToolbar(toolbarDataShift, buttonToolbarDataShift, IMAGE_SHIFT, TOOLTIP_SHIFT, false);
+		enableToolbar(toolbarRulerDetails, buttonToolbarRulerDetails, IMAGE_RULER, TOOLTIP_RULER, false);
+		//
+		toolbarDataShift.get().setScrollableChart(chartControl.get());
+		toolbarRulerDetails.get().setScrollableChart(chartControl.get());
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -85,11 +117,51 @@ public class ExtendedMassSpectrumOverlayUI extends Composite implements IExtende
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(3, false));
+		composite.setLayout(new GridLayout(7, false));
 		//
+		labelStatus = createLabelStatus(composite);
 		createButtonToggleChartLegend(composite, chartControl, IMAGE_LEGEND);
 		createResetButton(composite);
 		createSettingsButton(composite);
+		createNewOverlayPartButton(composite);
+		//
+		buttonToolbarDataShift = createButtonToggleToolbar(composite, toolbarDataShift, IMAGE_SHIFT, TOOLTIP_SHIFT);
+		buttonToolbarRulerDetails = createButtonToggleToolbar(composite, toolbarRulerDetails, IMAGE_RULER, TOOLTIP_RULER);
+	}
+
+	private void createDataShiftControllerUI(Composite parent) {
+
+		DataShiftControllerUI dataShiftControllerUI = new DataShiftControllerUI(parent, SWT.NONE);
+		dataShiftControllerUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		toolbarDataShift.set(dataShiftControllerUI);
+	}
+
+	private void createRulerDetailsUI(Composite parent) {
+
+		RulerDetailsUI rulerDetailsUI = new RulerDetailsUI(parent, SWT.NONE);
+		rulerDetailsUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		toolbarRulerDetails.set(rulerDetailsUI);
+	}
+
+	private void createNewOverlayPartButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Open a new Overlay");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PLUS, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				String bundle = Activator.getDefault().getBundle().getSymbolicName();
+				String classPath = PartSupport.PART_OVERLAY_MASS_SPECTRUM;
+				String name = "Mass Spectrum Overlay";
+				createNewPart(bundle, classPath, name);
+			}
+		});
 	}
 
 	private void createResetButton(Composite parent) {
@@ -122,19 +194,52 @@ public class ExtendedMassSpectrumOverlayUI extends Composite implements IExtende
 
 	private void createOverlayChart(Composite parent) {
 
-		MassSpectrumChartProfile chart = new MassSpectrumChartProfile(parent, SWT.BORDER);
+		MassSpectrumRulerChart chart = new MassSpectrumRulerChart(parent, SWT.BORDER);
 		chart.setLayoutData(new GridData(GridData.FILL_BOTH));
+		chartControl.set(chart);
+		/*
+		 * Chart Settings
+		 */
+		IChartSettings chartSettings = chart.getChartSettings();
+		chartSettings.setCreateMenu(true);
+		chartSettings.setEnableRangeSelector(true);
+		chartSettings.setShowRangeSelectorInitially(false);
+		chartSettings.setSupportDataShift(true);
+		chartSettings.getRangeRestriction().setZeroY(false);
+		chart.applySettings(chartSettings);
+		//
+		BaseChart baseChart = chart.getBaseChart();
+		baseChart.addSeriesModificationListener(new ISeriesModificationListener() {
+
+			@Override
+			public void handleSeriesModificationEvent() {
+
+				modifyDataStatusLabel();
+			}
+		});
+		//
+		chart.setRulerUpdateNotifier(new IRulerUpdateNotifier() {
+
+			@Override
+			public void update(RulerEvent rulerEvent) {
+
+				toolbarRulerDetails.get().setInput(rulerEvent);
+			}
+		});
+		//
 		chartControl.set(chart);
 	}
 
 	private void applySettings() {
 
 		refreshUpdateOverlayChart();
+		toolbarDataShift.get().update();
+		modifyDataStatusLabel();
 	}
 
 	private void refreshUpdateOverlayChart() {
 
-		MassSpectrumChartProfile chart = chartControl.get();
+		MassSpectrumRulerChart chart = chartControl.get();
 		chart.deleteSeries();
 		if(scanSelections.size() > 0) {
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
@@ -185,5 +290,47 @@ public class ExtendedMassSpectrumOverlayUI extends Composite implements IExtende
 		}
 		//
 		return new SeriesData(xSeries, ySeries, id);
+	}
+
+	private void modifyDataStatusLabel() {
+
+		if(chartControl.get().getBaseChart().isDataShifted()) {
+			labelStatus.setText("The displayed data is shifted.");
+			labelStatus.setBackground(Colors.YELLOW);
+		} else {
+			labelStatus.setText("");
+			labelStatus.setBackground(null);
+		}
+	}
+
+	private Label createLabelStatus(Composite parent) {
+
+		Label label = new Label(parent, SWT.NONE);
+		label.setToolTipText("Indicates whether the data has been modified or not.");
+		label.setText("");
+		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		return label;
+	}
+
+	private void createNewPart(String bundle, String classPath, String name) {
+
+		/*
+		 * Services
+		 */
+		EModelService modelService = Activator.getDefault().getModelService();
+		MApplication application = Activator.getDefault().getApplication();
+		EPartService partService = Activator.getDefault().getPartService();
+		//
+		if(modelService != null && application != null && partService != null) {
+			MPart part = MBasicFactory.INSTANCE.createPart();
+			part.setLabel(name);
+			part.setCloseable(true);
+			part.setContributionURI("bundleclass://" + bundle + "/" + classPath);
+			//
+			MPartStack partStack = PartSupport.getPartStack(PartSupport.PARTSTACK_LEFT_CENTER, modelService, application);
+			partStack.getChildren().add(part);
+			PartSupport.showPart(part, partService);
+		}
 	}
 }
