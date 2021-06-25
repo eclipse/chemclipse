@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.io;
+package org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.io;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -20,15 +20,12 @@ import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.io.MassSpectrumReaderVersion110;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.io.MassSpectrumReaderVersion110;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.xxd.converter.supplier.io.exception.UnknownVersionException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class MassSpectrumReader extends AbstractMassSpectraReader implements IMassSpectraReader {
-
-	private static final String CONTEXT_PATH_V_110 = "org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model";
-	private static final String MZML_V_110 = "1.1.0";
 
 	@Override
 	public IMassSpectra read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
@@ -51,8 +48,8 @@ public class MassSpectrumReader extends AbstractMassSpectraReader implements IMa
 		fileReader.close();
 		//
 		final String header = new String(charBuffer);
-		if(header.contains(MZML_V_110)) {
-			massSpectraReader = new MassSpectrumReaderVersion110(CONTEXT_PATH_V_110);
+		if(header.contains(IFormat.MZML_V_110)) {
+			massSpectraReader = new MassSpectrumReaderVersion110(IFormat.CONTEXT_PATH_V_110);
 		} else {
 			throw new UnknownVersionException();
 		}

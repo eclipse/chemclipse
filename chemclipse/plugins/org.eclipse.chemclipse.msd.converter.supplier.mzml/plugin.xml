@@ -5,12 +5,13 @@
          point="org.eclipse.chemclipse.msd.converter.chromatogramSupplier">
       <ChromatogramSupplier
             description="Reads mzML Chromatograms"
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.ChromatogramExportConverter"
             fileExtension=".mzML"
             filterName="mzML Chromatogram (*.mzML)"
             id="org.eclipse.chemclipse.msd.converter.supplier.mzml"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.ChromatogramImportConverter"
-            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.MagicNumberMatcher"
-            isExportable="false"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.ChromatogramMagicNumberMatcher"
+            isExportable="true"
             isImportable="true">
       </ChromatogramSupplier>
    </extension>
@@ -20,12 +21,18 @@
             description="Reads mzML Mass Spectra"
             exportConverter="org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.MassSpectrumExportConverter"
             fileExtension=".mzML"
-            filterName="mzML Mass Spectra (*.mzML)"
+            filterName="mzML Mass Spectrum (*.mzML)"
             id="org.eclipse.chemclipse.msd.converter.supplier.mzml.ms"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.MassSpectrumImportConverter"
-            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.MagicNumberMatcher"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.MassSpectrumMagicNumberMatcher"
             isExportable="false"
             isImportable="true">
       </MassSpectrumSupplier>
+   </extension>
+      <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.msd.converter.supplier.mzml.preferences.PreferenceInitializer">
+      </initializer>
    </extension>
 </plugin>

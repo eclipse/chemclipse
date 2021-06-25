@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.io;
+package org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.io;
 
 import java.io.File;
 import java.io.FileNotFoundException;

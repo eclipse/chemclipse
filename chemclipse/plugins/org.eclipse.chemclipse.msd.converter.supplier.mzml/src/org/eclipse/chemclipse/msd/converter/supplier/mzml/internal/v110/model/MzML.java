@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model;
 
+import java.io.Serializable;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -20,9 +22,10 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {"cvList", "fileDescription", "referenceableParamGroupList", "sampleList", "softwareList", "scanSettingsList", "instrumentConfigurationList", "dataProcessingList", "run"})
-@XmlRootElement(name = "mzML")
-public class MzML {
+@XmlRootElement(name = "mzML") // namespace = "http://psi.hupo.org/ms/mzml"
+public class MzML implements Serializable {
 
+	private final static long serialVersionUID = 110L;
 	@XmlElement(required = true)
 	private CVListType cvList;
 	@XmlElement(required = true)
