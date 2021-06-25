@@ -9,6 +9,7 @@
  * Contributors:
  * Christoph Läubrich - initial API and implementation
  * Matthias Mailänder - add support for MALDI
+ * Philip Wenig - add support for TSD
  *******************************************************************************/
 package org.eclipse.chemclipse.processing;
 
@@ -19,10 +20,10 @@ package org.eclipse.chemclipse.processing;
  *
  */
 public enum DataCategory {
-
 	MSD(Messages.getString("DataCategory.MSD")), //
 	CSD(Messages.getString("DataCategory.CSD")), //
 	WSD(Messages.getString("DataCategory.WSD")), //
+	TSD(Messages.getString("DataCategory.TSD")), //
 	FID(Messages.getString("DataCategory.FID")), //
 	NMR(Messages.getString("DataCategory.NMR")), //
 	XIR(Messages.getString("DataCategory.XIR")), //

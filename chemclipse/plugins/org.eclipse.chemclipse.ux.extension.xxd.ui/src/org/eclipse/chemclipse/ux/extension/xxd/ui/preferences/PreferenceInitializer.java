@@ -102,6 +102,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MAX_MSD, PreferenceConstants.DEF_HEATMAP_SCALE_INTENSITY_MAX_MSD);
 		store.setDefault(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MIN_WSD, PreferenceConstants.DEF_HEATMAP_SCALE_INTENSITY_MIN_WSD);
 		store.setDefault(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MAX_WSD, PreferenceConstants.DEF_HEATMAP_SCALE_INTENSITY_MAX_WSD);
+		store.setDefault(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MIN_TSD, PreferenceConstants.DEF_HEATMAP_SCALE_INTENSITY_MIN_TSD);
+		store.setDefault(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MAX_TSD, PreferenceConstants.DEF_HEATMAP_SCALE_INTENSITY_MAX_TSD);
 		/*
 		 * Peaks
 		 */
@@ -204,6 +206,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_SHOW_DATA_MSD, PreferenceConstants.DEF_SHOW_DATA_MSD);
 		store.setDefault(PreferenceConstants.P_SHOW_DATA_CSD, PreferenceConstants.DEF_SHOW_DATA_CSD);
 		store.setDefault(PreferenceConstants.P_SHOW_DATA_WSD, PreferenceConstants.DEF_SHOW_DATA_WSD);
+		store.setDefault(PreferenceConstants.P_SHOW_DATA_TSD, PreferenceConstants.DEF_SHOW_DATA_TSD);
 		store.setDefault(PreferenceConstants.P_SHOW_LIBRARY_MSD, PreferenceConstants.DEF_SHOW_LIBRARY_MSD);
 		store.setDefault(PreferenceConstants.P_SHOW_SCANS_MSD, PreferenceConstants.DEF_SHOW_SCANS_MSD);
 		store.setDefault(PreferenceConstants.P_SHOW_DATA_XIR, PreferenceConstants.DEF_SHOW_DATA_XIR);

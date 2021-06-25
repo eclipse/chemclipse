@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2020 Lablicate GmbH.
+ * Copyright (c) 2013, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,6 +20,7 @@ public interface ISupplierFileIdentifier extends SupplierContext {
 	String TYPE_MSD = "MSD";
 	String TYPE_CSD = "CSD";
 	String TYPE_WSD = "WSD";
+	String TYPE_TSD = "TSD";
 	String TYPE_XIR = "XIR";
 	String TYPE_NMR = "NMR";
 	String TYPE_DATABASE_MSD = "DATABASE_MSD";

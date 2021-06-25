@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.chemclipse.converter.ui.converterPreferencePage"      
+            class="org.eclipse.chemclipse.tsd.converter.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.tsd.converter.ui.preferencePage"
+            name="Converter TSD">
+      </page>
+   </extension>
+</plugin>

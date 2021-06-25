@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -145,6 +145,9 @@ public class DataExplorerLabelProvider extends LabelProvider implements ILabelPr
 					break;
 				case ISupplierFileIdentifier.TYPE_WSD:
 					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CHROMATOGRAM_WSD, IApplicationImage.SIZE_16x16);
+					break;
+				case ISupplierFileIdentifier.TYPE_TSD:
+					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CHROMATOGRAM_TSD, IApplicationImage.SIZE_16x16);
 					break;
 				case ISupplierFileIdentifier.TYPE_NMR:
 					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_SCAN_NMR, IApplicationImage.SIZE_16x16);

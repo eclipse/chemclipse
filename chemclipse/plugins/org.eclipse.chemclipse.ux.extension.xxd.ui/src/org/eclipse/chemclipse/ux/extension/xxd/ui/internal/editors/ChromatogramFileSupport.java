@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.support.settings.UserManagement;
+import org.eclipse.chemclipse.tsd.converter.chromatogram.ChromatogramConverterTSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ChromatogramExportRunnable;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -42,6 +43,7 @@ public class ChromatogramFileSupport {
 	private static final Logger logger = Logger.getLogger(ChromatogramFileSupport.class);
 
 	private ChromatogramFileSupport() {
+
 	}
 
 	public static boolean saveChromatogram(Shell shell, IChromatogram chromatogram, DataType dataType) throws NoConverterAvailableException {
@@ -182,6 +184,9 @@ public class ChromatogramFileSupport {
 				break;
 			case WSD:
 				converterSupport = ChromatogramConverterWSD.getInstance().getChromatogramConverterSupport();
+				break;
+			case TSD:
+				converterSupport = ChromatogramConverterTSD.getInstance().getChromatogramConverterSupport();
 				break;
 			default:
 				// Do nothing

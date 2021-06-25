@@ -249,6 +249,10 @@ public class PreferenceConstants extends ChartOptions {
 	public static final int DEF_HEATMAP_SCALE_INTENSITY_MIN_WSD = 1;
 	public static final String P_HEATMAP_SCALE_INTENSITY_MAX_WSD = "heatmapScaleIntensityMaxWSD";
 	public static final int DEF_HEATMAP_SCALE_INTENSITY_MAX_WSD = 1;
+	public static final String P_HEATMAP_SCALE_INTENSITY_MIN_TSD = "heatmapScaleIntensityMinTSD";
+	public static final int DEF_HEATMAP_SCALE_INTENSITY_MIN_TSD = 1;
+	public static final String P_HEATMAP_SCALE_INTENSITY_MAX_TSD = "heatmapScaleIntensityMaxTSD";
+	public static final int DEF_HEATMAP_SCALE_INTENSITY_MAX_TSD = 250;
 	/*
 	 * Peaks
 	 */
@@ -699,6 +703,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final boolean DEF_SHOW_DATA_CSD = true;
 	public static final String P_SHOW_DATA_WSD = "showDataWSD";
 	public static final boolean DEF_SHOW_DATA_WSD = true;
+	public static final String P_SHOW_DATA_TSD = "showDataTSD";
+	public static final boolean DEF_SHOW_DATA_TSD = true;
 	public static final String P_SHOW_LIBRARY_MSD = "showLibraryMSD";
 	public static final boolean DEF_SHOW_LIBRARY_MSD = true;
 	public static final String P_SHOW_SCANS_MSD = "showScansMSD";

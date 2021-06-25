@@ -88,6 +88,8 @@ public class PreferencePageChromatogram extends FieldEditorPreferencePage implem
 		addIntegerField(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MAX_MSD, "Scale Intensity Max (MSD)", PreferenceConstants.MIN_HEATMAP_SCALE_INTENSITY, PreferenceConstants.MAX_HEATMAP_SCALE_INTENSITY);
 		addIntegerField(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MIN_WSD, "Scale Intensity Min (WSD)", PreferenceConstants.MIN_HEATMAP_SCALE_INTENSITY, PreferenceConstants.MAX_HEATMAP_SCALE_INTENSITY);
 		addIntegerField(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MAX_WSD, "Scale Intensity Max (WSD)", PreferenceConstants.MIN_HEATMAP_SCALE_INTENSITY, PreferenceConstants.MAX_HEATMAP_SCALE_INTENSITY);
+		addIntegerField(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MIN_TSD, "Scale Intensity Min (TSD)", PreferenceConstants.MIN_HEATMAP_SCALE_INTENSITY, PreferenceConstants.MAX_HEATMAP_SCALE_INTENSITY);
+		addIntegerField(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MAX_TSD, "Scale Intensity Max (TSD)", PreferenceConstants.MIN_HEATMAP_SCALE_INTENSITY, PreferenceConstants.MAX_HEATMAP_SCALE_INTENSITY);
 	}
 
 	private void addIntegerField(String name, String labelText, int min, int max) {

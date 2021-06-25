@@ -15,7 +15,6 @@ package org.eclipse.chemclipse.model.types;
 import org.eclipse.chemclipse.processing.DataCategory;
 
 public enum DataType {
-
 	NONE, // Used e.g. as an initial value for the Scan Table
 	AUTO_DETECT, // Auto-Detect
 	MSD_NOMINAL, // Quadrupole, Ion Trap
@@ -24,6 +23,7 @@ public enum DataType {
 	MSD, // mass selective data
 	CSD, // current selective data
 	WSD, // wavelength selective data
+	TSD, // time selective data (IMS)
 	XIR, // Infrared detectors, FTIR, NIR, MIR
 	NMR, // Nuclear magnetic resonance
 	CAL, // Retention Index Calibration

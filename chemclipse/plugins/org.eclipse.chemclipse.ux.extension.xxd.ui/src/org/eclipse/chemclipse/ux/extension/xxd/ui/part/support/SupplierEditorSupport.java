@@ -31,6 +31,7 @@ import org.eclipse.chemclipse.nmr.converter.core.ScanConverterNMR;
 import org.eclipse.chemclipse.pcr.converter.core.PlateConverterPCR;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.tsd.converter.chromatogram.ChromatogramConverterTSD;
 import org.eclipse.chemclipse.ux.extension.msd.ui.editors.MassSpectrumEditor;
 import org.eclipse.chemclipse.ux.extension.ui.editors.EditorDescriptor;
 import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileEditorSupport;
@@ -38,6 +39,7 @@ import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorCSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorMSD;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorTSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorWSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.PlateEditorPCR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ProcessMethodEditor;
@@ -89,6 +91,9 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 				break;
 			case WSD:
 				supplier = ChromatogramConverterWSD.getInstance().getChromatogramConverterSupport().getSupplier();
+				break;
+			case TSD:
+				supplier = ChromatogramConverterTSD.getInstance().getChromatogramConverterSupport().getSupplier();
 				break;
 			case XIR:
 				supplier = ScanConverterXIR.getScanConverterSupport().getSupplier();
@@ -158,6 +163,15 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 				tooltip = ChromatogramEditorWSD.TOOLTIP;
 				topicUpdateRawfile = IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_RAWFILE;
 				topicUpdateOverview = IChemClipseEvents.TOPIC_CHROMATOGRAM_WSD_UPDATE_OVERVIEW;
+				break;
+			case TSD:
+				type = TYPE_TSD;
+				elementId = ChromatogramEditorTSD.ID;
+				contributionURI = ChromatogramEditorTSD.CONTRIBUTION_URI;
+				iconURI = ChromatogramEditorTSD.ICON_URI;
+				tooltip = ChromatogramEditorTSD.TOOLTIP;
+				topicUpdateRawfile = IChemClipseEvents.TOPIC_CHROMATOGRAM_TSD_UPDATE_RAWFILE;
+				topicUpdateOverview = IChemClipseEvents.TOPIC_CHROMATOGRAM_TSD_UPDATE_OVERVIEW;
 				break;
 			case XIR:
 				type = TYPE_XIR;

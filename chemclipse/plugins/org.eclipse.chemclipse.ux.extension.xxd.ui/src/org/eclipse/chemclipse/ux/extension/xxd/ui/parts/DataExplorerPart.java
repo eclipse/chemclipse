@@ -85,6 +85,12 @@ public class DataExplorerPart {
 			editorSupportList.add(new SupplierEditorSupport(DataType.WSD, () -> context));
 		}
 		/*
+		 * TSD
+		 */
+		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_TSD)) {
+			editorSupportList.add(new SupplierEditorSupport(DataType.TSD, () -> context));
+		}
+		/*
 		 * XIR
 		 */
 		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_DATA_XIR)) {
