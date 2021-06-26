@@ -45,6 +45,8 @@ public class ChromatogramConverterTSD implements IChromatogramConverter<IChromat
 
 		ChromatogramConverterSupport chromatogramConverterSupport = new ChromatogramConverterSupport(DataCategory.TSD);
 		Object[] services = Activator.getDefault().getConverterServices();
+		if(services == null)
+			return chromatogramConverterSupport;
 		for(Object service : services) {
 			if(service instanceof IConverterServiceTSD) {
 				IConverterServiceTSD converterServiceTSD = (IConverterServiceTSD)service;
