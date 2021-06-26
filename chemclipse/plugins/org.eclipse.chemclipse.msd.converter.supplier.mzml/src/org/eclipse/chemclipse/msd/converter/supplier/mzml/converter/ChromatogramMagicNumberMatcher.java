@@ -50,8 +50,9 @@ public class ChromatogramMagicNumberMatcher extends AbstractMagicNumberMatcher i
 			JAXBContext jaxbContext = JAXBContext.newInstance(IFormat.CONTEXT_PATH_V_110);
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 			MzML mzML = (MzML)unmarshaller.unmarshal(nodeList.item(0));
-			if(mzML.getRun().getChromatogramList() != null)
+			if(mzML.getRun().getChromatogramList() != null) {
 				isValidFormat = true;
+			}
 		} catch(Exception e) {
 			// fail silently
 		}

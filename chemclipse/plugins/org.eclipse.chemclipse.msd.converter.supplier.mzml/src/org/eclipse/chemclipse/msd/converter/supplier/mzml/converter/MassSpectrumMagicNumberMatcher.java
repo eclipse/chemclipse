@@ -52,8 +52,9 @@ public class MassSpectrumMagicNumberMatcher extends AbstractMagicNumberMatcher i
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 			MzML mzML = (MzML)unmarshaller.unmarshal(nodeList.item(0));
 			SpectrumListType spectrumList = mzML.getRun().getSpectrumList();
-			if(spectrumList != null && spectrumList.getCount().intValue() == 1)
+			if(spectrumList != null && spectrumList.getCount().intValue() == 1) {
 				isValidFormat = true;
+			}
 		} catch(Exception e) {
 			// fail silently
 		}

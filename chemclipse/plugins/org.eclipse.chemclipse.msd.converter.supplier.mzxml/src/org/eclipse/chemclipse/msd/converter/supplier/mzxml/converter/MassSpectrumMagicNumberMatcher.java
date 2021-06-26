@@ -50,8 +50,9 @@ public class MassSpectrumMagicNumberMatcher extends AbstractMagicNumberMatcher i
 			JAXBContext jaxbContext = JAXBContext.newInstance(IFormat.CONTEXT_PATH_V_320);
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 			MsRun msRun = (MsRun)unmarshaller.unmarshal(nodeList.item(0));
-			if(msRun.getScan().size() == 1)
+			if(msRun.getScan().size() == 1) {
 				isValidFormat = true;
+			}
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
