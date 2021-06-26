@@ -52,7 +52,6 @@ import org.eclipse.chemclipse.ux.extension.msd.ui.preferences.PreferenceSupplier
 import org.eclipse.chemclipse.ux.extension.msd.ui.swt.IMassSpectrumChart;
 import org.eclipse.chemclipse.ux.extension.msd.ui.swt.MassSpectrumChartCentroid;
 import org.eclipse.chemclipse.ux.extension.msd.ui.swt.MassSpectrumChartProfile;
-import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
@@ -73,7 +72,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 
-public class MassSpectrumEditor implements IChemClipseEditor {
+public class MassSpectrumEditor implements IMassSpectrumEditor {
 
 	public static final String ID = "org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectrumEditor";
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.editors.MassSpectrumEditor";
@@ -392,5 +391,11 @@ public class MassSpectrumEditor implements IChemClipseEditor {
 				massSpectrumChart.update(massSpectrum);
 			}
 		}
+	}
+
+	@Override
+	public IScanMSD getScanSelection() {
+
+		return massSpectrum;
 	}
 }
