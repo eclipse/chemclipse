@@ -14,4 +14,8 @@ package org.eclipse.chemclipse.tsd.model.core;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 
 public interface IChromatogramTSD extends IChromatogram<IChromatogramPeakTSD> {
+
+	String getLabelAxisX();
+
+	String getLabelAxisY();
 }

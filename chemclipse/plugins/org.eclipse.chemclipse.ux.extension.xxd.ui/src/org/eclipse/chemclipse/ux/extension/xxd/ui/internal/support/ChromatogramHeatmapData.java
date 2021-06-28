@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,6 +24,8 @@ public class ChromatogramHeatmapData {
 	private double maximum;
 	private int dataWidth;
 	private int dataHeight;
+	private String axisLabelX = "";
+	private String axisLabelY = "";
 
 	public ChromatogramHeatmapData(IPrimaryArrayWrapper arrayWrapper, Range axisRangeWidth, Range axisRangeHeight, double minimum, double maximum, int dataWidth, int dataHeight) {
 
@@ -36,6 +38,21 @@ public class ChromatogramHeatmapData {
 		this.maximum = maximum;
 		this.dataHeight = dataHeight;
 		this.dataWidth = dataWidth;
+	}
+
+	public ChromatogramHeatmapData(IPrimaryArrayWrapper arrayWrapper, Range axisRangeWidth, Range axisRangeHeight, double minimum, double maximum, int dataWidth, int dataHeight, String axisLabelX, String axisLabelY) {
+
+		super();
+		//
+		this.axisRangeWidth = axisRangeWidth;
+		this.axisRangeHeight = axisRangeHeight;
+		this.arrayWrapper = arrayWrapper;
+		this.minimum = minimum;
+		this.maximum = maximum;
+		this.dataHeight = dataHeight;
+		this.dataWidth = dataWidth;
+		this.axisLabelX = axisLabelX;
+		this.axisLabelY = axisLabelY;
 	}
 
 	public Range getAxisRangeWidth() {
@@ -106,5 +123,25 @@ public class ChromatogramHeatmapData {
 	public int getDataWidth() {
 
 		return dataWidth;
+	}
+
+	public String getAxisLabelX() {
+
+		return axisLabelX;
+	}
+
+	public void setAxisLabelX(String axisLabelX) {
+
+		this.axisLabelX = axisLabelX;
+	}
+
+	public String getAxisLabelY() {
+
+		return axisLabelY;
+	}
+
+	public void setAxisLabelY(String axisLabelY) {
+
+		this.axisLabelY = axisLabelY;
 	}
 }

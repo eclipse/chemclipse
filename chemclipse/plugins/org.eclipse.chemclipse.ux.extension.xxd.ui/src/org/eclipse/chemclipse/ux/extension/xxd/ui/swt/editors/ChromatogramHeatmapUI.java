@@ -51,8 +51,8 @@ import org.eclipse.swt.widgets.Display;
 
 public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI {
 
-	private static final String RETENTION_TIME = "Retention Time [min]";
-	private static final String DRIFT_TIME = "Drift Time";
+	private static final String LABEL_AXIS_X = "X";
+	private static final String LABEL_AXIS_Y = "Y";
 	//
 	private Button buttonToolbarInfo;
 	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
@@ -230,8 +230,8 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 
 		IntensityGraphFigure intensityGraphFigure = new IntensityGraphFigure();
 		intensityGraphFigure.setForegroundColor(Colors.BLACK);
-		intensityGraphFigure.getXAxis().setTitle(DRIFT_TIME);
-		intensityGraphFigure.getYAxis().setTitle(RETENTION_TIME);
+		intensityGraphFigure.getXAxis().setTitle(LABEL_AXIS_X);
+		intensityGraphFigure.getYAxis().setTitle(LABEL_AXIS_Y);
 		//
 		return intensityGraphFigure;
 	}
@@ -342,12 +342,15 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 			//
 			intensityGraphFigure.setMin(chromatogramHeatmapData.getMinimum());
 			intensityGraphFigure.setMax(chromatogramHeatmapData.getMaximum());
-			//
+			/*
+			 * IntensityGraphFigure
+			 * private static final int MAX_ARRAY_SIZE = 10000000;
+			 */
 			intensityGraphFigure.setDataWidth(chromatogramHeatmapData.getDataWidth());
 			intensityGraphFigure.setDataHeight(chromatogramHeatmapData.getDataHeight());
 			//
-			intensityGraphFigure.getXAxis().setTitle(DRIFT_TIME);
-			intensityGraphFigure.getYAxis().setTitle(RETENTION_TIME);
+			intensityGraphFigure.getXAxis().setTitle(chromatogramHeatmapData.getAxisLabelX());
+			intensityGraphFigure.getYAxis().setTitle(chromatogramHeatmapData.getAxisLabelY());
 			//
 			intensityGraphFigure.setColorMap(new ColorMap(PredefinedColorMap.JET, true, true));
 			/*
@@ -357,6 +360,7 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 			intensityGraphFigure.setDataArray(chromatogramHeatmapData.getArrayWrapper());
 			intensityGraphFigure.repaint();
 		} catch(Exception e) {
+			e.printStackTrace();
 			clear();
 		}
 	}

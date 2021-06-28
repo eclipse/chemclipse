@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.tsd.converter.service;
 
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
+import org.eclipse.chemclipse.model.settings.IProcessSettings;
 import org.eclipse.chemclipse.tsd.converter.core.IExportConverterTSD;
 import org.eclipse.chemclipse.tsd.converter.core.IImportConverterTSD;
 
@@ -35,6 +36,8 @@ public interface IConverterServiceTSD {
 
 	IMagicNumberMatcher getMagicNumberMatcher();
 
+	IProcessSettings getProcessSettings();
+
 	default boolean isImportable() {
 
 		return getImportConverter() != null;
@@ -43,5 +46,10 @@ public interface IConverterServiceTSD {
 	default boolean isExportable() {
 
 		return getExportConverter() != null;
+	}
+
+	default boolean hasProcessSettings() {
+
+		return getProcessSettings() != null;
 	}
 }
