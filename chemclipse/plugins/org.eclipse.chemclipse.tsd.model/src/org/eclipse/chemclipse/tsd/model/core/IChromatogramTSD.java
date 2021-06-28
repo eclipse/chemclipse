@@ -18,4 +18,11 @@ public interface IChromatogramTSD extends IChromatogram<IChromatogramPeakTSD> {
 	String getLabelAxisX();
 
 	String getLabelAxisY();
+
+	/*
+	 * This is a workaround to trigger the heatmap.
+	 * It will be adjusted in the future as we have learned more
+	 * how to handle GCxGC data.
+	 */
+	boolean isType2();
 }
