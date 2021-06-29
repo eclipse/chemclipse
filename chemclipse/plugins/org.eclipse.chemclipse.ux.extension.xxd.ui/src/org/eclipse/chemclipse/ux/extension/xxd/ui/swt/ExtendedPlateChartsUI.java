@@ -85,24 +85,9 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 	private void updateComboChannels() {
 
 		if(plate != null) {
-			IWell well = plate.getWells().first();
-			if(well != null) {
-				comboChannels.setItems(getComboItems(well));
-				IChannel channel = well.getActiveChannel();
-				if(channel != null) {
-					String name = channel.getDetectionName();
-					String[] items = comboChannels.getItems();
-					exitloop:
-					for(int i = 0; i < items.length; i++) {
-						if(items[i].equals(name)) {
-							comboChannels.select(i);
-							break exitloop;
-						}
-					}
-				} else {
-					comboChannels.select(0);
-				}
-			}
+			List<String> activeChannels = plate.getActiveChannels();
+			comboChannels.setItems(plate.getActiveChannels().toArray(new String[activeChannels.size()]));
+			comboChannels.select(plate.getActiveChannel());
 		} else {
 			comboChannels.setItems(new String[]{""});
 		}
@@ -114,19 +99,6 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 			updateChart();
 		} else {
 			chartControl.get().deleteSeries();
-		}
-	}
-
-	private String[] getComboItems(IWell well) {
-
-		if(well != null) {
-			List<String> items = new ArrayList<>();
-			for(IChannel channel : well.getChannels().values()) {
-				items.add(channel.getDetectionName());
-			}
-			return items.toArray(new String[items.size()]);
-		} else {
-			return new String[]{};
 		}
 	}
 

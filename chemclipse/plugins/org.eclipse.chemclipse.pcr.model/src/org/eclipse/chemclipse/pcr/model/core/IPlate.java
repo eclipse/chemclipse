@@ -29,6 +29,8 @@ public interface IPlate extends IMeasurementInfo {
 
 	List<String> getActiveChannels();
 
+	int getActiveChannel();
+
 	void setActiveChannel(int activeChannel);
 
 	List<String> getSampleSubsets();

@@ -128,6 +128,7 @@ public class ExtendedPCRPlateUI extends Composite implements IExtendedPartUI {
 					} else {
 						plate.setActiveChannel(combo.getSelectionIndex() - 1);
 					}
+					fireUpdate(e.widget.getDisplay(), plate);
 					fireUpdate(e.widget.getDisplay(), pcrPlate.getSelectedWell());
 					pcrPlate.refresh();
 				}
@@ -184,6 +185,11 @@ public class ExtendedPCRPlateUI extends Composite implements IExtendedPartUI {
 	private void fireUpdate(Display display, IWell well) {
 
 		UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_WELL_PCR_UPDATE_SELECTION, well);
+	}
+
+	private void fireUpdate(Display display, IPlate plate) {
+
+		UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_PLATE_PCR_UPDATE_SELECTION, plate);
 	}
 
 	private void updateWidget() {

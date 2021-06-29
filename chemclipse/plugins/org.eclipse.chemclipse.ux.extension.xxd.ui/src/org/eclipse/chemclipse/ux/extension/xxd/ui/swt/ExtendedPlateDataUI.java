@@ -266,8 +266,8 @@ public class ExtendedPlateDataUI extends Composite implements IExtendedPartUI {
 			List<IChannelSpecification> channelSpecifications = detectionFormat.getChannelSpecifications();
 			comboChannelSpecifications.setInput(channelSpecifications);
 			if(channelSpecifications.size() > 0) {
-				comboChannelSpecifications.getCombo().select(0);
-				channelSpecification = channelSpecifications.get(0);
+				comboChannelSpecifications.getCombo().select(plate.getActiveChannel());
+				channelSpecification = channelSpecifications.get(plate.getActiveChannel());
 			}
 		}
 		//
