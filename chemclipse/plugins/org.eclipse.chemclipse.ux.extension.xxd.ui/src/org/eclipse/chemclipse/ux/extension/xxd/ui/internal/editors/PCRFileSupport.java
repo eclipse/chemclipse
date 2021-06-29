@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Matthias Mailänder - remember save location
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors;
 
@@ -21,7 +22,6 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.pcr.converter.core.PlateConverterPCR;
 import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.PCRExportRunnable;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -34,19 +34,20 @@ public class PCRFileSupport {
 	private static final Logger logger = Logger.getLogger(PCRFileSupport.class);
 
 	private PCRFileSupport() {
+
 	}
 
-	public static boolean savePlate(Shell shell, IPlate plate) throws NoConverterAvailableException {
+	public static File savePlate(Shell shell, IPlate plate, String filterPath) throws NoConverterAvailableException {
 
 		if(plate == null || shell == null) {
-			return false;
+			return null;
 		}
 		//
 		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
 		/*
 		 * Create the dialog.
 		 */
-		dialog.setFilterPath(Activator.getDefault().getSettingsPath());
+		dialog.setFilterPath(filterPath);
 		dialog.setFileName(plate.getName());
 		dialog.setText("Save Plate As...");
 		dialog.setOverwrite(true);
@@ -64,13 +65,14 @@ public class PCRFileSupport {
 			 */
 			String filename = dialog.open();
 			if(filename != null) {
-				validateFile(dialog, converterSupport.getExportSupplier(), shell, converterSupport, plate);
-				return true;
+				List<ISupplier> exportSupplier = converterSupport.getExportSupplier();
+				File file = validateFile(dialog, exportSupplier, shell, converterSupport, plate);
+				return file;
 			} else {
-				return false;
+				return null;
 			}
 		} else {
-			return false;
+			return null;
 		}
 	}
 
@@ -96,7 +98,7 @@ public class PCRFileSupport {
 		}
 	}
 
-	private static void validateFile(FileDialog dialog, List<ISupplier> supplier, Shell shell, IScanConverterSupport converterSupport, IPlate plate) {
+	private static File validateFile(FileDialog dialog, List<ISupplier> supplier, Shell shell, IScanConverterSupport converterSupport, IPlate plate) {
 
 		File plateFolder = null;
 		boolean overwrite = dialog.getOverwrite();
@@ -109,7 +111,7 @@ public class PCRFileSupport {
 		ISupplier selectedSupplier = supplier.get(dialog.getFilterIndex());
 		if(selectedSupplier == null) {
 			MessageDialog.openInformation(shell, "PCR Converter", "The requested plate converter does not exists.");
-			return;
+			return null;
 		}
 		/*
 		 * Get the file or directory name.
@@ -194,9 +196,12 @@ public class PCRFileSupport {
 				/*
 				 * Export the plate.
 				 */
-				writeFile(shell, new File(filename), plate, selectedSupplier);
+				File file = new File(filename);
+				writeFile(shell, file, plate, selectedSupplier);
+				return file;
 			}
 		}
+		return null;
 	}
 
 	private static String removeFileExtensions(String filePath, ISupplier supplier) {
