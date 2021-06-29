@@ -1,4 +1,5 @@
 Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.chemclipse.tsd.converter.ui
 Bundle-ManifestVersion: 2
 Bundle-Name: TSD Converter UI
 Bundle-SymbolicName: org.eclipse.chemclipse.tsd.converter.ui;singleton:=true
@@ -25,5 +26,4 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.e4.core.contexts,
  org.eclipse.e4.core.di.annotations
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Automatic-Module-Name: org.eclipse.chemclipse.tsd.converter.ui
 Bundle-ActivationPolicy: lazy
