@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Matthias Mailänder - remember save location
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
 
@@ -24,12 +25,15 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
+import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors.PCRFileSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.PCRImportRunnable;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedPCRPlateUI;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
@@ -39,6 +43,7 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.e4.ui.model.application.ui.basic.MPartStack;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -47,6 +52,7 @@ import org.eclipse.swt.widgets.Shell;
 public class PlateEditorPCR implements IChemClipseEditor {
 
 	private static final Logger logger = Logger.getLogger(PlateEditorPCR.class);
+	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	//
 	public static final String ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.plateEditorPCR";
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.PlateEditorPCR";
@@ -117,13 +123,27 @@ public class PlateEditorPCR implements IChemClipseEditor {
 		saveAs();
 	}
 
+	private String getFilterPath() {
+
+		String filterPath = preferenceStore.getString(PreferenceConstants.P_PCR_SAVE_AS_FOLDER);
+		if(filterPath.isEmpty()) {
+			return UserManagement.getUserHome();
+		}
+		return filterPath;
+	}
+
 	@Override
 	public boolean saveAs() {
 
 		boolean saveSuccessful = false;
 		if(plate != null) {
 			try {
-				saveSuccessful = PCRFileSupport.savePlate(shell, plate);
+				String path = getFilterPath();
+				File file = PCRFileSupport.savePlate(shell, plate, path);
+				saveSuccessful = file != null;
+				if(saveSuccessful) {
+					preferenceStore.setValue(PreferenceConstants.P_PCR_SAVE_AS_FOLDER, file.getParent());
+				}
 				dirtyable.setDirty(!saveSuccessful);
 			} catch(Exception e) {
 				logger.warn(e);
