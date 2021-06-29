@@ -159,8 +159,8 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
 		createButtonToggleChartLegend(composite, chartControl, IMAGE_LEGEND);
 		createResetButton(composite);
-		createSettingsButton(composite);
 		createColorCompensationButton(composite);
+		createSettingsButton(composite);
 	}
 
 	private void createSettingsButton(Composite parent) {
