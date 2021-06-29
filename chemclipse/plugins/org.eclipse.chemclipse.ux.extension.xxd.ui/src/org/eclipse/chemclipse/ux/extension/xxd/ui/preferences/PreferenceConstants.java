@@ -15,6 +15,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 import org.eclipse.chemclipse.model.core.support.HeaderField;
 import org.eclipse.chemclipse.model.traces.NamedTraceUtil;
 import org.eclipse.chemclipse.msd.model.support.CalculationType;
+import org.eclipse.chemclipse.pcr.model.core.support.LabelSetting;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.swt.SWT;
@@ -780,6 +781,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_PCR_COLOR_CODES = "";
 	public static final String P_PCR_SAVE_AS_FOLDER = "pcrSaveAsFolder";
 	public static final String DEF_PCR_SAVE_AS_FOLDER = "";
+	public static final String P_PCR_REFERENCE_LABEL = "pcrReferenceLabel";
+	public static final String DEF_PCR_REFERENCE_LABEL = LabelSetting.COORDINATE_SAMPLENAME.name();
 	/*
 	 * Processor
 	 */

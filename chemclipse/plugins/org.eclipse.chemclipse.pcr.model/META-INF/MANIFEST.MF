@@ -14,4 +14,5 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.pcr.model.comparators,
- org.eclipse.chemclipse.pcr.model.core
+ org.eclipse.chemclipse.pcr.model.core,
+ org.eclipse.chemclipse.pcr.model.core.support
