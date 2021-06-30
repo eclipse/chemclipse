@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Matthias Mailänder - add color compensation
+ * Matthias Mailänder - add color compensation, per channel coloring
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -29,7 +29,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartPCR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.model.ColorCodes;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePCR;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageWellChart;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -183,7 +183,7 @@ public class ExtendedWellChartUI extends Composite implements IExtendedPartUI {
 
 	private void createSettingsButton(Composite parent) {
 
-		createSettingsButton(parent, Arrays.asList(PreferencePagePCR.class), new ISettingsHandler() {
+		createSettingsButton(parent, Arrays.asList(PreferencePageWellChart.class), new ISettingsHandler() {
 
 			@Override
 			public void apply(Display display) {
@@ -236,18 +236,19 @@ public class ExtendedWellChartUI extends Composite implements IExtendedPartUI {
 			 * Extract the channels.
 			 */
 			ColorCodes colorCodes = new ColorCodes();
-			colorCodes.load(preferenceStore.getString(PreferenceConstants.P_PCR_COLOR_CODES));
-			Color color = getWellColor(well, colorCodes);
+			colorCodes.load(preferenceStore.getString(PreferenceConstants.P_PCR_WELL_COLOR_CODES));
 			//
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 			int index = comboChannels.getSelectionIndex();
 			if(index == 0) {
 				for(IChannel channel : well.getChannels().values()) {
+					Color color = getChannelColor(channel, colorCodes);
 					addChannelData(channel, lineSeriesDataList, color);
 				}
 			} else {
 				try {
 					IChannel channel = well.getChannels().get(index - 1);
+					Color color = getChannelColor(channel, colorCodes);
 					addChannelData(channel, lineSeriesDataList, color);
 				} catch(NumberFormatException e) {
 					logger.warn(e);
@@ -260,14 +261,14 @@ public class ExtendedWellChartUI extends Composite implements IExtendedPartUI {
 		}
 	}
 
-	private Color getWellColor(IWell well, ColorCodes colorCodes) {
+	private Color getChannelColor(IChannel channel, ColorCodes colorCodes) {
 
-		String sampleSubset = well.getSampleSubset();
-		String targetName = well.getTargetName();
-		if(colorCodes.containsKey(sampleSubset)) {
-			return colorCodes.get(sampleSubset).getColor();
-		} else if(colorCodes.containsKey(targetName)) {
-			return colorCodes.get(targetName).getColor();
+		String detectionName = channel.getDetectionName();
+		String channelName = channel.getName();
+		if(colorCodes.containsKey(detectionName)) {
+			return colorCodes.get(detectionName).getColor();
+		} else if(colorCodes.containsKey(channelName)) {
+			return colorCodes.get(channelName).getColor();
 		} else {
 			return Colors.getColor(preferenceStore.getString(PreferenceConstants.P_PCR_DEFAULT_COLOR));
 		}

@@ -32,7 +32,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartPCR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.model.ColorCodes;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePCR;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePlateChart;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -137,7 +137,7 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 
 	private void createSettingsButton(Composite parent) {
 
-		createSettingsButton(parent, Arrays.asList(PreferencePagePCR.class), new ISettingsHandler() {
+		createSettingsButton(parent, Arrays.asList(PreferencePagePlateChart.class), new ISettingsHandler() {
 
 			@Override
 			public void apply(Display display) {
@@ -223,7 +223,7 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 		chartControl.get().deleteSeries();
 		if(plate != null) {
 			ColorCodes colorCodes = new ColorCodes();
-			colorCodes.load(preferenceStore.getString(PreferenceConstants.P_PCR_COLOR_CODES));
+			colorCodes.load(preferenceStore.getString(PreferenceConstants.P_PCR_PLATE_COLOR_CODES));
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 			//
 			for(IWell well : plate.getWells()) {

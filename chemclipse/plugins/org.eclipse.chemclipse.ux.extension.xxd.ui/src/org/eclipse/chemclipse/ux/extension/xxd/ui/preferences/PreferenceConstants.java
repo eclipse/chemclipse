@@ -777,8 +777,10 @@ public class PreferenceConstants extends ChartOptions {
 	 */
 	public static final String P_PCR_DEFAULT_COLOR = "pcrDefaultColor";
 	public static final String DEF_PCR_DEFAULT_COLOR = "192,192,192";
-	public static final String P_PCR_COLOR_CODES = "pcrColorCodes";
-	public static final String DEF_PCR_COLOR_CODES = "";
+	public static final String P_PCR_PLATE_COLOR_CODES = "pcrColorCodes";
+	public static final String DEF_PCR_PLATE_COLOR_CODES = "";
+	public static final String P_PCR_WELL_COLOR_CODES = "pcrWellColorCodes";
+	public static final String DEF_PCR_WELL_COLOR_CODES = "";
 	public static final String P_PCR_SAVE_AS_FOLDER = "pcrSaveAsFolder";
 	public static final String DEF_PCR_SAVE_AS_FOLDER = "";
 	public static final String P_PCR_REFERENCE_LABEL = "pcrReferenceLabel";

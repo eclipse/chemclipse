@@ -250,7 +250,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		 * PCR
 		 */
 		store.setDefault(PreferenceConstants.P_PCR_DEFAULT_COLOR, PreferenceConstants.DEF_PCR_DEFAULT_COLOR);
-		store.setDefault(PreferenceConstants.P_PCR_COLOR_CODES, PreferenceConstants.DEF_PCR_COLOR_CODES);
+		store.setDefault(PreferenceConstants.P_PCR_PLATE_COLOR_CODES, PreferenceConstants.DEF_PCR_PLATE_COLOR_CODES);
+		store.setDefault(PreferenceConstants.P_PCR_WELL_COLOR_CODES, PreferenceConstants.DEF_PCR_WELL_COLOR_CODES);
 		store.setDefault(PreferenceConstants.P_PCR_SAVE_AS_FOLDER, PreferenceConstants.DEF_PCR_SAVE_AS_FOLDER);
 		store.setDefault(PreferenceConstants.P_PCR_REFERENCE_LABEL, PreferenceConstants.DEF_PCR_REFERENCE_LABEL);
 		/*
