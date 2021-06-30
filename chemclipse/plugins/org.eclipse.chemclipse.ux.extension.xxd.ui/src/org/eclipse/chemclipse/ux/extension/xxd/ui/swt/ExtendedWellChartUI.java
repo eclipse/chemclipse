@@ -18,10 +18,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.numeric.core.IPoint;
-import org.eclipse.chemclipse.numeric.core.Point;
-import org.eclipse.chemclipse.numeric.equations.Equations;
-import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 import org.eclipse.chemclipse.pcr.model.core.IChannel;
 import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.pcr.model.core.IWell;
@@ -284,11 +280,6 @@ public class ExtendedWellChartUI extends Composite implements IExtendedPartUI {
 		if(channelCurve != null) {
 			lineSeriesDataList.add(channelCurve);
 		}
-		//
-		ILineSeriesData crossingPoint = getCrossingPoint(channel, color);
-		if(crossingPoint != null) {
-			lineSeriesDataList.add(crossingPoint);
-		}
 	}
 
 	private ILineSeriesData getChannelCurve(IChannel channel, Color color) {
@@ -310,48 +301,6 @@ public class ExtendedWellChartUI extends Composite implements IExtendedPartUI {
 			lineSeriesSettings.setEnableArea(false);
 		}
 		return lineSeriesData;
-	}
-
-	private ILineSeriesData getCrossingPoint(IChannel channel, Color color) {
-
-		ILineSeriesData lineSeriesData = null;
-		if(channel != null) {
-			IPoint crossingPoint = getCrossingPoint(channel);
-			if(crossingPoint != null) {
-				double[] xSeries = new double[]{crossingPoint.getX()};
-				double[] ySeries = new double[]{crossingPoint.getY()};
-				ISeriesData seriesData = new SeriesData(xSeries, ySeries, "Crossing Point " + channel.getId());
-				lineSeriesData = new LineSeriesData(seriesData);
-				ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
-				lineSeriesSettings.setSymbolColor(color);
-				lineSeriesSettings.setSymbolSize(8);
-				lineSeriesSettings.setSymbolType(PlotSymbolType.CROSS);
-				lineSeriesSettings.setEnableArea(false);
-			}
-		}
-		return lineSeriesData;
-	}
-
-	private IPoint getCrossingPoint(IChannel channel) {
-
-		double crossingPointX = channel.getCrossingPoint();
-		int floor = (int)Math.floor(crossingPointX);
-		int ceil = (int)Math.ceil(crossingPointX);
-		//
-		List<Double> pointList = colorCompensation ? channel.getColorCompensatedFluorescence() : channel.getFluorescence();
-		if(floor >= 0 && floor < pointList.size() && ceil >= 0 && ceil < pointList.size()) {
-			if(floor == ceil) {
-				double y = pointList.get(floor);
-				return new Point(crossingPointX, y);
-			} else {
-				IPoint p1 = new Point(floor, pointList.get(floor));
-				IPoint p2 = new Point(ceil, pointList.get(ceil));
-				LinearEquation equation = Equations.createLinearEquation(p1, p2);
-				double y = equation.calculateY(crossingPointX);
-				return new Point(crossingPointX, y);
-			}
-		}
-		return null;
 	}
 
 	private void updateLabel() {
