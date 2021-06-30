@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.pcr.model.core.IChannel;
 import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.pcr.model.core.IWell;
+import org.eclipse.chemclipse.pcr.model.core.support.LabelSetting;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
@@ -158,8 +159,8 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
 		createButtonToggleChartLegend(composite, chartControl, IMAGE_LEGEND);
 		createResetButton(composite);
-		createSettingsButton(composite);
 		createColorCompensationButton(composite);
+		createSettingsButton(composite);
 	}
 
 	private void createSettingsButton(Composite parent) {
@@ -257,8 +258,9 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 				try {
 					int channelNumber = comboChannels.getSelectionIndex();
 					IChannel channel = well.getChannels().get(channelNumber);
+					String label = getLabel(well);
 					Color color = getWellColor(well, colorCodes);
-					ILineSeriesData lineSeriesData = extractChannel(channel, Integer.toString(well.getPosition().getId() + 1), color);
+					ILineSeriesData lineSeriesData = getLineSeriesData(well, channel, label, color);
 					if(lineSeriesData != null) {
 						lineSeriesDataList.add(lineSeriesData);
 					}
@@ -268,6 +270,29 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 			}
 			//
 			chartControl.get().addSeriesData(lineSeriesDataList);
+		}
+	}
+
+	private String getLabel(IWell well) {
+
+		LabelSetting labelSetting = getLabelSetting();
+		switch(labelSetting) {
+			case SAMPLENAME:
+				return well.getSampleId();
+			case COORDINATE:
+				return well.getPosition().toString();
+			case COORDINATE_SAMPLENAME:
+			default:
+				return well.getPosition().toString() + ": " + well.getSampleId();
+		}
+	}
+
+	private LabelSetting getLabelSetting() {
+
+		try {
+			return LabelSetting.valueOf(preferenceStore.getString(PreferenceConstants.P_PCR_REFERENCE_LABEL));
+		} catch(Exception e) {
+			return LabelSetting.COORDINATE_SAMPLENAME;
 		}
 	}
 
@@ -284,7 +309,7 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 		}
 	}
 
-	private ILineSeriesData extractChannel(IChannel channel, String position, Color color) {
+	private ILineSeriesData getLineSeriesData(IWell well, IChannel channel, String description, Color color) {
 
 		ILineSeriesData lineSeriesData = null;
 		if(channel != null) {
@@ -294,11 +319,13 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 				points[index] = pointList.get(index);
 			}
 			//
-			ISeriesData seriesData = new SeriesData(points, "Position: " + position + " | Channel: " + channel.getId());
+			String position = Integer.toString(well.getPosition().getId() + 1);
+			ISeriesData seriesData = new SeriesData(points, position);
 			lineSeriesData = new LineSeriesData(seriesData);
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 			lineSeriesSettings.setLineColor(color);
 			lineSeriesSettings.setEnableArea(false);
+			lineSeriesSettings.setDescription(description);
 		}
 		return lineSeriesData;
 	}

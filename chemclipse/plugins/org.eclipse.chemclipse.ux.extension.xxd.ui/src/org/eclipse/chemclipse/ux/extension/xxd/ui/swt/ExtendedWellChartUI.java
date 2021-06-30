@@ -148,8 +148,8 @@ public class ExtendedWellChartUI extends Composite implements IExtendedPartUI {
 		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
 		createButtonToggleChartLegend(composite, chartControl, IMAGE_LEGEND);
 		createResetButton(composite);
-		createSettingsButton(composite);
 		createColorCompensationButton(composite);
+		createSettingsButton(composite);
 	}
 
 	private void createColorCompensationButton(Composite parent) {
@@ -300,7 +300,7 @@ public class ExtendedWellChartUI extends Composite implements IExtendedPartUI {
 			for(int index = 0; index < pointList.size(); index++) {
 				points[index] = pointList.get(index);
 			}
-			ISeriesData seriesData = new SeriesData(points, "Channel " + channel.getId());
+			ISeriesData seriesData = new SeriesData(points, channel.getDetectionName());
 			lineSeriesData = new LineSeriesData(seriesData);
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 			lineSeriesSettings.setLineColor(color);
