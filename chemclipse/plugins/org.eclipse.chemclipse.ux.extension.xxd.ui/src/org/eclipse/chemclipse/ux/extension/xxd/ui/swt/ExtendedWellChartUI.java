@@ -290,11 +290,12 @@ public class ExtendedWellChartUI extends Composite implements IExtendedPartUI {
 			for(int index = 0; index < pointList.size(); index++) {
 				points[index] = pointList.get(index);
 			}
-			ISeriesData seriesData = new SeriesData(points, channel.getDetectionName());
+			ISeriesData seriesData = new SeriesData(points, String.valueOf(channel.getId()));
 			lineSeriesData = new LineSeriesData(seriesData);
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 			lineSeriesSettings.setLineColor(color);
 			lineSeriesSettings.setEnableArea(false);
+			lineSeriesSettings.setDescription(channel.getDetectionName());
 		}
 		return lineSeriesData;
 	}
