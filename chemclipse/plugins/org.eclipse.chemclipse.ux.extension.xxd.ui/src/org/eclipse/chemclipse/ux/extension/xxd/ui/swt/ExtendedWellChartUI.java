@@ -41,7 +41,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
 import org.eclipse.swtchart.extensions.core.SeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
@@ -295,9 +294,6 @@ public class ExtendedWellChartUI extends Composite implements IExtendedPartUI {
 			lineSeriesData = new LineSeriesData(seriesData);
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 			lineSeriesSettings.setLineColor(color);
-			lineSeriesSettings.setSymbolColor(color);
-			lineSeriesSettings.setSymbolSize(2);
-			lineSeriesSettings.setSymbolType(PlotSymbolType.CIRCLE);
 			lineSeriesSettings.setEnableArea(false);
 		}
 		return lineSeriesData;
