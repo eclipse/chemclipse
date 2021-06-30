@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Matthias Mailänder - expose the active channel
  *******************************************************************************/
 package org.eclipse.chemclipse.pcr.model.core;
 
@@ -28,6 +29,7 @@ public class Plate extends AbstractMeasurementInfo implements IPlate {
 	private IDetectionFormat detectionFormat = null;
 	private List<IDetectionFormat> detectionFormats = new ArrayList<>();
 	private TreeSet<IWell> wells = new TreeSet<IWell>();
+	private int activeChannel;
 
 	@Override
 	public List<String> getActiveChannels() {
@@ -42,8 +44,15 @@ public class Plate extends AbstractMeasurementInfo implements IPlate {
 	}
 
 	@Override
+	public int getActiveChannel() {
+
+		return activeChannel;
+	}
+
+	@Override
 	public void setActiveChannel(int activeChannel) {
 
+		this.activeChannel = activeChannel;
 		if(activeChannel < 0) {
 			for(IWell well : wells) {
 				well.clearActiveChannel();
@@ -82,11 +91,13 @@ public class Plate extends AbstractMeasurementInfo implements IPlate {
 		}
 	}
 
+	@Override
 	public IDetectionFormat getDetectionFormat() {
 
 		return detectionFormat;
 	}
 
+	@Override
 	public void setDetectionFormat(IDetectionFormat detectionFormat) {
 
 		this.detectionFormat = detectionFormat;
