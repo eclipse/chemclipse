@@ -164,11 +164,22 @@ public class PeakBuilderWSD {
 			/*
 			 * Create the peak.
 			 */
-			ITotalScanSignal totalScanSignal = peakIntensityTotalScanSignals.getMaxTotalScanSignal();
-			if(totalScanSignal != null) {
+			IExtractedWavelengthSignal signalMax = null;
+			for(int i = extractedWavelengthSignals.getStartScan(); i < extractedWavelengthSignals.getStopScan(); i++) {
+				IExtractedWavelengthSignal signal = extractedWavelengthSignals.getExtractedWavelengthSignal(i);
+				if(signalMax == null) {
+					signalMax = signal;
+				} else {
+					signalMax = signalMax.getTotalSignal() < signal.getTotalSignal() ? signal : signalMax;
+				}
+			}
+			//
+			if(signalMax != null) {
 				IScanWSD peakScanWSD = new ScanWSD();
-				peakScanWSD.setRetentionTime(totalScanSignal.getRetentionTime());
-				peakScanWSD.addScanSignal(new ScanSignalWSD(200, totalScanSignal.getTotalSignal())); // TODO nm
+				peakScanWSD.setRetentionTime(signalMax.getRetentionTime());
+				for(int trace : traces) {
+					peakScanWSD.addScanSignal(new ScanSignalWSD(trace, signalMax.getAbundance(trace)));
+				}
 				IPeakModelWSD peakModel = new PeakModelWSD(peakScanWSD, peakIntensityValues, backgroundAbundanceRange.getStartBackgroundAbundance(), backgroundAbundanceRange.getStopBackgroundAbundance());
 				IChromatogramPeakWSD peak = new ChromatogramPeakWSD(peakModel, chromatogram);
 				return peak;
