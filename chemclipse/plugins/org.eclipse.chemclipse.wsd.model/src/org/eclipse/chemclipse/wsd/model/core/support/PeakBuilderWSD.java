@@ -110,23 +110,22 @@ public class PeakBuilderWSD {
 		validateChromatogram(chromatogram);
 		validateScanRange(scanRange);
 		checkScanRange(chromatogram, scanRange);
-		IExtractedWavelengthSignal extractedWavelengthSignal;
-		IBackgroundAbundanceRange backgroundAbundanceRange;
 		/*
-		 * Get the extracted signals and determine the start and stop background
-		 * abundance.
+		 * Filter the extracted signals.
 		 */
 		IExtractedWavelengthSignals extractedWavelengthSignals = getExtractedWavelengthSignals(chromatogram, scanRange);
-		for(IExtractedWavelengthSignal signal : extractedWavelengthSignals.getExtractedWavelengthSignals()) {
-			for(int i = signal.getStartWavelength(); i <= signal.getStopWavelength(); i++) {
+		for(IExtractedWavelengthSignal extractedWavelengthSignal : extractedWavelengthSignals.getExtractedWavelengthSignals()) {
+			for(int i = extractedWavelengthSignal.getStartWavelength(); i <= extractedWavelengthSignal.getStopWavelength(); i++) {
 				/*
 				 * Skip if trace shall be used.
 				 */
 				if(traces.contains(i)) {
 					continue;
 				}
-				//
-				signal.setAbundance(i, 0);
+				/*
+				 * Set to 0.
+				 */
+				extractedWavelengthSignal.setAbundance(i, 0);
 			}
 		}
 		/*
@@ -135,10 +134,10 @@ public class PeakBuilderWSD {
 		 * abundance is higher than the stop abundance or vice versa.
 		 */
 		try {
-			extractedWavelengthSignal = extractedWavelengthSignals.getExtractedWavelengthSignal(scanRange.getStartScan());
-			float startBackgroundAbundance = extractedWavelengthSignal.getTotalSignal();
-			extractedWavelengthSignal = extractedWavelengthSignals.getExtractedWavelengthSignal(scanRange.getStopScan());
-			float stopBackgroundAbundance = extractedWavelengthSignal.getTotalSignal();
+			IExtractedWavelengthSignal extractedWavelengthSignalStart = extractedWavelengthSignals.getExtractedWavelengthSignal(scanRange.getStartScan());
+			float startBackgroundAbundance = extractedWavelengthSignalStart.getTotalSignal();
+			IExtractedWavelengthSignal extractedWavelengthSignalStop = extractedWavelengthSignals.getExtractedWavelengthSignal(scanRange.getStopScan());
+			float stopBackgroundAbundance = extractedWavelengthSignalStop.getTotalSignal();
 			/*
 			 * The abundance of base or startBackground/stopBackground (depends
 			 * which is the lower value) is the chromatogram background.<br/> Then a
@@ -149,6 +148,7 @@ public class PeakBuilderWSD {
 			 * abundance.<br/> To include or exclude the background abundance in the
 			 * IPeakModel affects the calculation of its width at different heights.
 			 */
+			IBackgroundAbundanceRange backgroundAbundanceRange;
 			if(calculatePeakIncludedBackground) {
 				backgroundAbundanceRange = new BackgroundAbundanceRange(startBackgroundAbundance, stopBackgroundAbundance);
 			} else {
@@ -164,22 +164,25 @@ public class PeakBuilderWSD {
 			/*
 			 * Create the peak.
 			 */
-			IExtractedWavelengthSignal signalMax = null;
+			IExtractedWavelengthSignal extractedWavelengthSignalMax = null;
 			for(int i = extractedWavelengthSignals.getStartScan(); i < extractedWavelengthSignals.getStopScan(); i++) {
-				IExtractedWavelengthSignal signal = extractedWavelengthSignals.getExtractedWavelengthSignal(i);
-				if(signalMax == null) {
-					signalMax = signal;
+				IExtractedWavelengthSignal extractedWavelengthSignal = extractedWavelengthSignals.getExtractedWavelengthSignal(i);
+				if(extractedWavelengthSignalMax == null) {
+					extractedWavelengthSignalMax = extractedWavelengthSignal;
 				} else {
-					signalMax = signalMax.getTotalSignal() < signal.getTotalSignal() ? signal : signalMax;
+					extractedWavelengthSignalMax = extractedWavelengthSignalMax.getTotalSignal() < extractedWavelengthSignal.getTotalSignal() ? extractedWavelengthSignal : extractedWavelengthSignalMax;
 				}
 			}
 			//
-			if(signalMax != null) {
+			if(extractedWavelengthSignalMax != null) {
 				IScanWSD peakScanWSD = new ScanWSD();
-				peakScanWSD.setRetentionTime(signalMax.getRetentionTime());
+				int retentionTime = extractedWavelengthSignalMax.getRetentionTime();
+				peakScanWSD.setRetentionTime(retentionTime);
 				for(int trace : traces) {
-					peakScanWSD.addScanSignal(new ScanSignalWSD(trace, signalMax.getAbundance(trace)));
+					peakScanWSD.addScanSignal(new ScanSignalWSD(trace, extractedWavelengthSignalMax.getAbundance(trace)));
 				}
+				double adjustedTotalSignal = peakScanWSD.getTotalSignal() - backgroundEquation.calculateY(retentionTime);
+				peakScanWSD.adjustTotalSignal((float)adjustedTotalSignal);
 				IPeakModelWSD peakModel = new PeakModelWSD(peakScanWSD, peakIntensityValues, backgroundAbundanceRange.getStartBackgroundAbundance(), backgroundAbundanceRange.getStopBackgroundAbundance());
 				IChromatogramPeakWSD peak = new ChromatogramPeakWSD(peakModel, chromatogram);
 				return peak;
@@ -381,10 +384,10 @@ public class PeakBuilderWSD {
 
 	protected static ITotalScanSignals adjustTotalScanSignals(IExtractedWavelengthSignals extractedWavelengthSignals, LinearEquation backgroundEquation) throws Exception {
 
-		assert (extractedWavelengthSignals != null) : "The total ion signals must not be null.";
+		assert (extractedWavelengthSignals != null) : "The wavelength signals must not be null.";
 		assert (backgroundEquation != null) : "The background equation must not be null.";
 		if(extractedWavelengthSignals == null || backgroundEquation == null) {
-			throw new PeakException("The given totalIonSignals or backgroundEquation must not be null.");
+			throw new PeakException("The given wavelength signals or backgroundEquation must not be null.");
 		}
 		/*
 		 * Make a deep copy of totalIonSignals, normalize the values to
@@ -404,9 +407,11 @@ public class PeakBuilderWSD {
 			if(adjustedSignal < 0.0f) {
 				adjustedSignal = 0.0f;
 			}
+			//
 			ITotalScanSignal totalScanSignal = new TotalScanSignal(retentionTime, 0.0f, adjustedSignal);
 			peakIntensityTotalScanSignals.add(totalScanSignal);
 		}
+		//
 		TotalScanSignalsModifier.normalize(peakIntensityTotalScanSignals, IPeakIntensityValues.MAX_INTENSITY);
 		return peakIntensityTotalScanSignals;
 	}
