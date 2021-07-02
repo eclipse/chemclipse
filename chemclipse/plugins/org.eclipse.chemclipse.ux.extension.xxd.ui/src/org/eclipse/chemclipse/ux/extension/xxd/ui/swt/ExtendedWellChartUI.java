@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Matthias Mailänder - add color compensation
+ * Matthias Mailänder - add color compensation, per channel coloring
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -18,10 +18,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.numeric.core.IPoint;
-import org.eclipse.chemclipse.numeric.core.Point;
-import org.eclipse.chemclipse.numeric.equations.Equations;
-import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 import org.eclipse.chemclipse.pcr.model.core.IChannel;
 import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.pcr.model.core.IWell;
@@ -33,7 +29,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartPCR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.model.ColorCodes;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePCR;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageWellChart;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -45,7 +41,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
 import org.eclipse.swtchart.extensions.core.SeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
@@ -188,7 +183,7 @@ public class ExtendedWellChartUI extends Composite implements IExtendedPartUI {
 
 	private void createSettingsButton(Composite parent) {
 
-		createSettingsButton(parent, Arrays.asList(PreferencePagePCR.class), new ISettingsHandler() {
+		createSettingsButton(parent, Arrays.asList(PreferencePageWellChart.class), new ISettingsHandler() {
 
 			@Override
 			public void apply(Display display) {
@@ -241,18 +236,19 @@ public class ExtendedWellChartUI extends Composite implements IExtendedPartUI {
 			 * Extract the channels.
 			 */
 			ColorCodes colorCodes = new ColorCodes();
-			colorCodes.load(preferenceStore.getString(PreferenceConstants.P_PCR_COLOR_CODES));
-			Color color = getWellColor(well, colorCodes);
+			colorCodes.load(preferenceStore.getString(PreferenceConstants.P_PCR_WELL_COLOR_CODES));
 			//
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 			int index = comboChannels.getSelectionIndex();
 			if(index == 0) {
 				for(IChannel channel : well.getChannels().values()) {
+					Color color = getChannelColor(channel, colorCodes);
 					addChannelData(channel, lineSeriesDataList, color);
 				}
 			} else {
 				try {
 					IChannel channel = well.getChannels().get(index - 1);
+					Color color = getChannelColor(channel, colorCodes);
 					addChannelData(channel, lineSeriesDataList, color);
 				} catch(NumberFormatException e) {
 					logger.warn(e);
@@ -265,14 +261,14 @@ public class ExtendedWellChartUI extends Composite implements IExtendedPartUI {
 		}
 	}
 
-	private Color getWellColor(IWell well, ColorCodes colorCodes) {
+	private Color getChannelColor(IChannel channel, ColorCodes colorCodes) {
 
-		String sampleSubset = well.getSampleSubset();
-		String targetName = well.getTargetName();
-		if(colorCodes.containsKey(sampleSubset)) {
-			return colorCodes.get(sampleSubset).getColor();
-		} else if(colorCodes.containsKey(targetName)) {
-			return colorCodes.get(targetName).getColor();
+		String detectionName = channel.getDetectionName();
+		String channelName = channel.getName();
+		if(colorCodes.containsKey(detectionName)) {
+			return colorCodes.get(detectionName).getColor();
+		} else if(colorCodes.containsKey(channelName)) {
+			return colorCodes.get(channelName).getColor();
 		} else {
 			return Colors.getColor(preferenceStore.getString(PreferenceConstants.P_PCR_DEFAULT_COLOR));
 		}
@@ -283,11 +279,6 @@ public class ExtendedWellChartUI extends Composite implements IExtendedPartUI {
 		ILineSeriesData channelCurve = getChannelCurve(channel, color);
 		if(channelCurve != null) {
 			lineSeriesDataList.add(channelCurve);
-		}
-		//
-		ILineSeriesData crossingPoint = getCrossingPoint(channel, color);
-		if(crossingPoint != null) {
-			lineSeriesDataList.add(crossingPoint);
 		}
 	}
 
@@ -300,58 +291,14 @@ public class ExtendedWellChartUI extends Composite implements IExtendedPartUI {
 			for(int index = 0; index < pointList.size(); index++) {
 				points[index] = pointList.get(index);
 			}
-			ISeriesData seriesData = new SeriesData(points, channel.getDetectionName());
+			ISeriesData seriesData = new SeriesData(points, String.valueOf(channel.getId()));
 			lineSeriesData = new LineSeriesData(seriesData);
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 			lineSeriesSettings.setLineColor(color);
-			lineSeriesSettings.setSymbolColor(color);
-			lineSeriesSettings.setSymbolSize(2);
-			lineSeriesSettings.setSymbolType(PlotSymbolType.CIRCLE);
 			lineSeriesSettings.setEnableArea(false);
+			lineSeriesSettings.setDescription(channel.getDetectionName());
 		}
 		return lineSeriesData;
-	}
-
-	private ILineSeriesData getCrossingPoint(IChannel channel, Color color) {
-
-		ILineSeriesData lineSeriesData = null;
-		if(channel != null) {
-			IPoint crossingPoint = getCrossingPoint(channel);
-			if(crossingPoint != null) {
-				double[] xSeries = new double[]{crossingPoint.getX()};
-				double[] ySeries = new double[]{crossingPoint.getY()};
-				ISeriesData seriesData = new SeriesData(xSeries, ySeries, "Crossing Point " + channel.getId());
-				lineSeriesData = new LineSeriesData(seriesData);
-				ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
-				lineSeriesSettings.setSymbolColor(color);
-				lineSeriesSettings.setSymbolSize(8);
-				lineSeriesSettings.setSymbolType(PlotSymbolType.CROSS);
-				lineSeriesSettings.setEnableArea(false);
-			}
-		}
-		return lineSeriesData;
-	}
-
-	private IPoint getCrossingPoint(IChannel channel) {
-
-		double crossingPointX = channel.getCrossingPoint();
-		int floor = (int)Math.floor(crossingPointX);
-		int ceil = (int)Math.ceil(crossingPointX);
-		//
-		List<Double> pointList = colorCompensation ? channel.getColorCompensatedFluorescence() : channel.getFluorescence();
-		if(floor >= 0 && floor < pointList.size() && ceil >= 0 && ceil < pointList.size()) {
-			if(floor == ceil) {
-				double y = pointList.get(floor);
-				return new Point(crossingPointX, y);
-			} else {
-				IPoint p1 = new Point(floor, pointList.get(floor));
-				IPoint p2 = new Point(ceil, pointList.get(ceil));
-				LinearEquation equation = Equations.createLinearEquation(p1, p2);
-				double y = equation.calculateY(crossingPointX);
-				return new Point(crossingPointX, y);
-			}
-		}
-		return null;
 	}
 
 	private void updateLabel() {

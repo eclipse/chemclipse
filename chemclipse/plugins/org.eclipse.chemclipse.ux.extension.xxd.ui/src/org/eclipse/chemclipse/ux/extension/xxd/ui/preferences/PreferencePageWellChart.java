@@ -8,38 +8,37 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Matthias Mailänder - add a reference label setting
+ * Matthias Mailänder - add a color codes setting
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
-import org.eclipse.chemclipse.pcr.model.core.support.LabelSetting;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.fieldeditors.ColorCodesFieldEditor;
 import org.eclipse.jface.preference.ColorFieldEditor;
-import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-public class PreferencePagePCR extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class PreferencePageWellChart extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	public PreferencePagePCR() {
+	public PreferencePageWellChart() {
 
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setTitle("PCR");
+		setTitle("Well Chart");
 		setDescription("");
 	}
 
+	@Override
 	public void createFieldEditors() {
 
-		addField(new ComboFieldEditor(PreferenceConstants.P_PCR_REFERENCE_LABEL, "Reference Label:", LabelSetting.getOptions(), getFieldEditorParent()));
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new ColorFieldEditor(PreferenceConstants.P_PCR_DEFAULT_COLOR, "Default Line Color:", getFieldEditorParent()));
-		addField(new ColorCodesFieldEditor(PreferenceConstants.P_PCR_COLOR_CODES, "Color Codes", getFieldEditorParent()));
+		addField(new ColorCodesFieldEditor(PreferenceConstants.P_PCR_WELL_COLOR_CODES, "Color Codes", getFieldEditorParent()));
 	}
 
+	@Override
 	public void init(IWorkbench workbench) {
 
 	}
