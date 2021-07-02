@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,17 +15,12 @@ import java.io.File;
 
 import org.eclipse.chemclipse.converter.core.AbstractMagicNumberMatcher;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
-import org.eclipse.chemclipse.msd.converter.supplier.amdis.internal.converter.SpecificationValidatorMSL;
 
 public class MagicNumberMatcher extends AbstractMagicNumberMatcher implements IMagicNumberMatcher {
 
 	@Override
 	public boolean checkFileFormat(File file) {
 
-		file = SpecificationValidatorMSL.validateSpecification(file);
-		if(file.exists()) {
-			return true;
-		}
-		return false;
+		return checkFileExtension(file, ".MSL");
 	}
 }
