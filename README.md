@@ -9,7 +9,9 @@ Currently it offers workflows in the following areas:
 * flame-ionization detectors (GC/FID)
 * real-time polymerase chain reaction (PCR)
 * nuclear magnetic resonance (NMR)
-thanks to the open and flexible architecture more are possible and we are open for ideas and suggestions see our [contribution guidelines](https://github.com/eclipse/chemclipse/blob/develop/CONTRIBUTING.md).
+* infrared spectroscopy (FTIR, NIR, MIR)
+
+Thanks to the open and flexible architecture more are possible and we are open for ideas and suggestions see our [contribution guidelines](https://github.com/eclipse/chemclipse/blob/develop/CONTRIBUTING.md).
 
 [ChemClipse](https://projects.eclipse.org/projects/science.chemclipse) is part of the [Eclipse Science](https://science.eclipse.org/) working group and is the basis for [OpenChrom®](https://github.com/Openchrom/openchrom).
 
