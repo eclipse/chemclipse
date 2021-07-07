@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,25 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.ui;
 
-import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 import org.osgi.framework.BundleContext;
 
-/**
- * The activator class controls the plug-in life cycle
- */
-public class Activator extends AbstractUIPlugin {
+public class Activator extends AbstractActivatorUI {
 
-	// The plug-in ID
-	public static final String PLUGIN_ID = "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.ui"; //$NON-NLS-1$
-	// The shared instance
-	private static Activator plugin;
-
-	/**
-	 * The constructor
+	/*
+	 * Instance
 	 */
-	public Activator() {
-
-	}
+	private static Activator plugin;
 
 	/*
 	 * (non-Javadoc)
@@ -39,6 +30,7 @@ public class Activator extends AbstractUIPlugin {
 
 		super.start(context);
 		plugin = this;
+		initializePreferenceStore(PreferenceSupplier.INSTANCE());
 	}
 
 	/*
@@ -53,10 +45,10 @@ public class Activator extends AbstractUIPlugin {
 
 	/**
 	 * Returns the shared instance
-	 *
+	 * 
 	 * @return the shared instance
 	 */
-	public static Activator getDefault() {
+	public static AbstractActivatorUI getDefault() {
 
 		return plugin;
 	}

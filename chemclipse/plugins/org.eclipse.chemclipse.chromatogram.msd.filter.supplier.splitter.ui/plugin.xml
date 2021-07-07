@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.chemclipse.chromatogram.msd.filter.ui.preferences.filterPreferencePage"
+            class="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.ui.preferences.preferencePage"
+            name="Splitter">
+      </page>
+   </extension>
+</plugin>

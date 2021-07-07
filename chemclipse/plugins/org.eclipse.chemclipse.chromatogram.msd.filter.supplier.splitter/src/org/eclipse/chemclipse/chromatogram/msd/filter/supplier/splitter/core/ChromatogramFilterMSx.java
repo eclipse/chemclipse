@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,7 +22,7 @@ import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.AbstractChromatogramFilterMSD;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.settings.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.settings.FilterSettingsMSx;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -33,7 +33,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
+public class ChromatogramFilterMSx extends AbstractChromatogramFilterMSD {
 
 	@Override
 	public IProcessingInfo<?> applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
@@ -91,7 +91,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 	@Override
 	public IProcessingInfo<?> applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
-		FilterSettings splitterSettings = PreferenceSupplier.getSplitterSettings();
+		FilterSettingsMSx splitterSettings = PreferenceSupplier.getFilterSettingsMSx();
 		return applyFilter(chromatogramSelection, splitterSettings, monitor);
 	}
 }

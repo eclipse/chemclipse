@@ -5,11 +5,18 @@
          point="org.eclipse.chemclipse.chromatogram.msd.filter.chromatogramFilterSupplier">
       <ChromatogramFilterSupplier
             description="This filter splits a chromatogram into its MS1, MS2, ... reference chromatogram(s)."
-            filter="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.core.ChromatogramFilter"
+            filter="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.core.ChromatogramFilterMSx"
             filterName="Chromatogram Splitter (MS1, MS2, ...)"
-            filterSettings="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.settings.FilterSettings"
-            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter">
+            filterSettings="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.settings.FilterSettingsMSx"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.msx">
       </ChromatogramFilterSupplier>
+      <ChromatogramFilterSupplier
+            description="This filter splits a chromatogram into its SCAN, SIM reference chromatogram(s)."
+            filter="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.core.ChromatogramFilterSIM"
+            filterName="Chromatogram Splitter (SCAN, SIM)"
+            filterSettings="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.settings.FilterSettingsSIM"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.sim">
+      </ChromatogramFilterSupplier>      
    </extension>   
    <extension
          point="org.eclipse.core.runtime.preferences">

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,7 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.Activator;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.settings.FilterSettings;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.settings.FilterSettingsMSx;
+import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.settings.FilterSettingsSIM;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -23,6 +24,12 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
+	public static final int MIN_LIMIT_IONS_SIM = 1;
+	public static final int MAX_LIMIT_IONS_SIM = 100;
+	//
+	public static final String P_LIMIT_IONS_SIM = "limitIonsSIM";
+	public static final int DEF_LIMIT_IONS_SIM = 5;
+	//
 	private static IPreferenceSupplier preferenceSupplier;
 
 	public static IPreferenceSupplier INSTANCE() {
@@ -49,6 +56,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public Map<String, String> getDefaultValues() {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
+		defaultValues.put(P_LIMIT_IONS_SIM, Integer.toString(DEF_LIMIT_IONS_SIM));
 		return defaultValues;
 	}
 
@@ -58,9 +66,17 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static FilterSettings getSplitterSettings() {
+	public static FilterSettingsMSx getFilterSettingsMSx() {
 
-		FilterSettings splitterSettings = new FilterSettings();
-		return splitterSettings;
+		return new FilterSettingsMSx();
+	}
+
+	public static FilterSettingsSIM getFilterSettingsSIM() {
+
+		FilterSettingsSIM settings = new FilterSettingsSIM();
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		settings.setLimitIons(preferences.getInt(P_LIMIT_IONS_SIM, DEF_LIMIT_IONS_SIM));
+		//
+		return settings;
 	}
 }
