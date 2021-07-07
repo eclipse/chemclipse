@@ -454,4 +454,9 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_PRINT = PATH_PREFIX + "print.png";
 	String IMAGE_CLEAR = PATH_PREFIX + "clear.gif";
 	String IMAGE_RULER = PATH_PREFIX + "ruler.gif";
+	String IMAGE_SKIP_QUANTIFIED_PEAK = PATH_PREFIX + "skipQuantifiedPeak.gif";
+	String IMAGE_CROSS_ZERO = PATH_PREFIX + "crossZero.gif";
+	String IMAGE_INCLUDE_INTERCEPT = PATH_PREFIX + "includeIntercept.gif";
+	String IMAGE_LOWER_MIN_AREA = PATH_PREFIX + "lowerMinArea.gif";
+	String IMAGE_HIGHER_MAX_AREA = PATH_PREFIX + "higherMaxArea.gif";
 }
