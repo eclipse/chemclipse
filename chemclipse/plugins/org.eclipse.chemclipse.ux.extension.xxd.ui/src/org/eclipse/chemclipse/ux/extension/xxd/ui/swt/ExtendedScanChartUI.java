@@ -92,7 +92,10 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 	private Button buttonCopyTraces;
 	private Button buttonSave;
 	private Button buttonDeleteOptimized;
-	private ScanChartUI scanChartUI;
+	//
+	private Button buttonChartGrid;
+	private AtomicReference<ScanChartUI> chartControl = new AtomicReference<>();
+	private ChartGridSupport chartGridSupport = new ChartGridSupport();
 	//
 	private Combo comboDataType;
 	private Combo comboSignalType;
@@ -189,6 +192,8 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 	private void updateScanChart(IScan scan) {
 
 		IScanMSD optimizedMassSpectrum = getOptimizedScanMSD();
+		ScanChartUI scanChartUI = chartControl.get();
+		//
 		if(optimizedMassSpectrum != null) {
 			scanChartUI.setInput(optimizedMassSpectrum);
 		} else {
@@ -210,7 +215,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		createToolbarInfo(composite);
 		createToolbarTypes(composite);
 		createToolbarEdit(composite);
-		scanChartUI = createScanChart(composite);
+		createScanChart(composite);
 		//
 		initialize();
 	}
@@ -220,6 +225,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		enableToolbar(toolbarInfo, buttonToolbarInfo, IApplicationImage.IMAGE_INFO, TOOLTIP_INFO, true);
 		enableToolbar(toolbarTypes, buttonToolbarTypes, IMAGE_TYPES, TOOLTIP_TYPES, false);
 		enableToolbar(toolbarEdit, buttonToolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT, false);
+		enableChartGrid(chartControl, buttonChartGrid, IMAGE_CHART_GRID, chartGridSupport);
 		//
 		updateButtons();
 	}
@@ -228,7 +234,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		composite.setLayout(new GridLayout(12, false));
+		composite.setLayout(new GridLayout(13, false));
 		//
 		labelEdit = createInfoLabelEdit(composite);
 		labelSubtract = createInfoLabelSubtract(composite);
@@ -241,6 +247,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		createResetButton(composite);
 		buttonSave = createSaveButton(composite);
 		buttonDeleteOptimized = createDeleteOptimizedButton(composite);
+		buttonChartGrid = createButtonToggleChartGrid(composite, chartControl, IMAGE_CHART_GRID, chartGridSupport);
 		createSettingsButton(composite);
 		//
 		buttonToolbarEdit.addSelectionListener(new SelectionAdapter() {
@@ -450,7 +457,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				String selection = combo.getText();
-				scanChartUI.setDataType(DataType.valueOf(selection));
+				chartControl.get().setDataType(DataType.valueOf(selection));
 				updateScanChart(scan);
 			}
 		});
@@ -469,7 +476,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				String selection = combo.getText();
-				scanChartUI.setSignalType(SignalType.valueOf(selection));
+				chartControl.get().setSignalType(SignalType.valueOf(selection));
 				updateScanChart(scan);
 			}
 		});
@@ -545,6 +552,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 
 	private void updateButtons() {
 
+		buttonChartGrid.setEnabled(true);
 		boolean enabled = isMassSpectrum();
 		//
 		scanIdentifierUI.setEnabled(enabled || isWaveSpectrum());
@@ -676,11 +684,12 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		toolbarInfo.set(informationUI);
 	}
 
-	private ScanChartUI createScanChart(Composite parent) {
+	private void createScanChart(Composite parent) {
 
 		ScanChartUI scanChartUI = new ScanChartUI(parent, SWT.BORDER);
 		scanChartUI.setLayoutData(new GridData(GridData.FILL_BOTH));
-		return scanChartUI;
+		//
+		chartControl.set(scanChartUI);
 	}
 
 	private void setDetectorSignalType(IScan scan) {
@@ -703,6 +712,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		/*
 		 * Data / Signal Type
 		 */
+		ScanChartUI scanChartUI = chartControl.get();
 		scanChartUI.setDataType(DataType.valueOf(comboDataType.getText()));
 		scanChartUI.setSignalType(SignalType.valueOf(comboSignalType.getText()));
 	}

@@ -71,6 +71,7 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.Fonts;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.actions.GridLineEditAction;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.actions.ILabelEditSettings;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.actions.TargetLabelEditAction;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.RetentionIndexUI;
@@ -912,6 +913,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 
 		EditorToolBar editorToolBar = new EditorToolBar(parent);
 		processorToolbar = new ProcessorToolbar(editorToolBar, processTypeSupport, this::isValidSupplier, this::executeSupplier);
+		//
 		editorToolBar.addAction(createLabelsAction());
 		editorToolBar.addAction(createToggleToolbarAction("Info", "the info toolbar.", IApplicationImage.IMAGE_INFO, TOOLBAR_INFO));
 		editorToolBar.createCombo(this::initComboViewerSeparationColumn, true, 150);
@@ -919,10 +921,10 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		editorToolBar.addAction(createToggleToolbarAction("Edit", "the edit toolbar.", IApplicationImage.IMAGE_EDIT, TOOLBAR_EDIT));
 		editorToolBar.addAction(createToggleToolbarAction("Alignment", "the chromatogram alignment toolbar.", IApplicationImage.IMAGE_ALIGN_CHROMATOGRAMS, TOOLBAR_CHROMATOGRAM_ALIGNMENT));
 		editorToolBar.addAction(createToggleToolbarAction("Methods", "the method toolbar.", IApplicationImage.IMAGE_METHOD, TOOLBAR_METHOD));
-		//
 		createResetButton(editorToolBar);
 		editorToolBar.enableToolbarTextPage(preferenceStore, PREFERENCE_SHOW_TOOLBAR_TEXT);
 		processorToolbar.enablePreferencePage(preferenceStore, PreferenceConstants.P_CHROMATOGRAM_PROCESSOR_TOOLBAR);
+		editorToolBar.addAction(createGridLineAction());
 		editorToolBar.addPreferencePages(new Supplier<Collection<? extends IPreferencePage>>() {
 
 			@Override
@@ -1186,6 +1188,11 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 			}
 		});
 		return targetLabelEditAction;
+	}
+
+	private GridLineEditAction createGridLineAction() {
+
+		return new GridLineEditAction(this);
 	}
 
 	private ExtendedChromatogramUI getExtendedChromatogramUI() {

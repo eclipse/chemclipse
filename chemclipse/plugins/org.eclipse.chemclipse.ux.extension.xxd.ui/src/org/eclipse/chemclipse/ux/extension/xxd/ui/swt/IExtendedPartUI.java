@@ -31,6 +31,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.ScrollableChart;
 
 public interface IExtendedPartUI {
@@ -52,6 +53,7 @@ public interface IExtendedPartUI {
 	String TOOLTIP_TYPES = "the types toolbar.";
 	String TOOLTIP_LEGEND = "the chart legend.";
 	String TOOLTIP_LEGEND_MARKER = "the chart legend marker.";
+	String TOOLTIP_CHART_GRID = "the chart grid.";
 	//
 	String IMAGE_INFO = IApplicationImage.IMAGE_INFO;
 	String IMAGE_RESULTS = IApplicationImage.IMAGE_RESULTS;
@@ -61,6 +63,7 @@ public interface IExtendedPartUI {
 	String IMAGE_LEGEND = IApplicationImage.IMAGE_TAG;
 	String IMAGE_LEGEND_MARKER = IApplicationImage.IMAGE_CHART_LEGEND_MARKER;
 	String IMAGE_EDIT_ENTRY = IApplicationImage.IMAGE_EDIT_ENTRY;
+	String IMAGE_CHART_GRID = IApplicationImage.IMAGE_GRID;
 
 	default Button createButton(Composite parent, String text, String tooltip, String image) {
 
@@ -115,6 +118,30 @@ public interface IExtendedPartUI {
 					boolean edit = !tableViewer.isEditEnabled();
 					tableViewer.setEditEnabled(edit);
 					setButtonImage(button, image, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_TABLE, edit);
+				}
+			}
+		});
+		//
+		return button;
+	}
+
+	default Button createButtonToggleChartGrid(Composite parent, AtomicReference<? extends ScrollableChart> chartControl, String image, ChartGridSupport chartGridSupport) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		setButtonImage(button, image, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_CHART_GRID, false);
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				ScrollableChart scrollableChart = chartControl.get();
+				if(scrollableChart != null) {
+					IChartSettings chartSettings = scrollableChart.getChartSettings();
+					boolean isGridDisplayed = !chartGridSupport.isGridDisplayed(chartSettings);
+					chartGridSupport.showGrid(scrollableChart.getChartSettings(), isGridDisplayed);
+					scrollableChart.applySettings(chartSettings);
+					setButtonImage(button, image, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_CHART_GRID, isGridDisplayed);
 				}
 			}
 		});
@@ -238,6 +265,15 @@ public interface IExtendedPartUI {
 		if(tableViewer != null) {
 			tableViewer.setEditEnabled(edit);
 			setButtonImage(button, image, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_TABLE, edit);
+		}
+	}
+
+	default void enableChartGrid(AtomicReference<? extends ScrollableChart> chartControl, Button button, String image, ChartGridSupport chartGridSupport) {
+
+		ScrollableChart scrollableChart = chartControl.get();
+		if(scrollableChart != null) {
+			boolean isGridDisplayed = chartGridSupport.isGridDisplayed(scrollableChart.getChartSettings());
+			setButtonImage(button, image, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_CHART_GRID, isGridDisplayed);
 		}
 	}
 

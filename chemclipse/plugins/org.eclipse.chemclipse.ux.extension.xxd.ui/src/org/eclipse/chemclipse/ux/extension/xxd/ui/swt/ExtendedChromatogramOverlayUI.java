@@ -102,7 +102,9 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 	private AtomicReference<DataShiftControllerUI> toolbarDataShift = new AtomicReference<>();
 	private Button buttonToolbarRulerDetails;
 	private AtomicReference<RulerDetailsUI> toolbarRulerDetails = new AtomicReference<>();
+	private Button buttonChartGrid;
 	private AtomicReference<ChromatogramRulerChart> chartControl = new AtomicReference<>();
+	private ChartGridSupport chartGridSupport = new ChartGridSupport();
 	//
 	private Label labelStatus;
 	private Combo comboOverlayType;
@@ -151,6 +153,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		enableToolbar(toolbarNamedTraces, false);
 		enableToolbar(toolbarDataShift, buttonToolbarDataShift, IMAGE_SHIFT, TOOLTIP_SHIFT, false);
 		enableToolbar(toolbarRulerDetails, buttonToolbarRulerDetails, IMAGE_RULER, TOOLTIP_RULER, false);
+		enableChartGrid(chartControl, buttonChartGrid, IMAGE_CHART_GRID, chartGridSupport);
 		//
 		toolbarDataShift.get().setScrollableChart(chartControl.get());
 		toolbarRulerDetails.get().setScrollableChart(chartControl.get());
@@ -166,7 +169,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		composite.setLayout(new GridLayout(9, false));
+		composite.setLayout(new GridLayout(10, false));
 		//
 		labelStatus = createLabelStatus(composite);
 		comboOverlayType = createOverlayTypeCombo(composite);
@@ -176,6 +179,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		createButtonToggleChartLegend(composite, chartControl, IMAGE_LEGEND);
 		createResetButton(composite);
 		createNewOverlayPartButton(composite);
+		buttonChartGrid = createButtonToggleChartGrid(composite, chartControl, IMAGE_CHART_GRID, chartGridSupport);
 		createSettingsButton(composite);
 		//
 		return composite;
