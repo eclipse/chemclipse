@@ -47,8 +47,7 @@ Export-Package: org.eclipse.chemclipse.xxd.model.filter.peaks,
  org.eclipse.chemclipse.xxd.model.quantitation
 Import-Package: com.google.common.collect,
  org.osgi.service.component.annotations;version="1.2.0"
-Service-Component: OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.ClassifierFilter.xml,
- OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.AsymmetryFilter.xml,
+Service-Component: OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.AsymmetryFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.AreaPercentFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.ShapeFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.AreaFilter.xml,
@@ -64,4 +63,6 @@ Service-Component: OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.Classi
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.DeleteIntegrationsFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.HighPassPeaksFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.LowPassPeaksFilter.xml,
- OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.DeletePeaksByTargetFilter.xml
+ OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.DeletePeaksByTargetFilter.xml,
+ OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.ClassifierAssignFilter.xml,
+ OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.ClassifierRemoveFilter.xml
