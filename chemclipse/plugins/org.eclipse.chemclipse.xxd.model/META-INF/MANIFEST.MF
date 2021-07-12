@@ -65,4 +65,5 @@ Service-Component: OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.Asymme
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.LowPassPeaksFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.DeletePeaksByTargetFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.ClassifierAssignFilter.xml,
- OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.ClassifierRemoveFilter.xml
+ OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.ClassifierRemoveFilter.xml,
+ OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.ClassifierAddFilter.xml
