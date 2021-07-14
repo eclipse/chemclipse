@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
+import org.eclipse.chemclipse.msd.model.support.ScanSupport;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -457,7 +458,7 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 
 				IScanMSD scanMSD = getScanMSD();
 				int maxCopyTraces = preferenceStore.getInt(PreferenceConstants.P_MAX_COPY_SCAN_TRACES);
-				String traces = scanDataSupport.extractTracesText(scanMSD, maxCopyTraces);
+				String traces = ScanSupport.extractTracesText(scanMSD, maxCopyTraces);
 				TextTransfer textTransfer = TextTransfer.getInstance();
 				Object[] data = new Object[]{traces};
 				Transfer[] dataTypes = new Transfer[]{textTransfer};

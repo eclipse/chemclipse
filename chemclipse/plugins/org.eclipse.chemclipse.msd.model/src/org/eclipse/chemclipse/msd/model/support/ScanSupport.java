@@ -46,4 +46,50 @@ public class ScanSupport {
 		//
 		return builder.toString();
 	}
+
+	public static String extractTracesText(IScanMSD scanMSD, int maxCopyTraces) {
+
+		List<Integer> traces = extractTracesList(scanMSD, maxCopyTraces);
+		Iterator<Integer> iterator = traces.iterator();
+		StringBuilder builder = new StringBuilder();
+		//
+		while(iterator.hasNext()) {
+			builder.append(iterator.next());
+			if(iterator.hasNext()) {
+				builder.append(" ");
+			}
+		}
+		//
+		return builder.toString();
+	}
+
+	public static List<Integer> extractTracesList(IScanMSD scanMSD, int maxCopyTraces) {
+
+		List<Integer> traces = new ArrayList<>();
+		if(scanMSD != null) {
+			IScanMSD massSpectrum = scanMSD.getOptimizedMassSpectrum() != null ? scanMSD.getOptimizedMassSpectrum() : scanMSD;
+			List<IIon> ions = new ArrayList<>(massSpectrum.getIons());
+			Collections.sort(ions, (i1, i2) -> Float.compare(i2.getAbundance(), i1.getAbundance()));
+			//
+			exitloop:
+			for(IIon ion : ions) {
+				/*
+				 * Add the trace.
+				 */
+				int trace = AbstractIon.getIon(ion.getIon());
+				if(!traces.contains(trace)) {
+					traces.add(trace);
+				}
+				//
+				if(traces.size() >= maxCopyTraces) {
+					break exitloop;
+				}
+			}
+		}
+		/*
+		 * Sort the traces ascending.
+		 */
+		Collections.sort(traces);
+		return traces;
+	}
 }

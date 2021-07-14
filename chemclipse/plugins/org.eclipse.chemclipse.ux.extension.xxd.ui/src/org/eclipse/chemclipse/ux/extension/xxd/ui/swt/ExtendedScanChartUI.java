@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.msd.model.support.ScanSupport;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -577,7 +578,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 				IScanMSD scanMSD = getScanMSD();
 				if(scanMSD != null) {
 					int maxCopyTraces = preferenceStore.getInt(PreferenceConstants.P_MAX_COPY_SCAN_TRACES);
-					String traces = scanDataSupport.extractTracesText(scanMSD, maxCopyTraces);
+					String traces = ScanSupport.extractTracesText(scanMSD, maxCopyTraces);
 					TextTransfer textTransfer = TextTransfer.getInstance();
 					Object[] data = new Object[]{traces};
 					Transfer[] dataTypes = new Transfer[]{textTransfer};
