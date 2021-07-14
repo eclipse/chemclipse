@@ -9,16 +9,16 @@
  * Contributors:
  * Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.filter.impl.settings;
+package org.eclipse.chemclipse.chromatogram.filter.system;
 
-import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
 import org.eclipse.chemclipse.model.math.IonRoundMethod;
+import org.eclipse.chemclipse.processing.system.ISystemProcessSettings;
 import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class FilterSettingsIonRounding extends AbstractChromatogramFilterSettings {
+public class SettingsIonRounding implements ISystemProcessSettings {
 
 	@JsonProperty(value = "Ion Round Method", defaultValue = "DEFAULT")
 	@JsonPropertyDescription(value = "Set the used m/z round method on a system level.")

@@ -14,7 +14,8 @@ Export-Package: org.eclipse.chemclipse.processing;version="1.0.0",
  org.eclipse.chemclipse.processing.filter;version="1.0.0",
  org.eclipse.chemclipse.processing.methods;version="1.0.0",
  org.eclipse.chemclipse.processing.procedures;version="1.0.0",
- org.eclipse.chemclipse.processing.supplier;version="1.0.0"
+ org.eclipse.chemclipse.processing.supplier;version="1.0.0",
+ org.eclipse.chemclipse.processing.system
 Import-Package: org.eclipse.chemclipse.support.settings,
  org.eclipse.chemclipse.support.settings.parser,
  org.eclipse.chemclipse.support.settings.serialization,

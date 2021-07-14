@@ -25,4 +25,6 @@ Export-Package: org.eclipse.chemclipse.chromatogram.filter.core.chromatogram,
  org.eclipse.chemclipse.chromatogram.filter.result,
  org.eclipse.chemclipse.chromatogram.filter.settings
 Import-Package: org.osgi.service.component.annotations;version="1.2.0"
-Service-Component: OSGI-INF/org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.ChromatogramFilterProcessSupplier.xml
+Service-Component: OSGI-INF/org.eclipse.chemclipse.chromatogram.filter.core.chromatogram.ChromatogramFilterProcessSupplier.xml,
+ OSGI-INF/org.eclipse.chemclipse.chromatogram.filter.system.FilterIonRounding.xml,
+ OSGI-INF/org.eclipse.chemclipse.chromatogram.filter.system.FilterRetentionIndexQC.xml

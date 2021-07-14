@@ -9,14 +9,14 @@
  * Contributors:
  * Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.filter.impl.settings;
+package org.eclipse.chemclipse.chromatogram.filter.system;
 
-import org.eclipse.chemclipse.chromatogram.filter.settings.AbstractChromatogramFilterSettings;
+import org.eclipse.chemclipse.processing.system.ISystemProcessSettings;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class FilterSettingsQC extends AbstractChromatogramFilterSettings {
+public class SettingsRetentionIndexQC implements ISystemProcessSettings {
 
 	@JsonProperty(value = "QC: Use Retention Index", defaultValue = "false")
 	@JsonPropertyDescription(value = "Set this system value to use retention indices for quality control purposes.")

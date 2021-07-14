@@ -15,14 +15,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.filter.Activator;
-import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsIonRounding;
-import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsQC;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsReset;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.FilterSettingsSelection;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.PeakTargetsToReferencesSettings;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.ScanTargetsToPeakSettings;
 import org.eclipse.chemclipse.chromatogram.filter.impl.settings.ScanTargetsToReferencesSettings;
 import org.eclipse.chemclipse.chromatogram.filter.settings.MaxDetectorFilterSettings;
+import org.eclipse.chemclipse.chromatogram.filter.system.SettingsRetentionIndexQC;
+import org.eclipse.chemclipse.chromatogram.filter.system.SettingsIonRounding;
 import org.eclipse.chemclipse.model.math.IonRoundMethod;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -140,10 +140,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return new FilterSettingsReset();
 	}
 
-	public static FilterSettingsIonRounding getFilterSettingsIonRounding() {
+	public static SettingsIonRounding getFilterSettingsIonRounding() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		FilterSettingsIonRounding settings = new FilterSettingsIonRounding();
+		SettingsIonRounding settings = new SettingsIonRounding();
 		try {
 			settings.setIonRoundMethod(IonRoundMethod.valueOf(preferences.get(P_ION_ROUND_METHOD, DEF_ION_ROUND_METHOD)));
 		} catch(Exception e) {
@@ -152,10 +152,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return settings;
 	}
 
-	public static FilterSettingsQC getFilterSettingsQC() {
+	public static SettingsRetentionIndexQC getFilterSettingsQC() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		FilterSettingsQC settings = new FilterSettingsQC();
+		SettingsRetentionIndexQC settings = new SettingsRetentionIndexQC();
 		settings.setUseRetentionIndexQC(preferences.getBoolean(P_USE_RETENTION_INDEX_QC, DEF_USE_RETENTION_INDEX_QC));
 		return settings;
 	}
