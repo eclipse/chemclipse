@@ -35,6 +35,7 @@ public class Activator implements BundleActivator {
 		//
 		System.out.println("TODOS next version: v1401");
 		System.out.println("\tCheck (Scan) - are additional RI values stored? RetentionIndexType.POLAR, ...");
+		System.out.println("\tIQuantitationEntry - Quantitation Flag");
 		//
 		logger.info("-------------------------------------------------");
 		logger.info("Ensure backward and forward compatibility!");

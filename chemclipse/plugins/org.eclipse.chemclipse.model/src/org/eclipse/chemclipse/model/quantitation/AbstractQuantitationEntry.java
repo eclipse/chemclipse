@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2019 Lablicate GmbH.
+ * Copyright (c) 2013, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -31,8 +31,10 @@ public abstract class AbstractQuantitationEntry implements IQuantitationEntry {
 	private String calibrationMethod = "";
 	private boolean usedCrossZero = true;
 	private String description = "";
+	private QuantitationFlag quantitationFlag = QuantitationFlag.NONE;
 
 	public AbstractQuantitationEntry(String name, double concentration, String concentrationUnit, double area) {
+
 		this.name = name;
 		this.concentration = concentration;
 		this.concentrationUnit = concentrationUnit;
@@ -137,6 +139,18 @@ public abstract class AbstractQuantitationEntry implements IQuantitationEntry {
 				}
 			}
 		}
+	}
+
+	@Override
+	public QuantitationFlag getQuantitationFlag() {
+
+		return quantitationFlag;
+	}
+
+	@Override
+	public void setQuantitationFlag(QuantitationFlag quantitationFlag) {
+
+		this.quantitationFlag = quantitationFlag;
 	}
 
 	@Override
