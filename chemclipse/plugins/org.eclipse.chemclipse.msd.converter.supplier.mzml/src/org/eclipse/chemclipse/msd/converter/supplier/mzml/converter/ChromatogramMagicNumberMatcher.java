@@ -14,18 +14,15 @@ package org.eclipse.chemclipse.msd.converter.supplier.mzml.converter;
 
 import java.io.File;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.chemclipse.converter.core.AbstractMagicNumberMatcher;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.io.IFormat;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.IConstants;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.SpecificationValidator;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.MzML;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 public class ChromatogramMagicNumberMatcher extends AbstractMagicNumberMatcher implements IMagicNumberMatcher {
@@ -45,13 +42,17 @@ public class ChromatogramMagicNumberMatcher extends AbstractMagicNumberMatcher i
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 			Document document = documentBuilder.parse(file);
-			NodeList nodeList = document.getElementsByTagName(IConstants.NODE_MZML);
-			//
-			JAXBContext jaxbContext = JAXBContext.newInstance(IFormat.CONTEXT_PATH_V_110);
-			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-			MzML mzML = (MzML)unmarshaller.unmarshal(nodeList.item(0));
-			if(mzML.getRun().getChromatogramList() != null) {
-				isValidFormat = true;
+			NodeList root = document.getElementsByTagName(IConstants.NODE_MZML);
+			if(root.getLength() != 1) {
+				return isValidFormat;
+			}
+			NodeList chromatogramList = document.getElementsByTagName(IConstants.NODE_CHROMATOGRAM_LIST);
+			if(chromatogramList.getLength() > 0) {
+				Element element = (Element)chromatogramList.item(0);
+				int chromatogramCount = Integer.parseInt(element.getAttribute("count"));
+				if(chromatogramCount > 0) {
+					isValidFormat = true;
+				}
 			}
 		} catch(Exception e) {
 			// fail silently

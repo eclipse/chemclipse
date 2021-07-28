@@ -14,18 +14,15 @@ package org.eclipse.chemclipse.msd.converter.supplier.mzdata.converter;
 
 import java.io.File;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.chemclipse.converter.core.AbstractMagicNumberMatcher;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
-import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.io.IFormat;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.support.IConstants;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.support.SpecificationValidator;
-import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.MzData;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 public class ChromatogramMagicNumberMatcher extends AbstractMagicNumberMatcher implements IMagicNumberMatcher {
@@ -45,13 +42,17 @@ public class ChromatogramMagicNumberMatcher extends AbstractMagicNumberMatcher i
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 			Document document = documentBuilder.parse(file);
-			NodeList nodeList = document.getElementsByTagName(IConstants.NODE_MZ_DATA);
-			//
-			JAXBContext jaxbContext = JAXBContext.newInstance(IFormat.CONTEXT_PATH_V_105);
-			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-			MzData mzData = (MzData)unmarshaller.unmarshal(nodeList.item(0));
-			if(mzData.getSpectrumList().getCount() > 1) {
-				isValidFormat = true;
+			NodeList root = document.getElementsByTagName(IConstants.NODE_MZ_DATA);
+			if(root.getLength() != 1) {
+				return isValidFormat;
+			}
+			NodeList spectrumList = document.getElementsByTagName(IConstants.NODE_SPECTRUM_LIST);
+			if(spectrumList.getLength() > 0) {
+				Element element = (Element)spectrumList.item(0);
+				int spectrumCount = Integer.parseInt(element.getAttribute("count"));
+				if(spectrumCount > 1) {
+					isValidFormat = true;
+				}
 			}
 		} catch(Exception e) {
 			// Print no exception.

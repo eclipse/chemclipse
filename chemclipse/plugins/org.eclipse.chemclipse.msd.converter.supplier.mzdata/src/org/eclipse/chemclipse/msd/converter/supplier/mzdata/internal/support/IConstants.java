@@ -21,4 +21,5 @@ public interface IConstants {
 	String EXPORT_SCANS = "Export Scans";
 	String SCAN = "Scan";
 	String NODE_MZ_DATA = "mzData";
+	String NODE_SPECTRUM_LIST = "spectrumList";
 }
