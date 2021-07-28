@@ -77,12 +77,16 @@ public class ChromatogramReaderVersion110 extends AbstractChromatogramReader imp
 			//
 			RunType run = XmlReader.getMzML(file, contextPath).getRun();
 			for(ChromatogramType chromatogramType : run.getChromatogramList().getChromatogram()) {
-				for(BinaryDataArrayType binaryDataArrayType : chromatogramType.getBinaryDataArrayList().getBinaryDataArray()) {
-					Pair<String, double[]> binaryData = BinaryReader.parseBinaryData(binaryDataArrayType);
-					if(binaryData.getKey().equals("time")) {
-						retentionTimes = binaryData.getValue();
-					} else if(binaryData.getKey().equals("intensity")) {
-						intensities = binaryData.getValue();
+				if(chromatogramType.getId().equals("TIC")) {
+					if(chromatogramType.getCvParam().stream().anyMatch(n -> n.getAccession().equals("MS:1000235") && n.getName().equals("total ion current chromatogram"))) {
+						for(BinaryDataArrayType binaryDataArrayType : chromatogramType.getBinaryDataArrayList().getBinaryDataArray()) {
+							Pair<String, double[]> binaryData = BinaryReader.parseBinaryData(binaryDataArrayType);
+							if(binaryData.getKey().equals("time")) {
+								retentionTimes = binaryData.getValue();
+							} else if(binaryData.getKey().equals("intensity")) {
+								intensities = binaryData.getValue();
+							}
+						}
 					}
 				}
 			}
