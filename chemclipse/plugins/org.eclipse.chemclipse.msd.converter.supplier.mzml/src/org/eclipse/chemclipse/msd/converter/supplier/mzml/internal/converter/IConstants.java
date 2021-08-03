@@ -22,4 +22,6 @@ public interface IConstants {
 	//
 	String NODE_RUN = "run";
 	String NODE_MZML = "mzML";
+	String NODE_CHROMATOGRAM_LIST = "chromatogramList";
+	String NODE_SPECTRUM_LIST = "spectrumList";
 }

@@ -21,6 +21,7 @@ import java.util.List;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
+import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
@@ -169,8 +170,8 @@ public class ChromatogramWriterVersion110 extends AbstractChromatogramWriter imp
 			marshaller.marshal(mzML, file);
 		} catch(JAXBException e) {
 			logger.warn(e);
-		} catch(Exception e) {
-			e.printStackTrace();
+		} catch(DatatypeConfigurationException e) {
+			logger.warn(e);
 		}
 	}
 }

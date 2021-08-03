@@ -95,8 +95,6 @@ public class ChromatogramWriter105 extends AbstractChromatogramWriter implements
 			marshaller.marshal(mzData, file);
 		} catch(JAXBException e) {
 			logger.warn(e);
-		} catch(Exception e) {
-			e.printStackTrace();
 		}
 	}
 
