@@ -10,6 +10,7 @@
  * Dr. Philip Wenig - initial API and implementation
  * Christoph Läubrich - support for configuration, zoom lock
  * Alexander Kerner - Generics
+ * Matthias Mailänder - Add support for Max Plots
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -104,6 +105,8 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 	private static final String TOOLTIP_SHIFT = "the shift toolbar.";
 	private static final String IMAGE_RULER = IApplicationImage.IMAGE_RULER;
 	private static final String TOOLTIP_RULER = "the ruler toolbar.";
+	//
+	private static final String MPC_LABEL = "Max Plot";
 	//
 	// The traces toolbar is controlled by the combo overlay type.
 	//
@@ -523,6 +526,8 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 						appendSWC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
 					} else if(displayType.equals(DisplayType.XWC)) {
 						appendXWC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
+					} else if(displayType.equals(DisplayType.MPC)) {
+						appendMPC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
 					} else {
 						if(displayType.equals(DisplayType.BPC) || displayType.equals(DisplayType.XIC) || displayType.equals(DisplayType.TSC)) {
 							appendXXC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
@@ -897,6 +902,58 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 						color = chromatogramChartSupport.getSeriesColor(referenceChromatogramName, displayType);
 						ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(referencedChromatogram, referenceSeriesId, displayType, derivative, color, markedIons, false);
 						lineSeriesData.getSettings().setDescription(description);
+						lineSeriesDataList.add(lineSeriesData);
+					}
+				}
+			}
+		}
+	}
+
+	private void appendMPC(Set<String> availableSeriesIds, List<String> selectionSeries, List<ILineSeriesData> lineSeriesDataList, IChromatogram<?> chromatogram, DisplayType displayType, String chromatogramName) {
+
+		String seriesId;
+		Color color;
+		//
+		BaseChart baseChart = chartControl.get().getBaseChart();
+		Derivative derivative = getSelectedDerivative();
+		//
+		IMarkedWavelengths markedWavelengths = new MarkedWavelengths();
+		/*
+		 * Max Plot
+		 */
+		if(chromatogram instanceof IChromatogramWSD) {
+			IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
+			markedWavelengths.add(chromatogramWSD.getWavelengths());
+			String description = ChromatogramDataSupport.getReferenceLabel(chromatogram, 0, false);
+			seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + MPC_LABEL + OverlayChartSupport.OVERLAY_STOP_MARKER;
+			availableSeriesIds.add(seriesId);
+			selectionSeries.add(seriesId);
+			color = chromatogramChartSupport.getSeriesColor(seriesId, displayType);
+			//
+			if(!baseChart.isSeriesContained(seriesId)) {
+				ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, displayType, derivative, color, markedWavelengths, false);
+				lineSeriesData.getSettings().setDescription(MPC_LABEL + " (" + description + ")");
+				lineSeriesDataList.add(lineSeriesData);
+			}
+		}
+		/*
+		 * References
+		 */
+		if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_REFERENCED_CHROMATOGRAMS)) {
+			List<IChromatogram<?>> referencedChromatograms = chromatogram.getReferencedChromatograms();
+			int j = 1;
+			for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
+				if(referencedChromatogram instanceof IChromatogramWSD) {
+					String description = ChromatogramDataSupport.getReferenceLabel(referencedChromatogram, j, false);
+					String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j++;
+					seriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + MPC_LABEL + OverlayChartSupport.OVERLAY_STOP_MARKER;
+					availableSeriesIds.add(seriesId);
+					selectionSeries.add(seriesId);
+					color = chromatogramChartSupport.getSeriesColor(seriesId, displayType);
+					//
+					if(!baseChart.isSeriesContained(seriesId)) {
+						ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(referencedChromatogram, seriesId, displayType, derivative, color, markedWavelengths, false);
+						lineSeriesData.getSettings().setDescription(MPC_LABEL + " (" + description + ")");
 						lineSeriesDataList.add(lineSeriesData);
 					}
 				}

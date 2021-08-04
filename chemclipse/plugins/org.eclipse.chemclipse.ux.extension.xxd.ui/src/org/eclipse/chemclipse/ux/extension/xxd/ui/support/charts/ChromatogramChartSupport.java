@@ -10,6 +10,7 @@
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
  * Christoph Läubrich - allow setting of the preference store via constructor
+ * Matthias Mailänder - Add support for Max Plots
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts;
 
@@ -46,6 +47,7 @@ import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
+import org.eclipse.chemclipse.wsd.model.core.support.MarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignal;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignals;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -401,6 +403,14 @@ public class ChromatogramChartSupport {
 			IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
 			IMarkedWavelengths markedWavelengths = chromatogramSelectionWSD.getSelectedWavelengths();
 			return getLineSeriesData(chromatogram, seriesId, dataType, derivative, color, markedWavelengths, baseline);
+		} else if(dataType.equals(DisplayType.MPC)) {
+			/*
+			 * Max Plot
+			 */
+			IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
+			IMarkedWavelengths markedWavelengths = new MarkedWavelengths();
+			markedWavelengths.add(chromatogramSelectionWSD.getChromatogram().getWavelengths());
+			return getLineSeriesData(chromatogram, seriesId, dataType, derivative, color, markedWavelengths, baseline);
 		} else if(dataType.equals(DisplayType.TSC)) {
 			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
 			markedSignals = chromatogramSelectionMSD.getExcludedIons();
@@ -522,6 +532,22 @@ public class ChromatogramChartSupport {
 				for(int wavelength : wavelengths) {
 					intensity = extractedWavelengthSignal.getAbundance(wavelength);
 				}
+			}
+		} else if(dataType.equals(DisplayType.MPC)) {
+			/*
+			 * Max Plot: each point plotted at maximum absorbance
+			 */
+			if(scan instanceof IScanWSD && signals instanceof IMarkedWavelengths) {
+				IScanWSD scanWSD = (IScanWSD)scan;
+				IMarkedWavelengths markedWavelengths = (IMarkedWavelengths)signals;
+				float maxIntensity = -Float.MAX_VALUE;
+				for(double wavelength : markedWavelengths.getWavelengths()) {
+					float abundance = scanWSD.getScanSignal(wavelength).get().getAbundance();
+					if(abundance > maxIntensity) {
+						maxIntensity = abundance;
+					}
+				}
+				intensity = maxIntensity;
 			}
 		}
 		//

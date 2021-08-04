@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,6 +25,7 @@ public enum DisplayType {
 	SIC("SIC", "Selected Ion Chromatogram"), //
 	XWC("XWC", "Extracted Wavelength Chromatogram"), //
 	SWC("SWC", "Selected Wavelength Chromatogram"), //
+	MPC("MPC", "Max Plot Chromatogram"), //
 	TSC("TSC", "Total Subtracted Chromatogram"), //
 	SRM("SRM", "Single Reaction Monitoring"), //
 	MRM("MRM", "Multiple Reaction Monitoring");
@@ -40,6 +41,7 @@ public enum DisplayType {
 	private String description;
 
 	private DisplayType(String shortcut, String description) {
+
 		this.shortucut = shortcut;
 		this.description = description;
 	}

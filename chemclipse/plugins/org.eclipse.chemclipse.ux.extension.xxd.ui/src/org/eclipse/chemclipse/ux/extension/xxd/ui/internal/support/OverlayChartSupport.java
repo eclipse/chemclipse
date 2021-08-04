@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,6 +25,7 @@ public class OverlayChartSupport {
 	private String[] overlayTypes;
 
 	public OverlayChartSupport() {
+
 		initialize();
 	}
 
@@ -42,6 +43,7 @@ public class OverlayChartSupport {
 				DisplayType.toShortcut(DisplayType.SIC), //
 				DisplayType.toShortcut(DisplayType.XWC), //
 				DisplayType.toShortcut(DisplayType.SWC), //
+				DisplayType.toShortcut(DisplayType.MPC), //
 				DisplayType.toShortcut(DisplayType.TSC), //
 				DisplayType.toShortcut(DisplayType.TIC, DisplayType.BPC), //
 				DisplayType.toShortcut(DisplayType.TIC, DisplayType.XIC), //
