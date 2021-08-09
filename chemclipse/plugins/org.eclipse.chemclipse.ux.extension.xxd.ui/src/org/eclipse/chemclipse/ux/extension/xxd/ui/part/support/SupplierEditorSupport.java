@@ -250,7 +250,7 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 	@Override
 	public boolean openEditor(final File file, boolean batch) {
 
-		if(isSupplierFile(file) || isSupplierFileDirectory(file)) {
+		if(isSupplierFile(file)) {
 			openEditor(file, null, elementId, contributionURI, iconURI, tooltip, batch);
 			return true;
 		} else {
@@ -294,7 +294,7 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 	@Override
 	public void openOverview(final File file) {
 
-		if(isSupplierFile(file) || isSupplierFileDirectory(file)) {
+		if(isSupplierFile(file)) {
 			IEventBroker eventBroker = Activator.getDefault().getEventBroker();
 			eventBroker.send(topicUpdateRawfile, file);
 		}

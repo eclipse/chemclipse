@@ -132,11 +132,6 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 		return suppliers;
 	}
 
-	public boolean isSupplierFileDirectory(File file) {
-
-		return isSupplierFileDirectory(file);
-	}
-
 	private static boolean isDirectoryPatternMatch(File file, String[] directoryParts, int index) {
 
 		if(file.isDirectory()) {
