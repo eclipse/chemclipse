@@ -15,6 +15,8 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -24,6 +26,7 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.traces.NamedTrace;
 import org.eclipse.chemclipse.model.traces.NamedTraces;
@@ -53,8 +56,10 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDat
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.Derivative;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTracesUI;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
+import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.core.support.MarkedWavelengths;
+import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignal;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MBasicFactory;
@@ -78,14 +83,19 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swtchart.IAxisSet;
 import org.eclipse.swtchart.ISeries;
+import org.eclipse.swtchart.LineStyle;
 import org.eclipse.swtchart.Range;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.IExtendedChart;
+import org.eclipse.swtchart.extensions.core.ISeriesData;
 import org.eclipse.swtchart.extensions.core.ISeriesModificationListener;
 import org.eclipse.swtchart.extensions.core.RangeRestriction;
 import org.eclipse.swtchart.extensions.core.RangeRestriction.ExtendType;
+import org.eclipse.swtchart.extensions.core.SeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
+import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
+import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
 import org.eclipse.swtchart.extensions.preferences.PreferencePage;
 
 public class ExtendedChromatogramOverlayUI extends Composite implements IExtendedPartUI {
@@ -669,29 +679,15 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 	private void appendXWC(Set<String> availableSeriesIds, List<String> selectionSeries, List<ILineSeriesData> lineSeriesDataList, IChromatogram<?> chromatogram, DisplayType displayType, String chromatogramName) {
 
-		String seriesId;
-		Color color;
-		//
-		BaseChart baseChart = chartControl.get().getBaseChart();
-		Derivative derivative = getSelectedDerivative();
+		boolean showOptimizedXWC = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_OPTIMIZED_CHROMATOGRAM_XWC);
 		/*
-		 * XWC
+		 * Master
 		 */
 		if(chromatogram instanceof IChromatogramWSD) {
-			String description = ChromatogramDataSupport.getReferenceLabel(chromatogram, 0, false);
-			for(double wavelength : ((IChromatogramWSD)chromatogram).getWavelengths()) {
-				seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + wavelength + OverlayChartSupport.OVERLAY_STOP_MARKER;
-				availableSeriesIds.add(seriesId);
-				selectionSeries.add(seriesId);
-				color = chromatogramChartSupport.getSeriesColor(seriesId, displayType);
-				IMarkedWavelengths markedWavelengths = new MarkedWavelengths();
-				markedWavelengths.add(wavelength);
-				//
-				if(!baseChart.isSeriesContained(seriesId)) {
-					ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, displayType, derivative, color, markedWavelengths, false);
-					lineSeriesData.getSettings().setDescription(Double.toString(wavelength) + " nm (" + description + ")");
-					lineSeriesDataList.add(lineSeriesData);
-				}
+			if(showOptimizedXWC) {
+				appendOptimizedXWC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName, 0);
+			} else {
+				appendMasterFullXWC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
 			}
 		}
 		/*
@@ -702,23 +698,155 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			int j = 1;
 			for(IChromatogram<?> referencedChromatogram : referencedChromatograms) {
 				if(referencedChromatogram instanceof IChromatogramWSD) {
-					String description = ChromatogramDataSupport.getReferenceLabel(referencedChromatogram, j, false);
-					String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j++;
-					for(double wavelength : ((IChromatogramWSD)referencedChromatogram).getWavelengths()) {
-						//
-						seriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + wavelength + OverlayChartSupport.OVERLAY_STOP_MARKER;
-						availableSeriesIds.add(seriesId);
-						selectionSeries.add(seriesId);
-						color = chromatogramChartSupport.getSeriesColor(seriesId, displayType);
-						IMarkedWavelengths markedWavelengths = new MarkedWavelengths();
-						markedWavelengths.add(wavelength);
-						//
-						if(!baseChart.isSeriesContained(seriesId)) {
-							ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(referencedChromatogram, seriesId, displayType, derivative, color, markedWavelengths, false);
-							lineSeriesData.getSettings().setDescription(Double.toString(wavelength) + " nm (" + description + ")");
-							lineSeriesDataList.add(lineSeriesData);
+					if(showOptimizedXWC) {
+						String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j++;
+						appendOptimizedXWC(availableSeriesIds, selectionSeries, lineSeriesDataList, referencedChromatogram, displayType, referenceChromatogramName, j);
+					} else {
+						appendReferenceFullXWC(availableSeriesIds, selectionSeries, lineSeriesDataList, referencedChromatogram, displayType, chromatogramName, j);
+					}
+				}
+			}
+		}
+	}
+
+	private void appendMasterFullXWC(Set<String> availableSeriesIds, List<String> selectionSeries, List<ILineSeriesData> lineSeriesDataList, IChromatogram<?> chromatogram, DisplayType displayType, String chromatogramName) {
+
+		BaseChart baseChart = chartControl.get().getBaseChart();
+		Derivative derivative = getSelectedDerivative();
+		//
+		if(chromatogram instanceof IChromatogramWSD) {
+			String description = ChromatogramDataSupport.getReferenceLabel(chromatogram, 0, false);
+			for(double wavelength : ((IChromatogramWSD)chromatogram).getWavelengths()) {
+				String seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + wavelength + OverlayChartSupport.OVERLAY_STOP_MARKER;
+				availableSeriesIds.add(seriesId);
+				selectionSeries.add(seriesId);
+				Color color = chromatogramChartSupport.getSeriesColor(seriesId, displayType);
+				IMarkedWavelengths markedWavelengths = new MarkedWavelengths();
+				markedWavelengths.add(wavelength);
+				//
+				if(!baseChart.isSeriesContained(seriesId)) {
+					ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, displayType, derivative, color, markedWavelengths, false);
+					lineSeriesData.getSettings().setDescription(Double.toString(wavelength) + " nm (" + description + ")");
+					lineSeriesDataList.add(lineSeriesData);
+				}
+			}
+		}
+	}
+
+	private void appendReferenceFullXWC(Set<String> availableSeriesIds, List<String> selectionSeries, List<ILineSeriesData> lineSeriesDataList, IChromatogram<?> referencedChromatogram, DisplayType displayType, String chromatogramName, int j) {
+
+		BaseChart baseChart = chartControl.get().getBaseChart();
+		Derivative derivative = getSelectedDerivative();
+		//
+		if(referencedChromatogram instanceof IChromatogramWSD) {
+			String description = ChromatogramDataSupport.getReferenceLabel(referencedChromatogram, j, false);
+			String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j++;
+			for(double wavelength : ((IChromatogramWSD)referencedChromatogram).getWavelengths()) {
+				//
+				String seriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + wavelength + OverlayChartSupport.OVERLAY_STOP_MARKER;
+				availableSeriesIds.add(seriesId);
+				selectionSeries.add(seriesId);
+				Color color = chromatogramChartSupport.getSeriesColor(seriesId, displayType);
+				IMarkedWavelengths markedWavelengths = new MarkedWavelengths();
+				markedWavelengths.add(wavelength);
+				//
+				if(!baseChart.isSeriesContained(seriesId)) {
+					ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(referencedChromatogram, seriesId, displayType, derivative, color, markedWavelengths, false);
+					lineSeriesData.getSettings().setDescription(Double.toString(wavelength) + " nm (" + description + ")");
+					lineSeriesDataList.add(lineSeriesData);
+				}
+			}
+		}
+	}
+
+	private void appendOptimizedXWC(Set<String> availableSeriesIds, List<String> selectionSeries, List<ILineSeriesData> lineSeriesDataList, IChromatogram<?> chromatogram, DisplayType displayType, String chromatogramName, int index) {
+
+		BaseChart baseChart = chartControl.get().getBaseChart();
+		Derivative derivative = Derivative.NONE; // Always no derivative at the moment.
+		LineStyle lineStyle = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_OVERLAY));
+		boolean showArea = preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_SHOW_AREA);
+		//
+		if(chromatogram instanceof IChromatogramWSD) {
+			/*
+			 * WSD
+			 */
+			String description = ChromatogramDataSupport.getReferenceLabel(chromatogram, index, false);
+			IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
+			/*
+			 * Preselect certain wavelengths if too many are available.
+			 */
+			Set<Double> wavelengths = new HashSet<>();
+			List<Double> wavelengthList = new ArrayList<>(chromatogramWSD.getWavelengths());
+			if(wavelengthList.size() > 40) {
+				Collections.sort(wavelengthList);
+				int h = 0;
+				for(Double wavelength : wavelengthList) {
+					if(h % 4 == 0) {
+						wavelengths.add(wavelength);
+					}
+					h++;
+				}
+			} else {
+				wavelengths.addAll(wavelengthList);
+			}
+			/*
+			 * Map the data.
+			 */
+			Map<Double, ILineSeriesData> lineSeriesMap = new HashMap<>();
+			int numberOfScans = chromatogram.getNumberOfScans();
+			double displayWidth = Display.getDefault().getClientArea().width;
+			int modulo = (int)Math.round(numberOfScans / displayWidth);
+			int length = chromatogram.getNumberOfScans() / modulo;
+			int i = 0;
+			int j = 0;
+			//
+			for(IScan scan : chromatogramWSD.getScans()) {
+				if(j % modulo == 0) {
+					if(scan instanceof IScanWSD) {
+						IScanWSD scanWSD = (IScanWSD)scan;
+						IExtractedWavelengthSignal extractedWavelengthSignal = scanWSD.getExtractedWavelengthSignal();
+						int retentionTime = scanWSD.getRetentionTime();
+						for(double wavelength : wavelengths) {
+							/*
+							 * Line Series Data
+							 */
+							ILineSeriesData lineSeriesData = lineSeriesMap.get(wavelength);
+							if(lineSeriesData == null) {
+								String seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + wavelength + OverlayChartSupport.OVERLAY_STOP_MARKER;
+								double[] xSeries = new double[length];
+								double[] ySeries = new double[length];
+								ISeriesData seriesData = new SeriesData(xSeries, ySeries, seriesId);
+								lineSeriesData = new LineSeriesData(seriesData);
+								ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
+								lineSeriesSettings.setLineColor(chromatogramChartSupport.getSeriesColor(seriesId, displayType));
+								lineSeriesSettings.setLineStyle(lineStyle);
+								lineSeriesSettings.setEnableArea(showArea);
+								ILineSeriesSettings lineSeriesSettingsHighlight = (ILineSeriesSettings)lineSeriesSettings.getSeriesSettingsHighlight();
+								lineSeriesSettingsHighlight.setLineWidth(2);
+								lineSeriesData.getSettings().setDescription(Double.toString(wavelength) + " nm (" + description + ")");
+								lineSeriesMap.put(wavelength, lineSeriesData);
+							}
+							/*
+							 * Data
+							 */
+							if(i < length) {
+								ISeriesData seriesData = lineSeriesData.getSeriesData();
+								seriesData.getXSeries()[i] = retentionTime;
+								seriesData.getYSeries()[i] = extractedWavelengthSignal.getAbundance((int)wavelength);
+							}
 						}
 					}
+					i++;
+				}
+				j++;
+			}
+			//
+			for(ILineSeriesData lineSeriesData : lineSeriesMap.values()) {
+				String seriesId = lineSeriesData.getSeriesData().getId();
+				availableSeriesIds.add(seriesId);
+				selectionSeries.add(seriesId);
+				if(!baseChart.isSeriesContained(seriesId)) {
+					lineSeriesDataList.add(lineSeriesData);
 				}
 			}
 		}
