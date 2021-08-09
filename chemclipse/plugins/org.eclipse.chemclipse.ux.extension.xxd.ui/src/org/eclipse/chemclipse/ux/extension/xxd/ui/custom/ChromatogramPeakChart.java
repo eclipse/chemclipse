@@ -39,6 +39,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramCha
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanChartSupport;
+import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Composite;
@@ -60,6 +61,7 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 
 	private static final String SERIES_ID_CHROMATOGRAM_TIC = "Chromatogram";
 	private static final String SERIES_ID_CHROMATOGRAM_XIC = "Chromatogram (XIC)";
+	private static final String SERIES_ID_CHROMATOGRAM_SWC = "Chromatogram (SWC)";
 	private static final String SERIES_ID_BASELINE = "Baseline";
 	private static final String SERIES_ID_PEAKS_NORMAL_ACTIVE = "Peak(s) [Active]";
 	private static final String SERIES_ID_PEAKS_NORMAL_INACTIVE = "Peak(s) [Inactive]";
@@ -220,10 +222,14 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 	}
 
 	@Override
-	public void focusXIC(int percentOffset) {
+	public void focusTraces(int percentOffset) {
 
 		BaseChart baseChart = getBaseChart();
 		ISeries<?> series = baseChart.getSeriesSet().getSeries(ChromatogramPeakChart.SERIES_ID_CHROMATOGRAM_XIC);
+		if(series == null) {
+			series = baseChart.getSeriesSet().getSeries(ChromatogramPeakChart.SERIES_ID_CHROMATOGRAM_SWC);
+		}
+		//
 		if(series != null && series.getXSeries().length > 0) {
 			double maxY = getMaxY(series);
 			if(maxY > 0) {
@@ -287,10 +293,10 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 	private void addChromatogramData(List<ILineSeriesData> lineSeriesDataList, PeakChartSettings peakChartSettings) {
 
 		if(chromatogramSelection != null) {
-			boolean containsXIC = containsXIC(chromatogramSelection);
+			boolean containsTraces = containsTraces(chromatogramSelection);
 			Color colorActive = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM));
 			Color colorInactive = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_INACTIVE));
-			Color colorTIC = containsXIC ? colorInactive : colorActive;
+			Color colorTIC = containsTraces ? colorInactive : colorActive;
 			boolean enableChromatogramArea = preferenceStore.getBoolean(PreferenceConstants.P_ENABLE_CHROMATOGRAM_AREA);
 			/*
 			 * TIC
@@ -301,25 +307,40 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 			settingsTIC.setVisible(peakChartSettings.isShowChromatogramTIC());
 			lineSeriesDataList.add(lineSeriesDataTIC);
 			//
-			if(containsXIC) {
-				/*
-				 * XIC
-				 */
-				ILineSeriesData lineSeriesDataXIC = chromatogramChartSupport.getLineSeriesData((IChromatogramSelectionMSD)chromatogramSelection, SERIES_ID_CHROMATOGRAM_XIC, DisplayType.XIC, colorActive, false);
-				ILineSeriesSettings settingsXIC = lineSeriesDataXIC.getSettings();
-				settingsXIC.setEnableArea(enableChromatogramArea);
-				settingsXIC.setVisible(peakChartSettings.isShowChromatogramXIC());
-				lineSeriesDataList.add(lineSeriesDataXIC);
+			if(containsTraces) {
+				if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+					/*
+					 * XIC
+					 */
+					ILineSeriesData lineSeriesDataXIC = chromatogramChartSupport.getLineSeriesData((IChromatogramSelectionMSD)chromatogramSelection, SERIES_ID_CHROMATOGRAM_XIC, DisplayType.XIC, colorActive, false);
+					ILineSeriesSettings settingsXIC = lineSeriesDataXIC.getSettings();
+					settingsXIC.setEnableArea(enableChromatogramArea);
+					settingsXIC.setVisible(peakChartSettings.isShowChromatogramTraces());
+					lineSeriesDataList.add(lineSeriesDataXIC);
+				} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
+					/*
+					 * SWC
+					 */
+					ILineSeriesData lineSeriesDataSWC = chromatogramChartSupport.getLineSeriesData((IChromatogramSelectionWSD)chromatogramSelection, SERIES_ID_CHROMATOGRAM_SWC, DisplayType.SWC, colorActive, false);
+					ILineSeriesSettings settingsSWC = lineSeriesDataSWC.getSettings();
+					settingsSWC.setEnableArea(enableChromatogramArea);
+					settingsSWC.setVisible(peakChartSettings.isShowChromatogramTraces());
+					lineSeriesDataList.add(lineSeriesDataSWC);
+				}
 			}
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
-	private boolean containsXIC(IChromatogramSelection chromatogramSelection) {
+	private boolean containsTraces(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
 			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
 			if(chromatogramSelectionMSD.getSelectedIons().size() > 0) {
+				return true;
+			}
+		} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
+			IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
+			if(chromatogramSelectionWSD.getSelectedWavelengths().size() > 0) {
 				return true;
 			}
 		}
@@ -540,6 +561,7 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 
 		deleteSeries(SERIES_ID_CHROMATOGRAM_TIC);
 		deleteSeries(SERIES_ID_CHROMATOGRAM_XIC);
+		deleteSeries(SERIES_ID_CHROMATOGRAM_SWC);
 		deleteSeries(SERIES_ID_BASELINE);
 		deleteSeries(SERIES_ID_PEAKS_NORMAL_ACTIVE);
 		deleteSeries(SERIES_ID_PEAKS_NORMAL_INACTIVE);

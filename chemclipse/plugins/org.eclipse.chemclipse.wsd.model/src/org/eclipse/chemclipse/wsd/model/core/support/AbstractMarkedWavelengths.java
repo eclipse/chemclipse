@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,6 +21,7 @@ public class AbstractMarkedWavelengths implements IMarkedWavelengths {
 	private Set<IMarkedWavelength> markedWavelengths;
 
 	public AbstractMarkedWavelengths() {
+
 		markedWavelengths = new HashSet<IMarkedWavelength>();
 	}
 
@@ -135,10 +136,10 @@ public class AbstractMarkedWavelengths implements IMarkedWavelengths {
 	}
 
 	@Override
-	public void add(Collection<Double> wavelenghts) {
+	public void add(Collection<? extends Number> wavelenghts) {
 
-		for(double wavelenght : wavelenghts) {
-			markedWavelengths.add(new MarkedWavelength(wavelenght));
+		for(Number wavelenght : wavelenghts) {
+			markedWavelengths.add(new MarkedWavelength(wavelenght.doubleValue()));
 		}
 	}
 }
