@@ -126,7 +126,6 @@ public class QuantitationDatabaseEditor implements IQuantitationDatabaseEditor {
 	private void initialize(Composite parent) {
 
 		createEditorPages(parent);
-		dirtyable.setDirty(true);
 		quantitationDatabase = loadQuantitationDatabase();
 		extendedQuantCompoundListUI.update(quantitationDatabase);
 	}
