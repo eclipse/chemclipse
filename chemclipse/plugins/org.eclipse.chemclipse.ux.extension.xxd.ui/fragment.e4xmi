@@ -65,19 +65,15 @@
           </children>
           <children xsi:type="basic:PartSashContainer" xmi:id="_y_wTkCfeEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partsashcontainer.9" containerData="7500" horizontal="true">
             <children xsi:type="advanced:Placeholder" xmi:id="_2AQ3MCfeEeu5Pepo04c08Q" elementId="org.eclipse.ui.editorss" ref="_qjvtkCskEeakPPc3RJFSAg"/>
-            <children xsi:type="basic:PartStack" xmi:id="_4ld-4CfeEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.4">
-              <children xsi:type="advanced:Placeholder" xmi:id="_903b8CfeEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.platedata" ref="_4El74CfdEeu5Pepo04c08Q"/>
-            </children>
           </children>
         </children>
         <children xsi:type="basic:PartSashContainer" xmi:id="_ZdJRcCfdEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partsashcontainer.7" horizontal="true">
           <children xsi:type="basic:PartStack" xmi:id="_hMdGgCfdEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.1">
             <children xsi:type="advanced:Placeholder" xmi:id="_lEE4UCfdEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.platecharts" ref="_2wi6ECfdEeu5Pepo04c08Q"/>
-          </children>
-          <children xsi:type="basic:PartStack" xmi:id="_heiVACfdEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.2">
-            <children xsi:type="advanced:Placeholder" xmi:id="_lgcrQCfdEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.wellchart" ref="_3pxoICfdEeu5Pepo04c08Q"/>
+            <children xsi:type="advanced:Placeholder" xmi:id="_903b8CfeEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.platedata" ref="_4El74CfdEeu5Pepo04c08Q"/>
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_hyE8ECfdEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.3">
+            <children xsi:type="advanced:Placeholder" xmi:id="_lgcrQCfdEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.wellchart" ref="_3pxoICfdEeu5Pepo04c08Q"/>
             <children xsi:type="advanced:Placeholder" xmi:id="_l3MXUCfdEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.welldata" ref="_3OFKoCfdEeu5Pepo04c08Q"/>
             <children xsi:type="advanced:Placeholder" xmi:id="_HsdMICffEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.wellchannels" ref="_4fuYsCfdEeu5Pepo04c08Q"/>
           </children>
