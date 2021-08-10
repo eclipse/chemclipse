@@ -136,9 +136,11 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		 * Services
 		 */
 		Object[] moleculeImageServices = Activator.getDefault().getMoleculeImageServices();
-		comboViewerServices.setInput(moleculeImageServices);
-		if(moleculeImageServices.length >= 1) {
-			comboViewerServices.getCombo().select(0);
+		if(moleculeImageServices != null) {
+			comboViewerServices.setInput(moleculeImageServices);
+			if(moleculeImageServices.length >= 1) {
+				comboViewerServices.getCombo().select(0);
+			}
 		}
 		/*
 		 * Input Types
@@ -452,12 +454,14 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		 * Additional pages.
 		 */
 		Object[] moleculeImageServices = Activator.getDefault().getMoleculeImageServices();
-		for(Object object : moleculeImageServices) {
-			if(object instanceof IMoleculeImageService) {
-				IMoleculeImageService moleculeImageService = (IMoleculeImageService)object;
-				Class<? extends IWorkbenchPreferencePage> preferencePage = moleculeImageService.getPreferencePage();
-				if(preferencePage != null) {
-					preferencePages.add(preferencePage);
+		if(moleculeImageServices != null) {
+			for(Object object : moleculeImageServices) {
+				if(object instanceof IMoleculeImageService) {
+					IMoleculeImageService moleculeImageService = (IMoleculeImageService)object;
+					Class<? extends IWorkbenchPreferencePage> preferencePage = moleculeImageService.getPreferencePage();
+					if(preferencePage != null) {
+						preferencePages.add(preferencePage);
+					}
 				}
 			}
 		}
