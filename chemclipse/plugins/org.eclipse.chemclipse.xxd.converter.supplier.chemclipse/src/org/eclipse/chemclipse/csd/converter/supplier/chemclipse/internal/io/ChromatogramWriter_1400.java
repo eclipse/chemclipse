@@ -203,6 +203,7 @@ public class ChromatogramWriter_1400 extends AbstractChromatogramWriter implemen
 				dataOutputStream.writeInt(scanCSD.getRetentionTimeColumn2());
 				dataOutputStream.writeFloat(scanCSD.getRetentionIndex()); // Retention Index
 				dataOutputStream.writeBoolean(scanCSD.hasAdditionalRetentionIndices());
+				// TODO: Check (Scan) - are additional RI values stored? RetentionIndexType.POLAR, ...
 				if(scanCSD.hasAdditionalRetentionIndices()) {
 					Map<RetentionIndexType, Float> retentionIndicesTyped = scanCSD.getRetentionIndicesTyped();
 					dataOutputStream.writeInt(retentionIndicesTyped.size());
@@ -380,6 +381,7 @@ public class ChromatogramWriter_1400 extends AbstractChromatogramWriter implemen
 			writeString(dataOutputStream, quantitationEntry.getCalibrationMethod()); // Calibration Method
 			dataOutputStream.writeBoolean(quantitationEntry.getUsedCrossZero()); // Used Cross Zero
 			writeString(dataOutputStream, quantitationEntry.getDescription()); // Description
+			// TODO: QuantitationEntry - Quantitation Flag
 			/*
 			 * Legacy support
 			 */

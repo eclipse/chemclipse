@@ -11,13 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse;
 
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
 public class Activator implements BundleActivator {
 
-	private static final Logger logger = Logger.getLogger(Activator.class);
 	private static BundleContext context;
 
 	public static BundleContext getContext() {
@@ -29,30 +27,17 @@ public class Activator implements BundleActivator {
 	 * (non-Javadoc)
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void start(BundleContext bundleContext) throws Exception {
 
 		Activator.context = bundleContext;
-		//
-		System.out.println("TODOS next version: v1401");
-		System.out.println("\tCheck (Scan) - are additional RI values stored? RetentionIndexType.POLAR, ...");
-		System.out.println("\tIQuantitationEntry - Quantitation Flag");
-		//
-		logger.info("-------------------------------------------------");
-		logger.info("Ensure backward and forward compatibility!");
-		logger.info("-------------------------------------------------");
-		logger.info("*.ocb - measurement data container");
-		logger.info("*.ocm - process method container");
-		logger.info("*.ocq - quanititation table container");
-		logger.info("*.ocs - sequence data container");
-		logger.info("-------------------------------------------------");
-		logger.info("--- CHANGES MUST BE APPROVED BY PHILIP WENIG ---");
-		logger.info("-------------------------------------------------");
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext bundleContext) throws Exception {
 
 		Activator.context = null;

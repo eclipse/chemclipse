@@ -31,7 +31,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final int MIN_COMPRESSION_LEVEL = 0;
 	public static final int MAX_COMPRESSION_LEVEL = 9;
 	/*
-	 * *.ocb
+	 * *.ocb (measurement data container)
 	 */
 	public static final String P_CHROMATOGRAM_VERSION_SAVE = "chromatogramVersionSave";
 	public static final String DEF_CHROMATOGRAM_VERSION_SAVE = IFormat.CHROMATOGRAM_VERSION_LATEST;
@@ -48,14 +48,14 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_MIN_BYTES_TO_LOAD_IN_BACKGROUND = "minBytesToLoadInBackground"; // TODO REMOVE
 	public static final int DEF_MIN_BYTES_TO_LOAD_IN_BACKGROUND = 2000000; // 2 MB
 	/*
-	 * *.ocm
+	 * *.ocm (process method container)
 	 */
 	public static final String P_METHOD_VERSION_SAVE = "methodVersionSave";
 	public static final String DEF_METHOD_VERSION_SAVE = IFormat.METHOD_VERSION_LATEST;
 	public static final String P_METHOD_COMPRESSION_LEVEL = "methodCompressionLevel";
 	public static final int DEF_METHOD_COMPRESSION_LEVEL = IFormat.METHOD_COMPRESSION_LEVEL;
 	/*
-	 * *.ocq
+	 * *.ocq (quanititation table container)
 	 */
 	public static final String P_QUANTITATION_DB_VERSION_SAVE = "quantitationDatabaseVersionSave";
 	public static final String DEF_QUANTITATION_DB_VERSION_SAVE = IFormat.QUANTDB_VERSION_LATEST;
