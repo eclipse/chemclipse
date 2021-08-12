@@ -16,6 +16,9 @@ import java.util.zip.ZipOutputStream;
 
 public interface IFormat {
 
+	/*
+	 * CHANGES MUST BE APPROVED BY PHILIP WENIG!
+	 */
 	String CONVERTER_ID_CHROMATOGRAM = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse";
 	String CONVERTER_ID_METHOD = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.processMethodSupplier";
 	/*

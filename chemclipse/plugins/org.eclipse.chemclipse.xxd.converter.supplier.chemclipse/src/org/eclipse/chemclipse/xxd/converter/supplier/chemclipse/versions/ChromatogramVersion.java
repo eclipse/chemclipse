@@ -13,6 +13,9 @@ package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.versions;
 
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 
+/*
+ * Ensure backward and forward compatibility!
+ */
 public enum ChromatogramVersion implements IFormatVersion {
 	V_0701(IFormat.CHROMATOGRAM_VERSION_0701, "Nernst"), //
 	V_0803(IFormat.CHROMATOGRAM_VERSION_0803, "Dempster"), //
