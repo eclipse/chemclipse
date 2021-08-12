@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2019 Lablicate GmbH.
+ * Copyright (c) 2013, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
+ * Matthias Mailänder - set/populate wavelengths
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.model.core.selection;
 
@@ -62,4 +63,13 @@ public interface IChromatogramSelectionWSD extends IChromatogramSelection<IChrom
 	 * @return Wavelengths
 	 */
 	IMarkedWavelengths getSelectedWavelengths();
+
+	void setSelectedWavelengths(IMarkedWavelengths selectedWavelengths);
+
+	/**
+	 * Populate the list with wavelengths from the first scan of the given chromatogram.
+	 *
+	 * @param chromatogram
+	 */
+	void populateWavelengths(IChromatogramWSD chromatogram);
 }

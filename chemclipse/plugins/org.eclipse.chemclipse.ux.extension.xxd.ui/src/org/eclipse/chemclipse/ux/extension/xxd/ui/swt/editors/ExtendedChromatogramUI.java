@@ -10,6 +10,7 @@
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
  * Christoph Läubrich - propagate result of methods to the user, add label selection support
+ * Matthias Mailänder - display selected wavelengths
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
@@ -329,12 +330,17 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 
 		if(this.chromatogramSelection != chromatogramSelection) {
 			DataCategory dataCategory = DataCategory.AUTO_DETECT;
+			displayType = DisplayType.TIC;
 			if(chromatogramSelection != null) {
 				IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 				if(chromatogram instanceof IChromatogramMSD) {
 					dataCategory = DataCategory.MSD;
 				} else if(chromatogram instanceof IChromatogramWSD) {
 					dataCategory = DataCategory.WSD;
+					IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
+					if(chromatogramSelectionWSD.getSelectedWavelengths().size() == 1) {
+						displayType = DisplayType.SWC;
+					}
 				} else if(chromatogram instanceof IChromatogramCSD) {
 					dataCategory = DataCategory.CSD;
 				}

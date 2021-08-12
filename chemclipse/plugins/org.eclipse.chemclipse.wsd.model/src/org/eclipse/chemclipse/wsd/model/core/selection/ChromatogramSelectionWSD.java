@@ -42,15 +42,17 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection<IChr
 		 * valid scan and if exists a valid peak.
 		 */
 		super(chromatogram, fireUpdate);
-		/*
-		 * Populate the list with wavelengths from the first scan of the currently loaded chromatogram.
-		 */
-		IChromatogramWSD wsdChromatogram = chromatogram;
-		IScanWSD scan = (IScanWSD)wsdChromatogram.getScans().stream().findFirst().get();
+		//
+		populateWavelengths(chromatogram);
+		reset(fireUpdate);
+	}
+
+	@Override
+	public void populateWavelengths(IChromatogramWSD chromatogram) {
+
+		IScanWSD scan = (IScanWSD)chromatogram.getScans().stream().findFirst().get();
 		selectedWavelengths = new MarkedWavelengths();
 		selectedWavelengths.add(scan.getScanSignals().stream().findFirst().get().getWavelength());
-		//
-		reset(fireUpdate);
 	}
 
 	@Override
@@ -167,5 +169,11 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection<IChr
 	public IMarkedWavelengths getSelectedWavelengths() {
 
 		return selectedWavelengths;
+	}
+
+	@Override
+	public void setSelectedWavelengths(IMarkedWavelengths selectedWavelengths) {
+
+		this.selectedWavelengths = selectedWavelengths;
 	}
 }

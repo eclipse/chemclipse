@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Matthias Mailänder - add a wavelength selection mode
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -30,7 +31,11 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChro
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IntensityScaleUI.IScaleUpdateListener;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
+import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
+import org.eclipse.chemclipse.wsd.model.core.support.MarkedWavelengths;
 import org.eclipse.draw2d.LightweightSystem;
+import org.eclipse.draw2d.MouseEvent;
+import org.eclipse.draw2d.MouseListener;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -70,6 +75,28 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 		createControl();
 	}
 
+	class WavelengthSelector extends MouseListener.Stub implements MouseListener {
+
+		@Override
+		public void mousePressed(MouseEvent mouseEvent) {
+
+			IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
+			if(mouseEvent.button == 1) {
+				double clickedWavelength = intensityGraphFigure.getYAxis().getPositionValue(mouseEvent.y, false);
+				IMarkedWavelengths markedWavelengths = new MarkedWavelengths();
+				markedWavelengths.add(clickedWavelength);
+				chromatogramSelectionWSD.setSelectedWavelengths(markedWavelengths);
+				chromatogramSelectionWSD.fireUpdateChange(true);
+				toolbarInfo.get().setText("Selected wavelength: " + Math.round(clickedWavelength) + " nm");
+			} else if(mouseEvent.button == 3) {
+				chromatogramSelectionWSD.populateWavelengths(chromatogramSelectionWSD.getChromatogram());
+				chromatogramSelectionWSD.fireUpdateChange(true);
+				toolbarInfo.get().setText(ChromatogramDataSupport.getChromatogramSelectionLabel(chromatogramSelection));
+			}
+			mouseEvent.consume();
+		}
+	}
+
 	public void update(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		if(this.chromatogramSelection == chromatogramSelection) {
@@ -93,7 +120,12 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 				saveScaleValues(scaleMin, scaleMax);
 				toolbarInfo.get().setText(ChromatogramDataSupport.getChromatogramSelectionLabel(chromatogramSelection));
 				boolean isWavelengthData = chromatogramSelection instanceof IChromatogramSelectionWSD;
+				intensityGraphFigure = createIntensityGraphFigure(!isWavelengthData);
 				setHeatMap(heatmapData.get(), isWavelengthData);
+				if(isWavelengthData) {
+					WavelengthSelector wavelengthSelector = new WavelengthSelector();
+					intensityGraphFigure.addMouseListener(wavelengthSelector);
+				}
 			} else {
 				clear();
 			}
@@ -156,7 +188,7 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 			intensityGraphFigure.setDataHeight(chromatogramHeatmapData.getDataHeight());
 			//
 			intensityGraphFigure.getXAxis().setTitle("Retention Time [min]");
-			intensityGraphFigure.getYAxis().setTitle(isWavelengthData ? "Trace [nm]" : "Trace [m/z]");
+			intensityGraphFigure.getYAxis().setTitle(isWavelengthData ? "Wavelength [nm]" : "Trace [m/z]");
 			//
 			intensityGraphFigure.setColorMap(new ColorMap(PredefinedColorMap.JET, true, true));
 			/*
@@ -345,7 +377,6 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 		canvas.setBackground(Colors.WHITE);
 		//
 		lightweightSystem = createLightweightSystem(canvas);
-		intensityGraphFigure = createIntensityGraphFigure();
 		//
 		return canvas;
 	}
@@ -358,9 +389,9 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 		return lightweightSystem;
 	}
 
-	private IntensityGraphFigure createIntensityGraphFigure() {
+	private IntensityGraphFigure createIntensityGraphFigure(boolean zoom) {
 
-		IntensityGraphFigure intensityGraphFigure = new IntensityGraphFigure();
+		IntensityGraphFigure intensityGraphFigure = new IntensityGraphFigure(zoom);
 		intensityGraphFigure.setForegroundColor(Colors.BLACK);
 		intensityGraphFigure.getXAxis().setTitle("Retention Time [min]");
 		intensityGraphFigure.getYAxis().setTitle("Trace");
