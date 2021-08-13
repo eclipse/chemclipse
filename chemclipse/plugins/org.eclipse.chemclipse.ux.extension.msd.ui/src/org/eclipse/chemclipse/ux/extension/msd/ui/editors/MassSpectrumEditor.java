@@ -278,7 +278,6 @@ public class MassSpectrumEditor implements IMassSpectrumEditor {
 		} catch(InterruptedException e) {
 			logger.warn(e);
 		}
-		dirtyable.setDirty(true);
 		massSpectra = runnable.getMassSpectra();
 		massSpectrumFile = file;
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -36,6 +36,7 @@ import org.eclipse.e4.ui.model.application.ui.basic.MWindow;
 import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
+import org.eclipse.swt.widgets.Shell;
 
 public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 
@@ -126,5 +127,6 @@ public interface ISupplierFileEditorSupport extends ISupplierFileIdentifier {
 		 */
 		partStack.getChildren().add(part);
 		partService.showPart(part, PartState.ACTIVATE);
+		((Shell)window.getWidget()).forceFocus();
 	}
 }

@@ -248,7 +248,6 @@ public class DatabaseEditor implements IChemClipseEditor {
 		/*
 		 * Add the mass spectra handling.
 		 */
-		dirtyable.setDirty(true);
 		massSpectra = runnable.getMassSpectra();
 		massSpectrumFile = file;
 		massSpectra.addUpdateListener(new IUpdateListener() {
