@@ -379,7 +379,6 @@ public class ChromatogramChartSupport {
 		return getLineSeriesData(chromatogramSelection, seriesId, dataType, Derivative.NONE, color, baseline, timeIntervalSelection);
 	}
 
-	@SuppressWarnings("unused")
 	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?, ?> chromatogramSelection, String seriesId, DisplayType dataType, Derivative derivative, Color color, boolean baseline, boolean timeIntervalSelection) {
 
 		/*
@@ -418,7 +417,6 @@ public class ChromatogramChartSupport {
 			/*
 			 * BPC
 			 */
-			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
 		} else if(dataType.equals(DisplayType.TIC)) {
 			/*
 			 * TIC
