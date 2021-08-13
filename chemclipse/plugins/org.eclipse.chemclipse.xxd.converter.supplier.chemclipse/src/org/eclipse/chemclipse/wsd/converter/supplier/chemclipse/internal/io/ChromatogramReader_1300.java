@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -273,6 +273,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			}
 			//
 			int retentionTime = dataInputStream.readInt();
+			int relativeRetentionTime = dataInputStream.readInt();
 			int retentionTimeColumn1 = dataInputStream.readInt();
 			int retentionTimeColumn2 = dataInputStream.readInt();
 			float retentionIndex = dataInputStream.readFloat(); // Retention Index
@@ -289,6 +290,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			int cycleNumber = dataInputStream.readInt();
 			//
 			scanWSD.setRetentionTime(retentionTime);
+			scanWSD.setRelativeRetentionTime(relativeRetentionTime);
 			scanWSD.setRetentionTimeColumn1(retentionTimeColumn1);
 			scanWSD.setRetentionTimeColumn2(retentionTimeColumn2);
 			scanWSD.setRetentionIndex(retentionIndex);

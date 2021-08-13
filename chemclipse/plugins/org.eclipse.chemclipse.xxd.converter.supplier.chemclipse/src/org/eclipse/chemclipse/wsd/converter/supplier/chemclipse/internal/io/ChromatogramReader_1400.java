@@ -277,6 +277,7 @@ public class ChromatogramReader_1400 extends AbstractChromatogramReader implemen
 			}
 			//
 			int retentionTime = dataInputStream.readInt();
+			int relativeRetentionTime = dataInputStream.readInt();
 			int retentionTimeColumn1 = dataInputStream.readInt();
 			int retentionTimeColumn2 = dataInputStream.readInt();
 			float retentionIndex = dataInputStream.readFloat(); // Retention Index
@@ -293,6 +294,7 @@ public class ChromatogramReader_1400 extends AbstractChromatogramReader implemen
 			int cycleNumber = dataInputStream.readInt();
 			//
 			scanWSD.setRetentionTime(retentionTime);
+			scanWSD.setRelativeRetentionTime(relativeRetentionTime);
 			scanWSD.setRetentionTimeColumn1(retentionTimeColumn1);
 			scanWSD.setRetentionTimeColumn2(retentionTimeColumn2);
 			scanWSD.setRetentionIndex(retentionIndex);
