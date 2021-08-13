@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,7 +26,7 @@ public class CopyToClipboardEvent implements IKeyEventProcessor {
 	@Override
 	public void handleEvent(ExtendedTableViewer extendedTableViewer, KeyEvent e) {
 
-		if(e.stateMask == SWT.CTRL && e.keyCode == KEY_CODE_C) {
+		if(e.stateMask == SWT.MOD1 && e.keyCode == KEY_CODE_C) {
 			Clipboard clipboard = new Clipboard(Display.getDefault());
 			copyToClipboardProvider.copyToClipboard(clipboard, extendedTableViewer);
 		}

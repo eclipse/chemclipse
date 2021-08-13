@@ -517,8 +517,8 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 					 * DEL
 					 */
 					deleteTargets(display);
-				} else if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_I && (e.stateMask & SWT.CTRL) == SWT.CTRL) {
-					if((e.stateMask & SWT.ALT) == SWT.ALT) {
+				} else if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_I && (e.stateMask & SWT.MOD1) == SWT.MOD1) {
+					if((e.stateMask & SWT.MOD3) == SWT.MOD3) {
 						/*
 						 * CTRL + ALT + I
 						 */

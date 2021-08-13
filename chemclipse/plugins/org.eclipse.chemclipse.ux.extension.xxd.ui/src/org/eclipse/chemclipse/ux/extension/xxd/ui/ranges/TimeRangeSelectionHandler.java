@@ -46,7 +46,7 @@ public class TimeRangeSelectionHandler extends AbstractHandledEventProcessor imp
 	@Override
 	public int getStateMask() {
 
-		return SWT.ALT;
+		return SWT.MOD3;
 	}
 
 	@Override

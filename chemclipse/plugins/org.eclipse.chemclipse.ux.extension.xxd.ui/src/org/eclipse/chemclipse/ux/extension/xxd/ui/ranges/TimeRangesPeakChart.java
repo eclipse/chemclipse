@@ -192,7 +192,7 @@ public class TimeRangesPeakChart extends ChromatogramPeakChart {
 
 	private boolean isControlKeyPressed(Event event) {
 
-		return (event.stateMask & SWT.CTRL) == SWT.CTRL;
+		return (event.stateMask & SWT.MOD1) == SWT.MOD1;
 	}
 
 	private void startBaselineSelection(int x, int y) {

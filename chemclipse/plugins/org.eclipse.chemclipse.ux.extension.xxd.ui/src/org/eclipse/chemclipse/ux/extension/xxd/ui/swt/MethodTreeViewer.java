@@ -210,7 +210,7 @@ public class MethodTreeViewer extends TreeViewer {
 			@Override
 			public void keyReleased(KeyEvent e) {
 
-				if(e.stateMask == SWT.CTRL && e.keyCode == 'c') {
+				if(e.stateMask == SWT.MOD1 && e.keyCode == 'c') {
 					toolbarButtons.get().copyToClipboard(e.display);
 				}
 			}

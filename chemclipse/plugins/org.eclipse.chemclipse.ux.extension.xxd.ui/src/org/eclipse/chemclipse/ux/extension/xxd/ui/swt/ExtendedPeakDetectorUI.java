@@ -204,7 +204,7 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 		@Override
 		public int getStateMask() {
 
-			return SWT.CTRL;
+			return SWT.MOD1;
 		}
 
 		@Override
@@ -225,7 +225,7 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 		@Override
 		public int getStateMask() {
 
-			return SWT.CTRL;
+			return SWT.MOD1;
 		}
 
 		@Override
@@ -727,7 +727,7 @@ public class ExtendedPeakDetectorUI extends Composite implements IExtendedPartUI
 
 	private boolean isControlKeyPressed(Event event) {
 
-		return (event.stateMask & SWT.CTRL) == SWT.CTRL;
+		return (event.stateMask & SWT.MOD1) == SWT.MOD1;
 	}
 
 	private boolean isLeftMouseButtonPressed(Event event) {

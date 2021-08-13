@@ -442,8 +442,8 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 					 * DEL
 					 */
 					deletePeaksOrIdentifications(display);
-				} else if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_I && (e.stateMask & SWT.CTRL) == SWT.CTRL) {
-					if((e.stateMask & SWT.ALT) == SWT.ALT) {
+				} else if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_I && (e.stateMask & SWT.MOD1) == SWT.MOD1) {
+					if((e.stateMask & SWT.MOD3) == SWT.MOD3) {
 						/*
 						 * CTRL + ALT + i
 						 */
@@ -454,12 +454,12 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 						 */
 						setPeaksActiveForAnalysis(true);
 					}
-				} else if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_S && (e.stateMask & SWT.CTRL) == SWT.CTRL) {
+				} else if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_S && (e.stateMask & SWT.MOD1) == SWT.MOD1) {
 					/*
 					 * CTRL + s
 					 */
 					modifyInternalStandards(display);
-				} else if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_D && (e.stateMask & SWT.CTRL) == SWT.CTRL) {
+				} else if(e.keyCode == IKeyboardSupport.KEY_CODE_LC_D && (e.stateMask & SWT.MOD1) == SWT.MOD1) {
 					/*
 					 * CTRL + d
 					 */

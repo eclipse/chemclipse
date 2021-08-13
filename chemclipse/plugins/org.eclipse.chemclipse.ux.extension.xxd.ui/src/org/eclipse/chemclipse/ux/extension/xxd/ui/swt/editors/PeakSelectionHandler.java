@@ -56,7 +56,7 @@ public class PeakSelectionHandler extends AbstractHandledEventProcessor implemen
 	@Override
 	public int getStateMask() {
 
-		return SWT.ALT;
+		return SWT.MOD3;
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
