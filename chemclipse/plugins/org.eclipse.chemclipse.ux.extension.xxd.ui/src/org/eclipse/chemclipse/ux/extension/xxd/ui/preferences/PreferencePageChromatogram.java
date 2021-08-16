@@ -54,6 +54,8 @@ public class PreferencePageChromatogram extends FieldEditorPreferencePage implem
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_REFERENCE_LABEL, "Reference Label:", HeaderField.getOptions(), getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_COLUMN_TYPE_TO_REFERENCES, "Transfer Column Type to References", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SHOW_METHODS_TOOLBAR, "Show Methods Toolbar", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SHOW_REFERENCES_COMBO, "Show References Combo", getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new DoubleFieldEditor(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME, "Transfer delta retention time [min]", PreferenceConstants.MIN_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME, PreferenceConstants.MAX_CHROMATOGRAM_TRANSFER_DELTA_RETENTION_TIME, getFieldEditorParent()));

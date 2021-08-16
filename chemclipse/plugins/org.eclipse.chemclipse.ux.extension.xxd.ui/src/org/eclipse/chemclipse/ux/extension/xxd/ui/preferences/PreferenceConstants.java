@@ -512,6 +512,10 @@ public class PreferenceConstants extends ChartOptions {
 	public static final boolean DEF_CHROMATOGRAM_TRANSFER_COLUMN_TYPE_TO_REFERENCES = true;
 	public static final String P_CHROMATOGRAM_PROCESSOR_TOOLBAR = "chromatogramProcessorToolbar";
 	public static final String DEF_CHROMATOGRAM_PROCESSOR_TOOLBAR = "";
+	public static final String P_CHROMATOGRAM_SHOW_METHODS_TOOLBAR = "chromatogramShowMethodsToolbar";
+	public static final boolean DEF_CHROMATOGRAM_SHOW_METHODS_TOOLBAR = false;
+	public static final String P_CHROMATOGRAM_SHOW_REFERENCES_COMBO = "chromatogramShowReferencesCombo";
+	public static final boolean DEF_CHROMATOGRAM_SHOW_REFERENCES_COMBO = false;
 	//
 	public static final String P_TITLE_X_AXIS_MILLISECONDS = "titleXAxisMilliseconds";
 	public static final String DEF_TITLE_X_AXIS_MILLISECONDS = "Time [ms]";

@@ -26,6 +26,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -57,6 +58,7 @@ public class ChromatogramReferencesUI {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramReferencesUI.class);
 	//
+	private final Action referencesAction;
 	private final EditorToolBar toolBar;
 	private final ComboContainer comboChromatograms;
 	//
@@ -68,40 +70,33 @@ public class ChromatogramReferencesUI {
 	private Action buttonOpen;
 	//
 	private HashMap<IChromatogram<?>, IChromatogramSelection<?, ?>> referenceSelections = new HashMap<>();
+	private IUpdateListener updateListener;
 
 	public ChromatogramReferencesUI(EditorToolBar editorToolBar, Consumer<IChromatogramSelection<?, ?>> chromatogramReferencesListener) {
 
 		comboChromatograms = new ComboContainer(chromatogramReferencesListener.andThen(t -> updateButtons()));
-		//
-		Action action = new Action("References", Action.AS_CHECK_BOX) {
-
-			@Override
-			public void run() {
-
-				toolBar.setVisible(isChecked());
-				if(isChecked()) {
-					updateButtons();
-				}
-			}
-
-			@Override
-			public void setChecked(boolean checked) {
-
-				if(checked) {
-					setToolTipText("Collapse the references items");
-					setImageDescriptor(ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_COLLAPSE_ALL, IApplicationImage.SIZE_16x16));
-				} else {
-					setToolTipText("Expand the references items");
-					setImageDescriptor(ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_EXPAND_ALL, IApplicationImage.SIZE_16x16));
-				}
-				super.setChecked(checked);
-			}
-		};
-		//
-		editorToolBar.addAction(action);
-		action.setChecked(false);
+		referencesAction = createReferencesAction();
+		editorToolBar.addAction(referencesAction);
+		referencesAction.setChecked(false);
 		toolBar = editorToolBar.createChild();
 		initialize();
+	}
+
+	public void setUpdateListener(IUpdateListener updateListener) {
+
+		this.updateListener = updateListener;
+	}
+
+	public boolean isComboVisible() {
+
+		return referencesAction.isChecked();
+	}
+
+	public void setComboVisible(boolean visible) {
+
+		toolBar.setVisible(visible);
+		referencesAction.setChecked(visible);
+		updateButtons();
 	}
 
 	public List<IChromatogramSelection<?, ?>> getChromatogramSelections() {
@@ -133,6 +128,45 @@ public class ChromatogramReferencesUI {
 		//
 		comboChromatograms.setInput(chromatogramMasterAndReferences);
 		comboChromatograms.refreshUI();
+	}
+
+	private Action createReferencesAction() {
+
+		Action action = new Action("References", Action.AS_CHECK_BOX) {
+
+			@Override
+			public void run() {
+
+				toolBar.setVisible(isChecked());
+				if(isChecked()) {
+					updateButtons();
+				}
+				//
+				if(updateListener != null) {
+					updateListener.update();
+				}
+			}
+
+			@Override
+			public void setChecked(boolean checked) {
+
+				setActionChecked(this, checked);
+				super.setChecked(checked);
+			}
+		};
+		//
+		return action;
+	}
+
+	private void setActionChecked(Action action, boolean checked) {
+
+		if(checked) {
+			action.setToolTipText("Collapse the references items");
+			action.setImageDescriptor(ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_COLLAPSE_ALL, IApplicationImage.SIZE_16x16));
+		} else {
+			action.setToolTipText("Expand the references items");
+			action.setImageDescriptor(ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_EXPAND_ALL, IApplicationImage.SIZE_16x16));
+		}
 	}
 
 	private IChromatogramSelection<?, ?> createChromatogramSelection(IChromatogram<?> referencedChromatogram) {

@@ -42,6 +42,7 @@ import org.eclipse.chemclipse.model.support.IAnalysisSegment;
 import org.eclipse.chemclipse.model.targets.ITargetDisplaySettings;
 import org.eclipse.chemclipse.model.targets.TargetReference;
 import org.eclipse.chemclipse.model.updates.IChromatogramSelectionUpdateListener;
+import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.DataCategory;
@@ -900,13 +901,28 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		//
 		createChromatogramChart(this);
 		//
+		initialize();
+	}
+
+	private void initialize() {
+
 		comboViewerSeparationColumn.setInput(SeparationColumnFactory.getSeparationColumns());
 		//
 		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_INFO), false);
 		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_EDIT), false);
 		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_CHROMATOGRAM_ALIGNMENT), false);
-		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_METHOD), false);
+		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_METHOD), preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_SHOW_METHODS_TOOLBAR));
 		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_RETENTION_INDICES), false);
+		//
+		chromatogramReferencesUI.setComboVisible(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_SHOW_REFERENCES_COMBO));
+		chromatogramReferencesUI.setUpdateListener(new IUpdateListener() {
+
+			@Override
+			public void update() {
+
+				preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_SHOW_REFERENCES_COMBO, chromatogramReferencesUI.isComboVisible());
+			}
+		});
 	}
 
 	private EditorToolBar createToolbarMain(Composite parent) {
@@ -920,7 +936,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		chromatogramReferencesUI = new ChromatogramReferencesUI(editorToolBar, this::setChromatogramSelectionInternal);
 		editorToolBar.addAction(createToggleToolbarAction("Edit", "the edit toolbar.", IApplicationImage.IMAGE_EDIT, TOOLBAR_EDIT));
 		editorToolBar.addAction(createToggleToolbarAction("Alignment", "the chromatogram alignment toolbar.", IApplicationImage.IMAGE_ALIGN_CHROMATOGRAMS, TOOLBAR_CHROMATOGRAM_ALIGNMENT));
-		editorToolBar.addAction(createToggleToolbarAction("Methods", "the method toolbar.", IApplicationImage.IMAGE_METHOD, TOOLBAR_METHOD));
+		editorToolBar.addAction(createToggleToolbarAction("Methods", "the method toolbar.", IApplicationImage.IMAGE_METHOD, TOOLBAR_METHOD, PreferenceConstants.P_CHROMATOGRAM_SHOW_METHODS_TOOLBAR));
 		createResetButton(editorToolBar);
 		editorToolBar.enableToolbarTextPage(preferenceStore, PREFERENCE_SHOW_TOOLBAR_TEXT);
 		processorToolbar.enablePreferencePage(preferenceStore, PreferenceConstants.P_CHROMATOGRAM_PROCESSOR_TOOLBAR);
@@ -1202,6 +1218,11 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 
 	private IAction createToggleToolbarAction(String name, String tooltip, String image, String toolbar) {
 
+		return createToggleToolbarAction(name, tooltip, image, toolbar, null);
+	}
+
+	private IAction createToggleToolbarAction(String name, String tooltip, String image, String toolbar, String preferenceKey) {
+
 		return new Action(name, Action.AS_CHECK_BOX) {
 
 			{
@@ -1214,7 +1235,11 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 			public void run() {
 
 				if(toolbars.containsKey(toolbar)) {
-					setChecked(PartSupport.toggleCompositeVisibility(toolbars.get(toolbar)));
+					boolean isVisible = PartSupport.toggleCompositeVisibility(toolbars.get(toolbar));
+					if(preferenceKey != null) {
+						preferenceStore.setValue(preferenceKey, isVisible);
+					}
+					setChecked(isVisible);
 					updateText();
 				}
 			}
