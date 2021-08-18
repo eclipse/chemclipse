@@ -58,6 +58,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.Derivative;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTracesUI;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
+import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.core.support.MarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignal;
@@ -121,6 +122,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 	//
 	private Label labelStatus;
 	private Combo comboOverlayType;
+	private int previousChromatograms;
 	private ComboViewer comboViewerDerivative;
 	//
 	private final ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
@@ -405,6 +407,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		 */
 		Set<DisplayType> types = getDisplayType();
 		comboOverlayType.setToolTipText(DisplayType.toDescription(types));
+		// comboOverlayType.setText(DisplayType.toShortcut(types));
 		if(preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_AUTOFOCUS_PROFILE_SETTINGS)) {
 			if(isExtractedIonsModusEnabled() || isExtractedWavelengthsModusEnabled()) {
 				enableToolbar(toolbarNamedTraces, true);
@@ -508,9 +511,30 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			Set<String> availableSeriesIds = new HashSet<>();
 			BaseChart baseChart = chromatogramChart.getBaseChart();
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
+			HashSet<String> usefulTypes = new HashSet<String>();
 			int i = 0;
 			for(Entry<IChromatogramSelection, List<String>> entry : chromatogramSelections.entrySet()) {
 				IChromatogramSelection<?, ?> chromatogramSelection = entry.getKey();
+				if(previousChromatograms != chromatogramSelections.size()) {
+					if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
+						usefulTypes.add(DisplayType.toShortcut(DisplayType.SWC));
+						usefulTypes.add(DisplayType.toShortcut(DisplayType.XWC));
+						usefulTypes.add(DisplayType.toShortcut(DisplayType.MPC));
+					} else {
+						usefulTypes.add(DisplayType.toShortcut(DisplayType.TIC));
+						usefulTypes.add(DisplayType.toShortcut(DisplayType.BPC));
+						usefulTypes.add(DisplayType.toShortcut(DisplayType.XIC));
+						usefulTypes.add(DisplayType.toShortcut(DisplayType.SIC));
+						usefulTypes.add(DisplayType.toShortcut(DisplayType.TSC));
+						usefulTypes.add(DisplayType.toShortcut(DisplayType.TIC, DisplayType.BPC));
+						usefulTypes.add(DisplayType.toShortcut(DisplayType.TIC, DisplayType.XIC));
+						usefulTypes.add(DisplayType.toShortcut(DisplayType.TIC, DisplayType.SIC));
+						usefulTypes.add(DisplayType.toShortcut(DisplayType.TIC, DisplayType.TSC));
+					}
+					comboOverlayType.setItems(usefulTypes.toArray(new String[usefulTypes.size()]));
+					comboOverlayType.select(0);
+				}
+				//
 				List<String> selectionSeries = entry.getValue();
 				IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 				String chromatogramName = chromatogram.getName() + ChromatogramChartSupport.EDITOR_TAB + (i + 1);
@@ -538,6 +562,11 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 				}
 				i++;
 			}
+			if(previousChromatograms != chromatogramSelections.size()) {
+				comboOverlayType.setItems(usefulTypes.toArray(new String[usefulTypes.size()]));
+				comboOverlayType.select(0);
+			}
+			previousChromatograms = chromatogramSelections.size();
 			/*
 			 * Add the selected series
 			 */
