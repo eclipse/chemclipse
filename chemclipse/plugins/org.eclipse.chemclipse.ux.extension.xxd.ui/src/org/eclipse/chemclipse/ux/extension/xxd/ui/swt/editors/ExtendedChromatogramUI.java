@@ -370,6 +370,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		}
 	}
 
+	@Override
 	public void update() {
 
 		if(!suspendUpdate) {
@@ -577,7 +578,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		chromatogramChart.deleteSeries();
 		//
 		if(chromatogramSelection != null) {
-			addjustChromatogramChart();
+			setRangeRestrictions();
 			addChromatogramSeriesData();
 			adjustChromatogramSelectionRange();
 			chromatogramAlignmentUI.update(chromatogramReferencesUI.getChromatogramSelections());
@@ -610,7 +611,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		}
 	}
 
-	private void addjustChromatogramChart() {
+	private void setRangeRestrictions() {
 
 		IChartSettings chartSettings = chromatogramChart.getChartSettings();
 		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
@@ -629,7 +630,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 			rangeRestriction.setForceZeroMinY(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_FORCE_ZERO_MIN_Y_MSD));
 		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD || chromatogramSelection instanceof IChromatogramSelectionWSD) {
 			/*
-			 * CSD could contains negative scan intensities.
+			 * FID and DAD could contain negative scan intensities.
 			 * setForceZeroMinY(true) would display only 0 or positive scan intensities.
 			 */
 			rangeRestriction.setZeroY(false);
