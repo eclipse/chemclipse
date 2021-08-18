@@ -72,6 +72,9 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 
 	public void update(IChromatogramSelection<?, ?> chromatogramSelection) {
 
+		if(this.chromatogramSelection == chromatogramSelection) {
+			return;
+		}
 		this.chromatogramSelection = chromatogramSelection;
 		setScaleValues();
 		updateHeatmap();
