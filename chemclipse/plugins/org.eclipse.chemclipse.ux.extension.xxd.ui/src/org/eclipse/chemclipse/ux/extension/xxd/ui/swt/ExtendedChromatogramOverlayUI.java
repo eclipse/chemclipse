@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -512,7 +513,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			Set<String> availableSeriesIds = new HashSet<>();
 			BaseChart baseChart = chromatogramChart.getBaseChart();
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
-			HashSet<String> usefulTypes = new HashSet<String>();
+			LinkedHashSet<String> usefulTypes = new LinkedHashSet<String>();
 			int i = 0;
 			for(Entry<IChromatogramSelection, List<String>> entry : chromatogramSelections.entrySet()) {
 				IChromatogramSelection<?, ?> chromatogramSelection = entry.getKey();
