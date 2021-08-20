@@ -33,22 +33,22 @@ public enum DisplayType {
 	private static Map<String, DisplayType> shortcutMap = new HashMap<>();
 	static {
 		for(DisplayType displayType : DisplayType.values()) {
-			shortcutMap.put(displayType.shortucut, displayType);
+			shortcutMap.put(displayType.shortcut, displayType);
 		}
 	}
 	//
-	private String shortucut;
+	private String shortcut;
 	private String description;
 
 	private DisplayType(String shortcut, String description) {
 
-		this.shortucut = shortcut;
+		this.shortcut = shortcut;
 		this.description = description;
 	}
 
 	public String getShortcut() {
 
-		return shortucut;
+		return shortcut;
 	}
 
 	public String getDescription() {
