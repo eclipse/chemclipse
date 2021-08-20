@@ -517,6 +517,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 				IChromatogramSelection<?, ?> chromatogramSelection = entry.getKey();
 				if(previousChromatograms != chromatogramSelections.size()) {
 					if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
+						usefulTypes.add(DisplayType.toShortcut(DisplayType.TIC));
 						usefulTypes.add(DisplayType.toShortcut(DisplayType.SWC));
 						usefulTypes.add(DisplayType.toShortcut(DisplayType.XWC));
 						usefulTypes.add(DisplayType.toShortcut(DisplayType.MPC));
