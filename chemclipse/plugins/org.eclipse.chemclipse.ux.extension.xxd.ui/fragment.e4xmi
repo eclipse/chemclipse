@@ -24,6 +24,7 @@
     <elements xsi:type="basic:Part" xmi:id="_SUu-YK2iEeuuJ_UXBFJQCQ" elementId="org.eclipse.ui.navigator.ProjectExplorer" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Project Explorer" iconURI="platform:/plugin/org.eclipse.ui.navigator.resources/icons/full/eview16/resource_persp.gif"/>
     <elements xsi:type="basic:Part" xmi:id="_eNITQK2jEeuuJ_UXBFJQCQ" elementId="org.eclipse.ui.console.ConsoleView" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Console" iconURI="platform:/plugin/org.eclipse.ui.console/icons/full/cview16/console_view.gif"/>
     <elements xsi:type="basic:Part" xmi:id="_aHkWoK2kEeuuJ_UXBFJQCQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.processinginfo" contributionURI="bundleclass://org.eclipse.chemclipse.processing.ui/org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart" label="Feedback" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/info.gif"/>
+    <elements xsi:type="basic:Part" xmi:id="_u1EUMP9YEeu8g9dKSTy3Bg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.heatmap" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.parts.ChromatogramHeatmapPart" label="Heatmap" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramHeatmap.gif"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_NOrRACskEeakPPc3RJFSAg" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
     <elements xsi:type="advanced:Perspective" xmi:id="_PjP7sCskEeakPPc3RJFSAg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.main" label="Data Analysis (Main)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram.gif">
@@ -76,6 +77,49 @@
             <children xsi:type="advanced:Placeholder" xmi:id="_lgcrQCfdEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.wellchart" ref="_3pxoICfdEeu5Pepo04c08Q"/>
             <children xsi:type="advanced:Placeholder" xmi:id="_l3MXUCfdEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.welldata" ref="_3OFKoCfdEeu5Pepo04c08Q"/>
             <children xsi:type="advanced:Placeholder" xmi:id="_HsdMICffEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.wellchannels" ref="_4fuYsCfdEeu5Pepo04c08Q"/>
+          </children>
+        </children>
+      </children>
+    </elements>
+    <elements xsi:type="advanced:Perspective" xmi:id="_z7ANEJRkEeW3h-K0O5zQFg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.maldi" selectedElement="_9PaXsJRkEeW3h-K0O5zQFg" label="MALDI-TOF MS" iconURI="platform:/plugin/org.eclipse.chemclipse.ux.extension.xxd.ui/icons/16x16/profilems.gif">
+      <children xsi:type="basic:PartSashContainer" xmi:id="_9PaXsJRkEeW3h-K0O5zQFg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.maldi.partsashcontainer.0" horizontal="true">
+        <children xsi:type="basic:PartSashContainer" xmi:id="_A0XsMJRlEeW3h-K0O5zQFg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.maldi.partsashcontainer.1" containerData="1500" horizontal="true">
+          <children xsi:type="basic:PartStack" xmi:id="_FMIWoJRlEeW3h-K0O5zQFg" elementId="net.openchrom.msd.identifier.supplier.opentyper.ui.partstack.0">
+            <children xsi:type="basic:Part" xmi:id="_3h5WAIdGEeepUP_iBlDE9w" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.MassSpectrumFileExplorer" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.views.MassSpectrumFileExplorer" label="Mass Spectrum File Explorer" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/massSpectrumFileExplorer.gif"/>
+            <children xsi:type="basic:Part" xmi:id="_16cJoChgEei4gNjdUMAPPA" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.MassSpectrumHeader" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.parts.MassSpectrumHeaderPart" label="Mass Spectrum Header" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramOverview.gif"/>
+          </children>
+        </children>
+        <children xsi:type="basic:PartSashContainer" xmi:id="_DIrRIJRlEeW3h-K0O5zQFg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.maldi.partsashcontainer.2" horizontal="true">
+          <children xsi:type="basic:PartSashContainer" xmi:id="_zXuEYJRlEeW3h-K0O5zQFg" elementId="net.openchrom.msd.identifier.supplier.maldi.ui.partsashcontainer.3">
+            <children xsi:type="advanced:Placeholder" xmi:id="_SDGpEJRlEeW3h-K0O5zQFg" elementId="org.eclipse.ui.editorss" ref="_qjvtkCskEeakPPc3RJFSAg"/>
+            <children xsi:type="basic:PartStack" xmi:id="_RFJbYNWaEeuLN-OVfSRh5w" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.5">
+              <children xsi:type="basic:Part" xmi:id="_16cJoChgEei4gNjdUMAPPA" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.MassSpectrumOverlayPart" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.parts.MassSpectrumOverlayPart" label="Mass Spectrum Overlay" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramOverlay.gif" closeable="true"/>
+            </children>
+          </children>
+          <children xsi:type="basic:PartStack" xmi:id="_F-avMJRlEeW3h-K0O5zQFg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.maldi.partstack.1" containerData="2500">
+            <children xsi:type="basic:Part" xmi:id="_OTuAUOMCEeeFk6MNh27L1g" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.MassSpectrumPeakList" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.parts.MassSpectrumPeakListPart" label="Mass Spectrum Peak List" iconURI="platform:/plugin/org.eclipse.chemclipse.support.ui/icons/16x16/file.gif"/>
+          </children>
+        </children>
+      </children>
+    </elements>
+    <elements xsi:type="advanced:Perspective" xmi:id="_4ruCoPtaEeuOJq-XN8B4cw" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.wsd" label="HPLC-DAD" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogram-wsd.gif">
+      <children xsi:type="basic:PartSashContainer" xmi:id="_E5ws0PtbEeuOJq-XN8B4cw" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partsashcontainer.10">
+        <children xsi:type="basic:PartSashContainer" xmi:id="_QSF3APtbEeuOJq-XN8B4cw" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partsashcontainer.11" horizontal="true">
+          <children xsi:type="basic:PartStack" xmi:id="_SzI3cPtbEeuOJq-XN8B4cw" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.2" containerData="3500">
+            <children xsi:type="advanced:Placeholder" xmi:id="_Dcq14P9PEeu8g9dKSTy3Bg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.dataexplorer" ref="_qtur4Cf2EeafjOXnfHSw0Q"/>
+            <children xsi:type="advanced:Placeholder" xmi:id="_FaDvoP9PEeu8g9dKSTy3Bg" elementId="org.eclipse.ui.navigator.ProjectExplorer" ref="_SUu-YK2iEeuuJ_UXBFJQCQ"/>
+            <children xsi:type="advanced:Placeholder" xmi:id="_H8-_YP9PEeu8g9dKSTy3Bg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.sequenceexplorer" ref="_pWhTQI8wEeiO3oL5WUkZBQ"/>
+          </children>
+          <children xsi:type="basic:PartSashContainer" xmi:id="_QwrpoP9PEeu8g9dKSTy3Bg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partsashcontainer.12" containerData="6500" horizontal="true">
+            <children xsi:type="advanced:Placeholder" xmi:id="_ZGjIYP9PEeu8g9dKSTy3Bg" elementId="org.eclipse.ui.editorss" ref="_qjvtkCskEeakPPc3RJFSAg"/>
+          </children>
+        </children>
+        <children xsi:type="basic:PartSashContainer" xmi:id="_gO2AwP9PEeu8g9dKSTy3Bg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partsashcontainer.13" horizontal="true">
+          <children xsi:type="basic:PartStack" xmi:id="_mvzhcP9REeu8g9dKSTy3Bg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.7" containerData="3500">
+            <children xsi:type="advanced:Placeholder" xmi:id="__AdB4P9REeu8g9dKSTy3Bg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.chromatogramOverlayPartDescriptor" containerData="" ref="_7SwRMNngEeiyx5W2f1mKlA"/>
+          </children>
+          <children xsi:type="basic:PartStack" xmi:id="_z0TkcP9PEeu8g9dKSTy3Bg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.6" containerData="6500">
+            <children xsi:type="advanced:Placeholder" xmi:id="_5o3qcP9XEeu8g9dKSTy3Bg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.heatmap" ref="_u1EUMP9YEeu8g9dKSTy3Bg"/>
           </children>
         </children>
       </children>
@@ -140,7 +184,7 @@
     <elements xsi:type="menu:DirectMenuItem" xmi:id="_bwM8IArbEeqMVtWeZukEuw" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.directmenuitem.createnewprocessingmethod" label="New Process Method" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/method.gif" tooltip="Creates a new method that can be used to execute processing steps" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.handlers.CreateProcessMethodHandler"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_U1HpQArvEeqMVtWeZukEuw" featurename="snippets" parentElementId="org.eclipse.chemclipse.rcp.ide.application">
-    <elements xsi:type="basic:Part" xmi:id="_bimaQA-XEeq1N8Jqs-XMOg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.inputpart.peaklisteditor" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.PeakListEditor" label="Untitled" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/peaks.gif" tooltip="Peaklist Editor"/>
+    <elements xsi:type="basic:Part" xmi:id="_bimaQA-XEeq1N8Jqs-XMOg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.inputpart.peaklisteditor" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.PeakListEditor" label="Peaklist Editor" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/peaks.gif" tooltip=""/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_8V3O0CPiEeutTb-F-_fKDg" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.trimbar.top" positionInList="after:org.eclipse.chemclipse.rcp.app.ui.toolbar.main">
     <elements xsi:type="menu:ToolBar" xmi:id="_AKsyYCPjEeutTb-F-_fKDg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.toolbar.dataanalysis" toBeRendered="false" visible="false">
@@ -177,28 +221,5 @@
     <elements xsi:type="menu:HandledToolItem" xmi:id="_L8rzADOXEeuREPdzMrDpOQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.handledtoolitem.undo" label="Undo" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/undo.gif" command="_9e0bQDOWEeuREPdzMrDpOQ"/>
     <elements xsi:type="menu:HandledToolItem" xmi:id="_MROfoDOXEeuREPdzMrDpOQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.handledtoolitem.redo" label="Redo" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/redo.gif" command="_9wG_kDOWEeuREPdzMrDpOQ"/>
     <elements xsi:type="menu:ToolBarSeparator" xmi:id="_Mz2EgDOXEeuREPdzMrDpOQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.toolbarseparator.0"/>
-  </fragments>
-  <fragments xsi:type="fragment:StringModelFragment" xmi:id="_mj3M0JRkEeW3h-K0O5zQFg" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
-    <elements xsi:type="advanced:Perspective" xmi:id="_z7ANEJRkEeW3h-K0O5zQFg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.maldi" selectedElement="_9PaXsJRkEeW3h-K0O5zQFg" label="MALDI-TOF MS" iconURI="platform:/plugin/org.eclipse.chemclipse.ux.extension.xxd.ui/icons/16x16/profilems.gif">
-      <children xsi:type="basic:PartSashContainer" xmi:id="_9PaXsJRkEeW3h-K0O5zQFg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.maldi.partsashcontainer.0" horizontal="true">
-        <children xsi:type="basic:PartSashContainer" xmi:id="_A0XsMJRlEeW3h-K0O5zQFg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.maldi.partsashcontainer.1" containerData="1500" horizontal="true">
-          <children xsi:type="basic:PartStack" xmi:id="_FMIWoJRlEeW3h-K0O5zQFg" elementId="net.openchrom.msd.identifier.supplier.opentyper.ui.partstack.0">
-            <children xsi:type="basic:Part" xmi:id="_3h5WAIdGEeepUP_iBlDE9w" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.MassSpectrumFileExplorer" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.views.MassSpectrumFileExplorer" label="Mass Spectrum File Explorer" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/massSpectrumFileExplorer.gif"/>
-            <children xsi:type="basic:Part" xmi:id="_16cJoChgEei4gNjdUMAPPA" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.MassSpectrumHeader" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.parts.MassSpectrumHeaderPart" label="Mass Spectrum Header" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramOverview.gif"/>
-          </children>
-        </children>
-        <children xsi:type="basic:PartSashContainer" xmi:id="_DIrRIJRlEeW3h-K0O5zQFg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.maldi.partsashcontainer.2" horizontal="true">
-          <children xsi:type="basic:PartSashContainer" xmi:id="_zXuEYJRlEeW3h-K0O5zQFg" elementId="net.openchrom.msd.identifier.supplier.maldi.ui.partsashcontainer.3">
-            <children xsi:type="advanced:Placeholder" xmi:id="_SDGpEJRlEeW3h-K0O5zQFg" elementId="org.eclipse.ui.editorss" ref="_qjvtkCskEeakPPc3RJFSAg"/>
-            <children xsi:type="basic:PartStack" xmi:id="_RFJbYNWaEeuLN-OVfSRh5w" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.5">
-              <children xsi:type="basic:Part" xmi:id="_16cJoChgEei4gNjdUMAPPA" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.MassSpectrumOverlayPart" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.parts.MassSpectrumOverlayPart" label="Mass Spectrum Overlay" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramOverlay.gif" closeable="true"/>
-            </children>
-          </children>
-          <children xsi:type="basic:PartStack" xmi:id="_F-avMJRlEeW3h-K0O5zQFg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.maldi.partstack.1" containerData="2500">
-            <children xsi:type="basic:Part" xmi:id="_OTuAUOMCEeeFk6MNh27L1g" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.MassSpectrumPeakList" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.parts.MassSpectrumPeakListPart" label="Mass Spectrum Peak List" iconURI="platform:/plugin/org.eclipse.chemclipse.support.ui/icons/16x16/file.gif"/>
-          </children>
-        </children>
-      </children>
-    </elements>
   </fragments>
 </fragment:ModelFragments>

@@ -10,6 +10,7 @@
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
  * Christoph Läubrich - propagate result of methods to the user, add label selection support
+ * Matthias Mailänder - display selected wavelengths
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
@@ -329,12 +330,17 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 
 		if(this.chromatogramSelection != chromatogramSelection) {
 			DataCategory dataCategory = DataCategory.AUTO_DETECT;
+			displayType = DisplayType.TIC;
 			if(chromatogramSelection != null) {
 				IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 				if(chromatogram instanceof IChromatogramMSD) {
 					dataCategory = DataCategory.MSD;
 				} else if(chromatogram instanceof IChromatogramWSD) {
 					dataCategory = DataCategory.WSD;
+					IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
+					if(chromatogramSelectionWSD.getSelectedWavelengths().size() == 1) {
+						displayType = DisplayType.SWC;
+					}
 				} else if(chromatogram instanceof IChromatogramCSD) {
 					dataCategory = DataCategory.CSD;
 				}
@@ -370,6 +376,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		}
 	}
 
+	@Override
 	public void update() {
 
 		if(!suspendUpdate) {
@@ -577,7 +584,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		chromatogramChart.deleteSeries();
 		//
 		if(chromatogramSelection != null) {
-			addjustChromatogramChart();
+			setRangeRestrictions();
 			addChromatogramSeriesData();
 			adjustChromatogramSelectionRange();
 			chromatogramAlignmentUI.update(chromatogramReferencesUI.getChromatogramSelections());
@@ -610,7 +617,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		}
 	}
 
-	private void addjustChromatogramChart() {
+	private void setRangeRestrictions() {
 
 		IChartSettings chartSettings = chromatogramChart.getChartSettings();
 		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
@@ -629,7 +636,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 			rangeRestriction.setForceZeroMinY(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_FORCE_ZERO_MIN_Y_MSD));
 		} else if(chromatogramSelection instanceof IChromatogramSelectionCSD || chromatogramSelection instanceof IChromatogramSelectionWSD) {
 			/*
-			 * CSD could contains negative scan intensities.
+			 * FID and DAD could contain negative scan intensities.
 			 * setForceZeroMinY(true) would display only 0 or positive scan intensities.
 			 */
 			rangeRestriction.setZeroY(false);
