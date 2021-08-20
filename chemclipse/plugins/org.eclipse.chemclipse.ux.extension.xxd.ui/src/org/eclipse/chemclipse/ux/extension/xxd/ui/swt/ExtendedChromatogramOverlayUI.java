@@ -20,12 +20,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
@@ -511,12 +513,15 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			Set<String> availableSeriesIds = new HashSet<>();
 			BaseChart baseChart = chromatogramChart.getBaseChart();
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
-			HashSet<String> usefulTypes = new HashSet<String>();
+			LinkedHashSet<String> usefulTypes = new LinkedHashSet<String>();
 			int i = 0;
 			for(Entry<IChromatogramSelection, List<String>> entry : chromatogramSelections.entrySet()) {
 				IChromatogramSelection<?, ?> chromatogramSelection = entry.getKey();
 				if(previousChromatograms != chromatogramSelections.size()) {
-					if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
+					if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
+						usefulTypes.add(DisplayType.toShortcut(DisplayType.TIC));
+					} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
+						usefulTypes.add(DisplayType.toShortcut(DisplayType.TIC));
 						usefulTypes.add(DisplayType.toShortcut(DisplayType.SWC));
 						usefulTypes.add(DisplayType.toShortcut(DisplayType.XWC));
 						usefulTypes.add(DisplayType.toShortcut(DisplayType.MPC));
