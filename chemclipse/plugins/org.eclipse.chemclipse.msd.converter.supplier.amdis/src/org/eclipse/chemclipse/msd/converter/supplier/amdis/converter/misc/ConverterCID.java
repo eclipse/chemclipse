@@ -116,34 +116,6 @@ public class ConverterCID {
 		}
 	}
 
-	private static int getRetentionTime(CompoundInformation compoundInformation) {
-
-		String retentionTime = compoundInformation.getRetentionTime();
-		if(retentionTime != null && !retentionTime.isEmpty()) {
-			try {
-				return (int)(Double.parseDouble(compoundInformation.getRetentionTime()) * IChromatogram.MINUTE_CORRELATION_FACTOR);
-			} catch(NumberFormatException e) {
-				logger.warn(e);
-			}
-		}
-		//
-		return 0;
-	}
-
-	private static float getRetentionIndex(CompoundInformation compoundInformation) {
-
-		String retentionIndex = compoundInformation.getRetentionIndex();
-		if(retentionIndex != null && !retentionIndex.isEmpty()) {
-			try {
-				return Float.parseFloat(compoundInformation.getRetentionIndex());
-			} catch(NumberFormatException e) {
-				logger.warn(e);
-			}
-		}
-		//
-		return 0.0f;
-	}
-
 	/**
 	 * Converts e.g. the file
 	 * ---
@@ -228,5 +200,33 @@ public class ConverterCID {
 		}
 		//
 		return null;
+	}
+
+	private static int getRetentionTime(CompoundInformation compoundInformation) {
+
+		String retentionTime = compoundInformation.getRetentionTime();
+		if(retentionTime != null && !retentionTime.isEmpty()) {
+			try {
+				return (int)(Double.parseDouble(compoundInformation.getRetentionTime()) * IChromatogram.MINUTE_CORRELATION_FACTOR);
+			} catch(NumberFormatException e) {
+				logger.warn(e);
+			}
+		}
+		//
+		return 0;
+	}
+
+	private static float getRetentionIndex(CompoundInformation compoundInformation) {
+
+		String retentionIndex = compoundInformation.getRetentionIndex();
+		if(retentionIndex != null && !retentionIndex.isEmpty()) {
+			try {
+				return Float.parseFloat(compoundInformation.getRetentionIndex());
+			} catch(NumberFormatException e) {
+				logger.warn(e);
+			}
+		}
+		//
+		return 0.0f;
 	}
 }

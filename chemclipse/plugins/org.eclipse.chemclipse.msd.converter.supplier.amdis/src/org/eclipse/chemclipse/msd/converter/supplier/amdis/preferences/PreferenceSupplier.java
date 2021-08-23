@@ -36,6 +36,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final boolean DEF_EXPORT_INTENSITIES_AS_INTEGER = true;
 	public static final String P_PARSE_COMPOUND_INFORMATION = "parseCompoundInformation";
 	public static final boolean DEF_PARSE_COMPOUND_INFORMATION = true;
+	public static final String P_PARSE_MOL_INFORMATION = "parseMolInformation";
+	public static final boolean DEF_PARSE_MOL_INFORMATION = true;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -70,6 +72,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_NORMALIZE_INTENSITIES, Boolean.toString(DEF_NORMALIZE_INTENSITIES));
 		defaultValues.put(P_EXPORT_INTENSITIES_AS_INTEGER, Boolean.toString(DEF_EXPORT_INTENSITIES_AS_INTEGER));
 		defaultValues.put(P_PARSE_COMPOUND_INFORMATION, Boolean.toString(DEF_PARSE_COMPOUND_INFORMATION));
+		defaultValues.put(P_PARSE_MOL_INFORMATION, Boolean.toString(DEF_PARSE_MOL_INFORMATION));
 		return defaultValues;
 	}
 
@@ -119,5 +122,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.getBoolean(P_PARSE_COMPOUND_INFORMATION, DEF_PARSE_COMPOUND_INFORMATION);
+	}
+
+	public static boolean isParseMolInformation() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getBoolean(P_PARSE_MOL_INFORMATION, DEF_PARSE_MOL_INFORMATION);
 	}
 }

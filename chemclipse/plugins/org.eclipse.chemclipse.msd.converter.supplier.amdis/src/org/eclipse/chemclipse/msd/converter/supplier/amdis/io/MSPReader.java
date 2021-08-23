@@ -22,6 +22,7 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,6 +37,7 @@ import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.misc.CompoundInformation;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.misc.ConverterCID;
+import org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.misc.ConverterMOL;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.model.IVendorLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.model.VendorLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences.PreferenceSupplier;
@@ -89,6 +91,16 @@ public class MSPReader extends AbstractMassSpectraReader implements IMassSpectra
 			if(fileCID != null) {
 				List<CompoundInformation> compoundList = ConverterCID.convert(fileCID);
 				ConverterCID.transfer(compoundList, massSpectra);
+			}
+		}
+		/*
+		 * MOL Information (*.MOL)
+		 */
+		if(PreferenceSupplier.isParseMolInformation()) {
+			File fileMOL = ConverterMOL.getFileMOL(file);
+			if(fileMOL != null) {
+				Map<String, String> moleculeStructureMap = ConverterMOL.convert(fileMOL);
+				ConverterMOL.transfer(moleculeStructureMap, massSpectra);
 			}
 		}
 		//

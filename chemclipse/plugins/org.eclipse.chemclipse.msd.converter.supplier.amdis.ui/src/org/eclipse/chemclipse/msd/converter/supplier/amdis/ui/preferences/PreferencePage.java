@@ -41,6 +41,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_NORMALIZE_INTENSITIES, "Normalize intensities", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_EXPORT_INTENSITIES_AS_INTEGER, "Export intensities as Integer", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_PARSE_COMPOUND_INFORMATION, "Parse Compound Information (*.CID)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_PARSE_MOL_INFORMATION, "Parse MOL Information (*.MOL)", getFieldEditorParent()));
 	}
 
 	/*
