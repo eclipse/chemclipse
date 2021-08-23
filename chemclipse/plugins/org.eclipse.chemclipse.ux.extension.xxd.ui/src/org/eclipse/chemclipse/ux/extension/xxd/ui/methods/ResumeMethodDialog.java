@@ -59,7 +59,7 @@ public class ResumeMethodDialog extends TitleAreaDialog {
 		super.create();
 		setTitle("Process Method");
 		setMessage("Select to resume the method at the given process entry.", IMessageProvider.INFORMATION);
-		getButton(IDialogConstants.CANCEL_ID).setEnabled(false);
+		getButton(IDialogConstants.CANCEL_ID).setEnabled(true);
 		getButton(IDialogConstants.OK_ID).setText("Process");
 	}
 

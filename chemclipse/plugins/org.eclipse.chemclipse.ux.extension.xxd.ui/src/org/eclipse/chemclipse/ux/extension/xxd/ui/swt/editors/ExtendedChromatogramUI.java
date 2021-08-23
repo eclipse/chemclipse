@@ -81,6 +81,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorProcessTypeSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.TargetReferenceLabelMarker;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodCancelException;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupportUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.ResumeMethodSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
@@ -522,8 +523,8 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 
 	private <C> void executeSupplier(IProcessSupplier<C> processSupplier, ProcessSupplierContext processSupplierContext) {
 
-		Shell shell = getChromatogramChart().getShell();
 		try {
+			Shell shell = getChromatogramChart().getShell();
 			ProcessorPreferences<C> settings = SettingsWizard.getSettings(shell, SettingsWizard.getWorkspacePreferences(processSupplier), true);
 			if(settings == null) {
 				return;
@@ -549,6 +550,10 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		} catch(IOException e) {
 			DefaultProcessingResult<Object> processingInfo = new DefaultProcessingResult<>();
 			processingInfo.addErrorMessage(processSupplier.getName(), "The process method can't be applied.", e);
+			updateResult(processingInfo);
+		} catch(MethodCancelException e) {
+			DefaultProcessingResult<Object> processingInfo = new DefaultProcessingResult<>();
+			processingInfo.addWarnMessage(processSupplier.getName(), "The process method execution has been cancelled.");
 			updateResult(processingInfo);
 		}
 	}

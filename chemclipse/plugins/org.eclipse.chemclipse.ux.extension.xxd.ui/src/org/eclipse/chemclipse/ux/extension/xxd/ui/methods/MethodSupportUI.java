@@ -497,6 +497,10 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 				ProcessingInfoPartSupport.getInstance().update(processingInfo);
 			} catch(InterruptedException e) {
 				Thread.currentThread().interrupt();
+			} catch(MethodCancelException e) {
+				IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+				processingInfo.addWarnMessage(processMethod.getName(), "The process method execution has been cancelled.");
+				ProcessingInfoPartSupport.getInstance().update(processingInfo);
 			}
 		}
 	}

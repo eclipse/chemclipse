@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.Shell;
 
 public class ResumeMethodSupport {
 
-	public static int selectResumeIndex(Shell shell, IProcessMethod processMethod) {
+	public static int selectResumeIndex(Shell shell, IProcessMethod processMethod) throws MethodCancelException {
 
 		int resumeIndex = ProcessEntryContainer.DEFAULT_RESUME_INDEX;
 		if(processMethod != null) {
@@ -37,6 +37,8 @@ public class ResumeMethodSupport {
 					//
 					if(resumeMethodDialog.open() == Window.OK) {
 						resumeIndex = resumeMethodDialog.getResumeIndex();
+					} else {
+						throw new MethodCancelException();
 					}
 				}
 			}
