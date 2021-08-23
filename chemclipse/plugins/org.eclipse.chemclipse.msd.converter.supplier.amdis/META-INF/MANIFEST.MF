@@ -19,5 +19,6 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: ChemClipse
-Export-Package: org.eclipse.chemclipse.msd.converter.supplier.amdis.model,
+Export-Package: org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.misc,
+ org.eclipse.chemclipse.msd.converter.supplier.amdis.model,
  org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences

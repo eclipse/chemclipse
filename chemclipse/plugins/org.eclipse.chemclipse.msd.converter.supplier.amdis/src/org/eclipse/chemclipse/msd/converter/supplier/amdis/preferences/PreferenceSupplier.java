@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -34,6 +34,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final boolean DEF_NORMALIZE_INTENSITIES = true;
 	public static final String P_EXPORT_INTENSITIES_AS_INTEGER = "exportIntensitiesAsInteger";
 	public static final boolean DEF_EXPORT_INTENSITIES_AS_INTEGER = true;
+	public static final String P_PARSE_COMPOUND_INFORMATION = "parseCompoundInformation";
+	public static final boolean DEF_PARSE_COMPOUND_INFORMATION = true;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -67,6 +69,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_REMOVE_INTENSITIES_LOWER_THAN_ONE, Boolean.toString(DEF_REMOVE_INTENSITIES_LOWER_THAN_ONE));
 		defaultValues.put(P_NORMALIZE_INTENSITIES, Boolean.toString(DEF_NORMALIZE_INTENSITIES));
 		defaultValues.put(P_EXPORT_INTENSITIES_AS_INTEGER, Boolean.toString(DEF_EXPORT_INTENSITIES_AS_INTEGER));
+		defaultValues.put(P_PARSE_COMPOUND_INFORMATION, Boolean.toString(DEF_PARSE_COMPOUND_INFORMATION));
 		return defaultValues;
 	}
 
@@ -110,5 +113,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.getBoolean(P_EXPORT_INTENSITIES_AS_INTEGER, DEF_EXPORT_INTENSITIES_AS_INTEGER);
+	}
+
+	public static boolean isParseCompoundInformation() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getBoolean(P_PARSE_COMPOUND_INFORMATION, DEF_PARSE_COMPOUND_INFORMATION);
 	}
 }

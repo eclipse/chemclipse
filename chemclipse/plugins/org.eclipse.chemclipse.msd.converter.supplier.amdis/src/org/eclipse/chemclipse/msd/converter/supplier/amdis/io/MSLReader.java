@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -30,9 +30,11 @@ import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
-import org.eclipse.chemclipse.msd.converter.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.misc.CompoundInformation;
+import org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.misc.ConverterCID;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.model.IVendorLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.model.VendorLibraryMassSpectrum;
+import org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
@@ -68,9 +70,21 @@ public class MSLReader extends AbstractMassSpectraReader implements IMassSpectra
 	public IMassSpectra read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
 		List<String> massSpectraData = getMassSpectraData(file);
+		//
 		IMassSpectra massSpectra = extractMassSpectra(massSpectraData);
 		massSpectra.setConverterId(CONVERTER_ID);
 		massSpectra.setName(file.getName());
+		/*
+		 * Compound Information (*.CID)
+		 */
+		if(PreferenceSupplier.isParseCompoundInformation()) {
+			File fileCID = ConverterCID.getFileCID(file);
+			if(fileCID != null) {
+				List<CompoundInformation> compoundList = ConverterCID.convert(fileCID);
+				ConverterCID.transfer(compoundList, massSpectra);
+			}
+		}
+		//
 		return massSpectra;
 	}
 
@@ -191,8 +205,8 @@ public class MSLReader extends AbstractMassSpectraReader implements IMassSpectra
 	private IMassSpectra extractMassSpectra(List<String> massSpectraData) {
 
 		IMassSpectra massSpectra = new MassSpectra();
-		String referenceIdentifierMarker = PreferenceSupplier.getReferenceIdentifierMarker();
-		String referenceIdentifierPrefix = PreferenceSupplier.getReferenceIdentifierPrefix();
+		String referenceIdentifierMarker = org.eclipse.chemclipse.msd.converter.preferences.PreferenceSupplier.getReferenceIdentifierMarker();
+		String referenceIdentifierPrefix = org.eclipse.chemclipse.msd.converter.preferences.PreferenceSupplier.getReferenceIdentifierPrefix();
 		/*
 		 * Iterates through the saved mass spectrum text data and converts it to
 		 * a mass spectrum.
