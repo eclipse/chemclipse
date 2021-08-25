@@ -69,7 +69,7 @@ public interface IExtendedPartUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Delete the selected header entrie(s).");
+		button.setToolTipText(tooltip);
 		button.setImage(ApplicationImageFactory.getInstance().getImage(image, IApplicationImage.SIZE_16x16));
 		//
 		return button;
