@@ -52,6 +52,7 @@ public class ChromatogramFilterWSD extends AbstractChromatogramFilterWSD {
 
 		IChromatogram<? extends IPeak> chromatogram = chromatogramSelection.getChromatogram();
 		adjustMinSignalByWavelength(chromatogram);
+		chromatogramSelection.reset();
 	}
 
 	private void adjustMinSignalByWavelength(IChromatogram<? extends IPeak> chromatogram) {
