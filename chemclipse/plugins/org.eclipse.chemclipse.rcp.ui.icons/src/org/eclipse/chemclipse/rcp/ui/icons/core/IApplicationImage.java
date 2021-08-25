@@ -460,4 +460,5 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_LOWER_MIN_AREA = PATH_PREFIX + "lowerMinArea.gif";
 	String IMAGE_HIGHER_MAX_AREA = PATH_PREFIX + "higherMaxArea.gif";
 	String IMAGE_GRID = PATH_PREFIX + "grid.png";
+	String IMAGE_FILTER = PATH_PREFIX + "filter.png";
 }
