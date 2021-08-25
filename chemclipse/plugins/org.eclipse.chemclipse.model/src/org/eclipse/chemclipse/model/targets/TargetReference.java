@@ -41,6 +41,17 @@ public class TargetReference implements ITargetReference {
 	//
 	private ITargetSupplier supplier = null;
 
+	public static String createID(TargetReferenceType type, int retentionTime) {
+
+		String name = FORMAT.format(retentionTime / IChromatogram.MINUTE_CORRELATION_FACTOR);
+		return createID(type, name);
+	}
+
+	public static String createID(TargetReferenceType type, String name) {
+
+		return type.getLabel() + "." + name;
+	}
+
 	public <X extends ISignal & ITargetSupplier> TargetReference(X item, TargetReferenceType type, String name, float retentionIndex) {
 
 		this.signal = item;
@@ -49,7 +60,7 @@ public class TargetReference implements ITargetReference {
 		this.name = name;
 		this.retentionIndex = retentionIndex;
 		//
-		id = type.getLabel() + "." + name;
+		id = createID(type, name);
 	}
 
 	@Override
