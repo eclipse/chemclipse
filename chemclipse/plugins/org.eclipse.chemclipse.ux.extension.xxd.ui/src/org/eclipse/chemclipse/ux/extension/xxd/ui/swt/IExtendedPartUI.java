@@ -277,6 +277,11 @@ public interface IExtendedPartUI {
 		}
 	}
 
+	default void enableButton(Button button, String image, String tooltip, boolean active) {
+
+		setButtonImage(button, image, PREFIX_ENABLE, PREFIX_DISABLE, tooltip, active);
+	}
+
 	default void setButtonImage(Button button, String image, String prefixActivate, String prefixDeactivate, String tooltip, boolean enabled) {
 
 		button.setImage(ApplicationImageFactory.getInstance().getImage(image, IApplicationImage.SIZE_16x16, enabled));
