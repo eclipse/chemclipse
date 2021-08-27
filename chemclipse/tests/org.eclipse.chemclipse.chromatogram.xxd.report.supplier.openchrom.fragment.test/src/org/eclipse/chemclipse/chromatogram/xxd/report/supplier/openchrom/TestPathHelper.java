@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -10,8 +10,6 @@
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom;
-
-import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.PathResolver;
 
 /**
  * THIS CLASS IS NOT SUITED FOR PRODUCTIVE USE!<br/>

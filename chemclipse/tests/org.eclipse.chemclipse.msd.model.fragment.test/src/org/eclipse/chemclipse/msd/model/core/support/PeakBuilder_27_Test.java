@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,15 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import junit.framework.TestCase;
-
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignal;
 import org.eclipse.chemclipse.model.signals.TotalScanSignals;
-import org.eclipse.chemclipse.msd.model.core.support.PeakBuilderMSD;
+
+import junit.framework.TestCase;
 
 /**
  * Test the peak exceptions.

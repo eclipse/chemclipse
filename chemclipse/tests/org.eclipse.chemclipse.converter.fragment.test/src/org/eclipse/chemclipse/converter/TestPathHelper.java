@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -10,8 +10,6 @@
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.converter;
-
-import org.eclipse.chemclipse.converter.PathResolver;
 
 /**
  * THIS CLASS IS NOT SUITED FOR PRODUCTIVE USE!<br/>

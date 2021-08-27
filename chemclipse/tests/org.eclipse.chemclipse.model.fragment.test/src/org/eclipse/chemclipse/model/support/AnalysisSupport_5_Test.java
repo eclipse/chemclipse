@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,8 +12,6 @@
 package org.eclipse.chemclipse.model.support;
 
 import org.eclipse.chemclipse.model.exceptions.AnalysisSupportException;
-import org.eclipse.chemclipse.model.support.AnalysisSupport;
-import org.eclipse.chemclipse.model.support.IAnalysisSupport;
 
 import junit.framework.TestCase;
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,11 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.support;
 
-import org.eclipse.chemclipse.model.support.ITwoPoints;
-import org.eclipse.chemclipse.model.support.TwoPoints;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
 import org.eclipse.chemclipse.numeric.exceptions.PointIsNullException;
+
 import junit.framework.TestCase;
 
 public class TwoPoints_2_Test extends TestCase {

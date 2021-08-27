@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.core;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilterMSD;
-import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.settings.FilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.settings.FilterSettings;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
