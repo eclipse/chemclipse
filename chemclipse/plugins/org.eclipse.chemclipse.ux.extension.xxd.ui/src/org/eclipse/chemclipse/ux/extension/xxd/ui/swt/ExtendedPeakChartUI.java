@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -36,7 +36,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakDataSupport
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Rectangle;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -546,8 +546,8 @@ public class ExtendedPeakChartUI extends Composite implements IExtendedPartUI {
 			/*
 			 * Calculate the position.
 			 */
-			Rectangle rectangle = getPlotArea().getBounds();
-			int width = rectangle.width;
+			Point point = getPlotArea().getSize();
+			int width = point.x;
 			double factorWidth = 100.0d / width;
 			BaseChart baseChart = peakChart.getBaseChart();
 			IAxis retentionTime = baseChart.getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
