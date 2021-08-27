@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,7 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - make this configureable, null check for scan
+ * Christoph Läubrich - make this configurable, null check for scan
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -111,8 +111,9 @@ public class ExtendedComparisonScanUI extends Composite implements IExtendedPart
 
 	public void clear() {
 
-		IScanMSD scanMSD = null;
-		update(scanMSD);
+		IScanMSD scanMSD1 = null;
+		IScanMSD scanMSD2 = null;
+		update(scanMSD1, scanMSD2);
 	}
 
 	public void update(IScanMSD scanMSD) {
