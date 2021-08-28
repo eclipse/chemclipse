@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -33,10 +33,11 @@ import org.eclipse.swt.widgets.Composite;
 
 public class TaskTileContainer {
 
-	public static final Color DEFAULT_COLOR_TEXT = Colors.WHITE;
+	public static final Color DEFAULT_COLOR_TITLE = Colors.WHITE;
+	public static final Color DEFAULT_COLOR_DESCRIPTION = Colors.WHITE;
 	public static final Color DEFAULT_COLOR_INACTIVE = Colors.getColor(74, 142, 142);
 	public static final Color DEFAULT_COLOR_ACTIVE = Colors.getColor(5, 100, 100);
-	private final List<TaskTile> tiles = new ArrayList<TaskTile>();
+	private final List<TaskTile> tiles = new ArrayList<>();
 	private final Composite container;
 	private final Supplier<IEclipseContext> contextSupplier;
 	private final MouseMoveListener tileMouseMoveListener = mouseMove -> {
@@ -51,10 +52,12 @@ public class TaskTileContainer {
 	private final Color[] colors;
 
 	public TaskTileContainer(Composite parent, int columns, Supplier<IEclipseContext> contextSupplier) {
-		this(parent, columns, contextSupplier, new Color[]{DEFAULT_COLOR_ACTIVE, DEFAULT_COLOR_INACTIVE, DEFAULT_COLOR_TEXT});
+
+		this(parent, columns, contextSupplier, new Color[]{DEFAULT_COLOR_ACTIVE, DEFAULT_COLOR_INACTIVE, DEFAULT_COLOR_TITLE, DEFAULT_COLOR_DESCRIPTION,});
 	}
 
 	public TaskTileContainer(Composite parent, int columns, Supplier<IEclipseContext> contextSupplier, Color[] colors) {
+
 		this.contextSupplier = contextSupplier;
 		this.colors = colors;
 		container = new Composite(parent, SWT.NONE);
