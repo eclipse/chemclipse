@@ -33,7 +33,6 @@ public class PeakReader_1_MSD_1301_ITest extends PeakReaderMSDTestCase {
 		assertEquals(4, peaks.getPeaks().size());
 	}
 
-	@SuppressWarnings("deprecation")
 	public void testReader_2() {
 
 		IPeak peak = peaks.getPeak(1);

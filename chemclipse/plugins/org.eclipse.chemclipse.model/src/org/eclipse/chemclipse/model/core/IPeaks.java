@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -58,11 +58,9 @@ public interface IPeaks<T extends IPeak> {
 	 * Be aware, the index is 1 based and not 0 based like in a normal list.<br/>
 	 * If no peak is available, null will be returned.
 	 * 
-	 * @deprecated because of strange definition of index, use {@link #getPeaks().get(...)} instead
 	 * @param i
 	 * @return IPeak
 	 */
-	@Deprecated
 	default T getPeak(int i) {
 
 		List<T> peaks = getPeaks();

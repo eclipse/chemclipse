@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -20,16 +20,16 @@ import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 /**
  * peakDetectorSettings.getThreshold() is MEDIUM > threshold = 0.05d;
  * WindowSize.SCANS_5
- * 
- * @author eselmeister
  */
 public class FirstDerivativePeakDetector_2_Test extends FirstDerivativeSlopesTestCase {
 
 	private IFirstDerivativeDetectorSlopes slopes;
+	@SuppressWarnings("rawtypes")
 	private PeakDetectorMSD firstDerivativePeakDetector;
 	private Class<?> firstDerivativePeakDetectorClass;
 	private Method method;
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected void setUp() throws Exception {
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,6 +16,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.combined
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.exceptions.ValueMustNotBeNullException;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.CombinedIntegrationResult;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIntegrationResults;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.ICombinedIntegrationResult;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IPeakIntegrationResults;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.support.ChromatogramIntegratorSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.internal.support.PeakIntegratorSupport;
@@ -32,9 +33,9 @@ public class CombinedIntegrator extends AbstractCombinedIntegrator {
 
 	@SuppressWarnings("rawtypes")
 	@Override
-	public IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, ICombinedIntegrationSettings integrationSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<ICombinedIntegrationResult> integrate(IChromatogramSelection chromatogramSelection, ICombinedIntegrationSettings integrationSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = validate(chromatogramSelection, integrationSettings);
+		IProcessingInfo<ICombinedIntegrationResult> processingInfo = validate(chromatogramSelection, integrationSettings);
 		if(!processingInfo.hasErrorMessages()) {
 			if(integrationSettings instanceof CombinedIntegrationSettings) {
 				try {
@@ -62,9 +63,8 @@ public class CombinedIntegrator extends AbstractCombinedIntegrator {
 		return processingInfo;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<ICombinedIntegrationResult> integrate(IChromatogramSelection<?, ?> chromatogramSelection, IProgressMonitor monitor) {
 
 		CombinedIntegrationSettings combinedIntegrationSettings = PreferenceSupplier.getCombinedIntegrationSettings();
 		return integrate(chromatogramSelection, combinedIntegrationSettings, monitor);

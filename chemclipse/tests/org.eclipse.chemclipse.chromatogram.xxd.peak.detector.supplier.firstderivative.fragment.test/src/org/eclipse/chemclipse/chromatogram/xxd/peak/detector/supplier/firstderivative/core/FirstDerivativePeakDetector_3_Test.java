@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -22,16 +22,16 @@ import junit.framework.TestCase;
 /**
  * peakDetectorSettings.getThreshold() is MEDIUM > threshold = 0.05d;
  * WindowSize.SCANS_5
- * 
- * @author eselmeister
  */
 public class FirstDerivativePeakDetector_3_Test extends TestCase {
 
+	@SuppressWarnings("rawtypes")
 	private PeakDetectorMSD firstDerivativePeakDetector;
 	private Class<?> firstDerivativePeakDetectorClass;
 	private Method method;
 	private IRawPeak rawPeak;
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected void setUp() throws Exception {
 

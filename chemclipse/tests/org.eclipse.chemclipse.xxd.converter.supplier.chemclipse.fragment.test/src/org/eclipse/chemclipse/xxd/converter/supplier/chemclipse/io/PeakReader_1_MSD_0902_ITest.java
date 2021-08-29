@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2020 Lablicate GmbH.
+ * Copyright (c) 2014, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -33,7 +33,6 @@ public class PeakReader_1_MSD_0902_ITest extends PeakReaderMSDTestCase {
 		assertEquals(4, peaks.getPeaks().size());
 	}
 
-	@SuppressWarnings("deprecation")
 	public void testReader_2() {
 
 		IPeak peak = peaks.getPeak(1);

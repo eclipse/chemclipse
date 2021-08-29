@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -44,6 +44,7 @@ public class CombinedIntegrator {
 	 * This class has only static methods.
 	 */
 	private CombinedIntegrator() {
+
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -143,9 +144,9 @@ public class CombinedIntegrator {
 		return null;
 	}
 
-	private static IProcessingInfo getNoIntegratorAvailableProcessingInfo() {
+	private static IProcessingInfo<?> getNoIntegratorAvailableProcessingInfo() {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Combined Integrator", NO_INTEGRATOR_AVAILABLE);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;

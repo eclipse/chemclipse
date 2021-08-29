@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -32,10 +32,12 @@ public class FirstDerivativePeakDetector_1_ITest extends TestCase {
 
 	private File file;
 	private IChromatogramMSD chromatogram;
+	@SuppressWarnings("rawtypes")
 	private PeakDetectorMSD peakDetector;
 	private PeakDetectorSettingsMSD peakDetectorSettings;
 	private IChromatogramSelectionMSD chromatogramSelection;
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	protected void setUp() throws Exception {
 

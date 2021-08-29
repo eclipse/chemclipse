@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -69,11 +69,9 @@ public interface IBaselineModel {
 	 * If the given retention time is out of chromatogram borders, 0 will be
 	 * returned.
 	 * 
-	 * @deprecated - use method {@link #getBackground(int)}} or {@link #getBackgroundNotNaN(int)}} instead
 	 * @param retentionTime
 	 * @return float
 	 */
-	@Deprecated
 	float getBackgroundAbundance(int retentionTime);
 
 	/**

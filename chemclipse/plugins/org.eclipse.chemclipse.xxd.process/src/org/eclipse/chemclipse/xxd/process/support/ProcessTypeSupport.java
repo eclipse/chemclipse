@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2020 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -38,10 +38,9 @@ import org.eclipse.chemclipse.xxd.process.Activator;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
- * @deprecated either use the {@link ProcessSupplierContext} OSGI-Service or the E4ProcessSupplierContext if context injection is desired
+ * You could also use the {@link ProcessSupplierContext} OSGI-Service or the E4ProcessSupplierContext if context injection is desired
  *
  */
-@Deprecated
 public class ProcessTypeSupport implements ProcessSupplierContext {
 
 	private final List<IProcessTypeSupplier> localProcessSupplier = new ArrayList<>();

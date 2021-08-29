@@ -222,7 +222,6 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 	private Object menuCache = null;
 	private boolean menuActive = false;
 
-	@Deprecated
 	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker) {
 
 		this(parent, style, eventBroker, Activator.getDefault().getPreferenceStore());
@@ -233,7 +232,6 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		this(parent, style, eventBroker, supplierContext, Activator.getDefault().getPreferenceStore());
 	}
 
-	@Deprecated
 	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker, IPreferenceStore store) {
 
 		this(parent, style, eventBroker, new org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport(), store);
