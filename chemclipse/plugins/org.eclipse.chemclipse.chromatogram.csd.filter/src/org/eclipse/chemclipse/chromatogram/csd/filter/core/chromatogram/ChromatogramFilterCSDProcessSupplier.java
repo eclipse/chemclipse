@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,11 +26,8 @@ import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
-import org.eclipse.chemclipse.support.settings.parser.SettingsParser;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.osgi.service.component.annotations.Component;
-
-
 
 @Component(service = {IProcessTypeSupplier.class})
 public class ChromatogramFilterCSDProcessSupplier implements IProcessTypeSupplier {
@@ -62,6 +59,7 @@ public class ChromatogramFilterCSDProcessSupplier implements IProcessTypeSupplie
 
 		@SuppressWarnings("unchecked")
 		public ChromatogramFilterCSDProcessorSupplier(IChromatogramFilterSupplier supplier, IProcessTypeSupplier parent) {
+
 			super("ChromatogramFilterCSD." + supplier.getId(), supplier.getFilterName(), supplier.getDescription(), (Class<IChromatogramFilterSettings>)supplier.getSettingsClass(), parent, DataType.CSD);
 			this.supplier = supplier;
 		}
@@ -87,7 +85,5 @@ public class ChromatogramFilterCSDProcessSupplier implements IProcessTypeSupplie
 
 			return super.matchesId(id) || supplier.getId().equals(id);
 		}
-
 	}
 }
-

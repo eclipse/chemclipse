@@ -68,7 +68,7 @@
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.preferences.PreferenceInitializer">
+            class="org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.preferences.PreferenceInitializer">
       </initializer>
    </extension>
    <extension

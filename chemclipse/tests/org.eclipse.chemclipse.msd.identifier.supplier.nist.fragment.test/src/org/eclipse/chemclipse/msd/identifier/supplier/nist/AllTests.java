@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,11 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.identifier.supplier.nist;
 
+import org.eclipse.chemclipse.rcp.app.test.TestAssembler;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
-
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.Activator;
-import org.eclipse.chemclipse.rcp.app.test.TestAssembler;
 
 public class AllTests {
 

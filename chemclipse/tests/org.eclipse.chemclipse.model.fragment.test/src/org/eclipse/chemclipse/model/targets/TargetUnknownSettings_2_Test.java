@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.targets;
 
-import org.eclipse.chemclipse.model.targets.TargetUnknownSettings;
-
 import junit.framework.TestCase;
 
 public class TargetUnknownSettings_2_Test extends TestCase {

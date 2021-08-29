@@ -21,7 +21,7 @@
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.baselinesubtract.preferences.PreferenceInitializer">
+            class="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.preferences.PreferenceInitializer">
       </initializer>
    </extension>
 </plugin>

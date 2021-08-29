@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,9 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.result;
 
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.AbstractChromatogramIntegrationResult;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIntegrationResult;
-
 /**
  * THIS IS A TEST CLASS! DO NOT USE EXCEPT FOR TESTS!
  * 
@@ -22,6 +19,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIn
 public class ChromatogramIntegrationResult extends AbstractChromatogramIntegrationResult implements IChromatogramIntegrationResult {
 
 	public ChromatogramIntegrationResult(double ion, double chromatogramArea, double backgroundArea) {
+
 		super(ion, chromatogramArea, backgroundArea);
 	}
 }
