@@ -146,7 +146,8 @@ public class MassSpectrumEditor implements IMassSpectrumEditor {
 	@Persist
 	public boolean save() {
 
-		ProgressMonitorDialog dialog = new ProgressMonitorDialog(DisplayUtils.getShell());
+		Shell shell = DisplayUtils.getShell();
+		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
 		IRunnableWithProgress runnable = new IRunnableWithProgress() {
 
 			@Override
@@ -155,7 +156,7 @@ public class MassSpectrumEditor implements IMassSpectrumEditor {
 				try {
 					monitor.beginTask("Save Mass Spectra", IProgressMonitor.UNKNOWN);
 					try {
-						saveMassSpectra(monitor, DisplayUtils.getShell());
+						saveMassSpectra(monitor, shell);
 					} catch(NoMassSpectrumConverterAvailableException e) {
 						throw new InvocationTargetException(e);
 					}
