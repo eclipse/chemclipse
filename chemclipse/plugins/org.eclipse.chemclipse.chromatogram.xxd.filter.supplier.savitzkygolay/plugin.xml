@@ -37,7 +37,7 @@
             config="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.settings.MassSpectrumFilterSettings"
             description="This is a Savitzky-Golay Mass Spectrum optimization filter."
             filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.core.MassSpectrumFilter"
-            filterName="Savitzky-Golay MassSpectrum Filter"
+            filterName="Savitzky-Golay Filter"
             id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.savitzkygolay.massspectrum">
       </MassSpectrumFilterSupplier>
    </extension>
