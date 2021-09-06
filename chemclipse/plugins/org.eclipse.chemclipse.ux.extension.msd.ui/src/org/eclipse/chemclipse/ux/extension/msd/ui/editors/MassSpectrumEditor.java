@@ -352,6 +352,7 @@ public class MassSpectrumEditor implements IMassSpectrumEditor {
 
 		EventHandler eventHandler = new EventHandler() {
 
+			@Override
 			public void handleEvent(Event event) {
 
 				try {
@@ -386,9 +387,13 @@ public class MassSpectrumEditor implements IMassSpectrumEditor {
 
 		if(objects.size() == 1) {
 			Object object = objects.get(0);
-			if(object instanceof IScanMSD && object != massSpectrum) {
-				IScanMSD massSpectrum = (IScanMSD)object;
-				massSpectrumChart.update(massSpectrum);
+			if(object instanceof IScanMSD) {
+				if(object != massSpectrum) {
+					IScanMSD massSpectrum = (IScanMSD)object;
+					massSpectrumChart.update(massSpectrum);
+				} else {
+					dirtyable.setDirty(massSpectrum.isDirty());
+				}
 			}
 		}
 	}
