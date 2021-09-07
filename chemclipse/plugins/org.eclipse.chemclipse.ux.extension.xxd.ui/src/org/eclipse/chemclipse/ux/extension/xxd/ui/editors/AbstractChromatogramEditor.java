@@ -272,6 +272,10 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 				IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
 				if(extendedChromatogramUI.isActiveChromatogramSelection(chromatogramSelection)) {
 					extendedChromatogramUI.update();
+					IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+					if(chromatogram != null) {
+						dirtyable.setDirty(chromatogram.isDirty());
+					}
 					return true;
 				}
 			} else if(object instanceof IScan) {

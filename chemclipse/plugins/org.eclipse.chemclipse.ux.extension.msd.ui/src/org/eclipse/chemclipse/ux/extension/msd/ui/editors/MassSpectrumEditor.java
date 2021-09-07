@@ -146,7 +146,8 @@ public class MassSpectrumEditor implements IMassSpectrumEditor {
 	@Persist
 	public boolean save() {
 
-		ProgressMonitorDialog dialog = new ProgressMonitorDialog(DisplayUtils.getShell());
+		Shell shell = DisplayUtils.getShell();
+		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
 		IRunnableWithProgress runnable = new IRunnableWithProgress() {
 
 			@Override
@@ -155,7 +156,7 @@ public class MassSpectrumEditor implements IMassSpectrumEditor {
 				try {
 					monitor.beginTask("Save Mass Spectra", IProgressMonitor.UNKNOWN);
 					try {
-						saveMassSpectra(monitor, DisplayUtils.getShell());
+						saveMassSpectra(monitor, shell);
 					} catch(NoMassSpectrumConverterAvailableException e) {
 						throw new InvocationTargetException(e);
 					}
@@ -351,6 +352,7 @@ public class MassSpectrumEditor implements IMassSpectrumEditor {
 
 		EventHandler eventHandler = new EventHandler() {
 
+			@Override
 			public void handleEvent(Event event) {
 
 				try {
@@ -385,9 +387,13 @@ public class MassSpectrumEditor implements IMassSpectrumEditor {
 
 		if(objects.size() == 1) {
 			Object object = objects.get(0);
-			if(object instanceof IScanMSD && object != massSpectrum) {
-				IScanMSD massSpectrum = (IScanMSD)object;
-				massSpectrumChart.update(massSpectrum);
+			if(object instanceof IScanMSD) {
+				if(object != massSpectrum) {
+					IScanMSD massSpectrum = (IScanMSD)object;
+					massSpectrumChart.update(massSpectrum);
+				} else {
+					dirtyable.setDirty(massSpectrum.isDirty());
+				}
 			}
 		}
 	}
