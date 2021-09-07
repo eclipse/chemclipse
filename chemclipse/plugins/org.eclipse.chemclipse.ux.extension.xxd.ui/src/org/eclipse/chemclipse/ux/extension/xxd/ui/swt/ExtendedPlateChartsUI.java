@@ -45,7 +45,9 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
+import org.eclipse.swtchart.extensions.core.ISeriesSettings;
 import org.eclipse.swtchart.extensions.core.SeriesData;
+import org.eclipse.swtchart.extensions.core.SeriesMapper;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
@@ -298,6 +300,8 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 			lineSeriesSettings.setLineColor(color);
 			lineSeriesSettings.setEnableArea(false);
 			lineSeriesSettings.setDescription(description);
+			ISeriesSettings seriesSettingsDefault = SeriesMapper.getSeriesSettingsDefault(position, chartControl.get());
+			SeriesMapper.mapSetting(position, lineSeriesSettings, seriesSettingsDefault);
 		}
 		return lineSeriesData;
 	}
