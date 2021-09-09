@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -38,6 +38,25 @@ public class ValueParserSupport {
 	protected String parseString(String[] values, int index, String def) {
 
 		return (values.length > index) ? values[index].trim() : def;
+	}
+
+	protected int parseInteger(String[] values, int index) {
+
+		return parseInteger(values, index, 0);
+	}
+
+	protected int parseInteger(String[] values, int index, int def) {
+
+		int result = def;
+		String value = parseString(values, index, "");
+		if(!"".equals(value)) {
+			try {
+				result = Integer.parseInt(value);
+			} catch(NumberFormatException e) {
+				//
+			}
+		}
+		return result;
 	}
 
 	protected float parseFloat(String[] values, int index) {
