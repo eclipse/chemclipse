@@ -325,21 +325,30 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		chromatogramAlignmentUI.update(chromatogramReferencesUI.getChromatogramSelections());
 	}
 
+	private void updateWavelengths() {
+
+		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
+		if(!(chromatogram instanceof IChromatogramWSD)) {
+			return;
+		}
+		IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
+		if(chromatogramSelectionWSD.getSelectedWavelengths().getWavelengths().size() == 1) {
+			displayType = DisplayType.SWC;
+		} else {
+			displayType = DisplayType.TIC;
+		}
+	}
+
 	private void setChromatogramSelectionInternal(IChromatogramSelection chromatogramSelection) {
 
 		if(this.chromatogramSelection != chromatogramSelection) {
 			DataCategory dataCategory = DataCategory.AUTO_DETECT;
-			displayType = DisplayType.TIC;
 			if(chromatogramSelection != null) {
 				IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 				if(chromatogram instanceof IChromatogramMSD) {
 					dataCategory = DataCategory.MSD;
 				} else if(chromatogram instanceof IChromatogramWSD) {
 					dataCategory = DataCategory.WSD;
-					IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
-					if(chromatogramSelectionWSD.getSelectedWavelengths().size() == 1) {
-						displayType = DisplayType.SWC;
-					}
 				} else if(chromatogram instanceof IChromatogramCSD) {
 					dataCategory = DataCategory.CSD;
 				}
@@ -383,6 +392,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 				updateChromatogram();
 				adjustChromatogramSelectionRange();
 				setSeparationColumnSelection();
+				updateWavelengths();
 			}
 		}
 	}

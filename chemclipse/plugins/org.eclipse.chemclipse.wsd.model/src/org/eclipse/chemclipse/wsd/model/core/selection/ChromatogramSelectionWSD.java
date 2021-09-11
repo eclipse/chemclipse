@@ -20,6 +20,7 @@ import org.eclipse.chemclipse.model.notifier.UpdateNotifier;
 import org.eclipse.chemclipse.model.selection.AbstractChromatogramSelection;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
+import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.core.support.MarkedWavelengths;
@@ -52,7 +53,9 @@ public class ChromatogramSelectionWSD extends AbstractChromatogramSelection<IChr
 
 		IScanWSD scan = (IScanWSD)chromatogram.getScans().stream().findFirst().get();
 		selectedWavelengths = new MarkedWavelengths();
-		selectedWavelengths.add(scan.getScanSignals().stream().findFirst().get().getWavelength());
+		for(IScanSignalWSD signal : scan.getScanSignals()) {
+			selectedWavelengths.add(signal.getWavelength());
+		}
 	}
 
 	@Override

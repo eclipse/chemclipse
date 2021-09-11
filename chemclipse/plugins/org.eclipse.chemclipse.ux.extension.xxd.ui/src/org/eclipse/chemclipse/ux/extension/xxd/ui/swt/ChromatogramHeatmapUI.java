@@ -91,6 +91,7 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 			} else if(mouseEvent.button == 3) {
 				chromatogramSelectionWSD.populateWavelengths(chromatogramSelectionWSD.getChromatogram());
 				chromatogramSelectionWSD.fireUpdateChange(true);
+				chromatogramSelectionWSD.reset();
 				toolbarInfo.get().setText(ChromatogramDataSupport.getChromatogramSelectionLabel(chromatogramSelection));
 			}
 			mouseEvent.consume();
