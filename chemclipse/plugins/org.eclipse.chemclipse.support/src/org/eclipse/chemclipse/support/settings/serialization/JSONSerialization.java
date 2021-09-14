@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - added support for dynamic mapper
  *******************************************************************************/
 package org.eclipse.chemclipse.support.settings.serialization;
 
@@ -19,6 +20,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.eclipse.chemclipse.support.Activator;
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
 
 import com.fasterxml.jackson.core.Version;
@@ -41,6 +43,7 @@ public class JSONSerialization implements SettingsSerialization {
 
 			Class<?> src = type.getRawClass();
 			Class<?> dst = MAPPINGS.get(src);
+			//
 			if(dst == null) {
 				return null;
 			}
@@ -55,6 +58,7 @@ public class JSONSerialization implements SettingsSerialization {
 		for(InputValue inputValue : inputValues) {
 			result.put(inputValue, inputValue.getDefaultValue());
 		}
+		//
 		if(content != null && !content.isEmpty()) {
 			@SuppressWarnings("unchecked")
 			Map<String, Object> map = createMapper().readValue(content, HashMap.class);
@@ -83,14 +87,29 @@ public class JSONSerialization implements SettingsSerialization {
 		return mapper.writeValueAsString(result);
 	}
 
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	private ObjectMapper createMapper() {
 
-		ObjectMapper mapper = new ObjectMapper();
-		SimpleModule module = new SimpleModule("ChemClipse", Version.unknownVersion());
-		module.setAbstractTypes(RESOLVER);
-		mapper.registerModule(module);
-		mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-		return mapper;
+		ObjectMapper objectMapper = new ObjectMapper();
+		//
+		SimpleModule simpleModule = new SimpleModule("ChemClipse", Version.unknownVersion());
+		simpleModule.setAbstractTypes(RESOLVER);
+		/*
+		 * Add additional mapper dynamically.
+		 */
+		for(Object object : Activator.getDefault().getSerializationServices()) {
+			if(object instanceof ISerializationService) {
+				ISerializationService serializationService = (ISerializationService)object;
+				Class clazz = serializationService.getSupportedClass();
+				simpleModule.addSerializer(clazz, serializationService.getSerializer());
+				simpleModule.addDeserializer(clazz, serializationService.getDeserializer());
+			}
+		}
+		//
+		objectMapper.registerModule(simpleModule);
+		objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+		//
+		return objectMapper;
 	}
 
 	@Override

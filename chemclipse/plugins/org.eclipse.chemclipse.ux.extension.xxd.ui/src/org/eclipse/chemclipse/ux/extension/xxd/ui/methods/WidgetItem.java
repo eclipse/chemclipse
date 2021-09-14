@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.support.settings.parser.InputValue;
 import org.eclipse.chemclipse.support.settings.validation.InputValidator;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.provider.AdapterLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.fieldassist.ControlDecoration;
@@ -34,8 +35,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -52,12 +53,14 @@ import org.eclipse.swt.widgets.Text;
 public class WidgetItem {
 
 	private final InputValue inputValue;
+	//
 	private InputValidator inputValidator;
 	private ControlDecoration controlDecoration;
 	private Control control;
 	private Object currentSelection;
 
 	public WidgetItem(InputValue inputValue, Object currentSelection) {
+
 		this.inputValue = inputValue;
 		this.currentSelection = currentSelection;
 	}
@@ -118,9 +121,15 @@ public class WidgetItem {
 
 		Class<?> rawType = inputValue.getRawType();
 		if(rawType != null) {
+			/*
+			 * File
+			 */
 			if(rawType == File.class) {
 				return currentSelection;
 			}
+			/*
+			 * Text
+			 */
 			if(control instanceof Text) {
 				/*
 				 * Text
@@ -165,6 +174,19 @@ public class WidgetItem {
 				Combo combo = (Combo)control;
 				if(rawType.isEnum()) {
 					return combo.getText().trim();
+				}
+			} else {
+				/*
+				 * Specific controls
+				 */
+				for(Object object : Activator.getDefault().getAnnotationWidgetServices()) {
+					if(object instanceof IAnnotationWidgetService) {
+						IAnnotationWidgetService annotationWidgetService = (IAnnotationWidgetService)object;
+						Class<?> supportedClass = annotationWidgetService.getSupportedClass();
+						if(supportedClass.equals(rawType)) {
+							return annotationWidgetService.getValue(currentSelection);
+						}
+					}
 				}
 			}
 		}
@@ -216,11 +238,35 @@ public class WidgetItem {
 			} else if(rawType == File.class) {
 				return createFileWidget(parent);
 			} else {
-				Label label = new Label(parent, SWT.NONE);
-				label.setText("Unsupported Type: " + rawType);
-				return label;
+				/*
+				 * Specific controls
+				 */
+				Control control = getSpecificControl(parent);
+				if(control != null) {
+					return control;
+				} else {
+					Label label = new Label(parent, SWT.NONE);
+					label.setText("The type is not supported: " + rawType);
+					return label;
+				}
 			}
 		}
+		return null;
+	}
+
+	private Control getSpecificControl(Composite parent) {
+
+		Class<?> rawType = inputValue.getRawType();
+		for(Object object : Activator.getDefault().getAnnotationWidgetServices()) {
+			if(object instanceof IAnnotationWidgetService) {
+				IAnnotationWidgetService annotationWidgetService = (IAnnotationWidgetService)object;
+				Class<?> supportedClass = annotationWidgetService.getSupportedClass();
+				if(supportedClass.equals(rawType)) {
+					return annotationWidgetService.createWidget(parent, inputValue.getDescription(), currentSelection);
+				}
+			}
+		}
+		//
 		return null;
 	}
 
@@ -235,6 +281,7 @@ public class WidgetItem {
 		gridData.widthHint = 150;
 		combo.setLayoutData(gridData);
 		comboViewer.setInput(comboSupplier.items());
+		//
 		if(currentSelection instanceof String) {
 			Object currentValue = comboSupplier.fromString((String)currentSelection);
 			if(currentValue != null) {
@@ -244,6 +291,7 @@ public class WidgetItem {
 			}
 			currentSelection = currentValue;
 		}
+		//
 		comboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			@Override
@@ -252,17 +300,20 @@ public class WidgetItem {
 				currentSelection = comboViewer.getStructuredSelection().getFirstElement();
 			}
 		});
+		//
 		return comboViewer;
 	}
 
 	private Control createFileWidget(Composite parent) {
 
 		FileSettingProperty fileSettingProperty = inputValue.getFileSettingProperty();
+		//
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		GridLayout layout = new GridLayout(2, false);
 		layout.verticalSpacing = 0;
 		composite.setLayout(layout);
+		//
 		CLabel label = new CLabel(composite, SWT.NONE);
 		label.setForeground(parent.getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
 		String value = getValueAsString();
@@ -272,9 +323,10 @@ public class WidgetItem {
 			label.setText(value);
 		}
 		label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, true));
+		//
 		Button button = new Button(composite, SWT.PUSH);
 		button.setText(" ... ");
-		button.addSelectionListener(new SelectionListener() {
+		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -321,11 +373,6 @@ public class WidgetItem {
 				for(Listener listener : listeners) {
 					listener.handleEvent(new Event());
 				}
-			}
-
-			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
-
 			}
 		});
 		return composite;
@@ -390,9 +437,11 @@ public class WidgetItem {
 		if(currentSelection instanceof Boolean) {
 			return ((Boolean)currentSelection).booleanValue();
 		}
+		//
 		if(currentSelection instanceof String) {
 			return Boolean.valueOf((String)currentSelection);
 		}
+		//
 		return false;
 	}
 
@@ -401,6 +450,7 @@ public class WidgetItem {
 		if(currentSelection == null) {
 			return "";
 		}
+		//
 		if(currentSelection instanceof String) {
 			return (String)currentSelection;
 		} else {

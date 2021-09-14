@@ -176,6 +176,9 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 					setErrorMessage(null);
 					setPageComplete(true);
 				}
+				/*
+				 * User Specific Settings
+				 */
 				try {
 					jsonSettings = settingsUI.getControl().getSettings();
 				} catch(Exception e) {

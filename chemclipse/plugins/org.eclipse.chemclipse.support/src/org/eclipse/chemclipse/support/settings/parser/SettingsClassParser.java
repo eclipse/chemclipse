@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactorings
  *******************************************************************************/
 package org.eclipse.chemclipse.support.settings.parser;
 
@@ -27,9 +28,11 @@ import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
 import org.eclipse.chemclipse.support.settings.SystemSettings;
 import org.eclipse.chemclipse.support.settings.SystemSettingsStrategy;
+import org.eclipse.chemclipse.support.settings.ValidatorSettingsProperty;
 import org.eclipse.chemclipse.support.settings.validation.EvenOddValidator;
 import org.eclipse.chemclipse.support.settings.validation.MinMaxValidator;
 import org.eclipse.chemclipse.support.settings.validation.RegularExpressionValidator;
+import org.eclipse.core.databinding.validation.IValidator;
 
 import com.fasterxml.jackson.databind.BeanDescription;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -51,6 +54,7 @@ public class SettingsClassParser<SettingType> implements SettingsParser<SettingT
 	private final Object defaultConstructorArgument;
 
 	public SettingsClassParser(Class<SettingType> settingclass, Object defaultConstructorArgument) {
+
 		this.settingclass = settingclass;
 		this.defaultConstructorArgument = defaultConstructorArgument;
 	}
@@ -132,8 +136,22 @@ public class SettingsClassParser<SettingType> implements SettingsParser<SettingT
 									inputValue.setComboSupplier(((ComboSettingsProperty)annotation).value().newInstance());
 								} catch(InstantiationException
 										| IllegalAccessException e) {
-									throw new RuntimeException("can't create specified ComboSupplier", e);
+									throw new RuntimeException("The specified ComboSupplier can't be created.", e);
 								}
+							} else if(annotation instanceof ValidatorSettingsProperty) {
+								try {
+									ValidatorSettingsProperty validatorSettingsProperty = (ValidatorSettingsProperty)annotation;
+									Class<? extends IValidator> validatorClass = validatorSettingsProperty.validator();
+									IValidator validator = validatorClass.newInstance();
+									inputValue.addValidator(validator);
+								} catch(InstantiationException
+										| IllegalAccessException e) {
+									throw new RuntimeException("The validator can't be instantiated.", e);
+								}
+							} else {
+								/*
+								 * Handle by default without any further action.
+								 */
 							}
 						}
 					}

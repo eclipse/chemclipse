@@ -107,12 +107,14 @@ public class SettingsUI<T> extends Composite {
 			container = createContainer(parent);
 			this.preferences = preferences;
 			container.setLayout(new GridLayout(2, false));
+			//
 			Map<InputValue, Object> valuesMap = preferences.getSerialization().fromString(preferences.getSupplier().getSettingsParser().getInputValues(), preferences.getUserSettingsAsString());
 			if(valuesMap != null) {
 				for(Entry<InputValue, ?> entry : valuesMap.entrySet()) {
 					widgetItems.add(new WidgetItem(entry.getKey(), entry.getValue()));
 				}
 			}
+			//
 			if(widgetItems.size() > 0) {
 				createOptionWidgets(container);
 			} else {
@@ -126,6 +128,7 @@ public class SettingsUI<T> extends Composite {
 			for(WidgetItem widgetItem : widgetItems) {
 				widgetItem.getControl().setEnabled(enabled);
 			}
+			//
 			for(Label label : labels) {
 				label.setEnabled(enabled);
 			}
@@ -173,6 +176,7 @@ public class SettingsUI<T> extends Composite {
 				InputValue inputValue = widgetItem.getInputValue();
 				values.put(inputValue, widgetItem.getValue());
 			}
+			//
 			return preferences.getSerialization().toString(values);
 		}
 
@@ -185,7 +189,13 @@ public class SettingsUI<T> extends Composite {
 				control.addListener(SWT.KeyUp, listener);
 				control.addListener(SWT.MouseUp, listener);
 				control.addListener(SWT.MouseDoubleClick, listener);
+				//
+				if(control instanceof IChangeListener) {
+					IChangeListener changeListener = (IChangeListener)control;
+					changeListener.addChangeListener(listener);
+				}
 			}
+			//
 			Event event = new Event();
 			event.display = container.getShell().getDisplay();
 			event.widget = container;

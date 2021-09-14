@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 import org.eclipse.chemclipse.swt.ui.services.IMoleculeImageService;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.IAnnotationWidgetService;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.osgi.service.datalocation.Location;
@@ -37,6 +38,7 @@ public class Activator extends AbstractActivatorUI {
 	private DataUpdateSupport dataUpdateSupport;
 	//
 	private ServiceTracker<IMoleculeImageService, IMoleculeImageService> moleculeImageServiceTracker = null;
+	private ServiceTracker<IAnnotationWidgetService, IAnnotationWidgetService> annotationWidgetServiceTracker = null;
 
 	/*
 	 * (non-Javadoc)
@@ -51,6 +53,9 @@ public class Activator extends AbstractActivatorUI {
 		//
 		moleculeImageServiceTracker = new ServiceTracker<>(context, IMoleculeImageService.class, null);
 		moleculeImageServiceTracker.open();
+		//
+		annotationWidgetServiceTracker = new ServiceTracker<>(context, IAnnotationWidgetService.class, null);
+		annotationWidgetServiceTracker.open();
 		/*
 		 * Don't call here:
 		 * ---
@@ -107,6 +112,11 @@ public class Activator extends AbstractActivatorUI {
 	public Object[] getMoleculeImageServices() {
 
 		return moleculeImageServiceTracker.getServices();
+	}
+
+	public Object[] getAnnotationWidgetServices() {
+
+		return annotationWidgetServiceTracker.getServices();
 	}
 
 	private void initialize(DataUpdateSupport dataUpdateSupport) {

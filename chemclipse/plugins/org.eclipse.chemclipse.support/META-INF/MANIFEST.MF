@@ -43,3 +43,4 @@ Import-Package: com.fasterxml.jackson.annotation;version="2.5.0",
  org.slf4j;version="[1.7.0,2.0.0)"
 Service-Component: OSGI-INF/org.eclipse.chemclipse.support.internal.ConfigReader.xml,
  OSGI-INF/org.eclipse.chemclipse.support.internal.BundleReader.xml
+Require-Bundle: org.eclipse.osgi;bundle-version="3.13.0"
