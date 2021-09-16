@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,6 +14,9 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
@@ -35,55 +38,68 @@ public class ChromatogramImportRunnable implements IRunnableWithProgress {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramImportRunnable.class);
 	//
-	private File file;
+	private List<File> files = new ArrayList<>();
 	private DataType dataType;
-	private IChromatogramSelection<?, ?> chromatogramSelection;
+	private List<IChromatogramSelection<?, ?>> chromatogramSelections = new ArrayList<>();
 
 	public ChromatogramImportRunnable(File file, DataType dataType) {
 
-		this.file = file;
+		this(Arrays.asList(new File[]{file}), dataType);
+	}
+
+	public ChromatogramImportRunnable(List<File> files, DataType dataType) {
+
+		this.files.addAll(files);
 		this.dataType = dataType;
 	}
 
-	@SuppressWarnings("rawtypes")
-	public IChromatogramSelection getChromatogramSelection() {
+	public IChromatogramSelection<?, ?> getChromatogramSelection() {
 
-		return chromatogramSelection;
+		if(chromatogramSelections.size() > 0) {
+			return chromatogramSelections.get(0);
+		} else {
+			return null;
+		}
+	}
+
+	public List<IChromatogramSelection<?, ?>> getChromatogramSelections() {
+
+		return chromatogramSelections;
 	}
 
 	@Override
 	public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		try {
-			monitor.beginTask("Import Chromatogram", IProgressMonitor.UNKNOWN);
 			/*
 			 * Don't fire an update.
 			 */
-
-			boolean fireUpdate = false;
-			switch(dataType) {
-				case MSD_NOMINAL:
-				case MSD_TANDEM:
-				case MSD_HIGHRES:
-				case MSD:
-					IProcessingInfo<IChromatogramMSD> processingInfoMSD = ChromatogramConverterMSD.getInstance().convert(file, monitor);
-					IChromatogramMSD chromatogramMSD = processingInfoMSD.getProcessingResult();
-					chromatogramSelection = new ChromatogramSelectionMSD(chromatogramMSD, fireUpdate);
-					break;
-				case CSD:
-					IProcessingInfo<IChromatogramCSD> processingInfoCSD = ChromatogramConverterCSD.getInstance().convert(file, monitor);
-					IChromatogramCSD chromatogramCSD = processingInfoCSD.getProcessingResult();
-					chromatogramSelection = new ChromatogramSelectionCSD(chromatogramCSD, fireUpdate);
-					break;
-				case WSD:
-					IProcessingInfo<IChromatogramWSD> processingInfoWSD = ChromatogramConverterWSD.getInstance().convert(file, monitor);
-					IChromatogramWSD chromatogramWSD = processingInfoWSD.getProcessingResult();
-					chromatogramSelection = new ChromatogramSelectionWSD(chromatogramWSD, fireUpdate);
-					break;
-				default:
-					// No action
+			monitor.beginTask("Import Chromatogram(s)", IProgressMonitor.UNKNOWN);
+			for(File file : files) {
+				boolean fireUpdate = false;
+				switch(dataType) {
+					case MSD_NOMINAL:
+					case MSD_TANDEM:
+					case MSD_HIGHRES:
+					case MSD:
+						IProcessingInfo<IChromatogramMSD> processingInfoMSD = ChromatogramConverterMSD.getInstance().convert(file, monitor);
+						IChromatogramMSD chromatogramMSD = processingInfoMSD.getProcessingResult();
+						chromatogramSelections.add(new ChromatogramSelectionMSD(chromatogramMSD, fireUpdate));
+						break;
+					case CSD:
+						IProcessingInfo<IChromatogramCSD> processingInfoCSD = ChromatogramConverterCSD.getInstance().convert(file, monitor);
+						IChromatogramCSD chromatogramCSD = processingInfoCSD.getProcessingResult();
+						chromatogramSelections.add(new ChromatogramSelectionCSD(chromatogramCSD, fireUpdate));
+						break;
+					case WSD:
+						IProcessingInfo<IChromatogramWSD> processingInfoWSD = ChromatogramConverterWSD.getInstance().convert(file, monitor);
+						IChromatogramWSD chromatogramWSD = processingInfoWSD.getProcessingResult();
+						chromatogramSelections.add(new ChromatogramSelectionWSD(chromatogramWSD, fireUpdate));
+						break;
+					default:
+						// No action
+				}
 			}
-
 		} catch(Exception e) {
 			logger.error(e.getLocalizedMessage(), e);
 		} finally {

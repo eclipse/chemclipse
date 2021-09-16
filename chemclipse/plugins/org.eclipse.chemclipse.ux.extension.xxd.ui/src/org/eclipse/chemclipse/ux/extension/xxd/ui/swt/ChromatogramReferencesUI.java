@@ -13,10 +13,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
@@ -35,13 +37,18 @@ import org.eclipse.chemclipse.support.ui.swt.EditorToolBar;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.ChromatogramEditorDialog;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.DataTypeDialog;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ChromatogramImportRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizard;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -65,6 +72,7 @@ public class ChromatogramReferencesUI {
 	private Action buttonPrevious;
 	private Action buttonNext;
 	private Action buttonAdd;
+	private Action buttonImport;
 	private Action buttonRemove;
 	private Action buttonRemoveAll;
 	private Action buttonOpen;
@@ -201,6 +209,7 @@ public class ChromatogramReferencesUI {
 		buttonRemove = createButtonRemoveReference(toolBar);
 		buttonRemoveAll = createButtonRemoveReferenceAll(toolBar);
 		buttonAdd = createButtonAddReference(toolBar);
+		buttonImport = createButtonImportReferences(toolBar);
 		buttonOpen = createButtonOpenReference(toolBar);
 		toolBar.addSeparator();
 	}
@@ -383,6 +392,51 @@ public class ChromatogramReferencesUI {
 		return action;
 	}
 
+	private Action createButtonImportReferences(EditorToolBar toolBar) {
+
+		Action action = new Action("Import", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_IMPORT, IApplicationImage.SIZE_16x16)) {
+
+			{
+				setToolTipText("Import reference chromatograms.");
+			}
+
+			@Override
+			public void runWithEvent(Event event) {
+
+				DataTypeDialog dataTypeDialog = new DataTypeDialog(event.display.getActiveShell(), new DataType[]{DataType.MSD, DataType.CSD, DataType.WSD});
+				if(IDialogConstants.OK_ID == dataTypeDialog.open()) {
+					DataType dataType = dataTypeDialog.getDataType();
+					InputWizardSettings inputWizardSettings = InputWizardSettings.create(Activator.getDefault().getPreferenceStore(), dataType);
+					inputWizardSettings.setTitle("Select Chromatograms");
+					inputWizardSettings.setDescription("Select chromatogram that will be added as references.");
+					Set<File> chromatogramFiles = InputEntriesWizard.openWizard(event.display.getActiveShell(), inputWizardSettings).keySet();
+					if(!chromatogramFiles.isEmpty()) {
+						IChromatogramSelection<?, ?> masterSelection = comboChromatograms.master;
+						if(masterSelection != null) {
+							//
+							List<File> files = new ArrayList<>(chromatogramFiles);
+							ProgressMonitorDialog progressMonitorDialog = new ProgressMonitorDialog(event.display.getActiveShell());
+							ChromatogramImportRunnable runnable = new ChromatogramImportRunnable(files, dataType);
+							try {
+								progressMonitorDialog.run(false, false, runnable);
+								for(IChromatogramSelection<?, ?> chromatogramSelection : runnable.getChromatogramSelections()) {
+									masterSelection.getChromatogram().addReferencedChromatogram(chromatogramSelection.getChromatogram());
+									comboChromatograms.data.add(chromatogramSelection);
+								}
+								comboChromatograms.refreshUI();
+								updateButtons();
+							} catch(Exception e) {
+								logger.error(e.getLocalizedMessage(), e);
+							}
+						}
+					}
+				}
+			}
+		};
+		toolBar.addAction(action);
+		return action;
+	}
+
 	private Action createButtonOpenReference(EditorToolBar toolBar) {
 
 		Action action = new Action("Open", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16)) {
@@ -436,6 +490,7 @@ public class ChromatogramReferencesUI {
 				buttonRemove.setEnabled(selectionIndex > 0); // 0 is the master can't be removed
 				buttonRemoveAll.setEnabled(selectionIndex == 0 && size > 1); // Remove all when in master modus
 				buttonAdd.setEnabled(selectionIndex == 0); // 0 references can be added only to master
+				buttonImport.setEnabled(selectionIndex == 0); // 0 references can be added only to master
 				buttonOpen.setEnabled(true); // Always true
 			}
 		} catch(Exception e) {
