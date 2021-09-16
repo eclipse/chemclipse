@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -346,10 +346,42 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 		gridData.horizontalAlignment = SWT.END;
 		toolBar.setLayoutData(gridData);
 		//
+		createSortButton(toolBar);
 		createMoveUpButton(toolBar);
 		createMoveDownButton(toolBar);
 		createRemoveButton(toolBar);
 		createAddButton(toolBar);
+	}
+
+	private ToolItem createSortButton(ToolBar toolBar) {
+
+		final String KEY = "SORT_DIRECTION";
+		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
+		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SORT_ALPHA_ASC, IApplicationImage.SIZE_16x16));
+		item.setToolTipText("Sort the item(s).");
+		item.setData(KEY, true);
+		item.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean sortAscending = Boolean.valueOf(item.getData(KEY).toString());
+				if(sortAscending) {
+					Collections.sort(files, (f1, f2) -> f1.getName().compareTo(f2.getName()));
+					item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SORT_ALPHA_DESC, IApplicationImage.SIZE_16x16));
+					item.setData(KEY, false);
+				} else {
+					Collections.sort(files, (f1, f2) -> f2.getName().compareTo(f1.getName()));
+					item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SORT_ALPHA_ASC, IApplicationImage.SIZE_16x16));
+					item.setData(KEY, true);
+				}
+				//
+				tableViewer.setInput(files);
+				updateList(true);
+			}
+		});
+		//
+		return item;
 	}
 
 	private ToolItem createMoveUpButton(ToolBar toolBar) {

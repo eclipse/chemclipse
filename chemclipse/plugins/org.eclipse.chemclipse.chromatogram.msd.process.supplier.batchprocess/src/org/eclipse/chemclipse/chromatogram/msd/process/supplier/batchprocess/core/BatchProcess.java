@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2019 Lablicate GmbH.
+ * Copyright (c) 2010, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -33,15 +33,18 @@ public class BatchProcess {
 
 	private static final Logger logger = Logger.getLogger(BatchProcess.class);
 	private static final String DESCRIPTION = "Batch Processor";
+	//
 	private final ChromatogramTypeSupport chromatogramTypeSupport;
 	private final ProcessSupplierContext processSupplierContext;
 
 	@Deprecated
 	public BatchProcess() {
+
 		this(new DataType[]{DataType.CSD, DataType.MSD, DataType.WSD}, new ProcessTypeSupport());
 	}
 
 	public BatchProcess(DataType[] dataTypes, ProcessSupplierContext processSupplierContext) {
+
 		this.processSupplierContext = processSupplierContext;
 		chromatogramTypeSupport = new ChromatogramTypeSupport(dataTypes);
 	}
