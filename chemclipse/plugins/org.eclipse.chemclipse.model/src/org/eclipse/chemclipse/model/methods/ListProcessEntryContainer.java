@@ -161,6 +161,11 @@ public class ListProcessEntryContainer extends AbstractProcessEntryContainer {
 		getEntries().remove(processEntry);
 	}
 
+	public void removeAllProcessEntries() {
+
+		getEntries().clear();
+	}
+
 	public boolean isReadOnly() {
 
 		return readOnly;

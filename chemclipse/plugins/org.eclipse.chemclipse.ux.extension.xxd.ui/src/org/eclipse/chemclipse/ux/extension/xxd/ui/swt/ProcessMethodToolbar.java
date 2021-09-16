@@ -70,6 +70,7 @@ public class ProcessMethodToolbar extends ToolBar {
 	private ToolItem buttonAdd;
 	private ToolItem buttonCopy;
 	private ToolItem buttonRemove;
+	private ToolItem buttonRemoveAll;
 	private ToolItem buttonMoveUp;
 	private ToolItem buttonMoveDown;
 	private ToolItem buttonClipboard;
@@ -138,7 +139,9 @@ public class ProcessMethodToolbar extends ToolBar {
 		buttonAdd.setEnabled(isEditable);
 		//
 		IStructuredSelection selection = structuredViewer.getStructuredSelection();
-		boolean writeable = processMethod != null && !processMethod.isFinal() && !selection.isEmpty();
+		boolean canEdit = processMethod != null && !processMethod.isFinal();
+		boolean writeable = canEdit && !selection.isEmpty();
+		//
 		Iterator<?> iterator = selection.iterator();
 		while(iterator.hasNext() && writeable) {
 			Object object = iterator.next();
@@ -151,6 +154,7 @@ public class ProcessMethodToolbar extends ToolBar {
 		boolean readOnly = processMethod != null && (processMethod.isReadOnly() || this.readOnly);
 		buttonCopy.setEnabled(writeable && !readOnly);
 		buttonRemove.setEnabled(writeable && !readOnly);
+		buttonRemoveAll.setEnabled(canEdit && processMethod.getNumberOfEntries() > 0 && !readOnly);
 		buttonMoveUp.setEnabled(writeable && !readOnly);
 		buttonMoveDown.setEnabled(writeable && !readOnly);
 		buttonClipboard.setEnabled(true);
@@ -234,6 +238,7 @@ public class ProcessMethodToolbar extends ToolBar {
 
 		buttonAdd = createAddButton(this);
 		buttonRemove = createRemoveButton(this);
+		buttonRemoveAll = createRemoveAllButton(this);
 		buttonCopy = createCopyButton(this);
 		buttonMoveUp = createMoveUpButton(this);
 		buttonMoveDown = createMoveDownButton(this);
@@ -363,6 +368,26 @@ public class ProcessMethodToolbar extends ToolBar {
 						}
 					}
 					//
+					fireUpdate();
+					select(Collections.emptyList());
+				}
+			}
+		});
+		return item;
+	}
+
+	private ToolItem createRemoveAllButton(ToolBar toolBar) {
+
+		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
+		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImage.SIZE_16x16));
+		item.setToolTipText("Remove all process method(s).");
+		item.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(MessageDialog.openQuestion(toolBar.getShell(), "Delete Process Method(s)", "Would you like to delete all processor(s)?")) {
+					processMethod.removeAllProcessEntries();
 					fireUpdate();
 					select(Collections.emptyList());
 				}
