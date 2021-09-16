@@ -32,16 +32,20 @@ public enum HeaderField {
 
 	public static String[][] getOptions() {
 
-		HeaderField[] headerFields = values();
-		String[][] elements = new String[headerFields.length][2];
+		return getOptions(values());
+	}
+
+	public static String[][] getOptions(HeaderField[] elements) {
+
+		String[][] dataArray = new String[elements.length][2];
 		//
 		int counter = 0;
-		for(HeaderField headerField : headerFields) {
-			elements[counter][0] = headerField.getLabel();
-			elements[counter][1] = headerField.name();
+		for(HeaderField element : elements) {
+			dataArray[counter][0] = element.getLabel();
+			dataArray[counter][1] = element.name();
 			counter++;
 		}
 		//
-		return elements;
+		return dataArray;
 	}
 }

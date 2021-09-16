@@ -26,7 +26,9 @@ import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.support.HeaderField;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.support.HeaderUtil;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -40,6 +42,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.ChromatogramEditorDial
 import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.DataTypeDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ChromatogramImportRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputWizardSettings;
@@ -49,6 +52,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -375,8 +379,9 @@ public class ChromatogramReferencesUI {
 						IChromatogramSelection<?, ?> masterSelection = comboChromatograms.master;
 						if(masterSelection != null) {
 							if(masterSelection.getChromatogram() != chromatogramSelection.getChromatogram()) {
-								masterSelection.getChromatogram().addReferencedChromatogram(chromatogramSelection.getChromatogram());
-								comboChromatograms.data.add(chromatogramSelection);
+								List<IChromatogramSelection<?, ?>> chromatogramSelections = new ArrayList<>();
+								chromatogramSelections.add(chromatogramSelection);
+								addReferences(masterSelection, chromatogramSelections);
 								comboChromatograms.selection = new StructuredSelection(chromatogramSelection);
 								comboChromatograms.refreshUI();
 								updateButtons();
@@ -419,10 +424,7 @@ public class ChromatogramReferencesUI {
 							ChromatogramImportRunnable runnable = new ChromatogramImportRunnable(files, dataType);
 							try {
 								progressMonitorDialog.run(false, false, runnable);
-								for(IChromatogramSelection<?, ?> chromatogramSelection : runnable.getChromatogramSelections()) {
-									masterSelection.getChromatogram().addReferencedChromatogram(chromatogramSelection.getChromatogram());
-									comboChromatograms.data.add(chromatogramSelection);
-								}
+								addReferences(masterSelection, runnable.getChromatogramSelections());
 								comboChromatograms.refreshUI();
 								updateButtons();
 							} catch(Exception e) {
@@ -435,6 +437,36 @@ public class ChromatogramReferencesUI {
 		};
 		toolBar.addAction(action);
 		return action;
+	}
+
+	private void addReferences(IChromatogramSelection<?, ?> masterSelection, List<IChromatogramSelection<?, ?>> chromatogramSelections) {
+
+		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+		HeaderField headerField = HeaderUtil.getHeaderField(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_NAME_TO_REFERENCES_HEADER_FIELD));
+		//
+		for(IChromatogramSelection<?, ?> chromatogramSelection : chromatogramSelections) {
+			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
+			String name = chromatogram.getName();
+			switch(headerField) {
+				case DATA_NAME:
+					chromatogram.setDataName(name);
+					break;
+				case SAMPLE_GROUP:
+					chromatogram.setSampleGroup(name);
+					break;
+				case SHORT_INFO:
+					chromatogram.setShortInfo(name);
+					break;
+				default:
+					/*
+					 * NAME and DEFAULT are not supported here as NAME can't be set.
+					 */
+					break;
+			}
+			//
+			masterSelection.getChromatogram().addReferencedChromatogram(chromatogram);
+			comboChromatograms.data.add(chromatogramSelection);
+		}
 	}
 
 	private Action createButtonOpenReference(EditorToolBar toolBar) {

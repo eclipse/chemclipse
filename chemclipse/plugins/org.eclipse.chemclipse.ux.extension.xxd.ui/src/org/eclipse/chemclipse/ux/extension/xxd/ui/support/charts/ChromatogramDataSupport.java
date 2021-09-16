@@ -29,6 +29,7 @@ import org.eclipse.chemclipse.model.core.support.HeaderField;
 import org.eclipse.chemclipse.model.selection.ChromatogramSelectionSupport;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.selection.MoveDirection;
+import org.eclipse.chemclipse.model.support.HeaderUtil;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
@@ -292,7 +293,7 @@ public class ChromatogramDataSupport {
 	public static String getReferenceLabel(IChromatogram<?> chromatogram, int index, boolean addTypeInfo) {
 
 		IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-		HeaderField referencesLabel = HeaderField.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_REFERENCE_LABEL));
+		HeaderField referencesLabel = HeaderUtil.getHeaderField(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_REFERENCE_LABEL));
 		return getReferenceLabel(chromatogram, referencesLabel, index, addTypeInfo);
 	}
 
@@ -301,12 +302,12 @@ public class ChromatogramDataSupport {
 	 * Use addTypeInfo to append MSD, CSD, WSD.
 	 * 
 	 * @param chromatogram
-	 * @param headerReferences
+	 * @param headerField
 	 * @param index
 	 * @param addTypeInfo
 	 * @return String
 	 */
-	public static String getReferenceLabel(IChromatogram<?> chromatogram, HeaderField headerReferences, int index, boolean addTypeInfo) {
+	public static String getReferenceLabel(IChromatogram<?> chromatogram, HeaderField headerField, int index, boolean addTypeInfo) {
 
 		/*
 		 * Get the information to display.
@@ -314,7 +315,7 @@ public class ChromatogramDataSupport {
 		String type = ChromatogramDataSupport.getChromatogramType(chromatogram);
 		String description = null;
 		//
-		switch(headerReferences) {
+		switch(headerField) {
 			case NAME:
 				String name = chromatogram.getName();
 				if(name != null && !name.isEmpty()) {
