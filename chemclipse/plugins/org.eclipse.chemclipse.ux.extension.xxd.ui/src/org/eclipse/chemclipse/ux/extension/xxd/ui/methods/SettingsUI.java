@@ -108,7 +108,8 @@ public class SettingsUI<T> extends Composite {
 			this.preferences = preferences;
 			container.setLayout(new GridLayout(2, false));
 			//
-			Map<InputValue, Object> valuesMap = preferences.getSerialization().fromString(preferences.getSupplier().getSettingsParser().getInputValues(), preferences.getUserSettingsAsString());
+			List<InputValue> inputValues = preferences.getSupplier().getSettingsParser().getInputValues();
+			Map<InputValue, Object> valuesMap = preferences.getSerialization().fromObject(inputValues, preferences.getSettings());
 			if(valuesMap != null) {
 				for(Entry<InputValue, ?> entry : valuesMap.entrySet()) {
 					widgetItems.add(new WidgetItem(entry.getKey(), entry.getValue()));

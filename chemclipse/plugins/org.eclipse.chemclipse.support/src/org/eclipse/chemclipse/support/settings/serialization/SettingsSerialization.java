@@ -36,11 +36,12 @@ public interface SettingsSerialization {
 	 * Maps input values to actual values
 	 * 
 	 * @param inputValues
-	 * @param content
+	 * @param object:
+	 *            the intermediate settings object to cast to for proper deserialization
 	 * @return
 	 * @throws IOException
 	 */
-	Map<InputValue, Object> fromString(Collection<? extends InputValue> inputValues, String content) throws IOException;
+	Map<InputValue, Object> fromObject(Collection<? extends InputValue> inputValues, Object object) throws IOException;
 
 	/**
 	 * Reads the settings from string and updates the given object with the values
