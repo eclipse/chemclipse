@@ -462,4 +462,6 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_GRID = PATH_PREFIX + "grid.png";
 	String IMAGE_FILTER = PATH_PREFIX + "filter.png";
 	String IMAGE_LOCK_UPDATE = PATH_PREFIX + "lockUpdate.gif";
+	String IMAGE_SORT_ALPHA_ASC = PATH_PREFIX + "sort_alpha_asc.png";
+	String IMAGE_SORT_ALPHA_DESC = PATH_PREFIX + "sort_alpha_desc.png";
 }
