@@ -321,7 +321,6 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 		}
 		//
 		toolbarButtons.get().updateTableButtons();
-		setDirty(true);
 	}
 
 	@Override
