@@ -32,7 +32,7 @@ import org.eclipse.swt.widgets.Shell;
 public class DataTypeDialog extends Dialog {
 
 	private static final int WIDTH = 250;
-	private static final int HEIGHT = 150;
+	private static final int HEIGHT = 200;
 	//
 	private ComboViewer comboViewer;
 	//
