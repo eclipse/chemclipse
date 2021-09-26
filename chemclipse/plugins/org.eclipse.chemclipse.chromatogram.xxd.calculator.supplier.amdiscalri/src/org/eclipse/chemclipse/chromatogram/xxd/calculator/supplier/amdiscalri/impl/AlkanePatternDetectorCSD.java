@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,7 +30,6 @@ import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.ChromatogramSelectionCSD;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -61,7 +60,7 @@ public class AlkanePatternDetectorCSD {
 				peakDetectorSettings.setThreshold(Threshold.LOW);
 				peakDetectorSettings.setIncludeBackground(false);
 				peakDetectorSettings.setMinimumSignalToNoiseRatio(50.0f);
-				peakDetectorSettings.setMovingAverageWindowSize(WindowSize.WIDTH_5);
+				peakDetectorSettings.setMovingAverageWindowSize(5);
 				peakDetectorCSD.detect(chromatogramSelectionCSD, peakDetectorSettings, monitor);
 				/*
 				 * Peak integrator

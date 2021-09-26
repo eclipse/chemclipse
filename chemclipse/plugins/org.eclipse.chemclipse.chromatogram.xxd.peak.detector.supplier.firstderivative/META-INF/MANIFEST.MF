@@ -29,7 +29,8 @@ Export-Package: org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.f
  org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings,
  org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support
 Bundle-Vendor: ChemClipse
-Import-Package: org.apache.commons.lang3;version="3.1.0",
+Import-Package: com.fasterxml.jackson.databind.annotation;version="2.9.93",
+ org.apache.commons.lang3;version="3.1.0",
  org.osgi.service.component.annotations;version="1.2.0"
 Service-Component: OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.core.FirstDerivativePeakDetector.xml,
  OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.services.FirstDerivativeMaximaService.xml

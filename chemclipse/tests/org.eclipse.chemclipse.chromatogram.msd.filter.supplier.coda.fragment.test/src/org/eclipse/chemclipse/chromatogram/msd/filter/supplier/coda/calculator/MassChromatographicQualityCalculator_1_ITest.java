@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -21,7 +21,6 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
@@ -33,7 +32,7 @@ public class MassChromatographicQualityCalculator_1_ITest extends TestCase {
 	private IChromatogramMSD chromatogram;
 	private IChromatogramSelectionMSD chromatogramSelection;
 	private float codaThreshold;
-	private WindowSize windowSize = WindowSize.WIDTH_3;
+	private int windowSize = 3;
 	private File importFile;
 
 	@Override
@@ -42,7 +41,7 @@ public class MassChromatographicQualityCalculator_1_ITest extends TestCase {
 		super.setUp();
 		importFile = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_CHROMATOGRAM_1));
 		IProcessingInfo<IChromatogramMSD> processingInfo = ChromatogramConverterMSD.getInstance().convert(importFile, new NullProgressMonitor());
-		chromatogram = processingInfo.getProcessingResult(IChromatogramMSD.class);
+		chromatogram = processingInfo.getProcessingResult();
 		codaThreshold = 0.7f;
 		chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
 	}
@@ -94,7 +93,7 @@ public class MassChromatographicQualityCalculator_1_ITest extends TestCase {
 	public void testGetMassChromatographicQualityResult_4() {
 
 		try {
-			result = MassChromatographicQualityCalculator.calculate(chromatogramSelection, codaThreshold, null);
+			result = MassChromatographicQualityCalculator.calculate(chromatogramSelection, codaThreshold, 0);
 		} catch(CodaCalculatorException e) {
 			assertTrue("CodaCalculatorException", true);
 		}

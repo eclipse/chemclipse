@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -10,6 +10,7 @@
  * Dr. Philip Wenig - initial API and implementation
  * Dr. Alexander Kerner - implementation
  * Christoph Läubrich - add option to detect on individual traces
+ * Matthias Mailänder - remove the window size enum
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings;
 
@@ -25,18 +26,21 @@ import org.apache.commons.lang3.StringUtils;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.AbstractPeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.peak.detector.core.FilterMode;
 import org.eclipse.chemclipse.chromatogram.peak.detector.model.Threshold;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons.IonMarkMode;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
-import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.chemclipse.support.settings.EnumSelectionRadioButtonsSettingProperty;
-import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
+import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
+import org.eclipse.chemclipse.support.settings.IntSettingsProperty.Validation;
+import org.eclipse.chemclipse.support.settings.serialization.WindowSizeDeserializer;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 
@@ -48,10 +52,11 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 	@JsonProperty(value = "Min S/N Ratio", defaultValue = "0")
 	@FloatSettingsProperty(minValue = 0f, maxValue = Float.MAX_VALUE)
 	private float minimumSignalToNoiseRatio;
-	@JsonProperty(value = "Window Size", defaultValue = "WIDTH_5")
+	@JsonProperty(value = "Window Size", defaultValue = "5")
 	@JsonPropertyDescription(value = "Window Size: 3, 5, 7, ..., 45")
-	@EnumSelectionSettingProperty
-	private WindowSize windowSize = WindowSize.WIDTH_5;
+	@JsonDeserialize(using = WindowSizeDeserializer.class)
+	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_WINDOW_SIZE, maxValue = PreferenceSupplier.MAX_WINDOW_SIZE, validation = Validation.ODD_NUMBER_INCLUDING_ZERO)
+	private int windowSize = 5;
 	@JsonProperty(value = "Use Noise-Segments", defaultValue = "false")
 	@JsonPropertyDescription(value = "Whether to use Nois-Segments to decide where peaks should be detected, this can improve the sensitivity of the algorithm")
 	private boolean useNoiseSegments = false;
@@ -128,12 +133,12 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 		this.minimumSignalToNoiseRatio = minimumSignalToNoiseRatio;
 	}
 
-	public WindowSize getMovingAverageWindowSize() {
+	public int getMovingAverageWindowSize() {
 
 		return windowSize;
 	}
 
-	public void setMovingAverageWindowSize(WindowSize windowSize) {
+	public void setMovingAverageWindowSize(int windowSize) {
 
 		this.windowSize = windowSize;
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,7 +18,6 @@ import java.util.List;
 import org.eclipse.chemclipse.model.exceptions.CalculationException;
 import org.eclipse.chemclipse.model.exceptions.NoTotalSignalStoredException;
 import org.eclipse.chemclipse.numeric.statistics.Calculations;
-import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 
 public class TotalScanSignalsModifier {
 
@@ -221,28 +220,28 @@ public class TotalScanSignalsModifier {
 		}
 	}
 
-	public static void calculateMovingAverage(ITotalScanSignals totalIonSignals, WindowSize windowSize) {
+	public static void calculateMovingAverage(ITotalScanSignals totalIonSignals, int windowSize) {
 
 		/*
 		 * Return if the windowSize or totalIonSignals is null.
 		 */
-		if(windowSize == null || WindowSize.NONE.equals(windowSize) || totalIonSignals == null) {
+		if(windowSize == 0 || totalIonSignals == null) {
 			return;
 		}
 		/*
 		 * Return if the available number of totalIonSignals are lower than the
 		 * window size.
 		 */
-		if(totalIonSignals.size() < windowSize.getSize()) {
+		if(totalIonSignals.size() < windowSize) {
 			return;
 		}
-		int diff = windowSize.getSize() / 2;
-		int windowStop = windowSize.getSize() - diff;
+		int diff = windowSize / 2;
+		int windowStop = windowSize - diff;
 		/*
 		 * Moving average calculation.
 		 */
 		int size = totalIonSignals.size() - diff;
-		float[] values = new float[windowSize.getSize()];
+		float[] values = new float[windowSize];
 		for(int i = diff; i < size; i++) {
 			for(int j = -diff, k = 0; j < windowStop; j++, k++) {
 				/*

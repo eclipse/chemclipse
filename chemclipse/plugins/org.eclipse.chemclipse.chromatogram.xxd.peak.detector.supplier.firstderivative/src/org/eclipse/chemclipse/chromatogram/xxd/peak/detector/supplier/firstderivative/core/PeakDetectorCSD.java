@@ -45,7 +45,6 @@ import org.eclipse.chemclipse.model.support.ScanRange;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
-import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
@@ -117,7 +116,7 @@ public class PeakDetectorCSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 	public List<IChromatogramPeakCSD> detectPeaks(IChromatogramSelectionCSD chromatogramSelection, PeakDetectorSettingsCSD peakDetectorSettings, List<NoiseSegment> noiseSegments, IProgressMonitor monitor) {
 
 		Threshold threshold = peakDetectorSettings.getThreshold();
-		WindowSize windowSize = peakDetectorSettings.getMovingAverageWindowSize();
+		int windowSize = peakDetectorSettings.getMovingAverageWindowSize();
 		List<IRawPeak> rawPeaks = new ArrayList<>();
 		//
 		if(noiseSegments != null && noiseSegments.size() > 0) {
@@ -230,7 +229,7 @@ public class PeakDetectorCSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 	 * @param window
 	 * @return {@link IFirstDerivativeDetectorSlopes}
 	 */
-	public static IFirstDerivativeDetectorSlopes getFirstDerivativeSlopes(IChromatogramSelectionCSD chromatogramSelection, WindowSize windowSize) {
+	public static IFirstDerivativeDetectorSlopes getFirstDerivativeSlopes(IChromatogramSelectionCSD chromatogramSelection, int windowSize) {
 
 		ITotalScanSignals signals = new TotalScanSignals(chromatogramSelection);
 		TotalScanSignalsModifier.normalize(signals, NORMALIZATION_BASE);
@@ -257,7 +256,7 @@ public class PeakDetectorCSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 		/*
 		 * Moving average on the slopes
 		 */
-		if(!WindowSize.NONE.equals(windowSize)) {
+		if(windowSize != 0) {
 			slopes.calculateMovingAverage(windowSize);
 		}
 		//

@@ -15,7 +15,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderi
  * THIS CLASS IS NOT SUITED FOR PRODUCTIVE USE!<br/>
  * IT IS A TESTCLASS!
  * 
- * @author eselmeister
+ * @author Philip Wenig
  */
 public class TestPathHelper extends PathResolver {
 

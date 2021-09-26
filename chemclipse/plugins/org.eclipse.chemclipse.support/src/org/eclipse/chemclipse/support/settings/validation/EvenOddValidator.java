@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Matthias Mailänder - odd number including zero (for window sizes)
  *******************************************************************************/
 package org.eclipse.chemclipse.support.settings.validation;
 
@@ -22,6 +23,7 @@ public class EvenOddValidator implements IValidator {
 	private String fieldName;
 
 	public EvenOddValidator(String fieldName, Validation validation) {
+
 		this.fieldName = fieldName;
 		this.validation = validation;
 	}
@@ -31,6 +33,14 @@ public class EvenOddValidator implements IValidator {
 
 		if(value instanceof Number) {
 			int intValue = ((Number)value).intValue();
+			if(validation == Validation.ODD_NUMBER_INCLUDING_ZERO) {
+				if(intValue == 0) {
+					return ValidationStatus.ok();
+				}
+				if(intValue % 2 == 0) {
+					return ValidationStatus.error(fieldName + " must be odd or zero");
+				}
+			}
 			if(validation == Validation.ODD_NUMBER) {
 				if(intValue % 2 == 0) {
 					return ValidationStatus.error(fieldName + " must be odd");

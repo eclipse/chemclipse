@@ -52,16 +52,16 @@ public class JSONSerialization implements SettingsSerialization {
 	};
 
 	@Override
-	public Map<InputValue, Object> fromString(Collection<? extends InputValue> inputValues, String content) throws IOException {
+	public Map<InputValue, Object> fromObject(Collection<? extends InputValue> inputValues, Object object) throws IOException {
 
 		LinkedHashMap<InputValue, Object> result = new LinkedHashMap<>();
 		for(InputValue inputValue : inputValues) {
 			result.put(inputValue, inputValue.getDefaultValue());
 		}
 		//
-		if(content != null && !content.isEmpty()) {
+		if(object != null) {
 			@SuppressWarnings("unchecked")
-			Map<String, Object> map = createMapper().readValue(content, HashMap.class);
+			Map<String, Object> map = createMapper().convertValue(object, HashMap.class);
 			for(Map.Entry<String, Object> entry : map.entrySet()) {
 				for(InputValue inputValue : inputValues) {
 					if(inputValue.getName().equals(entry.getKey())) {

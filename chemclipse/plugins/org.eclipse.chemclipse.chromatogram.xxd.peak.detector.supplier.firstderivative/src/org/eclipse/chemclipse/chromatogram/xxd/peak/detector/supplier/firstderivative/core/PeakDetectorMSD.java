@@ -53,7 +53,6 @@ import org.eclipse.chemclipse.msd.model.xic.ITotalIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.TotalIonSignalExtractor;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
-import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
@@ -134,7 +133,7 @@ public class PeakDetectorMSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 		Collection<IMarkedIons> filterIons = peakDetectorSettings.getFilterIons();
 		for(IMarkedIons ions : filterIons) {
 			Threshold threshold = peakDetectorSettings.getThreshold();
-			WindowSize windowSize = peakDetectorSettings.getMovingAverageWindowSize();
+			int windowSize = peakDetectorSettings.getMovingAverageWindowSize();
 			List<IRawPeak> rawPeaks = new ArrayList<>();
 			//
 			if(noiseSegments != null && noiseSegments.size() > 0) {
@@ -252,7 +251,7 @@ public class PeakDetectorMSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 	 * @param windowSize
 	 * @return {@link IFirstDerivativeDetectorSlopes}
 	 */
-	public static IFirstDerivativeDetectorSlopes getFirstDerivativeSlopes(IChromatogramSelectionMSD chromatogramSelection, WindowSize windowSize, IMarkedIons filterIons) {
+	public static IFirstDerivativeDetectorSlopes getFirstDerivativeSlopes(IChromatogramSelectionMSD chromatogramSelection, int windowSize, IMarkedIons filterIons) {
 
 		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogram();
 		try {
@@ -281,7 +280,7 @@ public class PeakDetectorMSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 			/*
 			 * Moving average on the slopes
 			 */
-			if(!WindowSize.NONE.equals(windowSize)) {
+			if(windowSize != 0) {
 				slopes.calculateMovingAverage(windowSize);
 			}
 			return slopes;

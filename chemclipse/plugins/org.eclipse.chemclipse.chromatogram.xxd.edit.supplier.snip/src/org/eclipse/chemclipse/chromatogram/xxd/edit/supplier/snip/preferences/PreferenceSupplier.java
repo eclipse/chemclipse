@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.BaselineDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.MassSpectrumFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.settings.PeakFilterSettings;
-import org.eclipse.chemclipse.numeric.statistics.WindowSize;
+import org.eclipse.chemclipse.support.model.WindowSize;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -31,7 +31,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final int MIN_ITERATIONS = 5;
 	public static final int MAX_ITERATIONS = 2000;
 	public static final String P_WINDOW_SIZE = "windowSize";
-	public static final String DEF_WINDOW_SIZE = WindowSize.WIDTH_7.toString();
+	public static final int DEF_WINDOW_SIZE = 7;
+	public static final int MIN_WINDOW_SIZE = 0;
+	public static final int MAX_WINDOW_SIZE = 45;
 	public static final String P_MAGNIFICATION_FACTOR = "magnificationFactor";
 	public static final double DEF_MAGNIFICATION_FACTOR = 1;
 	public static final double MIN_MAGNIFICATION_FACTOR = 0.01d;
@@ -70,7 +72,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_ITERATIONS, Integer.toString(DEF_ITERATIONS));
 		defaultValues.put(P_MAGNIFICATION_FACTOR, Double.toString(DEF_MAGNIFICATION_FACTOR));
 		defaultValues.put(P_TRANSITIONS, Integer.toString(DEF_TRANSITIONS));
-		defaultValues.put(P_WINDOW_SIZE, DEF_WINDOW_SIZE);
+		defaultValues.put(P_WINDOW_SIZE, Integer.toString(DEF_WINDOW_SIZE));
 		return defaultValues;
 	}
 
@@ -112,11 +114,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return preferences.getInt(P_ITERATIONS, DEF_ITERATIONS);
 	}
 
-	public static WindowSize getWindowSize() {
+	public static int getWindowSize() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		String size = WindowSize.getAdjustedSetting(preferences.get(P_WINDOW_SIZE, DEF_WINDOW_SIZE));
-		return WindowSize.valueOf(size);
+		return WindowSize.getAdjustedSetting(preferences.get(P_WINDOW_SIZE, Integer.toString(DEF_WINDOW_SIZE)));
 	}
 
 	public static double getMagnificationFactor() {

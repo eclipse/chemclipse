@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -30,20 +30,20 @@ import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
 import org.eclipse.chemclipse.numeric.miscellaneous.Evaluation;
-import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 
 // TODO JUnit
 public class PeakDetectorSupport {
 
 	private static float NORMALIZATION_BASE = 100000.0f;
 	private static int CONSECUTIVE_SCAN_STEPS = 3;
-	private static WindowSize MOVING_AVERAGE_WINDOW = WindowSize.WIDTH_5;
+	private static int MOVING_AVERAGE_WINDOW = 5;
 	private static double threshold = 0.005d;
 
 	/**
 	 * This class has only static methods.
 	 */
 	private PeakDetectorSupport() {
+
 	}
 
 	/**

@@ -19,10 +19,9 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.processor.SavitzkyGolayFilter;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.numeric.statistics.Calculations;
-import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 
 /**
- * @author eselmeister
+ * @author Philip Wenig
  */
 public class DetectorSlopes implements IDetectorSlopes {
 
@@ -65,28 +64,28 @@ public class DetectorSlopes implements IDetectorSlopes {
 	}
 
 	@Override
-	public void calculateMovingAverage(WindowSize windowSize) {
+	public void calculateMovingAverage(int windowSize) {
 
 		/*
-		 * Return if the windowSize is null or NONE.
+		 * Return if the windowSize is NONE.
 		 */
-		if(windowSize == null || WindowSize.NONE.equals(windowSize)) {
+		if(windowSize == 0) {
 			return;
 		}
 		/*
 		 * Return if the available number of slopes are lower than the window
 		 * size.
 		 */
-		if(slopes.size() < windowSize.getSize()) {
+		if(slopes.size() < windowSize) {
 			return;
 		}
-		int diff = windowSize.getSize() / 2;
-		int windowStop = windowSize.getSize() - diff;
+		int diff = windowSize / 2;
+		int windowStop = windowSize - diff;
 		/*
 		 * Moving average calculation.
 		 */
 		int size = slopes.size() - diff;
-		double[] values = new double[windowSize.getSize()];
+		double[] values = new double[windowSize];
 		for(int i = diff; i < size; i++) {
 			for(int j = -diff, k = 0; j < windowStop; j++, k++) {
 				values[k] = slopes.get(i + j).getSlope();
@@ -98,11 +97,11 @@ public class DetectorSlopes implements IDetectorSlopes {
 		}
 	}
 
-	public void calculateSavitzkyGolaySmooth(WindowSize windowSize) {
+	public void calculateSavitzkyGolaySmooth(int windowSize) {
 
 		int SAVITZKYGOLAY_DERIVATIVE = 0;
 		int SAVITZKYGOLAY_ORDER = 3;
-		int filterWidth = windowSize.getSize();
+		int filterWidth = windowSize;
 		double[] initialSlopes = new double[slopes.size()];
 		double[] smoothedSlopes = new double[slopes.size()];
 		for(int i = 0; i < slopes.size(); i++)

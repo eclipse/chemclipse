@@ -37,7 +37,6 @@ import org.eclipse.chemclipse.nmr.model.core.SpectrumMeasurement;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
 import org.eclipse.chemclipse.numeric.equations.Equations;
-import org.eclipse.chemclipse.numeric.statistics.WindowSize;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.detector.Detector;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
@@ -115,7 +114,7 @@ public class FirstDerivativePeakDetector implements IMeasurementPeakDetector<Fir
 		return "Implementation of a first derivative peak detector.";
 	}
 
-	private static IFirstDerivativeDetectorSlopes getSignalSlopes(List<? extends ISignal> signals, WindowSize windowSize) {
+	private static IFirstDerivativeDetectorSlopes getSignalSlopes(List<? extends ISignal> signals, int windowSize) {
 
 		IFirstDerivativeDetectorSlopes firstDerivativeSlopes = new FirstDerivativeDetectorSlopes(signals);
 		for(int i = 1; i < signals.size(); i++) {

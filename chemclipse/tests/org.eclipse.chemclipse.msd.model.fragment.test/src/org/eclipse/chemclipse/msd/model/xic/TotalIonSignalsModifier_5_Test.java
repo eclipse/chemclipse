@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,7 +16,7 @@ import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignal;
 import org.eclipse.chemclipse.model.signals.TotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalsModifier;
-import org.eclipse.chemclipse.numeric.statistics.WindowSize;
+
 import junit.framework.TestCase;
 
 public class TotalIonSignalsModifier_5_Test extends TestCase {
@@ -46,7 +46,7 @@ public class TotalIonSignalsModifier_5_Test extends TestCase {
 			signal = new TotalScanSignal(i * 100, 0.0f, abundance[i - 1]);
 			signals.add(signal);
 		}
-		TotalScanSignalsModifier.calculateMovingAverage(signals, WindowSize.WIDTH_5);
+		TotalScanSignalsModifier.calculateMovingAverage(signals, 5);
 	}
 
 	@Override

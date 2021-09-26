@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -659,14 +659,14 @@ public class Calculations {
 	 * @param values
 	 * @param windowSize
 	 */
-	public static void smooth(double[] values, WindowSize windowSize) {
+	public static void smooth(double[] values, int windowSize) {
 
 		int window = 1;
 		/*
 		 * Check the window size.
 		 */
-		if(windowSize != null && windowSize.getSize() > 0 && windowSize.getSize() <= values.length) {
-			window = windowSize.getSize();
+		if(windowSize > 0 && windowSize <= values.length) {
+			window = windowSize;
 		}
 		int lastScan = getWindowReducedLength(values, window);
 		double sumSignals;
