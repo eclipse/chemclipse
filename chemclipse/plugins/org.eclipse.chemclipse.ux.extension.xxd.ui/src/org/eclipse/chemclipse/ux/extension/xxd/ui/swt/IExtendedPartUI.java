@@ -202,7 +202,7 @@ public interface IExtendedPartUI {
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(SelectionEvent event) {
 
 				if(preferencePages.size() > 0) {
 					/*
@@ -214,27 +214,27 @@ public interface IExtendedPartUI {
 							Class<? extends IPreferencePage> page = preferencePages.get(i);
 							IPreferencePage preferencePage = page.getConstructor().newInstance();
 							preferenceManager.addToRoot(new PreferenceNode(Integer.toString(i + 1), preferencePage));
-						} catch(Exception e1) {
-							logger.warn(e1);
+						} catch(Exception exception) {
+							logger.warn(exception);
 						}
 					}
 					//
-					PreferenceDialog preferenceDialog = new PreferenceDialog(e.display.getActiveShell(), preferenceManager);
+					PreferenceDialog preferenceDialog = new PreferenceDialog(event.display.getActiveShell(), preferenceManager);
 					preferenceDialog.create();
 					preferenceDialog.setMessage(TITLE_SETTINGS);
 					//
 					if(preferenceDialog.open() == Window.OK) {
 						try {
 							if(settingsHandler != null) {
-								settingsHandler.apply(e.display);
+								settingsHandler.apply(event.display);
 							}
-						} catch(Exception e1) {
-							System.out.println(e1);
-							MessageDialog.openError(e.display.getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
+						} catch(Exception exception) {
+							System.out.println(exception);
+							MessageDialog.openError(event.display.getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
 						}
 					}
 				} else {
-					MessageDialog.openInformation(e.display.getActiveShell(), TITLE_SETTINGS, "No setting page(s) have been defined.");
+					MessageDialog.openInformation(event.display.getActiveShell(), TITLE_SETTINGS, "No setting page(s) have been defined.");
 				}
 			}
 		});
