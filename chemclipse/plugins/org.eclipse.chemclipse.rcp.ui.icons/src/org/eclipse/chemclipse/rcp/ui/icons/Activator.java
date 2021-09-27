@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2020 Lablicate GmbH.
+ * Copyright (c) 2013, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
@@ -37,6 +38,7 @@ public class Activator extends AbstractUIPlugin {
 	 * The constructor
 	 */
 	public Activator() {
+
 	}
 
 	/*
@@ -50,6 +52,7 @@ public class Activator extends AbstractUIPlugin {
 		plugin = this;
 		applicationImage = new ApplicationImage(context);
 		applicationImage.start();
+		applicationImage.getImage(IApplicationImage.IMAGE_DECORATOR_ACTIVE, IApplicationImage.SIZE_7x7); // HACK: force init
 		context.registerService(IApplicationImageProvider.class, applicationImage, null);
 	}
 
