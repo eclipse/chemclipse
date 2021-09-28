@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2020 Lablicate GmbH.
+ * Copyright (c) 2013, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,8 +20,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.osgi.framework.Bundle;
@@ -32,6 +35,7 @@ import org.osgi.util.tracker.BundleTrackerCustomizer;
 
 public class ApplicationImage implements IApplicationImage, BundleTrackerCustomizer<IconBundle> {
 
+	private static final Logger logger = Logger.getLogger(ApplicationImage.class);
 	private static final String BUNDLE_SEPARATOR = "/";
 	//
 	private final BundleTracker<IconBundle> bundleTracker;
@@ -62,12 +66,21 @@ public class ApplicationImage implements IApplicationImage, BundleTrackerCustomi
 			//
 			Image image = getProvider(parts[0]).getImage(parts[1], size, active);
 			if(active) {
-				imageDecorator.setSize(size);
-				imageDecorator.setImage(image);
-				return imageDecorator.createImage();
-			} else {
-				return image;
+				/*
+				 * Sometimes, a TimeOutException occurs.
+				 * This could happen if a decorated image is requested
+				 * but somehow the widget isn't visible.
+				 */
+				try {
+					imageDecorator.setSize(size);
+					imageDecorator.setImage(image);
+					image = CompletableFuture.supplyAsync(() -> imageDecorator.createImage()).get(20, TimeUnit.MILLISECONDS);
+				} catch(Exception e) {
+					logger.warn(e);
+				}
 			}
+			//
+			return image;
 		});
 	}
 
