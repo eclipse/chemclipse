@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.swt.ui.components;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -28,8 +30,8 @@ import org.eclipse.swt.widgets.Text;
 
 public class SearchSupportUI extends Composite {
 
-	private Text text;
-	private Button buttonCaseSensitive;
+	private AtomicReference<Text> textControl = new AtomicReference<>();
+	private AtomicReference<Button> buttonControl = new AtomicReference<>();
 	//
 	private ISearchListener searchListener;
 	private boolean caseSensitive = PreferenceSupplier.isSearchCaseSensitive();
@@ -44,7 +46,9 @@ public class SearchSupportUI extends Composite {
 	public void setVisible(boolean visible) {
 
 		super.setVisible(visible);
-		updateButtonCaseSensitive();
+		if(visible) {
+			updateButtonCaseSensitive();
+		}
 	}
 
 	public void reset() {
@@ -59,7 +63,7 @@ public class SearchSupportUI extends Composite {
 
 	public void setSearchText(String searchText) {
 
-		text.setText(searchText);
+		textControl.get().setText(searchText);
 		runSearch();
 	}
 
@@ -71,12 +75,12 @@ public class SearchSupportUI extends Composite {
 	 */
 	public Text getText() {
 
-		return text;
+		return textControl.get();
 	}
 
 	public String getSearchText() {
 
-		return text.getText().trim();
+		return textControl.get().getText().trim();
 	}
 
 	public boolean isSearchCaseSensitive() {
@@ -95,8 +99,15 @@ public class SearchSupportUI extends Composite {
 		composite.setLayout(gridLayout);
 		//
 		createButtonSearch(composite);
-		text = createTextSearch(composite);
-		buttonCaseSensitive = createButtonCaseSensitive(composite);
+		createTextSearch(composite);
+		createButtonCaseSensitive(composite);
+		//
+		initialize();
+	}
+
+	private void initialize() {
+
+		updateButtonCaseSensitive();
 	}
 
 	private Button createButtonSearch(Composite parent) {
@@ -117,7 +128,7 @@ public class SearchSupportUI extends Composite {
 		return button;
 	}
 
-	private Text createTextSearch(Composite parent) {
+	private void createTextSearch(Composite parent) {
 
 		Text text = new Text(parent, SWT.BORDER | SWT.SEARCH | SWT.ICON_CANCEL | SWT.ICON_SEARCH);
 		text.setText("");
@@ -158,10 +169,10 @@ public class SearchSupportUI extends Composite {
 			}
 		});
 		//
-		return text;
+		textControl.set(text);
 	}
 
-	private Button createButtonCaseSensitive(Composite parent) {
+	private void createButtonCaseSensitive(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
@@ -179,19 +190,22 @@ public class SearchSupportUI extends Composite {
 			}
 		});
 		//
-		return button;
+		buttonControl.set(button);
 	}
 
 	private void updateButtonCaseSensitive() {
 
-		buttonCaseSensitive.setToolTipText(caseSensitive ? "Search Case Sensitive" : "Search Case Insensitive");
-		buttonCaseSensitive.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CASE_SENSITIVE, IApplicationImage.SIZE_16x16, caseSensitive));
+		Button button = buttonControl.get();
+		if(button != null) {
+			button.setToolTipText(caseSensitive ? "Search: Case Sensitive" : "Search: Case Insensitive");
+			button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CASE_SENSITIVE, IApplicationImage.SIZE_16x16, caseSensitive));
+		}
 	}
 
 	private void runSearch() {
 
 		if(searchListener != null) {
-			String searchText = text.getText().trim();
+			String searchText = textControl.get().getText().trim();
 			searchListener.performSearch(searchText, caseSensitive);
 		}
 	}

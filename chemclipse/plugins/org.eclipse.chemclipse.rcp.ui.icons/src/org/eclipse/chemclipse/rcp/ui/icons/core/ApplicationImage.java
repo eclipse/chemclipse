@@ -66,17 +66,18 @@ public class ApplicationImage implements IApplicationImage, BundleTrackerCustomi
 			//
 			Image image = getProvider(parts[0]).getImage(parts[1], size, active);
 			if(active) {
-				/*
-				 * Sometimes, a TimeOutException occurs.
-				 * This could happen if a decorated image is requested
-				 * but somehow the widget isn't visible.
-				 */
 				try {
 					imageDecorator.setSize(size);
 					imageDecorator.setImage(image);
-					image = CompletableFuture.supplyAsync(() -> imageDecorator.createImage()).get(20, TimeUnit.MILLISECONDS);
+					image = CompletableFuture.supplyAsync(() -> imageDecorator.createImage()).get(50, TimeUnit.MILLISECONDS);
 				} catch(Exception e) {
+					/*
+					 * TimeOutException
+					 */
 					logger.warn(e);
+					logger.warn("The decoration for the following icon fails: " + fileName);
+					logger.warn("Please check the icon. Is it a png? Does it contain an embedded RGB profile?");
+					logger.warn("Solution: Probably try to convert the icon to *.gif format.");
 				}
 			}
 			//
