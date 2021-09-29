@@ -146,7 +146,7 @@ public abstract class AbstractChromatogramWSD extends AbstractChromatogram<IChro
 
 		ResultType result = super.getMeasurementResult(type);
 		if(result == null && type == ChromatogramSegmentation.class) {
-			return type.cast(new ChromatogramSegmentation(this, PreferenceSupplier.getDefaultSegmentWidth()));
+			return type.cast(new ChromatogramSegmentation(this, PreferenceSupplier.getSelectedSegmentWidth()));
 		}
 		return result;
 	}

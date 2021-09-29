@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -43,6 +43,7 @@ public class AnalysisSupport implements IAnalysisSupport {
 	 * @throws AnalysisSupportException
 	 */
 	public AnalysisSupport(int numberOfScans, int segmentWidth) throws AnalysisSupportException {
+
 		/*
 		 * Starts at scan position 1.
 		 */
@@ -67,6 +68,7 @@ public class AnalysisSupport implements IAnalysisSupport {
 	 * @throws AnalysisSupportException
 	 */
 	public AnalysisSupport(IScanRange scanRange, int segmentWidth) throws AnalysisSupportException {
+
 		if(scanRange == null) {
 			throw new AnalysisSupportException("The scan range must not be null.");
 		}
@@ -129,9 +131,9 @@ public class AnalysisSupport implements IAnalysisSupport {
 	}
 
 	// ----------------------------------------private methods
-	public static List<ChromatogramSegment> getChromatogramSegments(IChromatogram<?> chromatogram, SegmentWidth segmentWidth) {
+	public static List<ChromatogramSegment> getChromatogramSegments(IChromatogram<?> chromatogram, int segmentWidth) {
 
-		return initializeAnalysisSegments(chromatogram.getNumberOfScans(), 1, segmentWidth.getWidth(), (startScan, segmentWidth1) -> new ChromatogramAnalysisSegment(chromatogram, startScan, segmentWidth1));
+		return initializeAnalysisSegments(chromatogram.getNumberOfScans(), 1, segmentWidth, (startScan, segmentWidth1) -> new ChromatogramAnalysisSegment(chromatogram, startScan, segmentWidth1));
 	}
 
 	private static final class ChromatogramAnalysisSegment extends AnalysisSegment implements ChromatogramSegment {
@@ -139,6 +141,7 @@ public class AnalysisSupport implements IAnalysisSupport {
 		private final IChromatogram<?> chromatogram;
 
 		public ChromatogramAnalysisSegment(IChromatogram<?> chromatogram, int startScan, int segmentWidth) {
+
 			super(startScan, segmentWidth);
 			this.chromatogram = chromatogram;
 		}
@@ -173,6 +176,7 @@ public class AnalysisSupport implements IAnalysisSupport {
 	private static final class SimpleSegment extends AnalysisSegment {
 
 		public SimpleSegment(int startScan, int segmentWidth) {
+
 			super(startScan, segmentWidth);
 		}
 

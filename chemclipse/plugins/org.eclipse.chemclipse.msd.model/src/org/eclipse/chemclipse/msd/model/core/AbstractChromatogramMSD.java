@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -71,6 +71,7 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 	private ImmutableZeroIon immutableZeroIon;
 
 	public AbstractChromatogramMSD() {
+
 		ionTransitionSettings = new IonTransitionSettings();
 		try {
 			immutableZeroIon = new ImmutableZeroIon();
@@ -300,7 +301,7 @@ public abstract class AbstractChromatogramMSD extends AbstractChromatogram<IChro
 
 		ResultType result = super.getMeasurementResult(type);
 		if(result == null && type == ChromatogramSegmentation.class) {
-			return type.cast(new ChromatogramSegmentation(this, PreferenceSupplier.getDefaultSegmentWidth()));
+			return type.cast(new ChromatogramSegmentation(this, PreferenceSupplier.getSelectedSegmentWidth()));
 		}
 		return result;
 	}

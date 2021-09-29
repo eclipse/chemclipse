@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,7 +16,7 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.Activator;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.settings.FilterSettings;
-import org.eclipse.chemclipse.model.support.SegmentWidth;
+import org.eclipse.chemclipse.support.model.SegmentWidth;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
