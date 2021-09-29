@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings;
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.AbstractPeakDetectorSettingsMSD;
-import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -29,7 +28,6 @@ public class AbstractProcessSettings extends AbstractPeakDetectorSettingsMSD imp
 	@JsonProperty(value = "Max Tailing", defaultValue = "2.0")
 	private float maxTailing = 2.0f;
 	@JsonProperty(value = "Filter Model Peaks", defaultValue = "MP1")
-	@EnumSelectionSettingProperty
 	private ModelPeakOption modelPeakOption = ModelPeakOption.MP1;
 
 	@Override

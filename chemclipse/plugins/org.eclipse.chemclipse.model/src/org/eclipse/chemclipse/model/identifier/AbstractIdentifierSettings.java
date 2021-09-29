@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.model.identifier;
 
 import org.eclipse.chemclipse.model.settings.AbstractProcessSettings;
-import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 
@@ -24,7 +23,6 @@ public class AbstractIdentifierSettings extends AbstractProcessSettings implemen
 
 	@JsonProperty(value = "Penalty Calculation", defaultValue = "NONE")
 	@JsonPropertyDescription(value = "Select the strategy, how penalties are calculated.")
-	@EnumSelectionSettingProperty
 	private PenaltyCalculation penaltyCalculation = PenaltyCalculation.NONE;
 	@JsonProperty(value = "Retention Time Window [ms]", defaultValue = "2000")
 	@JsonPropertyDescription(value = "The retention time window, given in milliseconds.")

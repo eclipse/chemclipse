@@ -23,7 +23,6 @@ import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.mode
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.model.ShapeRequirements;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.model.Threshold;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.support.settings.EnumSelectionRadioButtonsSettingProperty;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty.DialogType;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
@@ -55,7 +54,6 @@ public class SettingsAMDIS extends AbstractProcessSettings {
 	private int stopMZ = 600;
 	//
 	@JsonProperty(value = "Omit m/z", defaultValue = "false")
-	@EnumSelectionRadioButtonsSettingProperty
 	private boolean omitMz = false;
 	@JsonProperty(value = "Up to 8 m/z values separated by a space, 0 to omit TIC.", defaultValue = "0 18 28")
 	private String omitedMZ = "0 18 28";
@@ -65,28 +63,22 @@ public class SettingsAMDIS extends AbstractProcessSettings {
 	@JsonProperty(value = "Solvent tailing m/z.", defaultValue = "84")
 	private String solventTailingMZ = "84";
 	@JsonProperty(value = "Use column bleed", defaultValue = "true")
-	@EnumSelectionRadioButtonsSettingProperty
 	private boolean useColumnBleed = true;
 	@JsonProperty(value = "Column Bleed m/z.", defaultValue = "207")
 	private String columnBleedMZ = "207";
 	//
 	@JsonProperty(value = "Threshold", defaultValue = "MEDIUM")
-	@EnumSelectionRadioButtonsSettingProperty
 	private Threshold threshold = Threshold.MEDIUM;
 	@JsonProperty(value = "Component Width", defaultValue = "12")
 	@IntSettingsProperty(minValue = IOnsiteSettings.MIN_PEAK_WIDTH, maxValue = IOnsiteSettings.MAX_PEAK_WIDTH)
 	private int componentWidth = 12;
 	@JsonProperty(value = "Adjacent Peak Subtract", defaultValue = "NONE")
-	@EnumSelectionRadioButtonsSettingProperty
 	private AdjacentPeakSubtraction adjactentPeakSubtraction = AdjacentPeakSubtraction.NONE;
 	@JsonProperty(value = "Resolution", defaultValue = "MEDIUM")
-	@EnumSelectionRadioButtonsSettingProperty
 	private Resolution resolution = Resolution.MEDIUM;
 	@JsonProperty(value = "Sensitivity", defaultValue = "MEDIUM")
-	@EnumSelectionRadioButtonsSettingProperty
 	private Sensitivity sensitivity = Sensitivity.MEDIUM;
 	@JsonProperty(value = "Shape Requirements", defaultValue = "HIGH")
-	@EnumSelectionRadioButtonsSettingProperty
 	private ShapeRequirements shapeRequirements = ShapeRequirements.HIGH;
 	//
 	@JsonIgnore

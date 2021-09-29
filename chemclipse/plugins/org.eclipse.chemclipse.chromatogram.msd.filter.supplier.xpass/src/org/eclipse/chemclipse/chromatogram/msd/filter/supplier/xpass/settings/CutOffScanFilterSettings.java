@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.settings;
 
-import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -29,7 +28,6 @@ public class CutOffScanFilterSettings {
 	private int cutNumber = 5;
 	@JsonProperty(value = "Cut direction", defaultValue = "LOW")
 	@JsonPropertyDescription(value = "The direction to cut off")
-	@EnumSelectionSettingProperty
 	private CutDirection cutDirection = CutDirection.LOW;
 
 	public int getCutNumber() {

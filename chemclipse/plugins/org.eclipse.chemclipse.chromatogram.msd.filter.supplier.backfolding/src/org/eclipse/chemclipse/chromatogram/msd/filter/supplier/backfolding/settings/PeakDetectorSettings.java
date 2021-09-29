@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding.sett
 
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.AbstractPeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.peak.detector.model.Threshold;
-import org.eclipse.chemclipse.support.settings.EnumSelectionRadioButtonsSettingProperty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -22,7 +21,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class PeakDetectorSettings extends AbstractPeakDetectorSettingsMSD {
 
 	@JsonProperty(value = "Threshold", defaultValue = "MEDIUM")
-	@EnumSelectionRadioButtonsSettingProperty
 	private Threshold threshold = Threshold.MEDIUM;
 	@JsonIgnore
 	private IBackfoldingSettings backfoldingSettings;

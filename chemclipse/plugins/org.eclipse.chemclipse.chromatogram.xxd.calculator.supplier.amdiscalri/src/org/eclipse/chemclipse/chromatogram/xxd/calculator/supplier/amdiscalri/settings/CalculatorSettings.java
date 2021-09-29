@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2020 Lablicate GmbH.
+ * Copyright (c) 2014, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,7 +17,6 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.settings.AbstractChromatogramCalculatorSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.CalculatorStrategy;
-import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty.DialogType;
 
@@ -33,7 +32,6 @@ public class CalculatorSettings extends AbstractChromatogramCalculatorSettings i
 	private File calibrationFile;
 	@JsonProperty(value = "Calculator Strategy", defaultValue = "FILES")
 	@JsonPropertyDescription(value = "The strategy defines the data source, that shall be used for RI calculation.")
-	@EnumSelectionSettingProperty
 	private CalculatorStrategy calculatorStrategy = CalculatorStrategy.FILES;
 	@JsonProperty(value = "Use Default Column", defaultValue = "true")
 	@JsonPropertyDescription("In case of no match, the default column is used.")

@@ -31,7 +31,6 @@ import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons.IonMarkMode;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
-import org.eclipse.chemclipse.support.settings.EnumSelectionRadioButtonsSettingProperty;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty.Validation;
@@ -45,7 +44,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 
 	@JsonProperty(value = "Threshold", defaultValue = "MEDIUM")
-	@EnumSelectionRadioButtonsSettingProperty
 	private Threshold threshold = Threshold.MEDIUM;
 	@JsonProperty(value = "Include Background (VV: true, BV|VB: false)", defaultValue = "false")
 	private boolean includeBackground = false;

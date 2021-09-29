@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.model.settings;
 
-import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
 import org.eclipse.chemclipse.xxd.model.support.TargetsDeleteOption;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -19,7 +18,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class DeleteTargetsFilterSettings {
 
 	@JsonProperty(value = "Target Delete Option:")
-	@EnumSelectionSettingProperty
 	private TargetsDeleteOption targetDeleteOption = TargetsDeleteOption.ALL_TARGETS;
 
 	public TargetsDeleteOption getTargetDeleteOption() {
