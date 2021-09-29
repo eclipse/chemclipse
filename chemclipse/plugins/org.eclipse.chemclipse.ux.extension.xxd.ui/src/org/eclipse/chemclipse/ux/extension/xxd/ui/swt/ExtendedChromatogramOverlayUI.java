@@ -936,14 +936,14 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 					String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j++;
 					String referenceSeriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.OVERLAY_STOP_MARKER;
 					availableSeriesIds.add(referenceSeriesId);
-					selectionSeries.add(seriesId);
+					selectionSeries.add(referenceSeriesId);
 					if(!baseChart.isSeriesContained(referenceSeriesId)) {
 						color = chromatogramChartSupport.getSeriesColor(referenceChromatogramName, displayType);
 						ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(referencedChromatogram, referenceSeriesId, displayType, derivative, color, markedIons, false);
 						ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 						lineSeriesSettings.setDescription(description);
-						ISeriesSettings seriesSettingsDefault = SeriesMapper.getSeriesSettingsDefault(seriesId, chartControl.get());
-						SeriesMapper.mapSetting(seriesId, lineSeriesSettings, seriesSettingsDefault);
+						ISeriesSettings seriesSettingsDefault = SeriesMapper.getSeriesSettingsDefault(referenceSeriesId, chartControl.get());
+						SeriesMapper.mapSetting(referenceSeriesId, lineSeriesSettings, seriesSettingsDefault);
 						lineSeriesDataList.add(lineSeriesData);
 					}
 				}
@@ -1047,8 +1047,8 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 						ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(referencedChromatogram, referenceSeriesId, displayType, derivative, color, null, false);
 						ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 						lineSeriesSettings.setDescription(description);
-						ISeriesSettings seriesSettingsDefault = SeriesMapper.getSeriesSettingsDefault(seriesId, chartControl.get());
-						SeriesMapper.mapSetting(seriesId, lineSeriesSettings, seriesSettingsDefault);
+						ISeriesSettings seriesSettingsDefault = SeriesMapper.getSeriesSettingsDefault(referenceSeriesId, chartControl.get());
+						SeriesMapper.mapSetting(referenceSeriesId, lineSeriesSettings, seriesSettingsDefault);
 						lineSeriesDataList.add(lineSeriesData);
 					}
 				}
