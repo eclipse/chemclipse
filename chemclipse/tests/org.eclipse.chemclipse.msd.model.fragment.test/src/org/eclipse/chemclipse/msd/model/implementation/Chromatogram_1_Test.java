@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,12 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
+import static org.junit.Assert.assertNotEquals;
+
 import junit.framework.TestCase;
 
 /**
  * Tests the methods equals and hashCode.
  * 
- * @author eselmeister
+ * @author Philip Wenig
  */
 public class Chromatogram_1_Test extends TestCase {
 
@@ -41,32 +43,32 @@ public class Chromatogram_1_Test extends TestCase {
 
 	public void testEquals_1() {
 
-		assertTrue(chromatogram1.equals(chromatogram2));
+		assertEquals(chromatogram1, chromatogram2);
 	}
 
 	public void testEquals_2() {
 
-		assertTrue(chromatogram2.equals(chromatogram1));
+		assertEquals(chromatogram2, chromatogram1);
 	}
 
 	public void testEquals_3() {
 
-		assertFalse(chromatogram1.equals(null));
+		assertNotNull(chromatogram1);
 	}
 
 	public void testEquals_4() {
 
-		assertFalse(chromatogram2.equals(null));
+		assertNotNull(chromatogram2);
 	}
 
 	public void testEquals_5() {
 
-		assertFalse(chromatogram1.equals(new String("")));
+		assertNotEquals(chromatogram1, new Object());
 	}
 
 	public void testEquals_6() {
 
-		assertFalse(chromatogram2.equals(new String("")));
+		assertNotEquals(chromatogram2, new Object());
 	}
 
 	public void testHashCode_1() {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,12 +11,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
+import static org.junit.Assert.assertNotEquals;
+
 import junit.framework.TestCase;
 
 /**
  * Equals and hashCode test.
  * 
- * @author eselmeister
+ * @author Philip Wenig
  */
 public class SupplierIon_4_Test extends TestCase {
 
@@ -43,41 +45,41 @@ public class SupplierIon_4_Test extends TestCase {
 
 	public void testEquals_1() {
 
-		assertEquals("equals", false, ion1.equals(ion2));
+		assertNotEquals("equals", ion1, ion2);
 	}
 
 	public void testEquals_2() {
 
-		assertEquals("equals", false, ion2.equals(ion1));
+		assertNotEquals("equals", ion2, ion1);
 	}
 
 	public void testEquals_3() {
 
-		assertEquals("equals", false, ion1.equals(ionX));
+		assertNotEquals("equals", ion1, ionX);
 	}
 
 	public void testEquals_4() {
 
-		assertEquals("equals", false, ion2.equals(ionX));
+		assertNotEquals("equals", ion2, ionX);
 	}
 
 	public void testHashCode_1() {
 
-		assertTrue("hashCode", ion1.hashCode() != ion2.hashCode());
+		assertNotEquals("hashCode", ion1.hashCode(), ion2.hashCode());
 	}
 
 	public void testHashCode_2() {
 
-		assertTrue("hashCode", ion2.hashCode() != ion1.hashCode());
+		assertNotEquals("hashCode", ion2.hashCode(), ion1.hashCode());
 	}
 
 	public void testHashCode_3() {
 
-		assertTrue("hashCode", ion1.hashCode() != ionX.hashCode());
+		assertNotEquals("hashCode", ion1.hashCode(), ionX.hashCode());
 	}
 
 	public void testHashCode_4() {
 
-		assertTrue("hashCode", ion2.hashCode() != ionX.hashCode());
+		assertNotEquals("hashCode", ion2.hashCode(), ionX.hashCode());
 	}
 }

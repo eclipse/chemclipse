@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.xic;
 
+import static org.junit.Assert.assertNotEquals;
+
 import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.TotalScanSignal;
 
@@ -21,7 +23,7 @@ import junit.framework.TestCase;
  * TotalIonSignal(5720,1245.5f,25476.45f); totalIonSignal2 = new
  * TotalIonSignal(5725,1245.5f,25476.45f);
  * 
- * @author eselmeister
+ * @author Philip Wenig
  */
 public class TotalIonSignal_5_Test extends TestCase {
 
@@ -46,51 +48,51 @@ public class TotalIonSignal_5_Test extends TestCase {
 
 	public void testHashCode_1() {
 
-		assertTrue("hashCode", totalIonSignal1.hashCode() != totalIonSignal2.hashCode());
+		assertNotEquals("hashCode", totalIonSignal1.hashCode(), totalIonSignal2.hashCode());
 	}
 
 	public void testHashCode_2() {
 
-		assertTrue("hashCode", totalIonSignal2.hashCode() != totalIonSignal1.hashCode());
+		assertNotEquals("hashCode", totalIonSignal2.hashCode(), totalIonSignal1.hashCode());
 	}
 
 	public void testEquals_1() {
 
-		assertFalse("equals", totalIonSignal1.equals(totalIonSignal2));
+		assertNotEquals("equals", totalIonSignal1, totalIonSignal2);
 	}
 
 	public void testEquals_2() {
 
-		assertFalse("equals", totalIonSignal2.equals(totalIonSignal1));
+		assertNotEquals("equals", totalIonSignal2, totalIonSignal1);
 	}
 
 	public void testEquals_3() {
 
-		assertFalse("equals", totalIonSignal1.equals(null));
+		assertNotNull("equals", totalIonSignal1);
 	}
 
 	public void testEquals_4() {
 
-		assertFalse("equals", totalIonSignal2.equals(null));
+		assertNotNull("equals", totalIonSignal2);
 	}
 
 	public void testEquals_5() {
 
-		assertTrue("equals", totalIonSignal1.equals(totalIonSignal1));
+		assertEquals("equals", totalIonSignal1, totalIonSignal1);
 	}
 
 	public void testEquals_6() {
 
-		assertTrue("equals", totalIonSignal2.equals(totalIonSignal2));
+		assertEquals("equals", totalIonSignal2, totalIonSignal2);
 	}
 
 	public void testEquals_7() {
 
-		assertFalse("equals", totalIonSignal1.equals(new String("Test")));
+		assertNotEquals("equals", totalIonSignal1, new Object());
 	}
 
 	public void testEquals_8() {
 
-		assertFalse("equals", totalIonSignal2.equals(new String("Test")));
+		assertNotEquals("equals", totalIonSignal2, new Object());
 	}
 }

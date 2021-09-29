@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -10,6 +10,8 @@
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.quantitation.core;
+
+import static org.junit.Assert.assertNotEquals;
 
 import junit.framework.TestCase;
 
@@ -42,26 +44,26 @@ public class PeakQuantifierSupplier_4_Test extends TestCase {
 
 	public void testEquals_1() {
 
-		assertFalse("equals", supplier1.equals(supplier2));
+		assertNotEquals("equals", supplier1, supplier2);
 	}
 
 	public void testEquals_2() {
 
-		assertFalse("equals", supplier2.equals(supplier1));
+		assertNotEquals("equals", supplier2, supplier1);
 	}
 
 	public void testEquals_3() {
 
-		assertFalse("equals", supplier1.equals(null));
+		assertNotNull("equals", supplier1);
 	}
 
 	public void testEquals_4() {
 
-		assertFalse("equals", supplier1.equals("Test"));
+		assertNotEquals("equals", supplier1, new Object());
 	}
 
 	public void testHashCode_1() {
 
-		assertFalse("hashCode", supplier1.hashCode() == supplier2.hashCode());
+		assertNotEquals("hashCode", supplier1.hashCode(), supplier2.hashCode());
 	}
 }
