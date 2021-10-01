@@ -97,12 +97,15 @@ public class JSONSerialization implements SettingsSerialization {
 		/*
 		 * Add additional mapper dynamically.
 		 */
-		for(Object object : Activator.getDefault().getSerializationServices()) {
-			if(object instanceof ISerializationService) {
-				ISerializationService serializationService = (ISerializationService)object;
-				Class clazz = serializationService.getSupportedClass();
-				simpleModule.addSerializer(clazz, serializationService.getSerializer());
-				simpleModule.addDeserializer(clazz, serializationService.getDeserializer());
+		Object[] serializationServices = Activator.getDefault().getSerializationServices();
+		if(serializationServices != null) {
+			for(Object object : serializationServices) {
+				if(object instanceof ISerializationService) {
+					ISerializationService serializationService = (ISerializationService)object;
+					Class clazz = serializationService.getSupportedClass();
+					simpleModule.addSerializer(clazz, serializationService.getSerializer());
+					simpleModule.addDeserializer(clazz, serializationService.getDeserializer());
+				}
 			}
 		}
 		//
