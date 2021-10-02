@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -77,12 +77,13 @@ public class PcaExtractionPeaks implements IExtractionData {
 		IPeaks<?> peaks = new Peaks();
 		File file = new File(peakFile.getInputFile());
 		//
-		IProcessingInfo<IPeaks<?>> processingInfo = PeakConverterMSD.convert(file, monitor);
+		IProcessingInfo<?> processingInfo = PeakConverterMSD.convert(file, monitor);
 		if(processingInfo.getProcessingResult() != null) {
 			/*
 			 * MSD
 			 */
-			for(IPeak peak : processingInfo.getProcessingResult().getPeaks()) {
+			IPeaks<?> result = (IPeaks<?>)processingInfo.getProcessingResult();
+			for(IPeak peak : result.getPeaks()) {
 				peaks.addPeak(peak);
 			}
 		} else {

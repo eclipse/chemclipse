@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -109,34 +109,34 @@ public class PeakIdentificationBatchProcess implements IPeakIdentificationBatchP
 		return PeakConverterMSD.convert(peakInputFile, monitor);
 	}
 
-	private IProcessingInfo processPeaks(List<IPeakMSD> peaks, IPeakIdentificationBatchJob peakIdentificationBatchJob, IPeakIdentificationBatchProcessReport batchProcessReport, IProgressMonitor monitor) {
+	private IProcessingInfo<?> processPeaks(List<IPeakMSD> peaks, IPeakIdentificationBatchJob peakIdentificationBatchJob, IPeakIdentificationBatchProcessReport batchProcessReport, IProgressMonitor monitor) {
 
-		IProcessingInfo peakIdentificationProcessingInfo = new ProcessingInfo();
+		IProcessingInfo<?> peakIdentificationProcessingInfo = new ProcessingInfo<>();
 		/*
 		 * Integrator
 		 */
 		String integratorId = peakIdentificationBatchJob.getPeakIntegrationEntry().getProcessorId();
-		IProcessingInfo processingInfoIntegrator = PeakIntegrator.integrate(peaks, integratorId, monitor);
+		IProcessingInfo<?> processingInfoIntegrator = PeakIntegrator.integrate(peaks, integratorId, monitor);
 		peakIdentificationProcessingInfo.addMessages(processingInfoIntegrator);
 		/*
 		 * Identifier
 		 */
 		String identifierId = peakIdentificationBatchJob.getPeakIdentificationEntry().getProcessorId();
-		IProcessingInfo processingInfoIdentifier = PeakIdentifierMSD.identify(peaks, identifierId, monitor);
+		IProcessingInfo<?> processingInfoIdentifier = PeakIdentifierMSD.identify(peaks, identifierId, monitor);
 		peakIdentificationProcessingInfo.addMessages(processingInfoIdentifier);
 		/*
 		 * Add the peaks to the report.
 		 */
-		IPeaks reportPeaks = batchProcessReport.getPeaks();
+		IPeaks<?> reportPeaks = batchProcessReport.getPeaks();
 		for(IPeakMSD peak : peaks) {
 			reportPeaks.addPeak(peak);
 		}
 		return peakIdentificationProcessingInfo;
 	}
 
-	private IProcessingInfo exportPeaks(List<IPeakMSD> peakList, IPeakIdentificationBatchJob peakIdentificationBatchJob, IProgressMonitor monitor) {
+	private IProcessingInfo<?> exportPeaks(List<IPeakMSD> peakList, IPeakIdentificationBatchJob peakIdentificationBatchJob, IProgressMonitor monitor) {
 
-		IProcessingInfo peakIdentificationProcessingInfo = new ProcessingInfo();
+		IProcessingInfo<?> peakIdentificationProcessingInfo = new ProcessingInfo<>();
 		List<IPeakOutputEntry> outputEntries = peakIdentificationBatchJob.getPeakOutputEntries();
 		for(IPeakOutputEntry outputEntry : outputEntries) {
 			String converterId = outputEntry.getConverterId();
@@ -151,16 +151,16 @@ public class PeakIdentificationBatchProcess implements IPeakIdentificationBatchP
 			 * Write the mass spectra.
 			 */
 			File peakOutputFile = new File(outputFolder + peakIdentificationBatchJob.getName());
-			IPeaks peaks = getPeaksInstance(peakList);
-			IProcessingInfo processingInfo = PeakConverterMSD.convert(peakOutputFile, peaks, false, converterId, monitor);
+			IPeaks<?> peaks = getPeaksInstance(peakList);
+			IProcessingInfo<?> processingInfo = PeakConverterMSD.convert(peakOutputFile, peaks, false, converterId, monitor);
 			peakIdentificationProcessingInfo.addMessages(processingInfo);
 		}
 		return peakIdentificationProcessingInfo;
 	}
 
-	private IPeaks getPeaksInstance(List<IPeakMSD> peakList) {
+	private IPeaks<?> getPeaksInstance(List<IPeakMSD> peakList) {
 
-		IPeaks peaks = new Peaks();
+		IPeaks<?> peaks = new Peaks();
 		for(IPeakMSD peak : peakList) {
 			peaks.addPeak(peak);
 		}
@@ -200,7 +200,7 @@ public class PeakIdentificationBatchProcess implements IPeakIdentificationBatchP
 			/*
 			 * Integrator Report
 			 */
-			IPeaks peaks = batchProcessReport.getPeaks();
+			IPeaks<?> peaks = batchProcessReport.getPeaks();
 			String integrator = peakIdentificationBatchJob.getPeakIntegrationEntry().getProcessorId();
 			String identifier = peakIdentificationBatchJob.getPeakIdentificationEntry().getProcessorId();
 			PeakReport.writeResults(peaks, printWriter, integrator, identifier);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,27 +24,27 @@ public abstract class AbstractPeakFilter implements IPeakFilter {
 	private static final String DESCRIPTION = "Peak Filter";
 
 	@Override
-	public IProcessingInfo validate(IPeakCSD peak, IPeakFilterSettings peakFilterSettings) {
+	public IProcessingInfo<?> validate(IPeakCSD peak, IPeakFilterSettings peakFilterSettings) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		processingInfo.addMessages(validatePeak(peak));
 		processingInfo.addMessages(validateFilterSettings(peakFilterSettings));
 		return processingInfo;
 	}
 
 	@Override
-	public IProcessingInfo validate(List<IPeakCSD> peaks, IPeakFilterSettings peakFilterSettings) {
+	public IProcessingInfo<?> validate(List<IPeakCSD> peaks, IPeakFilterSettings peakFilterSettings) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		processingInfo.addMessages(validatePeaks(peaks));
 		processingInfo.addMessages(validateFilterSettings(peakFilterSettings));
 		return processingInfo;
 	}
 
 	@Override
-	public IProcessingInfo validate(IChromatogramSelectionCSD chromatogramSelection, IPeakFilterSettings peakFilterSettings) {
+	public IProcessingInfo<?> validate(IChromatogramSelectionCSD chromatogramSelection, IPeakFilterSettings peakFilterSettings) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		processingInfo.addMessages(validateChromatogramSelection(chromatogramSelection));
 		processingInfo.addMessages(validateFilterSettings(peakFilterSettings));
 		return processingInfo;
@@ -56,9 +56,9 @@ public abstract class AbstractPeakFilter implements IPeakFilter {
 	 * @param peak
 	 * @return {@link IProcessingInfo}
 	 */
-	private IProcessingInfo validatePeak(IPeakCSD peak) {
+	private IProcessingInfo<?> validatePeak(IPeakCSD peak) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		if(peak == null) {
 			processingInfo.addErrorMessage(DESCRIPTION, "The peak is not valid.");
 		}
@@ -71,9 +71,9 @@ public abstract class AbstractPeakFilter implements IPeakFilter {
 	 * @param peak
 	 * @return {@link IProcessingInfo}
 	 */
-	private IProcessingInfo validatePeaks(List<IPeakCSD> peaks) {
+	private IProcessingInfo<?> validatePeaks(List<IPeakCSD> peaks) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		if(peaks == null) {
 			processingInfo.addErrorMessage(DESCRIPTION, "The peak list is not valid.");
 		}
@@ -86,9 +86,9 @@ public abstract class AbstractPeakFilter implements IPeakFilter {
 	 * @param peakFilterSettings
 	 * @return {@link IProcessingInfo}
 	 */
-	private IProcessingInfo validateFilterSettings(IPeakFilterSettings peakFilterSettings) {
+	private IProcessingInfo<?> validateFilterSettings(IPeakFilterSettings peakFilterSettings) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		if(peakFilterSettings == null) {
 			processingInfo.addErrorMessage(DESCRIPTION, "The filter settings are not valid.");
 		}
@@ -101,9 +101,9 @@ public abstract class AbstractPeakFilter implements IPeakFilter {
 	 * @param chromatogramSelection
 	 * @return {@link IProcessingInfo}
 	 */
-	private IProcessingInfo validateChromatogramSelection(IChromatogramSelectionCSD chromatogramSelection) {
+	private IProcessingInfo<?> validateChromatogramSelection(IChromatogramSelectionCSD chromatogramSelection) {
 
-		IProcessingInfo processingInfo = new ProcessingInfo();
+		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 		if(chromatogramSelection == null) {
 			processingInfo.addErrorMessage(DESCRIPTION, "The chromatogram selection is not valid.");
 		} else {

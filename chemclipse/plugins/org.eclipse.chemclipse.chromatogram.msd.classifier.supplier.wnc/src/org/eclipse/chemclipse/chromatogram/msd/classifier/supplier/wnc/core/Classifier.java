@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -40,6 +40,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class Classifier extends AbstractChromatogramClassifier {
 
 	public Classifier() {
+
 		super(DataType.MSD);
 	}
 
@@ -60,7 +61,7 @@ public class Classifier extends AbstractChromatogramClassifier {
 					IWncIons resultWncIons = Calculator.calculateIonPercentages((IChromatogramMSD)chromatogram, chromatogramSelection, classifierSettings);
 					IWncClassifierResult chromatogramClassifierResult = new WncClassifierResult(ResultStatus.OK, "The chromatogram has been classified.", resultWncIons);
 					//
-					IMeasurementResult measurementResult = new MeasurementResult(IChromatogramResultWNC.NAME, IChromatogramResultWNC.IDENTIFIER, "This is percentage area list of selected ions.", chromatogramClassifierResult);
+					IMeasurementResult<?> measurementResult = new MeasurementResult(IChromatogramResultWNC.NAME, IChromatogramResultWNC.IDENTIFIER, "This is percentage area list of selected ions.", chromatogramClassifierResult);
 					chromatogramSelection.getChromatogram().addMeasurementResult(measurementResult);
 					//
 					processingInfo.setProcessingResult(chromatogramClassifierResult);

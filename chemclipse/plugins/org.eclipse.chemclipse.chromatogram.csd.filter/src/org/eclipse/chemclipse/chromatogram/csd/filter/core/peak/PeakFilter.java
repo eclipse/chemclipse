@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -45,6 +45,7 @@ public class PeakFilter {
 	 * This class is a singleton. Use only static methods.
 	 */
 	private PeakFilter() {
+
 	}
 
 	/**
@@ -57,14 +58,14 @@ public class PeakFilter {
 	 * @param filterId
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo applyFilter(IPeakCSD peak, IPeakFilterSettings peakFilterSettings, String filterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<?> applyFilter(IPeakCSD peak, IPeakFilterSettings peakFilterSettings, String filterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<?> processingInfo;
 		IPeakFilter peakFilter = getPeakFilter(filterId);
 		if(peakFilter != null) {
 			processingInfo = peakFilter.applyFilter(peak, peakFilterSettings, monitor);
 		} else {
-			processingInfo = new ProcessingInfo();
+			processingInfo = new ProcessingInfo<>();
 			processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, NO_PEAK_FILTER_AVAILABLE);
 		}
 		return processingInfo;
@@ -79,14 +80,14 @@ public class PeakFilter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo applyFilter(IPeakCSD peak, String filterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<?> applyFilter(IPeakCSD peak, String filterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<?> processingInfo;
 		IPeakFilter peakFilter = getPeakFilter(filterId);
 		if(peakFilter != null) {
 			processingInfo = peakFilter.applyFilter(peak, monitor);
 		} else {
-			processingInfo = new ProcessingInfo();
+			processingInfo = new ProcessingInfo<>();
 			processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, NO_PEAK_FILTER_AVAILABLE);
 		}
 		return processingInfo;
@@ -103,14 +104,14 @@ public class PeakFilter {
 	 * @param filterId
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo applyFilter(List<IPeakCSD> peaks, IPeakFilterSettings peakFilterSettings, String filterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<?> applyFilter(List<IPeakCSD> peaks, IPeakFilterSettings peakFilterSettings, String filterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<?> processingInfo;
 		IPeakFilter peakFilter = getPeakFilter(filterId);
 		if(peakFilter != null) {
 			processingInfo = peakFilter.applyFilter(peaks, peakFilterSettings, monitor);
 		} else {
-			processingInfo = new ProcessingInfo();
+			processingInfo = new ProcessingInfo<>();
 			processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, NO_PEAK_FILTER_AVAILABLE);
 		}
 		return processingInfo;
@@ -126,14 +127,14 @@ public class PeakFilter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo applyFilter(List<IPeakCSD> peaks, String filterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<?> applyFilter(List<IPeakCSD> peaks, String filterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<?> processingInfo;
 		IPeakFilter peakFilter = getPeakFilter(filterId);
 		if(peakFilter != null) {
 			processingInfo = peakFilter.applyFilter(peaks, monitor);
 		} else {
-			processingInfo = new ProcessingInfo();
+			processingInfo = new ProcessingInfo<>();
 			processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, NO_PEAK_FILTER_AVAILABLE);
 		}
 		return processingInfo;
@@ -149,14 +150,14 @@ public class PeakFilter {
 	 * @param filterId
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo applyFilter(IChromatogramSelectionCSD chromatogramSelection, IPeakFilterSettings peakFilterSettings, String filterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<?> applyFilter(IChromatogramSelectionCSD chromatogramSelection, IPeakFilterSettings peakFilterSettings, String filterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<?> processingInfo;
 		IPeakFilter peakFilter = getPeakFilter(filterId);
 		if(peakFilter != null) {
 			processingInfo = peakFilter.applyFilter(chromatogramSelection, peakFilterSettings, monitor);
 		} else {
-			processingInfo = new ProcessingInfo();
+			processingInfo = new ProcessingInfo<>();
 			processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, NO_PEAK_FILTER_AVAILABLE);
 		}
 		return processingInfo;
@@ -171,14 +172,14 @@ public class PeakFilter {
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	public static IProcessingInfo applyFilter(IChromatogramSelectionCSD chromatogramSelection, String filterId, IProgressMonitor monitor) {
+	public static IProcessingInfo<?> applyFilter(IChromatogramSelectionCSD chromatogramSelection, String filterId, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo;
+		IProcessingInfo<?> processingInfo;
 		IPeakFilter peakFilter = getPeakFilter(filterId);
 		if(peakFilter != null) {
 			processingInfo = peakFilter.applyFilter(chromatogramSelection, monitor);
 		} else {
-			processingInfo = new ProcessingInfo();
+			processingInfo = new ProcessingInfo<>();
 			processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, NO_PEAK_FILTER_AVAILABLE);
 		}
 		return processingInfo;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,7 +17,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class BackfoldingFilter_1_ITest extends ChromatogramImporterTestCase {
 
-	private IChromatogramFilterMSD chromatogramFilter;
+	private IChromatogramFilterMSD<?> chromatogramFilter;
 	private ChromatogramFilterSettings chromatogramFilterSettings;
 
 	@Override

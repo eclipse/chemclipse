@@ -17,7 +17,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class CodaFilter_1_ITest extends ChromatogramImporterTestCase {
 
-	private IChromatogramFilterMSD chromatogramFilter;
+	private IChromatogramFilterMSD<?> chromatogramFilter;
 	private FilterSettings chromatogramFilterSettings;
 
 	@Override
