@@ -9,18 +9,18 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Christoph Läubrich - support file selection, refactor for new settings model, use validators, support for longs
+ * Matthias Mailänder - add labeled combo boxes
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.chemclipse.support.settings.ComboSettingsProperty.ComboSupplier;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty.DialogType;
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
 import org.eclipse.chemclipse.support.settings.validation.InputValidator;
+import org.eclipse.chemclipse.support.text.ILabel;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.provider.AdapterLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -171,9 +171,8 @@ public class WidgetItem {
 				if(comboSupplier != null) {
 					return getValueAsString(comboSupplier);
 				}
-				Combo combo = (Combo)control;
 				if(rawType.isEnum()) {
-					return combo.getText().trim();
+					return currentSelection.toString();
 				}
 			} else {
 				/*
@@ -229,12 +228,9 @@ public class WidgetItem {
 			} else if(rawType == boolean.class || rawType == Boolean.class) {
 				return createCheckboxWidget(parent);
 			} else if(rawType.isEnum()) {
-				List<String> input = new ArrayList<>();
 				Enum[] enums = (Enum[])rawType.getEnumConstants();
-				for(int i = 0; i < enums.length; i++) {
-					input.add(enums[i].toString());
-				}
-				return createEnumComboViewerWidget(parent, input);
+				ComboViewer viewer = createLabeledEnumComboViewerWidget(parent, enums);
+				return viewer.getControl();
 			} else if(rawType == File.class) {
 				return createFileWidget(parent);
 			} else {
@@ -407,29 +403,41 @@ public class WidgetItem {
 		return button;
 	}
 
-	private Control createEnumComboViewerWidget(Composite parent, List<String> input) {
+	private ComboViewer createLabeledEnumComboViewerWidget(Composite parent, Enum[] input) {
 
 		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
-		//
-		Combo combo = comboViewer.getCombo();
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {
 
 			@Override
 			public String getText(Object element) {
 
+				if(element instanceof ILabel) {
+					return ((ILabel)element).label();
+				}
 				return element.toString();
 			}
 		});
+		Combo combo = comboViewer.getCombo();
 		combo.setToolTipText(inputValue.getDescription());
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.widthHint = 150;
 		combo.setLayoutData(gridData);
 		//
 		comboViewer.setInput(input);
-		combo.setText(getValueAsString());
+		Enum initialSelection = Enum.valueOf(input[0].getDeclaringClass(), getValueAsString());
+		comboViewer.setSelection(new StructuredSelection(initialSelection));
 		//
-		return combo;
+		comboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+
+				currentSelection = comboViewer.getStructuredSelection().getFirstElement();
+			}
+		});
+		//
+		return comboViewer;
 	}
 
 	private boolean getValueAsBoolean() {
