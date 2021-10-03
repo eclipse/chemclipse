@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.support;
 
+import static org.junit.Assert.assertNotEquals;
+
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IRawPeak;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.RawPeak;
 
@@ -19,7 +21,7 @@ import junit.framework.TestCase;
 /**
  * Tests the raw peak.
  * 
- * @author eselmeister
+ * @author Philip Wenig
  */
 public class RawPeak_5_Test extends TestCase {
 
@@ -48,21 +50,21 @@ public class RawPeak_5_Test extends TestCase {
 
 	public void testEquals_1() {
 
-		assertFalse("equals", rawPeak1.equals(rawPeak2));
+		assertNotEquals("equals", rawPeak1, rawPeak2);
 	}
 
 	public void testEquals_2() {
 
-		assertFalse("equals", rawPeak2.equals(rawPeak1));
+		assertNotEquals("equals", rawPeak2, rawPeak1);
 	}
 
 	public void testEquals_3() {
 
-		assertFalse("equals", rawPeak1.equals(null));
+		assertNotNull("equals", rawPeak1);
 	}
 
 	public void testEquals_4() {
 
-		assertFalse("equals", rawPeak1.equals("test"));
+		assertNotEquals("equals", rawPeak1, new Object());
 	}
 }

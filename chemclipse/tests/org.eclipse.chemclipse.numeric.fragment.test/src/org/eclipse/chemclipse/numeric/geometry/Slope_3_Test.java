@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,8 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.numeric.geometry;
 
+import static org.junit.Assert.assertNotEquals;
+
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
+
 import junit.framework.TestCase;
 
 public class Slope_3_Test extends TestCase {
@@ -44,21 +47,21 @@ public class Slope_3_Test extends TestCase {
 
 	public void testEquals_1() {
 
-		assertFalse("equals", slope1.equals(slope2));
+		assertNotEquals("equals", slope1, slope2);
 	}
 
 	public void testEquals_2() {
 
-		assertFalse("equals", slope2.equals(slope1));
+		assertNotEquals("equals", slope2, slope1);
 	}
 
 	public void testEquals_3() {
 
-		assertFalse("equals", slope1.equals(null));
+		assertNotNull("equals", slope1);
 	}
 
 	public void testEquals_4() {
 
-		assertFalse("equals", slope1.equals("test"));
+		assertNotEquals("equals", slope1, new Object());
 	}
 }

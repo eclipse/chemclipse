@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -10,6 +10,8 @@
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
+
+import static org.junit.Assert.assertNotEquals;
 
 import junit.framework.TestCase;
 
@@ -43,22 +45,22 @@ public class SupplierIon_3_Test extends TestCase {
 
 	public void testEquals_1() {
 
-		assertEquals("equals", true, ion1.equals(ion2));
+		assertEquals("equals", ion1, ion2);
 	}
 
 	public void testEquals_2() {
 
-		assertEquals("equals", true, ion2.equals(ion1));
+		assertEquals("equals", ion2, ion1);
 	}
 
 	public void testEquals_3() {
 
-		assertEquals("equals", false, ion1.equals(ionX));
+		assertNotEquals("equals", ion1, ionX);
 	}
 
 	public void testEquals_4() {
 
-		assertEquals("equals", false, ion2.equals(ionX));
+		assertNotEquals("equals", ion2, ionX);
 	}
 
 	public void testHashCode_1() {

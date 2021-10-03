@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,8 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.numeric.equations;
 
+import static org.junit.Assert.assertNotEquals;
+
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
+
 import junit.framework.TestCase;
 
 public class LinearEquations_2_Test extends TestCase {
@@ -38,22 +41,22 @@ public class LinearEquations_2_Test extends TestCase {
 
 	public void testEquals_1() {
 
-		assertTrue("equals", eq1.equals(eq2));
+		assertEquals("equals", eq1, eq2);
 	}
 
 	public void testEquals_2() {
 
-		assertTrue("equals", eq2.equals(eq1));
+		assertEquals("equals", eq2, eq1);
 	}
 
 	public void testEquals_3() {
 
-		assertFalse("equals", eq1.equals(null));
+		assertNotNull("equals", eq1);
 	}
 
 	public void testEquals_4() {
 
-		assertFalse("equals", eq1.equals(""));
+		assertNotEquals("equals", eq1, new Object());
 	}
 
 	public void testHashCode_1() {

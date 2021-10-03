@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.baseline;
 
+import static org.junit.Assert.assertNotEquals;
+
 import junit.framework.TestCase;
 
 public class BaselineSegment_5_Test extends TestCase {
@@ -48,31 +50,31 @@ public class BaselineSegment_5_Test extends TestCase {
 
 	public void testEquals_1() {
 
-		assertFalse("Equals", segmentI.equals(segmentII));
+		assertNotEquals("Equals", segmentI, segmentII);
 	}
 
 	public void testEquals_2() {
 
-		assertFalse("Equals", segmentII.equals(segmentI));
+		assertNotEquals("Equals", segmentII, segmentI);
 	}
 
 	public void testEquals_3() {
 
-		assertFalse("Equals", segmentI.equals(null));
+		assertNotNull("Equals", segmentI);
 	}
 
 	public void testEquals_4() {
 
-		assertFalse("Equals", segmentII.equals(null));
+		assertNotNull("Equals", segmentII);
 	}
 
 	public void testEquals_5() {
 
-		assertFalse("Equals", segmentI.equals(new String("Test")));
+		assertNotEquals("Equals", segmentI, new Object());
 	}
 
 	public void testEquals_6() {
 
-		assertFalse("Equals", segmentII.equals(new String("Test")));
+		assertNotEquals("Equals", segmentII, new Object());
 	}
 }
