@@ -179,19 +179,19 @@ public class DatabaseFileSupport {
 	/**
 	 * Opens a file dialog and tries to save the mass spectra
 	 * 
-	 * @param chromatogram
+	 * @param massSpectra
 	 * @throws NoConverterAvailableException
 	 */
 	public static void saveMassSpectra(Shell shell, IMassSpectra massSpectra, String fileName) throws NoConverterAvailableException {
 
 		/*
-		 * If the chromatogram is null, exit.
+		 * If the mass spectra is null, exit.
 		 */
 		if(massSpectra == null || massSpectra.size() == 0) {
 			return;
 		}
 		/*
-		 * Create the dialogue.
+		 * Create the dialog.
 		 */
 		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
 		dialog.setFilterPath(Activator.getDefault().getSettingsPath());
@@ -200,7 +200,7 @@ public class DatabaseFileSupport {
 		dialog.setOverwrite(true);
 		DatabaseConverterSupport converterSupport = DatabaseConverter.getDatabaseConverterSupport();
 		/*
-		 * Set the filters that allow an export of chromatographic data.
+		 * Set the filters that allow an export of MS data.
 		 */
 		String[] filterExtensions = converterSupport.getExportableFilterExtensions();
 		dialog.setFilterExtensions(filterExtensions);
@@ -218,11 +218,11 @@ public class DatabaseFileSupport {
 	}
 
 	/**
-	 * Write the chromatogram.<br/>
-	 * The supplier is the converter to export the given chromatogram.
+	 * Write the mass spectrum.<br/>
+	 * The supplier is the converter to export the given mass spectrum.
 	 * 
 	 * @param file
-	 * @param chromatogram
+	 * @param massSpectra
 	 * @param supplier
 	 */
 	public static void writeFile(Shell shell, final File file, final IMassSpectra massSpectra, final ISupplier supplier) {
@@ -254,15 +254,15 @@ public class DatabaseFileSupport {
 	}
 
 	/**
-	 * Validates the selected file to save the chromatogram. This method checks
-	 * if the chromatogram is stored in a directory or not and prepares the file
+	 * Validates the selected file to save the mass spectrum. This method checks
+	 * if the mass spectrum is stored in a directory or not and prepares the file
 	 * system in a convenient way.
 	 * 
 	 * @param dialog
 	 * @param supplier
 	 * @param shell
 	 * @param converterSupport
-	 * @param chromatogram
+	 * @param massSpectra
 	 */
 	private static void validateFile(FileDialog dialog, List<ISupplier> supplier, Shell shell, DatabaseConverterSupport converterSupport, IMassSpectra massSpectra) {
 
@@ -285,7 +285,7 @@ public class DatabaseFileSupport {
 		String filename = dialog.getFilterPath() + File.separator + dialog.getFileName();
 		if(selectedSupplier != null) {
 			/*
-			 * If the chromatogram file is stored in a directory create an
+			 * If the mass spectrum file is stored in a directory create an
 			 * appropriate directory.
 			 */
 			String directoryExtension = selectedSupplier.getDirectoryExtension();
@@ -309,7 +309,7 @@ public class DatabaseFileSupport {
 					}
 				}
 				/*
-				 * Checks if the chromatogram shall be overwritten.
+				 * Checks if the mass spectrum shall be overwritten.
 				 */
 				if(overwrite) {
 					if(!folderExists) {
@@ -335,9 +335,9 @@ public class DatabaseFileSupport {
 					 * The file name has been modified. Ask for override if it
 					 * still exists.
 					 */
-					File chromatogramFile = new File(filename);
-					if(chromatogramFile.exists()) {
-						if(MessageDialog.openQuestion(shell, "Overwrite", "Would you like to overwrite the file " + chromatogramFile.toString() + "?")) {
+					File massSpectrumFile = new File(filename);
+					if(massSpectrumFile.exists()) {
+						if(MessageDialog.openQuestion(shell, "Overwrite", "Would you like to overwrite the file " + massSpectrumFile.toString() + "?")) {
 							overwrite = true;
 						} else {
 							overwrite = false;
@@ -351,7 +351,7 @@ public class DatabaseFileSupport {
 			if(overwrite) {
 				/*
 				 * Check the directory and file name and correct them if
-				 * neccessary.
+				 * necessary.
 				 */
 				if(isDirectory) {
 					if(!folderExists) {
@@ -362,8 +362,8 @@ public class DatabaseFileSupport {
 				} else {
 					/*
 					 * If the filename is e.g. /home/user/OP17760, correct it to
-					 * e.g. /home/user/OP17760.chrom if the selected supplier
-					 * supports .chrom files.
+					 * e.g. /home/user/OP17760.ms if the selected supplier
+					 * supports .ms files.
 					 */
 					String fileExtension = selectedSupplier.getFileExtension();
 					if(!filename.endsWith(fileExtension)) {
@@ -392,14 +392,14 @@ public class DatabaseFileSupport {
 		int start = 0;
 		int stop = 0;
 		/*
-		 * If the directory extension is "", than the chromatogram is a plain
-		 * old file.<br/> Otherwise, the chromatogram data is stored inside a
+		 * If the directory extension is "", than the mass spectrum is a plain
+		 * old file.<br/> Otherwise, the mass spectrum data is stored inside a
 		 * directory.<br/> <br/> KEEP IN MIND THAT THE EXTENSIONS COULD BE IN
 		 * LOWER AND UPPERCASE LETTERS.
 		 */
 		if(supplier.getDirectoryExtension().equals("")) {
 			/*
-			 * Remove an extension like *.cdf or *.chrom if exists.
+			 * Remove a file extension if exists.
 			 */
 			String fileExtension = supplier.getFileExtension();
 			if(filePath.endsWith(fileExtension) || filePath.endsWith(fileExtension.toLowerCase()) || filePath.endsWith(fileExtension.toUpperCase())) {
@@ -408,7 +408,7 @@ public class DatabaseFileSupport {
 			}
 		} else {
 			/*
-			 * Remove the directory extension, e.g. *.D (Agilent), if exists.
+			 * Remove the directory extension, if exists.
 			 */
 			String directoryExtension = supplier.getDirectoryExtension();
 			if(filePath.endsWith(directoryExtension) || filePath.endsWith(directoryExtension.toLowerCase()) || filePath.endsWith(directoryExtension.toUpperCase())) {

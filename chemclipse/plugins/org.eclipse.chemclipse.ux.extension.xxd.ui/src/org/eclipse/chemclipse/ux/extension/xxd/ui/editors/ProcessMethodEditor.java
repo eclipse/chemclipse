@@ -21,6 +21,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.handler.IModificationHandler;
@@ -32,6 +33,8 @@ import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.support.ui.workbench.PartSupport;
+import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodFileSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.ProcessMethodNotifications;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedMethodUI;
 import org.eclipse.core.runtime.Adapters;
@@ -43,7 +46,7 @@ import org.eclipse.e4.ui.model.application.ui.basic.MPart;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class ProcessMethodEditor implements IModificationHandler {
+public class ProcessMethodEditor implements IModificationHandler, IChemClipseEditor {
 
 	private static final Logger logger = Logger.getLogger(ProcessMethodEditor.class);
 	//
@@ -94,6 +97,22 @@ public class ProcessMethodEditor implements IModificationHandler {
 				notifications.updated(newMethod, oldMethod);
 			}
 		}
+	}
+
+	@Override
+	public boolean saveAs() {
+
+		boolean saveSuccessful = false;
+		ProcessMethod newMethod = new ProcessMethod(extendedMethodUI.getProcessMethod());
+		newMethod.setName(null); // will be set after the filename was chosen
+		try {
+			saveSuccessful = MethodFileSupport.saveProccessMethod(newMethod);
+			dirtyable.setDirty(!saveSuccessful);
+			notifications.created(newMethod);
+		} catch(NoConverterAvailableException e) {
+			logger.warn(e);
+		}
+		return saveSuccessful;
 	}
 
 	@PostConstruct
