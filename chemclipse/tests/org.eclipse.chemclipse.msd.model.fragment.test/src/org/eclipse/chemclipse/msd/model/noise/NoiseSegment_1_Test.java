@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2019 Lablicate GmbH.
+ * Copyright (c) 2010, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -59,7 +59,7 @@ public class NoiseSegment_1_Test extends TestCase {
 
 	public void testGetAnalysisSegment_2() {
 
-		assertEquals("Segment Width", 200, noiseSegment.getAnalysisSegment().getSegmentWidth());
+		assertEquals("Segment Width", 200, noiseSegment.getAnalysisSegment().getWidth());
 	}
 
 	public void testGetNoiseMassSpectrum_1() {

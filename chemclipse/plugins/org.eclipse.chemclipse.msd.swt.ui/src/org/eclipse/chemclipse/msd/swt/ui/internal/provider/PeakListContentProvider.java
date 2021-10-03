@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.msd.swt.ui.internal.provider;
 
 import org.eclipse.chemclipse.model.core.IPeaks;
-
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -22,7 +21,7 @@ public class PeakListContentProvider implements IStructuredContentProvider {
 	public Object[] getElements(Object inputElement) {
 
 		if(inputElement instanceof IPeaks) {
-			IPeaks peaks = (IPeaks)inputElement;
+			IPeaks<?> peaks = (IPeaks<?>)inputElement;
 			return peaks.getPeaks().toArray();
 		} else {
 			return null;

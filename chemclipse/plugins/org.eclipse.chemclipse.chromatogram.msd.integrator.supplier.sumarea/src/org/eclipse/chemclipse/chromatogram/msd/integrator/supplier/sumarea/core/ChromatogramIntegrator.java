@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,11 +24,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramIntegrator extends AbstractChromatogramIntegrator {
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, IChromatogramIntegrationSettings chromatogramIntegrationSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramIntegrationResults> integrate(IChromatogramSelection chromatogramSelection, IChromatogramIntegrationSettings chromatogramIntegrationSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo processingInfo = super.validate(chromatogramSelection, chromatogramIntegrationSettings);
+		IProcessingInfo<IChromatogramIntegrationResults> processingInfo = super.validate(chromatogramSelection, chromatogramIntegrationSettings);
 		if(!processingInfo.hasErrorMessages()) {
 			if(chromatogramSelection instanceof IChromatogramSelectionMSD && chromatogramIntegrationSettings instanceof ChromatogramIntegrationSettings) {
 				IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
@@ -43,9 +42,8 @@ public class ChromatogramIntegrator extends AbstractChromatogramIntegrator {
 		return processingInfo;
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public IProcessingInfo integrate(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<IChromatogramIntegrationResults> integrate(IChromatogramSelection chromatogramSelection, IProgressMonitor monitor) {
 
 		IChromatogramIntegrationSettings chromatogramIntegrationSettings = PreferenceSupplier.getIntegrationSettings();
 		return integrate(chromatogramSelection, chromatogramIntegrationSettings, monitor);

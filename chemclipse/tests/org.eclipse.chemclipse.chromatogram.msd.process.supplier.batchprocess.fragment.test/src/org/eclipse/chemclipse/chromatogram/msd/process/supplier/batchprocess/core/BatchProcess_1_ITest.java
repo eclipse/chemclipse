@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
+ * Copyright (c) 2010, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,6 +16,8 @@ import java.io.File;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.TestPathHelper;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.batchprocess.model.BatchProcessJob;
 import org.eclipse.chemclipse.converter.model.ChromatogramInputEntry;
+import org.eclipse.chemclipse.model.types.DataType;
+import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
@@ -56,7 +58,7 @@ public class BatchProcess_1_ITest extends TestCase {
 
 	public void testProcess_1() {
 
-		BatchProcess bp = new BatchProcess();
+		BatchProcess bp = new BatchProcess(new DataType[]{DataType.MSD}, new ProcessTypeSupport());
 		bp.execute(batchProcessJob, new NullProgressMonitor());
 		File file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_EXPORT_TEST));
 		assertNotNull(file);

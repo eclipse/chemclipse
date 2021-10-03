@@ -55,7 +55,7 @@ public class AlkanePatternDetectorCSD {
 				/*
 				 * Peak detector.
 				 */
-				PeakDetectorCSD peakDetectorCSD = new PeakDetectorCSD();
+				PeakDetectorCSD<?, ?, ?> peakDetectorCSD = new PeakDetectorCSD<>();
 				PeakDetectorSettingsCSD peakDetectorSettings = new PeakDetectorSettingsCSD();
 				peakDetectorSettings.setThreshold(Threshold.LOW);
 				peakDetectorSettings.setIncludeBackground(false);
