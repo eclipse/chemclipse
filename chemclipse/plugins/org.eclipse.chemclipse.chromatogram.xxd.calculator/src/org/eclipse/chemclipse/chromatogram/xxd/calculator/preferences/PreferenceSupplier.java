@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2020 Lablicate GmbH.
+ * Copyright (c) 2014, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -10,6 +10,7 @@
  * Dr. Philip Wenig - initial API and implementation
  * Dr. Alexander Kerner - implementation
  * Christoph Läubrich - add method getDefaultSegmentWidth that return the raw enum instead, null check
+ * Matthias Mailänder - remove getDefaultSegmentWidth and add min/max segment size
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.preferences;
 
@@ -17,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.Activator;
-import org.eclipse.chemclipse.model.support.SegmentWidth;
+import org.eclipse.chemclipse.support.model.SegmentWidth;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -30,7 +31,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String DEF_NOISE_CALCULATOR_ID = "org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.dyson";
 	//
 	public static final String P_SEGMENT_WIDTH = "segmentWidth";
-	public static final String DEF_SEGMENT_WIDTH = SegmentWidth.WIDTH_9.toString();
+	public static final String DEF_SEGMENT_WIDTH = String.valueOf(9);
+	public static final int MIN_SEGMENT_SIZE = 5;
+	public static final int MAX_SEGMENT_SIZE = 19;
+	//
 	private static IPreferenceSupplier preferenceSupplier;
 
 	public static IPreferenceSupplier INSTANCE() {
@@ -98,14 +102,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static int getSelectedSegmentWidth() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		SegmentWidth segmentWidth = SegmentWidth.valueOf(preferences.get(P_SEGMENT_WIDTH, DEF_SEGMENT_WIDTH));
-		return segmentWidth.getWidth();
-	}
-
-	public static SegmentWidth getDefaultSegmentWidth() {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		SegmentWidth segmentWidth = SegmentWidth.valueOf(preferences.get(P_SEGMENT_WIDTH, DEF_SEGMENT_WIDTH));
+		int segmentWidth = SegmentWidth.getAdjustedSetting(preferences.get(P_SEGMENT_WIDTH, DEF_SEGMENT_WIDTH));
 		return segmentWidth;
 	}
 }

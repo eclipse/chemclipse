@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Matthias Mailänder - remove noise enums
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise;
 
@@ -28,10 +29,10 @@ import org.eclipse.chemclipse.model.results.NoiseSegmentMeasurementResult;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.support.IScanRange;
 import org.eclipse.chemclipse.model.support.NoiseSegment;
-import org.eclipse.chemclipse.model.support.SegmentWidth;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.support.model.SegmentWidth;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 
@@ -40,6 +41,7 @@ public class NoiseChromatogramClassifier extends AbstractChromatogramClassifier 
 	private static final String NAME = "Set Noise Settings";
 
 	public NoiseChromatogramClassifier() {
+
 		super(DataType.MSD, DataType.WSD, DataType.CSD);
 	}
 
@@ -71,7 +73,7 @@ public class NoiseChromatogramClassifier extends AbstractChromatogramClassifier 
 		if(noiseCalculator == null) {
 			throw new IllegalArgumentException("noise calculator with id " + settings.getNoiseCalculatorId() + " not found");
 		}
-		SegmentWidth segmentWidth = settings.getSegmentWidth();
+		int segmentWidth = settings.getSegmentWidth();
 		do {
 			ChromatogramSegmentation segmentation = new ChromatogramSegmentation(chromatogram, segmentWidth);
 			chromatogram.addMeasurementResult(segmentation);
@@ -89,7 +91,7 @@ public class NoiseChromatogramClassifier extends AbstractChromatogramClassifier 
 				chromatogram.addMeasurementResult(result);
 				return result;
 			}
-		} while(segmentWidth != null);
+		} while(segmentWidth != 0);
 		return null;
 	}
 

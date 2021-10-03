@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2019 Lablicate GmbH.
+ * Copyright (c) 2014, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein.
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.stein.TestPathHelper;
 import org.eclipse.chemclipse.model.results.ChromatogramSegmentation;
-import org.eclipse.chemclipse.model.support.SegmentWidth;
 
 public class NoiseCalculator_2_ITest extends ChromatogramReaderTestCase {
 
@@ -36,7 +35,7 @@ public class NoiseCalculator_2_ITest extends ChromatogramReaderTestCase {
 
 	public void testReader_1() {
 
-		chromatogram.addMeasurementResult(new ChromatogramSegmentation(chromatogram, SegmentWidth.WIDTH_9));
+		chromatogram.addMeasurementResult(new ChromatogramSegmentation(chromatogram, 9));
 		assertEquals(236, noiseCalculator.getSignalToNoiseRatio(chromatogram, 500));
 	}
 }

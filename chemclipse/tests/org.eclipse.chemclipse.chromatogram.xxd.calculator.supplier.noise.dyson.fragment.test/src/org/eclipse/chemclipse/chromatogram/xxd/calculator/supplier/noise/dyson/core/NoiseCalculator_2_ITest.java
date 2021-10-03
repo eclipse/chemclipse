@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2019 Lablicate GmbH.
+ * Copyright (c) 2014, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.dyson.
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.dyson.TestPathHelper;
 import org.eclipse.chemclipse.model.results.ChromatogramSegmentation;
-import org.eclipse.chemclipse.model.support.SegmentWidth;
 
 public class NoiseCalculator_2_ITest extends ChromatogramReaderTestCase {
 
@@ -40,7 +39,7 @@ public class NoiseCalculator_2_ITest extends ChromatogramReaderTestCase {
 		 * The loading time of the chromatogram takes a while.
 		 * That's why several tests are made here.
 		 */
-		chromatogram.addMeasurementResult(new ChromatogramSegmentation(chromatogram, SegmentWidth.WIDTH_13));
+		chromatogram.addMeasurementResult(new ChromatogramSegmentation(chromatogram, 13));
 		assertEquals(0.0f, noiseCalculator.getSignalToNoiseRatio(chromatogram, 0));
 		assertEquals(0.3802281369f, noiseCalculator.getSignalToNoiseRatio(chromatogram, 50));
 		assertEquals(1.0f, noiseCalculator.getSignalToNoiseRatio(chromatogram, 131.5f));
