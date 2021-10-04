@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.model.settings.peaks;
 
-import org.eclipse.chemclipse.support.settings.EnumSelectionSettingProperty;
 import org.eclipse.chemclipse.xxd.model.support.PeaksDeleteOption;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -20,7 +19,6 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 public class DeletePeaksByTargetFilterSettings {
 
 	@JsonProperty(value = "Use the target value:")
-	@EnumSelectionSettingProperty
 	private PeaksDeleteOption peaksDeleteOption = PeaksDeleteOption.NAME;
 	@JsonProperty(value = "Value", defaultValue = "")
 	@JsonPropertyDescription(value = "Delete peak(s) if at least one target matches the value on the selected option.")

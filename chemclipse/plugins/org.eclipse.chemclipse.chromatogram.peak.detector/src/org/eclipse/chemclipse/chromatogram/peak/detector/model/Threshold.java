@@ -8,10 +8,14 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Matthias Mailänder - add label
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.peak.detector.model;
 
-public enum Threshold {
+import org.eclipse.chemclipse.support.text.ILabel;
+
+public enum Threshold implements ILabel {
+
 	OFF(1), //
 	LOW(2), //
 	MEDIUM(3), //
@@ -29,13 +33,19 @@ public enum Threshold {
 		return threshold;
 	}
 
+	@Override
+	public String label() {
+
+		return name().toLowerCase();
+	}
+
 	public static String[][] getElements() {
 
 		String[][] elements = new String[values().length][2];
 		int counter = 0;
 		for(Threshold threshold : values()) {
-			elements[counter][0] = threshold.name(); // Label
-			elements[counter][1] = threshold.name(); // Value
+			elements[counter][0] = threshold.label();
+			elements[counter][1] = threshold.name();
 			counter++;
 		}
 		return elements;

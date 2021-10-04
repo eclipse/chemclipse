@@ -15,7 +15,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderi
 import org.eclipse.chemclipse.chromatogram.peak.detector.model.Threshold;
 import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.settings.AbstractPeakDetectorWSDSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.support.settings.EnumSelectionRadioButtonsSettingProperty;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty.Validation;
@@ -28,9 +27,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 public class PeakDetectorSettingsWSD extends AbstractPeakDetectorWSDSettings {
 
 	@JsonProperty(value = "Threshold", defaultValue = "MEDIUM")
-	@EnumSelectionRadioButtonsSettingProperty
 	private Threshold threshold = Threshold.MEDIUM;
-	@JsonProperty(value = "Include Background (VV: true, BV|VB: false)", defaultValue = "false")
+	@JsonProperty(value = "Include Background", defaultValue = "false")
+	@JsonPropertyDescription("VV: true, BV|VB: false")
 	private boolean includeBackground = false;
 	@JsonProperty(value = "Min S/N Ratio", defaultValue = "0")
 	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_SN_RATIO_MIN, maxValue = PreferenceSupplier.MIN_SN_RATIO_MAX)
