@@ -46,7 +46,7 @@ public class IonRoundMethod_Performance_Test extends TestCase {
 			method.round(Math.random());
 		}
 		long stop = System.currentTimeMillis();
-		System.out.println(method.getLabel() + ": " + (stop - start) + " ms");
+		System.out.println(method.label() + ": " + (stop - start) + " ms");
 	}
 
 	private void executeActive() {
@@ -56,6 +56,6 @@ public class IonRoundMethod_Performance_Test extends TestCase {
 			IonRoundMethod.getActive().round(Math.random());
 		}
 		long stop = System.currentTimeMillis();
-		System.out.println(IonRoundMethod.getActive().getLabel() + ": " + (stop - start) + " ms");
+		System.out.println(IonRoundMethod.getActive().label() + ": " + (stop - start) + " ms");
 	}
 }

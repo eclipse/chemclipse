@@ -15,13 +15,14 @@ import java.text.DecimalFormat;
 import java.util.function.Function;
 
 import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.support.text.ILabel;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 
 /**
  * Methods are defined to offer m/z round options.
  * 
  */
-public enum IonRoundMethod {
+public enum IonRoundMethod implements ILabel {
 	DEFAULT(v -> Math.round(v), "Default [Math.round()]"), //
 	MINUS_00(v -> round(v, 10), createDescription(-0.0d)), //
 	MINUS_01(v -> round(v, 9), createDescription(-0.1d)), //
@@ -43,7 +44,7 @@ public enum IonRoundMethod {
 		this.label = label;
 	}
 
-	public String getLabel() {
+	public String label() {
 
 		return label;
 	}
@@ -71,7 +72,7 @@ public enum IonRoundMethod {
 		//
 		int counter = 0;
 		for(IonRoundMethod method : methods) {
-			elements[counter][0] = method.getLabel();
+			elements[counter][0] = method.label();
 			elements[counter][1] = method.name();
 			counter++;
 		}
