@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -48,7 +48,7 @@ public class BatchJobUI {
 	private IModificationHandler modificationHandler;
 	private ProcessSupplierContext processingSupport;
 	private IPreferenceStore preferenceStore;
-	private String userlocationPrefrenceKey;
+	private String userLocationPreferenceKey;
 	private DataCategory[] dataCategories;
 	private IRunnableWithProgress executionRunnable;
 
@@ -57,11 +57,11 @@ public class BatchJobUI {
 		this(parent, processingSupport, preferenceStore, userlocationPrefrenceKey, DataType.convert(dataTypes), executionRunnable);
 	}
 
-	public BatchJobUI(Composite parent, ProcessSupplierContext processingSupport, IPreferenceStore preferenceStore, String userlocationPrefrenceKey, DataCategory[] dataCategories, IRunnableWithProgress executionRunnable) {
+	public BatchJobUI(Composite parent, ProcessSupplierContext processingSupport, IPreferenceStore preferenceStore, String userLocationPreferenceKey, DataCategory[] dataCategories, IRunnableWithProgress executionRunnable) {
 
 		this.processingSupport = processingSupport;
 		this.preferenceStore = preferenceStore;
-		this.userlocationPrefrenceKey = userlocationPrefrenceKey;
+		this.userLocationPreferenceKey = userLocationPreferenceKey;
 		this.dataCategories = dataCategories;
 		this.executionRunnable = executionRunnable;
 		//
@@ -140,7 +140,7 @@ public class BatchJobUI {
 
 	private DataListUI createDataListUI(Composite parent) {
 
-		DataListUI dataListUI = createDataList(parent, preferenceStore, userlocationPrefrenceKey, dataCategories);
+		DataListUI dataListUI = createDataList(parent, preferenceStore, userLocationPreferenceKey, dataCategories);
 		dataListUI.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
 		dataListUI.getConfig().setToolbarVisible(false);
 		//
