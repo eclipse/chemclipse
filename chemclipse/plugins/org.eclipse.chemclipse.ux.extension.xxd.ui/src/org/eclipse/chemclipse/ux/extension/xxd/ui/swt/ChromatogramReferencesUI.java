@@ -427,6 +427,7 @@ public class ChromatogramReferencesUI {
 								progressMonitorDialog.run(false, false, runnable);
 								List<IChromatogramSelection<?, ?>> references = runnable.getChromatogramSelections();
 								references.removeIf(r -> new RetentionTimeRange(r).contentEquals(masterSelection));
+								Collections.sort(references, (r1, r2) -> r1.getChromatogram().getName().compareTo(r2.getChromatogram().getName()));
 								addReferences(masterSelection, references);
 								comboChromatograms.refreshUI();
 								updateButtons();
