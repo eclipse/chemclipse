@@ -9,6 +9,7 @@
  * Contributors:
  * Christoph Läubrich - initial API and implementation
  * Philip Wenig - improvements file selection
+ * Matthias Mailänder - add number of files label
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -26,6 +27,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.columns.SimpleColumnDefinition;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.ux.extension.ui.provider.DataExplorerLabelProvider;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.InputEntriesWizard;
@@ -67,6 +69,7 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 	private Composite control;
 	private InputWizardSettings inputWizardSettings;
 	private Composite toolbarMain;
+	private InformationUI infoBottom;
 	//
 	private IPreferenceStore preferenceStore;
 	private String userPathKey;
@@ -248,12 +251,15 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 
 		dirtyListener.accept(dirtyStatus);
 		tableViewer.refresh();
+		infoBottom.setText("Files: " + files.size());
 	}
 
 	private Composite createControl(Composite parent) {
 
 		Composite control = new Composite(parent, SWT.NONE);
-		control.setLayout(new GridLayout(1, true));
+		GridLayout layout = new GridLayout(1, true);
+		layout.marginHeight = layout.marginWidth = 0;
+		control.setLayout(layout);
 		//
 		createToolbarTop(control);
 		createTableViewer(control);
@@ -341,10 +347,16 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 
 	private void createToolbarBottom(Composite parent) {
 
-		ToolBar toolBar = new ToolBar(parent, SWT.FLAT);
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalAlignment = SWT.END;
-		toolBar.setLayoutData(gridData);
+		Composite control = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, false);
+		control.setLayoutData(gridData);
+		GridLayout layout = new GridLayout(2, false);
+		layout.marginHeight = layout.marginWidth = 0;
+		control.setLayout(layout);
+		infoBottom = new InformationUI(control, SWT.BEGINNING);
+		infoBottom.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
+		ToolBar toolBar = new ToolBar(control, SWT.FLAT | SWT.END);
+		toolBar.setLayoutData(new GridData(SWT.END, SWT.CENTER, false, false));
 		//
 		createSortButton(toolBar);
 		createMoveUpButton(toolBar);
