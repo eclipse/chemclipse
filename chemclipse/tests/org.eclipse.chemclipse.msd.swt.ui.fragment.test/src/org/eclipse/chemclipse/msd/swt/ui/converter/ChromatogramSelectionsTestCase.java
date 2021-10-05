@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -28,7 +28,7 @@ import junit.framework.TestCase;
 public class ChromatogramSelectionsTestCase extends TestCase {
 
 	private IChromatogramMSD chromatogram;
-	private List<IChromatogramSelection> chromatogramSelections;
+	private List<IChromatogramSelection<?, ?>> chromatogramSelections;
 	private IChromatogramSelectionMSD chromatogramSelection;
 	private IVendorMassSpectrum massSpectrum;
 
@@ -36,7 +36,7 @@ public class ChromatogramSelectionsTestCase extends TestCase {
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		chromatogramSelections = new ArrayList<IChromatogramSelection>();
+		chromatogramSelections = new ArrayList<IChromatogramSelection<?, ?>>();
 		// ------------------------------------chromatogram1
 		chromatogram = new ChromatogramMSD();
 		chromatogram.setScanDelay(5000);
@@ -127,7 +127,7 @@ public class ChromatogramSelectionsTestCase extends TestCase {
 		return chromatogram;
 	}
 
-	public List<IChromatogramSelection> getChromatogramSelections() {
+	public List<IChromatogramSelection<?, ?>> getChromatogramSelections() {
 
 		return chromatogramSelections;
 	}

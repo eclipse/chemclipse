@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2020 Lablicate GmbH.
+ * Copyright (c) 2015, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -22,17 +22,15 @@ import org.eclipse.core.runtime.IProgressMonitor;
  */
 public class TestChromatogramFilter extends AbstractChromatogramFilterCSD {
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public IProcessingInfo applyFilter(IChromatogramSelectionCSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
+	public IProcessingInfo<?> applyFilter(IChromatogramSelectionCSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		return new ProcessingInfo();
+		return new ProcessingInfo<>();
 	}
 
-	@SuppressWarnings("rawtypes")
 	@Override
-	public IProcessingInfo applyFilter(IChromatogramSelectionCSD chromatogramSelection, IProgressMonitor monitor) {
+	public IProcessingInfo<?> applyFilter(IChromatogramSelectionCSD chromatogramSelection, IProgressMonitor monitor) {
 
-		return new ProcessingInfo();
+		return new ProcessingInfo<>();
 	}
 }

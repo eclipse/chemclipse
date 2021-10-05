@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -48,6 +48,7 @@ public class ChromatogramClassifier {
 	 * This class is a singleton. Use only static methods.
 	 */
 	private ChromatogramClassifier() {
+
 	}
 
 	public static IProcessingInfo<IChromatogramClassifierResult> applyClassifier(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramClassifierSettings chromatogramClassifierSettings, String classifierId, IProgressMonitor monitor) {
@@ -140,7 +141,7 @@ public class ChromatogramClassifier {
 	// --------------------------------------------private methods
 	private static IProcessingInfo<IChromatogramClassifierResult> getNoClassifierAvailableProcessingInfo() {
 
-		IProcessingInfo<IChromatogramClassifierResult> processingInfo = new ProcessingInfo();
+		IProcessingInfo<IChromatogramClassifierResult> processingInfo = new ProcessingInfo<>();
 		IProcessingMessage processingMessage = new ProcessingMessage(MessageType.ERROR, "Chromatogram Classifier", NO_CHROMATOGRAM_CLASSIFIER_AVAILABLE);
 		processingInfo.addMessage(processingMessage);
 		return processingInfo;
