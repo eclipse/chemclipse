@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,13 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.csv;
 
-import org.eclipse.chemclipse.msd.converter.supplier.csv.PathResolver;
-
 /**
  * THIS CLASS IS NOT SUITED FOR PRODUCTIVE USE!<br/>
  * IT IS A TESTCLASS!
  * 
- * @author eselmeister
+ * @author Philip Wenig
  */
 public class TestPathHelper extends PathResolver {
 
