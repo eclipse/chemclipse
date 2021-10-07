@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.pcr.model.core.support;
 
-public enum LabelSetting {
+import org.eclipse.chemclipse.support.text.ILabel;
+
+public enum LabelSetting implements ILabel {
 	SAMPLENAME("Sample ID"), //
 	COORDINATE("Coordinate"), //
 	COORDINATE_SAMPLENAME("Coordinate + Sample ID"); //
@@ -23,7 +25,8 @@ public enum LabelSetting {
 		this.label = label;
 	}
 
-	public String getLabel() {
+	@Override
+	public String label() {
 
 		return label;
 	}
@@ -35,7 +38,7 @@ public enum LabelSetting {
 		//
 		int counter = 0;
 		for(LabelSetting labelSetting : labelSettings) {
-			elements[counter][0] = labelSetting.getLabel();
+			elements[counter][0] = labelSetting.label();
 			elements[counter][1] = labelSetting.name();
 			counter++;
 		}
