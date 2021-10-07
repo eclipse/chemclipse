@@ -256,6 +256,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final int DEF_HEATMAP_SCALE_INTENSITY_MIN_TSD = 1;
 	public static final String P_HEATMAP_SCALE_INTENSITY_MAX_TSD = "heatmapScaleIntensityMaxTSD";
 	public static final int DEF_HEATMAP_SCALE_INTENSITY_MAX_TSD = 250;
+	public static final String P_HEATMAP_ENABLE_ZOOM = "enableZoom";
+	public static final boolean DEF_HEATMAP_ENABLE_ZOOM = true;
 	/*
 	 * Peaks
 	 */

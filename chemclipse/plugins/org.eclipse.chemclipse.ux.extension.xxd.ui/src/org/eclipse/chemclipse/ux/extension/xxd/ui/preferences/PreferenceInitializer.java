@@ -104,6 +104,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MAX_WSD, PreferenceConstants.DEF_HEATMAP_SCALE_INTENSITY_MAX_WSD);
 		store.setDefault(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MIN_TSD, PreferenceConstants.DEF_HEATMAP_SCALE_INTENSITY_MIN_TSD);
 		store.setDefault(PreferenceConstants.P_HEATMAP_SCALE_INTENSITY_MAX_TSD, PreferenceConstants.DEF_HEATMAP_SCALE_INTENSITY_MAX_TSD);
+		store.setDefault(PreferenceConstants.P_HEATMAP_ENABLE_ZOOM, PreferenceConstants.DEF_HEATMAP_ENABLE_ZOOM);
 		/*
 		 * Peaks
 		 */
