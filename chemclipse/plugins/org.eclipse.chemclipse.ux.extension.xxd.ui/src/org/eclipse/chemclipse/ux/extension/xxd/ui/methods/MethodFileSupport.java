@@ -48,30 +48,45 @@ public class MethodFileSupport {
 		if(processMethod == null) {
 			return false;
 		}
+		//
 		FileDialog dialog = new FileDialog(shell, SWT.SAVE);
 		dialog.setFilterPath(Activator.getDefault().getSettingsPath());
 		dialog.setFileName(fileName);
 		dialog.setText("Save Process Method As...");
 		dialog.setOverwrite(true);
+		//
 		MethodConverterSupport converterSupport = MethodConverter.getMethodConverterSupport();
-		dialog.setFilterExtensions(converterSupport.getFilterExtensions());
+		dialog.setFilterExtensions(getFilterExtensions(converterSupport));
 		dialog.setFilterNames(converterSupport.getFilterNames());
 		String filename = dialog.open();
 		int index = dialog.getFilterIndex();
 		if(index == -1) {
 			return false;
 		}
+		//
 		ISupplier selectedSupplier = converterSupport.getSupplier().get(index);
 		if(selectedSupplier == null) {
 			MessageDialog.openInformation(shell, "Save Process Method As", "The requested converter does not exists.");
 			return false;
 		}
+		//
 		File file = new File(filename);
 		ProcessMethod newMethod = (ProcessMethod)processMethod;
 		newMethod.setSourceFile(file);
 		newMethod.setName(newMethod.getName()); // derive from filename
 		writeFile(shell, file, newMethod, selectedSupplier);
 		return true;
+	}
+
+	private static String[] getFilterExtensions(MethodConverterSupport converterSupport) throws NoConverterAvailableException {
+
+		String[] extensions = converterSupport.getFilterExtensions();
+		for(int i = 0; i < extensions.length; i++) {
+			String extension = extensions[i];
+			extensions[i] = extension.startsWith(".") ? ("*" + extension) : extension;
+		}
+		//
+		return extensions;
 	}
 
 	public static void writeFile(Shell shell, final File file, final IProcessMethod processMethod, final ISupplier supplier) {
