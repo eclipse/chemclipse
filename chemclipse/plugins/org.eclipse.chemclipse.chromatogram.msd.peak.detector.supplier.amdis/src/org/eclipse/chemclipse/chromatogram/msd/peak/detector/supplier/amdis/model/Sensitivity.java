@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.model;
 
-public enum Sensitivity {
+import org.eclipse.chemclipse.support.text.ILabel;
+
+public enum Sensitivity implements ILabel {
+
 	VERY_HIGH("Very High", "60"), //
 	HIGH("High", "30"), //
 	MEDIUM("Medium", "10"), //
@@ -27,12 +30,13 @@ public enum Sensitivity {
 		this.value = value;
 	}
 
-	public String getLabel() {
+	@Override
+	public String label() {
 
 		return label;
 	}
 
-	public String getValue() {
+	public String value() {
 
 		return value;
 	}
@@ -40,11 +44,11 @@ public enum Sensitivity {
 	public static String[][] getItems() {
 
 		return new String[][]{//
-				{VERY_HIGH.getLabel(), VERY_HIGH.getValue()}, //
-				{HIGH.getLabel(), HIGH.getValue()}, //
-				{MEDIUM.getLabel(), MEDIUM.getValue()}, //
-				{LOW.getLabel(), LOW.getValue()}, //
-				{VERY_LOW.getLabel(), VERY_LOW.getValue()} //
+				{VERY_HIGH.label(), VERY_HIGH.value()}, //
+				{HIGH.label(), HIGH.value()}, //
+				{MEDIUM.label(), MEDIUM.value()}, //
+				{LOW.label(), LOW.value()}, //
+				{VERY_LOW.label(), VERY_LOW.value()} //
 		};
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Christoph Läubrich.
+ * Copyright (c) 2020, 2021 Christoph Läubrich.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,8 +15,10 @@ package org.eclipse.chemclipse.rcp.app.assets;
 import java.io.File;
 
 import org.eclipse.chemclipse.logging.support.Settings;
+import org.eclipse.chemclipse.support.text.ILabel;
 
-public enum AssetType {
+public enum AssetType implements ILabel {
+
 	CONFIGURATION("Configuration", ".cfg", Settings.getSystemConfigDirectory(), "Service Configuration File"), //
 	METHOD("Process Method", ".ocm", Settings.getSystemMethodDirectory(), "Process Method File"), //
 	PLUGIN("Plugin", ".jar", Settings.getSystemPluginDirectory(), "Plugin Extension");
@@ -39,7 +41,8 @@ public enum AssetType {
 	 * 
 	 * @return {String}
 	 */
-	public String getLabel() {
+	@Override
+	public String label() {
 
 		return label;
 	}
@@ -49,7 +52,7 @@ public enum AssetType {
 	 * 
 	 * @return {String}
 	 */
-	public String getExtension() {
+	public String extension() {
 
 		return extension;
 	}
@@ -59,7 +62,7 @@ public enum AssetType {
 	 * 
 	 * @return {File}
 	 */
-	public File getDirectory() {
+	public File directory() {
 
 		return directory;
 	}
@@ -69,7 +72,7 @@ public enum AssetType {
 	 * 
 	 * @return {String}
 	 */
-	public String getDescription() {
+	public String description() {
 
 		return description;
 	}

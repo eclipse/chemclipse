@@ -90,18 +90,18 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final int DEF_COLUMN_BLEED_MZ = IOnsiteSettings.VALUE_COLUMN_BLEED_MZ;
 	//
 	public static final String P_THRESHOLD = "threshold";
-	public static final String DEF_THRESHOLD = Threshold.MEDIUM.getValue();
+	public static final String DEF_THRESHOLD = Threshold.MEDIUM.value();
 	public static final String P_PEAK_WIDTH = "peakWidth"; // Component Width
 	public static final int DEF_PEAK_WIDTH = 12;
 	//
 	public static final String P_ADJACENT_PEAK_SUBTRACTION = "adjacentPeakSubtraction";
-	public static final String DEF_ADJACENT_PEAK_SUBTRACTION = AdjacentPeakSubtraction.NONE.getValue();
+	public static final String DEF_ADJACENT_PEAK_SUBTRACTION = AdjacentPeakSubtraction.NONE.value();
 	public static final String P_RESOLUTION = "resolution";
-	public static final String DEF_RESOLUTION = Resolution.MEDIUM.getValue();
+	public static final String DEF_RESOLUTION = Resolution.MEDIUM.value();
 	public static final String P_SENSITIVITY = "sensitivity";
-	public static final String DEF_SENSITIVITY = Sensitivity.MEDIUM.getValue();
+	public static final String DEF_SENSITIVITY = Sensitivity.MEDIUM.value();
 	public static final String P_SHAPE_REQUIREMENTS = "shapeRequirements";
-	public static final String DEF_SHAPE_REQUIREMENTS = ShapeRequirements.HIGH.getValue();
+	public static final String DEF_SHAPE_REQUIREMENTS = ShapeRequirements.HIGH.value();
 	/*
 	 * Extra settings
 	 */
@@ -262,16 +262,16 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		//
-		onsiteSettings.setValue(IOnsiteSettings.KEY_LOW_MZ_AUTO, preferences.getBoolean(P_LOW_MZ_AUTO, DEF_LOW_MZ_AUTO) ? Option.YES.getValue() : Option.NO.getValue());
+		onsiteSettings.setValue(IOnsiteSettings.KEY_LOW_MZ_AUTO, preferences.getBoolean(P_LOW_MZ_AUTO, DEF_LOW_MZ_AUTO) ? Option.YES.value() : Option.NO.value());
 		onsiteSettings.setValue(IOnsiteSettings.KEY_START_MZ, Integer.toString(preferences.getInt(P_START_MZ, DEF_START_MZ)));
-		onsiteSettings.setValue(IOnsiteSettings.KEY_HIGH_MZ_AUTO, preferences.getBoolean(P_HIGH_MZ_AUTO, DEF_HIGH_MZ_AUTO) ? Option.YES.getValue() : Option.NO.getValue());
+		onsiteSettings.setValue(IOnsiteSettings.KEY_HIGH_MZ_AUTO, preferences.getBoolean(P_HIGH_MZ_AUTO, DEF_HIGH_MZ_AUTO) ? Option.YES.value() : Option.NO.value());
 		onsiteSettings.setValue(IOnsiteSettings.KEY_STOP_MZ, Integer.toString(preferences.getInt(P_STOP_MZ, DEF_STOP_MZ)));
-		onsiteSettings.setValue(IOnsiteSettings.KEY_OMIT_MZ, preferences.getBoolean(P_OMIT_MZ, DEF_OMIT_MZ) ? Option.YES.getValue() : Option.NO.getValue());
+		onsiteSettings.setValue(IOnsiteSettings.KEY_OMIT_MZ, preferences.getBoolean(P_OMIT_MZ, DEF_OMIT_MZ) ? Option.YES.value() : Option.NO.value());
 		onsiteSettings.setValue(IOnsiteSettings.KEY_OMITED_MZ, preferences.get(P_OMITED_MZ, DEF_OMITED_MZ));
 		//
-		onsiteSettings.setValue(IOnsiteSettings.KEY_USE_SOLVENT_TAILING, preferences.getBoolean(P_USE_SOLVENT_TAILING, DEF_USE_SOLVENT_TAILING) ? Option.YES.getValue() : Option.NO.getValue());
+		onsiteSettings.setValue(IOnsiteSettings.KEY_USE_SOLVENT_TAILING, preferences.getBoolean(P_USE_SOLVENT_TAILING, DEF_USE_SOLVENT_TAILING) ? Option.YES.value() : Option.NO.value());
 		onsiteSettings.setValue(IOnsiteSettings.KEY_SOLVENT_TAILING_MZ, Integer.toString(preferences.getInt(P_SOLVENT_TAILING_MZ, DEF_SOLVENT_TAILING_MZ)));
-		onsiteSettings.setValue(IOnsiteSettings.KEY_USE_COLUMN_BLEED, preferences.getBoolean(P_USE_COLUMN_BLEED, DEF_USE_COLUMN_BLEED) ? Option.YES.getValue() : Option.NO.getValue());
+		onsiteSettings.setValue(IOnsiteSettings.KEY_USE_COLUMN_BLEED, preferences.getBoolean(P_USE_COLUMN_BLEED, DEF_USE_COLUMN_BLEED) ? Option.YES.value() : Option.NO.value());
 		onsiteSettings.setValue(IOnsiteSettings.KEY_COLUMN_BLEED_MZ, Integer.toString(preferences.getInt(P_COLUMN_BLEED_MZ, DEF_COLUMN_BLEED_MZ)));
 		//
 		onsiteSettings.setValue(IOnsiteSettings.KEY_THRESHOLD, preferences.get(P_THRESHOLD, DEF_THRESHOLD));

@@ -16,8 +16,10 @@ import java.util.function.Function;
 
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.support.text.ILabel;
 
-public enum LibraryField {
+public enum LibraryField implements ILabel {
+
 	NAME("Name", getLibraryExtractor(ILibraryInformation::getName)), //
 	CAS("CAS", getLibraryExtractor(ILibraryInformation::getCasNumber)), //
 	NAME_CAS("Name (CAS)", getLibraryExtractor(ILibraryInformation::getName, ILibraryInformation::getCasNumber)), //
@@ -37,7 +39,7 @@ public enum LibraryField {
 		this.transformer = transformer;
 	}
 
-	public String getLabel() {
+	public String label() {
 
 		return label;
 	}
@@ -63,7 +65,7 @@ public enum LibraryField {
 		//
 		int counter = 0;
 		for(LibraryField libraryField : libraryFields) {
-			elements[counter][0] = libraryField.getLabel();
+			elements[counter][0] = libraryField.label();
 			elements[counter][1] = libraryField.name();
 			counter++;
 		}

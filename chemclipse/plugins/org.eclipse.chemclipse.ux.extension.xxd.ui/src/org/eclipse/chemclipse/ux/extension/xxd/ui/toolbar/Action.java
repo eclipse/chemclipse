@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.toolbar;
 
-public enum Action {
+import org.eclipse.chemclipse.support.text.ILabel;
+
+public enum Action implements ILabel {
+
 	SHOW("Show"), //
 	HIDE("Hide");
 
@@ -22,12 +25,13 @@ public enum Action {
 		this.label = label;
 	}
 
-	public String getLabel() {
+	@Override
+	public String label() {
 
 		return label;
 	}
 
-	public String getId() {
+	public String id() {
 
 		return label.toLowerCase();
 	}

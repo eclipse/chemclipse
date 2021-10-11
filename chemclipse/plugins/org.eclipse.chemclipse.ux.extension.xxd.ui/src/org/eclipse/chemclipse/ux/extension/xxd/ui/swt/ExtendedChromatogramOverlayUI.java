@@ -288,7 +288,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 				if(element instanceof Derivative) {
 					Derivative derivative = (Derivative)element;
-					return derivative.getLabel();
+					return derivative.label();
 				}
 				return null;
 			}

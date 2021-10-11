@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2020 Lablicate GmbH.
+ * Copyright (c) 2014, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -34,9 +34,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	private static final Logger logger = Logger.getLogger(PreferenceSupplier.class);
 	//
 	public static final String[][] CALCULATOR_OPTIONS = new String[][]{ //
-			{CalculatorStrategy.AUTO.getLabel(), CalculatorStrategy.AUTO.name()}, //
-			{CalculatorStrategy.CHROMATOGRAM.getLabel(), CalculatorStrategy.CHROMATOGRAM.name()}, //
-			{CalculatorStrategy.FILES.getLabel(), CalculatorStrategy.FILES.name()} //
+			{CalculatorStrategy.AUTO.label(), CalculatorStrategy.AUTO.name()}, //
+			{CalculatorStrategy.CHROMATOGRAM.label(), CalculatorStrategy.CHROMATOGRAM.name()}, //
+			{CalculatorStrategy.FILES.label(), CalculatorStrategy.FILES.name()} //
 	};
 	/*
 	 * RI Calculation

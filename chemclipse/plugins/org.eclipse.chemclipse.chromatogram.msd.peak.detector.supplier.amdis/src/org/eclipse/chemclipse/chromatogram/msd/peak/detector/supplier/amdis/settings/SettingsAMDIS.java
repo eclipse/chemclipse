@@ -94,29 +94,29 @@ public class SettingsAMDIS extends AbstractProcessSettings {
 			/*
 			 * Default CDF settings.
 			 */
-			onsiteSettings.setValue(IOnsiteSettings.KEY_SCAN_DIRECTION, ScanDirection.NONE.getValue());
-			onsiteSettings.setValue(IOnsiteSettings.KEY_INSTRUMENT_FILE, InstrumentFile.CDF.getValue());
-			onsiteSettings.setValue(IOnsiteSettings.KEY_INSTRUMENT_TYPE, InstrumentType.QUADRUPOLE.getValue());
+			onsiteSettings.setValue(IOnsiteSettings.KEY_SCAN_DIRECTION, ScanDirection.NONE.value());
+			onsiteSettings.setValue(IOnsiteSettings.KEY_INSTRUMENT_FILE, InstrumentFile.CDF.value());
+			onsiteSettings.setValue(IOnsiteSettings.KEY_INSTRUMENT_TYPE, InstrumentType.QUADRUPOLE.value());
 			//
-			onsiteSettings.setValue(IOnsiteSettings.KEY_LOW_MZ_AUTO, lowMzAuto ? Option.YES.getValue() : Option.NO.getValue());
+			onsiteSettings.setValue(IOnsiteSettings.KEY_LOW_MZ_AUTO, lowMzAuto ? Option.YES.value() : Option.NO.value());
 			onsiteSettings.setValue(IOnsiteSettings.KEY_START_MZ, Integer.toString(startMZ));
-			onsiteSettings.setValue(IOnsiteSettings.KEY_HIGH_MZ_AUTO, highMzAuto ? Option.YES.getValue() : Option.NO.getValue());
+			onsiteSettings.setValue(IOnsiteSettings.KEY_HIGH_MZ_AUTO, highMzAuto ? Option.YES.value() : Option.NO.value());
 			onsiteSettings.setValue(IOnsiteSettings.KEY_STOP_MZ, Integer.toString(stopMZ));
 			//
-			onsiteSettings.setValue(IOnsiteSettings.KEY_OMIT_MZ, omitMz ? Option.YES.getValue() : Option.NO.getValue());
+			onsiteSettings.setValue(IOnsiteSettings.KEY_OMIT_MZ, omitMz ? Option.YES.value() : Option.NO.value());
 			onsiteSettings.setValue(IOnsiteSettings.KEY_OMITED_MZ, omitedMZ);
 			//
-			onsiteSettings.setValue(IOnsiteSettings.KEY_USE_SOLVENT_TAILING, useSolventTailing ? Option.YES.getValue() : Option.NO.getValue());
+			onsiteSettings.setValue(IOnsiteSettings.KEY_USE_SOLVENT_TAILING, useSolventTailing ? Option.YES.value() : Option.NO.value());
 			onsiteSettings.setValue(IOnsiteSettings.KEY_SOLVENT_TAILING_MZ, solventTailingMZ);
-			onsiteSettings.setValue(IOnsiteSettings.KEY_USE_COLUMN_BLEED, useColumnBleed ? Option.YES.getValue() : Option.NO.getValue());
+			onsiteSettings.setValue(IOnsiteSettings.KEY_USE_COLUMN_BLEED, useColumnBleed ? Option.YES.value() : Option.NO.value());
 			onsiteSettings.setValue(IOnsiteSettings.KEY_COLUMN_BLEED_MZ, columnBleedMZ);
 			//
-			onsiteSettings.setValue(IOnsiteSettings.KEY_THRESHOLD, threshold.getValue());
+			onsiteSettings.setValue(IOnsiteSettings.KEY_THRESHOLD, threshold.value());
 			onsiteSettings.setValue(IOnsiteSettings.KEY_PEAK_WIDTH, Integer.toString(componentWidth));
-			onsiteSettings.setValue(IOnsiteSettings.KEY_ADJACENT_PEAK_SUBTRACTION, adjactentPeakSubtraction.getValue());
-			onsiteSettings.setValue(IOnsiteSettings.KEY_RESOLUTION, resolution.getValue());
-			onsiteSettings.setValue(IOnsiteSettings.KEY_SENSITIVITY, sensitivity.getValue());
-			onsiteSettings.setValue(IOnsiteSettings.KEY_SHAPE_REQUIREMENTS, shapeRequirements.getValue());
+			onsiteSettings.setValue(IOnsiteSettings.KEY_ADJACENT_PEAK_SUBTRACTION, adjactentPeakSubtraction.value());
+			onsiteSettings.setValue(IOnsiteSettings.KEY_RESOLUTION, resolution.value());
+			onsiteSettings.setValue(IOnsiteSettings.KEY_SENSITIVITY, sensitivity.value());
+			onsiteSettings.setValue(IOnsiteSettings.KEY_SHAPE_REQUIREMENTS, shapeRequirements.value());
 		}
 		//
 		return onsiteSettings;

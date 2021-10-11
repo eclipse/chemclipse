@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -117,7 +117,7 @@ public abstract class AbstractGroupHandler implements IGroupHandler {
 	@Override
 	public String getActionElementId(Action action) {
 
-		return DIRECT_MENU_ITEM + "." + getGroupHandlerId() + "." + action.getId();
+		return DIRECT_MENU_ITEM + "." + getGroupHandlerId() + "." + action.id();
 	}
 
 	private void adjustIcon(MDirectToolItem directToolItem, boolean show) {
@@ -258,7 +258,7 @@ public abstract class AbstractGroupHandler implements IGroupHandler {
 			/*
 			 * Adjust the label.
 			 */
-			String prefix = partHandler.isPartVisible() ? Action.HIDE.getLabel() + " " : Action.SHOW.getLabel() + " ";
+			String prefix = partHandler.isPartVisible() ? Action.HIDE.label() + " " : Action.SHOW.label() + " ";
 			String label = prefix + partHandler.getName();
 			menuItem.setLabel(label);
 			/*
@@ -298,7 +298,7 @@ public abstract class AbstractGroupHandler implements IGroupHandler {
 			 */
 			MDirectMenuItem menuItem = modelService.createModelElement(MDirectMenuItem.class);
 			menuItem.setElementId(activateElementId);
-			menuItem.setLabel(Action.SHOW.getLabel());
+			menuItem.setLabel(Action.SHOW.label());
 			menuItem.setTooltip("Activate all mandatory part(s).");
 			menuItem.setIconURI("platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/preferences.gif");
 			menuItem.setContributionURI(ACTION_CONTRIBUTION_URI);
@@ -315,7 +315,7 @@ public abstract class AbstractGroupHandler implements IGroupHandler {
 			 */
 			MDirectMenuItem menuItem = modelService.createModelElement(MDirectMenuItem.class);
 			menuItem.setElementId(deactivateElementId);
-			menuItem.setLabel(Action.HIDE.getLabel());
+			menuItem.setLabel(Action.HIDE.label());
 			menuItem.setTooltip("Deactivate all part(s).");
 			menuItem.setIconURI("platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/preferences.gif");
 			menuItem.setContributionURI(ACTION_CONTRIBUTION_URI);

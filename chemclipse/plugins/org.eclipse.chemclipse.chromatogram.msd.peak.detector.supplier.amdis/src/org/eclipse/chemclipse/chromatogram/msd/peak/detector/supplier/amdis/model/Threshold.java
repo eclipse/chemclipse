@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.model;
 
-public enum Threshold {
+import org.eclipse.chemclipse.support.text.ILabel;
+
+public enum Threshold implements ILabel {
+
 	HIGH("High", "3"), //
 	MEDIUM("Medium", "2"), //
 	LOW("Low", "1"), //
@@ -26,12 +29,12 @@ public enum Threshold {
 		this.value = value;
 	}
 
-	public String getLabel() {
+	public String label() {
 
 		return label;
 	}
 
-	public String getValue() {
+	public String value() {
 
 		return value;
 	}
@@ -39,10 +42,10 @@ public enum Threshold {
 	public static String[][] getItems() {
 
 		return new String[][]{//
-				{HIGH.getLabel(), HIGH.getValue()}, //
-				{MEDIUM.getLabel(), MEDIUM.getValue()}, //
-				{LOW.getLabel(), LOW.getValue()}, //
-				{OFF.getLabel(), OFF.getValue()}//
+				{HIGH.label(), HIGH.value()}, //
+				{MEDIUM.label(), MEDIUM.value()}, //
+				{LOW.label(), LOW.value()}, //
+				{OFF.label(), OFF.value()}//
 		};
 	}
 }

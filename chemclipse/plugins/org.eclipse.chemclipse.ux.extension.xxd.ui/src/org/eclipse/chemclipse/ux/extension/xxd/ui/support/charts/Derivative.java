@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts;
 
-public enum Derivative {
+import org.eclipse.chemclipse.support.text.ILabel;
+
+public enum Derivative implements ILabel {
+
 	NONE("--", 0), //
 	FIRST("1st", 1), //
 	SECOND("2nd", 2), //
@@ -21,16 +24,18 @@ public enum Derivative {
 	private int order = 0;
 
 	private Derivative(String label, int order) {
+
 		this.label = label;
 		this.order = order;
 	}
 
-	public String getLabel() {
+	@Override
+	public String label() {
 
 		return label;
 	}
 
-	public int getOrder() {
+	public int order() {
 
 		return order;
 	}

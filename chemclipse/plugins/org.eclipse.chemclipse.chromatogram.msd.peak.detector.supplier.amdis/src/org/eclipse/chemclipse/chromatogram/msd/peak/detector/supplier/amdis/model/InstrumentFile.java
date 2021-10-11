@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.model;
 
-public enum InstrumentFile {
+import org.eclipse.chemclipse.support.text.ILabel;
+
+public enum InstrumentFile implements ILabel {
+
 	CDF("CDF", "2");
 
 	private String label = "";
@@ -23,12 +26,13 @@ public enum InstrumentFile {
 		this.value = value;
 	}
 
-	public String getLabel() {
+	@Override
+	public String label() {
 
 		return label;
 	}
 
-	public String getValue() {
+	public String value() {
 
 		return value;
 	}
@@ -36,7 +40,7 @@ public enum InstrumentFile {
 	public static String[][] getItems() {
 
 		return new String[][]{//
-				{CDF.getLabel(), CDF.getValue()}//
+				{CDF.label(), CDF.value()}//
 		};
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Christoph Läubrich.
+ * Copyright (c) 2020, 2021 Christoph Läubrich.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -52,6 +52,6 @@ public class AssetItem {
 	 */
 	public String getDescription() {
 
-		return assetType.getDescription();
+		return assetType.description();
 	}
 }

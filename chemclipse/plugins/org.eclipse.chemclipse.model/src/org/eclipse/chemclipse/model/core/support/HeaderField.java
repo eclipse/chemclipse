@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core.support;
 
-public enum HeaderField {
+import org.eclipse.chemclipse.support.text.ILabel;
+
+public enum HeaderField implements ILabel {
+
 	DEFAULT("Default"), //
 	NAME("Name"), //
 	DATA_NAME("Data Name"), //
@@ -25,7 +28,8 @@ public enum HeaderField {
 		this.label = label;
 	}
 
-	public String getLabel() {
+	@Override
+	public String label() {
 
 		return label;
 	}
@@ -41,7 +45,7 @@ public enum HeaderField {
 		//
 		int counter = 0;
 		for(HeaderField element : elements) {
-			dataArray[counter][0] = element.getLabel();
+			dataArray[counter][0] = element.label();
 			dataArray[counter][1] = element.name();
 			counter++;
 		}

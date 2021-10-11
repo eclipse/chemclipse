@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -156,7 +156,7 @@ public class DataTypeTypeSelectionWizard {
 			for(int i = 0; i < buttons.length; i++) {
 				DataCategory category = dataCategories[i];
 				String preferenceKey = categoryPreferenceKey(group, category);
-				Button button = checkbox(container, dataCategories[i].getLabel(), preferenceStore.getBoolean(preferenceKey));
+				Button button = checkbox(container, dataCategories[i].label(), preferenceStore.getBoolean(preferenceKey));
 				button.addSelectionListener(new SelectionListener() {
 
 					@Override

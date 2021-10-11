@@ -13,13 +13,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.processing;
 
+import org.eclipse.chemclipse.support.text.ILabel;
+
 /**
  * Describes very generic and broaden data categories a filter, processor or converter might handle
  * 
  * @author Christoph Läubrich
  *
  */
-public enum DataCategory {
+public enum DataCategory implements ILabel {
+
 	MSD(Messages.getString("DataCategory.MSD")), //
 	CSD(Messages.getString("DataCategory.CSD")), //
 	WSD(Messages.getString("DataCategory.WSD")), //
@@ -41,7 +44,8 @@ public enum DataCategory {
 		this.label = label;
 	}
 
-	public String getLabel() {
+	@Override
+	public String label() {
 
 		return label;
 	}

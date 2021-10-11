@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.model;
 
-public enum AdjacentPeakSubtraction {
+import org.eclipse.chemclipse.support.text.ILabel;
+
+public enum AdjacentPeakSubtraction implements ILabel {
+
 	TWO("Two", "0"), //
 	ONE("One", "1"), //
 	NONE("None", "2");
@@ -25,12 +28,13 @@ public enum AdjacentPeakSubtraction {
 		this.value = value;
 	}
 
-	public String getLabel() {
+	@Override
+	public String label() {
 
 		return label;
 	}
 
-	public String getValue() {
+	public String value() {
 
 		return value;
 	}
@@ -38,9 +42,9 @@ public enum AdjacentPeakSubtraction {
 	public static String[][] getItems() {
 
 		return new String[][]{//
-				{TWO.getLabel(), TWO.getValue()}, //
-				{ONE.getLabel(), ONE.getValue()}, //
-				{NONE.getLabel(), NONE.getValue()}//
+				{TWO.label(), TWO.value()}, //
+				{ONE.label(), ONE.value()}, //
+				{NONE.label(), NONE.value()}//
 		};
 	}
 }

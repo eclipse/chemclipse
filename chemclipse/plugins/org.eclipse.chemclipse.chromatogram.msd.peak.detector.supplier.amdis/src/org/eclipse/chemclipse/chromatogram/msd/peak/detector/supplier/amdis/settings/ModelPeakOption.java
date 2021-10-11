@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings;
 
-public enum ModelPeakOption {
+import org.eclipse.chemclipse.support.text.ILabel;
+
+public enum ModelPeakOption implements ILabel {
+
 	ALL("MPx (All)", 0), //
 	MP1("MP1", 1), //
 	MP2("MP2", 2), //
@@ -26,12 +29,13 @@ public enum ModelPeakOption {
 		this.value = value;
 	}
 
-	public String getLabel() {
+	@Override
+	public String label() {
 
 		return label;
 	}
 
-	public int getValue() {
+	public int value() {
 
 		return value;
 	}
@@ -39,10 +43,10 @@ public enum ModelPeakOption {
 	public static String[][] getItems() {
 
 		return new String[][]{//
-				{ALL.getLabel(), ALL.name()}, //
-				{MP1.getLabel(), MP1.name()}, //
-				{MP2.getLabel(), MP2.name()}, //
-				{MP3.getLabel(), MP3.name()} //
+				{ALL.label(), ALL.name()}, //
+				{MP1.label(), MP1.name()}, //
+				{MP2.label(), MP2.name()}, //
+				{MP3.label(), MP3.name()} //
 		};
 	}
 }

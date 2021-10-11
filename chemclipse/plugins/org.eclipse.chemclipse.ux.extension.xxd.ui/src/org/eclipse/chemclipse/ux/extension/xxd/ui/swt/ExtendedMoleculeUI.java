@@ -224,7 +224,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 				if(element instanceof ImageServiceInput) {
 					ImageServiceInput imageServiceInput = (ImageServiceInput)element;
-					return imageServiceInput.getLabel();
+					return imageServiceInput.label();
 				}
 				//
 				return null;

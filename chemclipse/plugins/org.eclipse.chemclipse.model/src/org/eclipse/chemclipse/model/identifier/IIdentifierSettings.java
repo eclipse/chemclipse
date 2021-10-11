@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,10 +17,10 @@ import org.eclipse.chemclipse.model.settings.IProcessSettings;
 public interface IIdentifierSettings extends IProcessSettings {
 
 	String[][] PENALTY_CALCULATION_OPTIONS = new String[][]{//
-			{PenaltyCalculation.NONE.getLabel(), PenaltyCalculation.NONE.name()}, //
-			{PenaltyCalculation.RETENTION_INDEX.getLabel(), PenaltyCalculation.RETENTION_INDEX.name()}, //
-			{PenaltyCalculation.RETENTION_TIME.getLabel(), PenaltyCalculation.RETENTION_TIME.name()}, //
-			{PenaltyCalculation.BOTH.getLabel(), PenaltyCalculation.BOTH.name()}};
+			{PenaltyCalculation.NONE.label(), PenaltyCalculation.NONE.name()}, //
+			{PenaltyCalculation.RETENTION_INDEX.label(), PenaltyCalculation.RETENTION_INDEX.name()}, //
+			{PenaltyCalculation.RETENTION_TIME.label(), PenaltyCalculation.RETENTION_TIME.name()}, //
+			{PenaltyCalculation.BOTH.label(), PenaltyCalculation.BOTH.name()}};
 	//
 	float DEF_PENALTY_CALCULATION_LEVEL_FACTOR = 5.0f;
 	float MIN_PENALTY_CALCULATION_LEVEL_FACTOR = 1.0f;
