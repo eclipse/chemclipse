@@ -29,6 +29,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.support.HeaderField;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.support.HeaderUtil;
+import org.eclipse.chemclipse.model.support.RetentionTimeRange;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -424,7 +425,10 @@ public class ChromatogramReferencesUI {
 							ChromatogramImportRunnable runnable = new ChromatogramImportRunnable(files, dataType);
 							try {
 								progressMonitorDialog.run(false, false, runnable);
-								addReferences(masterSelection, runnable.getChromatogramSelections());
+								List<IChromatogramSelection<?, ?>> references = runnable.getChromatogramSelections();
+								references.removeIf(r -> new RetentionTimeRange(r).contentEquals(masterSelection));
+								Collections.sort(references, (r1, r2) -> r1.getChromatogram().getName().compareTo(r2.getChromatogram().getName()));
+								addReferences(masterSelection, references);
 								comboChromatograms.refreshUI();
 								updateButtons();
 							} catch(Exception e) {
