@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Michael Chang.
+ * Copyright (c) 2015, 2021 ChemClipse Contributors.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,11 +14,4 @@ package org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.model.chromatog
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 
 public interface IVendorScan extends IScanWSD {
-
-	/**
-	 * Stores the total signal.
-	 * 
-	 * @param totalSignal
-	 */
-	void setTotalSignal(float totalSignal);
 }
