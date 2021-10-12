@@ -232,9 +232,8 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 				try {
 					int channelNumber = comboChannels.getSelectionIndex();
 					IChannel channel = well.getChannels().get(channelNumber);
-					String label = getLabel(well);
 					Color color = getWellColor(well, colorCodes);
-					ILineSeriesData lineSeriesData = getLineSeriesData(well, channel, label, color);
+					ILineSeriesData lineSeriesData = getLineSeriesData(plate, well, channel, color);
 					if(lineSeriesData != null) {
 						lineSeriesDataList.add(lineSeriesData);
 					}
@@ -283,7 +282,7 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 		}
 	}
 
-	private ILineSeriesData getLineSeriesData(IWell well, IChannel channel, String description, Color color) {
+	private ILineSeriesData getLineSeriesData(IPlate plate, IWell well, IChannel channel, Color color) {
 
 		ILineSeriesData lineSeriesData = null;
 		if(channel != null) {
@@ -294,14 +293,15 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 			}
 			//
 			String position = Integer.toString(well.getPosition().getId() + 1);
-			ISeriesData seriesData = new SeriesData(points, position);
+			String seriesId = plate.getName() + " " + channel.getId() + " " + position;
+			ISeriesData seriesData = new SeriesData(points, seriesId);
 			lineSeriesData = new LineSeriesData(seriesData);
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 			lineSeriesSettings.setLineColor(color);
 			lineSeriesSettings.setEnableArea(false);
-			lineSeriesSettings.setDescription(description);
-			ISeriesSettings seriesSettingsDefault = SeriesMapper.getSeriesSettingsDefault(position, chartControl.get());
-			SeriesMapper.mapSetting(position, lineSeriesSettings, seriesSettingsDefault);
+			lineSeriesSettings.setDescription(well.getLabel());
+			ISeriesSettings seriesSettingsDefault = SeriesMapper.getSeriesSettingsDefault(seriesId, chartControl.get());
+			SeriesMapper.mapSetting(seriesId, lineSeriesSettings, seriesSettingsDefault);
 		}
 		return lineSeriesData;
 	}
