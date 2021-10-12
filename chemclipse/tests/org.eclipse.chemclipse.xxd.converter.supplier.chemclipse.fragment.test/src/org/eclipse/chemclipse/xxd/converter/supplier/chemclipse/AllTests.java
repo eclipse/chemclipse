@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse;
 
 import org.eclipse.chemclipse.rcp.app.test.TestAssembler;
-import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.Activator;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;

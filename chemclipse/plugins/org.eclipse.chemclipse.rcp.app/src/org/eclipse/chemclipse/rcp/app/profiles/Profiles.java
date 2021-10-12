@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,6 +17,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.Map;
 
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.support.settings.ApplicationSettings;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
@@ -24,9 +26,7 @@ import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.core.runtime.preferences.IPreferenceFilter;
 import org.eclipse.core.runtime.preferences.IPreferencesService;
 import org.eclipse.core.runtime.preferences.InstanceScope;
-
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.support.settings.ApplicationSettings;
+import org.eclipse.core.runtime.preferences.PreferenceFilterEntry;
 
 public class Profiles {
 
@@ -35,6 +35,7 @@ public class Profiles {
 	private static final String PROFILES = "profiles";
 
 	private Profiles() {
+
 	}
 
 	public static File[] getAvailableProfiles() {
@@ -94,9 +95,8 @@ public class Profiles {
 				return new String[]{InstanceScope.SCOPE, ConfigurationScope.SCOPE};
 			}
 
-			@SuppressWarnings("rawtypes")
 			@Override
-			public Map getMapping(String scope) {
+			public Map<String, PreferenceFilterEntry[]> getMapping(String scope) {
 
 				return null;
 			}

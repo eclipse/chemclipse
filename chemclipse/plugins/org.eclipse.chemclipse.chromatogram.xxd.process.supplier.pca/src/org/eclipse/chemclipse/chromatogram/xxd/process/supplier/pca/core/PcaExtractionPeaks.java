@@ -71,7 +71,6 @@ public class PcaExtractionPeaks implements IExtractionData {
 		return peakExtractionSupport.extractPeakData(peakMap, extractionSettings, monitor);
 	}
 
-	@SuppressWarnings("unchecked")
 	private IPeaks<?> extractPeaks(IDataInputEntry peakFile, IProgressMonitor monitor) {
 
 		IPeaks<?> peaks = new Peaks();

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -35,6 +35,7 @@ public class ComparatorCache {
 	private IonAbundanceComparator ionAbundanceComparator;
 
 	public ComparatorCache() {
+
 		/*
 		 * Initialize the static maps once.
 		 */
@@ -65,7 +66,7 @@ public class ComparatorCache {
 		 * It is assumed that the reference is not modified.
 		 */
 		int keyReference = unknown.getIons().hashCode();
-		if(!referenceTopIons.containsKey(reference)) {
+		if(!referenceTopIons.containsKey(keyReference)) {
 			referenceTopIons.put(keyReference, extractTopIons(reference));
 		}
 		/*

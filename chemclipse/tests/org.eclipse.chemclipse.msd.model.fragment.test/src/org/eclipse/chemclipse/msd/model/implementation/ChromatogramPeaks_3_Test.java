@@ -38,13 +38,13 @@ public class ChromatogramPeaks_3_Test extends ChromatogramPeaksTestCase {
 
 	public void testSize_1() {
 
-		assertEquals(3, peaks.size());
+		assertEquals(3, peaks.getPeaks().size());
 	}
 
 	public void testRemovePeak_1() {
 
 		peaks.removePeak(getPeak1());
-		assertEquals(2, peaks.size());
+		assertEquals(2, peaks.getPeaks().size());
 		// Peak 2
 		peak = (IPeakMSD)peaks.getPeak(1);
 		assertTrue(peak.equals(getPeak2()));
@@ -56,7 +56,7 @@ public class ChromatogramPeaks_3_Test extends ChromatogramPeaksTestCase {
 	public void testRemovePeak_2() {
 
 		peaks.removePeak(getPeak2());
-		assertEquals(2, peaks.size());
+		assertEquals(2, peaks.getPeaks().size());
 		// Peak 1
 		peak = (IPeakMSD)peaks.getPeak(1);
 		assertTrue(peak.equals(getPeak1()));
@@ -68,7 +68,7 @@ public class ChromatogramPeaks_3_Test extends ChromatogramPeaksTestCase {
 	public void testRemovePeak_3() {
 
 		peaks.removePeak(getPeak3());
-		assertEquals(2, peaks.size());
+		assertEquals(2, peaks.getPeaks().size());
 		// Peak 1
 		peak = (IPeakMSD)peaks.getPeak(1);
 		assertTrue(peak.equals(getPeak1()));

@@ -69,7 +69,7 @@ public class PeakConverterMSD {
 		}
 	}
 
-	public static IProcessingInfo<?> convert(File file, IProgressMonitor monitor) {
+	public static IProcessingInfo<IPeaks<?>> convert(File file, IProgressMonitor monitor) {
 
 		return getPeaks(file, monitor);
 	}
@@ -90,9 +90,9 @@ public class PeakConverterMSD {
 		return processingInfo;
 	}
 
-	private static IProcessingInfo<?> getPeaks(final File file, IProgressMonitor monitor) {
+	private static IProcessingInfo<IPeaks<?>> getPeaks(final File file, IProgressMonitor monitor) {
 
-		IProcessingInfo<?> processingInfo;
+		IProcessingInfo<IPeaks<?>> processingInfo;
 		PeakConverterSupport converterSupport = getPeakConverterSupport();
 		/*
 		 * Try to convert.
