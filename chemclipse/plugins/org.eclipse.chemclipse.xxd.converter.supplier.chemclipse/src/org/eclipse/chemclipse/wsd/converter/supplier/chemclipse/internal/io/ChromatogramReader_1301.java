@@ -385,7 +385,7 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 		float totalSignalScan = dataInputStream.readFloat();
 		IVendorScan peakMaximum = new VendorScan();
 		peakMaximum.setRetentionTime(retentionTime);
-		peakMaximum.setTotalSignal(totalSignalScan);
+		peakMaximum.adjustTotalSignal(totalSignalScan);
 		peakMaximum.setRelativeRetentionTime(relativeRetentionTime);
 		int retentionTimeColumn1 = dataInputStream.readInt();
 		int retentionTimeColumn2 = dataInputStream.readInt();
