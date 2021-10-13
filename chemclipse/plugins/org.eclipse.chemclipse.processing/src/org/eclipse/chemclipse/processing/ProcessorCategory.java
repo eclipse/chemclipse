@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,13 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.processing;
 
+import org.eclipse.chemclipse.support.text.ILabel;
+
 /**
  * Allows to specify the general processing category of an item
  * 
  * @author Christoph Läubrich
  *
  */
-public enum ProcessorCategory {
+public enum ProcessorCategory implements ILabel {
+
 	/**
 	 * Indicates that this item is located in the Filtering domain, that means it adds/removes/changes a specific item
 	 */
@@ -29,10 +32,12 @@ public enum ProcessorCategory {
 	private String label;
 
 	ProcessorCategory(String label) {
+
 		this.label = label;
 	}
 
-	public String getLabel() {
+	@Override
+	public String label() {
 
 		return label;
 	}

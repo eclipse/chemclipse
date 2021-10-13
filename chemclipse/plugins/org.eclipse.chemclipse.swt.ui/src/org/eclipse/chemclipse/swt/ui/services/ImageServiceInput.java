@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.swt.ui.services;
 
-public enum ImageServiceInput {
+import org.eclipse.chemclipse.support.text.ILabel;
+
+public enum ImageServiceInput implements ILabel {
+
 	NAME("Name"), //
 	SMILES("SMILES");
 
@@ -22,7 +25,7 @@ public enum ImageServiceInput {
 		this.label = label;
 	}
 
-	public String getLabel() {
+	public String label() {
 
 		return label;
 	}

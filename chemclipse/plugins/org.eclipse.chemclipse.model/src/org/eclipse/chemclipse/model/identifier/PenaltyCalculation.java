@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
-public enum PenaltyCalculation {
+import org.eclipse.chemclipse.support.text.ILabel;
+
+public enum PenaltyCalculation implements ILabel {
+
 	NONE("None"), //
 	RETENTION_TIME("Retention Time"), //
 	RETENTION_INDEX("Retention Index"), //
@@ -24,7 +27,7 @@ public enum PenaltyCalculation {
 		this.label = label;
 	}
 
-	public String getLabel() {
+	public String label() {
 
 		return label;
 	}

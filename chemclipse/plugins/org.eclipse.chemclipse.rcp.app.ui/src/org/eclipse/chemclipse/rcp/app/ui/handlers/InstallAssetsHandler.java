@@ -49,7 +49,7 @@ public class InstallAssetsHandler {
 			 */
 			List<AssetItem> deletedItems = assetInstallPage.getDeletedItems();
 			for(AssetItem delete : deletedItems) {
-				File directory = delete.getAssetType().getDirectory();
+				File directory = delete.getAssetType().directory();
 				File deleteFile = new File(directory, delete.getName());
 				File backupFile = new File(directory, delete.getName() + "." + System.currentTimeMillis() + ".bak");
 				deleteFile.renameTo(backupFile);
@@ -59,7 +59,7 @@ public class InstallAssetsHandler {
 			 */
 			List<AssetItem> newItems = assetInstallPage.getNewItems();
 			for(AssetItem create : newItems) {
-				File directory = create.getAssetType().getDirectory();
+				File directory = create.getAssetType().directory();
 				File destinationFile = new File(directory, create.getName());
 				Files.copy(create.getFile().toPath(), destinationFile.toPath());
 			}

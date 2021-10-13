@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.quantitation;
 
-public enum QuantitationFlag {
+import org.eclipse.chemclipse.support.text.ILabel;
+
+public enum QuantitationFlag implements ILabel {
+
 	NONE("", ""), //
 	ZERO("0", "Z"), //
 	NEGATIVE("< 0", "N"), //
@@ -27,12 +30,12 @@ public enum QuantitationFlag {
 		this.shortcut = shortcut;
 	}
 
-	public String getLabel() {
+	public String label() {
 
 		return label;
 	}
 
-	public String getShortcut() {
+	public String shortcut() {
 
 		return shortcut;
 	}
@@ -44,7 +47,7 @@ public enum QuantitationFlag {
 		//
 		int counter = 0;
 		for(QuantitationFlag value : values) {
-			elements[counter][0] = value.getLabel();
+			elements[counter][0] = value.label();
 			elements[counter][1] = value.name();
 			counter++;
 		}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -86,7 +86,7 @@ public class TargetReferenceLabelProvider extends AbstractChemClipseLabelProvide
 					text = targetReference.getID();
 					break;
 				case 2:
-					text = targetReference.getType().getLabel();
+					text = targetReference.getType().label();
 					break;
 				case 3:
 					if(targetDisplaySettings != null) {
@@ -100,6 +100,7 @@ public class TargetReferenceLabelProvider extends AbstractChemClipseLabelProvide
 		return text;
 	}
 
+	@Override
 	public Image getImage(Object element) {
 
 		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TARGETS, IApplicationImage.SIZE_16x16);

@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.support;
 
-public enum CalculationType {
+import org.eclipse.chemclipse.support.text.ILabel;
+
+public enum CalculationType implements ILabel {
+
 	SUM("Sum"), //
 	MEAN("Mean"), //
 	MEDIAN("Median");
@@ -23,7 +26,7 @@ public enum CalculationType {
 		this.label = label;
 	}
 
-	public String getLabel() {
+	public String label() {
 
 		return label;
 	}
@@ -35,7 +38,7 @@ public enum CalculationType {
 		//
 		int counter = 0;
 		for(CalculationType calculationType : calculationTypes) {
-			elements[counter][0] = calculationType.getLabel();
+			elements[counter][0] = calculationType.label();
 			elements[counter][1] = calculationType.name();
 			counter++;
 		}

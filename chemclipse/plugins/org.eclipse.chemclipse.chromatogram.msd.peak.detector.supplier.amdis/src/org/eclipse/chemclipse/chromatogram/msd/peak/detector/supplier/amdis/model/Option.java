@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.model;
 
-public enum Option {
+import org.eclipse.chemclipse.support.text.ILabel;
+
+public enum Option implements ILabel {
+
 	YES("Yes", "1"), //
 	NO("No", "0");
 
@@ -24,12 +27,12 @@ public enum Option {
 		this.value = value;
 	}
 
-	public String getLabel() {
+	public String label() {
 
 		return label;
 	}
 
-	public String getValue() {
+	public String value() {
 
 		return value;
 	}
@@ -37,8 +40,8 @@ public enum Option {
 	public static String[][] getItems() {
 
 		return new String[][]{//
-				{YES.getLabel(), YES.getValue()}, //
-				{NO.getLabel(), NO.getValue()}//
+				{YES.label(), YES.value()}, //
+				{NO.label(), NO.value()}//
 		};
 	}
 }

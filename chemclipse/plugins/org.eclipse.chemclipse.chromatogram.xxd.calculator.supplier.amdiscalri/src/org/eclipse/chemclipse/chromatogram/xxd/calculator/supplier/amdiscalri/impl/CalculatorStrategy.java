@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl;
 
-public enum CalculatorStrategy {
+import org.eclipse.chemclipse.support.text.ILabel;
+
+public enum CalculatorStrategy implements ILabel {
+
 	AUTO("First Chromatogram - Then File(s)"), //
 	CHROMATOGRAM("Chromatogram Only"), //
 	FILES("File(s) Only");
@@ -23,7 +26,8 @@ public enum CalculatorStrategy {
 		this.label = label;
 	}
 
-	public String getLabel() {
+	@Override
+	public String label() {
 
 		return label;
 	}

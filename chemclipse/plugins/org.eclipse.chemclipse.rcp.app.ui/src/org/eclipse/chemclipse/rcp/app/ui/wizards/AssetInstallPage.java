@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Christoph Läubrich.
+ * Copyright (c) 2020, 2021 Christoph Läubrich.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -108,7 +108,7 @@ public class AssetInstallPage extends WizardPage {
 			public String getText(Object element) {
 
 				if(element instanceof AssetItem) {
-					return ((AssetItem)element).getAssetType().getLabel();
+					return ((AssetItem)element).getAssetType().label();
 				}
 				return super.getText(element);
 			}
@@ -174,8 +174,8 @@ public class AssetInstallPage extends WizardPage {
 				List<String> filterNames = new ArrayList<>();
 				List<String> filterExtensions = new ArrayList<>();
 				for(AssetType assetType : AssetType.values()) {
-					String extension = "*" + assetType.getExtension();
-					filterNames.add(assetType.getLabel() + " (" + extension + ")");
+					String extension = "*" + assetType.extension();
+					filterNames.add(assetType.label() + " (" + extension + ")");
 					filterExtensions.add(extension);
 				}
 				//
@@ -234,7 +234,7 @@ public class AssetInstallPage extends WizardPage {
 							 */
 							Set<String> assetExtensions = new HashSet<>();
 							for(AssetType assetType : AssetType.values()) {
-								assetExtensions.add(assetType.getExtension());
+								assetExtensions.add(assetType.extension());
 							}
 							/*
 							 * Messages / AssetItems
@@ -376,7 +376,7 @@ public class AssetInstallPage extends WizardPage {
 		AssetType assetType = assetItem.getAssetType();
 		String name = assetItem.getName();
 		//
-		if(new File(assetType.getDirectory(), name).exists()) {
+		if(new File(assetType.directory(), name).exists()) {
 			message = "The asset is installed already: " + name + ".";
 		} else {
 			/*
@@ -414,7 +414,7 @@ public class AssetInstallPage extends WizardPage {
 
 		AssetItem assetItem = null;
 		for(AssetType assetType : AssetType.values()) {
-			if(file.getName().toLowerCase().endsWith(assetType.getExtension())) {
+			if(file.getName().toLowerCase().endsWith(assetType.extension())) {
 				assetItem = new AssetItem(file, assetType);
 			}
 		}
@@ -516,11 +516,11 @@ public class AssetInstallPage extends WizardPage {
 		assets.clear();
 		//
 		for(AssetType type : AssetType.values()) {
-			File directory = type.getDirectory();
+			File directory = type.directory();
 			File[] listFiles = directory.listFiles();
 			if(listFiles != null) {
 				for(File file : listFiles) {
-					if(file.getName().toLowerCase().endsWith(type.getExtension())) {
+					if(file.getName().toLowerCase().endsWith(type.extension())) {
 						assets.add(new AssetItem(file, type));
 					}
 				}

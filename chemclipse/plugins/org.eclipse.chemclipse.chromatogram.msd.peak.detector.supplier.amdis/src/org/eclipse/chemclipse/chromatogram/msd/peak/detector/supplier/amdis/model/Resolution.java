@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.model;
 
-public enum Resolution {
+import org.eclipse.chemclipse.support.text.ILabel;
+
+public enum Resolution implements ILabel {
+
 	HIGH("High", "0"), //
 	MEDIUM("Medium", "1"), //
 	LOW("Low", "2");
@@ -25,12 +28,12 @@ public enum Resolution {
 		this.value = value;
 	}
 
-	public String getLabel() {
+	public String label() {
 
 		return label;
 	}
 
-	public String getValue() {
+	public String value() {
 
 		return value;
 	}
@@ -38,9 +41,9 @@ public enum Resolution {
 	public static String[][] getItems() {
 
 		return new String[][]{//
-				{HIGH.getLabel(), HIGH.getValue()}, //
-				{MEDIUM.getLabel(), MEDIUM.getValue()}, //
-				{LOW.getLabel(), LOW.getValue()} //
+				{HIGH.label(), HIGH.value()}, //
+				{MEDIUM.label(), MEDIUM.value()}, //
+				{LOW.label(), LOW.value()} //
 		};
 	}
 }

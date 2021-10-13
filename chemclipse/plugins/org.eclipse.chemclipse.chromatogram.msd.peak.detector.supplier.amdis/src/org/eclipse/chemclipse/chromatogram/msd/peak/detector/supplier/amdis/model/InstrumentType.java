@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.model;
 
-public enum InstrumentType {
+import org.eclipse.chemclipse.support.text.ILabel;
+
+public enum InstrumentType implements ILabel {
+
 	QUADRUPOLE("Quadrupole", "0"), //
 	ION_TRAP("Ion Trap", "1"), //
 	MAGNETIC_SECTOR("Magnetic Sector", "2"), //
@@ -26,12 +29,12 @@ public enum InstrumentType {
 		this.value = value;
 	}
 
-	public String getLabel() {
+	public String label() {
 
 		return label;
 	}
 
-	public String getValue() {
+	public String value() {
 
 		return value;
 	}
@@ -39,10 +42,10 @@ public enum InstrumentType {
 	public static String[][] getItems() {
 
 		return new String[][]{//
-				{QUADRUPOLE.getLabel(), QUADRUPOLE.getValue()}, //
-				{ION_TRAP.getLabel(), ION_TRAP.getValue()}, //
-				{MAGNETIC_SECTOR.getLabel(), MAGNETIC_SECTOR.getValue()}, //
-				{SIM.getLabel(), SIM.getValue()}//
+				{QUADRUPOLE.label(), QUADRUPOLE.value()}, //
+				{ION_TRAP.label(), ION_TRAP.value()}, //
+				{MAGNETIC_SECTOR.label(), MAGNETIC_SECTOR.value()}, //
+				{SIM.label(), SIM.value()}//
 		};
 	}
 }

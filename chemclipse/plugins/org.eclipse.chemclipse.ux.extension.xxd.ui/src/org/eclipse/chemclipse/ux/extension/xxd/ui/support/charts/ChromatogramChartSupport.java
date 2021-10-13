@@ -312,7 +312,7 @@ public class ChromatogramChartSupport {
 		/*
 		 * Calculate a derivative?
 		 */
-		int order = derivative.getOrder();
+		int order = derivative.order();
 		for(int i = 1; i <= order; i++) {
 			ySeries = calculateDerivate(ySeries);
 		}

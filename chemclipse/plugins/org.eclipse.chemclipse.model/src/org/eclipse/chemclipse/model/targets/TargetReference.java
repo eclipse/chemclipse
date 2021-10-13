@@ -49,7 +49,7 @@ public class TargetReference implements ITargetReference {
 
 	public static String createID(TargetReferenceType type, String name) {
 
-		return type.getLabel() + "." + name;
+		return type.label() + "." + name;
 	}
 
 	public <X extends ISignal & ITargetSupplier> TargetReference(X item, TargetReferenceType type, String name, float retentionIndex) {
