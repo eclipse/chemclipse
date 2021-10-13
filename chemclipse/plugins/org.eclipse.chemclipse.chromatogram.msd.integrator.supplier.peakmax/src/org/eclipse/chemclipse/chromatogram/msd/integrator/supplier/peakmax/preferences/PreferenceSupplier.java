@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,8 +16,6 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.Activator;
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.settings.PeakIntegrationSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IAreaSupport;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IIntegrationSupport;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.util.IonSettingUtil;
@@ -29,15 +27,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_SELECTED_IONS = "selectedIons";
 	public static final String DEF_SELECTED_IONS = "0"; // 103;104 | 0 = TIC
-	public static final String P_MINIMUM_PEAK_WIDTH = "minimumPeakWidth";
-	public static final int DEF_MINIMUM_PEAK_WIDTH = 0; // milliseconds
-	public static final String P_MINIMUM_SIGNAL_TO_NOISE_RATIO = "minimumSignalToNoiseRatio";
-	public static final int DEF_MINIMUM_SIGNAL_TO_NOISE_RATIO = 0; // 0 all peaks will be accepted
-	public static final String P_MINIMUM_PEAK_AREA = "minimumPeakArea";
-	public static final int DEF_MINIMUM_PEAK_AREA = 0; // 0 all peaks will be accepted
 	//
 	public static final int MIN_RETENTION_TIME = 0; // = 0.0 minutes
-	public static final int MAX_RETENTION_TIME = 60000; // = 1.0 minutes;
+	public static final int MAX_RETENTION_TIME = 60000; // = 1.0 minutes
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -64,11 +56,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	@Override
 	public Map<String, String> getDefaultValues() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
+		Map<String, String> defaultValues = new HashMap<>();
 		defaultValues.put(P_SELECTED_IONS, DEF_SELECTED_IONS);
-		defaultValues.put(P_MINIMUM_PEAK_AREA, Integer.toString(DEF_MINIMUM_PEAK_AREA));
-		defaultValues.put(P_MINIMUM_PEAK_WIDTH, Integer.toString(DEF_MINIMUM_PEAK_WIDTH));
-		defaultValues.put(P_MINIMUM_SIGNAL_TO_NOISE_RATIO, Integer.toString(DEF_MINIMUM_SIGNAL_TO_NOISE_RATIO));
 		return defaultValues;
 	}
 
@@ -83,39 +72,13 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		PeakIntegrationSettings peakIntegrationSettings = new PeakIntegrationSettings();
 		// baselineSupport.setBaselineHoldOn(5000, 100000);
 		/*
-		 * Area Support
-		 */
-		IAreaSupport areaSupport = peakIntegrationSettings.getAreaSupport();
-		areaSupport.setMinimumArea(PreferenceSupplier.getMinimumPeakArea()); // int but double should be used.
-		/*
 		 * Integration Support
 		 */
-		IIntegrationSupport integrationSupport = peakIntegrationSettings.getIntegrationSupport();
-		integrationSupport.setMinimumPeakWidth(PreferenceSupplier.getMinimumPeakWidth());
-		integrationSupport.setMinimumSignalToNoiseRatio(PreferenceSupplier.getMinimumSignalToNoiseRatio()); // int but float should be used.
 		IMarkedIons selectedIons = peakIntegrationSettings.getSelectedIons();
 		String ions = PreferenceSupplier.getIons(P_SELECTED_IONS, DEF_SELECTED_IONS);
 		IonSettingUtil settingIon = new IonSettingUtil();
 		selectedIons.add(settingIon.extractIons(settingIon.deserialize(ions)));
 		return peakIntegrationSettings;
-	}
-
-	public static int getMinimumPeakWidth() {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getInt(P_MINIMUM_PEAK_WIDTH, DEF_MINIMUM_PEAK_WIDTH);
-	}
-
-	public static int getMinimumSignalToNoiseRatio() {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getInt(P_MINIMUM_SIGNAL_TO_NOISE_RATIO, DEF_MINIMUM_SIGNAL_TO_NOISE_RATIO);
-	}
-
-	public static int getMinimumPeakArea() {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getInt(P_MINIMUM_PEAK_AREA, DEF_MINIMUM_PEAK_AREA);
 	}
 
 	/**
