@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentifierSettings;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.DoubleFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.FloatFieldEditor;
-import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.IntegerFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.ExtendedIntegerFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.jface.preference.BooleanFieldEditor;
@@ -63,13 +63,13 @@ public class PreferencePageFile extends FieldEditorPreferencePage implements IWo
 		addField(new DoubleFieldEditor(PreferenceSupplier.P_THRESHOLD_PRE_OPTIMIZATION, labelTextThreshold, PreferenceSupplier.MIN_THRESHOLD_PRE_OPTIMIZATION, PreferenceSupplier.MAX_THRESHOLD_PRE_OPTIMIZATION, getFieldEditorParent()));
 		//
 		addField(new ComboFieldEditor(PreferenceSupplier.P_MASS_SPECTRUM_COMPARATOR_ID, "Mass Spectrum Comparator", MassSpectrumComparator.getAvailableComparatorIds(), getFieldEditorParent()));
-		addField(new IntegerFieldEditor(PreferenceSupplier.P_NUMBER_OF_TARGETS, "Number of Targets", PreferenceSupplier.MIN_NUMBER_OF_TARGETS, PreferenceSupplier.MAX_NUMBER_OF_TARGETS, getFieldEditorParent()));
+		addField(new ExtendedIntegerFieldEditor(PreferenceSupplier.P_NUMBER_OF_TARGETS, "Number of Targets", PreferenceSupplier.MIN_NUMBER_OF_TARGETS, PreferenceSupplier.MAX_NUMBER_OF_TARGETS, getFieldEditorParent()));
 		addField(new FloatFieldEditor(PreferenceSupplier.P_MIN_MATCH_FACTOR, "Min Match Factor", PreferenceSupplier.MIN_FACTOR, PreferenceSupplier.MAX_FACTOR, getFieldEditorParent()));
 		addField(new FloatFieldEditor(PreferenceSupplier.P_MIN_REVERSE_MATCH_FACTOR, "Min Reverse Match Factor", PreferenceSupplier.MIN_FACTOR, PreferenceSupplier.MAX_FACTOR, getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new RadioGroupFieldEditor(PreferenceSupplier.P_PENALTY_CALCULATION, "Penalty Calculation", 1, IIdentifierSettings.PENALTY_CALCULATION_OPTIONS, getFieldEditorParent()));
-		addField(new IntegerFieldEditor(PreferenceSupplier.P_RETENTION_TIME_WINDOW, "Retention Time Window [ms]", PreferenceSupplier.MIN_RETENTION_TIME_WINDOW, PreferenceSupplier.MAX_RETENTION_TIME_WINDOW, getFieldEditorParent()));
+		addField(new ExtendedIntegerFieldEditor(PreferenceSupplier.P_RETENTION_TIME_WINDOW, "Retention Time Window [ms]", PreferenceSupplier.MIN_RETENTION_TIME_WINDOW, PreferenceSupplier.MAX_RETENTION_TIME_WINDOW, getFieldEditorParent()));
 		addField(new FloatFieldEditor(PreferenceSupplier.P_RETENTION_INDEX_WINDOW, "Retention Index Window", PreferenceSupplier.MIN_RETENTION_INDEX_WINDOW, PreferenceSupplier.MAX_RETENTION_INDEX_WINDOW, getFieldEditorParent()));
 		addField(new FloatFieldEditor(PreferenceSupplier.P_PENALTY_CALCULATION_LEVEL_FACTOR, "Penalty Calculation Level Factor", IIdentifierSettingsMSD.MIN_PENALTY_CALCULATION_LEVEL_FACTOR, IIdentifierSettingsMSD.MAX_PENALTY_CALCULATION_LEVEL_FACTOR, getFieldEditorParent()));
 		addField(new FloatFieldEditor(PreferenceSupplier.P_MAX_PENALTY, "Max Penalty", IComparisonResult.MIN_ALLOWED_PENALTY, IComparisonResult.MAX_ALLOWED_PENALTY, getFieldEditorParent()));

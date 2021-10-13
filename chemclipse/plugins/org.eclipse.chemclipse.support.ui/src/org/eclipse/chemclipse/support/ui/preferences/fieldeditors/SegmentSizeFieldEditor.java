@@ -15,7 +15,7 @@ import org.eclipse.chemclipse.support.model.SegmentWidth;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty.Validation;
 import org.eclipse.swt.widgets.Composite;
 
-public class SegmentSizeFieldEditor extends IntegerFieldEditor {
+public class SegmentSizeFieldEditor extends ExtendedIntegerFieldEditor {
 
 	public SegmentSizeFieldEditor(String name, String labelText, Composite parent) {
 

@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.preference
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.edit.supplier.snip.ui.Activator;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.DoubleFieldEditor;
-import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.IntegerFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.ExtendedIntegerFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.WindowSizeFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
@@ -38,12 +38,12 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	@Override
 	public void createFieldEditors() {
 
-		IntegerFieldEditor iterationsFieldEditor = new IntegerFieldEditor(PreferenceSupplier.P_ITERATIONS, "Iterations", getFieldEditorParent());
+		ExtendedIntegerFieldEditor iterationsFieldEditor = new ExtendedIntegerFieldEditor(PreferenceSupplier.P_ITERATIONS, "Iterations", getFieldEditorParent());
 		iterationsFieldEditor.setValidRange(PreferenceSupplier.MIN_ITERATIONS, PreferenceSupplier.MAX_ITERATIONS);
 		addField(iterationsFieldEditor);
 		addField(new WindowSizeFieldEditor(PreferenceSupplier.P_WINDOW_SIZE, "Window Size (Detector)", getFieldEditorParent()));
 		addField(new DoubleFieldEditor(PreferenceSupplier.P_MAGNIFICATION_FACTOR, "Magnification factor (Filter)", PreferenceSupplier.MIN_MAGNIFICATION_FACTOR, PreferenceSupplier.MAX_MAGNIFICATION_FACTOR, getFieldEditorParent()));
-		IntegerFieldEditor transitionsFieldEditor = new IntegerFieldEditor(PreferenceSupplier.P_TRANSITIONS, "Transitions (Filter)", getFieldEditorParent());
+		ExtendedIntegerFieldEditor transitionsFieldEditor = new ExtendedIntegerFieldEditor(PreferenceSupplier.P_TRANSITIONS, "Transitions (Filter)", getFieldEditorParent());
 		transitionsFieldEditor.setValidRange(PreferenceSupplier.MIN_TRANSITIONS, PreferenceSupplier.MAX_TRANSITIONS);
 		addField(transitionsFieldEditor);
 	}
