@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Christoph Läubrich - add mode to interface
+ * Matthias Mailänder - add label
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.support;
 
@@ -16,6 +17,7 @@ import java.util.Collection;
 import java.util.Set;
 
 import org.eclipse.chemclipse.model.core.IMarkedSignals;
+import org.eclipse.chemclipse.support.text.ILabel;
 
 /**
  * This class stores a list of ions which should be considered or not
@@ -25,19 +27,33 @@ import org.eclipse.chemclipse.model.core.IMarkedSignals;
  * Because it depends on the given precision if the ion is in the list or not. That's why it's better to create a set of accurate
  * ions and the given precision on the fly.
  * 
- * @author eselmeister
+ * @author Philip Wenig
  */
 public interface IMarkedIons extends IMarkedSignals<IMarkedIon> {
 
-	enum IonMarkMode {
+	enum IonMarkMode implements ILabel {
+
 		/**
 		 * in this mode, all ions in the list are considered as an exclusion, that means apply the given function to all except the given ions
 		 */
-		EXCLUDE,
+		EXCLUDE("exclude"),
 		/**
 		 * in this mode, all ions in the list are considered as an inclusion, that means apply the given function to all ions given
 		 */
-		INCLUDE;
+		INCLUDE("include");
+
+		private String label = "";
+
+		private IonMarkMode(String label) {
+
+			this.label = label;
+		}
+
+		@Override
+		public String label() {
+
+			return label;
+		}
 	}
 
 	Set<Integer> getIonsNominal();
