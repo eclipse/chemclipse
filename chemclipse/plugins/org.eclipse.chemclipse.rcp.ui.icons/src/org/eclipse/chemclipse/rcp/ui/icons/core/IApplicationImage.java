@@ -426,6 +426,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_PEAK_TRACES = PATH_PREFIX + "peakTraces.gif";
 	String IMAGE_COPY_CLIPBOARD = PATH_PREFIX + "copy-clipboard.png";
 	String IMAGE_ZOOM_LOCKED = PATH_PREFIX + "zoomLocked.png";
+	String IMAGE_ZOOM_IN = PATH_PREFIX + "zoomIn.png";
 	String IMAGE_TYPES = PATH_PREFIX + "types.png";
 	String IMAGE_VALUE_DECREASE = PATH_PREFIX + "valueDecrease.gif";
 	String IMAGE_VALUE_INCREASE = PATH_PREFIX + "valueIncrease.gif";

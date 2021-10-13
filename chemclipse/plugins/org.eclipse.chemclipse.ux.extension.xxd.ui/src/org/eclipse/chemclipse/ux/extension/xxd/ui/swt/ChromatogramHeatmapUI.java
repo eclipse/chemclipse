@@ -60,6 +60,11 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
 	private Button buttonToolbarEdit;
 	private AtomicReference<Composite> toolbarEdit = new AtomicReference<>();
+	//
+	private Button buttonZoom;
+	private static final String IMAGE_ZOOM = IApplicationImage.IMAGE_ZOOM_IN;
+	private static final String TOOLTIP_ZOOM = "the zoom.";
+	//
 	private IntensityScaleUI intensityScaleMin;
 	private IntensityScaleUI intensityScaleMax;
 	private LightweightSystem lightweightSystem;
@@ -98,6 +103,13 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 		}
 	}
 
+	@Override
+	public void setVisible(boolean visible) {
+
+		super.setVisible(visible);
+		updateButtonZoom();
+	}
+
 	public void update(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		if(this.chromatogramSelection == chromatogramSelection) {
@@ -120,8 +132,9 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 			if(heatmapData.isPresent()) {
 				saveScaleValues(scaleMin, scaleMax);
 				toolbarInfo.get().setText(ChromatogramDataSupport.getChromatogramSelectionLabel(chromatogramSelection));
+				boolean zoom = preferenceStore.getBoolean(PreferenceConstants.P_HEATMAP_ENABLE_ZOOM);
+				intensityGraphFigure = createIntensityGraphFigure(zoom);
 				boolean isWavelengthData = chromatogramSelection instanceof IChromatogramSelectionWSD;
-				intensityGraphFigure = createIntensityGraphFigure(!isWavelengthData);
 				setHeatMap(heatmapData.get(), isWavelengthData);
 				if(isWavelengthData) {
 					WavelengthSelector wavelengthSelector = new WavelengthSelector();
@@ -234,6 +247,7 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 
 		enableToolbar(toolbarInfo, buttonToolbarInfo, IMAGE_INFO, TOOLTIP_INFO, true);
 		enableToolbar(toolbarEdit, buttonToolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT, false);
+		enableButton(buttonZoom, IMAGE_ZOOM, TOOLTIP_ZOOM, preferenceStore.getBoolean(PreferenceConstants.P_HEATMAP_ENABLE_ZOOM));
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -242,10 +256,11 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(5, false));
+		composite.setLayout(new GridLayout(6, false));
 		//
 		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
 		buttonToolbarEdit = createButtonToggleToolbar(composite, toolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT);
+		buttonZoom = createButtonZoom(composite);
 		createColorMapComboViewer(composite);
 		createButtonReset(composite);
 		createButtonSettings(composite);
@@ -268,6 +283,32 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 		});
 		//
 		return button;
+	}
+
+	private Button createButtonZoom(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ZOOM_IN, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean zoom = preferenceStore.getBoolean(PreferenceConstants.P_HEATMAP_ENABLE_ZOOM);
+				preferenceStore.setValue(PreferenceConstants.P_HEATMAP_ENABLE_ZOOM, !zoom);
+				updateHeatmap();
+				updateButtonZoom();
+			}
+		});
+		//
+		return button;
+	}
+
+	private void updateButtonZoom() {
+
+		enableButton(buttonZoom, IMAGE_ZOOM, TOOLTIP_ZOOM, preferenceStore.getBoolean(PreferenceConstants.P_HEATMAP_ENABLE_ZOOM));
 	}
 
 	private void createButtonSettings(Composite parent) {
