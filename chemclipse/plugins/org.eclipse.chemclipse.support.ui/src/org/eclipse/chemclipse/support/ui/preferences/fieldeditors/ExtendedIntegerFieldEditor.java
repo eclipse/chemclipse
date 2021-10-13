@@ -19,7 +19,8 @@ import org.eclipse.swt.widgets.Text;
 public class ExtendedIntegerFieldEditor extends org.eclipse.jface.preference.IntegerFieldEditor {
 
 	private Validation validation;
-	private int min, max;
+	private int min = Integer.MIN_VALUE;
+	private int max = Integer.MAX_VALUE;
 
 	public ExtendedIntegerFieldEditor(String name, String labelText, Composite parent) {
 
@@ -60,7 +61,7 @@ public class ExtendedIntegerFieldEditor extends org.eclipse.jface.preference.Int
 		}
 		String numberString = text.getText();
 		try {
-			int number = Integer.valueOf(numberString).intValue();
+			int number = Integer.parseInt(numberString);
 			clearErrorMessage();
 			if(validation != null) {
 				if(validation == Validation.ODD_NUMBER_INCLUDING_ZERO) {
