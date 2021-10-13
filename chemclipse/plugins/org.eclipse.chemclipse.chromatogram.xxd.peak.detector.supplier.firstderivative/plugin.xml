@@ -27,7 +27,8 @@
             description="Implementation of a first derivative peak detector."
             id="org.eclipse.chemclipse.chromatogram.wsd.peak.detector.supplier.firstderivative"
             peakDetector="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.core.PeakDetectorWSD"
-            peakDetectorName="First Derivative">
+            peakDetectorName="First Derivative"
+            peakDetectorSettings="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsWSD">
       </PeakDetector>
    </extension>   
    <extension
