@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.ui.pref
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.splitter.ui.Activator;
-import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.IntegerFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.ExtendedIntegerFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
@@ -36,7 +36,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	@Override
 	public void createFieldEditors() {
 
-		addField(new IntegerFieldEditor(PreferenceSupplier.P_LIMIT_IONS_SIM, "Limit Ions (SIM)", PreferenceSupplier.MIN_LIMIT_IONS_SIM, PreferenceSupplier.MAX_LIMIT_IONS_SIM, getFieldEditorParent()));
+		addField(new ExtendedIntegerFieldEditor(PreferenceSupplier.P_LIMIT_IONS_SIM, "Limit Ions (SIM)", PreferenceSupplier.MIN_LIMIT_IONS_SIM, PreferenceSupplier.MAX_LIMIT_IONS_SIM, getFieldEditorParent()));
 	}
 
 	/*

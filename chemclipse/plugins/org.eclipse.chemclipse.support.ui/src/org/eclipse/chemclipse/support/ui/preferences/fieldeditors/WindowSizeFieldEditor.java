@@ -15,7 +15,7 @@ import org.eclipse.chemclipse.support.model.WindowSize;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty.Validation;
 import org.eclipse.swt.widgets.Composite;
 
-public class WindowSizeFieldEditor extends IntegerFieldEditor {
+public class WindowSizeFieldEditor extends ExtendedIntegerFieldEditor {
 
 	public WindowSizeFieldEditor(String name, String labelText, Composite parent) {
 

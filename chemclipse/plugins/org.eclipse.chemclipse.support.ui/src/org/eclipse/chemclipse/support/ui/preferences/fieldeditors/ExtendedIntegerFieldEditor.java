@@ -16,23 +16,24 @@ import org.eclipse.chemclipse.support.settings.IntSettingsProperty.Validation;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
-public class IntegerFieldEditor extends org.eclipse.jface.preference.IntegerFieldEditor {
+public class ExtendedIntegerFieldEditor extends org.eclipse.jface.preference.IntegerFieldEditor {
 
 	private Validation validation;
-	private int min, max;
+	private int min = Integer.MIN_VALUE;
+	private int max = Integer.MAX_VALUE;
 
-	public IntegerFieldEditor(String name, String labelText, Composite parent) {
+	public ExtendedIntegerFieldEditor(String name, String labelText, Composite parent) {
 
 		super(name, labelText, parent);
 	}
 
-	public IntegerFieldEditor(String name, String labelText, int min, int max, Composite parent) {
+	public ExtendedIntegerFieldEditor(String name, String labelText, int min, int max, Composite parent) {
 
 		super(name, labelText, parent);
 		setValidRange(min, max);
 	}
 
-	public IntegerFieldEditor(String name, String labelText, int min, int max, Validation validation, Composite parent) {
+	public ExtendedIntegerFieldEditor(String name, String labelText, int min, int max, Validation validation, Composite parent) {
 
 		super(name, labelText, parent);
 		setValidRange(min, max);
@@ -60,7 +61,7 @@ public class IntegerFieldEditor extends org.eclipse.jface.preference.IntegerFiel
 		}
 		String numberString = text.getText();
 		try {
-			int number = Integer.valueOf(numberString).intValue();
+			int number = Integer.parseInt(numberString);
 			clearErrorMessage();
 			if(validation != null) {
 				if(validation == Validation.ODD_NUMBER_INCLUDING_ZERO) {

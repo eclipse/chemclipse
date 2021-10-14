@@ -16,7 +16,7 @@ import org.eclipse.chemclipse.chromatogram.filter.ui.Activator;
 import org.eclipse.chemclipse.model.math.IonRoundMethod;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.DoubleFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.FloatFieldEditor;
-import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.IntegerFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.ExtendedIntegerFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.jface.preference.BooleanFieldEditor;
@@ -71,7 +71,7 @@ public class FilterPreferencePage extends FieldEditorPreferencePage implements I
 		addField(new StringFieldEditor(PreferenceSupplier.P_MAX_DETECTOR_TARGET_NAME, "Target Name", getFieldEditorParent()));
 		addField(new FloatFieldEditor(PreferenceSupplier.P_MAX_DETECTOR_MATCH_FACTOR, "Match Factor", PreferenceSupplier.MIN_FACTOR, PreferenceSupplier.MAX_FACTOR, getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_MAX_DETECTOR_MINIMA, "Detect Minima", getFieldEditorParent()));
-		addField(new IntegerFieldEditor(PreferenceSupplier.P_MAX_DETECTOR_COUNT, "Count (0 = All)", PreferenceSupplier.MIN_COUNT_MARKER, PreferenceSupplier.MAX_COUNT_MARKER, getFieldEditorParent()));
+		addField(new ExtendedIntegerFieldEditor(PreferenceSupplier.P_MAX_DETECTOR_COUNT, "Count (0 = All)", PreferenceSupplier.MIN_COUNT_MARKER, PreferenceSupplier.MAX_COUNT_MARKER, getFieldEditorParent()));
 	}
 
 	/*
