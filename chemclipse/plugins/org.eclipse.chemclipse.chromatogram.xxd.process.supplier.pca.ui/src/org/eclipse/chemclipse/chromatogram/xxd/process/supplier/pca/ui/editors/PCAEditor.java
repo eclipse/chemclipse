@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmHb.
+ * Copyright (c) 2018, 2021 Lablicate GmHb.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,10 +17,12 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamplesPCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt.AnalysisEditorUI;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.e4.core.contexts.IEclipseContext;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -54,6 +56,9 @@ public class PCAEditor {
 	@PreDestroy
 	public void preDestroy() {
 
+		context.remove(ISamplesPCA.class);
+		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+		eventBroker.send(Activator.TOPIC_PCA_EVALUATION_CLEAR, new Object());
 	}
 
 	@Focus

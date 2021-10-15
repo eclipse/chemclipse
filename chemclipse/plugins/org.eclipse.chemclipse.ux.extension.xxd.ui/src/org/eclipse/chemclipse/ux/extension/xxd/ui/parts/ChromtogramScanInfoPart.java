@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -49,6 +49,7 @@ public class ChromtogramScanInfoPart extends AbstractPart<ExtendedScanInfoUI> {
 				}
 			} else if(isCloseEvent(topic)) {
 				getControl().setInput(null);
+				unloadData();
 				return false;
 			}
 		}

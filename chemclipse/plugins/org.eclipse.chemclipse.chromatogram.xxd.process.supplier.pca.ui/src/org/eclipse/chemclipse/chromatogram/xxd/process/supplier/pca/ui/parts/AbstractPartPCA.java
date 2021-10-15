@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,6 +26,7 @@ public abstract class AbstractPartPCA<T extends Composite> extends AbstractPart<
 	/**
 	 * Overwrite, if additional topics shall be added.
 	 */
+	@Override
 	protected void subscribeAdditionalTopics() {
 
 		subscribeAdditionalTopic(Activator.TOPIC_PCA_EVALUATION_LOAD, IChemClipseEvents.EVENT_BROKER_DATA);

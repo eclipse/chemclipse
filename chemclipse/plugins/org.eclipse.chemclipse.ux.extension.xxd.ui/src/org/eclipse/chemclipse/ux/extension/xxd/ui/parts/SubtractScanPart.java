@@ -45,6 +45,7 @@ public class SubtractScanPart extends AbstractPart<ExtendedSubtractScanUI> {
 		if(objects.size() == 1) {
 			if(isCloseEvent(topic)) {
 				getControl().update(null);
+				unloadData();
 				return true;
 			} else {
 				Object object = objects.get(0);
