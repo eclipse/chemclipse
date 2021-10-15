@@ -126,8 +126,8 @@ public class ChromatogramWriterVersion110 extends AbstractChromatogramWriter imp
 					spectrum.getCvParam().add(cvParamType);
 				} else if(massSpectrum.getMassSpectrumType() == 1) {
 					CVParamType cvParamType = new CVParamType();
-					cvParamType.setAccession("MS:1000127");
-					cvParamType.setName("centroid spectrum");
+					cvParamType.setAccession("MS:1000128");
+					cvParamType.setName("profile spectrum");
 					spectrum.getCvParam().add(cvParamType);
 				}
 				spectrumList.getSpectrum().add(spectrum);
