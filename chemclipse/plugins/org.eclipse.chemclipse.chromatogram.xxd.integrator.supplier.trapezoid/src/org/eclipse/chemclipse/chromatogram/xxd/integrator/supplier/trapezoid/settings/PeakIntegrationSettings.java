@@ -14,26 +14,46 @@ package org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.se
 
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.AbstractPeakIntegrationSettings;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
+import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
 import org.eclipse.chemclipse.support.util.IonSettingUtil;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class PeakIntegrationSettings extends AbstractPeakIntegrationSettings {
 
-	@JsonProperty(value = "Ions to integrate", defaultValue = "0")
+	@JsonIgnore
+	private static final String TIC = "0";
+	//
+	@JsonProperty(value = "Ions to integrate", defaultValue = TIC)
 	@JsonPropertyDescription(value = "List the ions to integrate, separated by a white space. 0 = TIC")
 	@StringSettingsProperty(regExp = "(\\d+[;|\\s]?)+", isMultiLine = false)
-	private String ionsToIntegrate = "0";
+	private String ionsToIntegrate = TIC;
+	/*
+	 * The selected ions are handled separately.
+	 * They must not be persisted. If selected ions is
+	 * empty, TIC will be integrated.
+	 */
+	@JsonIgnore
+	private IMarkedIons selectedIons = null;
 
 	@Override
 	public IMarkedIons getSelectedIons() {
 
-		IonSettingUtil ionSettingUtil = new IonSettingUtil();
-		int[] ions = ionSettingUtil.extractIons(ionSettingUtil.deserialize(ionsToIntegrate));
-		return new MarkedIons(ions, IMarkedIons.IonMarkMode.INCLUDE);
+		if(selectedIons == null) {
+			selectedIons = super.getSelectedIons();
+			if(!ionsToIntegrate.equals(TIC)) {
+				IonSettingUtil ionSettingUtil = new IonSettingUtil();
+				int[] ions = ionSettingUtil.extractIons(ionSettingUtil.deserialize(ionsToIntegrate));
+				for(int ion : ions) {
+					selectedIons.add(new MarkedIon(ion));
+				}
+			}
+		}
+		//
+		return selectedIons;
 	}
 
 	public void setSelectedIon(String ionsToIntegrate) {

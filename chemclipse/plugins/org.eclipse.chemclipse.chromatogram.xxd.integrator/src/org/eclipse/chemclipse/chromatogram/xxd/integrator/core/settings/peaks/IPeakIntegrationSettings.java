@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks;
 
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.IIntegrationSettings;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.IIntegrationSettings;
 
 public interface IPeakIntegrationSettings extends IIntegrationSettings {
 
