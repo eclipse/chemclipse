@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,27 +12,18 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
-import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createColumn;
-import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createTreeTable;
-
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
-import org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinition;
-import org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinitionProvider;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
-import org.eclipse.core.runtime.Adapters;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
@@ -41,7 +32,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.TreeColumn;
 
 public class ExtendedMeasurementResultUI extends Composite implements IExtendedPartUI {
 
@@ -50,11 +40,7 @@ public class ExtendedMeasurementResultUI extends Composite implements IExtendedP
 	private Button buttonToolbarResults;
 	private AtomicReference<InformationUI> toolbarResults = new AtomicReference<>();
 	private ComboViewer comboMeasurementResults;
-	private TreeViewer resultTable;
-	private ProxySelectionChangedListener selectionChangedListener;
-	private ProxyTableLabelProvider labelProvider;
-	private ProxyStructuredContentProvider contentProvider;
-	private IMeasurementResult<?> lastResult;
+	private MeasurementResultUI measurementResultsUI;
 
 	public ExtendedMeasurementResultUI(Composite parent, int style) {
 
@@ -100,7 +86,7 @@ public class ExtendedMeasurementResultUI extends Composite implements IExtendedP
 		//
 		createToolbarMain(this);
 		createToolbarInfo(this);
-		resultTable = createResultSection(this);
+		createTable(this);
 		createToolbarResults(this);
 		//
 		initialize();
@@ -134,6 +120,12 @@ public class ExtendedMeasurementResultUI extends Composite implements IExtendedP
 		toolbarInfo.set(createInformationUI(parent));
 	}
 
+	private void createTable(Composite parent) {
+
+		measurementResultsUI = new MeasurementResultUI(parent, SWT.VIRTUAL | SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		measurementResultsUI.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+	}
+
 	private void createToolbarResults(Composite parent) {
 
 		toolbarResults.set(createInformationUI(parent));
@@ -145,19 +137,6 @@ public class ExtendedMeasurementResultUI extends Composite implements IExtendedP
 		informationUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		return informationUI;
-	}
-
-	private TreeViewer createResultSection(Composite parent) {
-
-		TreeViewer treeTable = createTreeTable(parent, true);
-		treeTable.getControl().setLayoutData(new GridData(GridData.FILL_BOTH));
-		contentProvider = new ProxyStructuredContentProvider();
-		treeTable.setContentProvider(contentProvider);
-		labelProvider = new ProxyTableLabelProvider();
-		treeTable.setLabelProvider(labelProvider);
-		selectionChangedListener = new ProxySelectionChangedListener();
-		treeTable.addSelectionChangedListener(selectionChangedListener);
-		return treeTable;
 	}
 
 	private ComboViewer createResultCombo(Composite parent) {
@@ -199,58 +178,22 @@ public class ExtendedMeasurementResultUI extends Composite implements IExtendedP
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
 				if(object instanceof IMeasurementResult<?>) {
-					updateMeasurementResult((IMeasurementResult<?>)object);
+					update((IMeasurementResult<?>)object);
 				} else {
-					updateMeasurementResult(null);
+					update(null);
 				}
 			}
 		});
 		return comboViewer;
 	}
 
-	private void updateMeasurementResult(IMeasurementResult<?> measurementResult) {
+	private void update(IMeasurementResult<?> measurementResult) {
 
 		updateLabel(measurementResult);
-		//
-		if(lastResult != measurementResult) {
-			contentProvider.setProxy(adaptTo(measurementResult, IStructuredContentProvider.class));
-			selectionChangedListener.setProxy(adaptTo(measurementResult, ISelectionChangedListener.class));
-			TreeColumn[] columns = resultTable.getTree().getColumns();
-			for(TreeColumn column : columns) {
-				column.dispose();
-			}
-			ColumnDefinitionProvider columnDefinitionProvider = adaptTo(measurementResult, ColumnDefinitionProvider.class);
-			if(columnDefinitionProvider != null) {
-				for(ColumnDefinition<?, ?> definition : columnDefinitionProvider.getColumnDefinitions()) {
-					createColumn(resultTable, definition);
-				}
-			}
-			ITableLabelProvider tableLabelProvider = adaptTo(measurementResult, ITableLabelProvider.class);
-			labelProvider.setProxy(tableLabelProvider);
-			if(tableLabelProvider != null) {
-				resultTable.setLabelProvider(tableLabelProvider);
-			}
-			resultTable.setInput(measurementResult);
-		}
-		this.lastResult = measurementResult;
-		resultTable.refresh();
+		measurementResultsUI.update(measurementResult);
 	}
 
-	private static <T> T adaptTo(IMeasurementResult<?> measurementResult, Class<T> desiredType) {
-
-		if(measurementResult == null) {
-			return null;
-		}
-		//
-		T resultAdapted = Adapters.adapt(measurementResult, desiredType);
-		if(resultAdapted != null) {
-			return resultAdapted;
-		} else {
-			return Adapters.adapt(measurementResult.getResult(), desiredType);
-		}
-	}
-
-	public void updateLabel(IMeasurementResult<?> measurementResult) {
+	private void updateLabel(IMeasurementResult<?> measurementResult) {
 
 		toolbarResults.get().setText(measurementResult != null ? measurementResult.getDescription() : "");
 	}
