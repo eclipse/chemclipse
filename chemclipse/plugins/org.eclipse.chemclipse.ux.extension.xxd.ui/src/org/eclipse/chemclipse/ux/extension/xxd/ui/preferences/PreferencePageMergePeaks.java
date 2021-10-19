@@ -31,7 +31,7 @@ public class PreferencePageMergePeaks extends FieldEditorPreferencePage implemen
 
 	public void createFieldEditors() {
 
-		addField(new ComboFieldEditor(PreferenceConstants.P_MERGE_PEAKS_CALCULATION_TYPE, "Calculation Type", CalculationType.getCalculationTypes(), getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_MERGE_PEAKS_CALCULATION_TYPE, "Calculation Type", CalculationType.getOptions(), getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_MERGE_PEAKS_IDENTIFICATION_TARGETS, "Merge Identification Targets", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_MERGE_PEAKS_DELETE_ORIGINS, "Delete Origins", getFieldEditorParent()));
 	}

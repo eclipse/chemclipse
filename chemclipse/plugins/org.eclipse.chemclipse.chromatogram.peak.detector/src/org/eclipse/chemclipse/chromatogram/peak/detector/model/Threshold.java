@@ -15,7 +15,6 @@ package org.eclipse.chemclipse.chromatogram.peak.detector.model;
 import org.eclipse.chemclipse.support.text.ILabel;
 
 public enum Threshold implements ILabel {
-
 	OFF(1), //
 	LOW(2), //
 	MEDIUM(3), //
@@ -39,15 +38,8 @@ public enum Threshold implements ILabel {
 		return name().toLowerCase();
 	}
 
-	public static String[][] getElements() {
+	public static String[][] getOptions() {
 
-		String[][] elements = new String[values().length][2];
-		int counter = 0;
-		for(Threshold threshold : values()) {
-			elements[counter][0] = threshold.label();
-			elements[counter][1] = threshold.name();
-			counter++;
-		}
-		return elements;
+		return ILabel.getOptions(values());
 	}
 }

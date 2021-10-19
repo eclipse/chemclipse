@@ -15,7 +15,6 @@ import org.eclipse.chemclipse.processing.Messages;
 import org.eclipse.chemclipse.support.text.ILabel;
 
 public enum DetectorCategory implements ILabel {
-
 	PEAK(Messages.getString("DetectorCategory.PEAK"));
 
 	private String label;

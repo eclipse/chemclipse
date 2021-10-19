@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.swt.ui.services;
 import org.eclipse.chemclipse.support.text.ILabel;
 
 public enum ImageServiceInput implements ILabel {
-
 	NAME("Name"), //
 	SMILES("SMILES");
 
@@ -28,5 +27,10 @@ public enum ImageServiceInput implements ILabel {
 	public String label() {
 
 		return label;
+	}
+
+	public static String[][] getOptions() {
+
+		return ILabel.getOptions(values());
 	}
 }

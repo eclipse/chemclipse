@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts;
 import org.eclipse.chemclipse.support.text.ILabel;
 
 public enum Derivative implements ILabel {
-
 	NONE("--", 0), //
 	FIRST("1st", 1), //
 	SECOND("2nd", 2), //
@@ -38,5 +37,10 @@ public enum Derivative implements ILabel {
 	public int order() {
 
 		return order;
+	}
+
+	public static String[][] getOptions() {
+
+		return ILabel.getOptions(values());
 	}
 }

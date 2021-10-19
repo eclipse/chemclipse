@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.set
 import org.eclipse.chemclipse.support.text.ILabel;
 
 public enum ModelPeakOption implements ILabel {
-
 	ALL("MPx (All)", 0), //
 	MP1("MP1", 1), //
 	MP2("MP2", 2), //
@@ -40,13 +39,8 @@ public enum ModelPeakOption implements ILabel {
 		return value;
 	}
 
-	public static String[][] getItems() {
+	public static String[][] getOptions() {
 
-		return new String[][]{//
-				{ALL.label(), ALL.name()}, //
-				{MP1.label(), MP1.name()}, //
-				{MP2.label(), MP2.name()}, //
-				{MP3.label(), MP3.name()} //
-		};
+		return ILabel.getOptions(values());
 	}
 }

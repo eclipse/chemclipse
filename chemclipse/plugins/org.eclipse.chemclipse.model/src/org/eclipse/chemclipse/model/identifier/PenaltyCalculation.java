@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.model.identifier;
 import org.eclipse.chemclipse.support.text.ILabel;
 
 public enum PenaltyCalculation implements ILabel {
-
 	NONE("None"), //
 	RETENTION_TIME("Retention Time"), //
 	RETENTION_INDEX("Retention Index"), //
@@ -30,5 +29,10 @@ public enum PenaltyCalculation implements ILabel {
 	public String label() {
 
 		return label;
+	}
+
+	public static String[][] getOptions() {
+
+		return ILabel.getOptions(values());
 	}
 }

@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.mod
 import org.eclipse.chemclipse.support.text.ILabel;
 
 public enum ScanDirection implements ILabel {
-
 	HIGH_TO_LOW("High to Low", "-1"), //
 	NONE("None", "0"), //
 	LOW_TO_HIGH("Low to High", "1");

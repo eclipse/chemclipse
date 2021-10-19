@@ -18,7 +18,6 @@ import org.eclipse.chemclipse.logging.support.Settings;
 import org.eclipse.chemclipse.support.text.ILabel;
 
 public enum AssetType implements ILabel {
-
 	CONFIGURATION("Configuration", ".cfg", Settings.getSystemConfigDirectory(), "Service Configuration File"), //
 	METHOD("Process Method", ".ocm", Settings.getSystemMethodDirectory(), "Process Method File"), //
 	PLUGIN("Plugin", ".jar", Settings.getSystemPluginDirectory(), "Plugin Extension");

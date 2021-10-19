@@ -19,7 +19,6 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.support.text.ILabel;
 
 public enum LibraryField implements ILabel {
-
 	NAME("Name", getLibraryExtractor(ILibraryInformation::getName)), //
 	CAS("CAS", getLibraryExtractor(ILibraryInformation::getCasNumber)), //
 	NAME_CAS("Name (CAS)", getLibraryExtractor(ILibraryInformation::getName, ILibraryInformation::getCasNumber)), //
@@ -58,19 +57,9 @@ public enum LibraryField implements ILabel {
 		return label;
 	}
 
-	public static String[][] getLibraryFields() {
+	public static String[][] getOptions() {
 
-		LibraryField[] libraryFields = values();
-		String[][] elements = new String[libraryFields.length][2];
-		//
-		int counter = 0;
-		for(LibraryField libraryField : libraryFields) {
-			elements[counter][0] = libraryField.label();
-			elements[counter][1] = libraryField.name();
-			counter++;
-		}
-		//
-		return elements;
+		return ILabel.getOptions(values());
 	}
 
 	private static <T> Function<IIdentificationTarget, T> getLibraryExtractor(Function<ILibraryInformation, T> extractor) {

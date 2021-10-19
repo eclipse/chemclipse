@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
 import org.eclipse.chemclipse.model.core.support.HeaderField;
+import org.eclipse.chemclipse.support.text.ILabel;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.DoubleFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
@@ -53,7 +54,7 @@ public class PreferencePageChromatogram extends FieldEditorPreferencePage implem
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_REFERENCE_LABEL, "Reference Label:", HeaderField.getOptions(), getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_NAME_TO_REFERENCES_HEADER_FIELD, "Transfer Name to References Header Field:", HeaderField.getOptions(new HeaderField[]{HeaderField.DATA_NAME, HeaderField.SAMPLE_GROUP, HeaderField.SHORT_INFO}), getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_NAME_TO_REFERENCES_HEADER_FIELD, "Transfer Name to References Header Field:", ILabel.getOptions(new HeaderField[]{HeaderField.DATA_NAME, HeaderField.SAMPLE_GROUP, HeaderField.SHORT_INFO}), getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_COLUMN_TYPE_TO_REFERENCES, "Transfer Column Type to References", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SHOW_METHODS_TOOLBAR, "Show Methods Toolbar", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_CHROMATOGRAM_SHOW_REFERENCES_COMBO, "Show References Combo", getFieldEditorParent()));

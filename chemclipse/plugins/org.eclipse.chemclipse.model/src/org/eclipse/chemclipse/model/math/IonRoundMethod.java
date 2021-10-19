@@ -23,7 +23,6 @@ import org.eclipse.chemclipse.support.text.ValueFormat;
  * 
  */
 public enum IonRoundMethod implements ILabel {
-
 	DEFAULT(v -> Math.round(v), "Default: round to nearest integer"), //
 	MINUS_00(v -> round(v, 10), createDescription(-0.0d)), //
 	MINUS_01(v -> round(v, 9), createDescription(-0.1d)), //
@@ -69,17 +68,7 @@ public enum IonRoundMethod implements ILabel {
 
 	public static String[][] getOptions() {
 
-		IonRoundMethod[] methods = values();
-		String[][] elements = new String[methods.length][2];
-		//
-		int counter = 0;
-		for(IonRoundMethod method : methods) {
-			elements[counter][0] = method.label();
-			elements[counter][1] = method.name();
-			counter++;
-		}
-		//
-		return elements;
+		return ILabel.getOptions(values());
 	}
 
 	public static IonRoundMethod getActive() {

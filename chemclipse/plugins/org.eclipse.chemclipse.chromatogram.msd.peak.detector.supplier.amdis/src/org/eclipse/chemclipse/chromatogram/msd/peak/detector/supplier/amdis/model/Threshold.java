@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.mod
 import org.eclipse.chemclipse.support.text.ILabel;
 
 public enum Threshold implements ILabel {
-
 	HIGH("High", "3"), //
 	MEDIUM("Medium", "2"), //
 	LOW("Low", "1"), //

@@ -22,7 +22,6 @@ import org.eclipse.chemclipse.support.text.ILabel;
  *
  */
 public enum DataCategory implements ILabel {
-
 	MSD(Messages.getString("DataCategory.MSD")), //
 	CSD(Messages.getString("DataCategory.CSD")), //
 	WSD(Messages.getString("DataCategory.WSD")), //

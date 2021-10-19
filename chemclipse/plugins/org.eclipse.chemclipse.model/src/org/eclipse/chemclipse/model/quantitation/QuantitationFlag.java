@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.model.quantitation;
 import org.eclipse.chemclipse.support.text.ILabel;
 
 public enum QuantitationFlag implements ILabel {
-
 	NONE("", ""), //
 	ZERO("0", "Z"), //
 	NEGATIVE("< 0", "N"), //
@@ -42,16 +41,6 @@ public enum QuantitationFlag implements ILabel {
 
 	public static String[][] getOptions() {
 
-		QuantitationFlag[] values = values();
-		String[][] elements = new String[values.length][2];
-		//
-		int counter = 0;
-		for(QuantitationFlag value : values) {
-			elements[counter][0] = value.label();
-			elements[counter][1] = value.name();
-			counter++;
-		}
-		//
-		return elements;
+		return ILabel.getOptions(values());
 	}
 }

@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.mod
 import org.eclipse.chemclipse.support.text.ILabel;
 
 public enum InstrumentType implements ILabel {
-
 	QUADRUPOLE("Quadrupole", "0"), //
 	ION_TRAP("Ion Trap", "1"), //
 	MAGNETIC_SECTOR("Magnetic Sector", "2"), //

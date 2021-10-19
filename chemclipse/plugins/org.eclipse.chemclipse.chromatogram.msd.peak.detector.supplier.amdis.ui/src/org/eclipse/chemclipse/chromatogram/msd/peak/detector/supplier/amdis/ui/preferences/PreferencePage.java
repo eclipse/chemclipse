@@ -111,7 +111,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		addField(new FloatFieldEditor(PreferenceSupplier.P_MAX_LEADING, "Max Leading:", 0.0f, Float.MAX_VALUE, getFieldEditorParent()));
 		addField(new FloatFieldEditor(PreferenceSupplier.P_MIN_TAILING, "Min Tailing:", 0.0f, Float.MAX_VALUE, getFieldEditorParent()));
 		addField(new FloatFieldEditor(PreferenceSupplier.P_MAX_TAILING, "Max Tailing:", 0.0f, Float.MAX_VALUE, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceSupplier.P_MODEL_PEAK_OPTION, "Model Peak Option", ModelPeakOption.getItems(), getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_MODEL_PEAK_OPTION, "Model Peak Option", ModelPeakOption.getOptions(), getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Extra settings (to improve the result quality).", getFieldEditorParent()));

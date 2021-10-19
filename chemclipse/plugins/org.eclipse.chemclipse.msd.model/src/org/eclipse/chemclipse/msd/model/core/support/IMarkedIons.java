@@ -32,15 +32,14 @@ import org.eclipse.chemclipse.support.text.ILabel;
 public interface IMarkedIons extends IMarkedSignals<IMarkedIon> {
 
 	enum IonMarkMode implements ILabel {
-
 		/**
-		 * in this mode, all ions in the list are considered as an exclusion, that means apply the given function to all except the given ions
+		 * In this mode, all ions in the list are considered as an exclusion, that means apply the given function to all except the given ions
 		 */
-		EXCLUDE("exclude"),
+		EXCLUDE("Exclude"),
 		/**
-		 * in this mode, all ions in the list are considered as an inclusion, that means apply the given function to all ions given
+		 * In this mode, all ions in the list are considered as an inclusion, that means apply the given function to all ions given
 		 */
-		INCLUDE("include");
+		INCLUDE("Include");
 
 		private String label = "";
 
@@ -53,6 +52,11 @@ public interface IMarkedIons extends IMarkedSignals<IMarkedIon> {
 		public String label() {
 
 			return label;
+		}
+
+		public static String[][] getOptions() {
+
+			return ILabel.getOptions(values());
 		}
 	}
 

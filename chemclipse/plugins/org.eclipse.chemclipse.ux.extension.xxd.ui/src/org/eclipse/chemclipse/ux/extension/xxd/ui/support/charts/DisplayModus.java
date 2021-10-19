@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts;
 import org.eclipse.chemclipse.support.text.ILabel;
 
 public enum DisplayModus implements ILabel {
-
 	NORMAL("Normal"), //
 	MIRRORED("Mirrored");
 
@@ -29,5 +28,10 @@ public enum DisplayModus implements ILabel {
 	public String label() {
 
 		return label;
+	}
+
+	public static String[][] getOptions() {
+
+		return ILabel.getOptions(values());
 	}
 }

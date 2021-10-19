@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.mod
 import org.eclipse.chemclipse.support.text.ILabel;
 
 public enum Sensitivity implements ILabel {
-
 	VERY_HIGH("Very High", "60"), //
 	HIGH("High", "30"), //
 	MEDIUM("Medium", "10"), //

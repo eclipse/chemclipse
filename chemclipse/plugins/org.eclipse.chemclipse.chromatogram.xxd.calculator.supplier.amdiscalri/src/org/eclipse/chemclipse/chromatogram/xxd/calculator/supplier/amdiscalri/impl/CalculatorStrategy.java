@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.i
 import org.eclipse.chemclipse.support.text.ILabel;
 
 public enum CalculatorStrategy implements ILabel {
-
 	AUTO("First Chromatogram - Then File(s)"), //
 	CHROMATOGRAM("Chromatogram Only"), //
 	FILES("File(s) Only");
@@ -30,5 +29,10 @@ public enum CalculatorStrategy implements ILabel {
 	public String label() {
 
 		return label;
+	}
+
+	public static String[][] getOptions() {
+
+		return ILabel.getOptions(values());
 	}
 }

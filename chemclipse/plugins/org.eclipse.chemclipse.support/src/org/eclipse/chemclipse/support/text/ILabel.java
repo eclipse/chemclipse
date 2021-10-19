@@ -14,4 +14,18 @@ package org.eclipse.chemclipse.support.text;
 public interface ILabel {
 
 	String label();
+
+	static String[][] getOptions(Enum<?>[] values) {
+
+		String[][] elements = new String[values.length][2];
+		//
+		int counter = 0;
+		for(Enum<?> value : values) {
+			elements[counter][0] = value instanceof ILabel ? ((ILabel)value).label() : value.toString();
+			elements[counter][1] = value.name();
+			counter++;
+		}
+		//
+		return elements;
+	}
 }

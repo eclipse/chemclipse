@@ -57,7 +57,7 @@ public class PreferencePageSystem extends FieldEditorPreferencePage implements I
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_RETENTION_INDEX_QC, "QC: Use Retention Index", getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceSupplier.P_BEST_TARGET_LIBRARY_FIELD, "Best Target", LibraryField.getLibraryFields(), getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_BEST_TARGET_LIBRARY_FIELD, "Best Target", LibraryField.getOptions(), getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceSupplier.P_ION_ROUND_METHOD, "Ion Round Method", IonRoundMethod.getOptions(), getFieldEditorParent()));
 		//
 		preferenceStore.addPropertyChangeListener(new IPropertyChangeListener() {

@@ -15,7 +15,6 @@ package org.eclipse.chemclipse.model.targets;
 import org.eclipse.chemclipse.support.text.ILabel;
 
 public enum TargetReferenceType implements ILabel {
-
 	NONE("None"), //
 	SCAN("Scan"), //
 	PEAK("Peak");
@@ -30,5 +29,10 @@ public enum TargetReferenceType implements ILabel {
 	public String label() {
 
 		return label;
+	}
+
+	public static String[][] getOptions() {
+
+		return ILabel.getOptions(values());
 	}
 }

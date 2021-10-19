@@ -16,12 +16,15 @@ import java.util.List;
 
 public class SeparationColumnFactory {
 
-	public static final String TYPE_DEFAULT = "default";
-	//
-	public static final String TYPE_POLAR = "polar";
-	public static final String TYPE_APOLAR = "apolar";
-	public static final String TYPE_SEMI_POLAR = "semi-polar";
-	//
+	public static final String TYPE_DEFAULT = "Default";
+	public static final String TYPE_POLAR = "Polar";
+	public static final String TYPE_APOLAR = "Nonpolar";
+	public static final String TYPE_SEMI_POLAR = "Semipolar";
+	/*
+	 * Specific columns might be removed soon as basic types.
+	 * Mappings shall be added to group specific columns into
+	 * one of the three above classes.
+	 */
 	public static final String TYPE_DB1 = "DB-1";
 	public static final String TYPE_DB5 = "DB-5";
 	public static final String TYPE_DB1701 = "DB-1701";

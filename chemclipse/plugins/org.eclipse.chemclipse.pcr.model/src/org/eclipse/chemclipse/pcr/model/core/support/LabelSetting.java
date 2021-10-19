@@ -33,16 +33,6 @@ public enum LabelSetting implements ILabel {
 
 	public static String[][] getOptions() {
 
-		LabelSetting[] labelSettings = values();
-		String[][] elements = new String[labelSettings.length][2];
-		//
-		int counter = 0;
-		for(LabelSetting labelSetting : labelSettings) {
-			elements[counter][0] = labelSetting.label();
-			elements[counter][1] = labelSetting.name();
-			counter++;
-		}
-		//
-		return elements;
+		return ILabel.getOptions(values());
 	}
 }

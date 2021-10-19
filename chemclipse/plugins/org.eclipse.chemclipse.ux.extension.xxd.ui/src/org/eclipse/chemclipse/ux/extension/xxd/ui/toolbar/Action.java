@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.toolbar;
 import org.eclipse.chemclipse.support.text.ILabel;
 
 public enum Action implements ILabel {
-
 	SHOW("Show"), //
 	HIDE("Hide");
 
@@ -34,5 +33,10 @@ public enum Action implements ILabel {
 	public String id() {
 
 		return label.toLowerCase();
+	}
+
+	public static String[][] getOptions() {
+
+		return ILabel.getOptions(values());
 	}
 }

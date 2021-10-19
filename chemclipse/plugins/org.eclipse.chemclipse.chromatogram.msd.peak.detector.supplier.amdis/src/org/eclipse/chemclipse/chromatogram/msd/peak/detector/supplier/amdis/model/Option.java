@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.mod
 import org.eclipse.chemclipse.support.text.ILabel;
 
 public enum Option implements ILabel {
-
 	YES("Yes", "1"), //
 	NO("No", "0");
 

@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.mod
 import org.eclipse.chemclipse.support.text.ILabel;
 
 public enum AdjacentPeakSubtraction implements ILabel {
-
 	TWO("Two", "0"), //
 	ONE("One", "1"), //
 	NONE("None", "2");

@@ -16,9 +16,8 @@ package org.eclipse.chemclipse.chromatogram.peak.detector.core;
 import org.eclipse.chemclipse.support.text.ILabel;
 
 public enum FilterMode implements ILabel {
-
-	INCLUDE("inclusive"), //
-	EXCLUDE("exclusive");
+	INCLUDE("Inclusive"), //
+	EXCLUDE("Exclusive");
 
 	private String label;
 
@@ -33,15 +32,8 @@ public enum FilterMode implements ILabel {
 		return label;
 	}
 
-	public static String[][] getElements() {
+	public static String[][] getOptions() {
 
-		String[][] elements = new String[values().length][2];
-		int counter = 0;
-		for(FilterMode filterMode : values()) {
-			elements[counter][0] = filterMode.label();
-			elements[counter][1] = filterMode.name();
-			counter++;
-		}
-		return elements;
+		return ILabel.getOptions(values());
 	}
 }

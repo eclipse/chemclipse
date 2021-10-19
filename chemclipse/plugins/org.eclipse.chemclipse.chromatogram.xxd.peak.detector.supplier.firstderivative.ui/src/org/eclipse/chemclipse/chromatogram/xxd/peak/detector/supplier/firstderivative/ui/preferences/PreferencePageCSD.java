@@ -40,7 +40,7 @@ public class PreferencePageCSD extends FieldEditorPreferencePage implements IWor
 	@Override
 	public void createFieldEditors() {
 
-		addField(new ComboFieldEditor(PreferenceSupplier.P_THRESHOLD_MSD, "Threshold", Threshold.getElements(), getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_THRESHOLD_MSD, "Threshold", Threshold.getOptions(), getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_INCLUDE_BACKGROUND_CSD, "Include Background (VV: true, BV|VB: false)", getFieldEditorParent()));
 		addField(new FloatFieldEditor(PreferenceSupplier.P_MIN_SN_RATIO_CSD, "Min S/N Ratio", 0.0f, Float.MAX_VALUE, getFieldEditorParent()));
 		addField(new WindowSizeFieldEditor(PreferenceSupplier.P_MOVING_AVERAGE_WINDOW_SIZE_CSD, "Window Size", getFieldEditorParent()));
