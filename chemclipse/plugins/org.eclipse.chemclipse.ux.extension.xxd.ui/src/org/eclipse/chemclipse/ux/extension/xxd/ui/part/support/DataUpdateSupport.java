@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -79,6 +79,11 @@ public class DataUpdateSupport {
 	public List<Object> getUpdates(String topic) {
 
 		return objectMap.getOrDefault(topic, Collections.emptyList());
+	}
+
+	public void clearObjects() {
+
+		objectMap.clear();
 	}
 
 	public void subscribe(String topic, String property) {

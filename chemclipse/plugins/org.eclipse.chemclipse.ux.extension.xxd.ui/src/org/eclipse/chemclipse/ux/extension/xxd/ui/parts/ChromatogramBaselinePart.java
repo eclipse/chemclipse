@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -50,6 +50,7 @@ public class ChromatogramBaselinePart extends AbstractPart<ExtendedBaselineUI> {
 				}
 			} else if(isCloseEvent(topic)) {
 				getControl().update(null);
+				unloadData();
 				return false;
 			}
 		}

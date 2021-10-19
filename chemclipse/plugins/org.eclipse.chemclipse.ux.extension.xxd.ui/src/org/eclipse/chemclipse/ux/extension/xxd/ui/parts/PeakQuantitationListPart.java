@@ -16,17 +16,14 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
-import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.support.PeakQuantitationsExtractor;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
-import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedPeakQuantitationListUI;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
-import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
@@ -64,6 +61,7 @@ public class PeakQuantitationListPart extends AbstractPart<ExtendedPeakQuantitat
 				}
 			} else if(isCloseEvent(topic)) {
 				getControl().update(null);
+				unloadData();
 				return false;
 			}
 		}
@@ -93,13 +91,13 @@ public class PeakQuantitationListPart extends AbstractPart<ExtendedPeakQuantitat
 		List<? extends IPeak> peaks = null;
 		if(chromatogram instanceof IChromatogramMSD) {
 			IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
-			peaks = chromatogramMSD.getPeaks((IChromatogramSelectionMSD)chromatogramSelection);
+			peaks = chromatogramMSD.getPeaks(chromatogramSelection);
 		} else if(chromatogram instanceof IChromatogramCSD) {
 			IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
-			peaks = chromatogramCSD.getPeaks((IChromatogramSelectionCSD)chromatogramSelection);
+			peaks = chromatogramCSD.getPeaks(chromatogramSelection);
 		} else if(chromatogram instanceof IChromatogramWSD) {
 			IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
-			peaks = chromatogramWSD.getPeaks((IChromatogramSelectionWSD)chromatogramSelection);
+			peaks = chromatogramWSD.getPeaks(chromatogramSelection);
 		}
 		//
 		return peaks;
