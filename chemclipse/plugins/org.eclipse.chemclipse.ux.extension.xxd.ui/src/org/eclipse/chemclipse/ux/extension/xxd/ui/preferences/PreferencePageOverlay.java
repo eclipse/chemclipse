@@ -12,14 +12,13 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.DoubleFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.ExtendedIntegerFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.IntegerFieldEditor;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swtchart.extensions.preferences.PreferenceSupport;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
@@ -52,16 +51,12 @@ public class PreferencePageOverlay extends FieldEditorPreferencePage implements 
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new DoubleFieldEditor(PreferenceConstants.P_OVERLAY_SHIFT_X, "Overlay Shift X:", PreferenceConstants.MIN_OVERLAY_SHIFT_X, PreferenceConstants.MAX_OVERLAY_SHIFT_X, getFieldEditorParent()));
-		addField(getIntegerFieldEditor(PreferenceConstants.P_INDEX_SHIFT_X, "Index Shift X", PreferenceConstants.MIN_INDEX_SHIFT_X, PreferenceConstants.MAX_INDEX_SHIFT_X, getFieldEditorParent()));
+		addField(new ExtendedIntegerFieldEditor(PreferenceConstants.P_INDEX_SHIFT_X, "Index Shift X", PreferenceConstants.MIN_INDEX_SHIFT_X, PreferenceConstants.MAX_INDEX_SHIFT_X, getFieldEditorParent()));
 		addField(new DoubleFieldEditor(PreferenceConstants.P_OVERLAY_SHIFT_Y, "Overlay Shift Y:", PreferenceConstants.MIN_OVERLAY_SHIFT_Y, PreferenceConstants.MAX_OVERLAY_SHIFT_Y, getFieldEditorParent()));
-		addField(getIntegerFieldEditor(PreferenceConstants.P_INDEX_SHIFT_Y, "Index Shift Y", PreferenceConstants.MIN_INDEX_SHIFT_Y, PreferenceConstants.MAX_INDEX_SHIFT_Y, getFieldEditorParent()));
-	}
-
-	private IntegerFieldEditor getIntegerFieldEditor(String name, String labelText, int min, int max, Composite parent) {
-
-		IntegerFieldEditor integerFieldEditor = new IntegerFieldEditor(name, labelText, parent);
-		integerFieldEditor.setValidRange(min, max);
-		return integerFieldEditor;
+		addField(new ExtendedIntegerFieldEditor(PreferenceConstants.P_INDEX_SHIFT_Y, "Index Shift Y", PreferenceConstants.MIN_INDEX_SHIFT_Y, PreferenceConstants.MAX_INDEX_SHIFT_Y, getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new ExtendedIntegerFieldEditor(PreferenceConstants.P_MODULO_AUTO_MIRROR_CHROMATOGRAMS, "Auto Mirror every nth chromatogram", PreferenceConstants.MIN_MODULO_AUTO_MIRROR, PreferenceConstants.MAX_MODULO_AUTO_MIRROR, getFieldEditorParent()));
 	}
 
 	@Override

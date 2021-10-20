@@ -72,6 +72,10 @@ public class PreferenceConstants extends ChartOptions {
 	public static final int MAX_DEVIATION_RETENTION_TIME = Integer.MAX_VALUE;
 	public static final float MIN_DEVIATION_RETENTION_INDEX = 0.0f;
 	public static final float MAX_DEVIATION_RETENTION_INDEX = Float.MAX_VALUE;
+	//
+	public static final int MIN_MODULO_AUTO_MIRROR = 2;
+	public static final int MAX_MODULO_AUTO_MIRROR = 100;
+	public static final int DEF_MODULO_AUTO_MIRROR = 2;
 	/*
 	 * General / Task Quick Access
 	 */
@@ -156,6 +160,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_LINE_STYLE_DISPLAY_OVERLAY = LineStyle.SOLID.toString();
 	public static final String P_SHOW_OPTIMIZED_CHROMATOGRAM_XWC = "showOptimizedChromatogramXWC";
 	public static final boolean DEF_SHOW_OPTIMIZED_CHROMATOGRAM_XWC = true;
+	public static final String P_MODULO_AUTO_MIRROR_CHROMATOGRAMS = "moduloAutoMirrorChromatograms";
+	public static final int DEF_MODULO_AUTO_MIRROR_CHROMATOGRAMS = DEF_MODULO_AUTO_MIRROR;
 	/*
 	 * Peak Traces
 	 */

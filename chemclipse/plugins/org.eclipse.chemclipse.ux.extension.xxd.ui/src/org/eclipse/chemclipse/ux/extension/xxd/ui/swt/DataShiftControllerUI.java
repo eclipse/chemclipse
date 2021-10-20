@@ -20,13 +20,16 @@ import java.util.Set;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlayChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.ShiftValidator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.DisplayModus;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.fieldassist.ControlDecoration;
 import org.eclipse.jface.fieldassist.FieldDecorationRegistry;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
@@ -56,16 +59,18 @@ import org.eclipse.swtchart.extensions.core.RangeRestriction.ExtendType;
 import org.eclipse.swtchart.extensions.core.ScrollableChart;
 import org.eclipse.swtchart.extensions.core.SeriesStatusAdapter;
 
-public class DataShiftControllerUI extends Composite {
+public class DataShiftControllerUI extends Composite implements IExtendedPartUI {
 
 	private static final String SERIES_REDRAW = "";
 	private static final String SERIES_ALL = "";
 	/*
 	 * Mirror Button
 	 */
-	private static final String BUTTON_MIRROR_KEY = "DisplayModus";
-	private static final String normalTooltip = "Set the selected series to normal modus.";
-	private static final String mirrorTooltip = "Set the selected series to mirrored modus.";
+	private static final String KEY_MIRROR_MODUS = "MirrorModus";
+	private static final String IMAGE_MIRROR = IApplicationImage.IMAGE_SHIFT_MIRROR;
+	private static final String TOOLTIP_MIRROR = "the mirror modus";
+	//
+	private Button buttonAutoMirror;
 	//
 	private Text textX;
 	private ComboViewer comboViewerX;
@@ -85,6 +90,7 @@ public class DataShiftControllerUI extends Composite {
 	//
 	private final OverlayChartSupport overlayChartSupport = new OverlayChartSupport();
 	private final Set<String> mirroredSeries = new HashSet<>();
+	private IPreferenceStore preferences = Activator.getDefault().getPreferenceStore();
 
 	public DataShiftControllerUI(Composite parent, int style) {
 
@@ -136,7 +142,8 @@ public class DataShiftControllerUI extends Composite {
 		if(scrollableChart != null) {
 			BaseChart baseChart = scrollableChart.getBaseChart();
 			IChartSettings chartSettings = scrollableChart.getChartSettings();
-			if(DisplayModus.MIRRORED.equals(displayModus)) {
+			//
+			if(DisplayModus.MIRROR.equals(displayModus)) {
 				if(!mirroredSeries.contains(seriesId)) {
 					baseChart.multiplySeries(seriesId, IExtendedChart.Y_AXIS, -1.0d);
 					mirroredSeries.add(seriesId);
@@ -148,7 +155,7 @@ public class DataShiftControllerUI extends Composite {
 				}
 			}
 			//
-			modifyWidgetStatus();
+			updateWidgets();
 			scrollableChart.applySettings(chartSettings);
 			scrollableChart.adjustRange(true);
 			scrollableChart.redraw();
@@ -160,7 +167,7 @@ public class DataShiftControllerUI extends Composite {
 		GridLayout gridLayout = new GridLayout(14, false);
 		setLayout(gridLayout);
 		//
-		createButtonAutoMirror(this);
+		buttonAutoMirror = createButtonAutoMirror(this);
 		createVerticalSeparator(this);
 		textX = createTextX(this);
 		comboViewerX = createComboViewerX(this);
@@ -174,6 +181,14 @@ public class DataShiftControllerUI extends Composite {
 		buttonShiftRight = createButtonRight(this);
 		buttonShiftUp = createButtonUp(this);
 		buttonShiftDown = createButtonDown(this);
+		//
+		initialize();
+	}
+
+	private void initialize() {
+
+		enableButton(buttonAutoMirror, IMAGE_MIRROR, TOOLTIP_MIRROR, false);
+		enableButton(buttonMirrorSeries, IMAGE_MIRROR, TOOLTIP_MIRROR, false);
 	}
 
 	private Text createTextX(Composite parent) {
@@ -348,12 +363,13 @@ public class DataShiftControllerUI extends Composite {
 		return button;
 	}
 
-	private void createButtonAutoMirror(Composite parent) {
+	private Button createButtonAutoMirror(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Auto Mirror Chromatograms");
+		button.setToolTipText("");
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SHIFT_AUTO_MIRROR, IApplicationImage.SIZE_16x16));
+		button.setData(KEY_MIRROR_MODUS, DisplayModus.NORMAL);
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@SuppressWarnings("rawtypes")
@@ -361,27 +377,54 @@ public class DataShiftControllerUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(scrollableChart != null) {
-					//
+					/*
+					 * Settings
+					 */
+					Object object = button.getData(KEY_MIRROR_MODUS);
+					DisplayModus displayModus = object instanceof DisplayModus ? (DisplayModus)object : DisplayModus.NORMAL;
 					IChartSettings chartSettings = scrollableChart.getChartSettings();
 					//
-					int i = 0;
-					for(ISeries series : baseChart.getSeriesSet().getSeries()) {
-						if(i % 2 == 1) {
+					if(DisplayModus.NORMAL.equals(displayModus)) {
+						/*
+						 * If status is normal, then mirror the series.
+						 */
+						displayModus = DisplayModus.MIRROR;
+						int i = 0;
+						int modulo = preferences.getInt(PreferenceConstants.P_MODULO_AUTO_MIRROR_CHROMATOGRAMS);
+						for(ISeries series : baseChart.getSeriesSet().getSeries()) {
+							if(i % modulo == 1) {
+								String seriesId = series.getId();
+								if(!mirroredSeries.contains(seriesId)) {
+									baseChart.multiplySeries(seriesId, IExtendedChart.Y_AXIS, -1.0d);
+									mirroredSeries.add(seriesId);
+								}
+							}
+							i++;
+						}
+					} else {
+						/*
+						 * If status is mirrored, then set the series to normal.
+						 */
+						displayModus = DisplayModus.NORMAL;
+						for(ISeries series : baseChart.getSeriesSet().getSeries()) {
 							String seriesId = series.getId();
-							if(!mirroredSeries.contains(seriesId)) {
+							if(mirroredSeries.contains(seriesId)) {
 								baseChart.multiplySeries(seriesId, IExtendedChart.Y_AXIS, -1.0d);
-								mirroredSeries.add(seriesId);
+								mirroredSeries.remove(seriesId);
 							}
 						}
-						i++;
 					}
 					//
+					buttonAutoMirror.setData(KEY_MIRROR_MODUS, displayModus);
+					enableButton(buttonAutoMirror, IMAGE_MIRROR, TOOLTIP_MIRROR, DisplayModus.MIRROR.equals(displayModus));
 					scrollableChart.applySettings(chartSettings);
 					scrollableChart.adjustRange(true);
 					scrollableChart.redraw();
 				}
 			}
 		});
+		//
+		return button;
 	}
 
 	private ComboViewer createComboViewerSelect(Composite parent) {
@@ -424,7 +467,7 @@ public class DataShiftControllerUI extends Composite {
 						baseChart.resetSeriesSettings();
 						baseChart.selectSeries(identifier);
 						baseChart.redraw();
-						modifyWidgetStatus();
+						updateWidgets();
 					}
 				}
 			}
@@ -435,18 +478,19 @@ public class DataShiftControllerUI extends Composite {
 
 	private Button createButtonMirror(Composite parent) {
 
-		//
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText(""); // Will be set dynamically
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SHIFT_MIRROR, IApplicationImage.SIZE_16x16));
+		button.setData(KEY_MIRROR_MODUS, DisplayModus.NORMAL);
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				Object object = button.getData(BUTTON_MIRROR_KEY);
+				Object object = button.getData(KEY_MIRROR_MODUS);
 				DisplayModus displayModus = object instanceof DisplayModus ? (DisplayModus)object : DisplayModus.NORMAL;
+				displayModus = DisplayModus.NORMAL.equals(displayModus) ? DisplayModus.MIRROR : DisplayModus.NORMAL;
 				setDisplayModus(displayModus, getSelectedSeriesId());
 				updateComboViewerSelect(BaseChart.SELECTED_SERIES_NONE);
 			}
@@ -616,7 +660,7 @@ public class DataShiftControllerUI extends Composite {
 		}
 	}
 
-	private void modifyWidgetStatus() {
+	private void updateWidgets() {
 
 		/*
 		 * Selected Series
@@ -629,14 +673,14 @@ public class DataShiftControllerUI extends Composite {
 		buttonShiftUp.setEnabled(isSeriesSelected);
 		buttonShiftDown.setEnabled(isSeriesSelected);
 		//
+		DisplayModus displayModus = mirroredSeries.contains(selectedSeries) ? DisplayModus.MIRROR : DisplayModus.NORMAL;
 		buttonMirrorSeries.setEnabled(isSeriesSelected);
-		if(mirroredSeries.contains(selectedSeries)) {
-			buttonMirrorSeries.setData(BUTTON_MIRROR_KEY, DisplayModus.NORMAL);
-			buttonMirrorSeries.setToolTipText(normalTooltip);
-		} else {
-			buttonMirrorSeries.setData(BUTTON_MIRROR_KEY, DisplayModus.MIRRORED);
-			buttonMirrorSeries.setToolTipText(mirrorTooltip);
-		}
+		buttonMirrorSeries.setData(KEY_MIRROR_MODUS, displayModus);
+		enableButton(buttonMirrorSeries, IMAGE_MIRROR, TOOLTIP_MIRROR, DisplayModus.MIRROR.equals(displayModus));
+		//
+		boolean active = mirroredSeries.size() > 0;
+		buttonAutoMirror.setData(KEY_MIRROR_MODUS, active ? DisplayModus.MIRROR : DisplayModus.NORMAL);
+		enableButton(buttonAutoMirror, IMAGE_MIRROR, TOOLTIP_MIRROR, active);
 	}
 
 	private double getShiftValuePrimary(String axis) {
@@ -742,7 +786,7 @@ public class DataShiftControllerUI extends Composite {
 		 */
 		comboViewerSelect.setInput(mappedSettings);
 		comboViewerSelect.getCombo().setText(label);
-		modifyWidgetStatus();
+		updateWidgets();
 	}
 
 	private String getSelectedSeriesId() {
