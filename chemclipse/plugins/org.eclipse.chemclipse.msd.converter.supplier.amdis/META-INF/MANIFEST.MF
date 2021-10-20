@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Automatic-Module-Name: org.eclipse.chemclipse.msd.converter.supplier.amdis
 Eclipse-RegisterBuddy: 	org.eclipse.chemclipse.model, org.eclipse.chemclipse.msd.model
 Bundle-ManifestVersion: 2
-Bundle-Name: Amdis Plug-in
+Bundle-Name: AMDIS Converter
 Bundle-SymbolicName: org.eclipse.chemclipse.msd.converter.supplier.amdis;singleton:=true
 Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.msd.converter.supplier.amdis.Activator
@@ -15,10 +15,13 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.model;bundle-version="0.8.0",
  org.apache.commons.io;bundle-version="2.2.0",
  org.eclipse.chemclipse.support;bundle-version="0.8.0",
- org.eclipse.chemclipse.numeric;bundle-version="0.8.0"
+ org.eclipse.chemclipse.numeric;bundle-version="0.8.0",
+ com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.9.9"
 Bundle-ActivationPolicy: lazy
+Import-Package: org.osgi.service.component.annotations;version="1.2.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-Vendor: ChemClipse
 Export-Package: org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.misc,
  org.eclipse.chemclipse.msd.converter.supplier.amdis.model,
  org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences
+Service-Component: OSGI-INF/org.eclipse.chemclipse.msd.converter.supplier.amdis.system.ConverterProcessor.xml

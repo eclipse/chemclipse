@@ -11,17 +11,23 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences;
 
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.Activator;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
+import org.eclipse.chemclipse.support.text.CharsetNIO;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.osgi.service.prefs.BackingStoreException;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
+	private static final Logger logger = Logger.getLogger(PreferenceSupplier.class);
+	//
 	public static final String P_SPLIT_LIBRARY = "splitLibrary";
 	public static final boolean DEF_SPLIT_LIBRARY = false;
 	public static final String P_EXCLUDE_UNCERTAIN_IONS = "excludeUncertainIons";
@@ -38,6 +44,15 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final boolean DEF_PARSE_COMPOUND_INFORMATION = true;
 	public static final String P_PARSE_MOL_INFORMATION = "parseMolInformation";
 	public static final boolean DEF_PARSE_MOL_INFORMATION = true;
+	//
+	public static final String P_CHARSET_IMPORT_MSL = "charsetImportMSL";
+	public static final String DEF_CHARSET_IMPORT_MSL = CharsetNIO.US_ASCII.name();
+	public static final String P_CHARSET_IMPORT_MSP = "charsetImportMSP";
+	public static final String DEF_CHARSET_IMPORT_MSP = CharsetNIO.US_ASCII.name();
+	public static final String P_CHARSET_IMPORT_FIN = "charsetImportFIN";
+	public static final String DEF_CHARSET_IMPORT_FIN = CharsetNIO.US_ASCII.name();
+	public static final String P_CHARSET_IMPORT_ELU = "charsetImportELU";
+	public static final String DEF_CHARSET_IMPORT_ELU = CharsetNIO.US_ASCII.name();
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -65,6 +80,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public Map<String, String> getDefaultValues() {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
+		//
 		defaultValues.put(P_SPLIT_LIBRARY, Boolean.toString(DEF_SPLIT_LIBRARY));
 		defaultValues.put(P_EXCLUDE_UNCERTAIN_IONS, Boolean.toString(DEF_EXCLUDE_UNCERTAIN_IONS));
 		defaultValues.put(P_USE_UNIT_MASS_RESOLUTION, Boolean.toString(DEF_USE_UNIT_MASS_RESOLUTION));
@@ -73,6 +89,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_EXPORT_INTENSITIES_AS_INTEGER, Boolean.toString(DEF_EXPORT_INTENSITIES_AS_INTEGER));
 		defaultValues.put(P_PARSE_COMPOUND_INFORMATION, Boolean.toString(DEF_PARSE_COMPOUND_INFORMATION));
 		defaultValues.put(P_PARSE_MOL_INFORMATION, Boolean.toString(DEF_PARSE_MOL_INFORMATION));
+		//
+		defaultValues.put(P_CHARSET_IMPORT_MSL, DEF_CHARSET_IMPORT_MSL);
+		defaultValues.put(P_CHARSET_IMPORT_MSP, DEF_CHARSET_IMPORT_MSP);
+		defaultValues.put(P_CHARSET_IMPORT_FIN, DEF_CHARSET_IMPORT_FIN);
+		defaultValues.put(P_CHARSET_IMPORT_ELU, DEF_CHARSET_IMPORT_ELU);
+		//
 		return defaultValues;
 	}
 
@@ -128,5 +150,66 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.getBoolean(P_PARSE_MOL_INFORMATION, DEF_PARSE_MOL_INFORMATION);
+	}
+
+	public static Charset getCharsetImportMSL() {
+
+		return getCharset(P_CHARSET_IMPORT_MSL, DEF_CHARSET_IMPORT_MSL);
+	}
+
+	public static void setCharsetImportMSL(CharsetNIO charsetNIO) {
+
+		setCharset(P_CHARSET_IMPORT_MSL, charsetNIO);
+	}
+
+	public static Charset getCharsetImportMSP() {
+
+		return getCharset(P_CHARSET_IMPORT_MSP, DEF_CHARSET_IMPORT_MSP);
+	}
+
+	public static void setCharsetImportMSP(CharsetNIO charsetNIO) {
+
+		setCharset(P_CHARSET_IMPORT_MSP, charsetNIO);
+	}
+
+	public static Charset getCharsetImportFIN() {
+
+		return getCharset(P_CHARSET_IMPORT_FIN, DEF_CHARSET_IMPORT_FIN);
+	}
+
+	public static void setCharsetImportFIN(CharsetNIO charsetNIO) {
+
+		setCharset(P_CHARSET_IMPORT_FIN, charsetNIO);
+	}
+
+	public static Charset getCharsetImportELU() {
+
+		return getCharset(P_CHARSET_IMPORT_ELU, DEF_CHARSET_IMPORT_ELU);
+	}
+
+	public static void setCharsetImportELU(CharsetNIO charsetNIO) {
+
+		setCharset(P_CHARSET_IMPORT_ELU, charsetNIO);
+	}
+
+	private static Charset getCharset(String key, String def) {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		try {
+			return CharsetNIO.valueOf(preferences.get(key, def)).getCharset();
+		} catch(Exception e) {
+			return CharsetNIO.US_ASCII.getCharset();
+		}
+	}
+
+	private static void setCharset(String key, CharsetNIO charsetNIO) {
+
+		try {
+			IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
+			preferences.put(key, charsetNIO.name());
+			preferences.flush();
+		} catch(BackingStoreException e) {
+			logger.warn(e);
+		}
 	}
 }

@@ -64,7 +64,6 @@ public class MSLReader extends AbstractMassSpectraReader implements IMassSpectra
 	private static final Pattern DATA = Pattern.compile("(.*)(Num Peaks:)(\\s*)(\\d*)(.*)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE | Pattern.DOTALL);
 	private static final Pattern IONS = Pattern.compile("([+]?\\d+\\.?\\d*)(\\s+)([+-]?\\d+\\.?\\d*([eE][+-]?\\d+)?)"); // "(\\d+)(\\s+)(\\d+)" or "(\\d+)(\\s+)([+-]?\\d+\\.?\\d*([eE][+-]?\\d+)?)"
 	//
-	private static final String CHARSET_US = "US-ASCII";
 	private static final String RETENTION_INDICES_DELIMITER = ", ";
 	private static final String LINE_DELIMITER = "\r\n";
 
@@ -160,7 +159,7 @@ public class MSLReader extends AbstractMassSpectraReader implements IMassSpectra
 	 */
 	private List<String> getMassSpectraData(File file) throws IOException {
 
-		Charset charset = Charset.forName(CHARSET_US);
+		Charset charset = PreferenceSupplier.getCharsetImportMSL();
 		List<String> massSpectraData = new ArrayList<String>();
 		//
 		try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file), charset))) {
@@ -186,7 +185,6 @@ public class MSLReader extends AbstractMassSpectraReader implements IMassSpectra
 			 * Don't forget to add the last mass spectrum.
 			 */
 			addMassSpectrumData(builder, massSpectraData);
-			bufferedReader.close();
 		}
 		//
 		return massSpectraData;

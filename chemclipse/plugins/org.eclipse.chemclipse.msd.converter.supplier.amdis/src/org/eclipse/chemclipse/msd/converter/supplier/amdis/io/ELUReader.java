@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2020 Lablicate GmbH.
+ * Copyright (c) 2014, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,7 +15,7 @@ package org.eclipse.chemclipse.msd.converter.supplier.amdis.io;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -73,8 +73,9 @@ public class ELUReader implements IPeakReader {
 	@Override
 	public IProcessingInfo<IPeaks<?>> read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
 
+		Charset charset = PreferenceSupplier.getCharsetImportELU();
 		IProcessingInfo<IPeaks<?>> processingInfo = new ProcessingInfo<IPeaks<?>>();
-		String content = FileUtils.readFileToString(file, StandardCharsets.US_ASCII);
+		String content = FileUtils.readFileToString(file, charset);
 		int numberOfHits = getNumberOfHits(content);
 		if(numberOfHits <= 0) {
 			processingInfo.addErrorMessage("AMDIS ELU Parser", "There seems to be no peak in the file.");

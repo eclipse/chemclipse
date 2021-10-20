@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.amdis.io;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -114,39 +113,34 @@ public class MSPReader extends AbstractMassSpectraReader implements IMassSpectra
 	 */
 	private List<String> getMassSpectraData(File file) throws IOException {
 
-		Charset charSet = Charset.forName("US-ASCII");
-		BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(file));
-		InputStreamReader inputStreamReader = new InputStreamReader(bufferedInputStream, charSet);
-		BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+		Charset charset = PreferenceSupplier.getCharsetImportMSP();
 		List<String> massSpectraData = new ArrayList<String>();
-		StringBuilder builder = new StringBuilder();
-		String line;
-		while((line = bufferedReader.readLine()) != null) {
-			/*
-			 * The mass spectra are divided by empty lines. If the builder has
-			 * at least 1 char, then add a new potential mass spectrum to the
-			 * mass spectra data list. Don't forget to build a new
-			 * StringBuilder. In all other cases append the found lines to the
-			 * StringBuilder.
-			 */
-			if(line.length() == 0) {
-				addMassSpectrumData(builder, massSpectraData);
-				builder = new StringBuilder();
-			} else {
-				builder.append(line);
-				builder.append(LINE_END);
+		//
+		try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file), charset))) {
+			StringBuilder builder = new StringBuilder();
+			String line;
+			while((line = bufferedReader.readLine()) != null) {
+				/*
+				 * The mass spectra are divided by empty lines. If the builder has
+				 * at least 1 char, then add a new potential mass spectrum to the
+				 * mass spectra data list. Don't forget to build a new
+				 * StringBuilder. In all other cases append the found lines to the
+				 * StringBuilder.
+				 */
+				if(line.length() == 0) {
+					addMassSpectrumData(builder, massSpectraData);
+					builder = new StringBuilder();
+				} else {
+					builder.append(line);
+					builder.append(LINE_END);
+				}
 			}
+			/*
+			 * Don't forget to add the last mass spectrum.
+			 */
+			addMassSpectrumData(builder, massSpectraData);
 		}
-		/*
-		 * Don't forget to add the last mass spectrum.
-		 */
-		addMassSpectrumData(builder, massSpectraData);
-		/*
-		 * Close the streams.
-		 */
-		bufferedReader.close();
-		inputStreamReader.close();
-		bufferedInputStream.close();
+		//
 		return massSpectraData;
 	}
 
