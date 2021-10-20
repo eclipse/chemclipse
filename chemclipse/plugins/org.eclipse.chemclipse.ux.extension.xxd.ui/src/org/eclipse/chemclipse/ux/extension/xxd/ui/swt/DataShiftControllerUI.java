@@ -753,7 +753,6 @@ public class DataShiftControllerUI extends Composite implements IExtendedPartUI 
 		//
 		List<MappedSeriesSettings> mappedSettings = new ArrayList<>();
 		mappedSettings.add(new MappedSeriesSettings(BaseChart.SELECTED_SERIES_NONE, null));
-		String label = BaseChart.SELECTED_SERIES_NONE;
 		//
 		if(baseChart != null) {
 			ISeriesSet seriesSet = baseChart.getSeriesSet();
@@ -762,39 +761,37 @@ public class DataShiftControllerUI extends Composite implements IExtendedPartUI 
 					String id = series.getId();
 					ISeriesSettings seriesSettings = baseChart.getSeriesSettings(id);
 					if(seriesSettings != null) {
-						/*
-						 * Add the mapping
-						 */
 						mappedSettings.add(new MappedSeriesSettings(id, seriesSettings));
-						/*
-						 * Is the current series selected?
-						 */
-						if(id.equals(seriesId)) {
-							String description = seriesSettings.getDescription();
-							if(!"".equals(description)) {
-								label = description;
-							} else {
-								label = id;
-							}
-						}
 					}
 				}
 			}
 		}
 		/*
-		 * Display by default the series none entry.
+		 * Display by default the series none entry if
+		 * the given series id can't be found in the
+		 * mapped settings.
 		 */
+		int index = -1;
 		comboViewerSelect.setInput(mappedSettings);
-		comboViewerSelect.getCombo().setText(label);
+		exitloop:
+		for(int i = 0; i < mappedSettings.size(); i++) {
+			if(seriesId.equals(mappedSettings.get(i).getIdentifier())) {
+				index = i;
+				break exitloop;
+			}
+		}
+		//
+		if(index >= 0) {
+			comboViewerSelect.getCombo().select(index);
+		}
+		//
 		updateWidgets();
 	}
 
 	private String getSelectedSeriesId() {
 
 		String id = BaseChart.SELECTED_SERIES_NONE;
-		Combo combo = comboViewerSelect.getCombo();
-		int index = combo.getSelectionIndex();
-		Object object = comboViewerSelect.getElementAt(index);
+		Object object = comboViewerSelect.getStructuredSelection().getFirstElement();
 		if(object instanceof MappedSeriesSettings) {
 			MappedSeriesSettings mappedSeriesSettings = (MappedSeriesSettings)object;
 			id = mappedSeriesSettings.getIdentifier();
