@@ -91,6 +91,7 @@ public class ChromatogramFileSupport {
 		return false;
 	}
 
+	@SuppressWarnings("deprecation")
 	private static Map<Integer, ISupplier> setExportConverter(IChromatogramConverterSupport chromatogramConverterSupport, FileDialog fileDialog) throws NoConverterAvailableException {
 
 		Map<Integer, ISupplier> exportSupplierMap = new HashMap<>();

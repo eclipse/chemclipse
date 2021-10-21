@@ -23,7 +23,6 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.pcr.model.core.IChannel;
 import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.pcr.model.core.IWell;
-import org.eclipse.chemclipse.pcr.model.core.support.LabelSetting;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
@@ -243,29 +242,6 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 			}
 			//
 			chartControl.get().addSeriesData(lineSeriesDataList);
-		}
-	}
-
-	private String getLabel(IWell well) {
-
-		LabelSetting labelSetting = getLabelSetting();
-		switch(labelSetting) {
-			case SAMPLENAME:
-				return well.getSampleId();
-			case COORDINATE:
-				return well.getPosition().toString();
-			case COORDINATE_SAMPLENAME:
-			default:
-				return well.getPosition().toString() + ": " + well.getSampleId();
-		}
-	}
-
-	private LabelSetting getLabelSetting() {
-
-		try {
-			return LabelSetting.valueOf(preferenceStore.getString(PreferenceConstants.P_PCR_REFERENCE_LABEL));
-		} catch(Exception e) {
-			return LabelSetting.COORDINATE_SAMPLENAME;
 		}
 	}
 

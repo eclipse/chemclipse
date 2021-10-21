@@ -403,7 +403,7 @@ public class WidgetItem {
 		return button;
 	}
 
-	private ComboViewer createLabeledEnumComboViewerWidget(Composite parent, Enum[] input) {
+	private ComboViewer createLabeledEnumComboViewerWidget(Composite parent, Enum<?>[] input) {
 
 		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
@@ -425,7 +425,7 @@ public class WidgetItem {
 		combo.setLayoutData(gridData);
 		//
 		comboViewer.setInput(input);
-		Enum initialSelection = Enum.valueOf(input[0].getDeclaringClass(), getValueAsString());
+		Enum<?> initialSelection = Enum.valueOf(input[0].getDeclaringClass(), getValueAsString());
 		comboViewer.setSelection(new StructuredSelection(initialSelection));
 		//
 		comboViewer.addSelectionChangedListener(new ISelectionChangedListener() {

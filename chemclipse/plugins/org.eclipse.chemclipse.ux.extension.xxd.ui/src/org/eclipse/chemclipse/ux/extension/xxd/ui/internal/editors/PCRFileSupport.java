@@ -37,6 +37,7 @@ public class PCRFileSupport {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	public static File savePlate(Shell shell, IPlate plate, String filterPath) throws NoConverterAvailableException {
 
 		if(plate == null || shell == null) {
