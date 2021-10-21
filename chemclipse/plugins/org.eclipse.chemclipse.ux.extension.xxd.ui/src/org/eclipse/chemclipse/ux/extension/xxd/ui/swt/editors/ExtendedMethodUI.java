@@ -191,7 +191,7 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 
 	private void applySettings() {
 
-		setDirty(true);
+		setMethodDirty(true);
 	}
 
 	private void createToolbarHeader(Composite parent) {
@@ -209,6 +209,15 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 			}
 		});
 		//
+		processMethodHeader.setModificationHandler(new IModificationHandler() {
+
+			@Override
+			public void setDirty(boolean dirty) {
+
+				setMethodDirty(dirty);
+			}
+		});
+		//
 		toolbarHeader.set(processMethodHeader);
 	}
 
@@ -223,7 +232,7 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 			public void update() {
 
 				updateProcessMethod();
-				setDirty(true);
+				setMethodDirty(true);
 			}
 		});
 		//
@@ -240,7 +249,7 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 			public void update() {
 
 				updateProcessMethod();
-				setDirty(true);
+				setMethodDirty(true);
 			}
 		});
 		//
@@ -265,7 +274,7 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 			public void update() {
 
 				updateProcessMethod();
-				setDirty(true);
+				setMethodDirty(true);
 			}
 		});
 		//
@@ -331,7 +340,7 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 		PartSupport.setCompositeVisibility(toolbarButtons.get(), enabled);
 	}
 
-	private void setDirty(boolean dirty) {
+	private void setMethodDirty(boolean dirty) {
 
 		if(modificationHandler != null) {
 			modificationHandler.setDirty(dirty);

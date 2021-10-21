@@ -30,8 +30,7 @@ import org.eclipse.jface.fieldassist.ContentProposal;
 import org.eclipse.jface.fieldassist.IContentProposal;
 import org.eclipse.jface.fieldassist.IContentProposalProvider;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -110,10 +109,10 @@ public class ProcessMethodHeader extends Composite {
 		text.setText("");
 		text.setToolTipText("The name of this method that is used for display");
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		text.addModifyListener(new ModifyListener() {
+		text.addKeyListener(new org.eclipse.swt.events.KeyAdapter() {
 
 			@Override
-			public void modifyText(ModifyEvent e) {
+			public void keyReleased(KeyEvent e) {
 
 				if(processMethod != null) {
 					processMethod.setName(text.getText().trim());
@@ -134,10 +133,10 @@ public class ProcessMethodHeader extends Composite {
 		text.setText("");
 		text.setToolTipText("The operator is the person who has created / currently manages this method");
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		text.addModifyListener(new ModifyListener() {
+		text.addKeyListener(new org.eclipse.swt.events.KeyAdapter() {
 
 			@Override
-			public void modifyText(ModifyEvent e) {
+			public void keyReleased(KeyEvent e) {
 
 				if(processMethod != null) {
 					processMethod.setOperator(text.getText().trim());
@@ -158,10 +157,10 @@ public class ProcessMethodHeader extends Composite {
 		text.setText("");
 		text.setToolTipText("Description");
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		text.addModifyListener(new ModifyListener() {
+		text.addKeyListener(new org.eclipse.swt.events.KeyAdapter() {
 
 			@Override
-			public void modifyText(ModifyEvent e) {
+			public void keyReleased(KeyEvent e) {
 
 				if(processMethod != null) {
 					processMethod.setDescription(text.getText().trim());
@@ -207,10 +206,10 @@ public class ProcessMethodHeader extends Composite {
 		text.setText("");
 		text.setToolTipText("The category groups similar methods under a common name");
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		text.addModifyListener(new ModifyListener() {
+		text.addKeyListener(new org.eclipse.swt.events.KeyAdapter() {
 
 			@Override
-			public void modifyText(ModifyEvent e) {
+			public void keyReleased(KeyEvent e) {
 
 				if(processMethod != null) {
 					processMethod.setCategory(text.getText().trim());
