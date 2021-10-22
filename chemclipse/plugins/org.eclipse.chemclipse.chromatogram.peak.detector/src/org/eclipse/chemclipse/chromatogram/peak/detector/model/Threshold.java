@@ -15,16 +15,18 @@ package org.eclipse.chemclipse.chromatogram.peak.detector.model;
 import org.eclipse.chemclipse.support.text.ILabel;
 
 public enum Threshold implements ILabel {
-	OFF(1), //
-	LOW(2), //
-	MEDIUM(3), //
-	HIGH(4);
+	OFF(1, "Off"), //
+	LOW(2, "Low"), //
+	MEDIUM(3, "Medium"), //
+	HIGH(4, "High");
 
 	private int threshold;
+	private String label;
 
-	private Threshold(int threshold) {
+	private Threshold(int threshold, String label) {
 
 		this.threshold = threshold;
+		this.label = label;
 	}
 
 	public int getThreshold() {
@@ -35,7 +37,7 @@ public enum Threshold implements ILabel {
 	@Override
 	public String label() {
 
-		return name().toLowerCase();
+		return label;
 	}
 
 	public static String[][] getOptions() {
