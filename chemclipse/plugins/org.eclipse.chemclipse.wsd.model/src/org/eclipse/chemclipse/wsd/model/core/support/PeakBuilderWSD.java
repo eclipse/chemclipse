@@ -104,36 +104,8 @@ public class PeakBuilderWSD {
 
 	public static IChromatogramPeakWSD createPeak(IChromatogramWSD chromatogram, IScanRange scanRange, boolean calculatePeakIncludedBackground, Set<Integer> traces) throws PeakException {
 
-		/*
-		 * Validate the given objects.
-		 */
-		validateChromatogram(chromatogram);
-		validateScanRange(scanRange);
-		checkScanRange(chromatogram, scanRange);
-		/*
-		 * Filter the extracted signals.
-		 */
-		IExtractedWavelengthSignals extractedWavelengthSignals = getExtractedWavelengthSignals(chromatogram, scanRange);
-		for(IExtractedWavelengthSignal extractedWavelengthSignal : extractedWavelengthSignals.getExtractedWavelengthSignals()) {
-			for(int i = extractedWavelengthSignal.getStartWavelength(); i <= extractedWavelengthSignal.getStopWavelength(); i++) {
-				/*
-				 * Skip if trace shall be used.
-				 */
-				if(traces.contains(i)) {
-					continue;
-				}
-				/*
-				 * Set to 0.
-				 */
-				extractedWavelengthSignal.setAbundance(i, 0);
-			}
-		}
-		/*
-		 * Retrieve the start and stop signals of the peak to calculate its
-		 * chromatogram and eventually peak internal background, if the start
-		 * abundance is higher than the stop abundance or vice versa.
-		 */
 		try {
+			IExtractedWavelengthSignals extractedWavelengthSignals = getExtractedWavelengthSignals(chromatogram, scanRange, traces);
 			IExtractedWavelengthSignal extractedWavelengthSignalStart = extractedWavelengthSignals.getExtractedWavelengthSignal(scanRange.getStartScan());
 			float startBackgroundAbundance = extractedWavelengthSignalStart.getTotalSignal();
 			IExtractedWavelengthSignal extractedWavelengthSignalStop = extractedWavelengthSignals.getExtractedWavelengthSignal(scanRange.getStopScan());
@@ -155,6 +127,35 @@ public class PeakBuilderWSD {
 				float base = Math.min(startBackgroundAbundance, stopBackgroundAbundance);
 				backgroundAbundanceRange = new BackgroundAbundanceRange(base, base);
 			}
+			//
+			return createPeak(chromatogram, scanRange, backgroundAbundanceRange.getStartBackgroundAbundance(), backgroundAbundanceRange.getStopBackgroundAbundance(), traces);
+		} catch(Exception e) {
+			throw new PeakException();
+		}
+	}
+
+	public static IChromatogramPeakWSD createPeak(IChromatogramWSD chromatogram, IScanRange scanRange, float startIntensity, float stopIntensity, Set<Integer> traces) throws PeakException {
+
+		/*
+		 * Validate the given objects.
+		 */
+		validateChromatogram(chromatogram);
+		validateScanRange(scanRange);
+		checkScanRange(chromatogram, scanRange);
+		/*
+		 * Filter the extracted signals.
+		 */
+		IExtractedWavelengthSignals extractedWavelengthSignals = getExtractedWavelengthSignals(chromatogram, scanRange, traces);
+		/*
+		 * Retrieve the start and stop signals of the peak to calculate its
+		 * chromatogram and eventually peak internal background, if the start
+		 * abundance is higher than the stop abundance or vice versa.
+		 */
+		try {
+			/*
+			 * Background
+			 */
+			IBackgroundAbundanceRange backgroundAbundanceRange = new BackgroundAbundanceRange(startIntensity, stopIntensity);
 			/*
 			 * Calculate the intensity values.
 			 */
@@ -285,6 +286,27 @@ public class PeakBuilderWSD {
 		} catch(ChromatogramIsNullException e) {
 			throw new PeakException("The chromatogram must not be null.");
 		}
+	}
+
+	protected static IExtractedWavelengthSignals getExtractedWavelengthSignals(IChromatogramWSD chromatogram, IScanRange scanRange, Set<Integer> traces) {
+
+		IExtractedWavelengthSignals extractedWavelengthSignals = getExtractedWavelengthSignals(chromatogram, scanRange);
+		for(IExtractedWavelengthSignal extractedWavelengthSignal : extractedWavelengthSignals.getExtractedWavelengthSignals()) {
+			for(int i = extractedWavelengthSignal.getStartWavelength(); i <= extractedWavelengthSignal.getStopWavelength(); i++) {
+				/*
+				 * Skip if trace shall be used.
+				 */
+				if(traces.contains(i)) {
+					continue;
+				}
+				/*
+				 * Set to 0.
+				 */
+				extractedWavelengthSignal.setAbundance(i, 0);
+			}
+		}
+		//
+		return extractedWavelengthSignals;
 	}
 
 	protected static IExtractedWavelengthSignals getExtractedWavelengthSignals(IChromatogramWSD chromatogram, IScanRange scanRange) throws PeakException {
