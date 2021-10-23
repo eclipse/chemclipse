@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.eclipse.chemclipse.model.core.AbstractScan;
 import org.eclipse.chemclipse.wsd.model.comparator.WavelengthCombinedComparator;
@@ -95,6 +96,21 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 	public void removeScanSignal(int scan) {
 
 		scanSignals.remove(scan);
+	}
+
+	@Override
+	public void removeScanSignals(Set<Integer> wavelengths) {
+
+		List<IScanSignalWSD> scanSignalsToRemove = new ArrayList<>();
+		for(int wavelength : wavelengths) {
+			for(IScanSignalWSD scanSignal : scanSignals) {
+				if(scanSignal.getWavelength() == wavelength) {
+					scanSignalsToRemove.add(scanSignal);
+				}
+			}
+		}
+		//
+		scanSignals.removeAll(scanSignalsToRemove);
 	}
 
 	@Override

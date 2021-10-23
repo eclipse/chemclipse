@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,9 +21,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -31,10 +31,13 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeakTraces;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakDataSupport;
+import org.eclipse.chemclipse.wsd.model.core.IPeakModelWSD;
 import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
+import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -72,6 +75,7 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
 	private ComboViewer comboViewerTraces;
 	private Button buttonDeleteTrace;
+	private Button buttonCopyClipboard;
 	private AtomicReference<PeakTracesUI> chartControl = new AtomicReference<>();
 	//
 	private IPeak peak = null;
@@ -124,7 +128,7 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
 		comboViewerTraces = createComboViewerTraces(composite);
 		buttonDeleteTrace = createButtonDeleteTrace(composite);
-		createButtonCopyTracesClipboard(composite);
+		buttonCopyClipboard = createButtonCopyTracesClipboard(composite);
 		createButtonToggleChartLegend(composite, chartControl, IMAGE_LEGEND);
 		createResetButton(composite);
 		createSettingsButton(composite);
@@ -197,8 +201,7 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 				if(object instanceof Integer) {
 					Set<Integer> traces = new HashSet<>();
 					traces.add((int)object);
-					deleteTraces(e.display.getActiveShell(), traces);
-					updatePeak();
+					deleteTraces(e.display, traces);
 				}
 			}
 		});
@@ -228,11 +231,14 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 					}
 				}
 				//
-				TextTransfer textTransfer = TextTransfer.getInstance();
-				Object[] data = new Object[]{builder.toString()};
-				Transfer[] dataTypes = new Transfer[]{textTransfer};
-				Clipboard clipboard = new Clipboard(e.widget.getDisplay());
-				clipboard.setContents(data, dataTypes);
+				String content = builder.toString();
+				if(!content.isEmpty()) {
+					TextTransfer textTransfer = TextTransfer.getInstance();
+					Object[] data = new Object[]{builder.toString()};
+					Transfer[] dataTypes = new Transfer[]{textTransfer};
+					Clipboard clipboard = new Clipboard(e.widget.getDisplay());
+					clipboard.setContents(data, dataTypes);
+				}
 			}
 		});
 		//
@@ -341,8 +347,7 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 			public void execute(Shell shell, ScrollableChart scrollableChart) {
 
 				if(peak != null) {
-					deleteTraces(shell, getHiddenTraces(scrollableChart));
-					updatePeak();
+					deleteTraces(scrollableChart.getDisplay(), getTraces(scrollableChart, true));
 				}
 			}
 		};
@@ -357,7 +362,7 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 			@Override
 			public String getName() {
 
-				return "Delete Selected Serie(s)";
+				return "Delete Visible Serie(s)";
 			}
 
 			@Override
@@ -370,8 +375,7 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 			public void execute(Shell shell, ScrollableChart scrollableChart) {
 
 				if(peak != null) {
-					deleteTraces(shell, getSelectedTraces(scrollableChart));
-					updatePeak();
+					deleteTraces(scrollableChart.getDisplay(), getTraces(scrollableChart, false));
 				}
 			}
 		};
@@ -379,18 +383,22 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 		return menuEntry;
 	}
 
-	private Set<Integer> getHiddenTraces(ScrollableChart scrollableChart) {
+	private Set<Integer> getTraces(ScrollableChart scrollableChart, boolean useHidden) {
 
 		Set<Integer> traces = new HashSet<>();
 		//
 		ISeriesSet seriesSet = scrollableChart.getBaseChart().getSeriesSet();
 		for(ISeries<?> series : seriesSet.getSeries()) {
-			if(!series.isVisible()) {
-				try {
-					int trace = Integer.parseInt(series.getId());
-					traces.add(trace);
-				} catch(NumberFormatException e) {
-					logger.warn(e);
+			int trace = getTrace(series.getId());
+			if(trace != -1) {
+				if(useHidden) {
+					if(!series.isVisible()) {
+						traces.add(trace);
+					}
+				} else {
+					if(series.isVisible()) {
+						traces.add(trace);
+					}
 				}
 			}
 		}
@@ -398,40 +406,47 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 		return traces;
 	}
 
-	private Set<Integer> getSelectedTraces(ScrollableChart scrollableChart) {
+	private int getTrace(String id) {
 
-		Set<Integer> traces = new HashSet<>();
-		//
-		BaseChart baseChart = scrollableChart.getBaseChart();
-		Set<String> selectedSeriesIds = baseChart.getSelectedSeriesIds();
-		for(String seriesId : selectedSeriesIds) {
-			try {
-				int trace = Integer.parseInt(seriesId);
-				traces.add(trace);
-			} catch(NumberFormatException e) {
-				logger.warn(e);
-			}
+		int trace = -1;
+		try {
+			trace = Integer.parseInt(id);
+		} catch(NumberFormatException e) {
+			logger.warn(e);
 		}
 		//
-		return traces;
+		return trace;
 	}
 
-	private void deleteTraces(Shell shell, Set<Integer> traces) {
+	private void deleteTraces(Display display, Set<Integer> traces) {
 
 		if(peak instanceof IPeakMSD) {
 			IPeakMSD peakMSD = (IPeakMSD)peak;
 			IPeakModelMSD peakModelMSD = peakMSD.getPeakModel();
 			IScanMSD scanMSD = peakModelMSD.getPeakMassSpectrum();
-			int maxDeleteIons = scanMSD.getNumberOfIons() - 1;
-			if(traces.size() >= maxDeleteIons) {
-				MessageDialog.openInformation(shell, CATEGORY, "It's not possible to delete all ions.");
+			int maxDeleteTraces = scanMSD.getNumberOfIons() - 1;
+			if(traces.size() >= maxDeleteTraces) {
+				MessageDialog.openInformation(display.getActiveShell(), CATEGORY, "It's not possible to delete all ions.");
 			} else {
 				scanMSD.removeIons(traces);
+				updatePeak();
+				UpdateNotifierUI.update(display, peak);
 			}
 		} else if(peak instanceof IPeakWSD) {
-			MessageDialog.openInformation(shell, CATEGORY, "Handling DAD peak traces is not implemented yet.");
-		} else if(peak instanceof IPeakCSD) {
-			MessageDialog.openInformation(shell, CATEGORY, "It's not possible to delete a FID peak.");
+			IPeakWSD peakWSD = (IPeakWSD)peak;
+			IPeakModelWSD peakModelWSD = peakWSD.getPeakModel();
+			IScan scan = peakModelWSD.getPeakMaximum();
+			if(scan instanceof IScanWSD) {
+				IScanWSD scanWSD = (IScanWSD)scan;
+				int maxDeleteTraces = scanWSD.getNumberOfScanSignals() - 1;
+				if(traces.size() >= maxDeleteTraces) {
+					MessageDialog.openInformation(display.getActiveShell(), CATEGORY, "It's not possible to delete all wavelengths.");
+				} else {
+					scanWSD.removeScanSignals(traces);
+					updatePeak();
+					UpdateNotifierUI.update(display, peak);
+				}
+			}
 		}
 	}
 
@@ -450,6 +465,10 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 		chartControl.get().setInput(peak);
 		updateComboTraces();
 		enableDeleteButton(false);
+		//
+		boolean enabled = peakIsEditable();
+		comboViewerTraces.getCombo().setEnabled(enabled);
+		buttonCopyClipboard.setEnabled(enabled);
 	}
 
 	private void updateComboTraces() {
@@ -463,12 +482,17 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 
 	private void enableDeleteButton(boolean enabled) {
 
-		buttonDeleteTrace.setEnabled(enabled);
+		buttonDeleteTrace.setEnabled(enabled && peakIsEditable());
 	}
 
 	private void selectComboSeries(int index) {
 
 		comboViewerTraces.getCombo().select(index);
 		enableDeleteButton(index > 0 ? true : false);
+	}
+
+	private boolean peakIsEditable() {
+
+		return (peak instanceof IPeakMSD || peak instanceof IPeakWSD);
 	}
 }
