@@ -49,6 +49,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.ScanSignalWSD;
+import org.eclipse.chemclipse.wsd.model.core.support.WavelengthSupport;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -391,7 +392,8 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 
 	private void updateButtonStatus() {
 
-		buttonCopyTraces.setEnabled(getScanMSD() != null);
+		IScan scan = getScan();
+		buttonCopyTraces.setEnabled(scan instanceof IScanMSD | scan instanceof IScanWSD);
 		buttonSaveScan.setEnabled(isSaveEnabled());
 		buttonDeleteOptimized.setEnabled(isOptimizedScan() ? true : false);
 		updateLabel(labelOptimized, isOptimizedScan() ? "Optimized" : "");
@@ -456,14 +458,25 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IScanMSD scanMSD = getScanMSD();
+				String traces = null;
 				int maxCopyTraces = preferenceStore.getInt(PreferenceConstants.P_MAX_COPY_SCAN_TRACES);
-				String traces = ScanSupport.extractTracesText(scanMSD, maxCopyTraces);
-				TextTransfer textTransfer = TextTransfer.getInstance();
-				Object[] data = new Object[]{traces};
-				Transfer[] dataTypes = new Transfer[]{textTransfer};
-				Clipboard clipboard = new Clipboard(e.widget.getDisplay());
-				clipboard.setContents(data, dataTypes);
+				//
+				IScan scan = getScan();
+				if(scan instanceof IScanMSD) {
+					traces = ScanSupport.extractTracesText((IScanMSD)scan, maxCopyTraces);
+				} else if(scan instanceof IScanWSD) {
+					traces = WavelengthSupport.extractTracesText((IScanWSD)scan, maxCopyTraces);
+				}
+				/*
+				 * Copy to clipboard
+				 */
+				if(traces != null) {
+					TextTransfer textTransfer = TextTransfer.getInstance();
+					Object[] data = new Object[]{traces};
+					Transfer[] dataTypes = new Transfer[]{textTransfer};
+					Clipboard clipboard = new Clipboard(e.widget.getDisplay());
+					clipboard.setContents(data, dataTypes);
+				}
 			}
 		});
 		//
