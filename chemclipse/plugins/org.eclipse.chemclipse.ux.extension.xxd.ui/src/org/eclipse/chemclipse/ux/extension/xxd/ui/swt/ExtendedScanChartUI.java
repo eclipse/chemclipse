@@ -48,6 +48,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubt
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.SubtractScanWizard;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
+import org.eclipse.chemclipse.wsd.model.core.support.WavelengthSupport;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -557,7 +558,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		boolean enabled = isMassSpectrum();
 		//
 		scanIdentifierUI.setEnabled(enabled || isWaveSpectrum());
-		buttonCopyTraces.setEnabled(enabled);
+		buttonCopyTraces.setEnabled(scan instanceof IScanMSD | scan instanceof IScanWSD);
 		buttonSave.setEnabled(enabled);
 		buttonDeleteOptimized.setEnabled(enabled && isOptimizedScan() ? true : false);
 		buttonSubtractOption.setEnabled(enabled);
@@ -575,10 +576,18 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				IScanMSD scanMSD = getScanMSD();
-				if(scanMSD != null) {
-					int maxCopyTraces = preferenceStore.getInt(PreferenceConstants.P_MAX_COPY_SCAN_TRACES);
-					String traces = ScanSupport.extractTracesText(scanMSD, maxCopyTraces);
+				String traces = null;
+				int maxCopyTraces = preferenceStore.getInt(PreferenceConstants.P_MAX_COPY_SCAN_TRACES);
+				//
+				if(scan instanceof IScanMSD) {
+					traces = ScanSupport.extractTracesText((IScanMSD)scan, maxCopyTraces);
+				} else if(scan instanceof IScanWSD) {
+					traces = WavelengthSupport.extractTracesText((IScanWSD)scan, maxCopyTraces);
+				}
+				/*
+				 * Copy to clipboard
+				 */
+				if(traces != null) {
 					TextTransfer textTransfer = TextTransfer.getInstance();
 					Object[] data = new Object[]{traces};
 					Transfer[] dataTypes = new Transfer[]{textTransfer};
