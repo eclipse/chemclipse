@@ -44,6 +44,7 @@ public class AbstractChromatogramFilter_1_Test extends TestCase {
 		super.tearDown();
 	}
 
+	@SuppressWarnings("unchecked")
 	public void testConstructor_1() {
 
 		chromatogramSelection = null;
@@ -52,6 +53,7 @@ public class AbstractChromatogramFilter_1_Test extends TestCase {
 		filter.applyFilter(chromatogramSelection, chromatogramFilterSettings, new NullProgressMonitor());
 	}
 
+	@SuppressWarnings("unchecked")
 	public void testConstructor_2() {
 
 		chromatogram = new ChromatogramMSD();

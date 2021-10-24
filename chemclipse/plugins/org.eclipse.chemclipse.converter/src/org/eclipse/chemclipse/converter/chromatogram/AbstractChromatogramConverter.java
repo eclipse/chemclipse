@@ -96,6 +96,7 @@ public abstract class AbstractChromatogramConverter<P extends IPeak, T extends I
 		return chromatogramConverterSupport;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IProcessingInfo<IChromatogramOverview> convertOverview(File file, IProgressMonitor monitor) {
 
@@ -126,6 +127,7 @@ public abstract class AbstractChromatogramConverter<P extends IPeak, T extends I
 		return processingInfo;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public IProcessingInfo<T> convert(File file, IProgressMonitor monitor) {
 
@@ -145,6 +147,7 @@ public abstract class AbstractChromatogramConverter<P extends IPeak, T extends I
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	@Override
 	public IProcessingInfo<T> convert(File file, String converterId, IProgressMonitor monitor) {
 
@@ -166,6 +169,7 @@ public abstract class AbstractChromatogramConverter<P extends IPeak, T extends I
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
+	@SuppressWarnings({"unchecked", "deprecation", "rawtypes"})
 	@Override
 	public IProcessingInfo getChromatogram(File file, boolean overview, IProgressMonitor monitor) {
 
