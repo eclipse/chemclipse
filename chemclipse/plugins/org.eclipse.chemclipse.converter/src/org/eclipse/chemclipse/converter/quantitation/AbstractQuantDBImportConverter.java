@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,5 +13,5 @@ package org.eclipse.chemclipse.converter.quantitation;
 
 import org.eclipse.chemclipse.converter.core.AbstractImportConverter;
 
-public abstract class AbstractQuantDBImportConverter extends AbstractImportConverter implements IQuantDBImportConverter {
+public abstract class AbstractQuantDBImportConverter<R> extends AbstractImportConverter implements IQuantDBImportConverter<R> {
 }

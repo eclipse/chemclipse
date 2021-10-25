@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -78,7 +78,7 @@ public class QuantDBConverter {
 	public static <R> IProcessingInfo<R> convert(final File file, final String converterId, IProgressMonitor monitor) {
 
 		IProcessingInfo<R> processingInfo;
-		IQuantDBImportConverter importConverter = getImportConverter(converterId);
+		IQuantDBImportConverter<R> importConverter = getImportConverter(converterId);
 		if(importConverter != null) {
 			processingInfo = importConverter.convert(file, monitor);
 		} else {
@@ -94,7 +94,7 @@ public class QuantDBConverter {
 		exitloop:
 		for(ISupplier supplier : converterSupport.getSupplier()) {
 			if(supplier.isExportable() && supplier.getId().equals(converterId)) {
-				IQuantDBExportConverter exportConverter = getExportConverter(converterId);
+				IQuantDBExportConverter<R> exportConverter = getExportConverter(converterId);
 				processingInfo = exportConverter.convert(file, quantitationDatabase, monitor);
 				break exitloop;
 			}
@@ -107,6 +107,7 @@ public class QuantDBConverter {
 		return processingInfo;
 	}
 
+	@SuppressWarnings("unchecked")
 	private static <R> IQuantDBImportConverter<R> getImportConverter(final String converterId) {
 
 		IConfigurationElement element;
@@ -114,7 +115,7 @@ public class QuantDBConverter {
 		IQuantDBImportConverter<R> instance = null;
 		if(element != null) {
 			try {
-				instance = (IQuantDBImportConverter)element.createExecutableExtension(IMPORT_CONVERTER);
+				instance = (IQuantDBImportConverter<R>)element.createExecutableExtension(IMPORT_CONVERTER);
 			} catch(CoreException e) {
 				logger.error(e.getLocalizedMessage(), e);
 			}
@@ -122,14 +123,15 @@ public class QuantDBConverter {
 		return instance;
 	}
 
-	private static IQuantDBExportConverter getExportConverter(final String converterId) {
+	@SuppressWarnings("unchecked")
+	private static <R> IQuantDBExportConverter<R> getExportConverter(final String converterId) {
 
 		IConfigurationElement element;
 		element = getConfigurationElement(converterId);
-		IQuantDBExportConverter instance = null;
+		IQuantDBExportConverter<R> instance = null;
 		if(element != null) {
 			try {
-				instance = (IQuantDBExportConverter)element.createExecutableExtension(EXPORT_CONVERTER);
+				instance = (IQuantDBExportConverter<R>)element.createExecutableExtension(EXPORT_CONVERTER);
 			} catch(CoreException e) {
 				logger.error(e.getLocalizedMessage(), e);
 			}
