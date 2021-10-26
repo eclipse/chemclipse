@@ -40,12 +40,20 @@ import org.eclipse.chemclipse.wsd.model.core.implementation.ChromatogramPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.PeakModelWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.ScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.ScanWSD;
+import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelength.WavelengthMarkMode;
 import org.eclipse.chemclipse.wsd.model.xwc.ExtractedWavelengthSignalExtractor;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignal;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignalExtractor;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignals;
+import org.eclipse.chemclipse.wsd.model.xwc.ITotalWavelengthSignalExtractor;
+import org.eclipse.chemclipse.wsd.model.xwc.TotalWavelengthSignalExtractor;
 
 public class PeakBuilderWSD {
+
+	private PeakBuilderWSD() {
+
+		throw new IllegalStateException("This utility class is meant to only host static functions.");
+	}
 
 	public static IChromatogramPeakWSD createPeak(IChromatogramWSD chromatogram, IScanRange scanRange, boolean calculatePeakIncludedBackground) throws PeakException {
 
@@ -101,35 +109,66 @@ public class PeakBuilderWSD {
 		return new ChromatogramPeakWSD(peakModel, chromatogram);
 	}
 
-	public static IChromatogramPeakWSD createPeak(IChromatogramWSD chromatogram, IScanRange scanRange, boolean calculatePeakIncludedBackground, Set<Integer> traces) throws PeakException {
+	public static IChromatogramPeakWSD createPeak(IChromatogramWSD chromatogram, IScanRange scanRange, boolean calculatePeakIncludedBackground, Set<Integer> includedWavelengths, WavelengthMarkMode filterMode) throws PeakException {
 
+		/*
+		 * Get the total signals and determine the start and stop background
+		 * abundance.
+		 */
+		ITotalScanSignals totalWavelengthSignals = getTotalIonSignals(chromatogram, scanRange, new MarkedWavelengths(includedWavelengths, filterMode));
+		/*
+		 * Retrieve the start and stop signals of the peak to calculate its
+		 * chromatogram and eventually peak internal background, if the start
+		 * abundance is higher than the stop abundance or vice versa.
+		 */
+		ITotalScanSignal totalWavelengthSignal = totalWavelengthSignals.getTotalScanSignal(scanRange.getStartScan());
+		float startBackgroundAbundance = totalWavelengthSignal.getTotalSignal();
+		totalWavelengthSignal = totalWavelengthSignals.getTotalScanSignal(scanRange.getStopScan());
+		float stopBackgroundAbundance = totalWavelengthSignal.getTotalSignal();
+		/*
+		 * The abundance of base or startBackground/stopBackground (depends
+		 * which is the lower value) is the chromatogram background.<br/> Then a
+		 * peak included background could be calculated or not.<br/> This
+		 * background is not the background of the chromatogram. It's the
+		 * background of the peak.<br/> Think of, a peak could be skewed, means
+		 * it starts with an abundance of zero and stops with a higher
+		 * abundance.<br/> To include or exclude the background abundance in the
+		 * IPeakModel affects the calculation of its width at different heights.
+		 */
+		IBackgroundAbundanceRange backgroundAbundanceRange;
+		if(calculatePeakIncludedBackground) {
+			backgroundAbundanceRange = new BackgroundAbundanceRange(startBackgroundAbundance, stopBackgroundAbundance);
+		} else {
+			float base = Math.min(startBackgroundAbundance, stopBackgroundAbundance);
+			backgroundAbundanceRange = new BackgroundAbundanceRange(base, base);
+		}
+		LinearEquation backgroundEquation = getBackgroundEquation(totalWavelengthSignals, scanRange, backgroundAbundanceRange);
+		/*
+		 * Calculate the intensity values.
+		 */
+		ITotalScanSignals peakIntensityTotalIonSignals = adjustTotalScanSignals(totalWavelengthSignals, backgroundEquation);
+		IPeakIntensityValues peakIntensityValues = getPeakIntensityValues(peakIntensityTotalIonSignals);
+		IScanWSD peakScan = getPeakScan(chromatogram, peakIntensityTotalIonSignals, backgroundEquation);
+		/*
+		 * Create the peak.
+		 */
+		IPeakModelWSD peakModel = new PeakModelWSD(peakScan, peakIntensityValues, backgroundAbundanceRange.getStartBackgroundAbundance(), backgroundAbundanceRange.getStopBackgroundAbundance());
+		return new ChromatogramPeakWSD(peakModel, chromatogram);
+	}
+
+	private static ITotalScanSignals getTotalIonSignals(IChromatogramWSD chromatogram, IScanRange scanRange, MarkedWavelengths excludedWavelengths) {
+
+		if(chromatogram == null || scanRange == null || excludedWavelengths == null) {
+			throw new PeakException("The given values must not be null.");
+		}
+		/*
+		 * Try to get the signals.
+		 */
 		try {
-			IExtractedWavelengthSignals extractedWavelengthSignals = getExtractedWavelengthSignals(chromatogram, scanRange, traces);
-			IExtractedWavelengthSignal extractedWavelengthSignalStart = extractedWavelengthSignals.getExtractedWavelengthSignal(scanRange.getStartScan());
-			float startBackgroundAbundance = extractedWavelengthSignalStart.getTotalSignal();
-			IExtractedWavelengthSignal extractedWavelengthSignalStop = extractedWavelengthSignals.getExtractedWavelengthSignal(scanRange.getStopScan());
-			float stopBackgroundAbundance = extractedWavelengthSignalStop.getTotalSignal();
-			/*
-			 * The abundance of base or startBackground/stopBackground (depends
-			 * which is the lower value) is the chromatogram background.<br/> Then a
-			 * peak included background could be calculated or not.<br/> This
-			 * background is not the background of the chromatogram. It's the
-			 * background of the peak.<br/> Think of, a peak could be skewed, means
-			 * it starts with an abundance of zero and stops with a higher
-			 * abundance.<br/> To include or exclude the background abundance in the
-			 * IPeakModel affects the calculation of its width at different heights.
-			 */
-			IBackgroundAbundanceRange backgroundAbundanceRange;
-			if(calculatePeakIncludedBackground) {
-				backgroundAbundanceRange = new BackgroundAbundanceRange(startBackgroundAbundance, stopBackgroundAbundance);
-			} else {
-				float base = Math.min(startBackgroundAbundance, stopBackgroundAbundance);
-				backgroundAbundanceRange = new BackgroundAbundanceRange(base, base);
-			}
-			//
-			return createPeak(chromatogram, scanRange, backgroundAbundanceRange.getStartBackgroundAbundance(), backgroundAbundanceRange.getStopBackgroundAbundance(), traces);
-		} catch(Exception e) {
-			throw new PeakException();
+			ITotalWavelengthSignalExtractor totalWavelengthSignalExtractor = new TotalWavelengthSignalExtractor(chromatogram);
+			return totalWavelengthSignalExtractor.getTotalScanSignals(scanRange.getStartScan(), scanRange.getStopScan(), excludedWavelengths);
+		} catch(ChromatogramIsNullException e) {
+			throw new PeakException("The chromatogram must not be null.");
 		}
 	}
 

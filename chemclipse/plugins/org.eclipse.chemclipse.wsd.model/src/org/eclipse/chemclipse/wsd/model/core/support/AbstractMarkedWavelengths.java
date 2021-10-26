@@ -16,13 +16,23 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-public class AbstractMarkedWavelengths implements IMarkedWavelengths {
+public abstract class AbstractMarkedWavelengths implements IMarkedWavelengths {
 
 	private Set<IMarkedWavelength> markedWavelengths;
 
 	public AbstractMarkedWavelengths() {
 
 		markedWavelengths = new HashSet<>();
+	}
+
+	protected AbstractMarkedWavelengths(Collection<? extends Number> wavelengths) {
+
+		markedWavelengths = new HashSet<>();
+		if(wavelengths != null) {
+			for(Number wavelength : wavelengths) {
+				markedWavelengths.add(new MarkedWavelength(wavelength.intValue()));
+			}
+		}
 	}
 
 	@Override
