@@ -165,10 +165,10 @@ public class PeakDetectorMSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 				 * [S] --- [N] --- [E]
 				 */
 				while(iterator.hasNext()) {
-					int startRetentionTimeSegment = noiseSegment.getStopRetentionTime();
+					int previousStopRetentionTimeSegment = noiseSegment.getStopRetentionTime();
 					noiseSegment = iterator.next();
-					int stopRetentionTimeSegment = noiseSegment.getStartRetentionTime();
-					chromatogramSelection.setRangeRetentionTime(startRetentionTimeSegment, stopRetentionTimeSegment);
+					int nextStartRetentionTimeSegment = noiseSegment.getStartRetentionTime();
+					chromatogramSelection.setRangeRetentionTime(previousStopRetentionTimeSegment, nextStartRetentionTimeSegment);
 					IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, windowSize, ions);
 					rawPeaks.addAll(getRawPeaks(slopes, threshold, monitor));
 				}
