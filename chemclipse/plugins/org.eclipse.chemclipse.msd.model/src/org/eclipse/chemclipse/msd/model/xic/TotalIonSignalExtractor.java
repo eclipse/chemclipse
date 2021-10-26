@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -29,6 +29,7 @@ public class TotalIonSignalExtractor extends TotalScanSignalExtractor implements
 	private IChromatogramMSD chromatogram;
 
 	public TotalIonSignalExtractor(IChromatogramMSD chromatogram) throws ChromatogramIsNullException {
+
 		super(chromatogram);
 		this.chromatogram = chromatogram;
 	}
@@ -110,7 +111,9 @@ public class TotalIonSignalExtractor extends TotalScanSignalExtractor implements
 	 */
 	private ITotalScanSignals initializeTotalIonSignals(int startScan, int stopScan, IMarkedIons excludedIons) {
 
-		assert (startScan <= stopScan) : "The startScan must be lower or equal the stop scan.";
+		if(startScan > stopScan) {
+			throw new IllegalArgumentException("The start scan " + startScan + " must be lower or equal the stop scan " + stopScan + ".");
+		}
 		/*
 		 * Validate the scan borders.
 		 */

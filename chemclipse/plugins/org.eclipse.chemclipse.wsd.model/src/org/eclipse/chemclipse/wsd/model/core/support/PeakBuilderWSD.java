@@ -253,8 +253,6 @@ public class PeakBuilderWSD {
 
 	protected static void checkScanRange(IChromatogramWSD chromatogram, IScanRange scanRange) throws PeakException {
 
-		assert (chromatogram != null) : "The chromatogram must not be null.";
-		assert (scanRange != null) : "The scan range must not be null.";
 		if(chromatogram == null || scanRange == null) {
 			throw new PeakException("The given chromatogram or scanRange must not be null.");
 		}
@@ -268,8 +266,6 @@ public class PeakBuilderWSD {
 
 	protected static ITotalScanSignals getTotalScanSignals(IChromatogramWSD chromatogram, IScanRange scanRange) throws PeakException {
 
-		assert (chromatogram != null) : "The chromatogram must not be null.";
-		assert (scanRange != null) : "The scan range must not be null.";
 		if(chromatogram == null || scanRange == null) {
 			throw new PeakException("The given values must not be null.");
 		}
@@ -307,8 +303,6 @@ public class PeakBuilderWSD {
 
 	protected static IExtractedWavelengthSignals getExtractedWavelengthSignals(IChromatogramWSD chromatogram, IScanRange scanRange) throws PeakException {
 
-		assert (chromatogram != null) : "The chromatogram must not be null.";
-		assert (scanRange != null) : "The scan range must not be null.";
 		if(chromatogram == null || scanRange == null) {
 			throw new PeakException("The given values must not be null.");
 		}
@@ -325,9 +319,6 @@ public class PeakBuilderWSD {
 
 	protected static LinearEquation getBackgroundEquation(ITotalScanSignals totalScanSignals, IScanRange scanRange, IBackgroundAbundanceRange backgroundAbundanceRange) throws PeakException {
 
-		assert (totalScanSignals != null) : "The total signals must not be null.";
-		assert (scanRange != null) : "The scan range must not be null.";
-		assert (backgroundAbundanceRange != null) : "The background abundance range must not be null.";
 		if(totalScanSignals == null || scanRange == null || backgroundAbundanceRange == null) {
 			throw new PeakException("The given totalIonSignals, scanRange or backgroundAbundanceRange must not be null.");
 		}
@@ -346,10 +337,6 @@ public class PeakBuilderWSD {
 
 	protected static LinearEquation getBackgroundEquation(IExtractedWavelengthSignals extractedWavelengthSignals, IScanRange scanRange, IBackgroundAbundanceRange backgroundAbundanceRange) throws Exception {
 
-		assert (extractedWavelengthSignals != null) : "The extracted wavelength signals must not be null.";
-		assert (scanRange != null) : "The scan range must not be null.";
-		assert (backgroundAbundanceRange != null) : "The background abundance range must not be null.";
-		//
 		if(extractedWavelengthSignals == null || scanRange == null || backgroundAbundanceRange == null) {
 			throw new PeakException("The given signals, scanRange or backgroundAbundanceRange must not be null.");
 		}
@@ -369,8 +356,6 @@ public class PeakBuilderWSD {
 
 	protected static ITotalScanSignals adjustTotalScanSignals(ITotalScanSignals totalScanSignals, LinearEquation backgroundEquation) throws PeakException {
 
-		assert (totalScanSignals != null) : "The total ion signals must not be null.";
-		assert (backgroundEquation != null) : "The background equation must not be null.";
 		if(totalScanSignals == null || backgroundEquation == null) {
 			throw new PeakException("The given totalIonSignals or backgroundEquation must not be null.");
 		}
@@ -400,8 +385,6 @@ public class PeakBuilderWSD {
 
 	protected static ITotalScanSignals adjustTotalScanSignals(IExtractedWavelengthSignals extractedWavelengthSignals, LinearEquation backgroundEquation) throws Exception {
 
-		assert (extractedWavelengthSignals != null) : "The wavelength signals must not be null.";
-		assert (backgroundEquation != null) : "The background equation must not be null.";
 		if(extractedWavelengthSignals == null || backgroundEquation == null) {
 			throw new PeakException("The given wavelength signals or backgroundEquation must not be null.");
 		}
@@ -434,7 +417,6 @@ public class PeakBuilderWSD {
 
 	protected static IPeakIntensityValues getPeakIntensityValues(ITotalScanSignals peakIntensityTotalIonSignals) throws PeakException {
 
-		assert (peakIntensityTotalIonSignals != null) : "The peak intensity total ion signals must not be null.";
 		if(peakIntensityTotalIonSignals == null) {
 			throw new PeakException("The peakIntensityTotalIonSignals must not be null.");
 		}
