@@ -135,6 +135,7 @@ public class PeakDetectorMSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 
 		List<IChromatogramPeakMSD> extractPeaks = new ArrayList<>();
 		Collection<IMarkedIons> filterIons = peakDetectorSettings.getFilterIons();
+		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogram();
 		for(IMarkedIons ions : filterIons) {
 			Threshold threshold = peakDetectorSettings.getThreshold();
 			int windowSize = peakDetectorSettings.getMovingAverageWindowSize();
@@ -191,7 +192,7 @@ public class PeakDetectorMSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 				IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, windowSize, ions);
 				rawPeaks.addAll(getRawPeaks(slopes, threshold, monitor));
 			}
-			List<IChromatogramPeakMSD> peaks = extractPeaks(rawPeaks, chromatogramSelection.getChromatogram(), peakDetectorSettings, ions);
+			List<IChromatogramPeakMSD> peaks = extractPeaks(rawPeaks, chromatogram, peakDetectorSettings, ions);
 			if(peakDetectorSettings.isUseIndividualTraces()) {
 				String classifier = "Trace " + ions.getIonsNominal().iterator().next();
 				for(IChromatogramPeakMSD msd : peaks) {
