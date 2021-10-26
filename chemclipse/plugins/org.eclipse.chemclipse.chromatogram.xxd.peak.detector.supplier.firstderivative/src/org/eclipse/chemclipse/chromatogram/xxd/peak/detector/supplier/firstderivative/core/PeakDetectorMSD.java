@@ -331,8 +331,8 @@ public class PeakDetectorMSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 	 */
 	private boolean isValidPeak(IChromatogramPeakMSD peak, PeakDetectorSettingsMSD peakDetectorSettings) {
 
-		if(peak != null && peak.getSignalToNoiseRatio() >= peakDetectorSettings.getMinimumSignalToNoiseRatio()) {
-			return true;
+		return (peak != null && peak.getSignalToNoiseRatio() >= peakDetectorSettings.getMinimumSignalToNoiseRatio());
+	}
 
 	protected ScanRange optimizeBaseline(IChromatogramMSD chromatogram, int startScan, int centerScan, int stopScan, IMarkedIons ions) {
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -114,8 +114,7 @@ public class PeakBuilderMSD {
 		 * Create the peak.
 		 */
 		IPeakModelMSD peakModel = new PeakModelMSD(peakMassSpectrum, peakIntensityValues, backgroundAbundanceRange.getStartBackgroundAbundance(), backgroundAbundanceRange.getStopBackgroundAbundance());
-		IChromatogramPeakMSD peak = new ChromatogramPeakMSD(peakModel, chromatogram);
-		return peak;
+		return new ChromatogramPeakMSD(peakModel, chromatogram);
 	}
 
 	public static IChromatogramPeakMSD createPeak(IChromatogramMSD chromatogram, IScanRange scanRange, float startIntensity, float stopIntensity, Set<Integer> includedIons, IonMarkMode filterMode) throws PeakException {

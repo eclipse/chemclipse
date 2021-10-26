@@ -70,9 +70,7 @@ public class TotalIonSignalExtractor extends TotalScanSignalExtractor implements
 		 * If excludedMassFragements is null the the total ion list will be
 		 * returned.
 		 */
-		ITotalScanSignals signals;
-		signals = initializeTotalIonSignals(startScan, stopScan, excludedIons);
-		return signals;
+		return initializeTotalIonSignals(startScan, stopScan, excludedIons);
 	}
 
 	@Override
@@ -90,8 +88,7 @@ public class TotalIonSignalExtractor extends TotalScanSignalExtractor implements
 		 */
 		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
 		int stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
-		ITotalScanSignals signals = initializeTotalIonSignals(startScan, stopScan, null);
-		return signals;
+		return initializeTotalIonSignals(startScan, stopScan, null);
 	}
 
 	@Override
@@ -125,7 +122,6 @@ public class TotalIonSignalExtractor extends TotalScanSignalExtractor implements
 		 */
 		ITotalScanSignal totalIonSignal;
 		ITotalScanSignals signals = new TotalScanSignals(startScan, stopScan, chromatogram);
-		
 		/*
 		 * Add the selected scans.
 		 */

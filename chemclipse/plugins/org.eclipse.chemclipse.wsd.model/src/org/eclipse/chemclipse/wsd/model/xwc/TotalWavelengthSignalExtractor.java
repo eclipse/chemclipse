@@ -49,8 +49,7 @@ public class TotalWavelengthSignalExtractor extends TotalScanSignalExtractor imp
 		 */
 		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
 		int stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
-		ITotalScanSignals signals = initializeTotalWavelenghtSignals(startScan, stopScan);
-		return signals;
+		return initializeTotalWavelengthSignals(startScan, stopScan, null);
 	}
 
 	private ITotalScanSignals initializeTotalWavelenghtSignals(int startScan, int stopScan) {

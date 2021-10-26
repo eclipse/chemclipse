@@ -98,8 +98,7 @@ public class PeakBuilderWSD {
 		 */
 		IScanWSD peakScanWSD = getPeakScan(chromatogram, totalScanSignals, backgroundEquation);
 		IPeakModelWSD peakModel = new PeakModelWSD(peakScanWSD, peakIntensityValues, backgroundAbundanceRange.getStartBackgroundAbundance(), backgroundAbundanceRange.getStopBackgroundAbundance());
-		IChromatogramPeakWSD peak = new ChromatogramPeakWSD(peakModel, chromatogram);
-		return peak;
+		return new ChromatogramPeakWSD(peakModel, chromatogram);
 	}
 
 	public static IChromatogramPeakWSD createPeak(IChromatogramWSD chromatogram, IScanRange scanRange, boolean calculatePeakIncludedBackground, Set<Integer> traces) throws PeakException {
@@ -185,8 +184,7 @@ public class PeakBuilderWSD {
 				double adjustedTotalSignal = peakScanWSD.getTotalSignal() - backgroundEquation.calculateY(retentionTime);
 				peakScanWSD.adjustTotalSignal((float)adjustedTotalSignal);
 				IPeakModelWSD peakModel = new PeakModelWSD(peakScanWSD, peakIntensityValues, backgroundAbundanceRange.getStartBackgroundAbundance(), backgroundAbundanceRange.getStopBackgroundAbundance());
-				IChromatogramPeakWSD peak = new ChromatogramPeakWSD(peakModel, chromatogram);
-				return peak;
+				return new ChromatogramPeakWSD(peakModel, chromatogram);
 			} else {
 				throw new PeakException();
 			}
@@ -213,8 +211,7 @@ public class PeakBuilderWSD {
 		 */
 		IScanWSD peakScanWSD = getPeakScan(chromatogram, totalScanSignals, backgroundEquation);
 		IPeakModelWSD peakModel = new PeakModelWSD(peakScanWSD, peakIntensityValues, backgroundAbundanceRange.getStartBackgroundAbundance(), backgroundAbundanceRange.getStopBackgroundAbundance());
-		IChromatogramPeakWSD peak = new ChromatogramPeakWSD(peakModel, chromatogram);
-		return peak;
+		return new ChromatogramPeakWSD(peakModel, chromatogram);
 	}
 
 	public static IChromatogramPeakWSD createPeak(IChromatogramWSD chromatogram, IScanRange scanRange, IBackgroundAbundanceRange backgroundAbundanceRange, boolean checkBackgroundAbundanceRange) throws PeakException {
@@ -237,8 +234,7 @@ public class PeakBuilderWSD {
 		 */
 		IScanWSD peakScanWSD = getPeakScan(chromatogram, totalScanSignals, backgroundEquation);
 		IPeakModelWSD peakModel = new PeakModelWSD(peakScanWSD, peakIntensityValues, backgroundAbundanceRange.getStartBackgroundAbundance(), backgroundAbundanceRange.getStopBackgroundAbundance());
-		IChromatogramPeakWSD peak = new ChromatogramPeakWSD(peakModel, chromatogram);
-		return peak;
+		return new ChromatogramPeakWSD(peakModel, chromatogram);
 	}
 
 	protected static void validateChromatogram(IChromatogramWSD chromatogram) throws PeakException {
@@ -345,8 +341,7 @@ public class PeakBuilderWSD {
 		/*
 		 * Create the background abundance equation.
 		 */
-		LinearEquation backgroundEquation = Equations.createLinearEquation(p1, p2);
-		return backgroundEquation;
+		return Equations.createLinearEquation(p1, p2);
 	}
 
 	protected static LinearEquation getBackgroundEquation(IExtractedWavelengthSignals extractedWavelengthSignals, IScanRange scanRange, IBackgroundAbundanceRange backgroundAbundanceRange) throws Exception {
@@ -369,8 +364,7 @@ public class PeakBuilderWSD {
 		/*
 		 * Create the background abundance equation.
 		 */
-		LinearEquation backgroundEquation = Equations.createLinearEquation(p1, p2);
-		return backgroundEquation;
+		return Equations.createLinearEquation(p1, p2);
 	}
 
 	protected static ITotalScanSignals adjustTotalScanSignals(ITotalScanSignals totalScanSignals, LinearEquation backgroundEquation) throws PeakException {
@@ -492,8 +486,6 @@ public class PeakBuilderWSD {
 	protected static IBackgroundAbundanceRange checkBackgroundAbundanceRange(ITotalScanSignals totalScanSignals, IScanRange scanRange, IBackgroundAbundanceRange backgroundAbundanceRange) throws PeakException {
 
 		ITotalScanSignal totalScanSignal;
-		float background = 0.0f;
-		float signal = 0.0f;
 		float startBackgroundAbundance = 0.0f;
 		float stopBackgroundAbundance = 0.0f;
 		boolean adjustBackgroundAbundance = false;
@@ -505,8 +497,8 @@ public class PeakBuilderWSD {
 		 */
 		totalScanSignal = totalScanSignals.getTotalScanSignal(scanRange.getStartScan());
 		if(totalScanSignal != null) {
-			background = backgroundAbundanceRange.getStartBackgroundAbundance();
-			signal = totalScanSignal.getTotalSignal();
+			float background = backgroundAbundanceRange.getStartBackgroundAbundance();
+			float signal = totalScanSignal.getTotalSignal();
 			if(background <= signal) {
 				startBackgroundAbundance = background;
 			} else {
@@ -521,8 +513,8 @@ public class PeakBuilderWSD {
 		 */
 		totalScanSignal = totalScanSignals.getTotalScanSignal(scanRange.getStopScan());
 		if(totalScanSignal != null) {
-			background = backgroundAbundanceRange.getStopBackgroundAbundance();
-			signal = totalScanSignal.getTotalSignal();
+			float background = backgroundAbundanceRange.getStopBackgroundAbundance();
+			float signal = totalScanSignal.getTotalSignal();
 			if(background <= signal) {
 				stopBackgroundAbundance = background;
 			} else {
