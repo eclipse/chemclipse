@@ -140,7 +140,7 @@ public class PeakDetectorMSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 			int windowSize = peakDetectorSettings.getMovingAverageWindowSize();
 			List<IRawPeak> rawPeaks = new ArrayList<>();
 			//
-			if(noiseSegments != null && noiseSegments.size() > 0) {
+			if(noiseSegments != null && !noiseSegments.isEmpty()) {
 				/*
 				 * Initial retention time range before running the detection using
 				 * noise segments.
