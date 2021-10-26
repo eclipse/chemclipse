@@ -40,7 +40,7 @@ public class PeakDetectorSettingsCSD extends AbstractPeakDetectorCSDSettings {
 	@JsonDeserialize(using = WindowSizeDeserializer.class)
 	private int windowSize = 5;
 	@JsonProperty(value = "Use Noise-Segments", defaultValue = "false")
-	@JsonPropertyDescription(value = "Whether to use Nois-Segments to decide where peaks should be detected, this can improve the sensitivity of the algorithm")
+	@JsonPropertyDescription(value = "Whether to use noise segments to decide where peaks should be detected. This can improve the sensitivity of the algorithm.")
 	private boolean useNoiseSegments = false;
 	@JsonProperty(value = "Optimize Baseline (VV)", defaultValue = "false")
 	private boolean optimizeBaseline = false;
