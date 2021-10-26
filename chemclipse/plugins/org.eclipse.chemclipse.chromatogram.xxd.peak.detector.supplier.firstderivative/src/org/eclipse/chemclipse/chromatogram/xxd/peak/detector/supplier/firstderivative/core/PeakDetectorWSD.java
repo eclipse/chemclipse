@@ -51,7 +51,7 @@ public class PeakDetectorWSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 
 	private static final Logger logger = Logger.getLogger(PeakDetectorWSD.class);
 	//
-	private static float NORMALIZATION_BASE = 100000.0f;
+	private static final float NORMALIZATION_BASE = 100000.0f;
 
 	@Override
 	public IProcessingInfo<R> detect(IChromatogramSelectionWSD chromatogramSelection, IPeakDetectorSettingsWSD detectorSettings, IProgressMonitor monitor) {
