@@ -91,7 +91,8 @@ public class FirstDerivativePeakDetector implements IMeasurementPeakDetector<Fir
 				} else {
 					configuration = globalConfiguration;
 				}
-				slopes = PeakDetectorWSD.getFirstDerivativeSlopes(new ChromatogramSelectionWSD((IChromatogramWSD)measurement), configuration.getMovingAverageWindowSize());
+				// TODO: filter wavelengths
+				slopes = PeakDetectorWSD.getFirstDerivativeSlopes(new ChromatogramSelectionWSD((IChromatogramWSD)measurement), configuration.getMovingAverageWindowSize(), null);
 			} else if(measurement instanceof SpectrumMeasurement) {
 				if(globalConfiguration == null) {
 					configuration = new FirstDerivativePeakDetectorSettings(DataType.NMR);

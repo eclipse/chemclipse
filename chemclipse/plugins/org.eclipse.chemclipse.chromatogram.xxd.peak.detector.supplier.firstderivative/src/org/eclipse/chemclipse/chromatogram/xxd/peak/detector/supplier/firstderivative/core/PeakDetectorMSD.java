@@ -36,6 +36,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderiv
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
@@ -44,6 +45,7 @@ import org.eclipse.chemclipse.model.support.NoiseSegment;
 import org.eclipse.chemclipse.model.support.ScanRange;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons.IonMarkMode;
@@ -53,6 +55,8 @@ import org.eclipse.chemclipse.msd.model.xic.ITotalIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.TotalIonSignalExtractor;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
+import org.eclipse.chemclipse.numeric.equations.Equations;
+import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
@@ -328,7 +332,72 @@ public class PeakDetectorMSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 
 		if(peak != null && peak.getSignalToNoiseRatio() >= peakDetectorSettings.getMinimumSignalToNoiseRatio()) {
 			return true;
+
+	protected ScanRange optimizeBaseline(IChromatogramMSD chromatogram, int startScan, int centerScan, int stopScan, IMarkedIons ions) {
+
+		/*
+		 * Right and left baseline optimization
+		 */
+		int stopScanOptimized = optimizeRightBaseline(chromatogram, startScan, centerScan, stopScan, ions);
+		int startScanOptimized = optimizeLeftBaseline(chromatogram, startScan, centerScan, stopScanOptimized, ions);
+		//
+		return new ScanRange(startScanOptimized, stopScanOptimized);
+	}
+
+	protected float getScanSignal(IChromatogramMSD chromatogram, int scanNumber, IMarkedIons ions) {
+
+		IScan scan = chromatogram.getScan(scanNumber);
+		if(scan instanceof IScanMSD) {
+			IScanMSD scanMSD = (IScanMSD)scan;
+			return scanMSD.getTotalSignal(ions);
+		} else {
+			return scan.getTotalSignal();
 		}
-		return false;
+	}
+
+	private int optimizeRightBaseline(IChromatogramMSD chromatogram, int startScan, int centerScan, int stopScan, IMarkedIons ions) {
+
+		IPoint p1 = new Point(getRetentionTime(chromatogram, startScan), getScanSignal(chromatogram, startScan, ions));
+		IPoint p2 = new Point(getRetentionTime(chromatogram, stopScan), getScanSignal(chromatogram, stopScan, ions));
+		LinearEquation backgroundEquation = Equations.createLinearEquation(p1, p2);
+		/*
+		 * Right border optimization
+		 */
+		int stopScanOptimized = stopScan;
+		for(int i = stopScan; i > centerScan; i--) {
+			float signal = getScanSignal(chromatogram, i, ions);
+			int retentionTime = chromatogram.getScan(i).getRetentionTime();
+			if(signal < backgroundEquation.calculateY(retentionTime)) {
+				stopScanOptimized = i;
+			}
+		}
+		//
+		return stopScanOptimized;
+	}
+
+	private int optimizeLeftBaseline(IChromatogramMSD chromatogram, int startScan, int centerScan, int stopScan, IMarkedIons ions) {
+
+		IPoint p1 = new Point(getRetentionTime(chromatogram, startScan), getScanSignal(chromatogram, startScan, ions));
+		IPoint p2 = new Point(getRetentionTime(chromatogram, stopScan), getScanSignal(chromatogram, stopScan, ions));
+		LinearEquation backgroundEquation = Equations.createLinearEquation(p1, p2);
+		/*
+		 * Right border optimization
+		 */
+		int startScanOptimized = startScan;
+		for(int i = startScan; i < centerScan; i++) {
+			float signal = getScanSignal(chromatogram, i, ions);
+			int retentionTime = chromatogram.getScan(i).getRetentionTime();
+			if(signal < backgroundEquation.calculateY(retentionTime)) {
+				/*
+				 * Create a new equation
+				 */
+				startScanOptimized = i;
+				p1 = new Point(getRetentionTime(chromatogram, startScanOptimized), getScanSignal(chromatogram, startScanOptimized, ions));
+				p2 = new Point(getRetentionTime(chromatogram, stopScan), getScanSignal(chromatogram, stopScan, ions));
+				backgroundEquation = Equations.createLinearEquation(p1, p2);
+			}
+		}
+		//
+		return startScanOptimized;
 	}
 }

@@ -23,15 +23,7 @@ import org.eclipse.chemclipse.chromatogram.peak.detector.support.RawPeak;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.IFirstDerivativeDetectorSlopes;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.model.support.ScanRange;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
-import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.numeric.core.IPoint;
-import org.eclipse.chemclipse.numeric.core.Point;
-import org.eclipse.chemclipse.numeric.equations.Equations;
-import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 import org.eclipse.chemclipse.numeric.miscellaneous.Evaluation;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
@@ -109,76 +101,6 @@ public class BasePeakDetector<P extends IPeak, C extends IChromatogram<P>, R> ex
 			subMonitor.worked(1);
 		}
 		return rawPeaks;
-	}
-
-	protected ScanRange optimizeBaseline(IChromatogram<? extends IPeak> chromatogram, int startScan, int centerScan, int stopScan, IMarkedIons ions) {
-
-		/*
-		 * Right and left baseline optimization
-		 */
-		int stopScanOptimized = optimizeRightBaseline(chromatogram, startScan, centerScan, stopScan, ions);
-		int startScanOptimized = optimizeLeftBaseline(chromatogram, startScan, centerScan, stopScanOptimized, ions);
-		//
-		return new ScanRange(startScanOptimized, stopScanOptimized);
-	}
-
-	protected float getScanSignal(IChromatogram<? extends IPeak> chromatogram, int scanNumber, IMarkedIons ions) {
-
-		float scanSignal = 0.0f;
-		IScan scan = chromatogram.getScan(scanNumber);
-		if(scan instanceof IScanMSD) {
-			IScanMSD scanMSD = (IScanMSD)scan;
-			scanSignal = scanMSD.getTotalSignal(ions);
-		} else {
-			scanSignal = scan.getTotalSignal();
-		}
-		return scanSignal;
-	}
-
-	private int optimizeRightBaseline(IChromatogram<? extends IPeak> chromatogram, int startScan, int centerScan, int stopScan, IMarkedIons ions) {
-
-		IPoint p1 = new Point(getRetentionTime(chromatogram, startScan), getScanSignal(chromatogram, startScan, ions));
-		IPoint p2 = new Point(getRetentionTime(chromatogram, stopScan), getScanSignal(chromatogram, stopScan, ions));
-		LinearEquation backgroundEquation = Equations.createLinearEquation(p1, p2);
-		/*
-		 * Right border optimization
-		 */
-		int stopScanOptimized = stopScan;
-		for(int i = stopScan; i > centerScan; i--) {
-			float signal = getScanSignal(chromatogram, i, ions);
-			int retentionTime = chromatogram.getScan(i).getRetentionTime();
-			if(signal < backgroundEquation.calculateY(retentionTime)) {
-				stopScanOptimized = i;
-			}
-		}
-		//
-		return stopScanOptimized;
-	}
-
-	private int optimizeLeftBaseline(IChromatogram<? extends IPeak> chromatogram, int startScan, int centerScan, int stopScan, IMarkedIons ions) {
-
-		IPoint p1 = new Point(getRetentionTime(chromatogram, startScan), getScanSignal(chromatogram, startScan, ions));
-		IPoint p2 = new Point(getRetentionTime(chromatogram, stopScan), getScanSignal(chromatogram, stopScan, ions));
-		LinearEquation backgroundEquation = Equations.createLinearEquation(p1, p2);
-		/*
-		 * Right border optimization
-		 */
-		int startScanOptimized = startScan;
-		for(int i = startScan; i < centerScan; i++) {
-			float signal = getScanSignal(chromatogram, i, ions);
-			int retentionTime = chromatogram.getScan(i).getRetentionTime();
-			if(signal < backgroundEquation.calculateY(retentionTime)) {
-				/*
-				 * Create a new equation
-				 */
-				startScanOptimized = i;
-				p1 = new Point(getRetentionTime(chromatogram, startScanOptimized), getScanSignal(chromatogram, startScanOptimized, ions));
-				p2 = new Point(getRetentionTime(chromatogram, stopScan), getScanSignal(chromatogram, stopScan, ions));
-				backgroundEquation = Equations.createLinearEquation(p1, p2);
-			}
-		}
-		//
-		return startScanOptimized;
 	}
 
 	protected int getRetentionTime(IChromatogram<? extends IPeak> chromatogram, int scanNumber) {
