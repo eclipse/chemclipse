@@ -164,7 +164,7 @@ public class PeakDetectorMSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 				 * Ranges between the noise segments
 				 * [S] --- [N] --- [E]
 				 */
-				while(iterator.hasNext()) {
+				while(iterator.hasNext() && noiseSegment != null) {
 					int previousStopRetentionTimeSegment = noiseSegment.getStopRetentionTime();
 					noiseSegment = iterator.next();
 					int nextStartRetentionTimeSegment = noiseSegment.getStartRetentionTime();
