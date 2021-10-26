@@ -22,7 +22,7 @@ public class AbstractMarkedWavelengths implements IMarkedWavelengths {
 
 	public AbstractMarkedWavelengths() {
 
-		markedWavelengths = new HashSet<IMarkedWavelength>();
+		markedWavelengths = new HashSet<>();
 	}
 
 	@Override
@@ -106,7 +106,7 @@ public class AbstractMarkedWavelengths implements IMarkedWavelengths {
 	@Override
 	public Set<Double> getWavelengths() {
 
-		Set<Double> wavelengths = new HashSet<Double>();
+		Set<Double> wavelengths = new HashSet<>();
 		for(IMarkedWavelength markedWavelength : markedWavelengths) {
 			wavelengths.add(markedWavelength.getWavelength());
 		}

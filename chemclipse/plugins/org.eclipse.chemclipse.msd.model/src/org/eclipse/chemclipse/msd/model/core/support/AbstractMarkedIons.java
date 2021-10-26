@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2019 Lablicate GmbH.
+ * Copyright (c) 2010, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -31,7 +31,8 @@ public abstract class AbstractMarkedIons implements IMarkedIons {
 	 * @param ions
 	 */
 	protected AbstractMarkedIons(int[] ionsList) {
-		markedIons = new HashSet<IMarkedIon>();
+
+		markedIons = new HashSet<>();
 		if(ionsList != null) {
 			for(int ion : ionsList) {
 				markedIons.add(new MarkedIon(ion));
@@ -41,8 +42,7 @@ public abstract class AbstractMarkedIons implements IMarkedIons {
 
 	protected AbstractMarkedIons(Collection<? extends Number> ionsList) {
 
-	
-		markedIons = new HashSet<IMarkedIon>();
+		markedIons = new HashSet<>();
 		if(ionsList != null) {
 			for(Number ion : ionsList) {
 				markedIons.add(new MarkedIon(ion.intValue()));
