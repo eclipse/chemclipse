@@ -8,11 +8,12 @@
  *
  * Contributors:
  * Alexander Stark - initial API and implementation
+ * Philip Wenig - refactoring ILabel support
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.model.settings.peaks;
 
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
-import org.eclipse.chemclipse.xxd.model.support.ShapeSelection;
+import org.eclipse.chemclipse.xxd.model.support.ShapeCriterion;
 import org.eclipse.chemclipse.xxd.model.support.TreatmentOption;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -20,56 +21,56 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class ShapeFilterSettings {
 
-	@JsonProperty(value = "Leading:", defaultValue = "0.9")
+	@JsonProperty(value = "Leading", defaultValue = "0.9")
 	@JsonPropertyDescription(value = "The leading value of a peak to be filtered accordingly.")
 	@DoubleSettingsProperty(minValue = 0.0d, maxValue = 100.0d)
-	private double leadingValue = 0.9d;
-	@JsonProperty(value = "Tailing:", defaultValue = "0.9")
+	private double leading = 0.9d;
+	@JsonProperty(value = "Tailing", defaultValue = "0.9")
 	@JsonPropertyDescription(value = "The tailing value of a peak to be filtered accordingly.")
 	@DoubleSettingsProperty(minValue = 0.0d, maxValue = 100.0d)
-	private double tailingValue = 0.9d;
-	@JsonProperty(value = "Peak Treatment Option:")
-	private TreatmentOption filterTreatmentOption = TreatmentOption.DEACTIVATE_PEAK;
-	@JsonProperty(value = "Peak Selection Criterion:")
-	private ShapeSelection filterSelectionCriterion = ShapeSelection.TAILING_GREATER_THAN_LIMIT;
+	private double tailing = 0.9d;
+	@JsonProperty(value = "Treatment Option")
+	private TreatmentOption treatmentOption = TreatmentOption.DEACTIVATE_PEAK;
+	@JsonProperty(value = "Shape Criterion")
+	private ShapeCriterion shapeCriterion = ShapeCriterion.TAILING_GREATER_THAN_LIMIT;
 
-	public double getLeadingValue() {
+	public double getLeading() {
 
-		return leadingValue;
+		return leading;
 	}
 
-	public void setLeadingValue(double leadingValue) {
+	public void setLeading(double leading) {
 
-		this.leadingValue = leadingValue;
+		this.leading = leading;
 	}
 
-	public double getTailingValue() {
+	public double getTailing() {
 
-		return tailingValue;
+		return tailing;
 	}
 
-	public void setTailingValue(double tailingValue) {
+	public void setTailing(double tailing) {
 
-		this.tailingValue = tailingValue;
+		this.tailing = tailing;
 	}
 
-	public TreatmentOption getFilterTreatmentOption() {
+	public TreatmentOption getTreatmentOption() {
 
-		return filterTreatmentOption;
+		return treatmentOption;
 	}
 
-	public void setFilterTreatmentOption(TreatmentOption filterTreatmentOption) {
+	public void setTreatmentOption(TreatmentOption treatmentOption) {
 
-		this.filterTreatmentOption = filterTreatmentOption;
+		this.treatmentOption = treatmentOption;
 	}
 
-	public ShapeSelection getFilterSelectionCriterion() {
+	public ShapeCriterion getShapeCriterion() {
 
-		return filterSelectionCriterion;
+		return shapeCriterion;
 	}
 
-	public void setFilterSelectionCriterion(ShapeSelection filterSelectionCriterion) {
+	public void setShapeCriterion(ShapeCriterion shapeCriterion) {
 
-		this.filterSelectionCriterion = filterSelectionCriterion;
+		this.shapeCriterion = shapeCriterion;
 	}
 }

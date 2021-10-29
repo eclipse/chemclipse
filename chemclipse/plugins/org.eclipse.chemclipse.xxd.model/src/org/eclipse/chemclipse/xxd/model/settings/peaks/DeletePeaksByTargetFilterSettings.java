@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class DeletePeaksByTargetFilterSettings {
 
-	@JsonProperty(value = "Use the target value:")
+	@JsonProperty(value = "Target")
 	private PeaksDeleteOption peaksDeleteOption = PeaksDeleteOption.NAME;
 	@JsonProperty(value = "Value", defaultValue = "")
 	@JsonPropertyDescription(value = "Delete peak(s) if at least one target matches the value on the selected option.")

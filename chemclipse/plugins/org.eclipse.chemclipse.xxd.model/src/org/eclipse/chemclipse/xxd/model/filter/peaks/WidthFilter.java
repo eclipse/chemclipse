@@ -15,6 +15,7 @@ package org.eclipse.chemclipse.xxd.model.filter.peaks;
 import java.util.Collection;
 import java.util.function.BiPredicate;
 
+import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.filter.IPeakFilter;
@@ -101,11 +102,11 @@ public class WidthFilter extends AbstractPeakFilter<WidthFilterSettings> {
 
 	private static WidthPredicate<?> getPredicate(WidthFilterSettings configuration) {
 
-		switch(configuration.getFilterSelectionCriterion()) {
+		switch(configuration.getWidthCriterion()) {
 			case WIDTH_SMALLER_THAN_LIMIT:
-				return new WidthPredicate<>(WIDTH_SMALLER_THAN_LIMIT_COMPARATOR, (int)(configuration.getWidthValue() * 60000));
+				return new WidthPredicate<>(WIDTH_SMALLER_THAN_LIMIT_COMPARATOR, (int)(configuration.getWidth() * IChromatogram.MINUTE_CORRELATION_FACTOR));
 			case WIDTH_GREATER_THAN_LIMIT:
-				return new WidthPredicate<>(WIDTH_GREATER_THAN_LIMIT_COMPARATOR, (int)(configuration.getWidthValue() * 60000));
+				return new WidthPredicate<>(WIDTH_GREATER_THAN_LIMIT_COMPARATOR, (int)(configuration.getWidth() * IChromatogram.MINUTE_CORRELATION_FACTOR));
 			default:
 				throw new IllegalArgumentException("Unsupported Peak Filter Selection Criterion!");
 		}
@@ -114,8 +115,8 @@ public class WidthFilter extends AbstractPeakFilter<WidthFilterSettings> {
 	private static <X extends IPeak> void processPeak(WidthFilterSettings configuration, CRUDListener<X, IPeakModel> listener, X peak, WidthPredicate<?> predicate) {
 
 		int width = peak.getPeakModel().getWidthByInflectionPoints();
-		switch(configuration.getFilterTreatmentOption()) {
-			case ENABLE_PEAK:
+		switch(configuration.getTreatmentOption()) {
+			case ACTIVATE_PEAK:
 				if(predicate.test(width)) {
 					peak.setActiveForAnalysis(true);
 					listener.updated(peak);

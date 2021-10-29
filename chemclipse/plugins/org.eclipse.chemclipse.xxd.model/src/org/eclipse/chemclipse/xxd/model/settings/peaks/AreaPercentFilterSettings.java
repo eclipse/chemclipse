@@ -8,11 +8,12 @@
  *
  * Contributors:
  * Alexander Stark - initial API and implementation
+ * Philip Wenig - refactoring ILabel support
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.model.settings.peaks;
 
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
-import org.eclipse.chemclipse.xxd.model.support.AreaSelection;
+import org.eclipse.chemclipse.xxd.model.support.AreaCriterion;
 import org.eclipse.chemclipse.xxd.model.support.TreatmentOption;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -20,18 +21,18 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class AreaPercentFilterSettings {
 
-	@JsonProperty(value = "Minimum area:")
+	@JsonProperty(value = "Minimum Area [%]")
 	@JsonPropertyDescription(value = "The minimum percentage area value of a peak to be filtered accordingly.")
 	@DoubleSettingsProperty(minValue = 0.0d, maxValue = 100.0d)
 	private double minimumPercentageAreaValue = 1.0d;
-	@JsonProperty(value = "Maximum area:")
+	@JsonProperty(value = "Maximum Area [%]")
 	@JsonPropertyDescription(value = "The maximum percentage area value of a peak to be filtered accordingly.")
 	@DoubleSettingsProperty(minValue = 0.0d, maxValue = 100.0d)
 	private double maximumPercentageAreaValue = 10.0d;
-	@JsonProperty(value = "Peak Treatment Option:")
-	private TreatmentOption filterTreatmentOption = TreatmentOption.DEACTIVATE_PEAK;
-	@JsonProperty(value = "Peak Selection Criterion:")
-	private AreaSelection filterSelectionCriterion = AreaSelection.AREA_LESS_THAN_MINIMUM;
+	@JsonProperty(value = "Treatment Option")
+	private TreatmentOption treatmentOption = TreatmentOption.DEACTIVATE_PEAK;
+	@JsonProperty(value = "Area Criterion")
+	private AreaCriterion areaCriterion = AreaCriterion.AREA_LESS_THAN_MINIMUM;
 
 	public double getMinimumPercentageAreaValue() {
 
@@ -53,23 +54,23 @@ public class AreaPercentFilterSettings {
 		this.maximumPercentageAreaValue = maximumPercentageAreaValue;
 	}
 
-	public TreatmentOption getFilterTreatmentOption() {
+	public TreatmentOption getTreatmentOption() {
 
-		return filterTreatmentOption;
+		return treatmentOption;
 	}
 
-	public void setFilterTreatmentOption(TreatmentOption filterTreatmentOption) {
+	public void setTreatmentOption(TreatmentOption treatmentOption) {
 
-		this.filterTreatmentOption = filterTreatmentOption;
+		this.treatmentOption = treatmentOption;
 	}
 
-	public AreaSelection getFilterSelectionCriterion() {
+	public AreaCriterion getAreaCriterion() {
 
-		return filterSelectionCriterion;
+		return areaCriterion;
 	}
 
-	public void setFilterSelectionCriterion(AreaSelection filterSelectionCriterion) {
+	public void setAreaCriterion(AreaCriterion areaCriterion) {
 
-		this.filterSelectionCriterion = filterSelectionCriterion;
+		this.areaCriterion = areaCriterion;
 	}
 }

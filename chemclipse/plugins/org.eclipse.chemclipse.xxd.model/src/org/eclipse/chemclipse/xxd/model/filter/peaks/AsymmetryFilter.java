@@ -102,11 +102,11 @@ public class AsymmetryFilter extends AbstractPeakFilter<AsymmetryFilterSettings>
 
 	private static FactorPredicate<?> getPredicate(AsymmetryFilterSettings configuration) {
 
-		switch(configuration.getFilterSelectionCriterion()) {
+		switch(configuration.getAsymmetryCriterion()) {
 			case ASYMMETRY_FACTOR_SMALLER_THAN_LIMIT:
-				return new FactorPredicate<>(ASYMMETRY_FACTOR_SMALLER_THAN_LIMIT_COMPARATOR, configuration.getPeakAsymmetryFactor());
+				return new FactorPredicate<>(ASYMMETRY_FACTOR_SMALLER_THAN_LIMIT_COMPARATOR, configuration.getAsymmetryFactor());
 			case ASYMMETRY_FACTOR_GREATER_THAN_LIMIT:
-				return new FactorPredicate<>(ASYMMETRY_FACTOR_GREATER_THAN_LIMIT_COMPARATOR, configuration.getPeakAsymmetryFactor());
+				return new FactorPredicate<>(ASYMMETRY_FACTOR_GREATER_THAN_LIMIT_COMPARATOR, configuration.getAsymmetryFactor());
 			default:
 				throw new IllegalArgumentException("Unsupported Peak Filter Selection Criterion!");
 		}
@@ -116,7 +116,7 @@ public class AsymmetryFilter extends AbstractPeakFilter<AsymmetryFilterSettings>
 
 		double peakAsymmetryFactor = peak.getPeakModel().getTailing() / peak.getPeakModel().getLeading();
 		switch(configuration.getFilterTreatmentOption()) {
-			case ENABLE_PEAK:
+			case ACTIVATE_PEAK:
 				if(predicate.test(peakAsymmetryFactor)) {
 					peak.setActiveForAnalysis(true);
 					listener.updated(peak);

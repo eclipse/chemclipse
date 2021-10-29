@@ -8,11 +8,12 @@
  *
  * Contributors:
  * Alexander Stark - initial API and implementation
+ * Philip Wenig - refactoring ILabel support
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.model.settings.peaks;
 
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
-import org.eclipse.chemclipse.xxd.model.support.AsymmetrySelection;
+import org.eclipse.chemclipse.xxd.model.support.AsymmetryCriterion;
 import org.eclipse.chemclipse.xxd.model.support.TreatmentOption;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -20,24 +21,23 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class AsymmetryFilterSettings {
 
-	@JsonProperty(value = "As:", defaultValue = "1.02")
-	@JsonPropertyDescription(value = "The peak asymmetry factor of a peak to be filtered accordingly.")
+	@JsonProperty(value = "Assymetry Factor", defaultValue = "1.02")
+	@JsonPropertyDescription(value = "Factor: 1.0-1.05 [excellent], 1.05 - 1.99 [acceptable], >= 2 [unacceptable]")
 	@DoubleSettingsProperty(minValue = 0.0d, maxValue = 10.0d)
-	// peak asymmetry factor (As) rating � As = 1.0-1.05 [excellent] - As = 1.2 [acceptable] - As >= 2 [unacceptable]
-	private double peakAsymmetryFactor = 1.02d;
-	@JsonProperty(value = "Peak Treatment Option:")
+	private double asymmetryFactor = 1.02d;
+	@JsonProperty(value = "Treatment Option")
 	private TreatmentOption filterTreatmentOption = TreatmentOption.DEACTIVATE_PEAK;
-	@JsonProperty(value = "Peak Selection Criterion:")
-	private AsymmetrySelection filterSelectionCriterion = AsymmetrySelection.ASYMMETRY_FACTOR_GREATER_THAN_LIMIT;
+	@JsonProperty(value = "Asymmetry Selection")
+	private AsymmetryCriterion asymmetryCriterion = AsymmetryCriterion.ASYMMETRY_FACTOR_GREATER_THAN_LIMIT;
 
-	public double getPeakAsymmetryFactor() {
+	public double getAsymmetryFactor() {
 
-		return peakAsymmetryFactor;
+		return asymmetryFactor;
 	}
 
-	public void setPeakAsymmetryFactor(double peakAsymmetryFactor) {
+	public void setAsymmetryFactor(double asymmetryFactor) {
 
-		this.peakAsymmetryFactor = peakAsymmetryFactor;
+		this.asymmetryFactor = asymmetryFactor;
 	}
 
 	public TreatmentOption getFilterTreatmentOption() {
@@ -50,13 +50,13 @@ public class AsymmetryFilterSettings {
 		this.filterTreatmentOption = filterTreatmentOption;
 	}
 
-	public AsymmetrySelection getFilterSelectionCriterion() {
+	public AsymmetryCriterion getAsymmetryCriterion() {
 
-		return filterSelectionCriterion;
+		return asymmetryCriterion;
 	}
 
-	public void setFilterSelectionCriterion(AsymmetrySelection filterSelectionCriterion) {
+	public void setAsymmetryCriterion(AsymmetryCriterion asymmetryCriterion) {
 
-		this.filterSelectionCriterion = filterSelectionCriterion;
+		this.asymmetryCriterion = asymmetryCriterion;
 	}
 }

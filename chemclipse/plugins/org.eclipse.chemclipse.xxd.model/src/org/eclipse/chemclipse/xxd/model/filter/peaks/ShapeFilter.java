@@ -120,13 +120,13 @@ public class ShapeFilter extends AbstractPeakFilter<ShapeFilterSettings> {
 
 	private static ShapePredicate<?> getPredicate(ShapeFilterSettings configuration) {
 
-		switch(configuration.getFilterSelectionCriterion()) {
+		switch(configuration.getShapeCriterion()) {
 			case LEADING_SMALLER_THAN_LIMIT:
-				return new ShapePredicate<>(LEADING_SMALLER_THAN_LIMIT_COMPARATOR, configuration.getLeadingValue());
+				return new ShapePredicate<>(LEADING_SMALLER_THAN_LIMIT_COMPARATOR, configuration.getLeading());
 			case TAILING_GREATER_THAN_LIMIT:
-				return new ShapePredicate<>(TAILING_GREATER_THAN_LIMIT_COMPARATOR, configuration.getTailingValue());
+				return new ShapePredicate<>(TAILING_GREATER_THAN_LIMIT_COMPARATOR, configuration.getTailing());
 			case VALUES_WITHIN_RANGE:
-				return new ShapePredicate<>(VALUES_WITHIN_RANGE_COMPARATOR_R, new RangeContainer(configuration.getLeadingValue(), configuration.getTailingValue()));
+				return new ShapePredicate<>(VALUES_WITHIN_RANGE_COMPARATOR_R, new RangeContainer(configuration.getLeading(), configuration.getTailing()));
 			default:
 				throw new IllegalArgumentException("Unsupported Peak Filter Selection Criterion!");
 		}
@@ -135,8 +135,8 @@ public class ShapeFilter extends AbstractPeakFilter<ShapeFilterSettings> {
 	private static <X extends IPeak> void processPeakSuperRange(ShapeFilterSettings configuration, CRUDListener<X, IPeakModel> listener, X peak, ShapePredicate<?> predicate) {
 
 		RangeContainer container = new RangeContainer(peak.getPeakModel().getLeading(), peak.getPeakModel().getTailing());
-		switch(configuration.getFilterTreatmentOption()) {
-			case ENABLE_PEAK:
+		switch(configuration.getTreatmentOption()) {
+			case ACTIVATE_PEAK:
 				if(predicate.test(container)) {
 					peak.setActiveForAnalysis(true);
 					listener.updated(peak);

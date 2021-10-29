@@ -8,54 +8,55 @@
  *
  * Contributors:
  * Alexander Stark - initial API and implementation
+ * Philip Wenig - refactoring ILabel support
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.model.settings.peaks;
 
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
-import org.eclipse.chemclipse.xxd.model.support.PeakWidthSelectionCriterion;
 import org.eclipse.chemclipse.xxd.model.support.TreatmentOption;
+import org.eclipse.chemclipse.xxd.model.support.WidthCriterion;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class WidthFilterSettings {
 
-	@JsonProperty(value = "Width value [min]:")
+	@JsonProperty(value = "Width [min]")
 	@JsonPropertyDescription(value = "The width value of a peak to be filtered accordingly.")
 	@DoubleSettingsProperty(minValue = 0.0d, maxValue = 100.0d)
-	private double widthValue = 0.0d;
-	@JsonProperty(value = "Peak Treatment Option:")
-	private TreatmentOption filterTreatmentOption = TreatmentOption.DEACTIVATE_PEAK;
-	@JsonProperty(value = "Width Selection Criterion:")
-	private PeakWidthSelectionCriterion filterSelectionCriterion = PeakWidthSelectionCriterion.WIDTH_GREATER_THAN_LIMIT;
+	private double width = 0.0d;
+	@JsonProperty(value = "Treatment Option")
+	private TreatmentOption treatmentOption = TreatmentOption.DEACTIVATE_PEAK;
+	@JsonProperty(value = "Width Criterion")
+	private WidthCriterion widthCriterion = WidthCriterion.WIDTH_GREATER_THAN_LIMIT;
 
-	public double getWidthValue() {
+	public double getWidth() {
 
-		return widthValue;
+		return width;
 	}
 
-	public void setWidthValue(double widthValue) {
+	public void setWidth(double width) {
 
-		this.widthValue = widthValue;
+		this.width = width;
 	}
 
-	public TreatmentOption getFilterTreatmentOption() {
+	public TreatmentOption getTreatmentOption() {
 
-		return filterTreatmentOption;
+		return treatmentOption;
 	}
 
-	public void setFilterTreatmentOption(TreatmentOption filterTreatmentOption) {
+	public void setTreatmentOption(TreatmentOption treatmentOption) {
 
-		this.filterTreatmentOption = filterTreatmentOption;
+		this.treatmentOption = treatmentOption;
 	}
 
-	public PeakWidthSelectionCriterion getFilterSelectionCriterion() {
+	public WidthCriterion getWidthCriterion() {
 
-		return filterSelectionCriterion;
+		return widthCriterion;
 	}
 
-	public void setFilterSelectionCriterion(PeakWidthSelectionCriterion filterSelectionCriterion) {
+	public void setWidthCriterion(WidthCriterion widthCriterion) {
 
-		this.filterSelectionCriterion = filterSelectionCriterion;
+		this.widthCriterion = widthCriterion;
 	}
 }

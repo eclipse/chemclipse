@@ -8,11 +8,12 @@
  *
  * Contributors:
  * Alexander Stark - initial API and implementation
+ * Philip Wenig - refactoring ILabel support
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.model.settings.peaks;
 
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
-import org.eclipse.chemclipse.xxd.model.support.AreaSelection;
+import org.eclipse.chemclipse.xxd.model.support.AreaCriterion;
 import org.eclipse.chemclipse.xxd.model.support.TreatmentOption;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -20,18 +21,18 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class AreaFilterSettings {
 
-	@JsonProperty(value = "Minimum area:")
+	@JsonProperty(value = "Minimum Area")
 	@JsonPropertyDescription(value = "The minimum area value of a peak to be filtered accordingly.")
 	@DoubleSettingsProperty(minValue = 1.0d, maxValue = Double.MAX_VALUE)
 	private double minimumAreaValue = 1.0d;
-	@JsonProperty(value = "Maximum area:")
+	@JsonProperty(value = "Maximum Area")
 	@JsonPropertyDescription(value = "The maximum area value of a peak to be filtered accordingly.")
 	@DoubleSettingsProperty(minValue = 1.0d, maxValue = Double.MAX_VALUE)
 	private double maximumAreaValue = 1.0d;
-	@JsonProperty(value = "Peak Treatment Option:")
-	private TreatmentOption filterTreatmentOption = TreatmentOption.DEACTIVATE_PEAK;
-	@JsonProperty(value = "Peak Selection Criterion:")
-	private AreaSelection filterSelectionCriterion = AreaSelection.AREA_LESS_THAN_MINIMUM;
+	@JsonProperty(value = "Treatment Option")
+	private TreatmentOption treatmentOption = TreatmentOption.DEACTIVATE_PEAK;
+	@JsonProperty(value = "Selection Criterion")
+	private AreaCriterion areaCriterion = AreaCriterion.AREA_LESS_THAN_MINIMUM;
 
 	public double getMinimumAreaValue() {
 
@@ -53,23 +54,23 @@ public class AreaFilterSettings {
 		this.maximumAreaValue = maximumAreaValue;
 	}
 
-	public TreatmentOption getFilterTreatmentOption() {
+	public TreatmentOption getTreatmentOption() {
 
-		return filterTreatmentOption;
+		return treatmentOption;
 	}
 
-	public void setFilterTreatmentOption(TreatmentOption filterTreatmentOption) {
+	public void setTreatmentOption(TreatmentOption treatmentOption) {
 
-		this.filterTreatmentOption = filterTreatmentOption;
+		this.treatmentOption = treatmentOption;
 	}
 
-	public AreaSelection getFilterSelectionCriterion() {
+	public AreaCriterion getAreaCriterion() {
 
-		return filterSelectionCriterion;
+		return areaCriterion;
 	}
 
-	public void setFilterSelectionCriterion(AreaSelection filterSelectionCriterion) {
+	public void setAreaCriterion(AreaCriterion areaCriterion) {
 
-		this.filterSelectionCriterion = filterSelectionCriterion;
+		this.areaCriterion = areaCriterion;
 	}
 }

@@ -125,7 +125,7 @@ public class AreaPercentFilter extends AbstractPeakFilter<AreaPercentFilterSetti
 
 	private static AreaPredicate<?> getPredicate(AreaPercentFilterSettings configuration) {
 
-		switch(configuration.getFilterSelectionCriterion()) {
+		switch(configuration.getAreaCriterion()) {
 			case AREA_LESS_THAN_MINIMUM:
 				return new AreaPredicate<>(AREA_LESS_THAN_MINIMUM_COMPARATOR, configuration.getMinimumPercentageAreaValue());
 			case AREA_GREATER_THAN_MAXIMUM:
@@ -139,8 +139,8 @@ public class AreaPercentFilter extends AbstractPeakFilter<AreaPercentFilterSetti
 
 	private static <X extends IPeak> void processPeak(CRUDListener<X, IPeakModel> listener, AreaPercentFilterSettings configuration, X peak, double compareAreaValue, AreaPredicate<?> predicate) {
 
-		switch(configuration.getFilterTreatmentOption()) {
-			case ENABLE_PEAK:
+		switch(configuration.getTreatmentOption()) {
+			case ACTIVATE_PEAK:
 				if(predicate.test(compareAreaValue)) {
 					peak.setActiveForAnalysis(true);
 					listener.updated(peak);

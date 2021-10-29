@@ -17,7 +17,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class DeleteTargetsFilterSettings {
 
-	@JsonProperty(value = "Target Delete Option:")
+	@JsonProperty(value = "Target Delete Option")
 	private TargetsDeleteOption targetDeleteOption = TargetsDeleteOption.ALL_TARGETS;
 
 	public TargetsDeleteOption getTargetDeleteOption() {
