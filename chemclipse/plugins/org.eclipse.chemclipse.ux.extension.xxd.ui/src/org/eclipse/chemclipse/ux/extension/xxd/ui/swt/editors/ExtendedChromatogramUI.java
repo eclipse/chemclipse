@@ -488,8 +488,11 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 			chromatogramReferencesUI.update();
 			updateSelection();
 			fireUpdate(shell.getDisplay());
-		} catch(Exception e) {
+		} catch(InterruptedException e) {
 			logger.error(e.getLocalizedMessage(), e);
+			Thread.currentThread().interrupt();
+		} catch(InvocationTargetException e) {
+			logger.warn(e);
 		}
 	}
 
