@@ -48,8 +48,7 @@ public class IdentifierFileReader {
 		 */
 		ISeparationColumn separationColumn = SeparationColumnFactory.getSeparationColumn(SeparationColumnFactory.TYPE_DEFAULT);
 		//
-		try {
-			BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
 			/*
 			 * Column Specification
 			 */
@@ -81,7 +80,6 @@ public class IdentifierFileReader {
 			 * Create the column.
 			 */
 			separationColumn = new SeparationColumn(name, length, diameter, phase);
-			bufferedReader.close();
 		} catch(IOException e) {
 			logger.error(e);
 		}
