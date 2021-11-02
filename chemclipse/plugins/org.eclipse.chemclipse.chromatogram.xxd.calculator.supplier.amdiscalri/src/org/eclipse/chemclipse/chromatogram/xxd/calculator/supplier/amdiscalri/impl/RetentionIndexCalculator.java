@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2020 Lablicate GmbH.
+ * Copyright (c) 2014, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -245,7 +245,7 @@ public class RetentionIndexCalculator {
 		if(separationColumnIndices == null) {
 			separationColumnIndices = getFileIndices(chromatogramSelection, calculatorSettings);
 		} else {
-			if(separationColumnIndices.size() == 0) {
+			if(separationColumnIndices.isEmpty()) {
 				separationColumnIndices = getFileIndices(chromatogramSelection, calculatorSettings);
 			}
 		}
@@ -283,10 +283,8 @@ public class RetentionIndexCalculator {
 		 */
 		String columnName = chromatogramSelection.getChromatogram().getSeparationColumnIndices().getSeparationColumn().getName();
 		ISeparationColumnIndices separationColumnIndices = calibrationMap.get(columnName);
-		if(separationColumnIndices == null) {
-			if(calculatorSettings.isUseDefaultColumn()) {
-				separationColumnIndices = calibrationMap.get(SeparationColumnFactory.TYPE_DEFAULT);
-			}
+		if(separationColumnIndices == null && calculatorSettings.isUseDefaultColumn()) {
+			separationColumnIndices = calibrationMap.get(SeparationColumnFactory.TYPE_DEFAULT);
 		}
 		//
 		return separationColumnIndices;
