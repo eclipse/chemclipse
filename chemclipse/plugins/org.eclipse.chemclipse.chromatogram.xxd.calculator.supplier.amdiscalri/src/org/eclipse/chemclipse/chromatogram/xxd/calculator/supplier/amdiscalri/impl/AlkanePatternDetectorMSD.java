@@ -96,7 +96,7 @@ public class AlkanePatternDetectorMSD {
 				List<String> retentionIndexFiles = new ArrayList<>();
 				retentionIndexFiles.add(pathRetentionIndexFile);
 				calculatorSettings.setRetentionIndexFiles(retentionIndexFiles);
-				retentionIndexCalculator.calculateIndices(chromatogramSelectionMSD, calculatorSettings, monitor);
+				retentionIndexCalculator.calculateIndices(chromatogramSelectionMSD, calculatorSettings);
 			}
 			/*
 			 * Peak identifier

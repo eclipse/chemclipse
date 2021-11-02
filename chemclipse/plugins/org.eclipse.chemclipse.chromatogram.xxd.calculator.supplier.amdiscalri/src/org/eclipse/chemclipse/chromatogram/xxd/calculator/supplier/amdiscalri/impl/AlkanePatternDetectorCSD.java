@@ -85,7 +85,7 @@ public class AlkanePatternDetectorCSD {
 				List<String> retentionIndexFiles = new ArrayList<>();
 				retentionIndexFiles.add(pathRetentionIndexFile);
 				calculatorSettings.setRetentionIndexFiles(retentionIndexFiles);
-				retentionIndexCalculator.calculateIndices(chromatogramSelectionCSD, calculatorSettings, monitor);
+				retentionIndexCalculator.calculateIndices(chromatogramSelectionCSD, calculatorSettings);
 			}
 		} catch(Exception e) {
 			logger.error(e.getLocalizedMessage(), e);

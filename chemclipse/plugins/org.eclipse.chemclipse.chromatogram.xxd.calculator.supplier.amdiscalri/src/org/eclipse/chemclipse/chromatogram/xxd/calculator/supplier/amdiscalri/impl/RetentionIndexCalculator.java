@@ -157,7 +157,7 @@ public class RetentionIndexCalculator {
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	public IProcessingInfo calculateIndices(IChromatogramSelection chromatogramSelection, CalculatorSettings calculatorSettings, IProgressMonitor monitor) {
+	public IProcessingInfo calculateIndices(IChromatogramSelection chromatogramSelection, CalculatorSettings calculatorSettings) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
 		if(chromatogramSelection != null) {
