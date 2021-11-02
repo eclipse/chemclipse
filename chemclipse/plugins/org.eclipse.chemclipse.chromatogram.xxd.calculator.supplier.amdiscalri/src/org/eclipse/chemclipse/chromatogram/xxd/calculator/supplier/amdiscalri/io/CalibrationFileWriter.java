@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,6 +30,7 @@ public class CalibrationFileWriter {
 	private DecimalFormat decimalFormat;
 
 	public CalibrationFileWriter() {
+
 		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 	}
 
@@ -44,7 +45,7 @@ public class CalibrationFileWriter {
 			 */
 			ISeparationColumn separationColumn = separationColumnIndices.getSeparationColumn();
 			if(separationColumn != null) {
-				printWriter.println(IColumnFormat.COLUMN_NAME + IColumnFormat.HEADER_VALUE_DELIMITER + separationColumn.getName());
+				printWriter.println(IColumnFormat.COLUMN_NAME + IColumnFormat.HEADER_VALUE_DELIMITER + separationColumn.getValue());
 				printWriter.println(IColumnFormat.COLUMN_LENGTH + IColumnFormat.HEADER_VALUE_DELIMITER + separationColumn.getLength());
 				printWriter.println(IColumnFormat.COLUMN_DIAMETER + IColumnFormat.HEADER_VALUE_DELIMITER + separationColumn.getDiameter());
 				printWriter.println(IColumnFormat.COLUMN_PHASE + IColumnFormat.HEADER_VALUE_DELIMITER + separationColumn.getPhase());

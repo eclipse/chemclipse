@@ -27,7 +27,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
-import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
+import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -276,15 +276,15 @@ public class RetentionIndexCalculator {
 			File file = new File(retentionIndexFile);
 			ISeparationColumnIndices separationColumnIndices = calibrationFileReader.parse(file);
 			ISeparationColumn separationColumn = separationColumnIndices.getSeparationColumn();
-			calibrationMap.put(separationColumn.getName(), separationColumnIndices);
+			calibrationMap.put(separationColumn.getValue(), separationColumnIndices);
 		}
 		/*
 		 * Run the calculation.
 		 */
-		String columnName = chromatogramSelection.getChromatogram().getSeparationColumnIndices().getSeparationColumn().getName();
+		String columnName = chromatogramSelection.getChromatogram().getSeparationColumnIndices().getSeparationColumn().getValue();
 		ISeparationColumnIndices separationColumnIndices = calibrationMap.get(columnName);
 		if(separationColumnIndices == null && calculatorSettings.isUseDefaultColumn()) {
-			separationColumnIndices = calibrationMap.get(SeparationColumnFactory.TYPE_DEFAULT);
+			separationColumnIndices = calibrationMap.get(SeparationColumnType.DEFAULT.value());
 		}
 		//
 		return separationColumnIndices;

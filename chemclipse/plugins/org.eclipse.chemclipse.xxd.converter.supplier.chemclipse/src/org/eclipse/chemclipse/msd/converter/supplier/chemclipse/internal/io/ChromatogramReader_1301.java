@@ -892,7 +892,7 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 		}
 		//
 		ISeparationColumn separationColumn = separationColumnIndices.getSeparationColumn();
-		separationColumn.setName(readString(dataInputStream));
+		separationColumn.setValue(readString(dataInputStream));
 		separationColumn.setLength(readString(dataInputStream));
 		separationColumn.setDiameter(readString(dataInputStream));
 		separationColumn.setPhase(readString(dataInputStream));

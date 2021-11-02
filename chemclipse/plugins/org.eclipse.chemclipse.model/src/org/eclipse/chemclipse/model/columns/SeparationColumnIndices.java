@@ -16,7 +16,7 @@ import java.util.TreeMap;
 public class SeparationColumnIndices extends TreeMap<Integer, IRetentionIndexEntry> implements ISeparationColumnIndices {
 
 	private static final long serialVersionUID = -104734015201641034L;
-	private ISeparationColumn separationColumn = SeparationColumnFactory.getSeparationColumn(SeparationColumnFactory.TYPE_DEFAULT);
+	private ISeparationColumn separationColumn = SeparationColumnFactory.getSeparationColumn(SeparationColumnType.DEFAULT);
 
 	@Override
 	public ISeparationColumn getSeparationColumn() {

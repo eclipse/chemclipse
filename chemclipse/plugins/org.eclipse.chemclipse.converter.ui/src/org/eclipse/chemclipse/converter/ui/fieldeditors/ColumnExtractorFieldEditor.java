@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,7 +17,7 @@ import java.util.Map;
 import org.eclipse.chemclipse.converter.model.SeparationColumnMapping;
 import org.eclipse.chemclipse.converter.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.converter.ui.swt.ColumExtractorTable;
-import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
+import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
@@ -74,6 +74,7 @@ public class ColumnExtractorFieldEditor extends FieldEditor {
 	private SeparationColumnMapping mapping = new SeparationColumnMapping();
 
 	public ColumnExtractorFieldEditor(String name, String labelText, Composite parent) {
+
 		init(name, labelText);
 		createControl(parent);
 	}
@@ -179,6 +180,7 @@ public class ColumnExtractorFieldEditor extends FieldEditor {
 		button.setToolTipText(ADD_TOOLTIP);
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				InputDialog dialog = new InputDialog(button.getShell(), DIALOG_TITLE, MESSAGE_ADD, "DB5", new IInputValidator() {
@@ -204,7 +206,7 @@ public class ColumnExtractorFieldEditor extends FieldEditor {
 					String item = dialog.getValue().trim();
 					if(!"".equals(item)) {
 						if(!mapping.keySet().contains(item)) {
-							mapping.put(item, SeparationColumnFactory.TYPE_DEFAULT);
+							mapping.put(item, SeparationColumnType.DEFAULT.value());
 							setTableViewerInput();
 						}
 					}
@@ -222,6 +224,7 @@ public class ColumnExtractorFieldEditor extends FieldEditor {
 		button.setToolTipText(REMOVE_TOOLTIP);
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				deleteItems(e.display.getActiveShell());
@@ -238,6 +241,7 @@ public class ColumnExtractorFieldEditor extends FieldEditor {
 		button.setToolTipText(REMOVE_ALL_TOOLTIP);
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				if(MessageDialog.openQuestion(button.getShell(), DIALOG_TITLE, MESSAGE_REMOVE_ALL)) {
@@ -257,6 +261,7 @@ public class ColumnExtractorFieldEditor extends FieldEditor {
 		button.setToolTipText(IMPORT_TITLE);
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
@@ -284,6 +289,7 @@ public class ColumnExtractorFieldEditor extends FieldEditor {
 		button.setToolTipText(EXPORT_TITLE);
 		button.addSelectionListener(new SelectionAdapter() {
 
+			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.SAVE);

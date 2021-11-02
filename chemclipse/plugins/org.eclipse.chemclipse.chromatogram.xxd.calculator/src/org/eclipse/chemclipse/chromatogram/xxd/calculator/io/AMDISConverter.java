@@ -23,8 +23,8 @@ import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.model.columns.RetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.SeparationColumn;
-import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
 import org.eclipse.chemclipse.model.columns.SeparationColumnIndices;
+import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
@@ -54,7 +54,8 @@ public class AMDISConverter {
 			/*
 			 * Column Specification
 			 */
-			String name = SeparationColumnFactory.TYPE_DEFAULT;
+			String name = SeparationColumnType.DEFAULT.name();
+			String value = SeparationColumnType.DEFAULT.value();
 			String length = "";
 			String diameter = "";
 			String phase = "";
@@ -116,7 +117,7 @@ public class AMDISConverter {
 			/*
 			 * Create and set the column.
 			 */
-			ISeparationColumn separationColumn = new SeparationColumn(name, length, diameter, phase);
+			ISeparationColumn separationColumn = new SeparationColumn(name, value, length, diameter, phase);
 			separationColumnIndices.setSeparationColumn(separationColumn);
 		} catch(IOException e) {
 			logger.error(e);
