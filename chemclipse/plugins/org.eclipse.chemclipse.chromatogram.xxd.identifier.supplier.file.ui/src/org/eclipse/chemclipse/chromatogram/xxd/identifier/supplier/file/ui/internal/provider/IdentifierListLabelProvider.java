@@ -48,7 +48,7 @@ public class IdentifierListLabelProvider extends AbstractChemClipseLabelProvider
 			IdentifierFile identifierFile = (IdentifierFile)element;
 			switch(columnIndex) {
 				case 0:
-					text = identifierFile.getSeparationColumn().getName();
+					text = identifierFile.getSeparationColumn().getValue();
 					break;
 				case 1:
 					text = identifierFile.getFile().getName();

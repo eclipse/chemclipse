@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,6 +22,7 @@ public class CalibrationFile {
 	private ISeparationColumnIndices separationColumnIndices;
 
 	public CalibrationFile(File file) {
+
 		this.file = file;
 		CalibrationFileReader calibrationFileReader = new CalibrationFileReader();
 		this.separationColumnIndices = calibrationFileReader.parse(file);
@@ -49,16 +50,20 @@ public class CalibrationFile {
 	@Override
 	public boolean equals(Object obj) {
 
-		if(this == obj)
+		if(this == obj) {
 			return true;
-		if(obj == null)
+		}
+		if(obj == null) {
 			return false;
-		if(getClass() != obj.getClass())
+		}
+		if(getClass() != obj.getClass()) {
 			return false;
+		}
 		CalibrationFile other = (CalibrationFile)obj;
 		if(file == null) {
-			if(other.file != null)
+			if(other.file != null) {
 				return false;
+			}
 		} else if(!file.equals(other.file)) {
 			return false;
 		}

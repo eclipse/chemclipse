@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,8 +23,8 @@ import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.model.columns.RetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.SeparationColumn;
-import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
 import org.eclipse.chemclipse.model.columns.SeparationColumnIndices;
+import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
@@ -50,12 +50,12 @@ public class AMDISConverter {
 
 		ISeparationColumnIndices separationColumnIndices = new SeparationColumnIndices();
 		//
-		try {
-			BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
 			/*
 			 * Column Specification
 			 */
-			String name = SeparationColumnFactory.TYPE_DEFAULT;
+			String name = SeparationColumnType.DEFAULT.name();
+			String value = SeparationColumnType.DEFAULT.value();
 			String length = "";
 			String diameter = "";
 			String phase = "";
@@ -117,10 +117,8 @@ public class AMDISConverter {
 			/*
 			 * Create and set the column.
 			 */
-			ISeparationColumn separationColumn = new SeparationColumn(name, length, diameter, phase);
+			ISeparationColumn separationColumn = new SeparationColumn(name, value, length, diameter, phase);
 			separationColumnIndices.setSeparationColumn(separationColumn);
-			//
-			bufferedReader.close();
 		} catch(IOException e) {
 			logger.error(e);
 		}

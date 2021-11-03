@@ -488,8 +488,11 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 			chromatogramReferencesUI.update();
 			updateSelection();
 			fireUpdate(shell.getDisplay());
-		} catch(Exception e) {
+		} catch(InterruptedException e) {
 			logger.error(e.getLocalizedMessage(), e);
+			Thread.currentThread().interrupt();
+		} catch(InvocationTargetException e) {
+			logger.warn(e);
 		}
 	}
 
@@ -1048,7 +1051,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 
 				if(element instanceof ISeparationColumn) {
 					ISeparationColumn separationColumn = (ISeparationColumn)element;
-					return separationColumn.getName();
+					return separationColumn.getValue();
 				}
 				return null;
 			}
@@ -1394,7 +1397,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		if(chromatogramSelection != null) {
 			ISeparationColumn separationColumn = chromatogramSelection.getChromatogram().getSeparationColumnIndices().getSeparationColumn();
 			if(separationColumn != null) {
-				String name = separationColumn.getName();
+				String name = separationColumn.getValue();
 				int index = -1;
 				exitloop:
 				for(String item : comboViewerSeparationColumn.getCombo().getItems()) {

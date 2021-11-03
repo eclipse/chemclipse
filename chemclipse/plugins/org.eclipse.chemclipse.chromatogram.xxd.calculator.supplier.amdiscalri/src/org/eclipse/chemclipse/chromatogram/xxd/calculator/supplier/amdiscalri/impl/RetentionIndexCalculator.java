@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2020 Lablicate GmbH.
+ * Copyright (c) 2014, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,7 +27,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
-import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
+import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -157,7 +157,7 @@ public class RetentionIndexCalculator {
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	public IProcessingInfo calculateIndices(IChromatogramSelection chromatogramSelection, CalculatorSettings calculatorSettings, IProgressMonitor monitor) {
+	public IProcessingInfo calculateIndices(IChromatogramSelection chromatogramSelection, CalculatorSettings calculatorSettings) {
 
 		IProcessingInfo processingInfo = new ProcessingInfo();
 		if(chromatogramSelection != null) {
@@ -245,7 +245,7 @@ public class RetentionIndexCalculator {
 		if(separationColumnIndices == null) {
 			separationColumnIndices = getFileIndices(chromatogramSelection, calculatorSettings);
 		} else {
-			if(separationColumnIndices.size() == 0) {
+			if(separationColumnIndices.isEmpty()) {
 				separationColumnIndices = getFileIndices(chromatogramSelection, calculatorSettings);
 			}
 		}
@@ -276,17 +276,15 @@ public class RetentionIndexCalculator {
 			File file = new File(retentionIndexFile);
 			ISeparationColumnIndices separationColumnIndices = calibrationFileReader.parse(file);
 			ISeparationColumn separationColumn = separationColumnIndices.getSeparationColumn();
-			calibrationMap.put(separationColumn.getName(), separationColumnIndices);
+			calibrationMap.put(separationColumn.getValue(), separationColumnIndices);
 		}
 		/*
 		 * Run the calculation.
 		 */
-		String columnName = chromatogramSelection.getChromatogram().getSeparationColumnIndices().getSeparationColumn().getName();
+		String columnName = chromatogramSelection.getChromatogram().getSeparationColumnIndices().getSeparationColumn().getValue();
 		ISeparationColumnIndices separationColumnIndices = calibrationMap.get(columnName);
-		if(separationColumnIndices == null) {
-			if(calculatorSettings.isUseDefaultColumn()) {
-				separationColumnIndices = calibrationMap.get(SeparationColumnFactory.TYPE_DEFAULT);
-			}
+		if(separationColumnIndices == null && calculatorSettings.isUseDefaultColumn()) {
+			separationColumnIndices = calibrationMap.get(SeparationColumnType.DEFAULT.value());
 		}
 		//
 		return separationColumnIndices;
