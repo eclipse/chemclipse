@@ -730,19 +730,19 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 	private ILibraryInformation createLibraryInformationByInput() {
 
-		ILibraryInformation libraryInformation = new LibraryInformation();
+		ILibraryInformation libraryInformationByInput = new LibraryInformation();
 		//
 		ImageServiceInput imageInput = getImageInput();
 		String text = textInput.getText().trim();
 		switch(imageInput) {
 			case SMILES:
-				libraryInformation.setSmiles(text);
+				libraryInformationByInput.setSmiles(text);
 				break;
 			default:
-				libraryInformation.setName(text);
+				libraryInformationByInput.setName(text);
 				break;
 		}
 		//
-		return libraryInformation;
+		return libraryInformationByInput;
 	}
 }
