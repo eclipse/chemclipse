@@ -663,7 +663,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 	private String getExportName() {
 
 		String input = textInput.getText().trim();
-		String name = input.replaceAll(":", "");
+		String name = input.replace(":", "");
 		name = name.isEmpty() ? "Unkown" : name;
 		int length = preferenceStore.getInt(PreferenceConstants.P_LENGTH_MOLECULE_NAME_EXPORT);
 		if(length >= PreferenceConstants.MIN_LENGTH_NAME_EXPORT && name.length() > length) {
