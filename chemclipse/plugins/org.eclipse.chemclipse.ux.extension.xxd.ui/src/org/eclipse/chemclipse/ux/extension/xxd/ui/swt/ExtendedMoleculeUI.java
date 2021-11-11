@@ -81,7 +81,6 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
 	private Button buttonToolbarEdit;
 	private AtomicReference<Composite> toolbarEdit = new AtomicReference<>();
-	private TabFolder tabFolder;
 	private ComboViewer comboViewerServices;
 	private Text textInput;
 	private ComboViewer comboViewerInput;
@@ -270,7 +269,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 	private void createTabFolderSection(Composite parent) {
 
-		tabFolder = new TabFolder(parent, SWT.BOTTOM);
+		TabFolder tabFolder = new TabFolder(parent, SWT.BOTTOM);
 		tabFolder.setBackgroundMode(SWT.INHERIT_DEFAULT);
 		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
