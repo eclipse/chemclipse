@@ -103,7 +103,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 	public void setInput(ILibraryInformation libraryInformation) {
 
 		this.libraryInformation = libraryInformation;
-		updateContent(getDisplay());
+		updateContent();
 	}
 
 	@Override
@@ -149,7 +149,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		/*
 		 * Create the image
 		 */
-		updateContent(getDisplay());
+		updateContent();
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -203,7 +203,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 				if(isEnterPressed(e)) {
 					libraryInformation = createLibraryInformationByInput();
-					updateContent(e.display);
+					updateContent();
 				}
 			}
 		});
@@ -260,7 +260,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				libraryInformation = createLibraryInformationByInput();
-				updateContent(e.display);
+				updateContent();
 			}
 		});
 		//
@@ -400,7 +400,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 				scaleFactor = SCALE_DEFAULT;
 				libraryInformation = LIBRARY_INFORMATION_THIAMIN;
-				updateContent(e.display);
+				updateContent();
 			}
 		});
 		//
@@ -478,7 +478,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 	private void applySettings(Display display) {
 
 		createMoleculeImage(display);
-		updateContent(display);
+		updateContent();
 	}
 
 	private boolean isEnterPressed(KeyEvent e) {
@@ -673,7 +673,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		}
 	}
 
-	private void updateContent(Display display) {
+	private void updateContent() {
 
 		updateWidgets();
 		canvasMolecule.redraw();
