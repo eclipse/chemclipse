@@ -322,7 +322,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_EXPAND_ALL = PATH_PREFIX + "expand_all.gif";
 	String IMAGE_COLLAPSE_ALL = PATH_PREFIX + "collapse_all.gif";
 	String IMAGE_SEARCH = PATH_PREFIX + "search.gif";
-	String IMAGE_CASE_SENSITIVE = PATH_PREFIX + "caseSensitive.gif";
+	String IMAGE_CASE_SENSITIVE = PATH_PREFIX + "caseSensitive.png";
 	String IMAGE_EVALUATE = PATH_PREFIX + "evaluate.gif";
 	String IMAGE_EVALUATED = PATH_PREFIX + "evaluated.gif";
 	String IMAGE_VALIDATE = PATH_PREFIX + "validate.gif";
