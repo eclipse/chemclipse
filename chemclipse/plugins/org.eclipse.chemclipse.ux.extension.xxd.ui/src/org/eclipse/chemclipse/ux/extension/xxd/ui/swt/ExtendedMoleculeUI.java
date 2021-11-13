@@ -68,11 +68,8 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 	private static final Logger logger = Logger.getLogger(ExtendedMoleculeUI.class);
 	//
+	private static final String EMPTY_MESSAGE = "Please select a target to view a molecular structure.";
 	private static final String ERROR_MESSAGE = "The molecule image couldn't be created.";
-	private static final ILibraryInformation LIBRARY_INFORMATION_THIAMIN = createLibraryInformationDefault();
-	private static final String THIAMINE_NAME = "Thiamine";
-	private static final String THIAMINE_CAS = "70-16-6";
-	private static final String THIAMINE_SMILES = "OCCc1c(C)[n+](=cs1)Cc2cnc(C)nc(N)2";
 	//
 	private static final double SCALE_DEFAULT = 1.0d;
 	private static final double SCALE_DELTA = 0.1d;
@@ -81,14 +78,13 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
 	private Button buttonToolbarEdit;
 	private AtomicReference<Composite> toolbarEdit = new AtomicReference<>();
-	private TabFolder tabFolder;
 	private ComboViewer comboViewerServices;
 	private Text textInput;
 	private ComboViewer comboViewerInput;
 	private Canvas canvasMolecule;
 	private Text textMolecule;
 	//
-	private ILibraryInformation libraryInformation = LIBRARY_INFORMATION_THIAMIN;
+	private ILibraryInformation libraryInformation;
 	//
 	private double scaleFactor = SCALE_DEFAULT;
 	private Image imageMolecule = null;
@@ -104,7 +100,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 	public void setInput(ILibraryInformation libraryInformation) {
 
 		this.libraryInformation = libraryInformation;
-		updateContent(getDisplay());
+		updateContent();
 	}
 
 	@Override
@@ -150,7 +146,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		/*
 		 * Create the image
 		 */
-		updateContent(getDisplay());
+		updateContent();
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -194,7 +190,6 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 	private Text createTextInput(Composite parent) {
 
 		Text text = new Text(parent, SWT.BORDER);
-		text.setText(THIAMINE_NAME);
 		text.setToolTipText("Input");
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		text.addKeyListener(new KeyAdapter() {
@@ -204,7 +199,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 				if(isEnterPressed(e)) {
 					libraryInformation = createLibraryInformationByInput();
-					updateContent(e.display);
+					updateContent();
 				}
 			}
 		});
@@ -261,7 +256,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				libraryInformation = createLibraryInformationByInput();
-				updateContent(e.display);
+				updateContent();
 			}
 		});
 		//
@@ -270,7 +265,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 	private void createTabFolderSection(Composite parent) {
 
-		tabFolder = new TabFolder(parent, SWT.BOTTOM);
+		TabFolder tabFolder = new TabFolder(parent, SWT.BOTTOM);
 		tabFolder.setBackgroundMode(SWT.INHERIT_DEFAULT);
 		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
@@ -400,8 +395,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				scaleFactor = SCALE_DEFAULT;
-				libraryInformation = LIBRARY_INFORMATION_THIAMIN;
-				updateContent(e.display);
+				updateContent();
 			}
 		});
 		//
@@ -479,7 +473,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 	private void applySettings(Display display) {
 
 		createMoleculeImage(display);
-		updateContent(display);
+		updateContent();
 	}
 
 	private boolean isEnterPressed(KeyEvent e) {
@@ -561,6 +555,21 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 	private void drawImage(Canvas canvas, PaintEvent event) {
 
+		if(libraryInformation == null || !isSourceDataAvailable(libraryInformation)) {
+			/*
+			 * Instructions
+			 */
+			Font font = getFont();
+			FontData[] fontData = font.getFontData();
+			int width = event.gc.stringExtent(EMPTY_MESSAGE).x;
+			int height = fontData[0].getHeight();
+			//
+			Point size = canvas.getSize();
+			int x = (int)(size.x / 2.0d - width / 2.0d);
+			int y = (int)(size.y / 2.0d - height / 2.0d);
+			event.gc.drawText(EMPTY_MESSAGE, x, y, true);
+			return;
+		}
 		createMoleculeImage(event.display);
 		if(imageMolecule != null) {
 			/*
@@ -664,7 +673,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 	private String getExportName() {
 
 		String input = textInput.getText().trim();
-		String name = input.replaceAll(":", "");
+		String name = input.replace(":", "");
 		name = name.isEmpty() ? "Unkown" : name;
 		int length = preferenceStore.getInt(PreferenceConstants.P_LENGTH_MOLECULE_NAME_EXPORT);
 		if(length >= PreferenceConstants.MIN_LENGTH_NAME_EXPORT && name.length() > length) {
@@ -674,7 +683,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		}
 	}
 
-	private void updateContent(Display display) {
+	private void updateContent() {
 
 		updateWidgets();
 		canvasMolecule.redraw();
@@ -718,32 +727,21 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		}
 	}
 
-	private static ILibraryInformation createLibraryInformationDefault() {
-
-		ILibraryInformation libraryInformation = new LibraryInformation();
-		//
-		libraryInformation.setName(THIAMINE_NAME);
-		libraryInformation.setCasNumber(THIAMINE_CAS);
-		libraryInformation.setSmiles(THIAMINE_SMILES);
-		//
-		return libraryInformation;
-	}
-
 	private ILibraryInformation createLibraryInformationByInput() {
 
-		ILibraryInformation libraryInformation = new LibraryInformation();
+		ILibraryInformation libraryInformationByInput = new LibraryInformation();
 		//
 		ImageServiceInput imageInput = getImageInput();
 		String text = textInput.getText().trim();
 		switch(imageInput) {
 			case SMILES:
-				libraryInformation.setSmiles(text);
+				libraryInformationByInput.setSmiles(text);
 				break;
 			default:
-				libraryInformation.setName(text);
+				libraryInformationByInput.setName(text);
 				break;
 		}
 		//
-		return libraryInformation;
+		return libraryInformationByInput;
 	}
 }
