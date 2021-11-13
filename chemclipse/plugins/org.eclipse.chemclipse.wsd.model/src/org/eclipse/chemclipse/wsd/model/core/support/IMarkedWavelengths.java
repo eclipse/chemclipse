@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.Set;
 
 import org.eclipse.chemclipse.model.core.IMarkedSignals;
+import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelength.WavelengthMarkMode;
 
 public interface IMarkedWavelengths extends IMarkedSignals<IMarkedWavelength> {
 
@@ -43,4 +44,6 @@ public interface IMarkedWavelengths extends IMarkedSignals<IMarkedWavelength> {
 	 */
 	@Deprecated
 	void add(int wavelengthStart, int wavelengthStop);
+
+	WavelengthMarkMode getMode();
 }

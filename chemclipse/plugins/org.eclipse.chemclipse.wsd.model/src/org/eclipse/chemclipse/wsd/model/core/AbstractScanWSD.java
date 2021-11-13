@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.wsd.model.core;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -22,6 +23,7 @@ import org.eclipse.chemclipse.model.core.AbstractScan;
 import org.eclipse.chemclipse.wsd.model.comparator.WavelengthCombinedComparator;
 import org.eclipse.chemclipse.wsd.model.comparator.WavelengthComparatorMode;
 import org.eclipse.chemclipse.wsd.model.core.implementation.ScanSignalWSD;
+import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.xwc.ExtractedSingleWavelengthSignal;
 import org.eclipse.chemclipse.wsd.model.xwc.ExtractedWavelengthSignal;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedSingleWavelengthSignal;
@@ -133,6 +135,40 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 			totalSignal += scan.getAbundance();
 		}
 		return totalSignal;
+	}
+
+	@Override
+	public float getTotalSignal(IMarkedWavelengths markedWavelengths) {
+
+		float totalSignal = 0;
+		/*
+		 * If the excluded ions are null, return the total signal.
+		 */
+		if(markedWavelengths == null || markedWavelengths.isEmpty()) {
+			totalSignal = getTotalSignal();
+		} else {
+			Iterator<IScanSignalWSD> iterator = scanSignals.iterator();
+			while(iterator.hasNext()) {
+				IScanSignalWSD scan = iterator.next();
+				if(useWavelength(scan, markedWavelengths)) {
+					totalSignal += scan.getAbundance();
+				}
+			}
+		}
+		return totalSignal;
+	}
+
+	private static boolean useWavelength(IScanSignalWSD scan, IMarkedWavelengths filterWavelengths) {
+
+		Set<Double> wavelengths = filterWavelengths.getWavelengths();
+		switch(filterWavelengths.getMode()) {
+			case EXCLUDE:
+				return wavelengths.contains(scan.getWavelength());
+			case INCLUDE:
+				return !wavelengths.contains(scan.getWavelength());
+			default:
+				return true;
+		}
 	}
 
 	@Override

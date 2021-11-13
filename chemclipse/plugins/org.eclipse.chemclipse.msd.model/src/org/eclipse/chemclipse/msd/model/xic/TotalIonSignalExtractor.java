@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -29,6 +29,7 @@ public class TotalIonSignalExtractor extends TotalScanSignalExtractor implements
 	private IChromatogramMSD chromatogram;
 
 	public TotalIonSignalExtractor(IChromatogramMSD chromatogram) throws ChromatogramIsNullException {
+
 		super(chromatogram);
 		this.chromatogram = chromatogram;
 	}
@@ -70,9 +71,7 @@ public class TotalIonSignalExtractor extends TotalScanSignalExtractor implements
 		 * If excludedMassFragements is null the the total ion list will be
 		 * returned.
 		 */
-		ITotalScanSignals signals;
-		signals = initializeTotalIonSignals(startScan, stopScan, excludedIons);
-		return signals;
+		return initializeTotalIonSignals(startScan, stopScan, excludedIons);
 	}
 
 	@Override
@@ -90,8 +89,7 @@ public class TotalIonSignalExtractor extends TotalScanSignalExtractor implements
 		 */
 		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
 		int stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
-		ITotalScanSignals signals = initializeTotalIonSignals(startScan, stopScan, null);
-		return signals;
+		return initializeTotalIonSignals(startScan, stopScan, null);
 	}
 
 	@Override
@@ -113,7 +111,9 @@ public class TotalIonSignalExtractor extends TotalScanSignalExtractor implements
 	 */
 	private ITotalScanSignals initializeTotalIonSignals(int startScan, int stopScan, IMarkedIons excludedIons) {
 
-		assert (startScan <= stopScan) : "The startScan must be lower or equal the stop scan.";
+		if(startScan > stopScan) {
+			throw new IllegalArgumentException("The start scan " + startScan + " must be lower or equal the stop scan " + stopScan + ".");
+		}
 		/*
 		 * Validate the scan borders.
 		 */
@@ -125,7 +125,6 @@ public class TotalIonSignalExtractor extends TotalScanSignalExtractor implements
 		 */
 		ITotalScanSignal totalIonSignal;
 		ITotalScanSignals signals = new TotalScanSignals(startScan, stopScan, chromatogram);
-		
 		/*
 		 * Add the selected scans.
 		 */

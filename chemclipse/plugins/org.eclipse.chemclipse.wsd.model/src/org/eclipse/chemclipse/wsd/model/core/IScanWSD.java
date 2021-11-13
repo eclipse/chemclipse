@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Matthias Mailänder - add total signal except excluded
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.model.core;
 
@@ -16,6 +17,7 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedSingleWavelengthSignal;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignal;
 
@@ -47,11 +49,17 @@ public interface IScanWSD extends IScan {
 
 	IExtractedWavelengthSignal getExtractedWavelengthSignal();
 
-	IExtractedWavelengthSignal getExtractedWavelengthSignal(double startIon, double stopIon);
+	IExtractedWavelengthSignal getExtractedWavelengthSignal(double startWavelength, double stopWavelength);
 
 	Optional<IExtractedSingleWavelengthSignal> getExtractedSingleWavelengthSignal(double wavelength);
 
 	boolean hasScanSignals();
 
 	IWavelengthBounds getWavelengthBounds();
+
+	/**
+	 * 
+	 * @return total intensity count (TIC) excepted excluded wavelengths
+	 */
+	float getTotalSignal(IMarkedWavelengths excludedWavelenths);
 }

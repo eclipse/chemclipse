@@ -35,6 +35,7 @@ import org.eclipse.chemclipse.csd.model.core.support.PeakBuilderCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
@@ -45,6 +46,8 @@ import org.eclipse.chemclipse.model.support.ScanRange;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
+import org.eclipse.chemclipse.numeric.equations.Equations;
+import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
@@ -197,7 +200,7 @@ public class PeakDetectorCSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 				 */
 				ScanRange scanRange = new ScanRange(rawPeak.getStartScan(), rawPeak.getStopScan());
 				if(includeBackground && optimizeBaseline) {
-					scanRange = optimizeBaseline(chromatogram, scanRange.getStartScan(), rawPeak.getMaximumScan(), scanRange.getStopScan(), null);
+					scanRange = optimizeBaseline(chromatogram, scanRange.getStartScan(), rawPeak.getMaximumScan(), scanRange.getStopScan());
 				}
 				/*
 				 * includeBackground
@@ -272,9 +275,66 @@ public class PeakDetectorCSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 	 */
 	private boolean isValidPeak(IChromatogramPeakCSD peak, PeakDetectorSettingsCSD peakDetectorSettings) {
 
-		if(peak != null && peak.getSignalToNoiseRatio() >= peakDetectorSettings.getMinimumSignalToNoiseRatio()) {
-			return true;
+		return (peak != null && peak.getSignalToNoiseRatio() >= peakDetectorSettings.getMinimumSignalToNoiseRatio());
+	}
+
+	private ScanRange optimizeBaseline(IChromatogramCSD chromatogram, int startScan, int centerScan, int stopScan) {
+
+		int stopScanOptimized = optimizeRightBaseline(chromatogram, startScan, centerScan, stopScan);
+		int startScanOptimized = optimizeLeftBaseline(chromatogram, startScan, centerScan, stopScanOptimized);
+		//
+		return new ScanRange(startScanOptimized, stopScanOptimized);
+	}
+
+	private int optimizeRightBaseline(IChromatogramCSD chromatogram, int startScan, int centerScan, int stopScan) {
+
+		IPoint p1 = new Point(getRetentionTime(chromatogram, startScan), getScanSignal(chromatogram, startScan));
+		IPoint p2 = new Point(getRetentionTime(chromatogram, stopScan), getScanSignal(chromatogram, stopScan));
+		LinearEquation backgroundEquation = Equations.createLinearEquation(p1, p2);
+		/*
+		 * Right border optimization
+		 */
+		int stopScanOptimized = stopScan;
+		for(int i = stopScan; i > centerScan; i--) {
+			float signal = getScanSignal(chromatogram, i);
+			int retentionTime = chromatogram.getScan(i).getRetentionTime();
+			if(signal < backgroundEquation.calculateY(retentionTime)) {
+				stopScanOptimized = i;
+			}
 		}
-		return false;
+		//
+		return stopScanOptimized;
+	}
+
+	private int optimizeLeftBaseline(IChromatogramCSD chromatogram, int startScan, int centerScan, int stopScan) {
+
+		IPoint p1 = new Point(getRetentionTime(chromatogram, startScan), getScanSignal(chromatogram, startScan));
+		IPoint p2 = new Point(getRetentionTime(chromatogram, stopScan), getScanSignal(chromatogram, stopScan));
+		LinearEquation backgroundEquation = Equations.createLinearEquation(p1, p2);
+		/*
+		 * Right border optimization
+		 */
+		int startScanOptimized = startScan;
+		for(int i = startScan; i < centerScan; i++) {
+			float signal = getScanSignal(chromatogram, i);
+			int retentionTime = chromatogram.getScan(i).getRetentionTime();
+			if(signal < backgroundEquation.calculateY(retentionTime)) {
+				/*
+				 * Create a new equation
+				 */
+				startScanOptimized = i;
+				p1 = new Point(getRetentionTime(chromatogram, startScanOptimized), getScanSignal(chromatogram, startScanOptimized));
+				p2 = new Point(getRetentionTime(chromatogram, stopScan), getScanSignal(chromatogram, stopScan));
+				backgroundEquation = Equations.createLinearEquation(p1, p2);
+			}
+		}
+		//
+		return startScanOptimized;
+	}
+
+	protected float getScanSignal(IChromatogramCSD chromatogram, int scanNumber) {
+
+		IScan scan = chromatogram.getScan(scanNumber);
+		return scan.getTotalSignal();
 	}
 }

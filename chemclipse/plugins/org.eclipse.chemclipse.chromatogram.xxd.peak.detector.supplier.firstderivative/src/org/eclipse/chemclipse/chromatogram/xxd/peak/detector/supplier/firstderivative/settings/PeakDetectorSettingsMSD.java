@@ -57,7 +57,7 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_WINDOW_SIZE, maxValue = PreferenceSupplier.MAX_WINDOW_SIZE, validation = Validation.ODD_NUMBER_INCLUDING_ZERO)
 	private int windowSize = 5;
 	@JsonProperty(value = "Use Noise-Segments", defaultValue = "false")
-	@JsonPropertyDescription(value = "Whether to use Nois-Segments to decide where peaks should be detected, this can improve the sensitivity of the algorithm")
+	@JsonPropertyDescription(value = "Whether to use noise segments to decide where peaks should be detected. This can improve the sensitivity of the algorithm.")
 	private boolean useNoiseSegments = false;
 	@JsonProperty(value = "Filter Mode", defaultValue = "EXCLUDE")
 	private FilterMode filterMode = FilterMode.EXCLUDE;
