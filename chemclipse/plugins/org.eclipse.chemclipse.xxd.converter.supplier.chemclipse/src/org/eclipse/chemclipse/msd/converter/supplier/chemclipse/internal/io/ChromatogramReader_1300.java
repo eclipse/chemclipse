@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2019 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -885,7 +885,7 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 		}
 		//
 		ISeparationColumn separationColumn = separationColumnIndices.getSeparationColumn();
-		separationColumn.setValue(readString(dataInputStream));
+		separationColumn.setName(readString(dataInputStream));
 		separationColumn.setLength(readString(dataInputStream));
 		separationColumn.setDiameter(readString(dataInputStream));
 		separationColumn.setPhase(readString(dataInputStream));

@@ -21,7 +21,6 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.columns.SeparationColumn;
 import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
-import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 
 public class IdentifierFileReader {
 
@@ -33,7 +32,7 @@ public class IdentifierFileReader {
 		 * Extract the separation column if the library contains the info, e.g. in a *.msl or *.msp file.
 		 * Otherwise, create a default column.
 		 */
-		ISeparationColumn separationColumn = SeparationColumnFactory.getSeparationColumn(SeparationColumnType.DEFAULT);
+		ISeparationColumn separationColumn = SeparationColumnFactory.getSeparationColumn(SeparationColumnFactory.TYPE_DEFAULT);
 		if(isSeparationColumnFile(file)) {
 			separationColumn = extractSeparationColumn(file);
 		}
@@ -47,14 +46,13 @@ public class IdentifierFileReader {
 		 * Restrict to *.msl and *.msp files at the moment.
 		 * Otherwise use default.
 		 */
-		ISeparationColumn separationColumn = SeparationColumnFactory.getSeparationColumn(SeparationColumnType.DEFAULT);
+		ISeparationColumn separationColumn = SeparationColumnFactory.getSeparationColumn(SeparationColumnFactory.TYPE_DEFAULT);
 		//
 		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
 			/*
 			 * Column Specification
 			 */
-			String name = SeparationColumnType.DEFAULT.name();
-			String value = SeparationColumnType.DEFAULT.value();
+			String name = SeparationColumnFactory.TYPE_DEFAULT;
 			String length = "";
 			String diameter = "";
 			String phase = "";
@@ -81,7 +79,7 @@ public class IdentifierFileReader {
 			/*
 			 * Create the column.
 			 */
-			separationColumn = new SeparationColumn(name, value, length, diameter, phase);
+			separationColumn = new SeparationColumn(name, length, diameter, phase);
 		} catch(IOException e) {
 			logger.error(e);
 		}

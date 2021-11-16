@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2020 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -101,7 +101,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 	private void setSeparationColumnSelection(ISeparationColumn separationColumn) {
 
 		if(separationColumn != null) {
-			String name = separationColumn.getValue();
+			String name = separationColumn.getName();
 			int index = -1;
 			exitloop:
 			for(String item : comboViewerSeparationColumn.getCombo().getItems()) {
@@ -197,7 +197,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 
 				if(element instanceof ISeparationColumn) {
 					ISeparationColumn separationColumn = (ISeparationColumn)element;
-					return separationColumn.getValue();
+					return separationColumn.getName();
 				}
 				return null;
 			}
@@ -391,7 +391,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 		StringBuilder builder = new StringBuilder();
 		if(object instanceof ISeparationColumn) {
 			ISeparationColumn separationColumn = (ISeparationColumn)object;
-			builder.append(separationColumn.getValue());
+			builder.append(separationColumn.getName());
 			builder.append(" ");
 			builder.append(separationColumn.getLength());
 			builder.append(" ");

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,23 +13,10 @@ package org.eclipse.chemclipse.model.columns;
 
 public abstract class AbstractSeparationColumn implements ISeparationColumn {
 
-	private String value = "";
 	private String name = "";
 	private String length = "";
 	private String diameter = "";
 	private String phase = "";
-
-	@Override
-	public String getValue() {
-
-		return value;
-	}
-
-	@Override
-	public void setValue(String value) {
-
-		this.value = value;
-	}
 
 	@Override
 	public String getName() {
@@ -100,51 +87,33 @@ public abstract class AbstractSeparationColumn implements ISeparationColumn {
 	@Override
 	public boolean equals(Object obj) {
 
-		if(this == obj) {
+		if(this == obj)
 			return true;
-		}
-		if(obj == null) {
+		if(obj == null)
 			return false;
-		}
-		if(getClass() != obj.getClass()) {
+		if(getClass() != obj.getClass())
 			return false;
-		}
 		AbstractSeparationColumn other = (AbstractSeparationColumn)obj;
 		if(diameter == null) {
-			if(other.diameter != null) {
+			if(other.diameter != null)
 				return false;
-			}
-		} else if(!diameter.equals(other.diameter)) {
+		} else if(!diameter.equals(other.diameter))
 			return false;
-		}
 		if(length == null) {
-			if(other.length != null) {
+			if(other.length != null)
 				return false;
-			}
-		} else if(!length.equals(other.length)) {
+		} else if(!length.equals(other.length))
 			return false;
-		}
 		if(name == null) {
-			if(other.name != null) {
+			if(other.name != null)
 				return false;
-			}
-		} else if(!name.equals(other.name)) {
+		} else if(!name.equals(other.name))
 			return false;
-		}
-		if(value == null) {
-			if(other.value != null) {
-				return false;
-			}
-		} else if(!value.equals(other.value)) {
-			return false;
-		}
 		if(phase == null) {
-			if(other.phase != null) {
+			if(other.phase != null)
 				return false;
-			}
-		} else if(!phase.equals(other.phase)) {
+		} else if(!phase.equals(other.phase))
 			return false;
-		}
 		return true;
 	}
 }

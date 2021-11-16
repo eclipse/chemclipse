@@ -578,7 +578,7 @@ public class ChromatogramWriter_1300 extends AbstractChromatogramWriter implemen
 		}
 		//
 		ISeparationColumn separationColumn = separationColumnIndices.getSeparationColumn();
-		writeString(dataOutputStream, separationColumn.getValue());
+		writeString(dataOutputStream, separationColumn.getName());
 		writeString(dataOutputStream, separationColumn.getLength());
 		writeString(dataOutputStream, separationColumn.getDiameter());
 		writeString(dataOutputStream, separationColumn.getPhase());
