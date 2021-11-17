@@ -40,6 +40,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class RetentionIndexCalculator {
 
 	private static final Logger logger = Logger.getLogger(RetentionIndexCalculator.class);
+	//
+	public static final String ALKANE_PREFIX = "C";
+	public static final String ALKANE_REGEX = "(C)(\\d+)";
+	public static final int ALKANE_MISSING = 0;
+	public static final int INDEX_MISSING = 0;
+	//
 	private static final Pattern PATTERN_ALKANE = Pattern.compile("(C)(\\d+)");
 	private static final String DESCRIPTION = "Retention Index Calculator";
 
@@ -137,23 +143,27 @@ public class RetentionIndexCalculator {
 		return standards.toArray(new String[standards.size()]);
 	}
 
-	public static float getRetentionIndex(String name) {
+	public static int getRetentionIndex(String name) {
 
-		float retentionIndex = 0.0f;
+		return getAlkaneNumber(name) * 100;
+	}
+
+	public static int getAlkaneNumber(String name) {
+
+		int alkaneNumber = ALKANE_MISSING;
 		Matcher matcher = PATTERN_ALKANE.matcher(name);
 		if(matcher.find()) {
 			try {
 				/*
-				 * C8 (Octane)
-				 * => 800
+				 * C8 (Octane) => 8
 				 */
-				retentionIndex = Integer.parseInt(matcher.group(2)) * 100;
+				alkaneNumber = Integer.parseInt(matcher.group(2));
 			} catch(NumberFormatException e) {
 				logger.warn(e);
 			}
 		}
 		//
-		return retentionIndex;
+		return alkaneNumber;
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})

@@ -40,8 +40,8 @@ public class RetentionIndexExtractor {
 			if(identificationTarget != null) {
 				ILibraryInformation libraryInformation = identificationTarget.getLibraryInformation();
 				String name = libraryInformation.getName().trim();
-				float retentionIndex = RetentionIndexCalculator.getRetentionIndex(name);
-				if(retentionIndex > 0.0f) {
+				int retentionIndex = RetentionIndexCalculator.getRetentionIndex(name);
+				if(retentionIndex > RetentionIndexCalculator.INDEX_MISSING) {
 					int retentionTime = peak.getPeakModel().getRetentionTimeAtPeakMaximum();
 					IRetentionIndexEntry retentionIndexEntry = new RetentionIndexEntry(retentionTime, retentionIndex, name);
 					separationColumnIndices.put(retentionIndexEntry);
