@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.converter.ui.internal.provider;
+package org.eclipse.chemclipse.swt.ui.internal.provider;
 
 import java.util.Map;
 
@@ -17,7 +17,7 @@ import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
 import org.eclipse.jface.viewers.Viewer;
 
-public class ColumExtractorComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
+public class ColumMappingComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
 
 	@SuppressWarnings("rawtypes")
 	@Override

@@ -13,10 +13,10 @@ package org.eclipse.chemclipse.model.columns;
 
 public class SeparationColumn extends AbstractSeparationColumn implements ISeparationColumn {
 
-	public SeparationColumn(String name, String value, String length, String diameter, String phase) {
+	public SeparationColumn(String name, SeparationColumnType separationColumnType, String length, String diameter, String phase) {
 
 		setName(name);
-		setValue(value);
+		setSeparationColumnType(separationColumnType);
 		setLength(length);
 		setDiameter(diameter);
 		setPhase(phase);

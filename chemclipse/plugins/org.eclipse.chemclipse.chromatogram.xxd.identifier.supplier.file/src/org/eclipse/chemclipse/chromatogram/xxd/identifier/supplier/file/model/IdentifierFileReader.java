@@ -19,7 +19,6 @@ import java.io.IOException;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.io.IColumnFormat;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.columns.ISeparationColumn;
-import org.eclipse.chemclipse.model.columns.SeparationColumn;
 import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
 import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 
@@ -54,7 +53,6 @@ public class IdentifierFileReader {
 			 * Column Specification
 			 */
 			String name = SeparationColumnType.DEFAULT.name();
-			String value = SeparationColumnType.DEFAULT.value();
 			String length = "";
 			String diameter = "";
 			String phase = "";
@@ -81,7 +79,7 @@ public class IdentifierFileReader {
 			/*
 			 * Create the column.
 			 */
-			separationColumn = new SeparationColumn(name, value, length, diameter, phase);
+			separationColumn = SeparationColumnFactory.getSeparationColumn(name, length, diameter, phase);
 		} catch(IOException e) {
 			logger.error(e);
 		}

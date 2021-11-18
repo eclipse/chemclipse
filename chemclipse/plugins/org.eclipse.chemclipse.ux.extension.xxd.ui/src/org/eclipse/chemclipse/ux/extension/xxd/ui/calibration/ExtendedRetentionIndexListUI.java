@@ -58,6 +58,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 	private Button buttonRemoveLibrary;
 	//
 	private ComboViewer comboViewerSeparationColumn;
+	private final List<ISeparationColumn> separationColumns = SeparationColumnFactory.getSeparationColumns();
 	//
 	private File retentionIndexFile;
 	private ISeparationColumnIndices separationColumnIndices = null;
@@ -101,19 +102,11 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 	private void setSeparationColumnSelection(ISeparationColumn separationColumn) {
 
 		if(separationColumn != null) {
-			String name = separationColumn.getValue();
-			int index = -1;
-			exitloop:
-			for(String item : comboViewerSeparationColumn.getCombo().getItems()) {
-				index++;
-				if(item.equals(name)) {
-					break exitloop;
-				}
+			if(!separationColumns.contains(separationColumn)) {
+				separationColumns.add(0, separationColumn);
 			}
-			//
-			if(index >= 0) {
-				comboViewerSeparationColumn.getCombo().select(index);
-			}
+			comboViewerSeparationColumn.setInput(separationColumns);
+			comboViewerSeparationColumn.getCombo().select(0);
 		} else {
 			comboViewerSeparationColumn.getCombo().setItems(new String[]{});
 		}
@@ -130,7 +123,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 		retentionIndexUI = createRetentionIndexUI(composite);
 		toolbarInfoBottom = createToolbarInfoBottom(composite);
 		//
-		comboViewerSeparationColumn.setInput(SeparationColumnFactory.getSeparationColumns());
+		comboViewerSeparationColumn.setInput(separationColumns);
 		buttonAddLibrary.setEnabled(false);
 		buttonRemoveLibrary.setEnabled(false);
 		//
@@ -197,7 +190,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 
 				if(element instanceof ISeparationColumn) {
 					ISeparationColumn separationColumn = (ISeparationColumn)element;
-					return separationColumn.getValue();
+					return SeparationColumnFactory.getColumnLabel(separationColumn, 25);
 				}
 				return null;
 			}
@@ -391,7 +384,9 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 		StringBuilder builder = new StringBuilder();
 		if(object instanceof ISeparationColumn) {
 			ISeparationColumn separationColumn = (ISeparationColumn)object;
-			builder.append(separationColumn.getValue());
+			builder.append(separationColumn.getName());
+			builder.append(" ");
+			builder.append(separationColumn.getSeparationColumnType().label());
 			builder.append(" ");
 			builder.append(separationColumn.getLength());
 			builder.append(" ");

@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.converter.model;
+package org.eclipse.chemclipse.model.columns;
 
 import java.io.BufferedReader;
 import java.io.File;

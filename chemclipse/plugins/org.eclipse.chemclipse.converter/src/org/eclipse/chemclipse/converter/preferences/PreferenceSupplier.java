@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,10 +26,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	private static final Logger logger = Logger.getLogger(PreferenceSupplier.class);
 	//
-	public static final String P_LIST_PATH_IMPORT = "listPathImport";
-	public static final String DEF_LIST_PATH_IMPORT = "";
-	public static final String P_LIST_PATH_EXPORT = "listPathExport";
-	public static final String DEF_LIST_PATH_EXPORT = "";
 	public static final String P_CHROMATOGRAM_EXPORT_FOLDER = "chromatogramExportFolder";
 	public static final String DEF_CHROMATOGRAM_EXPORT_FOLDER = "";
 	public static final String P_METHOD_EXPLORER_PATH_ROOT_FOLDER = "methodExplorerPathRootFolder";
@@ -63,8 +59,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public Map<String, String> getDefaultValues() {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
-		defaultValues.put(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
-		defaultValues.put(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
 		defaultValues.put(P_CHROMATOGRAM_EXPORT_FOLDER, DEF_CHROMATOGRAM_EXPORT_FOLDER);
 		defaultValues.put(P_METHOD_EXPLORER_PATH_ROOT_FOLDER, DEF_METHOD_EXPLORER_PATH_ROOT_FOLDER);
 		defaultValues.put(P_SELECTED_METHOD_NAME, DEF_SELECTED_METHOD_NAME);
@@ -81,26 +75,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.get(key, def);
-	}
-
-	public static String getListPathImport() {
-
-		return getFilterPath(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
-	}
-
-	public static void setListPathImport(String filterPath) {
-
-		setSettings(P_LIST_PATH_IMPORT, filterPath);
-	}
-
-	public static String getListPathExport() {
-
-		return getFilterPath(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
-	}
-
-	public static void setListPathExport(String filterPath) {
-
-		setSettings(P_LIST_PATH_EXPORT, filterPath);
 	}
 
 	public static String getChromatogramExportFolder() {
@@ -129,11 +103,5 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		} catch(BackingStoreException e) {
 			logger.warn(e);
 		}
-	}
-
-	private static String getFilterPath(String key, String def) {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.get(key, def);
 	}
 }

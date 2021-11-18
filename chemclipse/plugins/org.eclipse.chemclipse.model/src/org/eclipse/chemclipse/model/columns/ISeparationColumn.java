@@ -13,13 +13,15 @@ package org.eclipse.chemclipse.model.columns;
 
 public interface ISeparationColumn {
 
+	void copyFrom(ISeparationColumn separationColumn);
+
 	String getName();
 
 	void setName(String name);
 
-	String getValue();
+	SeparationColumnType getSeparationColumnType();
 
-	void setValue(String value);
+	void setSeparationColumnType(SeparationColumnType separationColumnType);
 
 	String getLength();
 

@@ -191,10 +191,12 @@ public final class ChromatogramConverterMSD extends AbstractChromatogramConverte
 			mapping.load(PreferenceSupplier.getSeparationColumnKeywords());
 			//
 			String miscInfo = chromatogramMSD.getMiscInfo();
+			exitloop:
 			for(Map.Entry<String, String> column : mapping.entrySet()) {
 				if(miscInfo.contains(column.getKey())) {
 					ISeparationColumn separationColumn = SeparationColumnFactory.getSeparationColumn(column.getValue());
 					chromatogramMSD.getSeparationColumnIndices().setSeparationColumn(separationColumn);
+					break exitloop;
 				}
 			}
 		}

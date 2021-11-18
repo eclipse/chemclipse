@@ -13,22 +13,21 @@ package org.eclipse.chemclipse.model.columns;
 
 public abstract class AbstractSeparationColumn implements ISeparationColumn {
 
-	private String value = "";
 	private String name = "";
+	private SeparationColumnType separationColumnType = SeparationColumnType.DEFAULT;
 	private String length = "";
 	private String diameter = "";
 	private String phase = "";
 
-	@Override
-	public String getValue() {
+	public void copyFrom(ISeparationColumn separationColumn) {
 
-		return value;
-	}
-
-	@Override
-	public void setValue(String value) {
-
-		this.value = value;
+		if(separationColumn != null) {
+			this.name = separationColumn.getName();
+			this.separationColumnType = separationColumn.getSeparationColumnType();
+			this.length = separationColumn.getLength();
+			this.diameter = separationColumn.getDiameter();
+			this.phase = separationColumn.getPhase();
+		}
 	}
 
 	@Override
@@ -41,6 +40,18 @@ public abstract class AbstractSeparationColumn implements ISeparationColumn {
 	public void setName(String name) {
 
 		this.name = name;
+	}
+
+	@Override
+	public SeparationColumnType getSeparationColumnType() {
+
+		return separationColumnType;
+	}
+
+	@Override
+	public void setSeparationColumnType(SeparationColumnType separationColumnType) {
+
+		this.separationColumnType = separationColumnType;
 	}
 
 	@Override
@@ -80,12 +91,6 @@ public abstract class AbstractSeparationColumn implements ISeparationColumn {
 	}
 
 	@Override
-	public String toString() {
-
-		return "SeparationColumn [name=" + name + ", length=" + length + ", diameter=" + diameter + ", phase=" + phase + "]";
-	}
-
-	@Override
 	public int hashCode() {
 
 		final int prime = 31;
@@ -100,51 +105,39 @@ public abstract class AbstractSeparationColumn implements ISeparationColumn {
 	@Override
 	public boolean equals(Object obj) {
 
-		if(this == obj) {
+		if(this == obj)
 			return true;
-		}
-		if(obj == null) {
+		if(obj == null)
 			return false;
-		}
-		if(getClass() != obj.getClass()) {
+		if(getClass() != obj.getClass())
 			return false;
-		}
 		AbstractSeparationColumn other = (AbstractSeparationColumn)obj;
 		if(diameter == null) {
-			if(other.diameter != null) {
+			if(other.diameter != null)
 				return false;
-			}
-		} else if(!diameter.equals(other.diameter)) {
+		} else if(!diameter.equals(other.diameter))
 			return false;
-		}
 		if(length == null) {
-			if(other.length != null) {
+			if(other.length != null)
 				return false;
-			}
-		} else if(!length.equals(other.length)) {
+		} else if(!length.equals(other.length))
 			return false;
-		}
 		if(name == null) {
-			if(other.name != null) {
+			if(other.name != null)
 				return false;
-			}
-		} else if(!name.equals(other.name)) {
+		} else if(!name.equals(other.name))
 			return false;
-		}
-		if(value == null) {
-			if(other.value != null) {
-				return false;
-			}
-		} else if(!value.equals(other.value)) {
-			return false;
-		}
 		if(phase == null) {
-			if(other.phase != null) {
+			if(other.phase != null)
 				return false;
-			}
-		} else if(!phase.equals(other.phase)) {
+		} else if(!phase.equals(other.phase))
 			return false;
-		}
 		return true;
+	}
+
+	@Override
+	public String toString() {
+
+		return "AbstractSeparationColumn [name=" + name + ", length=" + length + ", diameter=" + diameter + ", phase=" + phase + "]";
 	}
 }

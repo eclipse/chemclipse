@@ -9,19 +9,19 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.converter.ui.fieldeditors;
+package org.eclipse.chemclipse.swt.ui.fieldeditors;
 
 import java.io.File;
 import java.util.Map;
 
-import org.eclipse.chemclipse.converter.model.SeparationColumnMapping;
-import org.eclipse.chemclipse.converter.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.converter.ui.swt.ColumExtractorTable;
+import org.eclipse.chemclipse.model.columns.SeparationColumnMapping;
 import org.eclipse.chemclipse.model.columns.SeparationColumnType;
+import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
+import org.eclipse.chemclipse.swt.ui.columns.ColumExtractorTable;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -40,7 +40,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 
-public class ColumnExtractorFieldEditor extends FieldEditor {
+public class ColumnMappingFieldEditor extends FieldEditor {
 
 	private static final String ADD = "Add";
 	private static final String ADD_TOOLTIP = "Add a new keyword";
@@ -73,7 +73,7 @@ public class ColumnExtractorFieldEditor extends FieldEditor {
 	private ColumExtractorTable extendedTable;
 	private SeparationColumnMapping mapping = new SeparationColumnMapping();
 
-	public ColumnExtractorFieldEditor(String name, String labelText, Composite parent) {
+	public ColumnMappingFieldEditor(String name, String labelText, Composite parent) {
 
 		init(name, labelText);
 		createControl(parent);
@@ -206,7 +206,7 @@ public class ColumnExtractorFieldEditor extends FieldEditor {
 					String item = dialog.getValue().trim();
 					if(!"".equals(item)) {
 						if(!mapping.keySet().contains(item)) {
-							mapping.put(item, SeparationColumnType.DEFAULT.value());
+							mapping.put(item, SeparationColumnType.DEFAULT.name());
 							setTableViewerInput();
 						}
 					}

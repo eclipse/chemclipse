@@ -50,7 +50,7 @@ public class CalibrationListLabelProvider extends AbstractChemClipseLabelProvide
 			//
 			switch(columnIndex) {
 				case 0:
-					text = calibrationFile.getSeparationColumnIndices().getSeparationColumn().getValue();
+					text = calibrationFile.getSeparationColumnIndices().getSeparationColumn().getName();
 					break;
 				case 1:
 					text = calibrationFile.getFile().getName();

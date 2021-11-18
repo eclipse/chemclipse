@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.model.columns.RetentionIndexEntry;
+import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
 import org.eclipse.chemclipse.model.columns.SeparationColumnIndices;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -106,13 +107,14 @@ public class MassLibConverter {
 			/*
 			 * Column
 			 */
+			String length = "";
+			String name = "";
 			Matcher matcherColumn = patternColumn.matcher(content);
 			while(matcherColumn.find()) {
-				String length = matcherColumn.group(3).trim();
-				String name = matcherColumn.group(5).trim();
-				separationColumn.setValue(name);
-				separationColumn.setLength(length);
+				length = matcherColumn.group(3).trim();
+				name = matcherColumn.group(5).trim();
 			}
+			separationColumn.copyFrom(SeparationColumnFactory.getSeparationColumn(name, length, "", ""));
 			/*
 			 * Indices (RT/RI)
 			 */

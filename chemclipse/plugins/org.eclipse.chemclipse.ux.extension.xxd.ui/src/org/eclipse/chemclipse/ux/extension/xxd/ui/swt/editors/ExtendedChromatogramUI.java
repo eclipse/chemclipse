@@ -221,6 +221,8 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 	//
 	private Object menuCache = null;
 	private boolean menuActive = false;
+	//
+	private final List<ISeparationColumn> separationColumns = SeparationColumnFactory.getSeparationColumns();
 
 	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker) {
 
@@ -929,7 +931,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 
 	private void initialize() {
 
-		comboViewerSeparationColumn.setInput(SeparationColumnFactory.getSeparationColumns());
+		comboViewerSeparationColumn.setInput(separationColumns);
 		//
 		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_INFO), false);
 		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_EDIT), false);
@@ -1051,7 +1053,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 
 				if(element instanceof ISeparationColumn) {
 					ISeparationColumn separationColumn = (ISeparationColumn)element;
-					return separationColumn.getValue();
+					return SeparationColumnFactory.getColumnLabel(separationColumn, 25);
 				}
 				return null;
 			}
@@ -1397,19 +1399,11 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		if(chromatogramSelection != null) {
 			ISeparationColumn separationColumn = chromatogramSelection.getChromatogram().getSeparationColumnIndices().getSeparationColumn();
 			if(separationColumn != null) {
-				String name = separationColumn.getValue();
-				int index = -1;
-				exitloop:
-				for(String item : comboViewerSeparationColumn.getCombo().getItems()) {
-					index++;
-					if(item.equals(name)) {
-						break exitloop;
-					}
+				if(!separationColumns.contains(separationColumn)) {
+					separationColumns.add(0, separationColumn);
 				}
-				//
-				if(index >= 0) {
-					comboViewerSeparationColumn.getCombo().select(index);
-				}
+				comboViewerSeparationColumn.setInput(separationColumns);
+				comboViewerSeparationColumn.getCombo().select(0);
 			}
 		}
 	}

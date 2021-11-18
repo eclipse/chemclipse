@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2020 Lablicate GmbH.
+ * Copyright (c) 2013, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -22,16 +22,16 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePage() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("Converter");
+		setTitle("Converter");
+		setDescription("");
 	}
 
 	@Override
 	protected void createFieldEditors() {
 
-		addField(new DirectoryFieldEditor(PreferenceSupplier.P_LIST_PATH_IMPORT, "List Import Folder", getFieldEditorParent()));
-		addField(new DirectoryFieldEditor(PreferenceSupplier.P_LIST_PATH_EXPORT, "List Export Folder", getFieldEditorParent()));
 		addField(new DirectoryFieldEditor(PreferenceSupplier.P_CHROMATOGRAM_EXPORT_FOLDER, "Chromatogram Export Folder", getFieldEditorParent()));
 		addField(new DirectoryFieldEditor(PreferenceSupplier.P_METHOD_EXPLORER_PATH_ROOT_FOLDER, "Method(s) Folder", getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceSupplier.P_SELECTED_METHOD_NAME, "Method Name", getFieldEditorParent()));

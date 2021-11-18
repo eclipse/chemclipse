@@ -15,28 +15,20 @@ package org.eclipse.chemclipse.model.columns;
 import org.eclipse.chemclipse.support.text.ILabel;
 
 public enum SeparationColumnType implements ILabel {
-
-	DEFAULT("DEFAULT", "Default"), //
-	POLAR("POLAR", "Polar"), //
-	APOLAR("APOLAR", "Nonpolar"), //
-	SEMI_POLAR("SEMI-POLAR", "Semipolar"),
 	/*
-	 * Specific columns might be removed soon as basic types.
-	 * Mappings shall be added to group specific columns into
-	 * one of the three above classes.
+	 * These are the basic 3 column types and the default
+	 * to supply a generic option. Specific columns share
+	 * be mapped to either one of these 4 types.
 	 */
-	DB1("DB1", "DB-1"), //
-	DB5("DB5", "DB-5"), //
-	DB1701("DB1701", "DB-1701"), //
-	ZB1("ZB1", "ZB-1"), //
-	WAX_PLUS("WAX+", "WAX+");
+	DEFAULT("Default"), //
+	POLAR("Polar"), //
+	APOLAR("Nonpolar"), //
+	SEMI_POLAR("Semipolar");
 
-	private String value = "";
 	private String label = "";
 
-	private SeparationColumnType(String value, String label) {
+	private SeparationColumnType(String label) {
 
-		this.value = value;
 		this.label = label;
 	}
 
@@ -46,8 +38,8 @@ public enum SeparationColumnType implements ILabel {
 		return label;
 	}
 
-	public String value() {
+	public static String[][] getOptions() {
 
-		return value;
+		return ILabel.getOptions(values());
 	}
 }

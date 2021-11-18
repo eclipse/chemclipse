@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2019 Lablicate GmbH.
+ * Copyright (c) 2010, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -11,11 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.ui.preferences;
 
-import org.eclipse.chemclipse.converter.ui.fieldeditors.ColumnExtractorFieldEditor;
 import org.eclipse.chemclipse.msd.converter.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.converter.ui.Activator;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
+import org.eclipse.chemclipse.swt.ui.fieldeditors.ColumnMappingFieldEditor;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
@@ -25,9 +25,11 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class ConverterPreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public ConverterPreferencePage() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("MSD Converter");
+		setTitle("Converter (MSD)");
+		setDescription("");
 	}
 
 	@Override
@@ -52,7 +54,7 @@ public class ConverterPreferencePage extends FieldEditorPreferencePage implement
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Extract Separation Column (Header - Misc Info)", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_PARSE_SEPARATION_COLUMN_FROM_HEADER, "Parse Separation Column from Header", getFieldEditorParent()));
-		addField(new ColumnExtractorFieldEditor(PreferenceSupplier.P_SEPARATION_COLUMN_KEYWORDS, "Separation Column Keywords", getFieldEditorParent()));
+		addField(new ColumnMappingFieldEditor(PreferenceSupplier.P_SEPARATION_COLUMN_KEYWORDS, "Separation Column Keywords", getFieldEditorParent()));
 	}
 
 	@Override

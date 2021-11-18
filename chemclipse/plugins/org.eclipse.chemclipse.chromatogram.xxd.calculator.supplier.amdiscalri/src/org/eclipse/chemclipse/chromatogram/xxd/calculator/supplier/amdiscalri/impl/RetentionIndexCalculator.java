@@ -286,15 +286,30 @@ public class RetentionIndexCalculator {
 			File file = new File(retentionIndexFile);
 			ISeparationColumnIndices separationColumnIndices = calibrationFileReader.parse(file);
 			ISeparationColumn separationColumn = separationColumnIndices.getSeparationColumn();
-			calibrationMap.put(separationColumn.getValue(), separationColumnIndices);
+			/*
+			 * Put both name and separation type name() to be able to map first the specific
+			 * column and if that fails, the generic description.
+			 */
+			calibrationMap.put(separationColumn.getName(), separationColumnIndices);
+			calibrationMap.put(separationColumn.getSeparationColumnType().name(), separationColumnIndices);
 		}
 		/*
 		 * Run the calculation.
 		 */
-		String columnName = chromatogramSelection.getChromatogram().getSeparationColumnIndices().getSeparationColumn().getValue();
-		ISeparationColumnIndices separationColumnIndices = calibrationMap.get(columnName);
+		ISeparationColumnIndices separationColumnIndicesChromatogram = chromatogramSelection.getChromatogram().getSeparationColumnIndices();
+		ISeparationColumn separationColumn = separationColumnIndicesChromatogram.getSeparationColumn();
+		ISeparationColumnIndices separationColumnIndices = calibrationMap.get(separationColumn.getName());
+		/*
+		 * First try by column name.
+		 */
 		if(separationColumnIndices == null && calculatorSettings.isUseDefaultColumn()) {
-			separationColumnIndices = calibrationMap.get(SeparationColumnType.DEFAULT.value());
+			/*
+			 * Second try by separation column.
+			 */
+			separationColumnIndices = calibrationMap.get(separationColumn.getSeparationColumnType().name());
+			if(separationColumnIndices == null && calculatorSettings.isUseDefaultColumn()) {
+				separationColumnIndices = calibrationMap.get(SeparationColumnType.DEFAULT.name());
+			}
 		}
 		//
 		return separationColumnIndices;

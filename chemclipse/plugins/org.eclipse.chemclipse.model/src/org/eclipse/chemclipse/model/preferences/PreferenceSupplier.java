@@ -49,6 +49,13 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String DEF_BEST_TARGET_LIBRARY_FIELD = LibraryField.NAME.name();
 	public static final String P_ION_ROUND_METHOD = "ionRoundMethod"; // When changing this value, call clearCacheActiveIonRoundMethod.
 	public static final String DEF_ION_ROUND_METHOD = IonRoundMethod.DEFAULT.name();
+	//
+	public static final String P_LIST_PATH_IMPORT = "listPathImport";
+	public static final String DEF_LIST_PATH_IMPORT = "";
+	public static final String P_LIST_PATH_EXPORT = "listPathExport";
+	public static final String DEF_LIST_PATH_EXPORT = "";
+	public static final String P_SEPARATION_COLUMN_MAPPINGS = "separationColumnMappings";
+	public static final String DEF_SEPARATION_COLUMN_MAPPINGS = "";
 	/*
 	 * Used to cache the round method.
 	 * Call clearCacheActiveIonRoundMethod to force a reload.
@@ -81,6 +88,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public Map<String, String> getDefaultValues() {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
+		//
 		defaultValues.put(P_MISC_SEPARATOR, DEF_MISC_SEPARATOR);
 		defaultValues.put(P_MISC_SEPARATED_DELIMITER, DEF_MISC_SEPARATED_DELIMITER);
 		defaultValues.put(P_ALTERNATE_WINDOW_MOVE_DIRECTION, Boolean.toString(DEF_ALTERNATE_WINDOW_MOVE_DIRECTION));
@@ -92,6 +100,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_USE_RETENTION_INDEX_QC, Boolean.toString(DEF_USE_RETENTION_INDEX_QC));
 		defaultValues.put(P_BEST_TARGET_LIBRARY_FIELD, DEF_BEST_TARGET_LIBRARY_FIELD);
 		defaultValues.put(P_ION_ROUND_METHOD, DEF_ION_ROUND_METHOD);
+		defaultValues.put(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
+		defaultValues.put(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
+		defaultValues.put(P_SEPARATION_COLUMN_MAPPINGS, DEF_SEPARATION_COLUMN_MAPPINGS);
 		//
 		return defaultValues;
 	}
@@ -216,6 +227,32 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		activeIonRoundMethod = ionRoundMethod;
 	}
 
+	public static String getListPathImport() {
+
+		return getFilterPath(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
+	}
+
+	public static void setListPathImport(String filterPath) {
+
+		putString(P_LIST_PATH_IMPORT, filterPath);
+	}
+
+	public static String getListPathExport() {
+
+		return getFilterPath(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
+	}
+
+	public static void setListPathExport(String filterPath) {
+
+		putString(P_LIST_PATH_EXPORT, filterPath);
+	}
+
+	public static String getSeparationColumnMappings() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.get(P_SEPARATION_COLUMN_MAPPINGS, DEF_SEPARATION_COLUMN_MAPPINGS);
+	}
+
 	private static boolean getBoolean(String key, boolean def) {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
@@ -242,5 +279,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		} catch(Exception e) {
 			logger.warn(e);
 		}
+	}
+
+	private static String getFilterPath(String key, String def) {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.get(key, def);
 	}
 }

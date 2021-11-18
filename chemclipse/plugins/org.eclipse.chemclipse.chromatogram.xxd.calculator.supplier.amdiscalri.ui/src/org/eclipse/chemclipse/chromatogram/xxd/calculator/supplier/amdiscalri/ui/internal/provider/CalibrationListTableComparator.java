@@ -26,8 +26,8 @@ public class CalibrationListTableComparator extends AbstractRecordTableComparato
 			//
 			CalibrationFile calibrationFile1 = (CalibrationFile)e1;
 			CalibrationFile calibrationFile2 = (CalibrationFile)e2;
-			String column1 = calibrationFile1.getSeparationColumnIndices().getSeparationColumn().getValue();
-			String column2 = calibrationFile2.getSeparationColumnIndices().getSeparationColumn().getValue();
+			String column1 = calibrationFile1.getSeparationColumnIndices().getSeparationColumn().getName();
+			String column2 = calibrationFile2.getSeparationColumnIndices().getSeparationColumn().getName();
 			//
 			switch(getPropertyIndex()) {
 				case 0:

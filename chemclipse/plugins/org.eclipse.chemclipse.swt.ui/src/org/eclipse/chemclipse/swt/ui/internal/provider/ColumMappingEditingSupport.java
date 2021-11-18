@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.converter.ui.internal.provider;
+package org.eclipse.chemclipse.swt.ui.internal.provider;
 
 import java.util.Map;
 
@@ -21,23 +21,23 @@ import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 
-public class ColumExtractorEditingSupport extends EditingSupport {
+public class ColumMappingEditingSupport extends EditingSupport {
 
 	private CellEditor cellEditor;
 	private ExtendedTableViewer tableViewer;
 	private String column;
 	private static final String[] ITEMS = new String[]{ //
-			SeparationColumnType.DEFAULT.value(), //
-			SeparationColumnType.APOLAR.value(), //
-			SeparationColumnType.SEMI_POLAR.value(), //
-			SeparationColumnType.POLAR.value() //
+			SeparationColumnType.DEFAULT.name(), //
+			SeparationColumnType.APOLAR.name(), //
+			SeparationColumnType.SEMI_POLAR.name(), //
+			SeparationColumnType.POLAR.name() //
 	};
 
-	public ColumExtractorEditingSupport(ExtendedTableViewer tableViewer, String column) {
+	public ColumMappingEditingSupport(ExtendedTableViewer tableViewer, String column) {
 
 		super(tableViewer);
 		this.column = column;
-		if(column.equals(ColumExtractorLabelProvider.SEPRATION_COLUMN)) {
+		if(column.equals(ColumMappingLabelProvider.SEPRATION_COLUMN)) {
 			this.cellEditor = new ComboBoxCellEditor(tableViewer.getTable(), ITEMS, SWT.READ_ONLY);
 		} else {
 			this.cellEditor = new TextCellEditor(tableViewer.getTable());
@@ -64,7 +64,7 @@ public class ColumExtractorEditingSupport extends EditingSupport {
 		if(element instanceof Map.Entry) {
 			Map.Entry setting = (Map.Entry)element;
 			switch(column) {
-				case ColumExtractorLabelProvider.SEPRATION_COLUMN:
+				case ColumMappingLabelProvider.SEPRATION_COLUMN:
 					for(int i = 0; i < ITEMS.length; i++) {
 						if(ITEMS[i].equals(setting.getValue())) {
 							return i;
@@ -83,7 +83,7 @@ public class ColumExtractorEditingSupport extends EditingSupport {
 		if(element instanceof Map.Entry) {
 			Map.Entry setting = (Map.Entry)element;
 			switch(column) {
-				case ColumExtractorLabelProvider.SEPRATION_COLUMN:
+				case ColumMappingLabelProvider.SEPRATION_COLUMN:
 					setting.setValue(ITEMS[(int)value]);
 					break;
 			}

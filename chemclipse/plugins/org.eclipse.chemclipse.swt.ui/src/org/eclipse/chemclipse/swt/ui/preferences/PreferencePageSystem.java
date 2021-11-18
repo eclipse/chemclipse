@@ -16,8 +16,10 @@ import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.model.targets.LibraryField;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.chemclipse.swt.ui.Activator;
+import org.eclipse.chemclipse.swt.ui.fieldeditors.ColumnMappingFieldEditor;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
+import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -59,6 +61,11 @@ public class PreferencePageSystem extends FieldEditorPreferencePage implements I
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_RETENTION_INDEX_QC, "QC: Use Retention Index", getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceSupplier.P_BEST_TARGET_LIBRARY_FIELD, "Best Target", LibraryField.getOptions(), getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceSupplier.P_ION_ROUND_METHOD, "Ion Round Method", IonRoundMethod.getOptions(), getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_LIST_PATH_IMPORT, "Mappings Import Folder", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_LIST_PATH_EXPORT, "Mappings Export Folder", getFieldEditorParent()));
+		addField(new ColumnMappingFieldEditor(PreferenceSupplier.P_SEPARATION_COLUMN_MAPPINGS, "Separation Column Mappings", getFieldEditorParent()));
 		//
 		preferenceStore.addPropertyChangeListener(new IPropertyChangeListener() {
 

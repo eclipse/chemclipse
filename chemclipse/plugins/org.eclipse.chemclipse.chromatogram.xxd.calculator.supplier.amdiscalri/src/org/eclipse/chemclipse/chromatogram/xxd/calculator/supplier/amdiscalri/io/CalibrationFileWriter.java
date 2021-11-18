@@ -45,7 +45,7 @@ public class CalibrationFileWriter {
 			 */
 			ISeparationColumn separationColumn = separationColumnIndices.getSeparationColumn();
 			if(separationColumn != null) {
-				printWriter.println(IColumnFormat.COLUMN_NAME + IColumnFormat.HEADER_VALUE_DELIMITER + separationColumn.getValue());
+				printWriter.println(IColumnFormat.COLUMN_NAME + IColumnFormat.HEADER_VALUE_DELIMITER + separationColumn.getName());
 				printWriter.println(IColumnFormat.COLUMN_LENGTH + IColumnFormat.HEADER_VALUE_DELIMITER + separationColumn.getLength());
 				printWriter.println(IColumnFormat.COLUMN_DIAMETER + IColumnFormat.HEADER_VALUE_DELIMITER + separationColumn.getDiameter());
 				printWriter.println(IColumnFormat.COLUMN_PHASE + IColumnFormat.HEADER_VALUE_DELIMITER + separationColumn.getPhase());

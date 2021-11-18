@@ -26,8 +26,8 @@ public class IdentifierListTableComparator extends AbstractRecordTableComparator
 			//
 			IdentifierFile identifierFile1 = (IdentifierFile)e1;
 			IdentifierFile identifierFile2 = (IdentifierFile)e2;
-			String column1 = identifierFile1.getSeparationColumn().getValue();
-			String column2 = identifierFile2.getSeparationColumn().getValue();
+			String column1 = identifierFile1.getSeparationColumn().getName();
+			String column2 = identifierFile2.getSeparationColumn().getName();
 			//
 			switch(getPropertyIndex()) {
 				case 0:

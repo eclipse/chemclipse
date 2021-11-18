@@ -46,6 +46,7 @@ import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.model.columns.RetentionIndexEntry;
+import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IMethod;
@@ -580,11 +581,12 @@ public class ChromatogramReader_1301 extends AbstractChromatogramReader implemen
 			separationColumnIndices.put(retentionIndexEntry);
 		}
 		//
+		String name = readString(dataInputStream);
+		String length = readString(dataInputStream);
+		String diameter = readString(dataInputStream);
+		String phase = readString(dataInputStream);
 		ISeparationColumn separationColumn = separationColumnIndices.getSeparationColumn();
-		separationColumn.setValue(readString(dataInputStream));
-		separationColumn.setLength(readString(dataInputStream));
-		separationColumn.setDiameter(readString(dataInputStream));
-		separationColumn.setPhase(readString(dataInputStream));
+		separationColumn.copyFrom(SeparationColumnFactory.getSeparationColumn(name, length, diameter, phase));
 		//
 		if(closeStream) {
 			dataInputStream.close();
