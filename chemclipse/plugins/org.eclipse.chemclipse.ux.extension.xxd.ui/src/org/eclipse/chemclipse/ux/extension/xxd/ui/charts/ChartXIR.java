@@ -135,7 +135,7 @@ public class ChartXIR extends LineChart {
 		primaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
 		primaryAxisSettingsY.setGridLineStyle(LineStyle.NONE);
 		primaryAxisSettingsY.setVisible(true);
-		primaryAxisSettingsY.setReversed(true);
+		primaryAxisSettingsY.setReversed(false);
 	}
 
 	private void addSecondaryAxisSetProcessed(IChartSettings chartSettings) {
