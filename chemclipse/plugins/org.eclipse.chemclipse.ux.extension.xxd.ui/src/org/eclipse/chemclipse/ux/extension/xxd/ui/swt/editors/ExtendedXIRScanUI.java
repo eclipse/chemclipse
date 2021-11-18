@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -124,7 +124,7 @@ public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 			ySeries = new double[size];
 			int index = 0;
 			for(ISignalXIR scanSignal : scanXIR.getProcessedSignals()) {
-				xSeries[index] = scanSignal.getWavelength();
+				xSeries[index] = scanSignal.getWavenumber();
 				ySeries[index] = scanSignal.getIntensity();
 				index++;
 			}
