@@ -20,13 +20,15 @@ import org.eclipse.swt.graphics.Image;
 public class CalibrationListLabelProvider extends AbstractChemClipseLabelProvider {
 
 	public static final String[] TITLES = { //
-			"Column", //
 			"Name", //
-			"File" //
+			"Type", //
+			"File Name", //
+			"File Path" //
 	};
 	//
 	public static final int[] BOUNDS = { //
 			100, //
+			150, //
 			150, //
 			250 //
 	};
@@ -53,9 +55,12 @@ public class CalibrationListLabelProvider extends AbstractChemClipseLabelProvide
 					text = calibrationFile.getSeparationColumnIndices().getSeparationColumn().getName();
 					break;
 				case 1:
-					text = calibrationFile.getFile().getName();
+					text = calibrationFile.getSeparationColumnIndices().getSeparationColumn().getSeparationColumnType().label();
 					break;
 				case 2:
+					text = calibrationFile.getFile().getName();
+					break;
+				case 3:
 					text = calibrationFile.getFile().getAbsolutePath();
 					break;
 			}

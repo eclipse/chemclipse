@@ -28,15 +28,20 @@ public class IdentifierListTableComparator extends AbstractRecordTableComparator
 			IdentifierFile identifierFile2 = (IdentifierFile)e2;
 			String column1 = identifierFile1.getSeparationColumn().getName();
 			String column2 = identifierFile2.getSeparationColumn().getName();
+			String type1 = identifierFile1.getSeparationColumn().getSeparationColumnType().label();
+			String type2 = identifierFile2.getSeparationColumn().getSeparationColumnType().label();
 			//
 			switch(getPropertyIndex()) {
 				case 0:
 					sortOrder = column2.compareTo(column1);
 					break;
 				case 1:
-					sortOrder = identifierFile2.getFile().getName().compareTo(identifierFile1.getFile().getName());
+					sortOrder = type2.compareTo(type1);
 					break;
 				case 2:
+					sortOrder = identifierFile2.getFile().getName().compareTo(identifierFile1.getFile().getName());
+					break;
+				case 3:
 					sortOrder = identifierFile2.getFile().getAbsolutePath().compareTo(identifierFile1.getFile().getAbsolutePath());
 					break;
 			}

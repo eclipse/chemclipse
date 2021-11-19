@@ -20,13 +20,15 @@ import org.eclipse.swt.graphics.Image;
 public class IdentifierListLabelProvider extends AbstractChemClipseLabelProvider {
 
 	public static final String[] TITLES = { //
-			"Column", //
 			"Name", //
-			"File" //
+			"Type", //
+			"File Name", //
+			"File Path" //
 	};
 	//
 	public static final int[] BOUNDS = { //
 			100, //
+			150, //
 			150, //
 			250 //
 	};
@@ -51,9 +53,12 @@ public class IdentifierListLabelProvider extends AbstractChemClipseLabelProvider
 					text = identifierFile.getSeparationColumn().getName();
 					break;
 				case 1:
-					text = identifierFile.getFile().getName();
+					text = identifierFile.getSeparationColumn().getSeparationColumnType().label();
 					break;
 				case 2:
+					text = identifierFile.getFile().getName();
+					break;
+				case 3:
 					text = identifierFile.getFile().getAbsolutePath();
 					break;
 			}

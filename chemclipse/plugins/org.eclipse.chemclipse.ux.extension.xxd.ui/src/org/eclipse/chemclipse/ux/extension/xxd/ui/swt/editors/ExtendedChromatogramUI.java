@@ -957,7 +957,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		//
 		editorToolBar.addAction(createLabelsAction());
 		editorToolBar.addAction(createToggleToolbarAction("Info", "the info toolbar.", IApplicationImage.IMAGE_INFO, TOOLBAR_INFO));
-		editorToolBar.createCombo(this::initComboViewerSeparationColumn, true, 150);
+		editorToolBar.createCombo(this::initComboViewerSeparationColumn, true, 250);
 		chromatogramReferencesUI = new ChromatogramReferencesUI(editorToolBar, this::setChromatogramSelectionInternal);
 		editorToolBar.addAction(createToggleToolbarAction("Edit", "the edit toolbar.", IApplicationImage.IMAGE_EDIT, TOOLBAR_EDIT));
 		editorToolBar.addAction(createToggleToolbarAction("Alignment", "the chromatogram alignment toolbar.", IApplicationImage.IMAGE_ALIGN_CHROMATOGRAMS, TOOLBAR_CHROMATOGRAM_ALIGNMENT));

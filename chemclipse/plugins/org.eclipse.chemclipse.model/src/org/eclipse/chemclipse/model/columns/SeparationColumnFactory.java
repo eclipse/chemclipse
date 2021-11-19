@@ -61,7 +61,7 @@ public class SeparationColumnFactory {
 
 	public static ISeparationColumn getSeparationColumn(SeparationColumnType separationColumnType) {
 
-		return new SeparationColumn(separationColumnType.label(), separationColumnType, "", "", "");
+		return new SeparationColumn(separationColumnType.name(), separationColumnType, "", "", "");
 	}
 
 	public static ISeparationColumnIndices getSeparationColumnIndices(SeparationColumnType separationColumnType) {
