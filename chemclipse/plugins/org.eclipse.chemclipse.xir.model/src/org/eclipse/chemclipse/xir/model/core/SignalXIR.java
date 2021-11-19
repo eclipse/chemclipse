@@ -128,7 +128,7 @@ public class SignalXIR extends AbstractSignal implements ISignalXIR, Comparable<
 	@Override
 	public String toString() {
 
-		return "SignalXIR [wavenumber=" + wavelength + ", absorbance=" + absorbance + ", transmission=" + transmission + "]";
+		return "SignalXIR [wavenumber=" + wavenumber + ", absorbance=" + absorbance + ", transmission=" + transmission + "]";
 	}
 
 	@Override
