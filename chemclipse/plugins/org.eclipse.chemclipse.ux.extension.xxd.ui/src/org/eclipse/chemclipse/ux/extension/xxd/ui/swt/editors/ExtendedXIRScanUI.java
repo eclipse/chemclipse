@@ -49,6 +49,7 @@ public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 	//
 	private Label labelDataInfo;
 	private boolean showRawData = false;
+	private boolean showAbsorbance = false;
 
 	public ExtendedXIRScanUI(Composite parent, int style) {
 
@@ -60,9 +61,9 @@ public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 
 		this.scanXIR = scanXIR;
 		if(scanXIR != null) {
-			showRawData = (scanXIR.getProcessedSignals().size() > 0) ? false : true;
+			showRawData = scanXIR.getProcessedSignals().isEmpty();
 		}
-		chartXIR.modifyChart(showRawData);
+		chartXIR.modifyChart(showRawData, showAbsorbance);
 		updateScan();
 	}
 
@@ -77,7 +78,7 @@ public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 			 */
 			dataInfo += " | Rotation Angle: " + scanXIR.getRotationAngle() + "°";
 			//
-			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 			ILineSeriesData lineSeriesData;
 			ILineSeriesSettings lineSeriesSettings;
 			//
@@ -125,7 +126,11 @@ public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 			int index = 0;
 			for(ISignalXIR scanSignal : scanXIR.getProcessedSignals()) {
 				xSeries[index] = scanSignal.getWavenumber();
-				ySeries[index] = scanSignal.getIntensity();
+				if(showAbsorbance) {
+					ySeries[index] = scanSignal.getAbsorbance();
+				} else {
+					ySeries[index] = scanSignal.getTransmission();
+				}
 				index++;
 			}
 		} else {
@@ -166,9 +171,10 @@ public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(7, false));
+		composite.setLayout(new GridLayout(8, false));
 		//
 		createDataInfoLabel(composite);
+		createTransmittanceAbsorbanceButton(composite);
 		createRawProcessedButton(composite);
 		createToggleChartSeriesLegendButton(composite);
 		createToggleLegendMarkerButton(composite);
@@ -186,19 +192,43 @@ public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 		labelDataInfo.setLayoutData(gridData);
 	}
 
+	private void createTransmittanceAbsorbanceButton(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Toggle the transmittance/absorbance modus");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(getTransmittanceAbsorbanceImage(), IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				showAbsorbance = !showAbsorbance;
+				button.setImage(ApplicationImageFactory.getInstance().getImage(getTransmittanceAbsorbanceImage(), IApplicationImage.SIZE_16x16));
+				chartXIR.modifyChart(showRawData, showAbsorbance);
+				updateScan();
+			}
+		});
+	}
+
+	private String getTransmittanceAbsorbanceImage() {
+
+		return showAbsorbance ? IApplicationImage.IMAGE_SCAN_XIR_INVERTED : IApplicationImage.IMAGE_SCAN_XIR;
+	}
+
 	private void createRawProcessedButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Toggle the raw/processed modus");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SCAN_XIR, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SCAN_XIR_RAW, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				showRawData = !showRawData;
-				chartXIR.modifyChart(showRawData);
+				chartXIR.modifyChart(showRawData, showAbsorbance);
 				updateScan();
 			}
 		});
@@ -290,7 +320,7 @@ public class ExtendedXIRScanUI extends Composite implements IExtendedPartUI {
 
 	private void createScanChart(Composite parent) {
 
-		chartXIR = new ChartXIR(parent, SWT.BORDER);
+		chartXIR = new ChartXIR(parent, SWT.BORDER, showAbsorbance);
 		chartXIR.setLayoutData(new GridData(GridData.FILL_BOTH));
 		/*
 		 * Chart Settings

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -32,27 +32,26 @@ public class ChartXIR extends LineChart {
 	public ChartXIR() {
 
 		super();
-		initialize();
 	}
 
-	public ChartXIR(Composite parent, int style) {
+	public ChartXIR(Composite parent, int style, boolean isAbsorbance) {
 
 		super(parent, style);
-		initialize();
+		initialize(isAbsorbance);
 	}
 
-	public void modifyChart(boolean rawData) {
+	public void modifyChart(boolean rawData, boolean isAbsorbance) {
 
 		if(rawData) {
 			modifyRaw();
 		} else {
-			modifyProcessed();
+			modifyProcessed(isAbsorbance);
 		}
 	}
 
-	private void initialize() {
+	private void initialize(boolean isAbsorbance) {
 
-		modifyProcessed();
+		modifyProcessed(isAbsorbance);
 	}
 
 	private void modifyRaw() {
@@ -95,14 +94,14 @@ public class ChartXIR extends LineChart {
 		/*
 		 * Y
 		 */
-		ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings("Relative Intensity [%]", new PercentageConverter(SWT.VERTICAL, true));
+		ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings("Relative Transmission [%]", new PercentageConverter(SWT.VERTICAL, true));
 		secondaryAxisSettingsY.setPosition(Position.Secondary);
 		secondaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
 		secondaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
 		chartSettings.getSecondaryAxisSettingsListY().add(secondaryAxisSettingsY);
 	}
 
-	private void modifyProcessed() {
+	private void modifyProcessed(boolean isAbsorbance) {
 
 		/*
 		 * Chart Settings
@@ -115,12 +114,13 @@ public class ChartXIR extends LineChart {
 		chartSettings.getRangeRestriction().setZeroY(false);
 		chartSettings.getRangeRestriction().setForceZeroMinY(false);
 		//
-		setPrimaryAxisSetProcessed(chartSettings);
-		addSecondaryAxisSetProcessed(chartSettings);
+		String yLabel = isAbsorbance ? "Absorbance" : "Transmission";
+		setPrimaryAxisSetProcessed(chartSettings, yLabel);
+		addSecondaryAxisSetProcessed(chartSettings, yLabel);
 		applySettings(chartSettings);
 	}
 
-	private void setPrimaryAxisSetProcessed(IChartSettings chartSettings) {
+	private void setPrimaryAxisSetProcessed(IChartSettings chartSettings, String yLabel) {
 
 		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
 		primaryAxisSettingsX.setTitle("Wavenumber [1/cm]");
@@ -130,21 +130,21 @@ public class ChartXIR extends LineChart {
 		primaryAxisSettingsX.setReversed(true);
 		//
 		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
-		primaryAxisSettingsY.setTitle("Intensity");
+		primaryAxisSettingsY.setTitle(yLabel);
 		primaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.0#E0"), new DecimalFormatSymbols(Locale.ENGLISH)));
 		primaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
 		primaryAxisSettingsY.setGridLineStyle(LineStyle.NONE);
 		primaryAxisSettingsY.setVisible(true);
-		primaryAxisSettingsY.setReversed(true);
+		primaryAxisSettingsY.setReversed(false);
 	}
 
-	private void addSecondaryAxisSetProcessed(IChartSettings chartSettings) {
+	private void addSecondaryAxisSetProcessed(IChartSettings chartSettings, String yLabel) {
 
 		deleteSecondaryAxes(chartSettings);
 		/*
 		 * Y
 		 */
-		ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings("Relative Intensity [%]", new PercentageConverter(SWT.VERTICAL, true));
+		ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings("Relative " + yLabel + " [%]", new PercentageConverter(SWT.VERTICAL, true));
 		secondaryAxisSettingsY.setPosition(Position.Secondary);
 		secondaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
 		secondaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));

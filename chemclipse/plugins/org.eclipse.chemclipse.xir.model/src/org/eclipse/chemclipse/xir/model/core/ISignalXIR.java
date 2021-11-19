@@ -21,7 +21,11 @@ public interface ISignalXIR extends ISignal, Serializable {
 
 	void setWavenumber(double wavenumber);
 
-	double getIntensity();
+	double getTransmission();
 
-	void setIntensity(double intensity);
+	void setTransmission(double transmission);
+
+	double getAbsorbance();
+
+	void setAbsorbance(double absorbance);
 }
