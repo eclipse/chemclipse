@@ -132,6 +132,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		}
 	}
 
+	@Override
 	public boolean setFocus() {
 
 		updateChromatogramSelection();
@@ -503,7 +504,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			/*
 			 * Send update.
 			 */
-			if(scansToClear.size() > 0 || peaksToDelete.size() > 0) {
+			if(!scansToClear.isEmpty() || !peaksToDelete.isEmpty()) {
 				if(chromatogramSelection != null) {
 					chromatogramSelection.setSelectedPeak(null);
 					chromatogramSelection.setSelectedScan(null);
@@ -533,7 +534,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 
 	private void deleteScanIdentifications(List<IScan> scans) {
 
-		if(scans.size() > 0) {
+		if(!scans.isEmpty()) {
 			/*
 			 * Remove the selected identified scan.
 			 */
@@ -665,8 +666,6 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 				chromatogramSelection.setSelectedPeaks(selectedPeaks);
 				chromatogramSelection.setSelectedIdentifiedScans(selectedIdentifiedScans);
 				UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Peak(s)/Scan(s) selection via the list.");
-				//
-				return;
 			} else {
 				/*
 				 * Only one object.
@@ -683,8 +682,13 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 						ChromatogramDataSupport.adjustChromatogramSelection(peak, chromatogramSelection);
 					}
 					//
-					scanIdentifierUI.setInput(peak.getPeakModel().getPeakMaximum());
+					IScan scan = peak.getPeakModel().getPeakMaximum();
+					scanIdentifierUI.setInput(scan);
 					chromatogramSelection.setSelectedPeak(peak);
+					List<IScan> selectedIdentifiedScans = new ArrayList<>();
+					selectedIdentifiedScans.add(scan);
+					chromatogramSelection.setSelectedIdentifiedScans(selectedIdentifiedScans);
+					chromatogramSelection.setSelectedScan(null);
 					//
 					UpdateNotifierUI.update(display, peak);
 					UpdateNotifierUI.update(display, identificationTarget);
@@ -702,6 +706,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 					//
 					scanIdentifierUI.setInput(scan);
 					chromatogramSelection.setSelectedIdentifiedScan(scan);
+					chromatogramSelection.setSelectedPeaks(new ArrayList<IPeak>());
 					//
 					UpdateNotifierUI.update(display, scan);
 					UpdateNotifierUI.update(display, identificationTarget);
