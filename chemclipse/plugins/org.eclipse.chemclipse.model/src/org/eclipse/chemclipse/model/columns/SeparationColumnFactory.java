@@ -27,7 +27,7 @@ public class SeparationColumnFactory {
 		if(separationColumn != null) {
 			String name = separationColumn.getName();
 			if(name.length() > nameLength) {
-				name = name.substring(0, nameLength);
+				name = name.substring(0, nameLength) + "...";
 			}
 			builder.append(name);
 			builder.append(" (");
