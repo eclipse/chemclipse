@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,21 +17,23 @@ public class SignalXIR extends AbstractSignal implements ISignalXIR, Comparable<
 
 	private static final long serialVersionUID = -2575735757102126907L;
 	//
-	private double wavelength = 0.0d; // nm
+	private double wavenumber = 0.0d; // 1/cm
 	private double intensity = 0.0d;
 
 	public SignalXIR() {
+
 	}
 
 	public SignalXIR(double wavelength, double intensity) {
-		this.wavelength = wavelength;
+
+		this.wavenumber = wavelength;
 		this.intensity = intensity;
 	}
 
 	@Override
 	public double getX() {
 
-		return wavelength;
+		return wavenumber;
 	}
 
 	@Override
@@ -41,16 +43,16 @@ public class SignalXIR extends AbstractSignal implements ISignalXIR, Comparable<
 	}
 
 	@Override
-	public double getWavelength() {
+	public double getWavenumber() {
 
-		return wavelength;
+		return wavenumber;
 	}
 
 	@Override
-	public void setWavelength(double wavelength) {
+	public void setWavenumber(double wavelength) {
 
 		if(wavelength >= 0) {
-			this.wavelength = wavelength;
+			this.wavenumber = wavelength;
 		}
 	}
 
@@ -72,7 +74,7 @@ public class SignalXIR extends AbstractSignal implements ISignalXIR, Comparable<
 		final int prime = 31;
 		int result = 1;
 		long temp;
-		temp = Double.doubleToLongBits(wavelength);
+		temp = Double.doubleToLongBits(wavenumber);
 		result = prime * result + (int)(temp ^ (temp >>> 32));
 		return result;
 	}
@@ -80,29 +82,30 @@ public class SignalXIR extends AbstractSignal implements ISignalXIR, Comparable<
 	@Override
 	public boolean equals(Object obj) {
 
-		if(this == obj)
+		if(this == obj) {
 			return true;
-		if(obj == null)
+		}
+		if(obj == null) {
 			return false;
-		if(getClass() != obj.getClass())
+		}
+		if(getClass() != obj.getClass()) {
 			return false;
+		}
 		SignalXIR other = (SignalXIR)obj;
-		if(Double.doubleToLongBits(wavelength) != Double.doubleToLongBits(other.wavelength))
-			return false;
-		return true;
+		return (Double.doubleToLongBits(wavenumber) == Double.doubleToLongBits(other.wavenumber));
 	}
 
 	@Override
 	public String toString() {
 
-		return "SignalXIR [wavelength=" + wavelength + ", intensity=" + intensity + "]";
+		return "SignalXIR [wavenumber=" + wavenumber + ", intensity=" + intensity + "]";
 	}
 
 	@Override
 	public int compareTo(ISignalXIR signalXIR) {
 
 		if(signalXIR != null) {
-			return Double.compare(wavelength, signalXIR.getWavelength());
+			return Double.compare(wavenumber, signalXIR.getWavenumber());
 		} else {
 			return 0;
 		}
