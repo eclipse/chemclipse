@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Matthias Mailänder differentiate transmission vs absorbance
  *******************************************************************************/
 package org.eclipse.chemclipse.xir.model.core;
 
@@ -18,16 +19,18 @@ public class SignalXIR extends AbstractSignal implements ISignalXIR, Comparable<
 	private static final long serialVersionUID = -2575735757102126907L;
 	//
 	private double wavenumber = 0.0d; // 1/cm
-	private double intensity = 0.0d;
+	private double absorbance = 0.0d;
+	private double transmission = 0.0d;
 
 	public SignalXIR() {
 
 	}
 
-	public SignalXIR(double wavelength, double intensity) {
+	public SignalXIR(double wavenumber, double absorbance, double transmission) {
 
-		this.wavenumber = wavelength;
-		this.intensity = intensity;
+		this.wavenumber = wavenumber;
+		this.absorbance = absorbance;
+		this.transmission = transmission;
 	}
 
 	@Override
@@ -39,7 +42,11 @@ public class SignalXIR extends AbstractSignal implements ISignalXIR, Comparable<
 	@Override
 	public double getY() {
 
-		return intensity;
+		if(transmission > 0) {
+			return transmission;
+		} else {
+			return absorbance;
+		}
 	}
 
 	@Override
@@ -57,15 +64,38 @@ public class SignalXIR extends AbstractSignal implements ISignalXIR, Comparable<
 	}
 
 	@Override
-	public double getIntensity() {
+	public double getTransmission() {
 
-		return intensity;
+		if(transmission > 0) {
+			return transmission;
+		}
+		if(absorbance > 0) {
+			return 100 / Math.pow(10, absorbance);
+		}
+		return 0;
 	}
 
 	@Override
-	public void setIntensity(double intensity) {
+	public void setTransmission(double transmission) {
 
-		this.intensity = intensity;
+		this.transmission = transmission;
+	}
+
+	@Override
+	public double getAbsorbance() {
+
+		if(absorbance > 0) {
+			return absorbance;
+		} else if(transmission > 0) {
+			return Math.log(1 / transmission);
+		}
+		return 0;
+	}
+
+	@Override
+	public void setAbsorbance(double absorbance) {
+
+		this.absorbance = absorbance;
 	}
 
 	@Override
@@ -98,7 +128,7 @@ public class SignalXIR extends AbstractSignal implements ISignalXIR, Comparable<
 	@Override
 	public String toString() {
 
-		return "SignalXIR [wavenumber=" + wavenumber + ", intensity=" + intensity + "]";
+		return "SignalXIR [wavenumber=" + wavelength + ", absorbance=" + absorbance + ", transmission=" + transmission + "]";
 	}
 
 	@Override

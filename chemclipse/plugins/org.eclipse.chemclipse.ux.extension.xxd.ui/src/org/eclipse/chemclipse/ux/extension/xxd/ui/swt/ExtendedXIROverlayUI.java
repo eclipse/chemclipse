@@ -63,6 +63,7 @@ public class ExtendedXIROverlayUI extends Composite implements IExtendedPartUI {
 		createControl();
 	}
 
+	@Override
 	public void update() {
 
 		scanSelections = editorUpdateSupport.getScanSelectionsXIR();
@@ -120,7 +121,7 @@ public class ExtendedXIROverlayUI extends Composite implements IExtendedPartUI {
 
 	private void createOverlayChart(Composite parent) {
 
-		ChartXIR chartXIR = new ChartXIR(parent, SWT.BORDER);
+		ChartXIR chartXIR = new ChartXIR(parent, SWT.BORDER, true); // TODO
 		chartXIR.setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
 		chartControl.set(chartXIR);
@@ -135,9 +136,9 @@ public class ExtendedXIROverlayUI extends Composite implements IExtendedPartUI {
 
 		ChartXIR chartXIR = chartControl.get();
 		chartXIR.deleteSeries();
-		if(scanSelections.size() > 0) {
+		if(!scanSelections.isEmpty()) {
 			//
-			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 			int i = 1;
 			Color color = colorSchemeNormal.getColor();
 			//
@@ -180,7 +181,7 @@ public class ExtendedXIROverlayUI extends Composite implements IExtendedPartUI {
 			int index = 0;
 			for(ISignalXIR scanSignal : scanXIR.getProcessedSignals()) {
 				xSeries[index] = scanSignal.getWavenumber();
-				ySeries[index] = scanSignal.getIntensity();
+				ySeries[index] = scanSignal.getAbsorbance(); // TODO
 				index++;
 			}
 		} else {

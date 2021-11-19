@@ -88,6 +88,8 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_CHROMATOGRAM_WSD = PATH_PREFIX + "chromatogram-wsd.gif";
 	String IMAGE_CHROMATOGRAM_TSD = PATH_PREFIX + "chromatogram-tsd.gif";
 	String IMAGE_SCAN_XIR = PATH_PREFIX + "scan-xir.gif"; // FTIR, NIR, ...
+	String IMAGE_SCAN_XIR_RAW = PATH_PREFIX + "scan-xir-raw.gif";
+	String IMAGE_SCAN_XIR_INVERTED = PATH_PREFIX + "scan-xir-inverted.gif";
 	String IMAGE_SCAN_NMR = PATH_PREFIX + "scan-nmr.gif";
 	String IMAGE_SCAN_FID = PATH_PREFIX + "scan-fid.png";
 	//
