@@ -553,7 +553,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 	@SuppressWarnings("unchecked")
 	private void deletePeaks(List<IPeak> peaks) {
 
-		if(peaks.size() > 0) {
+		if(!peaks.isEmpty()) {
 			if(chromatogramSelection != null) {
 				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 				chromatogram.removePeaks(peaks);
@@ -686,7 +686,6 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 					scanIdentifierUI.setInput(scan);
 					chromatogramSelection.setSelectedPeak(peak);
 					List<IScan> selectedIdentifiedScans = new ArrayList<>();
-					selectedIdentifiedScans.add(scan);
 					chromatogramSelection.setSelectedIdentifiedScans(selectedIdentifiedScans);
 					chromatogramSelection.setSelectedScan(null);
 					//
@@ -705,6 +704,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 					IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(scan.getTargets(), identificationTargetComparator);
 					//
 					scanIdentifierUI.setInput(scan);
+					chromatogramSelection.setSelectedScan(scan);
 					chromatogramSelection.setSelectedIdentifiedScan(scan);
 					chromatogramSelection.setSelectedPeaks(new ArrayList<IPeak>());
 					//
@@ -903,7 +903,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 							peaks = getPeakList(table, indices);
 						}
 						//
-						if(peaks.size() > 0) {
+						if(!peaks.isEmpty()) {
 							DatabaseFileSupport.savePeaks(e.display.getActiveShell(), peaks, chromatogram.getName());
 						}
 						/*
@@ -981,7 +981,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 
 	private List<IPeak> getPeakList(Table table) {
 
-		List<IPeak> peakList = new ArrayList<IPeak>();
+		List<IPeak> peakList = new ArrayList<>();
 		for(TableItem tableItem : table.getItems()) {
 			Object object = tableItem.getData();
 			if(object instanceof IPeak) {
@@ -993,7 +993,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 
 	private List<IPeak> getPeakList(Table table, int[] indices) {
 
-		List<IPeak> peakList = new ArrayList<IPeak>();
+		List<IPeak> peakList = new ArrayList<>();
 		for(int index : indices) {
 			TableItem tableItem = table.getItem(index);
 			Object object = tableItem.getData();
@@ -1026,7 +1026,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 
 	private List<IScan> getScanList(Table table) {
 
-		List<IScan> scanList = new ArrayList<IScan>();
+		List<IScan> scanList = new ArrayList<>();
 		for(TableItem tableItem : table.getItems()) {
 			Object object = tableItem.getData();
 			if(object instanceof IScan) {
@@ -1038,7 +1038,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 
 	private List<IScan> getScanList(Table table, int[] indices) {
 
-		List<IScan> scanList = new ArrayList<IScan>();
+		List<IScan> scanList = new ArrayList<>();
 		for(int index : indices) {
 			TableItem tableItem = table.getItem(index);
 			Object object = tableItem.getData();
