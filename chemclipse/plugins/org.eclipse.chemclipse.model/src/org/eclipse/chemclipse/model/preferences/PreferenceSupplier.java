@@ -49,6 +49,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String DEF_BEST_TARGET_LIBRARY_FIELD = LibraryField.NAME.name();
 	public static final String P_ION_ROUND_METHOD = "ionRoundMethod"; // When changing this value, call clearCacheActiveIonRoundMethod.
 	public static final String DEF_ION_ROUND_METHOD = IonRoundMethod.DEFAULT.name();
+	public static final String P_SKIP_PEAK_WIDTH_CHECK = "skipPeakWidthCheck";
+	public static final boolean DEF_SKIP_PEAK_WIDTH_CHECK = false;
 	//
 	public static final String P_LIST_PATH_IMPORT = "listPathImport";
 	public static final String DEF_LIST_PATH_IMPORT = "";
@@ -100,6 +102,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_USE_RETENTION_INDEX_QC, Boolean.toString(DEF_USE_RETENTION_INDEX_QC));
 		defaultValues.put(P_BEST_TARGET_LIBRARY_FIELD, DEF_BEST_TARGET_LIBRARY_FIELD);
 		defaultValues.put(P_ION_ROUND_METHOD, DEF_ION_ROUND_METHOD);
+		defaultValues.put(P_SKIP_PEAK_WIDTH_CHECK, Boolean.toString(DEF_SKIP_PEAK_WIDTH_CHECK));
 		defaultValues.put(P_LIST_PATH_IMPORT, DEF_LIST_PATH_IMPORT);
 		defaultValues.put(P_LIST_PATH_EXPORT, DEF_LIST_PATH_EXPORT);
 		defaultValues.put(P_SEPARATION_COLUMN_MAPPINGS, DEF_SEPARATION_COLUMN_MAPPINGS);
@@ -225,6 +228,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		ionRoundMethod = (ionRoundMethod == null) ? IonRoundMethod.DEFAULT : ionRoundMethod;
 		putString(P_ION_ROUND_METHOD, ionRoundMethod.name());
 		activeIonRoundMethod = ionRoundMethod;
+	}
+
+	public static boolean isSkipPeakWidthCheck() {
+
+		return getBoolean(P_SKIP_PEAK_WIDTH_CHECK, DEF_SKIP_PEAK_WIDTH_CHECK);
 	}
 
 	public static String getListPathImport() {

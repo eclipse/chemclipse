@@ -42,6 +42,7 @@ import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.implementation.TripleQuadMethod;
 import org.eclipse.chemclipse.model.notifier.IChromatogramSelectionUpdateNotifier;
+import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.model.processor.IChromatogramProcessor;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignalExtractor;
@@ -1091,7 +1092,14 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	@Override
 	public void addPeak(T peak) {
 
-		if(peak.getPeakModel().getWidthByInflectionPoints() > 0) {
+		boolean addPeak = false;
+		if(PreferenceSupplier.isSkipPeakWidthCheck()) {
+			addPeak = true;
+		} else {
+			addPeak = peak.getPeakModel().getWidthByInflectionPoints() > 0;
+		}
+		//
+		if(addPeak) {
 			peaks.addPeak(peak);
 		}
 	}
