@@ -72,7 +72,7 @@ public class SignalXIR extends AbstractSignal implements ISignalXIR, Comparable<
 		if(absorbance > 0) {
 			return 100 / Math.pow(10, absorbance);
 		}
-		return 0;
+		return 100;
 	}
 
 	@Override
