@@ -1095,6 +1095,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 		boolean addPeak = false;
 		if(PreferenceSupplier.isSkipPeakWidthCheck()) {
 			addPeak = true;
+			peak.addClassifier("Skipped Peak Width Check");
 		} else {
 			addPeak = peak.getPeakModel().getWidthByInflectionPoints() > 0;
 		}
