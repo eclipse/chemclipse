@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Christoph Läubrich - update chromatogram selection after delete, allow updating of selection
+ * Lorenz Gerber - fix update on osx when number of list entries doesn't change
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -173,6 +174,8 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		} else {
 			currentModCount = chromatogramSelection.getChromatogram().getModCount();
 			lastRange = new RetentionTimeRange(chromatogramSelection);
+			// on OSX the clear is needed, else no update is fired when the number of list entries does not change
+			tableViewer.get().clear();
 			tableViewer.get().setInput(chromatogramSelection, showPeaks, showPeaksInRange, showScans, showScansInRange);
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			if(chromatogram instanceof IChromatogramMSD) {
