@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2020 Lablicate GmbH.
+ * Copyright (c) 2012, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -360,7 +360,7 @@ public abstract class AbstractArrayReader implements IArrayReader {
 	public int read4BUIntegerME() {
 
 		byte[] tmp = getByteArray(4);
-		return (int)(((tmp[0] & 0xFF) << 16) | ((tmp[1] & 0x7F) << 24) | (tmp[2] & 0xFF) | ((tmp[3] & 0xFF) << 8));
+		return ((tmp[0] & 0xFF) << 16) | ((tmp[1] & 0x7F) << 24) | (tmp[2] & 0xFF) | ((tmp[3] & 0xFF) << 8);
 	}
 
 	/**

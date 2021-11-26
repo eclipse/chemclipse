@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.converter.io.support;
 public interface ILittleEndianArrayReader {
 
 	/*
-	 * Unsigned Big Endian
+	 * Unsigned Little Endian
 	 */
 	short read1BUShortLE();
 
@@ -32,7 +32,7 @@ public interface ILittleEndianArrayReader {
 	float read4BUFloatLE();
 
 	/*
-	 * Signed Big Endian
+	 * Signed Little Endian
 	 */
 	short read1BShortLE();
 
@@ -71,7 +71,7 @@ public interface ILittleEndianArrayReader {
 	long readLongLE(int numBytes);
 
 	/*
-	 * Floating Point Big Endian
+	 * Floating Point Little Endian
 	 */
 	double read8BUDoubleLE();
 
