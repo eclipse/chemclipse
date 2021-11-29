@@ -360,6 +360,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_MINUTES, PreferenceConstants.DEF_GRIDLINE_STYLE_X_AXIS_MINUTES);
 		store.setDefault(PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_MINUTES, PreferenceConstants.DEF_GRIDLINE_COLOR_X_AXIS_MINUTES);
 		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_TITLE_MINUTES, PreferenceConstants.DEF_SHOW_X_AXIS_TITLE_MINUTES);
+		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_LINE_MINUTES, PreferenceConstants.DEF_SHOW_X_AXIS_LINE_MINUTES);
+		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_POSITION_MARKER_MINUTES, PreferenceConstants.DEF_SHOW_X_AXIS_POSITION_MARKER_MINUTES);
 		//
 		store.setDefault(PreferenceConstants.P_TITLE_X_AXIS_SCANS, PreferenceConstants.DEF_TITLE_X_AXIS_SCANS);
 		store.setDefault(PreferenceConstants.P_FORMAT_X_AXIS_SCANS, PreferenceConstants.DEF_FORMAT_X_AXIS_SCANS);

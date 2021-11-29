@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -249,6 +249,8 @@ public class ChromatogramChart extends LineChart {
 		int height = preferenceStore.getInt(PreferenceConstants.P_FONT_SIZE_X_AXIS_MINUTES);
 		int style = preferenceStore.getInt(PreferenceConstants.P_FONT_STYLE_X_AXIS_MINUTES);
 		Font titleFont = Fonts.getCachedFont(getBaseChart().getDisplay(), name, height, style);
+		boolean drawAxisLine = ChartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_LINE_MINUTES);
+		boolean drawPositionMarker = ChartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_POSITION_MARKER_MINUTES);
 		//
 		if(isShowAxis) {
 			if(axisSettings == null) {
@@ -256,6 +258,8 @@ public class ChromatogramChart extends LineChart {
 				ChartSupport.setAxisSettingsExtended(secondaryAxisSettingsX, positionNode, patternNode, colorNode, gridLineStyleNode, gridColorNode);
 				secondaryAxisSettingsX.setTitleFont(titleFont);
 				secondaryAxisSettingsX.setTitleVisible(isShowAxisTitle);
+				secondaryAxisSettingsX.setDrawAxisLine(drawAxisLine);
+				secondaryAxisSettingsX.setDrawPositionMarker(drawPositionMarker);
 				chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX);
 			} else {
 				ChartSupport.setAxisSettingsExtended(axisSettings, positionNode, patternNode, colorNode, gridLineStyleNode, gridColorNode);
@@ -263,6 +267,8 @@ public class ChromatogramChart extends LineChart {
 				axisSettings.setTitleFont(titleFont);
 				axisSettings.setVisible(true);
 				axisSettings.setTitleVisible(isShowAxisTitle);
+				axisSettings.setDrawAxisLine(drawAxisLine);
+				axisSettings.setDrawPositionMarker(drawPositionMarker);
 			}
 		} else {
 			if(axisSettings != null) {
@@ -270,6 +276,8 @@ public class ChromatogramChart extends LineChart {
 				axisSettings.setTitleFont(titleFont);
 				axisSettings.setVisible(false);
 				axisSettings.setTitleVisible(isShowAxisTitle);
+				axisSettings.setDrawAxisLine(drawAxisLine);
+				axisSettings.setDrawPositionMarker(drawPositionMarker);
 			}
 		}
 		/*

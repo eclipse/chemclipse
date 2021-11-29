@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -45,6 +45,8 @@ public class ChromatogramAxisMinutes extends FieldEditorPreferencePage implement
 		addField(new ComboFieldEditor(PreferenceConstants.P_GRIDLINE_STYLE_X_AXIS_MINUTES, "GridLine Style:", PreferenceConstants.LINE_STYLES, getFieldEditorParent()));
 		addField(new ColorFieldEditor(PreferenceConstants.P_GRIDLINE_COLOR_X_AXIS_MINUTES, "GridLine Color:", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_TITLE_MINUTES, "Show Axis Title", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_LINE_MINUTES, "Show Axis Line", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_POSITION_MARKER_MINUTES, "Show Axis Position Marker", getFieldEditorParent()));
 	}
 
 	@Override

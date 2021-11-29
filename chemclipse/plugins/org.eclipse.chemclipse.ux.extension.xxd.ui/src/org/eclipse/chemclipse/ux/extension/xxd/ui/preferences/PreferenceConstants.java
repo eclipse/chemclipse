@@ -592,6 +592,10 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_GRIDLINE_COLOR_X_AXIS_MINUTES = "192,192,192";
 	public static final String P_SHOW_X_AXIS_TITLE_MINUTES = "showXAxisTitleMinutes";
 	public static final boolean DEF_SHOW_X_AXIS_TITLE_MINUTES = true;
+	public static final String P_SHOW_X_AXIS_LINE_MINUTES = "showXAxisLineMinutes";
+	public static final boolean DEF_SHOW_X_AXIS_LINE_MINUTES = true;
+	public static final String P_SHOW_X_AXIS_POSITION_MARKER_MINUTES = "showXAxisPositionMarkerMinutes";
+	public static final boolean DEF_SHOW_X_AXIS_POSITION_MARKER_MINUTES = true;
 	//
 	public static final String P_TITLE_X_AXIS_SCANS = "titleXAxisScans";
 	public static final String DEF_TITLE_X_AXIS_SCANS = "Scan";
