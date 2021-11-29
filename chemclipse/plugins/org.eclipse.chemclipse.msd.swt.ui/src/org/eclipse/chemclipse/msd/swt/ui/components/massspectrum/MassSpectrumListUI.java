@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -77,7 +77,7 @@ public class MassSpectrumListUI extends ExtendedTableViewer {
 			REFERENCE_IDENTIFIER, //
 			COMMENTS//
 	};
-	private int bounds[] = {//
+	private int[] bounds = {//
 			300, //
 			100, //
 			100, //
@@ -140,10 +140,12 @@ public class MassSpectrumListUI extends ExtendedTableViewer {
 	}
 
 	public MassSpectrumListUI(Composite parent) {
+
 		this(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.VIRTUAL);
 	}
 
 	public MassSpectrumListUI(Composite parent, int style) {
+
 		super(parent, style);
 		createColumns();
 	}
@@ -177,6 +179,7 @@ public class MassSpectrumListUI extends ExtendedTableViewer {
 					} catch(InterruptedException e) {
 						logger.warn(e);
 						setInput(massSpectra);
+						Thread.currentThread().interrupt();
 					}
 				}
 			}
@@ -244,7 +247,7 @@ public class MassSpectrumListUI extends ExtendedTableViewer {
 
 	private void setEditingSupport() {
 
-		Set<String> excludeFromEditing = new HashSet<String>();
+		Set<String> excludeFromEditing = new HashSet<>();
 		excludeFromEditing.add(BASE_PEAK);
 		excludeFromEditing.add(BASE_PEAK_ABUNDANCE);
 		excludeFromEditing.add(NUMBER_OF_IONS);
@@ -262,7 +265,7 @@ public class MassSpectrumListUI extends ExtendedTableViewer {
 
 		if(massSpectra != null) {
 			int limitMassiveData = PreferenceSupplier.getLibraryMSDLimitSorting();
-			return (massSpectra.size() > limitMassiveData) ? true : false;
+			return (massSpectra.size() > limitMassiveData);
 		}
 		return false;
 	}

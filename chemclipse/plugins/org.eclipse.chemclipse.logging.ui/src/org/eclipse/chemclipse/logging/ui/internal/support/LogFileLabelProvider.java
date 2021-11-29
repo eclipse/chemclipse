@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2020 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,7 +13,8 @@ package org.eclipse.chemclipse.logging.ui.internal.support;
 
 import java.io.File;
 
-import org.eclipse.chemclipse.logging.ui.Activator;
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -44,8 +45,9 @@ public class LogFileLabelProvider extends LabelProvider implements ITableLabelPr
 	/**
 	 * Return the image.
 	 */
+	@Override
 	public Image getImage(Object element) {
 
-		return Activator.getDefault().getImage(Activator.ICON_LOG);
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_LOG, IApplicationImage.SIZE_16x16);
 	}
 }

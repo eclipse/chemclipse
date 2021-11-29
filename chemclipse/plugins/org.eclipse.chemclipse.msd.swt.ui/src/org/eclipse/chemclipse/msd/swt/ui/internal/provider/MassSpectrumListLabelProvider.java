@@ -68,8 +68,7 @@ public class MassSpectrumListLabelProvider extends AbstractChemClipseLabelProvid
 	@Override
 	public Image getImage(Object element) {
 
-		Image image = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_MASS_SPECTRUM, IApplicationImage.SIZE_16x16);
-		return image;
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_MASS_SPECTRUM, IApplicationImage.SIZE_16x16);
 	}
 
 	private String getText(IScanMSD massSpectrum, ILibraryInformation libraryInformation, int columnIndex) {

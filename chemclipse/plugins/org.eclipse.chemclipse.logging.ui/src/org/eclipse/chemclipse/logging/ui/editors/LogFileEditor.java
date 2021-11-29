@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,11 +16,14 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.logging.ui.swt.LogTableUI;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
@@ -32,7 +35,6 @@ import org.eclipse.e4.ui.workbench.modeling.EModelService;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
 
 public class LogFileEditor {
 
@@ -43,7 +45,7 @@ public class LogFileEditor {
 	private static final Logger logger = Logger.getLogger(LogFileEditor.class);
 	private MDirtyable dirtyable;
 	private File file;
-	private Text textEditor;
+	private LogTableUI logTableUI;
 	@Inject
 	private MApplication application;
 	@Inject
@@ -52,21 +54,22 @@ public class LogFileEditor {
 
 	@Inject
 	public LogFileEditor(Composite parent, MPart part, final MDirtyable dirtyable) {
+
 		this.dirtyable = dirtyable;
 		parent.setLayout(new FillLayout());
 		this.inputPart = part;
 		/*
 		 * Set the text editor content.
 		 */
-		textEditor = new Text(parent, SWT.WRAP | SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+		logTableUI = new LogTableUI(parent, SWT.NONE);
+		logTableUI.setLayout(new FillLayout());
 		try {
 			Object object = part.getObject();
 			if(object instanceof String) {
 				file = new File((String)object);
-				String text = getInputFileContent();
-				textEditor.setText(text);
+				logTableUI.setContent(getInputFileContent());
 			}
-		} catch(Exception e) {
+		} catch(IOException e) {
 			logger.warn(e);
 		}
 	}
@@ -74,7 +77,7 @@ public class LogFileEditor {
 	@Focus
 	public void setFocus() {
 
-		textEditor.setFocus();
+		logTableUI.setFocus();
 	}
 
 	@PreDestroy
@@ -94,31 +97,30 @@ public class LogFileEditor {
 	@Persist
 	public void save() {
 
-		try {
-			FileWriter fileWriter = new FileWriter(file);
-			fileWriter.write(textEditor.getText());
+		try (FileWriter fileWriter = new FileWriter(file)) {
+			StringBuilder builder = new StringBuilder();
+			for(String line : getInputFileContent()) {
+				builder.append(line);
+			}
+			fileWriter.write(builder.toString());
 			fileWriter.flush();
-			fileWriter.close();
 			dirtyable.setDirty(false);
 		} catch(IOException e) {
 			logger.warn(e);
 		}
 	}
 
-	private String getInputFileContent() throws Exception {
+	private List<String> getInputFileContent() throws IOException {
 
-		String text = "";
+		List<String> lines = new ArrayList<>();
 		if(file != null) {
-			BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-			//
-			StringBuilder builder = new StringBuilder();
-			String line;
-			while((line = bufferedReader.readLine()) != null) {
-				builder.append(line);
+			try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+				String line;
+				while((line = bufferedReader.readLine()) != null) {
+					lines.add(line);
+				}
 			}
-			bufferedReader.close();
-			text = builder.toString();
 		}
-		return text;
+		return lines;
 	}
 }
