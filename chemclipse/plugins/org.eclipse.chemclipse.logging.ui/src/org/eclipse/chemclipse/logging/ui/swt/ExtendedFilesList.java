@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,11 +14,12 @@ package org.eclipse.chemclipse.logging.ui.swt;
 import java.io.File;
 
 import org.eclipse.chemclipse.logging.support.PropertiesUtil;
-import org.eclipse.chemclipse.logging.ui.Activator;
 import org.eclipse.chemclipse.logging.ui.editors.LogFileEditor;
 import org.eclipse.chemclipse.logging.ui.internal.support.LogFileContentProvider;
 import org.eclipse.chemclipse.logging.ui.internal.support.LogFileLabelProvider;
 import org.eclipse.chemclipse.logging.ui.support.FilesSupport;
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.e4.ui.model.application.MApplication;
 import org.eclipse.e4.ui.model.application.ui.basic.MBasicFactory;
@@ -121,7 +122,7 @@ public class ExtendedFilesList extends Composite {
 		Button button = new Button(parent, SWT.NONE);
 		button.setText("");
 		button.setToolTipText("Delete selected log files.");
-		button.setImage(Activator.getDefault().getImage(Activator.ICON_DELETE));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
 		//
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -140,7 +141,7 @@ public class ExtendedFilesList extends Composite {
 		Button button = new Button(parent, SWT.NONE);
 		button.setText("");
 		button.setToolTipText("Delete all log files.");
-		button.setImage(Activator.getDefault().getImage(Activator.ICON_DELETE_ALL));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImage.SIZE_16x16));
 		//
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -159,7 +160,7 @@ public class ExtendedFilesList extends Composite {
 		Button button = new Button(parent, SWT.NONE);
 		button.setText("");
 		button.setToolTipText("Reload all files of the directory.");
-		button.setImage(Activator.getDefault().getImage(Activator.ICON_RESET));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
 		//
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -178,7 +179,7 @@ public class ExtendedFilesList extends Composite {
 		Button button = new Button(parent, SWT.NONE);
 		button.setText("");
 		button.setToolTipText("Open the log directory with the system file explorer.");
-		button.setImage(Activator.getDefault().getImage(Activator.ICON_FOLDER_OPENED));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_FOLDER_OPENED, IApplicationImage.SIZE_16x16));
 		//
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -209,7 +210,7 @@ public class ExtendedFilesList extends Composite {
 			public void doubleClick(DoubleClickEvent event) {
 
 				Object data = getSelectedObject();
-				if(data != null && data instanceof File) {
+				if(data instanceof File) {
 					File file = (File)data;
 					if(modelService != null && partService != null && application != null) {
 						/*

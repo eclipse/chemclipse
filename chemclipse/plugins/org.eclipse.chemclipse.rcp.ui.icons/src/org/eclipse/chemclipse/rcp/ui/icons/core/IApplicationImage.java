@@ -114,8 +114,10 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_PEAK_ADD = PATH_PREFIX + "peakAdd.gif";
 	String IMAGE_PEAK_REPLACE = PATH_PREFIX + "peakReplace.gif";
 	String IMAGE_PEAKS = PATH_PREFIX + "peaks.gif";
+	String IMAGE_ERROR = PATH_PREFIX + "error.gif";
 	String IMAGE_WARN = PATH_PREFIX + "warn.gif";
 	String IMAGE_INFO = PATH_PREFIX + "info.gif";
+	String IMAGE_VALID = PATH_PREFIX + "valid.gif";
 	String IMAGE_QUESTION = PATH_PREFIX + "question.gif";
 	String IMAGE_MASS_SPECTRUM = PATH_PREFIX + "massSpectrum.gif";
 	String IMAGE_MASS_SPECTRUM_FILE = PATH_PREFIX + "massSpectrumFile.gif";
@@ -131,7 +133,6 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_SAVEALL = PATH_PREFIX + "saveall.gif";
 	String IMAGE_SAVEALL_DISABLED = PATH_PREFIX + "saveall_disabled.gif";
 	String IMAGE_VIEW = PATH_PREFIX + "view.gif";
-	String IMAGE_ERROR = PATH_PREFIX + "error.gif";
 	String IMAGE_UNKNOWN = PATH_PREFIX + "unknown.gif";
 	String IMAGE_LOG = PATH_PREFIX + "log.gif";
 	String IMAGE_ION = PATH_PREFIX + "ion.gif";
