@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Matthias Mailänder - add a description field for the regular expression
  *******************************************************************************/
 package org.eclipse.chemclipse.support.settings.validation;
 
@@ -21,11 +22,14 @@ public class RegularExpressionValidator implements IValidator {
 
 	private String fieldName;
 	private Pattern regExp;
+	private String description;
 	private boolean multiline;
 
-	public RegularExpressionValidator(String fieldName, Pattern regExp, boolean multiline) {
+	public RegularExpressionValidator(String fieldName, Pattern regExp, String description, boolean multiline) {
+
 		this.fieldName = fieldName;
 		this.regExp = regExp;
+		this.description = description;
 		this.multiline = multiline;
 	}
 
@@ -44,7 +48,7 @@ public class RegularExpressionValidator implements IValidator {
 					n++;
 				}
 			} else if(!regExp.matcher(string).matches()) {
-				return ValidationStatus.error(fieldName + " must match " + regExp.pattern());
+				return ValidationStatus.error(fieldName + " " + description);
 			}
 			return ValidationStatus.ok();
 		}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2020 Lablicate GmbH.
+ * Copyright (c) 2010, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -24,11 +24,11 @@ public class FilterSettings extends AbstractChromatogramFilterSettings {
 
 	@JsonProperty(value = "Ions To Remove", defaultValue = "18 28 84 207")
 	@JsonPropertyDescription(value = "List the ions to remove, separated by a white space.")
-	@StringSettingsProperty(regExp = "(^$|((\\d+[;|\\s]?)+))", isMultiLine = false)
+	@StringSettingsProperty(regExp = "(^$|((\\d+[;|\\s]?)+))", description = "must be space separated digits.", isMultiLine = false)
 	private String ionsToRemove = "18;28;84;207";
 	@JsonProperty(value = "Ions To Preserve", defaultValue = "103 104")
 	@JsonPropertyDescription(value = "List the ions to preserve, separated by a white space.")
-	@StringSettingsProperty(regExp = "(^$|((\\d+[;|\\s]?)+))", isMultiLine = false)
+	@StringSettingsProperty(regExp = "(^$|((\\d+[;|\\s]?)+))", description = "must be space separated digits.", isMultiLine = false)
 	private String ionsToPreserve = "103;104";
 	@JsonProperty(value = "Adjust Threshold Transitions", defaultValue = "true")
 	@JsonPropertyDescription(value = "Adjust zero threshold transitions.")

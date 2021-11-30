@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -21,7 +21,7 @@ public class ChromatogramIntegrationSettings extends AbstractChromatogramIntegra
 
 	@JsonProperty(value = "Ions To Integrate", defaultValue = "")
 	@JsonPropertyDescription(value = "List the ions to integrate, separated by a semicolon. Empty means TIC.")
-	@StringSettingsProperty(regExp = "(^$|((\\d+;?)+))", isMultiLine = false)
+	@StringSettingsProperty(regExp = "(^$|((\\d+;?)+))", description = "must be space separated digits.", isMultiLine = false)
 	private String selectedIons = "";
 
 	public String getSelectedIons() {

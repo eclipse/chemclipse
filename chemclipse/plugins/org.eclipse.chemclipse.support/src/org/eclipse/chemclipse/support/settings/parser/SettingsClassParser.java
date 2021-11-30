@@ -126,7 +126,7 @@ public class SettingsClassParser<SettingType> implements SettingsParser<SettingT
 								StringSettingsProperty settingsProperty = (StringSettingsProperty)annotation;
 								String regExp = settingsProperty.regExp();
 								if(regExp != null && !regExp.isEmpty()) {
-									inputValue.addValidator(new RegularExpressionValidator(property.getName(), Pattern.compile(regExp), settingsProperty.isMultiLine()));
+									inputValue.addValidator(new RegularExpressionValidator(property.getName(), Pattern.compile(regExp), settingsProperty.description(), settingsProperty.isMultiLine()));
 								}
 								inputValue.setMultiLine(settingsProperty.isMultiLine());
 							} else if(annotation instanceof FileSettingProperty) {

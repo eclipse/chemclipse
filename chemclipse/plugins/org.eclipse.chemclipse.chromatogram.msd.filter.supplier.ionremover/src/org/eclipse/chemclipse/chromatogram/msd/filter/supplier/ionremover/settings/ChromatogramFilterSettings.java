@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -21,7 +21,7 @@ public class ChromatogramFilterSettings extends AbstractChromatogramFilterSettin
 
 	@JsonProperty(value = "Ions To Remove", defaultValue = "18 28 84 207")
 	@JsonPropertyDescription(value = "List the ions to remove, separated by a white space.")
-	@StringSettingsProperty(regExp = "(\\d+[;|\\s]?)+", isMultiLine = false)
+	@StringSettingsProperty(regExp = "(\\d+[;|\\s]?)+", description = "must be space separated digits.", isMultiLine = false)
 	private String ionsToRemove = "18 28 84 207";
 
 	public String getIonsToRemove() {
