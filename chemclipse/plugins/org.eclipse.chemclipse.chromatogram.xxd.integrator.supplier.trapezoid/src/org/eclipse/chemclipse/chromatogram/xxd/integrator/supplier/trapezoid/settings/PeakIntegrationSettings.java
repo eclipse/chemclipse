@@ -29,7 +29,7 @@ public class PeakIntegrationSettings extends AbstractPeakIntegrationSettings {
 	//
 	@JsonProperty(value = "Ions to integrate", defaultValue = TIC)
 	@JsonPropertyDescription(value = "List the ions to integrate, separated by a white space. 0 = TIC")
-	@StringSettingsProperty(regExp = "(\\d+[;|\\s]?)+", isMultiLine = false)
+	@StringSettingsProperty(regExp = "(\\d+[;|\\s]?)+", description = "must be space separated digits.", isMultiLine = false)
 	private String ionsToIntegrate = TIC;
 	/*
 	 * The selected ions are handled separately.
