@@ -38,19 +38,21 @@ public class RegularExpressionValidator implements IValidator {
 
 		if(value instanceof String) {
 			String string = (String)value;
-			if(multiline) {
-				String[] lines = string.split("[\r\n]+");
-				int n = 1;
-				for(String line : lines) {
-					if(!regExp.matcher(line).matches()) {
-						return ValidationStatus.error("Line #" + n + " of " + fieldName + " is not formatted correctly.");
+			if(!string.isEmpty()) {
+				if(multiline) {
+					String[] lines = string.split("[\r\n]+");
+					int n = 1;
+					for(String line : lines) {
+						if(!regExp.matcher(line).matches()) {
+							return ValidationStatus.error("Line #" + n + " of " + fieldName + " is not formatted correctly.");
+						}
+						n++;
 					}
-					n++;
+				} else if(!regExp.matcher(string).matches()) {
+					return ValidationStatus.error(fieldName + " " + description);
 				}
-			} else if(!regExp.matcher(string).matches()) {
-				return ValidationStatus.error(fieldName + " " + description);
+				return ValidationStatus.ok();
 			}
-			return ValidationStatus.ok();
 		}
 		return ValidationStatus.error("A value is required for " + fieldName);
 	}
