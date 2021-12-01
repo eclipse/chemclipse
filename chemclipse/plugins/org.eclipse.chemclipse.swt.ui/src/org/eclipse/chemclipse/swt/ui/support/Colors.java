@@ -20,6 +20,7 @@ import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
+import org.eclipse.swt.graphics.RGBA;
 import org.eclipse.swt.widgets.Display;
 
 public class Colors {
@@ -181,6 +182,12 @@ public class Colors {
 	public static Color getColor(RGB rgb) {
 
 		return getColor(rgb, ALPHA_OPAQUE);
+	}
+
+	public static Color getColor(RGBA rgba) {
+
+		RGB rgb = rgba.rgb;
+		return getColor(rgb, rgba.alpha);
 	}
 
 	public static Color getColor(RGB rgb, int alpha) {
