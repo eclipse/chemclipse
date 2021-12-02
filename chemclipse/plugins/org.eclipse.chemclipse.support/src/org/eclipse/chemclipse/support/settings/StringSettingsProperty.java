@@ -32,4 +32,6 @@ public @interface StringSettingsProperty {
 	String description() default "must match the pattern.";
 
 	boolean isMultiLine() default false;
+
+	boolean allowEmpty() default true;
 }

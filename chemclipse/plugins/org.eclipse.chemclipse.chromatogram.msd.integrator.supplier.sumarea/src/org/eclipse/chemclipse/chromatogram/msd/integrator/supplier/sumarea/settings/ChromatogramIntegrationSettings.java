@@ -21,7 +21,7 @@ public class ChromatogramIntegrationSettings extends AbstractChromatogramIntegra
 
 	@JsonProperty(value = "Ions To Integrate", defaultValue = "")
 	@JsonPropertyDescription(value = "List the ions to integrate, separated by a semicolon. Empty means TIC.")
-	@StringSettingsProperty(regExp = "(^$|((\\d+;?)+))", description = "must be space separated digits.", isMultiLine = false)
+	@StringSettingsProperty(regExp = "(^$|((\\d+;?)+))", description = "must be semicolon separated digits.", isMultiLine = false, allowEmpty = true)
 	private String selectedIons = "";
 
 	public String getSelectedIons() {
