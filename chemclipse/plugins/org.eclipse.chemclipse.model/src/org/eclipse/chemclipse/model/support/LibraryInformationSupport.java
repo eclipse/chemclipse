@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,7 +17,7 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 
 public class LibraryInformationSupport {
 
-	public boolean matchSearchText(ILibraryInformation libraryInformation, String searchText, boolean caseSensitive) {
+	public boolean containsSearchText(ILibraryInformation libraryInformation, String searchText, boolean caseSensitive) {
 
 		if(libraryInformation == null || searchText == null) {
 			return false;
@@ -43,43 +43,43 @@ public class LibraryInformationSupport {
 			/*
 			 * Name
 			 */
-			if(name.matches(searchText)) {
+			if(name.contains(searchText)) {
 				return true;
 			}
 			/*
 			 * Reference Identifier
 			 */
-			if(referenceIdentifier.matches(searchText)) {
+			if(referenceIdentifier.contains(searchText)) {
 				return true;
 			}
 			/*
 			 * Formula
 			 */
-			if(formula.matches(searchText)) {
+			if(formula.contains(searchText)) {
 				return true;
 			}
 			/*
 			 * SMILES
 			 */
-			if(smiles.matches(searchText)) {
+			if(smiles.contains(searchText)) {
 				return true;
 			}
 			/*
 			 * InChI
 			 */
-			if(inchi.matches(searchText)) {
+			if(inchi.contains(searchText)) {
 				return true;
 			}
 			/*
 			 * CAS
 			 */
-			if(casNumber.matches(searchText)) {
+			if(casNumber.contains(searchText)) {
 				return true;
 			}
 			/*
 			 * Comments
 			 */
-			if(comments.matches(searchText)) {
+			if(comments.contains(searchText)) {
 				return true;
 			}
 			/*
@@ -96,7 +96,7 @@ public class LibraryInformationSupport {
 				/*
 				 * Search
 				 */
-				if(synonym.matches(searchText)) {
+				if(synonym.contains(searchText)) {
 					return true;
 				}
 			}

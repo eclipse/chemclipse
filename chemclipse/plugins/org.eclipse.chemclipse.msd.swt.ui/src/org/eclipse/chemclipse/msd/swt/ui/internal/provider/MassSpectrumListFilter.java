@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,12 +26,13 @@ public class MassSpectrumListFilter extends ViewerFilter {
 	private LibraryInformationSupport libraryInformationSupport;
 
 	public MassSpectrumListFilter() {
+
 		libraryInformationSupport = new LibraryInformationSupport();
 	}
 
 	public void setSearchText(String searchText, boolean caseSensitive) {
 
-		this.searchText = ".*" + searchText + ".*";
+		this.searchText = searchText;
 		this.caseSensitive = caseSensitive;
 	}
 
@@ -56,7 +57,7 @@ public class MassSpectrumListFilter extends ViewerFilter {
 			//
 			ILibraryMassSpectrum libraryMassSpectrum = (ILibraryMassSpectrum)element;
 			ILibraryInformation libraryInformation = libraryMassSpectrum.getLibraryInformation();
-			if(libraryInformationSupport.matchSearchText(libraryInformation, searchText, caseSensitive)) {
+			if(libraryInformationSupport.containsSearchText(libraryInformation, searchText, caseSensitive)) {
 				return true;
 			}
 		} else if(element instanceof IScanMSD) {
@@ -65,7 +66,7 @@ public class MassSpectrumListFilter extends ViewerFilter {
 			for(IIdentificationTarget massSpectrumTarget : massSpectrum.getTargets()) {
 				IIdentificationTarget identificationEntry = (IIdentificationTarget)massSpectrumTarget;
 				ILibraryInformation libraryInformation = identificationEntry.getLibraryInformation();
-				if(libraryInformationSupport.matchSearchText(libraryInformation, searchText, caseSensitive)) {
+				if(libraryInformationSupport.containsSearchText(libraryInformation, searchText, caseSensitive)) {
 					return true;
 				}
 			}

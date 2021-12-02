@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,7 +30,7 @@ public class PeakScanListFilter extends ViewerFilter {
 
 	public void setSearchText(String searchText, boolean caseSensitive) {
 
-		this.searchText = ".*" + searchText + ".*";
+		this.searchText = searchText;
 		this.caseSensitive = caseSensitive;
 	}
 
@@ -62,7 +62,7 @@ public class PeakScanListFilter extends ViewerFilter {
 			for(ITarget target : peak.getTargets()) {
 				if(target instanceof IIdentificationTarget) {
 					IIdentificationTarget identificationTarget = (IIdentificationTarget)target;
-					if(libraryInformationSupport.matchSearchText(identificationTarget.getLibraryInformation(), searchText, caseSensitive)) {
+					if(libraryInformationSupport.containsSearchText(identificationTarget.getLibraryInformation(), searchText, caseSensitive)) {
 						return true;
 					}
 				}
@@ -74,7 +74,7 @@ public class PeakScanListFilter extends ViewerFilter {
 	private boolean matchScan(IScan scan) {
 
 		for(IIdentificationTarget target : scan.getTargets()) {
-			if(libraryInformationSupport.matchSearchText(target.getLibraryInformation(), searchText, caseSensitive)) {
+			if(libraryInformationSupport.containsSearchText(target.getLibraryInformation(), searchText, caseSensitive)) {
 				return true;
 			}
 		}
@@ -85,7 +85,7 @@ public class PeakScanListFilter extends ViewerFilter {
 
 		boolean isMatch = false;
 		//
-		Collection<String> classifier = peak.getClassifier();
+		Collection<String> classifiers = peak.getClassifier();
 		String detectorDescription = peak.getDetectorDescription();
 		String modelDescription = peak.getModelDescription();
 		String quantifierDescription = peak.getQuantifierDescription();
@@ -97,40 +97,40 @@ public class PeakScanListFilter extends ViewerFilter {
 			quantifierDescription = quantifierDescription.toLowerCase();
 		}
 		//
-		if(!isMatch && matchText(classifier, searchText, caseSensitive)) {
+		if(!isMatch && containsText(classifiers, searchText, caseSensitive)) {
 			isMatch = true;
 		}
 		//
-		if(!isMatch && detectorDescription.matches(searchText)) {
+		if(!isMatch && detectorDescription.contains(searchText)) {
 			isMatch = true;
 		}
 		//
-		if(!isMatch && modelDescription.matches(searchText)) {
+		if(!isMatch && modelDescription.contains(searchText)) {
 			isMatch = true;
 		}
 		//
-		if(!isMatch && quantifierDescription.matches(searchText)) {
+		if(!isMatch && quantifierDescription.contains(searchText)) {
 			isMatch = true;
 		}
 		//
 		return isMatch;
 	}
 
-	private static boolean matchText(Collection<String> classifier, String searchText, boolean caseSensitive) {
+	private static boolean containsText(Collection<String> classifiers, String searchText, boolean caseSensitive) {
 
-		for(String c : classifier) {
+		for(String classifier : classifiers) {
 			if(!caseSensitive) {
-				c = c.toLowerCase();
+				classifier = classifier.toLowerCase();
 			}
-			if(matchText(c, searchText)) {
+			if(containsText(classifier, searchText)) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	private static boolean matchText(String text, String searchText) {
+	private static boolean containsText(String text, String searchText) {
 
-		return text.matches(searchText);
+		return text.contains(searchText);
 	}
 }

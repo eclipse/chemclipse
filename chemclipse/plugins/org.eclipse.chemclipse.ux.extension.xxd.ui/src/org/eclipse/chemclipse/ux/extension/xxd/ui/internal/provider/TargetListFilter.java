@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,18 +19,17 @@ import org.eclipse.jface.viewers.ViewerFilter;
 public class TargetListFilter extends ViewerFilter {
 
 	private String searchText;
-	private String searchTextExtended;
 	private boolean caseSensitive;
 	private LibraryInformationSupport libraryInformationSupport;
 
 	public TargetListFilter() {
+
 		libraryInformationSupport = new LibraryInformationSupport();
 	}
 
 	public void setSearchText(String searchText, boolean caseSensitive) {
 
 		this.searchText = searchText;
-		this.searchTextExtended = ".*" + searchText + ".*";
 		this.caseSensitive = caseSensitive;
 	}
 
@@ -46,7 +45,7 @@ public class TargetListFilter extends ViewerFilter {
 		//
 		if(element instanceof IIdentificationTarget) {
 			IIdentificationTarget target = (IIdentificationTarget)element;
-			return libraryInformationSupport.matchSearchText(target.getLibraryInformation(), searchTextExtended, caseSensitive);
+			return libraryInformationSupport.containsSearchText(target.getLibraryInformation(), searchText, caseSensitive);
 		}
 		//
 		return false;
