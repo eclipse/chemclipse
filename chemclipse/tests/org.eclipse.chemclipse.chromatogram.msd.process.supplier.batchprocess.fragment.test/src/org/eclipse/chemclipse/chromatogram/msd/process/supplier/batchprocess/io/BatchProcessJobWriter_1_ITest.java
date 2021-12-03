@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
+ * Copyright (c) 2010, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -41,7 +41,6 @@ public class BatchProcessJobWriter_1_ITest extends TestCase {
 		writer = new JobWriter();
 		batchProcessJob = new BatchProcessJob();
 		String inputChromatogram = TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_TEST);
-		String outputChromatogram = TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_EXPORT_TEST);
 		/*
 		 * Input
 		 */

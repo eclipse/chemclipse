@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.csd.filter.core.chromatogram;
 
+import org.eclipse.chemclipse.chromatogram.filter.result.IChromatogramFilterResult;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -24,9 +25,9 @@ public abstract class AbstractChromatogramFilterCSD implements IChromatogramFilt
 	private static final String DESCRIPTION = "Chromatogram Filter";
 
 	@Override
-	public IProcessingInfo<?> validate(IChromatogramSelectionCSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings) {
+	public IProcessingInfo<IChromatogramFilterResult> validate(IChromatogramSelectionCSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings) {
 
-		IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+		IProcessingInfo<IChromatogramFilterResult> processingInfo = new ProcessingInfo<>();
 		processingInfo.addMessages(validateChromatogramSelection(chromatogramSelection));
 		processingInfo.addMessages(validateFilterSettings(chromatogramFilterSettings));
 		return processingInfo;
