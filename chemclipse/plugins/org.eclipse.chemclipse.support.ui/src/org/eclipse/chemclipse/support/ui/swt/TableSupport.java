@@ -87,8 +87,10 @@ public class TableSupport {
 
 	private static int[] convertColumnInfo(String columnInfo) {
 
-		if(columnInfo.isEmpty())
+		if(columnInfo.isEmpty()) {
 			return new int[0];
+		}
+		//
 		String[] values = columnInfo.split(VALUE_DELIMITER);
 		int size = values.length;
 		int[] columns = new int[size];
