@@ -24,13 +24,15 @@ public class RegularExpressionValidator implements IValidator {
 	private Pattern regExp;
 	private String description;
 	private boolean multiline;
+	private boolean allowEmpty;
 
-	public RegularExpressionValidator(String fieldName, Pattern regExp, String description, boolean multiline) {
+	public RegularExpressionValidator(String fieldName, Pattern regExp, String description, boolean multiline, boolean allowEmpty) {
 
 		this.fieldName = fieldName;
 		this.regExp = regExp;
 		this.description = description;
 		this.multiline = multiline;
+		this.allowEmpty = allowEmpty;
 	}
 
 	@Override
@@ -38,7 +40,7 @@ public class RegularExpressionValidator implements IValidator {
 
 		if(value instanceof String) {
 			String string = (String)value;
-			if(!string.isEmpty()) {
+			if(!string.isEmpty() || allowEmpty) {
 				if(multiline) {
 					String[] lines = string.split("[\r\n]+");
 					int n = 1;

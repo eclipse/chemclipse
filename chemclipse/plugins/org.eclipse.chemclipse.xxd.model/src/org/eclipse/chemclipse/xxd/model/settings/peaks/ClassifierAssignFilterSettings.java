@@ -32,11 +32,11 @@ public class ClassifierAssignFilterSettings {
 	private boolean matchPartly = true;
 	@JsonProperty(value = "Match Expression(s)", defaultValue = "")
 	@JsonPropertyDescription(value = "List the identification target names to search for.")
-	@StringSettingsProperty(regExp = REGULAR_EXPRESSION, isMultiLine = true)
+	@StringSettingsProperty(regExp = REGULAR_EXPRESSION, isMultiLine = true, allowEmpty = true)
 	private String matchExpressions = "";
 	@JsonProperty(value = "Match Classification(s)", defaultValue = "")
 	@JsonPropertyDescription(value = "If the identification target name is matched, set the classifier.")
-	@StringSettingsProperty(regExp = REGULAR_EXPRESSION, isMultiLine = true)
+	@StringSettingsProperty(regExp = REGULAR_EXPRESSION, isMultiLine = true, allowEmpty = true)
 	private String matchClassifications = "";
 
 	public boolean isUseRegularExpression() {
