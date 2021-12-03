@@ -17,6 +17,8 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -73,10 +75,22 @@ public class MassSpectrumExtendedWriter implements IMassSpectraWriter {
 	private void writeMassSpectrumToCsv(IMassSpectra massSpectra, FileWriter fileWriter) throws IOException {
 
 		if(massSpectra != null) {
-			CSVPrinter csvFilePrinter = null;
-			try {
-				csvFilePrinter = new CSVPrinter(fileWriter, CSVFormat.EXCEL);
-				csvFilePrinter.printRecord("Retention Time", "Retention Index", "Base Peak", "Base Peak Abundance", "Number of Ions", "Name", "CAS", "MW", "Formula", "Reference Identifier");
+			try (CSVPrinter csvFilePrinter = new CSVPrinter(fileWriter, CSVFormat.EXCEL);) {
+				/*
+				 * Header
+				 */
+				List<String> header = new ArrayList<>();
+				header.add("Retention Time");
+				header.add("Retention Index");
+				header.add("Base Peak");
+				header.add("Base Peak Abundance");
+				header.add("Number of Ions");
+				header.add("Name");
+				header.add("CAS");
+				header.add("MW");
+				header.add("Formula");
+				header.add("Reference Identifier");
+				csvFilePrinter.printRecord(header.toArray());
 				//
 				for(IScanMSD massSpectrum : massSpectra.getList()) {
 					/*
@@ -121,12 +135,24 @@ public class MassSpectrumExtendedWriter implements IMassSpectraWriter {
 					String formula = (libraryInformation != null) ? libraryInformation.getFormula() : "";
 					String referenceIdentifier = (libraryInformation != null) ? libraryInformation.getReferenceIdentifier() : "";
 					//
-					csvFilePrinter.printRecord(retentionTime, retentionIndex, retentionIndex, basePeak, basePeakAbundance, numberOfIons, name, cas, mw, formula, referenceIdentifier);
+					List<String> data = new ArrayList<>();
+					data.add(retentionTime);
+					data.add(retentionIndex);
+					data.add(basePeak);
+					data.add(basePeakAbundance);
+					data.add(numberOfIons);
+					data.add(name);
+					data.add(cas);
+					data.add(mw);
+					data.add(formula);
+					data.add(referenceIdentifier);
+					csvFilePrinter.printRecord(data.toArray());
 				}
+				csvFilePrinter.flush();
 			} finally {
-				if(csvFilePrinter != null) {
-					csvFilePrinter.close();
-				}
+				/*
+				 * Auto-Closable is used.
+				 */
 			}
 		}
 	}
