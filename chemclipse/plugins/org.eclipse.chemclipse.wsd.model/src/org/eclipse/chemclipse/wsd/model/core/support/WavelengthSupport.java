@@ -23,7 +23,12 @@ public class WavelengthSupport {
 
 	public static String extractTracesText(IScanWSD scanWSD, int maxCopyTraces) {
 
-		List<Integer> traces = extractTracesList(scanWSD, maxCopyTraces);
+		return extractTracesText(scanWSD, maxCopyTraces, true);
+	}
+
+	public static String extractTracesText(IScanWSD scanWSD, int maxCopyTraces, boolean sortTraces) {
+
+		List<Integer> traces = extractTracesList(scanWSD, maxCopyTraces, sortTraces);
 		Iterator<Integer> iterator = traces.iterator();
 		StringBuilder builder = new StringBuilder();
 		//
@@ -37,7 +42,7 @@ public class WavelengthSupport {
 		return builder.toString();
 	}
 
-	public static List<Integer> extractTracesList(IScanWSD scanWSD, int maxCopyTraces) {
+	public static List<Integer> extractTracesList(IScanWSD scanWSD, int maxCopyTraces, boolean sortTraces) {
 
 		List<Integer> traces = new ArrayList<>();
 		if(scanWSD != null) {
@@ -60,9 +65,12 @@ public class WavelengthSupport {
 			}
 		}
 		/*
-		 * Sort the traces ascending.
+		 * Sort the traces ascending on demand.
 		 */
-		Collections.sort(traces);
+		if(sortTraces) {
+			Collections.sort(traces);
+		}
+		//
 		return traces;
 	}
 }

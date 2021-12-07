@@ -49,7 +49,12 @@ public class ScanSupport {
 
 	public static String extractTracesText(IScanMSD scanMSD, int maxCopyTraces) {
 
-		List<Integer> traces = extractTracesList(scanMSD, maxCopyTraces);
+		return extractTracesText(scanMSD, maxCopyTraces, true);
+	}
+
+	public static String extractTracesText(IScanMSD scanMSD, int maxCopyTraces, boolean sortTraces) {
+
+		List<Integer> traces = extractTracesList(scanMSD, maxCopyTraces, sortTraces);
 		Iterator<Integer> iterator = traces.iterator();
 		StringBuilder builder = new StringBuilder();
 		//
@@ -64,6 +69,11 @@ public class ScanSupport {
 	}
 
 	public static List<Integer> extractTracesList(IScanMSD scanMSD, int maxCopyTraces) {
+
+		return extractTracesList(scanMSD, maxCopyTraces, true);
+	}
+
+	public static List<Integer> extractTracesList(IScanMSD scanMSD, int maxCopyTraces, boolean sortTraces) {
 
 		List<Integer> traces = new ArrayList<>();
 		if(scanMSD != null) {
@@ -87,9 +97,12 @@ public class ScanSupport {
 			}
 		}
 		/*
-		 * Sort the traces ascending.
+		 * Sort the traces ascending on demand.
 		 */
-		Collections.sort(traces);
+		if(sortTraces) {
+			Collections.sort(traces);
+		}
+		//
 		return traces;
 	}
 }
