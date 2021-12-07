@@ -22,6 +22,7 @@ public class PeakQuantitation {
 	private int retentionTime = 0;
 	private double integratedArea = 0;
 	private String name = "";
+	private String casNumber = "";
 	private String classifier = "";
 	private String quantifier = "";
 	private List<Double> concentrations = new ArrayList<Double>();
@@ -59,6 +60,16 @@ public class PeakQuantitation {
 	public void setName(String name) {
 
 		this.name = name;
+	}
+
+	public String getCasNumber() {
+
+		return casNumber;
+	}
+
+	public void setCasNumber(String casNumber) {
+
+		this.casNumber = casNumber;
 	}
 
 	public String getClassifier() {

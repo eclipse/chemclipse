@@ -57,6 +57,7 @@ public class PeakQuantitationsExtractor {
 			 */
 			peakQuantitations.getTitles().add("Time [min]");
 			peakQuantitations.getTitles().add("Name");
+			peakQuantitations.getTitles().add("CAS#");
 			peakQuantitations.getTitles().add("Area");
 			peakQuantitations.getTitles().add("Classifier");
 			peakQuantitations.getTitles().add("Quantifier");
@@ -67,9 +68,11 @@ public class PeakQuantitationsExtractor {
 			 * Add the concentrations.
 			 */
 			for(IPeak peak : peaks) {
+				IIdentificationTarget identificationTarget = getIdentificationTarget(peak);
 				PeakQuantitation peakQuantitation = new PeakQuantitation();
 				peakQuantitation.setRetentionTime(peak.getPeakModel().getRetentionTimeAtPeakMaximum());
-				peakQuantitation.setName(getName(peak));
+				peakQuantitation.setName(getName(identificationTarget));
+				peakQuantitation.setCasNumber(getCasNumber(identificationTarget));
 				peakQuantitation.setIntegratedArea(peak.getIntegratedArea());
 				peakQuantitation.setClassifier(Classifiable.asString(peak));
 				peakQuantitation.setQuantifier(getQuantifier(peak));
@@ -86,18 +89,32 @@ public class PeakQuantitationsExtractor {
 		return peakQuantitations;
 	}
 
-	private String getName(IPeak peak) {
+	private IIdentificationTarget getIdentificationTarget(IPeak peak) {
 
-		String name = "";
 		if(peak != null) {
 			float retentionIndex = peak.getPeakModel().getPeakMaximum().getRetentionIndex();
 			IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
-			IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets(), identificationTargetComparator);
-			if(identificationTarget != null) {
-				name = identificationTarget.getLibraryInformation().getName();
-			}
+			return IIdentificationTarget.getBestIdentificationTarget(peak.getTargets(), identificationTargetComparator);
+		}
+		return null;
+	}
+
+	private String getName(IIdentificationTarget identificationTarget) {
+
+		String name = "";
+		if(identificationTarget != null) {
+			name = identificationTarget.getLibraryInformation().getName();
 		}
 		return name;
+	}
+
+	private String getCasNumber(IIdentificationTarget identificationTarget) {
+
+		String casNumber = "";
+		if(identificationTarget != null) {
+			casNumber = identificationTarget.getLibraryInformation().getCasNumber();
+		}
+		return casNumber;
 	}
 
 	private String getQuantifier(IPeak peak) {
@@ -109,9 +126,9 @@ public class PeakQuantitationsExtractor {
 		return quantifier;
 	}
 
-	private double getConcentration(IPeak peak, String quantitationColumn) {
+	private Double getConcentration(IPeak peak, String quantitationColumn) {
 
-		double concentration = 0.0d;
+		Double concentration = Double.NaN;
 		exitloop:
 		for(IQuantitationEntry quantitationEntry : peak.getQuantitationEntries()) {
 			if(quantitationColumn.equals(getIdentifier(quantitationEntry.getName(), quantitationEntry.getConcentrationUnit()))) {

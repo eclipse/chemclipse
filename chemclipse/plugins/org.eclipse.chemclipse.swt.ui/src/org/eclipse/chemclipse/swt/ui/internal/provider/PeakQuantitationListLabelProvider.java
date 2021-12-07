@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,6 +23,7 @@ import org.eclipse.swt.graphics.Image;
 public class PeakQuantitationListLabelProvider extends AbstractChemClipseLabelProvider {
 
 	public PeakQuantitationListLabelProvider() {
+
 		super("0.0##");
 	}
 
@@ -51,20 +52,24 @@ public class PeakQuantitationListLabelProvider extends AbstractChemClipseLabelPr
 					text = peakQuantitationEntry.getName();
 					break;
 				case 2:
-					text = decimalFormat.format(peakQuantitationEntry.getIntegratedArea());
+					text = peakQuantitationEntry.getCasNumber();
 					break;
 				case 3:
-					text = peakQuantitationEntry.getClassifier();
+					text = decimalFormat.format(peakQuantitationEntry.getIntegratedArea());
 					break;
 				case 4:
+					text = peakQuantitationEntry.getClassifier();
+					break;
+				case 5:
 					text = peakQuantitationEntry.getQuantifier();
 					break;
 				default:
-					int index = columnIndex - 5;
+					int index = columnIndex - 6;
 					if(index < peakQuantitationEntry.getConcentrations().size()) {
-						text = decimalFormat.format(peakQuantitationEntry.getConcentrations().get(index));
-					} else {
-						text = "";
+						Double concentration = peakQuantitationEntry.getConcentrations().get(index);
+						if(!Double.isNaN(concentration)) {
+							text = decimalFormat.format(concentration);
+						}
 					}
 			}
 		}

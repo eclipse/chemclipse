@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -34,12 +34,15 @@ public class PeakQuantitationListTableComparator extends AbstractRecordTableComp
 					sortOrder = peakQuantitation2.getName().compareTo(peakQuantitation1.getName());
 					break;
 				case 2:
-					sortOrder = Double.compare(peakQuantitation2.getIntegratedArea(), peakQuantitation1.getIntegratedArea());
+					sortOrder = peakQuantitation2.getCasNumber().compareTo(peakQuantitation1.getCasNumber());
 					break;
 				case 3:
-					sortOrder = peakQuantitation2.getClassifier().compareTo(peakQuantitation1.getClassifier());
+					sortOrder = Double.compare(peakQuantitation2.getIntegratedArea(), peakQuantitation1.getIntegratedArea());
 					break;
 				case 4:
+					sortOrder = peakQuantitation2.getClassifier().compareTo(peakQuantitation1.getClassifier());
+					break;
+				case 5:
 					sortOrder = peakQuantitation2.getQuantifier().compareTo(peakQuantitation1.getQuantifier());
 					break;
 				default:
