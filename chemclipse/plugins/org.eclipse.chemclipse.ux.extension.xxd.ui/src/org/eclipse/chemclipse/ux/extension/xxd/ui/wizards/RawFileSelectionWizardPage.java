@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2020 Lablicate GmbH.
+ * Copyright (c) 2013, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -50,7 +50,7 @@ public class RawFileSelectionWizardPage extends WizardPage {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new FillLayout());
 		//
-		DataExplorerTreeUI treeUI = new DataExplorerTreeUI(parent, DataExplorerTreeRoot.DRIVES, Collections.singleton(new SupplierFileIdentifier(dataType)));
+		DataExplorerTreeUI treeUI = new DataExplorerTreeUI(composite, DataExplorerTreeRoot.DRIVES, Collections.singleton(new SupplierFileIdentifier(dataType)));
 		treeUI.expandLastDirectoryPath(new ScopedPreferenceStore(InstanceScope.INSTANCE, RawFileSelectionWizardPage.class.getName()));
 		treeViewer = treeUI.getTreeViewer();
 		//
