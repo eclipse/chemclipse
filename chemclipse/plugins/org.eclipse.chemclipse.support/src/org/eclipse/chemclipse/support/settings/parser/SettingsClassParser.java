@@ -25,11 +25,13 @@ import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
+import org.eclipse.chemclipse.support.settings.LongSettingsProperty;
 import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
 import org.eclipse.chemclipse.support.settings.SystemSettings;
 import org.eclipse.chemclipse.support.settings.SystemSettingsStrategy;
 import org.eclipse.chemclipse.support.settings.ValidatorSettingsProperty;
-import org.eclipse.chemclipse.support.settings.validation.EvenOddValidator;
+import org.eclipse.chemclipse.support.settings.validation.EvenOddValidatorInteger;
+import org.eclipse.chemclipse.support.settings.validation.EvenOddValidatorLong;
 import org.eclipse.chemclipse.support.settings.validation.MinMaxValidator;
 import org.eclipse.chemclipse.support.settings.validation.RegularExpressionValidator;
 import org.eclipse.core.databinding.validation.IValidator;
@@ -115,7 +117,11 @@ public class SettingsClassParser<SettingType> implements SettingsParser<SettingT
 							if(annotation instanceof IntSettingsProperty) {
 								IntSettingsProperty settingsProperty = (IntSettingsProperty)annotation;
 								inputValue.addValidator(new MinMaxValidator<Integer>(property.getName(), settingsProperty.minValue(), settingsProperty.maxValue(), Integer.class));
-								inputValue.addValidator(new EvenOddValidator(property.getName(), settingsProperty.validation()));
+								inputValue.addValidator(new EvenOddValidatorInteger(property.getName(), settingsProperty.validation()));
+							} else if(annotation instanceof LongSettingsProperty) {
+								LongSettingsProperty settingsProperty = (LongSettingsProperty)annotation;
+								inputValue.addValidator(new MinMaxValidator<Long>(property.getName(), settingsProperty.minValue(), settingsProperty.maxValue(), Long.class));
+								inputValue.addValidator(new EvenOddValidatorLong(property.getName(), settingsProperty.validation()));
 							} else if(annotation instanceof FloatSettingsProperty) {
 								FloatSettingsProperty settingsProperty = (FloatSettingsProperty)annotation;
 								inputValue.addValidator(new MinMaxValidator<Float>(property.getName(), settingsProperty.minValue(), settingsProperty.maxValue(), Float.class));

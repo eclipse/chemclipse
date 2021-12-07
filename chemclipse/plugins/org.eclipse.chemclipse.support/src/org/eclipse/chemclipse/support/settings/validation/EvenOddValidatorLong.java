@@ -12,17 +12,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.settings.validation;
 
-import org.eclipse.chemclipse.support.settings.IntSettingsProperty.Validation;
+import org.eclipse.chemclipse.support.settings.LongSettingsProperty.Validation;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 
-public class EvenOddValidator implements IValidator {
+public class EvenOddValidatorLong implements IValidator {
 
 	private Validation validation;
 	private String fieldName;
 
-	public EvenOddValidator(String fieldName, Validation validation) {
+	public EvenOddValidatorLong(String fieldName, Validation validation) {
 
 		this.fieldName = fieldName;
 		this.validation = validation;
@@ -32,26 +32,26 @@ public class EvenOddValidator implements IValidator {
 	public IStatus validate(Object value) {
 
 		if(value instanceof Number) {
-			int intValue = ((Number)value).intValue();
+			long longValue = ((Number)value).longValue();
 			if(validation == Validation.ODD_NUMBER_INCLUDING_ZERO) {
-				if(intValue == 0) {
+				if(longValue == 0) {
 					return ValidationStatus.ok();
 				}
-				if(intValue % 2 == 0) {
-					return ValidationStatus.error(fieldName + " must be odd or zero");
+				if(longValue % 2 == 0) {
+					return ValidationStatus.error(fieldName + " must be odd or zero.");
 				}
 			}
 			if(validation == Validation.ODD_NUMBER) {
-				if(intValue % 2 == 0) {
-					return ValidationStatus.error(fieldName + " must be odd");
+				if(longValue % 2 == 0) {
+					return ValidationStatus.error(fieldName + " must be odd.");
 				}
 			} else if(validation == Validation.EVEN_NUMBER) {
-				if(intValue % 2 != 0) {
-					return ValidationStatus.error(fieldName + " must be even");
+				if(longValue % 2 != 0) {
+					return ValidationStatus.error(fieldName + " must be even.");
 				}
 			}
 			return ValidationStatus.ok();
 		}
-		return ValidationStatus.error(fieldName + " must be a number");
+		return ValidationStatus.error(fieldName + " must be a number.");
 	}
 }
