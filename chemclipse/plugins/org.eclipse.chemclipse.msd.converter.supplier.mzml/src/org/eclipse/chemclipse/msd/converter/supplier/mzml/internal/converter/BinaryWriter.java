@@ -19,6 +19,8 @@ import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.util.zip.Deflater;
 
+import javax.xml.bind.DatatypeConverter;
+
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.BinaryDataArrayType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.CVParamType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.preferences.PreferenceSupplier;
@@ -69,16 +71,16 @@ public class BinaryWriter {
 			compresser.finish();
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 			byte[] readBuffer = new byte[1024];
-			int compressedDataLength = 0;
 			while(!compresser.finished()) {
 				int compressCount = compresser.deflate(readBuffer);
 				if(compressCount > 0) {
-					compressedDataLength += compressCount;
 					outputStream.write(readBuffer, 0, compressCount);
 				}
 			}
-			binaryDataArrayType.setEncodedLength(BigInteger.valueOf(compressedDataLength));
-			binaryDataArrayType.setBinary(outputStream.toByteArray());
+			byte[] outputByteArray = outputStream.toByteArray();
+			String characters = DatatypeConverter.printBase64Binary(outputByteArray);
+			binaryDataArrayType.setEncodedLength(BigInteger.valueOf(characters.length()));
+			binaryDataArrayType.setBinary(outputByteArray);
 			compresser.end();
 		} else {
 			binaryDataArrayType.setBinary(byteBuffer.array());
