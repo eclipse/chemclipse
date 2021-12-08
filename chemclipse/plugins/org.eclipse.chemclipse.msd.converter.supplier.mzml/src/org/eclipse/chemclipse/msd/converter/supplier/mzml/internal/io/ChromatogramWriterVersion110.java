@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.io;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -62,6 +63,7 @@ public class ChromatogramWriterVersion110 extends AbstractChromatogramWriter imp
 			RunType run = new RunType();
 			SpectrumListType spectrumList = new SpectrumListType();
 			ChromatogramListType chromatogramList = new ChromatogramListType();
+			chromatogramList.setCount(BigInteger.valueOf(1));
 			//
 			int scans = chromatogram.getNumberOfScans();
 			float[] totalSignals = new float[scans];
