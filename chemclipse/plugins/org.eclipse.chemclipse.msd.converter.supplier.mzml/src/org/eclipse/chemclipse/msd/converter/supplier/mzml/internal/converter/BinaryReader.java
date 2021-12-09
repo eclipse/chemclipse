@@ -40,12 +40,10 @@ public class BinaryReader {
 					compressed = true;
 				}
 			}
-			if(cvParam.getAccession().equals("MS:1000523")) {
-				if(cvParam.getName().equals("32-bit float")) {
-					doublePrecision = false;
-				} else if(cvParam.getName().equals("64-bit float")) {
-					doublePrecision = true;
-				}
+			if(cvParam.getAccession().equals("MS:1000521") && cvParam.getName().equals("32-bit float")) {
+				doublePrecision = false;
+			} else if(cvParam.getAccession().equals("MS:1000523") && cvParam.getName().equals("64-bit float")) {
+				doublePrecision = true;
 			}
 			if(cvParam.getAccession().equals("MS:1000514")) {
 				if(cvParam.getName().equals("m/z array")) {

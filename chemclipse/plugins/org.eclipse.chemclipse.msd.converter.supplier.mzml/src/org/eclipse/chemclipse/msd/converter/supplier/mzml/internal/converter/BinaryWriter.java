@@ -36,7 +36,7 @@ public class BinaryWriter {
 		BinaryDataArrayType binaryDataArrayType = createBinaryDataArray(byteBuffer);
 		binaryDataArrayType.setArrayLength(BigInteger.valueOf(values.length));
 		CVParamType cvParamDataType = new CVParamType();
-		cvParamDataType.setAccession("MS:1000523");
+		cvParamDataType.setAccession("MS:1000521");
 		cvParamDataType.setName("32-bit float");
 		binaryDataArrayType.getCvParam().add(cvParamDataType);
 		return binaryDataArrayType;
