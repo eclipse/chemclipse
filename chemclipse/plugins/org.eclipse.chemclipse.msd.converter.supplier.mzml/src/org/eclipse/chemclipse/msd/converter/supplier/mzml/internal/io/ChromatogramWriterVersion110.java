@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.io;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Date;
@@ -54,7 +53,7 @@ public class ChromatogramWriterVersion110 extends AbstractChromatogramWriter imp
 	private static final Logger logger = Logger.getLogger(ChromatogramWriterVersion110.class);
 
 	@Override
-	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
+	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileIsNotWriteableException, IOException {
 
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.MzML.class);

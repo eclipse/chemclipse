@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.io;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.zip.DataFormatException;
 
@@ -20,8 +19,6 @@ import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.converter.io.AbstractChromatogramReader;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
@@ -66,7 +63,7 @@ public class ChromatogramReaderVersion110 extends AbstractChromatogramReader imp
 	}
 
 	@Override
-	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws IOException {
 
 		IVendorChromatogram chromatogram = null;
 		double[] retentionTimes = null;
@@ -120,7 +117,7 @@ public class ChromatogramReaderVersion110 extends AbstractChromatogramReader imp
 	}
 
 	@Override
-	public IChromatogramMSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramMSD read(File file, IProgressMonitor monitor) throws IOException {
 
 		IVendorChromatogram chromatogram = null;
 		double[] intensities = null;
