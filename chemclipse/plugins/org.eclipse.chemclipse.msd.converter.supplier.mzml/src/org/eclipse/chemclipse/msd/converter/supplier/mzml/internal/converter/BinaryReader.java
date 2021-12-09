@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter;
 
+import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.DoubleBuffer;
@@ -27,25 +28,29 @@ public class BinaryReader {
 
 	public static Pair<String, double[]> parseBinaryData(BinaryDataArrayType binaryDataArrayType) throws DataFormatException {
 
+		double[] values = new double[0];
+		String content = "";
+		if(binaryDataArrayType.getArrayLength() == BigInteger.ZERO) {
+			return new ImmutablePair<>(content, values);
+		}
 		byte[] binary = binaryDataArrayType.getBinary();
+		if(binary == null) {
+			return new ImmutablePair<>(content, values);
+		}
 		ByteBuffer byteBuffer = ByteBuffer.wrap(binary);
-		double[] values = null;
 		boolean compressed = false;
 		boolean doublePrecision = false;
 		int multiplicator = 1;
-		String content = "";
 		for(CVParamType cvParam : binaryDataArrayType.getCvParam()) {
 			if(cvParam.getAccession().equals("MS:1000574")) {
 				if(cvParam.getName().equals("zlib compression")) {
 					compressed = true;
 				}
 			}
-			if(cvParam.getAccession().equals("MS:1000523")) {
-				if(cvParam.getName().equals("32-bit float")) {
-					doublePrecision = false;
-				} else if(cvParam.getName().equals("64-bit float")) {
-					doublePrecision = true;
-				}
+			if(cvParam.getAccession().equals("MS:1000521") && cvParam.getName().equals("32-bit float")) {
+				doublePrecision = false;
+			} else if(cvParam.getAccession().equals("MS:1000523") && cvParam.getName().equals("64-bit float")) {
+				doublePrecision = true;
 			}
 			if(cvParam.getAccession().equals("MS:1000514")) {
 				if(cvParam.getName().equals("m/z array")) {
@@ -85,6 +90,6 @@ public class BinaryReader {
 				values[index] = new Double(floatBuffer.get(index)) * multiplicator;
 			}
 		}
-		return new ImmutablePair<String, double[]>(content, values);
+		return new ImmutablePair<>(content, values);
 	}
 }

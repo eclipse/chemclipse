@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.io;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Date;
@@ -54,13 +53,14 @@ public class ChromatogramWriterVersion110 extends AbstractChromatogramWriter imp
 	private static final Logger logger = Logger.getLogger(ChromatogramWriterVersion110.class);
 
 	@Override
-	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
+	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileIsNotWriteableException, IOException {
 
 		try {
 			JAXBContext jaxbContext = JAXBContext.newInstance(org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.MzML.class);
 			Marshaller marshaller = jaxbContext.createMarshaller();
 			//
 			RunType run = new RunType();
+			run.setId(chromatogram.getIdentifier());
 			SpectrumListType spectrumList = new SpectrumListType();
 			ChromatogramListType chromatogramList = new ChromatogramListType();
 			chromatogramList.setCount(BigInteger.valueOf(1));
@@ -113,6 +113,8 @@ public class ChromatogramWriterVersion110 extends AbstractChromatogramWriter imp
 				scanList.getScan().add(scanType);
 				//
 				SpectrumType spectrum = new SpectrumType();
+				spectrum.setId("scan=" + scan.getScanNumber());
+				spectrum.setIndex(BigInteger.valueOf(scan.getScanNumber()));
 				spectrum.setScanList(scanList);
 				spectrum.setBinaryDataArrayList(binaryDataArrayList);
 				IVendorMassSpectrum massSpectrum = (IVendorMassSpectrum)scanMSD;
