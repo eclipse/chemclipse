@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -91,6 +91,9 @@ public class PeakScanListPart extends AbstractPart<ExtendedPeakScanListUI> {
 					logger.info(object);
 					getControl().refreshTableViewer();
 					return true;
+				} else if(isIdentificationTopic(topic)) {
+					getControl().updateChromatogramSelection();
+					linkWithEditor = false; // TODO Workaround: This otherwise breaks the table selection after undo.
 				}
 			}
 		}
@@ -101,7 +104,7 @@ public class PeakScanListPart extends AbstractPart<ExtendedPeakScanListUI> {
 	@Override
 	protected boolean isUpdateTopic(String topic) {
 
-		return isChromatogramEvent(topic) || isUpdateEditorEvent(topic) || isCloseEvent(topic);
+		return isChromatogramEvent(topic) || isUpdateEditorEvent(topic) || isCloseEvent(topic) || isIdentificationTopic(topic);
 	}
 
 	private boolean isChromatogramEvent(String topic) {
@@ -117,5 +120,10 @@ public class PeakScanListPart extends AbstractPart<ExtendedPeakScanListUI> {
 	private boolean isCloseEvent(String topic) {
 
 		return IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_CLOSE.equals(topic);
+	}
+
+	private boolean isIdentificationTopic(String topic) {
+
+		return IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION.equals(topic);
 	}
 }
