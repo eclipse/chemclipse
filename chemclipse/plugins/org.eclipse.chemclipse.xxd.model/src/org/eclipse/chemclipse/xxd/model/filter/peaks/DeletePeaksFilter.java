@@ -58,7 +58,7 @@ public class DeletePeaksFilter extends AbstractPeakFilter<DeletePeaksFilterSetti
 			SubMonitor subMonitor = SubMonitor.convert(monitor, peaks.size());
 			for(X peak : peaks) {
 				if(configuration.isDeleteUnidentifiedOnly()) {
-					if(peak.getTargets().size() == 0) {
+					if(peak.getTargets().isEmpty()) {
 						listener.delete(peak);
 					}
 				} else {
