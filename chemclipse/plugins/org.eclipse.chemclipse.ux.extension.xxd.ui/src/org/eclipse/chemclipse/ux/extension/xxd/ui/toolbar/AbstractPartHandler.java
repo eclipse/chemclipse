@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip Wenig - initial API and implementation
+ * Matthias Mailänder - set the part icon in the toolbar
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.toolbar;
 
@@ -56,6 +57,14 @@ public abstract class AbstractPartHandler implements IPartHandler {
 	public MApplication getApplication() {
 
 		return application != null ? application : ContextAddon.getApplication();
+	}
+
+	@Override
+	public String getIconURI() {
+
+		String partId = getPartStackReference().getPartId();
+		MApplication application = getApplication();
+		return PartSupport.getIconURI(partId, application);
 	}
 
 	@Evaluate

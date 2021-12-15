@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Christoph Läubrich - remove references to ModelAddon
+ * Matthias Mailänder - add a method to find descriptor and icon
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.support;
 
@@ -19,6 +20,7 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.e4.ui.model.application.MApplication;
+import org.eclipse.e4.ui.model.application.descriptor.basic.MPartDescriptor;
 import org.eclipse.e4.ui.model.application.ui.MUIElement;
 import org.eclipse.e4.ui.model.application.ui.advanced.MArea;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -91,9 +93,9 @@ public class PartSupport {
 	//
 	private static final String COMPATIBILITY_EDITOR_ELEMENT_ID = "org.eclipse.e4.ui.compatibility.editor";
 	//
-	private static Set<String> hiddenPartStacks = new HashSet<String>();
+	private static Set<String> hiddenPartStacks = new HashSet<>();
 	//
-	private static Map<String, String> partMap = new HashMap<String, String>();
+	private static Map<String, String> partMap = new HashMap<>();
 	//
 	static {
 		hiddenPartStacks.add(PARTSTACK_LEFT_CENTER);
@@ -225,7 +227,7 @@ public class PartSupport {
 	 * @param partStackId
 	 * @return boolean
 	 */
-	public static boolean togglePartVisibility(MPart part, String partStackId, EPartService partService) {
+	public static boolean togglePartVisibility(MPart part, EPartService partService) {
 
 		boolean isVisible = false;
 		if(part != null) {
@@ -357,6 +359,16 @@ public class PartSupport {
 		setPartVisibility(part, partService, visible);
 	}
 
+	public static String getIconURI(String partId, MApplication application) {
+
+		MPartDescriptor descriptor = getDescriptor(partId, application);
+		if(descriptor != null) {
+			return descriptor.getIconURI();
+		} else {
+			return "";
+		}
+	}
+
 	public static void setPartVisibility(MPart part, EPartService partService, boolean visible) {
 
 		if(part != null) {
@@ -426,7 +438,7 @@ public class PartSupport {
 			 * Toggle visibility.
 			 */
 			MPart part = getPart(partId, partStackId, partService, modelService, application);
-			visible = togglePartVisibility(part, partStackId, partService);
+			visible = togglePartVisibility(part, partService);
 		}
 		//
 		return visible;
@@ -449,5 +461,15 @@ public class PartSupport {
 	private static boolean is3xEditorPart(MPart mPart, String editorId) {
 
 		return mPart.getElementId().equals(COMPATIBILITY_EDITOR_ELEMENT_ID) && mPart.getTags().contains(editorId);
+	}
+
+	private static MPartDescriptor getDescriptor(String partId, MApplication application) {
+
+		for(MPartDescriptor descriptor : application.getDescriptors()) {
+			if(descriptor.getElementId().equals(partId)) {
+				return descriptor;
+			}
+		}
+		return null;
 	}
 }
