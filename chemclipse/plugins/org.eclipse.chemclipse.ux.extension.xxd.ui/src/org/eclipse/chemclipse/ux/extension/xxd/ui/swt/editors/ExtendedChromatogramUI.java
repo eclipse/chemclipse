@@ -1401,8 +1401,8 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 			if(separationColumn != null) {
 				if(!separationColumns.contains(separationColumn)) {
 					separationColumns.add(0, separationColumn);
+					comboViewerSeparationColumn.setInput(separationColumns);
 				}
-				comboViewerSeparationColumn.setInput(separationColumns);
 				comboViewerSeparationColumn.getCombo().select(0);
 			}
 		}
