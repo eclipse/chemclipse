@@ -94,6 +94,8 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_SCAN_FID = PATH_PREFIX + "scan-fid.png";
 	//
 	String IMAGE_SAMPLE = PATH_PREFIX + "sample.gif";
+	String IMAGE_SAMPLE_CALIBRATION = PATH_PREFIX + "sample-calibration.gif";
+	String IMAGE_SAMPLE_CALIBRATION_QUALIFIER = PATH_PREFIX + "sample-calibration-qualifier.gif";
 	String IMAGE_SAMPLE_QUALIFIER = PATH_PREFIX + "sample-qualifier.gif";
 	String IMAGE_SAMPLE_ISTD = PATH_PREFIX + "sample-istd.gif";
 	String IMAGE_SAMPLE_ISTD_QUALIFIER = PATH_PREFIX + "sample-istd-qualifier.gif";
@@ -156,6 +158,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_PEAK_INTEGRATOR = PATH_PREFIX + "peakIntegrator.gif";
 	String IMAGE_CHROMATOGRAM_INTEGRATOR = PATH_PREFIX + "chromatogramIntegrator.gif";
 	String IMAGE_DELETE_PEAK_INTEGRATIONS = PATH_PREFIX + "deletePeakIntegrations.gif";
+	String IMAGE_DELETE_PEAK_IDENTIFICATIONS = PATH_PREFIX + "delete_all_identifications.gif";
 	String IMAGE_DELETE_CHROMATOGRAM_INTEGRATIONS = PATH_PREFIX + "deleteChromatogramIntegrations.gif";
 	String IMAGE_COMBINED_INTEGRATOR = PATH_PREFIX + "combinedIntegrator.gif";
 	//
@@ -444,6 +447,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_REVIEW_DETAILS_SHOW = PATH_PREFIX + "reviewDetailsShow.gif";
 	String IMAGE_REVIEW_DETAILS_HIDE = PATH_PREFIX + "reviewDetailsHide.gif";
 	String IMAGE_PLUGINS = PATH_PREFIX + "plugins.png";
+	String IMAGE_XML_FILE = PATH_PREFIX + "xmldoc.gif";
 	String IMAGE_ZIP_FILE = PATH_PREFIX + "zip_file.png";
 	String IMAGE_TRANSFER = PATH_PREFIX + "transfer.png";
 	//
@@ -459,6 +463,8 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_CLEAR = PATH_PREFIX + "clear.gif";
 	String IMAGE_RULER = PATH_PREFIX + "ruler.gif";
 	String IMAGE_SKIP_QUANTIFIED_PEAK = PATH_PREFIX + "skipQuantifiedPeak.gif";
+	String IMAGE_DELETE_PEAK = PATH_PREFIX + "delete_peak.gif";
+	String IMAGE_DELETE_PEAKS = PATH_PREFIX + "delete_peaks.gif";
 	String IMAGE_CROSS_ZERO = PATH_PREFIX + "crossZero.gif";
 	String IMAGE_INCLUDE_INTERCEPT = PATH_PREFIX + "includeIntercept.gif";
 	String IMAGE_LOWER_MIN_AREA = PATH_PREFIX + "lowerMinArea.gif";
