@@ -134,6 +134,7 @@ public class ChromatogramWriterVersion110 extends AbstractChromatogramWriter imp
 					cvParamType.setName("profile spectrum");
 					spectrum.getCvParam().add(cvParamType);
 				}
+				spectrum.setDefaultArrayLength(ions.length);
 				spectrumList.getSpectrum().add(spectrum);
 			}
 			run.setSpectrumList(spectrumList);
@@ -157,6 +158,7 @@ public class ChromatogramWriterVersion110 extends AbstractChromatogramWriter imp
 			binaryDataArrayList.getBinaryDataArray().add(retentionTimesBinaryDataArrayType);
 			//
 			ChromatogramType tic = new ChromatogramType();
+			tic.setDefaultArrayLength(totalSignals.length);
 			tic.setBinaryDataArrayList(binaryDataArrayList);
 			chromatogramList.getChromatogram().add(tic);
 			run.setChromatogramList(chromatogramList);
