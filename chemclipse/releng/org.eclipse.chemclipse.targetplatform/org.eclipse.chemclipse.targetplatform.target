@@ -99,11 +99,6 @@
 	<repository location="https://download.eclipse.org/tools/orbit/downloads/drops/R20191126223242/repository"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-	<unit id="org.apache.log4j" version="0.0.0"/>
-	<unit id="org.apache.logging.log4j" version="0.0.0"/>
-	<repository location="https://download.eclipse.org/tools/orbit/downloads/drops/R20211213173813/repository"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 	<unit id="org.eclipse.swtchart.feature.feature.group" version="0.0.0"/>
 	<repository location="https://download.eclipse.org/swtchart/integration/develop/repository"/>
 </location>
