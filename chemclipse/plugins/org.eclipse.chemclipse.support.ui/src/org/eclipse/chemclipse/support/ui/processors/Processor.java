@@ -24,7 +24,46 @@ public class Processor {
 	public Processor(IProcessSupplier<?> processSupplier) {
 
 		this.processSupplier = processSupplier;
-		// Quick-Access Toolbar default icons:
+		assignDefaultIcon();
+	}
+
+	public boolean isActive() {
+
+		return active;
+	}
+
+	public void setActive(boolean active) {
+
+		this.active = active;
+	}
+
+	public String getImageFileName() {
+
+		return imageFileName;
+	}
+
+	public void setImageFileName(String imageFileName) {
+
+		if(imageFileName != null && !imageFileName.isEmpty()) {
+			this.imageFileName = imageFileName;
+		}
+	}
+
+	public IProcessSupplier<?> getProcessSupplier() {
+
+		return processSupplier;
+	}
+
+	private void assignDefaultIcon() {
+
+		/*
+		 * Quick-Access Toolbar default icons.
+		 * -------------
+		 * This is a quick solution to assign specific process type icons.
+		 * In a further version, the process supplier itself may define their specific symbol.
+		 * To implement this feature, the platform needs to be reviewed thoroughly, hence
+		 * assigning the specific icons here is a compromise.
+		 */
 		if(processSupplier.getCategory().equals("Baseline Detector")) {
 			imageFileName = IApplicationImage.IMAGE_BASELINE;
 			if(processSupplier.getName().contains("SNIP")) {
@@ -163,32 +202,5 @@ public class Processor {
 		} else if(processSupplier.getCategory().equals("System")) {
 			imageFileName = IApplicationImage.IMAGE_PREFERENCES;
 		}
-	}
-
-	public boolean isActive() {
-
-		return active;
-	}
-
-	public void setActive(boolean active) {
-
-		this.active = active;
-	}
-
-	public String getImageFileName() {
-
-		return imageFileName;
-	}
-
-	public void setImageFileName(String imageFileName) {
-
-		if(imageFileName != null && !imageFileName.isEmpty()) {
-			this.imageFileName = imageFileName;
-		}
-	}
-
-	public IProcessSupplier<?> getProcessSupplier() {
-
-		return processSupplier;
 	}
 }
