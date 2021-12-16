@@ -19,7 +19,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.Viewer;
 
 public class ListContentProvider implements IStructuredContentProvider {
 
@@ -46,15 +45,5 @@ public class ListContentProvider implements IStructuredContentProvider {
 			return list.toArray();
 		}
 		return new Object[0];
-	}
-
-	@Override
-	public void dispose() {
-
-	}
-
-	@Override
-	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-
 	}
 }
