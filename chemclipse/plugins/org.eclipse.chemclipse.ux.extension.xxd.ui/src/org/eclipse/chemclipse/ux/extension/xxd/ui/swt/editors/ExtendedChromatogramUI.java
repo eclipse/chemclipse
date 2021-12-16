@@ -120,6 +120,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.MenuListener;
@@ -1401,9 +1402,9 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 			if(separationColumn != null) {
 				if(!separationColumns.contains(separationColumn)) {
 					separationColumns.add(0, separationColumn);
+					comboViewerSeparationColumn.setInput(separationColumns);
 				}
-				comboViewerSeparationColumn.setInput(separationColumns);
-				comboViewerSeparationColumn.getCombo().select(0);
+				comboViewerSeparationColumn.setSelection(new StructuredSelection(separationColumn));
 			}
 		}
 	}
