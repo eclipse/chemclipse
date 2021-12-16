@@ -34,7 +34,6 @@ public class BinaryWriter {
 		byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
 		byteBuffer.asFloatBuffer().put(floatBuffer);
 		BinaryDataArrayType binaryDataArrayType = createBinaryDataArray(byteBuffer);
-		binaryDataArrayType.setArrayLength(BigInteger.valueOf(values.length));
 		CVParamType cvParamDataType = new CVParamType();
 		cvParamDataType.setAccession("MS:1000521");
 		cvParamDataType.setName("32-bit float");
@@ -49,7 +48,6 @@ public class BinaryWriter {
 		byteBuffer.order(ByteOrder.LITTLE_ENDIAN);
 		byteBuffer.asDoubleBuffer().put(doubleBuffer);
 		BinaryDataArrayType binaryDataArrayType = createBinaryDataArray(byteBuffer);
-		binaryDataArrayType.setArrayLength(BigInteger.valueOf(values.length));
 		CVParamType cvParamDataType = new CVParamType();
 		cvParamDataType.setAccession("MS:1000523");
 		cvParamDataType.setName("64-bit float");

@@ -114,7 +114,7 @@ public class ChromatogramWriterVersion110 extends AbstractChromatogramWriter imp
 				//
 				SpectrumType spectrum = new SpectrumType();
 				spectrum.setId("scan=" + scan.getScanNumber());
-				spectrum.setIndex(BigInteger.valueOf(scan.getScanNumber()));
+				spectrum.setIndex(BigInteger.valueOf((scan.getScanNumber() - 1)));
 				spectrum.setScanList(scanList);
 				spectrum.setBinaryDataArrayList(binaryDataArrayList);
 				IVendorMassSpectrum massSpectrum = (IVendorMassSpectrum)scanMSD;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model;
 
 import java.math.BigInteger;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -28,7 +29,7 @@ public class BinaryDataArrayType extends ParamGroupType {
 	private byte[] binary;
 	@XmlAttribute(name = "arrayLength")
 	@XmlSchemaType(name = "nonNegativeInteger")
-	private BigInteger arrayLength;
+	private BigInteger arrayLength; // optional, may override defaultArrayLength, not to be used for m/z, intensity and time
 	@XmlAttribute(name = "dataProcessingRef")
 	@XmlIDREF
 	@XmlSchemaType(name = "IDREF")
