@@ -70,12 +70,41 @@ public class ChromatogramWriterVersion110 extends AbstractChromatogramWriter imp
 			float[] retentionTimes = new float[scans];
 			int i = 0;
 			for(IScan scan : chromatogram.getScans()) {
+				SpectrumType spectrum = new SpectrumType();
+				spectrum.setId("scan=" + scan.getScanNumber());
+				spectrum.setIndex(BigInteger.valueOf((scan.getScanNumber() - 1)));
 				// TIC
 				totalSignals[i] = scan.getTotalSignal();
 				retentionTimes[i] = scan.getRetentionTime();
 				i++;
+				//
 				// full spectra
 				IScanMSD scanMSD = (IScanMSD)scan;
+				//
+				CVParamType cvParamTotalIonCurrent = new CVParamType();
+				cvParamTotalIonCurrent.setAccession("MS:1000285");
+				cvParamTotalIonCurrent.setName("total ion current");
+				cvParamTotalIonCurrent.setUnitAccession("MS:1000131");
+				cvParamTotalIonCurrent.setUnitName("number of detector counts");
+				cvParamTotalIonCurrent.setValue(String.valueOf(scanMSD.getTotalSignal()));
+				spectrum.getCvParam().add(cvParamTotalIonCurrent);
+				//
+				CVParamType cvParamBasePeak = new CVParamType();
+				cvParamBasePeak.setAccession("MS:1000504");
+				cvParamBasePeak.setName("base peak m/z");
+				cvParamBasePeak.setUnitAccession("MS:1000040");
+				cvParamBasePeak.setUnitName("m/z");
+				cvParamBasePeak.setValue(String.valueOf(scanMSD.getBasePeak()));
+				spectrum.getCvParam().add(cvParamBasePeak);
+				//
+				CVParamType cvParamBasePeakIntensity = new CVParamType();
+				cvParamBasePeakIntensity.setAccession("MS:1000505");
+				cvParamBasePeakIntensity.setName("base peak intensity");
+				cvParamBasePeakIntensity.setUnitAccession("MS:1000131");
+				cvParamBasePeakIntensity.setUnitName("number of detector counts");
+				cvParamBasePeakIntensity.setValue(String.valueOf(scanMSD.getBasePeakAbundance()));
+				spectrum.getCvParam().add(cvParamBasePeakIntensity);
+				//
 				List<IIon> ionList = scanMSD.getIons();
 				double[] ions = new double[ionList.size()];
 				float[] abundances = new float[ionList.size()];
@@ -112,28 +141,35 @@ public class ChromatogramWriterVersion110 extends AbstractChromatogramWriter imp
 				ScanListType scanList = new ScanListType();
 				scanList.getScan().add(scanType);
 				//
-				SpectrumType spectrum = new SpectrumType();
-				spectrum.setId("scan=" + scan.getScanNumber());
-				spectrum.setIndex(BigInteger.valueOf((scan.getScanNumber() - 1)));
 				spectrum.setScanList(scanList);
 				spectrum.setBinaryDataArrayList(binaryDataArrayList);
 				IVendorMassSpectrum massSpectrum = (IVendorMassSpectrum)scanMSD;
+				CVParamType cvParamType = new CVParamType();
+				if(massSpectrum.getMassSpectrometer() == 1) {
+					cvParamType.setAccession("MS:1000579");
+					cvParamType.setName("MS1 spectrum");
+				} else {
+					cvParamType.setAccession("MS:1000580");
+					cvParamType.setName("MSn spectrum");
+				}
+				spectrum.getCvParam().add(cvParamType);
 				CVParamType cvParamLevel = new CVParamType();
 				cvParamLevel.setAccession("MS:1000511");
 				cvParamLevel.setName("ms level");
 				cvParamLevel.setValue(String.valueOf(massSpectrum.getMassSpectrometer()));
 				spectrum.getCvParam().add(cvParamLevel);
 				if(massSpectrum.getMassSpectrumType() == 0) {
-					CVParamType cvParamType = new CVParamType();
-					cvParamType.setAccession("MS:1000127");
-					cvParamType.setName("centroid spectrum");
-					spectrum.getCvParam().add(cvParamType);
+					CVParamType cvSpectrumType = new CVParamType();
+					cvSpectrumType.setAccession("MS:1000127");
+					cvSpectrumType.setName("centroid spectrum");
+					spectrum.getCvParam().add(cvSpectrumType);
 				} else if(massSpectrum.getMassSpectrumType() == 1) {
-					CVParamType cvParamType = new CVParamType();
-					cvParamType.setAccession("MS:1000128");
-					cvParamType.setName("profile spectrum");
-					spectrum.getCvParam().add(cvParamType);
+					CVParamType cvSpectrumType = new CVParamType();
+					cvSpectrumType.setAccession("MS:1000128");
+					cvSpectrumType.setName("profile spectrum");
+					spectrum.getCvParam().add(cvSpectrumType);
 				}
+				spectrum.setDefaultArrayLength(ions.length);
 				spectrumList.getSpectrum().add(spectrum);
 			}
 			run.setSpectrumList(spectrumList);
@@ -157,6 +193,7 @@ public class ChromatogramWriterVersion110 extends AbstractChromatogramWriter imp
 			binaryDataArrayList.getBinaryDataArray().add(retentionTimesBinaryDataArrayType);
 			//
 			ChromatogramType tic = new ChromatogramType();
+			tic.setDefaultArrayLength(totalSignals.length);
 			tic.setBinaryDataArrayList(binaryDataArrayList);
 			chromatogramList.getChromatogram().add(tic);
 			run.setChromatogramList(chromatogramList);
