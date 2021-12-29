@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.msd.classifier.core;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.result.IChromatogramClassifierResult;
 import org.eclipse.chemclipse.chromatogram.msd.classifier.settings.IChromatogramClassifierSettings;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
@@ -46,7 +47,7 @@ public class AbstractChromatogramClassifier_1_Test extends TestCase {
 
 		chromatogramSelection = null;
 		chromatogramClassifierSettings = null;
-		classifier = new TestChromatogramClassifier();
+		classifier = new TestChromatogramClassifier(DataType.MSD);
 		IProcessingInfo<IChromatogramClassifierResult> processingInfo = classifier.applyClassifier(chromatogramSelection, chromatogramClassifierSettings, new NullProgressMonitor());
 		assertTrue(processingInfo.hasErrorMessages());
 	}
@@ -60,7 +61,7 @@ public class AbstractChromatogramClassifier_1_Test extends TestCase {
 			assertTrue("ChromatogramIsNullException", false);
 		}
 		chromatogramClassifierSettings = null;
-		classifier = new TestChromatogramClassifier();
+		classifier = new TestChromatogramClassifier(DataType.MSD);
 		IProcessingInfo<IChromatogramClassifierResult> processingInfo = classifier.applyClassifier(chromatogramSelection, chromatogramClassifierSettings, new NullProgressMonitor());
 		assertTrue(processingInfo.hasErrorMessages());
 	}

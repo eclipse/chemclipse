@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.chemclipse.converter.chromatogram.ChromatogramExportSettings;
+import org.eclipse.chemclipse.converter.core.IConverterSupport;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
@@ -43,7 +44,7 @@ public class ChromatogramConverterCSDProcessTypeSupplier implements IProcessType
 	public Collection<IProcessSupplier<?>> getProcessorSuppliers() {
 
 		List<IProcessSupplier<?>> list = new ArrayList<>();
-		for(ISupplier supplier : ChromatogramConverterCSD.getInstance().getChromatogramConverterSupport().getExportSupplier()) {
+		for(ISupplier supplier : ChromatogramConverterCSD.getInstance().getChromatogramConverterSupport().getSupplier(IConverterSupport.EXPORT_SUPPLIER)) {
 			list.add(new ChromatogramConverterCSDProcessorSupplier(supplier, this));
 		}
 		return list;
@@ -54,6 +55,7 @@ public class ChromatogramConverterCSDProcessTypeSupplier implements IProcessType
 		private ISupplier supplier;
 
 		public ChromatogramConverterCSDProcessorSupplier(ISupplier supplier, IProcessTypeSupplier parent) {
+
 			super("csd.export." + supplier.getId(), supplier.getFilterName(), supplier.getDescription(), ChromatogramExportSettings.class, parent, DataType.CSD);
 			this.supplier = supplier;
 		}

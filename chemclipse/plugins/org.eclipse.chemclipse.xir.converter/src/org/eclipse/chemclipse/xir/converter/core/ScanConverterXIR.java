@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -79,7 +79,6 @@ public class ScanConverterXIR {
 		IProcessingInfo<IScanXIR> processingInfo;
 		IScanConverterSupport converterSupport = getScanConverterSupport();
 		try {
-			@SuppressWarnings("deprecation")
 			List<String> availableConverterIds = converterSupport.getAvailableConverterIds(file);
 			for(String converterId : availableConverterIds) {
 				/*

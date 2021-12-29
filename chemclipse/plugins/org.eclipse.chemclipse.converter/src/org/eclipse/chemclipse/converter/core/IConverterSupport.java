@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -29,6 +29,7 @@ public interface IConverterSupport {
 	public static final Predicate<ISupplier> EXPORT_SUPPLIER = supplier -> supplier.isExportable();
 	public static final Predicate<ISupplier> IMPORT_SUPPLIER = supplier -> supplier.isImportable();
 	public static final Predicate<ISupplier> ALL_SUPPLIER = supplier -> true;
+
 	/**
 	 * Returns the filter extension which are actually registered at the
 	 * chromatogram converter extension point.<br/>
@@ -177,17 +178,18 @@ public interface IConverterSupport {
 	 * @return List<String>
 	 * @throws NoConverterAvailableException
 	 */
-	@Deprecated
 	default List<String> getAvailableConverterIds(File file) throws NoConverterAvailableException {
 
 		List<ISupplier> suppliers = Converter.getSupplierForFile(file, getSupplier());
 		if(suppliers.isEmpty()) {
 			throw new NoConverterAvailableException();
 		}
+		//
 		ArrayList<String> list = new ArrayList<>();
 		for(ISupplier supplier : suppliers) {
 			list.add(supplier.getId());
 		}
+		//
 		return list;
 	}
 

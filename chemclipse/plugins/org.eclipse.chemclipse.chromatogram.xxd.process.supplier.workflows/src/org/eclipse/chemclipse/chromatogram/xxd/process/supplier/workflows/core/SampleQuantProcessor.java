@@ -222,10 +222,13 @@ public class SampleQuantProcessor {
 
 	private IReportRowModel extractReportRowModel(File fileImport, String extensionPointId) {
 
-		IReportRowModel reportRowModel;
+		IReportRowModel reportRowModel = null;
 		IProcessingInfo<?> processingInfo = ReportConverter.convert(fileImport, extensionPointId, new NullProgressMonitor());
 		try {
-			reportRowModel = processingInfo.getProcessingResult(IReportRowModel.class);
+			Object object = processingInfo.getProcessingResult();
+			if(object instanceof IReportRowModel) {
+				reportRowModel = (IReportRowModel)object;
+			}
 		} catch(TypeCastException e) {
 			reportRowModel = null;
 		}

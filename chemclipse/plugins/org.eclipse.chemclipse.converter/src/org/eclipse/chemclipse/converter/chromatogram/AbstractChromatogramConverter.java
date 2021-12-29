@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2021 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -169,7 +169,7 @@ public abstract class AbstractChromatogramConverter<P extends IPeak, T extends I
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	@SuppressWarnings({"unchecked", "deprecation", "rawtypes"})
+	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
 	public IProcessingInfo getChromatogram(File file, boolean overview, IProgressMonitor monitor) {
 

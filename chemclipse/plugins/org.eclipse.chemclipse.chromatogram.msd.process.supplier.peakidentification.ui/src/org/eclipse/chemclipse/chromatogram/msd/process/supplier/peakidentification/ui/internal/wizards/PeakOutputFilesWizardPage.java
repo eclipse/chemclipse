@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2021 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentificat
 
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakOutputEntry;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.PeakOutputEntry;
+import org.eclipse.chemclipse.converter.core.IConverterSupport;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.msd.converter.peak.IPeakConverterSupport;
 import org.eclipse.chemclipse.msd.converter.peak.PeakConverterMSD;
@@ -31,10 +32,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-/**
- * @author Dr. Philip Wenig
- * 
- */
 public class PeakOutputFilesWizardPage extends WizardPage {
 
 	private Combo peakConverterComboBox;
@@ -45,6 +42,7 @@ public class PeakOutputFilesWizardPage extends WizardPage {
 	 * @param pageName
 	 */
 	protected PeakOutputFilesWizardPage(String pageName) {
+
 		super(pageName);
 		setTitle("Peak Output Formats");
 		setDescription("This wizard lets you select several output peak formats.");
@@ -98,7 +96,9 @@ public class PeakOutputFilesWizardPage extends WizardPage {
 		 * Select the output file format converter.
 		 */
 		converterSupport = PeakConverterMSD.getPeakConverterSupport();
-		try {
+		String[] filterNames = converterSupport.getFilterNames(IConverterSupport.EXPORT_SUPPLIER);
+		//
+		if(filterNames.length > 0) {
 			gridData = new GridData(GridData.FILL_HORIZONTAL);
 			gridData.horizontalSpan = 2;
 			gridData.heightHint = 30;
@@ -111,7 +111,6 @@ public class PeakOutputFilesWizardPage extends WizardPage {
 			/*
 			 * Output converter combo box.
 			 */
-			String[] filterNames = converterSupport.getExportableFilterNames();
 			peakConverterComboBox = new Combo(composite, SWT.NONE);
 			peakConverterComboBox.setItems(filterNames);
 			peakConverterComboBox.setLayoutData(gridData);
@@ -146,7 +145,7 @@ public class PeakOutputFilesWizardPage extends WizardPage {
 					}
 				}
 			});
-		} catch(NoConverterAvailableException e) {
+		} else {
 			gridData = new GridData(GridData.FILL_BOTH);
 			gridData.horizontalSpan = 2;
 			gridData.heightHint = 30;

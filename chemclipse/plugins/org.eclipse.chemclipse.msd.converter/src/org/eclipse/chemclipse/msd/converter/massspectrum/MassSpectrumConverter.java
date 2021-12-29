@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2021 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -45,8 +45,6 @@ import org.eclipse.core.runtime.Platform;
  * AMDIS *.msl<br/>
  * JCAMP-DX *.jdx<br/>
  * ASCII *.txt<br/>
- *
- * @author eselmeister
  */
 public class MassSpectrumConverter {
 
@@ -225,6 +223,7 @@ public class MassSpectrumConverter {
 	 * @param converterId
 	 * @return IMassSpectrumExportConverter
 	 */
+	@SuppressWarnings("unchecked")
 	private static <T> IMassSpectrumExportConverter<T> getMassSpectrumExportConverter(final String converterId) {
 
 		IConfigurationElement element;
@@ -232,7 +231,7 @@ public class MassSpectrumConverter {
 		IMassSpectrumExportConverter<T> instance = null;
 		if(element != null) {
 			try {
-				instance = (IMassSpectrumExportConverter)element.createExecutableExtension(Converter.EXPORT_CONVERTER);
+				instance = (IMassSpectrumExportConverter<T>)element.createExecutableExtension(Converter.EXPORT_CONVERTER);
 			} catch(CoreException e) {
 				logger.error(e.getLocalizedMessage(), e);
 			}

@@ -33,7 +33,7 @@ public class AmdisPeakDetector_1 extends TestCase {
 	private IChromatogramMSD chromatogram;
 	private IChromatogramSelectionMSD chromatogramSelection;
 	private SettingsAMDIS peakDetectorSettings;
-	private PeakDetectorAMDIS detector;
+	private PeakDetectorAMDIS<?, ?, ?> detector;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -44,7 +44,7 @@ public class AmdisPeakDetector_1 extends TestCase {
 		chromatogram = (IChromatogramMSD)processingInfo.getProcessingResult();
 		chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
 		peakDetectorSettings = new SettingsAMDIS();
-		detector = new PeakDetectorAMDIS();
+		detector = new PeakDetectorAMDIS<>();
 	}
 
 	@Override
