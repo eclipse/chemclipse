@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,6 +30,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetSupport;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
@@ -275,7 +276,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 				text = Integer.toString(peak.getSuggestedNumberOfComponents());
 				break;
 			case 17:
-				text = PeakScanListSupport.getBestTargetLibraryField(peak);
+				text = TargetSupport.getBestTargetLibraryField(peak);
 				break;
 			case 18:
 				if(chromatogramPeakArea > 0) {
@@ -346,7 +347,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 				text = NO_VALUE;
 				break;
 			case 17:
-				text = PeakScanListSupport.getBestTargetLibraryField(scan);
+				text = TargetSupport.getBestTargetLibraryField(scan);
 				break;
 			case 18:
 				text = NO_VALUE;

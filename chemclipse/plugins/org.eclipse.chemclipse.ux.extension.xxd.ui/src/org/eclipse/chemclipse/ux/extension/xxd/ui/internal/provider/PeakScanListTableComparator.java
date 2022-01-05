@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.support.TargetSupport;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -145,8 +146,8 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 				sortOrder = Integer.compare(getSuggestedNumberOfComponents(object2), getSuggestedNumberOfComponents(object1));
 				break;
 			case 17:
-				String name1 = PeakScanListSupport.getBestTargetLibraryField(object1);
-				String name2 = PeakScanListSupport.getBestTargetLibraryField(object2);
+				String name1 = TargetSupport.getBestTargetLibraryField(object1);
+				String name2 = TargetSupport.getBestTargetLibraryField(object2);
 				sortOrder = PreferenceSupplier.isSortCaseSensitive() ? name2.compareTo(name1) : name2.compareToIgnoreCase(name1);
 				break;
 			case 18:
