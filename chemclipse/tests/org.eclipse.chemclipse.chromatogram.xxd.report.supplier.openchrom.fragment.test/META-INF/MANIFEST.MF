@@ -1,11 +1,11 @@
 Manifest-Version: 1.0
-Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.fragment.test
+Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.fragment.test
 Bundle-ManifestVersion: 2
 Bundle-Name: Test
-Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.fragment.test
+Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.fragment.test
 Bundle-Version: 0.9.0.qualifier
 Bundle-Vendor: ChemClipse
-Fragment-Host: org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom;bundle-version="0.8.0"
+Fragment-Host: org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt;bundle-version="0.8.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Require-Bundle: org.junit;bundle-version="4.8.2",
  org.eclipse.chemclipse.msd.converter;bundle-version="0.8.0",
