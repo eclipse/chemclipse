@@ -4,11 +4,11 @@
       label="Normalizer Filter"
       version="0.9.0.qualifier" provider-name="ChemClipse" plugin="org.eclipse.chemclipse.feature.branding">
 
-   <description url="http://www.openchrom.net">
+   <description url="http://www.chemclipse.net">
       This is a normalizing filter.
    </description>
 
-   <copyright url="http://www.openchrom.net">
+   <copyright url="http://www.chemclipse.net">
       Copyright (c) 2013, 2018 Lablicate GmbH.
    </copyright>
 
