@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -87,6 +87,7 @@ import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.ChromatogramPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.PeakModelWSD;
+import org.eclipse.chemclipse.wsd.model.core.implementation.ScanSignalWSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.BaselineElement;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IBaselineElement;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
@@ -398,7 +399,7 @@ public class ChromatogramReader_1400 extends AbstractChromatogramReader implemen
 		float totalSignalScan = dataInputStream.readFloat();
 		IVendorScan peakMaximum = new VendorScan();
 		peakMaximum.setRetentionTime(retentionTime);
-		peakMaximum.adjustTotalSignal(totalSignalScan);
+		peakMaximum.addScanSignal(new ScanSignalWSD(0, totalSignalScan));
 		peakMaximum.setRelativeRetentionTime(relativeRetentionTime);
 		int retentionTimeColumn1 = dataInputStream.readInt();
 		int retentionTimeColumn2 = dataInputStream.readInt();
