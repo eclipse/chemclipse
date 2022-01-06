@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -42,10 +42,13 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.ProcessingWizard;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
 import org.eclipse.core.runtime.Adapters;
+import org.eclipse.jface.dialogs.IInputValidator;
+import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
@@ -74,6 +77,7 @@ public class ProcessMethodToolbar extends ToolBar {
 	private ToolItem buttonMoveUp;
 	private ToolItem buttonMoveDown;
 	private ToolItem buttonClipboard;
+	private ToolItem buttonModifyDescription;
 	private ToolItem buttonModifySettings;
 	//
 	private ProcessMethod processMethod;
@@ -158,6 +162,7 @@ public class ProcessMethodToolbar extends ToolBar {
 		buttonMoveUp.setEnabled(writeable && !readOnly);
 		buttonMoveDown.setEnabled(writeable && !readOnly);
 		buttonClipboard.setEnabled(true);
+		buttonModifyDescription.setEnabled(writeable && !readOnly);
 		buttonModifySettings.setEnabled(writeable && preferencesSupplier != null);
 	}
 
@@ -243,6 +248,7 @@ public class ProcessMethodToolbar extends ToolBar {
 		buttonMoveUp = createMoveUpButton(this);
 		buttonMoveDown = createMoveDownButton(this);
 		buttonClipboard = createClipboardButton(this);
+		buttonModifyDescription = createModifyDescriptionButton(this);
 		buttonModifySettings = createModifySettingsButton(this);
 	}
 
@@ -503,6 +509,48 @@ public class ProcessMethodToolbar extends ToolBar {
 			public void widgetSelected(SelectionEvent e) {
 
 				copyToClipboard(e.display);
+			}
+		});
+		//
+		return item;
+	}
+
+	private ToolItem createModifyDescriptionButton(ToolBar toolBar) {
+
+		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
+		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TAG, IApplicationImage.SIZE_16x16));
+		item.setToolTipText("Modify the process method description.");
+		item.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(processMethod != null) {
+					Object object = structuredViewer.getStructuredSelection().getFirstElement();
+					if(object instanceof ProcessEntry) {
+						/*
+						 * Ask the user for a specific description.
+						 */
+						ProcessEntry processEntry = (ProcessEntry)object;
+						InputDialog inputDialog = new InputDialog(e.display.getActiveShell(), "Description", "Set a specific process entry description.", processEntry.getDescription(), new IInputValidator() {
+
+							@Override
+							public String isValid(String value) {
+
+								if(value.trim().isEmpty()) {
+									return "Please enter a description.";
+								}
+								return null;
+							}
+						});
+						//
+						if(inputDialog.open() == Window.OK) {
+							String description = inputDialog.getValue().trim();
+							processEntry.setDescription(description);
+							fireUpdate();
+						}
+					}
+				}
 			}
 		});
 		//

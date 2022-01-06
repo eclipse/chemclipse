@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -44,6 +44,7 @@ import org.eclipse.swt.widgets.Composite;
 public class MethodTreeViewer extends TreeViewer {
 
 	private final TreeViewerColumn[] columns = new TreeViewerColumn[MethodListLabelProvider.TITLES.length];
+	//
 	private ProcessSupplierContext processingSupport;
 	private BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>> preferencesSupplier;
 	private AtomicReference<ProcessMethodToolbar> toolbarButtons;
