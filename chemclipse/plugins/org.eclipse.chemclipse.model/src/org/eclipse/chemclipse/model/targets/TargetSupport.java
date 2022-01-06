@@ -10,7 +10,7 @@
  * Dr. Philip Wenig - initial API and implementation
  * Christoph Läubrich - adjust to new API
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.support;
+package org.eclipse.chemclipse.model.targets;
 
 import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -18,7 +18,6 @@ import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.core.ITargetSupplier;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.model.targets.LibraryField;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 
 public class TargetSupport {
