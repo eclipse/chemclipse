@@ -28,7 +28,7 @@ public class ReportSettings2 extends DefaultChromatogramReportSettings {
 	private int deltaRetentionTimeRight = 0;
 	@JsonProperty(value = "Use Best Match", defaultValue = "" + PreferenceSupplier.DEF_USE_BEST_MATCH)
 	private boolean useBestMatch;
-	@JsonProperty(value = "Use Retention Index QC", defaultValue = "" + PreferenceSupplier.DEF_ADD_PEAK_AREA)
+	@JsonProperty(value = "Use Retention Index QC", defaultValue = "" + PreferenceSupplier.DEF_USE_RETENTION_INDEX_QC)
 	@JsonPropertyDescription(value = "When trying to get the best target, additionally use the min retention index delta.")
 	private boolean useRetentionIndexQC;
 	@JsonProperty(value = "Add Peak Area", defaultValue = "" + PreferenceSupplier.DEF_ADD_PEAK_AREA)
