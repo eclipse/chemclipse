@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -23,16 +23,24 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 public abstract class IdentifierAdapterSettings extends AbstractProcessSettings implements IIdentifierSettings {
 
+	/*
+	 * Delta Calculation
+	 */
+	@JsonIgnore
+	private DeltaCalculation deltaCalculation = DeltaCalculation.NONE;
+	@JsonIgnore
+	private float deltaWindow = 0.0f;
+	/*
+	 * Penalty Calculation
+	 */
 	@JsonIgnore
 	private PenaltyCalculation penaltyCalculation = PenaltyCalculation.NONE;
 	@JsonIgnore
-	private int retentionTimeWindow = 2000;
+	private float penaltyWindow = 0.0f;
 	@JsonIgnore
-	private float retentionIndexWindow = 20.0f;
+	private float penaltyLevelFactor = IIdentifierSettings.DEF_PENALTY_LEVEL_FACTOR;
 	@JsonIgnore
-	private float penaltyCalculationLevelFactor = IIdentifierSettings.DEF_PENALTY_CALCULATION_LEVEL_FACTOR;
-	@JsonIgnore
-	private float maxPenalty = 20.0f;
+	private float maxPenalty = IIdentifierSettings.DEF_PENALTY_MATCH_FACTOR;
 	//
 	@JsonIgnore
 	private boolean setResultAutomatically;
@@ -50,6 +58,30 @@ public abstract class IdentifierAdapterSettings extends AbstractProcessSettings 
 	}
 
 	@Override
+	public DeltaCalculation getDeltaCalculation() {
+
+		return deltaCalculation;
+	}
+
+	@Override
+	public void setDeltaCalculation(DeltaCalculation deltaCalculation) {
+
+		this.deltaCalculation = deltaCalculation;
+	}
+
+	@Override
+	public float getDeltaWindow() {
+
+		return deltaWindow;
+	}
+
+	@Override
+	public void setDeltaWindow(float deltaWindow) {
+
+		this.deltaWindow = deltaWindow;
+	}
+
+	@Override
 	public PenaltyCalculation getPenaltyCalculation() {
 
 		return penaltyCalculation;
@@ -62,39 +94,27 @@ public abstract class IdentifierAdapterSettings extends AbstractProcessSettings 
 	}
 
 	@Override
-	public int getRetentionTimeWindow() {
+	public float getPenaltyWindow() {
 
-		return retentionTimeWindow;
+		return penaltyWindow;
 	}
 
 	@Override
-	public void setRetentionTimeWindow(int retentionTimeWindow) {
+	public void setPenaltyWindow(float penaltyWindow) {
 
-		this.retentionTimeWindow = retentionTimeWindow;
+		this.penaltyWindow = penaltyWindow;
 	}
 
 	@Override
-	public float getRetentionIndexWindow() {
+	public float getPenaltyLevelFactor() {
 
-		return retentionIndexWindow;
+		return penaltyLevelFactor;
 	}
 
 	@Override
-	public void setRetentionIndexWindow(float retentionIndexWindow) {
+	public void setPenaltyLevelFactor(float penaltyLevelFactor) {
 
-		this.retentionIndexWindow = retentionIndexWindow;
-	}
-
-	@Override
-	public float getPenaltyCalculationLevelFactor() {
-
-		return penaltyCalculationLevelFactor;
-	}
-
-	@Override
-	public void setPenaltyCalculationLevelFactor(float penaltyCalculationLevelFactor) {
-
-		this.penaltyCalculationLevelFactor = penaltyCalculationLevelFactor;
+		this.penaltyLevelFactor = penaltyLevelFactor;
 	}
 
 	@Override

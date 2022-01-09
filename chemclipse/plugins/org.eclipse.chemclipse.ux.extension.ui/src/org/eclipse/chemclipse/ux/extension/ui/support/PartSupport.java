@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -82,6 +82,7 @@ public class PartSupport {
 	public static final String PARTDESCRIPTOR_QUANT_PEAKS_CHART = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.quantPeaksChartPartDescriptor";
 	public static final String PARTDESCRIPTOR_QUANT_PEAKS_LIST = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.quantPeaksListPartDescriptor";
 	public static final String PARTDESCRIPTOR_QUANT_SIGNALS_LIST = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.quantSignalsListPartDescriptor";
+	public static final String PARTDESCRIPTOR_PENALTY_CALCULATION = "org.eclipse.chemclipse.ux.extension.xxd.ui.partdescriptor.penaltyCalculationPartDescriptor";
 	//
 	public static final String PARTSTACK_NONE = "";
 	public static final String PARTSTACK_LEFT_TOP = "org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.left.top";

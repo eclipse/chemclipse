@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2019 Lablicate GmbH.
+ * Copyright (c) 2010, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -19,15 +19,16 @@ import java.util.Comparator;
 public interface IComparisonResult extends Serializable, Comparable<IComparisonResult> {
 
 	static Comparator<IComparisonResult> MATCH_FACTOR_COMPARATOR = (o1, o2) -> Float.compare(o1.getMatchFactor(), o2.getMatchFactor());
+	//
 	float FACTOR_BEST_MATCH = 100.0f;
 	float FACTOR_NO_MATCH = 0.0f;
 	//
 	float MAX_MATCH_FACTOR = FACTOR_BEST_MATCH;
 	float MAX_REVERSE_MATCH_FACTOR = FACTOR_BEST_MATCH;
 	//
-	float DEF_MAX_PENALTY = 20.0f;
-	float MIN_ALLOWED_PENALTY = 0.0f;
-	float MAX_ALLOWED_PENALTY = 100.0f;
+	float DEF_MAX_PENALTY = IIdentifierSettings.DEF_PENALTY_MATCH_FACTOR;
+	float MIN_ALLOWED_PENALTY = IIdentifierSettings.MIN_PENALTY_MATCH_FACTOR;
+	float MAX_ALLOWED_PENALTY = IIdentifierSettings.MAX_PENALTY_MATCH_FACTOR;
 	//
 	float MIN_ALLOWED_PROBABILITY = 0.0f;
 	float MAX_ALLOWED_PROBABILITY = 100.0f;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2021 Lablicate GmbH.
+ * Copyright (c) 2014, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,7 +27,8 @@ import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.PeakUnknownSettingsWSD;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.WaveSpectrumUnknownSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.DeltaCalculation;
+import org.eclipse.chemclipse.model.identifier.IIdentifierSettings;
 import org.eclipse.chemclipse.model.identifier.PenaltyCalculation;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.util.FileListUtil;
@@ -102,23 +103,20 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_NUMBER_OF_WAVELENGTH_UNKNOWN = "numberOfWavelengthUnknown";
 	public static final int DEF_NUMBER_OF_WAVELENGTH_UNKNOWN = 5;
 	/*
-	 * RI / RT penalty calculation.
+	 * Penalty calculation.
 	 */
+	public static final String P_DELTA_CALCULATION = "deltaCalculation";
+	public static final String DEF_DELTA_CALCULATION = DeltaCalculation.NONE.name();
+	public static final String P_DELTA_WINDOW = "deltaWindow";
+	public static final float DEF_DELTA_WINDOW = 0.0f;
 	public static final String P_PENALTY_CALCULATION = "penaltyCalculation";
 	public static final String DEF_PENALTY_CALCULATION = PenaltyCalculation.NONE.name();
-	//
-	public static final String P_PENALTY_CALCULATION_LEVEL_FACTOR = "penaltyCalculationLevelFactor";
+	public static final String P_PENALTY_WINDOW = "penaltyWindow";
+	public static final float DEF_PENALTY_WINDOW = 0.0f;
+	public static final String P_PENALTY_LEVEL_FACTOR = "penaltyLevelFactor";
+	public static final float DEF_PENALTY_LEVEL_FACTOR = IIdentifierSettings.DEF_PENALTY_LEVEL_FACTOR;
 	public static final String P_MAX_PENALTY = "maxPenalty";
-	//
-	public static final String P_RETENTION_TIME_WINDOW = "retentionTimeWindow";
-	public static final int DEF_RETENTION_TIME_WINDOW = 12000; // = 0.2 minutes
-	public static final int MIN_RETENTION_TIME_WINDOW = 60; // = 0.001 minutes
-	public static final int MAX_RETENTION_TIME_WINDOW = 60000; // = 1.0 minutes;
-	//
-	public static final String P_RETENTION_INDEX_WINDOW = "retentionIndexWindow";
-	public static final float DEF_RETENTION_INDEX_WINDOW = 20.0f;
-	public static final float MIN_RETENTION_INDEX_WINDOW = 10.0f;
-	public static final float MAX_RETENTION_INDEX_WINDOW = 20.0f;
+	public static final float DEF_MAX_PENALTY = IIdentifierSettings.DEF_PENALTY_MATCH_FACTOR;
 	//
 	public static final String P_FILTER_PATH_IDENTIFIER_FILES = "filterPathIdentifierFiles";
 	public static final String DEF_FILTER_PATH_IDENTIFIER_FILES = "";
@@ -164,11 +162,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_NUMBER_OF_MZ_UNKNOWN, Integer.toString(DEF_NUMBER_OF_MZ_UNKNOWN));
 		defaultValues.put(P_NUMBER_OF_WAVELENGTH_UNKNOWN, Integer.toString(DEF_NUMBER_OF_WAVELENGTH_UNKNOWN));
 		//
+		defaultValues.put(P_DELTA_CALCULATION, DEF_DELTA_CALCULATION);
+		defaultValues.put(P_DELTA_WINDOW, Float.toString(DEF_DELTA_WINDOW));
 		defaultValues.put(P_PENALTY_CALCULATION, DEF_PENALTY_CALCULATION);
-		defaultValues.put(P_PENALTY_CALCULATION_LEVEL_FACTOR, Float.toString(IIdentifierSettingsMSD.DEF_PENALTY_CALCULATION_LEVEL_FACTOR));
-		defaultValues.put(P_MAX_PENALTY, Float.toString(IComparisonResult.DEF_MAX_PENALTY));
-		defaultValues.put(P_RETENTION_TIME_WINDOW, Integer.toString(DEF_RETENTION_TIME_WINDOW));
-		defaultValues.put(P_RETENTION_INDEX_WINDOW, Float.toString(DEF_RETENTION_INDEX_WINDOW));
+		defaultValues.put(P_PENALTY_WINDOW, Float.toString(DEF_PENALTY_WINDOW));
+		defaultValues.put(P_PENALTY_LEVEL_FACTOR, Float.toString(DEF_PENALTY_LEVEL_FACTOR));
+		defaultValues.put(P_MAX_PENALTY, Float.toString(DEF_MAX_PENALTY));
 		defaultValues.put(P_FILTER_PATH_IDENTIFIER_FILES, DEF_FILTER_PATH_IDENTIFIER_FILES);
 		return defaultValues;
 	}
@@ -207,10 +206,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		settings.setMinReverseMatchFactor(preferences.getFloat(P_MIN_REVERSE_MATCH_FACTOR, DEF_MIN_REVERSE_MATCH_FACTOR));
 		//
 		settings.setPenaltyCalculation(getPenaltyCalculation());
-		settings.setPenaltyCalculationLevelFactor(preferences.getFloat(P_PENALTY_CALCULATION_LEVEL_FACTOR, IIdentifierSettingsMSD.DEF_PENALTY_CALCULATION_LEVEL_FACTOR));
-		settings.setMaxPenalty(preferences.getFloat(P_MAX_PENALTY, IComparisonResult.DEF_MAX_PENALTY));
-		settings.setRetentionTimeWindow(preferences.getInt(P_RETENTION_TIME_WINDOW, DEF_RETENTION_TIME_WINDOW));
-		settings.setRetentionIndexWindow(preferences.getFloat(P_RETENTION_INDEX_WINDOW, DEF_RETENTION_INDEX_WINDOW));
+		settings.setPenaltyWindow(preferences.getFloat(P_PENALTY_WINDOW, DEF_PENALTY_WINDOW));
+		settings.setPenaltyLevelFactor(preferences.getFloat(P_PENALTY_LEVEL_FACTOR, DEF_PENALTY_LEVEL_FACTOR));
+		settings.setMaxPenalty(preferences.getFloat(P_MAX_PENALTY, DEF_MAX_PENALTY));
 		//
 		return settings;
 	}
@@ -228,11 +226,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		settings.setMinMatchFactor(preferences.getFloat(P_MIN_MATCH_FACTOR, DEF_MIN_MATCH_FACTOR));
 		settings.setMinReverseMatchFactor(preferences.getFloat(P_MIN_REVERSE_MATCH_FACTOR, DEF_MIN_REVERSE_MATCH_FACTOR));
 		//
+		settings.setDeltaCalculation(getDeltaCalculation());
+		settings.setDeltaWindow(preferences.getFloat(P_DELTA_WINDOW, DEF_DELTA_WINDOW));
 		settings.setPenaltyCalculation(getPenaltyCalculation());
-		settings.setPenaltyCalculationLevelFactor(preferences.getFloat(P_PENALTY_CALCULATION_LEVEL_FACTOR, IIdentifierSettingsMSD.DEF_PENALTY_CALCULATION_LEVEL_FACTOR));
-		settings.setMaxPenalty(preferences.getFloat(P_MAX_PENALTY, IComparisonResult.DEF_MAX_PENALTY));
-		settings.setRetentionTimeWindow(preferences.getInt(P_RETENTION_TIME_WINDOW, DEF_RETENTION_TIME_WINDOW));
-		settings.setRetentionIndexWindow(preferences.getFloat(P_RETENTION_INDEX_WINDOW, DEF_RETENTION_INDEX_WINDOW));
+		settings.setPenaltyWindow(preferences.getFloat(P_PENALTY_WINDOW, DEF_PENALTY_WINDOW));
+		settings.setPenaltyLevelFactor(preferences.getFloat(P_PENALTY_LEVEL_FACTOR, DEF_PENALTY_LEVEL_FACTOR));
+		settings.setMaxPenalty(preferences.getFloat(P_MAX_PENALTY, DEF_MAX_PENALTY));
 		//
 		return settings;
 	}
@@ -335,6 +334,16 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		putSetting(P_FILTER_PATH_IDENTIFIER_FILES, filterPath);
 	}
 
+	private static DeltaCalculation getDeltaCalculation() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		try {
+			return DeltaCalculation.valueOf(preferences.get(P_DELTA_CALCULATION, DEF_DELTA_CALCULATION));
+		} catch(Exception e) {
+			return DeltaCalculation.NONE;
+		}
+	}
+
 	private static PenaltyCalculation getPenaltyCalculation() {
 
 		IEclipsePreferences eclipsePreferences = INSTANCE().getPreferences();
@@ -343,15 +352,27 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		 * Backward compatibility, see:
 		 * org.eclipse.chemclipse.model.identifier.IIdentifierSettings
 		 * commit 58061db00e5a47107fc35255135e2f368bd75e32
+		 * commit 2022/01 - improvement identifier settings
 		 */
 		if("RT".equals(setting)) {
-			putSetting(P_PENALTY_CALCULATION, PenaltyCalculation.RETENTION_TIME.name());
-			return PenaltyCalculation.RETENTION_TIME;
+			putSetting(P_PENALTY_CALCULATION, PenaltyCalculation.RETENTION_TIME_MS.name());
+			return PenaltyCalculation.RETENTION_TIME_MS;
 		} else if("RI".equals(setting)) {
 			putSetting(P_PENALTY_CALCULATION, PenaltyCalculation.RETENTION_INDEX.name());
 			return PenaltyCalculation.RETENTION_INDEX;
+		} else if("RETENTION_TIME".equals(setting)) {
+			putSetting(P_PENALTY_CALCULATION, PenaltyCalculation.RETENTION_TIME_MS.name());
+			return PenaltyCalculation.RETENTION_TIME_MS;
 		} else {
-			return PenaltyCalculation.valueOf(setting);
+			try {
+				return PenaltyCalculation.valueOf(setting);
+			} catch(Exception e) {
+				/*
+				 * The option BOTH has been removed as it doesn't make sense.
+				 */
+				putSetting(P_PENALTY_CALCULATION, PenaltyCalculation.NONE.name());
+				return PenaltyCalculation.NONE;
+			}
 		}
 	}
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -54,7 +54,7 @@ public class PreferenceConstants extends ChartOptions {
 	public static final int MAX_TRACES_VIRTUAL_TABLE = 25000;
 	//
 	public static final int MIN_OFFSET_RETENTION_TIME = 0;
-	public static final int MAX_OFFSET_RETENTION_TIME = 10000; // 10 seconds
+	public static final int MAX_OFFSET_RETENTION_TIME = 120000; // 120 Seconds (2 Minutes)
 	public static final int DEF_OFFSET_RETENTION_TIME = 0;
 	//
 	public static final int MIN_SIM_IONS = 1;
@@ -147,6 +147,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_STACK_POSITION_QUANT_PEAKS_LIST = PartSupport.PARTSTACK_BOTTOM_LEFT;
 	public static final String P_STACK_POSITION_QUANT_SIGNALS_LIST = "stackPositionQuantSignalsList";
 	public static final String DEF_STACK_POSITION_QUANT_SIGNALS_LIST = PartSupport.PARTSTACK_BOTTOM_LEFT;
+	public static final String P_STACK_POSITION_PENALTY_CALCULATION = "stackPositionPenaltyCalculation";
+	public static final String DEF_STACK_POSITION_PENALTY_CALCULATION = PartSupport.PARTSTACK_BOTTOM_RIGHT;
 	/*
 	 * Overlay
 	 */

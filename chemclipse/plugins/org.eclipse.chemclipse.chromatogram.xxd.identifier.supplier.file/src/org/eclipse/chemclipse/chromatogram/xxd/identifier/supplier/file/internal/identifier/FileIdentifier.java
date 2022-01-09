@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2021 Lablicate GmbH.
+ * Copyright (c) 2015, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,20 +26,20 @@ import java.util.function.Function;
 
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.IMassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.IMassSpectrumComparisonSupplier;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.support.DatabasesCache;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.support.PenaltyCalculationSupport;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.support.TargetBuilderMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.IFileIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.MassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.PeakIdentifierSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.identifier.DeltaCalculationSupport;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.IPeakIdentificationResults;
 import org.eclipse.chemclipse.model.identifier.MatchConstraints;
 import org.eclipse.chemclipse.model.identifier.PeakIdentificationResults;
+import org.eclipse.chemclipse.model.identifier.PenaltyCalculationSupport;
 import org.eclipse.chemclipse.model.support.LimitSupport;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -259,33 +259,6 @@ public class FileIdentifier {
 		return matched;
 	}
 
-	private static void applyPenaltyOnDemand(IScanMSD unknown, IScanMSD reference, IComparisonResult comparisonResult, IIdentifierSettingsMSD identifierSettings) {
-
-		float penalty = 0.0f;
-		switch(identifierSettings.getPenaltyCalculation()) {
-			case RETENTION_TIME:
-				penalty = PenaltyCalculationSupport.calculatePenaltyFromRetentionTime(unknown.getRetentionTime(), reference.getRetentionTime(), identifierSettings.getRetentionTimeWindow(), identifierSettings.getPenaltyCalculationLevelFactor(), identifierSettings.getMaxPenalty());
-				break;
-			case RETENTION_INDEX:
-				penalty = PenaltyCalculationSupport.calculatePenaltyFromRetentionIndex(unknown, reference, identifierSettings.getRetentionIndexWindow(), identifierSettings.getPenaltyCalculationLevelFactor(), identifierSettings.getMaxPenalty());
-				break;
-			case BOTH:
-				float penaltyRT = PenaltyCalculationSupport.calculatePenaltyFromRetentionTime(unknown.getRetentionTime(), reference.getRetentionTime(), identifierSettings.getRetentionTimeWindow(), identifierSettings.getPenaltyCalculationLevelFactor(), identifierSettings.getMaxPenalty());
-				float penaltyRI = PenaltyCalculationSupport.calculatePenaltyFromRetentionIndex(unknown, reference, identifierSettings.getRetentionIndexWindow(), identifierSettings.getPenaltyCalculationLevelFactor(), identifierSettings.getMaxPenalty());
-				penalty = (penaltyRT + penaltyRI) / 2.0f;
-				break;
-			case NONE:
-				// Do nothing.
-				break;
-		}
-		/*
-		 * Apply the penalty on demand.
-		 */
-		if(penalty != 0.0f) {
-			comparisonResult.setPenalty(penalty);
-		}
-	}
-
 	private static boolean isValidTarget(IComparisonResult comparisonResult, float minMatchFactor, float minReverseMatchFactor) {
 
 		if(comparisonResult.getMatchFactor() >= minMatchFactor && comparisonResult.getReverseMatchFactor() >= minReverseMatchFactor) {
@@ -349,9 +322,12 @@ public class FileIdentifier {
 			for(IScanMSD reference : references) {
 				IProcessingInfo<IComparisonResult> infoCompare = spectrumComparator.compare(unknown, reference, matchConstraints);
 				IComparisonResult comparisonResult = infoCompare.getProcessingResult();
-				applyPenaltyOnDemand(unknown, reference, comparisonResult, settings);
-				if(isValidTarget(comparisonResult, minMatchFactor, minReverseMatchFactor)) {
-					results.put(comparisonResult, reference);
+				boolean useTarget = DeltaCalculationSupport.useTarget(unknown, reference, settings);
+				if(useTarget) {
+					PenaltyCalculationSupport.applyPenalty(unknown, reference, comparisonResult, settings);
+					if(isValidTarget(comparisonResult, minMatchFactor, minReverseMatchFactor)) {
+						results.put(comparisonResult, reference);
+					}
 				}
 			}
 			return results;

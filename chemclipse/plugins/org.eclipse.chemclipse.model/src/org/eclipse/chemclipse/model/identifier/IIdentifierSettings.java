@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,31 +16,34 @@ import org.eclipse.chemclipse.model.settings.IProcessSettings;
 
 public interface IIdentifierSettings extends IProcessSettings {
 
-	String[][] PENALTY_CALCULATION_OPTIONS = new String[][]{//
-			{PenaltyCalculation.NONE.label(), PenaltyCalculation.NONE.name()}, //
-			{PenaltyCalculation.RETENTION_INDEX.label(), PenaltyCalculation.RETENTION_INDEX.name()}, //
-			{PenaltyCalculation.RETENTION_TIME.label(), PenaltyCalculation.RETENTION_TIME.name()}, //
-			{PenaltyCalculation.BOTH.label(), PenaltyCalculation.BOTH.name()}};
+	float MIN_DELTA_WINDOW = 0.0f;
+	float MAX_DELTA_WINDOW = Float.MAX_VALUE;
 	//
-	float DEF_PENALTY_CALCULATION_LEVEL_FACTOR = 5.0f;
-	float MIN_PENALTY_CALCULATION_LEVEL_FACTOR = 1.0f;
-	float MAX_PENALTY_CALCULATION_LEVEL_FACTOR = 1000.0f;
+	float MIN_PENALTY_WINDOW = 0.0f;
+	float MAX_PENALTY_WINDOW = Float.MAX_VALUE;
+	//
+	float DEF_PENALTY_LEVEL_FACTOR = 5.0f;
+	float MIN_PENALTY_LEVEL_FACTOR = 1.0f;
+	float MAX_PENALTY_LEVEL_FACTOR = 1000.0f;
+	//
+	float DEF_PENALTY_MATCH_FACTOR = 20.0f;
+	float MIN_PENALTY_MATCH_FACTOR = 0.0f;
+	float MAX_PENALTY_MATCH_FACTOR = 100.0f;
 
-	/**
-	 * Returns if the result should be stored automatically in the peak or
-	 * chromatogram.
-	 * 
-	 * @return boolean
-	 */
 	boolean isSetResultAutomatically();
 
-	/**
-	 * Sets if the result should be stored automatically in the peak or
-	 * chromatogram.
-	 * 
-	 * @param setResultAutomatically
-	 */
 	void setSetResultAutomatically(boolean setResultAutomatically);
+
+	/**
+	 * Retention Time / Index Delta Calculation
+	 */
+	DeltaCalculation getDeltaCalculation();
+
+	void setDeltaCalculation(DeltaCalculation deltaCalculation);
+
+	float getDeltaWindow();
+
+	void setDeltaWindow(float deltaWindow);
 
 	/**
 	 * Retention Time / Index Penalty Calculation
@@ -49,19 +52,15 @@ public interface IIdentifierSettings extends IProcessSettings {
 
 	void setPenaltyCalculation(PenaltyCalculation penaltyCalculation);
 
-	int getRetentionTimeWindow();
+	float getPenaltyWindow();
 
-	void setRetentionTimeWindow(int retentionTimeWindow);
+	void setPenaltyWindow(float penaltyWindow);
 
-	float getRetentionIndexWindow();
+	float getPenaltyLevelFactor();
 
-	void setRetentionIndexWindow(float retentionIndex);
-
-	float getPenaltyCalculationLevelFactor();
-
-	void setPenaltyCalculationLevelFactor(float penaltyCalculationLevelFactor);
+	void setPenaltyLevelFactor(float penaltyLevelFactor);
 
 	float getMaxPenalty();
 
-	void setMaxPenalty(float penaltyCalculationMaxValue);
+	void setMaxPenalty(float maxValue);
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.model.identifier;
 
 import org.eclipse.chemclipse.model.settings.AbstractProcessSettings;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
-import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -21,25 +20,34 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class AbstractIdentifierSettings extends AbstractProcessSettings implements IIdentifierSettings {
 
+	/**
+	 * Delta Calculation
+	 */
+	@JsonProperty(value = "Delta Calculation", defaultValue = "NONE")
+	@JsonPropertyDescription(value = "Select the strategy, how delta windows are applied to exclude peaks from the identification.")
+	private DeltaCalculation deltaCalculation = DeltaCalculation.NONE;
+	@JsonProperty(value = "Delta Window", defaultValue = "0")
+	@JsonPropertyDescription(value = "Identify the peak if the unknown is inside of the delta window (delta -/+).")
+	@FloatSettingsProperty(minValue = IIdentifierSettings.MIN_DELTA_WINDOW, maxValue = IIdentifierSettings.MAX_DELTA_WINDOW)
+	private float deltaWindow = 0.0f;
+	/**
+	 * Penalty Calculation
+	 */
 	@JsonProperty(value = "Penalty Calculation", defaultValue = "NONE")
 	@JsonPropertyDescription(value = "Select the strategy, how penalties are calculated.")
 	private PenaltyCalculation penaltyCalculation = PenaltyCalculation.NONE;
-	@JsonProperty(value = "Retention Time Window [ms]", defaultValue = "2000")
-	@JsonPropertyDescription(value = "The retention time window, given in milliseconds.")
-	@IntSettingsProperty(minValue = 0, maxValue = Integer.MAX_VALUE)
-	private int retentionTimeWindow = 2000;
-	@JsonProperty(value = "Retention Index Window", defaultValue = "20")
-	@JsonPropertyDescription(value = "The retention index window.")
-	@FloatSettingsProperty(minValue = 0.0f, maxValue = Float.MAX_VALUE)
-	private float retentionIndexWindow = 20.0f;
-	@JsonProperty(value = "Penalty Calculation Level Factor", defaultValue = "5.0")
-	@JsonPropertyDescription(value = "The penalty calculation level factor.")
-	@FloatSettingsProperty(minValue = IIdentifierSettings.MIN_PENALTY_CALCULATION_LEVEL_FACTOR, maxValue = IIdentifierSettings.MAX_PENALTY_CALCULATION_LEVEL_FACTOR)
-	private float penaltyCalculationLevelFactor = IIdentifierSettings.DEF_PENALTY_CALCULATION_LEVEL_FACTOR;
+	@JsonProperty(value = "Penalty Window", defaultValue = "0")
+	@JsonPropertyDescription(value = "The penalty window. The unit of the selected penalty calculation is used.")
+	@FloatSettingsProperty(minValue = IIdentifierSettings.MIN_PENALTY_WINDOW, maxValue = IIdentifierSettings.MAX_PENALTY_WINDOW)
+	private float penaltyWindow = 0.0f;
+	@JsonProperty(value = "Penalty Level Factor", defaultValue = "5.0")
+	@JsonPropertyDescription(value = "The penalty level factor.")
+	@FloatSettingsProperty(minValue = IIdentifierSettings.MIN_PENALTY_LEVEL_FACTOR, maxValue = IIdentifierSettings.MAX_PENALTY_LEVEL_FACTOR)
+	private float penaltyLevelFactor = IIdentifierSettings.DEF_PENALTY_LEVEL_FACTOR;
 	@JsonProperty(value = "Max Penalty", defaultValue = "20")
 	@JsonPropertyDescription(value = "The max penalty. Values between 0 (no penalty) and 100 (max penalty) are allowed.")
-	@FloatSettingsProperty(minValue = 0.0f, maxValue = 100.0f)
-	private float maxPenalty = 20.0f;
+	@FloatSettingsProperty(minValue = MIN_PENALTY_MATCH_FACTOR, maxValue = MAX_PENALTY_MATCH_FACTOR)
+	private float maxPenalty = DEF_PENALTY_MATCH_FACTOR;
 	//
 	@JsonIgnore
 	private boolean setResultAutomatically;
@@ -57,6 +65,30 @@ public class AbstractIdentifierSettings extends AbstractProcessSettings implemen
 	}
 
 	@Override
+	public DeltaCalculation getDeltaCalculation() {
+
+		return deltaCalculation;
+	}
+
+	@Override
+	public void setDeltaCalculation(DeltaCalculation deltaCalculation) {
+
+		this.deltaCalculation = deltaCalculation;
+	}
+
+	@Override
+	public float getDeltaWindow() {
+
+		return deltaWindow;
+	}
+
+	@Override
+	public void setDeltaWindow(float deltaWindow) {
+
+		this.deltaWindow = deltaWindow;
+	}
+
+	@Override
 	public PenaltyCalculation getPenaltyCalculation() {
 
 		return penaltyCalculation;
@@ -69,39 +101,27 @@ public class AbstractIdentifierSettings extends AbstractProcessSettings implemen
 	}
 
 	@Override
-	public int getRetentionTimeWindow() {
+	public float getPenaltyWindow() {
 
-		return retentionTimeWindow;
+		return penaltyWindow;
 	}
 
 	@Override
-	public void setRetentionTimeWindow(int retentionTimeWindow) {
+	public void setPenaltyWindow(float penaltyWindow) {
 
-		this.retentionTimeWindow = retentionTimeWindow;
+		this.penaltyWindow = penaltyWindow;
 	}
 
 	@Override
-	public float getRetentionIndexWindow() {
+	public float getPenaltyLevelFactor() {
 
-		return retentionIndexWindow;
+		return penaltyLevelFactor;
 	}
 
 	@Override
-	public void setRetentionIndexWindow(float retentionIndexWindow) {
+	public void setPenaltyLevelFactor(float penaltyLevelFactor) {
 
-		this.retentionIndexWindow = retentionIndexWindow;
-	}
-
-	@Override
-	public float getPenaltyCalculationLevelFactor() {
-
-		return penaltyCalculationLevelFactor;
-	}
-
-	@Override
-	public void setPenaltyCalculationLevelFactor(float penaltyCalculationLevelFactor) {
-
-		this.penaltyCalculationLevelFactor = penaltyCalculationLevelFactor;
+		this.penaltyLevelFactor = penaltyLevelFactor;
 	}
 
 	@Override

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2021 Lablicate GmbH.
+ * Copyright (c) 2014, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,22 +12,21 @@
 package org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.ui.preferences;
 
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.MassSpectrumComparator;
-import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.ui.editors.IdentifierTableEditor;
-import org.eclipse.chemclipse.model.identifier.IComparisonResult;
+import org.eclipse.chemclipse.model.identifier.DeltaCalculation;
 import org.eclipse.chemclipse.model.identifier.IIdentifierSettings;
+import org.eclipse.chemclipse.model.identifier.PenaltyCalculation;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.DoubleFieldEditor;
-import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.FloatFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.ExtendedIntegerFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.FloatFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.RadioGroupFieldEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
@@ -68,11 +67,14 @@ public class PreferencePageFile extends FieldEditorPreferencePage implements IWo
 		addField(new FloatFieldEditor(PreferenceSupplier.P_MIN_REVERSE_MATCH_FACTOR, "Min Reverse Match Factor", PreferenceSupplier.MIN_FACTOR, PreferenceSupplier.MAX_FACTOR, getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new RadioGroupFieldEditor(PreferenceSupplier.P_PENALTY_CALCULATION, "Penalty Calculation", 1, IIdentifierSettings.PENALTY_CALCULATION_OPTIONS, getFieldEditorParent()));
-		addField(new ExtendedIntegerFieldEditor(PreferenceSupplier.P_RETENTION_TIME_WINDOW, "Retention Time Window [ms]", PreferenceSupplier.MIN_RETENTION_TIME_WINDOW, PreferenceSupplier.MAX_RETENTION_TIME_WINDOW, getFieldEditorParent()));
-		addField(new FloatFieldEditor(PreferenceSupplier.P_RETENTION_INDEX_WINDOW, "Retention Index Window", PreferenceSupplier.MIN_RETENTION_INDEX_WINDOW, PreferenceSupplier.MAX_RETENTION_INDEX_WINDOW, getFieldEditorParent()));
-		addField(new FloatFieldEditor(PreferenceSupplier.P_PENALTY_CALCULATION_LEVEL_FACTOR, "Penalty Calculation Level Factor", IIdentifierSettingsMSD.MIN_PENALTY_CALCULATION_LEVEL_FACTOR, IIdentifierSettingsMSD.MAX_PENALTY_CALCULATION_LEVEL_FACTOR, getFieldEditorParent()));
-		addField(new FloatFieldEditor(PreferenceSupplier.P_MAX_PENALTY, "Max Penalty", IComparisonResult.MIN_ALLOWED_PENALTY, IComparisonResult.MAX_ALLOWED_PENALTY, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_DELTA_CALCULATION, "Delta Calculation", DeltaCalculation.getOptions(), getFieldEditorParent()));
+		addField(new FloatFieldEditor(PreferenceSupplier.P_DELTA_WINDOW, "Delta Window", IIdentifierSettings.MIN_DELTA_WINDOW, IIdentifierSettings.MAX_DELTA_WINDOW, getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_PENALTY_CALCULATION, "Penalty Calculation", PenaltyCalculation.getOptions(), getFieldEditorParent()));
+		addField(new FloatFieldEditor(PreferenceSupplier.P_PENALTY_WINDOW, "Penalty Window", IIdentifierSettings.MIN_PENALTY_WINDOW, IIdentifierSettings.MAX_PENALTY_WINDOW, getFieldEditorParent()));
+		addField(new FloatFieldEditor(PreferenceSupplier.P_PENALTY_LEVEL_FACTOR, "Penalty Level Factor", IIdentifierSettings.MIN_PENALTY_LEVEL_FACTOR, IIdentifierSettings.MAX_PENALTY_LEVEL_FACTOR, getFieldEditorParent()));
+		addField(new FloatFieldEditor(PreferenceSupplier.P_MAX_PENALTY, "Max Penalty", IIdentifierSettings.MIN_PENALTY_MATCH_FACTOR, IIdentifierSettings.MAX_PENALTY_MATCH_FACTOR, getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Used locations for library files", getFieldEditorParent()));

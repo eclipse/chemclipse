@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -59,6 +59,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_QUANT_PEAKS_CHART, PreferenceConstants.DEF_STACK_POSITION_QUANT_PEAKS_CHART);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_QUANT_PEAKS_LIST, PreferenceConstants.DEF_STACK_POSITION_QUANT_PEAKS_LIST);
 		store.setDefault(PreferenceConstants.P_STACK_POSITION_QUANT_SIGNALS_LIST, PreferenceConstants.DEF_STACK_POSITION_QUANT_SIGNALS_LIST);
+		store.setDefault(PreferenceConstants.P_STACK_POSITION_PENALTY_CALCULATION, PreferenceConstants.DEF_STACK_POSITION_PENALTY_CALCULATION);
 		/*
 		 * Overlay
 		 */

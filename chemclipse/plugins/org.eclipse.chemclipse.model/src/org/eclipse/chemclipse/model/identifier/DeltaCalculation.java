@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.model.identifier;
 
 import org.eclipse.chemclipse.support.text.ILabel;
 
-public enum PenaltyCalculation implements ILabel {
+public enum DeltaCalculation implements ILabel {
 	NONE("None"), //
 	RETENTION_TIME_MS("Retention Time [ms]"), //
 	RETENTION_TIME_MIN("Retention Time [min]"), //
@@ -21,7 +21,7 @@ public enum PenaltyCalculation implements ILabel {
 
 	private String label = "";
 
-	private PenaltyCalculation(String label) {
+	private DeltaCalculation(String label) {
 
 		this.label = label;
 	}
