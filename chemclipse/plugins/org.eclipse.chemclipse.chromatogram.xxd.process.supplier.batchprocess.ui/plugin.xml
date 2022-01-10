@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.ui.modelContribution"
+         point="org.eclipse.e4.workbench.model">
+      <fragment
+            uri="fragment.e4xmi">
+      </fragment>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="org.eclipse.chemclipse.chromatogram.xxd.batchprocess.ui"
+            name="Batch Process">
+      </category>
+      <wizard
+            category="org.eclipse.chemclipse.chromatogram.xxd.batchprocess.ui"
+            class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.ui.wizards.WizardProcessor"
+            icon="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/batchprocess.gif"
+            id="org.eclipse.chemclipse.chromatogram.xxd.batchprocess.ui.wizards.wizardProcessor"
+            name="Batch Process Job">
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.ui.editors.BatchJobEditor"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            extensions="obj"
+            icon="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/batchprocess.gif"
+            id="org.eclipse.chemclipse.chromatogram.xxd.batchprocess.ui.editors.BatchProcessJobEditor"
+            name="Batch Process Job Editor">
+      </editor>
+   </extension>   
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.chemclipse.xxd.process.ui.preferences.processPreferencePage"
+            class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.ui.preferences.preferencePage"
+            name="Batch Process">
+      </page>
+   </extension>
+</plugin>

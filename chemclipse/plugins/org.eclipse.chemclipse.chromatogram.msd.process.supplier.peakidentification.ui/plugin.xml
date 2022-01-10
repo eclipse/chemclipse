@@ -11,7 +11,7 @@
    <extension
          point="org.eclipse.ui.newWizards">
       <wizard
-            category="org.eclipse.chemclipse.chromatogram.msd.batchprocess.ui"
+            category="org.eclipse.chemclipse.chromatogram.xxd.batchprocess.ui"
             class="org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.wizards.BatchJobWizard"
             icon="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/batchprocess.gif"
             id="org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.ui.PeakIdentificationBatchJobWizard"
@@ -29,5 +29,4 @@
             name="Peak Identification Batch Job Editor">
       </editor>
    </extension>
-   
 </plugin>
