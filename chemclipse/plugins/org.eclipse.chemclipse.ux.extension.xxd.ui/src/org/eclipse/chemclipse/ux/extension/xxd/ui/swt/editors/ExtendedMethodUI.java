@@ -117,6 +117,7 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 	public void setModificationHandler(IModificationHandler modificationHandler) {
 
 		this.modificationHandler = modificationHandler;
+		toolbarHeader.get().setModificationHandler(modificationHandler);
 	}
 
 	private void createControl() {
@@ -198,8 +199,8 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 
 		ProcessMethodHeader processMethodHeader = new ProcessMethodHeader(parent, SWT.NONE);
 		processMethodHeader.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		processMethodHeader.setModificationHandler(modificationHandler);
 		processMethodHeader.setProcessingSupport(processingSupport);
+		//
 		processMethodHeader.setUpdateListener(new IUpdateListener() {
 
 			@Override

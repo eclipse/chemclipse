@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -118,8 +118,6 @@ public class BatchJobUI {
 		//
 		dataListUI = createDataListUI(composite);
 		extendedMethodUI = createExtendedMethodUI(composite);
-		extendedMethodUI.setToolbarHeaderVisible(false);
-		extendedMethodUI.setToolbarMainVisible(false);
 		//
 		return composite;
 	}
@@ -151,6 +149,8 @@ public class BatchJobUI {
 
 		ExtendedMethodUI extendedMethodUI = new ExtendedMethodUI(parent, SWT.NONE, processingSupport, dataCategories);
 		extendedMethodUI.setLayoutData(new GridData(GridData.FILL_BOTH));
+		extendedMethodUI.setToolbarHeaderVisible(false);
+		extendedMethodUI.setToolbarMainVisible(false);
 		extendedMethodUI.setModificationHandler(this::setEditorDirty);
 		//
 		return extendedMethodUI;

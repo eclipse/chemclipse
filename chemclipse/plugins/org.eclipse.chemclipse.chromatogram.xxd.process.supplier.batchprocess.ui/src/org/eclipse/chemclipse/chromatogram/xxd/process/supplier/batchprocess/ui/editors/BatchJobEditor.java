@@ -128,14 +128,8 @@ public class BatchJobEditor extends EditorPart implements IRunnableWithProgress 
 	 */
 	protected void updateDirtyStatus(boolean dirty) {
 
-		if(dirty && getBatchProcessJob().equals(batchProcessJob)) {
-			dirty = false;
-		}
-		//
-		if(this.isDirty != dirty) {
-			this.isDirty = dirty;
-			firePropertyChange(IEditorPart.PROP_DIRTY);
-		}
+		this.isDirty = dirty;
+		firePropertyChange(IEditorPart.PROP_DIRTY);
 	}
 
 	@Override
