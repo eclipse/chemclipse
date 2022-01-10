@@ -24,6 +24,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public abstract class IdentifierAdapterSettings extends AbstractProcessSettings implements IIdentifierSettings {
 
 	/*
+	 * Limit Match Factor
+	 */
+	@JsonIgnore
+	private float limitMatchFactor = IIdentifierSettings.DEF_LIMIT_MATCH_FACTOR;
+	/*
 	 * Delta Calculation
 	 */
 	@JsonIgnore
@@ -55,6 +60,18 @@ public abstract class IdentifierAdapterSettings extends AbstractProcessSettings 
 	public void setSetResultAutomatically(boolean setResultAutomatically) {
 
 		this.setResultAutomatically = setResultAutomatically;
+	}
+
+	@Override
+	public float getLimitMatchFactor() {
+
+		return limitMatchFactor;
+	}
+
+	@Override
+	public void setLimitMatchFactor(float limitMatchFactor) {
+
+		this.limitMatchFactor = limitMatchFactor;
 	}
 
 	@Override

@@ -21,6 +21,13 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 public class AbstractIdentifierSettings extends AbstractProcessSettings implements IIdentifierSettings {
 
 	/**
+	 * Limit Match Factor
+	 */
+	@JsonProperty(value = "Limit Match Factor", defaultValue = "80.0")
+	@JsonPropertyDescription(value = "Run an identification if no target exists with a Match Factor >= the given limit.")
+	@FloatSettingsProperty(minValue = IIdentifierSettings.MIN_LIMIT_MATCH_FACTOR, maxValue = IIdentifierSettings.MAX_LIMIT_MATCH_FACTOR)
+	private float limitMatchFactor = IIdentifierSettings.DEF_LIMIT_MATCH_FACTOR;
+	/**
 	 * Delta Calculation
 	 */
 	@JsonProperty(value = "Delta Calculation", defaultValue = "NONE")
@@ -62,6 +69,18 @@ public class AbstractIdentifierSettings extends AbstractProcessSettings implemen
 	public void setSetResultAutomatically(boolean setResultAutomatically) {
 
 		this.setResultAutomatically = setResultAutomatically;
+	}
+
+	@Override
+	public float getLimitMatchFactor() {
+
+		return limitMatchFactor;
+	}
+
+	@Override
+	public void setLimitMatchFactor(float limitMatchFactor) {
+
+		this.limitMatchFactor = limitMatchFactor;
 	}
 
 	@Override

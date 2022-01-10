@@ -29,6 +29,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
+import org.eclipse.chemclipse.model.identifier.DeltaCalculation;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
@@ -320,6 +321,9 @@ public class BasePeakIdentifier {
 	private void setIdentifierSettings(IIdentifierSettingsMSD identifierSettings) {
 
 		identifierSettings.setMassSpectrumComparatorId(IIdentifierSettingsMSD.DEFAULT_COMPARATOR_ID);
+		identifierSettings.setLimitMatchFactor(100.0f);
+		identifierSettings.setDeltaCalculation(DeltaCalculation.NONE);
+		identifierSettings.setDeltaWindow(0.0f);
 		identifierSettings.setPenaltyCalculation(PenaltyCalculation.NONE);
 		identifierSettings.setPenaltyWindow(0.0f);
 		identifierSettings.setPenaltyLevelFactor(0.0f);

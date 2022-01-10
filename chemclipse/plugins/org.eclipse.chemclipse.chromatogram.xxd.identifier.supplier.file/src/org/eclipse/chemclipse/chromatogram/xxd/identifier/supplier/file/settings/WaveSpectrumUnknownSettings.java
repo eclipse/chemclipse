@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.setting
 
 import org.eclipse.chemclipse.chromatogram.wsd.identifier.settings.WaveSpectrumIdentifierAdapterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.model.identifier.IIdentifierSettings;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 
@@ -23,7 +24,7 @@ public class WaveSpectrumUnknownSettings extends WaveSpectrumIdentifierAdapterSe
 
 	@JsonProperty(value = "Limit Match Factor", defaultValue = "80.0")
 	@JsonPropertyDescription(value = "Run an identification if no target exists with a Match Factor >= the given limit.")
-	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_FACTOR, maxValue = PreferenceSupplier.MAX_FACTOR)
+	@FloatSettingsProperty(minValue = IIdentifierSettings.MIN_LIMIT_MATCH_FACTOR, maxValue = IIdentifierSettings.MAX_LIMIT_MATCH_FACTOR)
 	private float limitMatchFactor = 80.0f;
 	@JsonProperty(value = "Target Name", defaultValue = PreferenceSupplier.DEF_TARGET_NAME_UNKNOWN)
 	private String targetName = "Unknown";

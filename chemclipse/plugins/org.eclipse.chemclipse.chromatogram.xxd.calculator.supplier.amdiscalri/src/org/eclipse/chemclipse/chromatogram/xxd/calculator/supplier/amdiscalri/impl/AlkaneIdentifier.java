@@ -26,6 +26,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.core.Pea
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.IFileIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.MassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.PeakIdentifierSettings;
+import org.eclipse.chemclipse.model.identifier.DeltaCalculation;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.IPeakIdentificationResults;
 import org.eclipse.chemclipse.model.identifier.PenaltyCalculation;
@@ -119,6 +120,9 @@ public class AlkaneIdentifier {
 	private void initializeSettings(IIdentifierSettingsMSD identifierSettings) {
 
 		identifierSettings.setMassSpectrumComparatorId(IIdentifierSettingsMSD.DEFAULT_COMPARATOR_ID);
+		identifierSettings.setLimitMatchFactor(100.0f);
+		identifierSettings.setDeltaCalculation(DeltaCalculation.NONE);
+		identifierSettings.setDeltaWindow(0.0f);
 		identifierSettings.setPenaltyCalculation(PenaltyCalculation.NONE);
 		identifierSettings.setPenaltyWindow(0.0f);
 		identifierSettings.setPenaltyLevelFactor(0.0f);

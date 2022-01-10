@@ -205,6 +205,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		settings.setMinMatchFactor(preferences.getFloat(P_MIN_MATCH_FACTOR, DEF_MIN_MATCH_FACTOR));
 		settings.setMinReverseMatchFactor(preferences.getFloat(P_MIN_REVERSE_MATCH_FACTOR, DEF_MIN_REVERSE_MATCH_FACTOR));
 		//
+		settings.setDeltaCalculation(getDeltaCalculation());
+		settings.setDeltaWindow(preferences.getFloat(P_DELTA_WINDOW, DEF_DELTA_WINDOW));
 		settings.setPenaltyCalculation(getPenaltyCalculation());
 		settings.setPenaltyWindow(preferences.getFloat(P_PENALTY_WINDOW, DEF_PENALTY_WINDOW));
 		settings.setPenaltyLevelFactor(preferences.getFloat(P_PENALTY_LEVEL_FACTOR, DEF_PENALTY_LEVEL_FACTOR));

@@ -16,6 +16,10 @@ import org.eclipse.chemclipse.model.settings.IProcessSettings;
 
 public interface IIdentifierSettings extends IProcessSettings {
 
+	float DEF_LIMIT_MATCH_FACTOR = 100.0f;
+	float MIN_LIMIT_MATCH_FACTOR = 0.0f;
+	float MAX_LIMIT_MATCH_FACTOR = 100.0f;
+	//
 	float MIN_DELTA_WINDOW = 0.0f;
 	float MAX_DELTA_WINDOW = Float.MAX_VALUE;
 	//
@@ -33,6 +37,20 @@ public interface IIdentifierSettings extends IProcessSettings {
 	boolean isSetResultAutomatically();
 
 	void setSetResultAutomatically(boolean setResultAutomatically);
+
+	/**
+	 * Limit Match Factor
+	 * 
+	 * @return float
+	 */
+	float getLimitMatchFactor();
+
+	/**
+	 * Only identify the peak if no target is available with a match factor >= the limit.
+	 * 
+	 * @param limitMatchFactor
+	 */
+	void setLimitMatchFactor(float limitMatchFactor);
 
 	/**
 	 * Retention Time / Index Delta Calculation

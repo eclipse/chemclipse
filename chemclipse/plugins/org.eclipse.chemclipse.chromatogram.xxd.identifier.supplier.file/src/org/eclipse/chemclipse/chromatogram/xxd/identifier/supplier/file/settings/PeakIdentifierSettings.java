@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2021 Lablicate GmbH.
+ * Copyright (c) 2015, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -34,10 +34,6 @@ public class PeakIdentifierSettings extends AbstractPeakIdentifierSettingsMSD im
 	@JsonPropertyDescription("Select the library file.")
 	@FileSettingProperty(dialogType = DialogType.OPEN_DIALOG, extensionNames = {"AMDIS (*.msl)", "AMDIS (*.MSL)", "NIST (*.msp)", "NIST (*.MSP)", "MassBank (.zip)", "MassBank (.ZIP)"}, validExtensions = {"*.msl", "*.MSL", "*.msp", "*.MSP", "*.zip", "*.ZIP"}, onlyDirectory = false)
 	private File libraryFile;
-	@JsonProperty(value = "Limit Match Factor", defaultValue = "80.0")
-	@JsonPropertyDescription(value = "Run an identification if no target exists with a Match Factor >= the given limit.")
-	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_FACTOR, maxValue = PreferenceSupplier.MAX_FACTOR)
-	private float limitMatchFactor = 80.0f;
 	@JsonProperty(value = "Pre-Optimization", defaultValue = "false")
 	private boolean usePreOptimization = false;
 	@JsonProperty(value = "Threshold Pre-Optimization", defaultValue = "0.12")
@@ -82,16 +78,6 @@ public class PeakIdentifierSettings extends AbstractPeakIdentifierSettingsMSD im
 	public void setLibraryFile(File libraryFile) {
 
 		this.libraryFile = libraryFile;
-	}
-
-	public float getLimitMatchFactor() {
-
-		return limitMatchFactor;
-	}
-
-	public void setLimitMatchFactor(float limitMatchFactor) {
-
-		this.limitMatchFactor = limitMatchFactor;
 	}
 
 	@Override
