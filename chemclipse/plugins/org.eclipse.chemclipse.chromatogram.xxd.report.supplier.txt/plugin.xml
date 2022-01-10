@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.xxd.report.chromatogramReportSupplier">
+      <ChromatogramReportSupplier
+            description="Reports Peaks and Identifications as ASCII text."
+            fileExtension=".txt"
+            fileName="PeaksIdentificationsReport"
+            id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.peaksidentifications"
+            reportGenerator="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.core.Report1"
+            reportName="Peaks Identifications Report (*.txt)"
+            reportSettings="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.settings.ReportSettings1">
+      </ChromatogramReportSupplier>
+      <ChromatogramReportSupplier
+            description="Chromatogram Report Area%."
+            fileExtension=".txt"
+            fileName="AreaPercentReport"
+            id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.areapercent"
+            reportGenerator="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.core.Report2"
+            reportName="Area Percent Report (*.txt)"
+            reportSettings="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.settings.ReportSettings2">
+      </ChromatogramReportSupplier>    
+      <ChromatogramReportSupplier
+            description="Chromatogram Quantitation Report."
+            fileExtension=".txt"
+            fileName="QuantitationReport"
+            id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.quantitation"
+            reportGenerator="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.core.Report3"
+            reportName="Quantitation Report (*.txt)"
+            reportSettings="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.settings.ReportSettings3">
+      </ChromatogramReportSupplier>
+      <ChromatogramReportSupplier
+            description="Reports Peaks as ASCII text."
+            fileExtension=".txt"
+            fileName="PeakTableReport"
+            id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.peaktable"
+            reportGenerator="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.core.Report4"
+            reportName="Peak Table Report (*.txt)"
+            reportSettings="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.settings.ReportSettings4">
+      </ChromatogramReportSupplier> 
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+</plugin>
