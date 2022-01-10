@@ -18,23 +18,11 @@ public class DeltaCalculationSupport {
 
 	public static boolean useTarget(IScan scanUnknown, IScan scanReference, IIdentifierSettings identifierSettings) {
 
-		final boolean useTarget;
-		switch(identifierSettings.getDeltaCalculation()) {
-			case RETENTION_TIME_MS:
-				useTarget = useTarget(scanUnknown.getRetentionTime(), scanReference.getRetentionTime(), identifierSettings.getDeltaWindow());
-				break;
-			case RETENTION_TIME_MIN:
-				useTarget = useTarget(scanUnknown.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR, scanReference.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR, identifierSettings.getDeltaWindow());
-				break;
-			case RETENTION_INDEX:
-				useTarget = useTarget(scanUnknown.getRetentionIndex(), scanReference.getRetentionIndex(), identifierSettings.getDeltaWindow());
-				break;
-			default:
-				useTarget = false;
-				break;
-		}
-		//
-		return useTarget;
+		int retentionTimeUnknown = scanUnknown.getRetentionTime();
+		float retentionIndexUnknown = scanUnknown.getRetentionIndex();
+		int retentionTimeReference = scanReference.getRetentionTime();
+		float retentionIndexReference = scanReference.getRetentionIndex();
+		return useTarget(retentionTimeUnknown, retentionIndexUnknown, retentionTimeReference, retentionIndexReference, identifierSettings);
 	}
 
 	public static boolean useTarget(int retentionTimeUnknown, float retentionIndexUnknown, int retentionTimeReference, float retentionIndexReference, IIdentifierSettings identifierSettings) {
@@ -51,7 +39,7 @@ public class DeltaCalculationSupport {
 				useTarget = useTarget(retentionIndexUnknown, retentionIndexReference, identifierSettings.getDeltaWindow());
 				break;
 			default:
-				useTarget = false;
+				useTarget = true;
 				break;
 		}
 		//
