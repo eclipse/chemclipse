@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.ui
+Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.ui
 Bundle-ManifestVersion: 2
 Bundle-Name: Report UI
 Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.ui;singleton:=true

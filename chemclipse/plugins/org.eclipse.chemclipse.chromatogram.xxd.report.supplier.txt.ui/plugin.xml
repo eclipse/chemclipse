@@ -6,8 +6,8 @@
       <page
             category="org.eclipse.chemclipse.chromatogram.xxd.report.ui.preferences.reportPreferencePage"
             class="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.ui.preferences.PreferencePage"
-            id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.openchrom.ui.preferences.preferencePage"
-            name="OpenChrom Report">
+            id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.ui.preferences.preferencePage"
+            name="ChemClipse Report">
       </page>
    </extension> 
 </plugin>
