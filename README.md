@@ -12,6 +12,7 @@ Currently it offers workflows in the following areas:
 * real-time polymerase chain reaction (PCR)
 * nuclear magnetic resonance (NMR)
 * infrared spectroscopy (FTIR, NIR, MIR)
+* mass spectrometry (MALDI-TOF MS)
 
 Thanks to the open and flexible architecture more are possible and we are open for ideas and suggestions see our [contribution guidelines](https://github.com/eclipse/chemclipse/blob/develop/CONTRIBUTING.md).
 
