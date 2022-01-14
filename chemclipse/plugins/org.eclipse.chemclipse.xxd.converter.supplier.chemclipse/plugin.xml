@@ -4,10 +4,10 @@
    <extension
          point="org.eclipse.chemclipse.msd.converter.chromatogramSupplier">
       <ChromatogramSupplier
-            description="Reads and writes OpenChrom chromatograms"
+            description="Reads and writes Open Chromatography binary chromatograms"
             exportConverter="org.eclipse.chemclipse.msd.converter.supplier.chemclipse.converter.ChromatogramExportConverter"
             fileExtension=".ocb"
-            filterName="OpenChrom Chromatogram (*.ocb)"
+            filterName="Open Chromatography Binary (*.ocb)"
             id="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.chemclipse.converter.ChromatogramImportConverter"
             importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.chemclipse.converter.MagicNumberMatcherMSD"
@@ -18,10 +18,10 @@
    <extension
          point="org.eclipse.chemclipse.msd.converter.peakSupplier">
       <PeakSupplier
-            description="Reads peaks OpenChrom chromatograms"
+            description="Reads peaks from Open Chromatography chromatograms"
             exportConverter="org.eclipse.chemclipse.msd.converter.supplier.chemclipse.converter.PeakExportConverter"
             fileExtension=".ocb"
-            filterName="OpenChrom Chromatogram (*.ocb)"
+            filterName="Open Chromatography Binary (*.ocb)"
             id="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.peaks"
             importConverter="org.eclipse.chemclipse.msd.converter.supplier.chemclipse.converter.PeakImportConverter"
             isExportable="false"
@@ -31,10 +31,10 @@
    <extension
          point="org.eclipse.chemclipse.csd.converter.chromatogramSupplier">
       <ChromatogramSupplier
-            description="Reads and writes OpenChrom chromatograms"
+            description="Reads and writes Open Chromatography chromatograms"
             exportConverter="org.eclipse.chemclipse.csd.converter.supplier.chemclipse.converter.ChromatogramExportConverter"
             fileExtension=".ocb"
-            filterName="OpenChrom Chromatogram (*.ocb)"
+            filterName="Open Chromatography Binary (*.ocb)"
             id="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse"
             importConverter="org.eclipse.chemclipse.csd.converter.supplier.chemclipse.converter.ChromatogramImportConverter"
             importMagicNumberMatcher="org.eclipse.chemclipse.csd.converter.supplier.chemclipse.converter.MagicNumberMatcherCSD"
@@ -51,10 +51,10 @@
    <extension
          point="org.eclipse.chemclipse.wsd.converter.chromatogramSupplier">
       <ChromatogramSupplier
-            description="Reads and writes OpenChrom chromatograms"
+            description="Reads and writes Open Chromatography chromatograms"
             exportConverter="org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.converter.ChromatogramExportConverter"
             fileExtension=".ocb"
-            filterName="OpenChrom Chromatogram (*.ocb)"
+            filterName="Open Chromatography Binary (*.ocb)"
             id="org.eclipse.chemclipse.xxd.converter.supplier.chemclipse"
             importConverter="org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.converter.ChromatogramImportConverter"
             importMagicNumberMatcher="org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.converter.MagicNumberMatcherWSD"
