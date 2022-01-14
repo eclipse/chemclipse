@@ -5,11 +5,14 @@
 The Eclipse ChemClipse project offers functionality for data reading and processing in the domain of
 Cheminformatics and Bioinformatics.
 Currently it offers workflows in the following areas:
-* chromatography coupled with mass spectrometry (GC/MS)
-* flame-ionization detectors (GC/FID)
+* chromatography
+  * coupled with mass spectrometry (GC/MS)
+  * flame-ionization detectors (GC/FID)
+  * wavelength-selective detectors (HPLC-DAD/UV-Vis)
 * real-time polymerase chain reaction (PCR)
 * nuclear magnetic resonance (NMR)
 * infrared spectroscopy (FTIR, NIR, MIR)
+* mass spectrometry (MALDI-TOF MS)
 
 Thanks to the open and flexible architecture more are possible and we are open for ideas and suggestions see our [contribution guidelines](https://github.com/eclipse/chemclipse/blob/develop/CONTRIBUTING.md).
 
