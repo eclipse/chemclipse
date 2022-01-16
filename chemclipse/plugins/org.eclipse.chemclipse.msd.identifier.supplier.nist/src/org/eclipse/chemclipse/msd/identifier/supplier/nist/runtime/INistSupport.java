@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -30,7 +30,7 @@ public interface INistSupport {
 	String PARAMETER_BACKGROUND = INSTRUMENT + " " + PAR2;
 	String PARAMETER_FOREGROUND = INSTRUMENT;
 	/*
-	 * The path is nist library specific.
+	 * The path is NIST library specific.
 	 */
 	String NISTLOG_FILE = "NISTLOG.TXT";
 	String SRCREADY_FILE = "SRCREADY.TXT";
@@ -39,7 +39,7 @@ public interface INistSupport {
 	String NIST_SETTINGS_FILE = "nistms.INI";
 	String HITS_TO_PRINT = "Hits to Print=";
 	/*
-	 * The path is OpenChrom specific.
+	 * The path is ChemClipse specific.
 	 */
 	String FILESPEC_FILE = "FILESPEC.FIL";
 	String MASSSPECTRA_FILE = "MASSSPECTRA.MSL";

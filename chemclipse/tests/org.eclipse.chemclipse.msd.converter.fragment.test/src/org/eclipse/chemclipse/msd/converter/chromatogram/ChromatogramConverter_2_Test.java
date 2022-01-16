@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -50,6 +50,6 @@ public class ChromatogramConverter_2_Test extends TestCase {
 		 * every case.
 		 */
 		assertTrue("Amount Filter Names", 3 <= filterNames.length);
-		assertEquals("FilterName", true, result.contains("OpenChrom Chromatogram (*.ocb)"));
+		assertEquals("FilterName", true, result.contains("Open Chromatography Binary (*.ocb)"));
 	}
 }
