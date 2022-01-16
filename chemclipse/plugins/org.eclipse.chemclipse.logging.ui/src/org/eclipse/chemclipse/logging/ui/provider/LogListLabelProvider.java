@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,10 +21,6 @@ import org.eclipse.swt.graphics.Image;
 
 public class LogListLabelProvider extends AbstractChemClipseLabelProvider {
 
-	private static final Color GREEN = Colors.getColor(166, 255, 139);
-	private static final Color YELLOW = Colors.getColor(255, 254, 136);
-	private static final Color RED = Colors.getColor(249, 154, 152);
-
 	@Override
 	public Image getColumnImage(Object element, int columnIndex) {
 
@@ -41,11 +37,11 @@ public class LogListLabelProvider extends AbstractChemClipseLabelProvider {
 		if(element instanceof ParsedLogEntry) {
 			ParsedLogEntry logEntry = (ParsedLogEntry)element;
 			if(logEntry.getMessage().contains("successfully") || logEntry.getMessage().contains("activated")) {
-				return GREEN;
+				return Colors.LIGHT_GREEN;
 			} else if(logEntry.getLevel().contains("WARN")) {
-				return YELLOW;
+				return Colors.LIGHT_YELLOW;
 			} else if(logEntry.getLevel().contains("ERROR")) {
-				return RED;
+				return Colors.LIGHT_RED;
 			} else if(logEntry.getLevel().contains("INFO")) {
 				return Colors.WHITE;
 			}

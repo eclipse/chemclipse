@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -177,13 +177,13 @@ public class TargetsListUI extends ExtendedTableViewer {
 								}
 								//
 								if(deviation < deviationWarn) {
-									cell.setBackground(Colors.GREEN);
+									cell.setBackground(Colors.LIGHT_GREEN);
 									cell.setForeground(Colors.BLACK);
 								} else if(deviation >= deviationWarn && deviation < deviationError) {
-									cell.setBackground(Colors.YELLOW);
+									cell.setBackground(Colors.LIGHT_YELLOW);
 									cell.setForeground(Colors.BLACK);
 								} else if(deviation >= deviationError) {
-									cell.setBackground(Colors.RED);
+									cell.setBackground(Colors.LIGHT_RED);
 									cell.setForeground(Colors.BLACK);
 								}
 							}
@@ -233,13 +233,13 @@ public class TargetsListUI extends ExtendedTableViewer {
 								}
 								//
 								if(deviation < deviationWarn) {
-									cell.setBackground(Colors.GREEN);
+									cell.setBackground(Colors.LIGHT_GREEN);
 									cell.setForeground(Colors.BLACK);
-								} else if(deviation >= deviationWarn && deviation < deviationError) {
-									cell.setBackground(Colors.YELLOW);
+								} else if(deviation < deviationError) {
+									cell.setBackground(Colors.LIGHT_YELLOW);
 									cell.setForeground(Colors.BLACK);
-								} else if(deviation >= deviationError) {
-									cell.setBackground(Colors.RED);
+								} else {
+									cell.setBackground(Colors.LIGHT_RED);
 									cell.setForeground(Colors.BLACK);
 								}
 							}

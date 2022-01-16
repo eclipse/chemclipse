@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -26,20 +26,23 @@ import org.eclipse.swt.widgets.Display;
 public class Colors {
 
 	public static final Color WHITE = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_WHITE);
-	public static final Color RED = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_RED);
 	public static final Color BLACK = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK);
+	public static final Color RED = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_RED);
 	public static final Color DARK_RED = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_DARK_RED);
+	public static final Color LIGHT_RED = new Color(Display.getCurrent(), 249, 154, 152);
 	public static final Color GREEN = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_GREEN);
+	public static final Color DARK_GREEN = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_DARK_GREEN);
+	public static final Color LIGHT_GREEN = new Color(Display.getCurrent(), 166, 255, 139);
 	public static final Color GRAY = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_GRAY);
 	public static final Color DARK_GRAY = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY);
 	public static final Color CYAN = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_CYAN);
 	public static final Color DARK_CYAN = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_DARK_CYAN);
-	public static final Color DARK_YELLOW = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_DARK_YELLOW);
-	public static final Color DARK_GREEN = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_DARK_GREEN);
 	public static final Color BLUE = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLUE);
 	public static final Color DARK_BLUE = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_DARK_BLUE);
 	public static final Color MAGENTA = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_MAGENTA);
 	public static final Color YELLOW = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_YELLOW);
+	public static final Color DARK_YELLOW = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_DARK_YELLOW);
+	public static final Color LIGHT_YELLOW = new Color(Display.getCurrent(), 255, 254, 136);
 	/*
 	 * These are system color ids, defined org.eclipse.swt.SWT. If you use own
 	 * color, dispose them, if not needed any more.

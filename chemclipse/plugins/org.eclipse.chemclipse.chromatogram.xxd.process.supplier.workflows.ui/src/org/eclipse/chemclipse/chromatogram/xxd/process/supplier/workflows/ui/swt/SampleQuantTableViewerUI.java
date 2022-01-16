@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -39,11 +39,13 @@ public class SampleQuantTableViewerUI extends ExtendedTableViewer {
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
 
 	public SampleQuantTableViewerUI(Composite parent) {
+
 		super(parent);
 		createColumns();
 	}
 
 	public SampleQuantTableViewerUI(Composite parent, int style) {
+
 		super(parent, style);
 		createColumns();
 	}
@@ -77,10 +79,10 @@ public class SampleQuantTableViewerUI extends ExtendedTableViewer {
 							//
 							if(!sampleQuantSubstance.getType().equals(ISampleQuantSubstance.TYPE_ISTD)) {
 								if(!sampleQuantSubstance.isValidated()) {
-									cell.setBackground(Colors.YELLOW);
+									cell.setBackground(Colors.LIGHT_YELLOW);
 									cell.setForeground(Colors.BLACK);
 								} else {
-									cell.setBackground(Colors.GREEN);
+									cell.setBackground(Colors.LIGHT_GREEN);
 									cell.setForeground(Colors.BLACK);
 								}
 							}
