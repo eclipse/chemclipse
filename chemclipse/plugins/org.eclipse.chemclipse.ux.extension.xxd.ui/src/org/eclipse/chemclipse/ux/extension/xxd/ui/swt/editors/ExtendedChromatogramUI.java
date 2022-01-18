@@ -61,6 +61,7 @@ import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.ui.processors.ProcessorToolbar;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
@@ -579,6 +580,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 			@Override
 			public void run() {
 
+				reset(true);
 				ProcessingInfoPartSupport.getInstance().update(processingInfo, true);
 			}
 		});
@@ -1026,6 +1028,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 				IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 				IChromatogramSelection chromatogramSelection = getChromatogramSelection();
 				ProcessEntryContainer.applyProcessEntries(processMethod, new ProcessExecutionContext(monitor, processingInfo, processTypeSupport), IChromatogramSelectionProcessSupplier.createConsumer(chromatogramSelection));
+				chromatogramSelection.getChromatogram().setDirty(true);
 				chromatogramSelection.update(false);
 				updateResult(processingInfo);
 			}
