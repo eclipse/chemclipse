@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -432,8 +432,8 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 
 	private void computeMethodComboItems() {
 
-		List<IProcessMethod> methods = new ArrayList<IProcessMethod>(MethodConverter.getUserMethods());
-		if(methods.size() > 0) {
+		List<IProcessMethod> methods = new ArrayList<>(MethodConverter.getUserMethods());
+		if(!methods.isEmpty()) {
 			Collections.sort(methods, new Comparator<IProcessMethod>() {
 
 				@Override

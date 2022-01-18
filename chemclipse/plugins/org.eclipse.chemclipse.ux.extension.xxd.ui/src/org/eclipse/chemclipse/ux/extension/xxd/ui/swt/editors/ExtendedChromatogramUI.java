@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -1126,7 +1126,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		//
 		boolean markAnalysisSegments = preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_MARK_ANALYSIS_SEGMENTS);
 		if(markAnalysisSegments) {
-			AnalysisSegmentPaintListener<IAnalysisSegment> listener = new AnalysisSegmentPaintListener<IAnalysisSegment>(AnalysisSegmentColorScheme.CHROMATOGRAM, new Supplier<Collection<IAnalysisSegment>>() {
+			AnalysisSegmentPaintListener<IAnalysisSegment> listener = new AnalysisSegmentPaintListener<>(AnalysisSegmentColorScheme.CHROMATOGRAM, new Supplier<Collection<IAnalysisSegment>>() {
 
 				@Override
 				public Collection<IAnalysisSegment> get() {
@@ -1193,19 +1193,14 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText(tooltip);
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(image, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(image, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				if(toolbars.containsKey(toolbar)) {
-					boolean visible = PartSupport.toggleCompositeVisibility(toolbars.get(toolbar));
-					if(visible) {
-						button.setImage(ApplicationImageFactory.getInstance().getImage(image, IApplicationImage.SIZE_16x16));
-					} else {
-						button.setImage(ApplicationImageFactory.getInstance().getImage(image, IApplicationImage.SIZE_16x16));
-					}
+					button.setImage(ApplicationImageFactory.getInstance().getImage(image, IApplicationImageProvider.SIZE_16x16));
 				}
 			}
 		});
@@ -1249,7 +1244,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 
 	private IAction createToggleToolbarAction(String name, String tooltip, String image, String toolbar, String preferenceKey) {
 
-		return new Action(name, Action.AS_CHECK_BOX) {
+		return new Action(name, IAction.AS_CHECK_BOX) {
 
 			{
 				setImageDescriptor(ApplicationImageFactory.getInstance().getImageDescriptor(image, IApplicationImage.SIZE_16x16));
