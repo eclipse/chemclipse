@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -191,6 +191,7 @@ public class ExtendedSequenceListUI extends Composite implements IExtendedPartUI
 							addSequenceRecordInformation(sequenceRecord, chromatogramSelection.getChromatogram());
 							ProcessingInfo<?> processorInfo = new ProcessingInfo<>();
 							ProcessEntryContainer.applyProcessEntries(processMethod, new ProcessExecutionContext(monitor, processorInfo, processSupplierContext), IChromatogramSelectionProcessSupplier.createConsumer(chromatogramSelection));
+							chromatogramSelection.getChromatogram().setDirty(true);
 							if(processorInfo.hasErrorMessages()) {
 								processingInfo.addMessages(processorInfo);
 							} else {
