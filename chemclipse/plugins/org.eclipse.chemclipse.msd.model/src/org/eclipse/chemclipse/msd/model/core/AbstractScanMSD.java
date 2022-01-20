@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -225,7 +225,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		/*
 		 * Initialize the list of mass over charge rations (ion) to be removed.
 		 */
-		Set<Integer> ions = new HashSet<Integer>();
+		Set<Integer> ions = new HashSet<>();
 		ions.add(ion);
 		removeIons(ions);
 		return this;
@@ -239,7 +239,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 			return this;
 		}
 		//
-		List<IIon> ionsToRemove = new ArrayList<IIon>();
+		List<IIon> ionsToRemove = new ArrayList<>();
 		/*
 		 * Get the list of ions for removal.
 		 */
@@ -482,8 +482,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 			}
 			float abundance = extractedIonSignal.getAbundance(ion);
 			if(abundance > 0) {
-				IIon defaultIon = new Ion(ion, abundance);
-				return defaultIon;
+				return new Ion(ion, abundance);
 			} else {
 				return null;
 			}
@@ -631,10 +630,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	@Override
 	public boolean hasIons() {
 
-		if(ionsList.size() == 0) {
-			return false;
-		}
-		return true;
+		return !ionsList.isEmpty();
 	}
 
 	@Override
@@ -731,7 +727,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	@Override
 	public boolean isMeasurementSIM() {
 
-		if(ionsList.size() > 0 && ionsList.size() <= LIMIT_SIM_MEASUREMENT) {
+		if(!ionsList.isEmpty() && ionsList.size() <= LIMIT_SIM_MEASUREMENT) {
 			return true;
 		} else {
 			return false;
@@ -902,7 +898,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	 */
 	private void createNewIonList() {
 
-		ionsList = new ArrayList<IIon>(200);
+		ionsList = new ArrayList<>(200);
 	}
 
 	/**

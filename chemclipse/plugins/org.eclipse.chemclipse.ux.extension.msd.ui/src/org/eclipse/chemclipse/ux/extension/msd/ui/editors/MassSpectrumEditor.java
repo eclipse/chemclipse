@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2021 Lablicate GmbH.
+ * Copyright (c) 2014, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,7 +13,6 @@
 package org.eclipse.chemclipse.ux.extension.msd.ui.editors;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +22,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
-import org.eclipse.chemclipse.converter.exceptions.NoChromatogramConverterAvailableException;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -101,14 +97,14 @@ public class MassSpectrumEditor implements IMassSpectrumEditor {
 	private IScanMSD massSpectrum;
 	private ArrayList<EventHandler> registeredEventHandler;
 	private IMassSpectrumChart massSpectrumChart;
-	private List<Object> objects = new ArrayList<Object>();
+	private List<Object> objects = new ArrayList<>();
 
 	@PostConstruct
 	private void createControl(Composite parent) {
 
 		loadMassSpectra();
 		createPages(parent);
-		registeredEventHandler = new ArrayList<EventHandler>();
+		registeredEventHandler = new ArrayList<>();
 		registerEvents();
 	}
 
@@ -259,7 +255,7 @@ public class MassSpectrumEditor implements IMassSpectrumEditor {
 		}
 	}
 
-	private void importMassSpectrum(File file, boolean batch) throws FileNotFoundException, NoChromatogramConverterAvailableException, FileIsNotReadableException, FileIsEmptyException, ChromatogramIsNullException {
+	private void importMassSpectrum(File file, boolean batch) throws ChromatogramIsNullException {
 
 		/*
 		 * Import the mass spectrum here, but do not set to the mass spectrum UI,
@@ -271,13 +267,14 @@ public class MassSpectrumEditor implements IMassSpectrumEditor {
 			/*
 			 * No fork, otherwise it might crash when loading the data takes too long.
 			 */
-			boolean fork = (batch) ? false : true;
+			boolean fork = !batch;
 			dialog.run(fork, false, runnable);
 		} catch(InvocationTargetException e) {
 			logger.warn(e);
 			logger.warn(e.getCause());
 		} catch(InterruptedException e) {
 			logger.warn(e);
+			Thread.currentThread().interrupt();
 		}
 		massSpectra = runnable.getMassSpectra();
 		massSpectrumFile = file;
@@ -389,8 +386,8 @@ public class MassSpectrumEditor implements IMassSpectrumEditor {
 			Object object = objects.get(0);
 			if(object instanceof IScanMSD) {
 				if(object != massSpectrum) {
-					IScanMSD massSpectrum = (IScanMSD)object;
-					massSpectrumChart.update(massSpectrum);
+					IScanMSD scanMSD = (IScanMSD)object;
+					massSpectrumChart.update(scanMSD);
 				} else {
 					dirtyable.setDirty(massSpectrum.isDirty());
 				}
