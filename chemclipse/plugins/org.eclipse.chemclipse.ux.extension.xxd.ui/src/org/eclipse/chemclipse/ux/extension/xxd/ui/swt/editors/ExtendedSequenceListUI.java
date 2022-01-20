@@ -191,7 +191,7 @@ public class ExtendedSequenceListUI extends Composite implements IExtendedPartUI
 							addSequenceRecordInformation(sequenceRecord, chromatogramSelection.getChromatogram());
 							ProcessingInfo<?> processorInfo = new ProcessingInfo<>();
 							ProcessEntryContainer.applyProcessEntries(processMethod, new ProcessExecutionContext(monitor, processorInfo, processSupplierContext), IChromatogramSelectionProcessSupplier.createConsumer(chromatogramSelection));
-							chromatogramSelection.getChromatogram().setDirty(true);
+							chromatogramSelection.getChromatogram().setDirty(true); // TODO: check each entry
 							if(processorInfo.hasErrorMessages()) {
 								processingInfo.addMessages(processorInfo);
 							} else {
