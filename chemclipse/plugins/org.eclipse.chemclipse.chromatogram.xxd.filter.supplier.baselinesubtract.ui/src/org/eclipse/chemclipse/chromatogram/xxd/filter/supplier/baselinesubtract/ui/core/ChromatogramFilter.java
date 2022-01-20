@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -60,6 +60,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 					}
 				});
 			}
+			chromatogramSelection.getChromatogram().setDirty(true);
 			processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "The chromatogram was successfully subtracted."));
 		}
 		return processingInfo;

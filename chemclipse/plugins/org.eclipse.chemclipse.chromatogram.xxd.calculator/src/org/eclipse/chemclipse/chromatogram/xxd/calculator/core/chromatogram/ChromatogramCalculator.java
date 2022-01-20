@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -42,6 +42,7 @@ public class ChromatogramCalculator {
 	 * This class is a singleton. Use only static methods.
 	 */
 	private ChromatogramCalculator() {
+
 	}
 
 	/**
@@ -63,6 +64,7 @@ public class ChromatogramCalculator {
 		IChromatogramCalculator chromatogramCalculator = getChromatogramCalculator(filterId);
 		if(chromatogramCalculator != null) {
 			processingInfo = chromatogramCalculator.applyCalculator(chromatogramSelection, chromatogramCalculatorSettings, monitor);
+			chromatogramSelection.getChromatogram().setDirty(true);
 		} else {
 			processingInfo = new ProcessingInfo();
 			processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, NO_CHROMATOGRAM_CALCULATOR_AVAILABLE);

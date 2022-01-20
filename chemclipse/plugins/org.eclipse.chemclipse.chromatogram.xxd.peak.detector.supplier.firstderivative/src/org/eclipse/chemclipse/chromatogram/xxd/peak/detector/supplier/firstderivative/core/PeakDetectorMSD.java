@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -90,6 +90,7 @@ public class PeakDetectorMSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 				for(IChromatogramPeakMSD peak : peaks) {
 					chromatogram.addPeak(peak);
 				}
+				chromatogram.setDirty(true);
 				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, FirstDerivativePeakDetector.DETECTOR_DESCRIPTION, peaks.size() + " peak(s) have been detected."));
 			} else {
 				logger.warn("Settings is not of type: " + PeakDetectorSettingsMSD.class);
@@ -201,6 +202,7 @@ public class PeakDetectorMSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 			}
 			extractPeaks.addAll(peaks);
 		}
+		chromatogram.setDirty(true);
 		return extractPeaks;
 	}
 
@@ -246,6 +248,7 @@ public class PeakDetectorMSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 			}
 		}
 		//
+		chromatogram.setDirty(true);
 		return peaks;
 	}
 

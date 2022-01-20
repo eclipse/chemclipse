@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -43,6 +43,7 @@ public class FilterDeleteIdentifier extends AbstractChromatogramFilter {
 						removeScanIdentifications(chromatogramSelection, monitor);
 						processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "Delete Scan Target(s)", "Scan Target(s) have been removed successfully."));
 						processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "Scan identification(s) have been removed successfully."));
+						chromatogramSelection.getChromatogram().setDirty(true);
 					}
 				}
 			} catch(FilterException e) {

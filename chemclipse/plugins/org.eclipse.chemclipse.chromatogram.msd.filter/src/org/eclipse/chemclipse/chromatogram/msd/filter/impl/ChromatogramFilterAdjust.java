@@ -89,6 +89,7 @@ public class ChromatogramFilterAdjust extends AbstractChromatogramFilterMSD {
 								}
 							}
 						}
+						chromatogramSelection.getChromatogram().setDirty(true);
 					} catch(Exception e) {
 						logger.warn(e);
 					}

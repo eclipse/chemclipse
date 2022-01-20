@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2021 Lablicate GmbH.
+ * Copyright (c) 2015, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -156,6 +156,7 @@ public class PeakFilter {
 		IPeakFilter peakFilter = getPeakFilter(filterId);
 		if(peakFilter != null) {
 			processingInfo = peakFilter.applyFilter(chromatogramSelection, peakFilterSettings, monitor);
+			chromatogramSelection.getChromatogram().setDirty(true);
 		} else {
 			processingInfo = new ProcessingInfo<>();
 			processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, NO_PEAK_FILTER_AVAILABLE);
@@ -178,6 +179,7 @@ public class PeakFilter {
 		IPeakFilter peakFilter = getPeakFilter(filterId);
 		if(peakFilter != null) {
 			processingInfo = peakFilter.applyFilter(chromatogramSelection, monitor);
+			chromatogramSelection.getChromatogram().setDirty(true);
 		} else {
 			processingInfo = new ProcessingInfo<>();
 			processingInfo.addErrorMessage(PROCESSING_DESCRIPTION, NO_PEAK_FILTER_AVAILABLE);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -67,6 +67,7 @@ public class ChromatogramFilterZeroValueRemoval extends AbstractChromatogramFilt
 					}
 					extract.updateSignal();
 				}
+				chromatogramSelection.getChromatogram().setDirty(true);
 				//
 				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "Chromatogram Filter Adjust applied"));
 			}

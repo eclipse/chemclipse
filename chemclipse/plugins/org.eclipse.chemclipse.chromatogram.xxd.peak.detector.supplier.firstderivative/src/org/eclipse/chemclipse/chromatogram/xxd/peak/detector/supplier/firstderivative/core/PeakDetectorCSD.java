@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2021 Lablicate GmbH.
+ * Copyright (c) 2014, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -84,6 +84,7 @@ public class PeakDetectorCSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 				for(IChromatogramPeakCSD peak : peaks) {
 					chromatogram.addPeak(peak);
 				}
+				chromatogramSelection.getChromatogram().setDirty(true);
 				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, FirstDerivativePeakDetector.DETECTOR_DESCRIPTION, "Peaks have been detected successfully."));
 			} else {
 				logger.warn("Settings is not of type: " + PeakDetectorSettingsCSD.class);
@@ -96,6 +97,7 @@ public class PeakDetectorCSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 	public IProcessingInfo<?> detect(IChromatogramSelectionCSD chromatogramSelection, IProgressMonitor monitor) {
 
 		PeakDetectorSettingsCSD peakDetectorSettings = PreferenceSupplier.getPeakDetectorSettingsCSD();
+		chromatogramSelection.getChromatogram().setDirty(true);
 		return detect(chromatogramSelection, peakDetectorSettings, monitor);
 	}
 
@@ -110,6 +112,7 @@ public class PeakDetectorCSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 	 */
 	public List<IChromatogramPeakCSD> detectPeaks(IChromatogramSelectionCSD chromatogramSelection, PeakDetectorSettingsCSD peakDetectorSettings, IProgressMonitor monitor) {
 
+		chromatogramSelection.getChromatogram().setDirty(true);
 		return detectPeaks(chromatogramSelection, peakDetectorSettings, null, monitor);
 	}
 
@@ -173,6 +176,7 @@ public class PeakDetectorCSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 			IFirstDerivativeDetectorSlopes slopes = getFirstDerivativeSlopes(chromatogramSelection, windowSize);
 			rawPeaks.addAll(getRawPeaks(slopes, threshold, monitor));
 		}
+		chromatogramSelection.getChromatogram().setDirty(true);
 		return extractPeaks(rawPeaks, chromatogramSelection.getChromatogram(), peakDetectorSettings);
 	}
 
@@ -222,6 +226,7 @@ public class PeakDetectorCSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 			}
 		}
 		//
+		chromatogram.setDirty(true);
 		return peaks;
 	}
 

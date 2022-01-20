@@ -60,6 +60,7 @@ public class ChromatogramFilterWSD extends AbstractChromatogramFilterWSD {
 				scanWSD.adjustTotalSignal(totalscanSignal.getTotalSignal());
 			}
 		}
+		chromatogramSelection.getChromatogram().setDirty(true);
 		return chromatogramFilterResult;
 	}
 

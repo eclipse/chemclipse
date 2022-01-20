@@ -952,7 +952,6 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 			chromatogramSelection.getChromatogram().recalculateTheNoiseFactor();
 			//
 			fireUpdate(chromatogramSelection);
-			setDirty(true);
 		}
 	}
 

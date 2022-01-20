@@ -62,6 +62,7 @@ public class SavitzkyGolayProcessor {
 				scanRecord.adjustTotalSignal(intensity);
 			}
 			//
+			chromatogram.setDirty(true);
 			chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.OK, "The Savitzky-Golay filter has been applied successfully.");
 		} catch(ChromatogramIsNullException e) {
 			chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.EXCEPTION, "Something has gone wrong to apply the Savitzky-Golay filter.");

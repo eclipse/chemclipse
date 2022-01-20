@@ -50,6 +50,7 @@ public class ChromatogramFilterMSD extends AbstractChromatogramFilterMSD {
 				double[][] matrix = extractedMatrix.getMatrix();
 				SavitzkyGolayProcessor.apply(matrix, (ChromatogramFilterSettings)filterSettings);
 				extractedMatrix.updateSignal();
+				chromatogramSelection.getChromatogram().setDirty(true);
 				chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.OK, "The Savitzky-Golay filter has been applied successfully.");
 			} catch(IllegalArgumentException e) {
 				chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.EXCEPTION, "High Resolution Data is not supported.");

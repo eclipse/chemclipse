@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -33,6 +33,7 @@ public class ChromatogramResetter extends AbstractChromatogramCalculator {
 			ResetterSettings resetterSettings = (ResetterSettings)chromatogramCalculatorSettings;
 			RetentionIndexCalculator calculator = new RetentionIndexCalculator();
 			IProcessingInfo<?> calculatorInfo = calculator.resetIndices(chromatogramSelection, resetterSettings, monitor);
+			chromatogramSelection.getChromatogram().setDirty(true);
 			processingInfo.addMessages(calculatorInfo);
 		}
 		//

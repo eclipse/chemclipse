@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -44,6 +44,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 					IMarkedIons ionsToRemove = new MarkedIons(ionSettingUtil.extractIons(ionSettingUtil.deserialize(filterSettings.getIonsToRemove())), IMarkedIons.IonMarkMode.INCLUDE);
 					applyIonRemoverFilter(chromatogramSelection, ionsToRemove, monitor);
 					processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "Mass fragments have been removed successfully."));
+					chromatogramSelection.getChromatogram().setDirty(true);
 				} catch(FilterException e) {
 					processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.EXCEPTION, e.getMessage()));
 				}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -43,6 +43,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 				float normalizationBase = filterSettings.getNormalizationBase();
 				try {
 					applyNormalizerFilter(chromatogramSelection, normalizationBase);
+					chromatogramSelection.getChromatogram().setDirty(true);
 					processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "The chromatogram selection was successfully normalized."));
 				} catch(FilterException e) {
 					processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.EXCEPTION, e.getMessage()));

@@ -50,10 +50,12 @@ public class FilterCleaner extends AbstractChromatogramFilter {
 				applyChromatogramCleanerFilter(chromatogramSelection, monitor);
 				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "Chromatogram Cleaner", "Empty scans have been removed successfully."));
 				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "Empty scans have been removed successfully."));
+				chromatogramSelection.getChromatogram().setDirty(true);
 			} catch(FilterException e) {
 				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.EXCEPTION, e.getMessage()));
 			}
 		}
+		chromatogramSelection.getChromatogram().setDirty(true);
 		return processingInfo;
 	}
 

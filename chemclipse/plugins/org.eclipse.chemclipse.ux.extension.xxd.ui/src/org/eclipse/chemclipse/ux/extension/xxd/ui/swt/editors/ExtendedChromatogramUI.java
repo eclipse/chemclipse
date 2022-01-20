@@ -482,9 +482,6 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		ProgressMonitorDialog monitor = new ProgressMonitorDialog(shell);
 		try {
 			monitor.run(true, true, runnable);
-			if(chromatogramSelection != null) {
-				chromatogramSelection.getChromatogram().setDirty(true);
-			}
 			/*
 			 * Select the reference chromatogram.
 			 */

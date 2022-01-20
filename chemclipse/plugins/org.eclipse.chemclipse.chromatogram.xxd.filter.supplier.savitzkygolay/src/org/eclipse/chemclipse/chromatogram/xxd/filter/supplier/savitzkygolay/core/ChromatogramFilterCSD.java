@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2021 Lablicate GmbH.
+ * Copyright (c) 2015, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -39,6 +39,7 @@ public class ChromatogramFilterCSD extends AbstractChromatogramFilterCSD {
 		TotalScanSignalExtractor totalScanSignalExtractor = new TotalScanSignalExtractor(chromatogramCSD);
 		ITotalScanSignals totalSignals = totalScanSignalExtractor.getTotalScanSignals(chromatogramSelection, false);
 		IChromatogramFilterResult chromatogramFilterResult = SavitzkyGolayProcessor.apply(totalSignals, (ChromatogramFilterSettings)chromatogramFilterSettings, monitor);
+		chromatogramSelection.getChromatogram().setDirty(true);
 		if(chromatogramFilterResult.getResultStatus().equals(ResultStatus.OK)) {
 			updateSignal(totalSignals, chromatogramCSD);
 		}
@@ -50,6 +51,7 @@ public class ChromatogramFilterCSD extends AbstractChromatogramFilterCSD {
 
 		IProcessingInfo<IChromatogramFilterResult> processingInfo = new ProcessingInfo<IChromatogramFilterResult>();
 		processingInfo.setProcessingResult(process(chromatogramSelection, chromatogramFilterSettings, monitor));
+		chromatogramSelection.getChromatogram().setDirty(true);
 		return processingInfo;
 	}
 
@@ -59,6 +61,7 @@ public class ChromatogramFilterCSD extends AbstractChromatogramFilterCSD {
 		ChromatogramFilterSettings chromatogramFilterSettings = PreferenceSupplier.getFilterSettings();
 		IProcessingInfo<IChromatogramFilterResult> processingInfo = new ProcessingInfo<IChromatogramFilterResult>();
 		processingInfo.setProcessingResult(process(chromatogramSelection, chromatogramFilterSettings, monitor));
+		chromatogramSelection.getChromatogram().setDirty(true);
 		return processingInfo;
 	}
 

@@ -46,6 +46,7 @@ public class FilterRemover extends AbstractChromatogramFilter {
 					applyScanRemoverFilter(chromatogramSelection, scanRemoverPattern, monitor);
 					processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "Scan Remover", "Scans have been removed successfully."));
 					processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "Scans have been removed successfully."));
+					chromatogramSelection.getChromatogram().setDirty(true);
 				}
 			} catch(FilterException e) {
 				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.EXCEPTION, e.getMessage()));

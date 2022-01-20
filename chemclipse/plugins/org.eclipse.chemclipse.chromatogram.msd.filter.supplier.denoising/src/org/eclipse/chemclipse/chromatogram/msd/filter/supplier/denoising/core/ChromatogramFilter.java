@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2020 Lablicate GmbH.
+ * Copyright (c) 2010, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -57,6 +57,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 					IMeasurementResult<?> measurementResult = new MeasurementResult("MS Denoising Filter", "org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising", "This list contains the calculated noise mass spectra.", filterResult);
 					chromatogramSelection.getChromatogram().addMeasurementResult(measurementResult);
 					processingInfo.setProcessingResult(filterResult);
+					chromatogramSelection.getChromatogram().setDirty(true);
 				} catch(FilterException e) {
 					processingInfo.setProcessingResult(new DenoisingFilterResult(ResultStatus.EXCEPTION, e.getMessage()));
 				}

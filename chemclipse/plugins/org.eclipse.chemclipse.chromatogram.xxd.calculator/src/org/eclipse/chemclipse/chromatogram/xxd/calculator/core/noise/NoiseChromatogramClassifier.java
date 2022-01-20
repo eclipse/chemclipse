@@ -89,6 +89,7 @@ public class NoiseChromatogramClassifier extends AbstractChromatogramClassifier 
 					}
 				}
 				chromatogram.addMeasurementResult(result);
+				chromatogram.setDirty(true);
 				return result;
 			}
 		} while(segmentWidth != 0);

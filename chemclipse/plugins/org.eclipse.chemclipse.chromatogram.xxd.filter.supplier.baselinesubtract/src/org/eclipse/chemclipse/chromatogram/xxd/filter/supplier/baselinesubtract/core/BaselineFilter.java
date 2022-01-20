@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -44,6 +44,7 @@ public class BaselineFilter extends AbstractChromatogramFilter {
 		chromatogram.recalculateTheNoiseFactor();
 		chromatogram.removeAllPeaks();
 		baselineModel.removeBaseline();
+		chromatogramSelection.getChromatogram().setDirty(true);
 		return new ProcessingInfo();
 	}
 
