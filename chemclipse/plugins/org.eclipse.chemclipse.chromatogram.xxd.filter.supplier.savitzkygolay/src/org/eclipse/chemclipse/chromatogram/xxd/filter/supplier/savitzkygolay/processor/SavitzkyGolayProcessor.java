@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2020 Lablicate GmbH.
+ * Copyright (c) 2015, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -71,19 +71,19 @@ public class SavitzkyGolayProcessor {
 
 	public static double[] smooth(double[] ticValues, SavitzkyGolayFilter filter, IProgressMonitor monitor) {
 
-		return smoothValues(ticValues, filter, monitor);
+		return smoothValues(ticValues, filter);
 	}
 
 	public static double[] smooth(double[] ticValues, ChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
 
 		SavitzkyGolayFilter filter = new SavitzkyGolayFilter(filterSettings.getOrder(), filterSettings.getWidth(), filterSettings.getDerivative());
-		return smoothValues(ticValues, filter, monitor);
+		return smoothValues(ticValues, filter);
 	}
 
 	public static double[] smooth(double[] ticValues, int derivative, int order, int width, IProgressMonitor monitor) {
 
 		SavitzkyGolayFilter filter = new SavitzkyGolayFilter(order, width, derivative);
-		return smoothValues(ticValues, filter, monitor);
+		return smoothValues(ticValues, filter);
 	}
 
 	public static double[] smooth(ITotalScanSignals totalScanSignals, ChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
@@ -99,14 +99,12 @@ public class SavitzkyGolayProcessor {
 		int order = filterSettings.getOrder();
 		int width = filterSettings.getWidth();
 		SavitzkyGolayFilter filter = new SavitzkyGolayFilter(order, width, derivative);
-		return smoothValues(ticValues, filter, monitor);
+		return smoothValues(ticValues, filter);
 	}
 
-	private static double[] smoothValues(double[] ticValues, SavitzkyGolayFilter filter, IProgressMonitor monitor) {
+	private static double[] smoothValues(double[] ticValues, SavitzkyGolayFilter filter) {
 
-		double[] newTicValues = new double[ticValues.length];
-		newTicValues = filter.apply(ticValues);
-		return newTicValues;
+		return filter.apply(ticValues);
 	}
 
 	public static IChromatogramFilterResult apply(ITotalScanSignals totalSignals, ChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
@@ -119,7 +117,7 @@ public class SavitzkyGolayProcessor {
 		return new ChromatogramFilterResult(ResultStatus.OK, "The Savitzky-Golay filter has been applied successfully.");
 	}
 
-	public static void apply(double[][] matrix, ChromatogramFilterSettings filterSettings, IProgressMonitor monitor) {
+	public static void apply(double[][] matrix, ChromatogramFilterSettings filterSettings) {
 
 		double[] ionSignal = new double[matrix.length];
 		int derivative = filterSettings.getDerivative();
@@ -130,7 +128,7 @@ public class SavitzkyGolayProcessor {
 			for(int j = 0; j < matrix.length; j++) {
 				ionSignal[j] = matrix[j][i];
 			}
-			ionSignal = smoothValues(ionSignal, filter, monitor);
+			ionSignal = smoothValues(ionSignal, filter);
 			for(int j = 0; j < matrix.length; j++) {
 				if(ionSignal[j] < 0.0) {
 					ionSignal[j] = 0.0;

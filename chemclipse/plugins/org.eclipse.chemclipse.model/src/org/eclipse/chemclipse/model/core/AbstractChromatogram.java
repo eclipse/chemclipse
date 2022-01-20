@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2021 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -864,7 +864,7 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	private double getIntegratedArea(List<IIntegrationEntry> integrationEntries) {
 
 		double integratedArea = 0.0d;
-		if(integrationEntries.size() > 0) {
+		if(!integrationEntries.isEmpty()) {
 			for(IIntegrationEntry integrationEntry : integrationEntries) {
 				integratedArea += integrationEntry.getIntegratedArea();
 			}
@@ -919,9 +919,6 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 					writeSerializedChromatogram(file);
 				}
 			}
-			/*
-			 * if(monitor.isCanceled()) { return; }
-			 */
 			/*
 			 * Remove all detected peaks and targets and the baseline.
 			 */

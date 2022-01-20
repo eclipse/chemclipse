@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -129,12 +129,14 @@ public class WidthFilter extends AbstractPeakFilter<WidthFilterSettings> {
 				}
 				break;
 			case KEEP_PEAK:
-				if(predicate.negate().test(width))
+				if(predicate.negate().test(width)) {
 					listener.delete(peak);
+				}
 				break;
 			case DELETE_PEAK:
-				if(predicate.test(width))
+				if(predicate.test(width)) {
 					listener.delete(peak);
+				}
 				break;
 			default:
 				throw new IllegalArgumentException("Unsupported Peak Filter Treatment Option!");

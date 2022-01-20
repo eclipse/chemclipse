@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -47,9 +47,8 @@ public class ChromatogramFilterAdjust extends AbstractChromatogramFilterMSD {
 				/*
 				 * No settings needed yet.
 				 */
-				// FilterSettingsAdjust filterSettings = (FilterSettingsAdjust)chromatogramFilterSettings;
 				if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-					IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
+					IChromatogramSelectionMSD chromatogramSelectionMSD = chromatogramSelection;
 					try {
 						IChromatogramMSD chromatogram = chromatogramSelectionMSD.getChromatogram();
 						IExtractedIonSignalExtractor extractedIonSignalExtractor = new ExtractedIonSignalExtractor(chromatogram);

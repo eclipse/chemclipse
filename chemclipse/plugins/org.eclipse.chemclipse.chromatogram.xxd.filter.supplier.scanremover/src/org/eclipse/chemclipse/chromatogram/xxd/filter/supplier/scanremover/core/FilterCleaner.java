@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2019 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -93,7 +93,7 @@ public class FilterCleaner extends AbstractChromatogramFilter {
 				/*
 				 * WSD
 				 */
-				if(((IScanWSD)chromatogramScan).getScanSignals().size() == 0) {
+				if(((IScanWSD)chromatogramScan).getScanSignals().isEmpty()) {
 					scansToRemove.add(scan);
 				}
 			}

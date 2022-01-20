@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -48,7 +48,7 @@ public class NoiseChromatogramClassifier extends AbstractChromatogramClassifier 
 	@Override
 	public IProcessingInfo<IChromatogramClassifierResult> applyClassifier(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramClassifierSettings chromatogramClassifierSettings, IProgressMonitor monitor) {
 
-		ProcessingInfo<IChromatogramClassifierResult> info = new ProcessingInfo<IChromatogramClassifierResult>(new AbstractChromatogramClassifierResult(ResultStatus.OK, NAME) {
+		ProcessingInfo<IChromatogramClassifierResult> info = new ProcessingInfo<>(new AbstractChromatogramClassifierResult(ResultStatus.OK, NAME) {
 		});
 		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 		NoiseChromatogramClassifierSettings settings;

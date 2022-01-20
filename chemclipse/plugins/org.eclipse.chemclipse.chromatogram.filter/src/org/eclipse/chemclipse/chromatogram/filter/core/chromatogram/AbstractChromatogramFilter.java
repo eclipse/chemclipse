@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2019 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -55,5 +55,4 @@ public abstract class AbstractChromatogramFilter<T extends IPeak, C extends IChr
 		}
 		return processingInfo;
 	}
-	// --------------------------------------------private methods
 }
