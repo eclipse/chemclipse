@@ -296,6 +296,7 @@ public class MassSpectrumEditor implements IMassSpectrumEditor {
 		 */
 		String name = ("".equals(massSpectra.getName())) ? "NoName" : massSpectra.getName();
 		massSpectrum = massSpectra.getMassSpectrum(1);
+		massSpectrum.setDirty(false);
 		if(massSpectrum instanceof IVendorMassSpectrum) {
 			name = ((IVendorMassSpectrum)massSpectrum).getName();
 		} else if(massSpectrum instanceof IRegularLibraryMassSpectrum) {
