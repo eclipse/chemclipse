@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -31,7 +31,7 @@ public abstract class AbstractMassSpectra implements IMassSpectra {
 
 	public AbstractMassSpectra(List<IScanMSD> massSpectra) {
 		this.massSpectra = massSpectra;
-		updateListeners = new ArrayList<IUpdateListener>();
+		updateListeners = new ArrayList<>();
 	}
 
 	/**
