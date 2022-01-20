@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -48,8 +48,9 @@ public class ChromatogramFilterMSD extends AbstractChromatogramFilterMSD {
 			try {
 				ExtractedMatrix extractedMatrix = new ExtractedMatrix(chromatogramSelection);
 				double[][] matrix = extractedMatrix.getMatrix();
-				SavitzkyGolayProcessor.apply(matrix, (ChromatogramFilterSettings)filterSettings, monitor);
+				SavitzkyGolayProcessor.apply(matrix, (ChromatogramFilterSettings)filterSettings);
 				extractedMatrix.updateSignal();
+				chromatogramSelection.getChromatogram().setDirty(true);
 				chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.OK, "The Savitzky-Golay filter has been applied successfully.");
 			} catch(IllegalArgumentException e) {
 				chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.EXCEPTION, "High Resolution Data is not supported.");
@@ -66,6 +67,7 @@ public class ChromatogramFilterMSD extends AbstractChromatogramFilterMSD {
 		return chromatogramFilterResult;
 	}
 
+	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo<IChromatogramFilterResult> processingInfo = new ProcessingInfo<IChromatogramFilterResult>();
@@ -80,6 +82,7 @@ public class ChromatogramFilterMSD extends AbstractChromatogramFilterMSD {
 		return processingInfo;
 	}
 
+	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
 		ChromatogramFilterSettings chromatogramFilterSettings = PreferenceSupplier.getFilterSettingsMSD();

@@ -482,9 +482,6 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		ProgressMonitorDialog monitor = new ProgressMonitorDialog(shell);
 		try {
 			monitor.run(true, true, runnable);
-			if(chromatogramSelection != null) {
-				chromatogramSelection.getChromatogram().setDirty(true);
-			}
 			/*
 			 * Select the reference chromatogram.
 			 */
@@ -573,6 +570,18 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		}
 	}
 
+	private void forceReset(boolean resetRange) {
+
+		getDisplay().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+
+				reset(resetRange);
+			}
+		});
+	}
+
 	public void updateResult(MessageProvider processingInfo) {
 
 		getDisplay().asyncExec(new Runnable() {
@@ -580,7 +589,6 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 			@Override
 			public void run() {
 
-				reset(true);
 				ProcessingInfoPartSupport.getInstance().update(processingInfo, true);
 			}
 		});
@@ -1028,9 +1036,9 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 				IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 				IChromatogramSelection chromatogramSelection = getChromatogramSelection();
 				ProcessEntryContainer.applyProcessEntries(processMethod, new ProcessExecutionContext(monitor, processingInfo, processTypeSupport), IChromatogramSelectionProcessSupplier.createConsumer(chromatogramSelection));
-				chromatogramSelection.getChromatogram().setDirty(true);
-				chromatogramSelection.update(false);
+				chromatogramSelection.getChromatogram().setDirty(true); // TODO: check each entry
 				updateResult(processingInfo);
+				forceReset(true);
 			}
 		});
 		toolbarMain.addPreferencePages(() -> Arrays.asList(methodSupportUI.getPreferencePages()), methodSupportUI::applySettings);

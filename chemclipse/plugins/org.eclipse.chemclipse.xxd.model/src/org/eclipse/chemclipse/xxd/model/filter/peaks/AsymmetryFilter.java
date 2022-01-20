@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -129,12 +129,14 @@ public class AsymmetryFilter extends AbstractPeakFilter<AsymmetryFilterSettings>
 				}
 				break;
 			case KEEP_PEAK:
-				if(predicate.negate().test(peakAsymmetryFactor))
+				if(predicate.negate().test(peakAsymmetryFactor)) {
 					listener.delete(peak);
+				}
 				break;
 			case DELETE_PEAK:
-				if(predicate.test(peakAsymmetryFactor))
+				if(predicate.test(peakAsymmetryFactor)) {
 					listener.delete(peak);
+				}
 				break;
 			default:
 				throw new IllegalArgumentException("Unsupported Peak Filter Treatment Option!");

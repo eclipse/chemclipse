@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2021 Lablicate GmbH.
+ * Copyright (c) 2014, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -54,6 +54,7 @@ public class PeakDetectorAMDIS<P extends IPeak, C extends IChromatogram<P>, R> e
 					Thread.currentThread().interrupt();
 					return null;
 				}
+				chromatogramSelection.getChromatogram().setDirty(true);
 			} else {
 				logger.warn("The settings is not of type: " + SettingsAMDIS.class);
 			}

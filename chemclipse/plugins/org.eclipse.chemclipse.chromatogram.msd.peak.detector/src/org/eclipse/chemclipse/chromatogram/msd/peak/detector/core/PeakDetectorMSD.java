@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -78,6 +78,7 @@ public class PeakDetectorMSD {
 		IPeakDetectorMSD<?, ?, ?> peakDetector = getPeakDetector(peakDetectorId);
 		if(peakDetector != null) {
 			processingInfo = peakDetector.detect(chromatogramSelection, peakDetectorSettings, monitor);
+			chromatogramSelection.getChromatogram().setDirty(true);
 		} else {
 			processingInfo = getNoPeakDetectorAvailableProcessingInfo();
 		}
@@ -95,6 +96,7 @@ public class PeakDetectorMSD {
 	 */
 	public static IProcessingInfo<?> detect(IChromatogramSelectionMSD chromatogramSelection, String peakDetectorId, IProgressMonitor monitor) {
 
+		chromatogramSelection.getChromatogram().setDirty(true);
 		return detect(chromatogramSelection, getPeakDetector(peakDetectorId), monitor);
 	}
 
@@ -103,6 +105,7 @@ public class PeakDetectorMSD {
 		IProcessingInfo<?> processingInfo;
 		if(peakDetector != null) {
 			processingInfo = peakDetector.detect(chromatogramSelection, monitor);
+			chromatogramSelection.getChromatogram().setDirty(true);
 		} else {
 			processingInfo = getNoPeakDetectorAvailableProcessingInfo();
 		}

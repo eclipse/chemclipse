@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -83,18 +83,21 @@ public class FilterMenuEntry extends AbstractChartMenuEntry implements IChartMen
 							if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
 								IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
 								processingInfo = ChromatogramFilterMSD.applyFilter(chromatogramSelectionMSD, filterId, monitor);
+								chromatogramSelectionMSD.getChromatogram().setDirty(true);
 							}
 							break;
 						case ExtendedChromatogramUI.TYPE_CSD:
 							if(chromatogramSelection instanceof IChromatogramSelectionCSD) {
 								IChromatogramSelectionCSD chromatogramSelectionCSD = (IChromatogramSelectionCSD)chromatogramSelection;
 								processingInfo = ChromatogramFilterCSD.applyFilter(chromatogramSelectionCSD, filterId, monitor);
+								chromatogramSelectionCSD.getChromatogram().setDirty(true);
 							}
 							break;
 						case ExtendedChromatogramUI.TYPE_WSD:
 							if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
 								IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
 								processingInfo = ChromatogramFilterWSD.applyFilter(chromatogramSelectionWSD, filterId, monitor);
+								chromatogramSelectionWSD.getChromatogram().setDirty(true);
 							}
 							break;
 					}

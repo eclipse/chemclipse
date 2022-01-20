@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -46,7 +46,7 @@ public class FilterRemover extends AbstractChromatogramFilter {
 					applyScanRemoverFilter(chromatogramSelection, scanRemoverPattern, monitor);
 					processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, "Scan Remover", "Scans have been removed successfully."));
 					processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "Scans have been removed successfully."));
-					settings = (FilterSettingsRemover)chromatogramFilterSettings;
+					chromatogramSelection.getChromatogram().setDirty(true);
 				}
 			} catch(FilterException e) {
 				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.EXCEPTION, e.getMessage()));

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -36,6 +36,7 @@ public class ChromatogramFilterStretch extends AbstractChromatogramFilter {
 				FilterSettingsStretch filterSettings = (FilterSettingsStretch)chromatogramFilterSettings;
 				try {
 					RetentionTimeStretcher.stretchChromatogram(chromatogramSelection, filterSettings);
+					chromatogramSelection.getChromatogram().setDirty(true);
 					processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "The chromatogram has been stretched successfully."));
 				} catch(FilterException e) {
 					processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.EXCEPTION, e.getMessage()));

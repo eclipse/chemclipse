@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -91,6 +91,7 @@ public class PeakDetectorWSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 				for(IChromatogramPeakWSD peak : peaks) {
 					chromatogram.addPeak(peak);
 				}
+				chromatogram.setDirty(true);
 				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, FirstDerivativePeakDetector.DETECTOR_DESCRIPTION, peaks.size() + " peaks have been detected successfully."));
 			} else {
 				logger.warn("Settings is not of type: " + PeakDetectorSettingsWSD.class);
@@ -103,6 +104,7 @@ public class PeakDetectorWSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 	public IProcessingInfo<R> detect(IChromatogramSelectionWSD chromatogramSelection, IProgressMonitor monitor) {
 
 		PeakDetectorSettingsWSD peakDetectorSettings = PreferenceSupplier.getPeakDetectorSettingsWSD();
+		chromatogramSelection.getChromatogram().setDirty(true);
 		return detect(chromatogramSelection, peakDetectorSettings, monitor);
 	}
 
@@ -185,6 +187,7 @@ public class PeakDetectorWSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 			}
 			extractPeaks.addAll(peaks);
 		}
+		chromatogram.setDirty(true);
 		return extractPeaks;
 	}
 

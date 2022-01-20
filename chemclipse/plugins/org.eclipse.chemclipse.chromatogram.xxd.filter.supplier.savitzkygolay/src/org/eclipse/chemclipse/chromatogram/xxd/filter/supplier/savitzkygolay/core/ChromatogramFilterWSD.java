@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2021 Lablicate GmbH.
+ * Copyright (c) 2015, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -60,9 +60,11 @@ public class ChromatogramFilterWSD extends AbstractChromatogramFilterWSD {
 				scanWSD.adjustTotalSignal(totalscanSignal.getTotalSignal());
 			}
 		}
+		chromatogramSelection.getChromatogram().setDirty(true);
 		return chromatogramFilterResult;
 	}
 
+	@Override
 	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelectionWSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
 		IProcessingInfo<IChromatogramFilterResult> processingInfo = new ProcessingInfo<IChromatogramFilterResult>();
@@ -70,6 +72,7 @@ public class ChromatogramFilterWSD extends AbstractChromatogramFilterWSD {
 		return processingInfo;
 	}
 
+	@Override
 	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelectionWSD chromatogramSelection, IProgressMonitor monitor) {
 
 		ChromatogramFilterSettings chromatogramFilterSettings = PreferenceSupplier.getFilterSettings();

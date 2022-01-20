@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -202,11 +202,13 @@ public class PeakIdentifierWSD {
 
 	public static <T extends IIdentificationResults> IProcessingInfo<T> identify(IChromatogramSelectionWSD chromatogramSelectionWSD, String identifierId, IProgressMonitor monitor) {
 
+		chromatogramSelectionWSD.getChromatogram().setDirty(true);
 		return identify(chromatogramSelectionWSD, null, identifierId, monitor);
 	}
 
 	public static <T extends IIdentificationResults> IProcessingInfo<T> identify(IChromatogramSelectionWSD chromatogramSelectionWSD, IPeakIdentifierSettingsWSD peakIdentifierSettingsWSD, String identifierId, IProgressMonitor monitor) {
 
+		chromatogramSelectionWSD.getChromatogram().setDirty(true);
 		return identify(chromatogramSelectionWSD.getChromatogram().getPeaks(chromatogramSelectionWSD), peakIdentifierSettingsWSD, identifierId, monitor);
 	}
 }

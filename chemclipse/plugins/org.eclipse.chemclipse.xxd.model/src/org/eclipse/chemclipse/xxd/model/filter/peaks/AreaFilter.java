@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -96,7 +96,6 @@ public class AreaFilter extends AbstractPeakFilter<AreaFilterSettings> {
 		SubMonitor subMonitor = SubMonitor.convert(monitor, peaks.size());
 		AreaPredicate<?> predicate = getPredicate(configuration);
 		for(X peak : peaks) {
-			// processPeak(listener, configuration, peak, getPredicate(configuration));
 			processPeak(listener, configuration, peak, predicate);
 			subMonitor.worked(1);
 		}
@@ -134,12 +133,14 @@ public class AreaFilter extends AbstractPeakFilter<AreaFilterSettings> {
 				}
 				break;
 			case KEEP_PEAK:
-				if(predicate.negate().test(peak.getIntegratedArea()))
+				if(predicate.negate().test(peak.getIntegratedArea())) {
 					listener.delete(peak);
+				}
 				break;
 			case DELETE_PEAK:
-				if(predicate.test(peak.getIntegratedArea()))
+				if(predicate.test(peak.getIntegratedArea())) {
 					listener.delete(peak);
+				}
 				break;
 			default:
 				throw new IllegalArgumentException("Unsupported Peak Filter Treatment Option!");

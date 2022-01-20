@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -34,6 +34,7 @@ public class ChromatogramFilterGapFiller extends AbstractChromatogramFilter {
 			if(chromatogramFilterSettings instanceof FilterSettingsGapFiller) {
 				FilterSettingsGapFiller filterSettings = (FilterSettingsGapFiller)chromatogramFilterSettings;
 				GapFiller.autofillScans(chromatogramSelection, filterSettings);
+				chromatogramSelection.getChromatogram().setDirty(true);
 				processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "The chromatogram has been autofilled successfully."));
 			}
 		}

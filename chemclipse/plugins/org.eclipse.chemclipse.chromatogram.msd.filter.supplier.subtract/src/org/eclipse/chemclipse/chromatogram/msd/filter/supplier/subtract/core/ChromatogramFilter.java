@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2020 Lablicate GmbH.
+ * Copyright (c) 2013, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -43,6 +43,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, DESCRIPTION, "The mass spectrum has been subtracted successfully from the chromatogram selection."));
 				IChromatogramFilterResult chromatogramFilterResult = new ChromatogramFilterResult(ResultStatus.OK, "The subtract filter has been applied successfully.");
 				processingInfo.setProcessingResult(chromatogramFilterResult);
+				chromatogramSelection.getChromatogram().setDirty(true);
 			} else {
 				processingInfo.addErrorMessage(DESCRIPTION, "The filter settings instance is not a type of:" + ChromatogramFilterSettings.class);
 			}

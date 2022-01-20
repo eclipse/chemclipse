@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -46,6 +46,7 @@ public class PeakDetectorELU<P extends IPeak, C extends IChromatogram<P>, R> ext
 				} else {
 					logger.warn("The file doesn't exist: " + file.getAbsolutePath());
 				}
+				chromatogramSelection.getChromatogram().setDirty(true);
 			} else {
 				logger.warn("The settings is not of type: " + SettingsELU.class);
 			}
