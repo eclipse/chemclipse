@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -513,6 +513,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 					chromatogramSelection.setSelectedScan(null);
 					chromatogramSelection.setSelectedIdentifiedScan(null);
 					chromatogramSelection.update(true);
+					chromatogramSelection.getChromatogram().setDirty(true);
 				}
 			}
 			//
@@ -668,6 +669,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 				//
 				chromatogramSelection.setSelectedPeaks(selectedPeaks);
 				chromatogramSelection.setSelectedIdentifiedScans(selectedIdentifiedScans);
+				chromatogramSelection.getChromatogram().setDirty(true);
 				UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Peak(s)/Scan(s) selection via the list.");
 			} else {
 				/*
@@ -791,6 +793,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 						 */
 						chromatogramMSD.addPeak(chromatogramPeakMSD);
 						chromatogramSelectionMSD.setSelectedPeak(chromatogramPeakMSD);
+						chromatogramMSD.setDirty(true);
 						updateChromatogramSelection();
 						//
 						UpdateNotifierUI.update(e.display, chromatogramPeakMSD);
