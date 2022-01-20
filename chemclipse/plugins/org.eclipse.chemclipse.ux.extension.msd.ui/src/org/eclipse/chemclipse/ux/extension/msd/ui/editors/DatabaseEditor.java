@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2021 Lablicate GmbH.
+ * Copyright (c) 2013, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,12 +8,14 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Matthias Mailänder - add dirty handling
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.editors;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +47,7 @@ import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.DatabaseImpor
 import org.eclipse.chemclipse.ux.extension.msd.ui.swt.MassSpectrumLibraryUI;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
 import org.eclipse.e4.ui.model.application.MApplication;
@@ -62,6 +65,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventHandler;
 
 public class DatabaseEditor implements IChemClipseEditor {
 
@@ -82,12 +87,16 @@ public class DatabaseEditor implements IChemClipseEditor {
 	private MApplication application;
 	@Inject
 	private EModelService modelService;
+	@Inject
+	private IEventBroker eventBroker;
 	/*
 	 * Mass spectrum selection and the GUI element.
 	 */
 	private MassSpectrumLibraryUI massSpectrumLibraryUI;
 	private File massSpectrumFile = null;
 	private IMassSpectra massSpectra = null;
+	private ArrayList<EventHandler> registeredEventHandler;
+	private List<Object> objects = new ArrayList<>();
 	/*
 	 * Showing additional info in tabs.
 	 */
@@ -98,6 +107,8 @@ public class DatabaseEditor implements IChemClipseEditor {
 
 		loadMassSpectra();
 		createPages(parent);
+		registeredEventHandler = new ArrayList<>();
+		registerEvents();
 	}
 
 	@Focus
@@ -295,5 +306,65 @@ public class DatabaseEditor implements IChemClipseEditor {
 	private void updateMassSpectrumListUI() {
 
 		massSpectrumLibraryUI.update(massSpectrumFile, massSpectra);
+	}
+
+	public void registerEvent(String topic, String property) {
+
+		registerEvent(topic, new String[]{property});
+	}
+
+	public void registerEvent(String topic, String[] properties) {
+
+		if(eventBroker != null) {
+			registeredEventHandler.add(registerEventHandler(eventBroker, topic, properties));
+		}
+	}
+
+	private EventHandler registerEventHandler(IEventBroker eventBroker, String topic, String[] properties) {
+
+		EventHandler eventHandler = new EventHandler() {
+
+			@Override
+			public void handleEvent(Event event) {
+
+				try {
+					objects.clear();
+					for(String property : properties) {
+						Object object = event.getProperty(property);
+						objects.add(object);
+					}
+					update(topic);
+				} catch(Exception e) {
+					logger.warn(e + "\t" + event);
+				}
+			}
+		};
+		eventBroker.subscribe(topic, eventHandler);
+		return eventHandler;
+	}
+
+	private void update(String topic) {
+
+		if(massSpectrumLibraryUI.isVisible()) {
+			updateObjects(objects, topic);
+		}
+	}
+
+	public void registerEvents() {
+
+		registerEvent(IChemClipseEvents.TOPIC_LIBRARY_MSD_UPDATE, IChemClipseEvents.EVENT_BROKER_DATA);
+	}
+
+	public void updateObjects(List<Object> objects, String topic) {
+
+		if(objects.size() == 1) {
+			Object object = objects.get(0);
+			if(object instanceof IMassSpectra) {
+				if(object == massSpectra) {
+					IMassSpectra massSpectra = (IMassSpectra)object;
+					dirtyable.setDirty(massSpectra.isDirty());
+				}
+			}
+		}
 	}
 }

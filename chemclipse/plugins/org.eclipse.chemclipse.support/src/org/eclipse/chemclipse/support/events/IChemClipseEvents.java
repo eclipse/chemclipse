@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2021 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -80,6 +80,7 @@ public interface IChemClipseEvents {
 	String TOPIC_SCAN_TARGET_UPDATE_COMPARISON = "target/update/comparison"; // Object[]{scan, identificationTarget}
 	String TOPIC_SCAN_REFERENCE_UPDATE_COMPARISON = "scan/update/comparison"; // Object[]{scan1, scan2}
 	//
+	String TOPIC_LIBRARY_MSD_UPDATE = "library/msd/update";
 	String TOPIC_LIBRARY_MSD_UPDATE_SELECTION = "library/msd/update/selection";
 	//
 	String TOPIC_PROCESSING_INFO_UPDATE = "processinginfo/update";

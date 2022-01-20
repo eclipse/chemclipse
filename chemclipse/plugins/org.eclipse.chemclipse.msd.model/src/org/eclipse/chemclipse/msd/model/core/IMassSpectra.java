@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -9,6 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - implementation
+ * Matthias Mailänder - add dirty handling
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
@@ -106,4 +107,16 @@ public interface IMassSpectra extends IUpdateListener {
 	 * @param updateListener
 	 */
 	void removeUpdateListener(IUpdateListener updateListener);
+
+	/**
+	 * This flag marks if a this list of mass spectra has been edited.
+	 */
+	boolean isDirty();
+
+	/**
+	 * This flag marks if this list of mass spectra has been edited.<br/>
+	 * It will only be saved if it is dirty. It should save a little bit of
+	 * process time.
+	 */
+	void setDirty(boolean isDirty);
 }

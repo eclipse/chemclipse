@@ -25,14 +25,17 @@ import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.implementation.RegularLibraryMassSpectrum;
+import org.eclipse.chemclipse.msd.swt.ui.Activator;
 import org.eclipse.chemclipse.msd.swt.ui.components.massspectrum.MassSpectrumListUI;
 import org.eclipse.chemclipse.msd.swt.ui.internal.runnables.LibraryImportRunnable;
 import org.eclipse.chemclipse.msd.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -83,8 +86,17 @@ public class LibraryModifySupportUI extends Composite {
 	public void update(IMassSpectra massSpectra) {
 
 		this.massSpectra = massSpectra;
+		notify(massSpectra);
 		if(massSpectrumListUI != null) {
 			massSpectrumListUI.setInput(massSpectra);
+		}
+	}
+
+	private void notify(IMassSpectra massSpectra) {
+
+		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+		if(eventBroker != null) {
+			eventBroker.send(IChemClipseEvents.TOPIC_LIBRARY_MSD_UPDATE, massSpectra);
 		}
 	}
 
@@ -226,6 +238,7 @@ public class LibraryModifySupportUI extends Composite {
 					if(massSpectraImport != null) {
 						textLibraryPath.setText("");
 						massSpectra.addMassSpectra(massSpectraImport.getList());
+						massSpectra.setDirty(true);
 						update(massSpectra);
 						resetSearch();
 					}
@@ -278,6 +291,7 @@ public class LibraryModifySupportUI extends Composite {
 								if(object instanceof IScanMSD) {
 									IScanMSD massSpectrum = (IScanMSD)object;
 									massSpectra.removeMassSpectrum(massSpectrum);
+									massSpectra.setDirty(true);
 								}
 							}
 							update(massSpectra);
@@ -324,6 +338,8 @@ public class LibraryModifySupportUI extends Composite {
 						 * Add to library and update the list.
 						 */
 						massSpectra.addMassSpectrum(libraryMassSpectrum);
+						massSpectra.setDirty(true);
+						update(massSpectra);
 						if(searchSupportUI != null) {
 							searchSupportUI.setSearchText(name);
 						}
