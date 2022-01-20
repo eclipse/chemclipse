@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -35,7 +35,7 @@ public interface IMassSpectraReader extends IFileHelper {
 	 * @throws FileIsEmptyException
 	 * @throws IOException
 	 */
-	IMassSpectra read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException;
+	IMassSpectra read(File file, IProgressMonitor monitor) throws IOException;
 
 	/**
 	 * This method tries to extract the reference identifier from the given name.
