@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -64,6 +64,7 @@ public class PeakIntegrator {
 	 * This class has only static methods.
 	 */
 	private PeakIntegrator() {
+
 	}
 
 	/**
@@ -143,6 +144,7 @@ public class PeakIntegrator {
 		IPeakIntegrator<T> integrator = getPeakIntegrator(integratorId);
 		if(integrator != null) {
 			processingInfo = integrator.integrate(chromatogramSelection, peakIntegrationSettings, monitor);
+			chromatogramSelection.getChromatogram().setDirty(true);
 		} else {
 			processingInfo = getNoIntegratorAvailableProcessingInfo();
 		}
@@ -163,6 +165,7 @@ public class PeakIntegrator {
 		IPeakIntegrator<T> integrator = getPeakIntegrator(integratorId);
 		if(integrator != null) {
 			processingInfo = integrator.integrate(chromatogramSelection, monitor);
+			chromatogramSelection.getChromatogram().setDirty(true);
 		} else {
 			processingInfo = getNoIntegratorAvailableProcessingInfo();
 		}
