@@ -43,17 +43,14 @@ public class ReportWriter3 {
 
 	public void generate(File file, boolean append, List<IChromatogram<? extends IPeak>> chromatograms, ReportSettings3 reportSettings, IProgressMonitor monitor) throws IOException {
 
-		try (FileWriter fileWriter = new FileWriter(file, append)) {
-			try (PrintWriter printWriter = new PrintWriter(fileWriter)) {
-				for(IChromatogram<? extends IPeak> chromatogram : chromatograms) {
-					printHeader(printWriter, chromatogram);
-					printWriter.println("");
-					printQuantitationResults(printWriter, chromatogram);
-					printWriter.println("");
-				}
-				printWriter.flush();
+		try (PrintWriter printWriter = new PrintWriter(new FileWriter(file, append))) {
+			for(IChromatogram<? extends IPeak> chromatogram : chromatograms) {
+				printHeader(printWriter, chromatogram);
+				printWriter.println("");
+				printQuantitationResults(printWriter, chromatogram);
+				printWriter.println("");
 			}
-			fileWriter.flush();
+			printWriter.flush();
 		}
 	}
 

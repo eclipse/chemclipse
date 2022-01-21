@@ -19,7 +19,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.report.settings.IChromatogramRepo
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.internal.support.SpecificationValidator;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.io.ReportWriter3;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.settings.ReportSettings1;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.settings.ReportSettings3;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
@@ -39,9 +38,9 @@ public class Report3 extends AbstractReport {
 		//
 		if(!processingInfo.hasErrorMessages()) {
 			if(settings instanceof ReportSettings3) {
-				ReportSettings3 reportSettings = (ReportSettings3)settings;
-				ReportWriter3 chromatogramReport = new ReportWriter3();
 				try {
+					ReportSettings3 reportSettings = (ReportSettings3)settings;
+					ReportWriter3 chromatogramReport = new ReportWriter3();
 					chromatogramReport.generate(file, append, chromatograms, reportSettings, monitor);
 					processingInfo.setProcessingResult(file);
 				} catch(IOException e) {
@@ -49,7 +48,7 @@ public class Report3 extends AbstractReport {
 					processingInfo.addErrorMessage("ChemClipse Chromatogram Report", "The report couldn't be created. An error occured.");
 				}
 			} else {
-				logger.warn("The settings are not of type: " + ReportSettings1.class);
+				logger.warn("The settings are not of type: " + ReportSettings3.class);
 			}
 		}
 		return processingInfo;

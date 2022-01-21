@@ -19,7 +19,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.report.settings.IChromatogramRepo
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.internal.support.SpecificationValidator;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.io.ReportWriter2;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.settings.ReportSettings1;
 import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.settings.ReportSettings2;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
@@ -49,7 +48,7 @@ public class Report2 extends AbstractReport {
 					processingInfo.addErrorMessage("ChemClipse Chromatogram Report", "The report couldn't be created. An error occured.");
 				}
 			} else {
-				logger.warn("The settings are not of type: " + ReportSettings1.class);
+				logger.warn("The settings are not of type: " + ReportSettings2.class);
 			}
 		}
 		return processingInfo;
