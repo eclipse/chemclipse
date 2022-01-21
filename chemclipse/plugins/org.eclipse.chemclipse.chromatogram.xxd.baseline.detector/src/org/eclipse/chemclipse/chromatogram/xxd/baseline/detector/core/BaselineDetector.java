@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -76,6 +76,7 @@ public class BaselineDetector {
 		IBaselineDetector detector = getBaselineDetector(detectorId);
 		if(detector != null) {
 			processingInfo = detector.setBaseline(chromatogramSelection, baselineDetectorSettings, monitor);
+			chromatogramSelection.getChromatogram().setDirty(true);
 		} else {
 			processingInfo = getNoDetectorAvailableProcessingInfo();
 		}
