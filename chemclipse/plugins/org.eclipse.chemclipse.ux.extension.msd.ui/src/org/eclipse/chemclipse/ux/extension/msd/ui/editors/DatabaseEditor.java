@@ -102,42 +102,21 @@ public class DatabaseEditor implements IChemClipseEditor {
 	 */
 	private TabFolder tabFolder;
 
-	@PostConstruct
-	private void createControl(Composite parent) {
+	public void registerEvent(String topic, String property) {
 
-		loadMassSpectra();
-		createPages(parent);
-		registeredEventHandler = new ArrayList<>();
-		registerEvents();
+		registerEvent(topic, new String[]{property});
 	}
 
-	@Focus
-	public void setFocus() {
+	public void registerEvent(String topic, String[] properties) {
 
-		if(massSpectra != null) {
-			UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_LIBRARY_MSD_UPDATE_SELECTION, massSpectra);
+		if(eventBroker != null) {
+			registeredEventHandler.add(registerEventHandler(eventBroker, topic, properties));
 		}
 	}
 
-	@PreDestroy
-	private void preDestroy() {
+	public void registerEvents() {
 
-		/*
-		 * Remove the editor from the listed parts.
-		 */
-		List<String> clearTopics = Arrays.asList(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION);
-		UpdateNotifier.update(IChemClipseEvents.TOPIC_EDITOR_LIBRARY_CLOSE, clearTopics);
-		//
-		if(modelService != null) {
-			MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);
-			part.setToBeRendered(false);
-			part.setVisible(false);
-			partStack.getChildren().remove(part);
-		}
-		/*
-		 * Run the garbage collector.
-		 */
-		System.gc();
+		registerEvent(IChemClipseEvents.TOPIC_LIBRARY_MSD_UPDATE, IChemClipseEvents.EVENT_BROKER_DATA);
 	}
 
 	@Persist
@@ -174,32 +153,6 @@ public class DatabaseEditor implements IChemClipseEditor {
 		}
 	}
 
-	private void saveMassSpectra(IProgressMonitor monitor, Shell shell) throws NoMassSpectrumConverterAvailableException {
-
-		if(massSpectrumFile != null && massSpectra != null && shell != null) {
-			/*
-			 * Convert the mass spectra.
-			 */
-			String converterId = massSpectra.getConverterId();
-			if(converterId != null && !converterId.equals("")) {
-				monitor.subTask("Save Mass Spectra");
-				IProcessingInfo<?> processingInfo = DatabaseConverter.convert(massSpectrumFile, massSpectra, false, converterId, monitor);
-				try {
-					/*
-					 * If no failures have occurred, set the dirty status to
-					 * false.
-					 */
-					processingInfo.getProcessingResult();
-					dirtyable.setDirty(false);
-				} catch(TypeCastException e) {
-					logger.warn(e);
-				}
-			} else {
-				throw new NoMassSpectrumConverterAvailableException();
-			}
-		}
-	}
-
 	@Override
 	public boolean saveAs() {
 
@@ -215,28 +168,65 @@ public class DatabaseEditor implements IChemClipseEditor {
 		return saveSuccessful;
 	}
 
-	private void loadMassSpectra() {
+	@Focus
+	public void setFocus() {
 
-		try {
-			Object object = part.getObject();
-			if(object instanceof Map) {
-				/*
-				 * String
-				 */
-				@SuppressWarnings("unchecked")
-				Map<String, Object> map = (Map<String, Object>)object;
-				File file = new File((String)map.get(EditorSupport.MAP_FILE));
-				boolean batch = (boolean)map.get(EditorSupport.MAP_BATCH);
-				importMassSpectra(file, batch);
-			} else if(object instanceof String) {
-				/*
-				 * Legacy ... Deprecated
-				 */
-				File file = new File((String)object);
-				importMassSpectra(file, true);
+		if(massSpectra != null) {
+			UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_LIBRARY_MSD_UPDATE_SELECTION, massSpectra);
+		}
+	}
+
+	public void updateObjects(List<Object> objects, String topic) {
+
+		if(objects.size() == 1) {
+			Object object = objects.get(0);
+			if(object instanceof IMassSpectra) {
+				if(object == massSpectra) {
+					IMassSpectra massSpectra = (IMassSpectra)object;
+					dirtyable.setDirty(massSpectra.isDirty());
+				}
 			}
-		} catch(Exception e) {
-			logger.warn(e);
+		}
+	}
+
+	@PostConstruct
+	private void createControl(Composite parent) {
+
+		loadMassSpectra();
+		createPages(parent);
+		registeredEventHandler = new ArrayList<>();
+		registerEvents();
+	}
+
+	private void createEditorPage() {
+
+		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
+		tabItem.setText("Library");
+		//
+		massSpectrumLibraryUI = new MassSpectrumLibraryUI(tabFolder, SWT.NONE);
+		massSpectrumLibraryUI.setLayout(new FillLayout());
+		updateMassSpectrumListUI();
+		//
+		tabItem.setControl(massSpectrumLibraryUI);
+	}
+
+	private void createErrorMessagePage(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayout(new FillLayout());
+		Label label = new Label(composite, SWT.NONE);
+		label.setText("The mass spectrum couldn't be loaded.");
+	}
+
+	private void createPages(Composite parent) {
+
+		if(massSpectra != null && massSpectra.getMassSpectrum(1) != null) {
+			String label = ("".equals(massSpectra.getName())) ? massSpectrumFile.getName() : massSpectra.getName();
+			part.setLabel(label);
+			tabFolder = new TabFolder(parent, SWT.BOTTOM);
+			createEditorPage();
+		} else {
+			createErrorMessagePage(parent);
 		}
 	}
 
@@ -271,53 +261,50 @@ public class DatabaseEditor implements IChemClipseEditor {
 		});
 	}
 
-	private void createPages(Composite parent) {
+	private void loadMassSpectra() {
 
-		if(massSpectra != null && massSpectra.getMassSpectrum(1) != null) {
-			String label = ("".equals(massSpectra.getName())) ? massSpectrumFile.getName() : massSpectra.getName();
-			part.setLabel(label);
-			tabFolder = new TabFolder(parent, SWT.BOTTOM);
-			createEditorPage();
-		} else {
-			createErrorMessagePage(parent);
+		try {
+			Object object = part.getObject();
+			if(object instanceof Map) {
+				/*
+				 * String
+				 */
+				@SuppressWarnings("unchecked")
+				Map<String, Object> map = (Map<String, Object>)object;
+				File file = new File((String)map.get(EditorSupport.MAP_FILE));
+				boolean batch = (boolean)map.get(EditorSupport.MAP_BATCH);
+				importMassSpectra(file, batch);
+			} else if(object instanceof String) {
+				/*
+				 * Legacy ... Deprecated
+				 */
+				File file = new File((String)object);
+				importMassSpectra(file, true);
+			}
+		} catch(Exception e) {
+			logger.warn(e);
 		}
 	}
 
-	private void createEditorPage() {
+	@PreDestroy
+	private void preDestroy() {
 
-		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-		tabItem.setText("Library");
+		/*
+		 * Remove the editor from the listed parts.
+		 */
+		List<String> clearTopics = Arrays.asList(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION);
+		UpdateNotifier.update(IChemClipseEvents.TOPIC_EDITOR_LIBRARY_CLOSE, clearTopics);
 		//
-		massSpectrumLibraryUI = new MassSpectrumLibraryUI(tabFolder, SWT.NONE);
-		massSpectrumLibraryUI.setLayout(new FillLayout());
-		updateMassSpectrumListUI();
-		//
-		tabItem.setControl(massSpectrumLibraryUI);
-	}
-
-	private void createErrorMessagePage(Composite parent) {
-
-		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setLayout(new FillLayout());
-		Label label = new Label(composite, SWT.NONE);
-		label.setText("The mass spectrum couldn't be loaded.");
-	}
-
-	private void updateMassSpectrumListUI() {
-
-		massSpectrumLibraryUI.update(massSpectrumFile, massSpectra);
-	}
-
-	public void registerEvent(String topic, String property) {
-
-		registerEvent(topic, new String[]{property});
-	}
-
-	public void registerEvent(String topic, String[] properties) {
-
-		if(eventBroker != null) {
-			registeredEventHandler.add(registerEventHandler(eventBroker, topic, properties));
+		if(modelService != null) {
+			MPartStack partStack = (MPartStack)modelService.find(IPerspectiveAndViewIds.EDITOR_PART_STACK_ID, application);
+			part.setToBeRendered(false);
+			part.setVisible(false);
+			partStack.getChildren().remove(part);
 		}
+		/*
+		 * Run the garbage collector.
+		 */
+		System.gc();
 	}
 
 	private EventHandler registerEventHandler(IEventBroker eventBroker, String topic, String[] properties) {
@@ -343,6 +330,32 @@ public class DatabaseEditor implements IChemClipseEditor {
 		return eventHandler;
 	}
 
+	private void saveMassSpectra(IProgressMonitor monitor, Shell shell) throws NoMassSpectrumConverterAvailableException {
+
+		if(massSpectrumFile != null && massSpectra != null && shell != null) {
+			/*
+			 * Convert the mass spectra.
+			 */
+			String converterId = massSpectra.getConverterId();
+			if(converterId != null && !converterId.equals("")) {
+				monitor.subTask("Save Mass Spectra");
+				IProcessingInfo<?> processingInfo = DatabaseConverter.convert(massSpectrumFile, massSpectra, false, converterId, monitor);
+				try {
+					/*
+					 * If no failures have occurred, set the dirty status to
+					 * false.
+					 */
+					processingInfo.getProcessingResult();
+					dirtyable.setDirty(false);
+				} catch(TypeCastException e) {
+					logger.warn(e);
+				}
+			} else {
+				throw new NoMassSpectrumConverterAvailableException();
+			}
+		}
+	}
+
 	private void update(String topic) {
 
 		if(massSpectrumLibraryUI.isVisible()) {
@@ -350,21 +363,8 @@ public class DatabaseEditor implements IChemClipseEditor {
 		}
 	}
 
-	public void registerEvents() {
+	private void updateMassSpectrumListUI() {
 
-		registerEvent(IChemClipseEvents.TOPIC_LIBRARY_MSD_UPDATE, IChemClipseEvents.EVENT_BROKER_DATA);
-	}
-
-	public void updateObjects(List<Object> objects, String topic) {
-
-		if(objects.size() == 1) {
-			Object object = objects.get(0);
-			if(object instanceof IMassSpectra) {
-				if(object == massSpectra) {
-					IMassSpectra massSpectra = (IMassSpectra)object;
-					dirtyable.setDirty(massSpectra.isDirty());
-				}
-			}
-		}
+		massSpectrumLibraryUI.update(massSpectrumFile, massSpectra);
 	}
 }
