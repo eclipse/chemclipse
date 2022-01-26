@@ -653,8 +653,8 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		/*
 		 * Add space on top to show labels correctly.
 		 */
-		double extendX = preferenceStore.getDouble(PreferenceConstants.P_CHROMATOGRAM_EXTEND_X);
-		rangeRestriction.setExtendMaxY(extendX);
+		double extendY = preferenceStore.getDouble(PreferenceConstants.P_CHROMATOGRAM_EXTEND_Y);
+		rangeRestriction.setExtendMaxY(extendY);
 		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
 			/*
 			 * MSD has no negative intensity values, so setZeroY(true)

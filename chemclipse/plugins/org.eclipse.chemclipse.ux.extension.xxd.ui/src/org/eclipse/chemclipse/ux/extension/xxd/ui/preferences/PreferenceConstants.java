@@ -498,10 +498,10 @@ public class PreferenceConstants extends ChartOptions {
 	public static final int MIN_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH = 10;
 	public static final int MAX_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH = 36000000; // = 600.0 minutes
 	public static final int DEF_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH = 6000000; // = 100.0 minutes
-	public static final String P_CHROMATOGRAM_EXTEND_X = "chromatogramExtendX";
-	public static final double MIN_CHROMATOGRAM_EXTEND_X = 0.0d;
-	public static final double MAX_CHROMATOGRAM_EXTEND_X = 10.0d;
-	public static final double DEF_CHROMATOGRAM_EXTEND_X = 0.5d; // 50%
+	public static final String P_CHROMATOGRAM_EXTEND_Y = "chromatogramExtendY";
+	public static final double MIN_CHROMATOGRAM_EXTEND_Y = 0.0d;
+	public static final double MAX_CHROMATOGRAM_EXTEND_Y = 10.0d;
+	public static final double DEF_CHROMATOGRAM_EXTEND_Y = 0.5d; // 50%
 	public static final String P_CHROMATOGRAM_RESTRICT_SELECT_X = "chromatogramRestrictSelectX";
 	public static final boolean DEF_CHROMATOGRAM_RESTRICT_SELECT_X = false;
 	public static final String P_CHROMATOGRAM_RESTRICT_SELECT_Y = "chromatogramRestrictSelectY";
