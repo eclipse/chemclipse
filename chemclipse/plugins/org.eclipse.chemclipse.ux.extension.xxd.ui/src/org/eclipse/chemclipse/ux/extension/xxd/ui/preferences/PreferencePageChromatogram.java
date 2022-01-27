@@ -64,10 +64,10 @@ public class PreferencePageChromatogram extends FieldEditorPreferencePage implem
 		addField(new BooleanFieldEditor(PreferenceConstants.P_CHROMATOGRAM_TRANSFER_BEST_TARGET_ONLY, "Transfer best target only", getFieldEditorParent()));
 		addIntegerField(PreferenceConstants.P_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY, "Stretch Chromatogram Scan Delay [ms]:", PreferenceConstants.MIN_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY, PreferenceConstants.MAX_STRETCH_CHROMATOGRAM_MILLISECONDS_SCAN_DELAY);
 		addIntegerField(PreferenceConstants.P_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH, "Stretch Chromatogram Length [ms]:", PreferenceConstants.MIN_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH, PreferenceConstants.MAX_STRETCH_CHROMATOGRAM_MILLISECONDS_LENGTH);
+		addField(new DoubleFieldEditor(PreferenceConstants.P_CHROMATOGRAM_EXTEND_Y, "Extend Y (1.0 = 100%)", PreferenceConstants.MIN_CHROMATOGRAM_EXTEND_Y, PreferenceConstants.MAX_CHROMATOGRAM_EXTEND_Y, getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("The following settings define how the chart reacts on a user selection and zoom events.", getFieldEditorParent()));
-		addField(new DoubleFieldEditor(PreferenceConstants.P_CHROMATOGRAM_EXTEND_Y, "Extend Y (1.0 = 100%)", PreferenceConstants.MIN_CHROMATOGRAM_EXTEND_Y, PreferenceConstants.MAX_CHROMATOGRAM_EXTEND_Y, getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_CHROMATOGRAM_RESTRICT_SELECT_X, "Restrict Select X", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_CHROMATOGRAM_RESTRICT_SELECT_Y, "Restrict Select Y", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_CHROMATOGRAM_FORCE_ZERO_MIN_Y_MSD, "Force Zero Min Y (MSD)", getFieldEditorParent()));

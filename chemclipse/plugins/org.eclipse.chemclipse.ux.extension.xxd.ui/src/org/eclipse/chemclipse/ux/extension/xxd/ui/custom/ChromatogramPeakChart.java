@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -54,6 +54,7 @@ import org.eclipse.swtchart.Range;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.IExtendedChart;
+import org.eclipse.swtchart.extensions.core.RangeRestriction;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 
@@ -97,13 +98,13 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 	public ChromatogramPeakChart() {
 
 		super();
-		init();
+		initialize();
 	}
 
 	public ChromatogramPeakChart(Composite parent, int style) {
 
 		super(parent, style);
-		init();
+		initialize();
 	}
 
 	public void updateChromatogram(IChromatogramSelection<?, ?> chromatogramSelection) {
@@ -272,11 +273,13 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 		redrawChart();
 	}
 
-	private void init() {
+	private void initialize() {
 
 		IChartSettings chartSettings = getChartSettings();
 		chartSettings.setCreateMenu(true);
+		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
 		chartSettings.getRangeRestriction().setRestrictFrame(true);
+		rangeRestriction.setExtendMaxY(preferenceStore.getDouble(PreferenceConstants.P_CHROMATOGRAM_EXTEND_Y));
 		applySettings(chartSettings);
 	}
 
