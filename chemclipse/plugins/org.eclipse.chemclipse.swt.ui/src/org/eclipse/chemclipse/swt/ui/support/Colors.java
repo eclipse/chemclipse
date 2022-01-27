@@ -25,14 +25,15 @@ import org.eclipse.swt.widgets.Display;
 
 public class Colors {
 
+	/*
+	 * System colors
+	 */
 	public static final Color WHITE = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_WHITE);
 	public static final Color BLACK = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK);
 	public static final Color RED = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_RED);
 	public static final Color DARK_RED = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_DARK_RED);
-	public static final Color LIGHT_RED = new Color(Display.getCurrent(), 249, 154, 152);
 	public static final Color GREEN = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_GREEN);
 	public static final Color DARK_GREEN = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_DARK_GREEN);
-	public static final Color LIGHT_GREEN = new Color(Display.getCurrent(), 166, 255, 139);
 	public static final Color GRAY = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_GRAY);
 	public static final Color DARK_GRAY = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY);
 	public static final Color CYAN = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_CYAN);
@@ -42,7 +43,12 @@ public class Colors {
 	public static final Color MAGENTA = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_MAGENTA);
 	public static final Color YELLOW = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_YELLOW);
 	public static final Color DARK_YELLOW = DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_DARK_YELLOW);
-	public static final Color LIGHT_YELLOW = new Color(Display.getCurrent(), 255, 254, 136);
+	/*
+	 * User specific colors.
+	 */
+	public static final RGB LIGHT_RED = new RGB(249, 154, 152);
+	public static final RGB LIGHT_GREEN = new RGB(166, 255, 139);
+	public static final RGB LIGHT_YELLOW = new RGB(255, 254, 136);
 	/*
 	 * These are system color ids, defined org.eclipse.swt.SWT. If you use own
 	 * color, dispose them, if not needed any more.
@@ -264,9 +270,9 @@ public class Colors {
 			 * Assume that there are 3 values.
 			 */
 			String[] values = rgb.split(",");
-			int red = Integer.parseInt(values[0]);
-			int green = Integer.parseInt(values[1]);
-			int blue = Integer.parseInt(values[2]);
+			int red = Integer.parseInt(values[0].trim());
+			int green = Integer.parseInt(values[1].trim());
+			int blue = Integer.parseInt(values[2].trim());
 			return getColor(new RGB(red, green, blue), alpha);
 		} catch(Exception e) {
 			return WHITE;

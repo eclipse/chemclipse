@@ -79,10 +79,10 @@ public class SampleQuantTableViewerUI extends ExtendedTableViewer {
 							//
 							if(!sampleQuantSubstance.getType().equals(ISampleQuantSubstance.TYPE_ISTD)) {
 								if(!sampleQuantSubstance.isValidated()) {
-									cell.setBackground(Colors.LIGHT_YELLOW);
+									cell.setBackground(Colors.getColor(Colors.LIGHT_YELLOW));
 									cell.setForeground(Colors.BLACK);
 								} else {
-									cell.setBackground(Colors.LIGHT_GREEN);
+									cell.setBackground(Colors.getColor(Colors.LIGHT_GREEN));
 									cell.setForeground(Colors.BLACK);
 								}
 							}

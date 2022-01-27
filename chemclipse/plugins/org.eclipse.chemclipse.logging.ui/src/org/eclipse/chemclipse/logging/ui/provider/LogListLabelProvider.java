@@ -37,11 +37,11 @@ public class LogListLabelProvider extends AbstractChemClipseLabelProvider {
 		if(element instanceof ParsedLogEntry) {
 			ParsedLogEntry logEntry = (ParsedLogEntry)element;
 			if(logEntry.getMessage().contains("successfully") || logEntry.getMessage().contains("activated")) {
-				return Colors.LIGHT_GREEN;
+				return Colors.getColor(Colors.LIGHT_GREEN);
 			} else if(logEntry.getLevel().contains("WARN")) {
-				return Colors.LIGHT_YELLOW;
+				return Colors.getColor(Colors.LIGHT_YELLOW);
 			} else if(logEntry.getLevel().contains("ERROR")) {
-				return Colors.LIGHT_RED;
+				return Colors.getColor(Colors.LIGHT_RED);
 			} else if(logEntry.getLevel().contains("INFO")) {
 				return Colors.WHITE;
 			}
