@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -43,7 +43,7 @@ public abstract class AbstractTransferFilter extends AbstractChromatogramFilter 
 		List<IScan> identifiedScans = new ArrayList<>();
 		for(int i = startScan; i <= stopScan; i++) {
 			IScan scan = chromatogram.getScan(i);
-			if(scan.getTargets().size() > 0) {
+			if(!scan.getTargets().isEmpty()) {
 				identifiedScans.add(scan);
 			}
 		}
