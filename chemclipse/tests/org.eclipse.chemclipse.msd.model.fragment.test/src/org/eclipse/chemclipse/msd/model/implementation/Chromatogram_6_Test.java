@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -195,10 +195,5 @@ public class Chromatogram_6_Test extends TestCase {
 
 		IExtractedIonSignals signals = extractedIonSignalExtractor.getExtractedIonSignals(14.2f, 105.6f);
 		assertEquals("List<IExtractedIonSignal> size", 2, signals.size());
-	}
-
-	public void testIsUndoable_1() {
-
-		assertEquals("isUndoable", true, chromatogram.isUndoable());
 	}
 }

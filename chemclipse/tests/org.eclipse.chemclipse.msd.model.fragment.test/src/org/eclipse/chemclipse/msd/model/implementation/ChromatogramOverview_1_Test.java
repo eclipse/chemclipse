@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,18 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
-import java.io.File;
 import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
-import org.eclipse.chemclipse.model.versioning.PathHelper;
-import org.eclipse.chemclipse.model.versioning.VersionManagement;
-import org.eclipse.chemclipse.support.settings.ApplicationSettings;
 
 import junit.framework.TestCase;
 
@@ -55,38 +49,6 @@ public class ChromatogramOverview_1_Test extends TestCase {
 		chrom = null;
 		date = null;
 		super.tearDown();
-	}
-
-	public void testGetIdentifier_1() {
-
-		/*
-		 * chromatogram@[116f2e6]_[1226516556244]
-		 * chromatogram@[1cfb84c]_[1226516556243]
-		 */
-		String input = chromatogram.getIdentifier();
-		String regex = "(chromatogram@)+[0-9a-f]*(_)[0-9]*";
-		Pattern pattern = Pattern.compile(regex);
-		Matcher matcher = pattern.matcher(input);
-		assertTrue("getIdentifier: " + input, matcher.find());
-	}
-
-	public void testGetStorageDirectory_1() {
-
-		/*
-		 * Test the storage path cases.<br/>The time id could differ in the last
-		 * digits so leave the last digits out of view.<br/><br/> test =
-		 * /home/eselmeister
-		 * /.chemclipse/org.eclipse.chemclipse.msd.model/serializedChromatograms
-		 * /chromatogram@1b2e165_12246569375[02]<br/> actual =
-		 * /home/eselmeister/
-		 * .chemclipse/org.eclipse.chemclipse.msd.model/serializedChromatograms
-		 * /chromatogram@1b2e165_12246569375[03]<br/>
-		 */
-		VersionManagement versionManagement = new VersionManagement();
-		File storagePath = new File(ApplicationSettings.getSettingsDirectory() + File.separator + PathHelper.CHROMATOGRAM_MODELS + File.separator + PathHelper.SERIALIZED_CHROMATOGRAMS + File.separator + versionManagement.getChromatogramIdentifier());
-		String test = storagePath.getAbsolutePath();
-		String actual = versionManagement.getStorageDirectory().getAbsolutePath();
-		assertTrue("storageDirectory: " + actual, test.regionMatches(0, actual, 0, actual.length() - 2));
 	}
 
 	public void testGetMinSignal_1() {
