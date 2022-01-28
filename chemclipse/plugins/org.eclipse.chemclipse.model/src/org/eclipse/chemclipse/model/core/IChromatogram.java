@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2021 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,11 +23,10 @@ import org.eclipse.chemclipse.model.support.IAnalysisSegment;
 import org.eclipse.chemclipse.model.support.IScanRange;
 import org.eclipse.chemclipse.model.targets.ITargetDisplaySettings;
 import org.eclipse.chemclipse.model.updates.IUpdater;
-import org.eclipse.chemclipse.model.versioning.IChromatogramVersioning;
 import org.eclipse.chemclipse.support.history.ISupplierEditHistory;
 import org.eclipse.core.runtime.IAdaptable;
 
-public interface IChromatogram<T extends IPeak> extends SegmentedMeasurement, IMeasurement, IChromatogramOverview, IAdaptable, IChromatogramPeaks<T>, IChromatogramVersioning, ISupplierEditHistory, IChromatogramBaseline, IUpdater, IChromatogramIntegrationSupport, IChromatogramProcessorSupport, ITargetSupplier, ITargetDisplaySettings {
+public interface IChromatogram<T extends IPeak> extends SegmentedMeasurement, IMeasurement, IChromatogramOverview, IAdaptable, IChromatogramPeaks<T>, ISupplierEditHistory, IChromatogramBaseline, IUpdater, IChromatogramIntegrationSupport, IChromatogramProcessorSupport, ITargetSupplier, ITargetDisplaySettings {
 
 	String DEFAULT_CHROMATOGRAM_NAME = "Chromatogram";
 	int MIN_SCANDELAY = 0;

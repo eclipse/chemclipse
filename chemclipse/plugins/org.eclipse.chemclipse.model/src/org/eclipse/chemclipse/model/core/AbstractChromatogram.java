@@ -12,15 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -43,21 +35,14 @@ import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.implementation.TripleQuadMethod;
 import org.eclipse.chemclipse.model.notifier.IChromatogramSelectionUpdateNotifier;
 import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.model.processor.IChromatogramProcessor;
-import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.model.signals.TotalScanSignalExtractor;
 import org.eclipse.chemclipse.model.support.IAnalysisSegment;
 import org.eclipse.chemclipse.model.support.IScanRange;
 import org.eclipse.chemclipse.model.updates.IChromatogramUpdateListener;
-import org.eclipse.chemclipse.model.versioning.IVersionManagement;
-import org.eclipse.chemclipse.model.versioning.VersionManagement;
 import org.eclipse.chemclipse.support.history.EditHistory;
-import org.eclipse.chemclipse.support.history.EditInformation;
 import org.eclipse.chemclipse.support.history.IEditHistory;
-import org.eclipse.chemclipse.support.preferences.SupportPreferences;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.ISafeRunnable;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.SafeRunner;
@@ -85,10 +70,6 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	 * has to update itself.
 	 */
 	private final List<IChromatogramUpdateListener> updateSupport;
-	/*
-	 * The version management handles the temporary files and revision names.
-	 */
-	private final IVersionManagement versionManagement;
 	/*
 	 * EditHistory stores all information about the edit operations processed on
 	 * the chromatogram.
@@ -133,7 +114,6 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	public AbstractChromatogram() {
 
 		updateSupport = new ArrayList<IChromatogramUpdateListener>(5);
-		versionManagement = new VersionManagement();
 		editHistory = new EditHistory();
 		baselineModelMap.put(DEFAULT_BASELINE_ID, new BaselineModel(this));
 		referencedChromatograms = new ArrayList<IChromatogram<?>>();
@@ -204,18 +184,6 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 			int milliseconds = Math.round(1000 / scansPerSecond);
 			setScanInterval(milliseconds);
 		}
-	}
-
-	@Override
-	public String getIdentifier() {
-
-		return versionManagement.getChromatogramIdentifier();
-	}
-
-	@Override
-	public File getStorageDirectory() {
-
-		return versionManagement.getStorageDirectory();
 	}
 
 	@Override
@@ -496,122 +464,10 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	}
 
 	@Override
-	public boolean isUndoable() {
-
-		return SupportPreferences.isUndoable();
-	}
-
-	// TODO Junit
-	@Override
-	public boolean canUndo() {
-
-		boolean result = false;
-		if(isUndoable() && versionManagement.getRevision() > 0) {
-			result = true;
-		}
-		return result;
-	}
-
-	// TODO Junit
-	@Override
-	public boolean canRedo() {
-
-		boolean result = false;
-		if(isUndoable() && versionManagement.getNextScanRevision().exists()) {
-			result = true;
-		}
-		return result;
-	}
-
-	@Override
-	public void hibernate() {
-
-		if(!isUndoable()) {
-			return;
-		}
-		File file = versionManagement.getActualScanRevision();
-		writeSerializedChromatogram(file);
-		// TODO set scans = null;
-	}
-
-	@Override
-	public void wakeUp() {
-
-		if(!isUndoable()) {
-			return;
-		}
-		File file = versionManagement.getActualScanRevision();
-		if(file.exists()) {
-			readSerializedChromatogram(file);
-		}
-	}
-
-	@Override
-	public void writeSerializedChromatogram(File file) {
-
-		assert file != null : getClass().getName() + " writeSerializedFile: The file must not be null.";
-		ObjectOutputStream outputStream = null;
-		try {
-			outputStream = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(file)));
-			outputStream.writeObject(getScans());
-		} catch(FileNotFoundException e) {
-			logger.warn(e);
-		} catch(IOException e) {
-			logger.warn(e);
-		} finally {
-			if(outputStream != null) {
-				try {
-					outputStream.close();
-				} catch(IOException e) {
-					logger.warn(e);
-				}
-			}
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public void readSerializedChromatogram(File file) {
-
-		assert file != null : getClass().getName() + " readSerializedFile: The file must not be null.";
-		ObjectInputStream inputStream = null;
-		Object inputObject;
-		try {
-			inputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream(file)));
-			inputObject = inputStream.readObject();
-			if(inputObject instanceof ArrayList) {
-				List<IScan> scans = getScans();
-				scans.clear();
-				scans.addAll((ArrayList<IScan>)inputObject);
-			}
-		} catch(FileNotFoundException e) {
-			logger.warn(e);
-		} catch(IOException e) {
-			logger.warn(e);
-		} catch(ClassNotFoundException e) {
-			logger.warn(e);
-		} finally {
-			if(inputStream != null) {
-				try {
-					inputStream.close();
-				} catch(IOException e) {
-					logger.warn(e);
-				}
-			}
-		}
-	}
-
-	@Override
 	@SuppressWarnings({"rawtypes", "unchecked"})
 	public Object getAdapter(Class adapter) {
 
 		return Platform.getAdapterManager().getAdapter(this, adapter);
-	}
-
-	@Override
-	public IVersionManagement getVersionManagement() {
-
-		return versionManagement;
 	}
 
 	@Override
@@ -882,121 +738,6 @@ public abstract class AbstractChromatogram<T extends IPeak> extends AbstractMeas
 	public void removeAllChromatogramIntegrationEntries() {
 
 		chromatogramIntegrationEntries.clear();
-	}
-
-	@Override
-	public void doOperation(IChromatogramProcessor chromatogramProcessor, IProgressMonitor monitor) {
-
-		boolean isUndoable = isUndoable();
-		doOperation(chromatogramProcessor, isUndoable, true, monitor);
-	}
-
-	@Override
-	public void doOperation(IChromatogramProcessor chromatogramProcessor, boolean isUndoable, boolean isDataModifying, IProgressMonitor monitor) {
-
-		/*
-		 * Return if the chromatogram modifier instance is null.<br/> Set the
-		 * monitor to the state done.
-		 */
-		if(chromatogramProcessor == null) {
-			return;
-		}
-		/*
-		 * Test, that chromatogram selection is != null and the given
-		 * chromatogram is == this chromatogram.
-		 */
-		@SuppressWarnings("rawtypes")
-		final IChromatogramSelection chromatogramSelection = chromatogramProcessor.getChromatogramSelection();
-		if(chromatogramSelection != null && chromatogramSelection.getChromatogram() == this) {
-			File file;
-			/*
-			 * Save the first revision if neccessary.
-			 */
-			if(isUndoable) {
-				if(getVersionManagement().isBaseRevision()) {
-					monitor.subTask("Save the actual state.");
-					file = getVersionManagement().getActualScanRevision();
-					writeSerializedChromatogram(file);
-				}
-			}
-			/*
-			 * Remove all detected peaks and targets and the baseline.
-			 */
-			if(isDataModifying) {
-				removeAllPeaks();
-				getTargets().clear();
-				removeAllMeasurementResults();
-				IBaselineModel baselineModel = getBaselineModel();
-				if(baselineModel != null) {
-					baselineModel.removeBaseline();
-				}
-			}
-			/*
-			 * Perform the operation.
-			 */
-			chromatogramProcessor.execute(monitor);
-			/*
-			 * Save the actual state.
-			 */
-			if(isUndoable) {
-				monitor.subTask("Save the undoable state.");
-				getVersionManagement().doOperation();
-				file = getVersionManagement().getActualScanRevision();
-				writeSerializedChromatogram(file);
-			}
-			monitor.subTask("Edit the history entries.");
-			getEditHistory().add(new EditInformation(chromatogramProcessor.getDescription()));
-			/*
-			 * Set the S/N recalculate flag.
-			 */
-			chromatogramSelection.getChromatogram().recalculateTheNoiseFactor();
-			//
-			fireUpdate(chromatogramSelection);
-		}
-	}
-
-	// TODO Junit
-	@SuppressWarnings("rawtypes")
-	@Override
-	public void redoOperation(IChromatogramSelection chromatogramSelection) {
-
-		if(chromatogramSelection != null && chromatogramSelection.getChromatogram() == this) {
-			/*
-			 * Redo
-			 */
-			if(isUndoable()) {
-				File file = getVersionManagement().getNextScanRevision();
-				if(file.exists()) {
-					readSerializedChromatogram(file);
-					getVersionManagement().redoOperation();
-					getEditHistory().add(new EditInformation("redo operation performed"));
-				}
-				//
-				fireUpdate(chromatogramSelection);
-			}
-		}
-	}
-
-	// TODO Junit
-	@SuppressWarnings("rawtypes")
-	@Override
-	public void undoOperation(IChromatogramSelection chromatogramSelection) {
-
-		if(chromatogramSelection != null && chromatogramSelection.getChromatogram() == this) {
-			/*
-			 * Undo
-			 */
-			if(isUndoable()) {
-				File file = getVersionManagement().getPreviousScanRevision();
-				if(file.exists()) {
-					readSerializedChromatogram(file);
-					getVersionManagement().undoOperation();
-					getEditHistory().add(new EditInformation("undo operation performed"));
-				}
-				//
-				fireUpdate(chromatogramSelection);
-			}
-		}
 	}
 
 	@Override

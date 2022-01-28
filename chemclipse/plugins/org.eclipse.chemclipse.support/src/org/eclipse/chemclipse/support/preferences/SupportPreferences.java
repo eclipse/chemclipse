@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,8 +21,6 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class SupportPreferences implements IPreferenceSupplier {
 
-	public static final String P_CHROMATOGRAM_OPERATION_IS_UNDOABLE = "chromatogramOperationIsUndoable";
-	public static final boolean DEF_CHROMATOGRAM_OPERATION_IS_UNDOABLE = true;
 	public static final String P_APPLICATION_LANGUAGE = "applicationLanguage";
 	public static final String DEF_APPLICATION_LANGUAGE = "";
 	public static final String P_CLIPBOARD_TABLE_DEFAULT_SORTING = "clipboardTableDefaultSorting";
@@ -64,7 +62,6 @@ public class SupportPreferences implements IPreferenceSupplier {
 	public Map<String, String> getDefaultValues() {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
-		defaultValues.put(P_CHROMATOGRAM_OPERATION_IS_UNDOABLE, Boolean.toString(DEF_CHROMATOGRAM_OPERATION_IS_UNDOABLE));
 		defaultValues.put(P_APPLICATION_LANGUAGE, DEF_APPLICATION_LANGUAGE);
 		defaultValues.put(P_CLIPBOARD_TABLE_DEFAULT_SORTING, Boolean.toString(DEF_CLIPBOARD_TABLE_DEFAULT_SORTING));
 		return defaultValues;
@@ -74,17 +71,6 @@ public class SupportPreferences implements IPreferenceSupplier {
 	public IEclipsePreferences getPreferences() {
 
 		return getScopeContext().getNode(getPreferenceNode());
-	}
-
-	/**
-	 * Returns whether chromatogram operations are undoable.
-	 * 
-	 * @return boolean
-	 */
-	public static boolean isUndoable() {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_CHROMATOGRAM_OPERATION_IS_UNDOABLE, DEF_CHROMATOGRAM_OPERATION_IS_UNDOABLE);
 	}
 
 	public static String getApplicationLanguage() {

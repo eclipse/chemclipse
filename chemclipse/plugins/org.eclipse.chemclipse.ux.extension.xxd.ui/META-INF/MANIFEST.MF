@@ -96,11 +96,11 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.help;bundle-version="3.8.100",
  org.eclipse.chemclipse.chromatogram.wsd.identifier;bundle-version="0.9.0",
  org.eclipse.chemclipse.tsd.model;bundle-version="0.9.0",
- org.eclipse.chemclipse.tsd.converter;bundle-version="0.9.0"
+ org.eclipse.chemclipse.tsd.converter;bundle-version="0.9.0",
+ org.eclipse.ui.workbench,
+ org.eclipse.core.commands
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Service-Component: OSGI-INF/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorProcessTypeSupplier.xml,
- OSGI-INF/undoOperationHandler.xml,
- OSGI-INF/redoOperationHandler.xml
+Service-Component: OSGI-INF/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorProcessTypeSupplier.xml
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.annotation;version="[1.0.0,2.0.0)",
  javax.inject;version="1.0.0",

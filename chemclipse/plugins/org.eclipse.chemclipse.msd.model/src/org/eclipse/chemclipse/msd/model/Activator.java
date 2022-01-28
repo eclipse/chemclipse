@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,7 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model;
 
-import org.eclipse.chemclipse.model.versioning.PathHelper;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIon;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
@@ -40,7 +39,6 @@ public class Activator implements BundleActivator {
 		JSONSerialization.addMapping(IMarkedIons.class, MarkedIons.class);
 		JSONSerialization.addMapping(IMarkedIon.class, MarkedIon.class);
 		Activator.context = bundleContext;
-		PathHelper.cleanStoragePath();
 		PreferenceSupplier.loadSessionSubtractMassSpectrum();
 	}
 
@@ -53,7 +51,6 @@ public class Activator implements BundleActivator {
 
 		JSONSerialization.removeMapping(IMarkedIons.class, MarkedIons.class);
 		JSONSerialization.removeMapping(IMarkedIon.class, MarkedIon.class);
-		PathHelper.cleanStoragePath();
 		Activator.context = null;
 	}
 }

@@ -59,12 +59,16 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.IUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.ClassifierDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.InternalStandardDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.TableConfigSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.operations.DeletePeaksOperation;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.operations.DeleteScansOperation;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMergePeaks;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakScanListUIConfig.InteractionMode;
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -82,6 +86,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swtchart.extensions.core.IKeyboardSupport;
+import org.eclipse.ui.PlatformUI;
 
 @SuppressWarnings("rawtypes")
 public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI, ConfigurableUI<PeakScanListUIConfig> {
@@ -475,7 +480,11 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		});
 	}
 
-	@SuppressWarnings("unchecked")
+	private IOperationHistory getOperationHistory() {
+
+		return PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
+	}
+
 	private void deletePeaksOrIdentifications(Display display) {
 
 		MessageBox messageBox = new MessageBox(display.getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
@@ -502,23 +511,24 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			/*
 			 * Clear scan(s) / peak(s)
 			 */
-			deleteScanIdentifications(scansToClear);
-			deletePeaks(peaksToDelete);
-			/*
-			 * Send update.
-			 */
-			if(!scansToClear.isEmpty() || !peaksToDelete.isEmpty()) {
-				if(chromatogramSelection != null) {
-					chromatogramSelection.setSelectedPeak(null);
-					chromatogramSelection.setSelectedScan(null);
-					chromatogramSelection.setSelectedIdentifiedScan(null);
-					chromatogramSelection.update(true);
-					chromatogramSelection.getChromatogram().setDirty(true);
+			if(!scansToClear.isEmpty()) {
+				DeleteScansOperation deleteScans = new DeleteScansOperation(display, chromatogramSelection, scansToClear);
+				deleteScans.addContext(PlatformUI.getWorkbench().getOperationSupport().getUndoContext());
+				try {
+					getOperationHistory().execute(deleteScans, null, null);
+				} catch(ExecutionException e) {
+					logger.warn(e);
 				}
 			}
-			//
-			UpdateNotifierUI.update(display, chromatogramSelection);
-			UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION, "A peak or scan was deleted.");
+			if(!peaksToDelete.isEmpty()) {
+				DeletePeaksOperation deletePeaks = new DeletePeaksOperation(display, chromatogramSelection, peaksToDelete);
+				deletePeaks.addContext(PlatformUI.getWorkbench().getOperationSupport().getUndoContext());
+				try {
+					getOperationHistory().execute(deletePeaks, null, null);
+				} catch(ExecutionException e) {
+					logger.warn(e);
+				}
+			}
 			updateChromatogramSelection();
 		}
 	}
@@ -534,35 +544,6 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			}
 		}
 		updateChromatogramSelection();
-	}
-
-	private void deleteScanIdentifications(List<IScan> scans) {
-
-		if(!scans.isEmpty()) {
-			/*
-			 * Remove the selected identified scan.
-			 */
-			if(chromatogramSelection != null) {
-				chromatogramSelection.setSelectedIdentifiedScan(null);
-			}
-			/*
-			 * Clear the targets.
-			 */
-			for(IScan scan : scans) {
-				scan.getTargets().clear();
-			}
-		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private void deletePeaks(List<IPeak> peaks) {
-
-		if(!peaks.isEmpty()) {
-			if(chromatogramSelection != null) {
-				IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-				chromatogram.removePeaks(peaks);
-			}
-		}
 	}
 
 	private void modifyInternalStandards(Display display) {
