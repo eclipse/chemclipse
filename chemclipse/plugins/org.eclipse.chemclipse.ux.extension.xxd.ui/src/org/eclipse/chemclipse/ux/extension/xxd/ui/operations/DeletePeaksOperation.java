@@ -72,8 +72,6 @@ public class DeletePeaksOperation extends AbstractOperation {
 	private void update(String message) {
 
 		chromatogramSelection.setSelectedPeak(null);
-		// chromatogramSelection.update(true);
-		//
 		UpdateNotifierUI.update(display, chromatogramSelection);
 		UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION, message);
 	}
