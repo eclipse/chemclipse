@@ -40,6 +40,7 @@ import org.eclipse.chemclipse.msd.model.implementation.ChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.MassSpectra;
 import org.eclipse.chemclipse.msd.model.support.CalculationType;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
+import org.eclipse.chemclipse.rcp.app.undo.UndoContextFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
@@ -69,6 +70,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDat
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PeakScanListUIConfig.InteractionMode;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.IOperationHistory;
+import org.eclipse.core.commands.operations.OperationHistoryFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -86,7 +88,6 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swtchart.extensions.core.IKeyboardSupport;
-import org.eclipse.ui.PlatformUI;
 
 @SuppressWarnings("rawtypes")
 public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI, ConfigurableUI<PeakScanListUIConfig> {
@@ -482,7 +483,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 
 	private IOperationHistory getOperationHistory() {
 
-		return PlatformUI.getWorkbench().getOperationSupport().getOperationHistory();
+		return OperationHistoryFactory.getOperationHistory();
 	}
 
 	private void deletePeaksOrIdentifications(Display display) {
@@ -513,7 +514,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			 */
 			if(!scansToClear.isEmpty()) {
 				DeleteScansOperation deleteScans = new DeleteScansOperation(display, chromatogramSelection, scansToClear);
-				deleteScans.addContext(PlatformUI.getWorkbench().getOperationSupport().getUndoContext());
+				deleteScans.addContext(UndoContextFactory.getUndoContext());
 				try {
 					getOperationHistory().execute(deleteScans, null, null);
 				} catch(ExecutionException e) {
@@ -522,7 +523,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			}
 			if(!peaksToDelete.isEmpty()) {
 				DeletePeaksOperation deletePeaks = new DeletePeaksOperation(display, chromatogramSelection, peaksToDelete);
-				deletePeaks.addContext(PlatformUI.getWorkbench().getOperationSupport().getUndoContext());
+				deletePeaks.addContext(UndoContextFactory.getUndoContext());
 				try {
 					getOperationHistory().execute(deletePeaks, null, null);
 				} catch(ExecutionException e) {
