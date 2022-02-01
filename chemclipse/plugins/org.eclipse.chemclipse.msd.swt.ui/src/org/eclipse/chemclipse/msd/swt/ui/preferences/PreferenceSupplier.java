@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -41,7 +41,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_LIBRARY_MSD_LIMIT_SORTING = "libraryMSDLimitSorting";
 	public static final int DEF_LIBRARY_MSD_LIMIT_SORTING = 10000;
 	public static final int MIN_LIBRARY_MSD_LIMIT_SORTING = 500;
-	public static final int MAX_LIBRARY_MSD_LIMIT_SORTING = 30000;
+	public static final int MAX_LIBRARY_MSD_LIMIT_SORTING = 100000;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
