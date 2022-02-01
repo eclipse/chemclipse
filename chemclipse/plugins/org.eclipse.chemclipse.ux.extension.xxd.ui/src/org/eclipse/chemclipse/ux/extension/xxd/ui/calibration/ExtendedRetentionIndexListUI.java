@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -167,11 +167,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 
 				PartSupport.toggleCompositeVisibility(toolbarInfoTop);
 				boolean visible = PartSupport.toggleCompositeVisibility(toolbarInfoBottom);
-				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
-				}
+				button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16, visible));
 			}
 		});
 		//
@@ -227,11 +223,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 			public void widgetSelected(SelectionEvent e) {
 
 				boolean visible = retentionIndexUI.toggleSearchVisibility();
-				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
-				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
-				}
+				button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16, visible));
 			}
 		});
 		//
