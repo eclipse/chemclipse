@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,6 +28,9 @@ public abstract class AbstractMagicNumberMatcher implements IMagicNumberMatcher 
 
 	protected boolean checkFileExtension(File file, String extension, boolean caseSensitive) {
 
+		if(file.isDirectory()) {
+			return false;
+		}
 		String fileExtension = (caseSensitive) ? file.getName() : file.getName().toLowerCase();
 		return fileExtension.endsWith((caseSensitive) ? extension : extension.toLowerCase());
 	}
