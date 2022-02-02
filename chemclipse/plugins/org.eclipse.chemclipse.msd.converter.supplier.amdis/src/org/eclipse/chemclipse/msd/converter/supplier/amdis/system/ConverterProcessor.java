@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,6 +15,7 @@ import java.util.Collection;
 import java.util.Collections;
 
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
@@ -40,7 +41,7 @@ public class ConverterProcessor extends AbstractSystemProcessSettings {
 
 		public ProcessSupplier(IProcessTypeSupplier parent) {
 
-			super(ID, NAME, DESCRIPTION, ConverterSettings.class, parent);
+			super(ID, NAME, DESCRIPTION, ConverterSettings.class, parent, DataCategory.MSD);
 		}
 
 		@Override
