@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -62,6 +62,7 @@ public abstract class OLEEditor extends EditorPart {
 	private boolean isDirty = false;
 
 	public OLEEditor(String progId, String filterExtension, String filterName) {
+
 		this.progId = progId;
 		this.filterExtension = filterExtension;
 		this.filterName = filterName;
@@ -166,6 +167,7 @@ public abstract class OLEEditor extends EditorPart {
 		 */
 		OleListener listener = new OleListener() {
 
+			@Override
 			public void handleEvent(OleEvent e) {
 
 				setDirty();
@@ -285,10 +287,8 @@ public abstract class OLEEditor extends EditorPart {
 		gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
 		createLabel(client, "There are some free office alternatives available:", IApplicationImage.IMAGE_INFO);
-		createLink(client, "LibreOffice", "http://www.libreoffice.org");
-		createLink(client, "OpenOffice", "http://www.openoffice.org");
-		createLabel(client, "You can use the office package in combination with the NOA4e plug-in:", IApplicationImage.IMAGE_INFO);
-		createLink(client, "NOA4e plug-in", "http://ubion.ion.ag/loesungen/003officeintegrationeditor");
+		createLink(client, "LibreOffice", "https://www.libreoffice.org");
+		createLink(client, "OpenOffice", "https://www.openoffice.org");
 		/*
 		 * Add the client to the section and paint flat borders.
 		 */
