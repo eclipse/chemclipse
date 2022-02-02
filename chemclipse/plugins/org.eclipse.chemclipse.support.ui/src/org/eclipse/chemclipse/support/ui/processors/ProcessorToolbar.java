@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -71,16 +71,14 @@ public class ProcessorToolbar {
 		}
 		//
 		toolBar = editorToolBar.createChild(true);
-		if(processors != null) {
-			if(processors.size() > 0) {
-				for(Processor processor : processors) {
-					if(processor != null && processor.isActive() && isVisible.test(processor.getProcessSupplier())) {
-						toolBar.addAction(new EditorToolbarAction(processor, executionListener, context));
-					}
+		if(!processors.isEmpty()) {
+			for(Processor processor : processors) {
+				if(processor != null && processor.isActive() && isVisible.test(processor.getProcessSupplier())) {
+					toolBar.addAction(new EditorToolbarAction(processor, executionListener, context));
 				}
-				toolBar.setVisible(true);
-				toolBar.addSeparator();
 			}
+			toolBar.setVisible(true);
+			toolBar.addSeparator();
 		}
 		//
 		editorToolBar.update();
