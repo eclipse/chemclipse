@@ -41,7 +41,7 @@ public class DeleteScansOperation extends AbstractOperation {
 		this.display = display;
 		this.chromatogramSelection = chromatogramSelection;
 		this.scansToClear = scansToClear;
-		backupScans = new ArrayList<IScan>();
+		backupScans = new ArrayList<>();
 	}
 
 	@Override

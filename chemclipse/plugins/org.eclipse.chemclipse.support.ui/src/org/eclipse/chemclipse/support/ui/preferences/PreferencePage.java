@@ -15,6 +15,7 @@ import org.eclipse.chemclipse.support.preferences.SupportPreferences;
 import org.eclipse.chemclipse.support.ui.Activator;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -24,13 +25,14 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("General settings");
+		setDescription("Support settings");
 	}
 
 	@Override
 	public void createFieldEditors() {
 
 		addField(new BooleanFieldEditor(SupportPreferences.P_CLIPBOARD_TABLE_DEFAULT_SORTING, "Clipboard Table Default Sorting", getFieldEditorParent()));
+		addField(new IntegerFieldEditor(SupportPreferences.P_UNDO_LIMIT, "Maximum allowed undo steps", getFieldEditorParent()));
 	}
 
 	/*

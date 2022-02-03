@@ -9,34 +9,29 @@
  * Contributors:
  * Matthias Mailänder - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.operations;
+package org.eclipse.chemclipse.xxd.model.operations;
 
 import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
-import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.AbstractOperation;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.swt.widgets.Display;
 
 @SuppressWarnings("rawtypes")
 public class DeletePeaksOperation extends AbstractOperation {
 
 	private IChromatogramSelection<?, ?> chromatogramSelection;
-	private Display display;
 	private List<IPeak> peaksToDelete;
 
-	public DeletePeaksOperation(Display display, IChromatogramSelection chromatogramSelection, List<IPeak> peaksToDelete) {
+	public DeletePeaksOperation(IChromatogramSelection chromatogramSelection, List<IPeak> peaksToDelete) {
 
 		super("Delete Peaks");
-		this.display = display;
 		this.chromatogramSelection = chromatogramSelection;
 		this.peaksToDelete = peaksToDelete;
 	}
@@ -65,21 +60,21 @@ public class DeletePeaksOperation extends AbstractOperation {
 
 		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 		chromatogram.removePeaks(peaksToDelete);
-		update("Peaks were deleted.");
+		updateChromatogramSelection();
 		return Status.OK_STATUS;
-	}
-
-	private void update(String message) {
-
-		chromatogramSelection.setSelectedPeak(null);
-		UpdateNotifierUI.update(display, chromatogramSelection);
-		UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION, message);
 	}
 
 	@Override
 	public String getLabel() {
 
 		return "Delete Peaks";
+	}
+
+	private void updateChromatogramSelection() {
+
+		chromatogramSelection.setSelectedPeak(null);
+		chromatogramSelection.reset(true);
+		chromatogramSelection.getChromatogram().setDirty(true);
 	}
 
 	@Override
@@ -96,7 +91,7 @@ public class DeletePeaksOperation extends AbstractOperation {
 		for(IPeak peak : peaksToDelete) {
 			chromatogram.addPeak(peak);
 		}
-		update("Peaks were added back again.");
+		updateChromatogramSelection();
 		return Status.OK_STATUS;
 	}
 }

@@ -17,10 +17,12 @@ import javax.inject.Named;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.progress.core.InfoType;
 import org.eclipse.chemclipse.progress.core.StatusLineLogger;
+import org.eclipse.chemclipse.rcp.app.undo.UndoContextFactory;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.IUndoContext;
+import org.eclipse.core.commands.operations.OperationHistoryFactory;
 import org.eclipse.e4.core.di.annotations.CanExecute;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.di.UISynchronize;
@@ -29,8 +31,6 @@ import org.eclipse.e4.ui.services.IServiceConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.operations.IWorkbenchOperationSupport;
 
 public class UndoOperationHandler {
 
@@ -39,8 +39,7 @@ public class UndoOperationHandler {
 	@CanExecute
 	boolean canExecute() {
 
-		IWorkbenchOperationSupport operationSupport = PlatformUI.getWorkbench().getOperationSupport();
-		return operationSupport.getOperationHistory().canUndo(operationSupport.getUndoContext());
+		return OperationHistoryFactory.getOperationHistory().canUndo(UndoContextFactory.getUndoContext());
 	}
 
 	@Execute
@@ -59,9 +58,8 @@ public class UndoOperationHandler {
 					/*
 					 * Undo the operation.
 					 */
-					IWorkbenchOperationSupport operationSupport = PlatformUI.getWorkbench().getOperationSupport();
-					IOperationHistory operationHistory = operationSupport.getOperationHistory();
-					IUndoContext undoContext = operationSupport.getUndoContext();
+					IOperationHistory operationHistory = OperationHistoryFactory.getOperationHistory();
+					IUndoContext undoContext = UndoContextFactory.getUndoContext();
 					operationHistory.undo(undoContext, null, null);
 				} catch(ExecutionException e) {
 					logger.warn(e);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,7 +24,8 @@ public class PeakFilterSupport implements IPeakFilterSupport {
 	 * Creates a new suppliers list.
 	 */
 	public PeakFilterSupport() {
-		suppliers = new ArrayList<IPeakFilterSupplier>();
+
+		suppliers = new ArrayList<>();
 	}
 
 	/**
@@ -44,7 +45,7 @@ public class PeakFilterSupport implements IPeakFilterSupport {
 		 * Test if the suppliers ArrayList is empty.
 		 */
 		arePeakFiltersStored();
-		List<String> availableFilters = new ArrayList<String>();
+		List<String> availableFilters = new ArrayList<>();
 		for(IPeakFilterSupplier supplier : suppliers) {
 			availableFilters.add(supplier.getId());
 		}
@@ -79,7 +80,7 @@ public class PeakFilterSupport implements IPeakFilterSupport {
 		 * If the ArrayList is not empty, return the registered chromatogram
 		 * converter filter names.<br/>
 		 */
-		ArrayList<String> filterNames = new ArrayList<String>();
+		ArrayList<String> filterNames = new ArrayList<>();
 		for(IPeakFilterSupplier supplier : suppliers) {
 			filterNames.add(supplier.getFilterName());
 		}
@@ -113,7 +114,7 @@ public class PeakFilterSupport implements IPeakFilterSupport {
 
 	private void arePeakFiltersStored() throws NoPeakFilterSupplierAvailableException {
 
-		if(suppliers.size() < 1) {
+		if(suppliers.isEmpty()) {
 			throw new NoPeakFilterSupplierAvailableException();
 		}
 	}

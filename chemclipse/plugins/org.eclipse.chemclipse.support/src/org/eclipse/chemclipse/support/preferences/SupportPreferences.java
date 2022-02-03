@@ -25,6 +25,8 @@ public class SupportPreferences implements IPreferenceSupplier {
 	public static final String DEF_APPLICATION_LANGUAGE = "";
 	public static final String P_CLIPBOARD_TABLE_DEFAULT_SORTING = "clipboardTableDefaultSorting";
 	public static final boolean DEF_CLIPBOARD_TABLE_DEFAULT_SORTING = false;
+	public static final String P_UNDO_LIMIT = "undoLimit";
+	public static final int DEF_UNDO_LIMIT = 5;
 	//
 	public static final String LANGUAGE_AUTODETECT = "";
 	public static final String LANGUAGE_EN_GB = "en_GB";
@@ -61,9 +63,10 @@ public class SupportPreferences implements IPreferenceSupplier {
 	@Override
 	public Map<String, String> getDefaultValues() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
+		Map<String, String> defaultValues = new HashMap<>();
 		defaultValues.put(P_APPLICATION_LANGUAGE, DEF_APPLICATION_LANGUAGE);
 		defaultValues.put(P_CLIPBOARD_TABLE_DEFAULT_SORTING, Boolean.toString(DEF_CLIPBOARD_TABLE_DEFAULT_SORTING));
+		defaultValues.put(P_UNDO_LIMIT, Integer.toString(DEF_UNDO_LIMIT));
 		return defaultValues;
 	}
 
@@ -83,5 +86,11 @@ public class SupportPreferences implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.getBoolean(P_CLIPBOARD_TABLE_DEFAULT_SORTING, DEF_CLIPBOARD_TABLE_DEFAULT_SORTING);
+	}
+
+	public static int getUndoLimit() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getInt(P_UNDO_LIMIT, DEF_UNDO_LIMIT);
 	}
 }
