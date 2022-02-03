@@ -61,7 +61,7 @@ public class SupportPreferences implements IPreferenceSupplier {
 	@Override
 	public Map<String, String> getDefaultValues() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
+		Map<String, String> defaultValues = new HashMap<>();
 		defaultValues.put(P_APPLICATION_LANGUAGE, DEF_APPLICATION_LANGUAGE);
 		defaultValues.put(P_CLIPBOARD_TABLE_DEFAULT_SORTING, Boolean.toString(DEF_CLIPBOARD_TABLE_DEFAULT_SORTING));
 		return defaultValues;
