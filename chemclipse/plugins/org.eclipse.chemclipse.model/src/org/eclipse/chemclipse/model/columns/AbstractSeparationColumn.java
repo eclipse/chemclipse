@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,6 +19,7 @@ public abstract class AbstractSeparationColumn implements ISeparationColumn {
 	private String diameter = "";
 	private String phase = "";
 
+	@Override
 	public void copyFrom(ISeparationColumn separationColumn) {
 
 		if(separationColumn != null) {
@@ -105,33 +106,44 @@ public abstract class AbstractSeparationColumn implements ISeparationColumn {
 	@Override
 	public boolean equals(Object obj) {
 
-		if(this == obj)
+		if(this == obj) {
 			return true;
-		if(obj == null)
+		}
+		if(obj == null) {
 			return false;
-		if(getClass() != obj.getClass())
+		}
+		if(getClass() != obj.getClass()) {
 			return false;
+		}
 		AbstractSeparationColumn other = (AbstractSeparationColumn)obj;
 		if(diameter == null) {
-			if(other.diameter != null)
+			if(other.diameter != null) {
 				return false;
-		} else if(!diameter.equals(other.diameter))
+			}
+		} else if(!diameter.equals(other.diameter)) {
 			return false;
+		}
 		if(length == null) {
-			if(other.length != null)
+			if(other.length != null) {
 				return false;
-		} else if(!length.equals(other.length))
+			}
+		} else if(!length.equals(other.length)) {
 			return false;
+		}
 		if(name == null) {
-			if(other.name != null)
+			if(other.name != null) {
 				return false;
-		} else if(!name.equals(other.name))
+			}
+		} else if(!name.equals(other.name)) {
 			return false;
+		}
 		if(phase == null) {
-			if(other.phase != null)
+			if(other.phase != null) {
 				return false;
-		} else if(!phase.equals(other.phase))
+			}
+		} else if(!phase.equals(other.phase)) {
 			return false;
+		}
 		return true;
 	}
 

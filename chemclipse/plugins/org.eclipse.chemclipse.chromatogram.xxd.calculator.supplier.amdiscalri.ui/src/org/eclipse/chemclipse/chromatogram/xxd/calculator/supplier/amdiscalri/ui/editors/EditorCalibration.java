@@ -102,10 +102,7 @@ public class EditorCalibration extends MultiPageEditorPart {
 		}
 	}
 
-	@Override
-	public void dispose() {
 
-		super.dispose();
 	}
 
 	@Override

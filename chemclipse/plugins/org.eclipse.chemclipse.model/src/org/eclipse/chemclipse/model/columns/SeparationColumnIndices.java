@@ -63,9 +63,6 @@ public class SeparationColumnIndices extends TreeMap<Integer, IRetentionIndexEnt
 			return false;
 		}
 		ISeparationColumnIndices other = (ISeparationColumnIndices)obj;
-		if(!other.equals(this)) {
-			return false;
-		}
-		return true;
+		return other.equals(this);
 	}
 }
