@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -29,13 +29,16 @@ public class RetentionIndexTableViewerUI extends ExtendedTableViewer {
 	private String[] titles = {"Retention Time (Minutes)", "Retention Index", NAME};
 	private int[] bounds = {200, 150, 200};
 	private RetentionIndexListFilter retentionIndexListFilter;
+	private IUpdateListener updateListener;
 
 	public RetentionIndexTableViewerUI(Composite parent) {
+
 		super(parent);
 		createColumns();
 	}
 
 	public RetentionIndexTableViewerUI(Composite parent, int style) {
+
 		super(parent, style);
 		createColumns();
 	}
@@ -66,6 +69,18 @@ public class RetentionIndexTableViewerUI extends ExtendedTableViewer {
 			if(columnLabel.equals(NAME)) {
 				tableViewerColumn.setEditingSupport(new RetentionIndexEditingSupport(this));
 			}
+		}
+	}
+
+	public void setUpdateListener(IUpdateListener updateListener) {
+
+		this.updateListener = updateListener;
+	}
+
+	public void updateContent() {
+
+		if(updateListener != null) {
+			updateListener.update(null);
 		}
 	}
 }

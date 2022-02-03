@@ -62,6 +62,7 @@ public interface IChemClipseEvents {
 	//
 	String TOPIC_RI_LIBRARY_ADD_ADD_TO_PROCESS = "ri/library/add/process";
 	String TOPIC_RI_LIBRARY_REMOVE_FROM_PROCESS = "ri/library/remove/process";
+	String TOPIC_RI_LIBRARY_UPDATE = "ri/library/update";
 	//
 	String TOPIC_METHOD_SELECTED = "methods/select";
 	String TOPIC_METHOD_CREATED = "methods/create";

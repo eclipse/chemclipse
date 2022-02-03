@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,10 +16,13 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -169,6 +172,8 @@ public class RetentionIndexUI extends Composite {
 							for(int key : keysToRemove) {
 								separationColumnIndices.remove(key);
 							}
+							separationColumnIndices.setDirty(true);
+							notifyLibraryUpdate();
 							retentionIndexListUI.setInput(separationColumnIndices);
 							fireUpdate(Display.getDefault());
 						}
@@ -181,6 +186,8 @@ public class RetentionIndexUI extends Composite {
 
 				if(retentionIndexEntry != null && separationColumnIndices != null) {
 					separationColumnIndices.put(retentionIndexEntry);
+					separationColumnIndices.setDirty(true);
+					notifyLibraryUpdate();
 					retentionIndexListUI.setInput(separationColumnIndices);
 					fireUpdate(Display.getDefault());
 				}
@@ -194,6 +201,14 @@ public class RetentionIndexUI extends Composite {
 
 		RetentionIndexTableViewerUI tableViewer = new RetentionIndexTableViewerUI(composite, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 		tableViewer.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
+		tableViewer.setUpdateListener(new IUpdateListener() {
+
+			@Override
+			public void update(Display display) {
+
+				notifyLibraryUpdate();
+			}
+		});
 		tableViewer.getTable().addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -211,6 +226,14 @@ public class RetentionIndexUI extends Composite {
 
 		if(updateListener != null) {
 			updateListener.update(display);
+		}
+	}
+
+	private void notifyLibraryUpdate() {
+
+		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+		if(eventBroker != null) {
+			eventBroker.send(IChemClipseEvents.TOPIC_RI_LIBRARY_UPDATE, new Object[]{"", separationColumnIndices});
 		}
 	}
 }
