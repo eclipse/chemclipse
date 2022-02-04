@@ -14,6 +14,8 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramPeak;
@@ -52,6 +54,7 @@ public class PenaltyCalculationChart extends ChromatogramChart {
 	//
 	private IPeak peak = null;
 	private PenaltyCalculationModel penaltyCalculationModel = null;
+	private TreeMap<Integer, Integer> retentionIndexMap = new TreeMap<>();
 
 	public PenaltyCalculationChart() {
 
@@ -74,6 +77,7 @@ public class PenaltyCalculationChart extends ChromatogramChart {
 	public void setInput(IPeak peak) {
 
 		this.peak = peak;
+		updateRetentionIndexMap();
 		updateChart();
 	}
 
@@ -193,25 +197,26 @@ public class PenaltyCalculationChart extends ChromatogramChart {
 
 	private void displayRetentionIndexPenalty() {
 
-		if(peak instanceof IChromatogramPeak) {
+		IChromatogram<?> chromatogram = getChromatogram();
+		if(chromatogram != null) {
 			IPeakModel peakModel = peak.getPeakModel();
 			IScan peakMaximum = peakModel.getPeakMaximum();
 			float retentionIndexUnknown = peakMaximum.getRetentionIndex();
 			if(retentionIndexUnknown > 0) {
-				IChromatogramPeak chromatogramPeak = (IChromatogramPeak)peak;
-				IChromatogram<?> chromatogram = chromatogramPeak.getChromatogram();
 				/*
-				 * Reference
+				 * Unknown
 				 */
+				int retentionTimeUnknown = peakMaximum.getRetentionTime();
+				String labelUnknown = "Unknown RI: " + (int)retentionIndexUnknown;
+				unknownListener.setData(retentionTimeUnknown, labelUnknown, "-- %");
+				//
 				double retentionIndexReference = penaltyCalculationModel.getReferenceValue();
-				int retentionTimeReference = getRetentionTime(chromatogram, (float)retentionIndexReference);
+				int retentionTimeReference = getRetentionTime((int)retentionIndexReference);
 				if(retentionTimeReference > -1) {
-					String labelReference = "Reference RI: " + (int)retentionIndexReference;
 					/*
-					 * Unknown
+					 * Reference
 					 */
-					int retentionTimeUnknown = peakMaximum.getRetentionTime();
-					String labelUnknown = "Unknown RI: " + (int)retentionIndexUnknown;
+					String labelReference = "Reference RI: " + (int)retentionIndexReference;
 					double penaltyWindow = penaltyCalculationModel.getPenaltyWindow();
 					double penaltyLevelFactor = penaltyCalculationModel.getPenaltyLevelFactor();
 					double maxPenalty = penaltyCalculationModel.getMaxPenalty();
@@ -244,23 +249,34 @@ public class PenaltyCalculationChart extends ChromatogramChart {
 		return seriesAdjusted;
 	}
 
-	private int getRetentionTime(IChromatogram<?> chromatogram, float retentionIndex) {
+	private void updateRetentionIndexMap() {
 
+		retentionIndexMap.clear();
+		IChromatogram<?> chromatogram = getChromatogram();
 		if(chromatogram != null) {
-			int index = 0;
 			for(IScan scan : chromatogram.getScans()) {
-				if(scan.getRetentionIndex() > retentionIndex) {
-					IScan scanPrevious = chromatogram.getScan(index - 1);
-					if(scanPrevious != null) {
-						return scanPrevious.getRetentionTime();
-					} else {
-						return -1;
-					}
+				float retentionIndex = scan.getRetentionIndex();
+				if(retentionIndex > 0) {
+					retentionIndexMap.put(Math.round(retentionIndex), scan.getRetentionTime());
 				}
-				index++;
 			}
 		}
+	}
+
+	private int getRetentionTime(int retentionIndex) {
+
+		Entry<Integer, Integer> floorEntry = retentionIndexMap.floorEntry(retentionIndex);
+		return floorEntry != null ? floorEntry.getValue().intValue() : -1;
+	}
+
+	private IChromatogram<?> getChromatogram() {
+
+		IChromatogram<?> chromatogram = null;
+		if(peak instanceof IChromatogramPeak) {
+			IChromatogramPeak chromatogramPeak = (IChromatogramPeak)peak;
+			chromatogram = chromatogramPeak.getChromatogram();
+		}
 		//
-		return -1;
+		return chromatogram;
 	}
 }
