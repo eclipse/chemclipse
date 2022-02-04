@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -88,6 +88,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 	//
 	private double scaleFactor = SCALE_DEFAULT;
 	private Image imageMolecule = null;
+	private ILibraryInformation renderedLibraryInformation;
 	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
@@ -483,15 +484,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 	private void createMoleculeImage(Display display) {
 
-		/*
-		 * Dispose an existing image.
-		 */
 		String moleculeInfo = "";
-		if(imageMolecule != null) {
-			imageMolecule.dispose();
-			imageMolecule = null;
-		}
-		//
 		IMoleculeImageService moleculeImageService = getMoleculeImageService();
 		if(moleculeImageService != null) {
 			/*
@@ -516,10 +509,17 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 						break;
 				}
 			}
-			//
+			if(renderedLibraryInformation == libraryInformation) {
+				return;
+			}
 			moleculeInfo = getMoleculeInformation(libraryInformation);
 			if(isSourceDataAvailable(libraryInformation)) {
+				if(imageMolecule != null) {
+					imageMolecule.dispose();
+					imageMolecule = null;
+				}
 				imageMolecule = moleculeImageService.create(display, libraryInformation, width, height);
+				renderedLibraryInformation = libraryInformation;
 			} else {
 				logger.info(ERROR_MESSAGE);
 			}
