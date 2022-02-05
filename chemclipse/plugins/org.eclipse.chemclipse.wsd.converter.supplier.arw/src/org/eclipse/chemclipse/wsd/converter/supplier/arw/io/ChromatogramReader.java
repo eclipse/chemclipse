@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -28,9 +28,11 @@ import org.eclipse.chemclipse.wsd.converter.supplier.arw.model.IVendorChromatogr
 import org.eclipse.chemclipse.wsd.converter.supplier.arw.model.VendorChromatogram;
 import org.eclipse.chemclipse.wsd.converter.supplier.arw.model.VendorScan;
 import org.eclipse.chemclipse.wsd.converter.supplier.arw.model.VendorScanSignal;
+import org.eclipse.chemclipse.wsd.converter.supplier.arw.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
+import org.eclipse.chemclipse.wsd.model.core.interpolation.ScanRasterizer;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramReader extends AbstractChromatogramWSDReader {
@@ -131,6 +133,10 @@ public class ChromatogramReader extends AbstractChromatogramWSDReader {
 		/*
 		 * Set scan delay and interval
 		 */
+		if(PreferenceSupplier.isNormalizeScans()) {
+			int steps = PreferenceSupplier.getNormalizationSteps();
+			ScanRasterizer.normalize(chromatogram, steps);
+		}
 		calculateScanIntervalAndDelay(chromatogram, monitor);
 		return chromatogram;
 	}

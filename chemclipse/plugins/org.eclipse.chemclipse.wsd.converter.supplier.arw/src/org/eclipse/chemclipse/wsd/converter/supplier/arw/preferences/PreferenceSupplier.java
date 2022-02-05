@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -22,6 +22,11 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
+	public static final String P_NORMALIZE_SCANS = "normalizeScans";
+	public static final boolean DEF_NORMALIZE_SCANS = true;
+	public static final String P_NORMALIZATION_STEPS = "normalizationSteps";
+	public static final int DEF_NORMALIZATION_STEPS = 1;
+	//
 	private static IPreferenceSupplier preferenceSupplier;
 
 	public static IPreferenceSupplier INSTANCE() {
@@ -48,6 +53,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public Map<String, String> getDefaultValues() {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
+		defaultValues.put(P_NORMALIZE_SCANS, Boolean.toString(DEF_NORMALIZE_SCANS));
+		defaultValues.put(P_NORMALIZATION_STEPS, Integer.toString(DEF_NORMALIZATION_STEPS));
 		return defaultValues;
 	}
 
@@ -55,5 +62,17 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public IEclipsePreferences getPreferences() {
 
 		return getScopeContext().getNode(getPreferenceNode());
+	}
+
+	public static boolean isNormalizeScans() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getBoolean(P_NORMALIZE_SCANS, DEF_NORMALIZE_SCANS);
+	}
+
+	public static int getNormalizationSteps() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getInt(P_NORMALIZATION_STEPS, DEF_NORMALIZATION_STEPS);
 	}
 }
