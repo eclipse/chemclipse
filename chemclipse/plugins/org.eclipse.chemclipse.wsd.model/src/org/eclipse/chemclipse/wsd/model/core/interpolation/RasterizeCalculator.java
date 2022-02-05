@@ -38,24 +38,29 @@ public class RasterizeCalculator {
 				Entry<Double, Float> lastWavelengthEntry = dataOriginal.lastEntry();
 				//
 				int startWavelengh = (int)Math.round(firstWavelengthEntry.getKey());
-				dataAdjusted.put(startWavelengh, firstWavelengthEntry.getValue());
+				adjust(dataAdjusted, startWavelengh, firstWavelengthEntry, dataOriginal.ceilingEntry((double)(startWavelengh + 1)));
 				//
 				int stopWavelengh = (int)Math.round(lastWavelengthEntry.getKey());
-				dataAdjusted.put(stopWavelengh, lastWavelengthEntry.getValue());
+				adjust(dataAdjusted, stopWavelengh, dataOriginal.floorEntry((double)(stopWavelengh - 1)), lastWavelengthEntry);
 				//
 				for(int wavelength = (startWavelengh + 1); wavelength <= (stopWavelengh - 1); wavelength++) {
 					if(wavelength % steps == 0) {
 						Entry<Double, Float> floorEntry = dataOriginal.floorEntry((double)wavelength);
 						Entry<Double, Float> ceilingEntry = dataOriginal.ceilingEntry((double)wavelength);
-						Point p1 = new Point(floorEntry.getKey(), floorEntry.getValue());
-						Point p2 = new Point(ceilingEntry.getKey(), ceilingEntry.getValue());
-						LinearEquation linearEquation = Equations.createLinearEquation(p1, p2);
-						dataAdjusted.put(wavelength, (float)linearEquation.calculateY(wavelength));
+						adjust(dataAdjusted, wavelength, floorEntry, ceilingEntry);
 					}
 				}
 			}
 		}
 		//
 		return dataAdjusted;
+	}
+
+	private static void adjust(Map<Integer, Float> dataAdjusted, int wavelength, Entry<Double, Float> floorEntry, Entry<Double, Float> ceilingEntry) {
+
+		Point p1 = new Point(floorEntry.getKey(), floorEntry.getValue());
+		Point p2 = new Point(ceilingEntry.getKey(), ceilingEntry.getValue());
+		LinearEquation linearEquation = Equations.createLinearEquation(p1, p2);
+		dataAdjusted.put(wavelength, (float)linearEquation.calculateY(wavelength));
 	}
 }

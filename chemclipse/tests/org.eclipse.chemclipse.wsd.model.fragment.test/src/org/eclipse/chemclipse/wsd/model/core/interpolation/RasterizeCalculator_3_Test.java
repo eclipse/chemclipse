@@ -50,7 +50,7 @@ public class RasterizeCalculator_3_Test extends TestCase {
 		Map<Integer, Float> dataRasterized = RasterizeCalculator.apply(dataOriginal, 1);
 		//
 		assertEquals(11, dataRasterized.size());
-		assertEquals(500.0f, dataRasterized.get(200));
+		assertEquals(625.0f, dataRasterized.get(200));
 		assertEquals(875.0f, dataRasterized.get(201));
 		assertEquals(1125.0f, dataRasterized.get(202));
 		assertEquals(1375.0f, dataRasterized.get(203));
@@ -60,7 +60,7 @@ public class RasterizeCalculator_3_Test extends TestCase {
 		assertEquals(850.0f, dataRasterized.get(207));
 		assertEquals(750.0f, dataRasterized.get(208));
 		assertEquals(650.0f, dataRasterized.get(209));
-		assertEquals(600.0f, dataRasterized.get(210));
+		assertEquals(550.0f, dataRasterized.get(210));
 	}
 
 	public void test3() {
@@ -68,7 +68,7 @@ public class RasterizeCalculator_3_Test extends TestCase {
 		Map<Integer, Float> dataRasterized = RasterizeCalculator.apply(dataOriginal, 2);
 		//
 		assertEquals(6, dataRasterized.size());
-		assertEquals(500.0f, dataRasterized.get(200));
+		assertEquals(625.0f, dataRasterized.get(200));
 		assertNull(dataRasterized.get(201));
 		assertEquals(1125.0f, dataRasterized.get(202));
 		assertNull(dataRasterized.get(203));
@@ -78,7 +78,7 @@ public class RasterizeCalculator_3_Test extends TestCase {
 		assertNull(dataRasterized.get(207));
 		assertEquals(750.0f, dataRasterized.get(208));
 		assertNull(dataRasterized.get(209));
-		assertEquals(600.0f, dataRasterized.get(210));
+		assertEquals(550.0f, dataRasterized.get(210));
 	}
 
 	public void test4() {
@@ -86,7 +86,7 @@ public class RasterizeCalculator_3_Test extends TestCase {
 		Map<Integer, Float> dataRasterized = RasterizeCalculator.apply(dataOriginal, 10);
 		//
 		assertEquals(2, dataRasterized.size());
-		assertEquals(500.0f, dataRasterized.get(200));
+		assertEquals(625.0f, dataRasterized.get(200));
 		assertNull(dataRasterized.get(201));
 		assertNull(dataRasterized.get(202));
 		assertNull(dataRasterized.get(203));
@@ -96,7 +96,7 @@ public class RasterizeCalculator_3_Test extends TestCase {
 		assertNull(dataRasterized.get(207));
 		assertNull(dataRasterized.get(208));
 		assertNull(dataRasterized.get(209));
-		assertEquals(600.0f, dataRasterized.get(210));
+		assertEquals(550.0f, dataRasterized.get(210));
 	}
 
 	public void test5() {
