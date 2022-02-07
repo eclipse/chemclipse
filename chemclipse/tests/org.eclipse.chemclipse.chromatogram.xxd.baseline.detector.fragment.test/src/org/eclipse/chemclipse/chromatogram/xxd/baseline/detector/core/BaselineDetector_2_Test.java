@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -23,8 +23,6 @@ import junit.framework.TestCase;
 
 /**
  * Test the BaselineDetector.
- * 
- * @author eselmeister
  */
 public class BaselineDetector_2_Test extends TestCase {
 

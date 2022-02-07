@@ -74,7 +74,7 @@ public class BaselineDetector {
 
 		IProcessingInfo processingInfo;
 		IBaselineDetector detector = getBaselineDetector(detectorId);
-		if(detector != null) {
+		if(detector != null && chromatogramSelection != null) {
 			processingInfo = detector.setBaseline(chromatogramSelection, baselineDetectorSettings, monitor);
 			chromatogramSelection.getChromatogram().setDirty(true);
 		} else {
