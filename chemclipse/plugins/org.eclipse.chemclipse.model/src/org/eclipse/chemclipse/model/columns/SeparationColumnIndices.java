@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,6 +17,7 @@ public class SeparationColumnIndices extends TreeMap<Integer, IRetentionIndexEnt
 
 	private static final long serialVersionUID = -104734015201641034L;
 	private ISeparationColumn separationColumn = SeparationColumnFactory.getSeparationColumn(SeparationColumnType.DEFAULT);
+	private boolean dirty = false;
 
 	@Override
 	public ISeparationColumn getSeparationColumn() {
@@ -28,6 +29,7 @@ public class SeparationColumnIndices extends TreeMap<Integer, IRetentionIndexEnt
 	public void setSeparationColumn(ISeparationColumn separationColumn) {
 
 		this.separationColumn = separationColumn;
+		setDirty(true);
 	}
 
 	@Override
@@ -35,7 +37,20 @@ public class SeparationColumnIndices extends TreeMap<Integer, IRetentionIndexEnt
 
 		if(retentionIndexEntry != null) {
 			put(retentionIndexEntry.getRetentionTime(), retentionIndexEntry);
+			setDirty(true);
 		}
+	}
+
+	@Override
+	public boolean isDirty() {
+
+		return dirty;
+	}
+
+	@Override
+	public void setDirty(boolean dirty) {
+
+		this.dirty = dirty;
 	}
 
 	@Override
@@ -63,9 +78,6 @@ public class SeparationColumnIndices extends TreeMap<Integer, IRetentionIndexEnt
 			return false;
 		}
 		ISeparationColumnIndices other = (ISeparationColumnIndices)obj;
-		if(!other.equals(this)) {
-			return false;
-		}
-		return true;
+		return other.equals(this);
 	}
 }

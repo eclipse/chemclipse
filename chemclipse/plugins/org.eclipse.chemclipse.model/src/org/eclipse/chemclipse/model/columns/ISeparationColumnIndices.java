@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Matthias Mailänder - dirty flagging
  *******************************************************************************/
 package org.eclipse.chemclipse.model.columns;
 
@@ -20,4 +21,8 @@ public interface ISeparationColumnIndices extends NavigableMap<Integer, IRetenti
 	void setSeparationColumn(ISeparationColumn separationColumn);
 
 	void put(IRetentionIndexEntry retentionIndexEntry);
+
+	boolean isDirty();
+
+	void setDirty(boolean isDirty);
 }
