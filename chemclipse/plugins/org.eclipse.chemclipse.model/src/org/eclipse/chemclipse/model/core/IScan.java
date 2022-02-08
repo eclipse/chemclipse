@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import org.eclipse.core.runtime.IAdaptable;
@@ -29,7 +30,7 @@ import org.eclipse.core.runtime.IAdaptable;
  * Or it could be a chromatogram containing subsequent scans too.
  * 
  */
-public interface IScan extends ISignal, IAdaptable, IScanSerializable, ITargetSupplier {
+public interface IScan extends ISignal, IAdaptable, Serializable, ITargetSupplier {
 
 	/**
 	 * Returns the chromatogram, where the mass spectrum is stored.<br/>
