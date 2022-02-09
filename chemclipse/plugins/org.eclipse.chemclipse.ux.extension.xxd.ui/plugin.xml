@@ -217,6 +217,12 @@
       </page>
       <page
             category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageNamedWavelengths"
+            id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageNamedWavelengths"
+            name="Named Wavelength(s)">
+      </page>
+      <page
+            category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMolecule"
             id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageMolecule"
             name="Molecule">
