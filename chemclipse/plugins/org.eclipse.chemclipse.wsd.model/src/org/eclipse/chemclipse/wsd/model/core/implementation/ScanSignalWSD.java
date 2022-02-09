@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,11 +16,15 @@ import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 
 public class ScanSignalWSD extends AbstractScanSignalWSD implements IScanSignalWSD {
 
+	private static final long serialVersionUID = 7188703805929591517L;
+
 	public ScanSignalWSD() {
+
 		super();
 	}
 
 	public ScanSignalWSD(double wavelength, float abundance) {
+
 		super();
 		setWavelength(wavelength);
 		setAbundance(abundance);
