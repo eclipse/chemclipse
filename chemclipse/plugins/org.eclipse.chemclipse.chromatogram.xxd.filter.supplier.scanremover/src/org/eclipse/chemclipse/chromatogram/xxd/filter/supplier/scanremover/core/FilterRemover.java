@@ -23,12 +23,12 @@ import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.prefe
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.settings.FilterSettingsRemover;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.settings.ScanRemoverPattern;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.SubMonitor;
 
 @SuppressWarnings("rawtypes")
 public class FilterRemover extends AbstractChromatogramFilter {
@@ -72,34 +72,25 @@ public class FilterRemover extends AbstractChromatogramFilter {
 	private void applyScanRemoverFilter(IChromatogramSelection chromatogramSelection, ScanRemoverPattern scanRemoverPattern, IProgressMonitor monitor) throws FilterException {
 
 		if(chromatogramSelection != null && scanRemoverPattern != null) {
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
-			int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
-			int stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
-			List<Integer> scansToRemove = new ArrayList<Integer>();
 			/*
-			 * Iterate through all selected scans and mark those to be removed.
+			 * Range of interest.
 			 */
-			for(int scan = startScan; scan <= stopScan; scan++) {
-				if(scanRemoverPattern.remove()) {
-					scansToRemove.add(scan);
-				}
-			}
+			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
+			int startRetentionTime = chromatogramSelection.getStartRetentionTime();
+			int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
 			/*
-			 * Use a remove counter, because each time a scan will be removed, the chromatogram contains one scan less.
+			 * Iterate through all scans and mark scans to be preserved.
 			 */
-			SubMonitor subMonitor = SubMonitor.convert(monitor, "Remove scan(s) from chromatogram", scansToRemove.size());
-			try {
-				int removeCounter = 0;
-				for(Integer scan : scansToRemove) {
-					scan -= removeCounter;
-					chromatogram.removeScan(scan);
-					removeCounter++;
-					subMonitor.worked(1);
+			List<IScan> scansToKeep = new ArrayList<>();
+			for(IScan scan : chromatogram.getScans()) {
+				if(scan.getRetentionTime() < startRetentionTime || scan.getRetentionTime() > stopRetentionTime) {
+					scansToKeep.add(scan);
+				} else if(!scanRemoverPattern.remove()) {
+					scansToKeep.add(scan);
 				}
-			} finally {
-				SubMonitor.done(subMonitor);
 			}
 			//
+			chromatogram.replaceAllScans(scansToKeep);
 			chromatogram.recalculateScanNumbers();
 			chromatogramSelection.reset();
 		}
