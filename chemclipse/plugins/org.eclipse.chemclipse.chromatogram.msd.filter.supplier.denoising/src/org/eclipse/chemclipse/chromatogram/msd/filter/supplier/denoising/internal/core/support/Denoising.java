@@ -164,9 +164,8 @@ public class Denoising {
 		return extractedIonSignals;
 	}
 
-	// TODO Refaktor in extracted ion signal auslagern?
 	/**
-	 * Removes the selected ions from the given extracted ion signal.
+	 * Sets the selected ions from the given extracted ion signal to zero signal intensity.
 	 */
 	private static void removeIons(IExtractedIonSignal extractedIonSignal, IMarkedIons selectedIons) {
 
