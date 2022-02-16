@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -69,10 +69,12 @@ public class EditorToolBar {
 	private boolean showText = true;
 
 	public EditorToolBar(Composite parent) {
+
 		this(parent, SWT.RIGHT);
 	}
 
 	public EditorToolBar(Composite parent, int align) {
+
 		this.parent = null;
 		actionContributions = new ArrayList<>();
 		ToolBarManager toolbarManagerSWT = new ToolBarManager(SWT.FLAT | SWT.WRAP);
@@ -84,6 +86,7 @@ public class EditorToolBar {
 	}
 
 	private EditorToolBar(IToolBarManager manager, EditorToolBar parent, String groupName) {
+
 		toolBarManager = manager;
 		this.parent = parent;
 		this.config = null;
@@ -313,7 +316,7 @@ public class EditorToolBar {
 	}
 
 	/**
-	 * enables a Settingspage where the user can choose to show text
+	 * enables a settings page where the user can choose to show text
 	 * 
 	 * @param preferenceStore
 	 * @param key
@@ -338,7 +341,6 @@ public class EditorToolBar {
 
 		if(parent != null) {
 			parent.addPreferencePages(pageSupplier, settingsChangedRunnable);
-			return;
 		} else {
 			config.addPreferencePageContainer(new PreferencePageContainer(pageSupplier, settingsChangedRunnable));
 			update();
@@ -364,6 +366,7 @@ public class EditorToolBar {
 		private final EditorToolBar parent;
 
 		public ConfigSection(EditorToolBar editorToolBar) {
+
 			this.parent = editorToolBar;
 		}
 
@@ -417,6 +420,7 @@ public class EditorToolBar {
 		private final Runnable runnable;
 
 		private PreferencePageContainer(Supplier<Collection<? extends IPreferencePage>> supplier, Runnable runnable) {
+
 			this.supplier = supplier;
 			this.runnable = runnable;
 		}

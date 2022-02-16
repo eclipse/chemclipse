@@ -117,7 +117,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 		public void objectChanged(ChangeType type, Object newObject, Object oldObject) {
 
 			if(extendedChromatogramUI != null) {
-				extendedChromatogramUI.updateMenu(true);
+				extendedChromatogramUI.updateMenu();
 				extendedChromatogramUI.updateMethods();
 			}
 		}
