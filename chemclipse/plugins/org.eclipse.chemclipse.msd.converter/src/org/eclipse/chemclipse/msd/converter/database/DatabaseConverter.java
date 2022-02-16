@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -104,6 +104,9 @@ public class DatabaseConverter {
 	private static IProcessingInfo<IMassSpectra> getMassSpectra(final File file, IProgressMonitor monitor) {
 
 		IProcessingInfo<IMassSpectra> processingInfo = new ProcessingInfo<>();
+		if(!file.exists()) {
+			return processingInfo;
+		}
 		DatabaseConverterSupport converterSupport = getDatabaseConverterSupport();
 		try {
 			List<String> availableConverterIds = converterSupport.getAvailableConverterIds(file);
