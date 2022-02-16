@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -46,11 +46,11 @@ public class TargetDisplaySettingsWizard {
 		 * Initial width and height.
 		 */
 		wizardDialog.setPageSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
-		//
-		if(wizardDialog.open() == Window.OK) {
-			return true;
-		} else {
-			return false;
-		}
+		return (wizardDialog.open() == Window.OK);
+	}
+
+	private TargetDisplaySettingsWizard() {
+		// static access only
+
 	}
 }
