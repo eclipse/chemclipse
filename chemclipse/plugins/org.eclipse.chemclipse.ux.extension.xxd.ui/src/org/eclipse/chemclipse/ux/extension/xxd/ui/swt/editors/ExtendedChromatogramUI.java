@@ -1348,6 +1348,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 
 		adjustAxisSettings();
 		updateChromatogram();
+		chromatogramReferencesUI.update();
 	}
 
 	private void reset(boolean resetRange) {
