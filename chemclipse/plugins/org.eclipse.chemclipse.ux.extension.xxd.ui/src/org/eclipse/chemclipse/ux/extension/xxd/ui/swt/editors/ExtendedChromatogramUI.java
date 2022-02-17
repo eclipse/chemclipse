@@ -367,7 +367,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 			//
 			if(chromatogramSelection != null) {
 				adjustAxisSettings();
-				updateMenu(true);
+				updateMenu();
 				updateChromatogram();
 				setSeparationColumnSelection();
 				retentionIndexUI.setInput(chromatogramSelection.getChromatogram().getSeparationColumnIndices());
@@ -498,11 +498,6 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 	}
 
 	public void updateMenu() {
-
-		updateMenu(false);
-	}
-
-	public void updateMenu(boolean force) {
 
 		if(processTypeSupport != null) {
 			if(menuCache != chromatogramSelection) {
@@ -738,7 +733,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 			List<IPeak> peaksInactiveISTD = new ArrayList<>();
 			//
 			for(IPeak peak : peaks) {
-				if(peak.getInternalStandards().size() > 0) {
+				if(!peak.getInternalStandards().isEmpty()) {
 					if(peak.isActiveForAnalysis()) {
 						peaksActiveISTD.add(peak);
 					} else {
@@ -762,7 +757,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 
 	private void addPeaks(List<ILineSeriesData> lineSeriesDataList, List<? extends IPeak> peaks, PlotSymbolType plotSymbolType, int symbolSize, Color symbolColor, String seriesId, ITargetDisplaySettings displaySettings) {
 
-		if(peaks.size() > 0) {
+		if(!peaks.isEmpty()) {
 			//
 			Collections.sort(peaks, peakRetentionTimeComparator);
 			ILineSeriesData lineSeriesData = peakChartSupport.getPeaks(peaks, true, false, symbolColor, seriesId);
@@ -831,7 +826,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 
 		if(chromatogramSelection != null) {
 			List<IScan> selectedIdentifiedScans = chromatogramSelection.getSelectedIdentifiedScans();
-			if(selectedIdentifiedScans.size() > 0) {
+			if(!selectedIdentifiedScans.isEmpty()) {
 				String seriesId = SERIES_ID_IDENTIFIED_SCAN_SELECTED;
 				Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_IDENTIFIED_SCAN));
 				PlotSymbolType symbolType = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_IDENTIFIED_SCAN_MARKER_TYPE));
@@ -844,7 +839,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 	private void addSelectedPeakData(List<ILineSeriesData> lineSeriesDataList, ITargetDisplaySettings settings) {
 
 		List<? extends IPeak> peaks = new ArrayList<>(chromatogramSelection.getSelectedPeaks());
-		if(peaks.size() > 0) {
+		if(!peaks.isEmpty()) {
 			/*
 			 * Settings
 			 */
@@ -1353,6 +1348,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 
 		adjustAxisSettings();
 		updateChromatogram();
+		chromatogramReferencesUI.update();
 	}
 
 	private void reset(boolean resetRange) {
