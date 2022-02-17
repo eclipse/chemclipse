@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -28,8 +28,7 @@ public class VendorMassSpectrum extends AbstractVendorMassSpectrum implements IV
 	private static final long serialVersionUID = 6529896871219884041L;
 	private static final Logger logger = Logger.getLogger(VendorMassSpectrum.class);
 	/**
-	 * MAX_IONS The total amount of ions to be stored in the
-	 * Agilent chromatogram.<br/>
+	 * MAX_IONS The total amount of ions to be stored in the chromatogram.<br/>
 	 * It does not mean, that ion 2000 is the upper bound, but only 2000 mass
 	 * fragments can be stored in a mass spectrum.
 	 */

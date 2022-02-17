@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -25,8 +25,8 @@ import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 /**
  * If a new mass spectrum type should be implemented, extend the abstract class {@link AbstractScanMSD} and not this class.
  * 
- * @author eselmeister
- * @author <a href="mailto:alexander.kerner@openchrom.net">Alexander Kerner</a>
+ * @author Philip Wenig
+ * @author Alexander Kerner
  */
 public class ScanMSD extends AbstractScanMSD implements IScanMSD {
 
