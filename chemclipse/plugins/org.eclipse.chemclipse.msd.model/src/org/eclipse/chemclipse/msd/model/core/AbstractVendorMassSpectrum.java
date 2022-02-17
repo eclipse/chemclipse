@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -20,7 +20,7 @@ public abstract class AbstractVendorMassSpectrum extends AbstractRegularMassSpec
 	 * Renew the serialVersionUID any time you have changed some fields or
 	 * methods.
 	 */
-	private static final long serialVersionUID = 5013842421250687340L;
+	private static final long serialVersionUID = 5013842421250687341L;
 	//
 	private File file;
 
@@ -44,6 +44,12 @@ public abstract class AbstractVendorMassSpectrum extends AbstractRegularMassSpec
 			name = file.getName();
 		}
 		return name;
+	}
+
+	@Override
+	public boolean checkIntensityCollisions() {
+
+		return true;
 	}
 
 	@Override
