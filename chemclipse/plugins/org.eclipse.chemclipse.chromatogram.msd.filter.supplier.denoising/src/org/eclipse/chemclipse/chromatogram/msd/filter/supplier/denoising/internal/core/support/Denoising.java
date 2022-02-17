@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2020 Lablicate GmbH.
+ * Copyright (c) 2010, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -16,19 +16,14 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.AnalysisSupportException;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
-import org.eclipse.chemclipse.msd.model.core.IIon;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.exceptions.FilterException;
-import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.exceptions.NoExtractedIonSignalStoredException;
-import org.eclipse.chemclipse.msd.model.implementation.Ion;
 import org.eclipse.chemclipse.msd.model.noise.Calculator;
 import org.eclipse.chemclipse.msd.model.noise.INoiseSegment;
 import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignalExtractor;
@@ -37,7 +32,10 @@ import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
 import org.eclipse.chemclipse.numeric.statistics.Calculations;
+import org.eclipse.chemclipse.rcp.app.undo.UndoContextFactory;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.operations.OperationHistoryFactory;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 
@@ -62,7 +60,7 @@ public class Denoising {
 	 */
 	public static List<ICombinedMassSpectrum> applyDenoisingFilter(IChromatogramSelectionMSD chromatogramSelection, IMarkedIons ionsToRemove, IMarkedIons ionsToPreserve, boolean adjustThresholdTransitions, int numberOfUsedIonsForCoefficient, int segmentWidth, IProgressMonitor monitor) throws FilterException {
 
-		List<ICombinedMassSpectrum> noiseMassSpectra = new ArrayList<ICombinedMassSpectrum>();
+		List<ICombinedMassSpectrum> noiseMassSpectra = new ArrayList<>();
 		SubMonitor subMonitor = SubMonitor.convert(monitor, "Denoising", 8);
 		try {
 			/*
@@ -123,7 +121,13 @@ public class Denoising {
 			/*
 			 * E -> Writes the results back to the chromatogram.
 			 */
-			writeExtractedIonSignalsBackToChromatogram(chromatogram, extractedIonSignals, monitor);
+			DenoiseOperation denoiseOperation = new DenoiseOperation(chromatogramSelection, extractedIonSignals);
+			denoiseOperation.addContext(UndoContextFactory.getUndoContext());
+			try {
+				OperationHistoryFactory.getOperationHistory().execute(denoiseOperation, null, null);
+			} catch(ExecutionException e) {
+				logger.warn(e);
+			}
 			subMonitor.worked(1);
 		} finally {
 			subMonitor.done();
@@ -135,7 +139,6 @@ public class Denoising {
 		return noiseMassSpectra;
 	}
 
-	// ---------------------------------------------------------private methods
 	/**
 	 * Removes the given ions from the scan range (start/stop scan).
 	 * 
@@ -161,9 +164,8 @@ public class Denoising {
 		return extractedIonSignals;
 	}
 
-	// TODO Refaktor in extracted ion signal auslagern?
 	/**
-	 * Removes the selected ions from the given extracted ion signal.
+	 * Sets the selected ions from the given extracted ion signal to zero signal intensity.
 	 */
 	private static void removeIons(IExtractedIonSignal extractedIonSignal, IMarkedIons selectedIons) {
 
@@ -303,71 +305,6 @@ public class Denoising {
 	}
 
 	/**
-	 * Writes the results back to the chromatogram.
-	 * 
-	 * @param chromatogram
-	 * @param extractedIonSignals
-	 * @param startScan
-	 * @param stopScan
-	 * @param monitor
-	 */
-	private static void writeExtractedIonSignalsBackToChromatogram(IChromatogramMSD chromatogram, IExtractedIonSignals extractedIonSignals, IProgressMonitor monitor) {
-
-		int startScan = extractedIonSignals.getStartScan();
-		int stopScan = extractedIonSignals.getStopScan();
-		IExtractedIonSignal extractedIonSignal;
-		IVendorMassSpectrum supplierMassSpectrum;
-		/*
-		 * Write the values from the extracted ion signals back to the
-		 * chromatogram.
-		 */
-		for(int scan = startScan; scan <= stopScan; scan++) {
-			try {
-				extractedIonSignal = extractedIonSignals.getExtractedIonSignal(scan);
-				supplierMassSpectrum = chromatogram.getSupplierScan(scan);
-				replaceIons(extractedIonSignal, supplierMassSpectrum);
-			} catch(NoExtractedIonSignalStoredException e) {
-				logger.warn(e);
-			}
-		}
-	}
-
-	/**
-	 * Replaces all ions in the supplier mass spectrum by the mass
-	 * fragments stored in the extracted ion signal.
-	 * 
-	 * @param extractedIonSignal
-	 * @param supplierMassSpectrum
-	 */
-	private static void replaceIons(IExtractedIonSignal extractedIonSignal, IVendorMassSpectrum supplierMassSpectrum) {
-
-		int startIon = extractedIonSignal.getStartIon();
-		int stopIon = extractedIonSignal.getStopIon();
-		float abundance;
-		/*
-		 * Remove all ions.
-		 */
-		supplierMassSpectrum.removeAllIons();
-		IIon defaultIon;
-		/*
-		 * Add the new ion values if abundance > 0.0f.
-		 */
-		for(int ion = startIon; ion <= stopIon; ion++) {
-			abundance = extractedIonSignal.getAbundance(ion);
-			if(abundance > 0.0f) {
-				try {
-					defaultIon = new Ion(ion, abundance);
-					supplierMassSpectrum.addIon(defaultIon);
-				} catch(AbundanceLimitExceededException e) {
-					logger.warn(e);
-				} catch(IonLimitExceededException e) {
-					logger.warn(e);
-				}
-			}
-		}
-	}
-
-	/**
 	 * Subtracts the noise mass spectra from the calculated segments.
 	 * 
 	 * @return
@@ -490,5 +427,4 @@ public class Denoising {
 		}
 		return result;
 	}
-	// ---------------------------------------------------------private methods
 }

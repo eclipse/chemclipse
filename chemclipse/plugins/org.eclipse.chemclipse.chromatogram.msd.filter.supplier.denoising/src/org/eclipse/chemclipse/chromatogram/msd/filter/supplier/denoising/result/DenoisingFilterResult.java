@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
+ * Copyright (c) 2010, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -23,16 +23,18 @@ public class DenoisingFilterResult extends AbstractChromatogramFilterResult impl
 	private List<ICombinedMassSpectrum> noiseMassSpectra;
 
 	public DenoisingFilterResult(ResultStatus resultStatus, String description) {
+
 		super(resultStatus, description);
-		this.noiseMassSpectra = new ArrayList<ICombinedMassSpectrum>();
+		this.noiseMassSpectra = new ArrayList<>();
 	}
 
 	public DenoisingFilterResult(ResultStatus resultStatus, String description, List<ICombinedMassSpectrum> noiseMassSpectra) {
+
 		super(resultStatus, description);
 		if(noiseMassSpectra != null) {
 			this.noiseMassSpectra = noiseMassSpectra;
 		} else {
-			this.noiseMassSpectra = new ArrayList<ICombinedMassSpectrum>();
+			this.noiseMassSpectra = new ArrayList<>();
 		}
 	}
 

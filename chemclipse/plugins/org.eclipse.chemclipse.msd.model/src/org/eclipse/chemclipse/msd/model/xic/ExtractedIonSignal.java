@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -44,6 +44,7 @@ public class ExtractedIonSignal implements IExtractedIonSignal {
 	 * @param stopIon
 	 */
 	public ExtractedIonSignal(double startIon, double stopIon) {
+
 		int start = AbstractIon.getIon(startIon);
 		int stop = AbstractIon.getIon(stopIon);
 		/*
@@ -70,8 +71,9 @@ public class ExtractedIonSignal implements IExtractedIonSignal {
 	}
 
 	public ExtractedIonSignal(List<IIon> ions) {
+
 		ions = new ArrayList<>(ions);
-		if(ions != null && ions.size() > 0) {
+		if(!ions.isEmpty()) {
 			Collections.sort(ions, new IonValueComparator());
 			this.startIon = AbstractIon.getIon(ions.get(0).getIon());
 			this.stopIon = AbstractIon.getIon(ions.get(ions.size() - 1).getIon());
@@ -221,7 +223,6 @@ public class ExtractedIonSignal implements IExtractedIonSignal {
 	@Override
 	public float getMeanIntensity() {
 
-		System.out.println("JUNIT");
 		return Calculations.getMean(abundanceValues);
 	}
 
@@ -274,8 +275,7 @@ public class ExtractedIonSignal implements IExtractedIonSignal {
 	@Override
 	public IIonRange getIonRange() {
 
-		IIonRange ionRange = new IonRange(startIon, stopIon);
-		return ionRange;
+		return new IonRange(startIon, stopIon);
 	}
 
 	@Override
