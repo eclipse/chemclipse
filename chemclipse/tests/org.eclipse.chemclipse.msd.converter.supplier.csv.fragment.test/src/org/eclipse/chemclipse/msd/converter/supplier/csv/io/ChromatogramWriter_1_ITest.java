@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,10 +12,7 @@
 package org.eclipse.chemclipse.msd.converter.supplier.csv.io;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.msd.converter.supplier.csv.TestPathHelper;
 import org.eclipse.chemclipse.msd.converter.supplier.csv.io.core.ChromatogramWriter;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -34,16 +31,13 @@ public class ChromatogramWriter_1_ITest extends ChromatogramReaderTestCase {
 
 	public void testExport_1() {
 
-		File file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_EXPORT_TEST));
 		try {
+			File file = new File(TestPathHelper.getAbsolutePath(TestPathHelper.DIRECTORY_EXPORT_TEST) + File.separator + "Test.csv");
 			chromatogramWriter.writeChromatogram(file, chromatogram, new NullProgressMonitor());
+			file.delete();
 			assertTrue(true);
-		} catch(FileNotFoundException e) {
-			assertTrue("FileNotFoundException", false);
-		} catch(FileIsNotWriteableException e) {
-			assertTrue("FileIsNotWriteableException", false);
-		} catch(IOException e) {
-			assertTrue("IOException", false);
+		} catch(Exception e) {
+			assertTrue("Exception", false);
 		}
 	}
 }

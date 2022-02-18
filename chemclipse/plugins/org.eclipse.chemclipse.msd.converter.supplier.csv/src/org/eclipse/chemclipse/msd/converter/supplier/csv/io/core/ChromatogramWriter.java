@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -76,7 +76,7 @@ public class ChromatogramWriter extends AbstractChromatogramWriter {
 	private void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
 
 		try (CSVPrinter csvPrinter = new CSVPrinter(new FileWriter(file), CSVFormat.EXCEL)) {
-			if(PreferenceSupplier.isUseTic()) {
+			if(PreferenceSupplier.isExportUseTic()) {
 				writeTIC(csvPrinter, chromatogram);
 			} else {
 				/*
@@ -97,7 +97,7 @@ public class ChromatogramWriter extends AbstractChromatogramWriter {
 	private void writeChromatogram(File file, IChromatogramWSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
 
 		try (CSVPrinter csvPrinter = new CSVPrinter(new FileWriter(file), CSVFormat.EXCEL)) {
-			if(PreferenceSupplier.isUseTic()) {
+			if(PreferenceSupplier.isExportUseTic()) {
 				writeTIC(csvPrinter, chromatogram);
 			} else {
 				/*

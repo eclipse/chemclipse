@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2020 Lablicate GmbH.
+ * Copyright (c) 2011, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,7 +18,6 @@ import org.eclipse.chemclipse.converter.chromatogram.AbstractChromatogramImportC
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
-import org.eclipse.chemclipse.msd.converter.supplier.csv.internal.converter.SpecificationValidator;
 import org.eclipse.chemclipse.msd.converter.supplier.csv.io.core.ChromatogramReader;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -34,11 +33,12 @@ public class ChromatogramImportConverter extends AbstractChromatogramImportConve
 
 		IProcessingInfo<IChromatogramMSD> processingInfo = super.validate(file);
 		if(!processingInfo.hasErrorMessages()) {
-			file = SpecificationValidator.validateSpecification(file, "csv");
-			IChromatogramMSDReader reader = new ChromatogramReader();
 			try {
-				IChromatogramMSD chromatogram = reader.read(file, monitor);
-				processingInfo.setProcessingResult(chromatogram);
+				if(file.getName().toLowerCase().endsWith(".csv")) {
+					IChromatogramMSDReader reader = new ChromatogramReader();
+					IChromatogramMSD chromatogram = reader.read(file, monitor);
+					processingInfo.setProcessingResult(chromatogram);
+				}
 			} catch(Exception e) {
 				logger.warn(e);
 				processingInfo.addErrorMessage(DESCRIPTION, "Something has definitely gone wrong with the file: " + file.getAbsolutePath());
@@ -52,11 +52,12 @@ public class ChromatogramImportConverter extends AbstractChromatogramImportConve
 
 		IProcessingInfo<IChromatogramOverview> processingInfo = super.validate(file);
 		if(!processingInfo.hasErrorMessages()) {
-			file = SpecificationValidator.validateSpecification(file, "csv");
-			IChromatogramMSDReader reader = new ChromatogramReader();
 			try {
-				IChromatogramOverview chromatogramOverview = reader.readOverview(file, monitor);
-				processingInfo.setProcessingResult(chromatogramOverview);
+				if(file.getName().toLowerCase().endsWith(".csv")) {
+					IChromatogramMSDReader reader = new ChromatogramReader();
+					IChromatogramOverview chromatogramOverview = reader.readOverview(file, monitor);
+					processingInfo.setProcessingResult(chromatogramOverview);
+				}
 			} catch(Exception e) {
 				logger.warn(e);
 				processingInfo.addErrorMessage(DESCRIPTION, "Something has definitely gone wrong with the file: " + file.getAbsolutePath());

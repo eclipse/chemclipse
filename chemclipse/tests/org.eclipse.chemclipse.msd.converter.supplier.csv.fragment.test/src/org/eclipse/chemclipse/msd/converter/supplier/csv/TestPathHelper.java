@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2021 Lablicate GmbH.
+ * Copyright (c) 2011, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -27,5 +27,5 @@ public class TestPathHelper extends PathResolver {
 	/*
 	 * EXPORT
 	 */
-	public static final String TESTFILE_EXPORT_TEST = "testData/files/export/Test.csv";
+	public static final String DIRECTORY_EXPORT_TEST = "testData/files/export";
 }

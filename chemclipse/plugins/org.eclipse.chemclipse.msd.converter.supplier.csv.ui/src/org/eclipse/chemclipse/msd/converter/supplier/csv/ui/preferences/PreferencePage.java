@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,10 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.csv.ui.preferences;
 
+import org.eclipse.chemclipse.model.settings.Delimiter;
 import org.eclipse.chemclipse.msd.converter.supplier.csv.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.converter.supplier.csv.ui.Activator;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
@@ -23,9 +26,11 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePage() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("CSV Converter");
+		setTitle("CSV Converter");
+		setDescription("");
 	}
 
 	@Override
@@ -36,8 +41,12 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	@Override
 	protected void createFieldEditors() {
 
+		addField(new LabelFieldEditor("Import", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_IMPORT_DELIMITER, "Delimiter", Delimiter.getOptions(), getFieldEditorParent()));
+		addField(new StringFieldEditor(PreferenceSupplier.P_IMPORT_ZERO_MARKER, "Zero Marker", getFieldEditorParent()));
+		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceSupplier.P_DELIMITER, "Delimiter character", 1, getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_TIC, "Export only TIC values.", getFieldEditorParent()));
+		addField(new LabelFieldEditor("Export", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_EXPORT_USE_TIC, "Export only TIC values.", getFieldEditorParent()));
 	}
 }

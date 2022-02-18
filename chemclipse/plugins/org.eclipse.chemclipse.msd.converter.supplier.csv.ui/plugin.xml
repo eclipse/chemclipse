@@ -7,8 +7,7 @@
             category="org.eclipse.chemclipse.msd.converter.ui.converterPreferencePage"
             class="org.eclipse.chemclipse.msd.converter.supplier.csv.ui.preferences.PreferencePage"
             id="org.eclipse.chemclipse.msd.converter.supplier.csv.ui.preferences.converterPreferencePage"
-            name="CSV MS Converter">
+            name="CSV Converter">
       </page>
    </extension>
-
 </plugin>

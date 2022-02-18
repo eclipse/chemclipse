@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,19 +14,26 @@ package org.eclipse.chemclipse.msd.converter.supplier.csv.preferences;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.settings.Delimiter;
 import org.eclipse.chemclipse.msd.converter.supplier.csv.Activator;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.osgi.service.prefs.BackingStoreException;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
-	public static final String P_DELIMITER = "separator";
-	public static final Character DEF_DELIMITER = ';';
+	private static final Logger logger = Logger.getLogger(PreferenceSupplier.class);
 	//
-	public static final String P_USE_TIC = "useTic";
-	public static final boolean DEF_USE_TIC = false;
+	public static final String P_IMPORT_DELIMITER = "importDelimiter";
+	public static final String DEF_IMPORT_DELIMITER = Delimiter.COMMA.name();
+	public static final String P_IMPORT_ZERO_MARKER = "importZeroMarker";
+	public static final String DEF_IMPORT_ZERO_MARKER = "0.0";
+	//
+	public static final String P_EXPORT_USE_TIC = "exportUseTic";
+	public static final boolean DEF_EXPORT_USE_TIC = false;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -54,8 +61,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public Map<String, String> getDefaultValues() {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
-		defaultValues.put(P_USE_TIC, Boolean.toString(DEF_USE_TIC));
-		defaultValues.put(P_DELIMITER, DEF_DELIMITER.toString());
+		defaultValues.put(P_IMPORT_DELIMITER, DEF_IMPORT_DELIMITER);
+		defaultValues.put(P_IMPORT_ZERO_MARKER, DEF_IMPORT_ZERO_MARKER);
+		defaultValues.put(P_EXPORT_USE_TIC, Boolean.toString(DEF_EXPORT_USE_TIC));
 		return defaultValues;
 	}
 
@@ -65,9 +73,62 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static boolean isUseTic() {
+	public static Delimiter getImportDelimiter() {
+
+		try {
+			IEclipsePreferences preferences = INSTANCE().getPreferences();
+			return Delimiter.valueOf(preferences.get(P_IMPORT_DELIMITER, DEF_IMPORT_DELIMITER));
+		} catch(Exception e) {
+			return Delimiter.COMMA;
+		}
+	}
+
+	public static void setImportDelimiter(Delimiter delimiter) {
+
+		putString(P_IMPORT_DELIMITER, delimiter.name());
+	}
+
+	public static String getImportZeroMarker() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.getBoolean(P_USE_TIC, DEF_USE_TIC);
+		return preferences.get(P_IMPORT_ZERO_MARKER, DEF_IMPORT_ZERO_MARKER);
+	}
+
+	public static void setImportZeroMarker(String zeroMarker) {
+
+		putString(P_IMPORT_ZERO_MARKER, zeroMarker);
+	}
+
+	public static boolean isExportUseTic() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getBoolean(P_EXPORT_USE_TIC, DEF_EXPORT_USE_TIC);
+	}
+
+	public static void setExportUseTic(boolean useTic) {
+
+		putBoolean(P_EXPORT_USE_TIC, useTic);
+	}
+
+	private static void putBoolean(String key, boolean value) {
+
+		try {
+			IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
+			preferences.putBoolean(key, value);
+			preferences.flush();
+		} catch(BackingStoreException e) {
+			logger.warn(e);
+		}
+	}
+
+	private static void putString(String key, String value) {
+
+		try {
+			IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
+			preferences.put(key, value);
+			preferences.flush();
+		} catch(BackingStoreException e) {
+			logger.warn(e);
+		}
 	}
 }
