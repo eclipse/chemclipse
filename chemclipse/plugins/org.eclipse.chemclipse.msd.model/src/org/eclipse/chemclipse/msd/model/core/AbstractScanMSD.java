@@ -52,9 +52,9 @@ import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
  * </li>
  * </ol>
  *
- * @author eselmeister
- * @author <a href="mailto:alexander.kerner@openchrom.net">Alexander Kerner</a>
- * @author janosbinder
+ * @author Philip Wenig
+ * @author Alexander Kerner
+ * @author Janos Binder
  * @see AbstractChromatogramMSD
  */
 public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
@@ -62,7 +62,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	/**
 	 * Renew the serialVersionUID any time you have changed some fields or methods.
 	 */
-	private static final long serialVersionUID = -5705437012632871946L;
+	private static final long serialVersionUID = -5705437012632871947L;
 	//
 	private static final Logger logger = Logger.getLogger(AbstractScanMSD.class);
 	//
@@ -127,6 +127,12 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	}
 
 	@Override
+	public boolean checkIntensityCollisions() {
+
+		return true;
+	}
+
+	@Override
 	public AbstractScanMSD addIons(List<IIon> ions, boolean addIntensities) {
 
 		for(IIon ion : ions) {
@@ -154,25 +160,27 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		}
 		//
 		boolean addNew = true;
-		for(IIon actualIon : ionsList) {
-			if(checkIon(ion, actualIon)) {
-				/*
-				 * Check whether the intensity should be added or only the higher intensity
-				 * should be taken.<br/> Replace the abundance only, if the abundance is higher
-				 * than the older one otherwise do nothing
-				 */
-				if(addIntensity) {
-					addIntensities(actualIon, ion);
-					addNew = false;
-					break;
-				} else {
-					if(ion.getAbundance() >= actualIon.getAbundance()) {
-						addHigherIntensity(actualIon, ion);
+		if(checkIntensityCollisions()) {
+			for(IIon actualIon : ionsList) {
+				if(checkIon(ion, actualIon)) {
+					/*
+					 * Check whether the intensity should be added or only the higher intensity
+					 * should be taken.<br/> Replace the abundance only, if the abundance is higher
+					 * than the older one otherwise do nothing
+					 */
+					if(addIntensity) {
+						addIntensities(actualIon, ion);
 						addNew = false;
 						break;
 					} else {
-						addNew = false;
-						break;
+						if(ion.getAbundance() >= actualIon.getAbundance()) {
+							addHigherIntensity(actualIon, ion);
+							addNew = false;
+							break;
+						} else {
+							addNew = false;
+							break;
+						}
 					}
 				}
 			}

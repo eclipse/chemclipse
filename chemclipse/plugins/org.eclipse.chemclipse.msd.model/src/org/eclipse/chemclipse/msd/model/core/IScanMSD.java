@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -55,7 +55,7 @@ import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
  * [PeakSubstanceLibraryMassSpectrum]<br/>
  * [...]<br/>
  * 
- * @author eselmeister
+ * @author Philip Wenig
  * @author Alexander Kerner
  * @see AbstractChromatogramMSD
  */
@@ -360,4 +360,12 @@ public interface IScanMSD extends IScan, IMassSpectrumCloneable, IMassSpectrumNo
 	 * @return boolean
 	 */
 	boolean isHighResolutionMS();
+
+	/**
+	 * Check each ion for possible collisions with other ions before adding it.
+	 * This comes at a huge performance toll and may not be required for MALDI.
+	 * 
+	 * @return boolean
+	 */
+	boolean checkIntensityCollisions();
 }

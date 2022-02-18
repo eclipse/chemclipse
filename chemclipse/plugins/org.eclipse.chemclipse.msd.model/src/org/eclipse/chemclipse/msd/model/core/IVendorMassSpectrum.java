@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,7 +16,7 @@ import java.io.File;
 /**
  * More informations about the class structure of mass spectra are stored in {@link IScanMSD}.
  * 
- * @author eselmeister
+ * @author Philip Wenig
  */
 public interface IVendorMassSpectrum extends IRegularMassSpectrum {
 
@@ -48,7 +48,7 @@ public interface IVendorMassSpectrum extends IRegularMassSpectrum {
 	 * It could be that the range of the ion values differs from manufacturer to
 	 * manufacturer.<br/>
 	 * One manufacturer for example stores maximal 2000 ion values, another 4000
-	 * ion.<br/>
+	 * ions.<br/>
 	 * Be aware of it!
 	 * 
 	 * @return int
