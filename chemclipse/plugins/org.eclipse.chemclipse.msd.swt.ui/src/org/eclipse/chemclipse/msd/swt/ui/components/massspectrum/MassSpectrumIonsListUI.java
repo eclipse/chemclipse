@@ -21,7 +21,7 @@ import org.eclipse.swt.widgets.Composite;
 public class MassSpectrumIonsListUI extends ExtendedTableViewer {
 
 	private String[] titles = {"m/z", "abundance", "parent m/z", "parent resolution", "daughter m/z", "daughter resolution", "collision energy"};
-	private int bounds[] = {100, 100, 120, 120, 120, 120, 120};
+	private int[] bounds = {100, 100, 120, 120, 120, 120, 120};
 
 	public MassSpectrumIonsListUI(Composite parent) {
 		super(parent);
@@ -33,7 +33,7 @@ public class MassSpectrumIonsListUI extends ExtendedTableViewer {
 		createColumns();
 	}
 
-	public void update(IScanMSD massSpectrum, boolean forceReload) {
+	public void update(IScanMSD massSpectrum) {
 
 		if(massSpectrum != null) {
 			setInput(massSpectrum);

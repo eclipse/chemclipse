@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -199,12 +199,11 @@ public class MassSpectrumListUI extends ExtendedTableViewer {
 	private void updateInput(IMassSpectra massSpectra) {
 
 		if(massSpectra != null) {
-			int size = massSpectra.size();
 			boolean massiveData = isMassiveData(massSpectra);
 			super.setInput(null); // Can only enable the hash look up before input has been set
 			setLabelAndContentProviders(massiveData);
 			super.setInput(massSpectra);
-			setItemCount(size);
+			setItemCount(massSpectra.size());
 		}
 	}
 

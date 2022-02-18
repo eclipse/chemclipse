@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,6 +18,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -70,7 +71,7 @@ public interface IExtendedPartUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText(tooltip);
-		button.setImage(ApplicationImageFactory.getInstance().getImage(image, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(image, IApplicationImageProvider.SIZE_16x16));
 		//
 		return button;
 	}
@@ -204,7 +205,7 @@ public interface IExtendedPartUI {
 			@Override
 			public void widgetSelected(SelectionEvent event) {
 
-				if(preferencePages.size() > 0) {
+				if(!preferencePages.isEmpty()) {
 					/*
 					 * Add the pages
 					 */
@@ -229,7 +230,6 @@ public interface IExtendedPartUI {
 								settingsHandler.apply(event.display);
 							}
 						} catch(Exception exception) {
-							System.out.println(exception);
 							MessageDialog.openError(event.display.getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
 						}
 					}
@@ -284,7 +284,7 @@ public interface IExtendedPartUI {
 
 	default void setButtonImage(Button button, String image, String prefixActivate, String prefixDeactivate, String tooltip, boolean enabled) {
 
-		button.setImage(ApplicationImageFactory.getInstance().getImage(image, IApplicationImage.SIZE_16x16, enabled));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(image, IApplicationImageProvider.SIZE_16x16, enabled));
 		StringBuilder builder = new StringBuilder();
 		builder.append(enabled ? prefixDeactivate : prefixActivate);
 		builder.append(" ");

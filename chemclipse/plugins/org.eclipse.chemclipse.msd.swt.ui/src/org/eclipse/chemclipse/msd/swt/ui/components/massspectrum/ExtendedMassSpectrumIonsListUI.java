@@ -28,7 +28,7 @@ public class ExtendedMassSpectrumIonsListUI extends Composite {
 
 	public void update(IScanMSD scanMSD) {
 
-		massSpectrumIonsListUI.update(scanMSD, true);
+		massSpectrumIonsListUI.update(scanMSD);
 	}
 
 	private void createControl() {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -170,7 +170,7 @@ public class TargetBuilderMSD {
 			boolean includeIntensityPercent = targetUnknownSettings.isIncludeIntensityPercent();
 			//
 			int size = (ionsSorted.size() >= numberMZ) ? numberMZ : ionsSorted.size();
-			double maxIntensity = ionsSorted.size() > 0 ? ionsSorted.get(0).getAbundance() : 0;
+			double maxIntensity = !ionsSorted.isEmpty() ? ionsSorted.get(0).getAbundance() : 0;
 			double factorMax = maxIntensity > 0 ? (100 / maxIntensity) : 0;
 			DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0");
 			/*
