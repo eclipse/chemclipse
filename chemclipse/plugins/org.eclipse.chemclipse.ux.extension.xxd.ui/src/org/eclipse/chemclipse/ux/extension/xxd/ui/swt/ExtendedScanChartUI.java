@@ -751,7 +751,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 				if(eventBroker != null) {
 					DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
 					List<Object> objects = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION);
-					if(objects != null && objects.size() > 0) {
+					if(objects != null && !objects.isEmpty()) {
 						Object object = objects.get(0);
 						if(object instanceof IChromatogramSelection) {
 							IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
