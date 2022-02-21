@@ -56,6 +56,15 @@ public class PeakScanListPart extends AbstractPart<ExtendedPeakScanListUI> {
 		}
 	}
 
+	@Override
+	public void setFocus() {
+
+		ExtendedPeakScanListUI control = getControl();
+		if(control != null) {
+			getControl().setFocus();
+		}
+	}
+
 	@Inject
 	@Optional
 	public void updatePeakSelection(@UIEventTopic(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION) IPeak peak) {

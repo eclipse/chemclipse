@@ -62,6 +62,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.InternalStandardDialog
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.TableConfigSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.operations.DeletePeaksOperation;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.operations.DeleteScansOperation;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMergePeaks;
@@ -111,6 +112,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 	private ScanIdentifierUI scanIdentifierUI;
 	private Button buttonTableEdit;
 	private AtomicReference<PeakScanListUI> tableViewer = new AtomicReference<>();
+	//
 	private IChromatogramSelection chromatogramSelection;
 	//
 	private boolean showScans;
@@ -142,6 +144,14 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 	@Override
 	public boolean setFocus() {
 
+		DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
+		List<Object> objects = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION);
+		if(!objects.isEmpty()) {
+			Object first = objects.get(0);
+			if(first instanceof IChromatogramSelection) {
+				chromatogramSelection = (IChromatogramSelection)first;
+			}
+		}
 		updateChromatogramSelection();
 		return true;
 	}
