@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
@@ -35,8 +38,9 @@ import org.eclipse.chemclipse.msd.converter.supplier.mmass.converter.model.Vendo
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IVendorStandaloneMassSpectrum;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
-import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.implementation.VendorStandaloneMassSpectrum;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
@@ -53,11 +57,11 @@ public class MassSpectrumReaderVersion22 extends AbstractMassSpectraReader imple
 	@Override
 	public IMassSpectra read(File file, IProgressMonitor monitor) throws IOException {
 
-		IVendorMassSpectrum massSpectrum = null;
+		IVendorStandaloneMassSpectrum massSpectrum = null;
 		//
 		try {
 			//
-			massSpectrum = new VendorMassSpectrum();
+			massSpectrum = new VendorStandaloneMassSpectrum();
 			massSpectrum.setFile(file);
 			massSpectrum.setIdentifier(file.getName());
 			massSpectrum.setMassSpectrumType((short)1); // profile
@@ -96,20 +100,26 @@ public class MassSpectrumReaderVersion22 extends AbstractMassSpectraReader imple
 		return document.getElementsByTagName("mSD");
 	}
 
-	private void readDescription(Element element, IVendorMassSpectrum massSpectrum) {
+	private void readDescription(Element element, IVendorStandaloneMassSpectrum massSpectrum) {
 
 		NodeList descriptionList = element.getElementsByTagName("description");
 		for(int i = 0; i < descriptionList.getLength(); i++) {
 			Node node = descriptionList.item(i);
 			Element description = (Element)node;
-			massSpectrum.setIdentifier(description.getElementsByTagName("title").item(0).getTextContent());
-			// TODO store and display
-			description.getElementsByTagName("date").item(0).getAttributes().getNamedItem("value").getTextContent();
-			description.getElementsByTagName("operator").item(0).getAttributes().getNamedItem("value").getTextContent();
-			description.getElementsByTagName("contact").item(0).getAttributes().getNamedItem("value").getTextContent();
-			description.getElementsByTagName("institution").item(0).getAttributes().getNamedItem("value").getTextContent();
-			description.getElementsByTagName("instrument").item(0).getAttributes().getNamedItem("value").getTextContent();
-			description.getElementsByTagName("notes").item(0).getTextContent();
+			massSpectrum.setSampleName(description.getElementsByTagName("title").item(0).getTextContent());
+			try {
+				String date = description.getElementsByTagName("date").item(0).getAttributes().getNamedItem("value").getTextContent();
+				SimpleDateFormat dateFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss yyyy", Locale.ENGLISH);
+				massSpectrum.setDate(dateFormat.parse(date));
+			} catch(ParseException e) {
+				logger.warn(e);
+			}
+			String operator = description.getElementsByTagName("operator").item(0).getAttributes().getNamedItem("value").getTextContent();
+			String contact = description.getElementsByTagName("contact").item(0).getAttributes().getNamedItem("value").getTextContent();
+			String institution = description.getElementsByTagName("institution").item(0).getAttributes().getNamedItem("value").getTextContent();
+			massSpectrum.setOperator(operator + " " + contact + " " + institution);
+			massSpectrum.setInstrument(description.getElementsByTagName("instrument").item(0).getAttributes().getNamedItem("value").getTextContent());
+			massSpectrum.setDescription(description.getElementsByTagName("notes").item(0).getTextContent());
 		}
 	}
 

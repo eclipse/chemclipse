@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,6 +12,8 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui;
 
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IVendorStandaloneMassSpectrum;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -32,10 +34,19 @@ public class ExtendedMassSpectrumHeaderUI extends Composite {
 		StringBuilder builder = new StringBuilder();
 		if(massSpectrum != null) {
 			addHeaderLine(builder, "Name", massSpectrum.getName());
-			addHeaderLine(builder, "Type Description", massSpectrum.getMassSpectrumTypeDescription());
+			addHeaderLine(builder, "Data", massSpectrum.getMassSpectrumTypeDescription());
 			addHeaderLine(builder, "File", massSpectrum.getFile().getName());
-			addHeaderLine(builder, "Mass Spectrometer", "MS" + massSpectrum.getMassSpectrometer());
+			addHeaderLine(builder, "Technique", "MS" + massSpectrum.getMassSpectrometer());
 			addHeaderLine(builder, "Ions", Integer.toString(massSpectrum.getNumberOfIons()));
+			if(massSpectrum instanceof IVendorStandaloneMassSpectrum) {
+				IVendorStandaloneMassSpectrum standaloneMassSpectrum = (IVendorStandaloneMassSpectrum)massSpectrum;
+				addHeaderLine(builder, "Sample", standaloneMassSpectrum.getSampleName());
+				addHeaderLine(builder, "Instrument", standaloneMassSpectrum.getInstrument());
+				addHeaderLine(builder, "Operator", standaloneMassSpectrum.getOperator());
+				if(standaloneMassSpectrum.getDate() != null) {
+					addHeaderLine(builder, "Date", ValueFormat.getDateFormatEnglish().format(standaloneMassSpectrum.getDate()));
+				}
+			}
 		}
 		//
 		text.setText(builder.toString());
