@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.msd.converter.massSpectrumSupplier">
+      <MassSpectrumSupplier
+            description="Reads mMass .msd Mass Spectra"
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.mmass.converter.MassSpectrumExportConverter"
+            fileExtension=".msd"
+            filterName="mMass Mass Spectrum (*.msd)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.mmass"
+            importConverter="org.eclipse.chemclipse.msd.converter.supplier.mmass.converter.MassSpectrumImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.mmass.converter.MassSpectrumMagicNumberMatcher"
+            isExportable="false"
+            isImportable="true">
+      </MassSpectrumSupplier>
+   </extension>
+</plugin>
