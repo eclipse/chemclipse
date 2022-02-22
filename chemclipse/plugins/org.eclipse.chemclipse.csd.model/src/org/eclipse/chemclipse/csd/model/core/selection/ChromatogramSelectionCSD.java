@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2021 Lablicate GmbH.
+ * Copyright (c) 2013, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -96,7 +96,7 @@ public class ChromatogramSelectionCSD extends AbstractChromatogramSelection<IChr
 		 */
 		if(chromatogram instanceof IChromatogramCSD) {
 			List<IChromatogramPeakCSD> peaks = ((IChromatogramCSD)chromatogram).getPeaks();
-			if(peaks != null && peaks.size() >= 1) {
+			if(peaks != null && !peaks.isEmpty()) {
 				setSelectedPeak(peaks.get(0));
 			} else {
 				setSelectedPeak(null);

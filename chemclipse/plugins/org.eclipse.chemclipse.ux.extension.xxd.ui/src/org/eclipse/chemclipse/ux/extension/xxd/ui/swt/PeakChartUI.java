@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -88,8 +88,7 @@ public class PeakChartUI extends ScrollableChart {
 	public void setInput(List<IPeak> peaks) {
 
 		prepareChart();
-		if(peaks != null && peaks.size() >= 1) {
-			//
+		if(peaks != null && !peaks.isEmpty()) {
 			modifyChart(peaks.get(0));
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 			for(int i = 0; i < peaks.size(); i++) {
