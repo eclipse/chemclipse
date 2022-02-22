@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -31,6 +31,7 @@ public class CreateSnapshotHandler {
 	private Clipboard clipboard;
 
 	public CreateSnapshotHandler() {
+
 		clipboard = new Clipboard(DisplayUtils.getDisplay());
 	}
 
@@ -90,9 +91,7 @@ public class CreateSnapshotHandler {
 				image = new Image(DisplayUtils.getDisplay(), compositeParent.getBounds());
 				gc.copyArea(image, 0, 0);
 			} finally {
-				if(gc != null) {
-					gc.dispose();
-				}
+				gc.dispose();
 			}
 		}
 		return image;
