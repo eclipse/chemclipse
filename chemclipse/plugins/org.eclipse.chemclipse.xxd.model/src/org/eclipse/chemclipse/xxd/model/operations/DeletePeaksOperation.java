@@ -73,7 +73,7 @@ public class DeletePeaksOperation extends AbstractOperation {
 	private void updateChromatogramSelection() {
 
 		chromatogramSelection.setSelectedPeak(null);
-		chromatogramSelection.reset(true);
+		chromatogramSelection.update(true);
 		chromatogramSelection.getChromatogram().setDirty(true);
 	}
 

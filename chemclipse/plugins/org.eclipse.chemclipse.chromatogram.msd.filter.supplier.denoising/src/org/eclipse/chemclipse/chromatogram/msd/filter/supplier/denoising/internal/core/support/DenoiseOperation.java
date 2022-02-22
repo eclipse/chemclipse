@@ -98,7 +98,7 @@ public class DenoiseOperation extends AbstractOperation {
 
 	private void updateChromatogramSelection() {
 
-		chromatogramSelection.reset(true);
+		chromatogramSelection.update(true);
 		chromatogramSelection.getChromatogram().setDirty(true);
 	}
 
