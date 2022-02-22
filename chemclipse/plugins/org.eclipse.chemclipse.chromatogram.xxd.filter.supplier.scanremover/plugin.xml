@@ -6,24 +6,31 @@
       <ChromatogramFilterSupplier
             description="This filter enables to remove a series of scans."
             filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.core.FilterRemover"
-            filterName="Scan Remover Filter"
+            filterName="Scan Remover"
             filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.settings.FilterSettingsRemover"
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover">
       </ChromatogramFilterSupplier>
       <ChromatogramFilterSupplier
             description="This filters removes empty scans."
             filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.core.FilterCleaner"
-            filterName="Remove Empty Scans Filter"
+            filterName="Scan Cleaner (Remove Empty)"
             filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.settings.FilterSettingsCleaner"
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.removeemptyscans">
       </ChromatogramFilterSupplier> 
       <ChromatogramFilterSupplier
             description="This filters deletes scan identification(s)."
             filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.core.FilterDeleteIdentifier"
-            filterName="Delete Scan Target(s)"
+            filterName="Scan Targets (Delete)"
             filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.settings.FilterSettingsDeleteIdentifier"
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.removescanidentifications">
-      </ChromatogramFilterSupplier>           
+      </ChromatogramFilterSupplier>
+      <ChromatogramFilterSupplier
+            description="This filters selects a scan in the chromatogram."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.core.FilterScanSelector"
+            filterName="Scan Selector"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.settings.FilterSettingsScanSelector"
+            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanselector">
+      </ChromatogramFilterSupplier>      
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">

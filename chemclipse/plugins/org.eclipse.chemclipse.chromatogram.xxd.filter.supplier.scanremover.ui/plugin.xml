@@ -7,7 +7,7 @@
             category="org.eclipse.chemclipse.chromatogram.filter.ui.preferences.filterPreferencePage"
             class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.ui.preferences.FilterPreferencePage"
             id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.scanremover.ui.preferences.scanremoverFilterPreferencePage"
-            name="Scan Remover">
+            name="Chromatogram Scan Filter">
       </page>
    </extension>  
 </plugin>

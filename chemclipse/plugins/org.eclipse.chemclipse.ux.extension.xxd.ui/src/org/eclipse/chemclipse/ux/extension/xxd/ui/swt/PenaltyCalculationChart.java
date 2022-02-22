@@ -14,8 +14,6 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
-import java.util.TreeMap;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramPeak;
@@ -24,6 +22,7 @@ import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.PenaltyCalculation;
 import org.eclipse.chemclipse.model.identifier.PenaltyCalculationSupport;
+import org.eclipse.chemclipse.model.support.RetentionIndexMap;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -54,7 +53,7 @@ public class PenaltyCalculationChart extends ChromatogramChart {
 	//
 	private IPeak peak = null;
 	private PenaltyCalculationModel penaltyCalculationModel = null;
-	private TreeMap<Integer, Integer> retentionIndexMap = new TreeMap<>();
+	private RetentionIndexMap retentionIndexMap = new RetentionIndexMap();
 
 	public PenaltyCalculationChart() {
 
@@ -77,7 +76,7 @@ public class PenaltyCalculationChart extends ChromatogramChart {
 	public void setInput(IPeak peak) {
 
 		this.peak = peak;
-		updateRetentionIndexMap();
+		retentionIndexMap.updateRetentionIndexMap(getChromatogram());
 		updateChart();
 	}
 
@@ -211,7 +210,7 @@ public class PenaltyCalculationChart extends ChromatogramChart {
 				unknownListener.setData(retentionTimeUnknown, labelUnknown, "-- %");
 				//
 				double retentionIndexReference = penaltyCalculationModel.getReferenceValue();
-				int retentionTimeReference = getRetentionTime((int)retentionIndexReference);
+				int retentionTimeReference = retentionIndexMap.getRetentionTime((int)retentionIndexReference);
 				if(retentionTimeReference > -1) {
 					/*
 					 * Reference
@@ -247,26 +246,6 @@ public class PenaltyCalculationChart extends ChromatogramChart {
 		seriesAdjusted[index++] = stop;
 		//
 		return seriesAdjusted;
-	}
-
-	private void updateRetentionIndexMap() {
-
-		retentionIndexMap.clear();
-		IChromatogram<?> chromatogram = getChromatogram();
-		if(chromatogram != null) {
-			for(IScan scan : chromatogram.getScans()) {
-				float retentionIndex = scan.getRetentionIndex();
-				if(retentionIndex > 0) {
-					retentionIndexMap.put(Math.round(retentionIndex), scan.getRetentionTime());
-				}
-			}
-		}
-	}
-
-	private int getRetentionTime(int retentionIndex) {
-
-		Entry<Integer, Integer> floorEntry = retentionIndexMap.floorEntry(retentionIndex);
-		return floorEntry != null ? floorEntry.getValue().intValue() : -1;
 	}
 
 	private IChromatogram<?> getChromatogram() {

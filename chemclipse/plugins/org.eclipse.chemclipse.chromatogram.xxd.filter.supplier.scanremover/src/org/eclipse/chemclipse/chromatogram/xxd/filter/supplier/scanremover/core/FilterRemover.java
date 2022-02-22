@@ -19,9 +19,9 @@ import org.eclipse.chemclipse.chromatogram.filter.result.ChromatogramFilterResul
 import org.eclipse.chemclipse.chromatogram.filter.result.ResultStatus;
 import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.exceptions.FilterException;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.model.ScanRemoverPattern;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.settings.FilterSettingsRemover;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.settings.ScanRemoverPattern;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;

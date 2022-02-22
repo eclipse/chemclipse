@@ -9,7 +9,7 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.settings;
+package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.model;
 
 import java.util.ArrayList;
 import java.util.List;

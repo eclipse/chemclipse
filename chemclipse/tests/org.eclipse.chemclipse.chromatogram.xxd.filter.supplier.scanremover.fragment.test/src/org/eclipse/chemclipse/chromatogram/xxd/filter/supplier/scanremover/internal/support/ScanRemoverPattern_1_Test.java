@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,15 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.internal.support;
 
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.model.ScanRemoverPattern;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.preferences.PreferenceSupplier;
+
 import junit.framework.TestCase;
 
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover.settings.ScanRemoverPattern;
-
-/**
- * @author Dr. Philip Wenig
- * 
- */
 public class ScanRemoverPattern_1_Test extends TestCase {
 
 	private ScanRemoverPattern scanRemoverPattern;
