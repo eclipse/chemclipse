@@ -810,7 +810,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 
 	private void addIdentifiedScansData(List<ILineSeriesData> lineSeriesDataList, List<IScan> scans, PlotSymbolType plotSymbolType, int symbolSize, Color symbolColor, String seriesId) {
 
-		if(scans.size() > 0) {
+		if(!scans.isEmpty()) {
 			ILineSeriesData lineSeriesData = null;
 			lineSeriesData = scanChartSupport.getLineSeriesDataPoint(scans, false, seriesId, displayType, chromatogramSelection);
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();

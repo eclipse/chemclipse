@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -751,28 +751,26 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 				if(eventBroker != null) {
 					DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
 					List<Object> objects = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION);
-					if(objects != null && objects.size() > 0) {
+					if(objects != null && !objects.isEmpty()) {
 						Object object = objects.get(0);
 						if(object instanceof IChromatogramSelection) {
 							IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
-							if(chromatogramSelection != null) {
-								if(scan != null) {
-									/*
-									 * We assume that the subtraction takes place in the same
-									 * chromatogram. It could happen, that one scan is selected
-									 * and set to edit modus and afterwards another chromatogram
-									 * is selected. This could lead to misleading behavior.
-									 * But it's unclear how to solve it hear. This is currently
-									 * the best way to prevent unwanted behavior. The scan chart shows
-									 * data from scans and peaks.
-									 */
-									IChromatogram<IPeak> chromatogram = chromatogramSelection.getChromatogram();
-									int retentionTime = scan.getRetentionTime();
-									int scanNumber = chromatogram.getScanNumber(retentionTime);
-									IScan scanReference = chromatogram.getScan(scanNumber);
-									if(scan == scanReference) {
-										chromatogramSelection.setSelectedScan(scan);
-									}
+							if(scan != null) {
+								/*
+								 * We assume that the subtraction takes place in the same
+								 * chromatogram. It could happen, that one scan is selected
+								 * and set to edit modus and afterwards another chromatogram
+								 * is selected. This could lead to misleading behavior.
+								 * But it's unclear how to solve it hear. This is currently
+								 * the best way to prevent unwanted behavior. The scan chart shows
+								 * data from scans and peaks.
+								 */
+								IChromatogram<IPeak> chromatogram = chromatogramSelection.getChromatogram();
+								int retentionTime = scan.getRetentionTime();
+								int scanNumber = chromatogram.getScanNumber(retentionTime);
+								IScan scanReference = chromatogram.getScan(scanNumber);
+								if(scan == scanReference) {
+									chromatogramSelection.setSelectedScan(scan);
 								}
 								/*
 								 * Update the chromatogram
