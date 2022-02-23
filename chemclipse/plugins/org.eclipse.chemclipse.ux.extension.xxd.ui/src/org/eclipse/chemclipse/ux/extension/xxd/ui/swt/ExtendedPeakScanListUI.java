@@ -824,8 +824,9 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			public void update(Display display) {
 
 				if(chromatogramSelection != null) {
-					UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Peaks/Scans have been identified.");
+					chromatogramSelection.getChromatogram().setDirty(true);
 				}
+				UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Peaks/Scans have been identified.");
 			}
 		});
 		//

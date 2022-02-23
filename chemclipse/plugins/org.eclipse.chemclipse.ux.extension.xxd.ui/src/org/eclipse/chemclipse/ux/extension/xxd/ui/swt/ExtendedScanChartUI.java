@@ -772,9 +772,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 								if(scan == scanReference) {
 									chromatogramSelection.setSelectedScan(scan);
 								}
-								/*
-								 * Update the chromatogram
-								 */
+								chromatogramSelection.getChromatogram().setDirty(true);
 								chromatogramSelection.update(false);
 							}
 						}
