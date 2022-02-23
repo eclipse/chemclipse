@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2021 Lablicate GmbH.
+ * Copyright (c) 2014, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,7 +18,7 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.ExtendedMassSpectrumHeaderUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedMassSpectrumHeaderUI;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
