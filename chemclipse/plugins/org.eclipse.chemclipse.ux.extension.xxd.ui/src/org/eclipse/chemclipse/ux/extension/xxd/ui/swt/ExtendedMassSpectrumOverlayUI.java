@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,7 +21,7 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IVendorStandaloneMassSpectrum;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
@@ -249,11 +249,13 @@ public class ExtendedMassSpectrumOverlayUI extends Composite implements IExtende
 				 * Get the data.
 				 */
 				ILineSeriesData lineSeriesData = getLineSeriesData(scanMSD);
-				ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
-				lineSeriesSettings.setLineColor(color);
-				lineSeriesSettings.setEnableArea(false);
-				lineSeriesDataList.add(lineSeriesData);
-				color = colorSchemeNormal.getNextColor();
+				if(lineSeriesData != null) {
+					ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
+					lineSeriesSettings.setLineColor(color);
+					lineSeriesSettings.setEnableArea(false);
+					lineSeriesDataList.add(lineSeriesData);
+					color = colorSchemeNormal.getNextColor();
+				}
 			}
 			chart.addSeriesData(lineSeriesDataList, LineChart.MEDIUM_COMPRESSION);
 		}
@@ -261,12 +263,15 @@ public class ExtendedMassSpectrumOverlayUI extends Composite implements IExtende
 
 	private ILineSeriesData getLineSeriesData(IScanMSD scanMSD) {
 
-		IVendorMassSpectrum massSpectrum = (IVendorMassSpectrum)scanMSD;
-		ILineSeriesData lineSeriesData = new LineSeriesData(getSeriesDataProcessed(scanMSD, massSpectrum.getName()));
-		ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
-		lineSeriesSettings.setLineColor(Colors.RED);
-		lineSeriesSettings.setEnableArea(true);
-		return lineSeriesData;
+		if(scanMSD instanceof IVendorStandaloneMassSpectrum) {
+			IVendorStandaloneMassSpectrum massSpectrum = (IVendorStandaloneMassSpectrum)scanMSD;
+			ILineSeriesData lineSeriesData = new LineSeriesData(getSeriesDataProcessed(scanMSD, massSpectrum.getName()));
+			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
+			lineSeriesSettings.setLineColor(Colors.RED);
+			lineSeriesSettings.setEnableArea(true);
+			return lineSeriesData;
+		}
+		return null;
 	}
 
 	private ISeriesData getSeriesDataProcessed(IScanMSD scanMSD, String id) {

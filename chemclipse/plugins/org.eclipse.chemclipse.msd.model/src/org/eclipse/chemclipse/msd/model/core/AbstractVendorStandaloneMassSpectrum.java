@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
+import java.io.File;
 import java.util.Date;
 
 public abstract class AbstractVendorStandaloneMassSpectrum extends AbstractVendorMassSpectrum implements IVendorStandaloneMassSpectrum {
@@ -21,11 +22,34 @@ public abstract class AbstractVendorStandaloneMassSpectrum extends AbstractVendo
 	 */
 	private static final long serialVersionUID = 7180911179209208597L;
 	//
+	private File file;
 	private String sample;
 	private String description;
 	private String operator;
 	private Date acquisitionDate;
 	private String instrument;
+
+	@Override
+	public File getFile() {
+
+		return file;
+	}
+
+	@Override
+	public void setFile(File file) {
+
+		this.file = file;
+	}
+
+	@Override
+	public String getName() {
+
+		String name = "No file has been set yet.";
+		if(file != null) {
+			name = file.getName();
+		}
+		return name;
+	}
 
 	@Override
 	public String getSampleName() {

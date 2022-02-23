@@ -11,37 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
-import java.io.File;
-
 /**
  * More informations about the class structure of mass spectra are stored in {@link IScanMSD}.
  * 
  * @author Philip Wenig
  */
 public interface IVendorMassSpectrum extends IRegularMassSpectrum {
-
-	/**
-	 * Returns the file, see setFile().
-	 * May return null.
-	 * 
-	 * @return File
-	 */
-	File getFile();
-
-	/**
-	 * Set the file of the mass spectrum, e.g. if it is a MALDI-MS record.
-	 * If it's a GC/MS run, file is not needed cause the chromatogram holds the scans.
-	 * 
-	 * @param file
-	 */
-	void setFile(File file);
-
-	/**
-	 * Returns the name of the mass spectrum, if it's e.g. a MALDI-MS record.
-	 * 
-	 * @return String
-	 */
-	String getName();
 
 	/**
 	 * Returns the maximal possible amount of ion values.<br/>

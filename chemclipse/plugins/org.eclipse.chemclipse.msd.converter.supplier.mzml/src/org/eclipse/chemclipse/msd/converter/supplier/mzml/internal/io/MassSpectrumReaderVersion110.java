@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -38,7 +38,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.Ru
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.SpectrumType;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
-import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IVendorStandaloneMassSpectrum;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -57,7 +57,7 @@ public class MassSpectrumReaderVersion110 extends AbstractMassSpectraReader impl
 	@Override
 	public IMassSpectra read(File file, IProgressMonitor monitor) throws IOException {
 
-		IVendorMassSpectrum massSpectrum = null;
+		IVendorStandaloneMassSpectrum massSpectrum = null;
 		//
 		try {
 			//

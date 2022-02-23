@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,31 +11,23 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.mzdata.model;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
-import org.eclipse.chemclipse.msd.model.core.AbstractVendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.AbstractVendorStandaloneMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
-import org.eclipse.chemclipse.logging.core.Logger;
 
-public class VendorScan extends AbstractVendorMassSpectrum implements IVendorScan {
+public class VendorScan extends AbstractVendorStandaloneMassSpectrum implements IVendorScan {
 
-	/**
-	 * Renew the serialVersionUID any time you have changed some fields or
-	 * methods.
-	 */
-	private static final long serialVersionUID = 5849271695859315388L;
+	private static final long serialVersionUID = -3291852423110935802L;
 	private static final Logger logger = Logger.getLogger(VendorScan.class);
-	/**
-	 * MAX_MASSFRAGMENTS The total amount of ions to be stored in the
-	 * chemclipse chromatogram.<br/>
-	 * It does not mean, that ion 65535 is the upper bound, but only 65535 mass
-	 * fragments can be stored in a mass spectrum.
-	 */
+	//
 	public static final int MAX_MASSFRAGMENTS = 65535;
 	public static final int MIN_RETENTION_TIME = 0;
 	public static final int MAX_RETENTION_TIME = Integer.MAX_VALUE;
 
 	public VendorScan() {
+
 		super();
 	}
 
@@ -57,7 +49,6 @@ public class VendorScan extends AbstractVendorMassSpectrum implements IVendorSca
 		return MAX_RETENTION_TIME;
 	}
 
-	// -------------------------------IMassSpectrumCloneable
 	@Override
 	public IVendorScan makeDeepCopy() throws CloneNotSupportedException {
 
@@ -89,5 +80,4 @@ public class VendorScan extends AbstractVendorMassSpectrum implements IVendorSca
 
 		return makeDeepCopy();
 	}
-	// -------------------------------IMassSpectrumCloneable
 }

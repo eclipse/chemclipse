@@ -12,39 +12,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core;
 
-import java.io.File;
-
 public abstract class AbstractVendorMassSpectrum extends AbstractRegularMassSpectrum implements IVendorMassSpectrum {
 
-	/**
-	 * Renew the serialVersionUID any time you have changed some fields or
-	 * methods.
-	 */
-	private static final long serialVersionUID = 5013842421250687341L;
-	//
-	private File file;
-
-	@Override
-	public File getFile() {
-
-		return file;
-	}
-
-	@Override
-	public void setFile(File file) {
-
-		this.file = file;
-	}
-
-	@Override
-	public String getName() {
-
-		String name = "No file has been set yet.";
-		if(file != null) {
-			name = file.getName();
-		}
-		return name;
-	}
+	private static final long serialVersionUID = -1469774885536119096L;
 
 	@Override
 	public boolean checkIntensityCollisions() {
