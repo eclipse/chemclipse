@@ -409,6 +409,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 				updateScan(scan);
 				UpdateNotifierUI.update(display, scan);
 				UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Scan Chart identification has been performed.");
+				fireUpdateChromatogramSelection(display, scan);
 			}
 		});
 		//
