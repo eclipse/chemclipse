@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2021 Lablicate GmbH.
+ * Copyright (c) 2014, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -46,7 +46,7 @@ public class RetentionIndexCalculator {
 	public static final int ALKANE_MISSING = 0;
 	public static final int INDEX_MISSING = 0;
 	//
-	private static final Pattern PATTERN_ALKANE = Pattern.compile("(C)(\\d+)");
+	private static final Pattern PATTERN_ALKANE = Pattern.compile(ALKANE_REGEX);
 	private static final String DESCRIPTION = "Retention Index Calculator";
 
 	public static String[] getStandards() {
