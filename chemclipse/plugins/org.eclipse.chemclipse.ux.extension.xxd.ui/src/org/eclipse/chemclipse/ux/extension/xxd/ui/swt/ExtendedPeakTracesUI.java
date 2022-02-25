@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -88,6 +88,7 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 		createControl();
 	}
 
+	@Override
 	@Focus
 	public boolean setFocus() {
 
@@ -329,7 +330,7 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 
 	private IChartMenuEntry createMenuDeleteHiddenSeries() {
 
-		IChartMenuEntry menuEntry = new IChartMenuEntry() {
+		return new IChartMenuEntry() {
 
 			@Override
 			public String getName() {
@@ -351,13 +352,11 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 				}
 			}
 		};
-		//
-		return menuEntry;
 	}
 
 	private IChartMenuEntry createMenuDeleteSelectedSeries() {
 
-		IChartMenuEntry menuEntry = new IChartMenuEntry() {
+		return new IChartMenuEntry() {
 
 			@Override
 			public String getName() {
@@ -379,8 +378,6 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 				}
 			}
 		};
-		//
-		return menuEntry;
 	}
 
 	private Set<Integer> getTraces(ScrollableChart scrollableChart, boolean useHidden) {
@@ -488,7 +485,7 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 	private void selectComboSeries(int index) {
 
 		comboViewerTraces.getCombo().select(index);
-		enableDeleteButton(index > 0 ? true : false);
+		enableDeleteButton(index > 0);
 	}
 
 	private boolean peakIsEditable() {
