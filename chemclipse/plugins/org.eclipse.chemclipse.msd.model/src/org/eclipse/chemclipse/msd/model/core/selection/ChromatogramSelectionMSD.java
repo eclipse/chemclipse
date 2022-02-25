@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -155,7 +155,7 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChr
 		 */
 		if(chromatogram instanceof IChromatogramMSD) {
 			List<IChromatogramPeakMSD> peaks = ((IChromatogramMSD)chromatogram).getPeaks();
-			if(peaks != null && peaks.size() >= 1) {
+			if(peaks != null && !peaks.isEmpty()) {
 				setSelectedPeak(peaks.get(0));
 			} else {
 				setSelectedPeak(null);
