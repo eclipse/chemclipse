@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IChromatogramPeak;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -455,6 +456,10 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 					UpdateNotifierUI.update(display, peak);
 				}
 			}
+		}
+		if(peak instanceof IChromatogramPeak) {
+			IChromatogramPeak chromatogramPeak = (IChromatogramPeak)peak;
+			chromatogramPeak.getChromatogram().setDirty(true);
 		}
 	}
 
