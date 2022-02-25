@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -46,6 +46,7 @@ import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTargets;
@@ -120,6 +121,28 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 	@Override
 	public boolean setFocus() {
 
+		DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
+		List<Object> peaks = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION);
+		if(!peaks.isEmpty()) {
+			Object first = peaks.get(0);
+			if(first instanceof IPeak) {
+				update(first);
+			}
+		}
+		List<Object> scans = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION);
+		if(!scans.isEmpty()) {
+			Object first = scans.get(0);
+			if(first instanceof IScan) {
+				update(first);
+			}
+		}
+		List<Object> targets = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION);
+		if(!targets.isEmpty()) {
+			Object first = targets.get(0);
+			if(first instanceof ITarget) {
+				update(first);
+			}
+		}
 		updateTargets(getDisplay());
 		return true;
 	}
