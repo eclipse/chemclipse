@@ -32,6 +32,7 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
@@ -113,6 +114,8 @@ public class ReportWriter2 {
 		printWriter.print("Retention Time [Minutes]");
 		printWriter.print(DELIMITER);
 		printWriter.print("Purity");
+		printWriter.print(DELIMITER);
+		printWriter.print("Ext. Quant. Ref. [Area%]");
 		printWriter.println("");
 		/*
 		 * Data
@@ -157,6 +160,8 @@ public class ReportWriter2 {
 					printWriter.print(decimalFormat.format(retentionTime / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
 					printWriter.print(DELIMITER);
 					printWriter.print(decimalFormat.format(getPurity(peakSource)));
+					printWriter.print(DELIMITER);
+					printWriter.print(decimalFormat.format(getExternalQuantAreaPercent(peakSource)));
 					printWriter.println("");
 				}
 			}
@@ -402,6 +407,17 @@ public class ReportWriter2 {
 		}
 		//
 		return purity;
+	}
+
+	private double getExternalQuantAreaPercent(IPeak peak) {
+
+		double area = 0f;
+		List<IQuantitationEntry> quantitationEntries = peak.getQuantitationEntries();
+		if(!quantitationEntries.isEmpty()) {
+			area = quantitationEntries.get(0).getArea();
+		}
+		//
+		return area;
 	}
 
 	private double getPercentagePeakArea(IChromatogram<?> chromatogram, IPeak peak) {
