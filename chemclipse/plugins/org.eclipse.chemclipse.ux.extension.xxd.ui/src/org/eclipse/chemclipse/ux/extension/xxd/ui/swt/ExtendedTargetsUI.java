@@ -686,6 +686,10 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		if(object instanceof ITargetSupplier) {
 			ITargetSupplier targetSupplier = (ITargetSupplier)object;
 			targetSupplier.getTargets().remove(target);
+			IChromatogram<?> chromatogram = ((IChromatogram<?>)objectCacheChromatogram);
+			if(chromatogram != null) {
+				chromatogram.setDirty(true);
+			}
 		}
 		/*
 		 * Don't do an table update here, cause this method could be called several times in a loop.
@@ -697,6 +701,10 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		if(object instanceof ITargetSupplier) {
 			ITargetSupplier targetSupplier = (ITargetSupplier)object;
 			targetSupplier.getTargets().clear();
+			IChromatogram<?> chromatogram = ((IChromatogram<?>)objectCacheChromatogram);
+			if(chromatogram != null) {
+				chromatogram.setDirty(true);
+			}
 		}
 	}
 
@@ -705,6 +713,10 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		if(object instanceof ITargetSupplier) {
 			ITargetSupplier targetSupplier = (ITargetSupplier)object;
 			targetSupplier.getTargets().add(identificationTarget);
+			IChromatogram<?> chromatogram = ((IChromatogram<?>)objectCacheChromatogram);
+			if(chromatogram != null) {
+				chromatogram.setDirty(true);
+			}
 		}
 		//
 		comboTarget.setText("");
