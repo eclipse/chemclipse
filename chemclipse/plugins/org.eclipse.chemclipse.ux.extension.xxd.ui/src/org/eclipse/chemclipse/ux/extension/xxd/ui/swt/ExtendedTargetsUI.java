@@ -649,14 +649,14 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 
 	private void updateWidgets() {
 
-		boolean enabled = (object == null) ? false : true;
+		boolean enabled = object != null;
 		comboTarget.setEnabled(enabled);
 		buttonAddTarget.setEnabled(enabled);
 		//
 		if(object instanceof ITargetSupplier) {
 			ITargetSupplier targetSupplier = (ITargetSupplier)object;
 			buttonDeleteTarget.setEnabled(tableViewer.get().getTable().getSelectionIndex() >= 0);
-			buttonDeleteTargets.setEnabled(targetSupplier.getTargets().size() > 0);
+			buttonDeleteTargets.setEnabled(!targetSupplier.getTargets().isEmpty());
 		} else {
 			buttonDeleteTarget.setEnabled(false);
 			buttonDeleteTargets.setEnabled(false);
@@ -772,12 +772,12 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		int index = table.getSelectionIndex();
 		if(index >= 0) {
 			TableItem tableItem = table.getItem(index);
-			Object object = tableItem.getData();
-			if(object instanceof IIdentificationTarget) {
+			Object data = tableItem.getData();
+			if(data instanceof IIdentificationTarget) {
 				/*
 				 * First update the mass spectrum.
 				 */
-				IIdentificationTarget identificationTarget = (IIdentificationTarget)object;
+				IIdentificationTarget identificationTarget = (IIdentificationTarget)data;
 				IScanMSD massSpectrum = getMassSpectrum();
 				if(massSpectrum != null) {
 					UpdateNotifierUI.update(display, massSpectrum, identificationTarget);
