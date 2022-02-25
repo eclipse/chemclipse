@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IChromatogramPeak;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -29,9 +30,12 @@ import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePagePeakTraces;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakDataSupport;
@@ -88,9 +92,18 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 		createControl();
 	}
 
+	@Override
 	@Focus
 	public boolean setFocus() {
 
+		DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
+		List<Object> objects = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION);
+		if(!objects.isEmpty()) {
+			Object last = objects.get(0);
+			if(last instanceof IPeak) {
+				peak = (IPeak)last;
+			}
+		}
 		update(peak);
 		return true;
 	}
@@ -329,7 +342,7 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 
 	private IChartMenuEntry createMenuDeleteHiddenSeries() {
 
-		IChartMenuEntry menuEntry = new IChartMenuEntry() {
+		return new IChartMenuEntry() {
 
 			@Override
 			public String getName() {
@@ -351,13 +364,11 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 				}
 			}
 		};
-		//
-		return menuEntry;
 	}
 
 	private IChartMenuEntry createMenuDeleteSelectedSeries() {
 
-		IChartMenuEntry menuEntry = new IChartMenuEntry() {
+		return new IChartMenuEntry() {
 
 			@Override
 			public String getName() {
@@ -379,8 +390,6 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 				}
 			}
 		};
-		//
-		return menuEntry;
 	}
 
 	private Set<Integer> getTraces(ScrollableChart scrollableChart, boolean useHidden) {
@@ -448,6 +457,10 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 				}
 			}
 		}
+		if(peak instanceof IChromatogramPeak) {
+			IChromatogramPeak chromatogramPeak = (IChromatogramPeak)peak;
+			chromatogramPeak.getChromatogram().setDirty(true);
+		}
 	}
 
 	private void applySettings() {
@@ -488,7 +501,7 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 	private void selectComboSeries(int index) {
 
 		comboViewerTraces.getCombo().select(index);
-		enableDeleteButton(index > 0 ? true : false);
+		enableDeleteButton(index > 0);
 	}
 
 	private boolean peakIsEditable() {
