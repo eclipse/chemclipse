@@ -149,10 +149,9 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		if(!objects.isEmpty()) {
 			Object first = objects.get(0);
 			if(first instanceof IChromatogramSelection) {
-				chromatogramSelection = (IChromatogramSelection)first;
+				updateChromatogramSelection((IChromatogramSelection)first);
 			}
 		}
-		updateChromatogramSelection();
 		return true;
 	}
 
@@ -825,8 +824,8 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 
 				if(chromatogramSelection != null) {
 					chromatogramSelection.getChromatogram().setDirty(true);
+					UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Peaks/Scans have been identified.");
 				}
-				UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Peaks/Scans have been identified.");
 			}
 		});
 		//
