@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -41,6 +41,9 @@ public class RetentionIndexExtractor {
 				ILibraryInformation libraryInformation = identificationTarget.getLibraryInformation();
 				String name = libraryInformation.getName().trim();
 				int retentionIndex = RetentionIndexCalculator.getRetentionIndex(name);
+				if(retentionIndex == RetentionIndexCalculator.INDEX_MISSING) {
+					retentionIndex = RetentionIndexCalculator.getRetentionIndex(libraryInformation);
+				}
 				if(retentionIndex > RetentionIndexCalculator.INDEX_MISSING) {
 					int retentionTime = peak.getPeakModel().getRetentionTimeAtPeakMaximum();
 					IRetentionIndexEntry retentionIndexEntry = new RetentionIndexEntry(retentionTime, retentionIndex, name);

@@ -102,9 +102,11 @@ public class AlkanePatternDetectorMSD {
 			 * Peak identifier
 			 * The settings are not needed by the CALRI peak identifier.
 			 */
-			PeakIdentifier peakIdentifier = new PeakIdentifier();
-			IPeakIdentifierSettingsMSD peakIdentifierSettings = null;
-			peakIdentifier.identify(peaks, peakIdentifierSettings, monitor);
+			if(peaks.stream().allMatch(p -> p.getTargets().isEmpty())) {
+				PeakIdentifier peakIdentifier = new PeakIdentifier();
+				IPeakIdentifierSettingsMSD peakIdentifierSettings = null;
+				peakIdentifier.identify(peaks, peakIdentifierSettings, monitor);
+			}
 			chromatogramSelectionMSD.getChromatogram().setDirty(true);
 		} catch(Exception e) {
 			logger.error(e.getLocalizedMessage(), e);

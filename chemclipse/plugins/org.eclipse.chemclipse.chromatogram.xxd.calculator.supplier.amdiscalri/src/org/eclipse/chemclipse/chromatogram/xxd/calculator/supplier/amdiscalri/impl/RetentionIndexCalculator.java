@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2021 Lablicate GmbH.
+ * Copyright (c) 2014, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,12 +9,14 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Alexander Kerner - Generics
+ * Matthias Mailänder - match alkanes by CAS or IUPAC name
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -31,6 +33,7 @@ import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -46,7 +49,7 @@ public class RetentionIndexCalculator {
 	public static final int ALKANE_MISSING = 0;
 	public static final int INDEX_MISSING = 0;
 	//
-	private static final Pattern PATTERN_ALKANE = Pattern.compile("(C)(\\d+)");
+	private static final Pattern PATTERN_ALKANE = Pattern.compile(ALKANE_REGEX);
 	private static final String DESCRIPTION = "Retention Index Calculator";
 
 	public static String[] getStandards() {
@@ -143,24 +146,85 @@ public class RetentionIndexCalculator {
 		return standards.toArray(new String[standards.size()]);
 	}
 
-	public static int getRetentionIndex(String name) {
+	public static LinkedHashMap<String, String> getAlkanesByCAS() {
 
-		return getAlkaneNumber(name) * 100;
+		LinkedHashMap<String, String> alkanesByCAS = new LinkedHashMap<>();
+		alkanesByCAS.put("74-82-8", "Methane");
+		alkanesByCAS.put("74-84-0", "Ethane");
+		alkanesByCAS.put("74-98-6", "Propane");
+		alkanesByCAS.put("106-97-8", "Butane");
+		alkanesByCAS.put("109-66-0", "Pentane");
+		alkanesByCAS.put("110-54-3", "Hexane");
+		alkanesByCAS.put("142-82-5", "Heptane");
+		alkanesByCAS.put("111-65-9", "Octane");
+		alkanesByCAS.put("111-84-2", "Nonane");
+		alkanesByCAS.put("124-18-5", "Decane");
+		alkanesByCAS.put("1120-21-4", "Undecane");
+		alkanesByCAS.put("112-40-3", "Dodecane");
+		alkanesByCAS.put("629-50-5", "Tridecane");
+		alkanesByCAS.put("629-59-4", "Tetradecane");
+		alkanesByCAS.put("629-62-9", "Pentadecane");
+		alkanesByCAS.put("544-76-3", "Hexadecane/Cetane");
+		alkanesByCAS.put("629-78-7", "Heptadecane");
+		alkanesByCAS.put("593-45-3", "Octadecane");
+		alkanesByCAS.put("629-92-5", "Nonadecane");
+		alkanesByCAS.put("112-95-8", "Icosane/Eicosane");
+		alkanesByCAS.put("629-94-7", "Heneicosane");
+		alkanesByCAS.put("629-97-0", "Docosane");
+		alkanesByCAS.put("638-67-5", "Tricosane");
+		alkanesByCAS.put("646-31-1", "Tetracosane");
+		alkanesByCAS.put("629-99-2", "Pentacosane");
+		alkanesByCAS.put("630-01-3", "Hexacosane");
+		alkanesByCAS.put("593-49-7", "Heptacosane");
+		alkanesByCAS.put("630-02-4", "Octacosane");
+		alkanesByCAS.put("630-03-5", "Nonacosane");
+		alkanesByCAS.put("638-68-6", "Triacontane");
+		alkanesByCAS.put("630-04-6", "Hentriacontane/Untriacontane");
+		alkanesByCAS.put("544-85-4", "Dotriacontane");
+		return alkanesByCAS;
 	}
 
-	public static int getAlkaneNumber(String name) {
+	public static int getRetentionIndex(String carbons) {
+
+		return getAlkaneNumber(carbons) * 100;
+	}
+
+	public static int getAlkaneNumber(String carbons) {
 
 		int alkaneNumber = ALKANE_MISSING;
-		Matcher matcher = PATTERN_ALKANE.matcher(name);
-		if(matcher.find()) {
+		Matcher carbonMatcher = PATTERN_ALKANE.matcher(carbons);
+		if(carbonMatcher.find()) {
 			try {
 				/*
 				 * C8 (Octane) => 8
 				 */
-				alkaneNumber = Integer.parseInt(matcher.group(2));
+				alkaneNumber = Integer.parseInt(carbonMatcher.group(2));
 			} catch(NumberFormatException e) {
 				logger.warn(e);
 			}
+		}
+		return alkaneNumber;
+	}
+
+	public static int getRetentionIndex(ILibraryInformation libraryInformation) {
+
+		return getAlkaneNumber(libraryInformation) * 100;
+	}
+
+	public static int getAlkaneNumber(ILibraryInformation libraryInformation) {
+
+		int alkaneNumber = ALKANE_MISSING;
+		LinkedHashMap<String, String> alkanesByCAS = getAlkanesByCAS();
+		String cas = libraryInformation.getCasNumber().trim();
+		String name = libraryInformation.getName().trim();
+		if(getAlkanesByCAS().containsKey(cas)) {
+			// 111-65-9 => 8
+			ArrayList<String> casNumbers = new ArrayList<>(alkanesByCAS.keySet());
+			alkaneNumber = casNumbers.indexOf(cas) + 1;
+		} else if(getAlkanesByCAS().containsValue(name)) {
+			// Octane => 8
+			ArrayList<String> iupacNames = new ArrayList<>(alkanesByCAS.values());
+			alkaneNumber = iupacNames.stream().filter(v -> v.contains(name)).map(iupacNames::indexOf).findFirst().orElse(-1) + 1;
 		}
 		//
 		return alkaneNumber;
