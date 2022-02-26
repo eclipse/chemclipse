@@ -28,7 +28,7 @@ import org.eclipse.swt.widgets.Composite;
 public class MassSpectrumIonsListUI extends ExtendedTableViewer {
 
 	private String[] titles = {"m/z", "abundance", "parent m/z", "parent resolution", "daughter m/z", "daughter resolution", "collision energy"};
-	private int[] bounds = {100, 100, 120, 120, 120, 120, 120};
+	private int[] bounds = {120, 120, 120, 120, 120, 120, 120};
 
 	public MassSpectrumIonsListUI(Composite parent) {
 
@@ -48,6 +48,18 @@ public class MassSpectrumIonsListUI extends ExtendedTableViewer {
 			boolean massiveData = isMassiveData(massSpectrum);
 			super.setInput(null); // Can only enable the hash look up before input has been set
 			setContentProviders(massiveData);
+			if(!massSpectrum.isTandemMS()) {
+				List<TableViewerColumn> columns = getTableViewerColumns().stream().skip(2).collect(Collectors.toList());
+				for(TableViewerColumn column : columns) {
+					column.getColumn().setWidth(0);
+				}
+			} else {
+				List<TableViewerColumn> columns = getTableViewerColumns();
+				int i = 0;
+				for(TableViewerColumn column : columns) {
+					column.getColumn().setWidth(bounds[i]);
+				}
+			}
 			List<IIon> ions = ConverterMSD.getFilteredIons(massSpectrum);
 			super.setInput(ions);
 			setItemCount(ions.size());
