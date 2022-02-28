@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -46,6 +46,7 @@ import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTargets;
@@ -120,6 +121,28 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 	@Override
 	public boolean setFocus() {
 
+		DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
+		List<Object> peaks = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION);
+		if(!peaks.isEmpty()) {
+			Object first = peaks.get(0);
+			if(first instanceof IPeak) {
+				update(first);
+			}
+		}
+		List<Object> scans = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION);
+		if(!scans.isEmpty()) {
+			Object first = scans.get(0);
+			if(first instanceof IScan) {
+				update(first);
+			}
+		}
+		List<Object> targets = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION);
+		if(!targets.isEmpty()) {
+			Object first = targets.get(0);
+			if(first instanceof ITarget) {
+				update(first);
+			}
+		}
 		updateTargets(getDisplay());
 		return true;
 	}
@@ -626,14 +649,14 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 
 	private void updateWidgets() {
 
-		boolean enabled = (object == null) ? false : true;
+		boolean enabled = object != null;
 		comboTarget.setEnabled(enabled);
 		buttonAddTarget.setEnabled(enabled);
 		//
 		if(object instanceof ITargetSupplier) {
 			ITargetSupplier targetSupplier = (ITargetSupplier)object;
 			buttonDeleteTarget.setEnabled(tableViewer.get().getTable().getSelectionIndex() >= 0);
-			buttonDeleteTargets.setEnabled(targetSupplier.getTargets().size() > 0);
+			buttonDeleteTargets.setEnabled(!targetSupplier.getTargets().isEmpty());
 		} else {
 			buttonDeleteTarget.setEnabled(false);
 			buttonDeleteTargets.setEnabled(false);
@@ -663,6 +686,10 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		if(object instanceof ITargetSupplier) {
 			ITargetSupplier targetSupplier = (ITargetSupplier)object;
 			targetSupplier.getTargets().remove(target);
+			IChromatogram<?> chromatogram = ((IChromatogram<?>)objectCacheChromatogram);
+			if(chromatogram != null) {
+				chromatogram.setDirty(true);
+			}
 		}
 		/*
 		 * Don't do an table update here, cause this method could be called several times in a loop.
@@ -674,6 +701,10 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		if(object instanceof ITargetSupplier) {
 			ITargetSupplier targetSupplier = (ITargetSupplier)object;
 			targetSupplier.getTargets().clear();
+			IChromatogram<?> chromatogram = ((IChromatogram<?>)objectCacheChromatogram);
+			if(chromatogram != null) {
+				chromatogram.setDirty(true);
+			}
 		}
 	}
 
@@ -682,6 +713,10 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		if(object instanceof ITargetSupplier) {
 			ITargetSupplier targetSupplier = (ITargetSupplier)object;
 			targetSupplier.getTargets().add(identificationTarget);
+			IChromatogram<?> chromatogram = ((IChromatogram<?>)objectCacheChromatogram);
+			if(chromatogram != null) {
+				chromatogram.setDirty(true);
+			}
 		}
 		//
 		comboTarget.setText("");
@@ -737,12 +772,12 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		int index = table.getSelectionIndex();
 		if(index >= 0) {
 			TableItem tableItem = table.getItem(index);
-			Object object = tableItem.getData();
-			if(object instanceof IIdentificationTarget) {
+			Object data = tableItem.getData();
+			if(data instanceof IIdentificationTarget) {
 				/*
 				 * First update the mass spectrum.
 				 */
-				IIdentificationTarget identificationTarget = (IIdentificationTarget)object;
+				IIdentificationTarget identificationTarget = (IIdentificationTarget)data;
 				IScanMSD massSpectrum = getMassSpectrum();
 				if(massSpectrum != null) {
 					UpdateNotifierUI.update(display, massSpectrum, identificationTarget);
