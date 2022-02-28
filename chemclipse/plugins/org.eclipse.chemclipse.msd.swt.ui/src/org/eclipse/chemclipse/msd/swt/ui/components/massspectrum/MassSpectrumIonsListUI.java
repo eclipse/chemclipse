@@ -13,6 +13,7 @@
 package org.eclipse.chemclipse.msd.swt.ui.components.massspectrum;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -22,6 +23,7 @@ import org.eclipse.chemclipse.msd.swt.ui.internal.provider.IonListTableComparato
 import org.eclipse.chemclipse.msd.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
@@ -83,13 +85,6 @@ public class MassSpectrumIonsListUI extends ExtendedTableViewer {
 	private void setLabelProvider() {
 
 		setLabelProvider(new IonListLabelProvider());
-		// TODO add a filter to display a subset of m/z values only
-		setEditingSupport();
-	}
-
-	private void setEditingSupport() {
-
-		// TODO implement
 	}
 
 	private void setContentProviders(boolean isMassiveData) {
