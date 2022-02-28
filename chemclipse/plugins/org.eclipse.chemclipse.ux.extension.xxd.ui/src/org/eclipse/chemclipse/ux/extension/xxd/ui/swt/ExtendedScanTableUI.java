@@ -168,16 +168,16 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 		DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
 		List<Object> scans = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION);
 		if(!scans.isEmpty()) {
-			Object first = scans.get(0);
-			if(first instanceof IScan) {
-				object = first;
+			Object last = scans.get(0);
+			if(last instanceof IScan) {
+				object = last;
 			}
 		}
 		List<Object> peaks = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION);
 		if(!peaks.isEmpty()) {
-			Object first = peaks.get(0);
-			if(first instanceof IPeak) {
-				object = first;
+			Object last = peaks.get(0);
+			if(last instanceof IPeak) {
+				object = last;
 			}
 		}
 		updateObject();
