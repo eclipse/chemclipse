@@ -106,6 +106,7 @@ public class ChromatogramFilter extends AbstractChromatogramFilter {
 					public void run() {
 
 						MassSpectrumIdentifier.identify(massSpectra, massSpectrumIdentifierSupplier.getId(), monitor);
+						chromatogram.setDirty(true);
 					}
 				});
 			}

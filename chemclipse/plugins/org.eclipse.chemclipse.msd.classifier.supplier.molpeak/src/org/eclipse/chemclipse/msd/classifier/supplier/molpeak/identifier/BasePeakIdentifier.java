@@ -248,7 +248,7 @@ public class BasePeakIdentifier {
 					/*
 					 * Only add the list if targets have been found.
 					 */
-					if(identifiedMassSpectra.size() > 0) {
+					if(!identifiedMassSpectra.isEmpty()) {
 						massSpectra.addMassSpectra(identifiedMassSpectra);
 					}
 				}
