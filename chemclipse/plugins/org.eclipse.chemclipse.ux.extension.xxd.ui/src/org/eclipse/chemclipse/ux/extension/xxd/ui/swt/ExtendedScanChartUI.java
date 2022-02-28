@@ -41,7 +41,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.IUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.SignalType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.parts.ScanChartPart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract;
@@ -50,6 +49,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.SubtractScanWizard;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.WavelengthSupport;
 import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
@@ -72,7 +72,7 @@ import org.eclipse.swt.widgets.Display;
 
 public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 
-	private static final Logger logger = Logger.getLogger(ScanChartPart.class);
+	private static final Logger logger = Logger.getLogger(ExtendedScanChartUI.class);
 	/*
 	 * The event broker should be set, but it
 	 * could be null if no events shall be fired.
@@ -124,6 +124,29 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 	public void setEventBroker(IEventBroker eventBroker) {
 
 		this.eventBroker = eventBroker;
+	}
+
+	@Override
+	@Focus
+	public boolean setFocus() {
+
+		boolean focus = super.setFocus();
+		DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
+		List<Object> scans = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION);
+		if(!scans.isEmpty()) {
+			Object last = scans.get(0);
+			if(last instanceof IScan) {
+				update((IScan)last);
+			}
+		}
+		List<Object> peaks = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION);
+		if(!peaks.isEmpty()) {
+			Object last = peaks.get(0);
+			if(last instanceof IPeak) {
+				update(((IPeak)last).getPeakModel().getPeakMaximum());
+			}
+		}
+		return focus;
 	}
 
 	public void update(IScan scan) {
