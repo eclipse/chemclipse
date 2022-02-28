@@ -657,7 +657,7 @@ public class ExtendedInternalStandardsUI extends Composite implements IExtendedP
 	private void setLabelInputError(String message) {
 
 		labelInputErrors.setText(message);
-		labelInputErrors.setBackground(Colors.YELLOW);
+		labelInputErrors.setBackground(Colors.getColor(Colors.LIGHT_YELLOW));
 	}
 
 	private boolean validate(IValidator validator, ControlDecoration controlDecoration, Text text) {

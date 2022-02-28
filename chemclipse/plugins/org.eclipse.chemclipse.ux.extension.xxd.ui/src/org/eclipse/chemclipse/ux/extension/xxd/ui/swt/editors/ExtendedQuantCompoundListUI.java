@@ -689,7 +689,7 @@ public class ExtendedQuantCompoundListUI extends Composite implements IExtendedP
 	private void setLabelInputError(String message) {
 
 		labelInputErrors.setText(message);
-		labelInputErrors.setBackground(Colors.YELLOW);
+		labelInputErrors.setBackground(Colors.getColor(Colors.LIGHT_YELLOW));
 	}
 
 	private void updateWidgets() {
