@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -53,11 +53,9 @@ public class MassSpectrumIdentifier {
 				 */
 				for(ISupplier supplier : suppliers) {
 					String supplierExtension = supplier.getFileExtension().toLowerCase();
-					if(supplierExtension != "" && baseFileName.endsWith(supplierExtension)) {
+					if(!supplierExtension.isEmpty() && baseFileName.endsWith(supplierExtension)) {
 						if(supplier.isImportable()) {
 							return true;
-						} else {
-							return false;
 						}
 					}
 				}
@@ -67,11 +65,9 @@ public class MassSpectrumIdentifier {
 				 */
 				for(ISupplier supplier : suppliers) {
 					String supplierFileName = supplier.getFileName().toLowerCase();
-					if(supplierFileName != "" && baseFileName.endsWith(supplierFileName)) {
+					if(!baseFileName.isEmpty() && baseFileName.endsWith(supplierFileName)) {
 						if(supplier.isImportable()) {
 							return true;
-						} else {
-							return false;
 						}
 					}
 				}
@@ -102,11 +98,9 @@ public class MassSpectrumIdentifier {
 		} else {
 			for(ISupplier supplier : suppliers) {
 				directoryExtension = supplier.getDirectoryExtension().toUpperCase();
-				if(directoryExtension != "" && directory.endsWith(directoryExtension)) {
+				if(!directoryExtension.isEmpty() && directory.endsWith(directoryExtension)) {
 					if(supplier.isImportable()) {
 						return true;
-					} else {
-						return false;
 					}
 				}
 			}

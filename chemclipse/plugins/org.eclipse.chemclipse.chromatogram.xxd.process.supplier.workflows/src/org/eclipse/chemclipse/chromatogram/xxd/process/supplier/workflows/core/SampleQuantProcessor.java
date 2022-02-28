@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,7 +13,9 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.core;
 
 import java.io.File;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +32,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.prefer
 import org.eclipse.chemclipse.converter.model.IReportRowModel;
 import org.eclipse.chemclipse.converter.report.ReportConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -137,7 +139,7 @@ public class SampleQuantProcessor {
 			//
 			Map<Integer, List<String>> areaPercentRowMap = new HashMap<>();
 			for(List<String> row : reportRowModelAreaPercent) {
-				int retentionTime = (int)(getValueDouble(row.get(INDEX_RTRERES_RT).trim()) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+				int retentionTime = (int)(getValueDouble(row.get(INDEX_RTRERES_RT).trim()) * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 				areaPercentRowMap.put(retentionTime, row);
 			}
 			//
@@ -156,7 +158,7 @@ public class SampleQuantProcessor {
 				String misc = row.get(INDEX_SUMRPT_MISC).trim();
 				String retentionTimeInMinutes = row.get(INDEX_SUMRPT_RT);
 				//
-				int retentionTime = (int)(getValueDouble(retentionTimeInMinutes) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+				int retentionTime = (int)(getValueDouble(retentionTimeInMinutes) * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 				List<String> rowAreaPercent = getRowByCompound(areaPercentRowMap, retentionTime, 1000);
 				//
 				ISampleQuantSubstance sampleQuantSubstance = new SampleQuantSubstance();
@@ -181,7 +183,9 @@ public class SampleQuantProcessor {
 				//
 				sampleQuantSubstances.add(sampleQuantSubstance);
 			}
-		} catch(Exception e) {
+		} catch(NullPointerException e) {
+			logger.warn(e);
+		} catch(InvalidParameterException e) {
 			logger.warn(e);
 		}
 		return sampleQuantSubstances;
@@ -192,20 +196,20 @@ public class SampleQuantProcessor {
 		return reportCompoundCasMap.get(name) != null ? reportCompoundCasMap.get(name) : "";
 	}
 
-	private int getMaxScan(List<String> rowAreaPercent, int INDEX_RTRERES_MAX_SCAN) {
+	private int getMaxScan(List<String> rowAreaPercent, int index) {
 
 		if(rowAreaPercent != null) {
-			return getValueInteger(rowAreaPercent.get(INDEX_RTRERES_MAX_SCAN));
+			return getValueInteger(rowAreaPercent.get(index));
 		} else {
 			return 0;
 		}
 	}
 
-	private int getRowIndex(IReportRowModel reportRowModel, String columnName) throws Exception {
+	private int getRowIndex(IReportRowModel reportRowModel, String columnName) throws InvalidParameterException {
 
 		int index = reportRowModel.getColumnIndex(columnName);
 		if(index == -1) {
-			throw new Exception("The column with the given name could't be found: " + columnName);
+			throw new InvalidParameterException("The column with the given name could't be found: " + columnName);
 		}
 		return index;
 	}
@@ -230,7 +234,7 @@ public class SampleQuantProcessor {
 				reportRowModel = (IReportRowModel)object;
 			}
 		} catch(TypeCastException e) {
-			reportRowModel = null;
+			// fail silently
 		}
 		return reportRowModel;
 	}
@@ -264,6 +268,6 @@ public class SampleQuantProcessor {
 				return entry.getValue();
 			}
 		}
-		return null;
+		return Collections.emptyList();
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -29,6 +29,6 @@ public class ChromatogramReportWriter implements IChromatogramReportWriter {
 		JAXBContext jaxbContext = JAXBContext.newInstance(new Class[]{SingleChromatogramReport.class});
 		Marshaller marshaller = jaxbContext.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-		marshaller.marshal((SingleChromatogramReport)chromatogramReport, file);
+		marshaller.marshal(chromatogramReport, file);
 	}
 }
