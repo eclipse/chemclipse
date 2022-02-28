@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -184,7 +184,7 @@ public class ScanIdentifierUI extends Composite {
 
 		setEnabled(false);
 		//
-		if(scans.size() > 0) {
+		if(!scans.isEmpty()) {
 			/*
 			 * Get the first scan to determine whether to use MSD or WSD.
 			 */
@@ -232,7 +232,7 @@ public class ScanIdentifierUI extends Composite {
 		 * Get a default identifier.
 		 */
 		if(massSpectrumIdentifierSupplier == null) {
-			if(identifierSuppliers.size() > 0) {
+			if(!identifierSuppliers.isEmpty()) {
 				massSpectrumIdentifierSupplier = identifierSuppliers.get(0);
 			}
 		}
@@ -263,7 +263,7 @@ public class ScanIdentifierUI extends Composite {
 		 * Get a default identifier.
 		 */
 		if(waveSpectrumIdentifierSupplier == null) {
-			if(identifierSuppliers.size() > 0) {
+			if(!identifierSuppliers.isEmpty()) {
 				waveSpectrumIdentifierSupplier = identifierSuppliers.get(0);
 			}
 		}
@@ -380,7 +380,7 @@ public class ScanIdentifierUI extends Composite {
 	 */
 	private void runIdentification(Display display, List<IScanMSD> massSpectra, List<IScanWSD> waveSpectra, boolean update) {
 
-		if(massSpectra.size() > 0) {
+		if(!massSpectra.isEmpty()) {
 			if(massSpectrumIdentifierSupplier != null) {
 				IRunnableWithProgress runnable = new MassSpectrumIdentifierRunnable(massSpectra, massSpectrumIdentifierSupplier.getId());
 				ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
@@ -389,15 +389,15 @@ public class ScanIdentifierUI extends Composite {
 					if(update) {
 						fireUpdate(display);
 					}
-				} catch(InvocationTargetException e1) {
-					logger.warn(e1);
-				} catch(InterruptedException e1) {
-					logger.warn(e1);
+				} catch(InvocationTargetException e) {
+					logger.warn(e);
+				} catch(InterruptedException e) {
+					logger.warn(e);
 				}
 			}
 		}
 		//
-		if(waveSpectra.size() > 0) {
+		if(!waveSpectra.isEmpty()) {
 			if(waveSpectrumIdentifierSupplier != null) {
 				IRunnableWithProgress runnable = new WaveSpectrumIdentifierRunnable(waveSpectra, waveSpectrumIdentifierSupplier.getId());
 				ProgressMonitorDialog monitor = new ProgressMonitorDialog(display.getActiveShell());
@@ -406,10 +406,10 @@ public class ScanIdentifierUI extends Composite {
 					if(update) {
 						fireUpdate(display);
 					}
-				} catch(InvocationTargetException e1) {
-					logger.warn(e1);
-				} catch(InterruptedException e1) {
-					logger.warn(e1);
+				} catch(InvocationTargetException e) {
+					logger.warn(e);
+				} catch(InterruptedException e) {
+					logger.warn(e);
 				}
 			}
 		}

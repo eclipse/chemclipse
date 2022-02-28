@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,12 +28,12 @@ public class ExtendedMassSpectrumIonsListUI extends Composite {
 
 	public void update(IScanMSD scanMSD) {
 
-		massSpectrumIonsListUI.update(scanMSD, true);
+		massSpectrumIonsListUI.update(scanMSD);
 	}
 
 	private void createControl() {
 
 		setLayout(new FillLayout());
-		massSpectrumIonsListUI = new MassSpectrumIonsListUI(this, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		massSpectrumIonsListUI = new MassSpectrumIonsListUI(this, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION | SWT.VIRTUAL);
 	}
 }
