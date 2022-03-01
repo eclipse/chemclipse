@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -37,6 +37,15 @@ public class ScanChartPart extends AbstractPart<ExtendedScanChartUI> {
 	protected ExtendedScanChartUI createControl(Composite parent) {
 
 		return new ExtendedScanChartUI(parent, SWT.NONE);
+	}
+
+	@Override
+	public void setFocus() {
+
+		ExtendedScanChartUI control = getControl();
+		if(control != null) {
+			getControl().setFocus();
+		}
 	}
 
 	@Override
