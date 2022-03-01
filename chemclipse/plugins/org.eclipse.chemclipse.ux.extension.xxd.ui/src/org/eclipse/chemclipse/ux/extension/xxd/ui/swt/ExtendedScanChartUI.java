@@ -131,6 +131,9 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 	public boolean setFocus() {
 
 		boolean focus = super.setFocus();
+		if(editModus || subtractModus) {
+			return focus;
+		}
 		DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
 		List<Object> scans = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION);
 		if(!scans.isEmpty()) {
