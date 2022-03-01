@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.core.ITargetSupplier;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.targets.ITarget;
 import org.eclipse.chemclipse.model.updates.ITargetUpdateListener;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
@@ -118,30 +119,38 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		createControl();
 	}
 
+	private String getLastTopic(List<String> topics) {
+
+		Collections.reverse(topics);
+		for(String topic : topics) {
+			if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION)) {
+				return topic;
+			}
+			if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION)) {
+				return topic;
+			}
+			if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION)) {
+				return topic;
+			}
+			if(topic.equals(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION)) {
+				return topic;
+			}
+		}
+		return "";
+	}
+
 	@Override
 	public boolean setFocus() {
 
 		DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
-		List<Object> peaks = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION);
-		if(!peaks.isEmpty()) {
-			Object last = peaks.get(0);
-			if(last instanceof IPeak) {
-				update(last);
+		List<Object> objects = dataUpdateSupport.getUpdates(getLastTopic(dataUpdateSupport.getTopics()));
+		if(!objects.isEmpty()) {
+			Object last = objects.get(0);
+			if(last instanceof IChromatogramSelection) {
+				IChromatogramSelection<?, ?> chromatogramSelection = (IChromatogramSelection<?, ?>)last;
+				last = chromatogramSelection.getChromatogram();
 			}
-		}
-		List<Object> scans = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION);
-		if(!scans.isEmpty()) {
-			Object last = scans.get(0);
-			if(last instanceof IScan) {
-				update(last);
-			}
-		}
-		List<Object> targets = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION);
-		if(!targets.isEmpty()) {
-			Object last = targets.get(0);
-			if(last instanceof ITarget) {
-				update(last);
-			}
+			update(last);
 		}
 		updateTargets(getDisplay());
 		return true;
