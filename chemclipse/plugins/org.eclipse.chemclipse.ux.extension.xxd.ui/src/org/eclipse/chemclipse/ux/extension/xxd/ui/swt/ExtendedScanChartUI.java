@@ -13,6 +13,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -126,6 +127,20 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		this.eventBroker = eventBroker;
 	}
 
+	private String getLastTopic(List<String> topics) {
+
+		Collections.reverse(topics);
+		for(String topic : topics) {
+			if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION)) {
+				return topic;
+			}
+			if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION)) {
+				return topic;
+			}
+		}
+		return "";
+	}
+
 	@Override
 	@Focus
 	public boolean setFocus() {
@@ -135,17 +150,12 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 			return focus;
 		}
 		DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
-		List<Object> scans = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION);
-		if(!scans.isEmpty()) {
-			Object last = scans.get(0);
+		List<Object> objects = dataUpdateSupport.getUpdates(getLastTopic(dataUpdateSupport.getTopics()));
+		if(!objects.isEmpty()) {
+			Object last = objects.get(0);
 			if(last instanceof IScan) {
 				update((IScan)last);
-			}
-		}
-		List<Object> peaks = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION);
-		if(!peaks.isEmpty()) {
-			Object last = peaks.get(0);
-			if(last instanceof IPeak) {
+			} else if(last instanceof IPeak) {
 				update(((IPeak)last).getPeakModel().getPeakMaximum());
 			}
 		}
