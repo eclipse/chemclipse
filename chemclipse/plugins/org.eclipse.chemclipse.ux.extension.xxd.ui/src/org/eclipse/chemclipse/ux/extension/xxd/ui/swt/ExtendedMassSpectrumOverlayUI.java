@@ -301,7 +301,7 @@ public class ExtendedMassSpectrumOverlayUI extends Composite implements IExtende
 
 		if(chartControl.get().getBaseChart().isDataShifted()) {
 			labelStatus.setText("The displayed data is shifted.");
-			labelStatus.setBackground(Colors.YELLOW);
+			labelStatus.setBackground(Colors.getColor(Colors.LIGHT_YELLOW));
 		} else {
 			labelStatus.setText("");
 			labelStatus.setBackground(null);

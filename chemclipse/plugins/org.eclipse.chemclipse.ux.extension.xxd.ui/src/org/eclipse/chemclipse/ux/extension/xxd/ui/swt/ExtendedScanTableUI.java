@@ -423,7 +423,7 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 		if("".equals(message)) {
 			label.setBackground(backgroundDefault);
 		} else {
-			label.setBackground(Colors.YELLOW);
+			label.setBackground(Colors.getColor(Colors.LIGHT_YELLOW));
 		}
 	}
 

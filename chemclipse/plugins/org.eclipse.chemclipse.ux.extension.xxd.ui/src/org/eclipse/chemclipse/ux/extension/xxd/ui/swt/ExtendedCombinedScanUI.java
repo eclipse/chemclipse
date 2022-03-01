@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -303,7 +303,7 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 		if("".equals(message)) {
 			label.setBackground(getBackground());
 		} else {
-			label.setBackground(Colors.YELLOW);
+			label.setBackground(Colors.getColor(Colors.LIGHT_YELLOW));
 		}
 	}
 
