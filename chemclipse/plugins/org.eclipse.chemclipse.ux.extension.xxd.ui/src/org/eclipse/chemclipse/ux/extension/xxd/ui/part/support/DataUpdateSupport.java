@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -39,6 +39,7 @@ public class DataUpdateSupport {
 	private Map<String, List<Object>> objectMap = new HashMap<>();
 	//
 	private List<IDataUpdateListener> updateListeners = new ArrayList<>();
+	private List<String> topicList = new ArrayList<>();
 
 	public DataUpdateSupport(IEventBroker eventBroker) throws IllegalArgumentException {
 
@@ -81,9 +82,15 @@ public class DataUpdateSupport {
 		return objectMap.getOrDefault(topic, Collections.emptyList());
 	}
 
+	public List<String> getTopics() {
+
+		return topicList;
+	}
+
 	public void clearObjects() {
 
 		objectMap.clear();
+		topicList.clear();
 	}
 
 	public void subscribe(String topic, String property) {
@@ -128,6 +135,7 @@ public class DataUpdateSupport {
 		handlerMap.clear();
 		propertiesMap.clear();
 		objectMap.clear();
+		topicList.clear();
 		//
 		logger.info("Subscriptions have been completely removed.");
 	}
@@ -185,8 +193,9 @@ public class DataUpdateSupport {
 		 * Create a new topic entry on demand.
 		 */
 		String topic = event.getTopic();
+		topicList.add(topic);
 		if(!objectMap.containsKey(topic)) {
-			objectMap.put(topic, new ArrayList<Object>());
+			objectMap.put(topic, new ArrayList<>());
 		}
 		//
 		List<Object> objects = objectMap.get(topic);
