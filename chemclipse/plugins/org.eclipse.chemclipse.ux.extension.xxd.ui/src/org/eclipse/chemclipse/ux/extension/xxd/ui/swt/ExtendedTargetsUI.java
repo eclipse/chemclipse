@@ -124,23 +124,23 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
 		List<Object> peaks = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION);
 		if(!peaks.isEmpty()) {
-			Object first = peaks.get(0);
-			if(first instanceof IPeak) {
-				update(first);
+			Object last = peaks.get(0);
+			if(last instanceof IPeak) {
+				update(last);
 			}
 		}
 		List<Object> scans = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION);
 		if(!scans.isEmpty()) {
-			Object first = scans.get(0);
-			if(first instanceof IScan) {
-				update(first);
+			Object last = scans.get(0);
+			if(last instanceof IScan) {
+				update(last);
 			}
 		}
 		List<Object> targets = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION);
 		if(!targets.isEmpty()) {
-			Object first = targets.get(0);
-			if(first instanceof ITarget) {
-				update(first);
+			Object last = targets.get(0);
+			if(last instanceof ITarget) {
+				update(last);
 			}
 		}
 		updateTargets(getDisplay());

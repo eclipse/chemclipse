@@ -147,9 +147,9 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
 		List<Object> objects = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION);
 		if(!objects.isEmpty()) {
-			Object first = objects.get(0);
-			if(first instanceof IChromatogramSelection) {
-				updateChromatogramSelection((IChromatogramSelection)first);
+			Object last = objects.get(0);
+			if(last instanceof IChromatogramSelection) {
+				updateChromatogramSelection((IChromatogramSelection)last);
 			}
 		}
 		return true;
