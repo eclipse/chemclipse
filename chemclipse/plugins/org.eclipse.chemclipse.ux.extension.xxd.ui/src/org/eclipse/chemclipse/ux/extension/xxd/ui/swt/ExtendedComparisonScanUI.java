@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,6 +13,8 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
@@ -21,9 +23,12 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.model.core.IIon;
+import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
+import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
@@ -32,10 +37,12 @@ import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.runnables.LibraryServiceRunnable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
@@ -102,9 +109,47 @@ public class ExtendedComparisonScanUI extends Composite implements IExtendedPart
 		createControl();
 	}
 
+	@Override
 	@Focus
 	public boolean setFocus() {
 
+		DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
+		String topic = getLastTopic(dataUpdateSupport.getTopics());
+		List<Object> objects = dataUpdateSupport.getUpdates(topic);
+		if(!objects.isEmpty()) {
+			Object last = objects.get(0);
+			if(last instanceof IScanMSD) {
+				IScanMSD scan = (IScanMSD)last;
+				float retentionIndex = scan.getRetentionIndex();
+				IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
+				IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(scan.getTargets(), identificationTargetComparator);
+				update(scan, identificationTarget);
+			} else if(last instanceof IPeakMSD) {
+				IPeakMSD peakMSD = (IPeakMSD)last;
+				IPeakMassSpectrum scan = peakMSD.getExtractedMassSpectrum();
+				float retentionIndex = scan.getRetentionIndex();
+				IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
+				IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peakMSD.getTargets(), identificationTargetComparator);
+				update(scan, identificationTarget);
+			} else if(last instanceof Object[]) {
+				Object[] values = (Object[])last;
+				Object first = values[0];
+				Object second = values[1];
+				if(IChemClipseEvents.TOPIC_SCAN_TARGET_UPDATE_COMPARISON.equals(topic)) {
+					if(first instanceof IScanMSD && second instanceof IIdentificationTarget) {
+						IScanMSD unknownMassSpectrum = (IScanMSD)first;
+						IIdentificationTarget identificationTarget = (IIdentificationTarget)second;
+						update(unknownMassSpectrum, identificationTarget);
+					}
+				} else if(IChemClipseEvents.TOPIC_SCAN_REFERENCE_UPDATE_COMPARISON.equals(topic)) {
+					if(first instanceof IScanMSD && second instanceof IScanMSD) {
+						IScanMSD unknownMassSpectrum = (IScanMSD)first;
+						IScanMSD referenceMassSpectrum = (IScanMSD)second;
+						update(unknownMassSpectrum, referenceMassSpectrum);
+					}
+				}
+			}
+		}
 		Display.getDefault().asyncExec(this::updateChart);
 		return true;
 	}
@@ -627,5 +672,25 @@ public class ExtendedComparisonScanUI extends Composite implements IExtendedPart
 	private void applySettings() {
 
 		updateChart();
+	}
+
+	private String getLastTopic(List<String> topics) {
+
+		Collections.reverse(topics);
+		for(String topic : topics) {
+			if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION)) {
+				return topic;
+			}
+			if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION)) {
+				return topic;
+			}
+			if(topic.equals(IChemClipseEvents.TOPIC_SCAN_TARGET_UPDATE_COMPARISON)) {
+				return topic;
+			}
+			if(topic.equals(IChemClipseEvents.TOPIC_SCAN_REFERENCE_UPDATE_COMPARISON)) {
+				return topic;
+			}
+		}
+		return "";
 	}
 }
