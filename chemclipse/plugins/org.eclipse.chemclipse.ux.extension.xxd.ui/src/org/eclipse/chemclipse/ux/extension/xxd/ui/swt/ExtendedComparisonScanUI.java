@@ -37,6 +37,7 @@ import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
@@ -266,6 +267,7 @@ public class ExtendedComparisonScanUI extends Composite implements IExtendedPart
 			try {
 				return scan.makeDeepCopy().normalize(NORMALIZATION_FACTOR);
 			} catch(CloneNotSupportedException e) {
+				// fail silently
 			}
 		}
 		return null;
@@ -286,15 +288,15 @@ public class ExtendedComparisonScanUI extends Composite implements IExtendedPart
 
 	private void updateScanComparisonNormal(boolean mirrored, boolean shifted) {
 
-		IScanMSD scan_1 = (scan1Optimized != null) ? scan1Optimized : scan1;
-		IScanMSD scan_2 = (scan2Optimized != null) ? scan2Optimized : scan2;
+		IScanMSD firstScan = (scan1Optimized != null) ? scan1Optimized : scan1;
+		IScanMSD secondScan = (scan2Optimized != null) ? scan2Optimized : scan2;
 		//
-		toolbarInfoTop.get().setText(scanDataSupport.getMassSpectrumLabel(scan_1, PREFIX_U, TITLE_UNKNOWN, POSTFIX_NONE));
-		toolbarInfoBottom.get().setText(scanDataSupport.getMassSpectrumLabel(scan_2, PREFIX_R, TITLE_REFERENCE, shifted ? POSTFIX_SHIFTED : POSTFIX_NONE));
+		toolbarInfoTop.get().setText(scanDataSupport.getMassSpectrumLabel(firstScan, PREFIX_U, TITLE_UNKNOWN, POSTFIX_NONE));
+		toolbarInfoBottom.get().setText(scanDataSupport.getMassSpectrumLabel(secondScan, PREFIX_R, TITLE_REFERENCE, shifted ? POSTFIX_SHIFTED : POSTFIX_NONE));
 		//
 		if(shifted) {
 			IScanMSD scan2Shifted = new ScanMSD();
-			IExtractedIonSignal extractedIonSignalScan2 = scan_2.getExtractedIonSignal();
+			IExtractedIonSignal extractedIonSignalScan2 = secondScan.getExtractedIonSignal();
 			int startIon = extractedIonSignalScan2.getStartIon();
 			int stopIon = extractedIonSignalScan2.getStopIon();
 			for(int ion = startIon; ion <= stopIon; ion++) {
@@ -303,22 +305,22 @@ public class ExtendedComparisonScanUI extends Composite implements IExtendedPart
 					scan2Shifted.addIon(getIon(ion + 1, abundance));
 				}
 			}
-			scanChartUI.setInput(scan_1, scan2Shifted, mirrored);
+			scanChartUI.setInput(firstScan, scan2Shifted, mirrored);
 		} else {
-			scanChartUI.setInput(scan_1, scan_2, mirrored);
+			scanChartUI.setInput(firstScan, secondScan, mirrored);
 		}
 	}
 
 	private void updateScanComparisonDifference(boolean mirrored, boolean shifted) {
 
-		IScanMSD scan_1 = (scan1Optimized != null) ? scan1Optimized : scan1;
-		IScanMSD scan_2 = (scan2Optimized != null) ? scan2Optimized : scan2;
+		IScanMSD firstScan = (scan1Optimized != null) ? scan1Optimized : scan1;
+		IScanMSD secondScan = (scan2Optimized != null) ? scan2Optimized : scan2;
 		//
-		toolbarInfoTop.get().setText(scanDataSupport.getMassSpectrumLabel(scan_1, PREFIX_UR, TITLE_UNKNOWN, POSTFIX_NONE));
-		toolbarInfoBottom.get().setText(scanDataSupport.getMassSpectrumLabel(scan_2, PREFIX_UR, TITLE_REFERENCE, shifted ? POSTFIX_SHIFTED : POSTFIX_NONE));
+		toolbarInfoTop.get().setText(scanDataSupport.getMassSpectrumLabel(firstScan, PREFIX_UR, TITLE_UNKNOWN, POSTFIX_NONE));
+		toolbarInfoBottom.get().setText(scanDataSupport.getMassSpectrumLabel(secondScan, PREFIX_UR, TITLE_REFERENCE, shifted ? POSTFIX_SHIFTED : POSTFIX_NONE));
 		//
-		IExtractedIonSignal extractedIonSignalReference = scan_1.getExtractedIonSignal();
-		IExtractedIonSignal extractedIonSignalComparison = scan_2.getExtractedIonSignal();
+		IExtractedIonSignal extractedIonSignalReference = firstScan.getExtractedIonSignal();
+		IExtractedIonSignal extractedIonSignalComparison = secondScan.getExtractedIonSignal();
 		int startIon = (extractedIonSignalReference.getStartIon() < extractedIonSignalComparison.getStartIon()) ? extractedIonSignalReference.getStartIon() : extractedIonSignalComparison.getStartIon();
 		int stopIon = (extractedIonSignalReference.getStopIon() > extractedIonSignalComparison.getStopIon()) ? extractedIonSignalReference.getStopIon() : extractedIonSignalComparison.getStopIon();
 		//
@@ -348,13 +350,13 @@ public class ExtendedComparisonScanUI extends Composite implements IExtendedPart
 		toolbarInfoBottom.get().setText("");
 		//
 		if(scan1 != null) {
-			IScanMSD scan_1 = (scan1Optimized != null) ? scan1Optimized : scan1;
-			toolbarInfoTop.get().setText(scanDataSupport.getMassSpectrumLabel(scan_1, PREFIX_U, TITLE_UNKNOWN, POSTFIX_NONE));
-			scanChartUI.setInput(scan_1);
+			IScanMSD firstScan = (scan1Optimized != null) ? scan1Optimized : scan1;
+			toolbarInfoTop.get().setText(scanDataSupport.getMassSpectrumLabel(firstScan, PREFIX_U, TITLE_UNKNOWN, POSTFIX_NONE));
+			scanChartUI.setInput(firstScan);
 		} else if(scan2 != null) {
-			IScanMSD scan_2 = (scan2Optimized != null) ? scan2Optimized : scan2;
-			toolbarInfoTop.get().setText(scanDataSupport.getMassSpectrumLabel(scan_2, PREFIX_U, TITLE_UNKNOWN, POSTFIX_NONE));
-			scanChartUI.setInput(scan_2);
+			IScanMSD secondScan = (scan2Optimized != null) ? scan2Optimized : scan2;
+			toolbarInfoTop.get().setText(scanDataSupport.getMassSpectrumLabel(secondScan, PREFIX_U, TITLE_UNKNOWN, POSTFIX_NONE));
+			scanChartUI.setInput(secondScan);
 		} else {
 			scanChartUI.setInput(null);
 		}
@@ -434,7 +436,7 @@ public class ExtendedComparisonScanUI extends Composite implements IExtendedPart
 		//
 		Button updateScan1 = new Button(group, SWT.RADIO);
 		updateScan1.setText("Scan 1");
-		updateScan1.setSelection(displayOption.equals(OPTION_UPDATE_SCAN_1) ? true : false);
+		updateScan1.setSelection(displayOption.equals(OPTION_UPDATE_SCAN_1));
 		updateScan1.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -447,7 +449,7 @@ public class ExtendedComparisonScanUI extends Composite implements IExtendedPart
 		//
 		Button updateScan2 = new Button(group, SWT.RADIO);
 		updateScan2.setText("Scan 2");
-		updateScan2.setSelection(displayOption.equals(OPTION_UPDATE_SCAN_2) ? true : false);
+		updateScan2.setSelection(displayOption.equals(OPTION_UPDATE_SCAN_2));
 		updateScan2.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -460,7 +462,7 @@ public class ExtendedComparisonScanUI extends Composite implements IExtendedPart
 		//
 		Button updateLibraryScan = new Button(group, SWT.RADIO);
 		updateLibraryScan.setText("Library Search");
-		updateLibraryScan.setSelection(displayOption.equals(OPTION_LIBRARY_SEARCH) ? true : false);
+		updateLibraryScan.setSelection(displayOption.equals(OPTION_LIBRARY_SEARCH));
 		updateLibraryScan.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -522,14 +524,14 @@ public class ExtendedComparisonScanUI extends Composite implements IExtendedPart
 		Button buttonMirrored = new Button(composite, SWT.PUSH);
 		buttonMirrored.setText("");
 		buttonMirrored.setToolTipText("Set whether the data shall be displayed normal or mirrored.");
-		buttonMirrored.setImage(ApplicationImageFactory.getInstance().getImage(displayMirrored ? IApplicationImage.IMAGE_MIRRORED_MASS_SPECTRUM : IApplicationImage.IMAGE_MASS_SPECTRUM, IApplicationImage.SIZE_16x16));
+		buttonMirrored.setImage(ApplicationImageFactory.getInstance().getImage(displayMirrored ? IApplicationImage.IMAGE_MIRRORED_MASS_SPECTRUM : IApplicationImage.IMAGE_MASS_SPECTRUM, IApplicationImageProvider.SIZE_16x16));
 		buttonMirrored.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				displayMirrored = !displayMirrored;
-				buttonMirrored.setImage(ApplicationImageFactory.getInstance().getImage(displayMirrored ? IApplicationImage.IMAGE_MIRRORED_MASS_SPECTRUM : IApplicationImage.IMAGE_MASS_SPECTRUM, IApplicationImage.SIZE_16x16));
+				buttonMirrored.setImage(ApplicationImageFactory.getInstance().getImage(displayMirrored ? IApplicationImage.IMAGE_MIRRORED_MASS_SPECTRUM : IApplicationImage.IMAGE_MASS_SPECTRUM, IApplicationImageProvider.SIZE_16x16));
 				updateChart();
 			}
 		});
@@ -537,14 +539,14 @@ public class ExtendedComparisonScanUI extends Composite implements IExtendedPart
 		Button buttonShifted = new Button(composite, SWT.PUSH);
 		buttonShifted.setText("");
 		buttonShifted.setToolTipText("Set whether the data shall be shifted or not.");
-		buttonShifted.setImage(ApplicationImageFactory.getInstance().getImage(displayShifted ? IApplicationImage.IMAGE_SHIFTED_MASS_SPECTRUM : IApplicationImage.IMAGE_MASS_SPECTRUM, IApplicationImage.SIZE_16x16));
+		buttonShifted.setImage(ApplicationImageFactory.getInstance().getImage(displayShifted ? IApplicationImage.IMAGE_SHIFTED_MASS_SPECTRUM : IApplicationImage.IMAGE_MASS_SPECTRUM, IApplicationImageProvider.SIZE_16x16));
 		buttonShifted.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				displayShifted = !displayShifted;
-				buttonShifted.setImage(ApplicationImageFactory.getInstance().getImage(displayShifted ? IApplicationImage.IMAGE_SHIFTED_MASS_SPECTRUM : IApplicationImage.IMAGE_MASS_SPECTRUM, IApplicationImage.SIZE_16x16));
+				buttonShifted.setImage(ApplicationImageFactory.getInstance().getImage(displayShifted ? IApplicationImage.IMAGE_SHIFTED_MASS_SPECTRUM : IApplicationImage.IMAGE_MASS_SPECTRUM, IApplicationImageProvider.SIZE_16x16));
 				updateChart();
 			}
 		});
@@ -579,7 +581,7 @@ public class ExtendedComparisonScanUI extends Composite implements IExtendedPart
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Reset the chart.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -594,7 +596,7 @@ public class ExtendedComparisonScanUI extends Composite implements IExtendedPart
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Save both mass spectra.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE_AS, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE_AS, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -619,7 +621,7 @@ public class ExtendedComparisonScanUI extends Composite implements IExtendedPart
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Show optimized scan.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PLUS, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PLUS, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
