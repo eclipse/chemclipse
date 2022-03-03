@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -39,6 +39,12 @@ public class ComparisonScanChartPart extends AbstractPart<ExtendedComparisonScan
 	protected ExtendedComparisonScanUI createControl(Composite parent) {
 
 		return new ExtendedComparisonScanUI(parent, SWT.NONE);
+	}
+
+	@Override
+	public void setFocus() {
+
+		getControl().setFocus();
 	}
 
 	@Override
