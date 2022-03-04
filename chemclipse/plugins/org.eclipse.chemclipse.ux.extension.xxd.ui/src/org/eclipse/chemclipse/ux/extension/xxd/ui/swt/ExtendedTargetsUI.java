@@ -161,13 +161,13 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		/*
 		 * Option: AUTO -> Collect IChromatogram
 		 */
-		if(!isTargetOptionChromatogram() && object instanceof IChromatogram) {
+		if(!isTargetOptionChromatogram() && object instanceof IChromatogram && objectCacheChromatogram != object) {
 			this.objectCacheChromatogram = object;
 		}
 		/*
 		 * Option: CHROMATOGRAM -> Collect Other
 		 */
-		if(isTargetOptionChromatogram() && !(object instanceof IChromatogram)) {
+		if(isTargetOptionChromatogram() && !(object instanceof IChromatogram) && objectCacheOther != object) {
 			this.objectCacheOther = object;
 		}
 		/*
@@ -176,7 +176,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		 */
 		Display display = getDisplay();
 		boolean showChromatogramTargets = isTargetOptionChromatogram();
-		if(object instanceof IChromatogram) {
+		if(object instanceof IChromatogram && this.object != object) {
 			/*
 			 * Chromatogram
 			 */
@@ -188,7 +188,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 			/*
 			 * Other (Peak, Scan, ITargetSupplier (General))
 			 */
-			if(!showChromatogramTargets) {
+			if(!showChromatogramTargets && this.object != object) {
 				this.object = object;
 				updateTargets(display);
 			}
@@ -196,8 +196,10 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 			/*
 			 * Object must be null here.
 			 */
-			this.object = null;
-			updateTargets(display);
+			if(this.object != null) {
+				this.object = null;
+				updateTargets(display);
+			}
 		}
 	}
 
