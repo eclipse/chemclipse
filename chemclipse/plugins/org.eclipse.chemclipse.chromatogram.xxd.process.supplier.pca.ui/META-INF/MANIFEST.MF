@@ -8,7 +8,6 @@ Bundle-Activator: org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.u
 Bundle-Vendor: ChemClipse
 Export-Package: org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart3d,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handlers,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable,
  org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards,

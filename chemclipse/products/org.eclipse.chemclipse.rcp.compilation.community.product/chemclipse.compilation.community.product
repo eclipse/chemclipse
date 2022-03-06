@@ -20,7 +20,6 @@
       </programArgsLin>
       <vmArgs>-Xms512M
 -Xmx2G
--Dosgi.framework.extensions=org.eclipse.fx.osgi
 -Dapplication.name=ChemClipse
 -Dapplication.version=0.8.x
 -Denable.cli.support=false
@@ -84,9 +83,9 @@ Contributors:
       <plugin id="org.eclipse.equinox.p2.reconciler.dropins" autoStart="true" startLevel="4" />
       <plugin id="org.eclipse.equinox.simpleconfigurator" autoStart="true" startLevel="1" />
       <plugin id="org.eclipse.update.configurator" autoStart="true" startLevel="4" />
-      <property name="sun.awt.xembedserver" value="true" />
       <property name="org.eclipse.update.reconcile" value="false" />
       <property name="osgi.requiredJavaVersion" value="1.8" />
+      <property name="sun.awt.xembedserver" value="true" />
    </configurations>
 
 </product>
