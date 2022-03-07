@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.MzData;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.MzData.SpectrumList;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.MzData.SpectrumList.Spectrum;
+import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.ObjectFactory;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.PeakListBinaryType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.SpectrumDescType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.SpectrumSettingsType;
@@ -50,7 +51,7 @@ public class ChromatogramWriter105 extends AbstractChromatogramWriter implements
 	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
 
 		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(MzData.class);
+			JAXBContext jaxbContext = JAXBContext.newInstance(ObjectFactory.class);
 			Marshaller marshaller = jaxbContext.createMarshaller();
 			SpectrumList spectrumList = new SpectrumList();
 			for(IScan scan : chromatogram.getScans()) {

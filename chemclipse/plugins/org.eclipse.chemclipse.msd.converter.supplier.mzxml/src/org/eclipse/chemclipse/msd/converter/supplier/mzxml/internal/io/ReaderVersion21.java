@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -24,8 +23,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
@@ -61,7 +58,7 @@ public class ReaderVersion21 extends AbstractReaderVersion implements IChromatog
 	}
 
 	@Override
-	public IChromatogramMSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramMSD read(File file, IProgressMonitor monitor) throws IOException {
 
 		IVendorChromatogram chromatogram = null;
 		//
