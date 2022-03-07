@@ -75,10 +75,6 @@ http://www.eclipse.org/legal/epl-v10.html
          version="0.0.0"/>
 
    <includes
-         id="org.eclipse.fx.runtime.min.feature"
-         version="0.0.0"/>
-
-   <includes
          id="org.eclipse.ecf.filetransfer.feature"
          version="0.0.0"/>
 
@@ -88,14 +84,6 @@ http://www.eclipse.org/legal/epl-v10.html
 
    <includes
          id="org.eclipse.swtchart.feature"
-         version="0.0.0"/>
-
-   <includes
-         id="openjfx.swt.feature"
-         version="0.0.0"/>
-
-   <includes
-         id="openjfx.standard.feature"
          version="0.0.0"/>
 
    <plugin
