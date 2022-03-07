@@ -1,0 +1,1 @@
+JAXB was dropped in Java 11. Due to API and implementation being separated and multiple variants existing, this causes trouble in OSGi which by design only defines the API as dependency. This bundles https://eclipse-ee4j.github.io/jaxb-ri/ and should be removed once it is properly available from Eclipse Orbit or another p2 repository.

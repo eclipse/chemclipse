@@ -40,7 +40,7 @@ public class MassSpectrumReader extends AbstractMassSpectraReader implements IMa
 			fileReader.read(charBuffer);
 			final String header = new String(charBuffer);
 			if(header.contains(IFormat.MZML_V_110)) {
-				massSpectraReader = new MassSpectrumReaderVersion110(IFormat.CONTEXT_PATH_V_110);
+				massSpectraReader = new MassSpectrumReaderVersion110();
 			} else {
 				throw new UnknownVersionException();
 			}

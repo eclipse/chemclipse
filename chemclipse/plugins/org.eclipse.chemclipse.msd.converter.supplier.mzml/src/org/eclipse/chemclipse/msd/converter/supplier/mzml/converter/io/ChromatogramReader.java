@@ -40,7 +40,7 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 		//
 		final String header = new String(charBuffer);
 		if(header.contains(IFormat.MZML_V_110)) {
-			chromatogramReader = new ChromatogramReaderVersion110(IFormat.CONTEXT_PATH_V_110);
+			chromatogramReader = new ChromatogramReaderVersion110();
 		} else {
 			throw new UnknownVersionException();
 		}

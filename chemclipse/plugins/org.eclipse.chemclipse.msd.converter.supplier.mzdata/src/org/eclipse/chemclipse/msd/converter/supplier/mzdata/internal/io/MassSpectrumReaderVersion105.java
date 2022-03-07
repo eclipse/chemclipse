@@ -15,9 +15,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -32,6 +29,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.support.ICo
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.CvParamType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.MzData;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.MzData.SpectrumList.Spectrum;
+import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.ObjectFactory;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.ParamType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.model.IVendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.model.IVendorMassSpectra;
@@ -47,14 +45,16 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
+
 public class MassSpectrumReaderVersion105 extends AbstractMassSpectraReader implements IMassSpectraReader {
 
 	private static final Logger logger = Logger.getLogger(MassSpectrumReaderVersion105.class);
-	private String contextPath;
 
-	public MassSpectrumReaderVersion105(String contextPath) {
+	public MassSpectrumReaderVersion105() {
 
-		this.contextPath = contextPath;
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class MassSpectrumReaderVersion105 extends AbstractMassSpectraReader impl
 			Document document = documentBuilder.parse(file);
 			NodeList nodeList = document.getElementsByTagName(IConstants.NODE_MZ_DATA);
 			//
-			JAXBContext jaxbContext = JAXBContext.newInstance(contextPath);
+			JAXBContext jaxbContext = JAXBContext.newInstance(ObjectFactory.class);
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 			MzData mzData = (MzData)unmarshaller.unmarshal(nodeList.item(0));
 			//

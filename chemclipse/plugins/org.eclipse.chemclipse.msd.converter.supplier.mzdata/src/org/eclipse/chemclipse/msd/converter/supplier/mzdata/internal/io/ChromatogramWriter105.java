@@ -19,10 +19,6 @@ import java.nio.ByteOrder;
 import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.io.AbstractChromatogramWriter;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -42,6 +38,10 @@ import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
+
 public class ChromatogramWriter105 extends AbstractChromatogramWriter implements IChromatogramMSDWriter {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramWriter105.class);
@@ -50,7 +50,7 @@ public class ChromatogramWriter105 extends AbstractChromatogramWriter implements
 	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
 
 		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.MzData.class);
+			JAXBContext jaxbContext = JAXBContext.newInstance(MzData.class);
 			Marshaller marshaller = jaxbContext.createMarshaller();
 			SpectrumList spectrumList = new SpectrumList();
 			for(IScan scan : chromatogram.getScans()) {

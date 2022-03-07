@@ -17,7 +17,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Iterator;
 
-import org.apache.batik.dom.GenericDOMImplementation;
+import org.apache.batik.anim.dom.SVGDOMImplementation;
 import org.apache.batik.svggen.SVGGraphics2D;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.w3c.dom.DOMImplementation;
@@ -38,7 +38,7 @@ public class ChromatogramWriter extends AbstractChromatogramMSDWriter {
 		/*
 		 * Get the SVG element.
 		 */
-		DOMImplementation domImplementation = GenericDOMImplementation.getDOMImplementation();
+		DOMImplementation domImplementation = SVGDOMImplementation.getDOMImplementation();
 		String namespaceSVG = "http://www.w3.org/2000/svg";
 		Document document = domImplementation.createDocument(namespaceSVG, "svg", null);
 		SVGGraphics2D svgGraphics2D = new SVGGraphics2D(document);

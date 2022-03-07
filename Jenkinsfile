@@ -14,7 +14,7 @@ pipeline {
 	}
 	tools {
 		maven 'apache-maven-latest'
-		jdk   'oracle-jdk8-latest'
+		jdk   'adoptopenjdk-hotspot-jdk11-latest'
 	}
 	options {
 		disableConcurrentBuilds()

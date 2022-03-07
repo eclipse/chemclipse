@@ -16,9 +16,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -32,6 +29,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.support.ICo
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.CvParamType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.MzData;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.MzData.SpectrumList.Spectrum;
+import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.ObjectFactory;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.io.AbstractChromatogramReader;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.model.IVendorChromatogram;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.model.IVendorIon;
@@ -46,14 +44,16 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
+
 public class ChromatogramReaderVersion105 extends AbstractChromatogramReader implements IChromatogramMSDReader {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramReaderVersion105.class);
-	private String contextPath;
 
-	public ChromatogramReaderVersion105(String contextPath) {
+	public ChromatogramReaderVersion105() {
 
-		this.contextPath = contextPath;
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class ChromatogramReaderVersion105 extends AbstractChromatogramReader imp
 			Document document = documentBuilder.parse(file);
 			NodeList nodeList = document.getElementsByTagName(IConstants.NODE_MZ_DATA);
 			//
-			JAXBContext jaxbContext = JAXBContext.newInstance(contextPath);
+			JAXBContext jaxbContext = JAXBContext.newInstance(ObjectFactory.class);
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 			MzData mzData = (MzData)unmarshaller.unmarshal(nodeList.item(0));
 			//

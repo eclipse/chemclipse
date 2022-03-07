@@ -23,9 +23,6 @@ import java.util.Date;
 import java.util.zip.DataFormatException;
 import java.util.zip.Inflater;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -36,6 +33,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v32.model.MsRun;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v32.model.ObjectFactory;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v32.model.Peaks;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v32.model.Scan;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.IVendorChromatogram;
@@ -51,15 +49,17 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
+
 public class ReaderVersion32 extends AbstractReaderVersion implements IChromatogramMSDReader {
 
 	private static final Logger logger = Logger.getLogger(ReaderVersion32.class);
 	private static final int ION_PRECISION = 4;
-	private String contextPath;
 
-	public ReaderVersion32(String contextPath) {
+	public ReaderVersion32() {
 
-		this.contextPath = contextPath;
 	}
 
 	@Override
@@ -73,7 +73,7 @@ public class ReaderVersion32 extends AbstractReaderVersion implements IChromatog
 			Document document = documentBuilder.parse(file);
 			NodeList nodeList = document.getElementsByTagName(IConstants.NODE_MS_RUN);
 			//
-			JAXBContext jaxbContext = JAXBContext.newInstance(contextPath);
+			JAXBContext jaxbContext = JAXBContext.newInstance(ObjectFactory.class);
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 			MsRun msrun = (MsRun)unmarshaller.unmarshal(nodeList.item(0));
 			//

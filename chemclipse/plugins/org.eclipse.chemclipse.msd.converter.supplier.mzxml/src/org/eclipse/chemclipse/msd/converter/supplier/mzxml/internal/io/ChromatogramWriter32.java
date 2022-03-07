@@ -22,9 +22,6 @@ import java.nio.DoubleBuffer;
 import java.util.List;
 import java.util.zip.Deflater;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
@@ -43,6 +40,10 @@ import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
+
 public class ChromatogramWriter32 extends AbstractChromatogramWriter implements IChromatogramMSDWriter {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramWriter32.class);
@@ -51,7 +52,7 @@ public class ChromatogramWriter32 extends AbstractChromatogramWriter implements 
 	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
 
 		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v32.model.MzXML.class);
+			JAXBContext jaxbContext = JAXBContext.newInstance(MzXML.class);
 			Marshaller marshaller = jaxbContext.createMarshaller();
 			MsRun msRun = new MsRun();
 			for(IScan sourceScan : chromatogram.getScans()) {
