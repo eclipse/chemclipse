@@ -17,7 +17,7 @@
 	</prerequisites>
 	<properties>
 		<!-- versions for plugins to use -->
-		<tycho.version>1.6.0</tycho.version>
+		<tycho.version>2.3.0</tycho.version>
 		<pmd.version>3.12.0</pmd.version>
 		<checkstyle.version>3.1.0</checkstyle.version>
 		<maven-install-plugin.version>2.5.2</maven-install-plugin.version>
@@ -100,15 +100,6 @@
 				<version>${tycho.version}</version>
 				<configuration>
 					<encoding>${project.build.sourceEncoding}</encoding>
-					<extraClasspathElements>
-						<extraClasspathElement>
-							<groupId>com.oracle</groupId>
-							<artifactId>javafx</artifactId>
-							<version>8.0.0-SNAPSHOT</version>
-							<systemPath>${java.home}/lib/jfxswt.jar</systemPath>
-							<scope>system</scope>
-						</extraClasspathElement>
-					</extraClasspathElements>
 				</configuration>
 			</plugin>
 			<plugin>

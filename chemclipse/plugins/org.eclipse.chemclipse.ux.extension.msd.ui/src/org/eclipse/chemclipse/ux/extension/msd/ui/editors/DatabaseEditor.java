@@ -13,7 +13,6 @@
 package org.eclipse.chemclipse.ux.extension.msd.ui.editors;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,9 +23,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
-import org.eclipse.chemclipse.converter.exceptions.NoChromatogramConverterAvailableException;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
@@ -150,6 +146,7 @@ public class DatabaseEditor implements IChemClipseEditor {
 			saveAs();
 		} catch(InterruptedException e) {
 			logger.warn(e);
+			Thread.currentThread().interrupt();
 		}
 	}
 
@@ -230,7 +227,7 @@ public class DatabaseEditor implements IChemClipseEditor {
 		}
 	}
 
-	private void importMassSpectra(File file, boolean batch) throws FileNotFoundException, NoChromatogramConverterAvailableException, FileIsNotReadableException, FileIsEmptyException, ChromatogramIsNullException {
+	private void importMassSpectra(File file, boolean batch) throws ChromatogramIsNullException {
 
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(DisplayUtils.getShell());
 		DatabaseImportRunnable runnable = new DatabaseImportRunnable(file);
@@ -245,6 +242,7 @@ public class DatabaseEditor implements IChemClipseEditor {
 			logger.warn(e.getCause());
 		} catch(InterruptedException e) {
 			logger.warn(e);
+			Thread.currentThread().interrupt();
 		}
 		/*
 		 * Add the mass spectra handling.

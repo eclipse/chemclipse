@@ -6,6 +6,6 @@ Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.csd.peak.detector.ui
 Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.chromatogram.csd.peak.detector.ui.Activator
 Bundle-Vendor: ChemClipse
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Import-Package: org.osgi.framework;version="1.3.0"
 Bundle-ActivationPolicy: lazy

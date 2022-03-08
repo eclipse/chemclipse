@@ -19,11 +19,11 @@ import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 import java.util.zip.Deflater;
 
-import javax.xml.bind.DatatypeConverter;
-
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.BinaryDataArrayType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.CVParamType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.preferences.PreferenceSupplier;
+
+import jakarta.xml.bind.DatatypeConverter;
 
 public class BinaryWriter {
 

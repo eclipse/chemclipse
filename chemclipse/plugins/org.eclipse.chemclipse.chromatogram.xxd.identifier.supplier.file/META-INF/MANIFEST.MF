@@ -21,7 +21,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.chromatogram.csd.identifier;bundle-version="0.9.0",
  org.eclipse.chemclipse.wsd.model;bundle-version="0.9.0",
  org.eclipse.chemclipse.chromatogram.wsd.identifier;bundle-version="0.9.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.core,
  org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.internal.identifier,
  org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.model,

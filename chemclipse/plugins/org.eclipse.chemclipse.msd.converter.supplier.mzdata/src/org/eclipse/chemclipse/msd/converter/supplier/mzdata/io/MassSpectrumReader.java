@@ -51,7 +51,7 @@ public class MassSpectrumReader extends AbstractMassSpectraReader implements IMa
 		//
 		final String header = new String(charBuffer);
 		if(header.contains(IFormat.V_105)) {
-			massSpectraReader = new MassSpectrumReaderVersion105(IFormat.CONTEXT_PATH_V_105);
+			massSpectraReader = new MassSpectrumReaderVersion105();
 		} else {
 			throw new UnknownVersionException();
 		}

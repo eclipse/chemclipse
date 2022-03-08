@@ -25,7 +25,6 @@
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 	<unit id="org.eclipse.swtbot.feature.group" version="0.0.0"/>
-	<unit id="org.eclipse.fx.ide.feature.feature.group" version="0.0.0"/>
 	<unit id="org.eclipse.equinox.sdk.feature.group" version="0.0.0"/>
 	<unit id="org.eclipse.epp.mpc.feature.group" version="0.0.0"/>
 	<unit id="org.eclipse.sdk.feature.group" version="0.0.0"/>
@@ -90,6 +89,8 @@
 	<unit id="org.dom4j" version="0.0.0"/>
 	<unit id="org.apache.batik.pdf" version="0.0.0"/>
 	<unit id="javax.xml.bind" version="0.0.0"/>
+	<unit id="javax.activation" version="0.0.0"/>
+	<unit id="javax.annotation" version="0.0.0"/>
 	<unit id="com.google.gson" version="0.0.0"/>
 	<unit id="org.apache.httpcomponents.httpasyncclient" version="0.0.0"/>
 	<unit id="org.apache.pdfbox.preflight" version="0.0.0"/>

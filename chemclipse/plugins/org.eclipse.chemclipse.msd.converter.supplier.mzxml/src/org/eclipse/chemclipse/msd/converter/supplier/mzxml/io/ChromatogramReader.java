@@ -45,17 +45,17 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 		//
 		final String header = new String(charBuffer);
 		if(header.contains(IFormat.MZXML_V_200)) {
-			chromatogramReader = new ReaderVersion20(IFormat.CONTEXT_PATH_V_200);
+			chromatogramReader = new ReaderVersion20();
 		} else if(header.contains(IFormat.MZXML_V_210)) {
-			chromatogramReader = new ReaderVersion21(IFormat.CONTEXT_PATH_V_210);
+			chromatogramReader = new ReaderVersion21();
 		} else if(header.contains(IFormat.MZXML_V_220)) {
-			chromatogramReader = new ReaderVersion21(IFormat.CONTEXT_PATH_V_220);
+			chromatogramReader = new ReaderVersion21();
 		} else if(header.contains(IFormat.MZXML_V_300)) {
-			chromatogramReader = new ReaderVersion30(IFormat.CONTEXT_PATH_V_300);
+			chromatogramReader = new ReaderVersion30();
 		} else if(header.contains(IFormat.MZXML_V_310)) {
-			chromatogramReader = new ReaderVersion31(IFormat.CONTEXT_PATH_V_310);
+			chromatogramReader = new ReaderVersion31();
 		} else if(header.contains(IFormat.MZXML_V_320)) {
-			chromatogramReader = new ReaderVersion32(IFormat.CONTEXT_PATH_V_320);
+			chromatogramReader = new ReaderVersion32();
 		} else {
 			throw new UnknownVersionException();
 		}

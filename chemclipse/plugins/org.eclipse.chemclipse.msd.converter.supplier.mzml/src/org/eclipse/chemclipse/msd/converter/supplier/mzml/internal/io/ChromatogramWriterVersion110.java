@@ -18,9 +18,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 
@@ -37,6 +34,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.CV
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.ChromatogramListType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.ChromatogramType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.MzML;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.ObjectFactory;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.RunType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.ScanListType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.ScanType;
@@ -48,6 +46,10 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
+
 public class ChromatogramWriterVersion110 extends AbstractChromatogramWriter implements IChromatogramMSDWriter {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramWriterVersion110.class);
@@ -56,7 +58,7 @@ public class ChromatogramWriterVersion110 extends AbstractChromatogramWriter imp
 	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileIsNotWriteableException, IOException {
 
 		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.MzML.class);
+			JAXBContext jaxbContext = JAXBContext.newInstance(ObjectFactory.class);
 			Marshaller marshaller = jaxbContext.createMarshaller();
 			//
 			RunType run = new RunType();

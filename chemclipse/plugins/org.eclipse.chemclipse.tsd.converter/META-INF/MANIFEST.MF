@@ -13,7 +13,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.chemclipse.processing;bundle-version="0.9.0",
  org.eclipse.chemclipse.support;bundle-version="0.9.0",
  org.eclipse.chemclipse.logging;bundle-version="0.9.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.tsd.converter.chromatogram,
  org.eclipse.chemclipse.tsd.converter.core,

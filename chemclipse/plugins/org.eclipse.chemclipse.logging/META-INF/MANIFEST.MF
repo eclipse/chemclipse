@@ -8,7 +8,7 @@ Bundle-Activator: org.eclipse.chemclipse.logging.Activator
 Require-Bundle: org.eclipse.core.runtime,
  org.apache.log4j;bundle-version="1.2.15"
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: org.eclipse.chemclipse.logging.core,
  org.eclipse.chemclipse.logging.support
 Bundle-Vendor: %Bundle-Vendor

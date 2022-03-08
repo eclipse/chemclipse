@@ -41,7 +41,7 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 		//
 		final String header = new String(charBuffer);
 		if(header.contains(IFormat.V_105)) {
-			chromatogramReader = new ChromatogramReaderVersion105(IFormat.CONTEXT_PATH_V_105);
+			chromatogramReader = new ChromatogramReaderVersion105();
 		} else {
 			throw new UnknownVersionException();
 		}

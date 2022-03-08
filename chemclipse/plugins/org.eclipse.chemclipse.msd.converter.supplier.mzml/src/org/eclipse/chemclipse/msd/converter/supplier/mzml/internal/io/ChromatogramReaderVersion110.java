@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.zip.DataFormatException;
 
-import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -52,14 +51,14 @@ import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.xml.sax.SAXException;
 
+import jakarta.xml.bind.JAXBException;
+
 public class ChromatogramReaderVersion110 extends AbstractChromatogramReader implements IChromatogramMSDReader {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramReaderVersion110.class);
-	private String contextPath;
 
-	public ChromatogramReaderVersion110(String contextPath) {
+	public ChromatogramReaderVersion110() {
 
-		this.contextPath = contextPath;
 	}
 
 	@Override
@@ -72,7 +71,7 @@ public class ChromatogramReaderVersion110 extends AbstractChromatogramReader imp
 		try {
 			chromatogram = new VendorChromatogram();
 			//
-			RunType run = XmlReader.getMzML(file, contextPath).getRun();
+			RunType run = XmlReader.getMzML(file).getRun();
 			for(ChromatogramType chromatogramType : run.getChromatogramList().getChromatogram()) {
 				if(chromatogramType.getId().equals("TIC")) {
 					if(chromatogramType.getCvParam().stream().anyMatch(n -> n.getAccession().equals("MS:1000235") && n.getName().equals("total ion current chromatogram"))) {
@@ -128,7 +127,7 @@ public class ChromatogramReaderVersion110 extends AbstractChromatogramReader imp
 			//
 			double[] mzs = null;
 			//
-			RunType run = XmlReader.getMzML(file, contextPath).getRun();
+			RunType run = XmlReader.getMzML(file).getRun();
 			for(SpectrumType spectrum : run.getSpectrumList().getSpectrum()) {
 				IVendorMassSpectrum massSpectrum = new VendorMassSpectrum();
 				for(CVParamType cvParam : spectrum.getCvParam()) {

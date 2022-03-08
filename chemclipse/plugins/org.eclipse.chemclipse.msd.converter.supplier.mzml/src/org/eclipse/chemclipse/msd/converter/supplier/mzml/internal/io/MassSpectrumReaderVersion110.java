@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.zip.DataFormatException;
 
-import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -44,14 +43,14 @@ import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.xml.sax.SAXException;
 
+import jakarta.xml.bind.JAXBException;
+
 public class MassSpectrumReaderVersion110 extends AbstractMassSpectraReader implements IMassSpectraReader {
 
 	private static final Logger logger = Logger.getLogger(MassSpectrumReaderVersion110.class);
-	private String contextPath;
 
-	public MassSpectrumReaderVersion110(String contextPath) {
+	public MassSpectrumReaderVersion110() {
 
-		this.contextPath = contextPath;
 	}
 
 	@Override
@@ -65,7 +64,7 @@ public class MassSpectrumReaderVersion110 extends AbstractMassSpectraReader impl
 			massSpectrum.setFile(file);
 			massSpectrum.setIdentifier(file.getName());
 			//
-			MzML mzML = XmlReader.getMzML(file, contextPath);
+			MzML mzML = XmlReader.getMzML(file);
 			//
 			FileDescriptionType fileDescription = mzML.getFileDescription();
 			if(fileDescription != null) {

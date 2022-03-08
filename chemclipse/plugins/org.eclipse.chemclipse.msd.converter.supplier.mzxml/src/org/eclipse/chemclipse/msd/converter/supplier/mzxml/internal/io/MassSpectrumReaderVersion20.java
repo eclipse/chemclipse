@@ -21,9 +21,6 @@ import java.nio.ByteOrder;
 import java.nio.DoubleBuffer;
 import java.nio.FloatBuffer;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -36,6 +33,7 @@ import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v20.model.DataProcessing;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v20.model.MsRun;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v20.model.ObjectFactory;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v20.model.Peaks;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v20.model.Scan;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.IVendorIon;
@@ -52,14 +50,16 @@ import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
+
 public class MassSpectrumReaderVersion20 extends AbstractMassSpectraReader implements IMassSpectraReader {
 
 	private static final Logger logger = Logger.getLogger(MassSpectrumReaderVersion20.class);
-	private String contextPath;
 
-	public MassSpectrumReaderVersion20(String contextPath) {
+	public MassSpectrumReaderVersion20() {
 
-		this.contextPath = contextPath;
 	}
 
 	@Override
@@ -73,7 +73,7 @@ public class MassSpectrumReaderVersion20 extends AbstractMassSpectraReader imple
 			Document document = documentBuilder.parse(file);
 			NodeList nodeList = document.getElementsByTagName(IConstants.NODE_MS_RUN);
 			//
-			JAXBContext jaxbContext = JAXBContext.newInstance(contextPath);
+			JAXBContext jaxbContext = JAXBContext.newInstance(ObjectFactory.class);
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 			MsRun msrun = (MsRun)unmarshaller.unmarshal(nodeList.item(0));
 			//
