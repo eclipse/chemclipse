@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.nmr.model.core;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 /**
  * 
@@ -84,7 +85,7 @@ public interface AcquisitionParameter {
 	 */
 	default BigDecimal getAcquisitionTime() {
 
-		return BigDecimal.valueOf(getNumberOfPoints()).divide(getSpectralWidth().multiply(getCarrierFrequency()), 10, BigDecimal.ROUND_HALF_EVEN);
+		return BigDecimal.valueOf(getNumberOfPoints()).divide(getSpectralWidth().multiply(getCarrierFrequency()), 10, RoundingMode.HALF_EVEN);
 	}
 
 	/**
@@ -117,9 +118,9 @@ public interface AcquisitionParameter {
 		BigDecimal sf = getSpectrometerFrequency();
 		BigDecimal sw = getSpectralWidth();
 		BigDecimal multiplicand = new BigDecimal("0.5");
-		BigDecimal fac1 = sfo1.divide(sf.subtract(BigDecimal.ONE), 10, BigDecimal.ROUND_HALF_EVEN);
+		BigDecimal fac1 = sfo1.divide(sf.subtract(BigDecimal.ONE), 10, RoundingMode.HALF_EVEN);
 		BigDecimal halfWidthPPM = sw.multiply(multiplicand);
-		BigDecimal fac2 = sfo1.divide(sf, 10, BigDecimal.ROUND_HALF_EVEN);
+		BigDecimal fac2 = sfo1.divide(sf, 10, RoundingMode.HALF_EVEN);
 		// `OFFSET = (SFO1/SF-1) * 1.0e6 + 0.5 * SW * SFO1/SF
 		return toHz(fac1.multiply(new BigDecimal("1E6")).add(toHz(halfWidthPPM)).multiply(fac2));
 	}
@@ -144,7 +145,7 @@ public interface AcquisitionParameter {
 	default BigDecimal toPPM(BigDecimal hz) {
 
 		BigDecimal cf = getCarrierFrequency();
-		return hz.divide(cf, Math.max(MIN_DIGITS, Math.max(hz.scale(), cf.scale())), BigDecimal.ROUND_HALF_EVEN);
+		return hz.divide(cf, Math.max(MIN_DIGITS, Math.max(hz.scale(), cf.scale())), RoundingMode.HALF_EVEN);
 	}
 
 	public static void print(AcquisitionParameter acquisitionParameter) {
