@@ -189,9 +189,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		} else {
 			currentModCount = chromatogramSelection.getChromatogram().getModCount();
 			lastRange = new RetentionTimeRange(chromatogramSelection);
-			// on OSX the clear is needed, else no update is fired when the number of list entries does not change
-			tableViewer.get().clear();
-			tableViewer.get().setInput(chromatogramSelection, showPeaks, showPeaksInRange, showScans, showScansInRange);
+			updateTable();
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			if(chromatogram instanceof IChromatogramMSD) {
 				buttonSave.setEnabled(true);
@@ -200,6 +198,12 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 				updateSelection();
 			}
 		}
+	}
+
+	public void updateTable() {
+
+		tableViewer.get().clear();// on Mac the clear is needed, else no update is fired when the number of list entries does not change
+		tableViewer.get().setInput(chromatogramSelection, showPeaks, showPeaksInRange, showScans, showScansInRange);
 	}
 
 	public void updateSelection() {

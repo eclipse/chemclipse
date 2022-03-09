@@ -99,6 +99,7 @@ public class PeakScanListPart extends AbstractPart<ExtendedPeakScanListUI> {
 				} else if(isUpdateEditorEvent(topic)) {
 					logger.info(object);
 					getControl().refreshTableViewer();
+					getControl().updateTable();
 					return true;
 				} else if(isIdentificationTopic(topic)) {
 					getControl().updateChromatogramSelection();
