@@ -104,13 +104,13 @@ public class ReaderVersion20 extends AbstractReaderVersion implements IChromatog
 					DoubleBuffer doubleBuffer = byteBuffer.asDoubleBuffer();
 					values = new double[doubleBuffer.capacity()];
 					for(int index = 0; index < doubleBuffer.capacity(); index++) {
-						values[index] = new Double(doubleBuffer.get(index));
+						values[index] = Double.valueOf(doubleBuffer.get(index));
 					}
 				} else {
 					FloatBuffer floatBuffer = byteBuffer.asFloatBuffer();
 					values = new double[floatBuffer.capacity()];
 					for(int index = 0; index < floatBuffer.capacity(); index++) {
-						values[index] = new Double(floatBuffer.get(index));
+						values[index] = Double.valueOf(floatBuffer.get(index));
 					}
 				}
 				//

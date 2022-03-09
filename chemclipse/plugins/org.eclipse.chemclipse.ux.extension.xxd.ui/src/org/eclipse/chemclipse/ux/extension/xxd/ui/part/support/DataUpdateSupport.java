@@ -121,7 +121,6 @@ public class DataUpdateSupport {
 	protected void finalize() throws Throwable {
 
 		unsubscribeEvents();
-		super.finalize();
 	}
 
 	private void unsubscribeEvents() {

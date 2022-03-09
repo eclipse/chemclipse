@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -137,7 +137,7 @@ public class RetentionIndex implements IRetentionIndex, Comparable<IRetentionInd
 	public int hashCode() {
 
 		// index, retentionTime, name
-		return 7 * new Double(index).hashCode() + 9 * Integer.valueOf(retentionTime).hashCode() + 11 * name.hashCode();
+		return 7 * Double.valueOf(index).hashCode() + 9 * Integer.valueOf(retentionTime).hashCode() + 11 * name.hashCode();
 	}
 
 	@Override

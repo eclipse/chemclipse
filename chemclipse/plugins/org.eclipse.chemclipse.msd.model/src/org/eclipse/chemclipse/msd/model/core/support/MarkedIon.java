@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -74,7 +74,7 @@ public class MarkedIon implements IMarkedIon {
 	@Override
 	public int hashCode() {
 
-		return 7 * new Double(ion).hashCode() + 11 * new Integer(magnification).hashCode();
+		return 7 * Double.valueOf(ion).hashCode() + 11 * Integer.valueOf(magnification).hashCode();
 	}
 
 	@Override

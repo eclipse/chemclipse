@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -253,7 +253,7 @@ public abstract class AbstractIon implements IIon {
 		if(ionTransition != null) {
 			ionTransitionHashCode = ionTransition.hashCode();
 		}
-		return 7 * new Double(ion).hashCode() + 11 * new Float(abundance).hashCode() + ionTransitionHashCode;
+		return 7 * Double.valueOf(ion).hashCode() + 11 * Float.valueOf(abundance).hashCode() + ionTransitionHashCode;
 	}
 
 	@Override

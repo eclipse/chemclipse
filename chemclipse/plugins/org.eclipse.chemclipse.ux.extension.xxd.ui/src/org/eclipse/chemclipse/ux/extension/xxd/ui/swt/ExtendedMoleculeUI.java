@@ -110,7 +110,6 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		if(imageMolecule != null) {
 			imageMolecule.dispose();
 		}
-		super.finalize();
 	}
 
 	private void createControl() {

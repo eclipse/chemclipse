@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -81,13 +81,13 @@ public class BinaryReader {
 			DoubleBuffer doubleBuffer = byteBuffer.asDoubleBuffer();
 			values = new double[doubleBuffer.capacity()];
 			for(int index = 0; index < doubleBuffer.capacity(); index++) {
-				values[index] = new Double(doubleBuffer.get(index)) * multiplicator;
+				values[index] = Double.valueOf(doubleBuffer.get(index)) * multiplicator;
 			}
 		} else {
 			FloatBuffer floatBuffer = byteBuffer.asFloatBuffer();
 			values = new double[floatBuffer.capacity()];
 			for(int index = 0; index < floatBuffer.capacity(); index++) {
-				values[index] = new Double(floatBuffer.get(index)) * multiplicator;
+				values[index] = Double.valueOf(floatBuffer.get(index)) * multiplicator;
 			}
 		}
 		return new ImmutablePair<>(content, values);

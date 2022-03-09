@@ -108,7 +108,3 @@ Import-Package: javax.annotation;version="[1.0.0,2.0.0)",
  org.eclipse.chemclipse.rcp.app.ui.handlers,
  org.osgi.service.component.annotations;version="1.2.0",
  org.osgi.service.event;version="[1.0.0,2.0.0)"
-Service-Component: OSGI-INF/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorProcessTypeSupplier.xml
-Bundle-ActivationPolicy: lazy
-Service-Component: OSGI-INF/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorProcessTypeSupplier.xml
-Bundle-ActivationPolicy: lazy

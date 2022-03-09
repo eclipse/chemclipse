@@ -137,8 +137,6 @@ public class ScanIdentifierUI extends Composite {
 		if(menuWSD != null) {
 			menuWSD.dispose();
 		}
-		//
-		super.finalize();
 	}
 
 	private void createControl() {

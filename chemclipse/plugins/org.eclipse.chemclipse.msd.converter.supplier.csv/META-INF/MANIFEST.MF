@@ -29,7 +29,3 @@ Export-Package: org.eclipse.chemclipse.msd.converter.supplier.csv.core,
  org.eclipse.chemclipse.msd.converter.supplier.csv.preferences,
  org.eclipse.chemclipse.msd.converter.supplier.csv.settings
 Service-Component: OSGI-INF/org.eclipse.chemclipse.msd.converter.supplier.csv.settings.ConverterProcessor.xml
-Service-Component: OSGI-INF/org.eclipse.chemclipse.msd.converter.supplier.csv.settings.ConverterProcessor.xml
-Bundle-ActivationPolicy: lazy
-Service-Component: OSGI-INF/org.eclipse.chemclipse.msd.converter.supplier.csv.settings.ConverterProcessor.xml
-Bundle-ActivationPolicy: lazy
