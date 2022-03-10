@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -33,6 +33,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ScanTableCom
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
@@ -139,6 +140,7 @@ public class ScanTableUI extends ExtendedTableViewer {
 		 * Reset
 		 */
 		setComparator(null);
+		setContentProvider(new ArrayContentProvider());
 		setLabelProvider(getTableLabelProvider(DataType.NONE));
 		//
 		String[] titles = getTitles(dataType);
