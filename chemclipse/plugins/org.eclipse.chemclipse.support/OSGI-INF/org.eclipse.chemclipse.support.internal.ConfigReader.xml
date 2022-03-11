@@ -4,6 +4,6 @@
    <service>
       <provide interface="java.lang.Runnable"/>
    </service>
-   <reference bind="setConfigurationAdmin" cardinality="1..1" interface="org.osgi.service.cm.ConfigurationAdmin" name="ConfigurationAdmin" policy="static"/>
+   <reference bind="setConfigurationAdmin" interface="org.osgi.service.cm.ConfigurationAdmin" name="ConfigurationAdmin"/>
    <implementation class="org.eclipse.chemclipse.support.internal.ConfigReader"/>
 </scr:component>

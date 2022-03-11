@@ -29,6 +29,6 @@ Export-Package: org.eclipse.chemclipse.chromatogram.xxd.integrator.core.chromato
 Bundle-Vendor: ChemClipse
 Import-Package: org.eclipse.chemclipse.support.settings.parser,
  org.osgi.service.component.annotations;version="1.2.0"
-Service-Component: OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks.PeakIntegratorProcessTypeSupplier.xml,
- OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.integrator.core.chromatogram.ChromatogramIntegratorProcessTypeSupplier.xml,
- OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.integrator.core.combined.CombinedIntegratorProcessTypeSupplier.xml
+Service-Component: OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.integrator.core.chromatogram.ChromatogramIntegratorProcessTypeSupplier.xml,
+ OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.integrator.core.combined.CombinedIntegratorProcessTypeSupplier.xml,
+ OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.integrator.core.peaks.PeakIntegratorProcessTypeSupplier.xml

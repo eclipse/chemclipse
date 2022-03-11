@@ -3,6 +3,6 @@
    <service>
       <provide interface="org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier"/>
    </service>
-   <reference bind="setProcessorFactory" cardinality="1..1" interface="org.eclipse.chemclipse.processing.ProcessorFactory" name="ProcessorFactory" policy="static"/>
+   <reference bind="setProcessorFactory" interface="org.eclipse.chemclipse.processing.ProcessorFactory" name="ProcessorFactory"/>
    <implementation class="org.eclipse.chemclipse.model.supplier.IMeasurementFilterProcessTypeSupplier"/>
 </scr:component>
