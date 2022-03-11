@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2019 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,7 +25,6 @@ import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
@@ -47,14 +46,13 @@ public class TaskTile extends Composite {
 	private Label textSection;
 	private Label textDesciption;
 	//
-	private final Cursor handCursor;
-	private final Cursor waitCursor;
 	private final TileDefinition definition;
 	private final Consumer<TileDefinition> definitionConsumer;
 	private final Color[] colors;
 	private final Function<TileDefinition, Integer> styleFunction;
 
 	TaskTile(Composite parent, TileDefinition definition, Consumer<TileDefinition> definitionConsumer, Function<TileDefinition, Integer> styleFunction, Color[] colors) {
+
 		super(parent, SWT.NONE);
 		if(colors.length < 3) {
 			throw new IllegalArgumentException("must suplly three colors");
@@ -64,8 +62,6 @@ public class TaskTile extends Composite {
 		this.styleFunction = styleFunction;
 		this.colors = colors;
 		initialize();
-		waitCursor = new Cursor(parent.getDisplay(), SWT.CURSOR_WAIT);
-		handCursor = new Cursor(parent.getDisplay(), SWT.CURSOR_HAND);
 		updateFromDefinition();
 	}
 
@@ -73,8 +69,6 @@ public class TaskTile extends Composite {
 	public void dispose() {
 
 		super.dispose();
-		handCursor.dispose();
-		waitCursor.dispose();
 	}
 
 	public TileDefinition getDefinition() {
@@ -218,32 +212,24 @@ public class TaskTile extends Composite {
 
 	private void handleSelection() {
 
-		Cursor oldCursor = getCursor();
-		try {
-			setCursor(waitCursor);
-			if(definition != null) {
-				try {
-					definitionConsumer.accept(definition);
-				} catch(RuntimeException e) {
-					Activator.getDefault().getLog().log(new Status(IStatus.ERROR, "TaskTile", "invoke of consumer failed", e));
-				}
+		if(definition != null) {
+			try {
+				definitionConsumer.accept(definition);
+			} catch(RuntimeException e) {
+				Activator.getDefault().getLog().log(new Status(IStatus.ERROR, "TaskTile", "invoke of consumer failed", e));
 			}
-		} finally {
-			setCursor(oldCursor);
 		}
 	}
 
 	private void updateStyle(int style) {
 
 		if((style & HIGHLIGHT) != 0) {
-			setCursor(handCursor);
 			colorActive = colors[0];
 			colorInactive = colors[1];
 			labelImage.setEnabled(true);
 			textSection.setEnabled(true);
 			textDesciption.setEnabled(true);
 		} else {
-			setCursor(null);
 			colorActive = colors[1];
 			colorInactive = colors[1];
 			labelImage.setEnabled(false);
