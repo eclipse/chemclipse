@@ -33,7 +33,6 @@
 	<unit id="org.apache.commons.csv" version="0.0.0"/>
 	<unit id="com.fasterxml.jackson.core.jackson-annotations" version="0.0.0"/>
 	<unit id="org.apache.pdfbox.fontbox" version="0.0.0"/>
-	<unit id="org.apache.httpcomponents.httpmime" version="0.0.0"/>
 	<unit id="org.slf4j.api" version="0.0.0"/>
 	<unit id="com.google.guava" version="0.0.0"/>
 	<unit id="org.apache.commons.logging" version="0.0.0"/>
