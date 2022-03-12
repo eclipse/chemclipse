@@ -57,7 +57,6 @@
 	<unit id="org.apache.batik.dom" version="0.0.0"/>
 	<unit id="org.ejml.denseC64" version="0.0.0"/>
 	<unit id="org.apache.commons.cli" version="0.0.0"/>
-	<unit id="org.apache.poi" version="0.0.0"/>
 	<unit id="com.sun.jersey" version="0.0.0"/>
 	<unit id="org.ejml.equation" version="0.0.0"/>
 	<unit id="org.ejml.experimental" version="0.0.0"/>
@@ -65,10 +64,12 @@
 	<unit id="org.apache.batik.svggen" version="0.0.0"/>
 	<unit id="ca.odell.glazedlists" version="0.0.0"/>
 	<unit id="org.json" version="0.0.0"/>
-	<unit id="org.apache.poi.ooxml.schemas" version="0.0.0"/>
 	<unit id="org.codehaus.jackson.jaxrs" version="0.0.0"/>
 	<unit id="org.bouncycastle.bcprov" version="0.0.0"/>
+	<unit id="org.apache.poi" version="0.0.0"/>
+	<unit id="org.apache.poi.ooxml.schemas" version="0.0.0"/>
 	<unit id="org.apache.poi.ooxml" version="0.0.0"/>
+	<unit id="org.apache.commons.collections4" version="0.0.0"/>
 	<unit id="org.apache.commons.lang" version="0.0.0"/>
 	<unit id="com.fasterxml.jackson.core.jackson-databind" version="0.0.0"/>
 	<unit id="org.apache.httpcomponents.httpcore.nio" version="0.0.0"/>
