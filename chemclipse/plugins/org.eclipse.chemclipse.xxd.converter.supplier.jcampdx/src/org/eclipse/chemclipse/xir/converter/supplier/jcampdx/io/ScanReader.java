@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,13 +21,13 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.activation.UnsupportedDataTypeException;
-
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.xir.converter.supplier.jcampdx.model.IVendorScanXIR;
 import org.eclipse.chemclipse.xir.converter.supplier.jcampdx.model.VendorScanXIR;
 import org.eclipse.chemclipse.xir.model.core.SignalXIR;
 import org.eclipse.core.runtime.IProgressMonitor;
+
+import jakarta.activation.UnsupportedDataTypeException;
 
 public class ScanReader {
 
