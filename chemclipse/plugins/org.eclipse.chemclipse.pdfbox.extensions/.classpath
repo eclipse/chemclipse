@@ -4,7 +4,6 @@
 	<classpathentry exported="true" kind="lib" path="libraries/org.apache.pdfbox.fontbox_2.0.6.v20190617-1333.jar"/>
 	<classpathentry exported="true" kind="lib" path="libraries/org.apache.pdfbox.preflight_2.0.6.v20190617-1333.jar"/>
 	<classpathentry exported="true" kind="lib" path="libraries/org.apache.pdfbox.xmpbox_2.0.6.v20190617-1333.jar"/>
-	<classpathentry exported="true" kind="lib" path="libraries/pdfbox-2.0.25.jar"/>
 	<classpathentry exported="true" kind="lib" path="libraries/javax.activation_1.1.0.v201211130549.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-11"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
