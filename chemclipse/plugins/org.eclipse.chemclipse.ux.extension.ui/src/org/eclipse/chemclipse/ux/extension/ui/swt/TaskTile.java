@@ -54,8 +54,8 @@ public class TaskTile extends Composite {
 	TaskTile(Composite parent, TileDefinition definition, Consumer<TileDefinition> definitionConsumer, Function<TileDefinition, Integer> styleFunction, Color[] colors) {
 
 		super(parent, SWT.NONE);
-		if(colors.length < 3) {
-			throw new IllegalArgumentException("must suplly three colors");
+		if(colors.length < 4) {
+			throw new IllegalArgumentException("must supply three colors");
 		}
 		this.definition = definition;
 		this.definitionConsumer = definitionConsumer;
@@ -135,6 +135,7 @@ public class TaskTile extends Composite {
 		Label label = new Label(parent, SWT.CENTER | SWT.WRAP);
 		label.setText("");
 		label.setLayoutData(getGridData(SWT.CENTER, SWT.BEGINNING, 2));
+		label.setForeground(colors[3]);
 		addControlListener(label);
 		return label;
 	}
