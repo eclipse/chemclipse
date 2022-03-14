@@ -625,26 +625,26 @@ public class ExtendedComparisonScanUI extends Composite implements IExtendedPart
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(SelectionEvent s) {
 
 				try {
 					/*
 					 * Scan 1
 					 */
-					if(scan1.getOptimizedMassSpectrum() != null) {
+					if(scan1 != null && scan1.getOptimizedMassSpectrum() != null) {
 						scan1Optimized = scan1.getOptimizedMassSpectrum().makeDeepCopy().normalize(NORMALIZATION_FACTOR);
 					}
 					/*
 					 * Scan 2
 					 */
-					if(scan2.getOptimizedMassSpectrum() != null) {
+					if(scan2 != null && scan2.getOptimizedMassSpectrum() != null) {
 						scan2Optimized = scan2.getOptimizedMassSpectrum().makeDeepCopy().normalize(NORMALIZATION_FACTOR);
 					}
 					//
 					button.setEnabled(false);
 					updateChart();
-				} catch(CloneNotSupportedException e1) {
-					logger.warn(e1);
+				} catch(CloneNotSupportedException e) {
+					logger.warn(e);
 				}
 			}
 		});
