@@ -28,7 +28,7 @@
 -XX:-UseGCOverheadLimit
 --add-modules=ALL-SYSTEM
       </vmArgs>
-      <vmArgsMac>-XstartOnFirstThread -Dorg.eclipse.swt.internal.carbon.smallFonts
+      <vmArgsMac>-XstartOnFirstThread
       </vmArgsMac>
    </launcherArgs>
 
