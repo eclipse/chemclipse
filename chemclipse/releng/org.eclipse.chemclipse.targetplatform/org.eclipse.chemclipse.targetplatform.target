@@ -42,7 +42,6 @@
 	<unit id="org.apache.xalan" version="0.0.0"/>
 	<unit id="org.apache.commons.math3" version="0.0.0"/>
 	<unit id="com.fasterxml.jackson.core.jackson-core" version="0.0.0"/>
-	<unit id="org.bouncycastle.bcpg" version="0.0.0"/>
 	<unit id="ch.qos.logback.core" version="0.0.0"/>
 	<unit id="org.apache.commons.io" version="0.0.0"/>
 	<unit id="org.apache.commons.math" version="0.0.0"/>
@@ -60,7 +59,6 @@
 	<unit id="org.apache.xerces" version="0.0.0"/>
 	<unit id="org.json" version="0.0.0"/>
 	<unit id="org.codehaus.jackson.jaxrs" version="0.0.0"/>
-	<unit id="org.bouncycastle.bcprov" version="0.0.0"/>
 	<unit id="org.apache.poi" version="0.0.0"/>
 	<unit id="org.apache.poi.ooxml.schemas" version="0.0.0"/>
 	<unit id="org.apache.poi.ooxml" version="0.0.0"/>
@@ -70,6 +68,8 @@
 	<unit id="org.apache.httpcomponents.httpcore.nio" version="0.0.0"/>
 	<unit id="org.hamcrest.library" version="0.0.0"/>
 	<unit id="org.ejml.simple" version="0.0.0"/>
+	<unit id="org.bouncycastle.bcpg" version="0.0.0"/>
+	<unit id="org.bouncycastle.bcprov" version="0.0.0"/>	
 	<unit id="org.bouncycastle.bcpkix" version="0.0.0"/>
 	<unit id="org.bouncycastle.bcutil" version="0.0.0"/>
 	<unit id="org.easymock" version="0.0.0"/>

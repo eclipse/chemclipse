@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="libraries/javax.xml.bind_2.2.0.v201105210648.jar"/>
 	<classpathentry exported="true" kind="lib" path="libraries/org.apache.pdfbox_2.0.6.v20190617-1333.jar"/>
 	<classpathentry exported="true" kind="lib" path="libraries/org.apache.pdfbox.fontbox_2.0.6.v20190617-1333.jar"/>
 	<classpathentry exported="true" kind="lib" path="libraries/org.apache.pdfbox.preflight_2.0.6.v20190617-1333.jar"/>

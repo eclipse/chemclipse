@@ -7,10 +7,16 @@ Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.pdfbox.extensions.Activator
 Bundle-Vendor: ChemClipse
 Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.chemclipse.logging;bundle-version="0.8.0"
+ org.apache.commons.logging;bundle-version="1.2.0",
+ org.eclipse.chemclipse.logging;bundle-version="0.8.0",
+ org.bouncycastle.bcpg;bundle-version="1.69.0",
+ org.bouncycastle.bcpkix;bundle-version="1.69.0",
+ org.bouncycastle.bcprov;bundle-version="1.69.0",
+ org.bouncycastle.bcutil;bundle-version="1.69.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: libraries/javax.activation_1.1.0.v201211130549.jar,
+ libraries/javax.xml.bind_2.2.0.v201105210648.jar,
  libraries/org.apache.pdfbox_2.0.6.v20190617-1333.jar,
  libraries/org.apache.pdfbox.fontbox_2.0.6.v20190617-1333.jar,
  libraries/org.apache.pdfbox.preflight_2.0.6.v20190617-1333.jar,
