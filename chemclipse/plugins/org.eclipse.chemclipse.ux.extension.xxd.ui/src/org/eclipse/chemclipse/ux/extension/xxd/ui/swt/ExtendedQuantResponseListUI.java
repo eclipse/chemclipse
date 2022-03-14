@@ -338,7 +338,7 @@ public class ExtendedQuantResponseListUI extends Composite implements IExtendedP
 		}
 	}
 
-	private boolean validate(IValidator validator, ControlDecoration controlDecoration, Text text) {
+	private boolean validate(IValidator<Object> validator, ControlDecoration controlDecoration, Text text) {
 
 		IStatus status = validator.validate(text.getText());
 		if(status.isOK()) {

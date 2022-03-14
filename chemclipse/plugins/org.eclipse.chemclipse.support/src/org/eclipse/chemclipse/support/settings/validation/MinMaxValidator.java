@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,7 +15,7 @@ import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 
-public class MinMaxValidator<T extends Number & Comparable<T>> implements IValidator {
+public class MinMaxValidator<T extends Number & Comparable<T>> implements IValidator<Object> {
 
 	private String fieldName;
 	private T min;
@@ -23,6 +23,7 @@ public class MinMaxValidator<T extends Number & Comparable<T>> implements IValid
 	private Class<T> type;
 
 	public MinMaxValidator(String fieldName, T min, T max, Class<T> type) {
+
 		this.fieldName = fieldName;
 		this.min = min;
 		this.max = max;

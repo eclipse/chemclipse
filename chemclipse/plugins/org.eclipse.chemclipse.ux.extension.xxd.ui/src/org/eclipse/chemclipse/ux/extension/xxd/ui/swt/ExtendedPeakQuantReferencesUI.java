@@ -336,7 +336,7 @@ public class ExtendedPeakQuantReferencesUI extends Composite implements IExtende
 		buttonDeleteReference.setEnabled(enabled);
 	}
 
-	private boolean validate(IValidator validator, ControlDecoration controlDecoration, Combo combo) {
+	private boolean validate(IValidator<Object> validator, ControlDecoration controlDecoration, Combo combo) {
 
 		IStatus status = validator.validate(combo.getText());
 		if(status.isOK()) {

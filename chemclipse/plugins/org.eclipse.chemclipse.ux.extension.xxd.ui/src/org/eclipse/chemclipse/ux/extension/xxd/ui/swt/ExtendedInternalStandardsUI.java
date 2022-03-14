@@ -660,17 +660,17 @@ public class ExtendedInternalStandardsUI extends Composite implements IExtendedP
 		labelInputErrors.setBackground(Colors.getColor(Colors.LIGHT_YELLOW));
 	}
 
-	private boolean validate(IValidator validator, ControlDecoration controlDecoration, Text text) {
+	private boolean validate(IValidator<Object> validator, ControlDecoration controlDecoration, Text text) {
 
 		return validate(validator, controlDecoration, text.getText());
 	}
 
-	private boolean validate(IValidator validator, ControlDecoration controlDecoration, ComboViewer combo) {
+	private boolean validate(IValidator<Object> validator, ControlDecoration controlDecoration, ComboViewer combo) {
 
 		return validate(validator, controlDecoration, combo.getCombo().getText());
 	}
 
-	private boolean validate(IValidator validator, ControlDecoration controlDecoration, String text) {
+	private boolean validate(IValidator<Object> validator, ControlDecoration controlDecoration, String text) {
 
 		IStatus status = validator.validate(text);
 		if(status.isOK()) {

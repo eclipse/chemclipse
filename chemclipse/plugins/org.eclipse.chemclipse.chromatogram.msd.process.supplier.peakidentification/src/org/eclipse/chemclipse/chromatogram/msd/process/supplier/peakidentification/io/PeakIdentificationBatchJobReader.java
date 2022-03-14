@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,10 +27,6 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.XMLEvent;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.internal.filter.PeakIdentificationBatchJobEventFilter;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.internal.support.IPeakIdentificationBatchJobTags;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakIdentificationBatchJob;
@@ -43,6 +39,9 @@ import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentificati
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.PeakInputEntry;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.PeakIntegrationEntry;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.PeakOutputEntry;
+import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
+import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakIdentificationBatchJobReader implements IPeakIdentificationBatchJobReader {
 
@@ -183,7 +182,6 @@ public class PeakIdentificationBatchJobReader implements IPeakIdentificationBatc
 		bufferedInputStream.close();
 	}
 
-	@SuppressWarnings("unchecked")
 	private void readPeakIntegrationEntry(File file, IPeakIdentificationBatchJob batchJob, IProgressMonitor monitor) throws XMLStreamException, IOException {
 
 		String processorId = "";
@@ -231,7 +229,6 @@ public class PeakIdentificationBatchJobReader implements IPeakIdentificationBatc
 		bufferedInputStream.close();
 	}
 
-	@SuppressWarnings("unchecked")
 	private void readPeakIdentificationEntry(File file, IPeakIdentificationBatchJob batchJob, IProgressMonitor monitor) throws XMLStreamException, IOException {
 
 		String processorId = "";
@@ -288,7 +285,6 @@ public class PeakIdentificationBatchJobReader implements IPeakIdentificationBatc
 	 * @throws XMLStreamException
 	 * @throws IOException
 	 */
-	@SuppressWarnings("unchecked")
 	private void readPeakOutputEntries(File file, IPeakIdentificationBatchJob batchJob, IProgressMonitor monitor) throws XMLStreamException, IOException {
 
 		IPeakOutputEntry outputEntry;

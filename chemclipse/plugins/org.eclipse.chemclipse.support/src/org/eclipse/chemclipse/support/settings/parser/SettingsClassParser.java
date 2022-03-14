@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -147,8 +147,8 @@ public class SettingsClassParser<SettingType> implements SettingsParser<SettingT
 							} else if(annotation instanceof ValidatorSettingsProperty) {
 								try {
 									ValidatorSettingsProperty validatorSettingsProperty = (ValidatorSettingsProperty)annotation;
-									Class<? extends IValidator> validatorClass = validatorSettingsProperty.validator();
-									IValidator validator = validatorClass.newInstance();
+									Class<? extends IValidator<Object>> validatorClass = validatorSettingsProperty.validator();
+									IValidator<Object> validator = validatorClass.newInstance();
 									inputValue.addValidator(validator);
 								} catch(InstantiationException
 										| IllegalAccessException e) {

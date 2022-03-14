@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,7 +25,7 @@ import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 
-public class TraceValidator implements IValidator {
+public class TraceValidator implements IValidator<Object> {
 
 	private static final String ERROR = "Please enter valid traces, e.g.: 320.1 400";
 	private static final String ERROR_VALUE = "The trace value can't be parsed: ";

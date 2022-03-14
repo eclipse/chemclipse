@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -407,7 +407,7 @@ public class NamedTracesUI extends Composite {
 		buttonDelete.setEnabled(namedTrace != null);
 	}
 
-	private boolean validate(IValidator validator, ControlDecoration controlDecoration, Text text) {
+	private boolean validate(IValidator<Object> validator, ControlDecoration controlDecoration, Text text) {
 
 		IStatus status = validator.validate(text.getText().trim());
 		if(status.isOK()) {

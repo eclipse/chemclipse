@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,7 +15,7 @@ import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 
-public class RetentionIndexValidator implements IValidator {
+public class RetentionIndexValidator implements IValidator<Object> {
 
 	private static final String ERROR = "Please enter a correct retention index, e.g. 600";
 	private static final String ERROR_VALUE_RANGE = "The retention index must be not <= 0.";

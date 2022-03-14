@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -108,7 +108,7 @@ public class WidgetItem {
 		} catch(RuntimeException e) {
 			currentValue = null;
 		}
-		for(IValidator validator : inputValue.getValidators()) {
+		for(IValidator<Object> validator : inputValue.getValidators()) {
 			IStatus validate = validator.validate(currentValue);
 			if(!validate.isOK()) {
 				return validate;

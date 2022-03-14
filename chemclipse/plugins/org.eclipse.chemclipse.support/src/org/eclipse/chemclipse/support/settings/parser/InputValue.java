@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -30,7 +30,7 @@ public class InputValue {
 	private final String regularExpression = null;
 	private boolean isMultiLine = false;
 	private FileSettingProperty fileSettingProperty;
-	private final List<IValidator> validators = new ArrayList<>();
+	private final List<IValidator<Object>> validators = new ArrayList<>();
 	private ComboSupplier<?> comboSupplier;
 
 	public boolean hasRegexConstraint() {
@@ -101,12 +101,12 @@ public class InputValue {
 		return fileSettingProperty;
 	}
 
-	public void addValidator(IValidator validator) {
+	public void addValidator(IValidator<Object> validator) {
 
 		validators.add(validator);
 	}
 
-	public Collection<IValidator> getValidators() {
+	public Collection<IValidator<Object>> getValidators() {
 
 		return Collections.unmodifiableCollection(validators);
 	}

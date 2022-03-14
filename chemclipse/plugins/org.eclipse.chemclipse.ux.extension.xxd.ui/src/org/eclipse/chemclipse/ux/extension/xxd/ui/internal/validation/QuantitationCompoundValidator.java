@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,7 +19,7 @@ import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 
-public class QuantitationCompoundValidator extends ValueParserSupport implements IValidator {
+public class QuantitationCompoundValidator extends ValueParserSupport implements IValidator<Object> {
 
 	public static final String DEMO = "Styrene | mg/kg | 5.68";
 	//

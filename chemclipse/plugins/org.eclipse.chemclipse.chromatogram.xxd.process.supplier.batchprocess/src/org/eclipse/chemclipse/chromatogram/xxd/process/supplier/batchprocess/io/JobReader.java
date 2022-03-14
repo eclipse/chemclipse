@@ -185,7 +185,6 @@ public class JobReader {
 		bufferedInputStream.close();
 	}
 
-	@SuppressWarnings("unchecked")
 	private void readChromatogramProcessEntries(File file, ProcessMethod method, IProgressMonitor monitor) throws XMLStreamException, IOException {
 
 		XMLEvent event;
