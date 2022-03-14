@@ -38,6 +38,10 @@ http://www.eclipse.org/legal/epl-v10.html
          id="org.eclipse.userstorage"
          version="0.0.0"/>
 
+   <includes
+         id="org.eclipse.rcp"
+         version="0.0.0"/>
+
    <plugin
          id="org.apache.httpcomponents.httpclient"
          download-size="0"
