@@ -33,9 +33,7 @@ pipeline {
 		}
 		stage('build') {
 			steps {
-				wrap([$class: 'Xvnc', takeScreenshot: false, useXauthority: true]) {
-					sh 'mvn -B -Dtycho.localArtifacts=false -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -Dmaven.test.failure.ignore=true -Dmaven.repo.local=$WORKSPACE/.mvn -f chemclipse/releng/org.eclipse.chemclipse.aggregator/pom.xml clean install'
-				}
+				sh 'mvn -B -Dtycho.localArtifacts=false -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn -Dmaven.test.failure.ignore=true -Dmaven.repo.local=$WORKSPACE/.mvn -f chemclipse/releng/org.eclipse.chemclipse.aggregator/pom.xml clean install'
 				archiveArtifacts 'chemclipse/products/org.eclipse.chemclipse.rcp.compilation.community.product/target/products/*.zip,chemclipse/products/org.eclipse.chemclipse.rcp.compilation.community.product/target/products/*.tar.gz'
 			}
 		}
@@ -79,7 +77,7 @@ pipeline {
 			}
 			steps {
 				sshagent ( ['projects-storage.eclipse.org-bot-ssh']) {
-					sh '''					
+					sh '''
 						scp chemclipse/products/org.eclipse.chemclipse.rcp.compilation.community.product/target/products/org.eclipse.chemclipse.rcp.compilation.community.product.id-win32.win32.x86_64.zip genie.chemclipse@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/chemclipse/integration/${BRANCH_NAME}/downloads/chemclipse-win32.win32.x86_64.zip
 						scp chemclipse/products/org.eclipse.chemclipse.rcp.compilation.community.product/target/products/org.eclipse.chemclipse.rcp.compilation.community.product.id-linux.gtk.x86_64.tar.gz genie.chemclipse@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/chemclipse/integration/${BRANCH_NAME}/downloads/chemclipse-linux.gtk.x86_64.tar.gz
 						scp chemclipse/products/org.eclipse.chemclipse.rcp.compilation.community.product/target/products/org.eclipse.chemclipse.rcp.compilation.community.product.id-macosx.cocoa.x86_64.tar.gz genie.chemclipse@projects-storage.eclipse.org:/home/data/httpd/download.eclipse.org/chemclipse/integration/${BRANCH_NAME}/downloads/chemclipse-macosx.cocoa.x86_64.tar.gz
