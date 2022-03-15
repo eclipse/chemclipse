@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -31,7 +31,7 @@ import org.eclipse.core.databinding.validation.MultiValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.databinding.swt.ISWTObservableValue;
-import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.jface.databinding.swt.typed.WidgetProperties;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellLabelProvider;
@@ -52,7 +52,7 @@ import org.eclipse.swt.widgets.Text;
 
 public class FilterRetentionTimeWizardPage extends WizardPage implements IFilterWizardPage {
 
-	private DataBindingContext dbc = new DataBindingContext();
+	private DataBindingContext dataBindingContext = new DataBindingContext();
 	private int filterType;
 	private List<int[]> intervals;
 	private IObservableValue<Double> observeBegin = new WritableValue<>();
@@ -132,14 +132,16 @@ public class FilterRetentionTimeWizardPage extends WizardPage implements IFilter
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(label);
 		Text text = new Text(composite, SWT.BORDER);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(text);
-		ISWTObservableValue targetObservableValue = WidgetProperties.text(SWT.Modify).observe(text);
-		UpdateValueStrategy targetToModel = UpdateValueStrategy.create(IConverter.create(String.class, Double.class, o1 -> {
+		ISWTObservableValue<String> targetObservableValue = WidgetProperties.text(SWT.Modify).observe(text);
+		//
+		UpdateValueStrategy<String, Double> targetToModel = UpdateValueStrategy.create(IConverter.create(String.class, Double.class, o1 -> {
 			try {
 				return decimalFormat.parse((String)o1).doubleValue();
 			} catch(ParseException e1) {
 			}
 			return null;
 		}));
+		//
 		targetToModel.setBeforeSetValidator(o1 -> {
 			if(o1 instanceof Double) {
 				Double d = (Double)o1;
@@ -149,7 +151,8 @@ public class FilterRetentionTimeWizardPage extends WizardPage implements IFilter
 			}
 			return ValidationStatus.error("error");
 		});
-		UpdateValueStrategy modelToTarget = UpdateValueStrategy.create(IConverter.create(Double.class, String.class, o1 -> {
+		//
+		UpdateValueStrategy<Double, String> modelToTarget = UpdateValueStrategy.create(IConverter.create(Double.class, String.class, o1 -> {
 			try {
 				return decimalFormat.format((o1));
 			} catch(NumberFormatException e) {
@@ -157,7 +160,7 @@ public class FilterRetentionTimeWizardPage extends WizardPage implements IFilter
 			return null;
 		}));
 		//
-		dbc.bindValue(targetObservableValue, observeBegin, targetToModel, modelToTarget);
+		dataBindingContext.bindValue(targetObservableValue, observeBegin, targetToModel, modelToTarget);
 		label = new Label(composite, SWT.None);
 		label.setText("End Time of Interval [min]");
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(label);
@@ -190,8 +193,8 @@ public class FilterRetentionTimeWizardPage extends WizardPage implements IFilter
 			return null;
 		}));
 		//
-		dbc.bindValue(targetObservableValue, observeFinish, targetToModel, modelToTarget);
-		dbc.addValidationStatusProvider(new MultiValidator() {
+		dataBindingContext.bindValue(targetObservableValue, observeFinish, targetToModel, modelToTarget);
+		dataBindingContext.addValidationStatusProvider(new MultiValidator() {
 
 			@Override
 			protected IStatus validate() {
@@ -210,11 +213,11 @@ public class FilterRetentionTimeWizardPage extends WizardPage implements IFilter
 		button.setText("Add Interval to Table");
 		button.addListener(SWT.Selection, e -> addFilterRetentionTimeInterval());
 		// Create a boolean observable, which depends on the ok status
-		AggregateValidationStatus aggregateValidationStatus = new AggregateValidationStatus(dbc.getBindings(), AggregateValidationStatus.MAX_SEVERITY);
+		AggregateValidationStatus aggregateValidationStatus = new AggregateValidationStatus(dataBindingContext.getBindings(), AggregateValidationStatus.MAX_SEVERITY);
 		IObservableValue<Boolean> isValidationOk = ComputedValue.create(() -> aggregateValidationStatus.getValue().isOK());
-		ISWTObservableValue buttonEnabledObservable = WidgetProperties.enabled().observe(button);
+		ISWTObservableValue<Boolean> buttonEnabledObservable = WidgetProperties.enabled().observe(button);
 		// bind the enablement of the finish button to the validation
-		dbc.bindValue(buttonEnabledObservable, isValidationOk);
+		dataBindingContext.bindValue(buttonEnabledObservable, isValidationOk);
 		button = new Button(buttonComposite, SWT.PUSH);
 		button.setText("Remove Selected Intervals");
 		button.addListener(SWT.Selection, e -> removeFilterRetentionTimeInterval());

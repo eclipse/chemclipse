@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - reduce compiler warnings
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters;
 
@@ -26,8 +27,9 @@ import org.eclipse.chemclipse.model.statistics.IVariable;
 
 public class AnovaFilter extends AbstractFilter implements IFilter {
 
+	private final String name = "Anova filter";
+	//
 	private double alpha;
-	final private String name = "Anova filter";
 	private String selectionResult = "";
 
 	public AnovaFilter() {

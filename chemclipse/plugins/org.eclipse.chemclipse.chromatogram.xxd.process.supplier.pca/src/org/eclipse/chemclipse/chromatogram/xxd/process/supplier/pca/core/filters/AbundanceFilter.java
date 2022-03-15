@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - reduce compiler warnings
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters;
 
@@ -22,17 +23,19 @@ import org.eclipse.chemclipse.model.statistics.IVariable;
 
 public class AbundanceFilter extends AbstractFilter implements IFilter {
 
-	final static public int ALL_VALUE = 0;
-	final static public int ANY_VALUE = 1;
-	final static public int LIMIT_GREATER_THAN = 0;
-	final static public int LIMIT_LESS_THAN = 1;
+	public static final int ALL_VALUE = 0;
+	public static final int ANY_VALUE = 1;
+	public static final int LIMIT_GREATER_THAN = 0;
+	public static final int LIMIT_LESS_THAN = 1;
+	//
+	private final String name = "Abundance filter";
+	//
 	private Function<Double, Boolean> comparator;
 	private int filterType;
 	private Function<Double, Boolean> gt = d -> d > this.limitValue;
 	private int limitType;
 	private double limitValue;
 	private Function<Double, Boolean> lt = d -> d < this.limitValue;
-	final private String name = "Abundance filter";
 	private String selectionResult = "";
 
 	public AbundanceFilter() {

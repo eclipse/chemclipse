@@ -139,19 +139,17 @@ public class SettingsClassParser<SettingType> implements SettingsParser<SettingT
 								inputValue.setFileSettingProperty((FileSettingProperty)annotation);
 							} else if(annotation instanceof ComboSettingsProperty) {
 								try {
-									inputValue.setComboSupplier(((ComboSettingsProperty)annotation).value().newInstance());
-								} catch(InstantiationException
-										| IllegalAccessException e) {
+									inputValue.setComboSupplier(((ComboSettingsProperty)annotation).value().getDeclaredConstructor().newInstance());
+								} catch(Exception e) {
 									throw new RuntimeException("The specified ComboSupplier can't be created.", e);
 								}
 							} else if(annotation instanceof ValidatorSettingsProperty) {
 								try {
 									ValidatorSettingsProperty validatorSettingsProperty = (ValidatorSettingsProperty)annotation;
 									Class<? extends IValidator<Object>> validatorClass = validatorSettingsProperty.validator();
-									IValidator<Object> validator = validatorClass.newInstance();
+									IValidator<Object> validator = validatorClass.getDeclaredConstructor().newInstance();
 									inputValue.addValidator(validator);
-								} catch(InstantiationException
-										| IllegalAccessException e) {
+								} catch(Exception e) {
 									throw new RuntimeException("The validator can't be instantiated.", e);
 								}
 							} else {
@@ -213,10 +211,9 @@ public class SettingsClassParser<SettingType> implements SettingsParser<SettingT
 					}
 				}
 				// try default constructor instead
-				return settingsClass.newInstance();
-			} catch(InstantiationException | IllegalAccessException
-					| IllegalArgumentException | InvocationTargetException e) {
-				throw new RuntimeException("can't create settings instance: " + e.getMessage(), e);
+				return settingsClass.getDeclaredConstructor().newInstance();
+			} catch(Exception e) {
+				throw new RuntimeException("Can't create settings instance: " + e.getMessage(), e);
 			}
 		}
 		return null;

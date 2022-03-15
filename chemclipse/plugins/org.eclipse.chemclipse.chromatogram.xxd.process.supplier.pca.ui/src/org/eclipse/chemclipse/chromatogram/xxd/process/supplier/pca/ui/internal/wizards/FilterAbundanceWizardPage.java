@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - reduce compiler warnings
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
@@ -16,13 +17,13 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.IFilter.DataTypeProcessing;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
-import org.eclipse.core.databinding.beans.PojoProperties;
+import org.eclipse.core.databinding.beans.typed.PojoProperties;
 import org.eclipse.core.databinding.conversion.IConverter;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.SelectObservableValue;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.jface.databinding.swt.ISWTObservableValue;
-import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.jface.databinding.swt.typed.WidgetProperties;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.wizard.WizardPage;
@@ -34,16 +35,16 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-@SuppressWarnings("unchecked")
 public class FilterAbundanceWizardPage extends WizardPage implements IFilterWizardPage {
 
-	final private DataBindingContext dbc = new DataBindingContext();
+	private final DataBindingContext dataBindingContext = new DataBindingContext();
 	private IObservableValue<Integer> observableFilterType;
 	private IObservableValue<Integer> observableLimitType;
 	private IObservableValue<Double> observeLimitValue;
 	private IObservableValue<DataTypeProcessing> dataTypeFiltration;
 
 	protected FilterAbundanceWizardPage(AbundanceFilter abundanceFilter) {
+
 		super("Abundance Filter");
 		setTitle("Abundance Filter");
 		observableLimitType = PojoProperties.value(AbundanceFilter.class, "limitType", Integer.class).observe(abundanceFilter);
@@ -55,7 +56,7 @@ public class FilterAbundanceWizardPage extends WizardPage implements IFilterWiza
 	@Override
 	public void createControl(Composite parent) {
 
-		WizardPageSupport.create(this, dbc);
+		WizardPageSupport.create(this, dataBindingContext);
 		Composite composite = new Composite(parent, SWT.None);
 		composite.setLayout(new GridLayout(1, false));
 		//
@@ -66,11 +67,11 @@ public class FilterAbundanceWizardPage extends WizardPage implements IFilterWiza
 		SelectObservableValue<DataTypeProcessing> selectedRadioButtonObservableProcessData = new SelectObservableValue<>();
 		Button button = new Button(groupDataSelection, SWT.RADIO);
 		button.setText("Use on raw data");
-		selectedRadioButtonObservableProcessData.addOption(DataTypeProcessing.RAW_DATA, WidgetProperties.selection().observe(button));
+		selectedRadioButtonObservableProcessData.addOption(DataTypeProcessing.RAW_DATA, WidgetProperties.buttonSelection().observe(button));
 		button = new Button(groupDataSelection, SWT.RADIO);
 		button.setText("Use on modified data");
-		selectedRadioButtonObservableProcessData.addOption(DataTypeProcessing.MODIFIED_DATA, WidgetProperties.selection().observe(button));
-		dbc.bindValue(selectedRadioButtonObservableProcessData, dataTypeFiltration, new UpdateValueStrategy(UpdateValueStrategy.POLICY_CONVERT), null);
+		selectedRadioButtonObservableProcessData.addOption(DataTypeProcessing.MODIFIED_DATA, WidgetProperties.buttonSelection().observe(button));
+		dataBindingContext.bindValue(selectedRadioButtonObservableProcessData, dataTypeFiltration, new UpdateValueStrategy<>(UpdateValueStrategy.POLICY_CONVERT), null);
 		//
 		label = new Label(composite, SWT.None);
 		label.setText("Select row in data table under the condition");
@@ -78,11 +79,11 @@ public class FilterAbundanceWizardPage extends WizardPage implements IFilterWiza
 		button = new Button(composite, SWT.RADIO);
 		button.setText("All value in row are");
 		button.setSelection(true);
-		selectedRadioButtonObservable.addOption(AbundanceFilter.ALL_VALUE, WidgetProperties.selection().observe(button));
+		selectedRadioButtonObservable.addOption(AbundanceFilter.ALL_VALUE, WidgetProperties.buttonSelection().observe(button));
 		button = new Button(composite, SWT.RADIO);
 		button.setText("At least one value  in row is");
-		selectedRadioButtonObservable.addOption(AbundanceFilter.ANY_VALUE, WidgetProperties.selection().observe(button));
-		dbc.bindValue(selectedRadioButtonObservable, observableFilterType, new UpdateValueStrategy(UpdateValueStrategy.POLICY_CONVERT), null);
+		selectedRadioButtonObservable.addOption(AbundanceFilter.ANY_VALUE, WidgetProperties.buttonSelection().observe(button));
+		dataBindingContext.bindValue(selectedRadioButtonObservable, observableFilterType, new UpdateValueStrategy<>(UpdateValueStrategy.POLICY_CONVERT), null);
 		Composite compareComposite = new Composite(composite, SWT.None);
 		GridDataFactory.swtDefaults().grab(true, false).align(SWT.FILL, SWT.CENTER).applyTo(compareComposite);
 		compareComposite.setLayout(new GridLayout(3, false));
@@ -91,12 +92,14 @@ public class FilterAbundanceWizardPage extends WizardPage implements IFilterWiza
 		combo.add("greater than");
 		combo.add("less than");
 		combo.select(0);
-		ISWTObservableValue comboLimitType = WidgetProperties.singleSelectionIndex().observe(combo);
-		dbc.bindValue(comboLimitType, observableLimitType, new UpdateValueStrategy(UpdateValueStrategy.POLICY_CONVERT), null);
+		//
+		ISWTObservableValue<Integer> comboLimitType = WidgetProperties.singleSelectionIndex().observe(combo);
+		dataBindingContext.bindValue(comboLimitType, observableLimitType, new UpdateValueStrategy<>(UpdateValueStrategy.POLICY_CONVERT), null);
 		Text text = new Text(compareComposite, SWT.BORDER);
 		GridDataFactory.swtDefaults().grab(true, false).align(SWT.FILL, SWT.BEGINNING).applyTo(text);
-		ISWTObservableValue txtSecondAttributeObservable = WidgetProperties.text(SWT.Modify).observe(text);
-		UpdateValueStrategy targetToModel = new UpdateValueStrategy(UpdateValueStrategy.POLICY_CONVERT);
+		ISWTObservableValue<String> txtSecondAttributeObservable = WidgetProperties.text(SWT.Modify).observe(text);
+		UpdateValueStrategy<String, Double> targetToModel = new UpdateValueStrategy<>(UpdateValueStrategy.POLICY_CONVERT);
+		//
 		targetToModel.setConverter(IConverter.create(String.class, Double.class, o1 -> {
 			try {
 				return Double.parseDouble((String)o1);
@@ -104,20 +107,22 @@ public class FilterAbundanceWizardPage extends WizardPage implements IFilterWiza
 			}
 			return null;
 		}));
+		//
 		targetToModel.setAfterConvertValidator(o1 -> {
 			if(o1 instanceof Double) {
 				return ValidationStatus.ok();
 			}
 			return ValidationStatus.error("Error");
 		});
-		UpdateValueStrategy modelToTarget = UpdateValueStrategy.create(IConverter.create(Double.class, String.class, o1 -> Double.toString((Double)o1)));
-		dbc.bindValue(txtSecondAttributeObservable, observeLimitValue, targetToModel, modelToTarget);
+		//
+		UpdateValueStrategy<Double, String> modelToTarget = UpdateValueStrategy.create(IConverter.create(Double.class, String.class, o1 -> Double.toString((Double)o1)));
+		dataBindingContext.bindValue(txtSecondAttributeObservable, observeLimitValue, targetToModel, modelToTarget);
 		setControl(composite);
 	}
 
 	@Override
 	public void update() {
 
-		dbc.updateModels();
+		dataBindingContext.updateModels();
 	}
 }

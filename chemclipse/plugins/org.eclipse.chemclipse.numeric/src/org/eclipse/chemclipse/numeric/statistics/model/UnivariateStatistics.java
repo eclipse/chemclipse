@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Janos Binder - initial API and implementation
+ * Philip Wenig - reduce compiler warnings
  *******************************************************************************/
 package org.eclipse.chemclipse.numeric.statistics.model;
 
@@ -18,14 +19,15 @@ import org.apache.commons.math3.stat.descriptive.rank.Percentile;
 
 public class UnivariateStatistics implements IUnivariateStatistics {
 
-	final private int sampleSize;
-	final private double[] abundances;
-	final private Mean mean;
-	final private Variance variance;
-	final private StandardDeviation sd;
-	final private Percentile percentile;
+	private final int sampleSize;
+	private final double[] abundances;
+	private final Mean mean;
+	private final Variance variance;
+	private final StandardDeviation sd;
+	private final Percentile percentile;
 
 	public UnivariateStatistics(int sampleSize, double[] abundances, Mean mean, Variance variance, StandardDeviation sd, Percentile percentile) {
+
 		this.sampleSize = sampleSize;
 		this.abundances = abundances;
 		this.mean = mean;
@@ -35,6 +37,7 @@ public class UnivariateStatistics implements IUnivariateStatistics {
 	}
 
 	public UnivariateStatistics(double[] abundances) {
+
 		this(abundances.length, abundances, new Mean(), new Variance(), new StandardDeviation(), new Percentile());
 		mean.setData(abundances);
 		variance.setData(abundances);

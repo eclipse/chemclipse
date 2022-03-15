@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,7 +25,7 @@ import org.eclipse.core.databinding.conversion.IConverter;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.core.databinding.validation.ValidationStatus;
-import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.jface.databinding.swt.typed.WidgetProperties;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -125,7 +125,7 @@ public class SpectraSettingsWizardPage extends WizardPage {
 		Text text = new Text(parent, SWT.BORDER);
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
-		UpdateValueStrategy widgetToModel = UpdateValueStrategy.create(IConverter.create(String.class, Integer.class, o1 -> {
+		UpdateValueStrategy<String, Integer> widgetToModel = UpdateValueStrategy.create(IConverter.create(String.class, Integer.class, o1 -> {
 			try {
 				return Integer.parseInt((String)o1);
 			} catch(NumberFormatException e) {
@@ -144,7 +144,7 @@ public class SpectraSettingsWizardPage extends WizardPage {
 			return ValidationStatus.error("Warning: The value must be positive.");
 		});
 		//
-		UpdateValueStrategy modelToWidget = UpdateValueStrategy.create(IConverter.create(Integer.class, String.class, o1 -> Integer.toString(((Integer)o1))));
+		UpdateValueStrategy<Integer, String> modelToWidget = UpdateValueStrategy.create(IConverter.create(Integer.class, String.class, o1 -> Integer.toString(((Integer)o1))));
 		dataBindingContext.bindValue(WidgetProperties.text(SWT.Modify).observe(text), massWindow, widgetToModel, modelToWidget);
 	}
 
@@ -175,7 +175,7 @@ public class SpectraSettingsWizardPage extends WizardPage {
 		spinner.setMinimum(1);
 		spinner.setIncrement(1000);
 		spinner.setMaximum(Integer.MAX_VALUE);
-		dataBindingContext.bindValue(WidgetProperties.selection().observe(spinner), maximalNumberPeaks);
+		dataBindingContext.bindValue(WidgetProperties.widgetSelection().observe(spinner), maximalNumberPeaks);
 		//
 		return spinner;
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - reduce compiler warnings
  *******************************************************************************/
 package org.eclipse.chemclipse.processing;
 
@@ -69,8 +70,8 @@ public interface Processor<ConfigType> {
 			if(configClass == null) {
 				return null;
 			}
-			return configClass.newInstance();
-		} catch(InstantiationException | IllegalAccessException e) {
+			return configClass.getDeclaredConstructor().newInstance();
+		} catch(Exception e) {
 			throw new UnsupportedOperationException("can't create default config class and the filter does not overrides createNewConfiguration");
 		}
 	}

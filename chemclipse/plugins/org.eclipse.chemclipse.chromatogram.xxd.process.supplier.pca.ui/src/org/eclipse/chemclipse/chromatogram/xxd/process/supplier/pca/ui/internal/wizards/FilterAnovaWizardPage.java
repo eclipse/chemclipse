@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - reduce compiler warnings
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
@@ -16,13 +17,13 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters.IFilter.DataTypeProcessing;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
-import org.eclipse.core.databinding.beans.PojoProperties;
+import org.eclipse.core.databinding.beans.typed.PojoProperties;
 import org.eclipse.core.databinding.conversion.IConverter;
 import org.eclipse.core.databinding.observable.value.IObservableValue;
 import org.eclipse.core.databinding.observable.value.SelectObservableValue;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.jface.databinding.swt.ISWTObservableValue;
-import org.eclipse.jface.databinding.swt.WidgetProperties;
+import org.eclipse.jface.databinding.swt.typed.WidgetProperties;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.wizard.WizardPage;
@@ -33,14 +34,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-@SuppressWarnings("unchecked")
 public class FilterAnovaWizardPage extends WizardPage implements IFilterWizardPage {
 
-	final private DataBindingContext dbc = new DataBindingContext();
+	private final DataBindingContext dataBindingContext = new DataBindingContext();
 	private IObservableValue<Double> observeAlfa;
 	private IObservableValue<DataTypeProcessing> dataTypeFiltration;
 
 	protected FilterAnovaWizardPage(AnovaFilter anovaFilter) {
+
 		super("ANOVA Filter");
 		setTitle("One-way Analysis of Variance Filter");
 		setDescription("ANOVA filter works just with selected sampels, which are in group (contains group name)");
@@ -51,7 +52,7 @@ public class FilterAnovaWizardPage extends WizardPage implements IFilterWizardPa
 	@Override
 	public void createControl(Composite parent) {
 
-		WizardPageSupport.create(this, dbc);
+		WizardPageSupport.create(this, dataBindingContext);
 		Composite composite = new Composite(parent, SWT.None);
 		composite.setLayout(new GridLayout(1, true));
 		//
@@ -60,19 +61,20 @@ public class FilterAnovaWizardPage extends WizardPage implements IFilterWizardPa
 		SelectObservableValue<DataTypeProcessing> selectedRadioButtonObservableProcessData = new SelectObservableValue<>();
 		Button button = new Button(composite, SWT.RADIO);
 		button.setText("Use on raw data");
-		selectedRadioButtonObservableProcessData.addOption(DataTypeProcessing.RAW_DATA, WidgetProperties.selection().observe(button));
+		selectedRadioButtonObservableProcessData.addOption(DataTypeProcessing.RAW_DATA, WidgetProperties.buttonSelection().observe(button));
 		button = new Button(composite, SWT.RADIO);
 		button.setText("Use on modified data");
-		selectedRadioButtonObservableProcessData.addOption(DataTypeProcessing.MODIFIED_DATA, WidgetProperties.selection().observe(button));
-		dbc.bindValue(selectedRadioButtonObservableProcessData, dataTypeFiltration, new UpdateValueStrategy(UpdateValueStrategy.POLICY_CONVERT), null);
+		selectedRadioButtonObservableProcessData.addOption(DataTypeProcessing.MODIFIED_DATA, WidgetProperties.buttonSelection().observe(button));
+		dataBindingContext.bindValue(selectedRadioButtonObservableProcessData, dataTypeFiltration, new UpdateValueStrategy<>(UpdateValueStrategy.POLICY_CONVERT), null);
 		//
 		label = new Label(composite, SWT.None);
 		label.setText("Select row in data table whose p-value is less than value (in %)");
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(label);
 		Text text = new Text(composite, SWT.BORDER);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(text);
-		ISWTObservableValue targetObservableValue = WidgetProperties.text(SWT.Modify).observe(text);
-		UpdateValueStrategy targetToModel = new UpdateValueStrategy(UpdateValueStrategy.POLICY_CONVERT);
+		ISWTObservableValue<String> targetObservableValue = WidgetProperties.text(SWT.Modify).observe(text);
+		UpdateValueStrategy<String, Double> targetToModel = new UpdateValueStrategy<>(UpdateValueStrategy.POLICY_CONVERT);
+		//
 		targetToModel.setConverter(IConverter.create(String.class, Double.class, o1 -> {
 			try {
 				return Double.parseDouble((String)o1) / 100.0;
@@ -80,6 +82,7 @@ public class FilterAnovaWizardPage extends WizardPage implements IFilterWizardPa
 			}
 			return null;
 		}));
+		//
 		targetToModel.setAfterConvertValidator(o1 -> {
 			if(o1 instanceof Double) {
 				Double d = (Double)o1;
@@ -89,14 +92,15 @@ public class FilterAnovaWizardPage extends WizardPage implements IFilterWizardPa
 			}
 			return ValidationStatus.error("error");
 		});
-		UpdateValueStrategy modelToTarget = UpdateValueStrategy.create(IConverter.create(Double.class, String.class, o1 -> Double.toString(((Double)o1) * 100.0)));
-		dbc.bindValue(targetObservableValue, observeAlfa, targetToModel, modelToTarget);
+		//
+		UpdateValueStrategy<Double, String> modelToTarget = UpdateValueStrategy.create(IConverter.create(Double.class, String.class, o1 -> Double.toString(((Double)o1) * 100.0)));
+		dataBindingContext.bindValue(targetObservableValue, observeAlfa, targetToModel, modelToTarget);
 		setControl(composite);
 	}
 
 	@Override
 	public void update() {
 
-		dbc.updateModels();
+		dataBindingContext.updateModels();
 	}
 }
