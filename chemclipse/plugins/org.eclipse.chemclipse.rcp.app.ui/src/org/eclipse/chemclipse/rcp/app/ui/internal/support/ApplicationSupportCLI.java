@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,9 +16,9 @@ import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
@@ -32,7 +32,6 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.equinox.app.IApplication;
-import org.eclipse.equinox.app.IApplicationContext;
 import org.eclipse.osgi.service.runnable.StartupMonitor;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
@@ -81,14 +80,14 @@ public class ApplicationSupportCLI {
 	 * @param context
 	 * @return
 	 */
-	public Object start(IApplicationContext context) {
+	public Object start() {
 
 		/*
 		 * Parse the command line options.
 		 */
 		Options options = getDefaultOptions();
 		addExtensionPointOptions(elements, options);
-		CommandLineParser commandLineParser = new BasicParser();
+		CommandLineParser commandLineParser = new DefaultParser();
 		CommandLine commandLine;
 		try {
 			String[] commandLineArgs = getCommandLineArgs();
@@ -107,9 +106,7 @@ public class ApplicationSupportCLI {
 					public void applicationRunning() {
 
 						startCommandLineContext(commandLine, options);
-						if(commandLine.hasOption(OPTION_NOSHUTDOWN)) {
-							return;
-						} else {
+						if(!commandLine.hasOption(OPTION_NOSHUTDOWN)) {
 							PlatformUI.getWorkbench().close();
 						}
 					}
@@ -117,7 +114,7 @@ public class ApplicationSupportCLI {
 				return startGraphicalContext();
 			}
 		} catch(ParseException e) {
-			System.out.println(e);
+			e.printStackTrace();
 			return IApplication.EXIT_OK;
 		}
 	}
@@ -174,7 +171,7 @@ public class ApplicationSupportCLI {
 					ICommandLineProcessor commandLineProcessor = (ICommandLineProcessor)element.createExecutableExtension(EXECUTABLE_EXTENSION_NAME);
 					commandLineProcessor.process(args);
 				} catch(CoreException e) {
-					System.out.println(e);
+					e.printStackTrace();
 				}
 			}
 		}
@@ -223,7 +220,7 @@ public class ApplicationSupportCLI {
 		 * Entries failing:
 		 * -Helios-SR2/eclipse/deltapack/eclipse/eclipse
 		 */
-		Pattern pattern = Pattern.compile("(.*)(-)(.*?)(\r|\n)");
+		Pattern pattern = Pattern.compile("(.*)(-)(.*?)([\r\n])");
 		Matcher matcher = pattern.matcher(eclipseCommands);
 		while(matcher.find()) {
 			String groupOne = matcher.group(1);
@@ -267,7 +264,7 @@ public class ApplicationSupportCLI {
 		 */
 		for(IConfigurationElement element : elements) {
 			String opt = element.getAttribute(OPTION_ATTRIBUTE_NAME);
-			boolean hasArguments = Boolean.valueOf(element.getAttribute(OPTION_ATTRIBUTE_HAS_ARGUMENTS));
+			boolean hasArguments = Boolean.parseBoolean(element.getAttribute(OPTION_ATTRIBUTE_HAS_ARGUMENTS));
 			String description = element.getAttribute(OPTION_ATTRIBUTE_DESCRIPTION);
 			option = new Option(opt, hasArguments, description);
 			options.addOption(option);
