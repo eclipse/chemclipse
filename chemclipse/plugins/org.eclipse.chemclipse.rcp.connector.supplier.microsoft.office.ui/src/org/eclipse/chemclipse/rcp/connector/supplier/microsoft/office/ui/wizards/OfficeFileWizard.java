@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,22 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.wizards;
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.apache.poi.xwpf.usermodel.XWPFDocument;
-import org.eclipse.jface.operation.IRunnableWithProgress;
-import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.ui.INewWizard;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
-import org.eclipse.jface.dialogs.MessageDialog;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.apache.poi.xwpf.usermodel.XWPFDocument;
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.Activator;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -37,10 +30,15 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.ui.INewWizard;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
-
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.rcp.connector.supplier.microsoft.office.ui.Activator;
 
 public abstract class OfficeFileWizard extends Wizard implements INewWizard {
 
@@ -51,6 +49,7 @@ public abstract class OfficeFileWizard extends Wizard implements INewWizard {
 	 * Constructor for ExcelFileXLSXWizard.
 	 */
 	public OfficeFileWizard() {
+
 		super();
 		setNeedsProgressMonitor(true);
 	}
@@ -117,35 +116,33 @@ public abstract class OfficeFileWizard extends Wizard implements INewWizard {
 		 * Create appropriate files using Apache POI.
 		 */
 		if(!file.exists()) {
-			FileOutputStream outputStream;
-			try {
-				outputStream = new FileOutputStream(file.getLocation().toOSString());
+			try (FileOutputStream outputStream = new FileOutputStream(file.getLocation().toOSString())) {
 				/*
 				 * XLS, XLSX, DOC, DOCX
 				 */
 				String extension = file.getFileExtension();
 				if(extension.equals("xls")) {
-					HSSFWorkbook hssfWorkbook = new HSSFWorkbook();
-					hssfWorkbook.createSheet("ChemClipse Worksheet");
-					hssfWorkbook.write(outputStream);
-					outputStream.flush();
-					outputStream.close();
+					try (HSSFWorkbook hssfWorkbook = new HSSFWorkbook()) {
+						hssfWorkbook.createSheet("ChemClipse Worksheet");
+						hssfWorkbook.write(outputStream);
+						outputStream.flush();
+					}
 				} else if(extension.equals("xlsx")) {
-					XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
-					xssfWorkbook.createSheet("ChemClipse Worksheet");
-					xssfWorkbook.write(outputStream);
-					outputStream.flush();
-					outputStream.close();
+					try (XSSFWorkbook xssfWorkbook = new XSSFWorkbook()) {
+						xssfWorkbook.createSheet("ChemClipse Worksheet");
+						xssfWorkbook.write(outputStream);
+						outputStream.flush();
+					}
 				} else if(extension.equals("doc")) {
-					XWPFDocument xwpfDocument = new XWPFDocument();
-					xwpfDocument.write(outputStream);
-					outputStream.flush();
-					outputStream.close();
+					try (XWPFDocument xwpfDocument = new XWPFDocument()) {
+						xwpfDocument.write(outputStream);
+						outputStream.flush();
+					}
 				} else if(extension.equals("docx")) {
-					XWPFDocument xwpfDocument = new XWPFDocument();
-					xwpfDocument.write(outputStream);
-					outputStream.flush();
-					outputStream.close();
+					try (XWPFDocument xwpfDocument = new XWPFDocument()) {
+						xwpfDocument.write(outputStream);
+						outputStream.flush();
+					}
 				}
 			} catch(IOException e) {
 				logger.warn(e);
