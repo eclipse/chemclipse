@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,14 +8,9 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactoring Observable
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.swt.edit;
-
-import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createColumns;
-import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createContainer;
-import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createTable;
-import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.gridData;
-import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.maximize;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +18,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.ui.swt.ControlBuilder;
 import org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinitionProvider;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ToolBarManager;
@@ -36,6 +32,8 @@ import org.eclipse.swt.widgets.Control;
 
 public class ListEdit<V> extends EditValue<List<V>> {
 
+	private static final long serialVersionUID = 4293060148111233267L;
+	//
 	private final TableViewer tableViewer;
 	private final List<V> initialValues = new ArrayList<>();
 	private final List<V> currentValues = new CopyOnWriteArrayList<V>();
@@ -45,15 +43,17 @@ public class ListEdit<V> extends EditValue<List<V>> {
 	private boolean edited;
 
 	public ListEdit(Composite parent, ColumnDefinitionProvider columnDefinitionProvider, ListEditModel<V> editModel) {
-		Composite container = createContainer(parent, 2);
-		gridData(container).heightHint = 200;
-		tableViewer = createTable(container, false);
-		maximize(tableViewer.getControl());
+
+		Composite container = ControlBuilder.createContainer(parent, 2);
+		ControlBuilder.gridData(container).heightHint = 200;
+		tableViewer = ControlBuilder.createTable(container, false);
+		ControlBuilder.maximize(tableViewer.getControl());
 		initialValues.addAll(editModel.list());
 		currentValues.addAll(initialValues);
-		createColumns(tableViewer, columnDefinitionProvider, false);
+		ControlBuilder.createColumns(tableViewer, columnDefinitionProvider, false);
 		tableViewer.setInput(currentValues);
 		ToolBarManager toolbar = new ToolBarManager(SWT.VERTICAL);
+		//
 		addAction = new Action("Add", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16)) {
 
 			@Override
@@ -63,12 +63,12 @@ public class ListEdit<V> extends EditValue<List<V>> {
 				if(newItem != null) {
 					currentValues.add(newItem);
 					tableViewer.refresh();
-					setChanged();
-					notifyObservers(currentValues);
+					updateChange(this, "ListEdit", currentValues, currentValues);
 				}
 				updateButtons(editModel);
 			}
 		};
+		//
 		deleteAction = new Action("Remove", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_REMOVE, IApplicationImage.SIZE_16x16)) {
 
 			@SuppressWarnings("unchecked")
@@ -85,12 +85,12 @@ public class ListEdit<V> extends EditValue<List<V>> {
 				}
 				if(changed) {
 					tableViewer.refresh();
-					setChanged();
-					notifyObservers(currentValues);
+					updateChange(this, "ListEdit", currentValues, currentValues);
 				}
 				updateButtons(editModel);
 			}
 		};
+		//
 		editAction = new Action("Remove", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16)) {
 
 			@SuppressWarnings("unchecked")
@@ -101,17 +101,17 @@ public class ListEdit<V> extends EditValue<List<V>> {
 				if(element != null && editModel.edit((V)element)) {
 					edited = true;
 					tableViewer.refresh();
-					setChanged();
-					notifyObservers(currentValues);
+					updateChange(this, "ListEdit", currentValues, currentValues);
 				}
 				updateButtons(editModel);
 			}
 		};
+		//
 		updateButtons(editModel);
 		toolbar.add(addAction);
 		toolbar.add(editAction);
 		toolbar.add(deleteAction);
-		gridData(toolbar.createControl(container)).verticalAlignment = SWT.TOP;
+		ControlBuilder.gridData(toolbar.createControl(container)).verticalAlignment = SWT.TOP;
 		tableViewer.addSelectionChangedListener(new ISelectionChangedListener() {
 
 			@Override

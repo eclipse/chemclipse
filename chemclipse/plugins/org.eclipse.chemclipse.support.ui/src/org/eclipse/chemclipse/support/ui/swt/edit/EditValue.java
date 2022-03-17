@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,22 +8,31 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactoring Observable
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.swt.edit;
 
-import java.util.Observable;
-import java.util.Observer;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 import org.eclipse.swt.widgets.Control;
 
 /**
  * 
  * An {@link EditValue} encapsulates a control and a value that should be edited, in contrast to a plain control, an {@link EditValue} can be accessed even if the control is disposed, it stores the last edit state. It also has ways to detect if an actual edit has happened.
- * Interested parties can also register an {@link Observer} to be notified on each change, the general contract is, that the object passed to the observer is the current edit value
+ * Interested parties can also register an {@link PropertyChangeListener} to be notified on each change, the general contract is, that the object passed to the observer is the current edit value
  *
  * @param <T>
  */
-public abstract class EditValue<T> extends Observable {
+public abstract class EditValue<T> extends PropertyChangeSupport {
+
+	private static final long serialVersionUID = -5844012602717155272L;
+
+	public EditValue() {
+
+		super("EditValue");
+	}
 
 	/**
 	 * 
@@ -39,10 +48,15 @@ public abstract class EditValue<T> extends Observable {
 
 	public abstract Control getControl();
 
-	@Override
-	public synchronized void addObserver(Observer o) {
+	public void updateChange(Object source, String propertyName, Object oldValue, Object newValue) {
 
-		super.addObserver(o);
-		o.update(this, getValue());
+		firePropertyChange(new PropertyChangeEvent(source, propertyName, oldValue, newValue));
+	}
+
+	@Override
+	public void addPropertyChangeListener(PropertyChangeListener listener) {
+
+		super.addPropertyChangeListener(listener);
+		firePropertyChange(new PropertyChangeEvent(this, "EditValue", getValue(), getValue()));
 	}
 }

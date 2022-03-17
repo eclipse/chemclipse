@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactoring Observable
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.swt.edit;
 
@@ -30,11 +31,14 @@ import org.eclipse.swt.widgets.Text;
 
 public class MultiLineTextEdit extends EditValue<List<String>> {
 
+	private static final long serialVersionUID = -855951035397214724L;
+	//
 	private final Text text;
 	private final List<String> initialValues = new ArrayList<String>();
 	private List<String> editedValues = new CopyOnWriteArrayList<>();
 
 	public MultiLineTextEdit(Composite parent, Collection<String> initialText) {
+
 		if(initialText == null) {
 			initialText = Collections.emptyList();
 		}
@@ -50,8 +54,7 @@ public class MultiLineTextEdit extends EditValue<List<String>> {
 
 				editedValues.clear();
 				editedValues.addAll(Arrays.asList(text.getText().split(Text.DELIMITER)));
-				setChanged();
-				notifyObservers(editedValues);
+				updateChange(this, "MultiLineTextEdit", editedValues, editedValues);
 			}
 		});
 	}

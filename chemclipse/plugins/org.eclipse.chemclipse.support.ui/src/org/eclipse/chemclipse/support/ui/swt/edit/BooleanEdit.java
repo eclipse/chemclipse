@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactoring Observable
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.swt.edit;
 
@@ -20,11 +21,14 @@ import org.eclipse.swt.widgets.Control;
 
 public class BooleanEdit extends EditValue<Boolean> {
 
+	private static final long serialVersionUID = 6116766646926264825L;
+	//
 	private final Button button;
 	private final boolean initialValue;
 	private boolean currentValue;
 
 	public BooleanEdit(Composite parent, String label, boolean initialValue) {
+
 		this.initialValue = initialValue;
 		currentValue = initialValue;
 		button = new Button(parent, SWT.CHECK);
@@ -38,8 +42,7 @@ public class BooleanEdit extends EditValue<Boolean> {
 			public void widgetSelected(SelectionEvent e) {
 
 				currentValue = button.getSelection();
-				setChanged();
-				notifyObservers(currentValue);
+				updateChange(this, "BooleanEdit", currentValue, currentValue);
 			}
 
 			@Override
