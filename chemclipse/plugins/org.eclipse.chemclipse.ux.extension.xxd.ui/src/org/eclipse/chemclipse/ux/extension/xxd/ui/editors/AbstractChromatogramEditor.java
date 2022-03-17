@@ -12,14 +12,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -435,10 +436,10 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 		extendedChromatogramUI = new ExtendedChromatogramUI(parent, SWT.BORDER, eventBroker, processSupplierContext);
 	}
 
-	private final class MeasurementResultListener implements ObjectChangedListener<IMeasurementResult<?>>, Observer {
+	private final class MeasurementResultListener implements ObjectChangedListener<IMeasurementResult<?>>, PropertyChangeListener {
 
 		private ICustomPaintListener oldPaintListener;
-		private Observable oldObserver;
+		private PropertyChangeSupport oldObserver;
 
 		@Override
 		public void objectChanged(ChangeType type, IMeasurementResult<?> newObject, IMeasurementResult<?> oldObject) {
@@ -453,7 +454,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 				}
 				//
 				if(oldObserver != null) {
-					oldObserver.deleteObserver(this);
+					oldObserver.removePropertyChangeListener(this);
 					oldObserver = null;
 				}
 				//
@@ -464,10 +465,10 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 					mustRedraw = true;
 				}
 				//
-				Observable observable = Adapters.adapt(newObject, Observable.class);
+				PropertyChangeSupport observable = Adapters.adapt(newObject, PropertyChangeSupport.class);
 				if(observable != null) {
 					oldObserver = observable;
-					observable.addObserver(this);
+					observable.addPropertyChangeListener(this);
 				}
 				//
 				if(mustRedraw) {
@@ -476,18 +477,18 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 			}
 		}
 
-		@Override
-		public void update(Observable o, Object arg) {
-
-			Display.getDefault().asyncExec(this::redraw);
-		}
-
 		private void redraw() {
 
 			ChromatogramChart chart = extendedChromatogramUI.getChromatogramChart();
 			if(!chart.isDisposed()) {
 				chart.redraw();
 			}
+		}
+
+		@Override
+		public void propertyChange(PropertyChangeEvent evt) {
+
+			Display.getDefault().asyncExec(this::redraw);
 		}
 	}
 }

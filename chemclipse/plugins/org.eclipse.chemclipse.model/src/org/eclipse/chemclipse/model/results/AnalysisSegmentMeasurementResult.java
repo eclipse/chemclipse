@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,17 +8,19 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactoring Observer
  *******************************************************************************/
 package org.eclipse.chemclipse.model.results;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.List;
-import java.util.Observable;
 
 import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.model.support.IAnalysisSegment;
 import org.eclipse.chemclipse.model.support.IScanRange;
 
-public abstract class AnalysisSegmentMeasurementResult<T extends IAnalysisSegment> extends Observable implements IMeasurementResult<List<T>> {
+public abstract class AnalysisSegmentMeasurementResult<T extends IAnalysisSegment> implements PropertyChangeListener, IMeasurementResult<List<T>> {
 
 	private T selection;
 
@@ -59,7 +61,7 @@ public abstract class AnalysisSegmentMeasurementResult<T extends IAnalysisSegmen
 
 		if(this.selection != selection) {
 			this.selection = selection;
-			notifyListener();
+			propertyChange(new PropertyChangeEvent(this, getDescription(), selection, selection));
 		}
 	}
 
@@ -70,7 +72,11 @@ public abstract class AnalysisSegmentMeasurementResult<T extends IAnalysisSegmen
 
 	public void notifyListener() {
 
-		setChanged();
-		notifyObservers();
+		propertyChange(new PropertyChangeEvent(this, getDescription(), selection, selection));
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+
 	}
 }
