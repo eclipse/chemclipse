@@ -135,6 +135,9 @@ public class ApplicationImage implements IApplicationImage, BundleTrackerCustomi
 
 		listCache.clear();
 		descriptorCache.clear();
+		for(Image image : imageCache.values()) {
+			image.dispose();
+		}
 		imageCache.clear();
 	}
 
@@ -173,6 +176,7 @@ public class ApplicationImage implements IApplicationImage, BundleTrackerCustomi
 
 	public void stop() {
 
+		clear();
 		bundleTracker.close();
 	}
 }
