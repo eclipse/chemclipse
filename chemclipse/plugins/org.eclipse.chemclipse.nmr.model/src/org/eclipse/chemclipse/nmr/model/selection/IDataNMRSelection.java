@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,10 +9,11 @@
  * Contributors:
  * Jan Holy - initial API and implementation
  * Christoph Läubrich - complete redesign
+ * Philip Wenig - refactoring Observable
  *******************************************************************************/
 package org.eclipse.chemclipse.nmr.model.selection;
 
-import java.util.Observer;
+import java.beans.PropertyChangeListener;
 
 import org.eclipse.chemclipse.model.core.IComplexSignalMeasurement;
 import org.eclipse.chemclipse.model.core.IMeasurement;
@@ -56,9 +57,9 @@ public interface IDataNMRSelection {
 	 * 
 	 * @param observer
 	 */
-	void addObserver(Observer observer);
+	void addObserver(PropertyChangeListener observer);
 
-	void removeObserver(Observer observer);
+	void removeObserver(PropertyChangeListener observer);
 
 	default void replace(IComplexSignalMeasurement<?> measurement, IComplexSignalMeasurement<?> replacement) {
 

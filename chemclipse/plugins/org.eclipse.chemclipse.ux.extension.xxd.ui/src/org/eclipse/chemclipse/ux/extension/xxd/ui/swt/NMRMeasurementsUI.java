@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,9 +8,12 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactoring Observable
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -19,8 +22,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Set;
 import java.util.function.BiPredicate;
 import java.util.function.Consumer;
@@ -64,7 +65,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 
-public class NMRMeasurementsUI implements Observer {
+public class NMRMeasurementsUI implements PropertyChangeListener {
 
 	private static final Image IMAGE_FREQUENCY = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SCAN_NMR, IApplicationImage.SIZE_16x16);
 	private static final Image IMAGE_FID = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SCAN_FID, IApplicationImage.SIZE_16x16);
@@ -75,6 +76,7 @@ public class NMRMeasurementsUI implements Observer {
 	private ProcessSupplierContext processSupplierContext;
 
 	public NMRMeasurementsUI(Composite parent, ProcessorFactory filterFactory, ProcessSupplierContext processSupplierContext) {
+
 		this.filterFactory = filterFactory;
 		this.processSupplierContext = processSupplierContext;
 		treeViewer = new TreeViewer(parent, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.FULL_SELECTION);
@@ -192,8 +194,7 @@ public class NMRMeasurementsUI implements Observer {
 							for(Entry<IComplexSignalMeasurement<?>, PeakList> entries : peaks.entrySet()) {
 								entries.getKey().addMeasurementResult(entries.getValue());
 							}
-							selection.setChanged();
-							selection.notifyObservers(ChangeType.SELECTION_CHANGED);
+							propertyChange(new PropertyChangeEvent(this, "PeakDetection", detectors, ChangeType.SELECTION_CHANGED));
 						};
 					});
 				}
@@ -229,6 +230,7 @@ public class NMRMeasurementsUI implements Observer {
 	private final class DeleteAction extends Action {
 
 		public DeleteAction() {
+
 			setText("Delete");
 		}
 
@@ -277,6 +279,7 @@ public class NMRMeasurementsUI implements Observer {
 		if(this.selection != null) {
 			this.selection.removeObserver(this);
 		}
+		//
 		this.selection = selection;
 		updateTree();
 		selection.addObserver(this);
@@ -350,8 +353,9 @@ public class NMRMeasurementsUI implements Observer {
 	}
 
 	@Override
-	public void update(Observable o, Object arg) {
+	public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
 
+		Object arg = propertyChangeEvent.getNewValue();
 		if(arg == ChangeType.NEW_ITEM || arg == ChangeType.REMOVED_ITEM) {
 			Display.getDefault().asyncExec(this::updateTree);
 		}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,9 +9,13 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Christoph Läubrich - restore initial implementation, support for selection of multiple spectras
+ * Philip Wenig - refactoring Observable
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -19,14 +23,11 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.core.IComplexSignalMeasurement;
 import org.eclipse.chemclipse.nmr.model.core.SpectrumMeasurement;
 import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection;
-import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection.ChangeType;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
@@ -56,7 +57,7 @@ import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 import org.eclipse.swtchart.extensions.linecharts.LineChart;
 import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
 
-public class ExtendedNMROverlayUI extends Composite implements Observer, IExtendedPartUI {
+public class ExtendedNMROverlayUI extends Composite implements PropertyChangeListener, IExtendedPartUI {
 
 	private enum Mode {
 		OVERLAY, STACKED
@@ -283,21 +284,25 @@ public class ExtendedNMROverlayUI extends Composite implements Observer, IExtend
 	}
 
 	@Override
-	public void update(Observable o, Object arg) {
+	public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
 
-		if(arg == ChangeType.SELECTION_CHANGED) {
+		Object arg = propertyChangeEvent.getNewValue();
+		if(arg == IDataNMRSelection.ChangeType.SELECTION_CHANGED) {
 			Display.getDefault().asyncExec(this::refreshUpdateOverlayChart);
 		}
 	}
 
-	private static final class OverlayDataNMRSelection extends Observable implements IDataNMRSelection, IColorProvider {
+	private static final class OverlayDataNMRSelection extends PropertyChangeSupport implements IDataNMRSelection, IColorProvider {
 
+		private static final long serialVersionUID = -4487563421162708058L;
+		//
 		private IScanEditorNMR editor;
 		private IComplexSignalMeasurement<?> selection;
 		private Color color;
 
 		public OverlayDataNMRSelection(IScanEditorNMR editor) {
 
+			super(editor);
 			this.editor = editor;
 			IComplexSignalMeasurement<?>[] measurements = getMeasurements();
 			if(measurements.length > 0) {
@@ -339,8 +344,7 @@ public class ExtendedNMROverlayUI extends Composite implements Observer, IExtend
 
 			if(this.selection != selection) {
 				this.selection = selection;
-				setChanged();
-				notifyObservers(ChangeType.SELECTION_CHANGED);
+				firePropertyChange(new java.beans.PropertyChangeEvent(this, "Change", selection, ChangeType.SELECTION_CHANGED));
 			}
 		}
 
@@ -352,15 +356,15 @@ public class ExtendedNMROverlayUI extends Composite implements Observer, IExtend
 		}
 
 		@Override
-		public void addObserver(Observer observer) {
+		public void addObserver(PropertyChangeListener observer) {
 
-			super.addObserver(observer);
+			addPropertyChangeListener(observer);
 		}
 
 		@Override
-		public void removeObserver(Observer observer) {
+		public void removeObserver(PropertyChangeListener observer) {
 
-			super.deleteObserver(observer);
+			removePropertyChangeListener(observer);
 		}
 
 		@Override

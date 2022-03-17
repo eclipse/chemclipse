@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,14 +9,15 @@
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
  * Christoph Läubrich - rework for new datamodel and processor support
+ * Philip Wenig - refactoring Observable
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
 import org.eclipse.chemclipse.model.core.IComplexSignalMeasurement;
 import org.eclipse.chemclipse.model.core.PeakList;
@@ -40,13 +41,14 @@ import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
 
-public class ExtendedNMRScanUI implements Observer {
+public class ExtendedNMRScanUI implements PropertyChangeListener {
 
 	private static final String SERIES_ID = "NMR";
 	private ChartNMR chartNMR;
 	private IDataNMRSelection dataNMRSelection;
 
 	public ExtendedNMRScanUI(Composite parent) {
+
 		chartNMR = new ChartNMR(parent, SWT.NONE, () -> dataNMRSelection.getMeasurement());
 		IChartSettings chartSettings = chartNMR.getChartSettings();
 		chartSettings.setCreateMenu(true);
@@ -162,8 +164,9 @@ public class ExtendedNMRScanUI implements Observer {
 	}
 
 	@Override
-	public void update(Observable o, Object arg) {
+	public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
 
+		Object arg = propertyChangeEvent.getNewValue();
 		if(arg == ChangeType.SELECTION_CHANGED) {
 			Display.getDefault().asyncExec(this::updateScan);
 		}

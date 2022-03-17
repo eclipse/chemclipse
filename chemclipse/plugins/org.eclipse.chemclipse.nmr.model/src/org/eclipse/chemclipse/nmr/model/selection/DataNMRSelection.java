@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,27 +9,34 @@
  * Contributors:
  * Jan Holy - initial API and implementation
  * Christoph Läubrich - complete redesign
+ * Philip Wenig - refactoring Observable
  *******************************************************************************/
 package org.eclipse.chemclipse.nmr.model.selection;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
 
 import org.eclipse.chemclipse.model.core.IComplexSignalMeasurement;
 
-public class DataNMRSelection extends Observable implements IDataNMRSelection {
+public class DataNMRSelection extends PropertyChangeSupport implements IDataNMRSelection {
 
+	private static final long serialVersionUID = -6184349224960987655L;
+	//
 	private List<IComplexSignalMeasurement<?>> measurements = new ArrayList<>();
 	private IComplexSignalMeasurement<?> measurement;
 	private String name;
 
 	public DataNMRSelection() {
+
 		this("NMR");
 	}
 
 	public DataNMRSelection(String name) {
+
+		super(name);
 		this.name = name;
 	}
 
@@ -63,8 +70,7 @@ public class DataNMRSelection extends Observable implements IDataNMRSelection {
 		if(!measurements.contains(measurement)) {
 			measurements.add(measurement);
 			setActiveMeasurement(measurement);
-			setChanged();
-			notifyObservers(ChangeType.NEW_ITEM);
+			firePropertyChange(new PropertyChangeEvent(measurement, name, measurement, ChangeType.NEW_ITEM));
 		}
 	}
 
@@ -73,8 +79,7 @@ public class DataNMRSelection extends Observable implements IDataNMRSelection {
 
 		if(measurement == null || measurements.contains(measurement)) {
 			this.measurement = measurement;
-			setChanged();
-			notifyObservers(ChangeType.SELECTION_CHANGED);
+			firePropertyChange(new PropertyChangeEvent(measurement, name, measurement, ChangeType.SELECTION_CHANGED));
 		}
 	}
 
@@ -94,26 +99,19 @@ public class DataNMRSelection extends Observable implements IDataNMRSelection {
 					setActiveMeasurement(null);
 				}
 			}
-			setChanged();
-			notifyObservers(ChangeType.REMOVED_ITEM);
+			firePropertyChange(new PropertyChangeEvent(measurement, name, measurement, ChangeType.REMOVED_ITEM));
 		}
 	}
 
 	@Override
-	public synchronized void setChanged() {
+	public void removeObserver(PropertyChangeListener observer) {
 
-		super.setChanged();
+		removePropertyChangeListener(observer);
 	}
 
 	@Override
-	public void removeObserver(Observer observer) {
+	public synchronized void addObserver(PropertyChangeListener observer) {
 
-		deleteObserver(observer);
-	}
-
-	@Override
-	public synchronized void addObserver(Observer o) {
-
-		super.addObserver(o);
+		addPropertyChangeListener(observer);
 	}
 }
