@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2021 Lablicate GmbH.
+ * Copyright (c) 2013, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,7 +22,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -69,15 +71,18 @@ public class ApplicationImage implements IApplicationImage, BundleTrackerCustomi
 				try {
 					imageDecorator.setSize(size);
 					imageDecorator.setImage(image);
-					image = CompletableFuture.supplyAsync(() -> imageDecorator.createImage()).get(50, TimeUnit.MILLISECONDS);
-				} catch(Exception e) {
-					/*
-					 * TimeOutException
-					 */
+					image = CompletableFuture.supplyAsync(imageDecorator::createImage).get(50, TimeUnit.MILLISECONDS);
+				} catch(InterruptedException e) {
+					logger.warn(e);
+					Thread.currentThread().interrupt();
+				} catch(ExecutionException e) {
+					logger.warn(e);
+				} catch(TimeoutException e) {
 					logger.warn(e);
 					logger.warn("The decoration for the following icon fails: " + fileName);
 					logger.warn("Please check the icon. Is it a png? Does it contain an embedded RGB profile?");
 					logger.warn("Solution: Probably try to convert the icon to *.gif format.");
+					// TODO: fix the real cause of the issue and remove all of this
 				}
 			}
 			//
