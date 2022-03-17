@@ -70,7 +70,7 @@ public class DataNMRSelection extends PropertyChangeSupport implements IDataNMRS
 		if(!measurements.contains(measurement)) {
 			measurements.add(measurement);
 			setActiveMeasurement(measurement);
-			firePropertyChange(new PropertyChangeEvent(measurement, name, measurement, ChangeType.NEW_ITEM));
+			firePropertyChange(new PropertyChangeEvent(this, name, measurement, ChangeType.NEW_ITEM));
 		}
 	}
 
@@ -79,7 +79,7 @@ public class DataNMRSelection extends PropertyChangeSupport implements IDataNMRS
 
 		if(measurement == null || measurements.contains(measurement)) {
 			this.measurement = measurement;
-			firePropertyChange(new PropertyChangeEvent(measurement, name, measurement, ChangeType.SELECTION_CHANGED));
+			firePropertyChange(new PropertyChangeEvent(this, name, measurement, ChangeType.SELECTION_CHANGED));
 		}
 	}
 
@@ -99,7 +99,7 @@ public class DataNMRSelection extends PropertyChangeSupport implements IDataNMRS
 					setActiveMeasurement(null);
 				}
 			}
-			firePropertyChange(new PropertyChangeEvent(measurement, name, measurement, ChangeType.REMOVED_ITEM));
+			firePropertyChange(new PropertyChangeEvent(this, name, measurement, ChangeType.REMOVED_ITEM));
 		}
 	}
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,10 +8,11 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactoring Observable
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
 
-import java.util.Observable;
+import java.beans.PropertyChangeSupport;
 
 import org.eclipse.swt.widgets.Composite;
 
@@ -29,5 +30,5 @@ public interface EditorExtension {
 	 * @param parent
 	 * @return an Observable that can be used to monitor for changes in this extension
 	 */
-	public Observable createExtension(Composite parent);
+	public PropertyChangeSupport createExtension(Composite parent);
 }

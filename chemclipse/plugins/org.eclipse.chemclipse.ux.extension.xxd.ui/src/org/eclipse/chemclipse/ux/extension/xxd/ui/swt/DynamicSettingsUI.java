@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,11 +8,12 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactoring Observable
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
-import java.util.Observable;
-import java.util.Observer;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 
 import org.eclipse.chemclipse.processing.filter.FilterContext;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorExtension;
@@ -30,6 +31,7 @@ public class DynamicSettingsUI {
 	private Composite composite;
 
 	public DynamicSettingsUI(Composite parent, Object layoutData) {
+
 		this.parent = parent;
 		this.layoutData = layoutData;
 		parent.addDisposeListener(new DisposeListener() {
@@ -42,7 +44,7 @@ public class DynamicSettingsUI {
 		});
 	}
 
-	public <T, C> void setActiveContext(FilterContext<T, C> context, Observer observer) {
+	public <T, C> void setActiveContext(FilterContext<T, C> context, PropertyChangeListener observer) {
 
 		disposeCurrent();
 		if(context != null) {
@@ -53,17 +55,17 @@ public class DynamicSettingsUI {
 					composite = new Composite(parent, SWT.NONE);
 					composite.setLayout(new FillLayout());
 					composite.setLayoutData(layoutData);
-					Observable extension = editorExtension.createExtension(composite);
+					PropertyChangeSupport extension = editorExtension.createExtension(composite);
 					if(observer != null) {
 						composite.addDisposeListener(new DisposeListener() {
 
 							@Override
 							public void widgetDisposed(DisposeEvent e) {
 
-								extension.deleteObserver(observer);
+								extension.removePropertyChangeListener(observer);
 							}
 						});
-						extension.addObserver(observer);
+						extension.addPropertyChangeListener(observer);
 					}
 				}
 			}

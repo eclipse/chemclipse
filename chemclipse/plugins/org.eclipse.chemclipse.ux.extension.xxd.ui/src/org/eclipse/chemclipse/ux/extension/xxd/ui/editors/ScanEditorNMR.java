@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,6 +14,8 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createContainer;
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.maximize;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -22,8 +24,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionException;
@@ -315,7 +315,7 @@ public class ScanEditorNMR implements IScanEditorNMR {
 		// TODO nothing to do at the moment
 	}
 
-	private final class UpdatingObserver<FilteredType, ConfigType> implements Observer {
+	private final class UpdatingObserver<FilteredType, ConfigType> implements PropertyChangeListener {
 
 		private final FilterContext<FilteredType, ConfigType> context;
 		private final IComplexSignalMeasurement<?> currentMeasurement;
@@ -329,11 +329,12 @@ public class ScanEditorNMR implements IScanEditorNMR {
 		}
 
 		@Override
-		public void update(Observable o, Object arg) {
+		public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
 
 			if(context == null) {
 				return;
 			}
+			//
 			Filter<ConfigType> filter = context.getFilter();
 			if(filter instanceof IMeasurementFilter<?>) {
 				IMeasurementFilter<ConfigType> measurementFilter = (IMeasurementFilter<ConfigType>)filter;
