@@ -73,6 +73,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.OperationHistoryFactory;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.window.Window;
@@ -202,8 +203,11 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 
 	public void updateTable() {
 
-		tableViewer.get().clear();// on Mac the clear is needed, else no update is fired when the number of list entries does not change
-		tableViewer.get().setInput(chromatogramSelection, showPeaks, showPeaksInRange, showScans, showScansInRange);
+		PeakScanListUI peakScanListUI = tableViewer.get();
+		ISelection selection = peakScanListUI.getSelection();
+		peakScanListUI.clear();// on Mac the clear is needed, else no update is fired when the number of list entries does not change
+		peakScanListUI.setInput(chromatogramSelection, showPeaks, showPeaksInRange, showScans, showScansInRange);
+		peakScanListUI.setSelection(selection);
 	}
 
 	public void updateSelection() {
