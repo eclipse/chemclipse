@@ -86,7 +86,7 @@
 	<unit id="org.apache.logging.log4j" version="0.0.0"/>
 	<unit id="org.apache.xmlbeans" version="0.0.0"/>
 	<unit id="org.apache.xml.serializer" version="0.0.0"/>
-	<repository location="https://download.eclipse.org/tools/orbit/downloads/drops/R20211213173813/repository"/>
+	<repository location="https://download.eclipse.org/tools/orbit/downloads/drops/R20220302172233/repository"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 	<unit id="org.eclipse.swtchart.feature.feature.group" version="0.0.0"/>
