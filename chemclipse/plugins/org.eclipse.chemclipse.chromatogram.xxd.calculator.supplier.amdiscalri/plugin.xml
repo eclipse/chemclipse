@@ -4,16 +4,16 @@
    <extension
          point="org.eclipse.chemclipse.chromatogram.xxd.calculator.chromatogramCalculatorSupplier">
       <ChromatogramCalculatorSupplier
-            calculator="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core.ChromatogramCalculator"
+            calculator="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.ri.core.ChromatogramCalculator"
             calculatorName="Retention Index Calculator (Scans and Peaks)"
-            calculatorSettings="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.CalculatorSettings"
+            calculatorSettings="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.ri.settings.CalculatorSettings"
             description="This calculator sets retention indices (RI)."
-            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri">
+            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.ri">
       </ChromatogramCalculatorSupplier>
       <ChromatogramCalculatorSupplier
-            calculator="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core.ChromatogramResetter"
+            calculator="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.ri.core.ChromatogramResetter"
             calculatorName="Retention Index Reset (Scans and Peaks)"
-            calculatorSettings="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.ResetterSettings"
+            calculatorSettings="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.ri.settings.ResetterSettings"
             description="This calculator resets retention indices (RI)."
             id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.resetri">
       </ChromatogramCalculatorSupplier>      
@@ -22,11 +22,11 @@
          point="org.eclipse.chemclipse.msd.converter.chromatogramSupplier">
       <ChromatogramSupplier
             description="Exports RI Calibration Files"
-            exportConverter="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core.ChromatogramExportConverter"
+            exportConverter="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.ri.core.ChromatogramExportConverter"
             fileExtension=".CAL"
             filterName="AMDIS RI Calibration (*.CAL)"
-            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.chromatogram.cal"
-            importMagicNumberMatcher="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core.MagicNumberMatcher"
+            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.ri.chromatogram.cal"
+            importMagicNumberMatcher="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.ri.core.MagicNumberMatcher"
             isExportable="true"
             isImportable="false">
       </ChromatogramSupplier>
@@ -35,35 +35,35 @@
          point="org.eclipse.chemclipse.chromatogram.msd.identifier.peakIdentifier">
       <PeakIdentificationSupplier
             description="This identifier tries to identify alkanes."
-            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.peak"
-            identifier="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core.PeakIdentifier"
+            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.ri.peak"
+            identifier="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.ri.core.PeakIdentifier"
             identifierName="Alkane(s)"
-            identifierSettings="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.PeakIdentifierAlkaneSettings">
+            identifierSettings="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.ri.settings.PeakIdentifierAlkaneSettings">
       </PeakIdentificationSupplier>
    </extension>
    <extension
          point="org.eclipse.chemclipse.chromatogram.msd.identifier.massSpectrumIdentifier">
       <MassSpectrumIdentificationSupplier
             description="This identifier tries to identify alkanes."
-            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.massSpectrum"
-            identifier="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core.MassSpectrumIdentifier"
+            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.ri.massSpectrum"
+            identifier="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.ri.core.MassSpectrumIdentifier"
             identifierName="Alkane(s)"
-            identifierSettings="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.MassSpectrumIdentifierAlkaneSettings">
+            identifierSettings="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.ri.settings.MassSpectrumIdentifierAlkaneSettings">
       </MassSpectrumIdentificationSupplier>
    </extension>   
    <extension
          point="org.eclipse.chemclipse.chromatogram.msd.identifier.libraryService">
       <LibraryServiceSupplier
             description="This plugin tries to identify library mass spectra given by the target."
-            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.libraryservice"
-            identifier="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core.LibraryService"
+            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.ri.libraryservice"
+            identifier="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.ri.core.LibraryService"
             identifierName="Alkane Library Service">
       </LibraryServiceSupplier>
    </extension>   
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.preferences.PreferenceInitializer">
+            class="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.ri.preferences.PreferenceInitializer">
       </initializer>
    </extension>
 </plugin>

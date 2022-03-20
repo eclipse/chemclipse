@@ -18,7 +18,7 @@
 #
 echo "Start setting project descriptions"
 
-echo 'Retention index calculation based on AMDIS *.cal files.' > org.eclipse.chemclipse.amdiscalri.git/description
+echo 'Retention index calculation based on AMDIS *.cal files.' > org.eclipse.chemclipse.ri.git/description
 echo 'Import/export of AMDIS file formats (*.msl, *.msp, *.elu).' > org.eclipse.chemclipse.amdismsdata.git/description
 echo 'Baseline detector.' > org.eclipse.chemclipse.baselinedetec.git/description
 echo 'Baseline detector and mass spectrum filter (SNIP algorithm).' > org.eclipse.chemclipse.baselinesnip.git/description

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.feature"
+      id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.ri.feature"
       label="Retention Index Calculator"
       version="0.9.0.qualifier"
-      provider-name="ChemClipse" plugin="org.eclipse.chemclipse.feature.branding">
+      provider-name="ChemClipse"
+      plugin="org.eclipse.chemclipse.feature.branding">
 
    <description url="http://www.chemclipse.net">
-      This is a Retention Index Calculator filter.
+      A retention index calculator re-using the AMDIS *.cal file format.
    </description>
 
    <copyright url="http://www.chemclipse.net">
@@ -24,18 +25,17 @@ http://www.eclipse.org/legal/epl-v10.html
    <requires>
       <import feature="org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.feature" version="0.9.0.qualifier"/>
       <import feature="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.feature" version="0.9.0.qualifier"/>
-      <import feature="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.feature" version="0.9.0.qualifier"/> 
+      <import feature="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.feature" version="0.9.0.qualifier"/>
    </requires>
 
    <plugin
-         id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri"
+         id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.ri"
          download-size="0"
          install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
-         id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui"
+         id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.ri.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
