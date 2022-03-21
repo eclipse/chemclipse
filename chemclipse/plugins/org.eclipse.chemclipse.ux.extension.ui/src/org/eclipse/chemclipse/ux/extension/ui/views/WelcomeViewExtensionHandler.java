@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - improved perspective dialog
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.views;
 
@@ -60,8 +61,6 @@ import org.eclipse.swt.widgets.Shell;
 
 /**
  * Handles the extension tiles area
- * 
- * @author Christoph Läubrich
  *
  */
 public class WelcomeViewExtensionHandler {
@@ -69,6 +68,7 @@ public class WelcomeViewExtensionHandler {
 	public static final String PREFERENCE_MIN_TILES = "WelcomeViewExtensionHandler.minTiles";
 	public static final String PREFERENCE_MAX_TILES = "WelcomeViewExtensionHandler.maxTiles";
 	public static final String PREFERENCE_ALWAYS_CHANGE_PERSPECTIVE = "WelcomeViewExtensionHandler.changePerspective";
+	//
 	private static final String PREFERENCE_ADDED = "WelcomeViewExtensionHandler.addedTiles";
 	private static final String PREFERENCE_REMOVED = "WelcomeViewExtensionHandler.removedTiles";
 	private static final String DATA_POPUP_MENU = "WelcomeViewExtensionHandler.POPUP";
@@ -78,6 +78,7 @@ public class WelcomeViewExtensionHandler {
 	private static final String ATTRIBUTE_PERSPECTIVE_ID = "PerspectiveId";
 	private static final String ATTRIBUTE_DEFAULTSHOW = "defaultShow";
 	private static final Comparator<TileDefinition> EXTENSION_COMPARATOR = (c1, c2) -> c1.getTitle().compareToIgnoreCase(c2.getTitle());
+	//
 	private final Set<String> removedTiles;
 	private final Set<String> addedTiles;
 	private final Set<TileDefinition> privateTileDefinitions = new HashSet<>();
@@ -85,9 +86,10 @@ public class WelcomeViewExtensionHandler {
 	private final int minTiles;
 	private final int maxTiles;
 	private int tiles;
+	private String subcontext;
+	//
 	private final IPreferenceStore preferenceStore;
 	private final Predicate<TileDefinition> definitionAcceptor;
-	private String subcontext;
 
 	/**
 	 * Constructs a {@link WelcomeViewExtensionHandler} with the given parameters
@@ -98,10 +100,12 @@ public class WelcomeViewExtensionHandler {
 	 *            the label provider to use for the selection dialog
 	 */
 	public WelcomeViewExtensionHandler(TaskTileContainer tileContainer, IPreferenceStore preferenceStore, String subcontext) {
+
 		this(tileContainer, preferenceStore, subcontext, tile -> tile.matches(subcontext));
 	}
 
 	private WelcomeViewExtensionHandler(TaskTileContainer tileContainer, IPreferenceStore preferenceStore, String subcontext, Predicate<TileDefinition> definitionAcceptor) {
+
 		this.tileContainer = tileContainer;
 		this.preferenceStore = preferenceStore;
 		this.subcontext = subcontext;
@@ -424,6 +428,7 @@ public class WelcomeViewExtensionHandler {
 		private final IConfigurationElement element;
 
 		public ConfigurationElementTileDefinition(IConfigurationElement element) {
+
 			this.element = element;
 		}
 
@@ -537,16 +542,27 @@ public class WelcomeViewExtensionHandler {
 
 			if(delegate != null) {
 				String preferredPerspective = delegate.getPreferredPerspective();
-				MPerspective model;
-				if(preferredPerspective != null && !preferredPerspective.isEmpty() && (model = perspectiveSupport.getPerspectiveModel(preferredPerspective)) != null) {
-					boolean changePerspective = (delegate instanceof ConfigurationElementTileDefinition) || preferenceStore.getBoolean(PREFERENCE_ALWAYS_CHANGE_PERSPECTIVE);
-					if(!changePerspective) {
-						// ask the user then...
-						PerspectiveChooserDialog dialog = new PerspectiveChooserDialog(shell, "Change Perspective?", "Perspectives offer the best user experience and special views to optimize the workflow. This task is associated with the " + model.getLabel() + " perspective do you like to change? ", preferenceStore, PREFERENCE_ALWAYS_CHANGE_PERSPECTIVE);
-						changePerspective = dialog.open() == Window.OK;
-					}
-					if(changePerspective) {
-						perspectiveSupport.changePerspective(preferredPerspective);
+				if(!preferredPerspective.isEmpty()) {
+					if(!perspectiveSupport.getActivePerspectiveId().startsWith(preferredPerspective)) {
+						if(preferredPerspective != null) {
+							MPerspective perspectiveModel = perspectiveSupport.getPerspectiveModel(preferredPerspective);
+							if(perspectiveModel != null) {
+								boolean changePerspectiveAutomatically = (delegate instanceof ConfigurationElementTileDefinition) || preferenceStore.getBoolean(PREFERENCE_ALWAYS_CHANGE_PERSPECTIVE);
+								if(!changePerspectiveAutomatically) {
+									/*
+									 * Ask the user for changing the perspective.
+									 */
+									PerspectiveChooserDialog dialog = new PerspectiveChooserDialog(shell, "Change Perspective?", "Perspectives offer the best user experience and special views to optimize the workflow. This task is associated with the " + perspectiveModel.getLabel() + " perspective do you like to change? ", preferenceStore, PREFERENCE_ALWAYS_CHANGE_PERSPECTIVE);
+									changePerspectiveAutomatically = (dialog.open() == Window.OK);
+								}
+								/*
+								 * Change perspective?
+								 */
+								if(changePerspectiveAutomatically) {
+									perspectiveSupport.changePerspective(preferredPerspective);
+								}
+							}
+						}
 					}
 				}
 				ContextInjectionFactory.invoke(delegate, Execute.class, context, null);
