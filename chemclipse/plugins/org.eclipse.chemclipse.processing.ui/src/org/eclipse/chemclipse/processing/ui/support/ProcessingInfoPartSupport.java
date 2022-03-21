@@ -56,13 +56,18 @@ public class ProcessingInfoPartSupport {
 		return Activator.getDefault().getProcessingInfoPartSupport();
 	}
 
+	public void update(final MessageProvider messageProvider, final boolean focusProcessingInfoPart) {
+
+		update(messageProvider, true, focusProcessingInfoPart);
+	}
+
 	/**
 	 * Update the message provider and show the processing info part on demand.
 	 * 
 	 * @param messageProvider
 	 * @param focusProcessingInfoPart
 	 */
-	public void update(final MessageProvider messageProvider, final boolean focusProcessingInfoPart) {
+	public void update(final MessageProvider messageProvider, final boolean displayDialogOnError, final boolean focusProcessingInfoPart) {
 
 		if(messageProvider == null) {
 			return;
@@ -89,51 +94,53 @@ public class ProcessingInfoPartSupport {
 		 * Display a message if an error occurred.
 		 */
 		if(messageProvider.hasErrorMessages()) {
-			getUISynchronize().asyncExec(new Runnable() {
+			if(displayDialogOnError) {
+				getUISynchronize().asyncExec(new Runnable() {
 
-				@Override
-				public void run() {
+					@Override
+					public void run() {
 
-					Shell shell = DisplayUtils.getShell();
-					if(shell != null) {
-						MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING);
-						messageBox.setText(TITLE);
-						messageBox.setMessage(MESSAGE);
-						messageBox.open();
-					}
-					/*
-					 * Focus the view if requested, this will open the feedback view if required.
-					 */
-					if(focusProcessingInfoPart) {
-						try {
-							EModelService modelService = Activator.getDefault().getModelService();
-							MApplication application = Activator.getDefault().getApplication();
-							EPartService partService = Activator.getDefault().getPartService();
-							//
-							if(modelService != null && application != null && partService != null) {
-								MUIElement element = modelService.find(ProcessingInfoPart.ID, application);
-								if(element instanceof MPart) {
-									MPart part = (MPart)element;
-									/*
-									 * Prevent the error by using asyncExcec
-									 * "Application does not have an active window"
-									 */
-									Display.getDefault().asyncExec(new Runnable() {
+						Shell shell = DisplayUtils.getShell();
+						if(shell != null) {
+							MessageBox messageBox = new MessageBox(shell, SWT.ICON_WARNING);
+							messageBox.setText(TITLE);
+							messageBox.setMessage(MESSAGE);
+							messageBox.open();
+						}
+						/*
+						 * Focus the view if requested, this will open the feedback view if required.
+						 */
+						if(focusProcessingInfoPart) {
+							try {
+								EModelService modelService = Activator.getDefault().getModelService();
+								MApplication application = Activator.getDefault().getApplication();
+								EPartService partService = Activator.getDefault().getPartService();
+								//
+								if(modelService != null && application != null && partService != null) {
+									MUIElement element = modelService.find(ProcessingInfoPart.ID, application);
+									if(element instanceof MPart) {
+										MPart part = (MPart)element;
+										/*
+										 * Prevent the error by using asyncExcec
+										 * "Application does not have an active window"
+										 */
+										Display.getDefault().asyncExec(new Runnable() {
 
-										@Override
-										public void run() {
+											@Override
+											public void run() {
 
-											partService.showPart(part, PartState.ACTIVATE);
-										}
-									});
+												partService.showPart(part, PartState.ACTIVATE);
+											}
+										});
+									}
 								}
+							} catch(RuntimeException e) {
+								logErrorMessage(ProcessingInfoPartSupport.class.getName(), "Failed to focus on part.", e);
 							}
-						} catch(RuntimeException e) {
-							logErrorMessage(ProcessingInfoPartSupport.class.getName(), "Failed to focus on part.", e);
 						}
 					}
-				}
-			});
+				});
+			}
 		}
 	}
 
