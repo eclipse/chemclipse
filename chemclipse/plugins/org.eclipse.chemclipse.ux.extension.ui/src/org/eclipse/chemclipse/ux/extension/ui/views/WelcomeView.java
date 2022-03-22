@@ -18,7 +18,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.workbench.PerspectiveSupport;
-import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.ui.definitions.TileDefinition;
 import org.eclipse.chemclipse.ux.extension.ui.swt.TaskTile;
@@ -26,7 +25,6 @@ import org.eclipse.chemclipse.ux.extension.ui.swt.TaskTileContainer;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -36,11 +34,6 @@ public class WelcomeView {
 
 	public static final String WELCOME_MAIN_CONTEXT = "WelcomeView.Main";
 	public static final String PERSPECTIVE_DATA_ANALYSIS = "org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.main";
-	//
-	public static final Color COLOR_TITLE = Colors.WHITE;
-	public static final Color COLOR_DESCRIPTION = Colors.WHITE;
-	public static final Color COLOR_INACTIVE = Colors.getColor(139, 23, 23);
-	public static final Color COLOR_ACTIVE = Colors.getColor(128, 0, 0);
 	//
 	private static final String PERSPECTIVE_PCA = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.perspective";
 	private static final String PERSPECTIVE_LOGGING = "org.eclipse.chemclipse.logging.ui.perspective.main";
@@ -101,7 +94,7 @@ public class WelcomeView {
 		preferenceStore.setDefault(WelcomeViewExtensionHandler.PREFERENCE_MIN_TILES, DEFAULT_NUMBER_OF_COLUMNS);
 		preferenceStore.setDefault(WelcomeViewExtensionHandler.PREFERENCE_ALWAYS_CHANGE_PERSPECTIVE, true);
 		int cols = preferenceStore.getInt(WelcomeViewExtensionHandler.PREFERENCE_MIN_TILES);
-		TaskTileContainer tileContainer = new TaskTileContainer(parent, cols, () -> eclipseContext, new Color[]{COLOR_ACTIVE, COLOR_INACTIVE, COLOR_TITLE, COLOR_DESCRIPTION});
+		TaskTileContainer tileContainer = new TaskTileContainer(parent, cols, () -> eclipseContext);
 		parent.setLayout(new FillLayout());
 		Image imageDataAnalysis = ApplicationImageFactory.getInstance().getImage(IApplicationImage.PICTOGRAM_DATA_ANALYSIS, IApplicationImageProvider.SIZE_128x128);
 		resizeTile(2, 2, tileContainer.addTaskTile(new Component(PERSPECTIVE_DATA_ANALYSIS, imageDataAnalysis, "Data Analysis", "This is the main perspective. Most of the work is performed here.")));
