@@ -217,6 +217,12 @@ public class ExtendedComparisonScanUI extends Composite implements IExtendedPart
 		Display.getDefault().asyncExec(this::updateChart);
 	}
 
+	@Override
+	public void dispose() {
+
+		scanChartUI.dispose();
+	}
+
 	private void updateIdentificationTarget(IIdentificationTarget identificationTarget) {
 
 		scan1Optimized = null;

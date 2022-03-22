@@ -167,6 +167,12 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		this.update(scan, DisplayUtils.getDisplay());
 	}
 
+	@Override
+	public void dispose() {
+
+		chartControl.get().dispose();
+	}
+
 	/**
 	 * Getting the updates from the system.
 	 * 

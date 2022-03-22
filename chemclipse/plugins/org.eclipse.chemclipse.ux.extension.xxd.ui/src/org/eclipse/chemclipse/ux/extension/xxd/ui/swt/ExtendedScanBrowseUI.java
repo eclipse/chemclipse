@@ -92,6 +92,12 @@ public class ExtendedScanBrowseUI extends Composite implements IExtendedPartUI {
 		updateScan(scan);
 	}
 
+	@Override
+	public void dispose() {
+
+		scanChartUI.dispose();
+	}
+
 	private void createControl() {
 
 		setLayout(new FillLayout());

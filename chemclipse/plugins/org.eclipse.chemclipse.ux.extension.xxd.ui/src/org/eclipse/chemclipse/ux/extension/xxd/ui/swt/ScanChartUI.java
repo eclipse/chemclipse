@@ -273,6 +273,13 @@ public class ScanChartUI extends ScrollableChart {
 		}
 	}
 
+	@Override
+	public void dispose() {
+
+		font.dispose();
+		super.dispose();
+	}
+
 	private void prepareChart() {
 
 		customLabels.clear();
