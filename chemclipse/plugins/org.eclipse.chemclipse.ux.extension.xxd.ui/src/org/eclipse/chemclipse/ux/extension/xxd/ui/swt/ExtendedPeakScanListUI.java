@@ -79,6 +79,8 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -328,10 +330,10 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		PeakScanListUI peakScanListUI = new PeakScanListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		Table table = peakScanListUI.getTable();
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
-		table.addSelectionListener(new SelectionAdapter() {
+		table.addMouseListener(new MouseAdapter() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void mouseDown(MouseEvent e) {
 
 				propagateSelection(e.display);
 			}
