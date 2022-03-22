@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan
 Bundle-ManifestVersion: 2
-Bundle-Name: ChromatogramScanFilter
+Bundle-Name: Chromatogram Scan Filter
 Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan;singleton:=true
 Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.Activator
