@@ -33,6 +33,7 @@ import org.eclipse.chemclipse.msd.model.support.ScanSupport;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
@@ -165,6 +166,12 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 	public void update(IScan scan) {
 
 		this.update(scan, DisplayUtils.getDisplay());
+	}
+
+	@Override
+	public void dispose() {
+
+		chartControl.get().dispose();
 	}
 
 	/**
@@ -391,7 +398,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Enable/Disable the interactive subtract option.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SUBTRACT_SCAN_DEFAULT, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SUBTRACT_SCAN_DEFAULT, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -408,7 +415,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 
 		this.subtractModus = subtractModus;
 		String fileName = this.subtractModus ? IApplicationImage.IMAGE_SUBTRACT_SCAN_ACTIVE : IApplicationImage.IMAGE_SUBTRACT_SCAN_DEFAULT;
-		buttonSubtractOption.setImage(ApplicationImageFactory.getInstance().getImage(fileName, IApplicationImage.SIZE_16x16));
+		buttonSubtractOption.setImage(ApplicationImageFactory.getInstance().getImage(fileName, IApplicationImageProvider.SIZE_16x16));
 		//
 		if(this.subtractModus && showDialog) {
 			if(preferenceStore.getBoolean(PreferenceConstants.P_SHOW_SUBTRACT_DIALOG)) {
@@ -597,7 +604,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		scanIdentifierUI.setEnabled(enabled || isWaveSpectrum());
 		buttonCopyTraces.setEnabled(scan instanceof IScanMSD | scan instanceof IScanWSD);
 		buttonSave.setEnabled(enabled);
-		buttonDeleteOptimized.setEnabled(enabled && isOptimizedScan() ? true : false);
+		buttonDeleteOptimized.setEnabled(enabled && isOptimizedScan());
 		buttonSubtractOption.setEnabled(enabled);
 		scanFilterUI.setEnabled(enabled);
 	}
@@ -607,7 +614,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Copy the traces to clipboard.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_COPY_CLIPBOARD, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_COPY_CLIPBOARD, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -642,7 +649,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Reset the scan");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -673,7 +680,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Save the scan.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE_AS, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE_AS, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -700,7 +707,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Delete the optimized scan.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override

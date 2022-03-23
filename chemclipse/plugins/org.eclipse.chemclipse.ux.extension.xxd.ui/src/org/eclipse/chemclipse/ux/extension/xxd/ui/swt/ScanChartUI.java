@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -75,7 +75,7 @@ public class ScanChartUI extends ScrollableChart {
 	private DecimalFormat decimalFormatQ3 = ValueFormat.getDecimalFormatEnglish("0.0");
 	//
 	private BarSeriesYComparator barSeriesIntensityComparator = new BarSeriesYComparator();
-	private Map<Double, String> customLabels = new HashMap<Double, String>();
+	private Map<Double, String> customLabels = new HashMap<>();
 	private LabelPaintListener labelPaintListenerX = new LabelPaintListener(true);
 	private LabelPaintListener labelPaintListenerY = new LabelPaintListener(false);
 	/*
@@ -271,6 +271,13 @@ public class ScanChartUI extends ScrollableChart {
 				addBarSeriesData(barSeriesDataList);
 			}
 		}
+	}
+
+	@Override
+	public void dispose() {
+
+		font.dispose();
+		super.dispose();
 	}
 
 	private void prepareChart() {
@@ -596,7 +603,7 @@ public class ScanChartUI extends ScrollableChart {
 		 * Remove and re-add it. There is no way to check if the label
 		 * paint listener is already registered.
 		 */
-		IPlotArea plotArea = (IPlotArea)getBaseChart().getPlotArea();
+		IPlotArea plotArea = getBaseChart().getPlotArea();
 		plotArea.removeCustomPaintListener(labelPaintListenerX);
 		plotArea.removeCustomPaintListener(labelPaintListenerY);
 		//
