@@ -260,7 +260,7 @@
    <extension
          point="org.eclipse.chemclipse.ux.extension.ui.welcometile">
       <WelcomeTile
-            Description="Polymerace Chain Reaction (PCR)"
+            Description="Polymerase Chain Reaction (PCR)"
             PerspectiveId="org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.pcr"
             Section="PCR"
             defaultShow="true">
