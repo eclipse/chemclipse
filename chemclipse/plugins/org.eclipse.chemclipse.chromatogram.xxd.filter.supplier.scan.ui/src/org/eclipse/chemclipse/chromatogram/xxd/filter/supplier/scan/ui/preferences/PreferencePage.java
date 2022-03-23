@@ -42,9 +42,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	protected void createFieldEditors() {
 
 		addField(new LabelFieldEditor("Scan Remover Pattern (" + PreferenceSupplier.PRESERVE_SIGN.toString() + "=preserve " + PreferenceSupplier.REMOVE_SIGN + "=remove)", getFieldEditorParent()));
-		StringRegexFieldEditor stringPattern = new StringRegexFieldEditor(PreferenceSupplier.P_REMOVER_PATTERN, "Pattern", getFieldEditorParent());
-		stringPattern.setRegEx(PreferenceSupplier.CHECK_REMOVER_PATTERM);
-		addField(stringPattern);
+		addField(new StringRegexFieldEditor(PreferenceSupplier.P_REMOVER_PATTERN, "Pattern", PreferenceSupplier.CHECK_REMOVER_PATTERN, getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Scan Selector", getFieldEditorParent()));

@@ -22,7 +22,7 @@ public class FilterSettingsRemover extends AbstractChromatogramFilterSettings {
 
 	@JsonProperty(value = "Scan Remover Pattern", defaultValue = PreferenceSupplier.DEF_REMOVER_PATTERN)
 	@JsonPropertyDescription(value = "The pattern, which is used to remove scans.")
-	@StringSettingsProperty(regExp = PreferenceSupplier.CHECK_REMOVER_PATTERM, allowEmpty = false)
+	@StringSettingsProperty(regExp = PreferenceSupplier.CHECK_REMOVER_PATTERN, allowEmpty = false)
 	private String scanRemoverPattern = PreferenceSupplier.DEF_REMOVER_PATTERN;
 
 	@Override

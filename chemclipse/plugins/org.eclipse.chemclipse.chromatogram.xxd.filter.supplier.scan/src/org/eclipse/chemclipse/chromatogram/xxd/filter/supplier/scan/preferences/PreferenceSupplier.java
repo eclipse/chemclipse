@@ -35,7 +35,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	//
 	public static final String P_REMOVER_PATTERN = "removerPattern";
 	public static final String DEF_REMOVER_PATTERN = "XO";
-	public static final String CHECK_REMOVER_PATTERM = "^[OX]+";
+	public static final String CHECK_REMOVER_PATTERN = "^[OX]+";
 	//
 	public static final String P_SCAN_SELECTOR_OPTION = "scanSelectorOption";
 	public static final String DEF_SCAN_SELECTOR_OPTION = ScanSelectorOption.RETENTION_TIME_MS.name();

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - improvements constructor
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.preferences.fieldeditors;
 
@@ -19,39 +20,35 @@ import org.eclipse.swt.widgets.Composite;
 
 public class StringRegexFieldEditor extends StringFieldEditor {
 
-	private String regularExpression = "^.*$";
+	private Pattern pattern;
+	private boolean useNegation = false;
 
 	public StringRegexFieldEditor(String name, String labelText, Composite parent) {
+
+		this(name, labelText, "(^.*$)", parent);
+	}
+
+	public StringRegexFieldEditor(String name, String labelText, String regularExpression, Composite parent) {
+
+		this(name, labelText, regularExpression, false, parent);
+	}
+
+	public StringRegexFieldEditor(String name, String labelText, String regularExpression, boolean useNegation, Composite parent) {
+
 		super(name, labelText, parent);
-	}
-
-	public StringRegexFieldEditor(String name, String labelText, int width, Composite parent) {
-		super(name, labelText, width, parent);
-	}
-
-	public StringRegexFieldEditor(String name, String labelText, int width, int strategy, Composite parent) {
-		super(name, labelText, width, strategy, parent);
-	}
-
-	public void setRegEx(String regEx) {
-
-		this.regularExpression = regEx;
-	}
-
-	public String getRegEx() {
-
-		return regularExpression;
+		this.pattern = Pattern.compile(regularExpression);
+		this.useNegation = useNegation;
 	}
 
 	@Override
 	protected boolean doCheckState() {
 
-		String value = getStringValue();
-		Pattern p = Pattern.compile(regularExpression);
-		Matcher m = p.matcher(value);
-		if(!m.matches()) {
-			return false;
+		boolean checkState = super.doCheckState();
+		if(checkState) {
+			Matcher matcher = pattern.matcher(getStringValue());
+			boolean matches = matcher.matches();
+			checkState = useNegation ? !matches : matches;
 		}
-		return super.doCheckState();
+		return checkState;
 	}
 }
