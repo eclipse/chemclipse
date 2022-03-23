@@ -43,6 +43,7 @@ import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.app.undo.UndoContextFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
@@ -79,6 +80,8 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -328,10 +331,10 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		PeakScanListUI peakScanListUI = new PeakScanListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		Table table = peakScanListUI.getTable();
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
-		table.addSelectionListener(new SelectionAdapter() {
+		table.addMouseListener(new MouseAdapter() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void mouseDown(MouseEvent e) {
 
 				propagateSelection(e.display);
 			}
@@ -734,7 +737,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Compare two selected scans/peaks.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_COMPARISON_SCAN, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_COMPARISON_SCAN, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -760,7 +763,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Merge the selected peaks into a new peak.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_MERGE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_MERGE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -809,7 +812,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Delete the selected peaks.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -873,7 +876,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Reset the peak/scan list.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -888,7 +891,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Save the peak/scan list.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE_AS, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE_AS, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -933,8 +936,8 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 							DatabaseFileSupport.saveMassSpectra(e.display.getActiveShell(), massSpectra, chromatogram.getName());
 						}
 					}
-				} catch(NoConverterAvailableException e1) {
-					logger.warn(e1);
+				} catch(NoConverterAvailableException n) {
+					logger.warn(n);
 				}
 			}
 		});
