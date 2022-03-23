@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Ui
+Bundle-Name: Peak Detector Manual UI
 Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui;singleton:=true
 Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.manual.ui.Activator

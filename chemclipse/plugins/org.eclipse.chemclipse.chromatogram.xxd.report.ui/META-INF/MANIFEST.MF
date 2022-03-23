@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.xxd.report.ui
 Bundle-ManifestVersion: 2
-Bundle-Name: Report UI
+Bundle-Name: Chromatogram Report UI
 Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.xxd.report.ui;singleton:=true
 Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.chromatogram.xxd.report.ui.Activator
