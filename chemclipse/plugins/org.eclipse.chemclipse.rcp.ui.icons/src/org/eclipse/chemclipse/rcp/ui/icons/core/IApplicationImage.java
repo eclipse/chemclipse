@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2021 Lablicate GmbH.
+ * Copyright (c) 2013, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -105,6 +105,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_PREFERENCES = PATH_PREFIX + "preferences.gif";
 	String IMAGE_SETTINGS_PULL = PATH_PREFIX + "settings_pull.png";
 	String IMAGE_SETTINGS_PUSH = PATH_PREFIX + "settings_push.png";
+	String IMAGE_SETTINGS_SYNCHRONIZE = PATH_PREFIX + "settings_synchronize.png";
 	String IMAGE_DRIVE = PATH_PREFIX + "drive.gif";
 	String IMAGE_CHROMATOGRAM_ZERO_SET = PATH_PREFIX + "chromatogramZeroSet.gif";
 	String IMAGE_FOLDER_OPENED = PATH_PREFIX + "folder_opened.gif";
