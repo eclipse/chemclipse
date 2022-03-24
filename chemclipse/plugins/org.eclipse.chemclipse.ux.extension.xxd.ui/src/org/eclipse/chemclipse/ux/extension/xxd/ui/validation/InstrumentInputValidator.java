@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -9,7 +9,7 @@
  * Contributors:
  * Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation;
+package org.eclipse.chemclipse.ux.extension.xxd.ui.validation;
 
 import java.util.HashSet;
 import java.util.Set;
