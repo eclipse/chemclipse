@@ -212,6 +212,7 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 		GridData gridData = new GridData(GridData.FILL_BOTH);
 		gridData.horizontalSpan = 3;
 		chart.setLayoutData(gridData);
+		chart.toggleSeriesLegendVisibility();
 		//
 		chartControl.set(chart);
 	}
