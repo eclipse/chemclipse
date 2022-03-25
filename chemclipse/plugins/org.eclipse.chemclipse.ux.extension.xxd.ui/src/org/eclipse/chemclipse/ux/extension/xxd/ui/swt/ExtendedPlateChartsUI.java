@@ -274,6 +274,8 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 			ISeriesData seriesData = new SeriesData(points, seriesId);
 			lineSeriesData = new LineSeriesData(seriesData);
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
+			lineSeriesSettings.setVisibleInLegend(!well.getSampleSubset().isEmpty());
+			lineSeriesSettings.setVisible(!well.getSampleSubset().isEmpty());
 			lineSeriesSettings.setLineColor(color);
 			lineSeriesSettings.setEnableArea(false);
 			lineSeriesSettings.setDescription(well.getLabel());
