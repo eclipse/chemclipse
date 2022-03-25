@@ -118,12 +118,7 @@ public class ExtendedPCRPlateUI extends Composite implements IExtendedPartUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(plate != null) {
-					String selection = combo.getText();
-					if(IPlate.ALL_CHANNELS.equals(selection)) {
-						plate.setActiveChannel(-1);
-					} else {
-						plate.setActiveChannel(combo.getSelectionIndex() - 1);
-					}
+					plate.setActiveChannel(combo.getSelectionIndex());
 					fireUpdate(e.widget.getDisplay(), plate);
 					fireUpdate(e.widget.getDisplay(), pcrPlate.getSelectedWell());
 					pcrPlate.refresh();
@@ -214,7 +209,6 @@ public class ExtendedPCRPlateUI extends Composite implements IExtendedPartUI {
 		if(plate != null) {
 			int selectionIndex = comboChannels.getSelectionIndex();
 			List<String> channels = plate.getActiveChannels();
-			channels.add(0, IPlate.ALL_CHANNELS);
 			comboChannels.setItems(channels.toArray(new String[channels.size()]));
 			setComboSelection(channels, comboChannels, selectionIndex);
 		} else {
