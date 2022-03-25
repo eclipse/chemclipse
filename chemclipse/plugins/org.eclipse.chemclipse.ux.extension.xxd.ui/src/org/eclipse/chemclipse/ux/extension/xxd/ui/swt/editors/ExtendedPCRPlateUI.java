@@ -132,7 +132,7 @@ public class ExtendedPCRPlateUI extends Composite implements IExtendedPartUI {
 	private void createResetButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Reset the scan");
+		button.setToolTipText("Reset the plate");
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
