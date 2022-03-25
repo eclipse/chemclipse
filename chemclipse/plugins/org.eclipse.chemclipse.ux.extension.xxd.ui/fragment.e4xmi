@@ -65,6 +65,12 @@
                 <children xsi:type="advanced:Placeholder" xmi:id="_e7z5kCfdEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.dataexplorer" ref="_qtur4Cf2EeafjOXnfHSw0Q"/>
               </children>
               <children xsi:type="advanced:Placeholder" xmi:id="_2AQ3MCfeEeu5Pepo04c08Q" elementId="org.eclipse.ui.editorss" ref="_qjvtkCskEeakPPc3RJFSAg"/>
+              <children xsi:type="basic:PartStack" xmi:id="_FzwjIKwkEey7K4kYy1L1Sw" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.3" visible="false">
+                <children xsi:type="advanced:Placeholder" xmi:id="_sUSmgKwgEey7K4kYy1L1Sw" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.welldata" toBeRendered="false" ref="_3OFKoCfdEeu5Pepo04c08Q"/>
+                <children xsi:type="advanced:Placeholder" xmi:id="_apy94KwkEey7K4kYy1L1Sw" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.wellchart" toBeRendered="false" ref="_3pxoICfdEeu5Pepo04c08Q"/>
+                <children xsi:type="advanced:Placeholder" xmi:id="_ma-s8KwkEey7K4kYy1L1Sw" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.platedata" toBeRendered="false" ref="_4El74CfdEeu5Pepo04c08Q"/>
+                <children xsi:type="advanced:Placeholder" xmi:id="_qnIkUKwkEey7K4kYy1L1Sw" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.wellchannels" toBeRendered="false" ref="_4fuYsCfdEeu5Pepo04c08Q"/>
+              </children>
             </children>
           </children>
           <children xsi:type="basic:PartSashContainer" xmi:id="_y_wTkCfeEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partsashcontainer.9" containerData="7500" horizontal="true">
