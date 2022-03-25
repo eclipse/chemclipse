@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -109,8 +109,6 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 		setLayout(new GridLayout(1, true));
 		//
 		createToolbarMain(this);
-		createToolbarInfo(this);
-		comboChannels = createComboChannels(this);
 		createChart(this);
 		//
 		initialize();
@@ -125,9 +123,11 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(5, false));
+		composite.setLayout(new GridLayout(7, false));
+		//
+		createToolbarInfo(composite);
+		comboChannels = createComboChannels(composite);
 		//
 		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
 		createButtonToggleChartLegend(composite, chartControl, IMAGE_LEGEND);
