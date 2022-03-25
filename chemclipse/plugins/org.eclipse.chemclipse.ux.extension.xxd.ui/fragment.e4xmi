@@ -56,7 +56,7 @@
         </children>
       </children>
     </elements>
-    <elements xsi:type="advanced:Perspective" xmi:id="_LTsDcCfdEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.pcr" label="Polymerase Chain Reaction (PCR)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/pcrDefault.gif" tooltip="Polymerase Chain Reaction (PCR)">
+    <elements xsi:type="advanced:Perspective" xmi:id="_LTsDcCfdEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.pcr" label="Polymerase Chain Reaction (PCR)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/plateCharts.png" tooltip="Polymerase Chain Reaction (PCR)">
       <children xsi:type="basic:PartSashContainer" xmi:id="_YY3xACfdEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partsashcontainer.5">
         <children xsi:type="basic:PartSashContainer" xmi:id="_ZJOP4CfdEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partsashcontainer.6" horizontal="true">
           <children xsi:type="basic:PartSashContainer" xmi:id="_yrc3gCfeEeu5Pepo04c08Q" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partsashcontainer.8" containerData="2500">
