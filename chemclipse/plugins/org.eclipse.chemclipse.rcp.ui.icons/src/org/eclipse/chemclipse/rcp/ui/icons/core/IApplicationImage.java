@@ -396,7 +396,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_MEASUREMENT_RESULTS_DEFAULT = PATH_PREFIX + "measurementResultsDefault.gif";
 	String IMAGE_MEASUREMENT_RESULTS_ACTIVE = PATH_PREFIX + "measurementResultsActive.gif";
 	//
-	String IMAGE_PLATE_PCR = PATH_PREFIX + "plate-pcr.gif";
+	String IMAGE_PLATE_PCR = PATH_PREFIX + "plate-pcr.png";
 	String IMAGE_METHOD = PATH_PREFIX + "method.gif";
 	String IMAGE_METHOD_ADD = PATH_PREFIX + "methodAdd.gif";
 	String IMAGE_METHOD_EDIT = PATH_PREFIX + "methodEdit.gif";

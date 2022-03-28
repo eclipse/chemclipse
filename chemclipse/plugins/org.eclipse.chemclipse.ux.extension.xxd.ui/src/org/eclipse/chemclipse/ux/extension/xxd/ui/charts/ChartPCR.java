@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,11 +20,8 @@ import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swtchart.IAxis.Position;
-import org.eclipse.swtchart.extensions.axisconverter.PercentageConverter;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.IPrimaryAxisSettings;
-import org.eclipse.swtchart.extensions.core.ISecondaryAxisSettings;
-import org.eclipse.swtchart.extensions.core.SecondaryAxisSettings;
 import org.eclipse.swtchart.extensions.linecharts.LineChart;
 
 public class ChartPCR extends LineChart {
@@ -58,7 +55,6 @@ public class ChartPCR extends LineChart {
 		chartSettings.setEnableTooltips(true);
 		//
 		setPrimaryAxisSet(chartSettings);
-		addSecondaryAxisSet(chartSettings);
 		applySettings(chartSettings);
 	}
 
@@ -72,27 +68,8 @@ public class ChartPCR extends LineChart {
 		primaryAxisSettingsX.setVisible(true);
 		//
 		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
-		primaryAxisSettingsY.setTitle("Intensity");
+		primaryAxisSettingsY.setTitle("Fluorescence");
 		primaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.0#E0"), new DecimalFormatSymbols(Locale.ENGLISH)));
 		primaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-	}
-
-	private void addSecondaryAxisSet(IChartSettings chartSettings) {
-
-		deleteSecondaryAxes(chartSettings);
-		/*
-		 * Y
-		 */
-		ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings("Relative Intensity [%]", new PercentageConverter(SWT.VERTICAL, true));
-		secondaryAxisSettingsY.setPosition(Position.Secondary);
-		secondaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
-		secondaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
-		chartSettings.getSecondaryAxisSettingsListY().add(secondaryAxisSettingsY);
-	}
-
-	private void deleteSecondaryAxes(IChartSettings chartSettings) {
-
-		chartSettings.getSecondaryAxisSettingsListX().clear();
-		chartSettings.getSecondaryAxisSettingsListY().clear();
 	}
 }
