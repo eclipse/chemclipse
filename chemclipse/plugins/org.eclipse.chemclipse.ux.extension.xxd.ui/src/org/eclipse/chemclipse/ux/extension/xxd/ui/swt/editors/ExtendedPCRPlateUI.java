@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -118,12 +118,7 @@ public class ExtendedPCRPlateUI extends Composite implements IExtendedPartUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(plate != null) {
-					String selection = combo.getText();
-					if(IPlate.ALL_CHANNELS.equals(selection)) {
-						plate.setActiveChannel(-1);
-					} else {
-						plate.setActiveChannel(combo.getSelectionIndex() - 1);
-					}
+					plate.setActiveChannel(combo.getSelectionIndex());
 					fireUpdate(e.widget.getDisplay(), plate);
 					fireUpdate(e.widget.getDisplay(), pcrPlate.getSelectedWell());
 					pcrPlate.refresh();
@@ -137,7 +132,7 @@ public class ExtendedPCRPlateUI extends Composite implements IExtendedPartUI {
 	private void createResetButton(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Reset the scan");
+		button.setToolTipText("Reset the plate");
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -214,7 +209,6 @@ public class ExtendedPCRPlateUI extends Composite implements IExtendedPartUI {
 		if(plate != null) {
 			int selectionIndex = comboChannels.getSelectionIndex();
 			List<String> channels = plate.getActiveChannels();
-			channels.add(0, IPlate.ALL_CHANNELS);
 			comboChannels.setItems(channels.toArray(new String[channels.size()]));
 			setComboSelection(channels, comboChannels, selectionIndex);
 		} else {
