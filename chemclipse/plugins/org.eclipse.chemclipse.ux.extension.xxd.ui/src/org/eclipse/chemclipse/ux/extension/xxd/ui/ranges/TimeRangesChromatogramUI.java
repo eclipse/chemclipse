@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,11 +24,17 @@ public class TimeRangesChromatogramUI extends Composite {
 	private TimeRangesPeakChart timeRangesPeakChart;
 	//
 	private TimeRanges timeRanges = null;
+	private IUpdateListener updateListener;
 
 	public TimeRangesChromatogramUI(Composite parent, int style) {
 
 		super(parent, style);
 		createControl();
+	}
+
+	public void setUpdateListener(IUpdateListener updateListener) {
+
+		this.updateListener = updateListener;
 	}
 
 	public void setTimeRanges(TimeRanges timeRanges) {
@@ -78,6 +84,22 @@ public class TimeRangesChromatogramUI extends Composite {
 		TimeRangesPeakChart timeRangesPeakChart = new TimeRangesPeakChart(parent, SWT.NONE);
 		timeRangesPeakChart.setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
+		timeRangesPeakChart.setUpdateListener(new IUpdateListener() {
+
+			@Override
+			public void update() {
+
+				fireTimeRangeUpdate();
+			}
+		});
+		//
 		return timeRangesPeakChart;
+	}
+
+	private void fireTimeRangeUpdate() {
+
+		if(updateListener != null) {
+			updateListener.update();
+		}
 	}
 }

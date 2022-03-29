@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,7 +30,7 @@ public class TimeRangeSelector {
 		/*
 		 * Try to get the time range and adjust the start | stop value.
 		 */
-		TimeRange timeRange = selectRange(baseChart, event, timeRanges);
+		TimeRange timeRange = selectRange(baseChart, event, -1, -1, timeRanges);
 		if(timeRange != null) {
 			double x = baseChart.getSelectedPrimaryAxisValue(event.x, IExtendedChart.X_AXIS);
 			int selection = (int)x;
@@ -56,7 +56,7 @@ public class TimeRangeSelector {
 	 * @param timeRanges
 	 * @return TimeRange
 	 */
-	public static TimeRange selectRange(BaseChart baseChart, Event event, TimeRanges timeRanges) {
+	public static TimeRange selectRange(BaseChart baseChart, Event event, int xStart, int xStop, TimeRanges timeRanges) {
 
 		/*
 		 * Try to get the closest identifier of the user x selection.
@@ -81,7 +81,21 @@ public class TimeRangeSelector {
 			 * Try to get the time range and adjust the start | stop value.
 			 * This could be also null if no time range was matched.
 			 */
-			return timeRanges.get(identifier);
+			TimeRange timeRange = timeRanges.get(identifier);
+			if(timeRange != null) {
+				if(xStart != -1 && xStop != -1) {
+					double positionStart = baseChart.getSelectedPrimaryAxisValue(xStart, IExtendedChart.X_AXIS);
+					double positionStop = baseChart.getSelectedPrimaryAxisValue(xStop, IExtendedChart.X_AXIS);
+					//
+					if(positionStart < timeRange.getStart() && positionStop < timeRange.getStart()) {
+						timeRange = null; // The selection is left of the time range area.
+					} else if(positionStart > timeRange.getStop() && positionStop > timeRange.getStop()) {
+						timeRange = null; // The selection is right of the time range area.
+					}
+				}
+			}
+			//
+			return timeRange;
 		}
 		//
 		return null;

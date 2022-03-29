@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -53,7 +53,7 @@ public class TimeRangeSelectionHandler extends AbstractHandledEventProcessor imp
 	public void handleEvent(BaseChart baseChart, Event event) {
 
 		if(timeRangesUI != null && timeRanges != null) {
-			TimeRange timeRange = TimeRangeSelector.selectRange(baseChart, event, timeRanges);
+			TimeRange timeRange = TimeRangeSelector.selectRange(baseChart, event, -1, -1, timeRanges);
 			if(timeRange != null) {
 				TimeRangeSelector.updateTimeRangeUI(timeRangesUI, timeRange, baseChart);
 			}

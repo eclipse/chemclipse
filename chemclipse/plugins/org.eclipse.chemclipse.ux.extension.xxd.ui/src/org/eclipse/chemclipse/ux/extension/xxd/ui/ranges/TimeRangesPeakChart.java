@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,8 +13,12 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.ranges;
 
 import org.eclipse.chemclipse.model.ranges.TimeRange;
 import org.eclipse.chemclipse.model.ranges.TimeRanges;
+import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.custom.ChromatogramPeakChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.BaselineSelectionPaintListener;
+import org.eclipse.jface.dialogs.IInputValidator;
+import org.eclipse.jface.dialogs.InputDialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Point;
@@ -46,11 +50,18 @@ public class TimeRangesPeakChart extends ChromatogramPeakChart {
 	private TimeRangesUI timeRangesUI;
 	private TimeRanges timeRanges;
 	private TimeRangeMarker timeRangeMarker;
+	//
+	private IUpdateListener updateListener;
 
 	public TimeRangesPeakChart(Composite parent, int style) {
 
 		super(parent, style);
 		createControl();
+	}
+
+	public void setUpdateListener(IUpdateListener updateListener) {
+
+		this.updateListener = updateListener;
 	}
 
 	public void update(TimeRange timeRange) {
@@ -165,28 +176,70 @@ public class TimeRangesPeakChart extends ChromatogramPeakChart {
 
 	private void adjustTimeRange(Event event) {
 
-		TimeRange timeRange = TimeRangeSelector.selectRange(getBaseChart(), event, timeRanges);
+		TimeRange timeRange = TimeRangeSelector.selectRange(getBaseChart(), event, xStart, xStop, timeRanges);
 		if(timeRange != null) {
-			BaseChart baseChart = getBaseChart();
-			IAxisSet axisSet = baseChart.getAxisSet();
-			Point rectangle = baseChart.getPlotArea().getSize();
-			int width = rectangle.x;
-			//
-			if(width != 0) {
-				double factorWidth = 100.0d / width;
-				double percentageStartWidth = (factorWidth * xStart) / 100.0d;
-				double percentageStopWidth = (factorWidth * xStop) / 100.0d;
+			updateTimeRange(timeRange); // Update
+		} else {
+			/*
+			 * Add a new TimeRange
+			 */
+			if(timeRanges != null) {
+				InputDialog inputDialog = new InputDialog(event.display.getActiveShell(), "Time Range", "Add a new time range.", "", new IInputValidator() {
+
+					@Override
+					public String isValid(String newText) {
+
+						if(newText == null || newText.isEmpty() || newText.isBlank()) {
+							return "Please define a new time range ID.";
+						} else {
+							for(TimeRange timeRangeX : timeRanges.values()) {
+								if(timeRangeX.getIdentifier().equals(newText)) {
+									return "The time range ID exists already.";
+								}
+							}
+						}
+						return null;
+					}
+				});
 				/*
-				 * Retention Time
+				 * Add a new time range.
 				 */
-				IAxis retentionTime = axisSet.getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
-				Range millisecondsRange = retentionTime.getRange();
-				double millisecondsWidth = millisecondsRange.upper - millisecondsRange.lower;
-				int startRetentionTime = (int)(millisecondsRange.lower + millisecondsWidth * percentageStartWidth);
-				int stopRetentionTime = (int)(millisecondsRange.lower + millisecondsWidth * percentageStopWidth);
-				timeRange.update(startRetentionTime, stopRetentionTime);
-				TimeRangeSelector.updateTimeRangeUI(timeRangesUI, timeRange, baseChart);
+				if(inputDialog.open() == Window.OK) {
+					String identifier = inputDialog.getValue().trim();
+					TimeRange timeRangeAdd = new TimeRange(identifier, 0, 0);
+					timeRanges.add(timeRangeAdd);
+					timeRangesUI.setInput(timeRanges);
+					updateTimeRange(timeRangeAdd);
+				}
 			}
+		}
+	}
+
+	private void updateTimeRange(TimeRange timeRange) {
+
+		BaseChart baseChart = getBaseChart();
+		IAxisSet axisSet = baseChart.getAxisSet();
+		Point rectangle = baseChart.getPlotArea().getSize();
+		int width = rectangle.x;
+		//
+		if(width != 0) {
+			/*
+			 * Selected Width
+			 */
+			double factorWidth = 100.0d / width;
+			double percentageStartWidth = (factorWidth * xStart) / 100.0d;
+			double percentageStopWidth = (factorWidth * xStop) / 100.0d;
+			/*
+			 * Retention Time
+			 */
+			IAxis retentionTime = axisSet.getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
+			Range millisecondsRange = retentionTime.getRange();
+			double millisecondsWidth = millisecondsRange.upper - millisecondsRange.lower;
+			int startRetentionTime = (int)(millisecondsRange.lower + millisecondsWidth * percentageStartWidth);
+			int stopRetentionTime = (int)(millisecondsRange.lower + millisecondsWidth * percentageStopWidth);
+			timeRange.update(startRetentionTime, stopRetentionTime);
+			TimeRangeSelector.updateTimeRangeUI(timeRangesUI, timeRange, baseChart);
+			fireTimeRangeUpdate();
 		}
 	}
 
@@ -264,6 +317,13 @@ public class TimeRangesPeakChart extends ChromatogramPeakChart {
 			Composite parent = timeRangesUI.getParent();
 			parent.layout(true);
 			parent.redraw();
+		}
+	}
+
+	private void fireTimeRangeUpdate() {
+
+		if(updateListener != null) {
+			updateListener.update();
 		}
 	}
 }
