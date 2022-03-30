@@ -20,11 +20,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -68,22 +64,9 @@ public class ApplicationImage implements IApplicationImage, BundleTrackerCustomi
 			//
 			Image image = getProvider(parts[0]).getImage(parts[1], size, active);
 			if(active) {
-				try {
-					imageDecorator.setSize(size);
-					imageDecorator.setImage(image);
-					image = CompletableFuture.supplyAsync(imageDecorator::createImage).get(50, TimeUnit.MILLISECONDS);
-				} catch(InterruptedException e) {
-					logger.warn(e);
-					Thread.currentThread().interrupt();
-				} catch(ExecutionException e) {
-					logger.warn(e);
-				} catch(TimeoutException e) {
-					logger.warn(e);
-					logger.warn("The decoration for the following icon fails: " + fileName);
-					logger.warn("Please check the icon. Is it a png? Does it contain an embedded RGB profile?");
-					logger.warn("Solution: Probably try to convert the icon to *.gif format.");
-					// TODO: fix the real cause of the issue and remove all of this
-				}
+				imageDecorator.setSize(size);
+				imageDecorator.setImage(image);
+				image = imageDecorator.createImage();
 			}
 			//
 			return image;
