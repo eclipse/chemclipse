@@ -270,4 +270,8 @@ http://www.eclipse.org/legal/epl-v10.html
          id="org.eclipse.chemclipse.msd.converter.supplier.mmass.feature"
          version="0.0.0"/>
 
+   <includes
+         id="org.eclipse.chemclipse.pcr.report.supplier.txt.feature"
+         version="0.0.0"/>
+
 </feature>
