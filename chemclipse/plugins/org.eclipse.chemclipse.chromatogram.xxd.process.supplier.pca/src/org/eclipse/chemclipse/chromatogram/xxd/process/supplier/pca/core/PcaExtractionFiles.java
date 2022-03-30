@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -61,10 +61,9 @@ public class PcaExtractionFiles implements IExtractionData {
 		printWriter.print("Classification");
 		printWriter.print(DELIMITER);
 		printWriter.print("Description");
-		printWriter.print(DELIMITER);
 		for(int i = 0; i < variables; i++) {
-			printWriter.print((char)(i + start));
 			printWriter.print(DELIMITER);
+			printWriter.print((char)(i + start));
 		}
 		printWriter.println();
 		/*
@@ -86,10 +85,9 @@ public class PcaExtractionFiles implements IExtractionData {
 			printWriter.print(type >= 0.5 ? "+" : "-");
 			printWriter.print(DELIMITER);
 			printWriter.print(type >= 0.5 ? "Over Center" : "Under Center");
-			printWriter.print(DELIMITER);
 			for(int i = 0; i < variables; i++) {
-				printWriter.print(Math.random());
 				printWriter.print(DELIMITER);
+				printWriter.print(Math.random());
 			}
 			printWriter.println();
 		}
