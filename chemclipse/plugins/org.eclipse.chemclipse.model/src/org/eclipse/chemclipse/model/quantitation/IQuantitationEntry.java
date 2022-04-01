@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2021 Lablicate GmbH.
+ * Copyright (c) 2013, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,12 +12,29 @@
 package org.eclipse.chemclipse.model.quantitation;
 
 import java.io.Serializable;
+import java.util.List;
 
 public interface IQuantitationEntry extends Serializable {
 
+	/**
+	 * Legacy method - Better use:
+	 * List<Double> getSignals();
+	 * 
+	 * @return List<Double>
+	 */
 	double getSignal();
 
+	/**
+	 * Legacy method - Better use:
+	 * setSignals(List<Double> signals)
+	 * 
+	 * @param signal
+	 */
 	void setSignal(double signal);
+
+	List<Double> getSignals();
+
+	void setSignals(List<Double> signals);
 
 	String getName();
 

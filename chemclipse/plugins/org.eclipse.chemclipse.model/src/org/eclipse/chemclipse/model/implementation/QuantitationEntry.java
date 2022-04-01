@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,6 +22,7 @@ public class QuantitationEntry extends AbstractQuantitationEntry implements IQua
 	private static final long serialVersionUID = -8475836941611695083L;
 
 	public QuantitationEntry(String name, double concentration, String concentrationUnit, double area) {
+
 		super(name, concentration, concentrationUnit, area);
 	}
 }

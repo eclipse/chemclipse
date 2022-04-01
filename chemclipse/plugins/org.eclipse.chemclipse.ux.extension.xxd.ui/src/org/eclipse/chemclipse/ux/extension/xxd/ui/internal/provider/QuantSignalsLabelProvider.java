@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import java.text.DecimalFormat;
 
-import org.eclipse.chemclipse.model.core.ISignal;
+import org.eclipse.chemclipse.model.core.SignalSupport;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationSignal;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -63,22 +63,17 @@ public class QuantSignalsLabelProvider extends AbstractChemClipseLabelProvider {
 		DecimalFormat decimalFormat = getDecimalFormat();
 		String text = "";
 		if(element instanceof IQuantitationSignal) {
-			IQuantitationSignal entry = (IQuantitationSignal)element;
+			IQuantitationSignal quantitationSignal = (IQuantitationSignal)element;
 			//
 			switch(columnIndex) {
 				case 0:
-					double signal = entry.getSignal();
-					if(signal == ISignal.TOTAL_INTENSITY) {
-						text = "TIC";
-					} else {
-						text = decimalFormat.format(signal);
-					}
+					text = SignalSupport.asText(quantitationSignal.getSignal(), decimalFormat);
 					break;
 				case 1:
-					text = decimalFormat.format(entry.getRelativeResponse());
+					text = decimalFormat.format(quantitationSignal.getRelativeResponse());
 					break;
 				case 2:
-					text = decimalFormat.format(entry.getUncertainty());
+					text = decimalFormat.format(quantitationSignal.getUncertainty());
 					break;
 				case 3:
 					text = ""; // Icon

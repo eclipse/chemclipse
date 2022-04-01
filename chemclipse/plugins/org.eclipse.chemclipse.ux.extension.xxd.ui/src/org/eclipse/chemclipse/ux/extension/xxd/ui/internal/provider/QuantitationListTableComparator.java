@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
+import org.eclipse.chemclipse.model.core.SignalSupport;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
@@ -42,7 +43,7 @@ public class QuantitationListTableComparator extends AbstractRecordTableComparat
 					sortOrder = Double.compare(quantitationEntry2.getArea(), quantitationEntry1.getArea());
 					break;
 				case 5:
-					sortOrder = Double.compare(quantitationEntry2.getSignal(), quantitationEntry1.getSignal());
+					sortOrder = SignalSupport.compare(quantitationEntry2.getSignals(), quantitationEntry1.getSignals());
 					break;
 				case 6:
 					sortOrder = quantitationEntry2.getCalibrationMethod().compareTo(quantitationEntry1.getCalibrationMethod());

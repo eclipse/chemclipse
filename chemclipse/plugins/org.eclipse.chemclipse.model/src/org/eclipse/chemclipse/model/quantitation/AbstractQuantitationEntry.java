@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2021 Lablicate GmbH.
+ * Copyright (c) 2013, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -10,6 +10,9 @@
  * Dr. Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.model.quantitation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.chemclipse.model.core.ISignal;
 
@@ -22,7 +25,7 @@ public abstract class AbstractQuantitationEntry implements IQuantitationEntry {
 	//
 	private static final String DESCRIPTION_DELIMITER = " | ";
 	//
-	private double signal = ISignal.TOTAL_INTENSITY;
+	private List<Double> signals = new ArrayList<>();
 	private String name = "";
 	private String chemicalClass = "";
 	private double concentration = 0.0d;
@@ -44,13 +47,34 @@ public abstract class AbstractQuantitationEntry implements IQuantitationEntry {
 	@Override
 	public double getSignal() {
 
-		return signal;
+		/*
+		 * This method has been added for backward compatibility reasons.
+		 */
+		return signals.isEmpty() ? ISignal.TOTAL_INTENSITY : signals.get(0);
 	}
 
 	@Override
 	public void setSignal(double signal) {
 
-		this.signal = signal;
+		/*
+		 * Better use:
+		 * void setSignals(List<Double> signals)
+		 */
+		this.signals.clear();
+		this.signals.add(signal);
+	}
+
+	@Override
+	public List<Double> getSignals() {
+
+		return signals;
+	}
+
+	@Override
+	public void setSignals(List<Double> signals) {
+
+		this.signals.clear();
+		this.signals.addAll(signals);
 	}
 
 	@Override

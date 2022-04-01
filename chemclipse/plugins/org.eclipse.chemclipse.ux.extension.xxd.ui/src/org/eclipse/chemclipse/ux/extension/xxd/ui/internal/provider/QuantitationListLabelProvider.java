@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import java.text.DecimalFormat;
 
-import org.eclipse.chemclipse.model.core.ISignal;
+import org.eclipse.chemclipse.model.core.SignalSupport;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -78,12 +78,8 @@ public class QuantitationListLabelProvider extends AbstractChemClipseLabelProvid
 				case 4:
 					text = decimalFormat.format(quantitationEntry.getArea());
 					break;
-				case 5: // TIC ...
-					text = ISignal.TOTAL_INTENSITY_DESCRIPTION;
-					double signal = quantitationEntry.getSignal();
-					if(signal != ISignal.TOTAL_INTENSITY) {
-						text = decimalFormat.format(signal);
-					}
+				case 5: // TIC, XIC, ...
+					text = SignalSupport.asText(quantitationEntry.getSignals(), decimalFormat);
 					break;
 				case 6:
 					text = quantitationEntry.getCalibrationMethod();
