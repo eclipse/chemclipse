@@ -37,54 +37,59 @@ public class TaskTileContainer {
 	public static final Color DEFAULT_COLOR_DESCRIPTION = Colors.WHITE;
 	public static final Color DEFAULT_COLOR_INACTIVE = Colors.getColor(139, 23, 23);
 	public static final Color DEFAULT_COLOR_ACTIVE = Colors.getColor(114, 20, 22);
-	private final List<TaskTile> tiles = new ArrayList<>();
+	//
+	private final List<TaskTile> taskTiles = new ArrayList<>();
 	private final Composite container;
 	private final Supplier<IEclipseContext> contextSupplier;
+	private final Color[] colors;
+	//
 	private final MouseMoveListener tileMouseMoveListener = mouseMove -> {
-		for(TaskTile tile : tiles) {
-			if(tile == mouseMove.widget) {
-				tile.setActive();
+		for(TaskTile taskTile : taskTiles) {
+			if(taskTile == mouseMove.widget) {
+				taskTile.setActive();
 			} else {
-				tile.setInactive();
+				taskTile.setInactive();
 			}
 		}
 	};
-	private final Color[] colors;
 
 	public TaskTileContainer(Composite parent, int columns, Supplier<IEclipseContext> contextSupplier) {
 
-		this(parent, columns, contextSupplier, new Color[]{DEFAULT_COLOR_ACTIVE, DEFAULT_COLOR_INACTIVE, DEFAULT_COLOR_TITLE, DEFAULT_COLOR_DESCRIPTION,});
+		this(parent, columns, contextSupplier, new Color[]{DEFAULT_COLOR_ACTIVE, DEFAULT_COLOR_INACTIVE, DEFAULT_COLOR_TITLE, DEFAULT_COLOR_DESCRIPTION});
 	}
 
 	public TaskTileContainer(Composite parent, int columns, Supplier<IEclipseContext> contextSupplier, Color[] colors) {
 
 		this.contextSupplier = contextSupplier;
 		this.colors = colors;
+		//
 		container = new Composite(parent, SWT.NONE);
 		container.setLayout(new GridLayout(columns, true));
 		container.setBackgroundMode(SWT.INHERIT_FORCE);
-		MouseTrackAdapter trackAdapter = new MouseTrackAdapter() {
+		//
+		MouseTrackAdapter mouseTrackAdapter = new MouseTrackAdapter() {
 
 			@Override
 			public void mouseExit(MouseEvent me) {
 
-				for(TaskTile tile : tiles) {
-					tile.setInactive();
+				for(TaskTile taskTile : taskTiles) {
+					taskTile.setInactive();
 				}
 			}
 		};
-		container.addMouseTrackListener(trackAdapter);
-		parent.addMouseTrackListener(trackAdapter);
+		//
+		container.addMouseTrackListener(mouseTrackAdapter);
+		parent.addMouseTrackListener(mouseTrackAdapter);
 	}
 
 	public TaskTile addTaskTile(TileDefinition definition) {
 
-		GridData gridData = new GridData(GridData.FILL_BOTH);
 		TaskTile taskTile = new TaskTile(container, definition, this::executeHandler, this::computeStyle, colors);
-		taskTile.setLayoutData(gridData);
+		taskTile.setLayoutData(new GridData(GridData.FILL_BOTH));
 		taskTile.addMouseMoveListener(tileMouseMoveListener);
-		tiles.add(taskTile);
+		taskTiles.add(taskTile);
 		container.layout();
+		//
 		return taskTile;
 	}
 
@@ -97,12 +102,15 @@ public class TaskTileContainer {
 
 		boolean largeText = tileDefinition.getIcon() == null && tileDefinition.getTitle().length() == 1;
 		int style = SWT.NONE;
+		//
 		if(canExecute(tileDefinition)) {
 			style |= TaskTile.HIGHLIGHT;
 		}
+		//
 		if(largeText) {
 			style |= TaskTile.LARGE_TITLE;
 		}
+		//
 		return style;
 	}
 
@@ -117,7 +125,7 @@ public class TaskTileContainer {
 
 	public void update() {
 
-		for(TaskTile taskTile : tiles) {
+		for(TaskTile taskTile : taskTiles) {
 			taskTile.updateFromDefinition();
 		}
 	}
@@ -125,13 +133,13 @@ public class TaskTileContainer {
 	public void removeTaskTile(TaskTile tile) {
 
 		tile.removeMouseMoveListener(tileMouseMoveListener);
-		tiles.remove(tile);
+		taskTiles.remove(tile);
 		tile.dispose();
 		container.layout();
 	}
 
 	public List<TaskTile> getTiles() {
 
-		return Collections.unmodifiableList(tiles);
+		return Collections.unmodifiableList(taskTiles);
 	}
 }

@@ -94,13 +94,16 @@ public class WelcomeView {
 		preferenceStore.setDefault(WelcomeViewExtensionHandler.PREFERENCE_MIN_TILES, DEFAULT_NUMBER_OF_COLUMNS);
 		preferenceStore.setDefault(WelcomeViewExtensionHandler.PREFERENCE_ALWAYS_CHANGE_PERSPECTIVE, true);
 		int cols = preferenceStore.getInt(WelcomeViewExtensionHandler.PREFERENCE_MIN_TILES);
+		//
 		TaskTileContainer tileContainer = new TaskTileContainer(parent, cols, () -> eclipseContext);
+		//
 		parent.setLayout(new FillLayout());
 		Image imageDataAnalysis = ApplicationImageFactory.getInstance().getImage(IApplicationImage.PICTOGRAM_DATA_ANALYSIS, IApplicationImageProvider.SIZE_128x128);
 		resizeTile(2, 2, tileContainer.addTaskTile(new Component(PERSPECTIVE_DATA_ANALYSIS, imageDataAnalysis, "Data Analysis", "This is the main perspective. Most of the work is performed here.")));
 		resizeTile(cols - 3, 1, tileContainer.addTaskTile(new Component(PERSPECTIVE_PCA, null, "PCA", "Used for principal component analysis")));
 		resizeTile(cols - 3, 1, tileContainer.addTaskTile(new Component(PERSPECTIVE_LOGGING, null, "Logging", "Have a look at the log files.")));
 		resizeTile(cols - 2, 1, tileContainer.addTaskTile(new DemoWelcomeTile()));
+		//
 		new WelcomeViewExtensionHandler(tileContainer, preferenceStore, "");
 	}
 

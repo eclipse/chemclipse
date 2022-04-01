@@ -15,6 +15,7 @@ package org.eclipse.chemclipse.ux.extension.ui.swt;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.ux.extension.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.ui.definitions.TileDefinition;
 import org.eclipse.core.runtime.IStatus;
@@ -36,9 +37,12 @@ import org.eclipse.swt.widgets.Label;
 
 public class TaskTile extends Composite {
 
+	private static final Logger logger = Logger.getLogger(TaskTile.class);
+	//
 	public static final int LARGE_TITLE = (1 << 1);
 	public static final int HIGHLIGHT = (1 << 2);
 	public static final int WRAP_IMAGE = (1 << 3);
+	//
 	private Color colorInactive;
 	private Color colorActive;
 	//
@@ -51,16 +55,27 @@ public class TaskTile extends Composite {
 	private final Color[] colors;
 	private final Function<TileDefinition, Integer> styleFunction;
 
-	TaskTile(Composite parent, TileDefinition definition, Consumer<TileDefinition> definitionConsumer, Function<TileDefinition, Integer> styleFunction, Color[] colors) {
+	public TaskTile(Composite parent, TileDefinition definition, Consumer<TileDefinition> definitionConsumer, Function<TileDefinition, Integer> styleFunction, Color[] colors) {
 
 		super(parent, SWT.NONE);
+		//
 		if(colors.length < 4) {
-			throw new IllegalArgumentException("must supply three colors");
+			/*
+			 * Warn and create default colors.
+			 */
+			logger.warn("The task tile requires at least 4 colors (active, inactive, title, description).");
+			Color colorActive = TaskTileContainer.DEFAULT_COLOR_ACTIVE;
+			Color colorInactive = TaskTileContainer.DEFAULT_COLOR_INACTIVE;
+			Color colorTitle = TaskTileContainer.DEFAULT_COLOR_TITLE;
+			Color colorDescription = TaskTileContainer.DEFAULT_COLOR_DESCRIPTION;
+			colors = new Color[]{colorActive, colorInactive, colorTitle, colorDescription};
 		}
+		//
 		this.definition = definition;
 		this.definitionConsumer = definitionConsumer;
 		this.styleFunction = styleFunction;
 		this.colors = colors;
+		//
 		initialize();
 		updateFromDefinition();
 	}
@@ -84,6 +99,7 @@ public class TaskTile extends Composite {
 		} else {
 			modifyLabelImage(false, wrapImage);
 		}
+		//
 		textSection.setText(section);
 		textDesciption.setText(description == null ? "" : description);
 	}
@@ -199,6 +215,7 @@ public class TaskTile extends Composite {
 				return e.x >= 0 && e.x <= size.x && e.y >= 0 && e.y <= size.y;
 			}
 		});
+		//
 		control.addKeyListener(new KeyAdapter() {
 
 			@Override
@@ -237,12 +254,15 @@ public class TaskTile extends Composite {
 			textSection.setEnabled(false);
 			textDesciption.setEnabled(false);
 		}
+		//
 		int fontSize;
+		//
 		if((style & LARGE_TITLE) != 0) {
 			fontSize = 40;
 		} else {
 			fontSize = 18;
 		}
+		//
 		Font font = new Font(getDisplay(), "Arial", fontSize, SWT.BOLD);
 		textSection.setFont(font);
 		font.dispose();
