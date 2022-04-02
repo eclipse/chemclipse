@@ -201,9 +201,12 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 		try {
 			dialog.run(true, false, runnable);
 		} catch(InvocationTargetException e) {
+			logger.warn(e);
+			logger.warn(e.getCause());
 			saveAs();
 		} catch(InterruptedException e) {
 			logger.warn(e);
+			Thread.currentThread().interrupt();
 		}
 	}
 
@@ -380,13 +383,17 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 			/*
 			 * No fork, otherwise it might crash when loading a chromatogram takes too long.
 			 */
-			boolean fork = batch ? false : true;
+			boolean fork = !batch;
 			dialog.run(fork, false, runnable);
-			chromatogramSelection = runnable.getChromatogramSelection();
-			chromatogramFile = file;
-		} catch(Exception e) {
-			logger.error(e.getLocalizedMessage(), e);
+		} catch(InvocationTargetException e) {
+			logger.warn(e);
+			logger.warn(e.getCause());
+		} catch(InterruptedException e) {
+			logger.warn(e);
+			Thread.currentThread().interrupt();
 		}
+		chromatogramSelection = runnable.getChromatogramSelection();
+		chromatogramFile = file;
 		//
 		return chromatogramSelection;
 	}
