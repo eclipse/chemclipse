@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -27,6 +27,7 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		super(configurer);
 	}
 
+	@Override
 	public ActionBarAdvisor createActionBarAdvisor(IActionBarConfigurer configurer) {
 
 		return new ApplicationActionBarAdvisor(configurer);
@@ -38,16 +39,6 @@ public class ApplicationWorkbenchWindowAdvisor extends WorkbenchWindowAdvisor {
 		if(Activator.getDefault().saveDirtyParts()) {
 			Display display = Display.getCurrent();
 			Shell shell = display.getActiveShell();
-			if(shell == null) {
-				// see Bug 534346, try to find an alternative shell
-				Shell[] shells = display.getShells();
-				for(Shell other : shells) {
-					if(other.isDisposed() || !other.isVisible()) {
-						continue;
-					}
-					shell = other;
-				}
-			}
 			if(shell == null) {
 				// we can't ask the user then
 				return true;
