@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2020 Lablicate GmbH.
+ * Copyright (c) 2014, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -38,6 +38,11 @@ import org.eclipse.chemclipse.numeric.equations.Equations;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 
 public class PeakBuilderCSD {
+
+	private PeakBuilderCSD() {
+
+		// only static usage
+	}
 
 	/**
 	 * Creates an instance of IPeak.<br/>
@@ -108,8 +113,7 @@ public class PeakBuilderCSD {
 		 */
 		IScanCSD supplierScanCSD = getPeakScan(totalScanSignals, backgroundEquation);
 		IPeakModelCSD peakModel = new PeakModelCSD(supplierScanCSD, peakIntensityValues, backgroundAbundanceRange.getStartBackgroundAbundance(), backgroundAbundanceRange.getStopBackgroundAbundance());
-		IChromatogramPeakCSD peak = new ChromatogramPeakCSD(peakModel, chromatogram);
-		return peak;
+		return new ChromatogramPeakCSD(peakModel, chromatogram);
 	}
 
 	public static IChromatogramPeakCSD createPeak(IChromatogramCSD chromatogram, IScanRange scanRange, float startIntensity, float stopIntensity) throws PeakException {
@@ -137,8 +141,7 @@ public class PeakBuilderCSD {
 		 */
 		IScanCSD supplierScanCSD = getPeakScan(totalScanSignals, backgroundEquation);
 		IPeakModelCSD peakModel = new PeakModelCSD(supplierScanCSD, peakIntensityValues, startIntensity, stopIntensity);
-		IChromatogramPeakCSD peak = new ChromatogramPeakCSD(peakModel, chromatogram);
-		return peak;
+		return new ChromatogramPeakCSD(peakModel, chromatogram);
 	}
 
 	/**
@@ -177,8 +180,7 @@ public class PeakBuilderCSD {
 		 */
 		IScanCSD supplierScanCSD = getPeakScan(totalScanSignals, backgroundEquation);
 		IPeakModelCSD peakModel = new PeakModelCSD(supplierScanCSD, peakIntensityValues, backgroundAbundanceRange.getStartBackgroundAbundance(), backgroundAbundanceRange.getStopBackgroundAbundance());
-		IChromatogramPeakCSD peak = new ChromatogramPeakCSD(peakModel, chromatogram);
-		return peak;
+		return new ChromatogramPeakCSD(peakModel, chromatogram);
 	}
 
 	private static IScanCSD getPeakScan(ITotalScanSignals totalScanSignals, LinearEquation backgroundEquation) {
@@ -186,8 +188,7 @@ public class PeakBuilderCSD {
 		ITotalScanSignal totalScanSignal = totalScanSignals.getMaxTotalScanSignal();
 		int retentionTime = totalScanSignal.getRetentionTime();
 		float adjustedSignal = (float)(totalScanSignal.getTotalSignal() - backgroundEquation.calculateY(retentionTime));
-		IScanCSD supplierScanCSD = new ScanCSD(retentionTime, adjustedSignal);
-		return supplierScanCSD;
+		return new ScanCSD(retentionTime, adjustedSignal);
 	}
 
 	/**
@@ -199,7 +200,6 @@ public class PeakBuilderCSD {
 	 */
 	protected static IPeakIntensityValues getPeakIntensityValues(ITotalScanSignals peakIntensityTotalIonSignals) throws PeakException {
 
-		assert (peakIntensityTotalIonSignals != null) : "The peak intensity total ion signals must not be null.";
 		if(peakIntensityTotalIonSignals == null) {
 			throw new PeakException("The peakIntensityTotalIonSignals must not be null.");
 		}
@@ -230,8 +230,6 @@ public class PeakBuilderCSD {
 	 */
 	protected static ITotalScanSignals adjustTotalScanSignals(ITotalScanSignals totalScanSignals, LinearEquation backgroundEquation) throws PeakException {
 
-		assert (totalScanSignals != null) : "The total ion signals must not be null.";
-		assert (backgroundEquation != null) : "The background equation must not be null.";
 		if(totalScanSignals == null || backgroundEquation == null) {
 			throw new PeakException("The given totalIonSignals or backgroundEquation must not be null.");
 		}
@@ -270,9 +268,6 @@ public class PeakBuilderCSD {
 	 */
 	protected static LinearEquation getBackgroundEquation(ITotalScanSignals totalScanSignals, IScanRange scanRange, IBackgroundAbundanceRange backgroundAbundanceRange) throws PeakException {
 
-		assert (totalScanSignals != null) : "The total ion signals must not be null.";
-		assert (scanRange != null) : "The scan range must not be null.";
-		assert (backgroundAbundanceRange != null) : "The background abundance range must not be null.";
 		if(totalScanSignals == null || scanRange == null || backgroundAbundanceRange == null) {
 			throw new PeakException("The given totalIonSignals, scanRange or backgroundAbundanceRange must not be null.");
 		}
@@ -286,8 +281,7 @@ public class PeakBuilderCSD {
 		/*
 		 * Create the background abundance equation.
 		 */
-		LinearEquation backgroundEquation = Equations.createLinearEquation(p1, p2);
-		return backgroundEquation;
+		return Equations.createLinearEquation(p1, p2);
 	}
 
 	/**
@@ -301,8 +295,6 @@ public class PeakBuilderCSD {
 	 */
 	protected static ITotalScanSignals getTotalScanSignals(IChromatogramCSD chromatogram, IScanRange scanRange) throws PeakException {
 
-		assert (chromatogram != null) : "The chromatogram must not be null.";
-		assert (scanRange != null) : "The scan range must not be null.";
 		if(chromatogram == null || scanRange == null) {
 			throw new PeakException("The given values must not be null.");
 		}
@@ -333,8 +325,6 @@ public class PeakBuilderCSD {
 	protected static IBackgroundAbundanceRange checkBackgroundAbundanceRange(ITotalScanSignals totalScanSignals, IScanRange scanRange, IBackgroundAbundanceRange backgroundAbundanceRange) throws PeakException {
 
 		ITotalScanSignal totalScanSignal;
-		float background = 0.0f;
-		float signal = 0.0f;
 		float startBackgroundAbundance = 0.0f;
 		float stopBackgroundAbundance = 0.0f;
 		boolean adjustBackgroundAbundance = false;
@@ -346,8 +336,8 @@ public class PeakBuilderCSD {
 		 */
 		totalScanSignal = totalScanSignals.getTotalScanSignal(scanRange.getStartScan());
 		if(totalScanSignal != null) {
-			background = backgroundAbundanceRange.getStartBackgroundAbundance();
-			signal = totalScanSignal.getTotalSignal();
+			float background = backgroundAbundanceRange.getStartBackgroundAbundance();
+			float signal = totalScanSignal.getTotalSignal();
 			if(background <= signal) {
 				startBackgroundAbundance = background;
 			} else {
@@ -362,8 +352,8 @@ public class PeakBuilderCSD {
 		 */
 		totalScanSignal = totalScanSignals.getTotalScanSignal(scanRange.getStopScan());
 		if(totalScanSignal != null) {
-			background = backgroundAbundanceRange.getStopBackgroundAbundance();
-			signal = totalScanSignal.getTotalSignal();
+			float background = backgroundAbundanceRange.getStopBackgroundAbundance();
+			float signal = totalScanSignal.getTotalSignal();
 			if(background <= signal) {
 				stopBackgroundAbundance = background;
 			} else {
@@ -393,8 +383,6 @@ public class PeakBuilderCSD {
 	 */
 	protected static void checkScanRange(IChromatogramCSD chromatogram, IScanRange scanRange) throws PeakException {
 
-		assert (chromatogram != null) : "The chromatogram must not be null.";
-		assert (scanRange != null) : "The scan range must not be null.";
 		if(chromatogram == null || scanRange == null) {
 			throw new PeakException("The given chromatogram or scanRange must not be null.");
 		}
