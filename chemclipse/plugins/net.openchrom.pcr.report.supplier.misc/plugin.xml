@@ -9,7 +9,7 @@
             fileExtension=".txt"
             fileName=""
             filterName="PCR Plate Report (*.txt)"
-            id="net.openchrom.pcr.report.supplier.misc.txt"
+            id="org.eclipse.chemclipse.pcr.report.supplier.txt"
             importConverter="org.eclipse.chemclipse.pcr.report.supplier.txt.core.PCRImportConverter"
             importMagicNumberMatcher="org.eclipse.chemclipse.pcr.report.supplier.txt.core.MagicNumberMatcher"
             isExportable="true"
@@ -19,7 +19,7 @@
    <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
-            class="net.openchrom.pcr.report.supplier.misc.preferences.PreferenceInitializer">
+            class="org.eclipse.chemclipse.pcr.report.supplier.txt.preferences.PreferenceInitializer">
       </initializer>
    </extension>
 </plugin>
