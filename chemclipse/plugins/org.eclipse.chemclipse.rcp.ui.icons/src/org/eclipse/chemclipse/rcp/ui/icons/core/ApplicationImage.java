@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.osgi.framework.Bundle;
@@ -33,7 +32,6 @@ import org.osgi.util.tracker.BundleTrackerCustomizer;
 
 public class ApplicationImage implements IApplicationImage, BundleTrackerCustomizer<IconBundle> {
 
-	private static final Logger logger = Logger.getLogger(ApplicationImage.class);
 	private static final String BUNDLE_SEPARATOR = "/";
 	//
 	private final BundleTracker<IconBundle> bundleTracker;
