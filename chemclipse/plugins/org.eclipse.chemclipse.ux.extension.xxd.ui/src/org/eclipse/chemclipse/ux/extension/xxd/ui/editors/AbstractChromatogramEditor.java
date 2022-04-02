@@ -236,6 +236,11 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 		return extendedChromatogramUI.getChromatogramSelection();
 	}
 
+	public void dispose() {
+
+		extendedChromatogramUI.dispose();
+	}
+
 	private String getFilterPath() {
 
 		String filterPath = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SAVE_AS_FOLDER);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -36,6 +36,7 @@ public class ChromatogramChart extends LineChart {
 	private String titleSeconds = "";
 	private String titleMinutes = "";
 	private String titleRelativeIntensity = "";
+	private Font titleFont;
 
 	public ChromatogramChart() {
 
@@ -248,7 +249,7 @@ public class ChromatogramChart extends LineChart {
 		String name = preferenceStore.getString(PreferenceConstants.P_FONT_NAME_X_AXIS_MINUTES);
 		int height = preferenceStore.getInt(PreferenceConstants.P_FONT_SIZE_X_AXIS_MINUTES);
 		int style = preferenceStore.getInt(PreferenceConstants.P_FONT_STYLE_X_AXIS_MINUTES);
-		Font titleFont = Fonts.getCachedFont(getBaseChart().getDisplay(), name, height, style);
+		titleFont = Fonts.getCachedFont(getBaseChart().getDisplay(), name, height, style);
 		boolean drawAxisLine = ChartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_LINE_MINUTES);
 		boolean drawPositionMarker = ChartSupport.getBoolean(PreferenceConstants.P_SHOW_X_AXIS_POSITION_MARKER_MINUTES);
 		//
@@ -284,5 +285,12 @@ public class ChromatogramChart extends LineChart {
 		 * Update the title to retrieve the correct axis.
 		 */
 		titleMinutes = title;
+	}
+
+	@Override
+	public void dispose() {
+
+		titleFont.dispose();
+		super.dispose();
 	}
 }
