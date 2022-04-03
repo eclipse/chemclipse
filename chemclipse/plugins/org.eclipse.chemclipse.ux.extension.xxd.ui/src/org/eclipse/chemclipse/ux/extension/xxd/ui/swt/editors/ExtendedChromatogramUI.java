@@ -1487,6 +1487,13 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		methodSupportUI.applySettings();
 	}
 
+	@Override
+	public void dispose() {
+
+		chromatogramChart.dispose();
+		super.dispose();
+	}
+
 	/**
 	 * Initializes a store with required defaults so it can be used with the {@link ExtendedChromatogramUI}
 	 * 

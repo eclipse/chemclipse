@@ -16,7 +16,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
@@ -25,8 +24,6 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.converter.exceptions.NoChromatogramConverterAvailableException;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
@@ -201,9 +198,12 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 		try {
 			dialog.run(true, false, runnable);
 		} catch(InvocationTargetException e) {
+			logger.warn(e);
+			logger.warn(e.getCause());
 			saveAs();
 		} catch(InterruptedException e) {
 			logger.warn(e);
+			Thread.currentThread().interrupt();
 		}
 	}
 
@@ -231,6 +231,11 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 	public IChromatogramSelection getChromatogramSelection() {
 
 		return extendedChromatogramUI.getChromatogramSelection();
+	}
+
+	public void dispose() {
+
+		extendedChromatogramUI.dispose();
 	}
 
 	private String getFilterPath() {
@@ -371,7 +376,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 		return chromatogramSelection;
 	}
 
-	private synchronized IChromatogramSelection loadChromatogramSelection(File file, boolean batch) throws FileNotFoundException, NoChromatogramConverterAvailableException, FileIsNotReadableException, FileIsEmptyException, ChromatogramIsNullException {
+	private synchronized IChromatogramSelection loadChromatogramSelection(File file, boolean batch) throws ChromatogramIsNullException {
 
 		IChromatogramSelection chromatogramSelection = null;
 		ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
@@ -380,13 +385,17 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 			/*
 			 * No fork, otherwise it might crash when loading a chromatogram takes too long.
 			 */
-			boolean fork = batch ? false : true;
+			boolean fork = !batch;
 			dialog.run(fork, false, runnable);
-			chromatogramSelection = runnable.getChromatogramSelection();
-			chromatogramFile = file;
-		} catch(Exception e) {
-			logger.error(e.getLocalizedMessage(), e);
+		} catch(InvocationTargetException e) {
+			logger.warn(e);
+			logger.warn(e.getCause());
+		} catch(InterruptedException e) {
+			logger.warn(e);
+			Thread.currentThread().interrupt();
 		}
+		chromatogramSelection = runnable.getChromatogramSelection();
+		chromatogramFile = file;
 		//
 		return chromatogramSelection;
 	}

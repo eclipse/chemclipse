@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2021 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -137,6 +137,7 @@ public class ChromatogramReportExportWizard extends Wizard implements IExportWiz
 		} catch(InterruptedException e) {
 			logger.warn(e);
 			showErrorMessage();
+			Thread.currentThread().interrupt();
 			return false;
 		}
 		MessageDialog.openInformation(getShell(), DESCRIPTION, "The reports have been created successfully.");
