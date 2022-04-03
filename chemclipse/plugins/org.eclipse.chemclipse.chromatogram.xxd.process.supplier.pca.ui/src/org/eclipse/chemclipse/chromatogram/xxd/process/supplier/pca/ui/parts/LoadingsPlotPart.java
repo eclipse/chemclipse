@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,15 +15,15 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.ProcessorPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt.ExtendedLoadingsPlot;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 public class LoadingsPlotPart extends AbstractPartPCA<ExtendedLoadingsPlot> {
 
-	private static final String TOPIC = Activator.TOPIC_PCA_EVALUATION_LOAD;
+	private static final String TOPIC = ProcessorPCA.TOPIC_PCA_EVALUATION_LOAD;
 
 	@Inject
 	public LoadingsPlotPart(Composite parent) {
@@ -65,6 +65,6 @@ public class LoadingsPlotPart extends AbstractPartPCA<ExtendedLoadingsPlot> {
 
 	private boolean isUnloadEvent(String topic) {
 
-		return topic.equals(Activator.TOPIC_PCA_EVALUATION_CLEAR);
+		return topic.equals(ProcessorPCA.TOPIC_PCA_EVALUATION_CLEAR);
 	}
 }

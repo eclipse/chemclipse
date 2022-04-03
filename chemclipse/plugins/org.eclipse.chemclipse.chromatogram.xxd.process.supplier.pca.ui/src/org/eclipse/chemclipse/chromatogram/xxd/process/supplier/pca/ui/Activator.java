@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2020 Lablicate GmbH.
+ * Copyright (c) 2013, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -49,9 +49,6 @@ public class Activator extends AbstractActivatorUI {
 	public static final String ICON_NORM_TRANS_LOG = "ICON_NORM_TRANS_LOG"; // $NON-NLS-1$
 	public static final String ICON_NORM_TRANS_NONE = "ICON_NORM_TRANS_NONE"; // $NON-NLS-1$
 	public static final String ICON_NORM_TRANS_POWER = "ICON_NORM_TRANS_POWER"; // $NON-NLS-1$
-	//
-	public static final String TOPIC_PCA_EVALUATION_LOAD = "pca/evaluation/load";
-	public static final String TOPIC_PCA_EVALUATION_CLEAR = "pca/evaluation/clear";
 	//
 	private static Activator plugin;
 

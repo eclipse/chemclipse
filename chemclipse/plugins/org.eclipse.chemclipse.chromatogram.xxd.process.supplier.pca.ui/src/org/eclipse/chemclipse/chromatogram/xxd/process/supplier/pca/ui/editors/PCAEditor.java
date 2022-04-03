@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,6 +16,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.ProcessorPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamplesPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt.AnalysisEditorUI;
@@ -58,7 +59,7 @@ public class PCAEditor {
 
 		context.remove(ISamplesPCA.class);
 		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-		eventBroker.send(Activator.TOPIC_PCA_EVALUATION_CLEAR, new Object());
+		eventBroker.send(ProcessorPCA.TOPIC_PCA_EVALUATION_CLEAR, new Object());
 	}
 
 	@Focus

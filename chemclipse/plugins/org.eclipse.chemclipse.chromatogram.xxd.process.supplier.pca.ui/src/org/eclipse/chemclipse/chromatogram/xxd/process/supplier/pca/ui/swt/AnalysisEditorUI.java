@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.ProcessorPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Algorithm;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
@@ -356,9 +357,9 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 				public void run() {
 
 					if(evaluationPCA != null) {
-						eventBroker.send(Activator.TOPIC_PCA_EVALUATION_LOAD, evaluationPCA);
+						eventBroker.send(ProcessorPCA.TOPIC_PCA_EVALUATION_LOAD, evaluationPCA);
 					} else {
-						eventBroker.send(Activator.TOPIC_PCA_EVALUATION_CLEAR, new Object());
+						eventBroker.send(ProcessorPCA.TOPIC_PCA_EVALUATION_CLEAR, new Object());
 					}
 				}
 			});

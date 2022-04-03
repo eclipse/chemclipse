@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,15 +16,15 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.ProcessorPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt.ExtendedFeatureListUI;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 public class FeatureTablePart extends AbstractPartPCA<ExtendedFeatureListUI> {
 
-	private static final String TOPIC = Activator.TOPIC_PCA_EVALUATION_LOAD;
+	private static final String TOPIC = ProcessorPCA.TOPIC_PCA_EVALUATION_LOAD;
 
 	@Inject
 	public FeatureTablePart(Composite parent) {
@@ -66,6 +66,6 @@ public class FeatureTablePart extends AbstractPartPCA<ExtendedFeatureListUI> {
 
 	private boolean isUnloadEvent(String topic) {
 
-		return topic.equals(Activator.TOPIC_PCA_EVALUATION_CLEAR);
+		return topic.equals(ProcessorPCA.TOPIC_PCA_EVALUATION_CLEAR);
 	}
 }
