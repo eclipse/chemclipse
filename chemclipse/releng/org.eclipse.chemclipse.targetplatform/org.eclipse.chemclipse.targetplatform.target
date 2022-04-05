@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <?pde version="3.8"?>
-<target name="Eclipse Chemclipse (Build)" sequenceNumber="528">
+<target name="Eclipse ChemClipse (Build)" sequenceNumber="528">
 <locations>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 	<unit id="org.eclipse.gemini.jpa.feature.feature.group" version="0.0.0"/>
 	<repository location="http://download.eclipse.org/gemini/jpa/updates"/>
-</location>
-<location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
-	<unit id="org.eclipse.persistence.sdk.feature.group" version="0.0.0"/>
-	<repository location="http://download.eclipse.org/rt/eclipselink/updates/2.7.6.v20200131-b7c997804f"/>
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 	<unit id="org.eclipse.nebula.feature.feature.group" version="0.0.0"/>
@@ -69,7 +65,7 @@
 	<unit id="org.hamcrest.library" version="0.0.0"/>
 	<unit id="org.ejml.simple" version="0.0.0"/>
 	<unit id="org.bouncycastle.bcpg" version="0.0.0"/>
-	<unit id="org.bouncycastle.bcprov" version="0.0.0"/>	
+	<unit id="org.bouncycastle.bcprov" version="0.0.0"/>
 	<unit id="org.bouncycastle.bcpkix" version="0.0.0"/>
 	<unit id="org.bouncycastle.bcutil" version="0.0.0"/>
 	<unit id="org.easymock" version="0.0.0"/>

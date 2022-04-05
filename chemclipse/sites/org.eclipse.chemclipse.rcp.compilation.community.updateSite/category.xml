@@ -9,9 +9,6 @@
    <feature url="features/org.eclipse.gemini.jpa.feature_1.2.0.M1.jar" id="org.eclipse.gemini.jpa.feature" version="1.2.0.M1">
       <category name="org.eclipse.chemclipse.chemclipse.libraries"/>
    </feature>
-   <feature url="features/org.eclipse.persistence.sdk_2.7.6.v20200131-b7c997804f.jar" id="org.eclipse.persistence.sdk" version="2.7.6.v20200131-b7c997804f">
-      <category name="org.eclipse.chemclipse.chemclipse.libraries"/>
-   </feature>
    <feature id="org.eclipse.equinox.sdk">
       <category name="org.eclipse.chemclipse.chemclipse.libraries"/>
    </feature>
@@ -20,13 +17,13 @@
    </feature>
    <category-def name="org.eclipse.chemclipse.chemclipse" label="Chemclipse">
       <description>
-         The parts of chemclipse
+         The parts of ChemClipse
       </description>
    </category-def>
    <category-def name="org.eclipse.chemclipse.chemclipse.libraries" label="Libraries">
       <description>
-         Contains libraries usefull for projects that like to enhance chemclipse.
-To make sure that all extensions are consitent and we do not end up with several versions we provide here these so extension developers can use one unique update site.
+         Contains libraries useful for projects that like to enhance ChemClipse.
+To make sure that all extensions are consistent and we do not end up with several versions we provide here these so extension developers can use one unique update site.
       </description>
    </category-def>
 </site>
