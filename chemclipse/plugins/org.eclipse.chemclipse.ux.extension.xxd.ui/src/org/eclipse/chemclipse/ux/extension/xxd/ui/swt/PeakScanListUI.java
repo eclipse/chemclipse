@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -108,9 +108,7 @@ public class PeakScanListUI extends ExtendedTableViewer {
 		for(int i = 0; i < tableViewerColumns.size(); i++) {
 			TableViewerColumn tableViewerColumn = tableViewerColumns.get(i);
 			String label = tableViewerColumn.getColumn().getText();
-			if(PeakScanListLabelProvider.ACTIVE_FOR_ANALYSIS.equals(label)) {
-				tableViewerColumn.setEditingSupport(new PeakScanListEditingSupport(this, label));
-			}
+			tableViewerColumn.setEditingSupport(new PeakScanListEditingSupport(this, label));
 		}
 	}
 }

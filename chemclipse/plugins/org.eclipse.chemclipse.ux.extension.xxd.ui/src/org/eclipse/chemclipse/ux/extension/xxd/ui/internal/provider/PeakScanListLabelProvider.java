@@ -288,7 +288,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 				}
 				break;
 			case 19:
-				text = (peak.getInternalStandards().size() > 0) ? "ISTD" : BLANK;
+				text = (!peak.getInternalStandards().isEmpty()) ? "ISTD" : BLANK;
 				break;
 			case 20: {
 				text = PeakScanListSupport.getClassifier(peak);
