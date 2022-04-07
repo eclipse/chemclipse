@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,16 +24,16 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
-public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class PreferencePageInstallation extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	private DirectoryFieldEditor pathEditor;
 
-	public PreferencePage() {
+	public PreferencePageInstallation() {
 
 		super(GRID);
 		setPreferenceStore(new ScopedPreferenceStore(InstanceScope.INSTANCE, PreferenceSupplier.INSTANCE().getPreferenceNode()));
-		setTitle("NIST (extern)");
-		setDescription("NIST-DB Application Settings");
+		setTitle("NIST (extern) - Installation");
+		setDescription("");
 		noDefaultButton();
 	}
 
@@ -62,6 +62,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 				return super.doCheckState();
 			}
 		};
+		//
 		pathEditor.setEmptyStringAllowed(true);
 		addField(pathEditor);
 		/*

@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -222,19 +223,33 @@ public interface IExtendedPartUI {
 
 		if(!preferencePages.isEmpty()) {
 			/*
-			 * Add the pages
+			 * Collect the pages
 			 */
-			PreferenceManager preferenceManager = new PreferenceManager();
+			TreeMap<String, IPreferencePage> preferencePageMap = new TreeMap<>();
 			for(int i = 0; i < preferencePages.size(); i++) {
 				try {
 					Class<? extends IPreferencePage> page = preferencePages.get(i);
 					IPreferencePage preferencePage = page.getConstructor().newInstance();
-					preferenceManager.addToRoot(new PreferenceNode(Integer.toString(i + 1), preferencePage));
+					String title = preferencePage.getTitle();
+					if(title == null || title.isEmpty() || title.isBlank()) {
+						title = "--";
+					}
+					preferencePageMap.put(title, preferencePage);
 				} catch(Exception exception) {
 					logger.warn(exception);
 				}
 			}
-			//
+			/*
+			 * Add the pages sorted by title.
+			 */
+			PreferenceManager preferenceManager = new PreferenceManager();
+			int i = 1;
+			for(IPreferencePage preferencePage : preferencePageMap.values()) {
+				preferenceManager.addToRoot(new PreferenceNode(Integer.toString(i++), preferencePage));
+			}
+			/*
+			 * Open the dialog
+			 */
 			PreferenceDialog preferenceDialog = new PreferenceDialog(event.display.getActiveShell(), preferenceManager);
 			preferenceDialog.create();
 			preferenceDialog.setMessage(TITLE_SETTINGS);

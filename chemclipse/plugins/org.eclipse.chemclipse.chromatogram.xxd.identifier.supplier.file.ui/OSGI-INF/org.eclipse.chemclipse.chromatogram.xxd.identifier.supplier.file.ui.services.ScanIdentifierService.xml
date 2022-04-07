@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" configuration-policy="optional" name="org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.ui.services.ScanIdentifierService">
+   <service>
+      <provide interface="org.eclipse.chemclipse.swt.ui.services.IScanIdentifierService"/>
+   </service>
+   <implementation class="org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.ui.services.ScanIdentifierService"/>
+</scr:component>

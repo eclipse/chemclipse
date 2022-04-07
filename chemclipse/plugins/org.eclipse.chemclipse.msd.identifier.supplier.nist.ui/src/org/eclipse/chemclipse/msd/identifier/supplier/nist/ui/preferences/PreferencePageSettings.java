@@ -20,13 +20,14 @@ import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-public class PreferencePageConnector extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
+public class PreferencePageSettings extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
-	public PreferencePageConnector() {
+	public PreferencePageSettings() {
 
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setTitle("NIST-DB Connector");
+		setTitle("NIST (extern) - Settings");
+		setDescription("");
 		setDescription("");
 	}
 

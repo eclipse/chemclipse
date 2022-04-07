@@ -5,15 +5,15 @@
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.chemclipse.chromatogram.msd.identifier.ui.preferences.identifierPreferencePage"
-            class="org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.preferences.PreferencePage"
-            id="org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.preferences.preferencePage"
-            name="NIST (extern)">
+            class="org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.preferences.PreferencePageInstallation"
+            id="org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.preferences.preferencePageInstallation"
+            name="NIST (extern) - Installation">
       </page>         
       <page
             category="org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.preferences.preferencePage"
-            class="org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.preferences.PreferencePageConnector"
-            id="org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.preferences.preferencePageConnector"
-            name="NIST Connector">
+            class="org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.preferences.PreferencePageSettings"
+            id="org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.preferences.preferencePageSettings"
+            name="NIST (extern) - Settings">
       </page>
    </extension>
 </plugin>
