@@ -12,13 +12,15 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.text.DecimalFormat;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
@@ -32,12 +34,14 @@ import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
+import org.eclipse.chemclipse.swt.ui.services.IScanIdentifierService;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.IUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract;
 import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.MouseAdapter;
@@ -53,6 +57,7 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI {
 
@@ -392,7 +397,8 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 
 	private void createButtonSettings(Composite parent) {
 
-		createSettingsButton(parent, Arrays.asList(PreferencePageScans.class, PreferencePageSubtract.class), new ISettingsHandler() {
+		List<Class<? extends IPreferencePage>> preferencePages = getPreferencePages();
+		createSettingsButton(parent, preferencePages, new ISettingsHandler() {
 
 			@Override
 			public void apply(Display display) {
@@ -400,6 +406,36 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 				applySettings();
 			}
 		});
+	}
+
+	private List<Class<? extends IPreferencePage>> getPreferencePages() {
+
+		/*
+		 * Default pages
+		 */
+		List<Class<? extends IPreferencePage>> preferencePages = new ArrayList<>();
+		preferencePages.add(PreferencePageScans.class);
+		preferencePages.add(PreferencePageSubtract.class);
+		/*
+		 * Additional pages.
+		 */
+		Object[] scanIdentifierServices = Activator.getDefault().getScanIdentifierServices();
+		if(scanIdentifierServices != null) {
+			for(Object object : scanIdentifierServices) {
+				if(object instanceof IScanIdentifierService) {
+					IScanIdentifierService scanIdentifierService = (IScanIdentifierService)object;
+					DataType dataType = scanIdentifierService.getDataType();
+					if(DataType.MSD.equals(dataType)) {
+						Class<? extends IWorkbenchPreferencePage> preferencePage = scanIdentifierService.getPreferencePage();
+						if(preferencePage != null) {
+							preferencePages.add(preferencePage);
+						}
+					}
+				}
+			}
+		}
+		//
+		return preferencePages;
 	}
 
 	private void applySettings() {

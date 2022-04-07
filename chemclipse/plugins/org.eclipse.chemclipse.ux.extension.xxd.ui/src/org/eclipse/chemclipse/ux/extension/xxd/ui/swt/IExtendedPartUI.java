@@ -195,51 +195,62 @@ public interface IExtendedPartUI {
 
 	default Button createSettingsButton(Composite parent, List<Class<? extends IPreferencePage>> preferencePages, ISettingsHandler settingsHandler) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setText("");
-		button.setToolTipText("Open the Settings");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
-		//
+		Button button = createSettingsButtonBasic(parent);
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent event) {
 
-				if(!preferencePages.isEmpty()) {
-					/*
-					 * Add the pages
-					 */
-					PreferenceManager preferenceManager = new PreferenceManager();
-					for(int i = 0; i < preferencePages.size(); i++) {
-						try {
-							Class<? extends IPreferencePage> page = preferencePages.get(i);
-							IPreferencePage preferencePage = page.getConstructor().newInstance();
-							preferenceManager.addToRoot(new PreferenceNode(Integer.toString(i + 1), preferencePage));
-						} catch(Exception exception) {
-							logger.warn(exception);
-						}
-					}
-					//
-					PreferenceDialog preferenceDialog = new PreferenceDialog(event.display.getActiveShell(), preferenceManager);
-					preferenceDialog.create();
-					preferenceDialog.setMessage(TITLE_SETTINGS);
-					//
-					if(preferenceDialog.open() == Window.OK) {
-						try {
-							if(settingsHandler != null) {
-								settingsHandler.apply(event.display);
-							}
-						} catch(Exception exception) {
-							MessageDialog.openError(event.display.getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
-						}
-					}
-				} else {
-					MessageDialog.openInformation(event.display.getActiveShell(), TITLE_SETTINGS, "No setting page(s) have been defined.");
-				}
+				showPreferencesDialog(event, preferencePages, settingsHandler);
 			}
 		});
 		//
 		return button;
+	}
+
+	default Button createSettingsButtonBasic(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Open the Settings");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16));
+		//
+		return button;
+	}
+
+	default void showPreferencesDialog(SelectionEvent event, List<Class<? extends IPreferencePage>> preferencePages, ISettingsHandler settingsHandler) {
+
+		if(!preferencePages.isEmpty()) {
+			/*
+			 * Add the pages
+			 */
+			PreferenceManager preferenceManager = new PreferenceManager();
+			for(int i = 0; i < preferencePages.size(); i++) {
+				try {
+					Class<? extends IPreferencePage> page = preferencePages.get(i);
+					IPreferencePage preferencePage = page.getConstructor().newInstance();
+					preferenceManager.addToRoot(new PreferenceNode(Integer.toString(i + 1), preferencePage));
+				} catch(Exception exception) {
+					logger.warn(exception);
+				}
+			}
+			//
+			PreferenceDialog preferenceDialog = new PreferenceDialog(event.display.getActiveShell(), preferenceManager);
+			preferenceDialog.create();
+			preferenceDialog.setMessage(TITLE_SETTINGS);
+			//
+			if(preferenceDialog.open() == Window.OK) {
+				try {
+					if(settingsHandler != null) {
+						settingsHandler.apply(event.display);
+					}
+				} catch(Exception exception) {
+					MessageDialog.openError(event.display.getActiveShell(), "Settings", "Something has gone wrong to apply the settings.");
+				}
+			}
+		} else {
+			MessageDialog.openInformation(event.display.getActiveShell(), TITLE_SETTINGS, "No setting pages have been defined.");
+		}
 	}
 
 	default void enableToolbar(AtomicReference<? extends Composite> toolbar, boolean active) {

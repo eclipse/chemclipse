@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2021 Lablicate GmbH.
+ * Copyright (c) 2015, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 import org.eclipse.chemclipse.swt.ui.services.IMoleculeImageService;
+import org.eclipse.chemclipse.swt.ui.services.IScanIdentifierService;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.IAnnotationWidgetService;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.core.runtime.Platform;
@@ -39,6 +40,7 @@ public class Activator extends AbstractActivatorUI {
 	//
 	private ServiceTracker<IMoleculeImageService, IMoleculeImageService> moleculeImageServiceTracker = null;
 	private ServiceTracker<IAnnotationWidgetService, IAnnotationWidgetService> annotationWidgetServiceTracker = null;
+	private ServiceTracker<IScanIdentifierService, IScanIdentifierService> scanIdentifierServiceTracker = null;
 
 	/*
 	 * (non-Javadoc)
@@ -50,12 +52,7 @@ public class Activator extends AbstractActivatorUI {
 		super.start(context);
 		plugin = this;
 		initializePreferenceStoreSubtract(PreferenceSupplier.INSTANCE());
-		//
-		moleculeImageServiceTracker = new ServiceTracker<>(context, IMoleculeImageService.class, null);
-		moleculeImageServiceTracker.open();
-		//
-		annotationWidgetServiceTracker = new ServiceTracker<>(context, IAnnotationWidgetService.class, null);
-		annotationWidgetServiceTracker.open();
+		startServices(context);
 		/*
 		 * Don't call here:
 		 * ---
@@ -75,7 +72,7 @@ public class Activator extends AbstractActivatorUI {
 
 		plugin = null;
 		dataUpdateSupport = null;
-		moleculeImageServiceTracker.close();
+		stopServices(context);
 		super.stop(context);
 	}
 
@@ -117,6 +114,30 @@ public class Activator extends AbstractActivatorUI {
 	public Object[] getAnnotationWidgetServices() {
 
 		return annotationWidgetServiceTracker.getServices();
+	}
+
+	public Object[] getScanIdentifierServices() {
+
+		return scanIdentifierServiceTracker.getServices();
+	}
+
+	private void startServices(BundleContext context) {
+
+		moleculeImageServiceTracker = new ServiceTracker<>(context, IMoleculeImageService.class, null);
+		moleculeImageServiceTracker.open();
+		//
+		annotationWidgetServiceTracker = new ServiceTracker<>(context, IAnnotationWidgetService.class, null);
+		annotationWidgetServiceTracker.open();
+		//
+		scanIdentifierServiceTracker = new ServiceTracker<>(context, IScanIdentifierService.class, null);
+		scanIdentifierServiceTracker.open();
+	}
+
+	private void stopServices(BundleContext context) {
+
+		moleculeImageServiceTracker.close();
+		annotationWidgetServiceTracker.close();
+		scanIdentifierServiceTracker.close();
 	}
 
 	private void initialize(DataUpdateSupport dataUpdateSupport) {

@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -38,6 +38,7 @@ import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
+import org.eclipse.chemclipse.swt.ui.services.IScanIdentifierService;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.IUpdateListener;
@@ -53,6 +54,7 @@ import org.eclipse.chemclipse.wsd.model.core.support.WavelengthSupport;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.preference.IPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
@@ -71,6 +73,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 
@@ -665,7 +668,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 
 	private void createSettingsButton(Composite parent) {
 
-		createSettingsButton(parent, Arrays.asList(PreferencePageScans.class, PreferencePageSubtract.class), new ISettingsHandler() {
+		ISettingsHandler settingsHandler = new ISettingsHandler() {
 
 			@Override
 			public void apply(Display display) {
@@ -673,7 +676,65 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 				updateScan(scan);
 				scanIdentifierUI.updateIdentifier();
 			}
+		};
+		//
+		Button button = createSettingsButtonBasic(parent);
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent event) {
+
+				/*
+				 * Dynamically show different settings, based on the selected scan type.
+				 */
+				List<Class<? extends IPreferencePage>> preferencePages = getPreferencePages();
+				showPreferencesDialog(event, preferencePages, settingsHandler);
+			}
 		});
+	}
+
+	private List<Class<? extends IPreferencePage>> getPreferencePages() {
+
+		/*
+		 * Default pages
+		 */
+		List<Class<? extends IPreferencePage>> preferencePages = new ArrayList<>();
+		preferencePages.add(PreferencePageScans.class);
+		preferencePages.add(PreferencePageSubtract.class);
+		/*
+		 * Additional pages.
+		 */
+		DataType scanDataType = getScanDataType();
+		Object[] scanIdentifierServices = Activator.getDefault().getScanIdentifierServices();
+		if(scanIdentifierServices != null) {
+			for(Object object : scanIdentifierServices) {
+				if(object instanceof IScanIdentifierService) {
+					IScanIdentifierService scanIdentifierService = (IScanIdentifierService)object;
+					DataType dataType = scanIdentifierService.getDataType();
+					if(scanDataType.equals(dataType)) {
+						Class<? extends IWorkbenchPreferencePage> preferencePage = scanIdentifierService.getPreferencePage();
+						if(preferencePage != null) {
+							preferencePages.add(preferencePage);
+						}
+					}
+				}
+			}
+		}
+		//
+		return preferencePages;
+	}
+
+	private DataType getScanDataType() {
+
+		if(scan instanceof IScanCSD) {
+			return DataType.CSD;
+		} else if(scan instanceof IScanMSD) {
+			return DataType.MSD;
+		} else if(scan instanceof IScanWSD) {
+			return DataType.WSD;
+		}
+		//
+		return DataType.NONE;
 	}
 
 	private Button createSaveButton(Composite parent) {

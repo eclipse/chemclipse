@@ -159,8 +159,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		setUnknownValues(defaultValues, POSTFIX_MSD);
 		setUnknownValues(defaultValues, POSTFIX_CSD);
 		setUnknownValues(defaultValues, POSTFIX_WSD);
-		defaultValues.put(P_NUMBER_OF_MZ_UNKNOWN, Integer.toString(DEF_NUMBER_OF_MZ_UNKNOWN));
-		defaultValues.put(P_NUMBER_OF_WAVELENGTH_UNKNOWN, Integer.toString(DEF_NUMBER_OF_WAVELENGTH_UNKNOWN));
 		//
 		defaultValues.put(P_DELTA_CALCULATION, DEF_DELTA_CALCULATION);
 		defaultValues.put(P_DELTA_WINDOW, Float.toString(DEF_DELTA_WINDOW));
@@ -242,10 +240,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
 		//
+		String postfix = POSTFIX_MSD;
 		PeakUnknownSettingsMSD settings = new PeakUnknownSettingsMSD();
 		settings.setMassSpectrumComparatorId("");
-		initalizeUnknownSettings(settings, POSTFIX_MSD);
-		settings.setNumberOfMZ(preferences.getInt(P_NUMBER_OF_MZ_UNKNOWN, DEF_NUMBER_OF_MZ_UNKNOWN));
+		initalizeUnknownSettings(settings, postfix);
+		settings.setNumberOfMZ(preferences.getInt(P_NUMBER_OF_MZ_UNKNOWN + postfix, DEF_NUMBER_OF_MZ_UNKNOWN));
 		//
 		return settings;
 	}
@@ -262,9 +261,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
 		//
+		String postfix = POSTFIX_WSD;
 		PeakUnknownSettingsWSD settings = new PeakUnknownSettingsWSD();
-		initalizeUnknownSettings(settings, POSTFIX_WSD);
-		settings.setNumberOfWavelengths(preferences.getInt(P_NUMBER_OF_WAVELENGTH_UNKNOWN, DEF_NUMBER_OF_WAVELENGTH_UNKNOWN));
+		initalizeUnknownSettings(settings, postfix);
+		settings.setNumberOfWavelengths(preferences.getInt(P_NUMBER_OF_WAVELENGTH_UNKNOWN + postfix, DEF_NUMBER_OF_WAVELENGTH_UNKNOWN));
 		//
 		return settings;
 	}
@@ -273,10 +273,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
 		//
+		String postfix = POSTFIX_MSD;
 		MassSpectrumUnknownSettings settings = new MassSpectrumUnknownSettings();
 		settings.setMassSpectrumComparatorId("");
-		initalizeUnknownSettings(settings, POSTFIX_MSD);
-		settings.setNumberOfMZ(preferences.getInt(P_NUMBER_OF_MZ_UNKNOWN, DEF_NUMBER_OF_MZ_UNKNOWN));
+		initalizeUnknownSettings(settings, postfix);
+		settings.setNumberOfMZ(preferences.getInt(P_NUMBER_OF_MZ_UNKNOWN + postfix, DEF_NUMBER_OF_MZ_UNKNOWN));
 		//
 		return settings;
 	}
@@ -285,9 +286,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
 		//
+		String postfix = POSTFIX_WSD;
 		WaveSpectrumUnknownSettings settings = new WaveSpectrumUnknownSettings();
-		initalizeUnknownSettings(settings, POSTFIX_WSD);
-		settings.setNumberOfWavelengths(preferences.getInt(P_NUMBER_OF_WAVELENGTH_UNKNOWN, DEF_NUMBER_OF_WAVELENGTH_UNKNOWN));
+		initalizeUnknownSettings(settings, postfix);
+		settings.setNumberOfWavelengths(preferences.getInt(P_NUMBER_OF_WAVELENGTH_UNKNOWN + postfix, DEF_NUMBER_OF_WAVELENGTH_UNKNOWN));
 		//
 		return settings;
 	}
