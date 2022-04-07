@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +12,14 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
+import java.text.DecimalFormat;
+
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IPeakModel;
+import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.model.targets.TargetSupport;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
@@ -24,6 +31,9 @@ public class PeakScanListEditingSupport extends EditingSupport {
 	private CellEditor cellEditor;
 	private final ExtendedTableViewer tableViewer;
 	private final String column;
+	//
+	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
+	private DecimalFormat integerFormat = ValueFormat.getDecimalFormatEnglish("0");
 
 	public PeakScanListEditingSupport(ExtendedTableViewer tableViewer, String column) {
 
@@ -46,7 +56,7 @@ public class PeakScanListEditingSupport extends EditingSupport {
 	@Override
 	protected boolean canEdit(Object element) {
 
-		if(column == PeakScanListLabelProvider.ACTIVE_FOR_ANALYSIS) {
+		if(column.equals(PeakScanListLabelProvider.ACTIVE_FOR_ANALYSIS)) {
 			return (element instanceof IPeak);
 		} else {
 			return tableViewer.isEditEnabled();
@@ -58,9 +68,32 @@ public class PeakScanListEditingSupport extends EditingSupport {
 
 		if(element instanceof IPeak) {
 			IPeak peak = (IPeak)element;
+			IPeakModel peakModel = peak.getPeakModel();
 			switch(column) {
 				case PeakScanListLabelProvider.ACTIVE_FOR_ANALYSIS:
 					return peak.isActiveForAnalysis();
+				case PeakScanListLabelProvider.RETENTION_TIME:
+					return decimalFormat.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
+				case PeakScanListLabelProvider.RELATIVE_RETENTION_TIME:
+					return decimalFormat.format(peakModel.getPeakMaximum().getRelativeRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
+				case PeakScanListLabelProvider.RETENTION_INDEX:
+					if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
+						return integerFormat.format(peakModel.getPeakMaximum().getRetentionIndex());
+					} else {
+						return decimalFormat.format(peakModel.getPeakMaximum().getRetentionIndex());
+					}
+				case PeakScanListLabelProvider.AREA_TOTAL:
+					if(PreferenceSupplier.showAreaWithoutDecimals()) {
+						return integerFormat.format(peak.getIntegratedArea());
+					} else {
+						return decimalFormat.format(peak.getIntegratedArea());
+					}
+				case PeakScanListLabelProvider.START_RETENTION_TIME:
+					return decimalFormat.format(peakModel.getStartRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
+				case PeakScanListLabelProvider.STOP_RETENTION_TIME:
+					return decimalFormat.format(peakModel.getStopRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
+				case PeakScanListLabelProvider.BEST_TARGET:
+					return TargetSupport.getBestTargetLibraryField(peak);
 			}
 		}
 		return false;
