@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,24 +11,26 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.extraction;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.ExtractionOption;
+
 public class ExtractionSettings {
 
-	private boolean useTargets = false;
-	private int retentionTimeWindow = 0;
+	private ExtractionOption extractionOption = ExtractionOption.RETENTION_TIME_MS;
+	private int groupValueWindow = 0;
 
-	public ExtractionSettings(boolean useTargets, int retentionTimeWindow) {
+	public ExtractionSettings(ExtractionOption extractionOption, int groupValueWindow) {
 
-		this.useTargets = useTargets;
-		this.retentionTimeWindow = retentionTimeWindow;
+		this.extractionOption = extractionOption;
+		this.groupValueWindow = groupValueWindow;
 	}
 
-	public boolean isUseTargets() {
+	public ExtractionOption getExtractionOption() {
 
-		return useTargets;
+		return extractionOption;
 	}
 
-	public int getRetentionTimeWindow() {
+	public int getGroupValueWindow() {
 
-		return retentionTimeWindow;
+		return groupValueWindow;
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - group by retention index
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core;
 
@@ -34,7 +35,7 @@ public class PeakExtractionSupportTest_1_4 {
 	@Before
 	public void setUp() {
 
-		ExtractionSettings extractionSettings = new ExtractionSettings(false, 1);
+		ExtractionSettings extractionSettings = new ExtractionSettings(ExtractionOption.RETENTION_TIME_MS, 1);
 		PeakExtractionSupport peakExtractionSupport = new PeakExtractionSupport();
 		Map<IDataInputEntry, IPeaks<?>> dataInput = new LinkedHashMap<>();
 		TestSupport.putPeakDataToMap("Sample1", "Group1", new int[]{1, 2}, new double[]{3.2, 3.4}, dataInput);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,13 +23,24 @@ public class PeakExtractionSupport {
 
 	public Samples extractPeakData(Map<IDataInputEntry, IPeaks<?>> peaks, ExtractionSettings extractionSettings, IProgressMonitor monitor) {
 
-		if(extractionSettings.isUseTargets()) {
-			PeakTargetExtractor samplesExtractor = new PeakTargetExtractor();
-			return samplesExtractor.extractPeakData(peaks, monitor);
-		} else {
-			PeakRetentionTimeExtractor samplesExtractor = new PeakRetentionTimeExtractor();
-			int retentionTimeWindow = extractionSettings.getRetentionTimeWindow();
-			return samplesExtractor.extractPeakData(peaks, retentionTimeWindow, monitor);
+		Samples samples;
+		switch(extractionSettings.getExtractionOption()) {
+			case RETENTION_INDEX:
+				PeakRetentionIndexExtractor peakRetentionIndexExtractor = new PeakRetentionIndexExtractor();
+				int retentionIndexWindow = extractionSettings.getGroupValueWindow();
+				samples = peakRetentionIndexExtractor.extractPeakData(peaks, retentionIndexWindow, monitor);
+				break;
+			case PEAK_TARGETS:
+				PeakTargetExtractor peakTargetExtractor = new PeakTargetExtractor();
+				samples = peakTargetExtractor.extractPeakData(peaks, monitor);
+				break;
+			default:
+				PeakRetentionTimeExtractor peakRetentionTimeExtractor = new PeakRetentionTimeExtractor();
+				int retentionTimeWindow = extractionSettings.getGroupValueWindow();
+				samples = peakRetentionTimeExtractor.extractPeakData(peaks, retentionTimeWindow, monitor);
+				break;
 		}
+		//
+		return samples;
 	}
 }

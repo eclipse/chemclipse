@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,11 +8,13 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - group by retention index
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.ExtractionOption;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IExtractionData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IPreprocessingSettings;
@@ -78,9 +80,9 @@ public class PeaksInputWizard extends Wizard implements IInputWizard {
 	public boolean performFinish() {
 
 		List<IDataInputEntry> dataInputs = getDataInputEntries();
-		boolean useTargets = peakSettingsWizardPage.isUseTargets();
-		int retentionTimeWindow = peakSettingsWizardPage.getRetentionTimeWindow();
-		ExtractionSettings extractionSettings = new ExtractionSettings(useTargets, retentionTimeWindow);
+		ExtractionOption extractionOption = peakSettingsWizardPage.getExtractionOption();
+		int groupValueWindow = peakSettingsWizardPage.getGroupValueWindow();
+		ExtractionSettings extractionSettings = new ExtractionSettings(extractionOption, groupValueWindow);
 		pcaExtractionData = new PcaExtractionPeaks(dataInputs, extractionSettings);
 		return true;
 	}

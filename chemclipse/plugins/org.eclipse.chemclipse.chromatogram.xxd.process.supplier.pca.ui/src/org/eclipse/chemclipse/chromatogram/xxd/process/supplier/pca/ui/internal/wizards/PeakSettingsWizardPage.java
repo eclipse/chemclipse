@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.ExtractionOption;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Algorithm;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.AnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
@@ -33,26 +34,23 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 
 public class PeakSettingsWizardPage extends WizardPage {
 
+	private ExtractionOption extractionOption = ExtractionOption.RETENTION_TIME_MS;
+	private int groupWindow = 1500; // 1.5 sec
 	private IAnalysisSettings analysisSettings = new AnalysisSettings();
 	//
 	private DataBindingContext dataBindingContext = new DataBindingContext();
-	private IObservableValue<Integer> retentionTimeWindow = new WritableValue<>();
+	private IObservableValue<Integer> groupValueWindow = new WritableValue<>();
 	//
-	private Button buttonRetentionTime;
-	private Button buttonTargets;
-	private Label labelRetentionTime;
-	private Text textRetentionTime;
+	private Label labelGroupValue;
+	private Text textGroupValue;
 	//
 	private Algorithm[] algorithms = Algorithm.getAlgorithms();
 
@@ -62,7 +60,7 @@ public class PeakSettingsWizardPage extends WizardPage {
 		setTitle("PCA");
 		setDescription("Set main PCA parameters.");
 		//
-		retentionTimeWindow.setValue(1500); // 1.5 sec
+		groupValueWindow.setValue(groupWindow);
 	}
 
 	@Override
@@ -73,9 +71,9 @@ public class PeakSettingsWizardPage extends WizardPage {
 		//
 		WizardPageSupport.create(this, dataBindingContext);
 		//
-		createRadioGroup(composite);
-		labelRetentionTime = createLabel(composite, "Retention Time Window [ms]:");
-		textRetentionTime = createVariableSection(composite);
+		createComboViewerExtractionOption(composite);
+		labelGroupValue = createLabel(composite, "Retention Time Window [ms]:");
+		textGroupValue = createVariableSection(composite);
 		createLabel(composite, "Number of PCs:");
 		createSpinnerPrincipleComponents(composite);
 		createLabel(composite, "Algorithm:");
@@ -86,14 +84,14 @@ public class PeakSettingsWizardPage extends WizardPage {
 		setControl(composite);
 	}
 
-	public boolean isUseTargets() {
+	public ExtractionOption getExtractionOption() {
 
-		return buttonTargets.getSelection();
+		return extractionOption;
 	}
 
-	public int getRetentionTimeWindow() {
+	public int getGroupValueWindow() {
 
-		return retentionTimeWindow.getValue();
+		return groupValueWindow.getValue();
 	}
 
 	public IAnalysisSettings getAnalysisSettings() {
@@ -101,37 +99,44 @@ public class PeakSettingsWizardPage extends WizardPage {
 		return analysisSettings;
 	}
 
-	private void createRadioGroup(Composite parent) {
+	private ComboViewer createComboViewerExtractionOption(Composite parent) {
 
-		Group group = new Group(parent, SWT.NONE);
+		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		Combo combo = comboViewer.getCombo();
+		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
+		comboViewer.setLabelProvider(new AbstractLabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+
+				if(element instanceof ExtractionOption) {
+					return ((ExtractionOption)element).label();
+				}
+				return null;
+			}
+		});
+		//
+		combo.setToolTipText("Select an extraction option.");
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 2;
-		group.setLayoutData(gridData);
-		group.setLayout(new RowLayout(SWT.HORIZONTAL));
-		group.setText("Group By:");
-		//
-		buttonRetentionTime = new Button(group, SWT.RADIO);
-		buttonRetentionTime.setText("Retention Time");
-		buttonRetentionTime.setSelection(true);
-		buttonRetentionTime.addSelectionListener(new SelectionAdapter() {
+		combo.setLayoutData(gridData);
+		combo.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				updateWidgets();
+				Object object = comboViewer.getStructuredSelection().getFirstElement();
+				if(object instanceof ExtractionOption) {
+					extractionOption = (ExtractionOption)object;
+					updateWidgets();
+				}
 			}
 		});
 		//
-		buttonTargets = new Button(group, SWT.RADIO);
-		buttonTargets.setText("Peak Target(s)");
-		buttonTargets.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				updateWidgets();
-			}
-		});
+		comboViewer.setInput(ExtractionOption.values());
+		combo.select(0);
+		//
+		return comboViewer;
 	}
 
 	private Label createLabel(Composite parent, String text) {
@@ -166,7 +171,7 @@ public class PeakSettingsWizardPage extends WizardPage {
 		});
 		//
 		UpdateValueStrategy<Integer, String> modelToWidget = UpdateValueStrategy.create(IConverter.create(Integer.class, String.class, o1 -> Integer.toString(((Integer)o1))));
-		dataBindingContext.bindValue(WidgetProperties.text(SWT.Modify).observe(text), retentionTimeWindow, widgetToModel, modelToWidget);
+		dataBindingContext.bindValue(WidgetProperties.text(SWT.Modify).observe(text), groupValueWindow, widgetToModel, modelToWidget);
 		//
 		return text;
 	}
@@ -245,8 +250,21 @@ public class PeakSettingsWizardPage extends WizardPage {
 
 	private void updateWidgets() {
 
-		boolean enabled = !isUseTargets();
-		labelRetentionTime.setEnabled(enabled);
-		textRetentionTime.setEnabled(enabled);
+		boolean enabled = false;
+		switch(extractionOption) {
+			case RETENTION_TIME_MS:
+				enabled = true;
+				labelGroupValue.setText("Retention Time Window [ms]:");
+				break;
+			case RETENTION_INDEX:
+				enabled = true;
+				labelGroupValue.setText("Retention Index Window:");
+				break;
+			default:
+				break;
+		}
+		//
+		labelGroupValue.setEnabled(enabled);
+		textGroupValue.setEnabled(enabled);
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -156,17 +156,17 @@ public class PeakRetentionTimeExtractor {
 	private IPeak getClosestPeak(TreeMap<Integer, IPeak> peakTree, int retentionTime) {
 
 		Map.Entry<Integer, IPeak> peakRetentionTimeCeil = peakTree.ceilingEntry(retentionTime);
-		Map.Entry<Integer, IPeak> peakRetentionTimeFlour = peakTree.floorEntry(retentionTime);
-		if(peakRetentionTimeCeil != null && peakRetentionTimeFlour != null) {
-			if((peakRetentionTimeCeil.getKey() - retentionTime) < (retentionTime - peakRetentionTimeFlour.getKey())) {
+		Map.Entry<Integer, IPeak> peakRetentionTimeFloor = peakTree.floorEntry(retentionTime);
+		if(peakRetentionTimeCeil != null && peakRetentionTimeFloor != null) {
+			if((peakRetentionTimeCeil.getKey() - retentionTime) < (retentionTime - peakRetentionTimeFloor.getKey())) {
 				return peakRetentionTimeCeil.getValue();
 			} else {
-				return peakRetentionTimeFlour.getValue();
+				return peakRetentionTimeFloor.getValue();
 			}
 		} else if(peakRetentionTimeCeil != null) {
 			return peakRetentionTimeCeil.getValue();
-		} else if(peakRetentionTimeFlour != null) {
-			return peakRetentionTimeFlour.getValue();
+		} else if(peakRetentionTimeFloor != null) {
+			return peakRetentionTimeFloor.getValue();
 		}
 		return null;
 	}
