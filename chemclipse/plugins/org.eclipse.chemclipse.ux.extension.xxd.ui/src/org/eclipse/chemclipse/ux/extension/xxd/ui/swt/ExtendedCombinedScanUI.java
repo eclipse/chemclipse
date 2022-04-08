@@ -26,9 +26,11 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.support.CalculationType;
 import org.eclipse.chemclipse.msd.model.support.FilterSupport;
+import org.eclipse.chemclipse.msd.model.support.ScanSupport;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
@@ -38,12 +40,17 @@ import org.eclipse.chemclipse.swt.ui.services.IScanIdentifierService;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.IUpdateListener;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.preference.IPreferencePage;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.dnd.Clipboard;
+import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -74,6 +81,7 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 	private ScanTableUI scanTableUI;
 	private AtomicReference<TargetsListUI> tableViewer = new AtomicReference<>();
 	private CLabel labelEdit;
+	private Button buttonCopyTraces;
 	private Button buttonLocked;
 	private ScanIdentifierUI scanIdentifierUI;
 	//
@@ -82,6 +90,7 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 	private boolean locked = false;
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish();
+	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public ExtendedCombinedScanUI(Composite parent, int style) {
 
@@ -140,12 +149,13 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		composite.setLayout(new GridLayout(7, false));
+		composite.setLayout(new GridLayout(8, false));
 		//
 		labelEdit = createInfoLabelEdit(composite);
 		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
 		buttonLocked = createButtonLocked(composite);
 		scanIdentifierUI = createScanIdentifierUI(composite);
+		buttonCopyTraces = createButtonCopyTracesClipboard(composite);
 		createButtonAddSubstract(composite);
 		createButtonSave(composite);
 		createButtonSettings(composite);
@@ -300,6 +310,7 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 		buttonLocked.setToolTipText(locked ? "Edit modus: on" : "Edit modus: off");
 		buttonLocked.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16, locked));
 		updateLabel(labelEdit, locked ? "Edit On" : "");
+		updateButtons();
 	}
 
 	private void updateLabel(CLabel label, String message) {
@@ -328,6 +339,39 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 		});
 		//
 		return scanIdentifierUI;
+	}
+
+	private Button createButtonCopyTracesClipboard(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setToolTipText("Copy the traces to clipboard.");
+		button.setText("");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_COPY_CLIPBOARD, IApplicationImageProvider.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				String traces = null;
+				int maxCopyTraces = preferenceStore.getInt(PreferenceConstants.P_MAX_COPY_SCAN_TRACES);
+				//
+				if(combinedMassSpectrum != null) {
+					traces = ScanSupport.extractTracesText(combinedMassSpectrum, maxCopyTraces);
+				}
+				/*
+				 * Copy to clipboard
+				 */
+				if(traces != null) {
+					TextTransfer textTransfer = TextTransfer.getInstance();
+					Object[] data = new Object[]{traces};
+					Transfer[] dataTypes = new Transfer[]{textTransfer};
+					Clipboard clipboard = new Clipboard(e.widget.getDisplay());
+					clipboard.setContents(data, dataTypes);
+				}
+			}
+		});
+		//
+		return button;
 	}
 
 	private void createButtonAddSubstract(Composite parent) {
@@ -463,6 +507,8 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 				}
 				break;
 		}
+		//
+		updateButtons();
 	}
 
 	private String getCombinedRangeInfo(Object object) {
@@ -487,5 +533,10 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 			builder.append("No chromatogram selected.");
 		}
 		return builder.toString();
+	}
+
+	private void updateButtons() {
+
+		buttonCopyTraces.setEnabled(combinedMassSpectrum != null);
 	}
 }
