@@ -10,7 +10,7 @@
             name="NIST (extern) - Installation">
       </page>         
       <page
-            category="org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.preferences.preferencePage"
+            category="org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.preferences.preferencePageInstallation"
             class="org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.preferences.PreferencePageSettings"
             id="org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.preferences.preferencePageSettings"
             name="NIST (extern) - Settings">
