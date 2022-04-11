@@ -28,7 +28,6 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
-import org.eclipse.chemclipse.msd.model.support.ScanSupport;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -44,24 +43,19 @@ import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.model.TracesSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.parts.ScanTablePart;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.ScanSignalWSD;
-import org.eclipse.chemclipse.wsd.model.core.support.WavelengthSupport;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.dnd.Clipboard;
-import org.eclipse.swt.dnd.TextTransfer;
-import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseAdapter;
@@ -118,7 +112,6 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 	private boolean fireUpdate = true;
 	//
 	private final ScanDataSupport scanDataSupport = new ScanDataSupport();
-	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private EditListener editListener = null;
 	//
 	private Color backgroundDefault;
@@ -481,25 +474,7 @@ public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				String traces = null;
-				int maxCopyTraces = preferenceStore.getInt(PreferenceConstants.P_MAX_COPY_SCAN_TRACES);
-				//
-				IScan scan = getScan();
-				if(scan instanceof IScanMSD) {
-					traces = ScanSupport.extractTracesText((IScanMSD)scan, maxCopyTraces);
-				} else if(scan instanceof IScanWSD) {
-					traces = WavelengthSupport.extractTracesText((IScanWSD)scan, maxCopyTraces);
-				}
-				/*
-				 * Copy to clipboard
-				 */
-				if(traces != null) {
-					TextTransfer textTransfer = TextTransfer.getInstance();
-					Object[] data = new Object[]{traces};
-					Transfer[] dataTypes = new Transfer[]{textTransfer};
-					Clipboard clipboard = new Clipboard(e.widget.getDisplay());
-					clipboard.setContents(data, dataTypes);
-				}
+				TracesSupport.copyTracesToClipboard(e.display, getScan());
 			}
 		});
 		//

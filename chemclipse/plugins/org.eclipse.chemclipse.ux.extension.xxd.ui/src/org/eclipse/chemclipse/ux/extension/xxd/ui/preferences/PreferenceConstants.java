@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.msd.model.support.CalculationType;
 import org.eclipse.chemclipse.pcr.model.core.support.LabelSetting;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.model.TracesExportOption;
 import org.eclipse.swt.SWT;
 import org.eclipse.swtchart.IAxis.Position;
 import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
@@ -223,6 +224,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final boolean DEF_SCAN_CHART_ENABLE_COMPRESS = false;
 	public static final String P_MAX_COPY_SCAN_TRACES = "maxCopyScanTraces";
 	public static final int DEF_MAX_COPY_SCAN_TRACES = DEF_SCAN_TRACES;
+	public static final String P_TRACES_EXPORT_OPTION = "tracesExportOption";
+	public static final String DEF_TRACES_EXPORT_OPTION = TracesExportOption.SIMPLE_TEXT.name();
 	public static final String P_SCAN_IDENTIFER_MSD = "scanIdentifierMSD";
 	public static final String DEF_SCAN_IDENTIFER_MSD = "org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.unknown.massSpectrum"; // see -> org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file/plugin.xml
 	public static final String P_SCAN_IDENTIFER_WSD = "scanIdentifierWSD";
