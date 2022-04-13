@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -39,7 +39,6 @@ import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorCSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorMSD;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorTSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorWSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.PlateEditorPCR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ProcessMethodEditor;
@@ -47,6 +46,8 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.QuantitationDatabaseEd
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorNMR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorXIR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.SequenceEditor;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.services.EditorServicesSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.services.IEditorService;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
 import org.eclipse.chemclipse.xir.converter.core.ScanConverterXIR;
 import org.eclipse.core.runtime.Adapters;
@@ -73,7 +74,7 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 
 		super(getSupplier(dataType));
 		this.contextSupplier = contextSupplier;
-		initialize(dataType);
+		refreshEditorReferences(dataType);
 	}
 
 	private static List<ISupplier> getSupplier(DataType dataType) {
@@ -123,8 +124,89 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 		return supplier;
 	}
 
-	private void initialize(DataType dataType) {
+	@Override
+	public String getType() {
 
+		return type;
+	}
+
+	@Override
+	public boolean openEditor(final File file, boolean batch) {
+
+		if(isSupplierFile(file)) {
+			refreshEditorReferences();
+			openEditor(file, null, elementId, contributionURI, iconURI, tooltip, batch);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	public boolean openEditor(File file, ISupplier supplier) {
+
+		IEclipseContext eclipseContext = contextSupplier.get();
+		IEclipseContext parameterContext = EclipseContextFactory.create();
+		try {
+			parameterContext.set(File.class, file);
+			parameterContext.set(ISupplier.class, supplier);
+			Object[] executables = {Adapters.adapt(supplier, EditorDescriptor.class), supplier};
+			for(Object executable : executables) {
+				if(executable == null) {
+					continue;
+				}
+				Object invoke = ContextInjectionFactory.invoke(executable, Execute.class, eclipseContext, parameterContext, NO_EXECUTE_METHOD);
+				if(NO_EXECUTE_METHOD != invoke) {
+					if(invoke instanceof Boolean) {
+						return ((Boolean)invoke).booleanValue();
+					}
+					return true;
+				}
+			}
+		} finally {
+			parameterContext.dispose();
+		}
+		return openEditor(file, false);
+	}
+
+	@Override
+	public void openEditor(IMeasurement measurement) {
+
+		refreshEditorReferences();
+		openEditor(null, measurement, elementId, contributionURI, iconURI, tooltip);
+	}
+
+	@Override
+	public void openOverview(final File file) {
+
+		if(isSupplierFile(file)) {
+			IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+			eventBroker.send(topicUpdateRawfile, file);
+		}
+	}
+
+	@Override
+	public void openOverview(IMeasurementInfo measurementInfo) {
+
+		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
+		eventBroker.send(topicUpdateOverview, measurementInfo);
+	}
+
+	private void refreshEditorReferences() {
+
+		/*
+		 * Dynamically reload the TSD editors.
+		 */
+		if(TYPE_TSD.equals(type)) {
+			refreshEditorReferences(DataType.TSD);
+		}
+	}
+
+	private void refreshEditorReferences(DataType dataType) {
+
+		/*
+		 * Clear existing values.
+		 */
 		type = "";
 		elementId = "";
 		contributionURI = "";
@@ -166,10 +248,11 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 				break;
 			case TSD:
 				type = TYPE_TSD;
-				elementId = ChromatogramEditorTSD.ID;
-				contributionURI = ChromatogramEditorTSD.CONTRIBUTION_URI;
-				iconURI = ChromatogramEditorTSD.ICON_URI;
-				tooltip = ChromatogramEditorTSD.TOOLTIP;
+				IEditorService editorService = EditorServicesSupport.getSelectedEditorService(type);
+				elementId = editorService.getElementId();
+				contributionURI = editorService.getContributionURI();
+				iconURI = editorService.getIconURI();
+				tooltip = editorService.getTooltip();
 				topicUpdateRawfile = IChemClipseEvents.TOPIC_CHROMATOGRAM_TSD_UPDATE_RAWFILE;
 				topicUpdateOverview = IChemClipseEvents.TOPIC_CHROMATOGRAM_TSD_UPDATE_OVERVIEW;
 				break;
@@ -239,71 +322,5 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 			default:
 				break;
 		}
-	}
-
-	@Override
-	public String getType() {
-
-		return type;
-	}
-
-	@Override
-	public boolean openEditor(final File file, boolean batch) {
-
-		if(isSupplierFile(file)) {
-			openEditor(file, null, elementId, contributionURI, iconURI, tooltip, batch);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	@Override
-	public boolean openEditor(File file, ISupplier supplier) {
-
-		IEclipseContext eclipseContext = contextSupplier.get();
-		IEclipseContext parameterContext = EclipseContextFactory.create();
-		try {
-			parameterContext.set(File.class, file);
-			parameterContext.set(ISupplier.class, supplier);
-			Object[] executables = {Adapters.adapt(supplier, EditorDescriptor.class), supplier};
-			for(Object executable : executables) {
-				if(executable == null) {
-					continue;
-				}
-				Object invoke = ContextInjectionFactory.invoke(executable, Execute.class, eclipseContext, parameterContext, NO_EXECUTE_METHOD);
-				if(NO_EXECUTE_METHOD != invoke) {
-					if(invoke instanceof Boolean) {
-						return ((Boolean)invoke).booleanValue();
-					}
-					return true;
-				}
-			}
-		} finally {
-			parameterContext.dispose();
-		}
-		return openEditor(file, false);
-	}
-
-	@Override
-	public void openEditor(IMeasurement measurement) {
-
-		openEditor(null, measurement, elementId, contributionURI, iconURI, tooltip);
-	}
-
-	@Override
-	public void openOverview(final File file) {
-
-		if(isSupplierFile(file)) {
-			IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-			eventBroker.send(topicUpdateRawfile, file);
-		}
-	}
-
-	@Override
-	public void openOverview(IMeasurementInfo measurementInfo) {
-
-		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-		eventBroker.send(topicUpdateOverview, measurementInfo);
 	}
 }

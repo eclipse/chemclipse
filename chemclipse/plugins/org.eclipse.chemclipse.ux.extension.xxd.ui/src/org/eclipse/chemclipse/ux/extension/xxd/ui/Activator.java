@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.swt.ui.services.IMoleculeImageService;
 import org.eclipse.chemclipse.swt.ui.services.IScanIdentifierService;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.IAnnotationWidgetService;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.services.IEditorService;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.osgi.service.datalocation.Location;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
@@ -41,6 +42,7 @@ public class Activator extends AbstractActivatorUI {
 	private ServiceTracker<IMoleculeImageService, IMoleculeImageService> moleculeImageServiceTracker = null;
 	private ServiceTracker<IAnnotationWidgetService, IAnnotationWidgetService> annotationWidgetServiceTracker = null;
 	private ServiceTracker<IScanIdentifierService, IScanIdentifierService> scanIdentifierServiceTracker = null;
+	private ServiceTracker<IEditorService, IEditorService> editorServiceTracker = null;
 
 	/*
 	 * (non-Javadoc)
@@ -121,6 +123,11 @@ public class Activator extends AbstractActivatorUI {
 		return scanIdentifierServiceTracker.getServices();
 	}
 
+	public Object[] getEditorServices() {
+
+		return editorServiceTracker.getServices();
+	}
+
 	private void startServices(BundleContext context) {
 
 		moleculeImageServiceTracker = new ServiceTracker<>(context, IMoleculeImageService.class, null);
@@ -131,6 +138,9 @@ public class Activator extends AbstractActivatorUI {
 		//
 		scanIdentifierServiceTracker = new ServiceTracker<>(context, IScanIdentifierService.class, null);
 		scanIdentifierServiceTracker.open();
+		//
+		editorServiceTracker = new ServiceTracker<>(context, IEditorService.class, null);
+		editorServiceTracker.open();
 	}
 
 	private void stopServices(BundleContext context) {
@@ -138,6 +148,7 @@ public class Activator extends AbstractActivatorUI {
 		moleculeImageServiceTracker.close();
 		annotationWidgetServiceTracker.close();
 		scanIdentifierServiceTracker.close();
+		editorServiceTracker.close();
 	}
 
 	private void initialize(DataUpdateSupport dataUpdateSupport) {

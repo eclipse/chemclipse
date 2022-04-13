@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.msd.model.support.CalculationType;
 import org.eclipse.chemclipse.pcr.model.core.support.LabelSetting;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ChromatogramEditorTSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.model.TracesExportOption;
 import org.eclipse.swt.SWT;
 import org.eclipse.swtchart.IAxis.Position;
@@ -831,4 +832,9 @@ public class PreferenceConstants extends ChartOptions {
 	public static final boolean DEF_MERGE_PEAKS_IDENTIFICATION_TARGETS = true;
 	public static final String P_MERGE_PEAKS_DELETE_ORIGINS = "mergePeaksDeleteOrigins";
 	public static final boolean DEF_MERGE_PEAKS_DELETE_ORIGINS = true;
+	/*
+	 * Editors
+	 */
+	public static final String P_EDITOR_TSD = "editorTSD";
+	public static final String DEF_EDITOR_TSD = ChromatogramEditorTSD.CONTRIBUTION_URI;
 }

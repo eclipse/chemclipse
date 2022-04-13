@@ -428,6 +428,10 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		 * Processor
 		 */
 		store.setDefault(PreferenceConstants.P_PROCESSOR_SELECTION_DATA_CATEGORY, PreferenceConstants.DEF_PROCESSOR_SELECTION_DATA_CATEGORY);
+		/*
+		 * Editors
+		 */
+		store.setDefault(PreferenceConstants.P_EDITOR_TSD, PreferenceConstants.DEF_EDITOR_TSD);
 		//
 		return store;
 	}

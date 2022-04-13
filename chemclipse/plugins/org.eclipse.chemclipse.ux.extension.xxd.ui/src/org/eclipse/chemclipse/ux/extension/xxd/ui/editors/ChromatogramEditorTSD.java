@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,7 +24,7 @@ import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.tsd.model.core.IChromatogramTSD;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChemClipseEditor;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ImportRunnableTSD;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.runnables.ImportRunnableTSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ChromatogramHeatmapUI;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
