@@ -31,9 +31,11 @@ public class QuantitationListLabelProvider extends AbstractChemClipseLabelProvid
 			"Trace", //
 			"Calibration Method", //
 			"Cross Zero", //
+			"Flag", //
 			"Description" //
 	};
 	public static final int[] BOUNDS = { //
+			100, //
 			100, //
 			100, //
 			100, //
@@ -88,6 +90,9 @@ public class QuantitationListLabelProvider extends AbstractChemClipseLabelProvid
 					text = Boolean.toString(quantitationEntry.getUsedCrossZero());
 					break;
 				case 8:
+					text = quantitationEntry.getQuantitationFlag().label();
+					break;
+				case 9:
 					text = quantitationEntry.getDescription();
 					break;
 				default:

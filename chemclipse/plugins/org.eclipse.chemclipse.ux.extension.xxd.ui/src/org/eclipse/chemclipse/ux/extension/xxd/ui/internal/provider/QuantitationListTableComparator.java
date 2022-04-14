@@ -52,6 +52,9 @@ public class QuantitationListTableComparator extends AbstractRecordTableComparat
 					sortOrder = Boolean.valueOf(quantitationEntry2.getUsedCrossZero()).compareTo(quantitationEntry1.getUsedCrossZero());
 					break;
 				case 8:
+					sortOrder = quantitationEntry2.getQuantitationFlag().compareTo(quantitationEntry1.getQuantitationFlag());
+					break;
+				case 9:
 					sortOrder = quantitationEntry2.getDescription().compareTo(quantitationEntry1.getDescription());
 					break;
 				default:
