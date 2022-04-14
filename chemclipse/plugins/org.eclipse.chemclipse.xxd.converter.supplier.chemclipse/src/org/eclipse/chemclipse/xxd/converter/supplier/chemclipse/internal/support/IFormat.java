@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -49,7 +49,8 @@ public interface IFormat {
 	String CHROMATOGRAM_VERSION_1300 = "1.3.0.0"; // Version 1.3.0, Release 1 (Dalton)
 	String CHROMATOGRAM_VERSION_1301 = "1.3.0.1"; // Version 1.3.0, Release 2
 	String CHROMATOGRAM_VERSION_1400 = "1.4.0.0"; // Version 1.4.0, Release 1 (Lawrence)
-	String CHROMATOGRAM_VERSION_LATEST = CHROMATOGRAM_VERSION_1400;
+	String CHROMATOGRAM_VERSION_1500 = "1.5.0.0"; // Version 1.5.0, Release 1 (McLafferty)
+	String CHROMATOGRAM_VERSION_LATEST = CHROMATOGRAM_VERSION_1500;
 	/*
 	 * Method (*.ocm)
 	 */

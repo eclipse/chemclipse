@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2021 Lablicate GmbH.
+ * Copyright (c) 2015, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.Read
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.ReaderProxy_1300;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.ReaderProxy_1301;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.ReaderProxy_1400;
+import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.internal.io.ReaderProxy_1500;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.model.chromatogram.IVendorScanProxy;
 import org.eclipse.chemclipse.msd.model.core.IIonTransitionSettings;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
@@ -51,6 +52,8 @@ public class ProxyReaderMSD {
 			scanReaderProxy = new ReaderProxy_1301();
 		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1400)) {
 			scanReaderProxy = new ReaderProxy_1400();
+		} else if(version.equals(IFormat.CHROMATOGRAM_VERSION_1500)) {
+			scanReaderProxy = new ReaderProxy_1500();
 		}
 		//
 		if(scanReaderProxy != null) {

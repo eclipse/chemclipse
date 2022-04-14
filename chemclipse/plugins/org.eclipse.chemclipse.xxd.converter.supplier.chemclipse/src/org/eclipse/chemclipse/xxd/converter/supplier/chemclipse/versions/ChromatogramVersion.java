@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,6 +17,7 @@ import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support
  * Ensure backward and forward compatibility!
  */
 public enum ChromatogramVersion implements IFormatVersion {
+
 	V_0701(IFormat.CHROMATOGRAM_VERSION_0701, "Nernst"), //
 	V_0803(IFormat.CHROMATOGRAM_VERSION_0803, "Dempster"), //
 	V_0903(IFormat.CHROMATOGRAM_VERSION_0903, "Mattauch"), //
@@ -24,7 +25,8 @@ public enum ChromatogramVersion implements IFormatVersion {
 	V_1100(IFormat.CHROMATOGRAM_VERSION_1100, "Diels"), //
 	V_1300(IFormat.CHROMATOGRAM_VERSION_1300, "Dalton v1"), //
 	V_1301(IFormat.CHROMATOGRAM_VERSION_1301, "Dalton v2"), //
-	V_1400(IFormat.CHROMATOGRAM_VERSION_1400, "Lawrence"); //
+	V_1400(IFormat.CHROMATOGRAM_VERSION_1400, "Lawrence"), //
+	V_1500(IFormat.CHROMATOGRAM_VERSION_1500, "McLafferty"); //
 
 	private String version = "";
 	private String release = "";
