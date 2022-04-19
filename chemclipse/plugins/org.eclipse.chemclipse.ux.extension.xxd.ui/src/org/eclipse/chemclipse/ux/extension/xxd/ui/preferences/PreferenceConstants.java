@@ -468,6 +468,20 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_CHROMATOGRAM_PEAKS_ACTIVE_ISTD_MARKER_TYPE = PlotSymbolType.DIAMOND.toString();
 	public static final String P_CHROMATOGRAM_PEAKS_INACTIVE_ISTD_MARKER_TYPE = "chromatogramPeaksInactiveIstdMarkerType";
 	public static final String DEF_CHROMATOGRAM_PEAKS_INACTIVE_ISTD_MARKER_TYPE = PlotSymbolType.DIAMOND.toString();
+	//
+	public static final String P_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_NORMAL = "colorChromatogramPeaksActiveNormal";
+	public static final String DEF_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_NORMAL = "128, 128, 128";
+	public static final String P_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_NORMAL_TARGETS_HIDDEN = "colorChromatogramPeaksActiveNormalTargetsHidden";
+	public static final String DEF_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_NORMAL_TARGETS_HIDDEN = "128, 0, 0";
+	public static final String P_COLOR_CHROMATOGRAM_PEAKS_INACTIVE_NORMAL = "colorChromatogramPeaksInactiveNormal";
+	public static final String DEF_COLOR_CHROMATOGRAM_PEAKS_INACTIVE_NORMAL = "192, 192, 192";
+	public static final String P_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_ISTD = "colorChromatogramPeaksActiveIstd";
+	public static final String DEF_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_ISTD = "255, 0, 0";
+	public static final String P_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_ISTD_TARGETS_HIDDEN = "colorChromatogramPeaksActiveIstdTargetsHidden";
+	public static final String DEF_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_ISTD_TARGETS_HIDDEN = "128,0,0";
+	public static final String P_COLOR_CHROMATOGRAM_PEAKS_INACTIVE_ISTD = "colorChromatogramPeaksInactiveIstd";
+	public static final String DEF_COLOR_CHROMATOGRAM_PEAKS_INACTIVE_ISTD = "192, 192, 192";
+	//
 	public static final String P_CHROMATOGRAM_SCAN_LABEL_SYMBOL_SIZE = "chromatogramScanLabelSymbolSize";
 	public static final String P_CHROMATOGRAM_SCAN_LABEL_FONT_NAME = "chromatogramScanLabelFontName";
 	public static final String DEF_CHROMATOGRAM_SCAN_LABEL_FONT_NAME = "Tahoma";

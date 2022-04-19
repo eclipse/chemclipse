@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -62,6 +62,13 @@ public class PreferencePageChromatogramPeaks extends FieldEditorPreferencePage i
 		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_PEAKS_INACTIVE_NORMAL_MARKER_TYPE, "Marker Type (Inactive Normal):", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_PEAKS_ACTIVE_ISTD_MARKER_TYPE, "Marker Type (Active ISTD):", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_CHROMATOGRAM_PEAKS_INACTIVE_ISTD_MARKER_TYPE, "Marker Type (Inactive ISTD):", PreferenceSupport.SYMBOL_TYPES, getFieldEditorParent()));
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_NORMAL, "Color (Active Normal):", getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_NORMAL_TARGETS_HIDDEN, "Color (Active Normal - Targets Hidden):", getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_CHROMATOGRAM_PEAKS_INACTIVE_NORMAL, "Color (Inactive Normal):", getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_ISTD, "Color (Active ISTD):", getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_ISTD_TARGETS_HIDDEN, "Color (Active ISTD - Targets Hidden):", getFieldEditorParent()));
+		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_CHROMATOGRAM_PEAKS_INACTIVE_ISTD, "Color (Inactive ISTD):", getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor(FIELD_MISCELLANEOUS, getFieldEditorParent()));

@@ -16,6 +16,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -36,12 +37,14 @@ import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
 import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSupplier;
 import org.eclipse.chemclipse.model.support.IAnalysisSegment;
 import org.eclipse.chemclipse.model.targets.ITargetDisplaySettings;
 import org.eclipse.chemclipse.model.targets.TargetReference;
+import org.eclipse.chemclipse.model.targets.TargetReferenceType;
 import org.eclipse.chemclipse.model.updates.IChromatogramSelectionUpdateListener;
 import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -63,6 +66,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.processors.ProcessorToolbar;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.EditorToolBar;
@@ -168,15 +172,19 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 	protected static final String TYPE_CSD = "TYPE_CSD";
 	protected static final String TYPE_WSD = "TYPE_WSD";
 	//
+	private static final DecimalFormat FORMAT = ValueFormat.getDecimalFormatEnglish("0.000");
+	//
 	private String titleScans = Activator.getDefault().getPreferenceStore().getString(PreferenceConstants.P_TITLE_X_AXIS_SCANS);
 	private static final String LABEL_SCAN_NUMBER = "Scan Number";
 	//
 	public static final String SERIES_ID_CHROMATOGRAM = "Chromatogram";
 	private static final String SERIES_ID_BASELINE = "Baseline";
-	private static final String SERIES_ID_PEAKS_NORMAL_ACTIVE = "Peak(s) [Active]";
-	private static final String SERIES_ID_PEAKS_NORMAL_INACTIVE = "Peak(s) [Inactive]";
-	private static final String SERIES_ID_PEAKS_ISTD_ACTIVE = "Peak(s) ISTD [Active]";
-	private static final String SERIES_ID_PEAKS_ISTD_INACTIVE = "Peak(s) ISTD [Inactive]";
+	private static final String SERIES_ID_PEAKS_NORMAL_ACTIVE = "Peaks [Active]";
+	private static final String SERIES_ID_PEAKS_NORMAL_TARGETS_HIDDEN = "Peaks [Targets Hidden]";
+	private static final String SERIES_ID_PEAKS_NORMAL_INACTIVE = "Peaks [Inactive]";
+	private static final String SERIES_ID_PEAKS_ISTD_ACTIVE = "Peaks ISTD [Active]";
+	private static final String SERIES_ID_PEAKS_ISTD_TARGETS_HIDDEN = "Peaks ISTD [Targets Hidden]";
+	private static final String SERIES_ID_PEAKS_ISTD_INACTIVE = "Peaks ISTD [Inactive]";
 	private static final String SERIES_ID_SELECTED_PEAK_MARKER = "Selected Peak Marker";
 	private static final String SERIES_ID_SELECTED_PEAK_SHAPE = "Selected Peak Shape";
 	private static final String SERIES_ID_SELECTED_PEAK_BACKGROUND = "Selected Peak Background";
@@ -724,40 +732,88 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 	private void addPeakData(List<ILineSeriesData> lineSeriesDataList, ITargetDisplaySettings settings) {
 
 		if(chromatogramSelection != null) {
+			/*
+			 * Settings
+			 */
 			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
+			ITargetDisplaySettings targetDisplaySettings = chromatogram;
 			int symbolSize = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_SYMBOL_SIZE);
+			//
 			PlotSymbolType symbolTypeActiveNormal = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAKS_ACTIVE_NORMAL_MARKER_TYPE));
 			PlotSymbolType symbolTypeInactiveNormal = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAKS_INACTIVE_NORMAL_MARKER_TYPE));
 			PlotSymbolType symbolTypeActiveIstd = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAKS_ACTIVE_ISTD_MARKER_TYPE));
 			PlotSymbolType symbolTypeInactiveIstd = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAKS_INACTIVE_ISTD_MARKER_TYPE));
 			//
+			Color colorTypeActiveNormal = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_NORMAL));
+			Color colorTypeActiveTargetsHidden = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_NORMAL_TARGETS_HIDDEN));
+			Color colorTypeInactiveNormal = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_PEAKS_INACTIVE_NORMAL));
+			Color colorTypeActiveIstd = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_ISTD));
+			Color colorTypeActiveIstdTargetsHidden = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_PEAKS_ACTIVE_ISTD_TARGETS_HIDDEN));
+			Color colorTypeInactiveIstd = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_PEAKS_INACTIVE_ISTD));
+			//
 			List<? extends IPeak> peaks = ChromatogramDataSupport.getPeaks(chromatogram);
 			List<IPeak> peaksActiveNormal = new ArrayList<>();
+			List<IPeak> peaksActiveTargetsHidden = new ArrayList<>();
 			List<IPeak> peaksInactiveNormal = new ArrayList<>();
-			List<IPeak> peaksActiveISTD = new ArrayList<>();
-			List<IPeak> peaksInactiveISTD = new ArrayList<>();
+			List<IPeak> peaksActiveIstd = new ArrayList<>();
+			List<IPeak> peaksActiveIstdTargetsHidden = new ArrayList<>();
+			List<IPeak> peaksInactiveIstd = new ArrayList<>();
 			//
 			for(IPeak peak : peaks) {
 				if(!peak.getInternalStandards().isEmpty()) {
+					/*
+					 * ISTD
+					 */
 					if(peak.isActiveForAnalysis()) {
-						peaksActiveISTD.add(peak);
+						if(peak.getTargets().isEmpty()) {
+							peaksActiveIstd.add(peak);
+						} else {
+							TargetReference targetReference = createTargetReference(peak);
+							if(!targetDisplaySettings.isVisible(targetReference)) {
+								peaksActiveIstdTargetsHidden.add(peak);
+							} else {
+								peaksActiveIstd.add(peak);
+							}
+						}
 					} else {
-						peaksInactiveISTD.add(peak);
+						peaksInactiveIstd.add(peak);
 					}
 				} else {
+					/*
+					 * Normal
+					 */
 					if(peak.isActiveForAnalysis()) {
-						peaksActiveNormal.add(peak);
+						if(peak.getTargets().isEmpty()) {
+							peaksActiveNormal.add(peak);
+						} else {
+							TargetReference targetReference = createTargetReference(peak);
+							if(!targetDisplaySettings.isVisible(targetReference)) {
+								peaksActiveTargetsHidden.add(peak);
+							} else {
+								peaksActiveNormal.add(peak);
+							}
+						}
 					} else {
 						peaksInactiveNormal.add(peak);
 					}
 				}
 			}
 			//
-			addPeaks(lineSeriesDataList, peaksActiveNormal, symbolTypeActiveNormal, symbolSize, Colors.DARK_GRAY, SERIES_ID_PEAKS_NORMAL_ACTIVE, settings);
-			addPeaks(lineSeriesDataList, peaksInactiveNormal, symbolTypeInactiveNormal, symbolSize, Colors.GRAY, SERIES_ID_PEAKS_NORMAL_INACTIVE, settings);
-			addPeaks(lineSeriesDataList, peaksActiveISTD, symbolTypeActiveIstd, symbolSize, Colors.RED, SERIES_ID_PEAKS_ISTD_ACTIVE, settings);
-			addPeaks(lineSeriesDataList, peaksInactiveISTD, symbolTypeInactiveIstd, symbolSize, Colors.GRAY, SERIES_ID_PEAKS_ISTD_INACTIVE, settings);
+			addPeaks(lineSeriesDataList, peaksActiveNormal, symbolTypeActiveNormal, symbolSize, colorTypeActiveNormal, SERIES_ID_PEAKS_NORMAL_ACTIVE, settings);
+			addPeaks(lineSeriesDataList, peaksActiveTargetsHidden, symbolTypeActiveNormal, symbolSize, colorTypeActiveTargetsHidden, SERIES_ID_PEAKS_NORMAL_TARGETS_HIDDEN, settings);
+			addPeaks(lineSeriesDataList, peaksInactiveNormal, symbolTypeInactiveNormal, symbolSize, colorTypeInactiveNormal, SERIES_ID_PEAKS_NORMAL_INACTIVE, settings);
+			addPeaks(lineSeriesDataList, peaksActiveIstd, symbolTypeActiveIstd, symbolSize, colorTypeActiveIstd, SERIES_ID_PEAKS_ISTD_ACTIVE, settings);
+			addPeaks(lineSeriesDataList, peaksActiveIstdTargetsHidden, symbolTypeActiveIstd, symbolSize, colorTypeActiveIstdTargetsHidden, SERIES_ID_PEAKS_ISTD_TARGETS_HIDDEN, settings);
+			addPeaks(lineSeriesDataList, peaksInactiveIstd, symbolTypeInactiveIstd, symbolSize, colorTypeInactiveIstd, SERIES_ID_PEAKS_ISTD_INACTIVE, settings);
 		}
+	}
+
+	private TargetReference createTargetReference(IPeak peak) {
+
+		IPeakModel peakModel = peak.getPeakModel();
+		String name = FORMAT.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogram.MINUTE_CORRELATION_FACTOR);
+		float retentionIndex = peakModel.getPeakMaximum().getRetentionIndex();
+		return new TargetReference(peak, TargetReferenceType.PEAK, name, retentionIndex);
 	}
 
 	private void addPeaks(List<ILineSeriesData> lineSeriesDataList, List<? extends IPeak> peaks, PlotSymbolType plotSymbolType, int symbolSize, Color symbolColor, String seriesId, ITargetDisplaySettings displaySettings) {
