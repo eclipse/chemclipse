@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,19 +9,19 @@
  * Contributors:
  * Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.xxd.model.settings.peaks;
+package org.eclipse.chemclipse.xxd.classification.settings;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class ClassifierRemoveFilterSettings {
+public class ClassifierAddFilterSettings {
 
 	@JsonProperty(value = "Classification", defaultValue = "")
-	@JsonPropertyDescription(value = "If empty, all classifications are removed.")
+	@JsonPropertyDescription(value = "This is the classification that shall be set.")
 	private String classification = "";
-	@JsonProperty(value = "Case Sensitive", defaultValue = "false")
-	@JsonPropertyDescription(value = "Search case sensitive or ignore the case.")
-	private boolean caseSensitive = false;
+	@JsonProperty(value = "Skip Classified Peaks", defaultValue = "true")
+	@JsonPropertyDescription(value = "Skip peaks that have been classified already.")
+	private boolean skipClassifiedPeak = true;
 
 	public String getClassification() {
 
@@ -33,13 +33,13 @@ public class ClassifierRemoveFilterSettings {
 		this.classification = classification;
 	}
 
-	public boolean isCaseSensitive() {
+	public boolean isSkipClassifiedPeak() {
 
-		return caseSensitive;
+		return skipClassifiedPeak;
 	}
 
-	public void setCaseSensitive(boolean caseSensitive) {
+	public void setSkipClassifiedPeak(boolean skipClassifiedPeak) {
 
-		this.caseSensitive = caseSensitive;
+		this.skipClassifiedPeak = skipClassifiedPeak;
 	}
 }

@@ -9,7 +9,7 @@
  * Contributors:
  * Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.xxd.model.filter.peaks;
+package org.eclipse.chemclipse.xxd.classification.filter;
 
 import java.util.Collection;
 
@@ -20,13 +20,13 @@ import org.eclipse.chemclipse.processing.Processor;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
-import org.eclipse.chemclipse.xxd.model.settings.peaks.ClassifierAddFilterSettings;
+import org.eclipse.chemclipse.xxd.classification.settings.ClassifierAddFilterSettings;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = {IPeakFilter.class, Filter.class, Processor.class})
-public class ClassifierAddFilter implements IPeakFilter<ClassifierAddFilterSettings> {
+public class ClassificationAddFilter implements IPeakFilter<ClassifierAddFilterSettings> {
 
 	@Override
 	public String getName() {

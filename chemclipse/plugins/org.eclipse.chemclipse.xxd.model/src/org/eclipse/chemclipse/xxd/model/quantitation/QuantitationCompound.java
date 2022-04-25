@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -36,6 +36,7 @@ public class QuantitationCompound extends AbstractQuantitationCompound implement
 	private static final long serialVersionUID = 2376307650470986106L;
 
 	public QuantitationCompound(String name, String concentrationUnit, int retentionTime) {
+
 		super(name, concentrationUnit, retentionTime);
 	}
 
@@ -43,7 +44,7 @@ public class QuantitationCompound extends AbstractQuantitationCompound implement
 	public void calculateSignalTablesFromPeaks() {
 
 		List<IQuantitationPeak> quantitationPeaks = getQuantitationPeaks();
-		if(quantitationPeaks.size() > 0) {
+		if(!quantitationPeaks.isEmpty()) {
 			/*
 			 * Extract the signals and response values
 			 * from the stored peaks.
