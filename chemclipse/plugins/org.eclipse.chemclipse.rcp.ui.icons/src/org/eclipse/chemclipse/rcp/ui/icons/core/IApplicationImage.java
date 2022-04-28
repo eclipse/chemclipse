@@ -74,6 +74,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_DESELECTED = PATH_PREFIX + "deselected.gif";
 	String IMAGE_DESELECTED_INACTIVE = PATH_PREFIX + "deselected_inactive.gif";
 	String IMAGE_SELECTED = PATH_PREFIX + "selected.gif";
+	String IMAGE_SELECTED_INACTIVE = PATH_PREFIX + "selected_inactive.gif";
 	String IMAGE_CHECK_ALL = PATH_PREFIX + "checkAll.gif";
 	String IMAGE_UNCHECK_ALL = PATH_PREFIX + "uncheckAll.gif";
 	//
