@@ -13,19 +13,23 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.custom;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.ranges.TimeRangesChromatogramUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.ranges.TimeRangesPeakChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.BaselineSelectionPaintListener;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.MouseMoveListener;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swtchart.IAxis;
 import org.eclipse.swtchart.IAxisSet;
 import org.eclipse.swtchart.IPlotArea;
 import org.eclipse.swtchart.Range;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 
-public class ManualSelectionChart extends ChromatogramPeakChart {
+public class ManualSelectionChart extends TimeRangesChromatogramUI {
 
 	private Cursor defaultCursor;
 	//
@@ -39,12 +43,6 @@ public class ManualSelectionChart extends ChromatogramPeakChart {
 	private ISelectionListener selectionListener = null;
 	//
 	private boolean manualDetectionEnabled = false;
-
-	public ManualSelectionChart() {
-
-		super();
-		init();
-	}
 
 	public ManualSelectionChart(Composite parent, int style) {
 
@@ -77,57 +75,62 @@ public class ManualSelectionChart extends ChromatogramPeakChart {
 		this.chromatogram = chromatogram;
 	}
 
-	@Override
-	public void handleMouseDownEvent(Event event) {
-
-		super.handleMouseDownEvent(event);
-		if(manualDetectionEnabled) {
-			if(isControlKeyPressed(event)) {
-				startBaselineSelection(event.x, event.y);
-				setCursor(SWT.CURSOR_CROSS);
-			}
-		}
-	}
-
-	@Override
-	public void handleMouseMoveEvent(Event event) {
-
-		super.handleMouseMoveEvent(event);
-		if(manualDetectionEnabled) {
-			if(isControlKeyPressed(event)) {
-				if(xStart > 0 && yStart > 0) {
-					trackBaselineSelection(event.x, event.y);
-				}
-			}
-		}
-	}
-
-	@Override
-	public void handleMouseUpEvent(Event event) {
-
-		super.handleMouseUpEvent(event);
-		if(manualDetectionEnabled) {
-			if(isControlKeyPressed(event)) {
-				stopBaselineSelection(event.x, event.y);
-				extractPeak();
-				setCursorDefault();
-				resetSelectedRange();
-			}
-		}
-	}
-
 	private void init() {
 
-		defaultCursor = getBaseChart().getCursor();
+		TimeRangesPeakChart peakChart = getChromatogramChart();
+		BaseChart baseChart = peakChart.getBaseChart();
+		defaultCursor = baseChart.getCursor();
+		//
+		peakChart.addMouseListener(new MouseAdapter() {
+
+			@Override
+			public void mouseUp(MouseEvent event) {
+
+				if(manualDetectionEnabled) {
+					if(isControlKeyPressed(event)) {
+						stopBaselineSelection(event.x, event.y);
+						extractPeak();
+						setCursorDefault();
+						resetSelectedRange();
+					}
+				}
+			}
+
+			@Override
+			public void mouseDown(MouseEvent event) {
+
+				if(manualDetectionEnabled) {
+					if(isControlKeyPressed(event)) {
+						startBaselineSelection(event.x, event.y);
+						setCursor(SWT.CURSOR_CROSS);
+					}
+				}
+			}
+		});
+		//
+		peakChart.addMouseMoveListener(new MouseMoveListener() {
+
+			@Override
+			public void mouseMove(MouseEvent event) {
+
+				if(manualDetectionEnabled) {
+					if(isControlKeyPressed(event)) {
+						if(xStart > 0 && yStart > 0) {
+							trackBaselineSelection(event.x, event.y);
+						}
+					}
+				}
+			}
+		});
 		/*
 		 * Add the paint listeners to draw the selected peak range.
 		 */
-		IPlotArea plotArea = getBaseChart().getPlotArea();
+		IPlotArea plotArea = baseChart.getPlotArea();
 		baselineSelectionPaintListener = new BaselineSelectionPaintListener();
 		plotArea.addCustomPaintListener(baselineSelectionPaintListener);
 	}
 
-	private boolean isControlKeyPressed(Event event) {
+	private boolean isControlKeyPressed(MouseEvent event) {
 
 		return (event.stateMask & SWT.MOD1) == SWT.MOD1;
 	}
@@ -176,17 +179,23 @@ public class ManualSelectionChart extends ChromatogramPeakChart {
 
 	private void setCursor(int cursorId) {
 
-		getBaseChart().setCursor(getBaseChart().getDisplay().getSystemCursor(cursorId));
+		TimeRangesPeakChart peakChart = getChromatogramChart();
+		BaseChart baseChart = peakChart.getBaseChart();
+		baseChart.setCursor(baseChart.getDisplay().getSystemCursor(cursorId));
 	}
 
 	private void setCursorDefault() {
 
-		getBaseChart().setCursor(defaultCursor);
+		TimeRangesPeakChart peakChart = getChromatogramChart();
+		BaseChart baseChart = peakChart.getBaseChart();
+		baseChart.setCursor(defaultCursor);
 	}
 
 	private void redrawChart() {
 
-		getBaseChart().redraw();
+		TimeRangesPeakChart peakChart = getChromatogramChart();
+		BaseChart baseChart = peakChart.getBaseChart();
+		baseChart.redraw();
 	}
 
 	private void extractPeak() {
@@ -206,7 +215,8 @@ public class ManualSelectionChart extends ChromatogramPeakChart {
 			/*
 			 * BaseChart
 			 */
-			BaseChart baseChart = getBaseChart();
+			TimeRangesPeakChart peakChart = getChromatogramChart();
+			BaseChart baseChart = peakChart.getBaseChart();
 			IAxisSet axisSet = baseChart.getAxisSet();
 			Point rectangle = baseChart.getPlotArea().getSize();
 			int width = rectangle.x;
