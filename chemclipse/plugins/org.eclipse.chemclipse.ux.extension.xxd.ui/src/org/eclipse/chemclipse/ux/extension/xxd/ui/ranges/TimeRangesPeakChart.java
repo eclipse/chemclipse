@@ -91,9 +91,12 @@ public class TimeRangesPeakChart extends ChromatogramPeakChart {
 		timeRangeMarker.getTimeRanges().clear();
 		if(timeRanges != null) {
 			/*
-			 * Show the time range composite.
+			 * Update the time range composite.
+			 * Don't set the time ranges visible, e.g. if the user has set
+			 * the composite invisible. The time ranges can be toggled via
+			 * IExtendedPartUI & AtomicReference<TimeRangesUI> getTimeRangesControl().
 			 */
-			setTimeRangesVisible(true);
+			// setTimeRangesVisible(true);
 			timeRangeMarker.getTimeRanges().addAll(timeRanges.values());
 		} else {
 			/*

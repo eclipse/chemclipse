@@ -11,16 +11,19 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.ranges;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.eclipse.chemclipse.model.ranges.TimeRanges;
 import org.eclipse.chemclipse.model.updates.IUpdateListener;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-public class TimeRangesChromatogramUI extends Composite {
+public class TimeRangesChromatogramUI extends Composite implements IExtendedPartUI {
 
-	private TimeRangesUI timeRangesUI;
+	private AtomicReference<TimeRangesUI> timeRangesControl = new AtomicReference<>();
 	private TimeRangesPeakChart timeRangesPeakChart;
 	//
 	private TimeRanges timeRanges = null;
@@ -40,8 +43,14 @@ public class TimeRangesChromatogramUI extends Composite {
 	public void setTimeRanges(TimeRanges timeRanges) {
 
 		this.timeRanges = timeRanges;
-		this.timeRangesUI.setInput(timeRanges);
-		timeRangesPeakChart.update(this.timeRangesUI, this.timeRanges);
+		TimeRangesUI timeRangesUI = timeRangesControl.get();
+		timeRangesUI.setInput(timeRanges);
+		timeRangesPeakChart.update(timeRangesUI, this.timeRanges);
+	}
+
+	public AtomicReference<TimeRangesUI> getTimeRangesControl() {
+
+		return timeRangesControl;
 	}
 
 	public TimeRangesPeakChart getChromatogramChart() {
@@ -51,17 +60,20 @@ public class TimeRangesChromatogramUI extends Composite {
 
 	private void createControl() {
 
-		GridLayout gridLayout = new GridLayout(1, true);
-		gridLayout.marginWidth = 0;
-		gridLayout.marginLeft = 0;
-		gridLayout.marginRight = 0;
-		setLayout(gridLayout);
+		setLayout(new GridLayout(1, true));
 		//
-		timeRangesUI = createTimeRangesUI(this);
+		createTimeRangesUI(this);
 		timeRangesPeakChart = createChromatogram(this);
+		//
+		initialize();
 	}
 
-	private TimeRangesUI createTimeRangesUI(Composite parent) {
+	private void initialize() {
+
+		enableToolbar(timeRangesControl, true);
+	}
+
+	private void createTimeRangesUI(Composite parent) {
 
 		TimeRangesUI timeRangesUI = new TimeRangesUI(parent, SWT.NONE);
 		timeRangesUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -76,7 +88,7 @@ public class TimeRangesChromatogramUI extends Composite {
 			}
 		});
 		//
-		return timeRangesUI;
+		timeRangesControl.set(timeRangesUI);
 	}
 
 	private TimeRangesPeakChart createChromatogram(Composite parent) {
