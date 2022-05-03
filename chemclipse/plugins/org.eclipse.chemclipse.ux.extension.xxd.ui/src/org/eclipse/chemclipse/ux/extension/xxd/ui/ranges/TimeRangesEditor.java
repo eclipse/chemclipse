@@ -85,6 +85,11 @@ public class TimeRangesEditor extends Composite {
 		updateTimeRanges();
 	}
 
+	public void refresh() {
+
+		updateTimeRanges();
+	}
+
 	private void createControl() {
 
 		GridLayout gridLayout = new GridLayout(6, false);
