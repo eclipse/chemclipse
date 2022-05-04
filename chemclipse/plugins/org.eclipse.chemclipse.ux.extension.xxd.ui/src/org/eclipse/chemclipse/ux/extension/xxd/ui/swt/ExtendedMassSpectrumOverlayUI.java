@@ -89,6 +89,7 @@ public class ExtendedMassSpectrumOverlayUI extends Composite implements IExtende
 		createControl();
 	}
 
+	@Override
 	public void update() {
 
 		scanSelections = editorUpdateSupport.getMassSpectrumSelections();
@@ -241,7 +242,7 @@ public class ExtendedMassSpectrumOverlayUI extends Composite implements IExtende
 
 		MassSpectrumRulerChart chart = chartControl.get();
 		chart.deleteSeries();
-		if(scanSelections.size() > 0) {
+		if(!scanSelections.isEmpty()) {
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
 			Color color = colorSchemeNormal.getColor();
 			for(IScanMSD scanMSD : scanSelections) {
@@ -337,5 +338,12 @@ public class ExtendedMassSpectrumOverlayUI extends Composite implements IExtende
 			partStack.getChildren().add(part);
 			PartSupport.showPart(part, partService);
 		}
+	}
+
+	@Override
+	public void dispose() {
+
+		chartControl.get().dispose();
+		super.dispose();
 	}
 }
