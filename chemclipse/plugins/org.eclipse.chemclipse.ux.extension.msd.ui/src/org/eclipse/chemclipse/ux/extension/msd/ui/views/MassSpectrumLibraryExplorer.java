@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2020 Lablicate GmbH.
+ * Copyright (c) 2014, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,18 +18,18 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.ux.extension.msd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.msd.ui.support.DatabaseSupport;
-import org.eclipse.chemclipse.ux.extension.ui.swt.DataExplorerUI;
+import org.eclipse.chemclipse.ux.extension.ui.swt.MultiDataExplorerTreeUI;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.swt.widgets.Composite;
 
 public class MassSpectrumLibraryExplorer {
 
-	private DataExplorerUI explorerUI;
+	private MultiDataExplorerTreeUI explorerUI;
 
 	@Inject
 	public MassSpectrumLibraryExplorer(Composite parent) {
 
-		explorerUI = new DataExplorerUI(parent, Activator.getDefault().getPreferenceStore());
+		explorerUI = new MultiDataExplorerTreeUI(parent, Activator.getDefault().getPreferenceStore());
 		explorerUI.setSupplierFileIdentifier((Collections.singleton(DatabaseSupport.getInstanceEditorSupport())));
 		explorerUI.expandLastDirectoryPath();
 	}
