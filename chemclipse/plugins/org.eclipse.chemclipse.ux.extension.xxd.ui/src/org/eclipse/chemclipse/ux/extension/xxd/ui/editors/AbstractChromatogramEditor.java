@@ -169,6 +169,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 		UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_CLOSE, clearTopics);
 		//
 		partSupport.closePart(part);
+		extendedChromatogramUI.dispose();
 	}
 
 	@Persist
@@ -231,11 +232,6 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 	public IChromatogramSelection getChromatogramSelection() {
 
 		return extendedChromatogramUI.getChromatogramSelection();
-	}
-
-	public void dispose() {
-
-		extendedChromatogramUI.dispose();
 	}
 
 	private String getFilterPath() {
