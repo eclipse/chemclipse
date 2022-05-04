@@ -338,4 +338,10 @@ public class ExtendedMassSpectrumOverlayUI extends Composite implements IExtende
 			PartSupport.showPart(part, partService);
 		}
 	}
+
+	public void dispose() {
+
+		chartControl.get().dispose();
+		super.dispose();
+	}
 }
