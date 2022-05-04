@@ -1112,4 +1112,11 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 		this.lockZoom = lockZoom;
 	}
+
+	@Override
+	public void dispose() {
+
+		chartControl.get().dispose();
+		super.dispose();
+	}
 }
