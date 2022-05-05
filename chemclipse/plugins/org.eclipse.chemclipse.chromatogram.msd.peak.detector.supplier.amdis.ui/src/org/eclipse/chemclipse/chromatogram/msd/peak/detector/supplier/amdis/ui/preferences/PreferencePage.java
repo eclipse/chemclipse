@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2021 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -73,8 +73,8 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		 * that need some other arguments.
 		 */
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new DirectoryFieldEditor(PreferenceSupplier.P_AMDIS_APPLICATION_PATH, "Folder AMDIS32", getFieldEditorParent()));
-		addField(new DirectoryFieldEditor(PreferenceSupplier.P_AMDIS_TMP_PATH, "Folder Data", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_AMDIS_APPLICATION_PATH, "Folder NIST/AMDIS32", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_AMDIS_TMP_PATH, "Folder Temp", getFieldEditorParent()));
 		/*
 		 * MAC OS X - try to define the Wine binary
 		 */

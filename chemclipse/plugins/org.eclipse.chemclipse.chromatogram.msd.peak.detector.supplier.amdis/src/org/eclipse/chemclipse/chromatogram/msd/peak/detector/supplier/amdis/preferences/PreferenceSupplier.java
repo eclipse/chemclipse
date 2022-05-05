@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2021 Lablicate GmbH.
+ * Copyright (c) 2010, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -29,7 +29,6 @@ import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.sett
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.settings.SettingsELU;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -39,21 +38,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	private static final Logger logger = Logger.getLogger(PreferenceSupplier.class);
 	//
 	public static final String IDENTIFIER = "AMDIS Identifier";
-	public static final String CONVERTER_ID = "net.openchrom.msd.converter.supplier.cdf"; // Exchange CDF with AMDIS
-	/*
-	 * AMDIS Path
-	 */
-	private static final String WINDOWS_AMDIS_PATH = "C:\\Programs\\NIST\\AMDIS32";
-	private static final String WINE_AMDIS_LINUX_PATH = "drive_c/Programs/NIST/AMDIS32";
-	private static final String WINE_AMDIS_MAC_PATH = "drive_c/NIST/AMDIS32";
-	private static final String WINE_AMDIS_UNIX_PATH = "drive_c/Programs/NIST/AMDIS32";
-	/*
-	 * Tmp Path
-	 */
-	private static final String WINDOWS_AMDIS_TMP_PATH = "C:\\tmp";
-	private static final String WINE_AMDIS_TMP_LINUX_PATH = "drive_c/tmp";
-	private static final String WINE_AMDIS_TMP_MAC_PATH = "drive_c/tmp";
-	private static final String WINE_AMDIS_TMP_UNIX_PATH = "drive_c/tmp";
+	public static final String CONVERTER_ID = "net.openchrom.msd.converter.supplier.cdf"; // exchange CDF with AMDIS
 	//
 	public static final String AMDIS_EXECUTABLE = "AMDIS32$.exe";
 	//
@@ -61,9 +46,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String DEF_MAC_WINE_BINARY = "/Applications/Wine.app";
 	//
 	public static final String P_AMDIS_APPLICATION_PATH = "amdisApplication";
-	public static final String DEF_AMDIS_APPLICATION_PATH = WINDOWS_AMDIS_PATH;
+	public static final String DEF_AMDIS_APPLICATION_PATH = "";
 	public static final String P_AMDIS_TMP_PATH = "amdisTmpPath";
-	public static final String DEF_AMDIS_TMP_PATH = WINDOWS_AMDIS_TMP_PATH;
+	public static final String DEF_AMDIS_TMP_PATH = "";
 	/*
 	 * AMDIS settings
 	 */
@@ -146,20 +131,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	@Override
 	public Map<String, String> getDefaultValues() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
-		if(OperatingSystemUtils.isLinux()) {
-			defaultValues.put(P_AMDIS_APPLICATION_PATH, WINE_AMDIS_LINUX_PATH);
-			defaultValues.put(P_AMDIS_TMP_PATH, WINE_AMDIS_TMP_LINUX_PATH);
-		} else if(OperatingSystemUtils.isMac()) {
-			defaultValues.put(P_AMDIS_APPLICATION_PATH, WINE_AMDIS_MAC_PATH);
-			defaultValues.put(P_AMDIS_TMP_PATH, WINE_AMDIS_TMP_MAC_PATH);
-		} else if(OperatingSystemUtils.isUnix()) {
-			defaultValues.put(P_AMDIS_APPLICATION_PATH, WINE_AMDIS_UNIX_PATH);
-			defaultValues.put(P_AMDIS_TMP_PATH, WINE_AMDIS_TMP_UNIX_PATH);
-		} else {
-			defaultValues.put(P_AMDIS_APPLICATION_PATH, WINDOWS_AMDIS_PATH);
-			defaultValues.put(P_AMDIS_TMP_PATH, WINDOWS_AMDIS_TMP_PATH);
-		}
+		Map<String, String> defaultValues = new HashMap<>();
 		/*
 		 * AMDIS settings
 		 */
