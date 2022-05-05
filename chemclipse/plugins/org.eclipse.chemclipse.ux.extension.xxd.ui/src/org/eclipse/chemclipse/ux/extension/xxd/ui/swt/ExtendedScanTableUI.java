@@ -45,7 +45,6 @@ import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.model.TracesSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.parts.ScanTablePart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport;
 import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
@@ -77,7 +76,7 @@ import org.eclipse.swt.widgets.Text;
 
 public class ExtendedScanTableUI extends Composite implements IExtendedPartUI {
 
-	private static final Logger logger = Logger.getLogger(ScanTablePart.class);
+	private static final Logger logger = Logger.getLogger(ExtendedScanTableUI.class);
 	//
 	private AtomicReference<Composite> toolbarMain = new AtomicReference<>();
 	private Button buttonToolbarInfo;
