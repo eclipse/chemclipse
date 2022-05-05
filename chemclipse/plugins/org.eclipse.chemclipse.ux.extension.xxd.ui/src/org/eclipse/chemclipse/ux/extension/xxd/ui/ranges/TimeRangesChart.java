@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.ranges;
 
 import org.eclipse.chemclipse.model.ranges.TimeRange;
 import org.eclipse.chemclipse.model.ranges.TimeRanges;
-import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.custom.ChromatogramPeakChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.BaselineSelectionPaintListener;
 import org.eclipse.jface.dialogs.IInputValidator;
@@ -22,7 +21,6 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Cursor;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swtchart.IAxis;
@@ -30,81 +28,41 @@ import org.eclipse.swtchart.IAxisSet;
 import org.eclipse.swtchart.IPlotArea;
 import org.eclipse.swtchart.Range;
 import org.eclipse.swtchart.extensions.core.BaseChart;
-import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.ICustomSelectionHandler;
-import org.eclipse.swtchart.extensions.core.ScrollableChart;
 
-public class TimeRangesPeakChart extends ChromatogramPeakChart {
+public class TimeRangesChart extends ChromatogramPeakChart {
 
 	private Cursor defaultCursor;
 	private BaselineSelectionPaintListener baselineSelectionPaintListener;
-	//
-	private TimeRangeAdjustmentHandler timeRangeAdjustmentHandler = new TimeRangeAdjustmentHandler();
-	private TimeRangeSelectionHandler timeRangeSelectionHandler = new TimeRangeSelectionHandler();
 	//
 	private int xStart;
 	private int yStart;
 	private int xStop;
 	private int yStop;
 	//
-	private TimeRangesUI timeRangesUI;
 	private TimeRanges timeRanges;
-	private TimeRangeMarker timeRangeMarker;
 	//
-	private IUpdateListener updateListener;
+	private ITimeRangeUpdateListener updateListener;
 
-	public TimeRangesPeakChart(Composite parent, int style) {
+	public TimeRangesChart(Composite parent, int style) {
 
 		super(parent, style);
 		createControl();
 	}
 
-	public void setUpdateListener(IUpdateListener updateListener) {
+	public void setUpdateListener(ITimeRangeUpdateListener updateListener) {
 
 		this.updateListener = updateListener;
 	}
 
-	public void update(TimeRange timeRange) {
+	public void setInput(TimeRanges timeRanges) {
 
-		TimeRangeSelector.updateTimeRangeUI(timeRangesUI, timeRange, getBaseChart());
-	}
-
-	public void update(TimeRanges timeRanges) {
-
-		if(timeRangesUI != null) {
-			timeRangesUI.setInput(timeRanges);
-		}
-		update(timeRangesUI, timeRanges);
-	}
-
-	public void update(TimeRangesUI timeRangesUI, TimeRanges timeRanges) {
-
-		this.timeRangesUI = timeRangesUI;
 		this.timeRanges = timeRanges;
-		timeRangeAdjustmentHandler.update(this.timeRangesUI, this.timeRanges);
-		timeRangeSelectionHandler.update(this.timeRangesUI, this.timeRanges);
-		updateTimeRangeMarker();
 	}
 
-	public void updateTimeRangeMarker() {
+	public void select(TimeRange timeRange) {
 
-		timeRangeMarker.getTimeRanges().clear();
-		if(timeRanges != null) {
-			/*
-			 * Update the time range composite.
-			 * Don't set the time ranges visible, e.g. if the user has set
-			 * the composite invisible. The time ranges can be toggled via
-			 * IExtendedPartUI & AtomicReference<TimeRangesUI> getTimeRangesControl().
-			 */
-			// setTimeRangesVisible(true);
-			timeRangeMarker.getTimeRanges().addAll(timeRanges.values());
-		} else {
-			/*
-			 * Hide the time range composite.
-			 */
-			setTimeRangesVisible(false);
-		}
-		getBaseChart().redraw();
+		fireUpdate(timeRange);
 	}
 
 	@Override
@@ -143,14 +101,6 @@ public class TimeRangesPeakChart extends ChromatogramPeakChart {
 	private void createControl() {
 
 		defaultCursor = getBaseChart().getCursor();
-		timeRangeMarker = addTimeRangeMarker(this);
-		/*
-		 * Chart Settings
-		 */
-		IChartSettings chartSettings = getChartSettings();
-		chartSettings.addHandledEventProcessor(timeRangeAdjustmentHandler);
-		chartSettings.addHandledEventProcessor(timeRangeSelectionHandler);
-		applySettings(chartSettings);
 		/*
 		 * Add the paint listeners to draw the selected peak range.
 		 */
@@ -166,15 +116,6 @@ public class TimeRangesPeakChart extends ChromatogramPeakChart {
 				assignCurrentRangeSelection();
 			}
 		});
-	}
-
-	private TimeRangeMarker addTimeRangeMarker(ScrollableChart scrollableChart) {
-
-		BaseChart baseChart = scrollableChart.getBaseChart();
-		IPlotArea plotArea = baseChart.getPlotArea();
-		TimeRangeMarker timeRangeMarker = new TimeRangeMarker(baseChart);
-		plotArea.addCustomPaintListener(timeRangeMarker);
-		return timeRangeMarker;
 	}
 
 	private void adjustTimeRange(Event event) {
@@ -211,7 +152,6 @@ public class TimeRangesPeakChart extends ChromatogramPeakChart {
 					String identifier = inputDialog.getValue().trim();
 					TimeRange timeRangeAdd = new TimeRange(identifier, 0, 0);
 					timeRanges.add(timeRangeAdd);
-					timeRangesUI.setInput(timeRanges);
 					updateTimeRange(timeRangeAdd);
 				}
 			}
@@ -241,9 +181,9 @@ public class TimeRangesPeakChart extends ChromatogramPeakChart {
 			int startRetentionTime = (int)(millisecondsRange.lower + millisecondsWidth * percentageStartWidth);
 			int stopRetentionTime = (int)(millisecondsRange.lower + millisecondsWidth * percentageStopWidth);
 			timeRange.update(startRetentionTime, stopRetentionTime);
-			TimeRangeSelector.updateTimeRangeUI(timeRangesUI, timeRange, baseChart);
-			fireTimeRangeUpdate();
 		}
+		//
+		fireUpdate(timeRange);
 	}
 
 	private boolean isControlKeyPressed(Event event) {
@@ -308,25 +248,10 @@ public class TimeRangesPeakChart extends ChromatogramPeakChart {
 		getBaseChart().redraw();
 	}
 
-	private void setTimeRangesVisible(boolean visible) {
-
-		if(timeRangesUI != null) {
-			timeRangesUI.setVisible(visible);
-			Object layoutData = timeRangesUI.getLayoutData();
-			if(layoutData instanceof GridData) {
-				GridData gridData = (GridData)layoutData;
-				gridData.exclude = !visible;
-			}
-			Composite parent = timeRangesUI.getParent();
-			parent.layout(true);
-			parent.redraw();
-		}
-	}
-
-	private void fireTimeRangeUpdate() {
+	private void fireUpdate(TimeRange timeRange) {
 
 		if(updateListener != null) {
-			updateListener.update();
+			updateListener.update(timeRange);
 		}
 	}
 }

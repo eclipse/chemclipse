@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,7 +28,6 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.ranges.TimeRange;
 import org.eclipse.chemclipse.model.ranges.TimeRangeSupport;
 import org.eclipse.chemclipse.model.ranges.TimeRanges;
-import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
@@ -262,10 +261,10 @@ public class TimeRangesEditor extends Composite {
 
 		TimeRangesUI timeRangesUI = new TimeRangesUI(parent, SWT.NONE);
 		timeRangesUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		timeRangesUI.setUpdateListener(new IUpdateListener() {
+		timeRangesUI.setUpdateListener(new ITimeRangeUpdateListener() {
 
 			@Override
-			public void update() {
+			public void update(TimeRange timeRange) {
 
 				updateTimeRangesTable();
 			}
@@ -293,14 +292,7 @@ public class TimeRangesEditor extends Composite {
 				Object object = timeRangesListUI.getStructuredSelection().getFirstElement();
 				if(object instanceof TimeRange) {
 					TimeRange timeRange = (TimeRange)object;
-					String[] items = timeRangesUI.getItems();
-					exitloop:
-					for(int i = 0; i < items.length; i++) {
-						if(items[i].equals(timeRange.getIdentifier())) {
-							timeRangesUI.select(i);
-							break exitloop;
-						}
-					}
+					timeRangesUI.select(timeRange);
 				}
 			}
 		});

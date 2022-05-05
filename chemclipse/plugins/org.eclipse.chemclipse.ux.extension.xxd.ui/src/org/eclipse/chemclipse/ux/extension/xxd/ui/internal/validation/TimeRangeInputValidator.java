@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,6 +24,7 @@ public class TimeRangeInputValidator implements IInputValidator {
 	private Set<String> identifier = new HashSet<>();
 
 	public TimeRangeInputValidator(Set<String> identifier) {
+
 		if(identifier != null) {
 			this.identifier = identifier;
 		}

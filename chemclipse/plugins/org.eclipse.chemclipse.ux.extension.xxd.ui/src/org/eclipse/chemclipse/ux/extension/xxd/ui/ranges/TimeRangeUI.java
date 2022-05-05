@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.ranges;
 
 import org.eclipse.chemclipse.model.ranges.TimeRange;
-import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -24,9 +23,9 @@ public class TimeRangeUI extends Composite {
 	private TimeSpinner timeSpinnerCenter;
 	private TimeSpinner timeSpinnerStop;
 	//
-	private TimeRange timeRange;
+	private TimeRange timeRange = null;
 	//
-	private IUpdateListener updateListener = null;
+	private ITimeRangeUpdateListener updateListener = null;
 
 	public TimeRangeUI(Composite parent, int style) {
 
@@ -45,13 +44,13 @@ public class TimeRangeUI extends Composite {
 		}
 	}
 
-	public void update(TimeRange timeRange) {
+	public void setInput(TimeRange timeRange) {
 
 		this.timeRange = timeRange;
-		updateTimeRange();
+		updateInput();
 	}
 
-	public void setUpdateListener(IUpdateListener updateListener) {
+	public void setUpdateListener(ITimeRangeUpdateListener updateListener) {
 
 		this.updateListener = updateListener;
 	}
@@ -67,50 +66,53 @@ public class TimeRangeUI extends Composite {
 		timeSpinnerStart = createSpinner(this, TimeRange.Marker.START);
 		timeSpinnerCenter = createSpinner(this, TimeRange.Marker.CENTER);
 		timeSpinnerStop = createSpinner(this, TimeRange.Marker.STOP);
+		//
+		initialize();
+	}
+
+	private void initialize() {
+
+		updateInput();
 	}
 
 	private TimeSpinner createSpinner(Composite parent, TimeRange.Marker marker) {
 
 		TimeSpinner timeSpinner = new TimeSpinner(parent, SWT.NONE, marker);
 		timeSpinner.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		timeSpinner.setUpdateListener(new IUpdateListener() {
+		timeSpinner.setUpdateListener(new ITimeRangeUpdateListener() {
 
 			@Override
-			public void update() {
+			public void update(TimeRange timeRange) {
 
-				fireUpdate();
+				updateInput(timeRange);
 			}
 		});
+		//
 		return timeSpinner;
 	}
 
-	private void updateTimeRange() {
+	private void updateInput() {
 
-		timeSpinnerStart.update(timeRange);
-		timeSpinnerCenter.update(timeRange);
-		timeSpinnerStop.update(timeRange);
+		timeSpinnerStart.setInput(timeRange);
+		timeSpinnerCenter.setInput(timeRange);
+		timeSpinnerStop.setInput(timeRange);
 	}
 
-	private void fireUpdate() {
+	private void updateInput(TimeRange timeRange) {
+
+		/*
+		 * The time spinner acts independently.
+		 * If one range is modified, all other ranges
+		 * shall be updated.
+		 */
+		updateInput();
+		fireUpdate(timeRange);
+	}
+
+	private void fireUpdate(TimeRange timeRange) {
 
 		if(updateListener != null) {
-			/*
-			 * The time spinner act independently.
-			 * If one range is modified, all other ranges
-			 * shall be updated.
-			 */
-			updateTimeRange();
-			/*
-			 * Inform all other listeners.
-			 */
-			getDisplay().asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-
-					updateListener.update();
-				}
-			});
+			updateListener.update(timeRange);
 		}
 	}
 }

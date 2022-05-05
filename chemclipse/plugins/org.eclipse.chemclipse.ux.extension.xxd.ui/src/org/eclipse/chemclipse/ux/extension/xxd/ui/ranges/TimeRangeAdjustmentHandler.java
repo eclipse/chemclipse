@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,13 +22,17 @@ import org.eclipse.swtchart.extensions.events.IHandledEventProcessor;
 
 public class TimeRangeAdjustmentHandler extends AbstractHandledEventProcessor implements IHandledEventProcessor {
 
-	private TimeRangesUI timeRangesUI;
 	private TimeRanges timeRanges;
+	private ITimeRangeUpdateListener updateListener;
 
-	public void update(TimeRangesUI timeRangesUI, TimeRanges timeRanges) {
+	public void setInput(TimeRanges timeRanges) {
 
-		this.timeRangesUI = timeRangesUI;
 		this.timeRanges = timeRanges;
+	}
+
+	public void setUpdateListener(ITimeRangeUpdateListener updateListener) {
+
+		this.updateListener = updateListener;
 	}
 
 	@Override
@@ -52,11 +56,18 @@ public class TimeRangeAdjustmentHandler extends AbstractHandledEventProcessor im
 	@Override
 	public void handleEvent(BaseChart baseChart, Event event) {
 
-		if(timeRangesUI != null && timeRanges != null) {
+		if(timeRanges != null) {
 			TimeRange timeRange = TimeRangeSelector.adjustRange(baseChart, event, timeRanges);
 			if(timeRange != null) {
-				TimeRangeSelector.updateTimeRangeUI(timeRangesUI, timeRange, baseChart);
+				fireUpdate(timeRange);
 			}
+		}
+	}
+
+	private void fireUpdate(TimeRange timeRange) {
+
+		if(updateListener != null) {
+			updateListener.update(timeRange);
 		}
 	}
 }

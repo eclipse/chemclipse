@@ -34,11 +34,18 @@ public class TimeRangeMarker extends AbstractBaseChartPaintListener implements I
 
 	private static final int INVISIBLE = -1;
 	//
+	private Color colorAreaSelected = Colors.DARK_RED;
+	private Color colorLabelSelected = Colors.BLACK;
+	private Color colorAreaNormal = Colors.GRAY;
+	private Color colorLabelNormal = Colors.DARK_GRAY;
+	//
 	private Set<TimeRange> timeRanges = new HashSet<>();
+	private TimeRange timeRangeSelected = null;
 	private Transform transform = new Transform(Display.getDefault());
 	private boolean plotCenterOnly = false;
 
 	public TimeRangeMarker(BaseChart baseChart) {
+
 		super(baseChart);
 		transform.rotate(-90);
 	}
@@ -46,6 +53,11 @@ public class TimeRangeMarker extends AbstractBaseChartPaintListener implements I
 	public Set<TimeRange> getTimeRanges() {
 
 		return timeRanges;
+	}
+
+	public void setTimeRangeSelected(TimeRange timeRangeSelected) {
+
+		this.timeRangeSelected = timeRangeSelected;
 	}
 
 	public boolean isPlotCenterOnly() {
@@ -64,7 +76,8 @@ public class TimeRangeMarker extends AbstractBaseChartPaintListener implements I
 		if(!getBaseChart().isBufferActive()) {
 			GC gc = e.gc;
 			for(TimeRange timeRange : timeRanges) {
-				plotMarker(gc, timeRange);
+				boolean isSelected = timeRange.equals(timeRangeSelected);
+				plotMarker(gc, timeRange, isSelected);
 			}
 			gc.setAlpha(255);
 		}
@@ -76,7 +89,7 @@ public class TimeRangeMarker extends AbstractBaseChartPaintListener implements I
 		transform.dispose();
 	}
 
-	private void plotMarker(GC gc, TimeRange timeRange) {
+	private void plotMarker(GC gc, TimeRange timeRange, boolean isSelected) {
 
 		BaseChart baseChart = getBaseChart();
 		if(baseChart.getSeriesSet().getSeries().length > 0) {
@@ -90,22 +103,24 @@ public class TimeRangeMarker extends AbstractBaseChartPaintListener implements I
 				Range rangeX = xAxis.getRange();
 				IPlotArea plotArea = baseChart.getPlotArea();
 				Point rectangle = (plotArea instanceof Scrollable) ? ((Scrollable)plotArea).getSize() : plotArea.getSize();
+				Color colorArea = isSelected ? colorAreaSelected : colorAreaNormal;
+				Color colorLabel = isSelected ? colorLabelSelected : colorLabelNormal;
 				//
 				if(plotCenterOnly) {
 					/*
 					 * Print center
 					 */
-					int xStop = printLine(gc, rectangle, rangeX, timeRange.getCenter(), Colors.DARK_GRAY, 1);
-					printLabel(gc, rectangle, timeRange.getIdentifier(), xStop, Colors.DARK_GRAY);
+					int xStop = printLine(gc, rectangle, rangeX, timeRange.getCenter(), colorArea, 1);
+					printLabel(gc, rectangle, timeRange.getIdentifier(), xStop, colorLabel);
 				} else {
 					/*
 					 * Print lines, rectangle and label
 					 */
-					int xStart = printLine(gc, rectangle, rangeX, timeRange.getStart(), Colors.DARK_GRAY, 1);
-					printLine(gc, rectangle, rangeX, timeRange.getCenter(), Colors.GRAY, 1);
-					int xStop = printLine(gc, rectangle, rangeX, timeRange.getStop(), Colors.DARK_GRAY, 1);
-					fillRectangle(gc, rectangle, xStart, xStop, Colors.GRAY);
-					printLabel(gc, rectangle, timeRange.getIdentifier(), xStop, Colors.DARK_GRAY);
+					int xStart = printLine(gc, rectangle, rangeX, timeRange.getStart(), colorArea, 1);
+					printLine(gc, rectangle, rangeX, timeRange.getCenter(), colorArea, 1);
+					int xStop = printLine(gc, rectangle, rangeX, timeRange.getStop(), colorArea, 1);
+					fillRectangle(gc, rectangle, xStart, xStop, colorArea);
+					printLabel(gc, rectangle, timeRange.getIdentifier(), xStop, colorLabel);
 				}
 			}
 		}

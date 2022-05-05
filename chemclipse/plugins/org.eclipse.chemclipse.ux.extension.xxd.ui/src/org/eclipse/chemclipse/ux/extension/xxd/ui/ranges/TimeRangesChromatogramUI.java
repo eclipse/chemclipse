@@ -13,21 +13,29 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.ranges;
 
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.eclipse.chemclipse.model.ranges.TimeRange;
 import org.eclipse.chemclipse.model.ranges.TimeRanges;
-import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swtchart.IPlotArea;
+import org.eclipse.swtchart.extensions.core.BaseChart;
+import org.eclipse.swtchart.extensions.core.IChartSettings;
+import org.eclipse.swtchart.extensions.core.ScrollableChart;
 
 public class TimeRangesChromatogramUI extends Composite implements IExtendedPartUI {
 
-	private AtomicReference<TimeRangesUI> timeRangesControl = new AtomicReference<>();
-	private TimeRangesPeakChart timeRangesPeakChart;
+	private AtomicReference<TimeRangesUI> rangesControl = new AtomicReference<>();
+	private AtomicReference<TimeRangesChart> chartControl = new AtomicReference<>();
+	//
+	private TimeRangeAdjustmentHandler timeRangeAdjustmentHandler = new TimeRangeAdjustmentHandler();
+	private TimeRangeSelectionHandler timeRangeSelectionHandler = new TimeRangeSelectionHandler();
 	//
 	private TimeRanges timeRanges = null;
-	private IUpdateListener updateListener;
+	private TimeRangeMarker timeRangeMarker;
+	private ITimeRangeUpdateListener updateListener;
 
 	public TimeRangesChromatogramUI(Composite parent, int style) {
 
@@ -35,27 +43,37 @@ public class TimeRangesChromatogramUI extends Composite implements IExtendedPart
 		createControl();
 	}
 
-	public void setUpdateListener(IUpdateListener updateListener) {
+	@Override
+	public void update() {
+
+		super.update();
+		rangesControl.get().setInput(timeRanges);
+	}
+
+	public void setUpdateListener(ITimeRangeUpdateListener updateListener) {
 
 		this.updateListener = updateListener;
 	}
 
-	public void setTimeRanges(TimeRanges timeRanges) {
+	public void setInput(TimeRanges timeRanges) {
 
 		this.timeRanges = timeRanges;
-		TimeRangesUI timeRangesUI = timeRangesControl.get();
-		timeRangesUI.setInput(timeRanges);
-		timeRangesPeakChart.update(timeRangesUI, this.timeRanges);
+		updateInput();
+	}
+
+	public void select(TimeRange timeRange) {
+
+		updateTimeRangeMarker(timeRange);
 	}
 
 	public AtomicReference<TimeRangesUI> getTimeRangesControl() {
 
-		return timeRangesControl;
+		return rangesControl;
 	}
 
-	public TimeRangesPeakChart getChromatogramChart() {
+	public AtomicReference<TimeRangesChart> getChromatogramChartControl() {
 
-		return timeRangesPeakChart;
+		return chartControl;
 	}
 
 	private void createControl() {
@@ -63,55 +81,145 @@ public class TimeRangesChromatogramUI extends Composite implements IExtendedPart
 		setLayout(new GridLayout(1, true));
 		//
 		createTimeRangesUI(this);
-		timeRangesPeakChart = createChromatogram(this);
+		createTimeRangesChart(this);
 		//
 		initialize();
 	}
 
 	private void initialize() {
 
-		enableToolbar(timeRangesControl, true);
+		enableToolbar(rangesControl, true);
+		//
+		timeRangeAdjustmentHandler.setUpdateListener(new ITimeRangeUpdateListener() {
+
+			@Override
+			public void update(TimeRange timeRange) {
+
+				updateTimeRangeMarker(timeRange);
+				fireUpdate(timeRange);
+			}
+		});
+		//
+		timeRangeSelectionHandler.setUpdateListener(new ITimeRangeUpdateListener() {
+
+			@Override
+			public void update(TimeRange timeRange) {
+
+				updateTimeRangeMarker(timeRange);
+				fireUpdate(timeRange);
+			}
+		});
 	}
 
 	private void createTimeRangesUI(Composite parent) {
 
 		TimeRangesUI timeRangesUI = new TimeRangesUI(parent, SWT.NONE);
 		timeRangesUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		timeRangesUI.setUpdateListener(new IUpdateListener() {
+		timeRangesUI.setUpdateListener(new ITimeRangeUpdateListener() {
 
 			@Override
-			public void update() {
+			public void update(TimeRange timeRange) {
 
 				if(timeRanges != null) {
-					timeRangesPeakChart.updateTimeRangeMarker();
+					updateTimeRangeMarker(timeRange);
+					fireUpdate(timeRange);
 				}
 			}
 		});
 		//
-		timeRangesControl.set(timeRangesUI);
+		rangesControl.set(timeRangesUI);
 	}
 
-	private TimeRangesPeakChart createChromatogram(Composite parent) {
+	private void createTimeRangesChart(Composite parent) {
 
-		TimeRangesPeakChart timeRangesPeakChart = new TimeRangesPeakChart(parent, SWT.NONE);
-		timeRangesPeakChart.setLayoutData(new GridData(GridData.FILL_BOTH));
+		TimeRangesChart timeRangesChart = new TimeRangesChart(parent, SWT.NONE);
+		timeRangesChart.setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
-		timeRangesPeakChart.setUpdateListener(new IUpdateListener() {
+		timeRangeMarker = addTimeRangeMarker(timeRangesChart);
+		//
+		IChartSettings chartSettings = timeRangesChart.getChartSettings();
+		chartSettings.addHandledEventProcessor(timeRangeAdjustmentHandler);
+		chartSettings.addHandledEventProcessor(timeRangeSelectionHandler);
+		timeRangesChart.applySettings(chartSettings);
+		//
+		timeRangesChart.setUpdateListener(new ITimeRangeUpdateListener() {
 
 			@Override
-			public void update() {
+			public void update(TimeRange timeRange) {
 
-				fireTimeRangeUpdate();
+				TimeRangesUI timeRangeUI = rangesControl.get();
+				timeRangeUI.update();
+				timeRangeUI.select(timeRange);
+				fireUpdate(timeRange);
 			}
 		});
 		//
-		return timeRangesPeakChart;
+		chartControl.set(timeRangesChart);
 	}
 
-	private void fireTimeRangeUpdate() {
+	private TimeRangeMarker addTimeRangeMarker(ScrollableChart scrollableChart) {
+
+		BaseChart baseChart = scrollableChart.getBaseChart();
+		IPlotArea plotArea = baseChart.getPlotArea();
+		TimeRangeMarker timeRangeMarker = new TimeRangeMarker(baseChart);
+		plotArea.addCustomPaintListener(timeRangeMarker);
+		//
+		return timeRangeMarker;
+	}
+
+	private void setTimeRangesVisible(boolean visible) {
+
+		TimeRangesUI timeRangesUI = rangesControl.get();
+		if(timeRangesUI != null) {
+			timeRangesUI.setVisible(visible);
+			Object layoutData = timeRangesUI.getLayoutData();
+			if(layoutData instanceof GridData) {
+				GridData gridData = (GridData)layoutData;
+				gridData.exclude = !visible;
+			}
+			Composite parent = timeRangesUI.getParent();
+			parent.layout(true);
+			parent.redraw();
+		}
+	}
+
+	private void updateInput() {
+
+		rangesControl.get().setInput(timeRanges);
+		timeRangeAdjustmentHandler.setInput(timeRanges);
+		timeRangeSelectionHandler.setInput(timeRanges);
+		updateTimeRangeMarker(null);
+		chartControl.get().setInput(timeRanges);
+	}
+
+	private void updateTimeRangeMarker(TimeRange timeRange) {
+
+		timeRangeMarker.getTimeRanges().clear();
+		if(timeRanges != null) {
+			/*
+			 * Update the time range composite.
+			 * Don't set the time ranges visible, e.g. if the user has set
+			 * the composite invisible. The time ranges can be toggled via
+			 * IExtendedPartUI & AtomicReference<TimeRangesUI> getTimeRangesControl().
+			 */
+			// setTimeRangesVisible(true);
+			rangesControl.get().select(timeRange);
+			timeRangeMarker.getTimeRanges().addAll(timeRanges.values());
+			timeRangeMarker.setTimeRangeSelected(timeRange);
+		} else {
+			/*
+			 * Hide the time range composite.
+			 */
+			setTimeRangesVisible(false);
+		}
+		//
+		chartControl.get().getBaseChart().redraw();
+	}
+
+	private void fireUpdate(TimeRange timeRange) {
 
 		if(updateListener != null) {
-			updateListener.update();
+			updateListener.update(timeRange);
 		}
 	}
 }

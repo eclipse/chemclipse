@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,8 +13,8 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.custom;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.ranges.TimeRangesChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.ranges.TimeRangesChromatogramUI;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.ranges.TimeRangesPeakChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.BaselineSelectionPaintListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
@@ -77,7 +77,7 @@ public class ManualSelectionChart extends TimeRangesChromatogramUI {
 
 	private void init() {
 
-		TimeRangesPeakChart peakChart = getChromatogramChart();
+		TimeRangesChart peakChart = getChromatogramChartControl().get();
 		BaseChart baseChart = peakChart.getBaseChart();
 		defaultCursor = baseChart.getCursor();
 		//
@@ -179,21 +179,21 @@ public class ManualSelectionChart extends TimeRangesChromatogramUI {
 
 	private void setCursor(int cursorId) {
 
-		TimeRangesPeakChart peakChart = getChromatogramChart();
+		TimeRangesChart peakChart = getChromatogramChartControl().get();
 		BaseChart baseChart = peakChart.getBaseChart();
 		baseChart.setCursor(baseChart.getDisplay().getSystemCursor(cursorId));
 	}
 
 	private void setCursorDefault() {
 
-		TimeRangesPeakChart peakChart = getChromatogramChart();
+		TimeRangesChart peakChart = getChromatogramChartControl().get();
 		BaseChart baseChart = peakChart.getBaseChart();
 		baseChart.setCursor(defaultCursor);
 	}
 
 	private void redrawChart() {
 
-		TimeRangesPeakChart peakChart = getChromatogramChart();
+		TimeRangesChart peakChart = getChromatogramChartControl().get();
 		BaseChart baseChart = peakChart.getBaseChart();
 		baseChart.redraw();
 	}
@@ -215,7 +215,7 @@ public class ManualSelectionChart extends TimeRangesChromatogramUI {
 			/*
 			 * BaseChart
 			 */
-			TimeRangesPeakChart peakChart = getChromatogramChart();
+			TimeRangesChart peakChart = getChromatogramChartControl().get();
 			BaseChart baseChart = peakChart.getBaseChart();
 			IAxisSet axisSet = baseChart.getAxisSet();
 			Point rectangle = baseChart.getPlotArea().getSize();

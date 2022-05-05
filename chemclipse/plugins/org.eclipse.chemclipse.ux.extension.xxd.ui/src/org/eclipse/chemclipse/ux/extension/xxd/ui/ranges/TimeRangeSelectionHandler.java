@@ -22,13 +22,17 @@ import org.eclipse.swtchart.extensions.events.IHandledEventProcessor;
 
 public class TimeRangeSelectionHandler extends AbstractHandledEventProcessor implements IHandledEventProcessor {
 
-	private TimeRangesUI timeRangesUI;
 	private TimeRanges timeRanges;
+	private ITimeRangeUpdateListener updateListener;
 
-	public void update(TimeRangesUI timeRangesUI, TimeRanges timeRanges) {
+	public void setInput(TimeRanges timeRanges) {
 
-		this.timeRangesUI = timeRangesUI;
 		this.timeRanges = timeRanges;
+	}
+
+	public void setUpdateListener(ITimeRangeUpdateListener updateListener) {
+
+		this.updateListener = updateListener;
 	}
 
 	@Override
@@ -52,11 +56,18 @@ public class TimeRangeSelectionHandler extends AbstractHandledEventProcessor imp
 	@Override
 	public void handleEvent(BaseChart baseChart, Event event) {
 
-		if(timeRangesUI != null && timeRanges != null) {
+		if(timeRanges != null) {
 			TimeRange timeRange = TimeRangeSelector.selectRange(baseChart, event, -1, -1, timeRanges);
 			if(timeRange != null) {
-				TimeRangeSelector.updateTimeRangeUI(timeRangesUI, timeRange, baseChart);
+				fireUpdate(timeRange);
 			}
+		}
+	}
+
+	private void fireUpdate(TimeRange timeRange) {
+
+		if(updateListener != null) {
+			updateListener.update(timeRange);
 		}
 	}
 }

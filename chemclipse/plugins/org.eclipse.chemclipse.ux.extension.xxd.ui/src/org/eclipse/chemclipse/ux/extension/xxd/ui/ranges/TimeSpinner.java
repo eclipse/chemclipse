@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.ranges;
 import java.text.DecimalFormat;
 
 import org.eclipse.chemclipse.model.ranges.TimeRange;
-import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.text.ValueFormat;
@@ -51,7 +50,7 @@ public class TimeSpinner extends Composite {
 	//
 	private TimeRange.Marker marker;
 	private TimeRange timeRange = null;
-	private IUpdateListener updateListener = null;
+	private ITimeRangeUpdateListener updateListener = null;
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
@@ -74,12 +73,12 @@ public class TimeSpinner extends Composite {
 		updateLabel();
 	}
 
-	public void setUpdateListener(IUpdateListener updateListener) {
+	public void setUpdateListener(ITimeRangeUpdateListener updateListener) {
 
 		this.updateListener = updateListener;
 	}
 
-	public void update(TimeRange timeRange) {
+	public void setInput(TimeRange timeRange) {
 
 		this.timeRange = timeRange;
 		boolean enabled = timeRange != null;
@@ -147,7 +146,7 @@ public class TimeSpinner extends Composite {
 					validator.setTimeRange(timeRange);
 					if(validate(validator, controlDecoration, text)) {
 						updateRetentionTime(validator.getRetentionTime());
-						fireUpdate();
+						fireUpdate(timeRange);
 					}
 				}
 			}
@@ -169,7 +168,7 @@ public class TimeSpinner extends Composite {
 
 				if(timeRange != null) {
 					updateRetentionTime(increase);
-					fireUpdate();
+					fireUpdate(timeRange);
 				}
 			}
 		});
@@ -187,13 +186,6 @@ public class TimeSpinner extends Composite {
 			controlDecoration.showHoverText(status.getMessage());
 			controlDecoration.show();
 			return false;
-		}
-	}
-
-	private void fireUpdate() {
-
-		if(updateListener != null) {
-			updateListener.update();
 		}
 	}
 
@@ -307,5 +299,12 @@ public class TimeSpinner extends Composite {
 		boolean visible = preferenceStore.getBoolean(PreferenceConstants.P_SHOW_TIME_RANGE_SPINNER_LABEL);
 		PartSupport.setControlVisibility(label, visible);
 		PartSupport.setControlVisibility(spacer, visible);
+	}
+
+	private void fireUpdate(TimeRange timeRange) {
+
+		if(updateListener != null) {
+			updateListener.update(timeRange);
+		}
 	}
 }
