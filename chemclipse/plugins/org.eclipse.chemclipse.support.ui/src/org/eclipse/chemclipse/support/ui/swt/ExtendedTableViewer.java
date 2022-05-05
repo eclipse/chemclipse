@@ -39,6 +39,7 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.Viewer;
@@ -626,6 +627,7 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 	private TableViewerColumn createTableColumn(String title, int width) {
 
 		final TableViewerColumn tableViewerColumn = new TableViewerColumn(this, SWT.NONE);
+		tableViewerColumn.setLabelProvider(new ColumnLabelProvider());
 		final TableColumn tableColumn = tableViewerColumn.getColumn();
 		tableColumn.setText(title);
 		tableColumn.setWidth(width);
