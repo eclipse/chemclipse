@@ -212,7 +212,7 @@ public class TimeRangesUI extends Composite implements IExtendedPartUI {
 							timeRanges.add(timeRangeNew);
 							timeRange = timeRangeNew;
 							updateComboViewer();
-							updateTimeRange(timeRange, true);
+							updateTimeRange(timeRangeNew, true);
 						}
 					}
 				}

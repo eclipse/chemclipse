@@ -120,10 +120,8 @@ public class TimeRangesChromatogramUI extends Composite implements IExtendedPart
 			@Override
 			public void update(TimeRange timeRange) {
 
-				if(timeRanges != null) {
-					updateTimeRangeMarker(timeRange);
-					fireUpdate(timeRange);
-				}
+				updateTimeRangeMarker(timeRange);
+				fireUpdate(timeRange);
 			}
 		});
 		//
@@ -150,6 +148,7 @@ public class TimeRangesChromatogramUI extends Composite implements IExtendedPart
 				TimeRangesUI timeRangeUI = rangesControl.get();
 				timeRangeUI.update();
 				timeRangeUI.select(timeRange);
+				updateTimeRangeMarker(timeRange);
 				fireUpdate(timeRange);
 			}
 		});
