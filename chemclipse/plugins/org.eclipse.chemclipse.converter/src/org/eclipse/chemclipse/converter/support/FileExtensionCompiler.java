@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -29,13 +29,14 @@ public class FileExtensionCompiler {
 	 * @param extension
 	 */
 	public FileExtensionCompiler(String extension, boolean useLowerAndUpperCase) {
+
 		/*
 		 * Avoid null pointer exceptions.
 		 */
 		if(extension == null) {
 			extension = "";
 		}
-		extensions = new ArrayList<String>();
+		extensions = new ArrayList<>();
 		/*
 		 * Add ".ionXML"
 		 */

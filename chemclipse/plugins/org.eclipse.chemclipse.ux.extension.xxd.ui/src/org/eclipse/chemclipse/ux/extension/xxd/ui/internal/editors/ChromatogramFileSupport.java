@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,7 +18,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
+import org.apache.commons.io.FilenameUtils;
 import org.eclipse.chemclipse.converter.chromatogram.IChromatogramConverterSupport;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.csd.converter.chromatogram.ChromatogramConverterCSD;
@@ -75,12 +77,19 @@ public class ChromatogramFileSupport {
 			Map<Integer, ISupplier> exportSupplierMap = setExportConverter(chromatogramConverterSupport, fileDialog);
 			String filename = fileDialog.open();
 			if(filename != null) {
+				String filePath = fileDialog.getFilterPath() + File.separator + fileDialog.getFileName();
+				boolean overwrite = fileDialog.getOverwrite();
 				int key = fileDialog.getFilterIndex();
 				if(exportSupplierMap.containsKey(key)) {
 					ISupplier selectedSupplier = exportSupplierMap.get(key);
-					String filePath = fileDialog.getFilterPath() + File.separator + fileDialog.getFileName();
-					boolean overwrite = fileDialog.getOverwrite();
 					validateAndExportFile(shell, chromatogram, dataType, filePath, overwrite, selectedSupplier);
+					return true;
+				} else {
+					String extension = FilenameUtils.getExtension(fileDialog.getFileName());
+					Optional<ISupplier> guessedSupplier = chromatogramConverterSupport.getSupplier().stream().filter(s -> s.getFileExtension().contains(extension)).findFirst();
+					if(guessedSupplier.isEmpty())
+						return false;
+					validateAndExportFile(shell, chromatogram, dataType, filePath, overwrite, guessedSupplier.get());
 					return true;
 				}
 			}
