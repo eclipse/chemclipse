@@ -47,7 +47,7 @@ public class PcaExtractionFiles implements IExtractionData {
 		this.dataInputEntries = dataInputEntries;
 	}
 
-	public static void getDemoContent(PrintWriter printWriter) {
+	public static void exportDemoContent(PrintWriter printWriter) {
 
 		int start = 65; // ASCII -> A
 		int variables = 10;
