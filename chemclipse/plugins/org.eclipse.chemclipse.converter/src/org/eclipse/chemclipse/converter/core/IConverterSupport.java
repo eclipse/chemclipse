@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -41,7 +41,7 @@ public interface IConverterSupport {
 	 */
 	default String[] getFilterExtensions(Predicate<? super ISupplier> filter) {
 
-		List<String> extensions = new ArrayList<String>();
+		List<String> extensions = new ArrayList<>();
 		for(ISupplier supplier : getSupplier(filter)) {
 			if(supplier.getDirectoryExtension().equals("")) {
 				FileExtensionCompiler fileExtensionCompiler = new FileExtensionCompiler(supplier.getFileExtension(), true);
