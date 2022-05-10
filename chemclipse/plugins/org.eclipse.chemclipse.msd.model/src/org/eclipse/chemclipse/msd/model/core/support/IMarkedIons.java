@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,8 +16,7 @@ package org.eclipse.chemclipse.msd.model.core.support;
 import java.util.Collection;
 import java.util.Set;
 
-import org.eclipse.chemclipse.model.core.IMarkedSignals;
-import org.eclipse.chemclipse.support.text.ILabel;
+import org.eclipse.chemclipse.model.core.IMarkedTraces;
 
 /**
  * This class stores a list of ions which should be considered or not
@@ -29,44 +28,9 @@ import org.eclipse.chemclipse.support.text.ILabel;
  * 
  * @author Philip Wenig
  */
-public interface IMarkedIons extends IMarkedSignals<IMarkedIon> {
-
-	enum IonMarkMode implements ILabel {
-		/**
-		 * In this mode, all ions in the list are considered as an exclusion, that means apply the given function to all except the given ions
-		 */
-		EXCLUDE("Exclude"),
-		/**
-		 * In this mode, all ions in the list are considered as an inclusion, that means apply the given function to all ions given
-		 */
-		INCLUDE("Include");
-
-		private String label = "";
-
-		private IonMarkMode(String label) {
-
-			this.label = label;
-		}
-
-		@Override
-		public String label() {
-
-			return label;
-		}
-
-		public static String[][] getOptions() {
-
-			return ILabel.getOptions(values());
-		}
-	}
+public interface IMarkedIons extends IMarkedTraces<IMarkedIon> {
 
 	Set<Integer> getIonsNominal();
-
-	/**
-	 * 
-	 * @return the mode for this ions list
-	 */
-	IonMarkMode getMode();
 
 	/**
 	 * Adds the ion range with magnification factor = 1.

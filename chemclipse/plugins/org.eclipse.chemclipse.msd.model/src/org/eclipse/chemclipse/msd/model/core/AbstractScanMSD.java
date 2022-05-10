@@ -24,11 +24,11 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.AbstractScan;
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonCombinedComparator;
 import org.eclipse.chemclipse.msd.model.core.comparator.IonComparatorMode;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons.IonMarkMode;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.msd.model.exceptions.IonIsNullException;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
@@ -269,8 +269,8 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 		}
 		//
 		Set<Integer> nominalIons = markedIons.getIonsNominal();
-		IonMarkMode mode = markedIons.getMode();
-		switch(mode) {
+		MarkedTraceModus markedTraceModus = markedIons.getMarkedTraceModus();
+		switch(markedTraceModus) {
 			case INCLUDE:
 				/*
 				 * Remove all listed ions.
@@ -340,7 +340,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	private static boolean useIon(IIon ion, IMarkedIons filterIons) {
 
 		Set<Integer> ionNominal = filterIons.getIonsNominal();
-		switch(filterIons.getMode()) {
+		switch(filterIons.getMarkedTraceModus()) {
 			case EXCLUDE:
 				return ionNominal.contains(AbstractIon.getIon(ion.getIon()));
 			case INCLUDE:
@@ -612,7 +612,7 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	private IScanMSD createNewMassSpectrum(IMarkedIons excludedIons) {
 
 		if(excludedIons == null) {
-			excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+			excludedIons = new MarkedIons(MarkedTraceModus.INCLUDE);
 		}
 		IScanMSD massSpectrum = new ScanMSD();
 		IIon ion;

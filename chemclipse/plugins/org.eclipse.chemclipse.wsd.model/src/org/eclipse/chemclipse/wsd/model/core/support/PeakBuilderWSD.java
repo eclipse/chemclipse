@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
@@ -40,7 +41,6 @@ import org.eclipse.chemclipse.wsd.model.core.implementation.ChromatogramPeakWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.PeakModelWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.ScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.implementation.ScanWSD;
-import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelength.WavelengthMarkMode;
 import org.eclipse.chemclipse.wsd.model.xwc.ExtractedWavelengthSignalExtractor;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignal;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedWavelengthSignalExtractor;
@@ -109,7 +109,7 @@ public class PeakBuilderWSD {
 		return new ChromatogramPeakWSD(peakModel, chromatogram);
 	}
 
-	public static IChromatogramPeakWSD createPeak(IChromatogramWSD chromatogram, IScanRange scanRange, boolean calculatePeakIncludedBackground, Set<Integer> includedWavelengths, WavelengthMarkMode filterMode) throws PeakException {
+	public static IChromatogramPeakWSD createPeak(IChromatogramWSD chromatogram, IScanRange scanRange, boolean calculatePeakIncludedBackground, Set<Integer> includedWavelengths, MarkedTraceModus filterMode) throws PeakException {
 
 		/*
 		 * Get the total signals and determine the start and stop background

@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.Abstract
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.exceptions.FilterException;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.ChromatogramFilterSettings;
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
@@ -25,7 +26,7 @@ import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
-import org.eclipse.chemclipse.support.util.IonSettingUtil;
+import org.eclipse.chemclipse.support.util.TraceSettingUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
@@ -40,8 +41,8 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 			if(chromatogramFilterSettings instanceof ChromatogramFilterSettings) {
 				try {
 					ChromatogramFilterSettings filterSettings = (ChromatogramFilterSettings)chromatogramFilterSettings;
-					IonSettingUtil ionSettingUtil = new IonSettingUtil();
-					IMarkedIons ionsToRemove = new MarkedIons(ionSettingUtil.extractIons(ionSettingUtil.deserialize(filterSettings.getIonsToRemove())), IMarkedIons.IonMarkMode.INCLUDE);
+					TraceSettingUtil ionSettingUtil = new TraceSettingUtil();
+					IMarkedIons ionsToRemove = new MarkedIons(ionSettingUtil.extractTraces(ionSettingUtil.deserialize(filterSettings.getIonsToRemove())), MarkedTraceModus.INCLUDE);
 					applyIonRemoverFilter(chromatogramSelection, ionsToRemove, monitor);
 					processingInfo.setProcessingResult(new ChromatogramFilterResult(ResultStatus.OK, "Mass fragments have been removed successfully."));
 					chromatogramSelection.getChromatogram().setDirty(true);

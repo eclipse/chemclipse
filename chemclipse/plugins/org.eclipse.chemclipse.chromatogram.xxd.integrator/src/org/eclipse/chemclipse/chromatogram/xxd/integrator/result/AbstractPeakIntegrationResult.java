@@ -26,11 +26,11 @@ public abstract class AbstractPeakIntegrationResult implements IPeakIntegrationR
 	private int startRetentionTime;
 	private int stopRetentionTime;
 	private float purity;
-	private Set<Integer> integratedIons;
+	private Set<Integer> integratedTraces;
 
 	protected AbstractPeakIntegrationResult() {
 
-		integratedIons = new HashSet<>();
+		integratedTraces = new HashSet<>();
 	}
 
 	@Override
@@ -154,30 +154,29 @@ public abstract class AbstractPeakIntegrationResult implements IPeakIntegrationR
 	}
 
 	@Override
-	public Set<Integer> getIntegratedIons() {
+	public Set<Integer> getIntegratedTraces() {
 
-		return integratedIons;
+		return integratedTraces;
 	}
 
 	@Override
-	public void addIntegratedIon(int ion) {
+	public void addIntegratedTrace(int trace) {
 
-		integratedIons.add(ion);
+		integratedTraces.add(trace);
 	}
 
 	@Override
-	public void removeIntegratedIon(int ion) {
+	public void removeIntegratedTrace(int trace) {
 
-		integratedIons.remove(ion);
+		integratedTraces.remove(trace);
 	}
 
 	@Override
-	public void addIntegratedIons(Set<Integer> ions) {
+	public void addIntegratedTraces(Set<Integer> traces) {
 
-		integratedIons.addAll(ions);
+		integratedTraces.addAll(traces);
 	}
 
-	// ----------------------------------------hashCode, equals, toString
 	@Override
 	public boolean equals(Object other) {
 
@@ -196,11 +195,11 @@ public abstract class AbstractPeakIntegrationResult implements IPeakIntegrationR
 		 */
 		int size = 0;
 		int otherSize = 0;
-		if(integratedIons != null) {
-			size = integratedIons.size();
+		if(integratedTraces != null) {
+			size = integratedTraces.size();
 		}
-		if(otherResult.getIntegratedIons() != null) {
-			otherSize = otherResult.getIntegratedIons().size();
+		if(otherResult.getIntegratedTraces() != null) {
+			otherSize = otherResult.getIntegratedTraces().size();
 		}
 		return integratedArea == otherResult.getIntegratedArea() && tailing == otherResult.getTailing() && width == otherResult.getWidth() && integratorType == otherResult.getIntegratorType() && peakType == otherResult.getPeakType() && modelDescription == otherResult.getModelDescription() && sn == otherResult.getSN() && startRetentionTime == otherResult.getStartRetentionTime() && stopRetentionTime == otherResult.getStopRetentionTime() && purity == otherResult.getPurity() && size == otherSize;
 	}
@@ -208,15 +207,15 @@ public abstract class AbstractPeakIntegrationResult implements IPeakIntegrationR
 	@Override
 	public int hashCode() {
 
-		return Double.valueOf(integratedArea).hashCode() + Float.valueOf(tailing).hashCode() + Integer.valueOf(width).hashCode() + integratorType.hashCode() + peakType.hashCode() + modelDescription.hashCode() + Float.valueOf(sn).hashCode() + Integer.valueOf(startRetentionTime).hashCode() + Integer.valueOf(stopRetentionTime).hashCode() + Float.valueOf(purity).hashCode() + integratedIons.hashCode();
+		return Double.valueOf(integratedArea).hashCode() + Float.valueOf(tailing).hashCode() + Integer.valueOf(width).hashCode() + integratorType.hashCode() + peakType.hashCode() + modelDescription.hashCode() + Float.valueOf(sn).hashCode() + Integer.valueOf(startRetentionTime).hashCode() + Integer.valueOf(stopRetentionTime).hashCode() + Float.valueOf(purity).hashCode() + integratedTraces.hashCode();
 	}
 
 	@Override
 	public String toString() {
 
 		int size = 0;
-		if(integratedIons != null) {
-			size = integratedIons.size();
+		if(integratedTraces != null) {
+			size = integratedTraces.size();
 		}
 		StringBuilder builder = new StringBuilder();
 		builder.append(getClass().getName());
@@ -243,9 +242,8 @@ public abstract class AbstractPeakIntegrationResult implements IPeakIntegrationR
 		builder.append(",");
 		builder.append("integratedArea=" + integratedArea);
 		builder.append(",");
-		builder.append("integratedIons=" + size);
+		builder.append("integratedTraces=" + size);
 		builder.append("]");
 		return builder.toString();
 	}
-	// ----------------------------------------hashCode, equals, toString
 }

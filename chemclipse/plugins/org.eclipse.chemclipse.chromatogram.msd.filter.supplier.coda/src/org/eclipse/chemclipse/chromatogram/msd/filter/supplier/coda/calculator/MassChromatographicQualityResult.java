@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2021 Lablicate GmbH.
+ * Copyright (c) 2011, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.coda.exceptions.CodaCalculatorException;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
@@ -46,7 +47,7 @@ public class MassChromatographicQualityResult implements IMassChromatographicQua
 		/*
 		 * Create a new excluded ions object.
 		 */
-		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+		excludedIons = new MarkedIons(MarkedTraceModus.INCLUDE);
 		calculateMassChromatographicQuality(chromatogramSelection, codaThreshold, windowSize, excludedIons);
 	}
 

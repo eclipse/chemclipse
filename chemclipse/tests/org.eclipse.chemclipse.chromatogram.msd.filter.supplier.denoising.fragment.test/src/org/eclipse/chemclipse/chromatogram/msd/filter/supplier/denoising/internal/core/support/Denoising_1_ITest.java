@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2019 Lablicate GmbH.
+ * Copyright (c) 2010, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.intern
 
 import java.util.List;
 
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
@@ -29,13 +30,13 @@ public class Denoising_1_ITest extends ChromatogramImporterTestCase {
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		ionsToRemove = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+		ionsToRemove = new MarkedIons(MarkedTraceModus.INCLUDE);
 		ionsToRemove.add(new MarkedIon(18));
 		ionsToRemove.add(new MarkedIon(28));
 		ionsToRemove.add(new MarkedIon(32));
 		ionsToRemove.add(new MarkedIon(84));
 		ionsToRemove.add(new MarkedIon(207));
-		ionsToPreserve = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+		ionsToPreserve = new MarkedIons(MarkedTraceModus.INCLUDE);
 		ionsToPreserve.add(new MarkedIon(103));
 		ionsToPreserve.add(new MarkedIon(103));
 		noiseMassSpectra = Denoising.applyDenoisingFilter(chromatogramSelection, ionsToRemove, ionsToPreserve, true, 1, 13, new NullProgressMonitor());

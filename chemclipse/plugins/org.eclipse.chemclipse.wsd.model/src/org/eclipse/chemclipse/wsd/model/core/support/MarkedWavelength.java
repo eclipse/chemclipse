@@ -11,85 +11,23 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.model.core.support;
 
-public class MarkedWavelength implements IMarkedWavelength {
+import org.eclipse.chemclipse.model.core.AbstractMarkedTrace;
 
-	private double wavelength;
-	private int magnification;
+public class MarkedWavelength extends AbstractMarkedTrace implements IMarkedWavelength {
 
-	/**
-	 * Adds the wavelength with magnification 1.
-	 * 
-	 * @param ion
-	 */
-	public MarkedWavelength(double wavelength) {
-		this(wavelength, 1);
+	public MarkedWavelength(double trace, int magnification) {
+
+		super(trace, magnification);
 	}
 
-	public MarkedWavelength(double wavelength, int magnification) {
-		setWavelength(wavelength);
-		setMagnification(magnification);
+	public MarkedWavelength(double trace) {
+
+		super(trace);
 	}
 
 	@Override
-	public double getWavelength() {
+	public int castTrace() {
 
-		return wavelength;
+		return (int)Math.round(getTrace());
 	}
-
-	@Override
-	public void setWavelength(double wavelength) {
-
-		this.wavelength = wavelength;
-	}
-
-	@Override
-	public int getMagnification() {
-
-		return magnification;
-	}
-
-	@Override
-	public void setMagnification(int magnification) {
-
-		this.magnification = magnification;
-	}
-
-	// -----------------------------equals, hashCode, toString
-	@Override
-	public boolean equals(Object otherObject) {
-
-		if(this == otherObject) {
-			return true;
-		}
-		if(otherObject == null) {
-			return false;
-		}
-		if(getClass() != otherObject.getClass()) {
-			return false;
-		}
-		MarkedWavelength other = (MarkedWavelength)otherObject;
-		return wavelength == other.getWavelength() && //
-				magnification == other.getMagnification();
-	}
-
-	@Override
-	public int hashCode() {
-
-		return 7 * Double.valueOf(wavelength).hashCode() + //
-				11 * Integer.valueOf(magnification).hashCode();
-	}
-
-	@Override
-	public String toString() {
-
-		StringBuilder builder = new StringBuilder();
-		builder.append(getClass().getName());
-		builder.append("[");
-		builder.append("wavelength=" + wavelength);
-		builder.append(",");
-		builder.append("magnification=" + magnification);
-		builder.append("]");
-		return builder.toString();
-	}
-	// -----------------------------equals, hashCode, toString
 }

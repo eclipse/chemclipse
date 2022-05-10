@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,8 +12,9 @@
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks;
 
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.IIntegrationSettings;
+import org.eclipse.chemclipse.model.core.IMarkedTrace;
+import org.eclipse.chemclipse.model.core.IMarkedTraces;
 import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 
 public interface IPeakIntegrationSettings extends IIntegrationSettings {
 
@@ -33,15 +34,13 @@ public interface IPeakIntegrationSettings extends IIntegrationSettings {
 	void removeReportDecider(IReportDecider reportDecider);
 
 	/**
-	 * Returns the selected ions.<br/>
-	 * If the list is empty or a signal IIon.TIC_Ion is stored the TIC
-	 * (total ion chromatogram will be integrated).<br/>
-	 * If the IIon.TIC_Ion is stored, the TIC signal will be integrated,
-	 * independently if there are other ions stored.
+	 * Selected traces. It could be either m/z or wavelengths.
+	 * If the traces are null, empty or ISignal.TOTAL_INTENSITY is stored,
+	 * then use all available signals.
 	 * 
-	 * @return {@link IMarkedIons}
+	 * @return {@link IMarkedTraces}
 	 */
-	IMarkedIons getSelectedIons();
+	IMarkedTraces<IMarkedTrace> getMarkedTraces();
 
 	/**
 	 * Returns an IAreaSupport instance.<br/>

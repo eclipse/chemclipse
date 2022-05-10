@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2019 Lablicate GmbH.
+ * Copyright (c) 2014, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.chromatogram.filter.settings.IPeakFilterSettings;
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.peak.AbstractPeakFilter;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.PeakFilterSettings;
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
@@ -29,7 +30,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
-import org.eclipse.chemclipse.support.util.IonSettingUtil;
+import org.eclipse.chemclipse.support.util.TraceSettingUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakFilter extends AbstractPeakFilter {
@@ -46,8 +47,8 @@ public class PeakFilter extends AbstractPeakFilter {
 		} else {
 			peakFilterSettings = PreferenceSupplier.getPeakFilterSettings();
 		}
-		IonSettingUtil settingIon = new IonSettingUtil();
-		IMarkedIons ionsToRemove = new MarkedIons(settingIon.extractIons(settingIon.deserialize(peakFilterSettings.getIonsToRemove())), IMarkedIons.IonMarkMode.INCLUDE);
+		TraceSettingUtil settingIon = new TraceSettingUtil();
+		IMarkedIons ionsToRemove = new MarkedIons(settingIon.extractTraces(settingIon.deserialize(peakFilterSettings.getIonsToRemove())), MarkedTraceModus.INCLUDE);
 		for(IPeakMSD peak : peaks) {
 			peak.getTargets().clear();
 			IPeakMassSpectrum peakMassSpectrum = peak.getPeakModel().getPeakMassSpectrum();

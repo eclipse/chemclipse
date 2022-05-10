@@ -118,7 +118,7 @@ public abstract class AbstractMarkedWavelengths implements IMarkedWavelengths {
 
 		Set<Double> wavelengths = new HashSet<>();
 		for(IMarkedWavelength markedWavelength : markedWavelengths) {
-			wavelengths.add(markedWavelength.getWavelength());
+			wavelengths.add(markedWavelength.getTrace());
 		}
 		return wavelengths;
 	}
@@ -148,8 +148,19 @@ public abstract class AbstractMarkedWavelengths implements IMarkedWavelengths {
 	@Override
 	public void add(Collection<? extends Number> wavelenghts) {
 
-		for(Number wavelenght : wavelenghts) {
-			markedWavelengths.add(new MarkedWavelength(wavelenght.doubleValue()));
+		for(Number wavelength : wavelenghts) {
+			markedWavelengths.add(new MarkedWavelength(wavelength.doubleValue()));
 		}
+	}
+
+	@Override
+	public Set<Integer> getTraces() {
+
+		Set<Integer> traces = new HashSet<Integer>();
+		for(IMarkedWavelength markedWavelength : markedWavelengths) {
+			traces.add(markedWavelength.castTrace());
+		}
+		//
+		return traces;
 	}
 }

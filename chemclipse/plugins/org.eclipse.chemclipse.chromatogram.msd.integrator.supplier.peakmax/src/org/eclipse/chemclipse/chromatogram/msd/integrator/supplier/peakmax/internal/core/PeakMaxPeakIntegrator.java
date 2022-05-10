@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2021 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -27,6 +27,8 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.PeakIntegration
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.PeakIntegrationResults;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
+import org.eclipse.chemclipse.model.core.IMarkedTrace;
+import org.eclipse.chemclipse.model.core.IMarkedTraces;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -36,7 +38,6 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IIonPercentages;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.IonPercentages;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -51,7 +52,7 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 		ISettingStatus settingStatus;
 		PeakIntegrationResult result = null;
 		IBaselineSupport baselineSupport = peakIntegrationSettings.getBaselineSupport();
-		List<IIntegrationEntry> integrationEntries = calculateIntegratedArea(peak, baselineSupport, peakIntegrationSettings.getSelectedIons());
+		List<IIntegrationEntry> integrationEntries = calculateIntegratedArea(peak, baselineSupport, peakIntegrationSettings.getMarkedTraces());
 		peak.setIntegratedArea(integrationEntries, IPeakMaxPeakIntegrator.INTEGRATOR_DESCRIPTION);
 		/*
 		 * Get the peak area if the peak should be reported.
@@ -176,7 +177,7 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 	 * 
 	 * @return List<IIntegrationEntry>
 	 */
-	private List<IIntegrationEntry> calculateIntegratedArea(IPeak peak, IBaselineSupport baselineSupport, IMarkedIons selectedIons) {
+	private List<IIntegrationEntry> calculateIntegratedArea(IPeak peak, IBaselineSupport baselineSupport, IMarkedTraces<IMarkedTrace> markedTraces) {
 
 		List<IIntegrationEntry> integrationEntries = new ArrayList<IIntegrationEntry>();
 		IIntegrationEntry integrationEntry;
@@ -184,7 +185,7 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 		IPeakModel peakModel = peak.getPeakModel();
 		IScan scan = peakModel.getPeakMaximum();
 		double integratedAreaTIC = calculateTICPeakArea(peak, baselineSupport);
-		Set<Integer> selectedIonsNominal = selectedIons.getIonsNominal();
+		Set<Integer> selectedIonsNominal = markedTraces.getTraces();
 		/*
 		 * Use the selected ions if:<br/> the size is greater 0
 		 * (means, ions have been selected)<br/> and<br/> the selected
@@ -243,7 +244,7 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 		/*
 		 * Selected ions.
 		 */
-		IMarkedIons selectedIons = peakIntegrationSettings.getSelectedIons();
+		IMarkedTraces<IMarkedTrace> selectedIons = peakIntegrationSettings.getMarkedTraces();
 		Set<Integer> integratedIons = getIntegratedIons(selectedIons);
 		PeakIntegrationResult result = new PeakIntegrationResult();
 		result.setIntegratedArea(integratedArea);
@@ -273,7 +274,7 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 		result.setStopRetentionTime(peak.getPeakModel().getStopRetentionTime());
 		result.setTailing(peak.getPeakModel().getTailing());
 		result.setWidth(peak.getPeakModel().getWidthByInflectionPoints());
-		result.addIntegratedIons(integratedIons);
+		result.addIntegratedTraces(integratedIons);
 		return result;
 	}
 
@@ -307,16 +308,16 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 	/**
 	 * Returns a list of the integrated ions.
 	 * 
-	 * @param selectedIons
+	 * @param markedTraces
 	 * @return List<Integer>
 	 */
-	private Set<Integer> getIntegratedIons(IMarkedIons selectedIons) {
+	private Set<Integer> getIntegratedIons(IMarkedTraces<IMarkedTrace> markedTraces) {
 
 		Set<Integer> result;
-		if(selectedIons == null) {
+		if(markedTraces == null) {
 			result = new HashSet<Integer>();
 		} else {
-			result = selectedIons.getIonsNominal();
+			result = markedTraces.getTraces();
 		}
 		return result;
 	}

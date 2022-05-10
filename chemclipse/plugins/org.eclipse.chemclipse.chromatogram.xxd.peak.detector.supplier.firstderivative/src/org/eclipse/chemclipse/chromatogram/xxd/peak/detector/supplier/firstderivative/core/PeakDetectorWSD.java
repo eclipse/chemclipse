@@ -225,7 +225,7 @@ public class PeakDetectorWSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 				 * false: BV or VB
 				 * true: VV
 				 */
-				peak = PeakBuilderWSD.createPeak(chromatogram, scanRange, includeBackground, traces, wavelengths.getMode());
+				peak = PeakBuilderWSD.createPeak(chromatogram, scanRange, includeBackground, traces, wavelengths.getMarkedTraceModus());
 				if(isValidPeak(peak)) {
 					/*
 					 * Add the detector description.

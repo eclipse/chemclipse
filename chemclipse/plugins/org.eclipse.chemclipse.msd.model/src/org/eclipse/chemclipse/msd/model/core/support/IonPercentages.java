@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,14 +19,10 @@ import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 
-/**
- * @author eselmeister
- */
 public class IonPercentages implements IIonPercentages {
 
 	private IScanMSD massSpectrum;
-	private SortedMap<Integer, Float> ionDistribution; // ion -
-														// percentage
+	private SortedMap<Integer, Float> ionDistribution;
 
 	/**
 	 * Given by the mass spectrum, a new ion distribution will be
@@ -35,12 +31,12 @@ public class IonPercentages implements IIonPercentages {
 	 * @param massSpectrum
 	 */
 	public IonPercentages(IScanMSD massSpectrum) {
+
 		this.massSpectrum = massSpectrum;
 		ionDistribution = new TreeMap<Integer, Float>();
 		setIonDistribution();
 	}
 
-	// --------------------------------------IIonPercentageDistribution
 	@Override
 	public IScanMSD getMassSpectrum() {
 
@@ -73,8 +69,6 @@ public class IonPercentages implements IIonPercentages {
 		return result;
 	}
 
-	// --------------------------------------IIonPercentageDistribution
-	// --------------------------------------private methods
 	/**
 	 * Calculates a ion percentage distribution.
 	 */
@@ -114,5 +108,4 @@ public class IonPercentages implements IIonPercentages {
 		}
 		return result;
 	}
-	// --------------------------------------private methods
 }

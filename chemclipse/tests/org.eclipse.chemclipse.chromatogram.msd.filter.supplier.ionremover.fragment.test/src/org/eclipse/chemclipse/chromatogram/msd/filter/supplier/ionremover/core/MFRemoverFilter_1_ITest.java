@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,10 +13,11 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.core;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.core.chromatogram.IChromatogramFilterMSD;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings.ChromatogramFilterSettings;
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
-import org.eclipse.chemclipse.support.util.IonSettingUtil;
+import org.eclipse.chemclipse.support.util.TraceSettingUtil;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
 public class MFRemoverFilter_1_ITest extends ChromatogramImporterTestCase {
@@ -31,8 +32,8 @@ public class MFRemoverFilter_1_ITest extends ChromatogramImporterTestCase {
 		super.setUp();
 		chromatogramFilter = new ChromatogramFilter();
 		chromatogramFilterSettings = new ChromatogramFilterSettings();
-		IonSettingUtil settingIon = new IonSettingUtil();
-		excludedIons = new MarkedIons(settingIon.extractIons(settingIon.deserialize(chromatogramFilterSettings.getIonsToRemove())), IMarkedIons.IonMarkMode.INCLUDE);
+		TraceSettingUtil settingIon = new TraceSettingUtil();
+		excludedIons = new MarkedIons(settingIon.extractTraces(settingIon.deserialize(chromatogramFilterSettings.getIonsToRemove())), MarkedTraceModus.INCLUDE);
 		excludedIons.add(new MarkedIon(28));
 		excludedIons.add(new MarkedIon(32));
 		excludedIons.add(new MarkedIon(207));

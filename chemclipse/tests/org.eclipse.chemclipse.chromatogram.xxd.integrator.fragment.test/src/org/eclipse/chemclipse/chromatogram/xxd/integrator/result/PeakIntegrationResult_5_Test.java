@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -25,10 +25,10 @@ public class PeakIntegrationResult_5_Test extends TestCase {
 		super.setUp();
 		result = new PeakIntegrationResult();
 		result.setIntegratedArea(500325.0d);
-		result.addIntegratedIon(55);
-		result.addIntegratedIon(73);
-		result.addIntegratedIon(34);
-		result.addIntegratedIon(48);
+		result.addIntegratedTrace(55);
+		result.addIntegratedTrace(73);
+		result.addIntegratedTrace(34);
+		result.addIntegratedTrace(48);
 		result.setIntegratorType("FirstDerivative");
 		result.setModelDescription("TIC");
 		result.setPeakType("VV");
@@ -53,7 +53,7 @@ public class PeakIntegrationResult_5_Test extends TestCase {
 
 	public void testGetIntegratedIons_1() {
 
-		Set<Integer> ions = result.getIntegratedIons();
+		Set<Integer> ions = result.getIntegratedTraces();
 		assertEquals(4, ions.size());
 		assertTrue(ions.contains(55));
 		assertTrue(ions.contains(73));

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.implementation;
 
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
@@ -50,7 +51,7 @@ public class Chromatogram_16_Test extends TestCase {
 			chromatogram.addScan(supplierMassSpectrum);
 		}
 		// ------------------------------Scan 1-100
-		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+		excludedIons = new MarkedIons(MarkedTraceModus.INCLUDE);
 		//
 		totalIonSignalExtractor = new TotalIonSignalExtractor(chromatogram);
 	}

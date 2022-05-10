@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -26,12 +26,12 @@ import org.eclipse.chemclipse.chromatogram.peak.detector.core.FilterMode;
 import org.eclipse.chemclipse.chromatogram.peak.detector.model.Threshold;
 import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.settings.AbstractPeakDetectorWSDSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty.Validation;
 import org.eclipse.chemclipse.support.settings.serialization.WindowSizeDeserializer;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelength;
-import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelength.WavelengthMarkMode;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
 import org.eclipse.chemclipse.wsd.model.core.support.MarkedWavelength;
 import org.eclipse.chemclipse.wsd.model.core.support.MarkedWavelengths;
@@ -166,13 +166,13 @@ public class PeakDetectorSettingsWSD extends AbstractPeakDetectorWSDSettings {
 	@JsonIgnore
 	public Collection<IMarkedWavelengths> getFilterWavelengths() {
 
-		WavelengthMarkMode wavelengthMarkMode;
+		MarkedTraceModus markedTraceModus;
 		switch(getFilterMode()) {
 			case EXCLUDE:
-				wavelengthMarkMode = WavelengthMarkMode.INCLUDE;
+				markedTraceModus = MarkedTraceModus.INCLUDE;
 				break;
 			case INCLUDE:
-				wavelengthMarkMode = WavelengthMarkMode.EXCLUDE;
+				markedTraceModus = MarkedTraceModus.EXCLUDE;
 				break;
 			default:
 				throw new IllegalArgumentException("Unsupported filter mode " + getFilterMode());
@@ -181,13 +181,13 @@ public class PeakDetectorSettingsWSD extends AbstractPeakDetectorWSDSettings {
 		if(isIndividualWavelengths()) {
 			List<IMarkedWavelengths> listedWavelengths = new ArrayList<>();
 			for(IMarkedWavelength wavelength : parsedWavelengths) {
-				IMarkedWavelengths markedWavelengths = new MarkedWavelengths(wavelengthMarkMode);
+				IMarkedWavelengths markedWavelengths = new MarkedWavelengths(markedTraceModus);
 				markedWavelengths.add(wavelength);
 				listedWavelengths.add(markedWavelengths);
 			}
 			return listedWavelengths;
 		} else {
-			IMarkedWavelengths markedWavelengths = new MarkedWavelengths(wavelengthMarkMode);
+			IMarkedWavelengths markedWavelengths = new MarkedWavelengths(markedTraceModus);
 			markedWavelengths.addAll(parsedWavelengths);
 			return Collections.singleton(markedWavelengths);
 		}

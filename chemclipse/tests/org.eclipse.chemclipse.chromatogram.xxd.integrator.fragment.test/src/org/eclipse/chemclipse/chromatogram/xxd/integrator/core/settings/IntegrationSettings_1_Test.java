@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,11 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings;
 
+import org.easymock.EasyMock;
+import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
-import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
-
-import org.easymock.EasyMock;
 
 import junit.framework.TestCase;
 
@@ -55,7 +54,7 @@ public class IntegrationSettings_1_Test extends TestCase {
 
 	public void testGetSelectedIons_1() {
 
-		assertNotNull(settings.getSelectedIons());
+		assertNotNull(settings.getMarkedTraces());
 	}
 
 	public void testGetSettingStatus_1() {

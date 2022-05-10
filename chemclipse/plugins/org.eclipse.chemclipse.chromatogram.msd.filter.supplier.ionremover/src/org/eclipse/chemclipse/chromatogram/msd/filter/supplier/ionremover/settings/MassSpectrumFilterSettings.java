@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2021 Lablicate GmbH.
+ * Copyright (c) 2014, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,8 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.ionremover.settings;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.settings.AbstractMassSpectrumFilterSettings;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons.IonMarkMode;
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -27,7 +26,7 @@ public class MassSpectrumFilterSettings extends AbstractMassSpectrumFilterSettin
 	private String ionsToRemove = "18 28 84 207";
 	@JsonProperty(value = "Mode", defaultValue = "INCLUDE")
 	@JsonPropertyDescription(value = "Gives the mode to use (include = remove all ions given in the list, exclude = remove all ions not in the list)")
-	private IMarkedIons.IonMarkMode markMode = IonMarkMode.INCLUDE;
+	private MarkedTraceModus markMode = MarkedTraceModus.INCLUDE;
 
 	public String getIonsToRemove() {
 
@@ -39,12 +38,12 @@ public class MassSpectrumFilterSettings extends AbstractMassSpectrumFilterSettin
 		this.ionsToRemove = ionsToRemove;
 	}
 
-	public IMarkedIons.IonMarkMode getMarkMode() {
+	public MarkedTraceModus getMarkMode() {
 
 		return markMode;
 	}
 
-	public void setMarkMode(IMarkedIons.IonMarkMode markMode) {
+	public void setMarkMode(MarkedTraceModus markMode) {
 
 		this.markMode = markMode;
 	}

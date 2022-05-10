@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2019 Lablicate GmbH.
+ * Copyright (c) 2010, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -11,9 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.settings;
 
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
-import org.eclipse.chemclipse.support.util.IonSettingUtil;
+import org.eclipse.chemclipse.support.util.TraceSettingUtil;
 
 import junit.framework.TestCase;
 
@@ -42,8 +42,8 @@ public class DenoisingFilterSettings_1_Test extends TestCase {
 
 	public void testGetIonsToRemove_2() {
 
-		IonSettingUtil settingIon = new IonSettingUtil();
-		assertEquals("IonsToRemove Size", 4, new MarkedIons(settingIon.extractIons(settingIon.deserialize(settings.getIonsToRemove())), IMarkedIons.IonMarkMode.INCLUDE).getIonsNominal().size());
+		TraceSettingUtil settingIon = new TraceSettingUtil();
+		assertEquals("IonsToRemove Size", 4, new MarkedIons(settingIon.extractTraces(settingIon.deserialize(settings.getIonsToRemove())), MarkedTraceModus.INCLUDE).getIonsNominal().size());
 	}
 
 	public void testGetIonsToPreserve_1() {
@@ -53,8 +53,8 @@ public class DenoisingFilterSettings_1_Test extends TestCase {
 
 	public void testGetIonsToPreserve_2() {
 
-		IonSettingUtil settingIon = new IonSettingUtil();
-		assertEquals("IonsToPreserve Size", 2, new MarkedIons(settingIon.extractIons(settingIon.deserialize(settings.getIonsToPreserve())), IMarkedIons.IonMarkMode.INCLUDE).getIonsNominal().size());
+		TraceSettingUtil settingIon = new TraceSettingUtil();
+		assertEquals("IonsToPreserve Size", 2, new MarkedIons(settingIon.extractTraces(settingIon.deserialize(settings.getIonsToPreserve())), MarkedTraceModus.INCLUDE).getIonsNominal().size());
 	}
 
 	public void testGetAdjustThresholdTransitions_1() {

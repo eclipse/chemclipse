@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,21 +7,11 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.support;
 
-import org.eclipse.chemclipse.model.core.IMarkedSignal;
+import org.eclipse.chemclipse.model.core.IMarkedTrace;
 
-public interface IMarkedIon extends IMarkedSignal {
-
-	double TOTAL_ION_SIGNAL = 0d;
-
-	double getIon();
-
-	void setIon(double ion);
-
-	int getMagnification();
-
-	void setMagnification(int magnification);
+public interface IMarkedIon extends IMarkedTrace {
 }

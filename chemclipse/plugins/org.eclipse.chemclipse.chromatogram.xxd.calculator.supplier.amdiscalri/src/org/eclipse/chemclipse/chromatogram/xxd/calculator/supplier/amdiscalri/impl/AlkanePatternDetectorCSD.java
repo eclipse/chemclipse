@@ -73,7 +73,7 @@ public class AlkanePatternDetectorCSD {
 				IIntegrationSupport integrationSupport = peakIntegratorSettings.getIntegrationSupport();
 				integrationSupport.setMinimumPeakWidth(0);
 				integrationSupport.setMinimumSignalToNoiseRatio(0);
-				peakIntegratorSettings.getSelectedIons().clear();
+				peakIntegratorSettings.getMarkedTraces().clear();
 				peakIntegrator.integrate(chromatogramSelectionCSD, monitor);
 			}
 			/*

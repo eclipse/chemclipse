@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,11 +7,16 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Philip Wenig - initial API and implementation
+ * Jan Holy - initial API and implementation
+ * Philip Wenig - formatting
  *******************************************************************************/
-package org.eclipse.chemclipse.wsd.model.core.support;
+package org.eclipse.chemclipse.model.core;
 
-import org.eclipse.chemclipse.model.core.IMarkedTrace;
+import java.util.Set;
 
-public interface IMarkedWavelength extends IMarkedTrace {
+public interface IMarkedTraces<S extends IMarkedTrace> extends Set<S> {
+
+	MarkedTraceModus getMarkedTraceModus();
+
+	Set<Integer> getTraces();
 }

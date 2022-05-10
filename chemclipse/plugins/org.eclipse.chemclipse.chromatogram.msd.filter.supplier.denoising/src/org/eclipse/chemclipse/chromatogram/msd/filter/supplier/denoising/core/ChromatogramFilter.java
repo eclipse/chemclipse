@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.prefere
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.result.DenoisingFilterResult;
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.settings.FilterSettings;
 import org.eclipse.chemclipse.model.core.IMeasurementResult;
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.model.implementation.MeasurementResult;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
@@ -30,7 +31,7 @@ import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.msd.model.exceptions.FilterException;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
-import org.eclipse.chemclipse.support.util.IonSettingUtil;
+import org.eclipse.chemclipse.support.util.TraceSettingUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
@@ -45,9 +46,9 @@ public class ChromatogramFilter extends AbstractChromatogramFilterMSD {
 			if(chromatogramFilterSettings instanceof FilterSettings) {
 				try {
 					FilterSettings filterSettings = (FilterSettings)chromatogramFilterSettings;
-					IonSettingUtil ionSettingsUtil = new IonSettingUtil();
-					IMarkedIons ionsToRemove = new MarkedIons(ionSettingsUtil.extractIons(ionSettingsUtil.deserialize(filterSettings.getIonsToRemove())), IMarkedIons.IonMarkMode.INCLUDE);
-					IMarkedIons ionsToPreserve = new MarkedIons(ionSettingsUtil.extractIons(ionSettingsUtil.deserialize(filterSettings.getIonsToPreserve())), IMarkedIons.IonMarkMode.INCLUDE);
+					TraceSettingUtil ionSettingsUtil = new TraceSettingUtil();
+					IMarkedIons ionsToRemove = new MarkedIons(ionSettingsUtil.extractTraces(ionSettingsUtil.deserialize(filterSettings.getIonsToRemove())), MarkedTraceModus.INCLUDE);
+					IMarkedIons ionsToPreserve = new MarkedIons(ionSettingsUtil.extractTraces(ionSettingsUtil.deserialize(filterSettings.getIonsToPreserve())), MarkedTraceModus.INCLUDE);
 					boolean adjustThresholdTransitions = filterSettings.isAdjustThresholdTransitions();
 					int numberOfUsedIonsForCoefficient = filterSettings.getNumberOfUsedIonsForCoefficient();
 					int segmentWidth = filterSettings.getSegmentWidth();

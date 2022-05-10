@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.msd.model.implementation;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
@@ -48,7 +49,7 @@ public class MassSpectrum_22_Test extends TestCase {
 		massSpectrum.addIon(ion);
 		ion = new Ion(28.2f, 33000.5f);
 		massSpectrum.addIon(ion);
-		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+		excludedIons = new MarkedIons(MarkedTraceModus.INCLUDE);
 	}
 
 	@Override

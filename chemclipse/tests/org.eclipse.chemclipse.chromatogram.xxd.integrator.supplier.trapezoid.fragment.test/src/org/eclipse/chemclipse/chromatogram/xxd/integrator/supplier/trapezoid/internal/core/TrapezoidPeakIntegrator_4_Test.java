@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -105,7 +105,7 @@ public class TrapezoidPeakIntegrator_4_Test extends DefaultPeakTestCase {
 			results = integrator.integrate(peaks, peakIntegrationSettings, new NullProgressMonitor());
 			result = results.getPeakIntegrationResult(0);
 			assertEquals("Integrated Peak Area", 285326.9905462646d, result.getIntegratedArea());
-			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
+			assertTrue(result.getIntegratedTraces().containsAll(peakIntegrationSettings.getMarkedTraces().getTraces()));
 		} catch(ValueMustNotBeNullException e) {
 			assertTrue("ValueMustNotBeNullException", false);
 		}
@@ -119,7 +119,7 @@ public class TrapezoidPeakIntegrator_4_Test extends DefaultPeakTestCase {
 			results = integrator.integrate(peaks, peakIntegrationSettings, new NullProgressMonitor());
 			result = results.getPeakIntegrationResult(0);
 			assertEquals("Integrated Peak Area", 531480.5905462648d, result.getIntegratedArea());
-			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
+			assertTrue(result.getIntegratedTraces().containsAll(peakIntegrationSettings.getMarkedTraces().getTraces()));
 		} catch(ValueMustNotBeNullException e) {
 			assertTrue("ValueMustNotBeNullException", false);
 		}

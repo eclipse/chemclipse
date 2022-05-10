@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,10 +14,11 @@
 package org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.settings;
 
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.AbstractPeakIntegrationSettings;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
+import org.eclipse.chemclipse.model.core.IMarkedTrace;
+import org.eclipse.chemclipse.model.core.IMarkedTraces;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
-import org.eclipse.chemclipse.support.util.IonSettingUtil;
+import org.eclipse.chemclipse.support.util.TraceSettingUtil;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -38,23 +39,23 @@ public class PeakIntegrationSettings extends AbstractPeakIntegrationSettings {
 	 * empty, TIC will be integrated.
 	 */
 	@JsonIgnore
-	private IMarkedIons selectedIons = null;
+	private IMarkedTraces<IMarkedTrace> markedTraces = null;
 
 	@Override
-	public IMarkedIons getSelectedIons() {
+	public IMarkedTraces<IMarkedTrace> getMarkedTraces() {
 
-		if(selectedIons == null) {
-			selectedIons = super.getSelectedIons();
+		if(markedTraces == null) {
+			markedTraces = super.getMarkedTraces();
 			if(!ionsToIntegrate.equals(TIC)) {
-				IonSettingUtil ionSettingUtil = new IonSettingUtil();
-				int[] ions = ionSettingUtil.extractIons(ionSettingUtil.deserialize(ionsToIntegrate));
+				TraceSettingUtil ionSettingUtil = new TraceSettingUtil();
+				int[] ions = ionSettingUtil.extractTraces(ionSettingUtil.deserialize(ionsToIntegrate));
 				for(int ion : ions) {
-					selectedIons.add(new MarkedIon(ion));
+					markedTraces.add(new MarkedIon(ion));
 				}
 			}
 		}
 		//
-		return selectedIons;
+		return markedTraces;
 	}
 
 	public void setSelectedIon(String ionsToIntegrate) {

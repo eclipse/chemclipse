@@ -18,8 +18,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.eclipse.chemclipse.msd.model.core.AbstractIon;
-
 public abstract class AbstractMarkedIons implements IMarkedIons {
 
 	private Set<IMarkedIon> markedIons;
@@ -133,7 +131,7 @@ public abstract class AbstractMarkedIons implements IMarkedIons {
 
 		Set<Integer> nominalIons = new HashSet<Integer>();
 		for(IMarkedIon markedIon : markedIons) {
-			nominalIons.add(AbstractIon.getIon(markedIon.getIon()));
+			nominalIons.add(markedIon.castTrace());
 		}
 		return nominalIons;
 	}
@@ -165,5 +163,11 @@ public abstract class AbstractMarkedIons implements IMarkedIons {
 		for(int ion : ions) {
 			markedIons.add(new MarkedIon(ion));
 		}
+	}
+
+	@Override
+	public Set<Integer> getTraces() {
+
+		return getIonsNominal();
 	}
 }

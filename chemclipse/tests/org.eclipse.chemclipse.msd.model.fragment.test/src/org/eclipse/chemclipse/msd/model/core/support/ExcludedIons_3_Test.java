@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,13 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.support;
 
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 
 import junit.framework.TestCase;
 
-/**
- * @author eselmeister
- */
 public class ExcludedIons_3_Test extends TestCase {
 
 	private IMarkedIons excludedIons;
@@ -26,7 +24,7 @@ public class ExcludedIons_3_Test extends TestCase {
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+		excludedIons = new MarkedIons(MarkedTraceModus.INCLUDE);
 	}
 
 	@Override

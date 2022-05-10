@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2020 Lablicate GmbH.
+ * Copyright (c) 2011, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIn
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.result.IChromatogramIntegrationResults;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.implementation.IntegrationEntry;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -34,7 +35,7 @@ import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.msd.model.xic.ExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
-import org.eclipse.chemclipse.support.util.IonSettingUtil;
+import org.eclipse.chemclipse.support.util.TraceSettingUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class ChromatogramIntegratorSupport {
@@ -135,7 +136,7 @@ public class ChromatogramIntegratorSupport {
 	private IMarkedIons getSelectedIons(ChromatogramIntegrationSettings chromatogramIntegrationSettings) {
 
 		String ions = chromatogramIntegrationSettings.getSelectedIons();
-		IonSettingUtil ionSettingUtil = new IonSettingUtil();
-		return new MarkedIons(ionSettingUtil.extractIons(ionSettingUtil.deserialize(ions)), IMarkedIons.IonMarkMode.INCLUDE);
+		TraceSettingUtil ionSettingUtil = new TraceSettingUtil();
+		return new MarkedIons(ionSettingUtil.extractTraces(ionSettingUtil.deserialize(ions)), MarkedTraceModus.INCLUDE);
 	}
 }

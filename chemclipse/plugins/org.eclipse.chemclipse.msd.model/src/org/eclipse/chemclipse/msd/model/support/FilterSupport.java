@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2020 Lablicate GmbH.
+ * Copyright (c) 2013, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.support;
 
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -134,7 +135,7 @@ public class FilterSupport {
 		 * Test excludedIons.<br/> If null create a new instance.
 		 */
 		if(excludedIons == null) {
-			excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+			excludedIons = new MarkedIons(MarkedTraceModus.INCLUDE);
 		}
 		return excludedIons;
 	}

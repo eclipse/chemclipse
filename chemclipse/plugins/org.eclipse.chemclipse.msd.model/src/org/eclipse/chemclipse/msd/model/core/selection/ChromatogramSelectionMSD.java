@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.notifier.UpdateNotifier;
 import org.eclipse.chemclipse.model.selection.AbstractChromatogramSelection;
@@ -55,8 +56,8 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChr
 		/*
 		 * Create instances of selected and excluded ions.
 		 */
-		selectedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
-		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+		selectedIons = new MarkedIons(MarkedTraceModus.INCLUDE);
+		excludedIons = new MarkedIons(MarkedTraceModus.INCLUDE);
 		/*
 		 * Marked ion transitions.
 		 */

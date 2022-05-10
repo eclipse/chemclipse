@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -32,23 +32,27 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.support.SegmentAreaCal
 import org.eclipse.chemclipse.csd.model.core.IChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
+import org.eclipse.chemclipse.model.core.IMarkedTrace;
+import org.eclipse.chemclipse.model.core.IMarkedTraces;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.model.implementation.IntegrationEntry;
 import org.eclipse.chemclipse.model.support.IntegrationConstraint;
-import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
-import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IIonPercentages;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.IonPercentages;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
+import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
+import org.eclipse.chemclipse.wsd.model.core.IPeakModelWSD;
 import org.eclipse.chemclipse.wsd.model.core.IPeakWSD;
+import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
+import org.eclipse.chemclipse.wsd.model.core.support.WavelengthPercentages;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
@@ -84,7 +88,7 @@ public class PeakIntegrator {
 		PeakIntegrationResult result = null;
 		IBaselineSupport baselineSupport = peakIntegrationSettings.getBaselineSupport();
 		//
-		List<? extends IIntegrationEntry> integrationEntries = calculateIntegratedArea(peak, baselineSupport, peakIntegrationSettings.getSelectedIons(), includeBackground);
+		List<? extends IIntegrationEntry> integrationEntries = calculateIntegratedArea(peak, baselineSupport, peakIntegrationSettings.getMarkedTraces(), includeBackground);
 		peak.setIntegratedArea(integrationEntries, INTEGRATOR_DESCRIPTION);
 		/*
 		 * Get the peak area if the peak should be reported.
@@ -94,6 +98,7 @@ public class PeakIntegrator {
 			double integratedArea = calculateIntegratedArea(integrationEntries);
 			result = getPeakIntegrationResult(peak, integratedArea, peakIntegrationSettings);
 		}
+		//
 		return result;
 	}
 
@@ -232,7 +237,7 @@ public class PeakIntegrator {
 	 * 
 	 * @return List<IIntegrationEntry>
 	 */
-	private List<IIntegrationEntry> calculateIntegratedArea(IPeak peak, IBaselineSupport baselineSupport, IMarkedIons selectedIons, boolean includeBackground) {
+	private List<IIntegrationEntry> calculateIntegratedArea(IPeak peak, IBaselineSupport baselineSupport, IMarkedTraces<IMarkedTrace> markedTraces, boolean includeBackground) {
 
 		List<IIntegrationEntry> integrationEntries = new ArrayList<IIntegrationEntry>();
 		if(peak instanceof IPeakMSD) {
@@ -243,15 +248,10 @@ public class PeakIntegrator {
 			IPeakModelMSD peakModel = peakMSD.getPeakModel();
 			IPeakMassSpectrum massSpectrum = peakModel.getPeakMassSpectrum();
 			double integratedAreaTIC = calculateTICPeakArea(peak, baselineSupport, includeBackground);
-			/*
-			 * Use the selected ions if:<br/> the size is greater 0
-			 * (means, ions have been selected)<br/> and<br/> the selected
-			 * ions does not contain IIon.TIC_Ion, which means,
-			 * the TIC signal should be integrated.
-			 */
+			//
 			IIntegrationEntry integrationEntry;
-			if(selectedIons.size() > 0 && !selectedIons.getIonsNominal().contains(AbstractIon.getIon(IIon.TIC_ION))) {
-				Set<Integer> ions = selectedIons.getIonsNominal();
+			if(markedTraces.size() > 0 && !markedTraces.getTraces().contains(IMarkedTrace.TOTAL_SIGNAL_AS_INT)) {
+				Set<Integer> ions = markedTraces.getTraces();
 				IIonPercentages ionPercentages = new IonPercentages(massSpectrum);
 				/*
 				 * Calculate the percentage integrated area for each selected ion.
@@ -266,7 +266,6 @@ public class PeakIntegrator {
 				integrationEntry = new IntegrationEntry(ISignal.TOTAL_INTENSITY, integratedAreaTIC);
 				integrationEntries.add(integrationEntry);
 			}
-			//
 		} else if(peak instanceof IPeakCSD) {
 			/*
 			 * FID
@@ -278,9 +277,33 @@ public class PeakIntegrator {
 			/*
 			 * WSD
 			 */
+			IPeakWSD peakWSD = (IPeakWSD)peak;
+			IPeakModelWSD peakModel = peakWSD.getPeakModel();
 			double integratedAreaTIC = calculateTICPeakArea(peak, baselineSupport, includeBackground);
-			IIntegrationEntry integrationEntry = new IntegrationEntry(integratedAreaTIC);
-			integrationEntries.add(integrationEntry);
+			//
+			IScanWSD scanWSD = null;
+			IScan scan = peakModel.getPeakMaximum();
+			if(scan instanceof IScanWSD) {
+				scanWSD = (IScanWSD)scan;
+			}
+			//
+			IIntegrationEntry integrationEntry;
+			if(scanWSD != null && markedTraces.size() > 0 && !markedTraces.getTraces().contains(IMarkedTrace.TOTAL_SIGNAL_AS_INT)) {
+				Set<Integer> wavelengths = markedTraces.getTraces();
+				WavelengthPercentages wavelengthPercentages = new WavelengthPercentages(scanWSD);
+				/*
+				 * Calculate the percentage integrated area for each selected ion.
+				 */
+				for(Integer wavelength : wavelengths) {
+					float correctionFactor = wavelengthPercentages.getPercentage(wavelength) / WavelengthPercentages.MAX_PERCENTAGE;
+					double integratedArea = integratedAreaTIC * correctionFactor;
+					integrationEntry = new IntegrationEntry(wavelength, integratedArea);
+					integrationEntries.add(integrationEntry);
+				}
+			} else {
+				integrationEntry = new IntegrationEntry(ISignal.TOTAL_INTENSITY, integratedAreaTIC);
+				integrationEntries.add(integrationEntry);
+			}
 		}
 		//
 		return integrationEntries;
@@ -467,15 +490,14 @@ public class PeakIntegrator {
 		/*
 		 * Selected ions.
 		 */
-		IMarkedIons selectedIons = peakIntegrationSettings.getSelectedIons();
-		Set<Integer> integratedIons = getIntegratedIons(selectedIons);
+		IMarkedTraces<IMarkedTrace> markedTraces = peakIntegrationSettings.getMarkedTraces();
+		Set<Integer> markedTraceSet = getMarkedTraceSet(markedTraces);
 		PeakIntegrationResult result = new PeakIntegrationResult();
 		result.setIntegratedArea(integratedArea);
 		result.setIntegratorType(INTEGRATOR_DESCRIPTION);
 		result.setPeakType(peak.getPeakType().toString());
 		/*
 		 * Chromatogram Peak
-		 * TODO optimize
 		 */
 		if(peak instanceof IChromatogramPeakMSD) {
 			IChromatogramPeakMSD chromatogramPeak = (IChromatogramPeakMSD)peak;
@@ -484,9 +506,12 @@ public class PeakIntegrator {
 		} else if(peak instanceof IChromatogramPeakCSD) {
 			IChromatogramPeakCSD chromatogramPeak = (IChromatogramPeakCSD)peak;
 			result.setSN(chromatogramPeak.getSignalToNoiseRatio());
+		} else if(peak instanceof IChromatogramPeakWSD) {
+			IChromatogramPeakWSD chromatogramPeak = (IChromatogramPeakWSD)peak;
+			result.setSN(chromatogramPeak.getSignalToNoiseRatio());
 		}
 		/*
-		 * Peak MSD / FID
+		 * Peak MSD / CSD / WSD
 		 */
 		if(peak instanceof IPeakMSD) {
 			IPeakMSD peakMSD = (IPeakMSD)peak;
@@ -494,14 +519,22 @@ public class PeakIntegrator {
 			result.setStopRetentionTime(peakMSD.getPeakModel().getStopRetentionTime());
 			result.setTailing(peakMSD.getPeakModel().getTailing());
 			result.setWidth(peakMSD.getPeakModel().getWidthByInflectionPoints());
-			result.addIntegratedIons(integratedIons);
+			result.addIntegratedTraces(markedTraceSet);
 		} else if(peak instanceof IPeakCSD) {
 			IPeakCSD peakFID = (IPeakCSD)peak;
 			result.setStartRetentionTime(peakFID.getPeakModel().getStartRetentionTime());
 			result.setStopRetentionTime(peakFID.getPeakModel().getStopRetentionTime());
 			result.setTailing(peakFID.getPeakModel().getTailing());
 			result.setWidth(peakFID.getPeakModel().getWidthByInflectionPoints());
+		} else if(peak instanceof IPeakWSD) {
+			IPeakWSD peakWSD = (IPeakWSD)peak;
+			result.setStartRetentionTime(peakWSD.getPeakModel().getStartRetentionTime());
+			result.setStopRetentionTime(peakWSD.getPeakModel().getStopRetentionTime());
+			result.setTailing(peakWSD.getPeakModel().getTailing());
+			result.setWidth(peakWSD.getPeakModel().getWidthByInflectionPoints());
+			result.addIntegratedTraces(markedTraceSet);
 		}
+		//
 		return result;
 	}
 
@@ -529,13 +562,13 @@ public class PeakIntegrator {
 	 * @param selectedIons
 	 * @return List<Integer>
 	 */
-	private Set<Integer> getIntegratedIons(IMarkedIons selectedIons) {
+	private Set<Integer> getMarkedTraceSet(IMarkedTraces<IMarkedTrace> markedTraces) {
 
 		Set<Integer> result;
-		if(selectedIons == null) {
+		if(markedTraces == null) {
 			result = new HashSet<Integer>();
 		} else {
-			result = selectedIons.getIonsNominal();
+			result = markedTraces.getTraces();
 		}
 		return result;
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -37,7 +37,7 @@ public class PeakIntegrationResult_4_Test extends TestCase {
 
 	public void testGetIntegratedIons_1() {
 
-		assertEquals(0, result.getIntegratedIons().size());
+		assertEquals(0, result.getIntegratedTraces().size());
 	}
 
 	public void testGetIntegratorType_1() {

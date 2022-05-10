@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
-import org.eclipse.chemclipse.model.core.IMarkedSignals;
+import org.eclipse.chemclipse.model.core.IMarkedTraces;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IIon;
@@ -58,7 +58,7 @@ public class ScanChartSupport {
 		return lineSeriesData;
 	}
 
-	public ILineSeriesData getLineSeriesDataPoint(IScan scan, boolean mirrored, String seriesId, DisplayType displayType, IMarkedSignals<?> markedSignals) {
+	public ILineSeriesData getLineSeriesDataPoint(IScan scan, boolean mirrored, String seriesId, DisplayType displayType, IMarkedTraces<?> markedSignals) {
 
 		List<IScan> scans = new ArrayList<>();
 		scans.add(scan);
@@ -67,13 +67,13 @@ public class ScanChartSupport {
 
 	public ILineSeriesData getLineSeriesDataPoint(List<IScan> scans, boolean mirrored, String seriesId) {
 
-		IMarkedSignals<?> markedSignals = null;
+		IMarkedTraces<?> markedSignals = null;
 		return getLineSeriesDataPoint(scans, mirrored, seriesId, DisplayType.TIC, markedSignals);
 	}
 
 	public ILineSeriesData getLineSeriesDataPoint(List<IScan> scans, boolean mirrored, String seriesId, DisplayType displayType, IChromatogramSelection<?, ?> chromatogramSelection) {
 
-		IMarkedSignals<?> markedSignals = null;
+		IMarkedTraces<?> markedSignals = null;
 		if(displayType.equals(DisplayType.SWC)) {
 			markedSignals = ((IChromatogramSelectionWSD)chromatogramSelection).getSelectedWavelengths();
 		}
@@ -85,7 +85,7 @@ public class ScanChartSupport {
 		return getLineSeriesDataPoint(Collections.singletonList(scan), mirrored, seriesId, displayType, chromatogramSelection);
 	}
 
-	public ILineSeriesData getLineSeriesDataPoint(List<IScan> scans, boolean mirrored, String seriesId, DisplayType displayType, IMarkedSignals<?> markedSignals) {
+	public ILineSeriesData getLineSeriesDataPoint(List<IScan> scans, boolean mirrored, String seriesId, DisplayType displayType, IMarkedTraces<?> markedSignals) {
 
 		List<Double> xSeries = new ArrayList<>(scans.size());
 		List<Double> ySeries = new ArrayList<>(scans.size());
@@ -101,7 +101,7 @@ public class ScanChartSupport {
 					IScanWSD scanWSD = (IScanWSD)scan;
 					Iterator<IMarkedWavelength> markedWavelengths = ((IMarkedWavelengths)markedSignals).iterator();
 					if(markedWavelengths.hasNext()) {
-						Optional<IScanSignalWSD> scanSignal = scanWSD.getScanSignal(markedWavelengths.next().getWavelength());
+						Optional<IScanSignalWSD> scanSignal = scanWSD.getScanSignal(markedWavelengths.next().getTrace());
 						if(scanSignal.isPresent()) {
 							xSeries.add((double)scan.getRetentionTime());
 							ySeries.add((double)scanSignal.get().getAbundance());

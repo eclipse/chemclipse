@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,11 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.support;
 
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
+
 import junit.framework.TestCase;
 
-/**
- * @author eselmeister
- */
 public class SelectedIons_8_Test extends TestCase {
 
 	private IMarkedIons selectedIons;
@@ -24,7 +23,7 @@ public class SelectedIons_8_Test extends TestCase {
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		selectedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+		selectedIons = new MarkedIons(MarkedTraceModus.INCLUDE);
 		selectedIons.add(new MarkedIon(28.82849943f));
 		selectedIons.add(new MarkedIon(28.787f));
 		selectedIons.add(new MarkedIon(29));

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.msd.model.support;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
@@ -35,7 +36,7 @@ public class CombinedMassSpectrumCalculator_2_Test extends TestCase {
 		super.setUp();
 		combinedMassSpectrumCalculator = new CombinedMassSpectrumCalculator();
 		ions = new ArrayList<IIon>();
-		excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+		excludedIons = new MarkedIons(MarkedTraceModus.INCLUDE);
 	}
 
 	@Override

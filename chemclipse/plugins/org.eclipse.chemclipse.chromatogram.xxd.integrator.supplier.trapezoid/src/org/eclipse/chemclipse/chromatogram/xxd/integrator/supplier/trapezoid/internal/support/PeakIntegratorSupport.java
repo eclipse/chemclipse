@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2020 Lablicate GmbH.
+ * Copyright (c) 2011, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -75,7 +75,6 @@ public class PeakIntegratorSupport {
 
 		monitor.subTask("Integrate the peak");
 		PeakIntegrator peakIntegrator = new PeakIntegrator();
-		IPeakIntegrationResult peakIntegrationResult = peakIntegrator.integrate(peak, peakIntegrationSettings, monitor);
-		return peakIntegrationResult;
+		return peakIntegrator.integrate(peak, peakIntegrationSettings, monitor);
 	}
 }

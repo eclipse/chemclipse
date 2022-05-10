@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -26,20 +26,20 @@ public class PeakIntegrationResults_2_Test extends TestCase {
 		super.setUp();
 		results = new PeakIntegrationResults();
 		result = new PeakIntegrationResult();
-		result.addIntegratedIon(55);
+		result.addIntegratedTrace(55);
 		result.setIntegratedArea(593992.4d);
 		results.add(result);
 		result = new PeakIntegrationResult();
-		result.addIntegratedIon(48);
+		result.addIntegratedTrace(48);
 		result.setIntegratedArea(474.4d);
 		results.add(result);
 		result = new PeakIntegrationResult();
-		result.addIntegratedIon(78);
+		result.addIntegratedTrace(78);
 		result.setIntegratedArea(2393.4d);
 		results.add(result);
 		result = new PeakIntegrationResult();
-		result.addIntegratedIon(55);
-		result.addIntegratedIon(78);
+		result.addIntegratedTrace(55);
+		result.addIntegratedTrace(78);
 		result.setIntegratedArea(942224.4d);
 		results.add(result);
 	}

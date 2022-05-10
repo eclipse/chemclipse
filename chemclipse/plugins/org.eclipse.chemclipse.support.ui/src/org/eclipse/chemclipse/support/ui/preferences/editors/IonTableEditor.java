@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,18 +14,19 @@ package org.eclipse.chemclipse.support.ui.preferences.editors;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.support.util.IonSettingUtil;
+import org.eclipse.chemclipse.support.util.TraceSettingUtil;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Composite;
 
 public class IonTableEditor extends TableViewerFieldEditor<String> {
 
-	private IonSettingUtil settinngUtils;
+	private TraceSettingUtil settinngUtils;
 
 	public IonTableEditor(String name, String labelText, Composite parent) {
+
 		super(name, labelText, new String[]{"Ions"}, new int[]{200}, parent);
-		settinngUtils = new IonSettingUtil();
+		settinngUtils = new TraceSettingUtil();
 	}
 
 	@Override

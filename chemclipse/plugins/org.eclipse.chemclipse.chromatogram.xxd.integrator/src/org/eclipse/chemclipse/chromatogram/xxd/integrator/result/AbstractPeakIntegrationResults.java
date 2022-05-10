@@ -67,7 +67,7 @@ public abstract class AbstractPeakIntegrationResults implements IPeakIntegration
 		Set<Integer> ions;
 		List<IPeakIntegrationResult> results = new ArrayList<IPeakIntegrationResult>();
 		for(IPeakIntegrationResult result : peakIntegrationResults) {
-			ions = result.getIntegratedIons();
+			ions = result.getIntegratedTraces();
 			if(ions.size() == 1 && ions.contains(ion)) {
 				results.add(result);
 			}
@@ -81,7 +81,7 @@ public abstract class AbstractPeakIntegrationResults implements IPeakIntegration
 		Set<Integer> ions;
 		List<IPeakIntegrationResult> results = new ArrayList<IPeakIntegrationResult>();
 		for(IPeakIntegrationResult result : peakIntegrationResults) {
-			ions = result.getIntegratedIons();
+			ions = result.getIntegratedTraces();
 			if(ions.contains(ion)) {
 				results.add(result);
 			}

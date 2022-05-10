@@ -16,6 +16,7 @@ import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.IMassSpec
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.IMassSpectrumComparisonSupplier;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.MassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.MassSpectrumComparatorDynamicSettingProperty;
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.model.identifier.AbstractIdentifierSettings;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
@@ -32,7 +33,7 @@ public class AbstractIdentifierSettingsMSD extends AbstractIdentifierSettings im
 	@ComboSettingsProperty(MassSpectrumComparatorDynamicSettingProperty.class)
 	private String massSpectrumComparatorId = DEFAULT_COMPARATOR_ID;
 	@JsonIgnore
-	private IMarkedIons excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+	private IMarkedIons excludedIons = new MarkedIons(MarkedTraceModus.INCLUDE);
 	@JsonIgnore
 	private IMassSpectrumComparator comparator = null; // The comparator will be created dynamically.
 

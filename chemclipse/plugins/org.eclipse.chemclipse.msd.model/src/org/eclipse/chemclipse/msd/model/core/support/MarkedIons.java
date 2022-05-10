@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,29 +16,32 @@ package org.eclipse.chemclipse.msd.model.core.support;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
+
 public class MarkedIons extends AbstractMarkedIons implements IMarkedIons {
 
-	private IonMarkMode mode;
+	private MarkedTraceModus markedTraceModus = MarkedTraceModus.INCLUDE;
 
-	public MarkedIons(int[] ionsList, IonMarkMode mode) {
-		super(ionsList);
-		this.mode = mode;
-	}
-
-	public MarkedIons(Collection<? extends Number> ionsList, IonMarkMode mode) {
+	public MarkedIons(int[] ionsList, MarkedTraceModus markedTraceModus) {
 
 		super(ionsList);
-		this.mode = mode;
+		this.markedTraceModus = markedTraceModus;
 	}
 
-	public MarkedIons(IonMarkMode mode) {
+	public MarkedIons(Collection<? extends Number> ionsList, MarkedTraceModus markedTraceModus) {
 
-		this(new ArrayList<>(), mode);
+		super(ionsList);
+		this.markedTraceModus = markedTraceModus;
+	}
+
+	public MarkedIons(MarkedTraceModus markedTraceModus) {
+
+		this(new ArrayList<>(), markedTraceModus);
 	}
 
 	@Override
-	public IonMarkMode getMode() {
+	public MarkedTraceModus getMarkedTraceModus() {
 
-		return mode;
+		return markedTraceModus;
 	}
 }

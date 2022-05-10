@@ -161,7 +161,7 @@ public abstract class AbstractScanWSD extends AbstractScan implements IScanWSD {
 	private static boolean useWavelength(IScanSignalWSD scan, IMarkedWavelengths filterWavelengths) {
 
 		Set<Double> wavelengths = filterWavelengths.getWavelengths();
-		switch(filterWavelengths.getMode()) {
+		switch(filterWavelengths.getMarkedTraceModus()) {
 			case EXCLUDE:
 				return wavelengths.contains(scan.getWavelength());
 			case INCLUDE:

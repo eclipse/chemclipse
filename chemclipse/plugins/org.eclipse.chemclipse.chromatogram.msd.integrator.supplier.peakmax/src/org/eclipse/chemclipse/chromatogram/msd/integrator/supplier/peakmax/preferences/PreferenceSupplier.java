@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2021 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,9 +16,11 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.Activator;
 import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.settings.PeakIntegrationSettings;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
+import org.eclipse.chemclipse.model.core.IMarkedTrace;
+import org.eclipse.chemclipse.model.core.IMarkedTraces;
+import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.eclipse.chemclipse.support.util.IonSettingUtil;
+import org.eclipse.chemclipse.support.util.TraceSettingUtil;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -74,10 +76,13 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		/*
 		 * Integration Support
 		 */
-		IMarkedIons selectedIons = peakIntegrationSettings.getSelectedIons();
+		IMarkedTraces<IMarkedTrace> markedTraces = peakIntegrationSettings.getMarkedTraces();
 		String ions = PreferenceSupplier.getIons(P_SELECTED_IONS, DEF_SELECTED_IONS);
-		IonSettingUtil settingIon = new IonSettingUtil();
-		selectedIons.add(settingIon.extractIons(settingIon.deserialize(ions)));
+		TraceSettingUtil settingIon = new TraceSettingUtil();
+		for(int trace : settingIon.extractTraces(settingIon.deserialize(ions))) {
+			markedTraces.add(new MarkedIon(trace));
+		}
+		//
 		return peakIntegrationSettings;
 	}
 

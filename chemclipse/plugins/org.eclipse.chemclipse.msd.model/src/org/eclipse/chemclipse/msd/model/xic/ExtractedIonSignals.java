@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
@@ -57,6 +58,7 @@ public class ExtractedIonSignals implements IExtractedIonSignals {
 	 * @param numberOfScans
 	 */
 	public ExtractedIonSignals(int numberOfScans) {
+
 		if(numberOfScans <= 0) {
 			numberOfScans = 0;
 			startScan = 0;
@@ -75,6 +77,7 @@ public class ExtractedIonSignals implements IExtractedIonSignals {
 	 * @param chromatogram
 	 */
 	public ExtractedIonSignals(int numberOfScans, IChromatogramMSD chromatogram) {
+
 		this(numberOfScans);
 		this.chromatogram = chromatogram;
 	}
@@ -88,6 +91,7 @@ public class ExtractedIonSignals implements IExtractedIonSignals {
 	 * @param stopScan
 	 */
 	public ExtractedIonSignals(int startScan, int stopScan) {
+
 		startScan = (startScan <= 0) ? 0 : startScan;
 		stopScan = (stopScan <= 0) ? 0 : stopScan;
 		int start = Math.min(startScan, stopScan);
@@ -113,6 +117,7 @@ public class ExtractedIonSignals implements IExtractedIonSignals {
 	 * @param chromatogram
 	 */
 	public ExtractedIonSignals(int startScan, int stopScan, IChromatogramMSD chromatogram) {
+
 		this(startScan, stopScan);
 		this.chromatogram = chromatogram;
 	}
@@ -193,7 +198,7 @@ public class ExtractedIonSignals implements IExtractedIonSignals {
 	@Override
 	public IScanMSD getScan(int scan) {
 
-		IMarkedIons excludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+		IMarkedIons excludedIons = new MarkedIons(MarkedTraceModus.INCLUDE);
 		return getScan(scan, excludedIons);
 	}
 

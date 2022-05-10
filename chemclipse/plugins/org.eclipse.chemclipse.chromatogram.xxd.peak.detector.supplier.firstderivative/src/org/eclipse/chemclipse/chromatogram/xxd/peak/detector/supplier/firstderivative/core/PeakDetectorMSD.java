@@ -37,6 +37,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignals;
@@ -48,7 +49,6 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons.IonMarkMode;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.PeakBuilderMSD;
 import org.eclipse.chemclipse.msd.model.xic.ITotalIonSignalExtractor;
@@ -235,7 +235,7 @@ public class PeakDetectorMSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 				 * false: BV or VB
 				 * true: VV
 				 */
-				IChromatogramPeakMSD peak = PeakBuilderMSD.createPeak(chromatogram, scanRange, includeBackground, traces, ions.getMode());
+				IChromatogramPeakMSD peak = PeakBuilderMSD.createPeak(chromatogram, scanRange, includeBackground, traces, ions.getMarkedTraceModus());
 				if(isValidPeak(peak, peakDetectorSettings)) {
 					/*
 					 * Add the detector description.
@@ -314,13 +314,13 @@ public class PeakDetectorMSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 		return result;
 	}
 
-	private static IonMarkMode buildFilterMode(FilterMode mode) {
+	private static MarkedTraceModus buildFilterMode(FilterMode mode) {
 
 		switch(mode) {
 			case EXCLUDE:
-				return IonMarkMode.EXCLUDE;
+				return MarkedTraceModus.EXCLUDE;
 			case INCLUDE:
-				return IonMarkMode.INCLUDE;
+				return MarkedTraceModus.INCLUDE;
 		}
 		throw new IllegalArgumentException("Unknown mode " + mode);
 	}

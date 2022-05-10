@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.model.exceptions.ChromatogramIsNullException;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
@@ -33,7 +34,6 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons.IonMarkMode;
 import org.eclipse.chemclipse.msd.model.implementation.ChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.PeakModelMSD;
@@ -50,7 +50,7 @@ public class PeakBuilderMSD {
 	@Deprecated
 	public static IChromatogramPeakMSD createPeak(IChromatogramMSD chromatogram, IScanRange scanRange, boolean includedBackground, Set<Integer> includedIons) throws PeakException {
 
-		return createPeak(chromatogram, scanRange, includedBackground, includedIons, IonMarkMode.INCLUDE);
+		return createPeak(chromatogram, scanRange, includedBackground, includedIons, MarkedTraceModus.INCLUDE);
 	}
 
 	/**
@@ -63,7 +63,7 @@ public class PeakBuilderMSD {
 	 * @return IChromatogramPeakMSD
 	 * @throws PeakException
 	 */
-	public static IChromatogramPeakMSD createPeak(IChromatogramMSD chromatogram, IScanRange scanRange, boolean includedBackground, Set<Integer> includedIons, IonMarkMode filterMode) throws PeakException {
+	public static IChromatogramPeakMSD createPeak(IChromatogramMSD chromatogram, IScanRange scanRange, boolean includedBackground, Set<Integer> includedIons, MarkedTraceModus filterMode) throws PeakException {
 
 		/*
 		 * Validate the given objects.
@@ -117,7 +117,7 @@ public class PeakBuilderMSD {
 		return new ChromatogramPeakMSD(peakModel, chromatogram);
 	}
 
-	public static IChromatogramPeakMSD createPeak(IChromatogramMSD chromatogram, IScanRange scanRange, float startIntensity, float stopIntensity, Set<Integer> includedIons, IonMarkMode filterMode) throws PeakException {
+	public static IChromatogramPeakMSD createPeak(IChromatogramMSD chromatogram, IScanRange scanRange, float startIntensity, float stopIntensity, Set<Integer> includedIons, MarkedTraceModus filterMode) throws PeakException {
 
 		/*
 		 * Validate the given objects.

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,30 +14,30 @@ package org.eclipse.chemclipse.wsd.model.core.support;
 
 import java.util.Collection;
 
-import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelength.WavelengthMarkMode;
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 
 public class MarkedWavelengths extends AbstractMarkedWavelengths implements IMarkedWavelengths {
 
-	private WavelengthMarkMode mode;
+	private MarkedTraceModus markedTraceModus = MarkedTraceModus.INCLUDE;
 
 	public MarkedWavelengths() {
 
 	}
 
-	public MarkedWavelengths(WavelengthMarkMode mode) {
+	public MarkedWavelengths(MarkedTraceModus markedTraceModus) {
 
-		this.mode = mode;
+		this.markedTraceModus = markedTraceModus;
 	}
 
-	public MarkedWavelengths(Collection<? extends Number> wavelengths, WavelengthMarkMode mode) {
+	public MarkedWavelengths(Collection<? extends Number> wavelengths, MarkedTraceModus markedTraceModus) {
 
 		super(wavelengths);
-		this.mode = mode;
+		this.markedTraceModus = markedTraceModus;
 	}
 
 	@Override
-	public WavelengthMarkMode getMode() {
+	public MarkedTraceModus getMarkedTraceModus() {
 
-		return mode;
+		return markedTraceModus;
 	}
 }

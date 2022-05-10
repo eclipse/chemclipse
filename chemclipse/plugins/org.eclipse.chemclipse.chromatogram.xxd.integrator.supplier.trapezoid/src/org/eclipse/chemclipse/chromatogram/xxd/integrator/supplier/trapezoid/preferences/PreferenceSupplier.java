@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2021 Lablicate GmbH.
+ * Copyright (c) 2010, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,9 +18,11 @@ import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.Act
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.ChromatogramIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.CombinedIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.settings.PeakIntegrationSettings;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
+import org.eclipse.chemclipse.model.core.IMarkedTrace;
+import org.eclipse.chemclipse.model.core.IMarkedTraces;
+import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
-import org.eclipse.chemclipse.support.util.IonSettingUtil;
+import org.eclipse.chemclipse.support.util.TraceSettingUtil;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
@@ -85,10 +87,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		/*
 		 * Integration Support
 		 */
-		IMarkedIons selectedIons = integrationSettings.getSelectedIons();
+		IMarkedTraces<IMarkedTrace> markedTraces = integrationSettings.getMarkedTraces();
 		String ions = PreferenceSupplier.getIons(P_SELECTED_IONS, DEF_SELECTED_IONS);
-		IonSettingUtil settingIon = new IonSettingUtil();
-		selectedIons.add(settingIon.extractIons(settingIon.deserialize(ions)));
+		TraceSettingUtil settingIon = new TraceSettingUtil();
+		for(int trace : settingIon.extractTraces(settingIon.deserialize(ions))) {
+			markedTraces.add(new MarkedIon(trace));
+		}
 		//
 		return integrationSettings;
 	}

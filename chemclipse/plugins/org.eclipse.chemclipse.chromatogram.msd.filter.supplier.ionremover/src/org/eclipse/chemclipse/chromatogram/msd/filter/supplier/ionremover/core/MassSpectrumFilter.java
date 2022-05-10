@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2019 Lablicate GmbH.
+ * Copyright (c) 2014, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,7 +27,7 @@ import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
-import org.eclipse.chemclipse.support.util.IonSettingUtil;
+import org.eclipse.chemclipse.support.util.TraceSettingUtil;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class MassSpectrumFilter extends AbstractMassSpectrumFilter {
@@ -44,8 +44,8 @@ public class MassSpectrumFilter extends AbstractMassSpectrumFilter {
 		if(!processingInfo.hasErrorMessages()) {
 			if(filterSettings instanceof MassSpectrumFilterSettings) {
 				MassSpectrumFilterSettings massSpectrumFilterSettings = (MassSpectrumFilterSettings)filterSettings;
-				IonSettingUtil settingIon = new IonSettingUtil();
-				IMarkedIons markedIons = new MarkedIons(settingIon.extractIons(settingIon.deserialize(massSpectrumFilterSettings.getIonsToRemove())), massSpectrumFilterSettings.getMarkMode());
+				TraceSettingUtil settingIon = new TraceSettingUtil();
+				IMarkedIons markedIons = new MarkedIons(settingIon.extractTraces(settingIon.deserialize(massSpectrumFilterSettings.getIonsToRemove())), massSpectrumFilterSettings.getMarkMode());
 				for(IScanMSD massSpectrum : massSpectra) {
 					massSpectrum.removeIons(markedIons);
 				}

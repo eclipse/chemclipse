@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,8 +24,8 @@ import java.util.Set;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.model.core.IMarkedSignal;
-import org.eclipse.chemclipse.model.core.IMarkedSignals;
+import org.eclipse.chemclipse.model.core.IMarkedTrace;
+import org.eclipse.chemclipse.model.core.IMarkedTraces;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.signals.ITotalScanSignal;
@@ -145,13 +145,13 @@ public class ChromatogramChartSupport {
 		return getLineSeriesData(chromatogramSelection, seriesId, dataType, Derivative.NONE, color, true, timeIntervalSelection);
 	}
 
-	public ILineSeriesData getLineSeriesDataBaseline(IChromatogram<?> chromatogram, String seriesId, DisplayType dataType, Color color, IMarkedSignals<? extends IMarkedSignal> signals) {
+	public ILineSeriesData getLineSeriesDataBaseline(IChromatogram<?> chromatogram, String seriesId, DisplayType dataType, Color color, IMarkedTraces<? extends IMarkedTrace> signals) {
 
 		return getLineSeriesData(chromatogram, seriesId, dataType, Derivative.NONE, color, signals, true);
 	}
 
 	@SuppressWarnings("rawtypes")
-	public ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, DisplayType dataType, Color color, IMarkedSignals<? extends IMarkedSignal> signals) {
+	public ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, DisplayType dataType, Color color, IMarkedTraces<? extends IMarkedTrace> signals) {
 
 		return getLineSeriesData(chromatogram, seriesId, dataType, Derivative.NONE, color, signals, false);
 	}
@@ -167,7 +167,7 @@ public class ChromatogramChartSupport {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?, ?> chromatogramSelection, String seriesId, DisplayType dataType, Derivative derivative, Color color, IMarkedSignals<? extends IMarkedSignal> signals, boolean baseline) {
+	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?, ?> chromatogramSelection, String seriesId, DisplayType dataType, Derivative derivative, Color color, IMarkedTraces<? extends IMarkedTrace> signals, boolean baseline) {
 
 		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
@@ -176,7 +176,7 @@ public class ChromatogramChartSupport {
 	}
 
 	@SuppressWarnings("rawtypes")
-	public ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, DisplayType dataType, Derivative derivative, Color color, IMarkedSignals<? extends IMarkedSignal> signals, boolean baseline) {
+	public ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, DisplayType dataType, Derivative derivative, Color color, IMarkedTraces<? extends IMarkedTrace> signals, boolean baseline) {
 
 		int startScan = 1;
 		int stopScan = chromatogram.getNumberOfScans();
@@ -216,7 +216,7 @@ public class ChromatogramChartSupport {
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	private ILineSeriesData getLineSeriesData(IChromatogram chromatogram, int startScan, int stopScan, String seriesId, DisplayType dataType, Derivative derivative, Color color, IMarkedSignals<? extends IMarkedSignal> signals, boolean baseline) {
+	private ILineSeriesData getLineSeriesData(IChromatogram chromatogram, int startScan, int stopScan, String seriesId, DisplayType dataType, Derivative derivative, Color color, IMarkedTraces<? extends IMarkedTrace> signals, boolean baseline) {
 
 		IBaselineModel baselineModel = null;
 		if(baseline) {
@@ -227,7 +227,7 @@ public class ChromatogramChartSupport {
 					IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
 					IMarkedWavelengths markedWavelengths = (IMarkedWavelengths)signals;
 					if(!markedWavelengths.isEmpty()) {
-						double wavelength = markedWavelengths.iterator().next().getWavelength();
+						double wavelength = markedWavelengths.iterator().next().getTrace();
 						baselineModel = chromatogramWSD.getBaselineModel(wavelength);
 					}
 				}
@@ -387,7 +387,7 @@ public class ChromatogramChartSupport {
 		 */
 		//
 		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
-		IMarkedSignals<?> markedSignals = null;
+		IMarkedTraces<?> markedSignals = null;
 		//
 		if(dataType.equals(DisplayType.SIC) || dataType.equals(DisplayType.XIC)) {
 			/*
@@ -436,7 +436,7 @@ public class ChromatogramChartSupport {
 		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, dataType, derivative, color, markedSignals, baseline);
 	}
 
-	private double getIntensity(IScan scan, DisplayType dataType, IMarkedSignals<? extends IMarkedSignal> signals) {
+	private double getIntensity(IScan scan, DisplayType dataType, IMarkedTraces<? extends IMarkedTrace> signals) {
 
 		double intensity = Double.NaN;
 		if(dataType.equals(DisplayType.TIC)) {
@@ -466,7 +466,7 @@ public class ChromatogramChartSupport {
 				intensity = 0.0d;
 				if(signals != null) {
 					for(IMarkedIon markedIon : markedIons) {
-						intensity += extractedIonSignal.getAbundance((int)markedIon.getIon());
+						intensity += extractedIonSignal.getAbundance(markedIon.castTrace());
 					}
 				}
 			}
@@ -482,7 +482,7 @@ public class ChromatogramChartSupport {
 				if(signals != null) {
 					Iterator<IMarkedIon> it = markedIons.iterator();
 					if(it.hasNext()) {
-						intensity = extractedIonSignal.getAbundance((int)it.next().getIon());
+						intensity = extractedIonSignal.getAbundance(it.next().castTrace());
 					}
 				}
 			}
@@ -497,7 +497,7 @@ public class ChromatogramChartSupport {
 				intensity = scanMSD.getTotalSignal();
 				if(signals != null) {
 					for(IMarkedIon markedIon : markedIons) {
-						intensity -= extractedIonSignal.getAbundance((int)markedIon.getIon());
+						intensity -= extractedIonSignal.getAbundance(markedIon.castTrace());
 					}
 				}
 			}

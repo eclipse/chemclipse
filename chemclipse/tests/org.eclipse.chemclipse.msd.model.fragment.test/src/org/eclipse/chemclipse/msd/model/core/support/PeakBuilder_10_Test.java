@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.support;
 
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.model.support.BackgroundAbundanceRange;
 import org.eclipse.chemclipse.model.support.IBackgroundAbundanceRange;
 import org.eclipse.chemclipse.model.support.IScanRange;
@@ -27,8 +28,6 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
  * and ends at a retention time of 15500 ms.<br/>
  * The chromatogram has 17 scans, starting at a retention time of 500 ms and
  * ends at a retention time of 16500 ms. It has a background of 1750 units.
- * 
- * @author eselmeister
  */
 public class PeakBuilder_10_Test extends PeakBuilderTestCase {
 
@@ -42,7 +41,7 @@ public class PeakBuilder_10_Test extends PeakBuilderTestCase {
 
 		super.setUp();
 		scanRange = new ScanRange(2, 16);
-		excludedExcludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+		excludedExcludedIons = new MarkedIons(MarkedTraceModus.INCLUDE);
 		excludedExcludedIons.add(new MarkedIon(43));
 		excludedExcludedIons.add(new MarkedIon(18));
 		excludedExcludedIons.add(new MarkedIon(28));

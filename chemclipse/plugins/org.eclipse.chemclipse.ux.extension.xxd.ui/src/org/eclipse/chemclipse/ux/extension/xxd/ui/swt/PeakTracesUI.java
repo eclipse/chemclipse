@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.model.selection.ChromatogramSelection;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
@@ -143,7 +144,7 @@ public class PeakTracesUI extends ScrollableChart {
 		traces.addAll(extractTraces(massSpectrum));
 		//
 		for(Integer trace : traces) {
-			IMarkedIons markedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+			IMarkedIons markedIons = new MarkedIons(MarkedTraceModus.INCLUDE);
 			markedIons.add(trace);
 			ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogramSelection, Integer.toString(trace), DisplayType.SIC, Derivative.NONE, colors.getColor(), markedIons, false);
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2019 Lablicate GmbH.
+ * Copyright (c) 2010, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.intern
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.internal.core.support.ChromatogramImporterTestCase;
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
@@ -37,7 +38,7 @@ public class Calculator_3_ITest extends ChromatogramImporterTestCase {
 
 		super.setUp();
 		calculator = new Calculator();
-		ionsToPreserve = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+		ionsToPreserve = new MarkedIons(MarkedTraceModus.INCLUDE);
 		ionsToPreserve.add(new MarkedIon(103));
 		ionsToPreserve.add(new MarkedIon(104));
 		extractedIonSignalExtractor = new ExtractedIonSignalExtractor(chromatogram);

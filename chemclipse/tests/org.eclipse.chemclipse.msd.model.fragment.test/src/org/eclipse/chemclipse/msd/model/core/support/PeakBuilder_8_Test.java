@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.support;
 
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.model.support.IScanRange;
 import org.eclipse.chemclipse.model.support.ScanRange;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -39,7 +40,7 @@ public class PeakBuilder_8_Test extends PeakBuilderTestCase {
 
 		super.setUp();
 		scanRange = new ScanRange(2, 16);
-		excludedExcludedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+		excludedExcludedIons = new MarkedIons(MarkedTraceModus.INCLUDE);
 		excludedExcludedIons.add(new MarkedIon(43));
 		excludedExcludedIons.add(new MarkedIon(18));
 		excludedExcludedIons.add(new MarkedIon(28));

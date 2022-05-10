@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -27,8 +27,8 @@ import org.eclipse.chemclipse.chromatogram.msd.peak.detector.settings.AbstractPe
 import org.eclipse.chemclipse.chromatogram.peak.detector.core.FilterMode;
 import org.eclipse.chemclipse.chromatogram.peak.detector.model.Threshold;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
-import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons.IonMarkMode;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
@@ -72,16 +72,13 @@ public class PeakDetectorSettingsMSD extends AbstractPeakDetectorSettingsMSD {
 	@JsonIgnore
 	public Collection<IMarkedIons> getFilterIons() {
 
-		// if(filterIonsString == null || filterIonsString.isEmpty()) {
-		// return Collections.singleton(new MarkedIons(IonMarkMode.INCLUDE));
-		// }
-		IonMarkMode ionMarkMode;
+		MarkedTraceModus ionMarkMode;
 		switch(getFilterMode()) {
 			case EXCLUDE:
-				ionMarkMode = IonMarkMode.INCLUDE;
+				ionMarkMode = MarkedTraceModus.INCLUDE;
 				break;
 			case INCLUDE:
-				ionMarkMode = IonMarkMode.EXCLUDE;
+				ionMarkMode = MarkedTraceModus.EXCLUDE;
 				break;
 			default:
 				throw new IllegalArgumentException("Unsupported filter mode " + getFilterMode());

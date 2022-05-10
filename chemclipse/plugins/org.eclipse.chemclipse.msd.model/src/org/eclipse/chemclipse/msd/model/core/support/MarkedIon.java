@@ -11,83 +11,24 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.core.support;
 
-public class MarkedIon implements IMarkedIon {
+import org.eclipse.chemclipse.model.core.AbstractMarkedTrace;
+import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 
-	private double ion;
-	private int magnification;
+public class MarkedIon extends AbstractMarkedTrace implements IMarkedIon {
 
-	/**
-	 * Adds the ions with magnification 1.
-	 * 
-	 * @param ion
-	 */
-	public MarkedIon(double ion) {
-		this(ion, 1);
+	public MarkedIon(double trace, int magnification) {
+
+		super(trace, magnification);
 	}
 
-	public MarkedIon(double ion, int magnification) {
-		setIon(ion);
-		setMagnification(magnification);
+	public MarkedIon(double trace) {
+
+		super(trace);
 	}
 
 	@Override
-	public double getIon() {
+	public int castTrace() {
 
-		return ion;
+		return AbstractIon.getIon(getTrace());
 	}
-
-	@Override
-	public void setIon(double ion) {
-
-		this.ion = ion;
-	}
-
-	@Override
-	public int getMagnification() {
-
-		return magnification;
-	}
-
-	@Override
-	public void setMagnification(int magnification) {
-
-		this.magnification = magnification;
-	}
-
-	// -----------------------------equals, hashCode, toString
-	@Override
-	public boolean equals(Object otherObject) {
-
-		if(this == otherObject) {
-			return true;
-		}
-		if(otherObject == null) {
-			return false;
-		}
-		if(getClass() != otherObject.getClass()) {
-			return false;
-		}
-		MarkedIon other = (MarkedIon)otherObject;
-		return ion == other.getIon() && magnification == other.getMagnification();
-	}
-
-	@Override
-	public int hashCode() {
-
-		return 7 * Double.valueOf(ion).hashCode() + 11 * Integer.valueOf(magnification).hashCode();
-	}
-
-	@Override
-	public String toString() {
-
-		StringBuilder builder = new StringBuilder();
-		builder.append(getClass().getName());
-		builder.append("[");
-		builder.append("ion=" + ion);
-		builder.append(",");
-		builder.append("magnification=" + magnification);
-		builder.append("]");
-		return builder.toString();
-	}
-	// -----------------------------equals, hashCode, toString
 }

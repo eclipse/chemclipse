@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.preferences;
 
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIon;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
@@ -30,7 +31,7 @@ public class PreferenceSupplier {
 	public static final int DEF_MAGNIFICATION_FACTOR_MIN = 1;
 	public static final int DEF_MAGNIFICATION_FACTOR_MAX = 50;
 	//
-	private static IMarkedIons compoundIonsEmpty = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+	private static IMarkedIons compoundIonsEmpty = new MarkedIons(MarkedTraceModus.INCLUDE);
 	private static int magnificationFactor = -1;
 	private static IMarkedIons compoundIonsHydrocarbons = null;
 	private static IMarkedIons compoundIonsFattyAcids = null;
@@ -46,6 +47,7 @@ public class PreferenceSupplier {
 	 * Use only static methods.
 	 */
 	private PreferenceSupplier() {
+
 	}
 
 	public static String[][] getOrganicCompoundPresets() {
@@ -79,7 +81,7 @@ public class PreferenceSupplier {
 			 * Hydrocarbons
 			 */
 			if(compoundIonsHydrocarbons == null) {
-				compoundIonsHydrocarbons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+				compoundIonsHydrocarbons = new MarkedIons(MarkedTraceModus.INCLUDE);
 				compoundIonsHydrocarbons.add(new MarkedIon(57, magnificationFactor));
 				compoundIonsHydrocarbons.add(new MarkedIon(71, magnificationFactor));
 				compoundIonsHydrocarbons.add(new MarkedIon(85, magnificationFactor));
@@ -90,7 +92,7 @@ public class PreferenceSupplier {
 			 * Fatty acids
 			 */
 			if(compoundIonsFattyAcids == null) {
-				compoundIonsFattyAcids = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+				compoundIonsFattyAcids = new MarkedIons(MarkedTraceModus.INCLUDE);
 				compoundIonsFattyAcids.add(new MarkedIon(74, magnificationFactor));
 				compoundIonsFattyAcids.add(new MarkedIon(87, magnificationFactor));
 			}
@@ -100,7 +102,7 @@ public class PreferenceSupplier {
 			 * FAME
 			 */
 			if(compoundIonsFame == null) {
-				compoundIonsFame = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+				compoundIonsFame = new MarkedIons(MarkedTraceModus.INCLUDE);
 				compoundIonsFame.add(new MarkedIon(79, magnificationFactor));
 				compoundIonsFame.add(new MarkedIon(81, magnificationFactor));
 			}

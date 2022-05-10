@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.msd.model.noise;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
@@ -68,7 +69,7 @@ public class Calculator_1_Test extends TestCase {
 		noiseMassSpectrum.addIon(new Ion(104.0f, 15000.0f));
 		noiseMassSpectrum.addIon(new Ion(201.0f, 8900.0f));
 		noiseMassSpectra.add(noiseMassSpectrum);
-		ionsToPreserve = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+		ionsToPreserve = new MarkedIons(MarkedTraceModus.INCLUDE);
 		// ionsToPreserve.add(103);
 		// ionsToPreserve.add(104);
 		// ionsToPreserve.add(201);

@@ -30,6 +30,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.eclipse.chemclipse.csd.model.core.selection.IChromatogramSelectionCSD;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IScan;
+import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.traces.NamedTrace;
 import org.eclipse.chemclipse.model.traces.NamedTraces;
@@ -622,7 +623,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 				availableSeriesIds.add(seriesId);
 				selectionSeries.add(seriesId);
 				if(!baseChart.isSeriesContained(seriesId)) {
-					IMarkedIons markedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+					IMarkedIons markedIons = new MarkedIons(MarkedTraceModus.INCLUDE);
 					markedIons.add(ion);
 					ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, displayType, derivative, color, markedIons, false);
 					lineSeriesData.getSettings().setDescription("m/z " + Integer.toString(ion) + " (" + description + ")");
@@ -647,7 +648,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 						availableSeriesIds.add(seriesId);
 						selectionSeries.add(seriesId);
 						if(!baseChart.isSeriesContained(seriesId)) {
-							IMarkedIons markedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+							IMarkedIons markedIons = new MarkedIons(MarkedTraceModus.INCLUDE);
 							markedIons.add(ion);
 							ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(referencedChromatogram, seriesId, displayType, derivative, color, markedIons, false);
 							lineSeriesData.getSettings().setDescription("m/z " + Integer.toString(ion) + " (" + description + ")");
@@ -903,7 +904,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		/*
 		 * BPC, XIC, TSC
 		 */
-		IMarkedIons markedIons = new MarkedIons(IMarkedIons.IonMarkMode.INCLUDE);
+		IMarkedIons markedIons = new MarkedIons(MarkedTraceModus.INCLUDE);
 		List<Number> ions = getSelectedTraces(true);
 		for(Number ion : ions) {
 			markedIons.add(ion.intValue());

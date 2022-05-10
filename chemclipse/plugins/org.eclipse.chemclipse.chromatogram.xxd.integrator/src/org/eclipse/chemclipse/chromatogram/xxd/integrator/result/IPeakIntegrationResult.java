@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -62,21 +62,21 @@ public interface IPeakIntegrationResult {
 	 * 
 	 * @return int
 	 */
-	Set<Integer> getIntegratedIons();
+	Set<Integer> getIntegratedTraces();
 
 	/**
 	 * Sets the ion which has been integrated.
 	 * 
 	 * @param ion
 	 */
-	void addIntegratedIon(int ion);
+	void addIntegratedTrace(int ion);
 
 	/**
 	 * Removes the ion from the actual integrated ion list.
 	 * 
 	 * @param ion
 	 */
-	void removeIntegratedIon(int ion);
+	void removeIntegratedTrace(int ion);
 
 	/**
 	 * Sets the ions which has been integrated.
@@ -84,5 +84,5 @@ public interface IPeakIntegrationResult {
 	 * @param List
 	 *            <Integer>
 	 */
-	void addIntegratedIons(Set<Integer> ions);
+	void addIntegratedTraces(Set<Integer> ions);
 }

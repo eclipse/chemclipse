@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -35,8 +35,8 @@ public class PeakIntegrationResult_7_Test extends TestCase {
 
 	public void testGetIntegratedIons_1() {
 
-		result.addIntegratedIon(55);
-		Set<Integer> ions = result.getIntegratedIons();
+		result.addIntegratedTrace(55);
+		Set<Integer> ions = result.getIntegratedTraces();
 		assertEquals(1, ions.size());
 		assertTrue(ions.contains(55));
 		assertFalse(ions.contains(73));
@@ -46,14 +46,14 @@ public class PeakIntegrationResult_7_Test extends TestCase {
 
 	public void testGetIntegratedIons_2() {
 
-		result.addIntegratedIon(55);
-		result.addIntegratedIon(73);
-		result.addIntegratedIon(34);
-		result.addIntegratedIon(48);
-		result.removeIntegratedIon(73);
-		result.removeIntegratedIon(34);
-		result.removeIntegratedIon(48);
-		Set<Integer> ions = result.getIntegratedIons();
+		result.addIntegratedTrace(55);
+		result.addIntegratedTrace(73);
+		result.addIntegratedTrace(34);
+		result.addIntegratedTrace(48);
+		result.removeIntegratedTrace(73);
+		result.removeIntegratedTrace(34);
+		result.removeIntegratedTrace(48);
+		Set<Integer> ions = result.getIntegratedTraces();
 		assertEquals(1, ions.size());
 		assertTrue(ions.contains(55));
 		assertFalse(ions.contains(73));
@@ -68,8 +68,8 @@ public class PeakIntegrationResult_7_Test extends TestCase {
 		ions.add(73);
 		ions.add(34);
 		ions.add(48);
-		result.addIntegratedIons(ions);
-		Set<Integer> ions2 = result.getIntegratedIons();
+		result.addIntegratedTraces(ions);
+		Set<Integer> ions2 = result.getIntegratedTraces();
 		assertEquals(4, ions2.size());
 		assertTrue(ions2.contains(55));
 		assertTrue(ions2.contains(73));
@@ -79,11 +79,11 @@ public class PeakIntegrationResult_7_Test extends TestCase {
 
 	public void testGetIntegratedIons_4() {
 
-		result.addIntegratedIon(55);
-		result.addIntegratedIon(55);
-		result.addIntegratedIon(55);
-		result.addIntegratedIon(55);
-		Set<Integer> ions = result.getIntegratedIons();
+		result.addIntegratedTrace(55);
+		result.addIntegratedTrace(55);
+		result.addIntegratedTrace(55);
+		result.addIntegratedTrace(55);
+		Set<Integer> ions = result.getIntegratedTraces();
 		assertEquals(1, ions.size());
 		assertTrue(ions.contains(55));
 	}

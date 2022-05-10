@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,7 +23,7 @@ import org.eclipse.chemclipse.support.model.RangesInteger;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class IonSettingUtil implements IStringSerialization<String> {
+public class TraceSettingUtil implements IStringSerialization<String> {
 
 	public static final String SEPARATOR_SEMICOLON = ";"; // Legacy
 	public static final String SEPARATOR_WHITESPACE = " ";
@@ -31,7 +31,7 @@ public class IonSettingUtil implements IStringSerialization<String> {
 	//
 	private ObjectMapper objectMapper;
 
-	public IonSettingUtil() {
+	public TraceSettingUtil() {
 
 		objectMapper = new ObjectMapper();
 	}
@@ -114,7 +114,7 @@ public class IonSettingUtil implements IStringSerialization<String> {
 		return Integer.compare(i1, i2);
 	}
 
-	public int[] extractIons(List<String> array) {
+	public int[] extractTraces(List<String> array) {
 
 		RangesInteger rangesInteger = new RangesInteger();
 		int[][] ranges = parseString(array);

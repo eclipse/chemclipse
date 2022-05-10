@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -71,7 +71,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			result = integrator.integrate(super.getPeak(), peakIntegrationSettings, new NullProgressMonitor());
 			assertEquals("Integrated Peak Area", 285326.9905462646d, result.getIntegratedArea());
 			assertEquals(INTEGRATOR, result.getIntegratorType());
-			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
+			assertTrue(result.getIntegratedTraces().containsAll(peakIntegrationSettings.getMarkedTraces().getTraces()));
 			String description = super.getPeak().getIntegratorDescription();
 			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
@@ -90,7 +90,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			result = integrator.integrate(super.getPeak(), peakIntegrationSettings, new NullProgressMonitor());
 			assertEquals("Integrated Peak Area", 531480.5905462648d, result.getIntegratedArea());
 			assertEquals(INTEGRATOR, result.getIntegratorType());
-			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
+			assertTrue(result.getIntegratedTraces().containsAll(peakIntegrationSettings.getMarkedTraces().getTraces()));
 			String description = super.getPeak().getIntegratorDescription();
 			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
@@ -112,7 +112,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			result = integrator.integrate(super.getPeak(), peakIntegrationSettings, new NullProgressMonitor());
 			assertEquals("Integrated Peak Area", 285326.9905462646d, result.getIntegratedArea());
 			assertEquals(INTEGRATOR, result.getIntegratorType());
-			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
+			assertTrue(result.getIntegratedTraces().containsAll(peakIntegrationSettings.getMarkedTraces().getTraces()));
 			String description = super.getPeak().getIntegratorDescription();
 			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
@@ -135,7 +135,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			result = integrator.integrate(super.getPeak(), peakIntegrationSettings, new NullProgressMonitor());
 			assertEquals("Integrated Peak Area", 285326.9905462646d, result.getIntegratedArea());
 			assertEquals(INTEGRATOR, result.getIntegratorType());
-			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
+			assertTrue(result.getIntegratedTraces().containsAll(peakIntegrationSettings.getMarkedTraces().getTraces()));
 			String description = super.getPeak().getIntegratorDescription();
 			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
@@ -156,7 +156,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			result = integrator.integrate(super.getPeak(), peakIntegrationSettings, new NullProgressMonitor());
 			assertEquals("Integrated Peak Area", 285326.9905462646d, result.getIntegratedArea());
 			assertEquals(INTEGRATOR, result.getIntegratorType());
-			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
+			assertTrue(result.getIntegratedTraces().containsAll(peakIntegrationSettings.getMarkedTraces().getTraces()));
 			String description = super.getPeak().getIntegratorDescription();
 			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
@@ -177,7 +177,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			result = integrator.integrate(super.getPeak(), peakIntegrationSettings, new NullProgressMonitor());
 			assertEquals("Integrated Peak Area", 85739.27804626466d, result.getIntegratedArea());
 			assertEquals(INTEGRATOR, result.getIntegratorType());
-			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
+			assertTrue(result.getIntegratedTraces().containsAll(peakIntegrationSettings.getMarkedTraces().getTraces()));
 			String description = super.getPeak().getIntegratorDescription();
 			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
@@ -199,7 +199,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			result = integrator.integrate(super.getPeak(), peakIntegrationSettings, new NullProgressMonitor());
 			assertEquals("Integrated Peak Area", 285326.9905462646d, result.getIntegratedArea());
 			assertEquals(INTEGRATOR, result.getIntegratorType());
-			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
+			assertTrue(result.getIntegratedTraces().containsAll(peakIntegrationSettings.getMarkedTraces().getTraces()));
 			String description = super.getPeak().getIntegratorDescription();
 			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
@@ -221,7 +221,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			result = integrator.integrate(super.getPeak(), peakIntegrationSettings, new NullProgressMonitor());
 			assertEquals("Integrated Peak Area", 0.0d, result.getIntegratedArea());
 			assertEquals(INTEGRATOR, result.getIntegratorType());
-			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
+			assertTrue(result.getIntegratedTraces().containsAll(peakIntegrationSettings.getMarkedTraces().getTraces()));
 			String description = super.getPeak().getIntegratorDescription();
 			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
@@ -242,7 +242,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			result = integrator.integrate(super.getPeak(), peakIntegrationSettings, new NullProgressMonitor());
 			assertEquals("Integrated Peak Area", 285326.9905462646d, result.getIntegratedArea());
 			assertEquals(INTEGRATOR, result.getIntegratorType());
-			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
+			assertTrue(result.getIntegratedTraces().containsAll(peakIntegrationSettings.getMarkedTraces().getTraces()));
 			String description = super.getPeak().getIntegratorDescription();
 			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
@@ -264,7 +264,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			result = integrator.integrate(super.getPeak(), peakIntegrationSettings, new NullProgressMonitor());
 			assertEquals("Integrated Peak Area", 0.0d, result.getIntegratedArea());
 			assertEquals(INTEGRATOR, result.getIntegratorType());
-			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
+			assertTrue(result.getIntegratedTraces().containsAll(peakIntegrationSettings.getMarkedTraces().getTraces()));
 			String description = super.getPeak().getIntegratorDescription();
 			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
@@ -286,7 +286,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			result = integrator.integrate(super.getPeak(), peakIntegrationSettings, new NullProgressMonitor());
 			assertEquals("Integrated Peak Area", 285326.9905462646d, result.getIntegratedArea());
 			assertEquals(INTEGRATOR, result.getIntegratorType());
-			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
+			assertTrue(result.getIntegratedTraces().containsAll(peakIntegrationSettings.getMarkedTraces().getTraces()));
 			String description = super.getPeak().getIntegratorDescription();
 			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
@@ -308,7 +308,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			result = integrator.integrate(super.getPeak(), peakIntegrationSettings, new NullProgressMonitor());
 			assertEquals("Integrated Peak Area", 83859.96051452635d, result.getIntegratedArea());
 			assertEquals(INTEGRATOR, result.getIntegratorType());
-			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
+			assertTrue(result.getIntegratedTraces().containsAll(peakIntegrationSettings.getMarkedTraces().getTraces()));
 			String description = super.getPeak().getIntegratorDescription();
 			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
@@ -330,7 +330,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			result = integrator.integrate(super.getPeak(), peakIntegrationSettings, new NullProgressMonitor());
 			assertEquals("Integrated Peak Area", 285326.9905462646d, result.getIntegratedArea());
 			assertEquals(INTEGRATOR, result.getIntegratorType());
-			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
+			assertTrue(result.getIntegratedTraces().containsAll(peakIntegrationSettings.getMarkedTraces().getTraces()));
 			String description = super.getPeak().getIntegratorDescription();
 			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
@@ -353,7 +353,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			result = integrator.integrate(super.getPeak(), peakIntegrationSettings, new NullProgressMonitor());
 			assertEquals("Integrated Peak Area", 285326.9905462646d, result.getIntegratedArea());
 			assertEquals(INTEGRATOR, result.getIntegratorType());
-			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
+			assertTrue(result.getIntegratedTraces().containsAll(peakIntegrationSettings.getMarkedTraces().getTraces()));
 			String description = super.getPeak().getIntegratorDescription();
 			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
@@ -363,9 +363,9 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 
 	public void testIntegrate_8a() {
 
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(77));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(50));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(103));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(77));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(50));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(103));
 		/*
 		 * No chromatogram baseline.
 		 * > peakIntegrationSettings.setIncludeBackground(false);
@@ -375,7 +375,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			result = integrator.integrate(super.getPeak(), peakIntegrationSettings, new NullProgressMonitor());
 			assertEquals("Integrated Peak Area", 59181.76195989684d, result.getIntegratedArea());
 			assertEquals(INTEGRATOR, result.getIntegratorType());
-			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
+			assertTrue(result.getIntegratedTraces().containsAll(peakIntegrationSettings.getMarkedTraces().getTraces()));
 			String description = super.getPeak().getIntegratorDescription();
 			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
@@ -385,9 +385,9 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 
 	public void testIntegrate_8b() {
 
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(77));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(50));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(103));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(77));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(50));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(103));
 		/*
 		 * No chromatogram baseline.
 		 * > peakIntegrationSettings.setIncludeBackground(true);
@@ -397,7 +397,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			result = integrator.integrate(super.getPeak(), peakIntegrationSettings, new NullProgressMonitor());
 			assertEquals("Integrated Peak Area", 110238.28392748673d, result.getIntegratedArea());
 			assertEquals(INTEGRATOR, result.getIntegratorType());
-			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
+			assertTrue(result.getIntegratedTraces().containsAll(peakIntegrationSettings.getMarkedTraces().getTraces()));
 			String description = super.getPeak().getIntegratorDescription();
 			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
@@ -407,9 +407,9 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 
 	public void testIntegrate_9a() {
 
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(77));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(50));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(103));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(77));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(50));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(103));
 		/*
 		 * Chromatogram baseline at an abundance level of 1760.0f;
 		 * > peakIntegrationSettings.setIncludeBackground(false);
@@ -423,7 +423,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			result = integrator.integrate(super.getPeak(), peakIntegrationSettings, new NullProgressMonitor());
 			assertEquals("Integrated Peak Area", 59181.76195989684d, result.getIntegratedArea());
 			assertEquals(INTEGRATOR, result.getIntegratorType());
-			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
+			assertTrue(result.getIntegratedTraces().containsAll(peakIntegrationSettings.getMarkedTraces().getTraces()));
 			String description = super.getPeak().getIntegratorDescription();
 			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
@@ -433,9 +433,9 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 
 	public void testIntegrate_9b() {
 
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(77));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(50));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(103));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(77));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(50));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(103));
 		/*
 		 * Chromatogram baseline at an abundance level of 1760.0f;
 		 * > peakIntegrationSettings.setIncludeBackground(false);
@@ -449,7 +449,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			result = integrator.integrate(super.getPeak(), peakIntegrationSettings, new NullProgressMonitor());
 			assertEquals("Integrated Peak Area", 59181.76195989684d, result.getIntegratedArea());
 			assertEquals(INTEGRATOR, result.getIntegratorType());
-			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
+			assertTrue(result.getIntegratedTraces().containsAll(peakIntegrationSettings.getMarkedTraces().getTraces()));
 			String description = super.getPeak().getIntegratorDescription();
 			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
@@ -462,14 +462,14 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 		/*
 		 * Add all peak ions
 		 */
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(104));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(103));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(51));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(50));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(78));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(77));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(74));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(105));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(104));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(103));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(51));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(50));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(78));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(77));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(74));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(105));
 		/*
 		 * No chromatogram baseline.
 		 * > peakIntegrationSettings.setIncludeBackground(false);
@@ -479,7 +479,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			result = integrator.integrate(super.getPeak(), peakIntegrationSettings, new NullProgressMonitor());
 			assertEquals("Integrated Peak Area", 285327.0001125974d, result.getIntegratedArea(), 1);
 			assertEquals(INTEGRATOR, result.getIntegratorType());
-			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
+			assertTrue(result.getIntegratedTraces().containsAll(peakIntegrationSettings.getMarkedTraces().getTraces()));
 			String description = super.getPeak().getIntegratorDescription();
 			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
@@ -492,14 +492,14 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 		/*
 		 * Add all peak ions
 		 */
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(104));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(103));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(51));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(50));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(78));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(77));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(74));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(105));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(104));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(103));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(51));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(50));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(78));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(77));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(74));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(105));
 		/*
 		 * No chromatogram baseline.
 		 * > peakIntegrationSettings.setIncludeBackground(true);
@@ -509,7 +509,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			result = integrator.integrate(super.getPeak(), peakIntegrationSettings, new NullProgressMonitor());
 			assertEquals("Integrated Peak Area", 531480.6083655402d, result.getIntegratedArea());
 			assertEquals(INTEGRATOR, result.getIntegratorType());
-			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
+			assertTrue(result.getIntegratedTraces().containsAll(peakIntegrationSettings.getMarkedTraces().getTraces()));
 			String description = super.getPeak().getIntegratorDescription();
 			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
@@ -522,14 +522,14 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 		/*
 		 * Add all peak ions
 		 */
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(104));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(103));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(51));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(50));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(78));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(77));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(74));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(105));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(104));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(103));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(51));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(50));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(78));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(77));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(74));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(105));
 		/*
 		 * Chromatogram baseline at an abundance level of 1760.0f;
 		 * > peakIntegrationSettings.setIncludeBackground(false);
@@ -543,7 +543,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			result = integrator.integrate(super.getPeak(), peakIntegrationSettings, new NullProgressMonitor());
 			assertEquals("Integrated Peak Area", 285327.0001125974d, result.getIntegratedArea(), 1);
 			assertEquals(INTEGRATOR, result.getIntegratorType());
-			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
+			assertTrue(result.getIntegratedTraces().containsAll(peakIntegrationSettings.getMarkedTraces().getTraces()));
 			String description = super.getPeak().getIntegratorDescription();
 			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
@@ -556,14 +556,14 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 		/*
 		 * Add all peak ions
 		 */
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(104));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(103));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(51));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(50));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(78));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(77));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(74));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(105));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(104));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(103));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(51));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(50));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(78));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(77));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(74));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(105));
 		/*
 		 * Chromatogram baseline at an abundance level of 1760.0f;
 		 * > peakIntegrationSettings.setIncludeBackground(true);
@@ -577,7 +577,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			result = integrator.integrate(super.getPeak(), peakIntegrationSettings, new NullProgressMonitor());
 			assertEquals("Integrated Peak Area", 285327.0001125974d, result.getIntegratedArea(), 1);
 			assertEquals(INTEGRATOR, result.getIntegratorType());
-			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
+			assertTrue(result.getIntegratedTraces().containsAll(peakIntegrationSettings.getMarkedTraces().getTraces()));
 			String description = super.getPeak().getIntegratorDescription();
 			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
@@ -590,15 +590,15 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 		/*
 		 * Add all peak ions
 		 */
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(104));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(103));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(51));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(50));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(78));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(77));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(74));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(105));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(IIon.TIC_ION));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(104));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(103));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(51));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(50));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(78));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(77));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(74));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(105));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(IIon.TIC_ION));
 		/*
 		 * No chromatogram baseline.
 		 * > peakIntegrationSettings.setIncludeBackground(false);
@@ -608,7 +608,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			result = integrator.integrate(super.getPeak(), peakIntegrationSettings, new NullProgressMonitor());
 			assertEquals("Integrated Peak Area", 285326.9905462646d, result.getIntegratedArea());
 			assertEquals(INTEGRATOR, result.getIntegratorType());
-			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
+			assertTrue(result.getIntegratedTraces().containsAll(peakIntegrationSettings.getMarkedTraces().getTraces()));
 			String description = super.getPeak().getIntegratorDescription();
 			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
@@ -621,15 +621,15 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 		/*
 		 * Add all peak ions
 		 */
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(104));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(103));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(51));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(50));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(78));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(77));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(74));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(105));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(IIon.TIC_ION));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(104));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(103));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(51));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(50));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(78));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(77));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(74));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(105));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(IIon.TIC_ION));
 		/*
 		 * No chromatogram baseline.
 		 * > peakIntegrationSettings.setIncludeBackground(true);
@@ -639,7 +639,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			result = integrator.integrate(super.getPeak(), peakIntegrationSettings, new NullProgressMonitor());
 			assertEquals("Integrated Peak Area", 531480.5905462648d, result.getIntegratedArea());
 			assertEquals(INTEGRATOR, result.getIntegratorType());
-			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
+			assertTrue(result.getIntegratedTraces().containsAll(peakIntegrationSettings.getMarkedTraces().getTraces()));
 			String description = super.getPeak().getIntegratorDescription();
 			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
@@ -652,15 +652,15 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 		/*
 		 * Add all peak ions
 		 */
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(104));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(103));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(51));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(50));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(78));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(77));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(74));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(105));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(IIon.TIC_ION));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(104));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(103));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(51));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(50));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(78));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(77));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(74));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(105));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(IIon.TIC_ION));
 		/*
 		 * Chromatogram baseline at an abundance level of 1760.0f;
 		 * > peakIntegrationSettings.setIncludeBackground(false);
@@ -674,7 +674,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			result = integrator.integrate(super.getPeak(), peakIntegrationSettings, new NullProgressMonitor());
 			assertEquals("Integrated Peak Area", 285326.9905462646d, result.getIntegratedArea());
 			assertEquals(INTEGRATOR, result.getIntegratorType());
-			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
+			assertTrue(result.getIntegratedTraces().containsAll(peakIntegrationSettings.getMarkedTraces().getTraces()));
 			String description = super.getPeak().getIntegratorDescription();
 			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
@@ -687,15 +687,15 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 		/*
 		 * Add all peak ions
 		 */
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(104));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(103));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(51));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(50));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(78));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(77));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(74));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(105));
-		peakIntegrationSettings.getSelectedIons().add(new MarkedIon(AbstractIon.getIon(IIon.TIC_ION)));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(104));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(103));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(51));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(50));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(78));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(77));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(74));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(105));
+		peakIntegrationSettings.getMarkedTraces().add(new MarkedIon(AbstractIon.getIon(IIon.TIC_ION)));
 		/*
 		 * Chromatogram baseline at an abundance level of 1760.0f;
 		 * peakIntegrationSettings.setIncludeBackground(true);
@@ -709,7 +709,7 @@ public class TrapezoidPeakIntegrator_3_Test extends DefaultPeakTestCase {
 			result = integrator.integrate(super.getPeak(), peakIntegrationSettings, new NullProgressMonitor());
 			assertEquals("Integrated Peak Area", 285326.9905462646d, result.getIntegratedArea());
 			assertEquals(INTEGRATOR, result.getIntegratorType());
-			assertTrue(result.getIntegratedIons().containsAll(peakIntegrationSettings.getSelectedIons().getIonsNominal()));
+			assertTrue(result.getIntegratedTraces().containsAll(peakIntegrationSettings.getMarkedTraces().getTraces()));
 			String description = super.getPeak().getIntegratorDescription();
 			assertEquals(INTEGRATOR, description);
 		} catch(ValueMustNotBeNullException e) {
