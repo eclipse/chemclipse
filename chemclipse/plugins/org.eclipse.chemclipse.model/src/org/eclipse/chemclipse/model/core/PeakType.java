@@ -13,6 +13,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.core;
 
+import org.eclipse.chemclipse.support.text.ILabel;
+
 /**
  * This enumeration defines values which declare the type of the peak start and
  * end point.<br/>
@@ -27,31 +29,38 @@ package org.eclipse.chemclipse.model.core;
  * P - perpendicular
  *
  */
-public enum PeakType {
+public enum PeakType implements ILabel {
+
 	/*
 	 * Some peak type defaults are listed here.
 	 */
-	DEFAULT("no peak type information available"), //
-	BB("baseline" + " - " + "baseline"), //
-	BV("baseline" + " - " + "valey"), //
-	VV("valey" + " - " + "valey"), //
-	VB("valey" + " - " + "baseline"), //
-	MM("manual" + " - " + "manual"), //
-	PV("perpendicular" + " - " + "valey"), //
-	PB("perpendicular" + " - " + "baseline"), //
-	VP("valey" + " - " + "perpendicular"), //
-	BP("baseline" + " - " + "perpendicular"), //
-	DD("deconvoluted" + " - " + "deconvoluted");
+	DEFAULT("--"), //
+	BB("BB (Baseline)"), //
+	BV("BV (Baseline, Valley)"), //
+	VV("VV (Valley)"), //
+	VB("VB (Valley, Baseline)"), //
+	MM("MM (Manual)"), //
+	PV("PV (Perpendicular Drop, Valley"), //
+	PB("PB (Perpendicular Drop, Baseline"), //
+	VP("VP (Valley, Perpendicular Drop"), //
+	BP("BP (Baseline, Perpendicular Drop"), //
+	DD("DD (Deconvolution)");
 
-	private String description = "";
+	private String label = "";
 
-	private PeakType(String description) {
+	private PeakType(String label) {
 
-		this.description = description;
+		this.label = label;
 	}
 
-	public String getDescription() {
+	@Override
+	public String label() {
 
-		return description;
+		return label;
+	}
+
+	public static String[][] getOptions() {
+
+		return ILabel.getOptions(values());
 	}
 }
