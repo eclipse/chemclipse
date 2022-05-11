@@ -90,8 +90,7 @@ public class FilterScanSelector extends AbstractChromatogramFilter {
 				scanNumber = chromatogram.getScanNumber((int)Math.round(value * IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
 				break;
 			case RETENTION_INDEX:
-				RetentionIndexMap retentionIndexMap = new RetentionIndexMap();
-				retentionIndexMap.updateRetentionIndexMap(chromatogram);
+				RetentionIndexMap retentionIndexMap = new RetentionIndexMap(chromatogram);
 				int retentionTime = retentionIndexMap.getRetentionTime((int)Math.round(value));
 				if(retentionTime > -1) {
 					scanNumber = chromatogram.getScanNumber(retentionTime);

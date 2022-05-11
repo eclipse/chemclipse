@@ -19,9 +19,20 @@ import org.eclipse.chemclipse.model.core.IScan;
 
 public class RetentionIndexMap extends TreeMap<Integer, Integer> {
 
+	public static final int VALUE_NOT_AVAILABLE = -1;
+	//
 	private static final long serialVersionUID = -4827650901052762574L;
 
-	public void updateRetentionIndexMap(IChromatogram<?> chromatogram) {
+	public RetentionIndexMap() {
+
+	}
+
+	public RetentionIndexMap(IChromatogram<?> chromatogram) {
+
+		update(chromatogram);
+	}
+
+	public void update(IChromatogram<?> chromatogram) {
 
 		clear();
 		if(chromatogram != null) {
@@ -37,6 +48,6 @@ public class RetentionIndexMap extends TreeMap<Integer, Integer> {
 	public int getRetentionTime(int retentionIndex) {
 
 		Entry<Integer, Integer> floorEntry = floorEntry(retentionIndex);
-		return floorEntry != null ? floorEntry.getValue().intValue() : -1;
+		return floorEntry != null ? floorEntry.getValue().intValue() : VALUE_NOT_AVAILABLE;
 	}
 }

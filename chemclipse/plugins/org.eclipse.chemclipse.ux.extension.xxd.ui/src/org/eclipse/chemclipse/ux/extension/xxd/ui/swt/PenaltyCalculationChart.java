@@ -76,7 +76,7 @@ public class PenaltyCalculationChart extends ChromatogramChart {
 	public void setInput(IPeak peak) {
 
 		this.peak = peak;
-		retentionIndexMap.updateRetentionIndexMap(getChromatogram());
+		retentionIndexMap.update(getChromatogram());
 		updateChart();
 	}
 
