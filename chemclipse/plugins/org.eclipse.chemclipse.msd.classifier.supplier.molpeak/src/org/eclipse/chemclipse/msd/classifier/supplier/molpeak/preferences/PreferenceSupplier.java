@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,6 +17,7 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.Activator;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.ClassifierSettings;
+import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.IBasePeakSettings;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.MassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.PeakIdentifierSettings;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
@@ -26,6 +27,14 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
+	public static final float MIN_FACTOR = 0.0f;
+	public static final float MAX_FACTOR = 100.0f;
+	//
+	public static final String P_LIMIT_MATCH_FACTOR = "limitMatchFactor";
+	public static final float DEF_LIMIT_MATCH_FACTOR = 80.0f;
+	public static final String P_MATCH_QUALITY = "matchQuality";
+	public static final float DEF_MATCH_QUALITY = 80.0f;
+	//
 	private static IPreferenceSupplier preferenceSupplier;
 
 	public static IPreferenceSupplier INSTANCE() {
@@ -52,18 +61,24 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public Map<String, String> getDefaultValues() {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
+		defaultValues.put(P_LIMIT_MATCH_FACTOR, Float.toString(DEF_LIMIT_MATCH_FACTOR));
+		defaultValues.put(P_MATCH_QUALITY, Float.toString(DEF_MATCH_QUALITY));
 		return defaultValues;
 	}
 
 	public static MassSpectrumIdentifierSettings getMassSpectrumIdentifierSettings() {
 
 		MassSpectrumIdentifierSettings settings = new MassSpectrumIdentifierSettings();
+		assignDefaultValues(settings);
+		//
 		return settings;
 	}
 
 	public static PeakIdentifierSettings getPeakIdentifierSettings() {
 
 		PeakIdentifierSettings settings = new PeakIdentifierSettings();
+		assignDefaultValues(settings);
+		//
 		return settings;
 	}
 
@@ -76,5 +91,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public IEclipsePreferences getPreferences() {
 
 		return getScopeContext().getNode(getPreferenceNode());
+	}
+
+	private static void assignDefaultValues(IBasePeakSettings settings) {
+
+		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
+		settings.setLimitMatchFactor(preferences.getFloat(P_LIMIT_MATCH_FACTOR, DEF_LIMIT_MATCH_FACTOR));
+		settings.setMatchQuality(preferences.getFloat(P_MATCH_QUALITY, DEF_MATCH_QUALITY));
 	}
 }

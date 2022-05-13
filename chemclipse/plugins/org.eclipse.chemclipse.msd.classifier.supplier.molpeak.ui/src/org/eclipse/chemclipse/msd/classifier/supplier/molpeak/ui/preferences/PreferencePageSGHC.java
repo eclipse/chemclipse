@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +12,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.preferences;
 
+import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.Activator;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.FloatFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
@@ -35,6 +37,8 @@ public class PreferencePageSGHC extends FieldEditorPreferencePage implements IWo
 	@Override
 	public void createFieldEditors() {
 
+		addField(new FloatFieldEditor(PreferenceSupplier.P_LIMIT_MATCH_FACTOR, "Limit Match Factor", PreferenceSupplier.MIN_FACTOR, PreferenceSupplier.MAX_FACTOR, getFieldEditorParent()));
+		addField(new FloatFieldEditor(PreferenceSupplier.P_MATCH_QUALITY, "Match Quality", PreferenceSupplier.MIN_FACTOR, PreferenceSupplier.MAX_FACTOR, getFieldEditorParent()));
 	}
 
 	/*

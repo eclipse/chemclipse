@@ -34,6 +34,7 @@ import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.PenaltyCalculation;
+import org.eclipse.chemclipse.model.support.LimitSupport;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.PathResolver;
 import org.eclipse.chemclipse.msd.classifier.supplier.molpeak.settings.IBasePeakSettings;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
@@ -49,6 +50,13 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
+/**
+ * Journal of Analytical and Applied Pyrolysis
+ * Volume 95, May 2012, Pages 95-100
+ * Multivariate curve resolution provides a high-throughput data processing pipeline for pyrolysis-gas chromatography/mass spectrometry
+ * Lorenz Gerber, Mattias Eliasson, Johan Trygg, Thomas Moritz, Björn Sundberg
+ * dx.doi.org/10.1016/j.jaap.2012.01.011
+ */
 public class BasePeakIdentifier {
 
 	private static final Logger logger = Logger.getLogger(BasePeakIdentifier.class);
@@ -103,29 +111,33 @@ public class BasePeakIdentifier {
 	public void identifyPeaks(List<? extends IPeakMSD> peaks, IBasePeakSettings settings, IProgressMonitor monitor) {
 
 		List<IPeakMSD> peaksNotFound = new ArrayList<>();
+		float limitMatchFactor = settings.getLimitMatchFactor();
+		//
 		for(int i = 0; i < peaks.size(); i++) {
-			// current peak to work with
 			IPeakMSD peak = peaks.get(i);
-			// get MassSpectrum data from peak object
-			IScanMSD massSpectrum = peak.getExtractedMassSpectrum();
-			// identify the massSpectrum
-			String name = getIdentification(massSpectrum, settings, i);
-			/*
-			 * Add the peak target
-			 */
-			IComparisonResult comparisonResult = getComparisonResult();
-			IIdentificationTarget peakTarget = targetBuilder.getPeakTarget(massSpectrum, comparisonResult, IDENTIFIER);
-			setLibraryInformationFields(peakTarget.getLibraryInformation(), name);
-			peak.getTargets().add(peakTarget);
-			/*
-			 * Add the classifier field.
-			 */
-			peak.addClassifier(name);
-			/*
-			 * Grep all not identified peaks.
-			 */
-			if(peakTarget.getLibraryInformation().getName().equals(NOT_FOUND)) {
-				peaksNotFound.add(peak);
+			if(LimitSupport.doIdentify(peak.getTargets(), limitMatchFactor)) {
+				/*
+				 * Identification
+				 */
+				IScanMSD massSpectrum = peak.getExtractedMassSpectrum();
+				String name = getIdentification(massSpectrum, settings, i);
+				/*
+				 * Add the peak target
+				 */
+				IComparisonResult comparisonResult = getComparisonResult(settings);
+				IIdentificationTarget peakTarget = targetBuilder.getPeakTarget(massSpectrum, comparisonResult, IDENTIFIER);
+				setLibraryInformationFields(peakTarget.getLibraryInformation(), name);
+				peak.getTargets().add(peakTarget);
+				/*
+				 * Add the classifier field.
+				 */
+				peak.addClassifier(name);
+				/*
+				 * Grep all not identified peaks.
+				 */
+				if(peakTarget.getLibraryInformation().getName().equals(NOT_FOUND)) {
+					peaksNotFound.add(peak);
+				}
 			}
 		}
 		/*
@@ -160,21 +172,25 @@ public class BasePeakIdentifier {
 	public void identifyMassSpectra(List<IScanMSD> massSpectrumList, IBasePeakSettings settings, IProgressMonitor monitor) {
 
 		List<IScanMSD> scansNotFound = new ArrayList<>();
+		float limitMatchFactor = settings.getLimitMatchFactor();
+		//
 		for(int i = 0; i < massSpectrumList.size(); i++) {
-			// current scan to work with
 			IScanMSD massSpectrum = massSpectrumList.get(i);
-			// identify the scan
-			String name = getIdentification(massSpectrum, settings, i);
-			IComparisonResult comparisonResult = getComparisonResult();
-			// construct a new target object using targetBuilder and assign the data to it
-			IIdentificationTarget massSpectrumTarget = targetBuilder.getMassSpectrumTarget(massSpectrum, comparisonResult, IDENTIFIER);
-			setLibraryInformationFields(massSpectrumTarget.getLibraryInformation(), name);
-			massSpectrum.getTargets().add(massSpectrumTarget);
-			/*
-			 * Grep all not identified scans.
-			 */
-			if(massSpectrumTarget.getLibraryInformation().getName().equals(NOT_FOUND)) {
-				scansNotFound.add(massSpectrum);
+			if(LimitSupport.doIdentify(massSpectrum.getTargets(), limitMatchFactor)) {
+				/*
+				 * Identification
+				 */
+				String name = getIdentification(massSpectrum, settings, i);
+				IComparisonResult comparisonResult = getComparisonResult(settings);
+				IIdentificationTarget massSpectrumTarget = targetBuilder.getMassSpectrumTarget(massSpectrum, comparisonResult, IDENTIFIER);
+				setLibraryInformationFields(massSpectrumTarget.getLibraryInformation(), name);
+				massSpectrum.getTargets().add(massSpectrumTarget);
+				/*
+				 * Grep all not identified scans.
+				 */
+				if(massSpectrumTarget.getLibraryInformation().getName().equals(NOT_FOUND)) {
+					scansNotFound.add(massSpectrum);
+				}
 			}
 		}
 		/*
@@ -313,9 +329,10 @@ public class BasePeakIdentifier {
 		}
 	}
 
-	private IComparisonResult getComparisonResult() {
+	private IComparisonResult getComparisonResult(IBasePeakSettings settings) {
 
-		return new ComparisonResult(100.0f, 100.0f, 100.0f, 100.0f);
+		float matchQuality = settings.getMatchQuality();
+		return new ComparisonResult(matchQuality, matchQuality, matchQuality, matchQuality);
 	}
 
 	private void setIdentifierSettings(IIdentifierSettingsMSD identifierSettings) {
