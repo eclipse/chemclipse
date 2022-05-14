@@ -26,7 +26,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.CalculatorSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.ResetterSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.model.columns.SeparationColumnType;
@@ -35,6 +34,7 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.support.RetentionIndexMath;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
@@ -44,7 +44,6 @@ public class RetentionIndexCalculator {
 
 	private static final Logger logger = Logger.getLogger(RetentionIndexCalculator.class);
 	//
-	public static final String ALKANE_PREFIX = "C";
 	public static final String ALKANE_REGEX = "(C)(\\d+)";
 	public static final int ALKANE_MISSING = 0;
 	public static final int INDEX_MISSING = 0;
@@ -379,59 +378,6 @@ public class RetentionIndexCalculator {
 		return separationColumnIndices;
 	}
 
-	/**
-	 * Calculate the value if both entries exists.
-	 * See AMDIS manual:
-	 * RIcomp = RIlo + ( (RIhi - RIlo) * (RTact - RTlo) / (RThi - RTlo) )
-	 */
-	public float calculateRetentionIndex(int retentionTime, ISeparationColumnIndices separationColumnIndices) {
-
-		float retentionIndex = 0;
-		Map.Entry<Integer, IRetentionIndexEntry> floorEntry = separationColumnIndices.floorEntry(retentionTime);
-		Map.Entry<Integer, IRetentionIndexEntry> ceilingEntry = separationColumnIndices.ceilingEntry(retentionTime);
-		//
-		if(floorEntry != null && ceilingEntry != null) {
-			/*
-			 * Get the values.
-			 */
-			IRetentionIndexEntry floorIndex = floorEntry.getValue();
-			IRetentionIndexEntry ceilingIndex = ceilingEntry.getValue();
-			float retentionIndexLow = floorIndex.getRetentionIndex();
-			int retentionTimeLow = floorIndex.getRetentionTime();
-			float retentionIndexHigh = ceilingIndex.getRetentionIndex();
-			int retentionTimeHigh = ceilingIndex.getRetentionTime();
-			retentionIndex = calculateRetentionIndex(retentionTime, retentionTimeLow, retentionTimeHigh, retentionIndexLow, retentionIndexHigh);
-		}
-		//
-		return retentionIndex;
-	}
-
-	public float calculateRetentionIndex(int retentionTime, int retentionTimeLow, int retentionTimeHigh, float retentionIndexLow, float retentionIndexHigh) {
-
-		float retentionIndex = 0;
-		//
-		if(retentionTimeLow == retentionTimeHigh) {
-			/*
-			 * We are at an exact value, return simply the RI, otherwise it will fail at if(denominatorRT != 0)
-			 */
-			return retentionIndexLow;
-		}
-		/*
-		 * Execute the calculation.
-		 */
-		float factorRetentionIndex = retentionIndexHigh - retentionIndexLow;
-		float nominatorRT = retentionTime - retentionTimeLow;
-		float denominatorRT = retentionTimeHigh - retentionTimeLow;
-		if(denominatorRT != 0) {
-			/*
-			 * Calculate the retention index.
-			 */
-			retentionIndex = retentionIndexLow + factorRetentionIndex * nominatorRT / denominatorRT;
-		}
-		//
-		return retentionIndex;
-	}
-
 	private void resetIndex(IChromatogram<? extends IPeak> chromatogram) {
 
 		float retentionIndex = 0.0f;
@@ -468,7 +414,7 @@ public class RetentionIndexCalculator {
 			 */
 			for(IScan scan : chromatogram.getScans()) {
 				int retentionTime = scan.getRetentionTime();
-				float retentionIndex = calculateRetentionIndex(retentionTime, separationColumnIndices);
+				float retentionIndex = RetentionIndexMath.calculateRetentionIndex(retentionTime, separationColumnIndices);
 				scan.setRetentionIndex(retentionIndex);
 				/*
 				 * Calculate RI also for the optimized MS.
@@ -487,7 +433,7 @@ public class RetentionIndexCalculator {
 			for(IPeak peak : chromatogram.getPeaks()) {
 				IScan scan = peak.getPeakModel().getPeakMaximum();
 				int retentionTime = scan.getRetentionTime();
-				float retentionIndex = calculateRetentionIndex(retentionTime, separationColumnIndices);
+				float retentionIndex = RetentionIndexMath.calculateRetentionIndex(retentionTime, separationColumnIndices);
 				scan.setRetentionIndex(retentionIndex);
 			}
 		}
