@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -64,7 +65,6 @@ import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
-import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.processors.ProcessorToolbar;
@@ -111,6 +111,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakChartSuppor
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ChromatogramBaselinesUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ChromatogramReferencesUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ToolbarConfig;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
@@ -161,7 +162,7 @@ import org.eclipse.swtchart.extensions.menu.ResetChartHandler;
 import org.eclipse.swtchart.extensions.preferences.PreferencePage;
 
 @SuppressWarnings("rawtypes")
-public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
+public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, IExtendedPartUI {
 
 	public static final String PREFERENCE_SHOW_TOOLBAR_TEXT = "ChromatogramUI.showToolbarText";
 	//
@@ -171,6 +172,9 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 	protected static final String TYPE_MSD = "TYPE_MSD";
 	protected static final String TYPE_CSD = "TYPE_CSD";
 	protected static final String TYPE_WSD = "TYPE_WSD";
+	//
+	private static final String IMAGE_RETENTION_INDEX = IApplicationImage.IMAGE_RETENION_INDEX;
+	private static final String TOOLTIP_RETENTION_INDEX = "retention index list.";
 	//
 	private static final DecimalFormat FORMAT = ValueFormat.getDecimalFormatEnglish("0.000");
 	//
@@ -204,7 +208,8 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 	private ChromatogramBaselinesUI chromatogramBaselinesUI;
 	private ChromatogramReferencesUI chromatogramReferencesUI;
 	private ChromatogramAlignmentUI chromatogramAlignmentUI;
-	private RetentionIndexUI retentionIndexUI;
+	private Button buttonToolbarRetentionIndex;
+	private AtomicReference<RetentionIndexUI> retentionIndexListControl = new AtomicReference<>();
 	private ChromatogramChart chromatogramChart;
 	private ComboViewer comboViewerSeparationColumn;
 	//
@@ -381,12 +386,11 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 				updateMenu();
 				updateChromatogram();
 				setSeparationColumnSelection();
-				retentionIndexUI.setInput(chromatogramSelection.getChromatogram().getSeparationColumnIndices());
 			} else {
 				adjustAxisSettings();
 				updateChromatogram();
-				retentionIndexUI.setInput(null);
 			}
+			updateMappedRetentionIndices();
 			/*
 			 * Update the chart.
 			 * fireUpdate(getChromatogramChart().getDisplay()); makes problems here.
@@ -626,6 +630,8 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 			adjustChromatogramSelectionRange();
 			chromatogramAlignmentUI.update(chromatogramReferencesUI.getChromatogramSelections());
 		}
+		//
+		updateMappedRetentionIndices();
 	}
 
 	private void clearPeakAndScanLabels() {
@@ -989,7 +995,8 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		toolbars.put(TOOLBAR_EDIT, createToolbarEdit(this));
 		toolbars.put(TOOLBAR_CHROMATOGRAM_ALIGNMENT, createChromatogramAlignmentUI(this));
 		toolbars.put(TOOLBAR_METHOD, createToolbarMethod(this));
-		toolbars.put(TOOLBAR_RETENTION_INDICES, retentionIndexUI = createToolbarRetentionIndexUI(this));
+		createToolbarRetentionIndexUI(this);
+		toolbars.put(TOOLBAR_RETENTION_INDICES, retentionIndexListControl.get());
 		//
 		createChromatogramChart(this);
 		//
@@ -999,6 +1006,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 	private void initialize() {
 
 		comboViewerSeparationColumn.setInput(separationColumns);
+		enableToolbar(retentionIndexListControl, buttonToolbarRetentionIndex, IMAGE_RETENTION_INDEX, TOOLTIP_RETENTION_INDEX, false);
 		//
 		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_INFO), false);
 		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_EDIT), false);
@@ -1071,13 +1079,13 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		return composite;
 	}
 
-	private RetentionIndexUI createToolbarRetentionIndexUI(Composite parent) {
+	private void createToolbarRetentionIndexUI(Composite parent) {
 
 		RetentionIndexUI retentionIndexUI = new RetentionIndexUI(parent, SWT.NONE);
 		retentionIndexUI.setLayoutData(new GridData(GridData.FILL_BOTH));
 		retentionIndexUI.setSearchVisibility(false);
 		//
-		return retentionIndexUI;
+		retentionIndexListControl.set(retentionIndexUI);
 	}
 
 	private Composite createToolbarMethod(Composite parent) {
@@ -1164,7 +1172,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(6, false));
 		//
-		createToggleToolbarButton(composite, "Toggle the retention index toolbar.", IApplicationImage.IMAGE_RETENION_INDEX, TOOLBAR_RETENTION_INDICES);
+		buttonToolbarRetentionIndex = createButtonToggleToolbar(composite, retentionIndexListControl, IMAGE_RETENTION_INDEX, TOOLTIP_RETENTION_INDEX);
 		chromatogramBaselinesUI = createChromatogramBaselinesUI(composite);
 		createVerticalSeparator(composite);
 		createToggleChartSeriesLegendButton(composite);
@@ -1254,26 +1262,6 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 				menuActive = false;
 			}
 		});
-	}
-
-	private Button createToggleToolbarButton(Composite parent, String tooltip, String image, String toolbar) {
-
-		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText(tooltip);
-		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(image, IApplicationImageProvider.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				if(toolbars.containsKey(toolbar)) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(image, IApplicationImageProvider.SIZE_16x16));
-				}
-			}
-		});
-		//
-		return button;
 	}
 
 	private TargetLabelEditAction createLabelsAction() {
@@ -1583,5 +1571,14 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig {
 		PreferenceInitializer.initializeChromatogramDefaults(preferenceStore);
 		// and set our private preference also
 		preferenceStore.setDefault(PREFERENCE_SHOW_TOOLBAR_TEXT, true);
+	}
+
+	private void updateMappedRetentionIndices() {
+
+		if(chromatogramSelection != null) {
+			retentionIndexListControl.get().setInput(chromatogramSelection.getChromatogram().getSeparationColumnIndices());
+		} else {
+			retentionIndexListControl.get().setInput(null);
+		}
 	}
 }

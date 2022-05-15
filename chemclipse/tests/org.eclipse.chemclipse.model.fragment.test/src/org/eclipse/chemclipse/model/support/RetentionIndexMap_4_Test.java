@@ -18,7 +18,7 @@ import org.eclipse.chemclipse.model.implementation.Scan;
 
 import junit.framework.TestCase;
 
-public class RetentionIndexMap_2_Test extends TestCase {
+public class RetentionIndexMap_4_Test extends TestCase {
 
 	private RetentionIndexMap retentionIndexMap = new RetentionIndexMap();
 
@@ -27,16 +27,16 @@ public class RetentionIndexMap_2_Test extends TestCase {
 
 		super.setUp();
 		/*
-		 * Start
 		 * C5 - C54
-		 * Stop
 		 */
 		IChromatogram<?> chromatogram = new Chromatogram();
 		for(int i = 1, j = 499; i < 5000; i++, j++) {
 			IScan scan = new Scan((float)Math.random());
 			scan.setRetentionTime(i * 750);
 			scan.setRetentionIndex(j);
-			chromatogram.addScan(scan);
+			if(j % 100 == 0) {
+				chromatogram.addScan(scan);
+			}
 		}
 		retentionIndexMap.update(chromatogram);
 	}
@@ -49,7 +49,7 @@ public class RetentionIndexMap_2_Test extends TestCase {
 
 	public void test1() {
 
-		assertEquals(52, retentionIndexMap.getSeparationColumnIndices().size());
+		assertEquals(50, retentionIndexMap.getSeparationColumnIndices().size());
 	}
 
 	public void test2() {

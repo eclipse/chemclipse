@@ -23,7 +23,7 @@ import org.eclipse.chemclipse.model.core.IScan;
 
 public class RetentionIndexMap {
 
-	private ISeparationColumnIndices separationColumnIndices = new SeparationColumnIndices();
+	private ISeparationColumnIndices separationColumnIndices = new SeparationColumnIndices(); // Retention Time, Retention Index
 	private TreeMap<Integer, Integer> retentionIndexMap = new TreeMap<>(); // Retention Index, Retention Time
 
 	public RetentionIndexMap() {
@@ -41,6 +41,7 @@ public class RetentionIndexMap {
 		 * Map the available retention indices.
 		 */
 		TreeMap<Integer, Integer> treeMap = new TreeMap<>();
+		//
 		if(chromatogram != null) {
 			for(IScan scan : chromatogram.getScans()) {
 				int retentionIndex = Math.round(scan.getRetentionIndex());
@@ -99,36 +100,50 @@ public class RetentionIndexMap {
 		/*
 		 * First Entry
 		 */
-		Entry<Integer, Integer> firstEntry = treeMap.firstEntry();
-		separationColumnIndices.put(new RetentionIndexEntry(firstEntry.getValue(), firstEntry.getKey(), "Start"));
-		/*
-		 * Check C1 - C99
-		 */
-		for(int i = 1; i < 99; i++) {
-			//
-			int retentionIndex = i * 100;
-			String alkane = RetentionIndexMath.ALKANE_PREFIX + i;
-			Entry<Integer, Integer> floorEntry = treeMap.floorEntry(retentionIndex);
-			Entry<Integer, Integer> higherEntry = treeMap.higherEntry(retentionIndex + 100);
-			//
-			if(floorEntry != null && higherEntry != null) {
-				if(floorEntry.getKey() % 100 == 0) {
-					separationColumnIndices.put(new RetentionIndexEntry(floorEntry.getValue(), retentionIndex, alkane));
-				} else {
-					float retentionIndexLow = floorEntry.getKey();
-					float retentionIndexHigh = higherEntry.getKey();
-					int retentionTimeLow = floorEntry.getValue();
-					int retentionTimeHigh = higherEntry.getValue();
-					int retentionTime = RetentionIndexMath.calculateRetentionTime(retentionIndex, retentionIndexLow, retentionIndexHigh, retentionTimeLow, retentionTimeHigh);
-					separationColumnIndices.put(new RetentionIndexEntry(retentionTime, retentionIndex, alkane));
+		if(treeMap.size() >= 2) {
+			Entry<Integer, Integer> firstEntry = treeMap.firstEntry();
+			separationColumnIndices.put(new RetentionIndexEntry(firstEntry.getValue(), firstEntry.getKey(), "Start"));
+			/*
+			 * Check C1 - C99
+			 */
+			for(int i = 1; i < 99; i++) {
+				//
+				int retentionIndex = i * 100;
+				String alkane = RetentionIndexMath.ALKANE_PREFIX + i;
+				Entry<Integer, Integer> floorEntry = treeMap.floorEntry(retentionIndex);
+				Entry<Integer, Integer> ceilingEntry = treeMap.ceilingEntry(retentionIndex + 100);
+				//
+				if(floorEntry != null) {
+					if(ceilingEntry != null) {
+						if(floorEntry.getKey() % 100 == 0) {
+							separationColumnIndices.put(new RetentionIndexEntry(floorEntry.getValue(), retentionIndex, alkane));
+						} else {
+							float retentionIndexLow = floorEntry.getKey();
+							float retentionIndexHigh = ceilingEntry.getKey();
+							int retentionTimeLow = floorEntry.getValue();
+							int retentionTimeHigh = ceilingEntry.getValue();
+							int retentionTime = RetentionIndexMath.calculateRetentionTime(retentionIndex, retentionIndexLow, retentionIndexHigh, retentionTimeLow, retentionTimeHigh);
+							separationColumnIndices.put(new RetentionIndexEntry(retentionTime, retentionIndex, alkane));
+						}
+					} else {
+						if(floorEntry.getKey() % 100 == 0) {
+							int retentionTime = floorEntry.getValue();
+							if(!separationColumnIndices.containsKey(retentionTime)) {
+								separationColumnIndices.put(new RetentionIndexEntry(retentionTime, retentionIndex, alkane));
+							}
+						}
+					}
 				}
 			}
+			/*
+			 * Last Entry
+			 */
+			Entry<Integer, Integer> lastEntry = treeMap.lastEntry();
+			int retentionTime = lastEntry.getValue();
+			if(!separationColumnIndices.containsKey(retentionTime)) {
+				separationColumnIndices.put(new RetentionIndexEntry(lastEntry.getValue(), lastEntry.getKey(), "Stop"));
+			}
 		}
-		/*
-		 * Last Entry
-		 */
-		Entry<Integer, Integer> lastEntry = treeMap.lastEntry();
-		separationColumnIndices.put(new RetentionIndexEntry(lastEntry.getValue(), lastEntry.getKey(), "Stop"));
 	}
 
 	private void mapRetentionIndices(ISeparationColumnIndices separationColumnIndices) {
