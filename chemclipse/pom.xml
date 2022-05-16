@@ -27,6 +27,11 @@
 		<maven.groupid>org.apache.maven.plugins</maven.groupid>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<skip.install>true</skip.install>
+		<!-- about dialog -->
+		<maven.build.timestamp.format>yyyyMMdd-HHmm</maven.build.timestamp.format>
+		<buildTimestamp>${maven.build.timestamp}</buildTimestamp>
+		<buildId>${buildTimestamp}</buildId>
+		<releaseName>0.9.0</releaseName>
 	</properties>
 	<build>
 		<!-- PLUGINS -->
@@ -125,6 +130,48 @@
 					<skip>${skip.install}</skip>
 				</configuration>
 			</plugin>
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-resources-plugin</artifactId>
+			    <version>2.6</version>
+			    <executions>
+			      <execution>
+			        <id>process-about.mappings</id>
+			        <phase>prepare-package</phase>
+			        <configuration>
+			          <outputDirectory>${project.build.directory}</outputDirectory>
+			          <overwrite>true</overwrite>
+			          <resources>
+			            <resource>
+			              <directory>${basedir}</directory>
+			              <includes>
+			                <include>about.mappings</include>
+			              </includes>
+			              <filtering>true</filtering>
+			            </resource>
+			          </resources>
+			        </configuration>
+			        <goals>
+			          <goal>copy-resources</goal>
+			        </goals>
+			      </execution>
+			    </executions>
+			  </plugin>
+			  <plugin>
+			    <groupId>org.eclipse.tycho</groupId>
+			    <artifactId>tycho-packaging-plugin</artifactId>
+			    <version>${tycho.version}</version>
+			    <configuration>
+			      <additionalFileSets>
+			        <fileSet>
+			          <directory>${project.build.directory}</directory>
+			          <includes>
+			            <include>about.mappings</include>
+			          </includes>
+			        </fileSet>
+			      </additionalFileSets>
+			    </configuration>
+			  </plugin>
 		</plugins>
 
 		<pluginManagement>
