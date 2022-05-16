@@ -45,6 +45,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
@@ -89,6 +90,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 	private double scaleFactor = SCALE_DEFAULT;
 	private Image imageMolecule = null;
 	private ILibraryInformation renderedLibraryInformation;
+	private Point renderedSize;
 	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
@@ -485,6 +487,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 		String moleculeInfo = "";
 		IMoleculeImageService moleculeImageService = getMoleculeImageService();
+		//
 		if(moleculeImageService != null) {
 			/*
 			 * Canvas and a scale factor are used.
@@ -508,19 +511,29 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 						break;
 				}
 			}
-			if(renderedLibraryInformation == libraryInformation) {
-				return;
-			}
-			moleculeInfo = getMoleculeInformation(libraryInformation);
-			if(isSourceDataAvailable(libraryInformation)) {
-				if(imageMolecule != null) {
-					imageMolecule.dispose();
-					imageMolecule = null;
+			/*
+			 * Skip creation if the molecule image exists already.
+			 * Take a size change of the canvas into account.
+			 */
+			if(!size.equals(renderedSize) || renderedLibraryInformation != libraryInformation) {
+				moleculeInfo = getMoleculeInformation(libraryInformation);
+				if(isSourceDataAvailable(libraryInformation)) {
+					/*
+					 * Dispose is required on images.
+					 */
+					if(imageMolecule != null) {
+						imageMolecule.dispose();
+						imageMolecule = null;
+					}
+					/*
+					 * Create a new molecule image.
+					 */
+					imageMolecule = moleculeImageService.create(display, libraryInformation, width, height);
+					renderedLibraryInformation = libraryInformation;
+					renderedSize = size;
+				} else {
+					logger.info(ERROR_MESSAGE);
 				}
-				imageMolecule = moleculeImageService.create(display, libraryInformation, width, height);
-				renderedLibraryInformation = libraryInformation;
-			} else {
-				logger.info(ERROR_MESSAGE);
 			}
 		}
 		//
@@ -552,7 +565,12 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		return new Point(width, height);
 	}
 
-	private void drawImage(Canvas canvas, PaintEvent event) {
+	private void drawImage(Canvas canvas, PaintEvent paintEvent) {
+
+		drawImage(canvas, paintEvent.display, paintEvent.gc);
+	}
+
+	private void drawImage(Canvas canvas, Display display, GC gc) {
 
 		if(libraryInformation == null || !isSourceDataAvailable(libraryInformation)) {
 			/*
@@ -560,57 +578,60 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 			 */
 			Font font = getFont();
 			FontData[] fontData = font.getFontData();
-			int width = event.gc.stringExtent(EMPTY_MESSAGE).x;
+			int width = gc.stringExtent(EMPTY_MESSAGE).x;
 			int height = fontData[0].getHeight();
 			//
 			Point size = canvas.getSize();
 			int x = (int)(size.x / 2.0d - width / 2.0d);
 			int y = (int)(size.y / 2.0d - height / 2.0d);
-			event.gc.drawText(EMPTY_MESSAGE, x, y, true);
-			return;
-		}
-		createMoleculeImage(event.display);
-		if(imageMolecule != null) {
-			/*
-			 * Image
-			 */
-			Rectangle bounds = imageMolecule.getBounds();
-			int srcX = 0;
-			int srcY = 0;
-			int srcWidth = bounds.width;
-			int srcHeight = bounds.height;
-			int destX = 0;
-			int destY = 0;
-			int destWidth = bounds.width;
-			int destHeight = bounds.height;
-			//
-			if(scaleFactor != 1.0d) {
-				destWidth = (int)(bounds.width * scaleFactor);
-				destHeight = (int)(bounds.height * scaleFactor);
-				Point size = canvasMolecule.getSize();
-				int corrwidth = (int)(size.x * scaleFactor);
-				int corrheight = (int)(size.y * scaleFactor);
-				destX = (int)(srcWidth / 2.0d - destWidth / 2.0d - corrwidth / 2.0d);
-				destY = (int)(srcHeight / 2.0d - destHeight / 2.0d - corrheight / 2.0d);
-			}
-			/*
-			 * Correction
-			 */
-			Point destSize = adjustSize(destWidth, destHeight);
-			event.gc.drawImage(imageMolecule, srcX, srcY, srcWidth, srcHeight, destX, destY, destSize.x, destSize.y);
+			gc.drawText(EMPTY_MESSAGE, x, y, true);
 		} else {
 			/*
-			 * Text
+			 * Molecule
 			 */
-			Font font = getFont();
-			FontData[] fontData = font.getFontData();
-			int width = event.gc.stringExtent(ERROR_MESSAGE).x;
-			int height = fontData[0].getHeight();
-			//
-			Point size = canvas.getSize();
-			int x = (int)(size.x / 2.0d - width / 2.0d);
-			int y = (int)(size.y / 2.0d - height / 2.0d);
-			event.gc.drawText(ERROR_MESSAGE, x, y, true);
+			createMoleculeImage(display);
+			if(imageMolecule != null) {
+				/*
+				 * Image of molecule.
+				 */
+				Rectangle bounds = imageMolecule.getBounds();
+				int srcX = 0;
+				int srcY = 0;
+				int srcWidth = bounds.width;
+				int srcHeight = bounds.height;
+				int destX = 0;
+				int destY = 0;
+				int destWidth = bounds.width;
+				int destHeight = bounds.height;
+				//
+				if(scaleFactor != 1.0d) {
+					destWidth = (int)(bounds.width * scaleFactor);
+					destHeight = (int)(bounds.height * scaleFactor);
+					Point size = canvasMolecule.getSize();
+					int corrwidth = (int)(size.x * scaleFactor);
+					int corrheight = (int)(size.y * scaleFactor);
+					destX = (int)(srcWidth / 2.0d - destWidth / 2.0d - corrwidth / 2.0d);
+					destY = (int)(srcHeight / 2.0d - destHeight / 2.0d - corrheight / 2.0d);
+				}
+				/*
+				 * Correction
+				 */
+				Point destSize = adjustSize(destWidth, destHeight);
+				gc.drawImage(imageMolecule, srcX, srcY, srcWidth, srcHeight, destX, destY, destSize.x, destSize.y);
+			} else {
+				/*
+				 * Can't create molecule display.
+				 */
+				Font font = getFont();
+				FontData[] fontData = font.getFontData();
+				int width = gc.stringExtent(ERROR_MESSAGE).x;
+				int height = fontData[0].getHeight();
+				//
+				Point size = canvas.getSize();
+				int x = (int)(size.x / 2.0d - width / 2.0d);
+				int y = (int)(size.y / 2.0d - height / 2.0d);
+				gc.drawText(ERROR_MESSAGE, x, y, true);
+			}
 		}
 	}
 
