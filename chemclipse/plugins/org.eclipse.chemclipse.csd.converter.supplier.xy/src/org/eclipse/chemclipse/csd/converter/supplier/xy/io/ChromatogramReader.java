@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2020 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,9 +15,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
@@ -36,6 +37,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class ChromatogramReader extends AbstractChromatogramCSDReader {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramReader.class);
+	//
+	private static final String TAB = DelimiterFormat.TAB.value();
+	private static final String COMMA = ",";
+	private static final String SEMICOLON = ";";
+	private static final String WHITE_SPACE = " ";
 
 	@Override
 	public IChromatogramCSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
@@ -56,9 +62,9 @@ public class ChromatogramReader extends AbstractChromatogramCSDReader {
 		/*
 		 * Read the chromatogram
 		 */
-		boolean importSuccessful = readChromatogram(new BufferedReader(new FileReader(file)), chromatogram);
+		boolean importSuccessful = readChromatogram(file, Charset.defaultCharset().name(), chromatogram);
 		if(!importSuccessful) {
-			readChromatogram(new BufferedReader(new InputStreamReader(new FileInputStream(file), "UTF-16")), chromatogram);
+			readChromatogram(file, "UTF-16", chromatogram);
 		}
 		/*
 		 * Calculate the scanInterval and scanDelay.
@@ -72,13 +78,13 @@ public class ChromatogramReader extends AbstractChromatogramCSDReader {
 		return chromatogram;
 	}
 
-	private boolean readChromatogram(BufferedReader bufferedReader, IVendorChromatogram chromatogram) {
+	private boolean readChromatogram(File file, String charsetName, IVendorChromatogram chromatogram) {
 
-		if(bufferedReader != null) {
+		try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file)))) {
 			try {
 				boolean autoDetectFormat = PreferenceSupplier.isAutoDetectFormat();
-				String delimiterFormat = PreferenceSupplier.getDelimiterFormat();
-				String retentionTimeFormat = PreferenceSupplier.getRetentionTimeFormat();
+				DelimiterFormat delimiterFormat = PreferenceSupplier.getDelimiterFormat();
+				RetentionTimeFormat retentionTimeFormat = PreferenceSupplier.getRetentionTimeFormat();
 				//
 				String line;
 				while((line = bufferedReader.readLine()) != null) {
@@ -87,17 +93,17 @@ public class ChromatogramReader extends AbstractChromatogramCSDReader {
 					 */
 					String[] values = null;
 					if(autoDetectFormat) {
-						if(line.contains(PreferenceSupplier.TAB)) {
-							values = line.split(PreferenceSupplier.TAB);
-						} else if(line.contains(PreferenceSupplier.COMMA)) {
-							values = line.split(PreferenceSupplier.COMMA);
-						} else if(line.contains(PreferenceSupplier.SEMICOLON)) {
-							values = line.split(PreferenceSupplier.SEMICOLON);
+						if(line.contains(TAB)) {
+							values = line.split(TAB);
+						} else if(line.contains(COMMA)) {
+							values = line.split(COMMA);
+						} else if(line.contains(SEMICOLON)) {
+							values = line.split(SEMICOLON);
 						} else {
-							values = line.split(PreferenceSupplier.WHITE_SPACE);
+							values = line.split(WHITE_SPACE);
 						}
 					} else {
-						values = line.split(delimiterFormat);
+						values = line.split(delimiterFormat.value());
 					}
 					//
 					if(values != null && values.length >= 2) {
@@ -119,14 +125,18 @@ public class ChromatogramReader extends AbstractChromatogramCSDReader {
 									retentionTime = Integer.parseInt(value);
 								}
 							} else {
-								if(retentionTimeFormat.equals(PreferenceSupplier.MINUTES)) {
-									double retentionTimeInMinutes = Double.parseDouble(value);
-									retentionTime = (int)(retentionTimeInMinutes * IChromatogram.MINUTE_CORRELATION_FACTOR);
-								} else if(retentionTimeFormat.equals(PreferenceSupplier.SECONDS)) {
-									double retentionTimeInSeconds = Double.parseDouble(value);
-									retentionTime = (int)(retentionTimeInSeconds * IChromatogram.SECOND_CORRELATION_FACTOR);
-								} else {
-									retentionTime = Integer.parseInt(value);
+								switch(retentionTimeFormat) {
+									case MINUTES:
+										double retentionTimeInMinutes = Double.parseDouble(value);
+										retentionTime = (int)(retentionTimeInMinutes * IChromatogram.MINUTE_CORRELATION_FACTOR);
+										break;
+									case SECONDS:
+										double retentionTimeInSeconds = Double.parseDouble(value);
+										retentionTime = (int)(retentionTimeInSeconds * IChromatogram.SECOND_CORRELATION_FACTOR);
+										break;
+									default:
+										retentionTime = Integer.parseInt(value);
+										break;
 								}
 							}
 							/*
@@ -142,15 +152,15 @@ public class ChromatogramReader extends AbstractChromatogramCSDReader {
 						}
 					}
 				}
-			} catch(IOException e) {
+			} catch(Exception e) {
 				logger.warn(e);
-			} finally {
-				try {
-					bufferedReader.close();
-				} catch(IOException e) {
-					logger.warn(e);
-				}
 			}
+		} catch(UnsupportedEncodingException e1) {
+			logger.warn(e1);
+		} catch(FileNotFoundException e1) {
+			logger.warn(e1);
+		} catch(IOException e1) {
+			logger.warn(e1);
 		}
 		//
 		return (chromatogram.getNumberOfScans() > 0) ? true : false;

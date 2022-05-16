@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2020 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -29,28 +29,33 @@ public class ChromatogramWriter extends AbstractChromatogramCSDWriter {
 	@Override
 	public void writeChromatogram(File file, IChromatogramCSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
 
-		String delimiterFormat = PreferenceSupplier.getDelimiterFormat();
-		String retentionTimeFormat = PreferenceSupplier.getRetentionTimeFormat();
+		DelimiterFormat delimiterFormat = PreferenceSupplier.getDelimiterFormat();
+		RetentionTimeFormat retentionTimeFormat = PreferenceSupplier.getRetentionTimeFormat();
 		//
 		try (PrintWriter printWriter = new PrintWriter(file)) {
 			/*
 			 * Write each scan to the file.
 			 */
+			String delimiter = delimiterFormat.value();
 			for(IScan scan : chromatogram.getScans()) {
 				int retentionTime = scan.getRetentionTime();
 				String x;
-				if(retentionTimeFormat.equals(PreferenceSupplier.MINUTES)) {
-					x = Double.toString(retentionTime / IChromatogram.MINUTE_CORRELATION_FACTOR);
-				} else if(retentionTimeFormat.equals(PreferenceSupplier.SECONDS)) {
-					x = Double.toString(retentionTime / IChromatogram.SECOND_CORRELATION_FACTOR);
-				} else {
-					x = Integer.toString(retentionTime);
+				switch(retentionTimeFormat) {
+					case MINUTES:
+						x = Double.toString(retentionTime / IChromatogram.MINUTE_CORRELATION_FACTOR);
+						break;
+					case SECONDS:
+						x = Double.toString(retentionTime / IChromatogram.SECOND_CORRELATION_FACTOR);
+						break;
+					default:
+						x = Integer.toString(retentionTime);
+						break;
 				}
-				printWriter.println(x + delimiterFormat + scan.getTotalSignal());
+				//
+				printWriter.println(x + delimiter + scan.getTotalSignal());
 			}
 			//
 			printWriter.flush();
-			printWriter.close();
 		}
 	}
 }

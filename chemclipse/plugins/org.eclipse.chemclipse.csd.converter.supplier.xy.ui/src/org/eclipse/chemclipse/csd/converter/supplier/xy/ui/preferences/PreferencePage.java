@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.csd.converter.supplier.xy.ui.preferences;
 
+import org.eclipse.chemclipse.csd.converter.supplier.xy.io.DelimiterFormat;
+import org.eclipse.chemclipse.csd.converter.supplier.xy.io.RetentionTimeFormat;
 import org.eclipse.chemclipse.csd.converter.supplier.xy.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.csd.converter.supplier.xy.ui.Activator;
 import org.eclipse.jface.preference.BooleanFieldEditor;
@@ -22,9 +24,11 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class PreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePage() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription("XY CSD Converter");
+		setTitle("XY CSD");
+		setDescription("");
 	}
 
 	/**
@@ -35,8 +39,8 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	public void createFieldEditors() {
 
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_AUTO_DETECT_FORMAT, "Auto-detect Format", getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceSupplier.P_DELIMITER_FORMAT, "Delimiter Format: ", PreferenceSupplier.DELIMITER_FORMATS, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceSupplier.P_RETENTION_TIME_FORMAT, "Retention Time Format:", PreferenceSupplier.RETENTION_TIME_FORMATS, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_DELIMITER_FORMAT, "Delimiter Format: ", DelimiterFormat.getOptions(), getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_RETENTION_TIME_FORMAT, "Retention Time Format:", RetentionTimeFormat.getOptions(), getFieldEditorParent()));
 	}
 
 	/*

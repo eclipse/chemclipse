@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.csd.converter.supplier.xy.Activator;
+import org.eclipse.chemclipse.csd.converter.supplier.xy.io.DelimiterFormat;
+import org.eclipse.chemclipse.csd.converter.supplier.xy.io.RetentionTimeFormat;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -24,31 +26,10 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_AUTO_DETECT_FORMAT = "autoDetectFormat";
 	public static final boolean DEF_AUTO_DETECT_FORMAT = true;
-	//
-	public static final String TAB = "\t";
-	public static final String COMMA = ",";
-	public static final String SEMICOLON = ";";
-	public static final String WHITE_SPACE = " ";
-	public static String[][] DELIMITER_FORMATS = new String[][]{//
-			{"Tab", TAB}, //
-			{"Comma", COMMA}, //
-			{"Semicolon", SEMICOLON}, //
-			{"White Space", WHITE_SPACE}//
-	};
 	public static final String P_DELIMITER_FORMAT = "delimiterFormat";
-	public static final String DEF_DELIMITER_FORMAT = TAB;
-	//
-	public static final String MINUTES = "Minutes";
-	public static final String SECONDS = "Seconds";
-	public static final String MILLISECONDS = "Milliseconds";
-	public static String[][] RETENTION_TIME_FORMATS = new String[][]{//
-			{"Minutes", MINUTES}, //
-			{"Seconds", SECONDS}, //
-			{"Milliseconds", MILLISECONDS}//
-	};
-	//
-	public static final String P_RETENTION_TIME_FORMAT = "retentionTimeFormat";
-	public static final String DEF_RETENTION_TIME_FORMAT = MINUTES;
+	public static final String DEF_DELIMITER_FORMAT = DelimiterFormat.TAB.name();
+	public static final String P_RETENTION_TIME_FORMAT = "timeFormat";
+	public static final String DEF_RETENTION_TIME_FORMAT = RetentionTimeFormat.MINUTES.name();
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -99,15 +80,23 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return preferences.getBoolean(P_AUTO_DETECT_FORMAT, DEF_AUTO_DETECT_FORMAT);
 	}
 
-	public static String getDelimiterFormat() {
+	public static DelimiterFormat getDelimiterFormat() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.get(P_DELIMITER_FORMAT, DEF_DELIMITER_FORMAT);
+		try {
+			IEclipsePreferences preferences = INSTANCE().getPreferences();
+			return DelimiterFormat.valueOf(preferences.get(P_DELIMITER_FORMAT, DEF_DELIMITER_FORMAT));
+		} catch(Exception e) {
+			return DelimiterFormat.TAB;
+		}
 	}
 
-	public static String getRetentionTimeFormat() {
+	public static RetentionTimeFormat getRetentionTimeFormat() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.get(P_RETENTION_TIME_FORMAT, DEF_RETENTION_TIME_FORMAT);
+		try {
+			IEclipsePreferences preferences = INSTANCE().getPreferences();
+			return RetentionTimeFormat.valueOf(preferences.get(P_RETENTION_TIME_FORMAT, DEF_RETENTION_TIME_FORMAT));
+		} catch(Exception e) {
+			return RetentionTimeFormat.MINUTES;
+		}
 	}
 }
