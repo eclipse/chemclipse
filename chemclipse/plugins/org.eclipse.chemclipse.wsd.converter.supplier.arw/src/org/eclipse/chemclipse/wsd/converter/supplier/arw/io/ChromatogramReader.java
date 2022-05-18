@@ -108,7 +108,7 @@ public class ChromatogramReader extends AbstractChromatogramWSDReader {
 								for(double wavelength : wavelengths) {
 									if(wavelength != INVALID_WAVELENGTH) {
 										float intensity = extractIntensity(values[index]);
-										if(intensity != Float.NaN) {
+										if(!Float.isNaN(intensity)) {
 											IScanSignalWSD scanSignal = new VendorScanSignal();
 											scanSignal.setWavelength(wavelength);
 											scanSignal.setAbundance(intensity);
