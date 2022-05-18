@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Philip Wenig - initial API and implementation
+ * Lorenz Gerber - adjust failed parsing behaviour
  *******************************************************************************/
 package org.eclipse.chemclipse.wsd.converter.supplier.arw.io;
 
@@ -107,7 +108,7 @@ public class ChromatogramReader extends AbstractChromatogramWSDReader {
 								for(double wavelength : wavelengths) {
 									if(wavelength != INVALID_WAVELENGTH) {
 										float intensity = extractIntensity(values[index]);
-										if(intensity != 0.0f) {
+										if(!Float.isNaN(intensity)) {
 											IScanSignalWSD scanSignal = new VendorScanSignal();
 											scanSignal.setWavelength(wavelength);
 											scanSignal.setAbundance(intensity);
@@ -160,7 +161,7 @@ public class ChromatogramReader extends AbstractChromatogramWSDReader {
 		try {
 			return Float.parseFloat(value);
 		} catch(NumberFormatException e) {
-			return 0.0f;
+			return Float.NaN;
 		}
 	}
 
