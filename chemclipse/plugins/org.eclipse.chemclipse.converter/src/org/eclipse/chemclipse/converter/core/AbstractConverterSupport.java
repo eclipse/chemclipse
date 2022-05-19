@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,12 +18,14 @@ import java.util.List;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.converter.support.FileExtensionCompiler;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 
 public abstract class AbstractConverterSupport implements IConverterSupportSetter {
 
 	private final List<ISupplier> suppliers;
 
 	public AbstractConverterSupport() {
+
 		suppliers = new ArrayList<ISupplier>();
 	}
 
@@ -102,7 +104,7 @@ public abstract class AbstractConverterSupport implements IConverterSupportSette
 			if(supplier.getDirectoryExtension().equals("")) {
 				FileExtensionCompiler fileExtensionCompiler = new FileExtensionCompiler(supplier.getFileExtension(), true);
 				extensions.add(fileExtensionCompiler.getCompiledFileExtension());
-			} else {
+			} else if(OperatingSystemUtils.isWindows()) {
 				/*
 				 * DirectoryExtension: Directory extension will return "*."
 				 * otherwise directory could not be identified under
@@ -153,7 +155,7 @@ public abstract class AbstractConverterSupport implements IConverterSupportSette
 					 */
 					fileExtensionCompiler = new FileExtensionCompiler(supplier.getFileExtension(), true);
 					extensions.add(fileExtensionCompiler.getCompiledFileExtension());
-				} else {
+				} else if(OperatingSystemUtils.isWindows()) {
 					/*
 					 * DirectoryExtension: Directory extension will return "*."
 					 * otherwise directory could not be identified under
