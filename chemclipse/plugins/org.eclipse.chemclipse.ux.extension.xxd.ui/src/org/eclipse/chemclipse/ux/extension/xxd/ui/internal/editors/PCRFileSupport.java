@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,7 +15,9 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Optional;
 
+import org.apache.commons.io.FilenameUtils;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.converter.scan.IScanConverterSupport;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -109,7 +111,18 @@ public class PCRFileSupport {
 		 * Check if the selected supplier exists.<br/> If some super brain tries
 		 * to edit the suppliers list.
 		 */
-		ISupplier selectedSupplier = supplier.get(dialog.getFilterIndex());
+		ISupplier selectedSupplier;
+		int index = dialog.getFilterIndex();
+		if(index != -1) {
+			selectedSupplier = supplier.get(dialog.getFilterIndex());
+		} else {
+			String extension = FilenameUtils.getExtension(dialog.getFileName());
+			Optional<ISupplier> guessedSupplier = supplier.stream().filter(s -> s.getFileExtension().contains(extension)).findFirst();
+			if(guessedSupplier.isEmpty()) {
+				return null;
+			}
+			selectedSupplier = guessedSupplier.get();
+		}
 		if(selectedSupplier == null) {
 			MessageDialog.openInformation(shell, "PCR Converter", "The requested plate converter does not exists.");
 			return null;
