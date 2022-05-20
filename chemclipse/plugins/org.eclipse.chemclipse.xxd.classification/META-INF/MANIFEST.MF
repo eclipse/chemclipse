@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Automatic-Module-Name: org.eclipse.chemclipse.xxd.filter.classification
+Automatic-Module-Name: org.eclipse.chemclipse.xxd.classification
 Bundle-ManifestVersion: 2
 Bundle-Name: Classification
 Bundle-SymbolicName: org.eclipse.chemclipse.xxd.classification;singleton:=true
