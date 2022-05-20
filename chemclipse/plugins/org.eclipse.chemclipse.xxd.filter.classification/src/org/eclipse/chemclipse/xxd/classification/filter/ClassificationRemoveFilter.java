@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,7 +9,7 @@
  * Contributors:
  * Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.xxd.model.filter.peaks;
+package org.eclipse.chemclipse.xxd.classification.filter;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,13 +22,13 @@ import org.eclipse.chemclipse.processing.Processor;
 import org.eclipse.chemclipse.processing.core.MessageConsumer;
 import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
-import org.eclipse.chemclipse.xxd.model.settings.peaks.ClassifierRemoveFilterSettings;
+import org.eclipse.chemclipse.xxd.classification.settings.ClassifierRemoveFilterSettings;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = {IPeakFilter.class, Filter.class, Processor.class})
-public class ClassifierRemoveFilter implements IPeakFilter<ClassifierRemoveFilterSettings> {
+public class ClassificationRemoveFilter implements IPeakFilter<ClassifierRemoveFilterSettings> {
 
 	@Override
 	public String getName() {

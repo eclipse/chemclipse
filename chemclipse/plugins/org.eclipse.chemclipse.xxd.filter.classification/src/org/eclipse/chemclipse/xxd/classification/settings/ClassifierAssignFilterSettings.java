@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -10,17 +10,17 @@
  * Alexander Stark - initial API and implementation
  * Philip Wenig - the exact name option has been added
  *******************************************************************************/
-package org.eclipse.chemclipse.xxd.model.settings.peaks;
+package org.eclipse.chemclipse.xxd.classification.settings;
 
-import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
+import org.eclipse.chemclipse.support.settings.ValidatorSettingsProperty;
+import org.eclipse.chemclipse.xxd.classification.model.ClassificationDictionary;
+import org.eclipse.chemclipse.xxd.classification.validators.ClassificationDictionaryValidator;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class ClassifierAssignFilterSettings {
 
-	private final static String REGULAR_EXPRESSION = "([a-zA-Z0-9,'-\\{\\[\\]\\}\\(\\)\\s*]+{2,})";
-	//
 	@JsonProperty(value = "Use Regular Expression", defaultValue = "false")
 	@JsonPropertyDescription(value = "Use a regular expression to match the target names.")
 	private boolean useRegularExpression = false;
@@ -30,14 +30,10 @@ public class ClassifierAssignFilterSettings {
 	@JsonProperty(value = "Match Partly", defaultValue = "true")
 	@JsonPropertyDescription(value = "If true, the peak name only needs to be matched partly.")
 	private boolean matchPartly = true;
-	@JsonProperty(value = "Match Expression(s)", defaultValue = "")
-	@JsonPropertyDescription(value = "List the identification target names to search for.")
-	@StringSettingsProperty(regExp = REGULAR_EXPRESSION, isMultiLine = true, allowEmpty = true)
-	private String matchExpressions = "";
-	@JsonProperty(value = "Match Classification(s)", defaultValue = "")
-	@JsonPropertyDescription(value = "If the identification target name is matched, set the classifier.")
-	@StringSettingsProperty(regExp = REGULAR_EXPRESSION, isMultiLine = true, allowEmpty = true)
-	private String matchClassifications = "";
+	@JsonProperty(value = "Matching Rules", defaultValue = "")
+	@JsonPropertyDescription(value = "List the regular expressions for target names to set classifications.")
+	@ValidatorSettingsProperty(validator = ClassificationDictionaryValidator.class)
+	private ClassificationDictionary classificationDictionary;
 
 	public boolean isUseRegularExpression() {
 
@@ -69,23 +65,13 @@ public class ClassifierAssignFilterSettings {
 		this.matchPartly = matchPartly;
 	}
 
-	public String getMatchExpressions() {
+	public ClassificationDictionary getClassificationDictionary() {
 
-		return matchExpressions;
+		return classificationDictionary;
 	}
 
-	public void setMatchExpressions(String matchExpressions) {
+	public void setClassificationDictionary(ClassificationDictionary classificationDictionary) {
 
-		this.matchExpressions = matchExpressions;
-	}
-
-	public String getMatchClassifications() {
-
-		return matchClassifications;
-	}
-
-	public void setMatchClassification(String matchClassifications) {
-
-		this.matchClassifications = matchClassifications;
+		this.classificationDictionary = classificationDictionary;
 	}
 }
