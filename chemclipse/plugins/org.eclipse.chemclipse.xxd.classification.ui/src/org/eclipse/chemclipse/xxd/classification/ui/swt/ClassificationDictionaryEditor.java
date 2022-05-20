@@ -92,6 +92,8 @@ public class ClassificationDictionaryEditor extends Composite implements IChange
 	@Override
 	public void addChangeListener(Listener listener) {
 
+		this.listener = listener;
+		//
 		Table table = listControl.get().getTable();
 		table.addListener(SWT.Selection, listener);
 		table.addListener(SWT.KeyUp, listener);
