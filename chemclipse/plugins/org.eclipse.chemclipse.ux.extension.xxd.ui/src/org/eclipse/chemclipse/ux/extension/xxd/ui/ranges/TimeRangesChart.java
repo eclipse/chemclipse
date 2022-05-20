@@ -127,7 +127,7 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 			/*
 			 * Add a new TimeRange
 			 */
-			if(timeRanges != null) {
+			if(timeRanges != null && !getBaseChart().getSeriesIds().isEmpty()) {
 				InputDialog inputDialog = new InputDialog(event.display.getActiveShell(), "Time Range", "Add a new time range.", "", new IInputValidator() {
 
 					@Override
