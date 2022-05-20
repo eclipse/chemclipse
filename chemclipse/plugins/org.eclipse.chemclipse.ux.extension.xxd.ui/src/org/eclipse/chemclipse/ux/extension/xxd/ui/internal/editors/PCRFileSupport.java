@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,7 +15,9 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.editors;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+import java.util.Optional;
 
+import org.apache.commons.io.FilenameUtils;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.converter.scan.IScanConverterSupport;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -67,8 +69,7 @@ public class PCRFileSupport {
 			String filename = dialog.open();
 			if(filename != null) {
 				List<ISupplier> exportSupplier = converterSupport.getExportSupplier();
-				File file = validateFile(dialog, exportSupplier, shell, converterSupport, plate);
-				return file;
+				return validateFile(dialog, exportSupplier, shell, plate, filename);
 			} else {
 				return null;
 			}
@@ -91,6 +92,7 @@ public class PCRFileSupport {
 			logger.warn(e);
 		} catch(InterruptedException e) {
 			logger.warn(e);
+			Thread.currentThread().interrupt();
 		}
 		//
 		File data = runnable.getData();
@@ -99,7 +101,7 @@ public class PCRFileSupport {
 		}
 	}
 
-	private static File validateFile(FileDialog dialog, List<ISupplier> supplier, Shell shell, IScanConverterSupport converterSupport, IPlate plate) {
+	private static File validateFile(FileDialog dialog, List<ISupplier> supplier, Shell shell, IPlate plate, String filename) {
 
 		File plateFolder = null;
 		boolean overwrite = dialog.getOverwrite();
@@ -109,98 +111,101 @@ public class PCRFileSupport {
 		 * Check if the selected supplier exists.<br/> If some super brain tries
 		 * to edit the suppliers list.
 		 */
-		ISupplier selectedSupplier = supplier.get(dialog.getFilterIndex());
+		ISupplier selectedSupplier;
+		int index = dialog.getFilterIndex();
+		if(index != -1) {
+			selectedSupplier = supplier.get(dialog.getFilterIndex());
+		} else {
+			String extension = FilenameUtils.getExtension(dialog.getFileName());
+			Optional<ISupplier> guessedSupplier = supplier.stream().filter(s -> s.getFileExtension().contains(extension)).findFirst();
+			if(guessedSupplier.isEmpty()) {
+				return null;
+			}
+			selectedSupplier = guessedSupplier.get();
+		}
 		if(selectedSupplier == null) {
 			MessageDialog.openInformation(shell, "PCR Converter", "The requested plate converter does not exists.");
 			return null;
 		}
 		/*
-		 * Get the file or directory name.
+		 * If the data file is stored in a directory create an
+		 * appropriate directory.
 		 */
-		String filename = dialog.getFilterPath() + File.separator + dialog.getFileName();
-		if(selectedSupplier != null) {
+		String directoryExtension = selectedSupplier.getDirectoryExtension();
+		if(!"".equals(directoryExtension)) {
+			isDirectory = true;
 			/*
-			 * If the data file is stored in a directory create an
-			 * appropriate directory.
+			 * Remove a possible directory extension.
 			 */
-			String directoryExtension = selectedSupplier.getDirectoryExtension();
-			if(directoryExtension != "") {
-				isDirectory = true;
+			filename = removeFileExtensions(filename, selectedSupplier);
+			filename = filename.concat(selectedSupplier.getDirectoryExtension());
+			/*
+			 * Check if the folder still exists.
+			 */
+			plateFolder = new File(filename);
+			if(plateFolder.exists()) {
+				folderExists = true;
+				if(MessageDialog.openQuestion(shell, "Overwrite", "Would you like to overwrite the plate " + plateFolder.toString() + "?")) {
+					overwrite = true;
+				} else {
+					overwrite = false;
+				}
+			}
+			/*
+			 * Checks if the data shall be overwritten.
+			 */
+			if(overwrite && !folderExists) {
+				plateFolder.mkdir();
+			}
+		} else {
+			/*
+			 * Remove a possible file extension.
+			 */
+			filename = removeFileExtensions(filename, selectedSupplier);
+			filename = filename.concat(selectedSupplier.getFileExtension());
+			//
+			String filenameDialog = dialog.getFilterPath() + File.separator + dialog.getFileName();
+			if(!filename.equals(filenameDialog)) {
 				/*
-				 * Remove a possible directory extension.
+				 * The file name has been modified. Ask for override if it
+				 * still exists.
 				 */
-				filename = removeFileExtensions(filename, selectedSupplier);
-				filename = filename.concat(selectedSupplier.getDirectoryExtension());
-				/*
-				 * Check if the folder still exists.
-				 */
-				plateFolder = new File(filename);
-				if(plateFolder.exists()) {
-					folderExists = true;
-					if(MessageDialog.openQuestion(shell, "Overwrite", "Would you like to overwrite the plate " + plateFolder.toString() + "?")) {
+				File dataFile = new File(filename);
+				if(dataFile.exists()) {
+					if(MessageDialog.openQuestion(shell, "Overwrite", "Would you like to overwrite the plate " + dataFile.toString() + "?")) {
 						overwrite = true;
 					} else {
 						overwrite = false;
 					}
 				}
-				/*
-				 * Checks if the data shall be overwritten.
-				 */
-				if(overwrite) {
-					if(!folderExists) {
+			}
+		}
+		/*
+		 * Write the data and check if the folder exists.
+		 */
+		if(overwrite) {
+			/*
+			 * Check the directory and file name and correct them if
+			 * necessary.
+			 */
+			if(isDirectory) {
+				if(!folderExists) {
+					if(plateFolder != null) {
 						plateFolder.mkdir();
 					}
 				}
 			} else {
-				/*
-				 * Remove a possible file extension.
-				 */
-				filename = removeFileExtensions(filename, selectedSupplier);
-				filename = filename.concat(selectedSupplier.getFileExtension());
-				//
-				String filenameDialog = dialog.getFilterPath() + File.separator + dialog.getFileName();
-				if(!filename.equals(filenameDialog)) {
-					/*
-					 * The file name has been modified. Ask for override if it
-					 * still exists.
-					 */
-					File dataFile = new File(filename);
-					if(dataFile.exists()) {
-						if(MessageDialog.openQuestion(shell, "Overwrite", "Would you like to overwrite the plate " + dataFile.toString() + "?")) {
-							overwrite = true;
-						} else {
-							overwrite = false;
-						}
-					}
+				String fileExtension = selectedSupplier.getFileExtension();
+				if(!filename.endsWith(fileExtension)) {
+					filename = filename + fileExtension;
 				}
 			}
 			/*
-			 * Write the data and check if the folder exists.
+			 * Export the plate.
 			 */
-			if(overwrite) {
-				/*
-				 * Check the directory and file name and correct them if
-				 * necessary.
-				 */
-				if(isDirectory) {
-					if(!folderExists) {
-						if(plateFolder != null) {
-							plateFolder.mkdir();
-						}
-					}
-				} else {
-					String fileExtension = selectedSupplier.getFileExtension();
-					if(!filename.endsWith(fileExtension)) {
-						filename = filename + fileExtension;
-					}
-				}
-				/*
-				 * Export the plate.
-				 */
-				File file = new File(filename);
-				writeFile(shell, file, plate, selectedSupplier);
-				return file;
-			}
+			File file = new File(filename);
+			writeFile(shell, file, plate, selectedSupplier);
+			return file;
 		}
 		return null;
 	}

@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.converter.methods.MethodConverter;
 import org.eclipse.chemclipse.converter.support.FileExtensionCompiler;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 
 public interface IConverterSupport {
 
@@ -46,7 +47,7 @@ public interface IConverterSupport {
 			if(supplier.getDirectoryExtension().equals("")) {
 				FileExtensionCompiler fileExtensionCompiler = new FileExtensionCompiler(supplier.getFileExtension(), true);
 				extensions.add(fileExtensionCompiler.getCompiledFileExtension());
-			} else {
+			} else if(OperatingSystemUtils.isWindows()) {
 				/*
 				 * DirectoryExtension: Directory extension will return "*."
 				 * otherwise directory could not be identified under
@@ -89,7 +90,7 @@ public interface IConverterSupport {
 	 */
 	default String[] getFilterNames(Predicate<? super ISupplier> filter) {
 
-		ArrayList<String> filterNames = new ArrayList<String>();
+		ArrayList<String> filterNames = new ArrayList<>();
 		for(ISupplier supplier : getSupplier(filter)) {
 			filterNames.add(supplier.getFilterName());
 		}
