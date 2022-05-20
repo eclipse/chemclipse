@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -34,6 +34,11 @@ import org.eclipse.chemclipse.support.util.TimeRangeListUtil;
 public class TimeRanges {
 
 	private static final Logger logger = Logger.getLogger(TimeRanges.class);
+	//
+	public static final String FILE_EXTENSION = ".txt";
+	public static final String FILE_NAME = "TimeRanges" + FILE_EXTENSION;
+	public static final String FILTER_EXTENSION = "*" + FILE_EXTENSION;
+	public static final String FILTER_NAME = "Time Ranges (*" + FILE_EXTENSION + ")";
 	//
 	private TimeRangeListUtil timeRangeListUtil = new TimeRangeListUtil();
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
