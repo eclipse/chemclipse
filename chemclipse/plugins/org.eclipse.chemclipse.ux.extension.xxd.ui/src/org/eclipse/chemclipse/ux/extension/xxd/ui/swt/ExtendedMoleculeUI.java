@@ -111,6 +111,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 
 		if(imageMolecule != null) {
 			imageMolecule.dispose();
+			imageMolecule = null;
 		}
 	}
 
