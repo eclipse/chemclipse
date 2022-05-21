@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -101,9 +101,8 @@ public class ChromatogramConverterSupport_2_Test extends TestCase {
 		String[] ids;
 		try {
 			ids = support.getFilterExtensions();
-			assertEquals("FilterExtension #0", "*.", ids[0]);
-			assertEquals("FilterExtension #1", "*.netCDF;*.netcdf;*.NETCDF", ids[1]);
-			assertEquals("FilterExtension #2", "*.chrom;*.CHROM", ids[2]);
+			assertEquals("FilterExtension #1", "*.netCDF;*.netcdf;*.NETCDF", ids[0]);
+			assertEquals("FilterExtension #2", "*.chrom;*.CHROM", ids[1]);
 		} catch(NoConverterAvailableException e) {
 			assertTrue(false);
 		}

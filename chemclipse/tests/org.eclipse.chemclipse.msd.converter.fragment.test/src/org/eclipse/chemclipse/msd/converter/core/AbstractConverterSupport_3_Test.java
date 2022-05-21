@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2021 Lablicate GmbH.
+ * Copyright (c) 2011, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -36,7 +36,7 @@ public class AbstractConverterSupport_3_Test extends AbstractConverterTestCase {
 	public void testGetExportableFilterExtensions_1() {
 
 		int size = filterExtensions.length;
-		assertEquals(3, size);
+		assertEquals(2, size);
 	}
 
 	public void testGetExportableFilterExtensions_2() {
@@ -49,11 +49,5 @@ public class AbstractConverterSupport_3_Test extends AbstractConverterTestCase {
 
 		String extension = filterExtensions[1];
 		assertEquals("*.xlsx;*.XLSX", extension);
-	}
-
-	public void testGetExportableFilterExtensions_4() {
-
-		String extension = filterExtensions[2];
-		assertEquals("*.", extension);
 	}
 }

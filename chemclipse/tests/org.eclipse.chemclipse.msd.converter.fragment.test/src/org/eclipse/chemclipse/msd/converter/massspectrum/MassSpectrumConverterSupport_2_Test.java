@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -98,9 +98,8 @@ public class MassSpectrumConverterSupport_2_Test extends TestCase {
 		String[] ids;
 		try {
 			ids = support.getFilterExtensions();
-			assertEquals("FilterExtension #0", "*.", ids[0]);
-			assertEquals("FilterExtension #1", "*.msl;*.MSL", ids[1]);
-			assertEquals("FilterExtension #2", "*.jdx;*.JDX", ids[2]);
+			assertEquals("FilterExtension #1", "*.msl;*.MSL", ids[0]);
+			assertEquals("FilterExtension #2", "*.jdx;*.JDX", ids[1]);
 		} catch(NoConverterAvailableException e) {
 			assertTrue(false);
 		}
