@@ -71,6 +71,9 @@ public class ClassificationRuleEditingSupport extends EditingSupport {
 					rule.setClassification((String)value);
 					break;
 			}
+			//
+			tableViewer.refresh();
+			tableViewer.updateContent();
 		}
 	}
 }

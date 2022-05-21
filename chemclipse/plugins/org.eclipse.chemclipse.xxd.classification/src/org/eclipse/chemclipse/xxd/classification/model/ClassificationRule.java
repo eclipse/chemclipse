@@ -18,6 +18,7 @@ public class ClassificationRule {
 
 	public ClassificationRule() {
 
+		this("", "");
 	}
 
 	public ClassificationRule(String searchExpression, String classification) {

@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.xxd.classification.ui.swt;
 import java.io.File;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
@@ -157,23 +158,24 @@ public class ClassificationDictionaryEditor extends Composite implements IChange
 
 	private void createTableSection(Composite parent) {
 
-		ClassificationDictionaryListUI peakDetectorListUI = new ClassificationDictionaryListUI(parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
-		Table table = peakDetectorListUI.getTable();
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
+		ClassificationDictionaryListUI classificationDictionaryListUI = new ClassificationDictionaryListUI(parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+		Table table = classificationDictionaryListUI.getTable();
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.heightHint = 450;
-		gridData.grabExcessVerticalSpace = true;
-		gridData.verticalAlignment = SWT.TOP;
-		table.setLayoutData(gridData);
 		//
-		peakDetectorListUI.setEditEnabled(true);
+		classificationDictionaryListUI.setEditEnabled(true);
+		classificationDictionaryListUI.setUpdateListener(new IUpdateListener() {
+
+			@Override
+			public void update() {
+
+				setInput();
+			}
+		});
 		//
-		ITableSettings tableSettings = peakDetectorListUI.getTableSettings();
-		peakDetectorListUI.applySettings(tableSettings);
+		ITableSettings tableSettings = classificationDictionaryListUI.getTableSettings();
+		classificationDictionaryListUI.applySettings(tableSettings);
 		//
-		listControl.set(peakDetectorListUI);
+		listControl.set(classificationDictionaryListUI);
 	}
 
 	private void createToolbarMain(Composite parent) {

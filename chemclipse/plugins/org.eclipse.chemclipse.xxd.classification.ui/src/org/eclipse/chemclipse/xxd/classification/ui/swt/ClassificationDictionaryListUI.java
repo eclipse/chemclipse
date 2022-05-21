@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.xxd.classification.ui.swt;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.xxd.classification.ui.provider.ClassificationRuleEditingSupport;
@@ -30,7 +31,7 @@ public class ClassificationDictionaryListUI extends ExtendedTableViewer {
 	private ClassificationRuleLabelProvider labelProvider = new ClassificationRuleLabelProvider();
 	private ClassificationRuleTableComparator tableComparator = new ClassificationRuleTableComparator();
 	//
-	private org.eclipse.chemclipse.model.updates.IUpdateListener updateListener;
+	private IUpdateListener updateListener;
 	//
 	private ClassificationRuleFilter listFilter = new ClassificationRuleFilter();
 
@@ -40,7 +41,7 @@ public class ClassificationDictionaryListUI extends ExtendedTableViewer {
 		createColumns();
 	}
 
-	public void setUpdateListener(org.eclipse.chemclipse.model.updates.IUpdateListener updateListener) {
+	public void setUpdateListener(IUpdateListener updateListener) {
 
 		this.updateListener = updateListener;
 	}
