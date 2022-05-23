@@ -288,17 +288,15 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 			} else if(object instanceof IPeak) {
 				extendedChromatogramUI.updateSelectedPeak();
 				return true;
-			} else {
-				if(TOPIC_EDITOR_UPDATE.equals(topic)) {
-					logger.info("Update the chromatogram editor: " + object);
-					extendedChromatogramUI.update();
-					dirtyable.setDirty(extendedChromatogramUI.getChromatogramSelection().getChromatogram().isDirty());
-					return true;
-				} else if(TOPIC_EDITOR_ADJUST.equals(topic)) {
-					logger.info("Adjust the chromatogram editor: " + object);
-					extendedChromatogramUI.adjustChromatogramChart();
-					return true;
-				}
+			} else if(TOPIC_EDITOR_UPDATE.equals(topic)) {
+				logger.info("Update the chromatogram editor: " + object);
+				extendedChromatogramUI.update();
+				dirtyable.setDirty(extendedChromatogramUI.getChromatogramSelection().getChromatogram().isDirty());
+				return true;
+			} else if(TOPIC_EDITOR_ADJUST.equals(topic)) {
+				logger.info("Adjust the chromatogram editor: " + object);
+				extendedChromatogramUI.adjustChromatogramChart();
+				return true;
 			}
 		}
 		//

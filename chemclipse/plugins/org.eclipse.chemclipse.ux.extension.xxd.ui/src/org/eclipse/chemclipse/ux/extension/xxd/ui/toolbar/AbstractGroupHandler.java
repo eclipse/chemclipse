@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.activator.ContextAddon;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.e4.core.di.annotations.Execute;
@@ -123,8 +124,8 @@ public abstract class AbstractGroupHandler implements IGroupHandler {
 	private void adjustIcon(MDirectToolItem directToolItem, boolean show) {
 
 		if(directToolItem != null) {
-			String iconHide = IApplicationImage.getLocation(getImageHide(), IApplicationImage.SIZE_16x16);
-			String iconShow = IApplicationImage.getLocation(getImageShow(), IApplicationImage.SIZE_16x16);
+			String iconHide = IApplicationImage.getLocation(getImageHide(), IApplicationImageProvider.SIZE_16x16);
+			String iconShow = IApplicationImage.getLocation(getImageShow(), IApplicationImageProvider.SIZE_16x16);
 			directToolItem.setIconURI(show ? iconHide : iconShow);
 		}
 	}
@@ -270,7 +271,7 @@ public abstract class AbstractGroupHandler implements IGroupHandler {
 
 	private void populateHandlerAdditional(MMenu menu, EModelService modelService, List<IPartHandler> partHandlers, List<MenuContribution> menuContributions, int offset) {
 
-		if(partHandlers.size() > 0) {
+		if(!partHandlers.isEmpty()) {
 			/*
 			 * Add the separator if not available yet.
 			 */
@@ -401,14 +402,12 @@ public abstract class AbstractGroupHandler implements IGroupHandler {
 
 	private String getPartHandlerId(IPartHandler partHandler) {
 
-		String name = normalize(partHandler.getName());
-		return name;
+		return normalize(partHandler.getName());
 	}
 
 	private String getGroupHandlerId() {
 
-		String name = normalize(getName());
-		return name;
+		return normalize(getName());
 	}
 
 	private String normalize(String value) {
