@@ -143,6 +143,8 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_REPORT = PATH_PREFIX + "report.gif";
 	String IMAGE_CHROMATOGRAM_REPORT = PATH_PREFIX + "chromatogramReport.gif";
 	String IMAGE_CHROMATOGRAM_REPORT_ADD = PATH_PREFIX + "chromatogramReportAdd.gif";
+	String IMAGE_CHROMATOGRAM_SELECTED = PATH_PREFIX + "chromatogramSelected.gif";
+	String IMAGE_CHROMATOGRAM_SELECTION = PATH_PREFIX + "chromatogramSelection.gif";
 	String IMAGE_BATCHPROCESS = PATH_PREFIX + "batchprocess.gif";
 	String IMAGE_BATCHPROCESS_PEAKIDENT = PATH_PREFIX + "batchprocessPeakIdent.gif";
 	String IMAGE_CONFIGURE = PATH_PREFIX + "configure.gif";
