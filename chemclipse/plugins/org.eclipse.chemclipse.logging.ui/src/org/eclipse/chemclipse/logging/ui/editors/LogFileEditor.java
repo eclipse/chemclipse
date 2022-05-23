@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2021 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,6 +24,8 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.logging.ui.swt.LogTableUI;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
@@ -40,7 +42,7 @@ public class LogFileEditor {
 
 	public static final String ID = "org.eclipse.chemclipse.logging.ui.part.logfileEditor";
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.logging.ui/org.eclipse.chemclipse.logging.ui.editors.LogFileEditor";
-	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/log.gif";
+	public static final String ICON_URI = IApplicationImage.getLocation(IApplicationImage.IMAGE_LOG, IApplicationImageProvider.SIZE_16x16);
 	public static final String TOOLTIP = "Log File Editor";
 	private static final Logger logger = Logger.getLogger(LogFileEditor.class);
 	private MDirtyable dirtyable;

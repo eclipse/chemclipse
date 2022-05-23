@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -10,6 +10,9 @@
  * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.toolbar;
+
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 
 public interface IPartHandler {
 
@@ -28,7 +31,7 @@ public interface IPartHandler {
 
 	default String getIconURI() {
 
-		return "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/tag.gif";
+		return IApplicationImage.getLocation(IApplicationImage.IMAGE_TAG, IApplicationImageProvider.SIZE_16x16);
 	}
 
 	void toggleVisibility();
