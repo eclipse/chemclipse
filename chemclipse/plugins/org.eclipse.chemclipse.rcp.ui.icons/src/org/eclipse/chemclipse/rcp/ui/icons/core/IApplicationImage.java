@@ -19,7 +19,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String PATH_PREFIX = "org.eclipse.chemclipse.rcp.ui.icons/";
 
 	/**
-	 * platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/comparisonScanDefault.gif
+	 * platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/info.gif
 	 * 
 	 * @param fileName
 	 * @param size

@@ -38,6 +38,8 @@ import org.eclipse.chemclipse.msd.model.core.IVendorStandaloneMassSpectrum;
 import org.eclipse.chemclipse.msd.swt.ui.support.DatabaseFileSupport;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
@@ -72,7 +74,7 @@ public class MassSpectrumEditor implements IMassSpectrumEditor {
 
 	public static final String ID = "org.eclipse.chemclipse.ux.extension.msd.ui.part.massSpectrumEditor";
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.editors.MassSpectrumEditor";
-	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/massSpectrumFile.gif";
+	public static final String ICON_URI = IApplicationImage.getLocation(IApplicationImage.IMAGE_MASS_SPECTRUM_FILE, IApplicationImageProvider.SIZE_16x16);
 	public static final String TOOLTIP = "Mass Spectrum - Detector Type: MSD";
 	//
 	private static final Logger logger = Logger.getLogger(MassSpectrumEditor.class);

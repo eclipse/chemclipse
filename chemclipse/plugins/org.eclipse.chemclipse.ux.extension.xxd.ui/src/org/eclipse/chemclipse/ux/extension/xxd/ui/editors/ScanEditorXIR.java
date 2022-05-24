@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,6 +21,8 @@ import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
@@ -49,7 +51,7 @@ public class ScanEditorXIR implements IScanEditorXIR {
 	//
 	public static final String ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.scanEditorXIR";
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorXIR";
-	public static final String ICON_URI = "platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/scan-xir.gif";
+	public static final String ICON_URI = IApplicationImage.getLocation(IApplicationImage.IMAGE_SCAN_XIR, IApplicationImageProvider.SIZE_16x16);
 	public static final String TOOLTIP = "FTIR/NIR/MIR Editor";
 	//
 	private final MPart part;

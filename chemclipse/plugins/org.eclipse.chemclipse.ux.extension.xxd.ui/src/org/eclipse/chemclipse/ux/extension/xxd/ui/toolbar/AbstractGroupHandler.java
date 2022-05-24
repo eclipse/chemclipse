@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,6 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.activator.ContextAddon;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.e4.core.di.annotations.Execute;
@@ -123,8 +124,8 @@ public abstract class AbstractGroupHandler implements IGroupHandler {
 	private void adjustIcon(MDirectToolItem directToolItem, boolean show) {
 
 		if(directToolItem != null) {
-			String iconHide = IApplicationImage.getLocation(getImageHide(), IApplicationImage.SIZE_16x16);
-			String iconShow = IApplicationImage.getLocation(getImageShow(), IApplicationImage.SIZE_16x16);
+			String iconHide = IApplicationImage.getLocation(getImageHide(), IApplicationImageProvider.SIZE_16x16);
+			String iconShow = IApplicationImage.getLocation(getImageShow(), IApplicationImageProvider.SIZE_16x16);
 			directToolItem.setIconURI(show ? iconHide : iconShow);
 		}
 	}
@@ -270,7 +271,7 @@ public abstract class AbstractGroupHandler implements IGroupHandler {
 
 	private void populateHandlerAdditional(MMenu menu, EModelService modelService, List<IPartHandler> partHandlers, List<MenuContribution> menuContributions, int offset) {
 
-		if(partHandlers.size() > 0) {
+		if(!partHandlers.isEmpty()) {
 			/*
 			 * Add the separator if not available yet.
 			 */
@@ -299,8 +300,8 @@ public abstract class AbstractGroupHandler implements IGroupHandler {
 			MDirectMenuItem menuItem = modelService.createModelElement(MDirectMenuItem.class);
 			menuItem.setElementId(activateElementId);
 			menuItem.setLabel(Action.SHOW.label());
-			menuItem.setTooltip("Activate all mandatory part(s).");
-			menuItem.setIconURI("platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/preferences.gif");
+			menuItem.setTooltip("Activate all mandatory parts.");
+			menuItem.setIconURI(IApplicationImage.getLocation(IApplicationImage.IMAGE_CHECK_ALL, IApplicationImageProvider.SIZE_16x16));
 			menuItem.setContributionURI(ACTION_CONTRIBUTION_URI);
 			menuContributions.add(new MenuContribution(menuItem));
 		}
@@ -316,8 +317,8 @@ public abstract class AbstractGroupHandler implements IGroupHandler {
 			MDirectMenuItem menuItem = modelService.createModelElement(MDirectMenuItem.class);
 			menuItem.setElementId(deactivateElementId);
 			menuItem.setLabel(Action.HIDE.label());
-			menuItem.setTooltip("Deactivate all part(s).");
-			menuItem.setIconURI("platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/preferences.gif");
+			menuItem.setTooltip("Deactivate all parts.");
+			menuItem.setIconURI(IApplicationImage.getLocation(IApplicationImage.IMAGE_UNCHECK_ALL, IApplicationImageProvider.SIZE_16x16));
 			menuItem.setContributionURI(ACTION_CONTRIBUTION_URI);
 			menuContributions.add(new MenuContribution(menuItem));
 		}
@@ -341,7 +342,7 @@ public abstract class AbstractGroupHandler implements IGroupHandler {
 			menuItem.setElementId(settingsElementId);
 			menuItem.setLabel("Settings");
 			menuItem.setTooltip("Settings to show/hide parts.");
-			menuItem.setIconURI("platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/preferences.gif");
+			menuItem.setIconURI(IApplicationImage.getLocation(IApplicationImage.IMAGE_PREFERENCES, IApplicationImageProvider.SIZE_16x16));
 			menuItem.setContributionURI(SETTINGS_CONTRIBUTION_URI);
 			menuContributions.add(new MenuContribution(menuItem));
 		}
@@ -401,14 +402,12 @@ public abstract class AbstractGroupHandler implements IGroupHandler {
 
 	private String getPartHandlerId(IPartHandler partHandler) {
 
-		String name = normalize(partHandler.getName());
-		return name;
+		return normalize(partHandler.getName());
 	}
 
 	private String getGroupHandlerId() {
 
-		String name = normalize(getName());
-		return name;
+		return normalize(getName());
 	}
 
 	private String normalize(String value) {
