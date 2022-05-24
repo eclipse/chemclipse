@@ -14,7 +14,7 @@
             importMagicNumberMatcher="org.eclipse.chemclipse.pcr.report.supplier.txt.core.MagicNumberMatcher"
             isExportable="true"
             isImportable="false">
-      </PlateSupplier>      
+      </PlateSupplier>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
