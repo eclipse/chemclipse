@@ -49,8 +49,7 @@ public interface IConverterSupport {
 			} else {
 				/*
 				 * DirectoryExtension: Directory extension will return "*."
-				 * otherwise directory could not be identified under
-				 * Windows.
+				 * otherwise directory could not be identified.
 				 */
 				extensions.add("*.");
 			}
