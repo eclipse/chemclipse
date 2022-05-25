@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
+import java.io.File;
 import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IExtractionData;
@@ -30,10 +31,23 @@ public class FilesInputWizard extends Wizard implements IInputWizard {
 	 * Will be created when finishing the report.
 	 */
 	private PcaExtractionFiles pcaExtractionData;
+	private File file;
+
+	public FilesInputWizard() {
+
+		this(null);
+	}
+
+	public FilesInputWizard(File file) {
+
+		this.file = file;
+	}
 
 	@Override
 	public void addPages() {
 
+		fileSettingsWizardPage.setFile(file);
+		//
 		addPage(fileSettingsWizardPage);
 		addPage(preprocessingWizardPage);
 		addPage(filterWizardPage);

@@ -47,6 +47,7 @@ public class FileSettingsWizardPage extends WizardPage {
 
 	private static final Logger logger = Logger.getLogger(FileSettingsWizardPage.class);
 	//
+	private File file;
 	private Text textFile;
 	//
 	private IAnalysisSettings analysisSettings = new AnalysisSettings();
@@ -57,6 +58,11 @@ public class FileSettingsWizardPage extends WizardPage {
 		super("Main Properties");
 		setTitle("PCA");
 		setDescription("Set main PCA parameters.");
+	}
+
+	public void setFile(File file) {
+
+		this.file = file;
 	}
 
 	@Override
@@ -176,6 +182,12 @@ public class FileSettingsWizardPage extends WizardPage {
 		text.setText("");
 		text.setToolTipText("Path to data matrix file.");
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		if(file != null) {
+			text.setText(file.getAbsolutePath());
+		} else {
+			text.setText("");
+		}
 		//
 		return text;
 	}
