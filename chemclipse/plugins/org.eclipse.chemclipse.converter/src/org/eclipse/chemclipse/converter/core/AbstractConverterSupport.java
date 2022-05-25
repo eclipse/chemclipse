@@ -18,7 +18,6 @@ import java.util.List;
 import org.eclipse.chemclipse.converter.exceptions.NoConverterAvailableException;
 import org.eclipse.chemclipse.converter.support.FileExtensionCompiler;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
-import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 
 public abstract class AbstractConverterSupport implements IConverterSupportSetter {
 
@@ -104,7 +103,7 @@ public abstract class AbstractConverterSupport implements IConverterSupportSette
 			if(supplier.getDirectoryExtension().equals("")) {
 				FileExtensionCompiler fileExtensionCompiler = new FileExtensionCompiler(supplier.getFileExtension(), true);
 				extensions.add(fileExtensionCompiler.getCompiledFileExtension());
-			} else if(OperatingSystemUtils.isWindows()) {
+			} else {
 				/*
 				 * DirectoryExtension: Directory extension will return "*."
 				 * otherwise directory could not be identified under
@@ -155,7 +154,7 @@ public abstract class AbstractConverterSupport implements IConverterSupportSette
 					 */
 					fileExtensionCompiler = new FileExtensionCompiler(supplier.getFileExtension(), true);
 					extensions.add(fileExtensionCompiler.getCompiledFileExtension());
-				} else if(OperatingSystemUtils.isWindows()) {
+				} else {
 					/*
 					 * DirectoryExtension: Directory extension will return "*."
 					 * otherwise directory could not be identified under
