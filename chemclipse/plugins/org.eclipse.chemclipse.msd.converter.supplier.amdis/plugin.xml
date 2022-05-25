@@ -94,6 +94,16 @@
             isExportable="true"
             isImportable="false">
       </ChromatogramSupplier>
+      <ChromatogramSupplier
+            description="Exports Chromatogram as Combined Spectrum in MSL format"
+            exportConverter="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.ChromatogramExportConverter"
+            fileExtension=".msl"
+            filterName="Chromatogram Combined Spectrum (*.msl)"
+            id="org.eclipse.chemclipse.msd.converter.supplier.amdis.chromatogram.combined.msl"
+            importMagicNumberMatcher="org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.MagicNumberMatcher"
+            isExportable="true"
+            isImportable="false">
+      </ChromatogramSupplier> 
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
