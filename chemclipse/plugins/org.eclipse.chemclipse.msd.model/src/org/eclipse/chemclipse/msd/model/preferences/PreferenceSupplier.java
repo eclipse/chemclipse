@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2021 Lablicate GmbH.
+ * Copyright (c) 2013, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -151,10 +151,19 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return preferences.get(P_SUBTRACT_MASS_SPECTRUM, DEF_SUBTRACT_MASS_SPECTRUM);
 	}
 
+	public static void setCalculationType(CalculationType calculationType) {
+
+		setString(P_CALCULATION_TYPE, calculationType.name());
+	}
+
 	public static CalculationType getCalculationType() {
 
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return CalculationType.valueOf(preferences.get(P_CALCULATION_TYPE, DEF_CALCULATION_TYPE));
+		try {
+			IEclipsePreferences preferences = INSTANCE().getPreferences();
+			return CalculationType.valueOf(preferences.get(P_CALCULATION_TYPE, DEF_CALCULATION_TYPE));
+		} catch(Exception e) {
+			return CalculationType.SUM;
+		}
 	}
 
 	public static String getMassSpectrum(IScanMSD massSpectrum) {
@@ -199,7 +208,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return null;
 	}
 
-	public static int getMaxCopyTraces() {
+	public static void setCopyTracesClipboard(int number) {
+
+		setInteger(P_COPY_TRACES_CLIPBOARD, number);
+	}
+
+	public static int getCopyTracesClipboard() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.getInt(P_COPY_TRACES_CLIPBOARD, DEF_COPY_TRACES_CLIPBOARD);
@@ -235,6 +249,28 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		try {
 			IEclipsePreferences preferences = INSTANCE().getPreferences();
 			preferences.putBoolean(key, value);
+			preferences.flush();
+		} catch(Exception e) {
+			logger.warn(e);
+		}
+	}
+
+	private static void setString(String key, String value) {
+
+		try {
+			IEclipsePreferences preferences = INSTANCE().getPreferences();
+			preferences.put(key, value);
+			preferences.flush();
+		} catch(Exception e) {
+			logger.warn(e);
+		}
+	}
+
+	private static void setInteger(String key, int value) {
+
+		try {
+			IEclipsePreferences preferences = INSTANCE().getPreferences();
+			preferences.putInt(key, value);
 			preferences.flush();
 		} catch(Exception e) {
 			logger.warn(e);

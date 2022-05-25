@@ -16,7 +16,9 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.e4.core.contexts;bundle-version="1.2.0",
  org.eclipse.chemclipse.model;bundle-version="0.8.0",
  org.eclipse.chemclipse.chromatogram.xxd.calculator;bundle-version="0.8.0",
- org.eclipse.chemclipse.processing
+ org.eclipse.chemclipse.processing,
+ com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.12.1",
+ org.apache.commons.math3;bundle-version="3.6.1"
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.msd.model.core,
@@ -34,7 +36,6 @@ Export-Package: org.eclipse.chemclipse.msd.model.core,
  org.eclipse.chemclipse.msd.model.util,
  org.eclipse.chemclipse.msd.model.xic
 Import-Package: javax.annotation;version="[1.0.0,2.0.0)",
- org.apache.commons.math3.analysis.function,
- org.apache.commons.math3.stat.inference,
- org.eclipse.chemclipse.processing.detector;version="1.0.0"
+ org.osgi.service.component.annotations;version="1.2.0"
 Automatic-Module-Name: org.eclipse.chemclipse.msd.model
+Service-Component: OSGI-INF/org.eclipse.chemclipse.msd.model.system.ModelProcessorMSD.xml
