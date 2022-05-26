@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.ui.edito
 import org.eclipse.chemclipse.model.identifier.DeltaCalculation;
 import org.eclipse.chemclipse.model.identifier.IIdentifierSettings;
 import org.eclipse.chemclipse.model.identifier.PenaltyCalculation;
+import org.eclipse.chemclipse.msd.model.support.CalculationType;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.DoubleFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.ExtendedIntegerFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.FloatFieldEditor;
@@ -75,6 +76,11 @@ public class PreferencePageFile extends FieldEditorPreferencePage implements IWo
 		addField(new FloatFieldEditor(PreferenceSupplier.P_PENALTY_WINDOW, "Penalty Window", IIdentifierSettings.MIN_PENALTY_WINDOW, IIdentifierSettings.MAX_PENALTY_WINDOW, getFieldEditorParent()));
 		addField(new FloatFieldEditor(PreferenceSupplier.P_PENALTY_LEVEL_FACTOR, "Penalty Level Factor", IIdentifierSettings.MIN_PENALTY_LEVEL_FACTOR, IIdentifierSettings.MAX_PENALTY_LEVEL_FACTOR, getFieldEditorParent()));
 		addField(new FloatFieldEditor(PreferenceSupplier.P_MAX_PENALTY, "Max Penalty", IIdentifierSettings.MIN_PENALTY_MATCH_FACTOR, IIdentifierSettings.MAX_PENALTY_MATCH_FACTOR, getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_NORMALIZED_SCAN, "Use normalized scan", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_CALCULATION_TYPE, "Calculation Type", CalculationType.getOptions(), getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_PEAKS_INSTEAD_OF_SCANS, "Use peaks instead of scans", getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Used locations for library files", getFieldEditorParent()));

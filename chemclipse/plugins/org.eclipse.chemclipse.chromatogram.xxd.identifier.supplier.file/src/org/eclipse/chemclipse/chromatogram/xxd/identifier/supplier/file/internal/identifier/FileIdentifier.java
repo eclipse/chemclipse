@@ -30,7 +30,7 @@ import org.eclipse.chemclipse.chromatogram.msd.identifier.support.DatabasesCache
 import org.eclipse.chemclipse.chromatogram.msd.identifier.support.TargetBuilderMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.IFileIdentifierSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.MassSpectrumIdentifierSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.ILibraryIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.PeakIdentifierSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.DeltaCalculationSupport;
@@ -64,7 +64,7 @@ public class FileIdentifier {
 	//
 	private final DatabasesCache databasesCache = new DatabasesCache(PreferenceSupplier.getMassSpectraFiles());
 
-	public IMassSpectra runIdentification(List<IScanMSD> massSpectraList, MassSpectrumIdentifierSettings fileIdentifierSettings, IProgressMonitor monitor) throws FileNotFoundException {
+	public IMassSpectra runIdentification(List<IScanMSD> massSpectraList, ILibraryIdentifierSettings fileIdentifierSettings, IProgressMonitor monitor) throws FileNotFoundException {
 
 		SubMonitor subMonitor = SubMonitor.convert(monitor, "Running mass spectra identification", 100);
 		/*
@@ -196,7 +196,7 @@ public class FileIdentifier {
 		return databasesCache;
 	}
 
-	public static int compareMassSpectraAgainstDatabase(List<? extends IScanMSD> unknownList, List<? extends IScanMSD> references, MassSpectrumIdentifierSettings fileIdentifierSettings, String identifier, String databaseName, IProgressMonitor monitor) {
+	public static int compareMassSpectraAgainstDatabase(List<? extends IScanMSD> unknownList, List<? extends IScanMSD> references, ILibraryIdentifierSettings fileIdentifierSettings, String identifier, String databaseName, IProgressMonitor monitor) {
 
 		return compareAgainstDatabase(unknownList, scan -> scan, references, fileIdentifierSettings, identifier, databaseName, monitor);
 	}

@@ -19,6 +19,7 @@ import java.util.Map;
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.IUnknownSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.IdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.MassSpectrumIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.MassSpectrumUnknownSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.PeakIdentifierSettings;
@@ -30,6 +31,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.identifier.DeltaCalculation;
 import org.eclipse.chemclipse.model.identifier.IIdentifierSettings;
 import org.eclipse.chemclipse.model.identifier.PenaltyCalculation;
+import org.eclipse.chemclipse.msd.model.support.CalculationType;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.chemclipse.support.util.FileListUtil;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -120,6 +122,15 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	//
 	public static final String P_FILTER_PATH_IDENTIFIER_FILES = "filterPathIdentifierFiles";
 	public static final String DEF_FILTER_PATH_IDENTIFIER_FILES = "";
+	/*
+	 * Combined Scan Identifier
+	 */
+	public static final String P_USE_NORMALIZED_SCAN = "useNormalizedScan";
+	public static final boolean DEF_USE_NORMALIZED_SCAN = true;
+	public static final String P_CALCULATION_TYPE = "calculationType";
+	public static final String DEF_CALCULATION_TYPE = CalculationType.SUM.name();
+	public static final String P_USE_PEAKS_INSTEAD_OF_SCANS = "usePeaksInsteadOfScans";
+	public static final boolean DEF_USE_PEAKS_INSTEAD_OF_SCANS = false;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -167,6 +178,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_PENALTY_LEVEL_FACTOR, Float.toString(DEF_PENALTY_LEVEL_FACTOR));
 		defaultValues.put(P_MAX_PENALTY, Float.toString(DEF_MAX_PENALTY));
 		defaultValues.put(P_FILTER_PATH_IDENTIFIER_FILES, DEF_FILTER_PATH_IDENTIFIER_FILES);
+		//
+		defaultValues.put(P_USE_NORMALIZED_SCAN, Boolean.toString(DEF_USE_NORMALIZED_SCAN));
+		defaultValues.put(P_CALCULATION_TYPE, DEF_CALCULATION_TYPE);
+		defaultValues.put(P_USE_PEAKS_INSTEAD_OF_SCANS, Boolean.toString(DEF_USE_PEAKS_INSTEAD_OF_SCANS));
+		//
 		return defaultValues;
 	}
 
@@ -338,6 +354,36 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		putSetting(P_FILTER_PATH_IDENTIFIER_FILES, filterPath);
 	}
 
+	public static IdentifierSettings getIdentifierSettings() {
+
+		IdentifierSettings settings = new IdentifierSettings();
+		settings.setUseNormalizedScan(isUseNormalizedScan());
+		settings.setDeltaCalculation(getDeltaCalculation());
+		settings.setUsePeaksInsteadOfScans(isUsePeaksInsteadOfScans());
+		//
+		return settings;
+	}
+
+	public static boolean isUseNormalizedScan() {
+
+		return getBoolean(P_USE_NORMALIZED_SCAN, DEF_USE_NORMALIZED_SCAN);
+	}
+
+	public static boolean isUsePeaksInsteadOfScans() {
+
+		return getBoolean(P_USE_PEAKS_INSTEAD_OF_SCANS, DEF_USE_PEAKS_INSTEAD_OF_SCANS);
+	}
+
+	public static CalculationType getCalculationType() {
+
+		try {
+			IEclipsePreferences preferences = INSTANCE().getPreferences();
+			return CalculationType.valueOf(preferences.get(P_CALCULATION_TYPE, DEF_CALCULATION_TYPE));
+		} catch(Exception e) {
+			return CalculationType.SUM;
+		}
+	}
+
 	private static DeltaCalculation getDeltaCalculation() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
@@ -395,5 +441,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		} catch(BackingStoreException e) {
 			logger.warn(e);
 		}
+	}
+
+	private static boolean getBoolean(String key, boolean def) {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getBoolean(key, def);
 	}
 }

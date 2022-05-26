@@ -80,4 +80,14 @@
             identifierName="File MS Library Service">
       </LibraryServiceSupplier>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.chromatogram.msd.identifier.chromatogramIdentifier">
+      <ChromatogramIdentificationSupplier
+            description="This identifier runs a file MS identification on a chromatogram."
+            id="org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.chromatogram"
+            identifier="org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.core.ChromatogramIdentifier"
+            identifierName="Library File (MS)"
+            identifierSettings="org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.IdentifierSettings">
+      </ChromatogramIdentificationSupplier>>      
+   </extension>    
 </plugin>

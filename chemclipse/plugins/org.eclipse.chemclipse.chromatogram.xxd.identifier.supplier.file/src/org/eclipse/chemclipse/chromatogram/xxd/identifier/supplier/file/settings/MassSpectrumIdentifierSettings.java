@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class MassSpectrumIdentifierSettings extends AbstractMassSpectrumIdentifierSettings implements IFileIdentifierSettings {
+public class MassSpectrumIdentifierSettings extends AbstractMassSpectrumIdentifierSettings implements ILibraryIdentifierSettings {
 
 	@JsonProperty(value = "Library File", defaultValue = "")
 	@JsonPropertyDescription("Select the library file.")
