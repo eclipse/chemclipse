@@ -24,4 +24,5 @@ Bundle-Vendor: ChemClipse
 Export-Package: org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.misc,
  org.eclipse.chemclipse.msd.converter.supplier.amdis.model,
  org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences
-Service-Component: OSGI-INF/org.eclipse.chemclipse.msd.converter.supplier.amdis.system.ConverterProcessor.xml
+Service-Component: OSGI-INF/org.eclipse.chemclipse.msd.converter.supplier.amdis.processors.CombinedScanProcessSupplier.xml,
+ OSGI-INF/org.eclipse.chemclipse.msd.converter.supplier.amdis.system.ConverterProcessor.xml

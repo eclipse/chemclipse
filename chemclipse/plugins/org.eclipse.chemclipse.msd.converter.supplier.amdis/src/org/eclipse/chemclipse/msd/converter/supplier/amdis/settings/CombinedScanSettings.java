@@ -9,20 +9,23 @@
  * Contributors:
  * Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.msd.model.system;
+package org.eclipse.chemclipse.msd.converter.supplier.amdis.settings;
+
+import java.io.File;
 
 import org.eclipse.chemclipse.msd.model.support.CalculationType;
-import org.eclipse.chemclipse.processing.system.ISystemProcessSettings;
-import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
+import org.eclipse.chemclipse.support.settings.SystemSettings;
+import org.eclipse.chemclipse.support.settings.SystemSettingsStrategy;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
-public class ModelSettingsMSD implements ISystemProcessSettings {
+@SystemSettings(SystemSettingsStrategy.NONE)
+public class CombinedScanSettings {
 
-	@JsonProperty(value = "Use Nominal m/z", defaultValue = "true")
-	@JsonPropertyDescription(value = "Use unit mass.")
-	boolean useNominalMZ = true;
+	@JsonProperty(value = "File Export", defaultValue = "combinedScans.msl")
+	@JsonPropertyDescription(value = "Select an export file.")
+	private File fileExport;
 	@JsonProperty(value = "Use Normalized Scan", defaultValue = "true")
 	@JsonPropertyDescription(value = "When merging scan, normalize the intensities.")
 	private boolean useNormalizedScan = true;
@@ -32,10 +35,19 @@ public class ModelSettingsMSD implements ISystemProcessSettings {
 	@JsonProperty(value = "Use Peaks Instead Of Scans", defaultValue = "false")
 	@JsonPropertyDescription(value = "Use peaks instead of scans to calculate the combined spectrum.")
 	boolean usePeaksInsteadOfScans = false;
-	@JsonProperty(value = "Copy Traces Clipboard", defaultValue = "5")
-	@JsonPropertyDescription(value = "The number of n highest traces that shall be copied to clipboard.")
-	@IntSettingsProperty(minValue = 1, maxValue = Integer.MAX_VALUE)
-	private int copyTracesClipboard = 5;
+	@JsonProperty(value = "Append", defaultValue = "true")
+	@JsonPropertyDescription(value = "Append the exported data.")
+	private boolean append = true;
+
+	public File getFileExport() {
+
+		return fileExport;
+	}
+
+	public void setFileExport(File fileExport) {
+
+		this.fileExport = fileExport;
+	}
 
 	public boolean isUseNormalizedScan() {
 
@@ -67,23 +79,13 @@ public class ModelSettingsMSD implements ISystemProcessSettings {
 		this.usePeaksInsteadOfScans = usePeaksInsteadOfScans;
 	}
 
-	public int getCopyTracesClipboard() {
+	public boolean isAppend() {
 
-		return copyTracesClipboard;
+		return append;
 	}
 
-	public void setCopyTracesClipboard(int copyTracesClipboard) {
+	public void setAppend(boolean append) {
 
-		this.copyTracesClipboard = copyTracesClipboard;
-	}
-
-	public boolean isUseNominalMZ() {
-
-		return useNominalMZ;
-	}
-
-	public void setUseNominalMZ(boolean useNominalMZ) {
-
-		this.useNominalMZ = useNominalMZ;
+		this.append = append;
 	}
 }

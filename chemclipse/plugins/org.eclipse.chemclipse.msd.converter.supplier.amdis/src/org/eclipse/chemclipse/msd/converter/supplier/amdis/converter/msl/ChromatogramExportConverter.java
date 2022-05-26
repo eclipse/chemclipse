@@ -18,6 +18,11 @@ import org.eclipse.chemclipse.converter.chromatogram.IChromatogramExportConverte
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
+import org.eclipse.chemclipse.model.identifier.ComparisonResult;
+import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
+import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.model.identifier.LibraryInformation;
+import org.eclipse.chemclipse.model.implementation.IdentificationTarget;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraWriter;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.io.MSLWriter;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -42,9 +47,36 @@ public class ChromatogramExportConverter extends AbstractChromatogramExportConve
 			try {
 				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
 				ChromatogramSelectionMSD chromatogramSelectionMSD = new ChromatogramSelectionMSD(chromatogramMSD);
+				/*
+				 * Create the combined scan.
+				 */
 				boolean useNormalize = PreferenceSupplier.isUseNormalizedScan();
 				CalculationType calculationType = PreferenceSupplier.getCalculationType();
-				IScanMSD combinedMassSpectrum = FilterSupport.getCombinedMassSpectrum(chromatogramSelectionMSD, null, useNormalize, calculationType);
+				boolean usePeaksInsteadOfScans = PreferenceSupplier.isUsePeaksInsteadOfScans();
+				IScanMSD combinedMassSpectrum = FilterSupport.getCombinedMassSpectrum(chromatogramSelectionMSD, null, useNormalize, calculationType, usePeaksInsteadOfScans);
+				/*
+				 * Set the chromatogram name and processing comments.
+				 */
+				StringBuilder builder = new StringBuilder();
+				builder.append("Normalize:");
+				builder.append(" ");
+				builder.append(useNormalize);
+				builder.append(", ");
+				builder.append("Calculation Type:");
+				builder.append(" ");
+				builder.append(calculationType.label());
+				builder.append(", ");
+				builder.append("Use Peaks instead of Scans:");
+				builder.append(" ");
+				builder.append(usePeaksInsteadOfScans);
+				//
+				ILibraryInformation libraryInformation = new LibraryInformation();
+				libraryInformation.setName(chromatogramSelectionMSD.getChromatogram().getName());
+				IIdentificationTarget identificationTarget = new IdentificationTarget(libraryInformation, ComparisonResult.createBestMatchComparisonResult());
+				combinedMassSpectrum.getTargets().add(identificationTarget);
+				/*
+				 * Export as *.msl file.
+				 */
 				IMassSpectraWriter massSpectraWriter = new MSLWriter();
 				massSpectraWriter.write(file, combinedMassSpectrum, false, monitor);
 				processingInfo.setProcessingResult(file);

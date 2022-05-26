@@ -215,8 +215,9 @@ public class ExtendedSubtractScanUI extends Composite implements IExtendedPartUI
 				if(chromatogramSelectionMSD != null) {
 					boolean useNormalize = PreferenceSupplier.isUseNormalizedScan();
 					CalculationType calculationType = PreferenceSupplier.getCalculationType();
+					boolean usePeaksInsteadOfScans = PreferenceSupplier.isUsePeaksInsteadOfScans();
 					IScanMSD massSpectrum1 = PreferenceSupplier.getSessionSubtractMassSpectrum();
-					IScanMSD massSpectrum2 = FilterSupport.getCombinedMassSpectrum(chromatogramSelectionMSD, null, useNormalize, calculationType);
+					IScanMSD massSpectrum2 = FilterSupport.getCombinedMassSpectrum(chromatogramSelectionMSD, null, useNormalize, calculationType, usePeaksInsteadOfScans);
 					IScanMSD subtractMassSpectrum = FilterSupport.getCombinedMassSpectrum(massSpectrum1, massSpectrum2, null, useNormalize, calculationType);
 					saveSessionMassSpectrum(e.display, subtractMassSpectrum);
 				}

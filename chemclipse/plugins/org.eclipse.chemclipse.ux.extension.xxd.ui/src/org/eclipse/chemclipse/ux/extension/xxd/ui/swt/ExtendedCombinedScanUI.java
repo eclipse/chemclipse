@@ -98,6 +98,11 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 		return true;
 	}
 
+	public void updateSelection() {
+
+		update(chromatogramSelection);
+	}
+
 	public void update(Object object) {
 
 		if(!locked) {
@@ -109,7 +114,8 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 				this.chromatogramSelection = chromatogramSelectionMSD;
 				boolean useNormalize = PreferenceSupplier.isUseNormalizedScan();
 				CalculationType calculationType = PreferenceSupplier.getCalculationType();
-				combinedMassSpectrum = FilterSupport.getCombinedMassSpectrum(chromatogramSelectionMSD, null, useNormalize, calculationType);
+				boolean usePeaksInsteadOfScans = PreferenceSupplier.isUsePeaksInsteadOfScans();
+				combinedMassSpectrum = FilterSupport.getCombinedMassSpectrum(chromatogramSelectionMSD, null, useNormalize, calculationType, usePeaksInsteadOfScans);
 			}
 			//
 			toolbarInfo.get().setText(getCombinedRangeInfo(object));

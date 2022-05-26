@@ -13,7 +13,9 @@ package org.eclipse.chemclipse.msd.model.support;
 
 import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
+import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.ICombinedMassSpectrum;
+import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
@@ -31,7 +33,7 @@ public class FilterSupport {
 	 * @param excludedIons
 	 * @return {@link IScanMSD}
 	 */
-	public static IScanMSD getCombinedMassSpectrum(IChromatogramSelectionMSD chromatogramSelection, IMarkedIons excludedIons, boolean useNormalize, CalculationType calculationType) {
+	public static IScanMSD getCombinedMassSpectrum(IChromatogramSelectionMSD chromatogramSelection, IMarkedIons excludedIons, boolean useNormalize, CalculationType calculationType, boolean usePeaksInsteadOfScans) {
 
 		if(chromatogramSelection == null || chromatogramSelection.getChromatogram() == null) {
 			return null;
@@ -42,17 +44,28 @@ public class FilterSupport {
 		 * Use the scan range from the start and stop scan.
 		 */
 		IChromatogramMSD chromatogram = chromatogramSelection.getChromatogram();
-		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
-		int stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
+		int startRetentionTime = chromatogramSelection.getStartRetentionTime();
+		int stopRetentionTime = chromatogramSelection.getStopRetentionTime();
+		int startScan = chromatogram.getScanNumber(startRetentionTime);
+		int stopScan = chromatogram.getScanNumber(stopRetentionTime);
 		CombinedMassSpectrumCalculator massSpectrumCalculator = new CombinedMassSpectrumCalculator();
 		/*
-		 * Merge all selected scans.<br/> All scan intensities will be added.
+		 * Merge all selected scans/peaks.<br/> All scan intensities will be added.
 		 * Afterwards, they will be normalized.<br/> It would be also possible
 		 * to add the intensity of each scan, normalize and add the next
 		 * intensity.
 		 */
-		for(int scan = startScan; scan <= stopScan; scan++) {
-			massSpectrumCalculator.addIons(chromatogram.getSupplierScan(scan).getIons(), excludedIons);
+		if(usePeaksInsteadOfScans) {
+			for(IChromatogramPeakMSD peakMSD : chromatogram.getPeaks(startRetentionTime, stopRetentionTime)) {
+				if(peakMSD.isActiveForAnalysis()) {
+					IPeakModelMSD peakModelMSD = peakMSD.getPeakModel();
+					massSpectrumCalculator.addIons(peakModelMSD.getPeakMassSpectrum().getIons(), excludedIons);
+				}
+			}
+		} else {
+			for(int scan = startScan; scan <= stopScan; scan++) {
+				massSpectrumCalculator.addIons(chromatogram.getSupplierScan(scan).getIons(), excludedIons);
+			}
 		}
 		/*
 		 * Normalized or normal summed values.

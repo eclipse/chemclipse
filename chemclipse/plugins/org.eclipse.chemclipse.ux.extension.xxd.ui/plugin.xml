@@ -123,7 +123,7 @@
             category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract"
             id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageSubtract"
-            name="Subtract">
+            name="Subtract/Combined">
       </page>
       <page
             category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -44,6 +44,8 @@ public class CombinedScanPart extends AbstractPart<ExtendedCombinedScanUI> {
 			if(isUpdateEvent(topic)) {
 				getControl().update(object);
 				return true;
+			} else if(isPeakEvent(topic)) {
+				getControl().updateSelection();
 			} else if(isCloseEvent(topic)) {
 				getControl().update(null);
 				unloadData();
@@ -57,7 +59,7 @@ public class CombinedScanPart extends AbstractPart<ExtendedCombinedScanUI> {
 	@Override
 	protected boolean isUpdateTopic(String topic) {
 
-		return isUpdateEvent(topic) || isCloseEvent(topic);
+		return isUpdateEvent(topic) || isPeakEvent(topic) || isCloseEvent(topic);
 	}
 
 	private boolean isUpdateEvent(String topic) {
@@ -68,5 +70,10 @@ public class CombinedScanPart extends AbstractPart<ExtendedCombinedScanUI> {
 	private boolean isCloseEvent(String topic) {
 
 		return IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_CLOSE.equals(topic);
+	}
+
+	private boolean isPeakEvent(String topic) {
+
+		return IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION.equals(topic);
 	}
 }

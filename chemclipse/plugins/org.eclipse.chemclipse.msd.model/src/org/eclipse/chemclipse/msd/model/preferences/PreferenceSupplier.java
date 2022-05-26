@@ -44,6 +44,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final boolean DEF_USE_NORMALIZED_SCAN = true;
 	public static final String P_CALCULATION_TYPE = "calculationType";
 	public static final String DEF_CALCULATION_TYPE = CalculationType.SUM.name();
+	public static final String P_USE_PEAKS_INSTEAD_OF_SCANS = "usePeaksInsteadOfScans";
+	public static final boolean DEF_USE_PEAKS_INSTEAD_OF_SCANS = false;
 	public static final String P_COPY_TRACES_CLIPBOARD = "copyTracesClipboard";
 	public static final int DEF_COPY_TRACES_CLIPBOARD = 5;
 	//
@@ -84,6 +86,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_USE_NOMINAL_MZ, Boolean.toString(DEF_USE_NOMINAL_MZ));
 		defaultValues.put(P_USE_NORMALIZED_SCAN, Boolean.toString(DEF_USE_NORMALIZED_SCAN));
 		defaultValues.put(P_CALCULATION_TYPE, DEF_CALCULATION_TYPE);
+		defaultValues.put(P_USE_PEAKS_INSTEAD_OF_SCANS, Boolean.toString(DEF_USE_PEAKS_INSTEAD_OF_SCANS));
 		defaultValues.put(P_COPY_TRACES_CLIPBOARD, Integer.toString(DEF_COPY_TRACES_CLIPBOARD));
 		return defaultValues;
 	}
@@ -164,6 +167,16 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		} catch(Exception e) {
 			return CalculationType.SUM;
 		}
+	}
+
+	public static void setUsePeaksInsteadOfScans(boolean usePeaks) {
+
+		setBoolean(P_USE_PEAKS_INSTEAD_OF_SCANS, usePeaks);
+	}
+
+	public static boolean isUsePeaksInsteadOfScans() {
+
+		return getBoolean(P_USE_PEAKS_INSTEAD_OF_SCANS, DEF_USE_PEAKS_INSTEAD_OF_SCANS);
 	}
 
 	public static String getMassSpectrum(IScanMSD massSpectrum) {

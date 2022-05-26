@@ -51,6 +51,7 @@ public class ModelProcessorMSD extends AbstractSystemProcessSettings {
 				PreferenceSupplier.setUseNominalMZ(processSettings.isUseNominalMZ());
 				PreferenceSupplier.setUseNormalizedScan(processSettings.isUseNormalizedScan());
 				PreferenceSupplier.setCalculationType(processSettings.getCalculationType());
+				PreferenceSupplier.setUsePeaksInsteadOfScans(processSettings.isUsePeaksInsteadOfScans());
 				PreferenceSupplier.setCopyTracesClipboard(processSettings.getCopyTracesClipboard());
 			}
 		}
