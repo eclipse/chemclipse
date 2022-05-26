@@ -101,8 +101,9 @@ public class ChromatogramConverterSupport_2_Test extends TestCase {
 		String[] ids;
 		try {
 			ids = support.getFilterExtensions();
-			assertEquals("FilterExtension #1", "*.netCDF;*.netcdf;*.NETCDF", ids[0]);
-			assertEquals("FilterExtension #2", "*.chrom;*.CHROM", ids[1]);
+			assertEquals("FilterExtension #0", "*.", ids[0]); // Important ... otherwise 'Save As...' fails
+			assertEquals("FilterExtension #1", "*.netCDF;*.netcdf;*.NETCDF", ids[1]);
+			assertEquals("FilterExtension #2", "*.chrom;*.CHROM", ids[2]);
 		} catch(NoConverterAvailableException e) {
 			assertTrue(false);
 		}

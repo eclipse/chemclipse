@@ -36,7 +36,7 @@ public class AbstractConverterSupport_3_Test extends AbstractConverterTestCase {
 	public void testGetExportableFilterExtensions_1() {
 
 		int size = filterExtensions.length;
-		assertEquals(2, size);
+		assertEquals(3, size); // Important ... otherwise 'Save As...' fails
 	}
 
 	public void testGetExportableFilterExtensions_2() {
@@ -49,5 +49,11 @@ public class AbstractConverterSupport_3_Test extends AbstractConverterTestCase {
 
 		String extension = filterExtensions[1];
 		assertEquals("*.xlsx;*.XLSX", extension);
+	}
+
+	public void testGetExportableFilterExtensions_4() {
+
+		String extension = filterExtensions[2];
+		assertEquals("*.", extension);
 	}
 }
