@@ -18,6 +18,7 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.msd.identifier.settings.IIdentifierSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.Activator;
+import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.ILibraryIdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.IUnknownSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.IdentifierSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.MassSpectrumIdentifierSettings;
@@ -208,23 +209,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static MassSpectrumIdentifierSettings getMassSpectrumIdentifierSettings() {
 
-		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
 		MassSpectrumIdentifierSettings settings = new MassSpectrumIdentifierSettings();
-		settings.setMassSpectraFiles(preferences.get(P_MASS_SPECTRA_FILES, DEF_MASS_SPECTRA_FILES));
-		settings.setUsePreOptimization(preferences.getBoolean(P_USE_PRE_OPTIMIZATION, DEF_USE_PRE_OPTIMIZATION));
-		settings.setThresholdPreOptimization(preferences.getDouble(P_THRESHOLD_PRE_OPTIMIZATION, DEF_THRESHOLD_PRE_OPTIMIZATION));
-		settings.setMassSpectrumComparatorId(preferences.get(P_MASS_SPECTRUM_COMPARATOR_ID, DEF_MASS_SPECTRUM_COMPARATOR_ID));
-		settings.setNumberOfTargets(preferences.getInt(P_NUMBER_OF_TARGETS, DEF_NUMBER_OF_TARGETS));
-		settings.setLimitMatchFactor(preferences.getFloat(P_LIMIT_MATCH_FACTOR_FILE, DEF_LIMIT_MATCH_FACTOR_FILE));
-		settings.setMinMatchFactor(preferences.getFloat(P_MIN_MATCH_FACTOR, DEF_MIN_MATCH_FACTOR));
-		settings.setMinReverseMatchFactor(preferences.getFloat(P_MIN_REVERSE_MATCH_FACTOR, DEF_MIN_REVERSE_MATCH_FACTOR));
-		//
-		settings.setDeltaCalculation(getDeltaCalculation());
-		settings.setDeltaWindow(preferences.getFloat(P_DELTA_WINDOW, DEF_DELTA_WINDOW));
-		settings.setPenaltyCalculation(getPenaltyCalculation());
-		settings.setPenaltyWindow(preferences.getFloat(P_PENALTY_WINDOW, DEF_PENALTY_WINDOW));
-		settings.setPenaltyLevelFactor(preferences.getFloat(P_PENALTY_LEVEL_FACTOR, DEF_PENALTY_LEVEL_FACTOR));
-		settings.setMaxPenalty(preferences.getFloat(P_MAX_PENALTY, DEF_MAX_PENALTY));
+		initialize(settings);
 		//
 		return settings;
 	}
@@ -360,6 +346,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		settings.setUseNormalizedScan(isUseNormalizedScan());
 		settings.setDeltaCalculation(getDeltaCalculation());
 		settings.setUsePeaksInsteadOfScans(isUsePeaksInsteadOfScans());
+		initialize(settings);
 		//
 		return settings;
 	}
@@ -424,6 +411,27 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 				return PenaltyCalculation.NONE;
 			}
 		}
+	}
+
+	private static void initialize(ILibraryIdentifierSettings settings) {
+
+		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
+		//
+		settings.setMassSpectraFiles(preferences.get(P_MASS_SPECTRA_FILES, DEF_MASS_SPECTRA_FILES));
+		settings.setUsePreOptimization(preferences.getBoolean(P_USE_PRE_OPTIMIZATION, DEF_USE_PRE_OPTIMIZATION));
+		settings.setThresholdPreOptimization(preferences.getDouble(P_THRESHOLD_PRE_OPTIMIZATION, DEF_THRESHOLD_PRE_OPTIMIZATION));
+		settings.setMassSpectrumComparatorId(preferences.get(P_MASS_SPECTRUM_COMPARATOR_ID, DEF_MASS_SPECTRUM_COMPARATOR_ID));
+		settings.setNumberOfTargets(preferences.getInt(P_NUMBER_OF_TARGETS, DEF_NUMBER_OF_TARGETS));
+		settings.setLimitMatchFactor(preferences.getFloat(P_LIMIT_MATCH_FACTOR_FILE, DEF_LIMIT_MATCH_FACTOR_FILE));
+		settings.setMinMatchFactor(preferences.getFloat(P_MIN_MATCH_FACTOR, DEF_MIN_MATCH_FACTOR));
+		settings.setMinReverseMatchFactor(preferences.getFloat(P_MIN_REVERSE_MATCH_FACTOR, DEF_MIN_REVERSE_MATCH_FACTOR));
+		//
+		settings.setDeltaCalculation(getDeltaCalculation());
+		settings.setDeltaWindow(preferences.getFloat(P_DELTA_WINDOW, DEF_DELTA_WINDOW));
+		settings.setPenaltyCalculation(getPenaltyCalculation());
+		settings.setPenaltyWindow(preferences.getFloat(P_PENALTY_WINDOW, DEF_PENALTY_WINDOW));
+		settings.setPenaltyLevelFactor(preferences.getFloat(P_PENALTY_LEVEL_FACTOR, DEF_PENALTY_LEVEL_FACTOR));
+		settings.setMaxPenalty(preferences.getFloat(P_MAX_PENALTY, DEF_MAX_PENALTY));
 	}
 
 	private static String getFilterPath(String key, String def) {
