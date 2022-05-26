@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Inject;
 
@@ -57,6 +58,9 @@ public class ExtendedSubtractScanUI extends Composite implements IExtendedPartUI
 	private ScanChartUI scanChartUI;
 	private ExtendedScanTableUI extendedScanTableUI;
 	//
+	private AtomicReference<Button> buttonSelectedScanControl = new AtomicReference<>();
+	private AtomicReference<Button> buttonCombinedScanControl = new AtomicReference<>();
+	//
 	private IScanMSD scanMSD = null;
 	private IChromatogramSelectionMSD chromatogramSelectionMSD = null;
 
@@ -101,6 +105,7 @@ public class ExtendedSubtractScanUI extends Composite implements IExtendedPartUI
 		createScanTabFolderSection(composite);
 		//
 		loadSessionMassSpectrum(composite.getDisplay());
+		updateWidgets();
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -200,6 +205,8 @@ public class ExtendedSubtractScanUI extends Composite implements IExtendedPartUI
 				}
 			}
 		});
+		//
+		buttonSelectedScanControl.set(button);
 	}
 
 	private void createAddCombinedScanButton(Composite parent) {
@@ -223,6 +230,8 @@ public class ExtendedSubtractScanUI extends Composite implements IExtendedPartUI
 				}
 			}
 		});
+		//
+		buttonCombinedScanControl.set(button);
 	}
 
 	private void createClearSessionButton(Composite parent) {
@@ -330,6 +339,8 @@ public class ExtendedSubtractScanUI extends Composite implements IExtendedPartUI
 				extendedScanTableUI.setInput(scanMSD);
 			}
 		}
+		//
+		updateWidgets();
 	}
 
 	private void loadSessionMassSpectrum(Display display) {
@@ -352,6 +363,13 @@ public class ExtendedSubtractScanUI extends Composite implements IExtendedPartUI
 		if(display != null) {
 			fireUpdateEvent(display);
 		}
+	}
+
+	private void updateWidgets() {
+
+		boolean enabled = chromatogramSelectionMSD != null;
+		buttonSelectedScanControl.get().setEnabled(enabled);
+		buttonCombinedScanControl.get().setEnabled(enabled);
 	}
 
 	private void fireUpdateEvent(Display display) {

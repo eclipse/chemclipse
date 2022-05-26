@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedSubtractScanUI;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -42,6 +43,8 @@ public class SubtractScanPart extends AbstractPart<ExtendedSubtractScanUI> {
 	@Override
 	protected boolean updateData(List<Object> objects, String topic) {
 
+		System.out.println("Substract Scan: " + topic);
+		//
 		if(objects.size() == 1) {
 			if(isCloseEvent(topic)) {
 				getControl().update(null);
@@ -52,15 +55,23 @@ public class SubtractScanPart extends AbstractPart<ExtendedSubtractScanUI> {
 				if(IChemClipseEvents.TOPIC_UPDATE_SESSION_SUBTRACT_MASS_SPECTRUM.equals(topic)) {
 					IScanMSD scanMSD = PreferenceSupplier.getSessionSubtractMassSpectrum();
 					getControl().update(scanMSD);
+					/*
+					 * Additionally try to get the latest chromatogram selection.
+					 */
+					List<Object> objectsSelection = Activator.getDefault().getDataUpdateSupport().getUpdates(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION);
+					if(objectsSelection.size() == 1) {
+						Object objectSelection = objectsSelection.get(0);
+						if(objectSelection instanceof IChromatogramSelectionMSD) {
+							getControl().update(objectSelection);
+						}
+					}
+					//
 					return true;
 				} else if(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION.equals(topic)) {
 					if(object instanceof IChromatogramSelectionMSD) {
 						getControl().update(object);
 						return true;
 					}
-				} else {
-					getControl().update(null);
-					return true;
 				}
 			}
 		}
