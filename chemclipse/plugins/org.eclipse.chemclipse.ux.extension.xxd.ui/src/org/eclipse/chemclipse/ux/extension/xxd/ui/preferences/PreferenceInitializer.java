@@ -454,6 +454,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_MODULO_AUTO_MIRROR_CHROMATOGRAMS, PreferenceConstants.DEF_MODULO_AUTO_MIRROR_CHROMATOGRAMS);
 		//
 		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_NAMED_TRACES, PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_NAMED_TRACES);
+		store.setDefault(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_NAMED_WAVELENGTHS, PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_NAMED_WAVELENGTHS);
 		//
 		store.setDefault(PreferenceConstants.P_OVERLAY_SHIFT_X, PreferenceConstants.DEF_OVERLAY_SHIFT_X);
 		store.setDefault(PreferenceConstants.P_INDEX_SHIFT_X, PreferenceConstants.DEF_INDEX_SHIFT_X);

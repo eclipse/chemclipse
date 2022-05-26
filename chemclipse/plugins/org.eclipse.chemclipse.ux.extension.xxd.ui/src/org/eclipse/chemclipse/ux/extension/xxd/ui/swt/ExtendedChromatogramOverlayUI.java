@@ -35,6 +35,8 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.traces.NamedTrace;
 import org.eclipse.chemclipse.model.traces.NamedTraces;
 import org.eclipse.chemclipse.model.updates.IUpdateListener;
+import org.eclipse.chemclipse.model.wavelengths.NamedWavelength;
+import org.eclipse.chemclipse.model.wavelengths.NamedWavelengths;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
@@ -42,6 +44,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.validators.TraceValidator;
+import org.eclipse.chemclipse.support.validators.WavelengthValidator;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -53,12 +56,14 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlayChartS
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageNamedTraces;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageNamedWavelengths;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageOverlay;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.DisplayType;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ChromatogramDataSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.Derivative;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.traces.NamedTracesUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.wavelengths.NamedWavelengthsUI;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
@@ -117,6 +122,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 	// The traces toolbar is controlled by the combo overlay type.
 	//
 	private AtomicReference<NamedTracesUI> toolbarNamedTraces = new AtomicReference<>();
+	private AtomicReference<NamedWavelengthsUI> toolbarNamedWavelengths = new AtomicReference<>();
 	private Button buttonToolbarDataShift;
 	private AtomicReference<DataShiftControllerUI> toolbarDataShift = new AtomicReference<>();
 	private Button buttonToolbarRulerDetails;
@@ -161,6 +167,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		//
 		createToolbarMain(this);
 		createNamedTraces(this);
+		createNamedWavelengths(this);
 		createDataShiftControllerUI(this);
 		createRulerDetailsUI(this);
 		createOverlayChart(this);
@@ -171,6 +178,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 	private void initialize() {
 
 		enableToolbar(toolbarNamedTraces, false);
+		enableToolbar(toolbarNamedWavelengths, false);
 		enableToolbar(toolbarDataShift, buttonToolbarDataShift, IMAGE_SHIFT, TOOLTIP_SHIFT, false);
 		enableToolbar(toolbarRulerDetails, buttonToolbarRulerDetails, IMAGE_RULER, TOOLTIP_RULER, false);
 		enableChartGrid(chartControl, buttonChartGrid, IMAGE_CHART_GRID, chartGridSupport);
@@ -225,6 +233,28 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		});
 		//
 		toolbarNamedTraces.set(namedTracesUI);
+	}
+
+	private void createNamedWavelengths(Composite parent) {
+
+		NamedWavelengthsUI namedWavelengthsUI = new NamedWavelengthsUI(parent, SWT.NONE);
+		namedWavelengthsUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		namedWavelengthsUI.setInput(new NamedWavelengths(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_NAMED_WAVELENGTHS)));
+		namedWavelengthsUI.setUpdateListener(new IUpdateListener() {
+
+			@Override
+			public void update() {
+
+				NamedWavelengths namedWavelengths = namedWavelengthsUI.getNamedWavelengths();
+				if(namedWavelengths != null) {
+					preferenceStore.putValue(PreferenceConstants.DEF_CHROMATOGRAM_OVERLAY_NAMED_WAVELENGTHS, namedWavelengths.save());
+					chartControl.get().deleteSeries();
+					refreshUpdateOverlayChart();
+				}
+			}
+		});
+		//
+		toolbarNamedWavelengths.set(namedWavelengthsUI);
 	}
 
 	private void createDataShiftControllerUI(Composite parent) {
@@ -382,6 +412,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		createSettingsButton(parent, Arrays.asList( //
 				PreferencePageOverlay.class, //
 				PreferencePageNamedTraces.class, //
+				PreferencePageNamedWavelengths.class, //
 				PreferencePageChromatogram.class, //
 				PreferencePage.class //
 		), new ISettingsHandler() {
@@ -414,20 +445,29 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		comboOverlayType.setToolTipText(DisplayType.toDescription(types));
 		// comboOverlayType.setText(DisplayType.toShortcut(types));
 		if(preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_AUTOFOCUS_PROFILE_SETTINGS)) {
-			if(isExtractedIonsModusEnabled() || isExtractedWavelengthsModusEnabled()) {
+			if(isExtractedIonsModusEnabled()) {
 				enableToolbar(toolbarNamedTraces, true);
 			} else {
 				enableToolbar(toolbarNamedTraces, false);
+			}
+			if(isExtractedWavelengthsModusEnabled()) {
+				enableToolbar(toolbarNamedWavelengths, true);
+			} else {
+				enableToolbar(toolbarNamedWavelengths, false);
 			}
 		}
 		//
 		NamedTracesUI namedTracesUI = toolbarNamedTraces.get();
 		if(isExtractedIonsModusEnabled()) {
 			namedTracesUI.setEnabled(true);
-		} else if(isExtractedWavelengthsModusEnabled()) {
-			namedTracesUI.setEnabled(true);
 		} else {
 			namedTracesUI.setEnabled(false);
+		}
+		NamedWavelengthsUI namedWavelengthsUI = toolbarNamedWavelengths.get();
+		if(isExtractedWavelengthsModusEnabled()) {
+			namedWavelengthsUI.setEnabled(true);
+		} else {
+			namedWavelengthsUI.setEnabled(false);
 		}
 		//
 		toolbarDataShift.get().update();
@@ -445,6 +485,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 	private void applySettings() {
 
 		updateNamedTraces();
+		updateNamedWavelengths();
 		chromatogramChartSupport.loadUserSettings();
 		chartControl.get().deleteSeries();
 		refreshUpdateOverlayChart();
@@ -455,6 +496,11 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 	private void updateNamedTraces() {
 
 		toolbarNamedTraces.get().setInput(new NamedTraces(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_NAMED_TRACES)));
+	}
+
+	private void updateNamedWavelengths() {
+
+		toolbarNamedWavelengths.get().setInput(new NamedWavelengths(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_NAMED_WAVELENGTHS)));
 	}
 
 	private void createOverlayChart(Composite parent) {
@@ -670,7 +716,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		/*
 		 * SWC
 		 */
-		List<Number> wavelengths = getSelectedTraces(false);
+		List<Number> wavelengths = getSelectedWavelengths(false);
 		if(chromatogram instanceof IChromatogramWSD) {
 			String description = ChromatogramDataSupport.getReferenceLabel(chromatogram, 0, false);
 			for(Number number : wavelengths) {
@@ -1089,6 +1135,25 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		}
 		//
 		return traceList;
+	}
+
+	private List<Number> getSelectedWavelengths(boolean rounded) {
+
+		List<Number> wavelengthsList = new ArrayList<>();
+		NamedWavelength namedWavelength = toolbarNamedWavelengths.get().getNamedWavelength();
+		if(namedWavelength != null) {
+			WavelengthValidator wavelengthValidator = new WavelengthValidator();
+			IStatus status = wavelengthValidator.validate(namedWavelength.getWavelengths());
+			if(status.isOK()) {
+				if(rounded) {
+					wavelengthsList.addAll(wavelengthValidator.getWavelengthsAsInteger());
+				} else {
+					wavelengthsList.addAll(wavelengthValidator.getWavelengthsAsDouble());
+				}
+			}
+		}
+		//
+		return wavelengthsList;
 	}
 
 	private Set<DisplayType> getDisplayType() {

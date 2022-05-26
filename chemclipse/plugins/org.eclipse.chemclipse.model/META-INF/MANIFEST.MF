@@ -52,7 +52,8 @@ Export-Package: org.eclipse.chemclipse.model.baseline,
  org.eclipse.chemclipse.model.targets,
  org.eclipse.chemclipse.model.traces,
  org.eclipse.chemclipse.model.types,
- org.eclipse.chemclipse.model.updates
+ org.eclipse.chemclipse.model.updates,
+ org.eclipse.chemclipse.model.wavelengths
 Import-Package: org.osgi.service.component.annotations;version="1.2.0"
 Service-Component: OSGI-INF/org.eclipse.chemclipse.model.supplier.IMeasurementFilterProcessTypeSupplier.xml,
  OSGI-INF/org.eclipse.chemclipse.model.supplier.IPeakFilterProcessTypeSupplier.xml

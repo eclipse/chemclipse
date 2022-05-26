@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
 import org.eclipse.chemclipse.model.core.support.HeaderField;
 import org.eclipse.chemclipse.model.traces.NamedTraceUtil;
+import org.eclipse.chemclipse.model.wavelengths.NamedWavelengthUtil;
 import org.eclipse.chemclipse.msd.model.support.CalculationType;
 import org.eclipse.chemclipse.pcr.model.core.support.LabelSetting;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
@@ -177,6 +178,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final int DEF_PEAK_TRACES_OFFSET_RETENTION_TIME = DEF_OFFSET_RETENTION_TIME;
 	public static final String P_CHROMATOGRAM_OVERLAY_NAMED_TRACES = "chromatogramOverlayNamedTraces";
 	public static final String DEF_CHROMATOGRAM_OVERLAY_NAMED_TRACES = NamedTraceUtil.getDefaultTraces();
+	public static final String P_CHROMATOGRAM_OVERLAY_NAMED_WAVELENGTHS = "chromatogramOverlayNamedWavelengths";
+	public static final String DEF_CHROMATOGRAM_OVERLAY_NAMED_WAVELENGTHS = NamedWavelengthUtil.getDefaultWavelengths();
 	//
 	public static final String P_OVERLAY_SHIFT_X = "overlayShiftX";
 	public static final double DEF_OVERLAY_SHIFT_X = 0.0d;
@@ -413,6 +416,11 @@ public class PreferenceConstants extends ChartOptions {
 	 */
 	public static final String P_NAMED_TRACES_TEMPLATE_FOLDER = "namedTracesTemplateFolder";
 	public static final String DEF_NAMED_TRACES_TEMPLATE_FOLDER = "";
+	/*
+	 * Named Wavelengths
+	 */
+	public static final String P_NAMED_WAVELENGTHS_TEMPLATE_FOLDER = "namedWavelengthsTemplateFolder";
+	public static final String DEF_NAMED_WAVELENGTHS_TEMPLATE_FOLDER = "";
 	/*
 	 * Target Templates
 	 */
