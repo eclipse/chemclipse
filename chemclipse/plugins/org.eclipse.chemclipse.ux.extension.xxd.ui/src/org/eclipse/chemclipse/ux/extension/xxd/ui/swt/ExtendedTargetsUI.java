@@ -293,7 +293,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 	private Button createButtonDeleteAll(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setToolTipText("Delete all target(s)");
+		button.setToolTipText("Delete all targets");
 		button.setText("");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
@@ -301,7 +301,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Target(s)", "Do you want to delete all target(s)?")) {
+				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Targets", "Do you want to delete all targets?")) {
 					deleteAllTargets();
 					updateTargets(e.display);
 				}
@@ -407,7 +407,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Delete the selected target(s).");
+		button.setToolTipText("Delete the selected targets.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -474,7 +474,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 			@Override
 			public String getName() {
 
-				return "Delete Target(s)";
+				return "Delete Targets";
 			}
 
 			@Override
@@ -498,7 +498,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 			@Override
 			public String getName() {
 
-				return "Verify Target(s) Check";
+				return "Verify Targets Check";
 			}
 
 			@Override
@@ -522,7 +522,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 			@Override
 			public String getName() {
 
-				return "Verify Target(s) Uncheck";
+				return "Verify Targets Uncheck";
 			}
 
 			@Override
@@ -677,7 +677,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 	@SuppressWarnings("rawtypes")
 	private void deleteTargets(Display display) {
 
-		if(MessageDialog.openQuestion(display.getActiveShell(), "Target(s)", "Would you like to delete the selected target(s)?")) {
+		if(MessageDialog.openQuestion(display.getActiveShell(), "Targets", "Would you like to delete the selected targets?")) {
 			/*
 			 * Delete Target
 			 */
@@ -774,7 +774,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 			}
 		}
 		//
-		UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Target(s) have been modified (deleted/updated).");
+		UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Targets have been modified (deleted/updated).");
 	}
 
 	private void propagateTarget(Display display) {

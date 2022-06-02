@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -34,7 +34,7 @@ public class ScanInfoLabelProvider extends AbstractChemClipseLabelProvider {
 	//
 	public static final String SCAN = "Scan#";
 	public static final String RETENTION_TIME = "Time [min]";
-	public static final String COUNT_IONS = "Count Ion(s)";
+	public static final String COUNT_IONS = "Count Ions";
 	public static final String CLASSIFICATION = "SIM/SCAN";
 	public static final String IONS = "m/z...";
 	//

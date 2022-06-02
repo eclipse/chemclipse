@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2020 Lablicate GmbH.
+ * Copyright (c) 2014, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -29,7 +29,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public class LowPassScanFilter extends AbstractMassSpectrumFilter {
 
-	private static final String DESCRIPTION = "Low Pass Ion(s)";
+	private static final String DESCRIPTION = "Low Pass Ions";
 
 	@Override
 	public IProcessingInfo<IMassSpectrumFilterResult> applyFilter(List<IScanMSD> massSpectra, IMassSpectrumFilterSettings filterSettings, IProgressMonitor monitor) {

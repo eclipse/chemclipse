@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Christoph Läubrich.
+ * Copyright (c) 2020, 2022 Christoph Läubrich.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -230,7 +230,7 @@ public class AssetInstallPage extends WizardPage {
 						File file = new File(open);
 						try (ZipFile zipFile = new ZipFile(file)) {
 							/*
-							 * Available asset extension(s).
+							 * Available asset extensions.
 							 */
 							Set<String> assetExtensions = new HashSet<>();
 							for(AssetType assetType : AssetType.values()) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -174,8 +174,8 @@ public class PagePeakSelection extends AbstractExtendedWizardPage {
 					 * Press "DEL" button.
 					 */
 					MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.YES | SWT.NO | SWT.ICON_WARNING);
-					messageBox.setText("Delete peak(s)");
-					messageBox.setMessage("Would you like to delete the selected peak(s)?");
+					messageBox.setText("Delete peaks");
+					messageBox.setMessage("Would you like to delete the selected peaks?");
 					if(messageBox.open() == SWT.YES) {
 						propagateChange(PEAKS_DELETE);
 					}

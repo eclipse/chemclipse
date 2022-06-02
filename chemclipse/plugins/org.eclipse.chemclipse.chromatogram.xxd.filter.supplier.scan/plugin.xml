@@ -18,7 +18,7 @@
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.removeemptyscans">
       </ChromatogramFilterSupplier> 
       <ChromatogramFilterSupplier
-            description="This filters deletes scan identification(s)."
+            description="This filters deletes scan identifications."
             filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.core.FilterDeleteIdentifier"
             filterName="Scan Targets (Delete)"
             filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsDeleteIdentifier"

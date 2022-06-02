@@ -43,7 +43,7 @@ public class DeletePeaksFilter extends AbstractPeakFilter<DeletePeaksFilterSetti
 	@Override
 	public String getName() {
 
-		return "Delete Peak(s)";
+		return "Delete Peaks";
 	}
 
 	@Override

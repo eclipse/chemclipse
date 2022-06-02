@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,8 +16,8 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class DeleteIntegrationsFilterSettings {
 
-	@JsonProperty(value = "Delete Integration(s)", defaultValue = "false")
-	@JsonPropertyDescription(value = "Confirm to delete the integration(s).")
+	@JsonProperty(value = "Delete Integrations", defaultValue = "false")
+	@JsonPropertyDescription(value = "Confirm to delete the integrations.")
 	private boolean deleteIntegrations;
 
 	public boolean isDeleteIntegrations() {

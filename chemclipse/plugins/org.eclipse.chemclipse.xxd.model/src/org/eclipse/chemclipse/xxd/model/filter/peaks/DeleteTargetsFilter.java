@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -32,13 +32,13 @@ public class DeleteTargetsFilter implements IPeakFilter<DeleteTargetsFilterSetti
 	@Override
 	public String getName() {
 
-		return "Delete Target(s)";
+		return "Delete Targets";
 	}
 
 	@Override
 	public String getDescription() {
 
-		return "Filter Peak Target(s)";
+		return "Filter Peak Targets";
 	}
 
 	@Override

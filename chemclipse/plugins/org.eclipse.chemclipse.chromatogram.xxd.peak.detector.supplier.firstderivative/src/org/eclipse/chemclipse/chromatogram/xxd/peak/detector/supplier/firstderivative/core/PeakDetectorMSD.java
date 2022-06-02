@@ -91,7 +91,7 @@ public class PeakDetectorMSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 					chromatogram.addPeak(peak);
 				}
 				chromatogram.setDirty(true);
-				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, FirstDerivativePeakDetector.DETECTOR_DESCRIPTION, peaks.size() + " peak(s) have been detected."));
+				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, FirstDerivativePeakDetector.DETECTOR_DESCRIPTION, peaks.size() + " peaks have been detected."));
 			} else {
 				logger.warn("Settings is not of type: " + PeakDetectorSettingsMSD.class);
 			}

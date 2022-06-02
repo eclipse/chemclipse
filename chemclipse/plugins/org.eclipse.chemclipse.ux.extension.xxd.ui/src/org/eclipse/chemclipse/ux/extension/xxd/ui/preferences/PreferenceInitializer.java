@@ -131,7 +131,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_PEAK_DETECTOR_SCAN_MARKER_COLOR, PreferenceConstants.DEF_PEAK_DETECTOR_SCAN_MARKER_COLOR);
 		store.setDefault(PreferenceConstants.P_PEAK_DETECTOR_SCAN_MARKER_TYPE, PreferenceConstants.DEF_PEAK_DETECTOR_SCAN_MARKER_TYPE);
 		/*
-		 * Peak(s) Chart
+		 * Peak Chart
 		 */
 		store.setDefault(PreferenceConstants.P_COLOR_SCHEME_DISPLAY_PEAKS, PreferenceConstants.DEF_COLOR_SCHEME_DISPLAY_PEAKS);
 		store.setDefault(PreferenceConstants.P_SHOW_AREA_DISPLAY_PEAKS, PreferenceConstants.DEF_SHOW_AREA_DISPLAY_PEAKS);

@@ -174,8 +174,8 @@ public class MassSpectrumEditListUI extends Composite {
 					int index = table.getSelectionIndex();
 					if(index >= 0) {
 						MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ICON_WARNING | SWT.OK | SWT.CANCEL);
-						messageBox.setText("Delete ion(s)?");
-						messageBox.setMessage("Would you like to delete the ion(s)?");
+						messageBox.setText("Delete ions?");
+						messageBox.setMessage("Would you like to delete the ions?");
 						if(messageBox.open() == SWT.OK) {
 							//
 							enableButtonFields(ACTION_DELETE);

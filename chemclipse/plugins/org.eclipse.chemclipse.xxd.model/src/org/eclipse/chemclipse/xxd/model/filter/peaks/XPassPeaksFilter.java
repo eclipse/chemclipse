@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,9 +27,9 @@ public class XPassPeaksFilter {
 
 	public static <X extends IPeak> void filterPeaks(CRUDListener<X, IPeakModel> listener, MessageConsumer messageConsumer, int keepPeaks, boolean highPass, IProgressMonitor monitor) throws IllegalArgumentException {
 
-		String description = (highPass ? "High " : "Low ") + " Pass Peak(s)";
+		String description = (highPass ? "High " : "Low ") + " Pass Peaks";
 		/*
-		 * Extract the peak(s) and check the area.
+		 * Extract the peaks and check the area.
 		 */
 		boolean peaksAreIntegrated = true;
 		List<X> peaks = new ArrayList<>();
@@ -42,10 +42,10 @@ public class XPassPeaksFilter {
 			}
 		}
 		/*
-		 * Sort the peak(s)
+		 * Sort the peaks
 		 */
 		if(peaksAreIntegrated) {
-			messageConsumer.addInfoMessage(description, "The peak area is used to filter the peak(s).");
+			messageConsumer.addInfoMessage(description, "The peak area is used to filter the peaks.");
 			if(highPass) {
 				Collections.sort(peaks, (p1, p2) -> Double.compare(p2.getIntegratedArea(), p1.getIntegratedArea()));
 			} else {
@@ -60,7 +60,7 @@ public class XPassPeaksFilter {
 			}
 		}
 		/*
-		 * Delete the peak(s).
+		 * Delete the peaks.
 		 */
 		SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
 		for(int i = 0; i < peaks.size(); i++) {

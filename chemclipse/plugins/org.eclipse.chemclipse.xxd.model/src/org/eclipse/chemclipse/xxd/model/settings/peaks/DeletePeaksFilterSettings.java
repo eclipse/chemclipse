@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,11 +16,11 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class DeletePeaksFilterSettings {
 
-	@JsonProperty(value = "Delete Peak(s)", defaultValue = "false")
-	@JsonPropertyDescription(value = "Confirm to delete the peak(s).")
+	@JsonProperty(value = "Delete Peaks", defaultValue = "false")
+	@JsonPropertyDescription(value = "Confirm to delete the peaks.")
 	private boolean deletePeaks;
 	@JsonProperty(value = "Unidentified Only", defaultValue = "false")
-	@JsonPropertyDescription(value = "Only delete the unidentified peak(s).")
+	@JsonPropertyDescription(value = "Only delete the unidentified peaks.")
 	private boolean deleteUnidentifiedOnly;
 
 	public boolean isDeletePeaks() {

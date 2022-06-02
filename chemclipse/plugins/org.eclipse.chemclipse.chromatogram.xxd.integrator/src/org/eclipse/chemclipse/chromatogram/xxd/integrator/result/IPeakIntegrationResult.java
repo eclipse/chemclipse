@@ -56,7 +56,7 @@ public interface IPeakIntegrationResult {
 	void setPurity(float purity);
 
 	/**
-	 * Returns the ion(s) which has been integrated as a set.<br/>
+	 * Returns the ions which has been integrated as a set.<br/>
 	 * If it was TIC (total ion chromatogram), the IIon.TIC_Ion will be
 	 * returned.
 	 * 

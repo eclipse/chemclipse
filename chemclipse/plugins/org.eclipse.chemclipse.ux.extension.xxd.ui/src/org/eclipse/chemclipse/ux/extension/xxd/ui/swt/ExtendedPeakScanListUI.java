@@ -499,8 +499,8 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 	private void deletePeaksOrIdentifications(Display display) {
 
 		MessageBox messageBox = new MessageBox(display.getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-		messageBox.setText("Delete Peak(s)/Scan Identification(s)");
-		messageBox.setMessage("Would you like to delete the selected peak(s)/scan identification(s)?");
+		messageBox.setText("Delete Peaks/Scan Identifications");
+		messageBox.setMessage("Would you like to delete the selected peaks/scan identifications?");
 		if(messageBox.open() == SWT.YES) {
 			/*
 			 * Selected Items.
@@ -520,7 +520,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 				}
 			}
 			/*
-			 * Clear scan(s) / peak(s)
+			 * Clear scan(s) / peaks
 			 */
 			if(!scansToClear.isEmpty()) {
 				DeleteScansOperation deleteScans = new DeleteScansOperation(display, chromatogramSelection, scansToClear);
@@ -662,7 +662,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 				chromatogramSelection.setSelectedPeaks(selectedPeaks);
 				chromatogramSelection.setSelectedIdentifiedScans(selectedIdentifiedScans);
 				chromatogramSelection.getChromatogram().setDirty(true);
-				UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Peak(s)/Scan(s) selection via the list.");
+				UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Peaks/Scan(s) selection via the list.");
 			} else {
 				/*
 				 * Only one object.

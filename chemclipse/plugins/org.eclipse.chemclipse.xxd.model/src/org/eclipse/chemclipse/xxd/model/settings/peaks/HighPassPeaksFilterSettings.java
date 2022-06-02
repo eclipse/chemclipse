@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,7 +20,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 public class HighPassPeaksFilterSettings {
 
 	@JsonProperty(value = "Number Highest", defaultValue = "5")
-	@JsonPropertyDescription(value = "This value defines the number of n highest peak(s) to be preserved.")
+	@JsonPropertyDescription(value = "This value defines the number of n highest peaks to be preserved.")
 	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_NUMBER_HIGHEST, maxValue = PreferenceSupplier.MAX_NUMBER_HIGHEST)
 	private int numberHighest = PreferenceSupplier.DEF_NUMBER_HIGHEST;
 

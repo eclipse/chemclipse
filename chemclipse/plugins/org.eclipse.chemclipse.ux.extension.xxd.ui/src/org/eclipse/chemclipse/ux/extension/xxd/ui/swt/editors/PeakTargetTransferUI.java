@@ -59,7 +59,7 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 
 	private static final Logger logger = Logger.getLogger(PeakTargetTransferUI.class);
 	//
-	private static final String DESCRIPTION = "Transfer Target(s)";
+	private static final String DESCRIPTION = "Transfer Targets";
 	private static final String TYPE_PEAKS = "Peaks";
 	private static final String TYPE_SCANS = "Scans";
 	private static final String[] TYPE_ITEMS = new String[]{TYPE_PEAKS, TYPE_SCANS};
@@ -383,8 +383,8 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 				 * Question
 				 */
 				MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-				messageBox.setText("Transfer Target(s)");
-				messageBox.setMessage("Would you like to transfer the selected target(s) to chromatogram: " + ChromatogramDataSupport.getChromatogramEditorLabel(chromatogramSelectionSink) + "?");
+				messageBox.setText("Transfer Targets");
+				messageBox.setMessage("Would you like to transfer the selected targets to chromatogram: " + ChromatogramDataSupport.getChromatogramEditorLabel(chromatogramSelectionSink) + "?");
 				if(messageBox.open() == SWT.YES) {
 					/*
 					 * Transfer the targets.
@@ -417,7 +417,7 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 		if(message != null) {
 			showWarnMessage(shell, message);
 		} else {
-			MessageDialog.openInformation(shell, DESCRIPTION, "The peak target(s) have been transfered successfully.");
+			MessageDialog.openInformation(shell, DESCRIPTION, "The peak targets have been transfered successfully.");
 		}
 	}
 
@@ -434,7 +434,7 @@ public class PeakTargetTransferUI extends Composite implements IChromatogramSele
 		if(message != null) {
 			showWarnMessage(shell, message);
 		} else {
-			MessageDialog.openInformation(shell, DESCRIPTION, "The scan target(s) have been transfered successfully.");
+			MessageDialog.openInformation(shell, DESCRIPTION, "The scan targets have been transfered successfully.");
 		}
 	}
 

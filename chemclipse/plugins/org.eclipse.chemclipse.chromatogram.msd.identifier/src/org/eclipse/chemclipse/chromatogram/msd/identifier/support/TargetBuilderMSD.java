@@ -174,7 +174,7 @@ public class TargetBuilderMSD {
 			double factorMax = maxIntensity > 0 ? (100 / maxIntensity) : 0;
 			DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0");
 			/*
-			 * Ion(s)
+			 * Ions
 			 */
 			for(int i = 0; i < size; i++) {
 				IIon ion = ionsSorted.get(i);

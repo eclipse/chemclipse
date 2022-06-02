@@ -64,10 +64,10 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 	private static final String SERIES_ID_CHROMATOGRAM_XIC = "Chromatogram (XIC)";
 	private static final String SERIES_ID_CHROMATOGRAM_SWC = "Chromatogram (SWC)";
 	private static final String SERIES_ID_BASELINE = "Baseline";
-	private static final String SERIES_ID_PEAKS_NORMAL_ACTIVE = "Peak(s) [Active]";
-	private static final String SERIES_ID_PEAKS_NORMAL_INACTIVE = "Peak(s) [Inactive]";
-	private static final String SERIES_ID_PEAKS_ISTD_ACTIVE = "Peak(s) ISTD [Active]";
-	private static final String SERIES_ID_PEAKS_ISTD_INACTIVE = "Peak(s) ISTD [Inactive]";
+	private static final String SERIES_ID_PEAKS_NORMAL_ACTIVE = "Peaks [Active]";
+	private static final String SERIES_ID_PEAKS_NORMAL_INACTIVE = "Peaks [Inactive]";
+	private static final String SERIES_ID_PEAKS_ISTD_ACTIVE = "Peaks ISTD [Active]";
+	private static final String SERIES_ID_PEAKS_ISTD_INACTIVE = "Peaks ISTD [Inactive]";
 	private static final String SERIES_ID_PEAKS_SELECTED_MARKER = "Peaks Selected Marker";
 	private static final String SERIES_ID_PEAKS_SELECTED_SHAPE = "Peaks Selected Shape";
 	private static final String SERIES_ID_PEAKS_SELECTED_BACKGROUND = "Peaks Selected Background";

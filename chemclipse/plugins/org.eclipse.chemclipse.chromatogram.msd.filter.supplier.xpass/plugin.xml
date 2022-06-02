@@ -7,14 +7,14 @@
             config="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.settings.HighPassFilterSettings"
             description="This filter preserves the n highest ions."
             filter="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.core.HighPassScanFilter"
-            filterName="High Pass Ion(s)"
+            filterName="High Pass Ions"
             id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.high">
       </MassSpectrumFilterSupplier>
       <MassSpectrumFilterSupplier
             config="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.settings.LowPassFilterSettings"
             description="This filter preserves the n lowest ions."
             filter="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.core.LowPassScanFilter"
-            filterName="Low Pass Ion(s)"
+            filterName="Low Pass Ions"
             id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.low">
       </MassSpectrumFilterSupplier>
       <MassSpectrumFilterSupplier

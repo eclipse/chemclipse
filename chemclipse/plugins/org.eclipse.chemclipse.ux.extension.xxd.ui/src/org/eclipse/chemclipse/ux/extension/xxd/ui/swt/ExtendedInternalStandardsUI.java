@@ -242,7 +242,7 @@ public class ExtendedInternalStandardsUI extends Composite implements IExtendedP
 
 				if(peak != null) {
 					if(peak.getIntegratedArea() == 0) {
-						setLabelInputError("The peak area is 0. Please integrate the peak(s) first.");
+						setLabelInputError("The peak area is 0. Please integrate the peaks first.");
 					} else {
 						clearLabelInputErrors();
 						enableButtonFields(ACTION_ADD);
@@ -478,7 +478,7 @@ public class ExtendedInternalStandardsUI extends Composite implements IExtendedP
 			@Override
 			public String getName() {
 
-				return "Delete Internal Standard(s)";
+				return "Delete Internal Standards";
 			}
 
 			@Override
@@ -517,8 +517,8 @@ public class ExtendedInternalStandardsUI extends Composite implements IExtendedP
 
 		if(peak != null) {
 			MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-			messageBox.setText("Delete Internal Standard(s)");
-			messageBox.setMessage("Would you like to delete the selected internal standard(s)?");
+			messageBox.setText("Delete Internal Standards");
+			messageBox.setMessage("Would you like to delete the selected internal standards?");
 			if(messageBox.open() == SWT.YES) {
 				/*
 				 * Delete ISTD

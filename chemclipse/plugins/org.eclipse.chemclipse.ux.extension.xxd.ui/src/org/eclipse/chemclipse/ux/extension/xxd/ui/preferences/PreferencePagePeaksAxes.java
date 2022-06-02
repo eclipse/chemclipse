@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -25,9 +25,10 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 public class PreferencePagePeaksAxes extends FieldEditorPreferencePage implements IWorkbenchPreferencePage {
 
 	public PreferencePagePeaksAxes() {
+
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setTitle("Peak(s) Axes");
+		setTitle("Peak Axes");
 		setDescription("");
 	}
 

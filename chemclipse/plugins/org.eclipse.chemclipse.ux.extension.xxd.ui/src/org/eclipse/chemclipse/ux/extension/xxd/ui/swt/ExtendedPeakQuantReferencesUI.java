@@ -272,7 +272,7 @@ public class ExtendedPeakQuantReferencesUI extends Composite implements IExtende
 
 		MessageBox messageBox = new MessageBox(shell, SWT.ICON_QUESTION | SWT.YES | SWT.NO);
 		messageBox.setText("Delete Quantitation Reference(s)");
-		messageBox.setMessage("Would you like to delete the selected quantitation(s)?");
+		messageBox.setMessage("Would you like to delete the selected quantitations?");
 		if(messageBox.open() == SWT.YES) {
 			//
 			Iterator iterator = tableViewer.get().getStructuredSelection().iterator();

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -55,7 +55,7 @@ public class Classifier extends AbstractChromatogramClassifier {
 		IProcessingInfo<IChromatogramClassifierResult> processingInfo = validate(chromatogramSelection, classifierSettings);
 		if(!processingInfo.hasErrorMessages()) {
 			/*
-			 * Are identification(s) available already?
+			 * Are identifications available already?
 			 */
 			List<IPeakMSD> peaks = BasePeakClassifier.getPeaks(chromatogramSelection);
 			if(!BasePeakClassifier.areClassificationsAvailable(peaks)) {
@@ -70,7 +70,7 @@ public class Classifier extends AbstractChromatogramClassifier {
 				processingInfo.addWarnMessage(BasePeakIdentifier.IDENTIFIER, "The peaks are not integrated. Hence, just the occurrence is counted instead of the area.");
 			}
 			/*
-			 * Classify the base peak(s).
+			 * Classify the base peaks.
 			 */
 			ILigninRatios ligninRatios = BasePeakClassifier.calculateLigninRatios(chromatogramSelection);
 			IBasePeakClassifierResult chromatogramClassifierResult = new BasePeakClassifierResult(ResultStatus.OK, "The chromatogram has been classified.", ligninRatios);

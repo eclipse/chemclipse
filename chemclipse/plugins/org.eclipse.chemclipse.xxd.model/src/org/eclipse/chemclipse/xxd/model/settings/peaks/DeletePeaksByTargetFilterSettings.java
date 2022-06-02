@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,7 +21,7 @@ public class DeletePeaksByTargetFilterSettings {
 	@JsonProperty(value = "Target")
 	private PeaksDeleteOption peaksDeleteOption = PeaksDeleteOption.NAME;
 	@JsonProperty(value = "Value", defaultValue = "")
-	@JsonPropertyDescription(value = "Delete peak(s) if at least one target matches the value on the selected option.")
+	@JsonPropertyDescription(value = "Delete peaks if at least one target matches the value on the selected option.")
 	private String value = "";
 	@JsonProperty(value = "Case Sensitive", defaultValue = "false")
 	@JsonPropertyDescription(value = "Case sensitive search and matching of targets.")

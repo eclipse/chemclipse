@@ -314,7 +314,7 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String P_PEAK_DETECTOR_SCAN_MARKER_TYPE = "showPeakDetectorScanMarkerType";
 	public static final String DEF_PEAK_DETECTOR_SCAN_MARKER_TYPE = PlotSymbolType.NONE.toString();
 	/*
-	 * Peak(s) Chart
+	 * Peak Chart
 	 */
 	public static final String P_COLOR_SCHEME_DISPLAY_PEAKS = "colorSchemeDisplayPeaks";
 	public static final String DEF_COLOR_SCHEME_DISPLAY_PEAKS = Colors.COLOR_SCHEME_PRINT;

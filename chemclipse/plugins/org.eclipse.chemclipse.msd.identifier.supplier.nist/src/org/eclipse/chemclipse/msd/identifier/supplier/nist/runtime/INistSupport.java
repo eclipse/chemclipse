@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.msd.identifier.supplier.nist.runtime;
 public interface INistSupport {
 
 	/*
-	 * Note: The LibraryService requires the legacy label to load spectra for target(s).
+	 * Note: The LibraryService requires the legacy label to load spectra for targets.
 	 * If one loads an old file, containing the "NIST" label, the library service shall be
 	 * able to locate the mass spectrum.
 	 */

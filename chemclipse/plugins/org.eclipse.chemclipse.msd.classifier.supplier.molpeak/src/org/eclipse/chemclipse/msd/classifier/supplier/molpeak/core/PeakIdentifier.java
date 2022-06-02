@@ -42,7 +42,7 @@ public class PeakIdentifier extends AbstractPeakIdentifierMSD<IPeakIdentificatio
 			PeakIdentifierSettings peakIdentifierSettings = (PeakIdentifierSettings)identifierSettings;
 			BasePeakIdentifier basePeakIdentifier = new BasePeakIdentifier();
 			basePeakIdentifier.identifyPeaks(peaks, peakIdentifierSettings, monitor);
-			processingInfo.addInfoMessage("BasePeakIdentifier", "Peak(s) have been identified.");
+			processingInfo.addInfoMessage("BasePeakIdentifier", "Peaks have been identified.");
 		}
 		//
 		return processingInfo;

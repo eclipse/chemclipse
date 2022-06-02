@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -33,13 +33,13 @@ public class ClassifiedPeaksFilter implements IPeakFilter<ClassifiedPeaksFilterS
 	@Override
 	public String getName() {
 
-		return "Disable Classified Peak(s)";
+		return "Disable Classified Peaks";
 	}
 
 	@Override
 	public String getDescription() {
 
-		return "Disables peak(s) with a given classification";
+		return "Disables peaks with a given classification";
 	}
 
 	@Override

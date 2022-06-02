@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -417,8 +417,8 @@ public class PagePeakAssignment extends AbstractExtendedWizardPage {
 					 * Press "DEL" button.
 					 */
 					MessageBox messageBox = new MessageBox(Display.getCurrent().getActiveShell(), SWT.YES | SWT.NO | SWT.ICON_WARNING);
-					messageBox.setText("Delete identification(s)");
-					messageBox.setMessage("Would you like to delete the identification(s)?");
+					messageBox.setText("Delete identifications");
+					messageBox.setMessage("Would you like to delete the identifications?");
 					if(messageBox.open() == SWT.YES) {
 						/*
 						 * Delete the identifications.
