@@ -53,15 +53,11 @@ public class NamedTracesUI extends Composite {
 
 	private static final String TOOLTIP_TEXT = "Enter/modify the traces.";
 	//
-	public static final String IMPORT_TITLE = "Import Named Trace(s)";
-	public static final String EXPORT_TITLE = "Export Named Trace(s)";
-	public static final String MESSAGE_IMPORT_SUCCESSFUL = "Named trace(s) have been imported successfully.";
-	public static final String MESSAGE_EXPORT_SUCCESSFUL = "Named trace(s) have been exported successfully.";
-	public static final String MESSAGE_EXPORT_FAILED = "Failed to export the named trace(s).";
-	//
-	private static final String FILTER_EXTENSION = "*.txt";
-	private static final String FILTER_NAME = "Named Traces (*.txt)";
-	private static final String FILE_NAME = "NamedTraces.txt";
+	public static final String IMPORT_TITLE = "Import " + NamedTraces.DESCRIPTION;
+	public static final String EXPORT_TITLE = "Export " + NamedTraces.DESCRIPTION;
+	public static final String MESSAGE_IMPORT_SUCCESSFUL = "Named traces have been imported successfully.";
+	public static final String MESSAGE_EXPORT_SUCCESSFUL = "Named traces have been exported successfully.";
+	public static final String MESSAGE_EXPORT_FAILED = "Failed to export the named traces.";
 	//
 	private ComboViewer comboViewer;
 	private Text textTraces;
@@ -289,8 +285,8 @@ public class NamedTracesUI extends Composite {
 				if(namedTraces != null) {
 					FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
 					fileDialog.setText(IMPORT_TITLE);
-					fileDialog.setFilterExtensions(new String[]{FILTER_EXTENSION});
-					fileDialog.setFilterNames(new String[]{FILTER_NAME});
+					fileDialog.setFilterExtensions(new String[]{NamedTraces.FILTER_EXTENSION});
+					fileDialog.setFilterNames(new String[]{NamedTraces.FILTER_NAME});
 					fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_NAMED_TRACES_TEMPLATE_FOLDER));
 					String path = fileDialog.open();
 					if(path != null) {
@@ -322,9 +318,9 @@ public class NamedTracesUI extends Composite {
 					FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
 					fileDialog.setOverwrite(true);
 					fileDialog.setText(EXPORT_TITLE);
-					fileDialog.setFilterExtensions(new String[]{FILTER_EXTENSION});
-					fileDialog.setFilterNames(new String[]{FILTER_NAME});
-					fileDialog.setFileName(FILE_NAME);
+					fileDialog.setFilterExtensions(new String[]{NamedTraces.FILTER_EXTENSION});
+					fileDialog.setFilterNames(new String[]{NamedTraces.FILTER_NAME});
+					fileDialog.setFileName(NamedTraces.FILE_NAME);
 					fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_NAMED_TRACES_TEMPLATE_FOLDER));
 					String path = fileDialog.open();
 					if(path != null) {

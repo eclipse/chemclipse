@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -58,12 +58,7 @@ import org.eclipse.swt.widgets.Table;
 
 public class NamedTracesSettingsEditor implements SettingsUIProvider.SettingsUIControl, IExtendedPartUI {
 
-	private static final String FILTER_EXTENSION = "*.txt";
-	private static final String FILTER_NAME = "Named Traces (*.txt)";
-	private static final String FILE_NAME = "NamedTraces.txt";
-	//
-	private static final String DIALOG_TITLE = "Named Trace(s)";
-	private static final String MESSAGE_REMOVE = "Do you want to delete the selected named trace(s)?";
+	private static final String MESSAGE_REMOVE = "Do you want to delete the selected named traces?";
 	private static final String CATEGORY = "Named Traces";
 	private static final String DELETE = "Delete";
 	//
@@ -332,8 +327,8 @@ public class NamedTracesSettingsEditor implements SettingsUIProvider.SettingsUIC
 
 				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
 				fileDialog.setText("Named Trace List");
-				fileDialog.setFilterExtensions(new String[]{FILTER_EXTENSION});
-				fileDialog.setFilterNames(new String[]{FILTER_NAME});
+				fileDialog.setFilterExtensions(new String[]{NamedTraces.FILTER_EXTENSION});
+				fileDialog.setFilterNames(new String[]{NamedTraces.FILTER_NAME});
 				fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_NAMED_TRACES_TEMPLATE_FOLDER));
 				String pathname = fileDialog.open();
 				if(pathname != null) {
@@ -362,9 +357,9 @@ public class NamedTracesSettingsEditor implements SettingsUIProvider.SettingsUIC
 				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
 				fileDialog.setOverwrite(true);
 				fileDialog.setText("Named Trace List");
-				fileDialog.setFilterExtensions(new String[]{FILTER_EXTENSION});
-				fileDialog.setFilterNames(new String[]{FILTER_NAME});
-				fileDialog.setFileName(FILE_NAME);
+				fileDialog.setFilterExtensions(new String[]{NamedTraces.FILTER_EXTENSION});
+				fileDialog.setFilterNames(new String[]{NamedTraces.FILTER_NAME});
+				fileDialog.setFileName(NamedTraces.FILE_NAME);
 				fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_NAMED_TRACES_TEMPLATE_FOLDER));
 				String pathname = fileDialog.open();
 				if(pathname != null) {
@@ -446,7 +441,7 @@ public class NamedTracesSettingsEditor implements SettingsUIProvider.SettingsUIC
 
 	private void deleteItems(Shell shell) {
 
-		if(MessageDialog.openQuestion(shell, DIALOG_TITLE, MESSAGE_REMOVE)) {
+		if(MessageDialog.openQuestion(shell, NamedTraces.DESCRIPTION, MESSAGE_REMOVE)) {
 			IStructuredSelection structuredSelection = (IStructuredSelection)listUI.getSelection();
 			for(Object object : structuredSelection.toArray()) {
 				if(object instanceof NamedTrace) {

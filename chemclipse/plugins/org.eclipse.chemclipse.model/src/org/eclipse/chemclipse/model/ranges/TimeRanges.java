@@ -37,9 +37,9 @@ public class TimeRanges {
 	//
 	public static final String DESCRIPTION = "Time Ranges";
 	public static final String FILE_EXTENSION = ".tra";
-	public static final String FILE_NAME = "TimeRanges" + FILE_EXTENSION;
+	public static final String FILE_NAME = DESCRIPTION.replaceAll("\\s", "") + FILE_EXTENSION;
 	public static final String FILTER_EXTENSION = "*" + FILE_EXTENSION;
-	public static final String FILTER_NAME = "Time Ranges (*" + FILE_EXTENSION + ")";
+	public static final String FILTER_NAME = DESCRIPTION + " (*" + FILE_EXTENSION + ")";
 	//
 	private TimeRangeListUtil timeRangeListUtil = new TimeRangeListUtil();
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");

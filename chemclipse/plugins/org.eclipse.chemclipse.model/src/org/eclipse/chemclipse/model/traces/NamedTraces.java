@@ -33,10 +33,11 @@ public class NamedTraces {
 
 	private static final Logger logger = Logger.getLogger(NamedTraces.class);
 	//
-	public static final String FILE_EXTENSION = ".txt";
-	public static final String FILE_NAME = "NamedTraces" + FILE_EXTENSION;
+	public static final String DESCRIPTION = "Named Traces";
+	public static final String FILE_EXTENSION = ".ntr";
+	public static final String FILE_NAME = DESCRIPTION.replaceAll("\\s", "") + FILE_EXTENSION;
 	public static final String FILTER_EXTENSION = "*" + FILE_EXTENSION;
-	public static final String FILTER_NAME = "Named Traces (*" + FILE_EXTENSION + ")";
+	public static final String FILTER_NAME = DESCRIPTION + " (*" + FILE_EXTENSION + ")";
 	//
 	private NamedTraceListUtil namedTraceListUtil = new NamedTraceListUtil();
 	private final Map<String, NamedTrace> namedTraceMap = new HashMap<>();

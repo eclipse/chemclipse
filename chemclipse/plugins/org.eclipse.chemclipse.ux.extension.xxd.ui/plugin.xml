@@ -207,13 +207,13 @@
             category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageTimeRanges"
             id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageTimeRanges"
-            name="Time Range(s)">
+            name="Time Ranges">
       </page>  
       <page
             category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
             class="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageNamedTraces"
             id="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePageNamedTraces"
-            name="Named Trace(s)">
+            name="Named Traces">
       </page>
       <page
             category="org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.preferencePage"
