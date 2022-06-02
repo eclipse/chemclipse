@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.support;
 
+import java.util.List;
+
 import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
@@ -66,6 +68,34 @@ public class FilterSupport {
 			for(int scan = startScan; scan <= stopScan; scan++) {
 				massSpectrumCalculator.addIons(chromatogram.getSupplierScan(scan).getIons(), excludedIons);
 			}
+		}
+		/*
+		 * Normalized or normal summed values.
+		 */
+		return getMassSpectrum(massSpectrumCalculator, useNormalize, calculationType);
+	}
+
+	/**
+	 * Returns a normalized combined mass spectrum of the two given mass spectra.
+	 * May return null.
+	 * 
+	 * @param massSpectra
+	 * @param excludedIons
+	 * @param useNormalize
+	 * @param calculationType
+	 * @return
+	 */
+	public static IScanMSD getCombinedMassSpectrum(List<IScanMSD> massSpectra, IMarkedIons excludedIons, boolean useNormalize, CalculationType calculationType) {
+
+		if(massSpectra.isEmpty()) {
+			return null;
+		}
+		//
+		excludedIons = validateExcludedIons(excludedIons);
+		CombinedMassSpectrumCalculator massSpectrumCalculator = new CombinedMassSpectrumCalculator();
+		//
+		for(IScanMSD massSpectrum : massSpectra) {
+			addIonsToCalculator(massSpectrum, excludedIons, massSpectrumCalculator, useNormalize, calculationType);
 		}
 		/*
 		 * Normalized or normal summed values.
