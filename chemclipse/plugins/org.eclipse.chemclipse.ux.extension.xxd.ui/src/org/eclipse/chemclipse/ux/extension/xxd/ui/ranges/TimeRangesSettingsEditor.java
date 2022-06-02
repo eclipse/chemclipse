@@ -52,10 +52,6 @@ import org.eclipse.swt.widgets.Listener;
 
 public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUIControl, IExtendedPartUI {
 
-	private static final String FILTER_EXTENSION = "*.txt";
-	private static final String FILTER_NAME = "Time Ranges (*.txt)";
-	private static final String FILE_NAME = "TimeRanges.txt";
-	//
 	private Composite control;
 	//
 	private Button buttonToolbarSearch;
@@ -311,8 +307,8 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 
 				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
 				fileDialog.setText("Time Range List");
-				fileDialog.setFilterExtensions(new String[]{FILTER_EXTENSION});
-				fileDialog.setFilterNames(new String[]{FILTER_NAME});
+				fileDialog.setFilterExtensions(new String[]{TimeRanges.FILTER_EXTENSION});
+				fileDialog.setFilterNames(new String[]{TimeRanges.FILTER_NAME});
 				fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_TIME_RANGE_TEMPLATE_FOLDER));
 				String pathname = fileDialog.open();
 				if(pathname != null) {
@@ -341,9 +337,9 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
 				fileDialog.setOverwrite(true);
 				fileDialog.setText("Time Range List");
-				fileDialog.setFilterExtensions(new String[]{FILTER_EXTENSION});
-				fileDialog.setFilterNames(new String[]{FILTER_NAME});
-				fileDialog.setFileName(FILE_NAME);
+				fileDialog.setFilterExtensions(new String[]{TimeRanges.FILTER_EXTENSION});
+				fileDialog.setFilterNames(new String[]{TimeRanges.FILTER_NAME});
+				fileDialog.setFileName(TimeRanges.FILE_NAME);
 				fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_TIME_RANGE_TEMPLATE_FOLDER));
 				String pathname = fileDialog.open();
 				if(pathname != null) {

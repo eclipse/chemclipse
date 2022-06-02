@@ -35,7 +35,8 @@ public class TimeRanges {
 
 	private static final Logger logger = Logger.getLogger(TimeRanges.class);
 	//
-	public static final String FILE_EXTENSION = ".txt";
+	public static final String DESCRIPTION = "Time Ranges";
+	public static final String FILE_EXTENSION = ".tra";
 	public static final String FILE_NAME = "TimeRanges" + FILE_EXTENSION;
 	public static final String FILTER_EXTENSION = "*" + FILE_EXTENSION;
 	public static final String FILTER_NAME = "Time Ranges (*" + FILE_EXTENSION + ")";

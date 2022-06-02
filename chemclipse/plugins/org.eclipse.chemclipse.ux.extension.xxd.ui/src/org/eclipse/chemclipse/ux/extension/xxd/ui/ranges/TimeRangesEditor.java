@@ -54,11 +54,6 @@ import org.eclipse.swt.widgets.Table;
 
 public class TimeRangesEditor extends Composite {
 
-	private static final String DESCRIPTION = "Time Ranges";
-	private static final String FILTER_EXTENSION = "*.txt";
-	private static final String FILTER_NAME = "Time Ranges (*.txt)";
-	private static final String FILE_NAME = "TimeRanges.txt";
-	//
 	private TimeRangesUI timeRangesUI;
 	private TimeRangesListUI timeRangesListUI;
 	//
@@ -124,9 +119,9 @@ public class TimeRangesEditor extends Composite {
 
 				if(timeRanges != null) {
 					FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
-					fileDialog.setText(DESCRIPTION);
-					fileDialog.setFilterExtensions(new String[]{FILTER_EXTENSION});
-					fileDialog.setFilterNames(new String[]{FILTER_NAME});
+					fileDialog.setText(TimeRanges.DESCRIPTION);
+					fileDialog.setFilterExtensions(new String[]{TimeRanges.FILTER_EXTENSION});
+					fileDialog.setFilterNames(new String[]{TimeRanges.FILTER_NAME});
 					fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_TIME_RANGE_TEMPLATE_FOLDER));
 					String pathname = fileDialog.open();
 					if(pathname != null) {
@@ -189,10 +184,10 @@ public class TimeRangesEditor extends Composite {
 				if(timeRanges != null) {
 					FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
 					fileDialog.setOverwrite(true);
-					fileDialog.setText(DESCRIPTION);
-					fileDialog.setFilterExtensions(new String[]{FILTER_EXTENSION});
-					fileDialog.setFilterNames(new String[]{FILTER_NAME});
-					fileDialog.setFileName(FILE_NAME);
+					fileDialog.setText(TimeRanges.DESCRIPTION);
+					fileDialog.setFilterExtensions(new String[]{TimeRanges.FILTER_EXTENSION});
+					fileDialog.setFilterNames(new String[]{TimeRanges.FILTER_NAME});
+					fileDialog.setFileName(TimeRanges.FILE_NAME);
 					fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_TIME_RANGE_TEMPLATE_FOLDER));
 					String pathname = fileDialog.open();
 					if(pathname != null) {
@@ -200,9 +195,9 @@ public class TimeRangesEditor extends Composite {
 						String path = file.getParentFile().getAbsolutePath();
 						preferenceStore.putValue(PreferenceConstants.P_TIME_RANGE_TEMPLATE_FOLDER, path);
 						if(timeRanges.exportItems(file)) {
-							MessageDialog.openInformation(button.getShell(), DESCRIPTION, "The time ranges have been exported successfully.");
+							MessageDialog.openInformation(button.getShell(), TimeRanges.DESCRIPTION, "The time ranges have been exported successfully.");
 						} else {
-							MessageDialog.openWarning(button.getShell(), DESCRIPTION, "Something went wrong to export the time ranges.");
+							MessageDialog.openWarning(button.getShell(), TimeRanges.DESCRIPTION, "Something went wrong to export the time ranges.");
 						}
 					}
 				}
