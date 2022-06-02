@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,8 +12,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.model.core.IMeasurementResult;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
@@ -24,8 +28,6 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -35,6 +37,8 @@ import org.eclipse.swt.widgets.Composite;
 
 public class ExtendedMeasurementResultUI extends Composite implements IExtendedPartUI {
 
+	private static final String NO_SELECTION = "--";
+	//
 	private Button buttonToolbarInfo;
 	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
 	private Button buttonToolbarResults;
@@ -56,28 +60,47 @@ public class ExtendedMeasurementResultUI extends Composite implements IExtendedP
 	 * @param infoLabel
 	 *            the infolabel to show must not be <code>null</code>
 	 */
-	public void update(Collection<IMeasurementResult<?>> results, String infoLabel) {
+	public void setInput(Collection<IMeasurementResult<?>> results, String infoLabel) {
 
 		toolbarInfo.get().setText(infoLabel);
+		/*
+		 * Update the combo viewer.
+		 */
+		List<Object> measurementResults = new ArrayList<>();
+		measurementResults.add(NO_SELECTION);
+		List<IMeasurementResult<?>> resultsSorted = new ArrayList<>(results.stream().filter(m -> m.isVisible()).collect(Collectors.toList()));
+		Collections.sort(resultsSorted, (r1, r2) -> r1.getName().compareTo(r2.getName()));
+		measurementResults.addAll(resultsSorted);
 		//
-		IStructuredSelection selection = comboMeasurementResults.getStructuredSelection();
-		comboMeasurementResults.setInput(results);
-		comboMeasurementResults.refresh();
-		//
-		IMeasurementResult<?> selectedElement = (IMeasurementResult<?>)selection.getFirstElement();
-		if(!results.contains(selectedElement)) {
-			selectedElement = null;
+		IStructuredSelection structuredSelection = comboMeasurementResults.getStructuredSelection();
+		Object object = structuredSelection.getFirstElement();
+		comboMeasurementResults.setSelection(StructuredSelection.EMPTY);
+		comboMeasurementResults.setInput(measurementResults);
+		/*
+		 * Get the selection
+		 */
+		IMeasurementResult<?> selection = null;
+		int index = 0;
+		if(object instanceof IMeasurementResult<?>) {
+			/*
+			 * Validation
+			 */
+			IMeasurementResult<?> result = (IMeasurementResult<?>)object;
+			exitloop:
+			for(int i = 0; i < resultsSorted.size(); i++) {
+				IMeasurementResult<?> measurementResult = resultsSorted.get(i);
+				if(measurementResult.getName().equals(result.getName())) {
+					selection = measurementResult;
+					index = i + 1;
+					break exitloop;
+				}
+			}
 		}
-		//
-		if(selectedElement == null && results.size() == 1) {
-			selectedElement = results.iterator().next();
-		}
-		//
-		if(selectedElement == null) {
-			comboMeasurementResults.setSelection(StructuredSelection.EMPTY);
-		} else {
-			comboMeasurementResults.setSelection(new StructuredSelection(selectedElement));
-		}
+		/*
+		 * Set the selection
+		 */
+		comboMeasurementResults.setSelection(selection == null ? StructuredSelection.EMPTY : new StructuredSelection(selection));
+		comboMeasurementResults.getCombo().select(index);
 	}
 
 	private void createControl() {
@@ -142,17 +165,6 @@ public class ExtendedMeasurementResultUI extends Composite implements IExtendedP
 	private ComboViewer createResultCombo(Composite parent) {
 
 		ComboViewer comboViewer = new ComboViewer(parent, SWT.PUSH);
-		comboViewer.addFilter(new ViewerFilter() {
-
-			@Override
-			public boolean select(Viewer viewer, Object parentElement, Object element) {
-
-				if(element instanceof IMeasurementResult<?>) {
-					return ((IMeasurementResult<?>)element).isVisible();
-				}
-				return true;
-			}
-		});
 		Combo combo = comboViewer.getCombo();
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {
@@ -163,10 +175,14 @@ public class ExtendedMeasurementResultUI extends Composite implements IExtendedP
 				if(element instanceof IMeasurementResult<?>) {
 					IMeasurementResult<?> measurementResult = (IMeasurementResult<?>)element;
 					return measurementResult.getName();
+				} else if(element instanceof String) {
+					return (String)element;
 				}
+				//
 				return super.getText(element);
 			}
 		});
+		//
 		combo.setToolTipText("Show the available measurement results.");
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.grabExcessHorizontalSpace = true;
@@ -184,6 +200,7 @@ public class ExtendedMeasurementResultUI extends Composite implements IExtendedP
 				}
 			}
 		});
+		//
 		return comboViewer;
 	}
 

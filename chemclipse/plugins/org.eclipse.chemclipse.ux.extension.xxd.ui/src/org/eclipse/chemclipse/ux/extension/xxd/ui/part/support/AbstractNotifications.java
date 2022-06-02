@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - comments
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.part.support;
 
@@ -57,11 +58,13 @@ public abstract class AbstractNotifications<T> {
 	public void select(T selection) {
 
 		T object = getSelection();
+		//
 		if(selection == null) {
 			selectedObject = null;
 		} else {
 			selectedObject = new SoftReference<T>(selection);
 		}
+		//
 		for(ObjectChangedListener<? super T> listener : listeners) {
 			listener.objectChanged(ChangeType.SELECTED, selection, object);
 		}

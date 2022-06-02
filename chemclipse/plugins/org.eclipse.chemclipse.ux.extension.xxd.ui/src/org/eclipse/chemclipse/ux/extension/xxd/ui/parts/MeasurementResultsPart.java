@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -36,8 +36,9 @@ import org.eclipse.swt.widgets.Composite;
 public class MeasurementResultsPart extends AbstractPart<ExtendedMeasurementResultUI> {
 
 	private static final String TOPIC = IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION;
+	//
 	@Inject
-	private MeasurementResultNotification notification;
+	private MeasurementResultNotification measurementResultNotification;
 
 	@Inject
 	public MeasurementResultsPart(Composite parent) {
@@ -59,11 +60,13 @@ public class MeasurementResultsPart extends AbstractPart<ExtendedMeasurementResu
 				if(selection instanceof IStructuredSelection) {
 					Object element = ((IStructuredSelection)selection).getFirstElement();
 					if(element instanceof IMeasurementResult<?>) {
-						notification.select((IMeasurementResult<?>)element);
-						return;
+						measurementResultNotification.select((IMeasurementResult<?>)element);
+					} else {
+						measurementResultNotification.select(null);
 					}
+				} else {
+					measurementResultNotification.select(null);
 				}
-				notification.select(null);
 			}
 		});
 		//
@@ -88,8 +91,9 @@ public class MeasurementResultsPart extends AbstractPart<ExtendedMeasurementResu
 			}
 		}
 		//
-		notification.select(null);
-		getControl().update(results, infoLabel);
+		measurementResultNotification.select(null);
+		getControl().setInput(results, infoLabel);
+		//
 		return true;
 	}
 

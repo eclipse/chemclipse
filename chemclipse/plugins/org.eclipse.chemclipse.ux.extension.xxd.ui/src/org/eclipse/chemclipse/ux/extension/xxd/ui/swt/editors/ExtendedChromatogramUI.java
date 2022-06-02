@@ -1199,7 +1199,10 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		 */
 		BaseChart baseChart = chromatogramChart.getBaseChart();
 		baseChart.addCustomRangeSelectionHandler(new ChromatogramSelectionHandler(this));
-		//
+		/*
+		 * Some converter have an option to set analysis segments while parsing the chromatogram data.
+		 * Via the preferences it's defined, whether these segements shall be displayed be default.
+		 */
 		boolean markAnalysisSegments = preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_MARK_ANALYSIS_SEGMENTS);
 		if(markAnalysisSegments) {
 			AnalysisSegmentPaintListener<IAnalysisSegment> listener = new AnalysisSegmentPaintListener<>(AnalysisSegmentColorScheme.CHROMATOGRAM, new Supplier<Collection<IAnalysisSegment>>() {

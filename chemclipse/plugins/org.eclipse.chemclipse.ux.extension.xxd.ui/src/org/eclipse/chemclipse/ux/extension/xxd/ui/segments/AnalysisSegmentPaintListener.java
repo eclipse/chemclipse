@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - formatting
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.segments;
 
@@ -33,9 +34,11 @@ import org.eclipse.swtchart.ISeries;
 public class AnalysisSegmentPaintListener<X extends IAnalysisSegment> implements ICustomPaintListener {
 
 	private static final int ALPHA = 100;
+	//
 	private final AnalysisSegmentColorScheme colorScheme;
 	private final Supplier<Collection<X>> segmentSupplier;
 	private final Predicate<X> selectionCheck;
+	//
 	private boolean paintArea = true;
 	private boolean paintLines = false;
 	private int alpha = ALPHA;
