@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,6 +28,12 @@ public class TargetTemplates extends HashMap<String, TargetTemplate> {
 
 	private static final long serialVersionUID = -439374805911311705L;
 	private static final Logger logger = Logger.getLogger(TargetTemplates.class);
+	//
+	public static final String DESCRIPTION = "Target Templates";
+	public static final String FILE_EXTENSION = ".txt";
+	public static final String FILE_NAME = DESCRIPTION.replaceAll("\\s", "") + FILE_EXTENSION;
+	public static final String FILTER_EXTENSION = "*" + FILE_EXTENSION;
+	public static final String FILTER_NAME = DESCRIPTION + " (*" + FILE_EXTENSION + ")";
 	//
 	private TargetListUtil targetListUtil = new TargetListUtil();
 

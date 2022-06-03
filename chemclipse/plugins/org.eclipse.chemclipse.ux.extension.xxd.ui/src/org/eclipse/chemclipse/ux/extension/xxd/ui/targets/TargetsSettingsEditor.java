@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -64,9 +64,11 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 
 	private static final int WARN_NUMBER_IMPORT_ENTRIES = 500;
 	//
-	private static final String FILTER_EXTENSION = "*.txt";
-	private static final String FILTER_NAME = "Target List (*.txt)";
-	private static final String FILE_NAME = "TargetList.txt";
+	public static final String DESCRIPTION = "Target List";
+	public static final String FILE_EXTENSION = ".txt";
+	public static final String FILE_NAME = DESCRIPTION.replaceAll("\\s", "") + FILE_EXTENSION;
+	public static final String FILTER_EXTENSION = "*" + FILE_EXTENSION;
+	public static final String FILTER_NAME = DESCRIPTION + " (*" + FILE_EXTENSION + ")";
 	//
 	private Composite control;
 	//
@@ -274,13 +276,13 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Remove the selected target template(s).");
+		button.setToolTipText("Remove the selected target templates.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
 
-				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Target Template(s)", "Do you want to delete the selected target template(s)?")) {
+				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Target Templates", "Do you want to delete the selected target templates?")) {
 					IStructuredSelection structuredSelection = (IStructuredSelection)listUI.getSelection();
 					for(Object object : structuredSelection.toArray()) {
 						if(object instanceof TargetTemplate) {
@@ -299,13 +301,13 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Remove all target template(s).");
+		button.setToolTipText("Remove all target templates.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
 
-				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Target Template(s)", "Do you want to delete all target template(s)?")) {
+				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Target Templates", "Do you want to delete all target templates?")) {
 					settings.clear();
 					setTableViewerInput();
 				}
@@ -319,7 +321,7 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Import a target template(s) from a library.");
+		button.setToolTipText("Import a target templates from a library.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_MASS_SPECTRUM_LIBRARY, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 

@@ -53,15 +53,11 @@ public class TargetTemplatesUI extends Composite {
 
 	private static final String TOOLTIP_TEXT = "Enter/modify the target templates.";
 	//
-	public static final String IMPORT_TITLE = "Import Target Template(s)";
-	public static final String EXPORT_TITLE = "Export Target Template(s)";
-	public static final String MESSAGE_IMPORT_SUCCESSFUL = "Target template(s) have been imported successfully.";
-	public static final String MESSAGE_EXPORT_SUCCESSFUL = "Target template(s) have been exported successfully.";
-	public static final String MESSAGE_EXPORT_FAILED = "Failed to export the target template(s).";
-	//
-	private static final String FILTER_EXTENSION = "*.txt";
-	private static final String FILTER_NAME = "Target Templates (*.txt)";
-	private static final String FILE_NAME = "TargetTemplates.txt";
+	public static final String IMPORT_TITLE = "Import Target Templates";
+	public static final String EXPORT_TITLE = "Export Target Templates";
+	public static final String MESSAGE_IMPORT_SUCCESSFUL = "Target templates have been imported successfully.";
+	public static final String MESSAGE_EXPORT_SUCCESSFUL = "Target templates have been exported successfully.";
+	public static final String MESSAGE_EXPORT_FAILED = "Failed to export the target templates.";
 	//
 	private ComboViewer comboViewer;
 	private Text textTargets;
@@ -283,7 +279,7 @@ public class TargetTemplatesUI extends Composite {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Import target template(s).");
+		button.setToolTipText("Import target templates.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -293,8 +289,8 @@ public class TargetTemplatesUI extends Composite {
 				if(targetTemplates != null) {
 					FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
 					fileDialog.setText(IMPORT_TITLE);
-					fileDialog.setFilterExtensions(new String[]{FILTER_EXTENSION});
-					fileDialog.setFilterNames(new String[]{FILTER_NAME});
+					fileDialog.setFilterExtensions(new String[]{TargetTemplates.FILTER_EXTENSION});
+					fileDialog.setFilterNames(new String[]{TargetTemplates.FILTER_NAME});
 					fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_TARGET_TEMPLATES_FOLDER));
 					String path = fileDialog.open();
 					if(path != null) {
@@ -315,7 +311,7 @@ public class TargetTemplatesUI extends Composite {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Export target template(s).");
+		button.setToolTipText("Export target templates.");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXPORT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -326,9 +322,9 @@ public class TargetTemplatesUI extends Composite {
 					FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
 					fileDialog.setOverwrite(true);
 					fileDialog.setText(EXPORT_TITLE);
-					fileDialog.setFilterExtensions(new String[]{FILTER_EXTENSION});
-					fileDialog.setFilterNames(new String[]{FILTER_NAME});
-					fileDialog.setFileName(FILE_NAME);
+					fileDialog.setFilterExtensions(new String[]{TargetTemplates.FILTER_EXTENSION});
+					fileDialog.setFilterNames(new String[]{TargetTemplates.FILTER_NAME});
+					fileDialog.setFileName(TargetTemplates.FILE_NAME);
 					fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_TARGET_TEMPLATES_FOLDER));
 					String path = fileDialog.open();
 					if(path != null) {

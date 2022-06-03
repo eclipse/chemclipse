@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -116,8 +116,8 @@ public class TargetTemplatesEditor extends Composite {
 				if(targetTemplates != null) {
 					if(e.keyCode == SWT.DEL) {
 						MessageBox messageBox = new MessageBox(e.display.getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-						messageBox.setText("Delete target template(s)");
-						messageBox.setMessage("Would you like to delete the selected target template(s)?");
+						messageBox.setText("Delete target templates");
+						messageBox.setMessage("Would you like to delete the selected target templates?");
 						if(messageBox.open() == SWT.YES) {
 							/*
 							 * Collect
