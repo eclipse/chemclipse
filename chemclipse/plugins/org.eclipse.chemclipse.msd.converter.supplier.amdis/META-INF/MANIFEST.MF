@@ -22,6 +22,7 @@ Import-Package: org.osgi.service.component.annotations;version="1.2.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-Vendor: ChemClipse
 Export-Package: org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.misc,
+ org.eclipse.chemclipse.msd.converter.supplier.amdis.format,
  org.eclipse.chemclipse.msd.converter.supplier.amdis.model,
  org.eclipse.chemclipse.msd.converter.supplier.amdis.preferences
 Service-Component: OSGI-INF/org.eclipse.chemclipse.msd.converter.supplier.amdis.processors.CombinedScanProcessSupplier.xml,
