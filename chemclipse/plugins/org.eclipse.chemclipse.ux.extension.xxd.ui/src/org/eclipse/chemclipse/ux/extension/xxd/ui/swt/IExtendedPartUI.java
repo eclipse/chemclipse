@@ -107,6 +107,11 @@ public interface IExtendedPartUI {
 
 	default Button createButtonToggleEditTable(Composite parent, AtomicReference<? extends ExtendedTableViewer> viewer, String image) {
 
+		return createButtonToggleEditTable(parent, Arrays.asList(viewer), image);
+	}
+
+	default Button createButtonToggleEditTable(Composite parent, List<AtomicReference<? extends ExtendedTableViewer>> viewers, String image) {
+
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		setButtonImage(button, image, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_TABLE, false);
@@ -115,12 +120,27 @@ public interface IExtendedPartUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				ExtendedTableViewer tableViewer = viewer.get();
-				if(tableViewer != null) {
-					boolean edit = !tableViewer.isEditEnabled();
-					tableViewer.setEditEnabled(edit);
-					setButtonImage(button, image, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_TABLE, edit);
+				/*
+				 * Get the first status
+				 */
+				boolean edit = false;
+				exitloop:
+				for(AtomicReference<? extends ExtendedTableViewer> viewer : viewers) {
+					ExtendedTableViewer tableViewer = viewer.get();
+					if(tableViewer != null) {
+						edit = !tableViewer.isEditEnabled();
+						break exitloop;
+					}
 				}
+				/*
+				 * Apply the edit status and set the button image.
+				 */
+				for(AtomicReference<? extends ExtendedTableViewer> viewer : viewers) {
+					ExtendedTableViewer tableViewer = viewer.get();
+					tableViewer.setEditEnabled(edit);
+				}
+				//
+				setButtonImage(button, image, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_TABLE, edit);
 			}
 		});
 		//
@@ -287,11 +307,19 @@ public interface IExtendedPartUI {
 
 	default void enableEdit(AtomicReference<? extends ExtendedTableViewer> viewer, Button button, String image, boolean edit) {
 
-		ExtendedTableViewer tableViewer = viewer.get();
-		if(tableViewer != null) {
-			tableViewer.setEditEnabled(edit);
-			setButtonImage(button, image, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_TABLE, edit);
+		enableEdit(Arrays.asList(viewer), button, image, edit);
+	}
+
+	default void enableEdit(List<AtomicReference<? extends ExtendedTableViewer>> viewers, Button button, String image, boolean edit) {
+
+		for(AtomicReference<? extends ExtendedTableViewer> viewer : viewers) {
+			ExtendedTableViewer tableViewer = viewer.get();
+			if(tableViewer != null) {
+				tableViewer.setEditEnabled(edit);
+			}
 		}
+		//
+		setButtonImage(button, image, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_TABLE, edit);
 	}
 
 	default void enableChartGrid(AtomicReference<? extends ScrollableChart> chartControl, Button button, String image, ChartGridSupport chartGridSupport) {

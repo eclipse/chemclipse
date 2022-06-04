@@ -38,7 +38,6 @@ import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
-import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
@@ -46,6 +45,7 @@ import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
+import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
@@ -58,8 +58,6 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.ScanDataSupport
 import org.eclipse.chemclipse.ux.extension.xxd.ui.targets.ComboTarget;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.MouseAdapter;
@@ -69,9 +67,10 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swtchart.extensions.core.IKeyboardSupport;
@@ -79,8 +78,7 @@ import org.eclipse.swtchart.extensions.core.IKeyboardSupport;
 public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 
 	private static final String MENU_CATEGORY_TARGETS = "Targets";
-	private static final String TARGET_OPTION_AUTO = "Auto";
-	private static final String TARGET_OPTION_CHROMATOGRAM = "Chromatogram";
+	private static final int INDEX_CHROMATOGRAM = 1;
 	//
 	private Button buttonToolbarInfo;
 	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
@@ -89,23 +87,18 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 	private Button buttonToolbarEdit;
 	private AtomicReference<Composite> toolbarEdit = new AtomicReference<>();
 	//
-	private ComboViewer comboViewerTargetOption;
 	private ComboTarget comboTarget;
 	private Button buttonAddTarget;
 	private Button buttonDeleteTarget;
 	private Button buttonDeleteTargets;
 	//
 	private Button buttonTableEdit;
-	private AtomicReference<TargetsListUI> tableViewer = new AtomicReference<>();
-	/*
-	 * IScan,
-	 * IPeak,
-	 * IChromatogram,
-	 * ITargetSupplier
-	 */
-	private Object object = null;
-	private Object objectCacheChromatogram = null;
-	private Object objectCacheOther = null;
+	private AtomicReference<TabFolder> tabControl = new AtomicReference<>();
+	private AtomicReference<TargetsListUI> targetListOther = new AtomicReference<>();
+	private AtomicReference<TargetsListUI> targetListChromatogram = new AtomicReference<>();
+	//
+	private Object objectCacheChromatogram = null; // IChromatogram
+	private Object objectCacheOther = null; // IScan, IPeak, ITargetSupplier
 	//
 	private ScanDataSupport scanDataSupport = new ScanDataSupport();
 	private PeakDataSupport peakDataSupport = new PeakDataSupport();
@@ -119,86 +112,57 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		createControl();
 	}
 
-	private String getLastTopic(List<String> topics) {
-
-		Collections.reverse(topics);
-		for(String topic : topics) {
-			if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION)) {
-				return topic;
-			}
-			if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION)) {
-				return topic;
-			}
-			if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION)) {
-				return topic;
-			}
-			if(topic.equals(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION)) {
-				return topic;
-			}
-		}
-		return "";
-	}
-
 	@Override
 	public boolean setFocus() {
 
-		DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
-		List<Object> objects = dataUpdateSupport.getUpdates(getLastTopic(dataUpdateSupport.getTopics()));
-		if(!objects.isEmpty()) {
-			Object last = objects.get(0);
-			if(last instanceof IChromatogramSelection) {
-				IChromatogramSelection<?, ?> chromatogramSelection = (IChromatogramSelection<?, ?>)last;
-				last = chromatogramSelection.getChromatogram();
-			}
-			update(last);
-		}
-		updateTargets(getDisplay());
+		updateOnFocus();
 		return true;
 	}
 
-	public void update(Object object) {
+	public void clear() {
 
-		/*
-		 * Option: AUTO -> Collect IChromatogram
-		 */
-		if(!isTargetOptionChromatogram() && object instanceof IChromatogram && objectCacheChromatogram != object) {
-			this.objectCacheChromatogram = object;
-		}
-		/*
-		 * Option: CHROMATOGRAM -> Collect Other
-		 */
-		if(isTargetOptionChromatogram() && !(object instanceof IChromatogram) && objectCacheOther != object) {
-			this.objectCacheOther = object;
-		}
-		/*
-		 * Various objects are updated here.
-		 * Hence, a simple this.object = object won't work.
-		 */
-		Display display = getDisplay();
-		boolean showChromatogramTargets = isTargetOptionChromatogram();
-		if(object instanceof IChromatogram && this.object != object) {
+		objectCacheChromatogram = null;
+		objectCacheOther = null;
+		updateTargets(getDisplay());
+	}
+
+	public void updateChromatogram(IChromatogramSelection<?, ?> chromatogramSelection) {
+
+		if(chromatogramSelection != null) {
+			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			/*
-			 * Chromatogram
+			 * Update Peak/Scan
 			 */
-			if(showChromatogramTargets) {
-				this.object = object;
-				updateTargets(display);
+			if(objectCacheOther instanceof IPeak) {
+				updateOther(chromatogramSelection.getSelectedPeak());
+			} else if(objectCacheOther instanceof IScan) {
+				updateOther(chromatogramSelection.getSelectedIdentifiedScan());
 			}
-		} else if(object != null) {
 			/*
-			 * Other (Peak, Scan, ITargetSupplier (General))
+			 * Update Chromatogram
 			 */
-			if(!showChromatogramTargets && this.object != object) {
-				this.object = object;
-				updateTargets(display);
+			if(objectCacheChromatogram != chromatogram) {
+				this.objectCacheChromatogram = chromatogram;
 			}
-		} else {
+			//
+			if(isChromatogramActive()) {
+				updateTargets(getDisplay());
+			}
+		}
+	}
+
+	public void updateOther(Object object) {
+
+		if(object != null) {
 			/*
-			 * Object must be null here.
+			 * Update Cache
 			 */
-			if(this.object != null) {
-				this.object = null;
-				updateTargets(display);
+			if(objectCacheOther != object) {
+				this.objectCacheOther = object;
+			}
+			//
+			if(!isChromatogramActive()) {
+				updateTargets(getDisplay());
 			}
 		}
 	}
@@ -215,7 +179,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		createToolbarInfo(this);
 		createToolbarSearch(this);
 		createToolbarEdit(this);
-		createTargetTable(this);
+		createTableSection(this);
 		//
 		initialize();
 	}
@@ -226,9 +190,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		enableToolbar(toolbarSearch, buttonToolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH, false);
 		enableToolbar(toolbarEdit, buttonToolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT, false);
 		//
-		enableEdit(tableViewer, buttonTableEdit, IMAGE_EDIT_ENTRY, false);
-		comboViewerTargetOption.setInput(new String[]{TARGET_OPTION_AUTO, TARGET_OPTION_CHROMATOGRAM});
-		comboViewerTargetOption.getCombo().select(0);
+		enableEdit(Arrays.asList(targetListOther, targetListChromatogram), buttonTableEdit, IMAGE_EDIT_ENTRY, false);
 		applySettings();
 	}
 
@@ -238,56 +200,13 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(6, false));
+		composite.setLayout(new GridLayout(5, false));
 		//
 		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
-		comboViewerTargetOption = createComboViewerTargetOption(composite);
 		buttonToolbarSearch = createButtonToggleToolbar(composite, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
 		buttonToolbarEdit = createButtonToggleToolbar(composite, toolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT);
 		buttonDeleteTargets = createButtonDeleteAll(composite);
 		createButtonSettings(composite);
-	}
-
-	private ComboViewer createComboViewerTargetOption(Composite composite) {
-
-		ComboViewer comboViewer = new ComboViewer(composite, SWT.READ_ONLY);
-		Combo combo = comboViewer.getCombo();
-		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
-		comboViewer.setLabelProvider(new AbstractLabelProvider() {
-
-			@Override
-			public String getText(Object element) {
-
-				if(element instanceof String) {
-					return (String)element;
-				}
-				return null;
-			}
-		});
-		/*
-		 * Select the item.
-		 */
-		combo.setToolTipText("Select the target display option.");
-		GridData gridData = new GridData();
-		gridData.widthHint = 150;
-		combo.setLayoutData(gridData);
-		combo.addSelectionListener(new SelectionAdapter() {
-
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-
-				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object != null) {
-					if(TARGET_OPTION_CHROMATOGRAM.equals(object)) {
-						update(objectCacheChromatogram);
-					} else {
-						update(objectCacheOther);
-					}
-				}
-			}
-		});
-		//
-		return comboViewer;
 	}
 
 	private Button createButtonDeleteAll(Composite parent) {
@@ -345,7 +264,8 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void performSearch(String searchText, boolean caseSensitive) {
 
-				tableViewer.get().setSearchText(searchText, caseSensitive);
+				targetListOther.get().setSearchText(searchText, caseSensitive);
+				targetListChromatogram.get().setSearchText(searchText, caseSensitive);
 			}
 		});
 		//
@@ -361,7 +281,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		comboTarget = createComboTarget(composite);
 		buttonAddTarget = createButtonAdd(composite);
 		buttonDeleteTarget = createButtonDelete(composite);
-		buttonTableEdit = createButtonToggleEditTable(composite, tableViewer, IMAGE_EDIT_ENTRY);
+		buttonTableEdit = createButtonToggleEditTable(composite, Arrays.asList(targetListOther, targetListChromatogram), IMAGE_EDIT_ENTRY);
 		//
 		toolbarEdit.set(composite);
 	}
@@ -420,7 +340,42 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		return button;
 	}
 
-	private void createTargetTable(Composite parent) {
+	private void createTableSection(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		composite.setLayout(new GridLayout(1, true));
+		//
+		TabFolder tabFolder = new TabFolder(composite, SWT.BOTTOM);
+		tabFolder.setBackground(Colors.WHITE);
+		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
+		tabFolder.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				updateOnFocus();
+			}
+		});
+		//
+		createTargetTableTabItem(tabFolder, targetListOther);
+		createTargetTableTabItem(tabFolder, targetListChromatogram);
+		//
+		tabControl.set(tabFolder);
+	}
+
+	private void createTargetTableTabItem(TabFolder tabFolder, AtomicReference<TargetsListUI> listControl) {
+
+		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
+		tabItem.setText(listControl == targetListOther ? "Auto" : "Chromatogram");
+		Composite composite = new Composite(tabFolder, SWT.NONE);
+		composite.setLayout(new GridLayout(1, true));
+		tabItem.setControl(composite);
+		//
+		createTargetTable(composite, listControl);
+	}
+
+	private void createTargetTable(Composite parent, AtomicReference<TargetsListUI> listControl) {
 
 		TargetsListUI targetListUI = new TargetsListUI(parent, SWT.BORDER);
 		targetListUI.setEditingSupport();
@@ -464,7 +419,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		addKeyEventProcessors(display, tableSettings);
 		targetListUI.applySettings(tableSettings);
 		//
-		tableViewer.set(targetListUI);
+		listControl.set(targetListUI);
 	}
 
 	private void addDeleteMenuEntry(Display display, ITableSettings tableSettings) {
@@ -573,7 +528,8 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 	@SuppressWarnings("rawtypes")
 	private void verifyTargets(boolean verified, Display display) {
 
-		Iterator iterator = tableViewer.get().getStructuredSelection().iterator();
+		AtomicReference<TargetsListUI> targetList = getActiveTargetList();
+		Iterator iterator = targetList.get().getStructuredSelection().iterator();
 		while(iterator.hasNext()) {
 			Object object = iterator.next();
 			if(object instanceof IIdentificationTarget) {
@@ -587,20 +543,24 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 	private void applySettings() {
 
 		comboTarget.updateContentProposals();
-		TargetsListUI targetListUI = tableViewer.get();
-		targetListUI.setComparator(preferenceStore.getBoolean(PreferenceConstants.P_TARGETS_TABLE_SORTABLE));
+		//
+		targetListOther.get().setComparator(preferenceStore.getBoolean(PreferenceConstants.P_TARGETS_TABLE_SORTABLE));
+		targetListChromatogram.get().setComparator(preferenceStore.getBoolean(PreferenceConstants.P_TARGETS_TABLE_SORTABLE));
 	}
 
 	private void updateInput(float retentionIndex) {
 
+		AtomicReference<TargetsListUI> targetList = getActiveTargetList();
+		Object object = getObject();
+		//
 		if(object instanceof ITargetSupplier) {
 			ITargetSupplier targetSupplier = (ITargetSupplier)object;
 			List<IIdentificationTarget> identificationTargets = new ArrayList<>(targetSupplier.getTargets());
 			IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
 			Collections.sort(identificationTargets, identificationTargetComparator);
-			tableViewer.get().setInput(identificationTargets);
+			targetList.get().setInput(identificationTargets);
 		} else {
-			tableViewer.get().setInput(null);
+			targetList.get().setInput(null);
 			enableToolbar(toolbarEdit, buttonToolbarEdit, IMAGE_EDIT, TOOLTIP_EDIT, false);
 		}
 		//
@@ -609,25 +569,38 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 
 	private void updateRetentionInfo() {
 
+		if(isChromatogramActive()) {
+			updateRetentionInfo(targetListChromatogram);
+		} else {
+			updateRetentionInfo(targetListOther);
+		}
+	}
+
+	private void updateRetentionInfo(AtomicReference<TargetsListUI> targetList) {
+
+		Object object = getObject();
+		//
 		if(object instanceof ITargetSupplier) {
 			if(object instanceof IChromatogram) {
-				tableViewer.get().updateSourceRange(null, null);
+				targetList.get().updateSourceRange(null, null);
 			} else if(object instanceof IPeak) {
 				IScan scan = ((IPeak)object).getPeakModel().getPeakMaximum();
-				tableViewer.get().updateSourceRange(scan.getRetentionTime(), scan.getRetentionIndex());
+				targetList.get().updateSourceRange(scan.getRetentionTime(), scan.getRetentionIndex());
 			} else if(object instanceof IScan) {
 				IScan scan = ((IScan)object);
-				tableViewer.get().updateSourceRange(scan.getRetentionTime(), scan.getRetentionIndex());
+				targetList.get().updateSourceRange(scan.getRetentionTime(), scan.getRetentionIndex());
 			} else {
-				tableViewer.get().updateSourceRange(null, null);
+				targetList.get().updateSourceRange(null, null);
 			}
 		} else {
-			tableViewer.get().updateSourceRange(null, null);
+			targetList.get().updateSourceRange(null, null);
 		}
 	}
 
 	private float getRetentionIndex() {
 
+		Object object = getObject();
+		//
 		if(object instanceof IPeak) {
 			IScan scan = ((IPeak)object).getPeakModel().getPeakMaximum();
 			return scan.getRetentionIndex();
@@ -641,6 +614,8 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 
 	private void updateLabelInfo() {
 
+		Object object = getObject();
+		//
 		if(object instanceof ITargetSupplier) {
 			String dataDescription;
 			if(object instanceof IChromatogram) {
@@ -660,13 +635,16 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 
 	private void updateWidgets() {
 
+		Object object = getObject();
+		//
 		boolean enabled = object != null;
 		comboTarget.setEnabled(enabled);
 		buttonAddTarget.setEnabled(enabled);
+		AtomicReference<TargetsListUI> targetList = getActiveTargetList();
 		//
 		if(object instanceof ITargetSupplier) {
 			ITargetSupplier targetSupplier = (ITargetSupplier)object;
-			buttonDeleteTarget.setEnabled(tableViewer.get().getTable().getSelectionIndex() >= 0);
+			buttonDeleteTarget.setEnabled(targetList.get().getTable().getSelectionIndex() >= 0);
 			buttonDeleteTargets.setEnabled(!targetSupplier.getTargets().isEmpty());
 		} else {
 			buttonDeleteTarget.setEnabled(false);
@@ -681,7 +659,8 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 			/*
 			 * Delete Target
 			 */
-			Iterator iterator = tableViewer.get().getStructuredSelection().iterator();
+			AtomicReference<TargetsListUI> targetList = getActiveTargetList();
+			Iterator iterator = targetList.get().getStructuredSelection().iterator();
 			while(iterator.hasNext()) {
 				Object object = iterator.next();
 				if(object instanceof ITarget) {
@@ -694,6 +673,8 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 
 	private void deleteTarget(ITarget target) {
 
+		Object object = getObject();
+		//
 		if(object instanceof ITargetSupplier) {
 			ITargetSupplier targetSupplier = (ITargetSupplier)object;
 			targetSupplier.getTargets().remove(target);
@@ -709,6 +690,8 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 
 	private void deleteAllTargets() {
 
+		Object object = getObject();
+		//
 		if(object instanceof ITargetSupplier) {
 			ITargetSupplier targetSupplier = (ITargetSupplier)object;
 			targetSupplier.getTargets().clear();
@@ -721,6 +704,8 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 
 	private void setTarget(Display display, IIdentificationTarget identificationTarget) {
 
+		Object object = getObject();
+		//
 		if(object instanceof ITargetSupplier) {
 			ITargetSupplier targetSupplier = (ITargetSupplier)object;
 			targetSupplier.getTargets().add(identificationTarget);
@@ -741,6 +726,8 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 	 */
 	private IScanMSD getMassSpectrum() {
 
+		Object object = getObject();
+		//
 		if(object instanceof IScanMSD) {
 			return (IScanMSD)object;
 		} else if(object instanceof IPeakMSD) {
@@ -751,19 +738,14 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		}
 	}
 
-	private boolean isTargetOptionChromatogram() {
-
-		Object object = comboViewerTargetOption.getStructuredSelection().getFirstElement();
-		return TARGET_OPTION_CHROMATOGRAM.equals(object);
-	}
-
 	private void updateTargets(Display display) {
 
 		updateRetentionInfo();
 		updateInput(getRetentionIndex());
 		updateWidgets();
 		//
-		TargetsListUI targetListUI = tableViewer.get();
+		AtomicReference<TargetsListUI> targetList = getActiveTargetList();
+		TargetsListUI targetListUI = targetList.get();
 		targetListUI.sortTable();
 		Table table = targetListUI.getTable();
 		if(table.getItemCount() > 0) {
@@ -779,7 +761,8 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 
 	private void propagateTarget(Display display) {
 
-		Table table = tableViewer.get().getTable();
+		AtomicReference<TargetsListUI> targetList = getActiveTargetList();
+		Table table = targetList.get().getTable();
 		int index = table.getSelectionIndex();
 		if(index >= 0) {
 			TableItem tableItem = table.getItem(index);
@@ -796,5 +779,57 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 				UpdateNotifierUI.update(display, identificationTarget);
 			}
 		}
+	}
+
+	private AtomicReference<TargetsListUI> getActiveTargetList() {
+
+		return isChromatogramActive() ? targetListChromatogram : targetListOther;
+	}
+
+	private void updateOnFocus() {
+
+		DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
+		List<Object> objects = dataUpdateSupport.getUpdates(getLastTopic(dataUpdateSupport.getTopics()));
+		//
+		if(!objects.isEmpty()) {
+			Object object = objects.get(0);
+			if(object instanceof IChromatogramSelection) {
+				IChromatogramSelection<?, ?> chromatogramSelection = (IChromatogramSelection<?, ?>)object;
+				updateChromatogram(chromatogramSelection);
+			} else {
+				updateOther(object);
+			}
+		}
+	}
+
+	private String getLastTopic(List<String> topics) {
+
+		Collections.reverse(topics);
+		for(String topic : topics) {
+			if(topic.equals(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION)) {
+				return topic;
+			}
+			if(topic.equals(IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION)) {
+				return topic;
+			}
+			if(topic.equals(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION)) {
+				return topic;
+			}
+			if(topic.equals(IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION)) {
+				return topic;
+			}
+		}
+		//
+		return "";
+	}
+
+	private Object getObject() {
+
+		return isChromatogramActive() ? objectCacheChromatogram : objectCacheOther;
+	}
+
+	private boolean isChromatogramActive() {
+
+		return tabControl.get().getSelectionIndex() == INDEX_CHROMATOGRAM;
 	}
 }
