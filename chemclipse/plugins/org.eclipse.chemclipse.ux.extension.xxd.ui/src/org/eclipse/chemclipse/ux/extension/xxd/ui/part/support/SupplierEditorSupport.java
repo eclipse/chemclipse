@@ -26,6 +26,7 @@ import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.core.IMeasurementInfo;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
+import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
 import org.eclipse.chemclipse.msd.converter.massspectrum.MassSpectrumConverter;
 import org.eclipse.chemclipse.nmr.converter.core.ScanConverterNMR;
 import org.eclipse.chemclipse.pcr.converter.core.PlateConverterPCR;
@@ -116,6 +117,9 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 				break;
 			case MALDI:
 				supplier = MassSpectrumConverter.getMassSpectrumConverterSupport().getSupplier();
+				break;
+			case MSD_DATABASE:
+				supplier = DatabaseConverter.getDatabaseConverterSupport().getSupplier();
 				break;
 			default:
 				// No action

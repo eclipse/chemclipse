@@ -13,7 +13,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.extraction.SpectraExtractionSupport.ExtractionType;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.extraction.MALDIExtractionSupport.ExtractionType;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Algorithm;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.AnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
@@ -42,7 +42,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 
-public class SpectraSettingsWizardPage extends WizardPage {
+public class MALDISettingsWizardPage extends WizardPage {
 
 	private IAnalysisSettings analysisSettings = new AnalysisSettings();
 	//
@@ -54,7 +54,7 @@ public class SpectraSettingsWizardPage extends WizardPage {
 	//
 	private Algorithm[] algorithms = new Algorithm[]{Algorithm.SVD, Algorithm.NIPALS, Algorithm.OPLS};
 
-	public SpectraSettingsWizardPage() {
+	public MALDISettingsWizardPage() {
 
 		super("Main Parameters");
 		setTitle("Set Main Parameters");

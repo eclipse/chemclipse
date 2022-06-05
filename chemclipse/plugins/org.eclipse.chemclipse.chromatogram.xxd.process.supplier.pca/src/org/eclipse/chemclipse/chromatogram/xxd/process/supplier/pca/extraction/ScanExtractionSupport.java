@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -164,21 +164,21 @@ public class ScanExtractionSupport {
 		for(Sample sample : samples.getSampleList()) {
 			List<PeakSampleData> data = sample.getSampleData();
 			NavigableMap<Integer, Float> scans = extractScans.get(sample.getName());
-			double[] retetnionTime = new double[scans.size()];
+			double[] retentionTime = new double[scans.size()];
 			double[] scanValues = new double[scans.size()];
 			int j = 0;
 			Iterator<Entry<Integer, Float>> it = scans.entrySet().iterator();
 			while(it.hasNext()) {
 				Entry<Integer, Float> entry = it.next();
-				retetnionTime[j] = entry.getKey();
+				retentionTime[j] = entry.getKey();
 				scanValues[j] = entry.getValue();
 				j++;
 			}
-			UnivariateFunction fun = interpolator.interpolate(retetnionTime, scanValues);
+			UnivariateFunction univariateFunction = interpolator.interpolate(retentionTime, scanValues);
 			for(int i = beginRetentionTimeMax; i <= endRetentionTimeMin; i += retentionTimeWindow) {
-				double value = fun.value(i);
-				PeakSampleData d = new PeakSampleData(value, null);
-				data.add(d);
+				double value = univariateFunction.value(i);
+				PeakSampleData peakSampleData = new PeakSampleData(value, null);
+				data.add(peakSampleData);
 			}
 		}
 		setRetentionTime(samples);
@@ -187,12 +187,12 @@ public class ScanExtractionSupport {
 	private void setClosestScan(Samples samples, Map<String, NavigableMap<Integer, Float>> extractScans) {
 
 		for(Sample sample : samples.getSampleList()) {
-			List<PeakSampleData> data = sample.getSampleData();
+			List<PeakSampleData> sampleData = sample.getSampleData();
 			NavigableMap<Integer, Float> scans = extractScans.get(sample.getName());
 			for(int i = beginRetentionTimeMax; i <= endRetentionTimeMin; i += retentionTimeWindow) {
 				Float value = getClosestScans(scans, i);
-				PeakSampleData d = new PeakSampleData(value, null);
-				data.add(d);
+				PeakSampleData peakSampleData = new PeakSampleData(value, null);
+				sampleData.add(peakSampleData);
 			}
 		}
 		setRetentionTime(samples);
@@ -213,20 +213,20 @@ public class ScanExtractionSupport {
 		List<Integer> retentionTimes = new ArrayList<>(retentionTimesSet);
 		Collections.sort(retentionTimes);
 		for(Sample sample : samples.getSampleList()) {
-			Iterator<Integer> it = retentionTimes.iterator();
+			Iterator<Integer> iterator = retentionTimes.iterator();
 			List<PeakSampleData> data = sample.getSampleData();
 			NavigableMap<Integer, Float> scans = extractScans.get(sample.getName());
-			while(it.hasNext()) {
-				Integer time = it.next();
+			while(iterator.hasNext()) {
+				Integer time = iterator.next();
 				Float value = scans.get(time);
-				PeakSampleData d;
+				PeakSampleData peakSampleData;
 				if(value != null) {
-					d = new PeakSampleData(value, null);
+					peakSampleData = new PeakSampleData(value, null);
 				} else {
 					value = getClosestScans(scans, time);
-					d = new PeakSampleData(value, null);
+					peakSampleData = new PeakSampleData(value, null);
 				}
-				data.add(d);
+				data.add(peakSampleData);
 			}
 		}
 		samples.getVariables().addAll(RetentionTime.create(retentionTimes));

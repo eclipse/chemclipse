@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -37,7 +37,7 @@ import org.eclipse.chemclipse.model.statistics.MassToChargeRatio;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class SpectraExtractionSupport {
+public class MALDIExtractionSupport {
 
 	public enum ExtractionType {
 		CLOSEST_MASS, LINEAR_INTERPOLATION_MASS;
@@ -50,7 +50,7 @@ public class SpectraExtractionSupport {
 	private double massWindow;
 	private boolean useDefaultProperties;
 
-	public SpectraExtractionSupport(int massWindow, int maximalNumberPeaks, ExtractionType extractionType, boolean useDefaultProperties) {
+	public MALDIExtractionSupport(int massWindow, int maximalNumberPeaks, ExtractionType extractionType, boolean useDefaultProperties) {
 
 		this.massWindow = massWindow;
 		this.extractionType = extractionType;

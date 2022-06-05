@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.support.text.ILabel;
  *
  */
 public enum DataCategory implements ILabel {
+
 	MSD(Messages.getString("DataCategory.MSD")), //
 	CSD(Messages.getString("DataCategory.CSD")), //
 	WSD(Messages.getString("DataCategory.WSD")), //
@@ -31,6 +32,7 @@ public enum DataCategory implements ILabel {
 	XIR(Messages.getString("DataCategory.XIR")), //
 	PCR(Messages.getString("DataCategory.PCR")), //
 	MALDI(Messages.getString("DataCategory.MALDI")), //
+	MSD_DATABASE(Messages.getString("DataCategory.MSD_DATABASE")), //
 	/**
 	 * Suggests that this Filter can support a wide range of datatypes and content-sensing is the only option to check if the filter, processor or converter can really handle the data or not
 	 */

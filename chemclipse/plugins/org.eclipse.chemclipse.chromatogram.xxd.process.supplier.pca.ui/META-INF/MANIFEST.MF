@@ -62,6 +62,7 @@ Import-Package: javax.annotation;version="1.0.0";resolution:=optional,
  org.osgi.service.component.annotations;version="1.2.0"
 Bundle-ActivationPolicy: lazy
 Service-Component: OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.quickstart.FileTileDefinition.xml,
+ OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.quickstart.MALDITileDefinition.xml,
+ OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.quickstart.MassSpectrumTileDefinition.xml,
  OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.quickstart.PeakTileDefinition.xml,
- OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.quickstart.ScanTileDefinition.xml,
- OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.quickstart.SpectraTileDefinition.xml
+ OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.quickstart.ScanTileDefinition.xml
