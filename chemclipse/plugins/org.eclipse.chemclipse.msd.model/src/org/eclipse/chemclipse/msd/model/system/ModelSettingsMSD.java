@@ -22,7 +22,7 @@ public class ModelSettingsMSD implements ISystemProcessSettings {
 
 	@JsonProperty(value = "Use Nominal m/z", defaultValue = "true")
 	@JsonPropertyDescription(value = "Use unit mass.")
-	boolean useNominalMZ = true;
+	private boolean useNominalMZ = true;
 	@JsonProperty(value = "Use Normalized Scan", defaultValue = "true")
 	@JsonPropertyDescription(value = "When merging scan, normalize the intensities.")
 	private boolean useNormalizedScan = true;
@@ -31,7 +31,7 @@ public class ModelSettingsMSD implements ISystemProcessSettings {
 	private CalculationType calculationType = CalculationType.SUM;
 	@JsonProperty(value = "Use Peaks Instead Of Scans", defaultValue = "false")
 	@JsonPropertyDescription(value = "Use peaks instead of scans to calculate the combined spectrum.")
-	boolean usePeaksInsteadOfScans = false;
+	private boolean usePeaksInsteadOfScans = false;
 	@JsonProperty(value = "Copy Traces Clipboard", defaultValue = "5")
 	@JsonPropertyDescription(value = "The number of n highest traces that shall be copied to clipboard.")
 	@IntSettingsProperty(minValue = 1, maxValue = Integer.MAX_VALUE)

@@ -34,7 +34,7 @@ public class CombinedScanSettings {
 	private CalculationType calculationType = CalculationType.SUM;
 	@JsonProperty(value = "Use Peaks Instead Of Scans", defaultValue = "false")
 	@JsonPropertyDescription(value = "Use peaks instead of scans to calculate the combined spectrum.")
-	boolean usePeaksInsteadOfScans = false;
+	private boolean usePeaksInsteadOfScans = false;
 	@JsonProperty(value = "Append", defaultValue = "true")
 	@JsonPropertyDescription(value = "Append the exported data.")
 	private boolean append = true;

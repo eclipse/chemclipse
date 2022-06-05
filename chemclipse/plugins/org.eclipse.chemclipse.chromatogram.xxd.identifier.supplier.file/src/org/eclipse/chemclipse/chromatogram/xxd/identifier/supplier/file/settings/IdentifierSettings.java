@@ -42,7 +42,7 @@ public class IdentifierSettings extends ChromatogramIdentifierAdapterSettings im
 	private CalculationType calculationType = CalculationType.SUM;
 	@JsonProperty(value = "Use Peaks Instead Of Scans", defaultValue = "false")
 	@JsonPropertyDescription(value = "Use peaks instead of scans to calculate the combined spectrum.")
-	boolean usePeaksInsteadOfScans = false;
+	private boolean usePeaksInsteadOfScans = false;
 	/*
 	 * File Identifier Settings
 	 */

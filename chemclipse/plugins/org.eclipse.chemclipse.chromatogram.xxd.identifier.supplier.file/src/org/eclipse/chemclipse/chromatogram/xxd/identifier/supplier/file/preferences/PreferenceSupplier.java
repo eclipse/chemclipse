@@ -344,7 +344,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IdentifierSettings settings = new IdentifierSettings();
 		settings.setUseNormalizedScan(isUseNormalizedScan());
-		settings.setDeltaCalculation(getDeltaCalculation());
+		settings.setCalculationType(getCalculationType());
 		settings.setUsePeaksInsteadOfScans(isUsePeaksInsteadOfScans());
 		initialize(settings);
 		//

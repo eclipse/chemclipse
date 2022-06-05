@@ -21,6 +21,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.internal
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.settings.IdentifierSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.support.LimitSupport;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
@@ -52,19 +53,16 @@ public class ChromatogramIdentifier extends AbstractChromatogramIdentifier {
 					 * Combined Scan
 					 */
 					IChromatogramMSD chromatogram = chromatogramSelection.getChromatogram();
-					IScanMSD combinedMassSpectrum = FilterSupport.getCombinedMassSpectrum(chromatogramSelection, null, useNormalize, calculationType, usePeaksInsteadOfScans);
-					FileIdentifier fileIdentifier = new FileIdentifier();
-					List<IScanMSD> scansMSD = new ArrayList<>();
-					scansMSD.add(combinedMassSpectrum);
-					fileIdentifier.runIdentification(scansMSD, settings, monitor);
-					/*
-					 * Identification Targets
-					 */
-					chromatogram.getTargets().addAll(combinedMassSpectrum.getTargets());
-					/*
-					 * Info
-					 */
-					processingInfo.addInfoMessage(DESCRIPTION, "The chromatogram has been identified.");
+					float limitMatchFactor = settings.getLimitMatchFactor();
+					if(LimitSupport.doIdentify(chromatogram.getTargets(), limitMatchFactor)) {
+						IScanMSD combinedMassSpectrum = FilterSupport.getCombinedMassSpectrum(chromatogramSelection, null, useNormalize, calculationType, usePeaksInsteadOfScans);
+						FileIdentifier fileIdentifier = new FileIdentifier();
+						List<IScanMSD> scansMSD = new ArrayList<>();
+						scansMSD.add(combinedMassSpectrum);
+						fileIdentifier.runIdentification(scansMSD, settings, monitor);
+						chromatogram.getTargets().addAll(combinedMassSpectrum.getTargets());
+						processingInfo.addInfoMessage(DESCRIPTION, "The chromatogram has been identified.");
+					}
 				} catch(FileNotFoundException e) {
 					logger.warn(e);
 					processingInfo.addWarnMessage(DESCRIPTION, "The database file couldn't be found.");
