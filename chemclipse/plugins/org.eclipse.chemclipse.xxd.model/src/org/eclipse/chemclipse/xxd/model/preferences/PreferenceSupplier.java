@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -22,6 +22,9 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
+	public static final double MIN_CONCENTRATION = 0;
+	public static final double MAX_CONCENTRATION = Double.MAX_VALUE;
+	//
 	public static final String P_NUMBER_LOWEST = "numberLowest";
 	public static final int DEF_NUMBER_LOWEST = 5;
 	public static final int MIN_NUMBER_LOWEST = 1;

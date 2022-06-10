@@ -54,6 +54,7 @@ Service-Component: OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.AreaFi
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.AsymmetryFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.ClassifiedPeaksFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.DeleteIntegrationsFilter.xml,
+ OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.DeletePeaksByQuantitationFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.DeletePeaksByTargetFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.DeletePeaksFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.DeleteQuantitationsFilter.xml,
