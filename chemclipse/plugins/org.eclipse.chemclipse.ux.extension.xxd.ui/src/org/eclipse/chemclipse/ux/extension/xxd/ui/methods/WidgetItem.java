@@ -18,6 +18,7 @@ import java.io.File;
 import org.eclipse.chemclipse.support.settings.ComboSettingsProperty.ComboSupplier;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty.DialogType;
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
 import org.eclipse.chemclipse.support.settings.validation.InputValidator;
 import org.eclipse.chemclipse.support.text.ILabel;
@@ -406,6 +407,14 @@ public class WidgetItem {
 	private ComboViewer createLabeledEnumComboViewerWidget(Composite parent, Enum<?>[] input) {
 
 		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		Combo combo = comboViewer.getCombo();
+		/*
+		 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=567652
+		 */
+		if(OperatingSystemUtils.isLinux()) {
+			combo.setBackground(combo.getBackground());
+		}
+		//
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {
 
@@ -418,7 +427,7 @@ public class WidgetItem {
 				return element.toString();
 			}
 		});
-		Combo combo = comboViewer.getCombo();
+		//
 		combo.setToolTipText(inputValue.getDescription());
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.widthHint = 150;
