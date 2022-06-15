@@ -14,6 +14,8 @@ package org.eclipse.chemclipse.msd.converter.supplier.amdis.settings;
 import java.io.File;
 
 import org.eclipse.chemclipse.msd.model.support.CalculationType;
+import org.eclipse.chemclipse.support.settings.FileSettingProperty;
+import org.eclipse.chemclipse.support.settings.FileSettingProperty.DialogType;
 import org.eclipse.chemclipse.support.settings.SystemSettings;
 import org.eclipse.chemclipse.support.settings.SystemSettingsStrategy;
 
@@ -25,6 +27,7 @@ public class CombinedScanSettings {
 
 	@JsonProperty(value = "File Export", defaultValue = "combinedScans.msl")
 	@JsonPropertyDescription(value = "Select an export file.")
+	@FileSettingProperty(dialogType = DialogType.SAVE_DIALOG, onlyDirectory = false, validExtensions = {"*.msl"}, extensionNames = {"AMDIS (*.msl)"})
 	private File fileExport;
 	@JsonProperty(value = "Use Normalized Scan", defaultValue = "true")
 	@JsonPropertyDescription(value = "When merging scan, normalize the intensities.")
