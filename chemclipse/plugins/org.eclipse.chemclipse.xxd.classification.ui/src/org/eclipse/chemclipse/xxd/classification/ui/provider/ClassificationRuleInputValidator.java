@@ -34,9 +34,9 @@ public class ClassificationRuleInputValidator implements IInputValidator {
 
 		IStatus status = validator.validate(target);
 		if(status.isOK()) {
-			ClassificationRule entry = validator.getSetting();
-			if(dictionary.contains(entry)) {
-				return "The element already exists.";
+			ClassificationRule classificationRule = validator.getSetting();
+			if(dictionary.contains(classificationRule)) {
+				return "The rule already exists.";
 			}
 		} else {
 			return status.getMessage();

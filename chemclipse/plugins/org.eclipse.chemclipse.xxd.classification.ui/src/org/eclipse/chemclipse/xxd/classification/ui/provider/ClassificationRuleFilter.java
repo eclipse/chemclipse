@@ -37,11 +37,13 @@ public class ClassificationRuleFilter extends ViewerFilter {
 			ClassificationRule rule = (ClassificationRule)element;
 			String searchExpression = rule.getSearchExpression();
 			String classification = rule.getClassification();
+			String reference = rule.getReference().label();
 			//
 			if(!caseSensitive) {
 				searchText = searchText.toLowerCase();
 				searchExpression = searchExpression.toLowerCase();
 				classification = classification.toLowerCase();
+				reference = reference.toLowerCase();
 			}
 			//
 			if(searchExpression.contains(searchText)) {
@@ -49,6 +51,10 @@ public class ClassificationRuleFilter extends ViewerFilter {
 			}
 			//
 			if(classification.contains(searchText)) {
+				return true;
+			}
+			//
+			if(reference.contains(searchText)) {
 				return true;
 			}
 		}

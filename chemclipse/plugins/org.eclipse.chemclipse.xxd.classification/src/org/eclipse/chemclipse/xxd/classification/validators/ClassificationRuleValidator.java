@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.xxd.classification.validators;
 
 import org.eclipse.chemclipse.support.util.ValueParserSupport;
 import org.eclipse.chemclipse.xxd.classification.model.ClassificationRule;
+import org.eclipse.chemclipse.xxd.classification.model.Reference;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
@@ -21,6 +22,7 @@ public class ClassificationRuleValidator extends ValueParserSupport implements I
 
 	private String searchExpression = "";
 	private String classification = "";
+	private Reference reference = Reference.NAME;
 
 	@Override
 	public IStatus validate(Object value) {
@@ -51,6 +53,12 @@ public class ClassificationRuleValidator extends ValueParserSupport implements I
 						if(classification.isBlank()) {
 							message = "A classification name needs to be set.";
 						}
+						//
+						try {
+							reference = Reference.valueOf(parseString(values, 2));
+						} catch(Exception e) {
+							reference = Reference.NAME;
+						}
 					} else {
 						message = "Please enter rule and classification split by a pipe e.g. *ane | Alkane";
 					}
@@ -72,6 +80,8 @@ public class ClassificationRuleValidator extends ValueParserSupport implements I
 		ClassificationRule setting = new ClassificationRule();
 		setting.setSearchExpression(searchExpression);
 		setting.setClassification(classification);
+		setting.setReference(reference);
+		//
 		return setting;
 	}
 }

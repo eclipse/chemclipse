@@ -53,9 +53,9 @@ public class ClassificationDictionary extends ArrayList<ClassificationRule> {
 		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
 			String line;
 			while((line = bufferedReader.readLine()) != null) {
-				ClassificationRule rule = extract(line);
-				if(rule != null) {
-					add(rule);
+				ClassificationRule classificationRule = extract(line);
+				if(classificationRule != null) {
+					add(classificationRule);
 				}
 			}
 		} catch(FileNotFoundException e) {
@@ -67,42 +67,45 @@ public class ClassificationDictionary extends ArrayList<ClassificationRule> {
 
 	public boolean exportRules(File file) {
 
-		try {
-			PrintWriter printWriter = new PrintWriter(file);
+		boolean success = false;
+		try (PrintWriter printWriter = new PrintWriter(file)) {
 			Iterator<ClassificationRule> iterator = iterator();
 			while(iterator.hasNext()) {
 				ClassificationRule rule = iterator.next();
 				StringBuilder builder = new StringBuilder();
 				builder.append(rule.getSearchExpression());
-				builder.append(WHITE_SPACE);
-				builder.append(SEPARATOR_ENTRY);
-				builder.append(WHITE_SPACE);
+				addSeparator(builder);
 				builder.append(rule.getClassification());
+				addSeparator(builder);
+				builder.append(rule.getReference().name());
 				printWriter.println(builder.toString());
 			}
 			printWriter.flush();
-			printWriter.close();
-			return true;
+			success = true;
 		} catch(FileNotFoundException e) {
 			logger.warn(e);
-			return false;
 		}
+		//
+		return success;
 	}
 
 	private String extract() {
 
 		StringBuilder builder = new StringBuilder();
 		Iterator<ClassificationRule> iterator = iterator();
+		//
 		while(iterator.hasNext()) {
 			ClassificationRule rule = iterator.next();
 			builder.append(rule.getSearchExpression());
-			builder.append(WHITE_SPACE);
-			builder.append(SEPARATOR_ENTRY);
-			builder.append(WHITE_SPACE);
+			addSeparator(builder);
 			builder.append(rule.getClassification());
-			if(iterator.hasNext())
+			addSeparator(builder);
+			builder.append(rule.getReference().name());
+			if(iterator.hasNext()) {
 				builder.append(SEPARATOR_TOKEN);
+			}
 		}
+		//
 		return builder.toString().trim();
 	}
 
@@ -130,11 +133,19 @@ public class ClassificationDictionary extends ArrayList<ClassificationRule> {
 			lines = new String[1];
 			lines[0] = input;
 		}
+		//
 		for(String line : lines) {
 			ClassificationRule rule = extractClassificationRule(line);
 			if(rule != null && !contains(rule)) {
 				add(rule);
 			}
 		}
+	}
+
+	private void addSeparator(StringBuilder builder) {
+
+		builder.append(WHITE_SPACE);
+		builder.append(SEPARATOR_ENTRY);
+		builder.append(WHITE_SPACE);
 	}
 }

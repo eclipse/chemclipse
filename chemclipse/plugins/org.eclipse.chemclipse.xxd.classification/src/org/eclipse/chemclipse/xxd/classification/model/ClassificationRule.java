@@ -15,6 +15,7 @@ public class ClassificationRule {
 
 	private String searchExpression = "";
 	private String classification = "";
+	private Reference reference = Reference.NAME;
 
 	public ClassificationRule() {
 
@@ -23,8 +24,14 @@ public class ClassificationRule {
 
 	public ClassificationRule(String searchExpression, String classification) {
 
+		this(searchExpression, classification, Reference.NAME);
+	}
+
+	public ClassificationRule(String searchExpression, String classification, Reference reference) {
+
 		this.searchExpression = searchExpression;
 		this.classification = classification;
+		this.reference = reference;
 	}
 
 	public String getSearchExpression() {
@@ -45,5 +52,15 @@ public class ClassificationRule {
 	public void setClassification(String classification) {
 
 		this.classification = classification;
+	}
+
+	public Reference getReference() {
+
+		return reference;
+	}
+
+	public void setReference(Reference reference) {
+
+		this.reference = reference;
 	}
 }

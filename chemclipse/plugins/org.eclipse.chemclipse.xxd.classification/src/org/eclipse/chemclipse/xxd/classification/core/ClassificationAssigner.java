@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.xxd.classification.model.ClassificationRule;
+import org.eclipse.chemclipse.xxd.classification.model.Reference;
 import org.eclipse.chemclipse.xxd.classification.settings.ClassifierAssignFilterSettings;
 
 public class ClassificationAssigner {
@@ -26,24 +27,30 @@ public class ClassificationAssigner {
 	public static void apply(IPeak peak, ClassifierAssignFilterSettings settings) {
 
 		peak.removeClassifier("");
+		//
 		boolean isCaseSensitive = settings.isCaseSensitive();
 		boolean useRegularExpression = settings.isUseRegularExpression();
 		boolean isMatchPartly = settings.isMatchPartly();
 		//
 		for(IIdentificationTarget identificationTarget : peak.getTargets()) {
-			boolean isMatch = false;
-			String value = getName(identificationTarget, isCaseSensitive);
-			if(value != null && !value.isEmpty()) {
-				for(ClassificationRule classificationRule : settings.getClassificationDictionary()) {
-					if(useRegularExpression) {
-						isMatch = matchByRegularExpression(value, classificationRule.getSearchExpression(), isCaseSensitive, isMatchPartly);
-					} else {
-						String searchExpression = getStringByCaseOption(classificationRule.getSearchExpression(), isCaseSensitive);
-						isMatch = matchByString(value, searchExpression, isMatchPartly);
-					}
-					//
-					if(isMatch) {
-						peak.addClassifier(classificationRule.getClassification());
+			for(ClassificationRule classificationRule : settings.getClassificationDictionary()) {
+				String searchExpression = classificationRule.getSearchExpression();
+				if(searchExpression != null && !searchExpression.isEmpty()) {
+					String value = getTargetValue(identificationTarget, classificationRule.getReference(), isCaseSensitive);
+					if(value != null && !value.isEmpty()) {
+						/*
+						 * Try to match the target value.
+						 */
+						boolean isMatch = false;
+						if(useRegularExpression) {
+							isMatch = matchByRegularExpression(value, searchExpression, isCaseSensitive, isMatchPartly);
+						} else {
+							isMatch = matchByString(value, getStringByCaseOption(searchExpression, isCaseSensitive), isMatchPartly);
+						}
+						//
+						if(isMatch) {
+							peak.addClassifier(classificationRule.getClassification());
+						}
 					}
 				}
 			}
@@ -83,16 +90,29 @@ public class ClassificationAssigner {
 		return pattern;
 	}
 
-	private static String getName(IIdentificationTarget identificationTarget, boolean isCaseSensitive) {
+	private static String getTargetValue(IIdentificationTarget identificationTarget, Reference classificationReference, boolean isCaseSensitive) {
 
+		String value = null;
 		if(identificationTarget != null) {
 			ILibraryInformation libraryInformation = identificationTarget.getLibraryInformation();
 			if(libraryInformation != null) {
-				return getStringByCaseOption(libraryInformation.getName(), isCaseSensitive);
+				switch(classificationReference) {
+					case NAME:
+						value = getStringByCaseOption(libraryInformation.getName(), isCaseSensitive);
+						break;
+					case CAS:
+						value = getStringByCaseOption(libraryInformation.getCasNumber(), isCaseSensitive);
+						break;
+					case REFERENCE_ID:
+						value = getStringByCaseOption(libraryInformation.getReferenceIdentifier(), isCaseSensitive);
+						break;
+					default:
+						break;
+				}
 			}
 		}
 		//
-		return null;
+		return value;
 	}
 
 	private static String getStringByCaseOption(String value, boolean isCaseSensitive) {

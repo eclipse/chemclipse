@@ -31,7 +31,7 @@ import org.eclipse.chemclipse.xxd.classification.settings.ClassifierAssignFilter
 
 import junit.framework.TestCase;
 
-public class ClassificationAssigner_1_Test extends TestCase {
+public class ClassificationAssigner_3_Test extends TestCase {
 
 	private static final String NAME = "Heptanoic acid, 3-methylbutyl ester";
 	private static final String CAS = "109-25-1";
@@ -79,7 +79,7 @@ public class ClassificationAssigner_1_Test extends TestCase {
 
 	public void test0b() {
 
-		ClassificationRule rule = createClassificationRule("Heptanoic acid, 3-methylbutyl ester", "");
+		ClassificationRule rule = createClassificationRule("ID-202206", "");
 		ClassifierAssignFilterSettings settings = createSettings(false, false, false, rule);
 		ClassificationAssigner.apply(peak, settings);
 		//
@@ -97,7 +97,7 @@ public class ClassificationAssigner_1_Test extends TestCase {
 
 	public void test1a() {
 
-		ClassificationRule rule = createClassificationRule("Heptanoic acid, 3-methylbutyl ester", CLASSIFICATION);
+		ClassificationRule rule = createClassificationRule("ID-202206", CLASSIFICATION);
 		ClassifierAssignFilterSettings settings = createSettings(false, false, false, rule);
 		ClassificationAssigner.apply(peak, settings);
 		//
@@ -107,7 +107,7 @@ public class ClassificationAssigner_1_Test extends TestCase {
 
 	public void test1b() {
 
-		ClassificationRule rule = createClassificationRule("HEPTANOIC acid, 3-methylbutyl ester", CLASSIFICATION);
+		ClassificationRule rule = createClassificationRule("id-202206", CLASSIFICATION);
 		ClassifierAssignFilterSettings settings = createSettings(false, false, false, rule);
 		ClassificationAssigner.apply(peak, settings);
 		//
@@ -117,7 +117,7 @@ public class ClassificationAssigner_1_Test extends TestCase {
 
 	public void test2() {
 
-		ClassificationRule rule = createClassificationRule("Heptanoic acid, 3-methylbutyl ester", CLASSIFICATION);
+		ClassificationRule rule = createClassificationRule("ID-202206", CLASSIFICATION);
 		ClassifierAssignFilterSettings settings = createSettings(true, false, false, rule);
 		ClassificationAssigner.apply(peak, settings);
 		//
@@ -127,7 +127,7 @@ public class ClassificationAssigner_1_Test extends TestCase {
 
 	public void test3() {
 
-		ClassificationRule rule = createClassificationRule("Heptanoic acid, 3-methylbutyl ester", CLASSIFICATION);
+		ClassificationRule rule = createClassificationRule("ID-202206", CLASSIFICATION);
 		ClassifierAssignFilterSettings settings = createSettings(true, true, false, rule);
 		ClassificationAssigner.apply(peak, settings);
 		//
@@ -137,7 +137,7 @@ public class ClassificationAssigner_1_Test extends TestCase {
 
 	public void test4() {
 
-		ClassificationRule rule = createClassificationRule("Heptanoic acid, 3-methylbutyl ester", CLASSIFICATION);
+		ClassificationRule rule = createClassificationRule("ID-202206", CLASSIFICATION);
 		ClassifierAssignFilterSettings settings = createSettings(true, true, true, rule);
 		ClassificationAssigner.apply(peak, settings);
 		//
@@ -147,7 +147,7 @@ public class ClassificationAssigner_1_Test extends TestCase {
 
 	public void test5a() {
 
-		ClassificationRule rule = createClassificationRule("3-methylbutyl", CLASSIFICATION);
+		ClassificationRule rule = createClassificationRule("-2022", CLASSIFICATION);
 		ClassifierAssignFilterSettings settings = createSettings(false, false, false, rule);
 		ClassificationAssigner.apply(peak, settings);
 		//
@@ -156,7 +156,7 @@ public class ClassificationAssigner_1_Test extends TestCase {
 
 	public void test5b() {
 
-		ClassificationRule rule = createClassificationRule("3-methylbutyl", CLASSIFICATION);
+		ClassificationRule rule = createClassificationRule("-2022", CLASSIFICATION);
 		ClassifierAssignFilterSettings settings = createSettings(true, false, false, rule);
 		ClassificationAssigner.apply(peak, settings);
 		//
@@ -165,7 +165,7 @@ public class ClassificationAssigner_1_Test extends TestCase {
 
 	public void test5c() {
 
-		ClassificationRule rule = createClassificationRule("3-methylbutyl", CLASSIFICATION);
+		ClassificationRule rule = createClassificationRule("-2022", CLASSIFICATION);
 		ClassifierAssignFilterSettings settings = createSettings(false, true, false, rule);
 		ClassificationAssigner.apply(peak, settings);
 		//
@@ -175,7 +175,7 @@ public class ClassificationAssigner_1_Test extends TestCase {
 
 	public void test5d() {
 
-		ClassificationRule rule = createClassificationRule("3-METHYLBUTYL", CLASSIFICATION);
+		ClassificationRule rule = createClassificationRule("id-2022", CLASSIFICATION);
 		ClassifierAssignFilterSettings settings = createSettings(false, true, false, rule);
 		ClassificationAssigner.apply(peak, settings);
 		//
@@ -185,7 +185,7 @@ public class ClassificationAssigner_1_Test extends TestCase {
 
 	public void test5e() {
 
-		ClassificationRule rule = createClassificationRule("3-methylbutyl", CLASSIFICATION);
+		ClassificationRule rule = createClassificationRule("-2022", CLASSIFICATION);
 		ClassifierAssignFilterSettings settings = createSettings(true, true, false, rule);
 		ClassificationAssigner.apply(peak, settings);
 		//
@@ -195,7 +195,7 @@ public class ClassificationAssigner_1_Test extends TestCase {
 
 	public void test5f() {
 
-		ClassificationRule rule = createClassificationRule("(.*)(3-methylbutyl)(.*)", CLASSIFICATION);
+		ClassificationRule rule = createClassificationRule("(.*)(-2022)(.*)", CLASSIFICATION);
 		ClassifierAssignFilterSettings settings = createSettings(true, false, true, rule);
 		ClassificationAssigner.apply(peak, settings);
 		//
@@ -205,7 +205,7 @@ public class ClassificationAssigner_1_Test extends TestCase {
 
 	public void test5g() {
 
-		ClassificationRule rule = createClassificationRule("(.*)(3-methylbutyl)", CLASSIFICATION);
+		ClassificationRule rule = createClassificationRule("(.*)(-2022)", CLASSIFICATION);
 		ClassifierAssignFilterSettings settings = createSettings(true, false, true, rule);
 		ClassificationAssigner.apply(peak, settings);
 		//
@@ -214,7 +214,7 @@ public class ClassificationAssigner_1_Test extends TestCase {
 
 	public void test5h() {
 
-		ClassificationRule rule = createClassificationRule("(.*)(3-methylbutyl)", CLASSIFICATION);
+		ClassificationRule rule = createClassificationRule("(.*)(-2022)", CLASSIFICATION);
 		ClassifierAssignFilterSettings settings = createSettings(true, true, true, rule);
 		ClassificationAssigner.apply(peak, settings);
 		//
@@ -224,7 +224,7 @@ public class ClassificationAssigner_1_Test extends TestCase {
 
 	public void test5i() {
 
-		ClassificationRule rule = createClassificationRule("(.*)(3-Methylbutyl)(.*)", CLASSIFICATION);
+		ClassificationRule rule = createClassificationRule("(.*)(id-2022)(.*)", CLASSIFICATION);
 		ClassifierAssignFilterSettings settings = createSettings(false, false, true, rule);
 		ClassificationAssigner.apply(peak, settings);
 		//
@@ -234,7 +234,7 @@ public class ClassificationAssigner_1_Test extends TestCase {
 
 	public void test5j() {
 
-		ClassificationRule rule = createClassificationRule("(.*)(3-Methylbutyl)", CLASSIFICATION);
+		ClassificationRule rule = createClassificationRule("(.*)(id-2022)", CLASSIFICATION);
 		ClassifierAssignFilterSettings settings = createSettings(false, false, true, rule);
 		ClassificationAssigner.apply(peak, settings);
 		//
@@ -243,7 +243,7 @@ public class ClassificationAssigner_1_Test extends TestCase {
 
 	public void test5k() {
 
-		ClassificationRule rule = createClassificationRule("(.*)(3-Methylbutyl)", CLASSIFICATION);
+		ClassificationRule rule = createClassificationRule("(.*)(id-2022)", CLASSIFICATION);
 		ClassifierAssignFilterSettings settings = createSettings(false, true, true, rule);
 		ClassificationAssigner.apply(peak, settings);
 		//
@@ -263,7 +263,7 @@ public class ClassificationAssigner_1_Test extends TestCase {
 
 	private ClassificationRule createClassificationRule(String searchExpression, String classification) {
 
-		return new ClassificationRule(searchExpression, classification, Reference.NAME);
+		return new ClassificationRule(searchExpression, classification, Reference.REFERENCE_ID);
 	}
 
 	private ClassifierAssignFilterSettings createSettings(boolean caseSensitive, boolean matchPartly, boolean useRegularExpression, ClassificationRule classificationRule) {

@@ -22,14 +22,17 @@ public class ClassificationRuleLabelProvider extends AbstractChemClipseLabelProv
 
 	public static final String SEARCH_EXPRESSION = "Search Expression";
 	public static final String CLASSIFICATION = "Classification";
+	public static final String REFERENCE = "Reference";
 	//
 	public static final String[] TITLES = { //
 			SEARCH_EXPRESSION, //
-			CLASSIFICATION //
+			CLASSIFICATION, //
+			REFERENCE //
 	};
 	public static final int[] BOUNDS = { //
 			200, //
 			200, //
+			200 //
 	};
 
 	@Override
@@ -54,6 +57,9 @@ public class ClassificationRuleLabelProvider extends AbstractChemClipseLabelProv
 					break;
 				case 1:
 					text = rule.getClassification();
+					break;
+				case 2:
+					text = rule.getReference().label();
 					break;
 				default:
 					text = "n.a.";

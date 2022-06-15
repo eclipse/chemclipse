@@ -18,10 +18,6 @@ import org.eclipse.jface.viewers.Viewer;
 
 public class ClassificationRuleTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
 
-	public ClassificationRuleTableComparator() {
-
-	}
-
 	@Override
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
@@ -37,11 +33,16 @@ public class ClassificationRuleTableComparator extends AbstractRecordTableCompar
 				case 1:
 					sortOrder = rule2.getClassification().compareTo(rule1.getClassification());
 					break;
+				case 2:
+					sortOrder = rule2.getReference().compareTo(rule1.getReference());
+					break;
 			}
+			//
 			if(getDirection() == ASCENDING) {
 				sortOrder = -sortOrder;
 			}
 		}
+		//
 		return sortOrder;
 	}
 }
