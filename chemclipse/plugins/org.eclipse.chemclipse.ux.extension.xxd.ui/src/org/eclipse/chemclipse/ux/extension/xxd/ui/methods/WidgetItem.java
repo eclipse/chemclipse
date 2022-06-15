@@ -271,6 +271,13 @@ public class WidgetItem {
 
 		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
 		Combo combo = comboViewer.getCombo();
+		/*
+		 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=567652
+		 */
+		if(OperatingSystemUtils.isLinux()) {
+			combo.setBackground(combo.getBackground());
+		}
+		//
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
 		comboViewer.setLabelProvider(new AdapterLabelProvider());
 		combo.setToolTipText(inputValue.getDescription());
@@ -401,6 +408,7 @@ public class WidgetItem {
 		button.setSelection(getValueAsBoolean());
 		button.setToolTipText(inputValue.getDescription());
 		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
 		return button;
 	}
 
