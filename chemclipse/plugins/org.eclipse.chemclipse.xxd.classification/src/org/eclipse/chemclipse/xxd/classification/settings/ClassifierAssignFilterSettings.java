@@ -33,7 +33,7 @@ public class ClassifierAssignFilterSettings {
 	@JsonProperty(value = "Matching Rules", defaultValue = "")
 	@JsonPropertyDescription(value = "List the regular expressions for target names to set classifications.")
 	@ValidatorSettingsProperty(validator = ClassificationDictionaryValidator.class)
-	private ClassificationDictionary classificationDictionary;
+	private ClassificationDictionary classificationDictionary = new ClassificationDictionary();
 
 	public boolean isUseRegularExpression() {
 
