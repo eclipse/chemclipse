@@ -18,5 +18,6 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Import-Package: org.osgi.framework;version="1.3.0"
 Bundle-ActivationPolicy: lazy
-Export-Package: org.eclipse.chemclipse.wsd.converter.supplier.arw.model,
+Export-Package: org.eclipse.chemclipse.wsd.converter.supplier.arw.io,
+ org.eclipse.chemclipse.wsd.converter.supplier.arw.model,
  org.eclipse.chemclipse.wsd.converter.supplier.arw.preferences
