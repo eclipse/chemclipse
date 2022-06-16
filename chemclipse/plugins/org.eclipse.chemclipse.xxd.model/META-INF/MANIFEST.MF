@@ -63,6 +63,7 @@ Service-Component: OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.AreaFi
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.HighPassPeaksFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.LowPassPeaksFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.MinimumTracesFilter.xml,
+ OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.PeakActiveForAnalysisFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.ShapeFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.SignalToNoisePeakFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.model.filter.peaks.WidthFilter.xml,
