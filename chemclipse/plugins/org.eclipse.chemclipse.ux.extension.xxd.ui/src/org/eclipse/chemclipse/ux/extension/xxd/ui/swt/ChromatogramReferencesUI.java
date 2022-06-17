@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -36,6 +36,7 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.ui.swt.EditorToolBar;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -62,6 +63,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.ToolItem;
@@ -242,11 +244,20 @@ public class ChromatogramReferencesUI {
 	private void createComboChromatograms(EditorToolBar toolBar) {
 
 		toolBar.createCombo(viewer -> {
+			/*
+			 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=567652
+			 */
+			Combo combo = viewer.getCombo();
+			if(OperatingSystemUtils.isLinux()) {
+				combo.setBackground(combo.getBackground());
+			}
+			//
 			ComboViewer oldViewer = comboChromatograms.viewerReference.getAndSet(viewer);
 			if(oldViewer != null) {
 				oldViewer.removeSelectionChangedListener(comboChromatograms);
 			}
 			viewer.addSelectionChangedListener(comboChromatograms);
+			//
 			Control control = viewer.getControl();
 			control.setToolTipText("Select a referenced chromatogram.");
 			control.addDisposeListener(new DisposeListener() {
@@ -260,6 +271,7 @@ public class ChromatogramReferencesUI {
 					}
 				}
 			});
+			//
 			viewer.setLabelProvider(new LabelProvider() {
 
 				@Override

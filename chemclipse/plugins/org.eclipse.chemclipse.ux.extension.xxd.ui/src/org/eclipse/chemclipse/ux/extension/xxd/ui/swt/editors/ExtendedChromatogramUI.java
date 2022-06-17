@@ -66,6 +66,7 @@ import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.processors.ProcessorToolbar;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
@@ -1122,6 +1123,13 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		comboViewerSeparationColumn = comboViewer;
 		//
 		Control combo = comboViewer.getControl();
+		/*
+		 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=567652
+		 */
+		if(OperatingSystemUtils.isLinux()) {
+			combo.setBackground(combo.getBackground());
+		}
+		//
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {
 
 			@Override
