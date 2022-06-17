@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,8 +22,11 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 public class ClassifiedPeaksFilterSettings {
 
 	@JsonProperty(value = "Classifications", defaultValue = "")
-	@JsonPropertyDescription("Disables all peaks with the given classification, separate different ones with comma.")
+	@JsonPropertyDescription("Filter peaks with the given classification, separate different ones with comma.")
 	private String classifications = "";
+	@JsonProperty(value = "Active for Analysis", defaultValue = "")
+	@JsonPropertyDescription("Activate/deactivate the matched peaks.")
+	private boolean activeForAnalysis = true;
 
 	public String getClassifications() {
 
@@ -48,5 +51,15 @@ public class ClassifiedPeaksFilterSettings {
 		}
 		//
 		return set;
+	}
+
+	public boolean isActiveForAnalysis() {
+
+		return activeForAnalysis;
+	}
+
+	public void setActiveForAnalysis(boolean activeForAnalysis) {
+
+		this.activeForAnalysis = activeForAnalysis;
 	}
 }

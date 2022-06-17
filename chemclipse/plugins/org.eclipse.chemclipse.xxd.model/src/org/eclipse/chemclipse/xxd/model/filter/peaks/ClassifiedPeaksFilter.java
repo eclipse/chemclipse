@@ -33,13 +33,13 @@ public class ClassifiedPeaksFilter implements IPeakFilter<ClassifiedPeaksFilterS
 	@Override
 	public String getName() {
 
-		return "Disable Classified Peaks";
+		return "Activate/Deactivate by Classification";
 	}
 
 	@Override
 	public String getDescription() {
 
-		return "Disables peaks with a given classification";
+		return "Sets the active for analysis status for peaks with a given classification";
 	}
 
 	@Override
@@ -55,13 +55,16 @@ public class ClassifiedPeaksFilter implements IPeakFilter<ClassifiedPeaksFilterS
 		if(configuration == null) {
 			configuration = createConfiguration(peaks);
 		}
+		//
 		Set<String> classifications = configuration.getClassificationSet();
+		boolean activeForAnalysis = configuration.isActiveForAnalysis();
+		//
 		SubMonitor subMonitor = SubMonitor.convert(monitor, peaks.size());
 		for(X peak : peaks) {
 			Collection<String> classifier = peak.getClassifier();
 			for(String classification : classifications) {
 				if(classifier.contains(classification)) {
-					peak.setActiveForAnalysis(false);
+					peak.setActiveForAnalysis(activeForAnalysis);
 					listener.updated(peak);
 					break;
 				}
