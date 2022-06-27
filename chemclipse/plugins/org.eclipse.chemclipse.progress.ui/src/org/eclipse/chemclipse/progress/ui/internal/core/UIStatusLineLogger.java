@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,9 +8,15 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Matthias Mailänder - fix status line not appearing
  *******************************************************************************/
 package org.eclipse.chemclipse.progress.ui.internal.core;
 
+import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.progress.core.IStatusLineMessageListener;
+import org.eclipse.chemclipse.progress.core.InfoType;
+import org.eclipse.chemclipse.progress.ui.exceptions.StatusLineManagerException;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.jface.action.IStatusLineManager;
 import org.eclipse.jface.action.StatusLineManager;
 import org.eclipse.swt.widgets.Display;
@@ -23,39 +29,27 @@ import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
-import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.progress.core.IStatusLineMessageListener;
-import org.eclipse.chemclipse.progress.core.InfoType;
-import org.eclipse.chemclipse.progress.ui.exceptions.DisplayException;
-import org.eclipse.chemclipse.progress.ui.exceptions.StatusLineManagerException;
-
 /**
  * Prints messages to the status line.
  * 
- * @author eselmeister
+ * @author Philip Wenig
  */
 public class UIStatusLineLogger implements IStatusLineMessageListener {
 
 	private static final Logger logger = Logger.getLogger(UIStatusLineLogger.class);
 	private IStatusLineManager statusLineManager;
-	private Display display;
 
 	@Override
 	public void setInfo(final InfoType infoType, final String message) {
 
-		Display display;
-		final IStatusLineManager statusLineManager;
-		try {
-			statusLineManager = getStatusLineManager();
-			display = getDisplay();
-			/*
-			 * AsyncExec to update the display.
-			 */
-			display.asyncExec(new Runnable() {
+		Display display = DisplayUtils.getDisplay();
+		display.asyncExec(new Runnable() {
 
-				@Override
-				public void run() {
+			@Override
+			public void run() {
 
+				try {
+					IStatusLineManager statusLineManager = getStatusLineManager();
 					switch(infoType) {
 						case MESSAGE:
 							statusLineManager.setMessage(message);
@@ -64,29 +58,11 @@ public class UIStatusLineLogger implements IStatusLineMessageListener {
 							statusLineManager.setErrorMessage(message);
 							break;
 					}
+				} catch(StatusLineManagerException e) {
+					logger.warn(e);
 				}
-			});
-		} catch(StatusLineManagerException e) {
-			/*
-			 * There is no appropriate status line in Eclipse 4.3.
-			 * There should be one, but this is a bug.
-			 */
-			// logger.warn(e);
-		} catch(DisplayException e) {
-			logger.warn(e);
-		}
-	}
-
-	// ---------------------------------------------------private methods
-	private Display getDisplay() throws DisplayException {
-
-		if(display == null) {
-			display = Display.getCurrent();
-			if(display == null) {
-				throw new DisplayException("The display instance is null.");
 			}
-		}
-		return display;
+		});
 	}
 
 	/**
@@ -186,5 +162,4 @@ public class UIStatusLineLogger implements IStatusLineMessageListener {
 			throw new StatusLineManagerException("IViewSite or IEditorSite instances are not available.");
 		}
 	}
-	// ---------------------------------------------------private methods
 }

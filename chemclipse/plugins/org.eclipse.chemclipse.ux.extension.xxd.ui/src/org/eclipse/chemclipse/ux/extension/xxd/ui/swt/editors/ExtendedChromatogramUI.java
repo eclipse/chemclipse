@@ -510,6 +510,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			Thread.currentThread().interrupt();
 		} catch(InvocationTargetException e) {
 			logger.warn(e);
+			logger.warn(e.getCause());
 		}
 	}
 

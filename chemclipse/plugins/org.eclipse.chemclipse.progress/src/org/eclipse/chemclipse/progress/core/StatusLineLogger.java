@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,12 +16,13 @@ import java.util.List;
 
 public class StatusLineLogger {
 
-	private static List<IStatusLineMessageListener> listeners = new ArrayList<IStatusLineMessageListener>();
+	private static List<IStatusLineMessageListener> listeners = new ArrayList<>();
 
 	/**
 	 * Use only static methods.
 	 */
 	private StatusLineLogger() {
+
 	}
 
 	/**
