@@ -116,7 +116,6 @@
     <trimBars xmi:id="_h0BcTDLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.trimbar.top">
       <children xsi:type="menu:ToolBar" xmi:id="_h0BcTTLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbar.main">
         <children xsi:type="menu:ToolBarSeparator" xmi:id="_nIMLMINGEeOuPY34hxPAxA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbarseparator.3"/>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_h0BcTjLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.exit" label="Quit" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/quit.gif" command="_h0A1OjLzEeKMEOdllHiEaA"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_tL2EwDgEEeKBGer45Yb2dA" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.save" label="Save" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/save.gif" command="_SkvDQDgEEeKBGer45Yb2dA"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_vo3g0DgEEeKBGer45Yb2dA" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.saveAll" label="Save All" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/saveall.gif" command="_ZgJ9QDgEEeKBGer45Yb2dA"/>
         <children xsi:type="menu:ToolBarSeparator" xmi:id="_rJYIsINGEeOuPY34hxPAxA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbarseparator.4"/>
