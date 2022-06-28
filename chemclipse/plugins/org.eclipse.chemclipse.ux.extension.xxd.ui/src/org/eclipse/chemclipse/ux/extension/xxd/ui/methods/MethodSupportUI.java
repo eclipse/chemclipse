@@ -33,6 +33,8 @@ import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
+import org.eclipse.chemclipse.progress.core.InfoType;
+import org.eclipse.chemclipse.progress.core.StatusLineLogger;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
@@ -182,12 +184,10 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 				File directory = MethodConverter.getUserMethodDirectory();
 				if(directory.exists()) {
 					createNewMethod(shell, true);
+				} else if(selectMethodDirectory(shell)) {
+					createNewMethod(shell, true);
 				} else {
-					if(selectMethodDirectory(shell)) {
-						createNewMethod(shell, true);
-					} else {
-						MessageDialog.openError(shell, "Method Editor", "Please select a directory via the settings where your methods are located.");
-					}
+					MessageDialog.openError(shell, "Method Editor", "Please select a directory via the settings where your methods are located.");
 				}
 			}
 		});
@@ -494,6 +494,7 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 			} catch(InvocationTargetException e) {
 				IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 				processingInfo.addErrorMessage(processMethod.getName(), "Execution failed", e.getCause());
+				StatusLineLogger.setInfo(InfoType.ERROR_MESSAGE, "Failed to execute process method. See Feedback for details.");
 				ProcessingInfoPartSupport.getInstance().update(processingInfo);
 			} catch(InterruptedException e) {
 				Thread.currentThread().interrupt();

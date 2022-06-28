@@ -45,7 +45,6 @@ public class RedoOperationHandler {
 	@Execute
 	public void execute(UISynchronize uiSynchronize, final @Named(IServiceConstants.ACTIVE_SHELL) Shell shell, @Named(IServiceConstants.ACTIVE_PART) MPart part) {
 
-		StatusLineLogger.setInfo(InfoType.MESSAGE, "Start Redo Operation");
 		uiSynchronize.syncExec(new Runnable() {
 
 			@Override
@@ -63,11 +62,12 @@ public class RedoOperationHandler {
 					operationHistory.redo(undoContext, null, null);
 				} catch(ExecutionException e) {
 					logger.warn(e);
+					StatusLineLogger.setInfo(InfoType.ERROR_MESSAGE, "Redo operation failed");
 				} finally {
 					shell.setCursor(cursor);
+					StatusLineLogger.setInfo(InfoType.MESSAGE, "Redo operation finished");
 				}
 			}
 		});
-		StatusLineLogger.setInfo(InfoType.MESSAGE, "Redo Operation finished");
 	}
 }
