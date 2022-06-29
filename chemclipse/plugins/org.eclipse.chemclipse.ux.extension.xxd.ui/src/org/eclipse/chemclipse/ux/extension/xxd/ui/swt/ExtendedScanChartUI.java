@@ -69,6 +69,9 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swtchart.IAxis;
+import org.eclipse.swtchart.Range;
+import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
@@ -224,6 +227,7 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 	private void updateScan(IScan scan) {
 
 		this.scan = scan;
+		//
 		scanFilterUI.setInput(scan);
 		scanIdentifierUI.setInput(scan);
 		toolbarInfo.get().setText(scanDataSupport.getScanLabel(scan));
@@ -231,6 +235,29 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		updateScanChart(scan);
 		updateInfoLabels();
 		updateButtons();
+		/*
+		 * Set a fixed range on demand.
+		 */
+		boolean isFixedRangeX = preferenceStore.getBoolean(PreferenceConstants.P_SCAN_CHART_ENABLE_FIXED_RANGE_X);
+		boolean isFixedRangeY = preferenceStore.getBoolean(PreferenceConstants.P_SCAN_CHART_ENABLE_FIXED_RANGE_Y);
+		//
+		if(isFixedRangeX || isFixedRangeY) {
+			BaseChart baseChart = chartControl.get().getBaseChart();
+			//
+			if(isFixedRangeX) {
+				double startX = preferenceStore.getDouble(PreferenceConstants.P_SCAN_CHART_FIXED_RANGE_START_X);
+				double stopX = preferenceStore.getDouble(PreferenceConstants.P_SCAN_CHART_FIXED_RANGE_STOP_X);
+				IAxis axisX = baseChart.getAxisSet().getXAxis(BaseChart.ID_PRIMARY_X_AXIS);
+				axisX.setRange(new Range(startX, stopX));
+			}
+			//
+			if(isFixedRangeY) {
+				double startY = preferenceStore.getDouble(PreferenceConstants.P_SCAN_CHART_FIXED_RANGE_START_Y);
+				double stopY = preferenceStore.getDouble(PreferenceConstants.P_SCAN_CHART_FIXED_RANGE_STOP_Y);
+				IAxis axisY = baseChart.getAxisSet().getYAxis(BaseChart.ID_PRIMARY_Y_AXIS);
+				axisY.setRange(new Range(startY, stopY));
+			}
+		}
 	}
 
 	private void updateScanChart(IScan scan) {

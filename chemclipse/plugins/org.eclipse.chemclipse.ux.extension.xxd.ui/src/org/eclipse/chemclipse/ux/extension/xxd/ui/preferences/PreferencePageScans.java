@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.DoubleFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.ExtendedIntegerFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
@@ -74,6 +75,15 @@ public class PreferencePageScans extends FieldEditorPreferencePage implements IW
 		addField(new SpinnerFieldEditor(PreferenceConstants.P_MAX_COPY_SCAN_TRACES, "Copy Traces", PreferenceConstants.MIN_TRACES, PreferenceConstants.MAX_TRACES, getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SORT_COPY_TRACES, "Sort Traces", getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_TRACES_EXPORT_OPTION, "Traces Export Option", TracesExportOption.getOptions(), getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("The primary X|Y axis scale is used to set the values.", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SCAN_CHART_ENABLE_FIXED_RANGE_X, "Fixed range X", getFieldEditorParent()));
+		addField(new DoubleFieldEditor(PreferenceConstants.P_SCAN_CHART_FIXED_RANGE_START_X, "Start X", PreferenceConstants.MIN_RANGE, PreferenceConstants.MAX_RANGE, getFieldEditorParent()));
+		addField(new DoubleFieldEditor(PreferenceConstants.P_SCAN_CHART_FIXED_RANGE_STOP_X, "Stop X", PreferenceConstants.MIN_RANGE, PreferenceConstants.MAX_RANGE, getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SCAN_CHART_ENABLE_FIXED_RANGE_Y, "Fixed range Y", getFieldEditorParent()));
+		addField(new DoubleFieldEditor(PreferenceConstants.P_SCAN_CHART_FIXED_RANGE_START_Y, "Start Y", PreferenceConstants.MIN_RANGE, PreferenceConstants.MAX_RANGE, getFieldEditorParent()));
+		addField(new DoubleFieldEditor(PreferenceConstants.P_SCAN_CHART_FIXED_RANGE_STOP_Y, "Stop Y", PreferenceConstants.MIN_RANGE, PreferenceConstants.MAX_RANGE, getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new ExtendedIntegerFieldEditor(PreferenceConstants.P_TRACES_VIRTUAL_TABLE, "Traces Virtual Table", PreferenceConstants.MIN_TRACES_VIRTUAL_TABLE, PreferenceConstants.MAX_TRACES_VIRTUAL_TABLE, getFieldEditorParent()));

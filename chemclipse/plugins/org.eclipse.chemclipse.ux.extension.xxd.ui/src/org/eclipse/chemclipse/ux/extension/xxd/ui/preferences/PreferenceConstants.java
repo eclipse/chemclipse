@@ -78,6 +78,9 @@ public class PreferenceConstants extends ChartOptions {
 	public static final int MIN_MODULO_AUTO_MIRROR = 2;
 	public static final int MAX_MODULO_AUTO_MIRROR = 100;
 	public static final int DEF_MODULO_AUTO_MIRROR = 2;
+	//
+	public static final double MIN_RANGE = -Double.MAX_VALUE;
+	public static final double MAX_RANGE = Double.MAX_VALUE;
 	/*
 	 * General / Task Quick Access
 	 */
@@ -237,6 +240,19 @@ public class PreferenceConstants extends ChartOptions {
 	public static final boolean DEF_ENABLE_MULTI_SUBTRACT = false;
 	public static final String P_SHOW_SUBTRACT_DIALOG = "showSubtractDialog";
 	public static final boolean DEF_SHOW_SUBTRACT_DIALOG = true;
+	//
+	public static final String P_SCAN_CHART_ENABLE_FIXED_RANGE_X = "scanChartEnableFixedRangeX";
+	public static final boolean DEF_SCAN_CHART_ENABLE_FIXED_RANGE_X = false;
+	public static final String P_SCAN_CHART_FIXED_RANGE_START_X = "scanChartFixedRangeStartX";
+	public static final double DEF_SCAN_CHART_FIXED_RANGE_START_X = 0.0d;
+	public static final String P_SCAN_CHART_FIXED_RANGE_STOP_X = "scanChartFixedRangeStopX";
+	public static final double DEF_SCAN_CHART_FIXED_RANGE_STOP_X = 0.0d;
+	public static final String P_SCAN_CHART_ENABLE_FIXED_RANGE_Y = "scanChartEnableFixedRangeY";
+	public static final boolean DEF_SCAN_CHART_ENABLE_FIXED_RANGE_Y = false;
+	public static final String P_SCAN_CHART_FIXED_RANGE_START_Y = "scanChartFixedRangeStartY";
+	public static final double DEF_SCAN_CHART_FIXED_RANGE_START_Y = 0.0d;
+	public static final String P_SCAN_CHART_FIXED_RANGE_STOP_Y = "scanChartFixedRangeStopY";
+	public static final double DEF_SCAN_CHART_FIXED_RANGE_STOP_Y = 0.0d;
 	//
 	public static final String P_TITLE_X_AXIS_MZ = "titleXAxisMZ";
 	public static final String DEF_TITLE_X_AXIS_MZ = "Ion [m/z]";

@@ -90,6 +90,13 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_SHOW_SUBTRACT_DIALOG, PreferenceConstants.DEF_SHOW_SUBTRACT_DIALOG);
 		store.setDefault(PreferenceConstants.P_ENABLE_MULTI_SUBTRACT, PreferenceConstants.DEF_ENABLE_MULTI_SUBTRACT);
 		//
+		store.setDefault(PreferenceConstants.P_SCAN_CHART_ENABLE_FIXED_RANGE_X, PreferenceConstants.DEF_SCAN_CHART_ENABLE_FIXED_RANGE_X);
+		store.setDefault(PreferenceConstants.P_SCAN_CHART_FIXED_RANGE_START_X, PreferenceConstants.DEF_SCAN_CHART_FIXED_RANGE_START_X);
+		store.setDefault(PreferenceConstants.P_SCAN_CHART_FIXED_RANGE_STOP_X, PreferenceConstants.DEF_SCAN_CHART_FIXED_RANGE_STOP_X);
+		store.setDefault(PreferenceConstants.P_SCAN_CHART_ENABLE_FIXED_RANGE_Y, PreferenceConstants.DEF_SCAN_CHART_ENABLE_FIXED_RANGE_Y);
+		store.setDefault(PreferenceConstants.P_SCAN_CHART_FIXED_RANGE_START_Y, PreferenceConstants.DEF_SCAN_CHART_FIXED_RANGE_START_Y);
+		store.setDefault(PreferenceConstants.P_SCAN_CHART_FIXED_RANGE_STOP_Y, PreferenceConstants.DEF_SCAN_CHART_FIXED_RANGE_STOP_Y);
+		//
 		store.setDefault(PreferenceConstants.P_TITLE_X_AXIS_MZ, PreferenceConstants.DEF_TITLE_X_AXIS_MZ);
 		store.setDefault(PreferenceConstants.P_TITLE_X_AXIS_PARENT_MZ, PreferenceConstants.DEF_TITLE_X_AXIS_PARENT_MZ);
 		store.setDefault(PreferenceConstants.P_TITLE_X_AXIS_PARENT_RESOLUTION, PreferenceConstants.DEF_TITLE_X_AXIS_PARENT_RESOLUTION);
