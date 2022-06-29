@@ -35,16 +35,17 @@ public class TracesSupport {
 	public static void copyTracesToClipboard(Display display, Object scan) {
 
 		String traces = null;
-		int maxCopyTraces = TracesSupport.getNumberOfTraces();
+		int maxCopyTraces = getNumberOfTraces();
+		boolean sortTraces = isSortTraces();
 		IScan scanInstance = null;
 		//
 		if(scan instanceof IScanMSD) {
 			IScanMSD scanMSD = (IScanMSD)scan;
-			traces = ScanSupport.extractTracesText(scanMSD, maxCopyTraces);
+			traces = ScanSupport.extractTracesText(scanMSD, maxCopyTraces, sortTraces);
 			scanInstance = scanMSD;
 		} else if(scan instanceof IScanWSD) {
 			IScanWSD scanWSD = (IScanWSD)scan;
-			traces = WavelengthSupport.extractTracesText(scanWSD, maxCopyTraces);
+			traces = WavelengthSupport.extractTracesText(scanWSD, maxCopyTraces, sortTraces);
 			scanInstance = scanWSD;
 		}
 		/*
@@ -83,6 +84,11 @@ public class TracesSupport {
 	private static int getNumberOfTraces() {
 
 		return preferenceStore.getInt(PreferenceConstants.P_MAX_COPY_SCAN_TRACES);
+	}
+
+	private static boolean isSortTraces() {
+
+		return preferenceStore.getBoolean(PreferenceConstants.P_SORT_COPY_TRACES);
 	}
 
 	private static TracesExportOption getTracesExportOption() {

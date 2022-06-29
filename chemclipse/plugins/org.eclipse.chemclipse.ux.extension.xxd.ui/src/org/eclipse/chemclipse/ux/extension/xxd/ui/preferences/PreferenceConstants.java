@@ -225,6 +225,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final boolean DEF_SCAN_CHART_ENABLE_COMPRESS = false;
 	public static final String P_MAX_COPY_SCAN_TRACES = "maxCopyScanTraces";
 	public static final int DEF_MAX_COPY_SCAN_TRACES = DEF_SCAN_TRACES;
+	public static final String P_SORT_COPY_TRACES = "sortCopyTraces";
+	public static final boolean DEF_SORT_COPY_TRACES = true;
 	public static final String P_TRACES_EXPORT_OPTION = "tracesExportOption";
 	public static final String DEF_TRACES_EXPORT_OPTION = TracesExportOption.SIMPLE_TEXT.name();
 	public static final String P_SCAN_IDENTIFER_MSD = "scanIdentifierMSD";
