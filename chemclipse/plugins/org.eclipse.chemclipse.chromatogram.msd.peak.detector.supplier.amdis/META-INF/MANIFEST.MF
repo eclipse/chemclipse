@@ -20,7 +20,7 @@ Require-Bundle: org.eclipse.core.runtime,
  com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.7.1",
  org.eclipse.chemclipse.chromatogram.msd.comparison
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-Vendor: ChemClipse
 Export-Package: org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.core,
  org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.model,

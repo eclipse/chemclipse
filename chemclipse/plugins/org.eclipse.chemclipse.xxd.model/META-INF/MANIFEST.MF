@@ -42,7 +42,7 @@ Require-Bundle: org.eclipse.core.runtime,
  com.fasterxml.jackson.core.jackson-annotations;bundle-version="2.9.2",
  org.eclipse.core.commands;bundle-version="3.9.100",
  org.eclipse.chemclipse.rcp.app;bundle-version="0.9.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.xxd.model.filter.peaks,
  org.eclipse.chemclipse.xxd.model.preferences,
