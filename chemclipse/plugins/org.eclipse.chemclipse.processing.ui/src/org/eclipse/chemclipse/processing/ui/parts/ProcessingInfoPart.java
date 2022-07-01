@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2020 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -10,15 +10,20 @@
  * Dr. Philip Wenig - initial API and implementation
  * Janos Binder - cleanup
  * Christoph Läubrich - use E4 DI to listen for topic changes, init view with current data on construction
+ * Matthias Mailänder - log to the status line
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.ui.parts;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageProvider;
+import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoUpdateNotifier;
 import org.eclipse.chemclipse.processing.ui.swt.ProcessingInfoUI;
+import org.eclipse.chemclipse.progress.core.InfoType;
+import org.eclipse.chemclipse.progress.core.StatusLineLogger;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.e4.core.di.annotations.Optional;
@@ -122,6 +127,15 @@ public class ProcessingInfoPart {
 
 		if(processingInfoUI != null) {
 			processingInfoUI.update(data);
+		}
+		if(data != null) {
+			for(IProcessingMessage message : data.getMessages()) {
+				if(message.getMessageType() == MessageType.ERROR) {
+					StatusLineLogger.setInfo(InfoType.ERROR_MESSAGE, message.getMessage());
+				} else {
+					StatusLineLogger.setInfo(InfoType.MESSAGE, message.getMessage());
+				}
+			}
 		}
 	}
 }

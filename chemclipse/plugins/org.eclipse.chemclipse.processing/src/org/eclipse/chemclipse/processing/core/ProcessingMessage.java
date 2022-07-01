@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,13 +20,16 @@ public class ProcessingMessage extends AbstractProcessingMessage implements IPro
 	private Throwable exception;
 
 	public ProcessingMessage(MessageType messageType, String description, String message) {
+
 		super(messageType, description, message);
 	}
 
 	public ProcessingMessage(MessageType messageType, String description, String message, String solution) {
+
 		super(messageType, description, message, solution);
 	}
 
+	@Override
 	public Throwable getException() {
 
 		return exception;

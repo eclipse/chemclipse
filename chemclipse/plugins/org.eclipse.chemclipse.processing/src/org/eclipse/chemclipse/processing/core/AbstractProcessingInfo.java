@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,11 +22,13 @@ public abstract class AbstractProcessingInfo<T> implements IProcessingInfo<T> {
 	private List<IProcessingMessage> processingMessages;
 	private T processingResult;
 
-	public AbstractProcessingInfo() {
+	protected AbstractProcessingInfo() {
+
 		processingMessages = new ArrayList<>();
 	}
 
-	public AbstractProcessingInfo(IProcessingInfo<T> processingInfo) {
+	protected AbstractProcessingInfo(IProcessingInfo<T> processingInfo) {
+
 		this();
 		addMessages(processingInfo);
 	}

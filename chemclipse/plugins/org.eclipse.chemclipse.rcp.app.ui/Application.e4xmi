@@ -138,8 +138,6 @@
     <trimBars xmi:id="_jEP4kDL0EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.trimbar.bottom" side="Bottom">
       <children xsi:type="menu:ToolBar" xmi:id="_ksnkkDL0EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbar.bottom">
         <children xsi:type="menu:ToolBarSeparator" xmi:id="_kOkSsINGEeOuPY34hxPAxA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbarseparator.0"/>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_ZDn1MDinEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.selectView" label="Select View" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/view.gif" command="_ASbeYDilEeKDEdWQrkwLnQ"/>
-        <children xsi:type="menu:ToolControl" xmi:id="_NDGRMEKHEeWHOc5lcHTqLQ" elementId="org.eclipse.chemclipse.rcp.app.ui.toolcontrol.activePerspective" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.toolcontrols.ActivePerspective"/>
       </children>
     </trimBars>
   </children>
