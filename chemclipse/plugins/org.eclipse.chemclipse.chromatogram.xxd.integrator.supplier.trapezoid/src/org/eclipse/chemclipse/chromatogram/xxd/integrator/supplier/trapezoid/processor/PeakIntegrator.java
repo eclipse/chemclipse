@@ -84,11 +84,12 @@ public class PeakIntegrator {
 		 * The background shall be not included normally.
 		 */
 		boolean includeBackground = peakIntegrationSettings.isIncludeBackground();
+		boolean useAreaConstraint = peakIntegrationSettings.isUseAreaConstraint();
 		ISettingStatus settingStatus;
 		PeakIntegrationResult result = null;
 		IBaselineSupport baselineSupport = peakIntegrationSettings.getBaselineSupport();
 		//
-		List<? extends IIntegrationEntry> integrationEntries = calculateIntegratedArea(peak, baselineSupport, peakIntegrationSettings.getMarkedTraces(), includeBackground);
+		List<? extends IIntegrationEntry> integrationEntries = calculateIntegratedArea(peak, baselineSupport, peakIntegrationSettings.getMarkedTraces(), includeBackground, useAreaConstraint);
 		peak.setIntegratedArea(integrationEntries, INTEGRATOR_DESCRIPTION);
 		/*
 		 * Get the peak area if the peak should be reported.
@@ -237,7 +238,7 @@ public class PeakIntegrator {
 	 * 
 	 * @return List<IIntegrationEntry>
 	 */
-	private List<IIntegrationEntry> calculateIntegratedArea(IPeak peak, IBaselineSupport baselineSupport, IMarkedTraces<IMarkedTrace> markedTraces, boolean includeBackground) {
+	private List<IIntegrationEntry> calculateIntegratedArea(IPeak peak, IBaselineSupport baselineSupport, IMarkedTraces<IMarkedTrace> markedTraces, boolean includeBackground, boolean useAreaConstraint) {
 
 		List<IIntegrationEntry> integrationEntries = new ArrayList<IIntegrationEntry>();
 		if(peak instanceof IPeakMSD) {
@@ -247,7 +248,7 @@ public class PeakIntegrator {
 			IPeakMSD peakMSD = (IPeakMSD)peak;
 			IPeakModelMSD peakModel = peakMSD.getPeakModel();
 			IPeakMassSpectrum massSpectrum = peakModel.getPeakMassSpectrum();
-			double integratedAreaTIC = calculateTICPeakArea(peak, baselineSupport, includeBackground);
+			double integratedAreaTIC = calculateTICPeakArea(peak, baselineSupport, includeBackground, useAreaConstraint);
 			//
 			IIntegrationEntry integrationEntry;
 			if(markedTraces.size() > 0 && !markedTraces.getTraces().contains(IMarkedTrace.TOTAL_SIGNAL_AS_INT)) {
@@ -270,7 +271,7 @@ public class PeakIntegrator {
 			/*
 			 * FID
 			 */
-			double integratedAreaTIC = calculateTICPeakArea(peak, baselineSupport, includeBackground);
+			double integratedAreaTIC = calculateTICPeakArea(peak, baselineSupport, includeBackground, useAreaConstraint);
 			IIntegrationEntry integrationEntry = new IntegrationEntry(integratedAreaTIC);
 			integrationEntries.add(integrationEntry);
 		} else if(peak instanceof IPeakWSD) {
@@ -279,7 +280,7 @@ public class PeakIntegrator {
 			 */
 			IPeakWSD peakWSD = (IPeakWSD)peak;
 			IPeakModelWSD peakModel = peakWSD.getPeakModel();
-			double integratedAreaTIC = calculateTICPeakArea(peak, baselineSupport, includeBackground);
+			double integratedAreaTIC = calculateTICPeakArea(peak, baselineSupport, includeBackground, useAreaConstraint);
 			//
 			IScanWSD scanWSD = null;
 			IScan scan = peakModel.getPeakMaximum();
@@ -318,7 +319,7 @@ public class PeakIntegrator {
 	 * @param peak
 	 * @return double
 	 */
-	private double calculateTICPeakArea(IPeak peak, IBaselineSupport baselineSupport, boolean includeBackground) {
+	private double calculateTICPeakArea(IPeak peak, IBaselineSupport baselineSupport, boolean includeBackground, boolean useAreaConstraint) {
 
 		double integratedArea = 0.0d;
 		List<Integer> retentionTimes;
@@ -363,12 +364,16 @@ public class PeakIntegrator {
 			}
 		}
 		/*
-		 * The calculations are not as precise as they could be.<br/> If the
-		 * area is lower than 1 it could be assumed, that the area is 0.
+		 * We had a check before, that the area must not be < 1.
+		 * Especially when handling HPLC-DAD files, it could be lower than 1.
+		 * Hence, this check has been revised and set to the constraint, that
+		 * no negative areas are allowed.
 		 */
-		if(integratedArea < 1.0d) {
+		double minArea = useAreaConstraint ? 1.0d : 0.0d;
+		if(integratedArea < minArea) {
 			integratedArea = 0.0d;
 		}
+		//
 		return integratedArea;
 	}
 

@@ -29,6 +29,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_SELECTED_IONS = "selectedIons";
 	public static final String DEF_SELECTED_IONS = "0"; // 103;104 | 0 = TIC
+	public static final String P_USE_AREA_CONSTRAINT = "useAreaConstraint";
+	public static final boolean DEF_USE_AREA_CONSTRAINT = true;
 	//
 	public static final int MIN_RETENTION_TIME = 0; // = 0.0 minutes
 	public static final int MAX_RETENTION_TIME = 60000; // = 1.0 minutes
@@ -60,6 +62,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		Map<String, String> defaultValues = new HashMap<>();
 		defaultValues.put(P_SELECTED_IONS, DEF_SELECTED_IONS);
+		defaultValues.put(P_USE_AREA_CONSTRAINT, Boolean.toString(DEF_USE_AREA_CONSTRAINT));
 		return defaultValues;
 	}
 
@@ -72,6 +75,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static PeakIntegrationSettings getPeakIntegrationSettings() {
 
 		PeakIntegrationSettings peakIntegrationSettings = new PeakIntegrationSettings();
+		peakIntegrationSettings.setUseAreaConstraint(isUseAreaConstraint());
 		// baselineSupport.setBaselineHoldOn(5000, 100000);
 		/*
 		 * Integration Support
@@ -98,5 +102,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		 * E.g. "18;28;84;207" to 18 28 84 207
 		 */
 		return preferences.get(preference, def);
+	}
+
+	public static boolean isUseAreaConstraint() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getBoolean(P_USE_AREA_CONSTRAINT, DEF_USE_AREA_CONSTRAINT);
 	}
 }

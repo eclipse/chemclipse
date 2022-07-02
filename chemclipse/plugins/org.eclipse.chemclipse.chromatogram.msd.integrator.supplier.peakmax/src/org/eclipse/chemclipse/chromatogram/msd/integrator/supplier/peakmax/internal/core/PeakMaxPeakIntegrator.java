@@ -16,6 +16,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.settings.PeakIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.IBaselineSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.IIntegrationSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.integrator.core.settings.peaks.IPeakIntegrationSettings;
@@ -49,10 +50,14 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 
 		validatePeak(peak);
 		validateSettings(peakIntegrationSettings);
+		boolean useAreaConstraint = true;
+		if(peakIntegrationSettings instanceof PeakIntegrationSettings) {
+			useAreaConstraint = ((PeakIntegrationSettings)peakIntegrationSettings).isUseAreaConstraint();
+		}
 		ISettingStatus settingStatus;
 		PeakIntegrationResult result = null;
 		IBaselineSupport baselineSupport = peakIntegrationSettings.getBaselineSupport();
-		List<IIntegrationEntry> integrationEntries = calculateIntegratedArea(peak, baselineSupport, peakIntegrationSettings.getMarkedTraces());
+		List<IIntegrationEntry> integrationEntries = calculateIntegratedArea(peak, baselineSupport, peakIntegrationSettings.getMarkedTraces(), useAreaConstraint);
 		peak.setIntegratedArea(integrationEntries, IPeakMaxPeakIntegrator.INTEGRATOR_DESCRIPTION);
 		/*
 		 * Get the peak area if the peak should be reported.
@@ -177,14 +182,14 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 	 * 
 	 * @return List<IIntegrationEntry>
 	 */
-	private List<IIntegrationEntry> calculateIntegratedArea(IPeak peak, IBaselineSupport baselineSupport, IMarkedTraces<IMarkedTrace> markedTraces) {
+	private List<IIntegrationEntry> calculateIntegratedArea(IPeak peak, IBaselineSupport baselineSupport, IMarkedTraces<IMarkedTrace> markedTraces, boolean useAreaConstraint) {
 
 		List<IIntegrationEntry> integrationEntries = new ArrayList<IIntegrationEntry>();
 		IIntegrationEntry integrationEntry;
 		//
 		IPeakModel peakModel = peak.getPeakModel();
 		IScan scan = peakModel.getPeakMaximum();
-		double integratedAreaTIC = calculateTICPeakArea(peak, baselineSupport);
+		double integratedAreaTIC = calculateTICPeakArea(peak, baselineSupport, useAreaConstraint);
 		Set<Integer> selectedIonsNominal = markedTraces.getTraces();
 		/*
 		 * Use the selected ions if:<br/> the size is greater 0
@@ -216,7 +221,7 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 	 * @param peak
 	 * @return double
 	 */
-	private double calculateTICPeakArea(IPeak peak, IBaselineSupport baselineSupport) {
+	private double calculateTICPeakArea(IPeak peak, IBaselineSupport baselineSupport, boolean useAreaConstraint) {
 
 		double integratedArea = 0.0d;
 		IPeakModel peakModel = peak.getPeakModel();
@@ -227,12 +232,16 @@ public class PeakMaxPeakIntegrator implements IPeakMaxPeakIntegrator {
 		 */
 		integratedArea = peakModel.getPeakMaximum().getTotalSignal();
 		/*
-		 * The calculations are not as precise as they could be.<br/> If the
-		 * area is lower than 1 it could be assumed, that the area is 0.
+		 * We had a check before, that the area must not be < 1.
+		 * Especially when handling HPLC-DAD files, it could be lower than 1.
+		 * Hence, this check has been revised and set to the constraint, that
+		 * no negative areas are allowed.
 		 */
-		if(integratedArea < 1.0d) {
+		double minArea = useAreaConstraint ? 1.0d : 0.0d;
+		if(integratedArea < minArea) {
 			integratedArea = 0.0d;
 		}
+		//
 		return integratedArea;
 	}
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -39,6 +39,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 
 		addField(new IonTableEditor(PreferenceSupplier.P_SELECTED_IONS, "Selected ions (default empty list: 0 = TIC)", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceSupplier.P_PEAK_AREA_INCLUDE_BACKGROUND, "Include peak background in area calculation.", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_USE_AREA_CONSTRAINT, "Use Area Constraint (integrations < 1 are set to 0).", getFieldEditorParent()));
 	}
 
 	/*

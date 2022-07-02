@@ -33,6 +33,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String DEF_SELECTED_IONS = "0"; // 103;104 | 0 = TIC
 	public static final String P_PEAK_AREA_INCLUDE_BACKGROUND = "peakAreaIncludeBackground";
 	public static final boolean DEF_PEAK_AREA_INCLUDE_BACKGROUND = false; // The background will be not calculated
+	public static final String P_USE_AREA_CONSTRAINT = "useAreaConstraint";
+	public static final boolean DEF_USE_AREA_CONSTRAINT = true;
 	//
 	public static final int MIN_RETENTION_TIME = 0; // = 0.0 minutes
 	public static final int MAX_RETENTION_TIME = 60000; // = 1.0 minutes
@@ -65,6 +67,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		Map<String, String> defaultValues = new HashMap<>();
 		defaultValues.put(P_SELECTED_IONS, DEF_SELECTED_IONS);
 		defaultValues.put(P_PEAK_AREA_INCLUDE_BACKGROUND, Boolean.toString(DEF_PEAK_AREA_INCLUDE_BACKGROUND));
+		defaultValues.put(P_USE_AREA_CONSTRAINT, Boolean.toString(DEF_USE_AREA_CONSTRAINT));
 		return defaultValues;
 	}
 
@@ -84,6 +87,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		PeakIntegrationSettings integrationSettings = new PeakIntegrationSettings();
 		// baselineSupport.setBaselineHoldOn(5000, 100000);
 		integrationSettings.setIncludeBackground(getPeakAreaIncludeBackground());
+		integrationSettings.setUseAreaConstraint(isUseAreaConstraint());
 		/*
 		 * Integration Support
 		 */
@@ -106,6 +110,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.getBoolean(P_PEAK_AREA_INCLUDE_BACKGROUND, DEF_PEAK_AREA_INCLUDE_BACKGROUND);
+	}
+
+	public static boolean isUseAreaConstraint() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getBoolean(P_USE_AREA_CONSTRAINT, DEF_USE_AREA_CONSTRAINT);
 	}
 
 	/**

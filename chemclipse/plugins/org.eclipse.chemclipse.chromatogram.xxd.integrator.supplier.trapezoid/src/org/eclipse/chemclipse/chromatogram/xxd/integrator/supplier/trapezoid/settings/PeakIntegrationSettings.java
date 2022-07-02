@@ -32,6 +32,9 @@ public class PeakIntegrationSettings extends AbstractPeakIntegrationSettings {
 	@JsonPropertyDescription(value = "List the ions to integrate, separated by a white space. 0 = TIC")
 	@StringSettingsProperty(regExp = "(\\d+[;|\\s]?)+", description = "must be space separated digits.", isMultiLine = false, allowEmpty = false)
 	private String tracesToIntegrate = TIC;
+	@JsonProperty(value = "Area Constraint", defaultValue = "true")
+	@JsonPropertyDescription(value = "If selected, calculated areas < 1 are set to 0.")
+	private boolean useAreaConstraint = true;
 	/*
 	 * The selected ions are handled separately.
 	 * They must not be persisted. If selected ions is
@@ -74,5 +77,15 @@ public class PeakIntegrationSettings extends AbstractPeakIntegrationSettings {
 	public void setIncludeBackground(boolean includeBackground) {
 
 		this.includeBackground = includeBackground;
+	}
+
+	public boolean isUseAreaConstraint() {
+
+		return useAreaConstraint;
+	}
+
+	public void setUseAreaConstraint(boolean useAreaConstraint) {
+
+		this.useAreaConstraint = useAreaConstraint;
 	}
 }
