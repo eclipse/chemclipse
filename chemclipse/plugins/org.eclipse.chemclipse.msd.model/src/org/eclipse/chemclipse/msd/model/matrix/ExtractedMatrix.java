@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IIonBounds;
@@ -81,7 +82,7 @@ public class ExtractedMatrix {
 		scans = selection.getChromatogram() //
 				.getScans() //
 				.stream() //
-				.filter(s -> s instanceof IScanMSD) //
+				.filter(IScanMSD.class::isInstance) //
 				.map(IScanMSD.class::cast) //
 				.filter(s -> s.getScanNumber() >= startScan) //
 				.filter(s -> s.getScanNumber() <= stopScan) //
@@ -136,13 +137,11 @@ public class ExtractedMatrix {
 
 	public int[] getScanNumbers() {
 
-		int[] scanNumbers = scans.stream().mapToInt(scan -> scan.getScanNumber()).toArray();
-		return scanNumbers;
+		return scans.stream().mapToInt(IScan::getScanNumber).toArray();
 	}
 
 	public int[] getRetentionTimes() {
 
-		int[] retentionTimes = scans.stream().mapToInt(scan -> scan.getRetentionTime()).toArray();
-		return retentionTimes;
+		return scans.stream().mapToInt(IScan::getRetentionTime).toArray();
 	}
 }

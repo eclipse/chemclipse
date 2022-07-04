@@ -40,11 +40,8 @@ public class ChromatogramFilterMSD extends AbstractChromatogramFilterMSD {
 
 		IChromatogramMSD chromatogramMSD = chromatogramSelection.getChromatogram();
 		ChromatogramFilterSettingsMSD settings = (ChromatogramFilterSettingsMSD)filterSettings;
-		/*
-		 * 1. step - export signal from chromatogram
-		 */
 		IChromatogramFilterResult chromatogramFilterResult;
-		if(settings.getPerIonCalculation() == true) {
+		if(settings.getPerIonCalculation()) {
 			try {
 				ExtractedMatrix extractedMatrix = new ExtractedMatrix(chromatogramSelection);
 				double[][] matrix = extractedMatrix.getMatrix();
@@ -62,6 +59,7 @@ public class ChromatogramFilterMSD extends AbstractChromatogramFilterMSD {
 			totalSignals.setNegativeTotalSignalsToZero();
 			if(chromatogramFilterResult.getResultStatus().equals(ResultStatus.OK)) {
 				updateSignal(totalSignals, chromatogramMSD);
+				chromatogramSelection.getChromatogram().setDirty(true);
 			}
 		}
 		return chromatogramFilterResult;
@@ -70,7 +68,7 @@ public class ChromatogramFilterMSD extends AbstractChromatogramFilterMSD {
 	@Override
 	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo<IChromatogramFilterResult> processingInfo = new ProcessingInfo<IChromatogramFilterResult>();
+		IProcessingInfo<IChromatogramFilterResult> processingInfo = new ProcessingInfo<>();
 		processingInfo.setProcessingResult(process(chromatogramSelection, chromatogramFilterSettings, monitor));
 		if(processingInfo.getProcessingResult().getResultStatus().equals(ResultStatus.EXCEPTION)) {
 			StringBuilder proposedString = new StringBuilder("Please run the Scan Filter to nominalize chromatogram first.");
@@ -86,16 +84,16 @@ public class ChromatogramFilterMSD extends AbstractChromatogramFilterMSD {
 	public IProcessingInfo applyFilter(IChromatogramSelectionMSD chromatogramSelection, IProgressMonitor monitor) {
 
 		ChromatogramFilterSettings chromatogramFilterSettings = PreferenceSupplier.getFilterSettingsMSD();
-		IProcessingInfo<IChromatogramFilterResult> processingInfo = new ProcessingInfo<IChromatogramFilterResult>();
+		IProcessingInfo<IChromatogramFilterResult> processingInfo = new ProcessingInfo<>();
 		processingInfo.setProcessingResult(process(chromatogramSelection, chromatogramFilterSettings, monitor));
 		return processingInfo;
 	}
 
 	private void updateSignal(ITotalScanSignals totalSignals, IChromatogramMSD chromatogram) {
 
-		Iterator<Integer> itScan = totalSignals.iterator();
-		while(itScan.hasNext()) {
-			Integer scan = itScan.next();
+		Iterator<Integer> iteratorScan = totalSignals.iterator();
+		while(iteratorScan.hasNext()) {
+			Integer scan = iteratorScan.next();
 			IScanMSD scanMSD = chromatogram.getSupplierScan(scan);
 			ITotalScanSignal totalscanSignal = totalSignals.getTotalScanSignal(scan);
 			scanMSD.adjustTotalSignal(totalscanSignal.getTotalSignal());

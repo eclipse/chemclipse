@@ -36,25 +36,14 @@ public class ChromatogramFilterWSD extends AbstractChromatogramFilterWSD {
 	private IChromatogramFilterResult process(IChromatogramSelectionWSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
 		IChromatogramWSD chromatogramWSD = chromatogramSelection.getChromatogram();
-		/*
-		 * 1. step - export signal from chromatogram
-		 */
 		TotalScanSignalExtractor totalScanSignalExtractor = new TotalScanSignalExtractor(chromatogramWSD);
-		/*
-		 * here is different between CSD and MSD, in case csd is NOT check if value are negative
-		 */
+		// Don't check if values are negative (unlike CSD/MSD)
 		ITotalScanSignals totalSignals = totalScanSignalExtractor.getTotalScanSignals(chromatogramSelection, false);
-		/*
-		 * 2. step - process signal
-		 */
 		IChromatogramFilterResult chromatogramFilterResult = SavitzkyGolayProcessor.apply(totalSignals, (ChromatogramFilterSettings)chromatogramFilterSettings, monitor);
-		/*
-		 * 3. step - adjust signal in chromatogram if data has been process successfully
-		 */
 		if(chromatogramFilterResult.getResultStatus().equals(ResultStatus.OK)) {
-			Iterator<Integer> itScan = totalSignals.iterator();
-			while(itScan.hasNext()) {
-				Integer scan = itScan.next();
+			Iterator<Integer> iteratorScan = totalSignals.iterator();
+			while(iteratorScan.hasNext()) {
+				Integer scan = iteratorScan.next();
 				IScanWSD scanWSD = chromatogramWSD.getSupplierScan(scan);
 				ITotalScanSignal totalscanSignal = totalSignals.getTotalScanSignal(scan);
 				scanWSD.adjustTotalSignal(totalscanSignal.getTotalSignal());
@@ -67,7 +56,7 @@ public class ChromatogramFilterWSD extends AbstractChromatogramFilterWSD {
 	@Override
 	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelectionWSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo<IChromatogramFilterResult> processingInfo = new ProcessingInfo<IChromatogramFilterResult>();
+		IProcessingInfo<IChromatogramFilterResult> processingInfo = new ProcessingInfo<>();
 		processingInfo.setProcessingResult(process(chromatogramSelection, chromatogramFilterSettings, monitor));
 		return processingInfo;
 	}
@@ -76,7 +65,7 @@ public class ChromatogramFilterWSD extends AbstractChromatogramFilterWSD {
 	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelectionWSD chromatogramSelection, IProgressMonitor monitor) {
 
 		ChromatogramFilterSettings chromatogramFilterSettings = PreferenceSupplier.getFilterSettings();
-		IProcessingInfo<IChromatogramFilterResult> processingInfo = new ProcessingInfo<IChromatogramFilterResult>();
+		IProcessingInfo<IChromatogramFilterResult> processingInfo = new ProcessingInfo<>();
 		processingInfo.setProcessingResult(process(chromatogramSelection, chromatogramFilterSettings, monitor));
 		return processingInfo;
 	}

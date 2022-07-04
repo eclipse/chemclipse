@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -25,6 +25,9 @@ import org.eclipse.chemclipse.numeric.statistics.Calculations;
  */
 public class DetectorSlopes implements IDetectorSlopes {
 
+	public static final int SAVITZKYGOLAY_DERIVATIVE = 0;
+	public static final int SAVITZKYGOLAY_ORDER = 3;
+	//
 	private List<IDetectorSlope> slopes;
 	private int startScan;
 	private int stopScan;
@@ -39,7 +42,7 @@ public class DetectorSlopes implements IDetectorSlopes {
 		this.startScan = startScan;
 		this.stopScan = stopScan;
 		int amount = stopScan - startScan + 1;
-		slopes = new ArrayList<IDetectorSlope>(amount);
+		slopes = new ArrayList<>(amount);
 	}
 
 	// ----------------------------------------IFirstDerivativeSlopes
@@ -97,19 +100,19 @@ public class DetectorSlopes implements IDetectorSlopes {
 		}
 	}
 
+	@Override
 	public void calculateSavitzkyGolaySmooth(int windowSize) {
 
-		int SAVITZKYGOLAY_DERIVATIVE = 0;
-		int SAVITZKYGOLAY_ORDER = 3;
 		int filterWidth = windowSize;
 		double[] initialSlopes = new double[slopes.size()];
-		double[] smoothedSlopes = new double[slopes.size()];
-		for(int i = 0; i < slopes.size(); i++)
+		for(int i = 0; i < slopes.size(); i++) {
 			initialSlopes[i] = slopes.get(i).getSlope();
+		}
 		SavitzkyGolayFilter filter = new SavitzkyGolayFilter(SAVITZKYGOLAY_ORDER, filterWidth, SAVITZKYGOLAY_DERIVATIVE);
-		smoothedSlopes = filter.apply(initialSlopes);
-		for(int i = 0; i < slopes.size(); i++)
+		double[] smoothedSlopes = filter.apply(initialSlopes);
+		for(int i = 0; i < slopes.size(); i++) {
 			slopes.get(i).setSlope(smoothedSlopes[i]);
+		}
 	}
 
 	@Override
