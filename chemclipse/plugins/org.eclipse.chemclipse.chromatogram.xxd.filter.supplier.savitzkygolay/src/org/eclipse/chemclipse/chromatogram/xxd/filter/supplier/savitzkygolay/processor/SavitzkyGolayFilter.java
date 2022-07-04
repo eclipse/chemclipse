@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -36,7 +36,7 @@ public class SavitzkyGolayFilter {
 	public SavitzkyGolayFilter(int order, int width, int derivative) {
 
 		// Validate and rectify input
-		width = Math.max(PreferenceSupplier.MIN_WIDTH, (1 + 2 * Math.round((width - 1) / 2)));
+		width = Math.max(PreferenceSupplier.MIN_WIDTH, (1 + 2 * (width - 1) / 2));
 		order = (int)StatUtils.min(new double[]{Math.max(0, order), 5, (width - 1)});
 		derivative = Math.min(Math.max(0, derivative), order);
 		this.derivative = derivative;
