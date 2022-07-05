@@ -49,7 +49,7 @@ public class ChromatogramFilterCSD extends AbstractChromatogramFilterCSD {
 	@Override
 	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelectionCSD chromatogramSelection, IChromatogramFilterSettings chromatogramFilterSettings, IProgressMonitor monitor) {
 
-		IProcessingInfo<IChromatogramFilterResult> processingInfo = new ProcessingInfo<IChromatogramFilterResult>();
+		IProcessingInfo<IChromatogramFilterResult> processingInfo = new ProcessingInfo<>();
 		processingInfo.setProcessingResult(process(chromatogramSelection, chromatogramFilterSettings, monitor));
 		chromatogramSelection.getChromatogram().setDirty(true);
 		return processingInfo;
@@ -59,7 +59,7 @@ public class ChromatogramFilterCSD extends AbstractChromatogramFilterCSD {
 	public IProcessingInfo<IChromatogramFilterResult> applyFilter(IChromatogramSelectionCSD chromatogramSelection, IProgressMonitor monitor) {
 
 		ChromatogramFilterSettings chromatogramFilterSettings = PreferenceSupplier.getFilterSettings();
-		IProcessingInfo<IChromatogramFilterResult> processingInfo = new ProcessingInfo<IChromatogramFilterResult>();
+		IProcessingInfo<IChromatogramFilterResult> processingInfo = new ProcessingInfo<>();
 		processingInfo.setProcessingResult(process(chromatogramSelection, chromatogramFilterSettings, monitor));
 		chromatogramSelection.getChromatogram().setDirty(true);
 		return processingInfo;
@@ -67,9 +67,9 @@ public class ChromatogramFilterCSD extends AbstractChromatogramFilterCSD {
 
 	private void updateSignal(ITotalScanSignals totalSignals, IChromatogramCSD chromatogram) {
 
-		Iterator<Integer> itScan = totalSignals.iterator();
-		while(itScan.hasNext()) {
-			Integer scan = itScan.next();
+		Iterator<Integer> iteratorScans = totalSignals.iterator();
+		while(iteratorScans.hasNext()) {
+			Integer scan = iteratorScans.next();
 			IScanCSD scanCSD = chromatogram.getSupplierScan(scan);
 			ITotalScanSignal totalscanSignal = totalSignals.getTotalScanSignal(scan);
 			scanCSD.adjustTotalSignal(totalscanSignal.getTotalSignal());
