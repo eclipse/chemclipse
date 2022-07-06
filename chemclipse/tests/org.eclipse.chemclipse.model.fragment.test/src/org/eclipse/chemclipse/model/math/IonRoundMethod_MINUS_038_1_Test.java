@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Lablicate GmbH.
+ * Copyright (c) 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,9 +13,9 @@ package org.eclipse.chemclipse.model.math;
 
 import junit.framework.TestCase;
 
-public class IonRoundMethod_MINUS_02_1_Test extends TestCase {
+public class IonRoundMethod_MINUS_038_1_Test extends TestCase {
 
-	private IonRoundMethod ionRoundMethod = IonRoundMethod.MINUS_02;
+	private IonRoundMethod ionRoundMethod = IonRoundMethod.MINUS_038;
 
 	public void test1() {
 
@@ -39,31 +39,31 @@ public class IonRoundMethod_MINUS_02_1_Test extends TestCase {
 
 	public void test5() {
 
-		assertEquals(17, ionRoundMethod.round(17.7d));
+		assertEquals(17, ionRoundMethod.round(17.61d));
 	}
 
 	public void test6() {
 
-		assertEquals(18, ionRoundMethod.round(17.8d));
+		assertEquals(18, ionRoundMethod.round(17.62d));
 	}
 
 	public void test7() {
 
-		assertEquals(18, ionRoundMethod.round(17.9d));
+		assertEquals(18, ionRoundMethod.round(18.0d));
 	}
 
 	public void test8() {
 
-		assertEquals(18, ionRoundMethod.round(18.7d));
+		assertEquals(18, ionRoundMethod.round(18.61d));
 	}
 
 	public void test9() {
 
-		assertEquals(19, ionRoundMethod.round(18.8d));
+		assertEquals(19, ionRoundMethod.round(18.62d));
 	}
 
 	public void test10() {
 
-		assertEquals("Round m/z from -0.2 (incl.) to +0.8 (excl.)", ionRoundMethod.label());
+		assertEquals("Round m/z from -0.38 (incl.) to +0.62 (excl.)", ionRoundMethod.label());
 	}
 }

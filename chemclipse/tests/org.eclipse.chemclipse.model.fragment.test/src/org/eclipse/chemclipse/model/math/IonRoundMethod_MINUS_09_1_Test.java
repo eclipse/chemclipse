@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -60,5 +60,10 @@ public class IonRoundMethod_MINUS_09_1_Test extends TestCase {
 	public void test9() {
 
 		assertEquals(19, ionRoundMethod.round(18.1d));
+	}
+
+	public void test10() {
+
+		assertEquals("Round m/z from -0.9 (incl.) to +0.1 (excl.)", ionRoundMethod.label());
 	}
 }
