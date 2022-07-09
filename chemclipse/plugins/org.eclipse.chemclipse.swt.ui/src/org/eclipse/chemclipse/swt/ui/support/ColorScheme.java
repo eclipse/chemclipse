@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,12 +15,13 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Color;
 
-public class ColorScheme implements IColorScheme {
+public class ColorScheme extends AbstractColorScheme {
 
 	private int index = 0;
 	private List<Color> colors;
 
 	public ColorScheme(List<Color> colors) {
+
 		this.colors = colors;
 	}
 

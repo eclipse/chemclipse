@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - increment color
  *******************************************************************************/
 package org.eclipse.chemclipse.swt.ui.support;
 
@@ -16,7 +17,7 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Color;
 
-public class UnlimitedColorSchema implements IColorScheme {
+public class UnlimitedColorSchema extends AbstractColorScheme {
 
 	private static final float brightness = 1.0f;
 	private static final float offsetAngle = 0;
@@ -143,6 +144,7 @@ public class UnlimitedColorSchema implements IColorScheme {
 	private int index = 0;
 
 	public UnlimitedColorSchema() {
+
 		colors = new ArrayList<>();
 		colors.addAll(getColors(INIT_SIZE));
 	}

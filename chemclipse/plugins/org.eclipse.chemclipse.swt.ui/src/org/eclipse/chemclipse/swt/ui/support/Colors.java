@@ -121,6 +121,25 @@ public class Colors {
 	};
 	private static List<Color> colorsGradientPrint;
 	/*
+	 * Grayscale
+	 */
+	public static final String COLOR_SCHEME_GRAYSCALE = "Grayscale";
+	private static final RGB[] colorIdsGradientGrayscale = new RGB[]{ //
+			new RGB(26, 26, 26), // 90%
+			new RGB(51, 51, 51), // 80%
+			new RGB(77, 77, 77), // 70%
+			new RGB(102, 102, 102), // 60%
+			new RGB(128, 128, 128), // 50%
+			new RGB(153, 153, 153), // 40%
+			new RGB(179, 179, 179), // 30%
+			new RGB(204, 204, 204), // 20%
+			new RGB(230, 230, 230), // 10%
+			new RGB(236, 236, 236), // 7.5%
+			new RGB(242, 242, 242), // 5%
+			new RGB(249, 249, 249) // 2.5%
+	};
+	private static List<Color> colorsGradientGrayscale;
+	/*
 	 * 
 	 */
 	public static final String COLOR_SCHEME_UNLIMITED = "Unlimited";
@@ -139,7 +158,7 @@ public class Colors {
 
 	public static String[][] getAvailableColorSchemes() {
 
-		String[][] elements = new String[7][2];
+		String[][] elements = new String[8][2];
 		//
 		elements[0][0] = COLOR_SCHEME_RED;
 		elements[0][1] = COLOR_SCHEME_RED;
@@ -159,8 +178,12 @@ public class Colors {
 		elements[5][0] = COLOR_SCHEME_PRINT;
 		elements[5][1] = COLOR_SCHEME_PRINT;
 		//
-		elements[6][0] = COLOR_SCHEME_UNLIMITED;
-		elements[6][1] = COLOR_SCHEME_UNLIMITED;
+		elements[6][0] = COLOR_SCHEME_GRAYSCALE;
+		elements[6][1] = COLOR_SCHEME_GRAYSCALE;
+		//
+		elements[7][0] = COLOR_SCHEME_UNLIMITED;
+		elements[7][1] = COLOR_SCHEME_UNLIMITED;
+		//
 		return elements;
 	}
 
@@ -180,6 +203,8 @@ public class Colors {
 			return new ColorScheme(colorsGradientPublication);
 		} else if(COLOR_SCHEME_PRINT.equals(colorScheme)) {
 			return new ColorScheme(colorsGradientPrint);
+		} else if(COLOR_SCHEME_GRAYSCALE.equals(colorScheme)) {
+			return new ColorScheme(colorsGradientGrayscale);
 		} else if(COLOR_SCHEME_UNLIMITED.equals(colorScheme)) {
 			return new UnlimitedColorSchema();
 		} else {
@@ -342,6 +367,14 @@ public class Colors {
 		for(RGB rgb : colorIdsGradientPrint) {
 			Color color = getColor(rgb);
 			colorsGradientPrint.add(color);
+		}
+		/*
+		 * GRADIENT GRAYSCALE
+		 */
+		colorsGradientGrayscale = new ArrayList<Color>();
+		for(RGB rgb : colorIdsGradientGrayscale) {
+			Color color = getColor(rgb);
+			colorsGradientGrayscale.add(color);
 		}
 	}
 
