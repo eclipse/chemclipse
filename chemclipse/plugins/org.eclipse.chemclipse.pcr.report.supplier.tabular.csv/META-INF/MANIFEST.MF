@@ -1,0 +1,25 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.chemclipse.pcr.report.supplier.tabular.csv
+Bundle-ManifestVersion: 2
+Bundle-Name: PCR to CSV Export converter
+Bundle-SymbolicName: org.eclipse.chemclipse.pcr.report.supplier.tabular.csv;singleton:=true
+Bundle-Version: 0.9.0.qualifier
+Bundle-Activator: org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.Activator
+Bundle-Vendor: ChemClipse
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.chemclipse.converter;bundle-version="0.8.0",
+ org.eclipse.chemclipse.pcr.converter;bundle-version="0.8.0",
+ org.eclipse.chemclipse.model;bundle-version="0.8.0",
+ org.eclipse.chemclipse.pcr.model;bundle-version="0.8.0",
+ org.eclipse.chemclipse.logging;bundle-version="0.8.0",
+ org.eclipse.chemclipse.processing;bundle-version="0.8.0",
+ org.eclipse.chemclipse.support;bundle-version="0.8.0",
+ org.apache.commons.io;bundle-version="2.2.0",
+ org.eclipse.chemclipse.numeric;bundle-version="0.8.0",
+ org.eclipse.chemclipse.pcr.report.supplier.tabular,
+ org.apache.commons.csv
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-ActivationPolicy: lazy
+Import-Package: org.apache.commons.lang3;version="3.1.0",
+ org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.preferences
+Export-Package: org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.preferences

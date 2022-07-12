@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.chemclipse.pcr.converter.ui.converterPreferencePage"
+            class="org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.ui.preferences.converterPreferencePage"
+            name="CSV PCR Export Converter">
+      </page>
+   </extension>
+</plugin>

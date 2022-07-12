@@ -140,4 +140,14 @@ public class Plate extends AbstractMeasurementInfo implements IPlate {
 
 		return name;
 	}
+
+	@Override
+	public IPlate makeDeepCopy() {
+
+		IPlate plate = new Plate();
+		for(IWell well : getWells()) {
+			plate.getWells().add(well.makeDeepCopy());
+		}
+		return plate;
+	}
 }
