@@ -6,5 +6,5 @@ Bundle-SymbolicName: org.eclipse.chemclipse.pdfbox.extensions.fragment.test
 Bundle-Version: 0.9.0.qualifier
 Bundle-Vendor: ChemClipse
 Fragment-Host: org.eclipse.chemclipse.pdfbox.extensions
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: org.junit;bundle-version="4.12.0"

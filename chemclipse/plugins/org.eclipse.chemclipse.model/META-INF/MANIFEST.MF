@@ -16,7 +16,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.databinding;bundle-version="1.6.200",
  org.eclipse.e4.core.services;bundle-version="2.1.100",
  org.eclipse.e4.core.contexts;bundle-version="1.7.0"
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.chemclipse.model.baseline,
  org.eclipse.chemclipse.model.cas,

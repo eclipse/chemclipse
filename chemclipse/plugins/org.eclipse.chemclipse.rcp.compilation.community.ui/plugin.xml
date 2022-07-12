@@ -12,7 +12,7 @@
          </property>
          <property
                name="aboutText"
-               value="%aboutPlaceholder">
+               value="ChemClipse - chemistry software for the masses">
          </property>
          <property
                name="aboutImage"
