@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -50,6 +50,7 @@ public class Messages {
 	 * @param bundle
 	 */
 	public Messages(Bundle bundle) {
+
 		initializeMessageMap(bundle);
 	}
 
@@ -67,15 +68,13 @@ public class Messages {
 		if(message == null) {
 			message = NO_ENTRY;
 			logger.warn(NO_ENTRY + " > " + key); // $NON-NLS-1$
-		} else {
-			if(args != null && args.length > 0) {
-				/*
-				 * Replace all placeholders.
-				 * It's a regex, so don't remove the escape sequence: \\
-				 */
-				for(int i = 0; i < args.length; i++) {
-					message = message.replaceAll("\\{" + i + "\\}", args[i]); // $NON-NLS-1$
-				}
+		} else if(args != null && args.length > 0) {
+			/*
+			 * Replace all placeholders.
+			 * It's a regex, so don't remove the escape sequence: \\
+			 */
+			for(int i = 0; i < args.length; i++) {
+				message = message.replaceAll("\\{" + i + "\\}", args[i]); // $NON-NLS-1$
 			}
 		}
 		return message;
@@ -104,7 +103,7 @@ public class Messages {
 			}
 		}
 		//
-		messageMap = new HashMap<String, String>();
+		messageMap = new HashMap<>();
 		/*
 		 * Parse the language files.
 		 * They are parsed in this order to fill the gap of missing translations.
@@ -169,8 +168,8 @@ public class Messages {
 	 */
 	private void addMessages(File file, boolean checkKey) {
 
-		try {
-			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file), CHARSET));
+		try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file), CHARSET))) {
+			;
 			/*
 			 * Import each entry.
 			 */
@@ -205,10 +204,6 @@ public class Messages {
 					}
 				}
 			}
-			/*
-			 * Close the readers.
-			 */
-			bufferedReader.close();
 		} catch(IOException e) {
 			logger.warn("reading file {} failed", file, e);
 		}

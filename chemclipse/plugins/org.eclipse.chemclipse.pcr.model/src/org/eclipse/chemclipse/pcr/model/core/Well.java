@@ -69,6 +69,7 @@ public class Well extends AbstractDataModel implements IWell {
 		this.activeChannel = null;
 	}
 
+	@Override
 	public boolean isActiveSubset() {
 
 		if(ALL_SUBSETS_SELECTED.equals(activeSubset)) {
@@ -170,6 +171,7 @@ public class Well extends AbstractDataModel implements IWell {
 		return false;
 	}
 
+	@Override
 	public void applyDetectionFormat(IDetectionFormat detectionFormat) {
 
 		List<Integer> keys = new ArrayList<>(channels.keySet());

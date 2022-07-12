@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.editors;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class CalibrationFileListUtil {
 
 	public String createList(String[] items) {
 
-		List<String> fileList = getFileList(items);
+		List<String> fileList = Arrays.asList(items);
 		String files = "";
 		for(String file : fileList) {
 			files = files.concat(file + SEPARATOR_TOKEN);
@@ -43,28 +44,14 @@ public class CalibrationFileListUtil {
 
 	public List<String> getFiles(String preferenceEntry) {
 
-		List<String> files = new ArrayList<String>();
-		if(preferenceEntry != "") {
+		List<String> files = new ArrayList<>();
+		if(!"".equals(preferenceEntry)) {
 			String[] items = parseString(preferenceEntry);
 			if(items.length > 0) {
-				for(String item : items) {
-					files.add(item);
-				}
+				files = Arrays.asList(items);
 			}
 		}
 		Collections.sort(files);
-		return files;
-	}
-
-	private List<String> getFileList(String[] items) {
-
-		List<String> files = new ArrayList<String>();
-		if(items != null) {
-			int size = items.length;
-			for(int i = 0; i < size; i++) {
-				files.add(items[i]);
-			}
-		}
 		return files;
 	}
 }
