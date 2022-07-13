@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.pcr.converter.plateSupplier">
+      <PlateSupplier
+            description="Exports PCR Plate Data"
+            exportConverter="org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.core.PCRExportConverter"
+            fileExtension=".csv"
+            fileName=""
+            filterName="Tabular Plate Report (*.csv)"
+            id="org.eclipse.chemclipse.pcr.report.supplier.tabular.csv"
+            importConverter="org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.core.PCRImportConverter"
+            importMagicNumberMatcher="org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.core.MagicNumberMatcher"
+            isExportable="true"
+            isImportable="false">
+      </PlateSupplier>
+   </extension>
+</plugin>

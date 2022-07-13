@@ -111,6 +111,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_CHROMATOGRAM_ZERO_SET = PATH_PREFIX + "chromatogramZeroSet.gif";
 	String IMAGE_FOLDER_OPENED = PATH_PREFIX + "folder_opened.gif";
 	String IMAGE_FOLDER_CLOSED = PATH_PREFIX + "folder_closed.gif";
+	String IMAGE_HEADER = PATH_PREFIX + "header.gif";
 	String IMAGE_FILE = PATH_PREFIX + "file.gif";
 	String IMAGE_FOLDER = PATH_PREFIX + "folder.png";
 	String IMAGE_OPEN_FOLDER = PATH_PREFIX + "open-folder.png";

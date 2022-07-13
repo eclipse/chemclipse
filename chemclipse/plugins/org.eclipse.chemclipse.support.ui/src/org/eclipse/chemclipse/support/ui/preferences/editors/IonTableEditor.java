@@ -21,24 +21,24 @@ import org.eclipse.swt.widgets.Composite;
 
 public class IonTableEditor extends TableViewerFieldEditor<String> {
 
-	private TraceSettingUtil settinngUtils;
+	private TraceSettingUtil settingUtils;
 
 	public IonTableEditor(String name, String labelText, Composite parent) {
 
 		super(name, labelText, new String[]{"Ions"}, new int[]{200}, parent);
-		settinngUtils = new TraceSettingUtil();
+		settingUtils = new TraceSettingUtil();
 	}
 
 	@Override
 	protected String createSavePreferences(List<String> values) {
 
-		return settinngUtils.serialize(values);
+		return settingUtils.serialize(values);
 	}
 
 	@Override
 	protected List<String> parseSavePreferences(String string) {
 
-		return settinngUtils.deserialize(string);
+		return settingUtils.deserialize(string);
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class IonTableEditor extends TableViewerFieldEditor<String> {
 		dialog.create();
 		if(Window.OK == dialog.open()) {
 			String ion = dialog.getValue();
-			return settinngUtils.parseInput(ion);
+			return settingUtils.parseInput(ion);
 		}
 		return new ArrayList<>();
 	}
@@ -62,6 +62,6 @@ public class IonTableEditor extends TableViewerFieldEditor<String> {
 	@Override
 	protected int compareValue(String value1, String value2, int columnNumber) {
 
-		return settinngUtils.compare(value1, value2);
+		return settingUtils.compare(value1, value2);
 	}
 }

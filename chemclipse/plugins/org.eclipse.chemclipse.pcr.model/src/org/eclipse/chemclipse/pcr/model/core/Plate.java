@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,7 +28,7 @@ public class Plate extends AbstractMeasurementInfo implements IPlate {
 	private String name = "";
 	private IDetectionFormat detectionFormat = null;
 	private List<IDetectionFormat> detectionFormats = new ArrayList<>();
-	private TreeSet<IWell> wells = new TreeSet<IWell>();
+	private TreeSet<IWell> wells = new TreeSet<>();
 	private int activeChannel;
 
 	@Override
@@ -74,7 +74,7 @@ public class Plate extends AbstractMeasurementInfo implements IPlate {
 		//
 		List<String> sampleSubsets = new ArrayList<>(subsets);
 		Collections.sort(sampleSubsets);
-		if(sampleSubsets.size() == 0 || !sampleSubsets.get(0).equals(ALL_SUBSETS)) {
+		if(sampleSubsets.isEmpty() || !sampleSubsets.get(0).equals(ALL_SUBSETS)) {
 			sampleSubsets.set(0, ALL_SUBSETS); // All subsets
 		}
 		//
@@ -139,5 +139,15 @@ public class Plate extends AbstractMeasurementInfo implements IPlate {
 	public String getName() {
 
 		return name;
+	}
+
+	@Override
+	public IPlate makeDeepCopy() {
+
+		IPlate plate = new Plate();
+		for(IWell well : getWells()) {
+			plate.getWells().add(well.makeDeepCopy());
+		}
+		return plate;
 	}
 }

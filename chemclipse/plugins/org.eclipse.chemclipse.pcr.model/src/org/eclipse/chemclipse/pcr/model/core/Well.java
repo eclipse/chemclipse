@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 
@@ -69,6 +70,7 @@ public class Well extends AbstractDataModel implements IWell {
 		this.activeChannel = null;
 	}
 
+	@Override
 	public boolean isActiveSubset() {
 
 		if(ALL_SUBSETS_SELECTED.equals(activeSubset)) {
@@ -170,6 +172,7 @@ public class Well extends AbstractDataModel implements IWell {
 		return false;
 	}
 
+	@Override
 	public void applyDetectionFormat(IDetectionFormat detectionFormat) {
 
 		List<Integer> keys = new ArrayList<>(channels.keySet());
@@ -196,5 +199,22 @@ public class Well extends AbstractDataModel implements IWell {
 	private boolean isChannelPositive(IChannel channel) {
 
 		return (channel != null && channel.getCrossingPoint() > 0.0d);
+	}
+
+	@Override
+	public IWell makeDeepCopy() {
+
+		IWell well = new Well();
+		well.getPosition().setId(position.getId());
+		well.getPosition().setColumn(position.getColumn());
+		well.getPosition().setRow(position.getRow());
+		for(Entry<Integer, IChannel> set : channels.entrySet()) {
+			well.getChannels().put(set.getKey(), set.getValue().makeDeepCopy());
+		}
+		well.setData(SAMPLE_ID, getSampleId());
+		well.setData(TARGET_NAME, getTargetName());
+		well.setData(CROSSING_POINT, String.valueOf(getCrossingPoint()));
+		well.setData(SAMPLE_SUBSET, getSampleSubset());
+		return well;
 	}
 }

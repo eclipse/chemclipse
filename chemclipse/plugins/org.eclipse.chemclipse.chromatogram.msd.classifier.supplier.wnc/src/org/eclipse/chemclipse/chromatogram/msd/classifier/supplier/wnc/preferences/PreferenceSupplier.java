@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -62,7 +62,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	@Override
 	public Map<String, String> getDefaultValues() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
+		Map<String, String> defaultValues = new HashMap<>();
 		defaultValues.put(P_WNC_IONS, DEF_WNC_IONS);
 		return defaultValues;
 	}
@@ -94,12 +94,12 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		 */
 		IWncIons ions = new WncIons();
 		String preferenceEntry = preferences.get(P_WNC_IONS, DEF_WNC_IONS);
-		if(preferenceEntry != "") {
+		if(!"".equals(preferenceEntry)) {
 			String[] items = parseString(preferenceEntry);
 			if(items.length > 0) {
 				String name;
 				Integer ion;
-				String values[];
+				String[] values;
 				for(String item : items) {
 					try {
 						values = item.split(VALUE_DELIMITER);
@@ -152,7 +152,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		String values = "";
 		if(wncIons != null) {
 			StringBuilder builder = new StringBuilder();
-			List<Integer> keys = new ArrayList<Integer>(wncIons.getKeys());
+			List<Integer> keys = new ArrayList<>(wncIons.getKeys());
 			int size = keys.size();
 			if(size >= 1) {
 				for(int index = 0; index < size; index++) {

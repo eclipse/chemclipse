@@ -49,4 +49,6 @@ public interface IPlate extends IMeasurementInfo {
 	void setName(String name);
 
 	String getName();
+
+	IPlate makeDeepCopy();
 }
