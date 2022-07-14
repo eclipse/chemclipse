@@ -12,18 +12,19 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.model.filter.peaks;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.function.BiPredicate;
 
 import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.filter.IPeakFilter;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.Processor;
-import org.eclipse.chemclipse.processing.core.MessageConsumer;
-import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.xxd.model.settings.peaks.AreaPercentFilterSettings;
-import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.chemclipse.xxd.model.support.TreatmentOption;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
@@ -79,42 +80,39 @@ public class AreaPercentFilter extends AbstractPeakFilter<AreaPercentFilterSetti
 	}
 
 	@Override
-	public boolean acceptsIPeaks(Collection<? extends IPeak> items) {
+	public void filterPeaks(IChromatogramSelection<?, ?> chromatogramSelection, AreaPercentFilterSettings configuration, ProcessExecutionContext context) throws IllegalArgumentException {
 
-		return true;
-	}
-
-	@Override
-	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, AreaPercentFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
-
-		Collection<X> peaks = listener.read();
+		Collection<IPeak> peaks = getReadOnlyPeaks(chromatogramSelection);
 		//
 		if(configuration == null) {
 			configuration = createConfiguration(peaks);
 		}
 		//
-		SubMonitor subMonitor = SubMonitor.convert(monitor, peaks.size());
+		SubMonitor subMonitor = SubMonitor.convert(context.getProgressMonitor(), peaks.size());
 		double areaSum = calculateAreaSum(peaks);
 		AreaPredicate<?> predicate = getPredicate(configuration);
-		for(X peak : peaks) {
+		TreatmentOption treatmentOption = configuration.getTreatmentOption();
+		List<IPeak> peaksToDelete = new ArrayList<>();
+		for(IPeak peak : peaks) {
 			double compareAreaValue = calculatePercentageAreaCompareValue(peak, areaSum);
-			processPeak(listener, configuration, peak, compareAreaValue, predicate);
+			processPeak(treatmentOption, peak, compareAreaValue, predicate, peaksToDelete);
 			subMonitor.worked(1);
 		}
 		//
-		resetPeakSelection(listener.getDataContainer());
+		deletePeaks(peaksToDelete, chromatogramSelection);
+		resetPeakSelection(chromatogramSelection);
 	}
 
-	private static <X extends IPeak> double calculateAreaSum(Collection<X> peaks) {
+	private static double calculateAreaSum(Collection<IPeak> peaks) {
 
 		double areaSum = 0;
-		for(X peak : peaks) {
+		for(IPeak peak : peaks) {
 			areaSum = areaSum + peak.getIntegratedArea();
 		}
 		return areaSum;
 	}
 
-	private static <X extends IPeak> double calculatePercentageAreaCompareValue(X peak, double areaSum) {
+	private static double calculatePercentageAreaCompareValue(IPeak peak, double areaSum) {
 
 		if(areaSum != 0) {
 			return (100 / areaSum) * peak.getIntegratedArea();
@@ -137,29 +135,27 @@ public class AreaPercentFilter extends AbstractPeakFilter<AreaPercentFilterSetti
 		}
 	}
 
-	private static <X extends IPeak> void processPeak(CRUDListener<X, IPeakModel> listener, AreaPercentFilterSettings configuration, X peak, double compareAreaValue, AreaPredicate<?> predicate) {
+	private static void processPeak(TreatmentOption treatmentOption, IPeak peak, double compareAreaValue, AreaPredicate<?> predicate, List<IPeak> peaksToDelete) {
 
-		switch(configuration.getTreatmentOption()) {
+		switch(treatmentOption) {
 			case ACTIVATE_PEAK:
 				if(predicate.test(compareAreaValue)) {
 					peak.setActiveForAnalysis(true);
-					listener.updated(peak);
 				}
 				break;
 			case DEACTIVATE_PEAK:
 				if(predicate.test(compareAreaValue)) {
 					peak.setActiveForAnalysis(false);
-					listener.updated(peak);
 				}
 				break;
 			case KEEP_PEAK:
 				if(predicate.negate().test(compareAreaValue)) {
-					listener.delete(peak);
+					peaksToDelete.add(peak);
 				}
 				break;
 			case DELETE_PEAK:
 				if(predicate.test(compareAreaValue)) {
-					listener.delete(peak);
+					peaksToDelete.add(peak);
 				}
 				break;
 			default:

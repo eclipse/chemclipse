@@ -12,18 +12,18 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.model.filter.peaks;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.filter.IPeakFilter;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.Processor;
-import org.eclipse.chemclipse.processing.core.MessageConsumer;
-import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.xxd.model.settings.peaks.DeletePeaksByQuantitationFilterSettings;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
@@ -43,31 +43,26 @@ public class DeletePeaksByQuantitationFilter extends AbstractPeakFilter<DeletePe
 	}
 
 	@Override
-	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, DeletePeaksByQuantitationFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
+	public void filterPeaks(IChromatogramSelection<?, ?> chromatogramSelection, DeletePeaksByQuantitationFilterSettings configuration, ProcessExecutionContext context) throws IllegalArgumentException {
 
-		Collection<X> peaks = listener.read();
+		Collection<IPeak> peaks = getReadOnlyPeaks(chromatogramSelection);
 		//
 		if(configuration == null) {
 			configuration = createConfiguration(peaks);
 		}
 		//
 		if(isConfigurationValid(configuration)) {
-			SubMonitor subMonitor = SubMonitor.convert(monitor, peaks.size());
-			for(X peak : peaks) {
+			List<IPeak> peaksToDelete = new ArrayList<>();
+			SubMonitor subMonitor = SubMonitor.convert(context.getProgressMonitor(), peaks.size());
+			for(IPeak peak : peaks) {
 				if(isDeletePeak(peak, configuration)) {
-					listener.delete(peak);
+					peaksToDelete.add(peak);
 				}
 				subMonitor.worked(1);
 			}
+			deletePeaks(peaksToDelete, chromatogramSelection);
+			resetPeakSelection(chromatogramSelection);
 		}
-		//
-		resetPeakSelection(listener.getDataContainer());
-	}
-
-	@Override
-	public boolean acceptsIPeaks(Collection<? extends IPeak> items) {
-
-		return true;
 	}
 
 	public static boolean isDeletePeak(IPeak peak, DeletePeaksByQuantitationFilterSettings configuration) {
