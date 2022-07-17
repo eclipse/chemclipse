@@ -11,7 +11,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.databinding,
  org.eclipse.chemclipse.model,
  org.eclipse.chemclipse.processing,
- org.eclipse.chemclipse.logging
+ org.eclipse.chemclipse.logging,
+ org.eclipse.chemclipse.xxd.model
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Import-Package: com.fasterxml.jackson.annotation;version="2.12.1",

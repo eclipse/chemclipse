@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,17 +14,11 @@ package org.eclipse.chemclipse.model.supplier;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.filter.IPeakFilter;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.ProcessorFactory;
-import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.supplier.AbstractProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
@@ -33,7 +27,7 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 
 @Component(service = {IProcessTypeSupplier.class})
-public class IPeakFilterProcessTypeSupplier implements IProcessTypeSupplier {
+public class PeakFilterProcessTypeSupplier implements IProcessTypeSupplier {
 
 	private ProcessorFactory processorFactory;
 
@@ -82,33 +76,9 @@ public class IPeakFilterProcessTypeSupplier implements IProcessTypeSupplier {
 			return chromatogramSelection;
 		}
 
-		private <P extends IPeak, C extends IChromatogram<P>> void doFilter(IChromatogramSelection<P, C> chromatogramSelection, ConfigType processSettings, ProcessExecutionContext context) {
+		private void doFilter(IChromatogramSelection<?, ?> chromatogramSelection, ConfigType processSettings, ProcessExecutionContext context) {
 
-			C chromatogram = chromatogramSelection.getChromatogram();
-			List<P> peaks = new CopyOnWriteArrayList<P>(chromatogram.getPeaks(chromatogramSelection));
-			if(filter.acceptsIPeaks(peaks)) {
-				filter.filterIPeaks(new CRUDListener<P, IPeakModel>() {
-
-					@Override
-					public boolean delete(P item) {
-
-						chromatogram.removePeak(item);
-						return peaks.remove(item);
-					}
-
-					@Override
-					public Collection<P> read() {
-
-						return Collections.unmodifiableCollection(peaks);
-					}
-
-					@Override
-					public Object getDataContainer() {
-
-						return chromatogramSelection;
-					}
-				}, processSettings, context, context.getProgressMonitor());
-			}
+			filter.filterPeaks(chromatogramSelection, processSettings, context);
 		}
 	}
 }

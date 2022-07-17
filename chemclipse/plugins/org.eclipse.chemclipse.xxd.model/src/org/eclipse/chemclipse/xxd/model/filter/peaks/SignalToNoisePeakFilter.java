@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,18 +13,18 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.model.filter.peaks;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IChromatogramPeak;
 import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.filter.IPeakFilter;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.Processor;
-import org.eclipse.chemclipse.processing.core.MessageConsumer;
-import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.xxd.model.settings.peaks.SignalToNoisePeakFilterSettings;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = {IPeakFilter.class, Filter.class, Processor.class})
@@ -43,9 +43,9 @@ public class SignalToNoisePeakFilter extends AbstractPeakFilter<SignalToNoisePea
 	}
 
 	@Override
-	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, SignalToNoisePeakFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
+	public void filterPeaks(IChromatogramSelection<?, ?> chromatogramSelection, SignalToNoisePeakFilterSettings configuration, ProcessExecutionContext context) throws IllegalArgumentException {
 
-		Collection<X> peaks = listener.read();
+		Collection<IPeak> peaks = getReadOnlyPeaks(chromatogramSelection);
 		//
 		if(configuration == null) {
 			configuration = new SignalToNoisePeakFilterSettings();
@@ -53,28 +53,19 @@ public class SignalToNoisePeakFilter extends AbstractPeakFilter<SignalToNoisePea
 		//
 		float maxSignalToNoise = configuration.getMaxSignalToNoise();
 		float minSignalToNoise = configuration.getMinSignalToNoise();
-		for(X peak : peaks) {
+		List<IPeak> peaksToDelete = new ArrayList<>();
+		for(IPeak peak : peaks) {
 			if(peak instanceof IChromatogramPeak) {
 				float sn = ((IChromatogramPeak)peak).getSignalToNoiseRatio();
 				if(Float.isFinite(sn)) {
 					if((Float.isFinite(maxSignalToNoise) && maxSignalToNoise > 0 && sn > maxSignalToNoise) || (Float.isFinite(minSignalToNoise) && minSignalToNoise > 0 && sn < minSignalToNoise)) {
-						listener.delete(peak);
+						peaksToDelete.add(peak);
 					}
 				}
 			}
 		}
 		//
-		resetPeakSelection(listener.getDataContainer());
-	}
-
-	@Override
-	public boolean acceptsIPeaks(Collection<? extends IPeak> items) {
-
-		for(IPeak peak : items) {
-			if(!(peak instanceof IChromatogramPeak)) {
-				return false;
-			}
-		}
-		return true;
+		deletePeaks(peaksToDelete, chromatogramSelection);
+		resetPeakSelection(chromatogramSelection);
 	}
 }

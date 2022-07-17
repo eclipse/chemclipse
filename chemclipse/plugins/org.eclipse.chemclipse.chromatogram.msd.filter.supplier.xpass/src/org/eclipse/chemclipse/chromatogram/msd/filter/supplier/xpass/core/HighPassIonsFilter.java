@@ -15,20 +15,19 @@ import java.util.Collection;
 
 import org.eclipse.chemclipse.chromatogram.msd.filter.supplier.xpass.settings.HighPassFilterSettings;
 import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.filter.IPeakFilter;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.processing.Processor;
-import org.eclipse.chemclipse.processing.core.MessageConsumer;
-import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
-import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
+import org.eclipse.chemclipse.xxd.model.filter.peaks.AbstractPeakFilter;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = {IPeakFilter.class, Filter.class, Processor.class})
-public class HighPassPeakFilter implements IPeakFilter<HighPassFilterSettings> {
+public class HighPassIonsFilter extends AbstractPeakFilter<HighPassFilterSettings> {
 
 	@Override
 	public String getName() {
@@ -43,17 +42,18 @@ public class HighPassPeakFilter implements IPeakFilter<HighPassFilterSettings> {
 	}
 
 	@Override
-	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, HighPassFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
+	public void filterPeaks(IChromatogramSelection<?, ?> chromatogramSelection, HighPassFilterSettings configuration, ProcessExecutionContext context) throws IllegalArgumentException {
 
-		Collection<X> read = listener.read();
+		Collection<IPeak> peaks = getReadOnlyPeaks(chromatogramSelection);
+		//
 		if(configuration == null) {
-			configuration = createConfiguration(read);
+			configuration = createConfiguration(peaks);
 		}
 		//
 		int number = configuration.getNumberHighest();
 		//
-		SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
-		for(X peak : read) {
+		SubMonitor subMonitor = SubMonitor.convert(context.getProgressMonitor(), peaks.size());
+		for(IPeak peak : peaks) {
 			if(peak instanceof IPeakMSD) {
 				IPeakMSD peakMSD = (IPeakMSD)peak;
 				IPeakModelMSD peakModelMSD = peakMSD.getPeakModel();
@@ -61,16 +61,5 @@ public class HighPassPeakFilter implements IPeakFilter<HighPassFilterSettings> {
 				subMonitor.worked(1);
 			}
 		}
-	}
-
-	@Override
-	public boolean acceptsIPeaks(Collection<? extends IPeak> items) {
-
-		for(IPeak peak : items) {
-			if(!(peak instanceof IPeakMSD)) {
-				return false;
-			}
-		}
-		return true;
 	}
 }

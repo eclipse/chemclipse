@@ -14,19 +14,17 @@ package org.eclipse.chemclipse.xxd.model.filter.peaks;
 import java.util.Collection;
 
 import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.filter.IPeakFilter;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.Processor;
-import org.eclipse.chemclipse.processing.core.MessageConsumer;
-import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.xxd.model.settings.peaks.DeleteQuantitationsFilterSettings;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = {IPeakFilter.class, Filter.class, Processor.class})
-public class DeleteQuantitationsFilter implements IPeakFilter<DeleteQuantitationsFilterSettings> {
+public class DeleteQuantitationsFilter extends AbstractPeakFilter<DeleteQuantitationsFilterSettings> {
 
 	@Override
 	public String getName() {
@@ -47,26 +45,20 @@ public class DeleteQuantitationsFilter implements IPeakFilter<DeleteQuantitation
 	}
 
 	@Override
-	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, DeleteQuantitationsFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
+	public void filterPeaks(IChromatogramSelection<?, ?> chromatogramSelection, DeleteQuantitationsFilterSettings configuration, ProcessExecutionContext context) throws IllegalArgumentException {
 
-		Collection<X> peaks = listener.read();
+		Collection<IPeak> peaks = getReadOnlyPeaks(chromatogramSelection);
 		//
 		if(configuration == null) {
 			configuration = createConfiguration(peaks);
 		}
 		//
 		if(configuration.isDeleteQuantitations()) {
-			SubMonitor subMonitor = SubMonitor.convert(monitor, peaks.size());
-			for(X peak : peaks) {
+			SubMonitor subMonitor = SubMonitor.convert(context.getProgressMonitor(), peaks.size());
+			for(IPeak peak : peaks) {
 				peak.removeAllQuantitationEntries();
 				subMonitor.worked(1);
 			}
 		}
-	}
-
-	@Override
-	public boolean acceptsIPeaks(Collection<? extends IPeak> items) {
-
-		return true;
 	}
 }

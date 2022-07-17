@@ -17,25 +17,21 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.model.core.IPeakModel;
-import org.eclipse.chemclipse.processing.core.MessageConsumer;
-import org.eclipse.chemclipse.processing.filter.CRUDListener;
-import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.core.runtime.SubMonitor;
 
 public class XPassPeaksFilter {
 
-	public static <X extends IPeak> void filterPeaks(CRUDListener<X, IPeakModel> listener, MessageConsumer messageConsumer, int keepPeaks, boolean highPass, IProgressMonitor monitor) throws IllegalArgumentException {
+	public static List<IPeak> filterPeaks(Collection<IPeak> filterItems, ProcessExecutionContext context, int keepPeaks, boolean highPass) {
 
 		String description = (highPass ? "High " : "Low ") + " Pass Peaks";
 		/*
 		 * Extract the peaks and check the area.
 		 */
 		boolean peaksAreIntegrated = true;
-		List<X> peaks = new ArrayList<>();
+		List<IPeak> peaks = new ArrayList<>();
 		//
-		Collection<X> read = listener.read();
-		for(X peak : read) {
+		for(IPeak peak : filterItems) {
 			peaks.add(peak);
 			if(peak.getIntegratedArea() == 0.0d) {
 				peaksAreIntegrated = false;
@@ -45,14 +41,14 @@ public class XPassPeaksFilter {
 		 * Sort the peaks
 		 */
 		if(peaksAreIntegrated) {
-			messageConsumer.addInfoMessage(description, "The peak area is used to filter the peaks.");
+			context.addInfoMessage(description, "The peak area is used to filter the peaks.");
 			if(highPass) {
 				Collections.sort(peaks, (p1, p2) -> Double.compare(p2.getIntegratedArea(), p1.getIntegratedArea()));
 			} else {
 				Collections.sort(peaks, (p1, p2) -> Double.compare(p1.getIntegratedArea(), p2.getIntegratedArea()));
 			}
 		} else {
-			messageConsumer.addWarnMessage(description, "At least one peak is not integrated. Switch to peak height at maximum.");
+			context.addWarnMessage(description, "At least one peak is not integrated. Switch to peak height at maximum.");
 			if(highPass) {
 				Collections.sort(peaks, (p1, p2) -> Double.compare(p2.getPeakModel().getPeakMaximum().getTotalSignal(), p1.getPeakModel().getPeakMaximum().getTotalSignal()));
 			} else {
@@ -60,15 +56,17 @@ public class XPassPeaksFilter {
 			}
 		}
 		/*
-		 * Delete the peaks.
+		 * Peaks for deletion.
 		 */
-		SubMonitor subMonitor = SubMonitor.convert(monitor, read.size());
+		List<IPeak> peaksToDelete = new ArrayList<>();
+		SubMonitor subMonitor = SubMonitor.convert(context.getProgressMonitor(), peaks.size());
 		for(int i = 0; i < peaks.size(); i++) {
 			if(i >= keepPeaks) {
-				X peak = peaks.get(i);
-				listener.delete(peak);
+				IPeak peak = peaks.get(i);
+				peaksToDelete.add(peak);
 			}
 			subMonitor.worked(1);
 		}
+		return peaksToDelete;
 	}
 }

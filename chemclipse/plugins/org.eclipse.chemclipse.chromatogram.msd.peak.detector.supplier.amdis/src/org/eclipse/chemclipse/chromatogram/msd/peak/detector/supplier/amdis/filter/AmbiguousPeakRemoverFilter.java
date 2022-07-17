@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,25 +22,25 @@ import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.IMassSpec
 import org.eclipse.chemclipse.chromatogram.msd.comparison.massspectrum.MassSpectrumComparator;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.filter.AmbiguousPeakRemoverFilterSettings.SelectionMethod;
 import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.filter.IPeakFilter;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.MatchConstraints;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.Processor;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.MessageConsumer;
-import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
+import org.eclipse.chemclipse.xxd.model.filter.peaks.AbstractPeakFilter;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
 @Component(service = {IPeakFilter.class, Filter.class, Processor.class})
-public class AmbiguousPeakRemoverFilter implements IPeakFilter<AmbiguousPeakRemoverFilterSettings> {
+public class AmbiguousPeakRemoverFilter extends AbstractPeakFilter<AmbiguousPeakRemoverFilterSettings> {
 
 	private static final String NAME = "Ambiguous Peak Remover";
 
@@ -63,25 +63,25 @@ public class AmbiguousPeakRemoverFilter implements IPeakFilter<AmbiguousPeakRemo
 	}
 
 	@Override
-	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, AmbiguousPeakRemoverFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
+	public void filterPeaks(IChromatogramSelection<?, ?> chromatogramSelection, AmbiguousPeakRemoverFilterSettings configuration, ProcessExecutionContext context) throws IllegalArgumentException {
 
-		List<X> peaks = new ArrayList<>(listener.read());
+		List<IPeak> peaks = new ArrayList<>(getReadOnlyPeaks(chromatogramSelection));
 		if(configuration == null) {
 			configuration = createNewConfiguration();
 		}
-		Comparator<X> compareFunction;
+		Comparator<IPeak> compareFunction;
 		if(configuration.getMethod() == SelectionMethod.AREA) {
 			compareFunction = new AreaComparator<>();
-			for(X peak : peaks) {
+			for(IPeak peak : peaks) {
 				if(!(peak instanceof IPeakMSD)) {
 					throw new IllegalArgumentException("invalid peak type");
 				}
 			}
 		} else {
 			compareFunction = new SNRComparator<>();
-			for(X peak : peaks) {
+			for(IPeak peak : peaks) {
 				if(!(peak instanceof IChromatogramPeakMSD)) {
-					messageConsumer.addWarnMessage(getName(), "SNR compare method is only avaiable for Chromatogram Peaks, skip processing");
+					context.addWarnMessage(getName(), "SNR compare method is only avaiable for Chromatogram Peaks, skip processing");
 					return;
 				}
 				if(!(peak instanceof IPeakMSD)) {
@@ -89,48 +89,36 @@ public class AmbiguousPeakRemoverFilter implements IPeakFilter<AmbiguousPeakRemo
 				}
 			}
 		}
-		filterDuplicatePeaks(peaks, configuration, listener, compareFunction, monitor);
+		filterDuplicatePeaks(chromatogramSelection, peaks, configuration, compareFunction, context.getProgressMonitor());
 	}
 
 	@Override
-	public boolean acceptsIPeaks(Collection<? extends IPeak> items) {
-
-		for(IPeak peak : items) {
-			IPeakMSD peakMSD = Adapters.adapt(peak, IPeakMSD.class);
-			if(peakMSD == null) {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	@Override
-	public AmbiguousPeakRemoverFilterSettings createConfiguration(Collection<? extends IPeak> items) throws IllegalArgumentException {
+	public AmbiguousPeakRemoverFilterSettings createConfiguration(Collection<IPeak> items) throws IllegalArgumentException {
 
 		for(IPeak peak : items) {
 			if(peak instanceof IChromatogramPeakMSD) {
 				return new AmbiguousPeakRemoverFilterSettings(((IChromatogramPeakMSD)peak).getChromatogram());
 			}
 		}
-		return IPeakFilter.super.createConfiguration(items);
+		return super.createConfiguration(items);
 	}
 
-	private static <X extends IPeak> void filterDuplicatePeaks(List<X> peaks, AmbiguousPeakRemoverFilterSettings settings, CRUDListener<? super X, ?> listener, Comparator<X> compareFunction, IProgressMonitor monitor) {
+	private void filterDuplicatePeaks(IChromatogramSelection<?, ?> chromatogramSelection, List<IPeak> peaks, AmbiguousPeakRemoverFilterSettings settings, Comparator<IPeak> compareFunction, IProgressMonitor monitor) {
 
 		SubMonitor subMonitor = SubMonitor.convert(monitor, NAME, peaks.size());
 		// We first order all peaks by retention time
-		Collections.sort(peaks, new Comparator<X>() {
+		Collections.sort(peaks, new Comparator<IPeak>() {
 
 			@Override
-			public int compare(X p1, X p2) {
+			public int compare(IPeak p1, IPeak p2) {
 
 				return getRTDelta(Adapters.adapt(p1, IPeakMSD.class), Adapters.adapt(p2, IPeakMSD.class));
 			}
 		});
-		X lastPeak = null;
-		List<X> candidatePeakSet = new ArrayList<>();
+		IPeak lastPeak = null;
+		List<IPeak> candidatePeakSet = new ArrayList<>();
 		IMassSpectrumComparator comparator = MassSpectrumComparator.getMassSpectrumComparator(settings.getComparatorID());
-		for(X peak : peaks) {
+		for(IPeak peak : peaks) {
 			if(lastPeak != null) {
 				double deltaSeconds = getRTDelta(peak, lastPeak) / 1000d;
 				double deltaMinutes = deltaSeconds / 60d;
@@ -141,7 +129,7 @@ public class AmbiguousPeakRemoverFilter implements IPeakFilter<AmbiguousPeakRemo
 				} else {
 					// extract peaks from the candidatesSet...
 					// and delete extracted ones...
-					deletePeaks(extractPeaks(candidatePeakSet, comparator, settings.getMinmatchfactor()), listener, compareFunction);
+					deletePeaks(extractPeaks(candidatePeakSet, comparator, settings.getMinmatchfactor()), chromatogramSelection, compareFunction);
 					lastPeak = null;
 				}
 			}
@@ -155,11 +143,11 @@ public class AmbiguousPeakRemoverFilter implements IPeakFilter<AmbiguousPeakRemo
 		if(!candidatePeakSet.isEmpty()) {
 			// extract peaks from the candidatesSet...
 			// and delete extracted ones...
-			deletePeaks(extractPeaks(candidatePeakSet, comparator, settings.getMinmatchfactor()), listener, compareFunction);
+			deletePeaks(extractPeaks(candidatePeakSet, comparator, settings.getMinmatchfactor()), chromatogramSelection, compareFunction);
 		}
 	}
 
-	private static <T extends IPeak> List<PeakGroup<T>> extractPeaks(List<T> candidatePeakSet, IMassSpectrumComparator comparator, double minMatchFactor) {
+	private static List<PeakGroup<IPeak>> extractPeaks(List<IPeak> candidatePeakSet, IMassSpectrumComparator comparator, double minMatchFactor) {
 
 		MatchConstraints matchConstraints = new MatchConstraints();
 		//
@@ -169,22 +157,22 @@ public class AmbiguousPeakRemoverFilter implements IPeakFilter<AmbiguousPeakRemo
 			return Collections.emptyList();
 		}
 		// compare each other and form a group
-		List<PeakGroup<T>> peakGroups = new ArrayList<>();
+		List<PeakGroup<IPeak>> peakGroups = new ArrayList<>();
 		for(int i = 0; i < size; i++) {
-			T candidate = candidatePeakSet.get(i);
+			IPeak candidate = candidatePeakSet.get(i);
 			for(int j = 0; j < size; j++) {
 				if(j == i) {
 					// no need to compare with itself
 					continue;
 				}
-				T comparison = candidatePeakSet.get(j);
+				IPeak comparison = candidatePeakSet.get(j);
 				IProcessingInfo<IComparisonResult> info = comparator.compare(Adapters.adapt(comparison, IPeakMSD.class).getExtractedMassSpectrum(), Adapters.adapt(candidate, IPeakMSD.class).getExtractedMassSpectrum(), matchConstraints);
 				if(info != null) {
 					IComparisonResult result = info.getProcessingResult();
 					if(result != null) {
 						float matchFactor = result.getMatchFactor();
 						if(matchFactor / 100.0d > minMatchFactor) {
-							PeakGroup<T> group = new PeakGroup<>();
+							PeakGroup<IPeak> group = new PeakGroup<>();
 							group.addPeak(candidate, i);
 							group.addPeak(comparison, j);
 							peakGroups.add(group);
@@ -196,19 +184,19 @@ public class AmbiguousPeakRemoverFilter implements IPeakFilter<AmbiguousPeakRemo
 		int groups = peakGroups.size();
 		// now join groups that intersect each other
 		for(int i = 0; i < groups; i++) {
-			PeakGroup<T> current = peakGroups.get(i);
+			PeakGroup<IPeak> current = peakGroups.get(i);
 			for(int j = 0; j < groups; j++) {
 				if(i == j) {
 					continue;
 				}
-				PeakGroup<T> other = peakGroups.get(j);
+				PeakGroup<IPeak> other = peakGroups.get(j);
 				if(current.intersects(other)) {
 					current.merge(other);
 				}
 			}
 		}
-		for(Iterator<PeakGroup<T>> iterator = peakGroups.iterator(); iterator.hasNext();) {
-			PeakGroup<T> peakGroup = iterator.next();
+		for(Iterator<PeakGroup<IPeak>> iterator = peakGroups.iterator(); iterator.hasNext();) {
+			PeakGroup<IPeak> peakGroup = iterator.next();
 			if(peakGroup.isEmpty()) {
 				iterator.remove();
 			}
@@ -216,20 +204,22 @@ public class AmbiguousPeakRemoverFilter implements IPeakFilter<AmbiguousPeakRemo
 		return peakGroups;
 	}
 
-	private static <T extends IPeak> void deletePeaks(List<PeakGroup<T>> list, CRUDListener<? super T, ?> listener, Comparator<T> compareFunction) {
+	private void deletePeaks(List<PeakGroup<IPeak>> list, IChromatogramSelection<?, ?> chromatogramSelection, Comparator<IPeak> compareFunction) {
 
-		for(PeakGroup<T> peakGroup : list) {
-			T maxPeak = peakGroup.getMaxPeak(compareFunction);
+		List<IPeak> peaksToDelete = new ArrayList<>();
+		for(PeakGroup<IPeak> peakGroup : list) {
+			IPeak maxPeak = peakGroup.getMaxPeak(compareFunction);
 			if(maxPeak != null) {
-				Collection<T> values = peakGroup.values();
-				for(T peak : values) {
+				for(IPeak peak : peakGroup.values()) {
 					if(peak == maxPeak) {
 						continue;
 					}
-					listener.delete(peak);
+					peaksToDelete.add(peak);
 				}
 			}
 		}
+		deletePeaks(peaksToDelete, chromatogramSelection);
+		resetPeakSelection(chromatogramSelection);
 	}
 
 	private static int getRTDelta(IPeak p1, IPeak p2) {

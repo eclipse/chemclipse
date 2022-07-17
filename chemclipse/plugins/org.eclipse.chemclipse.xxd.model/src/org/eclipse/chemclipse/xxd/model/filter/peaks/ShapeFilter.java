@@ -12,18 +12,19 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.model.filter.peaks;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.function.BiPredicate;
 
 import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.filter.IPeakFilter;
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.Processor;
-import org.eclipse.chemclipse.processing.core.MessageConsumer;
-import org.eclipse.chemclipse.processing.filter.CRUDListener;
 import org.eclipse.chemclipse.processing.filter.Filter;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.xxd.model.settings.peaks.ShapeFilterSettings;
-import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.chemclipse.xxd.model.support.TreatmentOption;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 
@@ -95,27 +96,24 @@ public class ShapeFilter extends AbstractPeakFilter<ShapeFilterSettings> {
 	}
 
 	@Override
-	public boolean acceptsIPeaks(Collection<? extends IPeak> items) {
+	public void filterPeaks(IChromatogramSelection<?, ?> chromatogramSelection, ShapeFilterSettings configuration, ProcessExecutionContext context) throws IllegalArgumentException {
 
-		return true;
-	}
-
-	@Override
-	public <X extends IPeak> void filterIPeaks(CRUDListener<X, IPeakModel> listener, ShapeFilterSettings configuration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
-
-		Collection<X> peaks = listener.read();
+		Collection<IPeak> peaks = getReadOnlyPeaks(chromatogramSelection);
 		//
 		if(configuration == null) {
 			configuration = createConfiguration(peaks);
 		}
-		SubMonitor subMonitor = SubMonitor.convert(monitor, peaks.size());
+		SubMonitor subMonitor = SubMonitor.convert(context.getProgressMonitor(), peaks.size());
+		TreatmentOption treatmentOption = configuration.getTreatmentOption();
 		ShapePredicate<?> predicate = getPredicate(configuration);
-		for(X peak : peaks) {
-			processPeakSuperRange(configuration, listener, peak, predicate);
+		List<IPeak> peaksToDelete = new ArrayList<>();
+		for(IPeak peak : peaks) {
+			processPeakSuperRange(treatmentOption, peak, predicate, peaksToDelete);
 			subMonitor.worked(1);
 		}
 		//
-		resetPeakSelection(listener.getDataContainer());
+		deletePeaks(peaksToDelete, chromatogramSelection);
+		resetPeakSelection(chromatogramSelection);
 	}
 
 	private static ShapePredicate<?> getPredicate(ShapeFilterSettings configuration) {
@@ -132,30 +130,28 @@ public class ShapeFilter extends AbstractPeakFilter<ShapeFilterSettings> {
 		}
 	}
 
-	private static <X extends IPeak> void processPeakSuperRange(ShapeFilterSettings configuration, CRUDListener<X, IPeakModel> listener, X peak, ShapePredicate<?> predicate) {
+	private static void processPeakSuperRange(TreatmentOption treatmentOption, IPeak peak, ShapePredicate<?> predicate, List<IPeak> peaksToDelete) {
 
 		RangeContainer container = new RangeContainer(peak.getPeakModel().getLeading(), peak.getPeakModel().getTailing());
-		switch(configuration.getTreatmentOption()) {
+		switch(treatmentOption) {
 			case ACTIVATE_PEAK:
 				if(predicate.test(container)) {
 					peak.setActiveForAnalysis(true);
-					listener.updated(peak);
 				}
 				break;
 			case DEACTIVATE_PEAK:
 				if(predicate.test(container)) {
 					peak.setActiveForAnalysis(false);
-					listener.updated(peak);
 				}
 				break;
 			case KEEP_PEAK:
 				if(predicate.negate().test(container)) {
-					listener.delete(peak);
+					peaksToDelete.add(peak);
 				}
 				break;
 			case DELETE_PEAK:
 				if(predicate.test(container)) {
-					listener.delete(peak);
+					peaksToDelete.add(peak);
 				}
 				break;
 			default:
