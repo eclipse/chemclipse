@@ -87,6 +87,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorProcessTypeSupplier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.TargetReferenceLabelMarker;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.handlers.DynamicHandler;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodCancelException;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupportUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.ResumeMethodSupport;
@@ -117,6 +118,8 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ToolbarConfig;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.IChromatogramSelectionWSD;
 import org.eclipse.chemclipse.xxd.process.comparators.CategoryNameComparator;
+import org.eclipse.core.commands.Category;
+import org.eclipse.core.commands.Command;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.action.Action;
@@ -161,6 +164,8 @@ import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 import org.eclipse.swtchart.extensions.menu.IChartMenuEntry;
 import org.eclipse.swtchart.extensions.menu.ResetChartHandler;
 import org.eclipse.swtchart.extensions.preferences.PreferencePage;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.commands.ICommandService;
 
 @SuppressWarnings("rawtypes")
 public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, IExtendedPartUI {
@@ -168,6 +173,8 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	public static final String PREFERENCE_SHOW_TOOLBAR_TEXT = "ChromatogramUI.showToolbarText";
 	//
 	private static final Logger logger = Logger.getLogger(ExtendedChromatogramUI.class);
+	//
+	private ICommandService commandService = PlatformUI.getWorkbench().getService(ICommandService.class);
 	//
 	protected static final String TYPE_GENERIC = "TYPE_GENERIC";
 	protected static final String TYPE_MSD = "TYPE_MSD";
@@ -535,6 +542,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 					IChartMenuEntry cachedEntry = new ProcessorSupplierMenuEntry<>(supplier, processTypeSupport, this::executeSupplier);
 					cachedMenuEntries.add(cachedEntry);
 					chartSettings.addMenuEntry(cachedEntry);
+					addCommand(supplier, cachedEntry);
 				}
 				/*
 				 * Apply the menu items.
@@ -543,6 +551,14 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 				menuCache = chromatogramSelection;
 			}
 		}
+	}
+
+	private void addCommand(IProcessSupplier<?> supplier, IChartMenuEntry cachedEntry) {
+
+		Command newCommand = commandService.getCommand(supplier.getId());
+		Category category = commandService.getCategory(supplier.getCategory());
+		newCommand.define(supplier.getName(), supplier.getDescription(), category);
+		newCommand.setHandler(new DynamicHandler(cachedEntry, chromatogramChart));
 	}
 
 	private <C> void executeSupplier(IProcessSupplier<C> processSupplier, ProcessSupplierContext processSupplierContext) {
