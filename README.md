@@ -18,6 +18,4 @@ Thanks to the open and flexible architecture more are possible and we are open f
 
 [ChemClipse](https://projects.eclipse.org/projects/science.chemclipse) is part of the [Eclipse Science](https://science.eclipse.org/) working group and is the basis for [OpenChrom®](https://github.com/Openchrom/openchrom).
 
-For user- and developer documentation, have a look at our [wiki](https://github.com/eclipse/chemclipse/wiki), if you have questions or need guidelines you can contact contact the project developers via the [project's "dev" list](https://dev.eclipse.org/mailman/listinfo/chemclipse-dev).
-
-
+For user- and developer documentation, have a look at our [wiki](https://github.com/eclipse/chemclipse/wiki), if you have questions or need guidelines you can contact contact the project developers via the [project's "dev" list](https://dev.eclipse.org/mailman/listinfo/chemclipse-dev). See [Jenkins](https://ci.eclipse.org/chemclipse/) for continous integration builds.
