@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,23 +23,23 @@ import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 
-public class ProcessExecutionContext implements ProcessSupplierContext, MessageConsumer {
+public class ProcessExecutionContext implements IProcessSupplierContext, MessageConsumer {
 
 	private static final int WORK_UNIT = 100;
 	//
 	private final SubMonitor subMonitor;
-	private final ProcessSupplierContext context;
+	private final IProcessSupplierContext context;
 	private final MessageConsumer consumer;
 	private ProcessExecutionContext parent;
 	//
 	private final Map<Class<?>, Object> contextMap = new IdentityHashMap<>();
 
-	public ProcessExecutionContext(IProgressMonitor monitor, MessageConsumer rootConsumer, ProcessSupplierContext rootContext) {
+	public ProcessExecutionContext(IProgressMonitor monitor, MessageConsumer rootConsumer, IProcessSupplierContext rootContext) {
 
 		this(monitor, rootConsumer, rootContext, null);
 	}
 
-	private ProcessExecutionContext(IProgressMonitor monitor, MessageConsumer rootConsumer, ProcessSupplierContext rootContext, ProcessExecutionContext parent) {
+	private ProcessExecutionContext(IProgressMonitor monitor, MessageConsumer rootConsumer, IProcessSupplierContext rootContext, ProcessExecutionContext parent) {
 
 		this.consumer = rootConsumer;
 		this.context = rootContext;
@@ -106,7 +106,7 @@ public class ProcessExecutionContext implements ProcessSupplierContext, MessageC
 		return split(context);
 	}
 
-	public ProcessExecutionContext split(ProcessSupplierContext childContext) {
+	public ProcessExecutionContext split(IProcessSupplierContext childContext) {
 
 		return new ProcessExecutionContext(subMonitor.split(WORK_UNIT), consumer, childContext, this);
 	}

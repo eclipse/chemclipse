@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.support.ui.internal.provider.Tuple;
 
 public class ProcessorSupport {
@@ -38,7 +38,7 @@ public class ProcessorSupport {
 	private static final String VALUE_DELIMITER = "§";
 	private static final String PROCESSOR_DELIMITER = "%";
 
-	public static List<Processor> getActiveProcessors(ProcessSupplierContext context, String preference) {
+	public static List<Processor> getActiveProcessors(IProcessSupplierContext context, String preference) {
 
 		List<Processor> activeProcessors = new ArrayList<>();
 		//

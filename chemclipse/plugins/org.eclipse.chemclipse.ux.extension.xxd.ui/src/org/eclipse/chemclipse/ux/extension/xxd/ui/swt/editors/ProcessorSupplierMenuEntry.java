@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,7 +16,7 @@ import java.util.function.BiConsumer;
 
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier.SupplierType;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtchart.extensions.core.ScrollableChart;
 import org.eclipse.swtchart.extensions.menu.AbstractChartMenuEntry;
@@ -25,10 +25,10 @@ import org.eclipse.swtchart.extensions.menu.IChartMenuEntry;
 public class ProcessorSupplierMenuEntry<T> extends AbstractChartMenuEntry implements IChartMenuEntry {
 
 	private final IProcessSupplier<T> processorSupplier;
-	private final BiConsumer<IProcessSupplier<T>, ProcessSupplierContext> executionConsumer;
-	private final ProcessSupplierContext context;
+	private final BiConsumer<IProcessSupplier<T>, IProcessSupplierContext> executionConsumer;
+	private final IProcessSupplierContext context;
 
-	public ProcessorSupplierMenuEntry(IProcessSupplier<T> processorSupplier, ProcessSupplierContext context, BiConsumer<IProcessSupplier<T>, ProcessSupplierContext> executionConsumer) {
+	public ProcessorSupplierMenuEntry(IProcessSupplier<T> processorSupplier, IProcessSupplierContext context, BiConsumer<IProcessSupplier<T>, IProcessSupplierContext> executionConsumer) {
 
 		this.executionConsumer = executionConsumer;
 		this.processorSupplier = processorSupplier;

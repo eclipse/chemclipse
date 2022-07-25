@@ -19,22 +19,22 @@ import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.support.ui.preferences.ProcessorToolbarPreferencePage;
 import org.eclipse.chemclipse.support.ui.swt.EditorToolBar;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 public class ProcessorToolbar {
 
-	private final ProcessSupplierContext context;
-	private final BiConsumer<IProcessSupplier<?>, ProcessSupplierContext> executionListener;
+	private final IProcessSupplierContext context;
+	private final BiConsumer<IProcessSupplier<?>, IProcessSupplierContext> executionListener;
 	private final EditorToolBar editorToolBar;
 	private EditorToolBar toolBar;
 	private final Predicate<IProcessSupplier<?>> isVisible;
 	private List<Processor> processors = new ArrayList<>();
 	private PreferencesSupport preferencesSupport;
 
-	public ProcessorToolbar(EditorToolBar editorToolBar, ProcessSupplierContext context, Predicate<IProcessSupplier<?>> isVisible, BiConsumer<IProcessSupplier<?>, ProcessSupplierContext> executionListener) {
+	public ProcessorToolbar(EditorToolBar editorToolBar, IProcessSupplierContext context, Predicate<IProcessSupplier<?>> isVisible, BiConsumer<IProcessSupplier<?>, IProcessSupplierContext> executionListener) {
 
 		this.editorToolBar = editorToolBar;
 		this.context = context;

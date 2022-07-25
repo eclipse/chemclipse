@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.instruments.Instrument;
 import org.eclipse.chemclipse.model.instruments.Instruments;
-import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
@@ -69,9 +69,9 @@ public class InstrumentsSettingsEditor implements SettingsUIProvider.SettingsUIC
 	private List<Listener> listeners = new ArrayList<>();
 	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private ProcessorPreferences<Instruments> preferences = null;
+	private IProcessorPreferences<Instruments> preferences = null;
 
-	public InstrumentsSettingsEditor(Composite parent, ProcessorPreferences<Instruments> preferences, Instruments instruments) {
+	public InstrumentsSettingsEditor(Composite parent, IProcessorPreferences<Instruments> preferences, Instruments instruments) {
 
 		/*
 		 * Populate the settings on demand.

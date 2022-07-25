@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.ranges.TimeRange;
 import org.eclipse.chemclipse.model.ranges.TimeRanges;
-import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
@@ -63,9 +63,9 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 	private List<Listener> listeners = new ArrayList<>();
 	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private ProcessorPreferences<TimeRanges> preferences = null;
+	private IProcessorPreferences<TimeRanges> preferences = null;
 
-	public TimeRangesSettingsEditor(Composite parent, ProcessorPreferences<TimeRanges> preferences, TimeRanges timeRanges) {
+	public TimeRangesSettingsEditor(Composite parent, IProcessorPreferences<TimeRanges> preferences, TimeRanges timeRanges) {
 
 		/*
 		 * Populate the settings on demand.

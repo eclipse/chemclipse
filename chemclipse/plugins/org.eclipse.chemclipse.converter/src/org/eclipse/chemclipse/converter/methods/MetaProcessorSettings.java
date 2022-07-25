@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
-import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.support.settings.SystemSettings;
 import org.eclipse.chemclipse.support.settings.SystemSettingsStrategy;
 
@@ -52,7 +52,7 @@ public class MetaProcessorSettings {
 		return processMethod;
 	}
 
-	public <T> ProcessorPreferences<T> getProcessorPreferences(IProcessEntry processEntry, ProcessorPreferences<T> processorPreferences) {
+	public <T> IProcessorPreferences<T> getProcessorPreferences(IProcessEntry processEntry, IProcessorPreferences<T> processorPreferences) {
 
 		if(processorPreferences == null) {
 			return null;
@@ -62,7 +62,7 @@ public class MetaProcessorSettings {
 		 * .metadata/.plugins/org.eclipse.core.runtime/.settings/org.eclipse.chemclipse.processing.supplier.IProcessSupplier.prefs
 		 */
 		String processEntryIdentifier = getProcessEntryIdentifier(processEntry);
-		ProcessorPreferences<T> metaProcessorPreferences = new ProcessorPreferences<T>() {
+		IProcessorPreferences<T> metaProcessorPreferences = new IProcessorPreferences<T>() {
 
 			@Override
 			public DialogBehavior getDialogBehaviour() {

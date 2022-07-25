@@ -38,7 +38,7 @@ import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection.ChangeType;
 import org.eclipse.chemclipse.processing.ProcessorFactory;
 import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
 import org.eclipse.chemclipse.processing.filter.Filtered;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.actions.IMeasurementFilterAction;
@@ -73,9 +73,9 @@ public class NMRMeasurementsUI implements PropertyChangeListener {
 	private TreeViewer treeViewer;
 	private DataNMRSelection selection;
 	private ProcessorFactory filterFactory;
-	private ProcessSupplierContext processSupplierContext;
+	private IProcessSupplierContext processSupplierContext;
 
-	public NMRMeasurementsUI(Composite parent, ProcessorFactory filterFactory, ProcessSupplierContext processSupplierContext) {
+	public NMRMeasurementsUI(Composite parent, ProcessorFactory filterFactory, IProcessSupplierContext processSupplierContext) {
 
 		this.filterFactory = filterFactory;
 		this.processSupplierContext = processSupplierContext;

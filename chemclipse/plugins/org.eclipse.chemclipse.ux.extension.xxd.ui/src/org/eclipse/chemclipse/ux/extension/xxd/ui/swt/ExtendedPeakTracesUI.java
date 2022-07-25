@@ -30,6 +30,7 @@ import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
@@ -52,6 +53,7 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -99,9 +101,8 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 		DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
 		List<Object> objects = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION);
 		if(!objects.isEmpty()) {
-			Object last = objects.get(0);
-			if(last instanceof IPeak) {
-				peak = (IPeak)last;
+			if(objects.get(0) instanceof IPeak last) {
+				peak = last;
 			}
 		}
 		update(peak);
@@ -165,10 +166,10 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof String) {
-					return (String)element;
-				} else if(element instanceof Integer) {
-					return TRACE_LABEL_PREFIX + " " + Integer.toString((int)element);
+				if(element instanceof String string) {
+					return string;
+				} else if(element instanceof Integer integer) {
+					return TRACE_LABEL_PREFIX + " " + Integer.toString(integer);
 				}
 				return null;
 			}
@@ -300,8 +301,7 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 
 				if(!"".equals(seriesId)) {
 					Object input = comboViewerTraces.getInput();
-					if(input instanceof List) {
-						List list = (List)input;
+					if(input instanceof List list) {
 						exitloop:
 						for(int i = 0; i < list.size(); i++) {
 							if(list.get(i).toString().equals(seriesId)) {
@@ -373,7 +373,7 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 			@Override
 			public String getName() {
 
-				return "Delete Visible Serie(s)";
+				return "Delete Visible Series";
 			}
 
 			@Override
@@ -404,10 +404,8 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 					if(!series.isVisible()) {
 						traces.add(trace);
 					}
-				} else {
-					if(series.isVisible()) {
-						traces.add(trace);
-					}
+				} else if(series.isVisible()) {
+					traces.add(trace);
 				}
 			}
 		}
@@ -429,8 +427,7 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 
 	private void deleteTraces(Display display, Set<Integer> traces) {
 
-		if(peak instanceof IPeakMSD) {
-			IPeakMSD peakMSD = (IPeakMSD)peak;
+		if(peak instanceof IPeakMSD peakMSD) {
 			IPeakModelMSD peakModelMSD = peakMSD.getPeakModel();
 			IScanMSD scanMSD = peakModelMSD.getPeakMassSpectrum();
 			int maxDeleteTraces = scanMSD.getNumberOfIons() - 1;
@@ -441,12 +438,10 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 				updatePeak();
 				UpdateNotifierUI.update(display, peak);
 			}
-		} else if(peak instanceof IPeakWSD) {
-			IPeakWSD peakWSD = (IPeakWSD)peak;
+		} else if(peak instanceof IPeakWSD peakWSD) {
 			IPeakModelWSD peakModelWSD = peakWSD.getPeakModel();
 			IScan scan = peakModelWSD.getPeakMaximum();
-			if(scan instanceof IScanWSD) {
-				IScanWSD scanWSD = (IScanWSD)scan;
+			if(scan instanceof IScanWSD scanWSD) {
 				int maxDeleteTraces = scanWSD.getNumberOfScanSignals() - 1;
 				if(traces.size() >= maxDeleteTraces) {
 					MessageDialog.openInformation(display.getActiveShell(), CATEGORY, "It's not possible to delete all wavelengths.");
@@ -457,8 +452,7 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 				}
 			}
 		}
-		if(peak instanceof IChromatogramPeak) {
-			IChromatogramPeak chromatogramPeak = (IChromatogramPeak)peak;
+		if(peak instanceof IChromatogramPeak chromatogramPeak) {
 			chromatogramPeak.getChromatogram().setDirty(true);
 		}
 	}

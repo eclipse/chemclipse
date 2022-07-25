@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -64,19 +64,19 @@ public interface IProcessSupplier<SettingType> {
 
 	/**
 	 * 
-	 * @return the settingsclass
+	 * @return the settings class
 	 */
 	Class<SettingType> getSettingsClass();
 
 	/**
 	 * 
-	 * @return a set of supported datatypes
+	 * @return a set of supported data types
 	 */
 	Set<DataCategory> getSupportedDataTypes();
 
 	/**
 	 * 
-	 * @return the settingsparser for this supplier
+	 * @return the settings parser for this supplier
 	 */
 	SettingsParser<SettingType> getSettingsParser();
 
@@ -101,28 +101,28 @@ public interface IProcessSupplier<SettingType> {
 	 * 
 	 * @return the context that belongs to this supplier, this could either be the supplier itself or the corresponding {@link IProcessTypeSupplier}
 	 */
-	default ProcessSupplierContext getContext() {
+	default IProcessSupplierContext getContext() {
 
-		if(this instanceof ProcessSupplierContext) {
-			return (ProcessSupplierContext)this;
+		if(this instanceof IProcessSupplierContext processSupplierContext) {
+			return processSupplierContext;
 		} else {
 			return getTypeSupplier();
 		}
 	}
 
-	public static <X, T> T applyProcessor(ProcessorPreferences<X> processorPreferences, ProcessExecutionConsumer<T> consumer, ProcessExecutionContext context) {
+	public static <X, T> T applyProcessor(IProcessorPreferences<X> processorPreferences, IProcessExecutionConsumer<T> consumer, ProcessExecutionContext context) {
 
 		IProcessSupplier<X> supplier = processorPreferences.getSupplier();
 		try {
 			int numberOfCalls = 0;
 			boolean canDirectExecute = consumer.canExecute(processorPreferences);
-			ProcessExecutor supplierExecutionConsumer = null;
+			IProcessExecutor supplierExecutionConsumer = null;
 			ExecutionResultTransformer<X> transformer = null;
 			if(canDirectExecute) {
 				numberOfCalls++;
 			}
-			if(supplier instanceof ProcessExecutor) {
-				supplierExecutionConsumer = (ProcessExecutor)supplier;
+			if(supplier instanceof IProcessExecutor processExecutor) {
+				supplierExecutionConsumer = processExecutor;
 				numberOfCalls++;
 			}
 			if(supplier instanceof ExecutionResultTransformer<?>) {
@@ -134,12 +134,12 @@ public interface IProcessSupplier<SettingType> {
 				context.setWorkRemaining(numberOfCalls);
 			}
 			context.setContextObject(IProcessSupplier.class, supplier);
-			context.setContextObject(ProcessorPreferences.class, processorPreferences);
+			context.setContextObject(IProcessorPreferences.class, processorPreferences);
 			if(transformer != null) {
 				consumer = transformer.transform(consumer, processorPreferences, mustSplit ? context.split() : context);
 			}
 			//
-			context.setContextObject(ProcessExecutionConsumer.class, consumer);
+			context.setContextObject(IProcessExecutionConsumer.class, consumer);
 			if(canDirectExecute) {
 				consumer.execute(processorPreferences, mustSplit ? context.split() : context);
 			}
@@ -161,8 +161,8 @@ public interface IProcessSupplier<SettingType> {
 			context.addErrorMessage(supplier.getName(), "execution throws an error, processor is skipped", cause);
 		} finally {
 			context.setContextObject(IProcessSupplier.class, null);
-			context.setContextObject(ProcessorPreferences.class, null);
-			context.setContextObject(ProcessExecutionConsumer.class, null);
+			context.setContextObject(IProcessorPreferences.class, null);
+			context.setContextObject(IProcessExecutionConsumer.class, null);
 		}
 		return consumer.getResult();
 	}
@@ -187,7 +187,7 @@ public interface IProcessSupplier<SettingType> {
 	 * 
 	 * @param settings
 	 *            the settings to check
-	 * @return a {@link IStatus} describing the outcome of the settingscheck, the default implementation always returns the result of {@link #validate()}
+	 * @return a {@link IStatus} describing the outcome of the settings check, the default implementation always returns the result of {@link #validate()}
 	 */
 	default IStatus validate(SettingType settings) {
 

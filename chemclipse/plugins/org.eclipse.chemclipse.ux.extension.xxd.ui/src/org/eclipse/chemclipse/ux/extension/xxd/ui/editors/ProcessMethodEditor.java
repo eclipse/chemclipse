@@ -29,7 +29,7 @@ import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
@@ -62,7 +62,7 @@ public class ProcessMethodEditor implements IModificationHandler, IChemClipseEdi
 	@Inject
 	private MDirtyable dirtyable;
 	@Inject
-	private ProcessSupplierContext processSupplierContext;
+	private IProcessSupplierContext processSupplierContext;
 	@Inject
 	private ProcessMethodNotifications notifications;
 	@Inject

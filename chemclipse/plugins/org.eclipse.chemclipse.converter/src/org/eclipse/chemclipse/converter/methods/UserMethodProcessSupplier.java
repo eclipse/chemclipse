@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,12 +21,12 @@ import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.AbstractProcessSupplier;
-import org.eclipse.chemclipse.processing.supplier.ProcessExecutionConsumer;
+import org.eclipse.chemclipse.processing.supplier.IProcessExecutionConsumer;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
-import org.eclipse.chemclipse.processing.supplier.ProcessExecutor;
-import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.IProcessExecutor;
+import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 
-public final class UserMethodProcessSupplier extends AbstractProcessSupplier<Void> implements ProcessEntryContainer, ProcessExecutor {
+public final class UserMethodProcessSupplier extends AbstractProcessSupplier<Void> implements ProcessEntryContainer, IProcessExecutor {
 
 	private static final String SKIP_MESSAGE = "SKIP CHECK: Is this method used?";
 	//
@@ -51,9 +51,9 @@ public final class UserMethodProcessSupplier extends AbstractProcessSupplier<Voi
 	}
 
 	@Override
-	public <X> void execute(ProcessorPreferences<X> preferences, ProcessExecutionContext context) throws Exception {
+	public <X> void execute(IProcessorPreferences<X> preferences, ProcessExecutionContext context) throws Exception {
 
-		ProcessExecutionConsumer<?> consumer = context.getContextObject(ProcessExecutionConsumer.class);
+		IProcessExecutionConsumer<?> consumer = context.getContextObject(IProcessExecutionConsumer.class);
 		ProcessEntryContainer.applyProcessEntries(processMethod, context, consumer);
 	}
 

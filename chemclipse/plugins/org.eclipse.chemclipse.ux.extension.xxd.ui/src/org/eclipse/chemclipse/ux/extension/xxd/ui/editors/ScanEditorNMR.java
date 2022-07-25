@@ -50,7 +50,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.filter.Filter;
 import org.eclipse.chemclipse.processing.filter.FilterContext;
 import org.eclipse.chemclipse.processing.filter.Filtered;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
@@ -107,10 +107,10 @@ public class ScanEditorNMR implements IScanEditorNMR {
 	private NMRMeasurementsUI measurementsUI;
 	private final ProcessorFactory filterFactory;
 	private final PartSupport partSupport;
-	private ProcessSupplierContext processSupplierContext;
+	private IProcessSupplierContext processSupplierContext;
 
 	@Inject
-	public ScanEditorNMR(Composite parent, IEventBroker eventBroker, MPart part, MDirtyable dirtyable, Shell shell, ProcessorFactory filterFactory, PartSupport partSupport, ProcessSupplierContext context) {
+	public ScanEditorNMR(Composite parent, IEventBroker eventBroker, MPart part, MDirtyable dirtyable, Shell shell, ProcessorFactory filterFactory, PartSupport partSupport, IProcessSupplierContext context) {
 
 		this.partSupport = partSupport;
 		this.processSupplierContext = context;

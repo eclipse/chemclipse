@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Christoph Läubrich.
+ * Copyright (c) 2020, 2022 Christoph Läubrich.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,7 +28,7 @@ import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.rcp.app.cli.AbstractCommandLineProcessor;
 import org.eclipse.chemclipse.rcp.app.cli.ICommandLineProcessor;
 import org.eclipse.chemclipse.ui.cli.ContextCLI;
@@ -46,7 +46,7 @@ public class MethodProcessor extends AbstractCommandLineProcessor implements ICo
 	@Override
 	public void process(String[] args) {
 
-		ProcessSupplierContext processSupplierContext = ContextCLI.getProcessSupplierContext();
+		IProcessSupplierContext processSupplierContext = ContextCLI.getProcessSupplierContext();
 		if(processSupplierContext == null) {
 			LOG.error("Can't get a supplier context!");
 			throw new RuntimeException();

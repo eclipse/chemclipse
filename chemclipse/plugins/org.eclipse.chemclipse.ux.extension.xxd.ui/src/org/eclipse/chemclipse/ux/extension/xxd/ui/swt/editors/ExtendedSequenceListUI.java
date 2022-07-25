@@ -30,7 +30,7 @@ import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -87,7 +87,7 @@ public class ExtendedSequenceListUI extends Composite implements IExtendedPartUI
 	private ISequence<? extends ISequenceRecord> sequence;
 	private final ChromatogramTypeSupportUI chromatogramTypeSupport = new ChromatogramTypeSupportUI(new DataType[]{DataType.CSD, DataType.MSD, DataType.WSD});
 	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private final ProcessSupplierContext processSupplierContext = new ProcessTypeSupport();
+	private final IProcessSupplierContext processSupplierContext = new ProcessTypeSupport();
 
 	public ExtendedSequenceListUI(Composite parent, int style) {
 

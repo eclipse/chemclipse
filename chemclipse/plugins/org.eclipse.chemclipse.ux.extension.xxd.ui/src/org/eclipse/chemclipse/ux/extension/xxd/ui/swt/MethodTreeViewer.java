@@ -25,8 +25,8 @@ import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
-import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.MethodListLabelProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
 import org.eclipse.jface.viewers.DoubleClickEvent;
@@ -45,8 +45,8 @@ public class MethodTreeViewer extends TreeViewer {
 
 	private final TreeViewerColumn[] columns = new TreeViewerColumn[MethodListLabelProvider.TITLES.length];
 	//
-	private ProcessSupplierContext processingSupport;
-	private BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>> preferencesSupplier;
+	private IProcessSupplierContext processingSupport;
+	private BiFunction<IProcessEntry, IProcessSupplierContext, IProcessorPreferences<?>> preferencesSupplier;
 	private AtomicReference<ProcessMethodToolbar> toolbarButtons;
 	//
 	private IUpdateListener updateListener = null;
@@ -56,7 +56,7 @@ public class MethodTreeViewer extends TreeViewer {
 		super(parent, style);
 	}
 
-	public void createControl(ProcessSupplierContext processingSupport, BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>> preferencesSupplier, final AtomicReference<ProcessMethodToolbar> toolbarButtons, boolean enableTooltips) {
+	public void createControl(IProcessSupplierContext processingSupport, BiFunction<IProcessEntry, IProcessSupplierContext, IProcessorPreferences<?>> preferencesSupplier, final AtomicReference<ProcessMethodToolbar> toolbarButtons, boolean enableTooltips) {
 
 		this.processingSupport = processingSupport;
 		this.preferencesSupplier = preferencesSupplier;

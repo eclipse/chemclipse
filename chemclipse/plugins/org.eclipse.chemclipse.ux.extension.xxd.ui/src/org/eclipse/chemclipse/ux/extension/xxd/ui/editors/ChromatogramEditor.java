@@ -12,7 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.editors;
 
 import org.eclipse.chemclipse.model.types.DataType;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.ui.model.application.ui.MDirtyable;
 import org.eclipse.e4.ui.model.application.ui.basic.MPart;
@@ -23,7 +23,7 @@ public class ChromatogramEditor extends AbstractChromatogramEditor {
 
 	private final Composite parent;
 
-	public ChromatogramEditor(DataType dataType, Composite parent, MPart part, MDirtyable dirtyable, Shell shell, ProcessSupplierContext filterFactory, IEclipseContext eclipseContext) {
+	public ChromatogramEditor(DataType dataType, Composite parent, MPart part, MDirtyable dirtyable, Shell shell, IProcessSupplierContext filterFactory, IEclipseContext eclipseContext) {
 
 		super(dataType, parent, part, dirtyable, filterFactory, shell);
 		this.parent = parent;

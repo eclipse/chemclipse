@@ -21,7 +21,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.traces.NamedTrace;
 import org.eclipse.chemclipse.model.traces.NamedTraces;
-import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
@@ -74,9 +74,9 @@ public class NamedTracesSettingsEditor implements SettingsUIProvider.SettingsUIC
 	private List<Button> buttons = new ArrayList<>();
 	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private ProcessorPreferences<NamedTraces> preferences = null;
+	private IProcessorPreferences<NamedTraces> preferences = null;
 
-	public NamedTracesSettingsEditor(Composite parent, ProcessorPreferences<NamedTraces> preferences, NamedTraces namedTraces) {
+	public NamedTracesSettingsEditor(Composite parent, IProcessorPreferences<NamedTraces> preferences, NamedTraces namedTraces) {
 
 		/*
 		 * Populate the settings on demand.

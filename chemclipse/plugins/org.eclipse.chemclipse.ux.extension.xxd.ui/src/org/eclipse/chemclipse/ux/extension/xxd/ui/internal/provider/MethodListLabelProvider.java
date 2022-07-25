@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,8 +19,8 @@ import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
-import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
@@ -30,8 +30,8 @@ import org.eclipse.swt.graphics.Image;
 
 public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 
-	private final ProcessSupplierContext processTypeSupport;
-	private BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>> preferencesSupplier;
+	private final IProcessSupplierContext processTypeSupport;
+	private BiFunction<IProcessEntry, IProcessSupplierContext, IProcessorPreferences<?>> preferencesSupplier;
 	//
 	public static final String[] TITLES = {//
 			"", //
@@ -51,7 +51,7 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 			110 //
 	};
 
-	public MethodListLabelProvider(ProcessSupplierContext processTypeSupport, BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>> preferencesSupplier) {
+	public MethodListLabelProvider(IProcessSupplierContext processTypeSupport, BiFunction<IProcessEntry, IProcessSupplierContext, IProcessorPreferences<?>> preferencesSupplier) {
 
 		this.processTypeSupport = processTypeSupport;
 		this.preferencesSupplier = preferencesSupplier;
@@ -107,7 +107,7 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 		//
 		if(element instanceof IProcessEntry) {
 			IProcessEntry processEntry = (IProcessEntry)element;
-			ProcessSupplierContext supplierContext = IProcessEntry.getContext(processEntry, processTypeSupport);
+			IProcessSupplierContext supplierContext = IProcessEntry.getContext(processEntry, processTypeSupport);
 			IProcessSupplier<?> processSupplier = supplierContext.getSupplier(processEntry.getProcessorId());
 			switch(columnIndex) {
 				case 1:
@@ -125,7 +125,7 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 						if(processSupplier.getSettingsParser().getInputValues().isEmpty() || preferencesSupplier == null) {
 							return "not configurable";
 						} else {
-							ProcessorPreferences<?> preferences = preferencesSupplier.apply(processEntry, supplierContext);
+							IProcessorPreferences<?> preferences = preferencesSupplier.apply(processEntry, supplierContext);
 							if(preferences.isUseSystemDefaults()) {
 								return "defaults";
 							} else {
@@ -186,7 +186,7 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 		/*
 		 * Checks
 		 */
-		ProcessorPreferences<?> processorPreferences = preferencesSupplier.apply(processEntry, processTypeSupport);
+		IProcessorPreferences<?> processorPreferences = preferencesSupplier.apply(processEntry, processTypeSupport);
 		//
 		if(processorPreferences == null) {
 			return ValidationStatus.error("The processor " + processEntry.getName() + " preferences are not available.");

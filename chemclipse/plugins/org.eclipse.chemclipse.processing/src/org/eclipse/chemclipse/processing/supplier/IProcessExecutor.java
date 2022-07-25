@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.supplier;
 
-public interface ProcessExecutor {
+public interface IProcessExecutor {
 
-	<X> void execute(ProcessorPreferences<X> preferences, ProcessExecutionContext context) throws Exception;
+	<X> void execute(IProcessorPreferences<X> preferences, ProcessExecutionContext context) throws Exception;
 }

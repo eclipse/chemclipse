@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,8 +17,8 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
-import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 
 public interface IProcessEntry extends ProcessEntryContainer {
 
@@ -110,12 +110,12 @@ public interface IProcessEntry extends ProcessEntryContainer {
 
 	ProcessEntryContainer getParent();
 
-	default <T> ProcessorPreferences<T> getPreferences(ProcessSupplierContext context) {
+	default <T> IProcessorPreferences<T> getPreferences(IProcessSupplierContext context) {
 
 		return getPreferences(context.getSupplier(getProcessorId()));
 	}
 
-	default <T> ProcessorPreferences<T> getPreferences(IProcessSupplier<T> supplier) {
+	default <T> IProcessorPreferences<T> getPreferences(IProcessSupplier<T> supplier) {
 
 		if(supplier == null) {
 			return null;
@@ -179,15 +179,15 @@ public interface IProcessEntry extends ProcessEntryContainer {
 		return entriesEquals(other);
 	}
 
-	public static ProcessSupplierContext getContext(IProcessEntry processEntry, ProcessSupplierContext defaultContext) {
+	public static IProcessSupplierContext getContext(IProcessEntry processEntry, IProcessSupplierContext defaultContext) {
 
 		ProcessEntryContainer processEntryContainer = processEntry.getParent();
 		//
 		if(processEntryContainer instanceof IProcessEntry) {
 			IProcessEntry processEntryParent = (IProcessEntry)processEntryContainer;
 			IProcessSupplier<?> processSupplier = getContext(processEntryParent, defaultContext).getSupplier(processEntryParent.getProcessorId());
-			if(processSupplier instanceof ProcessSupplierContext) {
-				return (ProcessSupplierContext)processSupplier;
+			if(processSupplier instanceof IProcessSupplierContext) {
+				return (IProcessSupplierContext)processSupplier;
 			}
 		}
 		//

@@ -33,8 +33,8 @@ import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
-import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
@@ -82,8 +82,8 @@ public class ProcessMethodToolbar extends ToolBar {
 	//
 	private ProcessMethod processMethod;
 	private StructuredViewer structuredViewer;
-	private ProcessSupplierContext processingSupport;
-	private BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>> preferencesSupplier;
+	private IProcessSupplierContext processingSupport;
+	private BiFunction<IProcessEntry, IProcessSupplierContext, IProcessorPreferences<?>> preferencesSupplier;
 	private DataCategory[] dataCategories;
 	private IUpdateListener updateListener = null;
 	private boolean readOnly = false;
@@ -112,12 +112,12 @@ public class ProcessMethodToolbar extends ToolBar {
 		this.structuredViewer = structuredViewer;
 	}
 
-	public void setProcessingSupport(ProcessSupplierContext processingSupport) {
+	public void setProcessingSupport(IProcessSupplierContext processingSupport) {
 
 		this.processingSupport = processingSupport;
 	}
 
-	public void setPreferencesSupplier(BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>> preferencesSupplier) {
+	public void setPreferencesSupplier(BiFunction<IProcessEntry, IProcessSupplierContext, IProcessorPreferences<?>> preferencesSupplier) {
 
 		this.preferencesSupplier = preferencesSupplier;
 	}
@@ -210,9 +210,9 @@ public class ProcessMethodToolbar extends ToolBar {
 		clipboard.setContents(data, dataTypes);
 	}
 
-	public boolean modifyProcessEntry(Shell shell, IProcessEntry processEntry, ProcessSupplierContext supplierContext, boolean showHint) {
+	public boolean modifyProcessEntry(Shell shell, IProcessEntry processEntry, IProcessSupplierContext supplierContext, boolean showHint) {
 
-		ProcessorPreferences<?> preferences = preferencesSupplier.apply(processEntry, supplierContext);
+		IProcessorPreferences<?> preferences = preferencesSupplier.apply(processEntry, supplierContext);
 		if(preferences == null) {
 			return false;
 		}
@@ -316,22 +316,22 @@ public class ProcessMethodToolbar extends ToolBar {
 				menu.setVisible(true);
 			} else {
 				if(processMethod != null) {
-					Map<ProcessSupplierContext, String> contextList = new LinkedHashMap<>();
+					Map<IProcessSupplierContext, String> contextList = new LinkedHashMap<>();
 					Object element = structuredViewer.getStructuredSelection().getFirstElement();
 					ProcessEntry selectedEntry = null;
 					if(element instanceof ProcessEntry) {
 						selectedEntry = (ProcessEntry)element;
 						String id = selectedEntry.getProcessorId();
 						IProcessSupplier<?> supplier = processingSupport.getSupplier(id);
-						if(supplier instanceof ProcessSupplierContext) {
-							contextList.put((ProcessSupplierContext)supplier, supplier.getName());
+						if(supplier instanceof IProcessSupplierContext) {
+							contextList.put((IProcessSupplierContext)supplier, supplier.getName());
 						}
 					}
 					contextList.put(processingSupport, processMethod.getName());
-					Map<ProcessSupplierContext, IProcessEntry> map = ProcessingWizard.open(getShell(), contextList, dataCategories);
+					Map<IProcessSupplierContext, IProcessEntry> map = ProcessingWizard.open(getShell(), contextList, dataCategories);
 					if(map != null) {
-						for(Entry<ProcessSupplierContext, IProcessEntry> entry : map.entrySet()) {
-							ProcessSupplierContext supplierContext = entry.getKey();
+						for(Entry<IProcessSupplierContext, IProcessEntry> entry : map.entrySet()) {
+							IProcessSupplierContext supplierContext = entry.getKey();
 							IProcessEntry editedEntry = entry.getValue();
 							boolean edit = modifyProcessEntry(getShell(), editedEntry, supplierContext, false);
 							if(!edit) {

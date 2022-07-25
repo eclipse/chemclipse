@@ -40,7 +40,7 @@ public class SupplierFileIdentifier extends AbstractSupplierFileIdentifier imple
 
 	private static List<ISupplier> getSupplier(DataType dataType) {
 
-		List<ISupplier> supplier = new ArrayList<ISupplier>();
+		List<ISupplier> supplier = new ArrayList<>();
 		switch(dataType) {
 			case MSD_NOMINAL:
 			case MSD_TANDEM:

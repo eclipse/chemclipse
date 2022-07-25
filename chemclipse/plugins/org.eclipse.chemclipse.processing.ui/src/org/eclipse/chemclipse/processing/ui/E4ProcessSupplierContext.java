@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,17 +17,17 @@ import java.util.function.Consumer;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.processing.supplier.ProcessSupplierFactory;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.core.di.annotations.Creatable;
 
 @Creatable
-public class E4ProcessSupplierContext implements ProcessSupplierContext {
+public class E4ProcessSupplierContext implements IProcessSupplierContext {
 
 	@Inject
-	private ProcessSupplierContext processSupplierContext;
+	private IProcessSupplierContext processSupplierContext;
 	@Inject
 	private IEclipseContext eclipseContext;
 

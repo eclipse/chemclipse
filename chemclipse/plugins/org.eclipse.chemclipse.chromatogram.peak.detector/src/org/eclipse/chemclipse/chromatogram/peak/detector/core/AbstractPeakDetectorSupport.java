@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -25,6 +25,7 @@ public abstract class AbstractPeakDetectorSupport<S extends IPeakDetectorSupplie
 	List<S> suppliers;
 
 	public AbstractPeakDetectorSupport() {
+
 		suppliers = new ArrayList<>();
 	}
 
@@ -40,7 +41,7 @@ public abstract class AbstractPeakDetectorSupport<S extends IPeakDetectorSupplie
 		 * Test if the suppliers ArrayList is empty.
 		 */
 		arePeakDetectorsStored();
-		List<String> availablePeakDetectors = new ArrayList<String>();
+		List<String> availablePeakDetectors = new ArrayList<>();
 		for(IPeakDetectorSupplier supplier : suppliers) {
 			availablePeakDetectors.add(supplier.getId());
 		}
@@ -99,7 +100,7 @@ public abstract class AbstractPeakDetectorSupport<S extends IPeakDetectorSupplie
 		 * If the ArrayList is not empty, return the registered chromatogram
 		 * converter filter names.<br/>
 		 */
-		ArrayList<String> integratorNames = new ArrayList<String>();
+		ArrayList<String> integratorNames = new ArrayList<>();
 		for(IPeakDetectorSupplier supplier : suppliers) {
 			integratorNames.add(supplier.getPeakDetectorName());
 		}
@@ -109,7 +110,7 @@ public abstract class AbstractPeakDetectorSupport<S extends IPeakDetectorSupplie
 	// -------------------------------------private methods
 	private void arePeakDetectorsStored() throws NoPeakDetectorAvailableException {
 
-		if(suppliers.size() < 1) {
+		if(suppliers.isEmpty()) {
 			throw new NoPeakDetectorAvailableException();
 		}
 	}

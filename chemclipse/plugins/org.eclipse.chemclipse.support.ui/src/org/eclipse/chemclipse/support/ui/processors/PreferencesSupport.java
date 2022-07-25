@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,20 +17,20 @@ import java.util.function.Predicate;
 
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 public class PreferencesSupport {
 
 	private final IPreferenceStore preferenceStore;
-	private final ProcessSupplierContext context;
+	private final IProcessSupplierContext context;
 	private final Predicate<IProcessSupplier<?>> filter;
 	private final String keyDefault;
 	//
 	private Set<IProcessSupplier<?>> processSuppliers;
 	private String keyActive;
 
-	public PreferencesSupport(IPreferenceStore preferenceStore, String key, ProcessSupplierContext context, Predicate<IProcessSupplier<?>> filter) {
+	public PreferencesSupport(IPreferenceStore preferenceStore, String key, IProcessSupplierContext context, Predicate<IProcessSupplier<?>> filter) {
 
 		this.preferenceStore = preferenceStore;
 		this.context = context;

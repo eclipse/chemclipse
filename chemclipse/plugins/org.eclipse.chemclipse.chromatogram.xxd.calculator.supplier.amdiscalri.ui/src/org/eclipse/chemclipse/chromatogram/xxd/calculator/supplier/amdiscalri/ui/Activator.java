@@ -33,7 +33,7 @@ public class Activator extends AbstractActivatorUI {
 	 * Instance
 	 */
 	private static Activator plugin;
-	private List<EventHandler> registeredEventHandler = new ArrayList<EventHandler>();
+	private List<EventHandler> registeredEventHandler = new ArrayList<>();
 
 	/*
 	 * (non-Javadoc)
@@ -93,8 +93,7 @@ public class Activator extends AbstractActivatorUI {
 
 				try {
 					Object object = event.getProperty(property);
-					if(object instanceof File) {
-						File file = (File)object;
+					if(object instanceof File file) {
 						if(file.exists()) {
 							/*
 							 * Add/Remove the RI calibration file.

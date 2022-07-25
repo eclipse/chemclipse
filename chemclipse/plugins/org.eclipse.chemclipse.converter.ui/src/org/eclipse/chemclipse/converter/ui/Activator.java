@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2020 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +12,7 @@
 package org.eclipse.chemclipse.converter.ui;
 
 import org.eclipse.chemclipse.converter.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.support.ui.activator.AbstractActivatorUI;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
@@ -20,7 +20,7 @@ import org.osgi.util.tracker.ServiceTracker;
 public class Activator extends AbstractActivatorUI {
 
 	private static Activator plugin;
-	private static ServiceTracker<ProcessSupplierContext, ProcessSupplierContext> serviceTracker;
+	private static ServiceTracker<IProcessSupplierContext, IProcessSupplierContext> serviceTracker;
 
 	@Override
 	public void start(BundleContext context) throws Exception {
@@ -28,7 +28,7 @@ public class Activator extends AbstractActivatorUI {
 		super.start(context);
 		plugin = this;
 		initializePreferenceStore(PreferenceSupplier.INSTANCE());
-		serviceTracker = new ServiceTracker<>(context, ProcessSupplierContext.class, null);
+		serviceTracker = new ServiceTracker<>(context, IProcessSupplierContext.class, null);
 		serviceTracker.open();
 	}
 
@@ -46,7 +46,7 @@ public class Activator extends AbstractActivatorUI {
 		return plugin;
 	}
 
-	public static ProcessSupplierContext getProcessSupplierContext() {
+	public static IProcessSupplierContext getProcessSupplierContext() {
 
 		if(serviceTracker != null) {
 			return serviceTracker.getService();

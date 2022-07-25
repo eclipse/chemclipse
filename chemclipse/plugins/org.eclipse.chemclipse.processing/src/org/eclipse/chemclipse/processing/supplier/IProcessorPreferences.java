@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,7 +25,7 @@ import org.eclipse.chemclipse.support.settings.serialization.SettingsSerializati
  * @author Christoph Läubrich
  *
  */
-public interface ProcessorPreferences<SettingType> {
+public interface IProcessorPreferences<SettingType> {
 
 	public static final SettingsSerialization DEFAULT_SETTINGS_SERIALIZATION = new JSONSerialization();
 

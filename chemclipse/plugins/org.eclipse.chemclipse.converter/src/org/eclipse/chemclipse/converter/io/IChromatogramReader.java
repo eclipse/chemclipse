@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,14 +12,10 @@
 package org.eclipse.chemclipse.converter.io;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import org.eclipse.core.runtime.IProgressMonitor;
-
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IChromatogramReader extends IFileHelper {
 
@@ -28,11 +24,7 @@ public interface IChromatogramReader extends IFileHelper {
 	 * If the chromatogram can not be parsed, null will be returned.
 	 * 
 	 * @param file
-	 * @return IChromatogramOverview
-	 * @throws FileNotFoundException
-	 * @throws FileIsNotReadableException
-	 * @throws FileIsEmptyException
 	 * @throws IOException
 	 */
-	IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException;
+	IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws IOException;
 }

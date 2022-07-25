@@ -96,8 +96,8 @@ public class AmbiguousPeakRemoverFilter extends AbstractPeakFilter<AmbiguousPeak
 	public AmbiguousPeakRemoverFilterSettings createConfiguration(Collection<IPeak> items) throws IllegalArgumentException {
 
 		for(IPeak peak : items) {
-			if(peak instanceof IChromatogramPeakMSD) {
-				return new AmbiguousPeakRemoverFilterSettings(((IChromatogramPeakMSD)peak).getChromatogram());
+			if(peak instanceof IChromatogramPeakMSD peakMSD) {
+				return new AmbiguousPeakRemoverFilterSettings((peakMSD).getChromatogram());
 			}
 		}
 		return super.createConfiguration(items);

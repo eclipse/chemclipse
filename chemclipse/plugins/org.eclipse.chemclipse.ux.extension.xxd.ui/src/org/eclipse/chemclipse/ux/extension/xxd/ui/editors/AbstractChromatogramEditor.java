@@ -46,7 +46,7 @@ import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
@@ -124,7 +124,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 	};
 	//
 	private final ObjectChangedListener<IMeasurementResult<?>> updateMeasurementResult = new MeasurementResultListener();
-	private final ProcessSupplierContext processSupplierContext;
+	private final IProcessSupplierContext processSupplierContext;
 
 	@Deprecated
 	public AbstractChromatogramEditor(DataType dataType, Composite parent, MPart part, MDirtyable dirtyable, ProcessorFactory filterFactory, Shell shell) {
@@ -132,7 +132,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 		this(dataType, parent, part, dirtyable, new ProcessTypeSupport(), shell);
 	}
 
-	public AbstractChromatogramEditor(DataType dataType, Composite parent, MPart part, MDirtyable dirtyable, ProcessSupplierContext processSupplierContext, Shell shell) {
+	public AbstractChromatogramEditor(DataType dataType, Composite parent, MPart part, MDirtyable dirtyable, IProcessSupplierContext processSupplierContext, Shell shell) {
 
 		super(TOPIC_CHROMATOGRAM);
 		//
