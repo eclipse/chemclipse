@@ -16,4 +16,19 @@
             name="NIST (extern) - Settings">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.msd.identifier.supplier.nist.peak">
+      </icon>
+      <icon
+            class="org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.msd.identifier.supplier.nist.massSpectrum">
+      </icon>
+      <icon
+            class="org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.msd.identifier.supplier.nist.massSpectrumDirect">
+      </icon>
+   </extension>
 </plugin>

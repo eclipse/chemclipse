@@ -10,5 +10,12 @@
             name="Microsoft Excel MS Converter">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.msd.converter.supplier.excel.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.msd.converter.supplier.excel">
+      </icon>
+   </extension>
 
 </plugin>

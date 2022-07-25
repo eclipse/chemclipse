@@ -9,4 +9,11 @@
             name="Unit Sum Normalizer">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.unitsumnormalizer">
+      </icon>
+   </extension>
 </plugin>

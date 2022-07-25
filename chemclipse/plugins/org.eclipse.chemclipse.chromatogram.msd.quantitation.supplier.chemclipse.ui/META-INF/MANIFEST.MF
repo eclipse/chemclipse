@@ -37,7 +37,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.swtchart;bundle-version="0.8.0",
  org.eclipse.swtchart.extensions;bundle-version="0.8.0",
  org.eclipse.chemclipse.xxd.model;bundle-version="0.8.0",
- org.eclipse.chemclipse.converter;bundle-version="0.8.0"
+ org.eclipse.chemclipse.converter;bundle-version="0.8.0",
+ org.eclipse.chemclipse.xxd.process.ui
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: ChemClipse

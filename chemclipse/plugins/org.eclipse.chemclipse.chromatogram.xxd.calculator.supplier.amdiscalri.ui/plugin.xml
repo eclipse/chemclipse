@@ -46,5 +46,16 @@
             class="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.wizards.WizardCreateRetentionIndexFile"
             id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.wizards.WizardCreateRetentionIndexFile">
       </wizard>
-   </extension>    
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.icon.CalibrationExportMenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.chromatogram.cal">
+      </icon>
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.icon.RetentionIndexMenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri">
+      </icon>
+   </extension>
 </plugin>

@@ -383,6 +383,12 @@ public class ExtendedPeakTracesUI extends Composite implements IExtendedPartUI {
 			}
 
 			@Override
+			public Image getIcon() {
+
+				return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImageProvider.SIZE_16x16);
+			}
+
+			@Override
 			public void execute(Shell shell, ScrollableChart scrollableChart) {
 
 				if(peak != null) {

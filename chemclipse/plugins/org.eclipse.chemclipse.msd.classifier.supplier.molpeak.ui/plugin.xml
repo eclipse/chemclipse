@@ -31,4 +31,11 @@
          </adapter>
       </factory>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.msd.classifier.supplier.molpeak.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.msd.classifier.supplier.molpeak">
+      </icon>
+   </extension>
 </plugin>

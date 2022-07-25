@@ -14,9 +14,16 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors;
 
 import java.util.function.BiConsumer;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier.SupplierType;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
+import org.eclipse.chemclipse.xxd.process.ui.menu.IMenuIcon;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtchart.extensions.core.ScrollableChart;
 import org.eclipse.swtchart.extensions.menu.AbstractChartMenuEntry;
@@ -27,6 +34,9 @@ public class ProcessorSupplierMenuEntry<T> extends AbstractChartMenuEntry implem
 	private final IProcessSupplier<T> processorSupplier;
 	private final BiConsumer<IProcessSupplier<T>, IProcessSupplierContext> executionConsumer;
 	private final IProcessSupplierContext context;
+	//
+	private static final String MENU_ICON = "org.eclipse.chemclipse.xxd.process.ui.menu.icon";
+	private static final Logger logger = Logger.getLogger(ProcessorSupplierMenuEntry.class);
 
 	public ProcessorSupplierMenuEntry(IProcessSupplier<T> processorSupplier, IProcessSupplierContext context, BiConsumer<IProcessSupplier<T>, IProcessSupplierContext> executionConsumer) {
 
@@ -49,6 +59,29 @@ public class ProcessorSupplierMenuEntry<T> extends AbstractChartMenuEntry implem
 			return name + " ...";
 		}
 		return name;
+	}
+
+	@Override
+	public Image getIcon() {
+
+		IExtensionRegistry registry = Platform.getExtensionRegistry();
+		IConfigurationElement[] config = registry.getConfigurationElementsFor(MENU_ICON);
+		try {
+			for(IConfigurationElement element : config) {
+				// NOTE: some process type suppliers add hard-coded prefixes
+				final String id = element.getAttribute("id");
+				if(!(processorSupplier.getId().contains(id))) {
+					continue;
+				}
+				final Object object = element.createExecutableExtension("class");
+				if(object instanceof IMenuIcon menuIcon) {
+					return menuIcon.getImage();
+				}
+			}
+		} catch(CoreException e) {
+			logger.warn(e);
+		}
+		return null;
 	}
 
 	@Override

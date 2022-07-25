@@ -10,5 +10,12 @@
             name="Baseline Detector">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.ui.icon.BaselineDeleteMenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.xxd.baseline.detector.impl.delete">
+      </icon>
+   </extension>
 
 </plugin>

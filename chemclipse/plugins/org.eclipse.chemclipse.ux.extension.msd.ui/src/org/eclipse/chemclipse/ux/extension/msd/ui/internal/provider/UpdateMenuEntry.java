@@ -11,7 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.msd.ui.internal.provider;
 
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.ux.extension.msd.ui.swt.IMassSpectrumChart;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtchart.extensions.core.ScrollableChart;
 import org.eclipse.swtchart.extensions.menu.AbstractChartMenuEntry;
@@ -29,6 +33,12 @@ public class UpdateMenuEntry extends AbstractChartMenuEntry implements IChartMen
 	public String getName() {
 
 		return "Update";
+	}
+
+	@Override
+	public Image getIcon() {
+
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_REFRESH, IApplicationImageProvider.SIZE_16x16);
 	}
 
 	@Override

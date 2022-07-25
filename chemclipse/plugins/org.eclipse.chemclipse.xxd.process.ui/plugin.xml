@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="org.eclipse.chemclipse.xxd.process.ui.menu.icon" name="Menu Icon Provider" schema="schema/org.eclipse.chemclipse.xxd.process.ui.menu.icon.exsd"/>
    <extension
          point="org.eclipse.ui.preferencePages">
       <page

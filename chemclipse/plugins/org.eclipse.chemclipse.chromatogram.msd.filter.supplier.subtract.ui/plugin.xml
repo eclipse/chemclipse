@@ -16,4 +16,19 @@
             name="Subtract Filter">
       </page> 
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.chromatogram">
+      </icon>
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.peak">
+      </icon>
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.subtract.massspectrum">
+      </icon>
+   </extension>
 </plugin>

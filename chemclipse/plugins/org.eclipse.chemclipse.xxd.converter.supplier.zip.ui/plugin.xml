@@ -10,5 +10,12 @@
             name="ZIP Chromatogram MS Converter">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.xxd.converter.supplier.zip.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.xxd.converter.supplier.zip">
+      </icon>
+   </extension>
 
 </plugin>
