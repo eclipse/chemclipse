@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -33,6 +33,7 @@ public class SupplierFileIdentifier extends AbstractSupplierFileIdentifier imple
 	private String type = "";
 
 	public SupplierFileIdentifier(DataType dataType) {
+
 		super(getSupplier(dataType));
 		initialize(dataType);
 	}
@@ -67,8 +68,10 @@ public class SupplierFileIdentifier extends AbstractSupplierFileIdentifier imple
 				break;
 			case MTH:
 				supplier = MethodConverter.getMethodConverterSupport().getSupplier();
+				break;
 			case QDB:
 				supplier = QuantDBConverter.getQuantDBConverterSupport().getSupplier();
+				break;
 			default:
 				// No action
 		}
