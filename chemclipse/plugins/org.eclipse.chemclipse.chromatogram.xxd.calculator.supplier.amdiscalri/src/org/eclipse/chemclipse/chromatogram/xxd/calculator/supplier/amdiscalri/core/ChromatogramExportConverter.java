@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2020 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,8 +20,6 @@ import org.eclipse.chemclipse.converter.chromatogram.IChromatogramExportConverte
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDWriter;
-import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -35,11 +33,10 @@ public class ChromatogramExportConverter extends AbstractChromatogramExportConve
 
 		file = SpecificationValidator.validateSpecification(file);
 		IProcessingInfo<File> processingInfo = super.validate(file);
-		if(!processingInfo.hasErrorMessages() && chromatogram instanceof IChromatogramMSD) {
-			IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
-			IChromatogramMSDWriter writer = new ChromatogramWriter();
+		if(!processingInfo.hasErrorMessages()) {
 			try {
-				writer.writeChromatogram(file, chromatogramMSD, monitor);
+				ChromatogramWriter writer = new ChromatogramWriter();
+				writer.writeChromatogram(file, chromatogram, monitor);
 				processingInfo.setProcessingResult(file);
 			} catch(Exception e) {
 				logger.warn(e);

@@ -32,6 +32,19 @@
       </ChromatogramSupplier>
    </extension>
    <extension
+         point="org.eclipse.chemclipse.csd.converter.chromatogramSupplier">
+      <ChromatogramSupplier
+            description="Exports RI Calibration Files"
+            exportConverter="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core.ChromatogramExportConverter"
+            fileExtension=".CAL"
+            filterName="AMDIS RI Calibration (*.CAL)"
+            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.chromatogram.cal"
+            importMagicNumberMatcher="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core.MagicNumberMatcher"
+            isExportable="true"
+            isImportable="false">
+      </ChromatogramSupplier>
+   </extension>   
+   <extension
          point="org.eclipse.chemclipse.chromatogram.msd.identifier.peakIdentifier">
       <PeakIdentificationSupplier
             description="This identifier tries to identify alkanes."
