@@ -96,8 +96,7 @@ public class QuantitationCompound extends AbstractQuantitationCompound implement
 		for(IQuantitationPeak quantitationPeak : quantitationPeaks) {
 			double concentration = quantitationPeak.getConcentration();
 			IPeak peak = quantitationPeak.getReferencePeak();
-			if(peak instanceof IPeakMSD) {
-				IPeakMSD peakMSD = (IPeakMSD)peak;
+			if(peak instanceof IPeakMSD peakMSD) {
 				/*
 				 * The integrated area needs to use the TIC mode. Otherwise, wrong areas/response values would be calculated.
 				 */
@@ -159,7 +158,7 @@ public class QuantitationCompound extends AbstractQuantitationCompound implement
 
 	private List<Double> getSelectedQunatitationIons(IExtractedIonSignal extractedIonSignal) {
 
-		List<Double> selectedQunatitationIons = new ArrayList<Double>();
+		List<Double> selectedQunatitationIons = new ArrayList<>();
 		int startIon = extractedIonSignal.getStartIon();
 		int stopIon = extractedIonSignal.getStopIon();
 		for(int ion = startIon; ion <= stopIon; ion++) {
