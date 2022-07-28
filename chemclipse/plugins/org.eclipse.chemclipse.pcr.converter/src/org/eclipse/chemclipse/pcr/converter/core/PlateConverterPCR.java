@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -62,18 +62,17 @@ public class PlateConverterPCR {
 
 	public static IProcessingInfo<IPlate> convert(final File file, final IProgressMonitor monitor) {
 
-		return getPlate(file, false, monitor);
+		return getPlate(file, monitor);
 	}
 
 	/**
 	 * If no suitable parser was found, null will be returned.
 	 * 
 	 * @param file
-	 * @param overview
 	 * @param monitor
 	 * @return {@link IProcessingInfo}
 	 */
-	private static IProcessingInfo<IPlate> getPlate(final File file, boolean overview, IProgressMonitor monitor) {
+	private static IProcessingInfo<IPlate> getPlate(final File file, IProgressMonitor monitor) {
 
 		IProcessingInfo<IPlate> processingInfo;
 		IScanConverterSupport converterSupport = getScanConverterSupport();

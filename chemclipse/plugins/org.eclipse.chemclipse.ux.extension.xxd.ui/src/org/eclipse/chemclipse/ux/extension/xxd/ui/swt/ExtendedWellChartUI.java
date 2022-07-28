@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.pcr.model.core.IChannel;
 import org.eclipse.chemclipse.pcr.model.core.IWell;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -77,7 +78,7 @@ public class ExtendedWellChartUI extends Composite implements IExtendedPartUI {
 
 		if(well != null) {
 			if(well.isEmptyMeasurement()) {
-				comboChannels.setItems(new String[]{});
+				comboChannels.setItems();
 			} else {
 				comboChannels.setItems(getComboItems(well));
 				IChannel channel = well.getActiveChannel();
@@ -96,7 +97,7 @@ public class ExtendedWellChartUI extends Composite implements IExtendedPartUI {
 				}
 			}
 		} else {
-			comboChannels.setItems(new String[]{""});
+			comboChannels.setItems("");
 		}
 	}
 
@@ -150,14 +151,14 @@ public class ExtendedWellChartUI extends Composite implements IExtendedPartUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Toggle Color Compensation");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_BAR_CHART, IApplicationImage.SIZE_16x16, colorCompensation));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_BAR_CHART, IApplicationImageProvider.SIZE_16x16, colorCompensation));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				colorCompensation = !colorCompensation;
-				button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_BAR_CHART, IApplicationImage.SIZE_16x16, colorCompensation));
+				button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_BAR_CHART, IApplicationImageProvider.SIZE_16x16, colorCompensation));
 				updateChart();
 			}
 		});
@@ -236,7 +237,7 @@ public class ExtendedWellChartUI extends Composite implements IExtendedPartUI {
 			ColorCodes colorCodes = new ColorCodes();
 			colorCodes.load(preferenceStore.getString(PreferenceConstants.P_PCR_WELL_COLOR_CODES));
 			//
-			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 			int index = comboChannels.getSelectionIndex();
 			if(index == 0) {
 				for(IChannel channel : well.getChannels().values()) {
