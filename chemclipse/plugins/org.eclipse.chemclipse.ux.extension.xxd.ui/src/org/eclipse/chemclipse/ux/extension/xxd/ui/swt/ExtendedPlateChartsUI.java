@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.pcr.model.core.IWell;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -97,6 +98,7 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 
 	private void updateChartData() {
 
+		chartControl.get().updatePlate(plate);
 		if(plate != null) {
 			updateChart();
 		} else {

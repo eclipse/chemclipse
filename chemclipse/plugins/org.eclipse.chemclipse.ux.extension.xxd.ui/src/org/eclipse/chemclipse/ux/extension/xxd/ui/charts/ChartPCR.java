@@ -12,19 +12,38 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.charts;
 
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.List;
 import java.util.Locale;
 
+import org.eclipse.chemclipse.converter.scan.IScanConverterSupport;
+import org.eclipse.chemclipse.pcr.converter.core.PlateConverterPCR;
+import org.eclipse.chemclipse.pcr.model.core.IPlate;
+import org.eclipse.chemclipse.processing.converter.ISupplier;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.ProcessingInfo;
+import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swtchart.IAxis.Position;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.IPrimaryAxisSettings;
+import org.eclipse.swtchart.extensions.core.ScrollableChart;
 import org.eclipse.swtchart.extensions.linecharts.LineChart;
+import org.eclipse.swtchart.extensions.menu.IChartMenuEntry;
 
 public class ChartPCR extends LineChart {
+
+	private IPlate plate;
 
 	public ChartPCR() {
 
@@ -36,6 +55,11 @@ public class ChartPCR extends LineChart {
 
 		super(parent, style);
 		initialize();
+	}
+
+	public void updatePlate(IPlate plate) {
+
+		this.plate = plate;
 	}
 
 	private void initialize() {
@@ -55,6 +79,7 @@ public class ChartPCR extends LineChart {
 		chartSettings.setEnableTooltips(true);
 		//
 		setPrimaryAxisSet(chartSettings);
+		setExportMenu(chartSettings);
 		applySettings(chartSettings);
 	}
 
@@ -71,5 +96,69 @@ public class ChartPCR extends LineChart {
 		primaryAxisSettingsY.setTitle("Fluorescence");
 		primaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.0#E0"), new DecimalFormatSymbols(Locale.ENGLISH)));
 		primaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_BLACK));
+	}
+
+	@SuppressWarnings("deprecation")
+	private void setExportMenu(IChartSettings settings) {
+
+		IScanConverterSupport converterSupport = PlateConverterPCR.getScanConverterSupport();
+		List<ISupplier> exportSupplier = converterSupport.getExportSupplier();
+		for(ISupplier supplier : exportSupplier) {
+			settings.addMenuEntry(new IChartMenuEntry() {
+
+				@Override
+				public String getName() {
+
+					return supplier.getFilterName();
+				}
+
+				@Override
+				public String getToolTipText() {
+
+					return supplier.getDescription();
+				}
+
+				@Override
+				public String getCategory() {
+
+					return "Export";
+				}
+
+				@Override
+				public void execute(Shell shell, ScrollableChart scrollableChart) {
+
+					if(plate == null) {
+						return;
+					}
+					FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
+					fileDialog.setText("PCR Export");
+					fileDialog.setFileName(plate.getName() + "." + supplier.getFileExtension());
+					fileDialog.setFilterExtensions(new String[]{"*" + supplier.getFileExtension()});
+					fileDialog.setFilterNames(new String[]{supplier.getFilterName()});
+					String pathname = fileDialog.open();
+					if(pathname != null) {
+						File file = new File(pathname);
+						ProgressMonitorDialog dialog = new ProgressMonitorDialog(shell);
+						try {
+							dialog.run(true, true, new IRunnableWithProgress() {
+
+								@Override
+								public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+
+									IProcessingInfo<File> convert = PlateConverterPCR.convert(file, plate, supplier.getId(), monitor);
+									ProcessingInfoPartSupport.getInstance().update(convert);
+								}
+							});
+						} catch(InvocationTargetException e) {
+							IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
+							processingInfo.addErrorMessage("PCR Export", "Export failed", e.getCause());
+							ProcessingInfoPartSupport.getInstance().update(processingInfo);
+						} catch(InterruptedException e) {
+							Thread.currentThread().interrupt();
+						}
+					}
+				}
+			});
+		}
 	}
 }
