@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -20,9 +20,9 @@ import java.util.function.Supplier;
 
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.NodeProcessorPreferences;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
-import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
-import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences.DialogBehavior;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences.DialogBehavior;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -51,14 +51,14 @@ public class SettingsWizard extends Wizard {
 	}
 
 	/**
-	 * Opens a wizard to edit the given preferences if the user confirms the given {@link ProcessorPreferences} are updated via the public set methods
+	 * Opens a wizard to edit the given preferences if the user confirms the given {@link IProcessorPreferences} are updated via the public set methods
 	 * 
 	 * @param shell
 	 * @param preferences
 	 * @return <code>true</code> if user has confirmed, <code>false</code> otherwise
 	 * @throws IOException
 	 */
-	public static <T> boolean openEditPreferencesWizard(Shell shell, ProcessorPreferences<T> preferences, boolean showProfileToolbar) throws IOException {
+	public static <T> boolean openEditPreferencesWizard(Shell shell, IProcessorPreferences<T> preferences, boolean showProfileToolbar) throws IOException {
 
 		IProcessSupplier<T> processorSupplier = preferences.getSupplier();
 		SettingsWizard wizard = new SettingsWizard("Edit Processor Options");
@@ -92,7 +92,7 @@ public class SettingsWizard extends Wizard {
 	 * @param shell
 	 * @param processTypeSupport
 	 */
-	public static void openManagePreferencesWizard(Shell shell, Supplier<Collection<ProcessorPreferences<?>>> preferenceSupplier) {
+	public static void openManagePreferencesWizard(Shell shell, Supplier<Collection<IProcessorPreferences<?>>> preferenceSupplier) {
 
 		SettingsWizard wizard = new SettingsWizard("Manage Processor Options");
 		SettingsPreferencesEditPage page = new SettingsPreferencesEditPage(preferenceSupplier);
@@ -131,7 +131,7 @@ public class SettingsWizard extends Wizard {
 	 * @throws IOException
 	 *             if reading the settings failed
 	 */
-	public static <T> ProcessorPreferences<T> getSettings(Shell shell, ProcessorPreferences<T> preferences, boolean showProfileToolbar) throws IOException {
+	public static <T> IProcessorPreferences<T> getSettings(Shell shell, IProcessorPreferences<T> preferences, boolean showProfileToolbar) throws IOException {
 
 		IProcessSupplier<T> processSupplier = preferences.getSupplier();
 		Class<T> settingsClass = processSupplier.getSettingsClass();
@@ -154,7 +154,7 @@ public class SettingsWizard extends Wizard {
 	 * @param processorId
 	 * @return the preferences for this processor id
 	 */
-	public static <T> ProcessorPreferences<T> getWorkspacePreferences(IProcessSupplier<T> supplier) {
+	public static <T> IProcessorPreferences<T> getWorkspacePreferences(IProcessSupplier<T> supplier) {
 
 		return new NodeProcessorPreferences<T>(supplier, getStorage().node(supplier.getId()));
 	}
@@ -163,11 +163,11 @@ public class SettingsWizard extends Wizard {
 
 	/**
 	 * 
-	 * @return all active preferences for this {@link ProcessSupplierContext}
+	 * @return all active preferences for this {@link IProcessSupplierContext}
 	 */
-	public static Collection<ProcessorPreferences<?>> getAllPreferences(ProcessSupplierContext context) {
+	public static Collection<IProcessorPreferences<?>> getAllPreferences(IProcessSupplierContext context) {
 
-		List<ProcessorPreferences<?>> result = new ArrayList<>();
+		List<IProcessorPreferences<?>> result = new ArrayList<>();
 		try {
 			IEclipsePreferences storage = getStorage();
 			String[] childrenNames = storage.childrenNames();

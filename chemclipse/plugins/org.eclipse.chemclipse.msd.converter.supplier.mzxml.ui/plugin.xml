@@ -10,4 +10,11 @@
             name="mzXML Converter">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.msd.converter.supplier.mzxml.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.msd.converter.supplier.mzxml.chromatogram">
+      </icon>
+   </extension>
 </plugin>

@@ -10,4 +10,11 @@
             name="Median Normalizer">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.mediannormalizer.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.mediannormalizer">
+      </icon>
+   </extension>
 </plugin>

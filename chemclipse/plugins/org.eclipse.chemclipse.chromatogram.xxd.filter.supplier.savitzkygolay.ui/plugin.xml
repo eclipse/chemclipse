@@ -22,4 +22,23 @@
             name="Savitzky-Golay Smoothing">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.savitzkygolay">
+      </icon>
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.csd.filter.supplier.savitzkygolay">
+      </icon>
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.wsd.filter.supplier.savitzkygolay">
+      </icon>
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.savitzkygolay.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.savitzkygolay.massspectrum">
+      </icon>
+   </extension>
 </plugin>

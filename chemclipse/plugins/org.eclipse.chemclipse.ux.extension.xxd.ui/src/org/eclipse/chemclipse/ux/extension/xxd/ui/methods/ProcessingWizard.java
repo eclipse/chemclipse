@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,7 +17,7 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.jface.dialogs.DialogSettings;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -44,12 +44,12 @@ public class ProcessingWizard extends Wizard {
 	}
 
 	@Deprecated
-	public static IProcessEntry open(Shell shell, ProcessSupplierContext processingSupport, DataCategory[] dataCategories) {
+	public static IProcessEntry open(Shell shell, IProcessSupplierContext processingSupport, DataCategory[] dataCategories) {
 
 		return open(shell, Collections.singletonMap(processingSupport, "global"), dataCategories).get(processingSupport);
 	}
 
-	public static Map<ProcessSupplierContext, IProcessEntry> open(Shell shell, Map<ProcessSupplierContext, String> contexts, DataCategory[] dataCategories) {
+	public static Map<IProcessSupplierContext, IProcessEntry> open(Shell shell, Map<IProcessSupplierContext, String> contexts, DataCategory[] dataCategories) {
 
 		ProcessingWizard wizard = new ProcessingWizard();
 		ProcessingWizardPage wizardPage = new ProcessingWizardPage(contexts, dataCategories);

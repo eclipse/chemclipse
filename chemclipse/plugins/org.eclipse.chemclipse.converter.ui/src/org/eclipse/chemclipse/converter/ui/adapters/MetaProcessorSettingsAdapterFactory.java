@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved.
  * 
@@ -29,8 +29,8 @@ import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
-import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsUIProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedMethodUI;
 import org.eclipse.core.databinding.validation.ValidationStatus;
@@ -52,21 +52,21 @@ public class MetaProcessorSettingsAdapterFactory implements IAdapterFactory, Set
 		private final MetaProcessorSettings processorSettings;
 		private final ExtendedMethodUI extendedMethodUI;
 		//
-		private ProcessorPreferences<MetaProcessorSettings> preferences;
+		private IProcessorPreferences<MetaProcessorSettings> preferences;
 		private List<Listener> listeners = new ArrayList<>();
 		//
 		boolean enableEditProfiles = false;
 		private int sizeProfiles = 1; // Default 1 profile
 
-		public SettingsUIControlImplementation(Composite parent, ProcessorPreferences<MetaProcessorSettings> preferences, boolean showProfileToolbar) throws IOException {
+		public SettingsUIControlImplementation(Composite parent, IProcessorPreferences<MetaProcessorSettings> preferences, boolean showProfileToolbar) throws IOException {
 
 			this.preferences = preferences;
 			//
 			processorSettings = preferences.getSettings();
-			extendedMethodUI = new ExtendedMethodUI(parent, SWT.READ_ONLY, Activator.getProcessSupplierContext(), new BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>>() {
+			extendedMethodUI = new ExtendedMethodUI(parent, SWT.READ_ONLY, Activator.getProcessSupplierContext(), new BiFunction<IProcessEntry, IProcessSupplierContext, IProcessorPreferences<?>>() {
 
 				@Override
-				public ProcessorPreferences<?> apply(IProcessEntry processEntry, ProcessSupplierContext supplierContext) {
+				public IProcessorPreferences<?> apply(IProcessEntry processEntry, IProcessSupplierContext supplierContext) {
 
 					return processorSettings.getProcessorPreferences(processEntry, processEntry.getPreferences(supplierContext));
 				}
@@ -213,7 +213,7 @@ public class MetaProcessorSettingsAdapterFactory implements IAdapterFactory, Set
 	}
 
 	@Override
-	public SettingsUIControl createUI(Composite parent, ProcessorPreferences<MetaProcessorSettings> preferences, boolean showProfileToolbar) throws IOException {
+	public SettingsUIControl createUI(Composite parent, IProcessorPreferences<MetaProcessorSettings> preferences, boolean showProfileToolbar) throws IOException {
 
 		return new SettingsUIControlImplementation(parent, preferences, showProfileToolbar);
 	}

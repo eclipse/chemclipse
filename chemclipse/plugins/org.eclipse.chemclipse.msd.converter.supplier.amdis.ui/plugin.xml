@@ -10,5 +10,19 @@
             name="AMDIS Converter">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.msd.converter.supplier.amdis.ui.icon.ChromatogramCombinedSpectrumMenuIcon"
+            id="org.eclipse.chemclipse.msd.converter.supplier.amdis.chromatogram.combined.msl">
+      </icon>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.msd.converter.supplier.amdis.ui.icon.ChromatogramNISTPeakMenuIcon"
+            id="org.eclipse.chemclipse.msd.converter.supplier.amdis.chromatogram.peak.msp">
+      </icon>
+   </extension>
 
 </plugin>

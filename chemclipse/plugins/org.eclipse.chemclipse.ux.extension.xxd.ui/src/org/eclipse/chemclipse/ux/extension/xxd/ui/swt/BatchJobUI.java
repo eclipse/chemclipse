@@ -22,7 +22,7 @@ import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -46,18 +46,18 @@ public class BatchJobUI {
 	private ExtendedMethodUI extendedMethodUI;
 	//
 	private IModificationHandler modificationHandler;
-	private ProcessSupplierContext processingSupport;
+	private IProcessSupplierContext processingSupport;
 	private IPreferenceStore preferenceStore;
 	private String userLocationPreferenceKey;
 	private DataCategory[] dataCategories;
 	private IRunnableWithProgress executionRunnable;
 
-	public BatchJobUI(Composite parent, ProcessSupplierContext processingSupport, IPreferenceStore preferenceStore, String userlocationPrefrenceKey, DataType[] dataTypes, IRunnableWithProgress executionRunnable) {
+	public BatchJobUI(Composite parent, IProcessSupplierContext processingSupport, IPreferenceStore preferenceStore, String userlocationPrefrenceKey, DataType[] dataTypes, IRunnableWithProgress executionRunnable) {
 
 		this(parent, processingSupport, preferenceStore, userlocationPrefrenceKey, DataType.convert(dataTypes), executionRunnable);
 	}
 
-	public BatchJobUI(Composite parent, ProcessSupplierContext processingSupport, IPreferenceStore preferenceStore, String userLocationPreferenceKey, DataCategory[] dataCategories, IRunnableWithProgress executionRunnable) {
+	public BatchJobUI(Composite parent, IProcessSupplierContext processingSupport, IPreferenceStore preferenceStore, String userLocationPreferenceKey, DataCategory[] dataCategories, IRunnableWithProgress executionRunnable) {
 
 		this.processingSupport = processingSupport;
 		this.preferenceStore = preferenceStore;

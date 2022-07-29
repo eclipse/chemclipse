@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,7 +28,7 @@ import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
@@ -53,7 +53,7 @@ import org.eclipse.swt.widgets.Label;
 
 public class ProcessingWizardPage extends WizardPage {
 
-	private final Map<ProcessSupplierContext, String> processSupplierContextMap;
+	private final Map<IProcessSupplierContext, String> processSupplierContextMap;
 	private final Set<DataCategory> selectedDataTypes = new HashSet<>();
 	private final List<Button> dataCategorySelections = new ArrayList<>();
 	private final List<DataCategory> dataCategories = new ArrayList<>();
@@ -61,11 +61,11 @@ public class ProcessingWizardPage extends WizardPage {
 	private ComboViewer comboViewerCategory;
 	private ComboViewer comboViewerProcessor;
 	private ProcessEntry processEntry;
-	private ProcessSupplierContext processContext;
+	private IProcessSupplierContext processContext;
 	//
 	private static IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
-	protected ProcessingWizardPage(Map<ProcessSupplierContext, String> contexts, DataCategory[] dataCategories) {
+	protected ProcessingWizardPage(Map<IProcessSupplierContext, String> contexts, DataCategory[] dataCategories) {
 
 		super("ProcessingWizardPage");
 		this.processSupplierContextMap = contexts;
@@ -145,7 +145,7 @@ public class ProcessingWizardPage extends WizardPage {
 			@Override
 			public void selectionChanged(SelectionChangedEvent event) {
 
-				processContext = (ProcessSupplierContext)comboViewer.getStructuredSelection().getFirstElement();
+				processContext = (IProcessSupplierContext)comboViewer.getStructuredSelection().getFirstElement();
 				updateComboDataCategoryItems();
 			}
 		});
@@ -413,7 +413,7 @@ public class ProcessingWizardPage extends WizardPage {
 		}
 	}
 
-	public ProcessSupplierContext getProcessSupplierContext() {
+	public IProcessSupplierContext getProcessSupplierContext() {
 
 		return processContext;
 	}

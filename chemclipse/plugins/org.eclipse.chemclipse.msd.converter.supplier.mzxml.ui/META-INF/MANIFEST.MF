@@ -10,6 +10,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.chemclipse.support,
  org.eclipse.chemclipse.msd.converter.supplier.mzxml,
- org.eclipse.chemclipse.support.ui
+ org.eclipse.chemclipse.support.ui,
+ org.eclipse.chemclipse.xxd.process.ui,
+ org.eclipse.chemclipse.rcp.ui.icons
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy

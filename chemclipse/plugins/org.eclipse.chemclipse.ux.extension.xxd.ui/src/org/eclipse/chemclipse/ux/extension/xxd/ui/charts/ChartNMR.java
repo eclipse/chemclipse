@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -32,11 +32,15 @@ import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
@@ -87,6 +91,12 @@ public class ChartNMR extends LineChart {
 					public String getCategory() {
 
 						return "Export";
+					}
+
+					@Override
+					public Image getIcon() {
+
+						return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXPORT, IApplicationImageProvider.SIZE_16x16);
 					}
 
 					@Override

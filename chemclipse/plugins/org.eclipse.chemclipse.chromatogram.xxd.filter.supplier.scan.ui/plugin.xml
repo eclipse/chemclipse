@@ -9,5 +9,12 @@
             id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.scan.ui.preferences.preferencePage"
             name="Chromatogram Scan Filter">
       </page>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanremover">
+      </icon>
    </extension>  
 </plugin>

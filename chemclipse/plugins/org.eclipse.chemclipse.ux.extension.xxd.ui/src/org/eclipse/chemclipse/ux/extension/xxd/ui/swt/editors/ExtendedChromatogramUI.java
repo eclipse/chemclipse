@@ -59,9 +59,9 @@ import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier.SupplierType;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
-import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
@@ -236,7 +236,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	//
 	private boolean suspendUpdate = false;
 	private final IPreferenceStore preferenceStore;
-	private final ProcessSupplierContext processTypeSupport;
+	private final IProcessSupplierContext processTypeSupport;
 	//
 	private final IEventBroker eventBroker;
 	private MethodSupportUI methodSupportUI;
@@ -254,7 +254,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		this(parent, style, eventBroker, Activator.getDefault().getPreferenceStore());
 	}
 
-	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker, ProcessSupplierContext supplierContext) {
+	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker, IProcessSupplierContext supplierContext) {
 
 		this(parent, style, eventBroker, supplierContext, Activator.getDefault().getPreferenceStore());
 	}
@@ -264,7 +264,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		this(parent, style, eventBroker, new org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport(), store);
 	}
 
-	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker, ProcessSupplierContext supplierContext, IPreferenceStore store) {
+	public ExtendedChromatogramUI(Composite parent, int style, IEventBroker eventBroker, IProcessSupplierContext supplierContext, IPreferenceStore store) {
 
 		super(parent, style);
 		this.eventBroker = eventBroker;
@@ -384,7 +384,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			/*
 			 * Adjust
 			 */
-			dataCategoryPredicate = ProcessSupplierContext.createDataCategoryPredicate(dataCategory);
+			dataCategoryPredicate = IProcessSupplierContext.createDataCategoryPredicate(dataCategory);
 			targetDisplaySettings = null;
 			this.chromatogramSelection = chromatogramSelection;
 			updateToolbar(toolbars.get(TOOLBAR_CHROMATOGRAM_ALIGNMENT), chromatogramSelection);
@@ -445,9 +445,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			//
 			chromatogramChart.deleteSeries(SERIES_ID_SELECTED_PEAK_MARKER);
 			for(String seriesId : seriesIds) {
-				if(seriesId.startsWith(SERIES_ID_SELECTED_PEAK_SHAPE)) {
-					chromatogramChart.deleteSeries(seriesId);
-				} else if(seriesId.startsWith(SERIES_ID_SELECTED_PEAK_BACKGROUND)) {
+				if(seriesId.startsWith(SERIES_ID_SELECTED_PEAK_SHAPE) || seriesId.startsWith(SERIES_ID_SELECTED_PEAK_BACKGROUND)) {
 					chromatogramChart.deleteSeries(seriesId);
 				}
 			}
@@ -466,10 +464,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 	public boolean isActiveChromatogramSelection(IChromatogramSelection chromatogramSelection) {
 
-		if(this.chromatogramSelection == chromatogramSelection) {
-			return true;
-		}
-		return false;
+		return (this.chromatogramSelection == chromatogramSelection);
 	}
 
 	protected void setChromatogramSelectionRange(int startRetentionTime, int stopRetentionTime, float startAbundance, float stopAbundance) {
@@ -523,33 +518,31 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 	public void updateMenu() {
 
-		if(processTypeSupport != null) {
-			if(menuCache != chromatogramSelection) {
-				/*
-				 * Clean the Menu
-				 */
-				IChartSettings chartSettings = chromatogramChart.getChartSettings();
-				for(IChartMenuEntry cachedEntry : cachedMenuEntries) {
-					chartSettings.removeMenuEntry(cachedEntry);
-				}
-				cachedMenuEntries.clear();
-				/*
-				 * Dynamic Menu Items
-				 */
-				List<IProcessSupplier<?>> suplierList = new ArrayList<>(processTypeSupport.getSupplier(this::isValidSupplier));
-				Collections.sort(suplierList, new CategoryNameComparator());
-				for(IProcessSupplier<?> supplier : suplierList) {
-					IChartMenuEntry cachedEntry = new ProcessorSupplierMenuEntry<>(supplier, processTypeSupport, this::executeSupplier);
-					cachedMenuEntries.add(cachedEntry);
-					chartSettings.addMenuEntry(cachedEntry);
-					addCommand(supplier, cachedEntry);
-				}
-				/*
-				 * Apply the menu items.
-				 */
-				chromatogramChart.applySettings(chartSettings);
-				menuCache = chromatogramSelection;
+		if(processTypeSupport != null && menuCache != chromatogramSelection) {
+			/*
+			 * Clean the Menu
+			 */
+			IChartSettings chartSettings = chromatogramChart.getChartSettings();
+			for(IChartMenuEntry cachedEntry : cachedMenuEntries) {
+				chartSettings.removeMenuEntry(cachedEntry);
 			}
+			cachedMenuEntries.clear();
+			/*
+			 * Dynamic Menu Items
+			 */
+			List<IProcessSupplier<?>> suplierList = new ArrayList<>(processTypeSupport.getSupplier(this::isValidSupplier));
+			Collections.sort(suplierList, new CategoryNameComparator());
+			for(IProcessSupplier<?> supplier : suplierList) {
+				IChartMenuEntry cachedEntry = new ProcessorSupplierMenuEntry<>(supplier, processTypeSupport, this::executeSupplier);
+				cachedMenuEntries.add(cachedEntry);
+				chartSettings.addMenuEntry(cachedEntry);
+				addCommand(supplier, cachedEntry);
+			}
+			/*
+			 * Apply the menu items.
+			 */
+			chromatogramChart.applySettings(chartSettings);
+			menuCache = chromatogramSelection;
 		}
 	}
 
@@ -561,17 +554,16 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		newCommand.setHandler(new DynamicHandler(cachedEntry, chromatogramChart));
 	}
 
-	private <C> void executeSupplier(IProcessSupplier<C> processSupplier, ProcessSupplierContext processSupplierContext) {
+	private <C> void executeSupplier(IProcessSupplier<C> processSupplier, IProcessSupplierContext processSupplierContext) {
 
 		try {
 			Shell shell = getChromatogramChart().getShell();
-			ProcessorPreferences<C> settings = SettingsWizard.getSettings(shell, SettingsWizard.getWorkspacePreferences(processSupplier), true);
+			IProcessorPreferences<C> settings = SettingsWizard.getSettings(shell, SettingsWizard.getWorkspacePreferences(processSupplier), true);
 			if(settings == null) {
 				return;
 			}
 			//
-			if(processSupplier instanceof MetaProcessorProcessSupplier) {
-				MetaProcessorProcessSupplier metaProcessorProcessSupplier = (MetaProcessorProcessSupplier)processSupplier;
+			if(processSupplier instanceof MetaProcessorProcessSupplier metaProcessorProcessSupplier) {
 				IProcessMethod processMethod = metaProcessorProcessSupplier.getProcessMethod();
 				int resumeIndex = ResumeMethodSupport.selectResumeIndex(shell, processMethod);
 				processMethod.setResumeIndex(resumeIndex);
@@ -802,24 +794,22 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 					} else {
 						peaksInactiveIstd.add(peak);
 					}
-				} else {
-					/*
-					 * Normal
-					 */
-					if(peak.isActiveForAnalysis()) {
-						if(peak.getTargets().isEmpty()) {
-							peaksActiveNormal.add(peak);
-						} else {
-							TargetReference targetReference = createTargetReference(peak);
-							if(!targetDisplaySettings.isVisible(targetReference)) {
-								peaksActiveTargetsHidden.add(peak);
-							} else {
-								peaksActiveNormal.add(peak);
-							}
-						}
+				} else /*
+						 * Normal
+						 */
+				if(peak.isActiveForAnalysis()) {
+					if(peak.getTargets().isEmpty()) {
+						peaksActiveNormal.add(peak);
 					} else {
-						peaksInactiveNormal.add(peak);
+						TargetReference targetReference = createTargetReference(peak);
+						if(!targetDisplaySettings.isVisible(targetReference)) {
+							peaksActiveTargetsHidden.add(peak);
+						} else {
+							peaksActiveNormal.add(peak);
+						}
 					}
+				} else {
+					peaksInactiveNormal.add(peak);
 				}
 			}
 			//
@@ -1152,8 +1142,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof ISeparationColumn) {
-					ISeparationColumn separationColumn = (ISeparationColumn)element;
+				if(element instanceof ISeparationColumn separationColumn) {
 					return SeparationColumnFactory.getColumnLabel(separationColumn, 25);
 				}
 				return null;
@@ -1167,11 +1156,10 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			public void selectionChanged(SelectionChangedEvent event) {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof ISeparationColumn && chromatogramSelection != null) {
+				if(object instanceof ISeparationColumn separationColumn && chromatogramSelection != null) {
 					/*
 					 * Set the column
 					 */
-					ISeparationColumn separationColumn = (ISeparationColumn)object;
 					IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 					chromatogram.getSeparationColumnIndices().setSeparationColumn(separationColumn);
 					/*
@@ -1534,18 +1522,13 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 						axisSettings.setTitle(title);
 						setScanAxisSettings(axisSettings);
 					}
-				} else {
-					/*
-					 * Remove
-					 */
-					if(axisSettings != null) {
-						axisSettings.setTitle(title);
-						chartSettings.getSecondaryAxisSettingsListX().remove(axisSettings);
-					}
+				} else /*
+						 * Remove
+						 */
+				if(axisSettings != null) {
+					axisSettings.setTitle(title);
+					chartSettings.getSecondaryAxisSettingsListX().remove(axisSettings);
 				}
-				/*
-				 * Update the title to retrieve the correct axis.
-				 */
 				chromatogramChart.applySettings(chartSettings);
 				titleScans = title;
 			}
@@ -1570,8 +1553,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 	private void updateToolbar(Composite composite, IChromatogramSelection chromatogramSelection) {
 
-		if(composite instanceof IChromatogramSelectionUpdateListener) {
-			IChromatogramSelectionUpdateListener listener = (IChromatogramSelectionUpdateListener)composite;
+		if(composite instanceof IChromatogramSelectionUpdateListener listener) {
 			listener.update(chromatogramSelection);
 		}
 	}

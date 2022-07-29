@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,10 +25,10 @@ import org.eclipse.chemclipse.processing.supplier.AbstractProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.ExecutionResultTransformer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
-import org.eclipse.chemclipse.processing.supplier.ProcessExecutionConsumer;
+import org.eclipse.chemclipse.processing.supplier.IProcessExecutionConsumer;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
-import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 // import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
@@ -37,7 +37,7 @@ import org.osgi.service.component.annotations.ReferencePolicy;
 // @Component(service = {IProcessTypeSupplier.class})
 public class ProcedureProcessTypeSupplier implements IProcessTypeSupplier {
 
-	private ProcessSupplierContext context;
+	private IProcessSupplierContext context;
 	private final List<Procedure<?>> procedures = new CopyOnWriteArrayList<Procedure<?>>();
 
 	@Override
@@ -57,7 +57,7 @@ public class ProcedureProcessTypeSupplier implements IProcessTypeSupplier {
 	}
 
 	@Reference(unbind = "-")
-	public void setProcessSupplierContext(ProcessSupplierContext context) {
+	public void setProcessSupplierContext(IProcessSupplierContext context) {
 
 		this.context = context;
 	}
@@ -73,7 +73,7 @@ public class ProcedureProcessTypeSupplier implements IProcessTypeSupplier {
 		procedures.remove(procedure);
 	}
 
-	private final class ProcedureProcessSupplier<ConfigType> extends AbstractProcessSupplier<ConfigType> implements ProcessSupplierContext, ExecutionResultTransformer<ConfigType> {
+	private final class ProcedureProcessSupplier<ConfigType> extends AbstractProcessSupplier<ConfigType> implements IProcessSupplierContext, ExecutionResultTransformer<ConfigType> {
 
 		private final Procedure<ConfigType> procedure;
 
@@ -116,9 +116,9 @@ public class ProcedureProcessTypeSupplier implements IProcessTypeSupplier {
 		}
 
 		@Override
-		public <T> ProcessExecutionConsumer<T> transform(ProcessExecutionConsumer<T> consumer, ProcessorPreferences<ConfigType> processorPreferences, ProcessExecutionContext context) throws IOException {
+		public <T> IProcessExecutionConsumer<T> transform(IProcessExecutionConsumer<T> consumer, IProcessorPreferences<ConfigType> processorPreferences, ProcessExecutionContext context) throws IOException {
 
-			ProcessExecutionConsumer<T> executionConsumer = procedure.createConsumer(processorPreferences.getSettings(), consumer, context);
+			IProcessExecutionConsumer<T> executionConsumer = procedure.createConsumer(processorPreferences.getSettings(), consumer, context);
 			if(executionConsumer == null) {
 				return consumer;
 			}

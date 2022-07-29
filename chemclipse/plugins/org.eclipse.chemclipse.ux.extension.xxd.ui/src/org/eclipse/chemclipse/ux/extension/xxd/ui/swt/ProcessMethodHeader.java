@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,7 +24,7 @@ import org.eclipse.chemclipse.model.handler.IModificationHandler;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.fieldassist.ContentProposal;
 import org.eclipse.jface.fieldassist.IContentProposal;
@@ -53,7 +53,7 @@ public class ProcessMethodHeader extends Composite {
 	//
 	private IUpdateListener updateListener = null;
 	private IModificationHandler modificationHandler = null;
-	private ProcessSupplierContext processingSupport = null;
+	private IProcessSupplierContext processingSupport = null;
 	//
 	private String[] knownCategories = new String[]{};
 
@@ -79,7 +79,7 @@ public class ProcessMethodHeader extends Composite {
 		this.modificationHandler = modificationHandler;
 	}
 
-	public void setProcessingSupport(ProcessSupplierContext processingSupport) {
+	public void setProcessingSupport(IProcessSupplierContext processingSupport) {
 
 		this.processingSupport = processingSupport;
 	}

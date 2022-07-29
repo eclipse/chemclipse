@@ -35,7 +35,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.BatchJobUI;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
@@ -60,7 +60,7 @@ public class BatchJobEditor extends EditorPart implements IRunnableWithProgress 
 	private boolean isDirty = false;
 	private BatchProcessJob batchProcessJob;
 	//
-	private ProcessSupplierContext supplierContext;
+	private IProcessSupplierContext supplierContext;
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {

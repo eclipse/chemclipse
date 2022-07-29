@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,9 +18,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
-import org.eclipse.chemclipse.processing.supplier.ProcessExecutionConsumer;
+import org.eclipse.chemclipse.processing.supplier.IProcessExecutionConsumer;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
-import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 
 public interface IMeasurementProcessSupplier<ConfigType> extends IProcessSupplier<ConfigType> {
 
@@ -41,14 +41,14 @@ public interface IMeasurementProcessSupplier<ConfigType> extends IProcessSupplie
 	 */
 	Collection<? extends IMeasurement> applyProcessor(Collection<? extends IMeasurement> measurements, ConfigType processSettings, ProcessExecutionContext context);
 
-	static ProcessExecutionConsumer<Collection<? extends IMeasurement>> createConsumer(Collection<? extends IMeasurement> measurements) {
+	static IProcessExecutionConsumer<Collection<? extends IMeasurement>> createConsumer(Collection<? extends IMeasurement> measurements) {
 
-		return new ProcessExecutionConsumer<Collection<? extends IMeasurement>>() {
+		return new IProcessExecutionConsumer<Collection<? extends IMeasurement>>() {
 
 			AtomicReference<Collection<? extends IMeasurement>> result = new AtomicReference<Collection<? extends IMeasurement>>(measurements);
 
 			@Override
-			public <X> void execute(ProcessorPreferences<X> preferences, ProcessExecutionContext context) throws Exception {
+			public <X> void execute(IProcessorPreferences<X> preferences, ProcessExecutionContext context) throws Exception {
 
 				IProcessSupplier<X> supplier = preferences.getSupplier();
 				if(supplier instanceof IMeasurementProcessSupplier<?>) {
@@ -64,14 +64,14 @@ public interface IMeasurementProcessSupplier<ConfigType> extends IProcessSupplie
 			}
 
 			@Override
-			public <X> boolean canExecute(ProcessorPreferences<X> preferences) {
+			public <X> boolean canExecute(IProcessorPreferences<X> preferences) {
 
 				IProcessSupplier<X> supplier = preferences.getSupplier();
 				return supplier instanceof IMeasurementProcessSupplier<?>;
 			}
 
 			@Override
-			public ProcessExecutionConsumer<Collection<? extends IMeasurement>> withResult(Object initialResult) {
+			public IProcessExecutionConsumer<Collection<? extends IMeasurement>> withResult(Object initialResult) {
 
 				if(initialResult instanceof IMeasurement) {
 					return IMeasurementProcessSupplier.createConsumer(Collections.singleton((IMeasurement)initialResult));

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -68,8 +68,7 @@ public class ChromatogramFilterMSDProcessSupplier implements IProcessTypeSupplie
 		@Override
 		public IChromatogramSelection<?, ?> apply(IChromatogramSelection<?, ?> chromatogramSelection, IChromatogramFilterSettings processSettings, MessageConsumer messageConsumer, IProgressMonitor monitor) {
 
-			if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-				IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
+			if(chromatogramSelection instanceof IChromatogramSelectionMSD chromatogramSelectionMSD) {
 				if(processSettings instanceof IChromatogramFilterSettings) {
 					messageConsumer.addMessages(ChromatogramFilterMSD.applyFilter(chromatogramSelectionMSD, processSettings, supplier.getId(), monitor));
 				} else {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,12 +19,12 @@ import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.AbstractProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
-import org.eclipse.chemclipse.processing.supplier.ProcessExecutionConsumer;
+import org.eclipse.chemclipse.processing.supplier.IProcessExecutionConsumer;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
-import org.eclipse.chemclipse.processing.supplier.ProcessExecutor;
-import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.IProcessExecutor;
+import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 
-public final class MetaProcessorProcessSupplier extends AbstractProcessSupplier<MetaProcessorSettings> implements ProcessExecutor {
+public final class MetaProcessorProcessSupplier extends AbstractProcessSupplier<MetaProcessorSettings> implements IProcessExecutor {
 
 	private final IProcessMethod processMethod;
 
@@ -46,17 +46,17 @@ public final class MetaProcessorProcessSupplier extends AbstractProcessSupplier<
 	}
 
 	@Override
-	public <X> void execute(ProcessorPreferences<X> preferences, ProcessExecutionContext context) throws Exception {
+	public <X> void execute(IProcessorPreferences<X> preferences, ProcessExecutionContext context) throws Exception {
 
 		X settings = preferences.getSettings();
 		if(settings instanceof MetaProcessorSettings) {
 			MetaProcessorSettings processorSettings = (MetaProcessorSettings)settings;
-			ProcessExecutionConsumer<?> callerDelegate = context.getContextObject(ProcessExecutionConsumer.class);
+			IProcessExecutionConsumer<?> callerDelegate = context.getContextObject(IProcessExecutionConsumer.class);
 			if(callerDelegate != null) {
-				ProcessEntryContainer.applyProcessEntries(processMethod, context, new BiFunction<IProcessEntry, IProcessSupplier<X>, ProcessorPreferences<X>>() {
+				ProcessEntryContainer.applyProcessEntries(processMethod, context, new BiFunction<IProcessEntry, IProcessSupplier<X>, IProcessorPreferences<X>>() {
 
 					@Override
-					public ProcessorPreferences<X> apply(IProcessEntry processEntry, IProcessSupplier<X> processSupplier) {
+					public IProcessorPreferences<X> apply(IProcessEntry processEntry, IProcessSupplier<X> processSupplier) {
 
 						return processorSettings.getProcessorPreferences(processEntry, processEntry.getPreferences(processSupplier));
 					}

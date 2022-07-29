@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.processing.Processor;
 import org.eclipse.chemclipse.processing.filter.Filter;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.xxd.classification.settings.ClassifierAddFilterSettings;
-import org.eclipse.chemclipse.xxd.model.filter.peaks.AbstractPeakFilter;
+import org.eclipse.chemclipse.xxd.filter.peaks.AbstractPeakFilter;
 import org.eclipse.core.runtime.SubMonitor;
 import org.osgi.service.component.annotations.Component;
 

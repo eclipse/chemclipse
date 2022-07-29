@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,8 +20,8 @@ import java.util.TreeMap;
 import java.util.function.Supplier;
 
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
-import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
-import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences.DialogBehavior;
+import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences.DialogBehavior;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -47,9 +47,9 @@ import org.eclipse.swt.widgets.ToolItem;
 public class SettingsPreferencesEditPage extends WizardPage {
 
 	private TreeViewer treeViewer;
-	private final Supplier<Collection<ProcessorPreferences<?>>> preferenceSupplier;
+	private final Supplier<Collection<IProcessorPreferences<?>>> preferenceSupplier;
 
-	public SettingsPreferencesEditPage(Supplier<Collection<ProcessorPreferences<?>>> preferenceSupplier) {
+	public SettingsPreferencesEditPage(Supplier<Collection<IProcessorPreferences<?>>> preferenceSupplier) {
 
 		super(SettingsPreferencesEditPage.class.getName());
 		this.preferenceSupplier = preferenceSupplier;
@@ -75,7 +75,7 @@ public class SettingsPreferencesEditPage extends WizardPage {
 					if(element instanceof TreeNode) {
 						element = ((TreeNode)element).getValue();
 					}
-					ProcessorPreferences<?> entry = getEntry(element);
+					IProcessorPreferences<?> entry = getEntry(element);
 					if(entry != null) {
 						return entry.getSupplier().getName();
 					}
@@ -92,7 +92,7 @@ public class SettingsPreferencesEditPage extends WizardPage {
 				@Override
 				public String getText(Object element) {
 
-					ProcessorPreferences<?> preferences = getEntry(element);
+					IProcessorPreferences<?> preferences = getEntry(element);
 					if(preferences != null) {
 						if(preferences.getDialogBehaviour() == DialogBehavior.SHOW) {
 							return "yes";
@@ -116,7 +116,7 @@ public class SettingsPreferencesEditPage extends WizardPage {
 					if(element instanceof TreeNode) {
 						element = ((TreeNode)element).getValue();
 					}
-					ProcessorPreferences<Object> preferences = getEntry(element);
+					IProcessorPreferences<Object> preferences = getEntry(element);
 					if(preferences != null) {
 						if(preferences.isUseSystemDefaults()) {
 							return "(System Default)";
@@ -179,7 +179,7 @@ public class SettingsPreferencesEditPage extends WizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				for(ProcessorPreferences<?> preferences : preferenceSupplier.get()) {
+				for(IProcessorPreferences<?> preferences : preferenceSupplier.get()) {
 					preferences.reset();
 				}
 				updateTree();
@@ -227,7 +227,7 @@ public class SettingsPreferencesEditPage extends WizardPage {
 	private void doEdit() throws IOException {
 
 		ITreeSelection selection = treeViewer.getStructuredSelection();
-		ProcessorPreferences<?> entry = getEntry(selection.getFirstElement());
+		IProcessorPreferences<?> entry = getEntry(selection.getFirstElement());
 		if(entry != null) {
 			if(SettingsWizard.openEditPreferencesWizard(getShell(), entry, true)) {
 				updateTree();
@@ -238,7 +238,7 @@ public class SettingsPreferencesEditPage extends WizardPage {
 	private void updateTree() {
 
 		Map<String, TreeNode> categories = new TreeMap<>();
-		for(ProcessorPreferences<?> entry : preferenceSupplier.get()) {
+		for(IProcessorPreferences<?> entry : preferenceSupplier.get()) {
 			IProcessTypeSupplier supplier = entry.getSupplier().getTypeSupplier();
 			TreeNode processorNode = new TreeNode(entry);
 			String category = supplier.getCategory();
@@ -261,13 +261,13 @@ public class SettingsPreferencesEditPage extends WizardPage {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static <T> ProcessorPreferences<T> getEntry(Object element) {
+	private static <T> IProcessorPreferences<T> getEntry(Object element) {
 
 		if(element instanceof TreeNode) {
 			element = ((TreeNode)element).getValue();
 		}
-		if(element instanceof ProcessorPreferences<?>) {
-			return (ProcessorPreferences<T>)element;
+		if(element instanceof IProcessorPreferences<?>) {
+			return (IProcessorPreferences<T>)element;
 		}
 		return null;
 	}

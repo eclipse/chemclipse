@@ -10,4 +10,19 @@
             name="Peak Integrator Trapezoid">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.ui.icon.ChromatogramIntegratorMenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.chromatogramIntegrator">
+      </icon>
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.ui.icon.CombinedIntegratorMenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.combinedIntegrator">
+      </icon>
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.ui.icon.PeakIntegratorMenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.peakIntegrator">
+      </icon>
+   </extension>
 </plugin>

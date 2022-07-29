@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,28 +11,28 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.methods;
 
-import org.eclipse.chemclipse.processing.supplier.ProcessExecutionConsumer;
+import org.eclipse.chemclipse.processing.supplier.IProcessExecutionConsumer;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
-import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 
-public final class SubProcessExecutionConsumer<T> implements ProcessExecutionConsumer<T> {
+public final class SubProcessExecutionConsumer<T> implements IProcessExecutionConsumer<T> {
 
-	private final ProcessExecutionConsumer<T> intercepted;
+	private final IProcessExecutionConsumer<T> intercepted;
 	private final SubProcess<T> subprocess;
 
-	public SubProcessExecutionConsumer(ProcessExecutionConsumer<T> parent, SubProcess<T> subprocess) {
+	public SubProcessExecutionConsumer(IProcessExecutionConsumer<T> parent, SubProcess<T> subprocess) {
 		this.intercepted = parent;
 		this.subprocess = subprocess;
 	}
 
 	@Override
-	public <X> void execute(ProcessorPreferences<X> preferences, ProcessExecutionContext context) throws Exception {
+	public <X> void execute(IProcessorPreferences<X> preferences, ProcessExecutionContext context) throws Exception {
 
 		ProcessExecutionContext ctx2;
 		if(intercepted.canExecute(preferences)) {
 			context.setWorkRemaining(2);
 			ProcessExecutionContext ctx1 = context.split();
-			ctx1.setContextObject(ProcessExecutionConsumer.class, intercepted);
+			ctx1.setContextObject(IProcessExecutionConsumer.class, intercepted);
 			intercepted.execute(preferences, ctx1);
 			ctx2 = context.split();
 		} else {
@@ -48,9 +48,9 @@ public final class SubProcessExecutionConsumer<T> implements ProcessExecutionCon
 	}
 
 	@Override
-	public ProcessExecutionConsumer<T> withResult(Object initialResult) {
+	public IProcessExecutionConsumer<T> withResult(Object initialResult) {
 
-		ProcessExecutionConsumer<T> withResult = intercepted.withResult(initialResult);
+		IProcessExecutionConsumer<T> withResult = intercepted.withResult(initialResult);
 		if(withResult == null) {
 			return null;
 		}
@@ -60,6 +60,6 @@ public final class SubProcessExecutionConsumer<T> implements ProcessExecutionCon
 	@FunctionalInterface
 	public static interface SubProcess<SubType> {
 
-		<SubX> void execute(ProcessorPreferences<SubX> preferences, ProcessExecutionConsumer<SubType> parent, ProcessExecutionContext subcontext);
+		<SubX> void execute(IProcessorPreferences<SubX> preferences, IProcessExecutionConsumer<SubType> parent, ProcessExecutionContext subcontext);
 	}
 }

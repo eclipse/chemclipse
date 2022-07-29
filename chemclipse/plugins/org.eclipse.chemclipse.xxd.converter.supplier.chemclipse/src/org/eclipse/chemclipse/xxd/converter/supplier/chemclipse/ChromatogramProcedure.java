@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,7 +26,7 @@ import org.eclipse.chemclipse.msd.model.core.selection.ChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.procedures.Procedure;
-import org.eclipse.chemclipse.processing.supplier.ProcessExecutionConsumer;
+import org.eclipse.chemclipse.processing.supplier.IProcessExecutionConsumer;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
@@ -64,7 +64,7 @@ public class ChromatogramProcedure implements Procedure<ChromatogramProcedureSet
 	}
 
 	@Override
-	public <ResultType> ProcessExecutionConsumer<ResultType> createConsumer(ChromatogramProcedureSettings settings, ProcessExecutionConsumer<ResultType> currentConsumer, ProcessExecutionContext context) {
+	public <ResultType> IProcessExecutionConsumer<ResultType> createConsumer(ChromatogramProcedureSettings settings, IProcessExecutionConsumer<ResultType> currentConsumer, ProcessExecutionContext context) {
 
 		ResultType result = currentConsumer.getResult();
 		if(result instanceof IChromatogramSelection<?, ?>) {

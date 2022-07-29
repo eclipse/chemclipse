@@ -27,8 +27,8 @@ import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
-import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
@@ -57,9 +57,9 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 	private static final String IMAGE_PROFILE = IApplicationImage.IMAGE_INSTRUMENT;
 	private static final String TOOLTIP_PROFILE = "the profile selection.";
 	//
-	private final ProcessSupplierContext processingSupport;
+	private final IProcessSupplierContext processingSupport;
 	private final DataCategory[] dataCategories;
-	private final BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>> preferencesSupplier;
+	private final BiFunction<IProcessEntry, IProcessSupplierContext, IProcessorPreferences<?>> preferencesSupplier;
 	//
 	private AtomicReference<Composite> toolbarMain = new AtomicReference<>();
 	private Button buttonToolbarHeader;
@@ -75,12 +75,12 @@ public class ExtendedMethodUI extends Composite implements IExtendedPartUI {
 	//
 	private boolean readOnly = false;
 
-	public ExtendedMethodUI(Composite parent, int style, ProcessSupplierContext processingSupport, DataCategory[] dataCategories) {
+	public ExtendedMethodUI(Composite parent, int style, IProcessSupplierContext processingSupport, DataCategory[] dataCategories) {
 
 		this(parent, style, processingSupport, (entry, context) -> entry.getPreferences(context), dataCategories);
 	}
 
-	public ExtendedMethodUI(Composite parent, int style, ProcessSupplierContext processingSupport, BiFunction<IProcessEntry, ProcessSupplierContext, ProcessorPreferences<?>> preferencesSupplier, DataCategory[] dataCategories) {
+	public ExtendedMethodUI(Composite parent, int style, IProcessSupplierContext processingSupport, BiFunction<IProcessEntry, IProcessSupplierContext, IProcessorPreferences<?>> preferencesSupplier, DataCategory[] dataCategories) {
 
 		super(parent, style);
 		//

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,7 +16,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
-public final class NodeProcessorPreferences<T> implements ProcessorPreferences<T> {
+public final class NodeProcessorPreferences<T> implements IProcessorPreferences<T> {
 
 	private static final Logger logger = Logger.getLogger(NodeProcessorPreferences.class);
 	//

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Christoph Läubrich.
+ * Copyright (c) 2020, 2022 Christoph Läubrich.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.processing.ui.E4ProcessSupplierContext;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -32,8 +32,8 @@ import org.osgi.util.tracker.ServiceTracker;
 public class ContextCLI implements BundleActivator {
 
 	private static List<IChromatogram<?>> CHROMATOGRAMS = new ArrayList<IChromatogram<?>>();
-	private static ProcessSupplierContext processSupplierContext;
-	private static ServiceTracker<ProcessSupplierContext, ProcessSupplierContext> serviceTracker;
+	private static IProcessSupplierContext processSupplierContext;
+	private static ServiceTracker<IProcessSupplierContext, IProcessSupplierContext> serviceTracker;
 
 	@Inject
 	synchronized void setE4ProcessSupplierContext(E4ProcessSupplierContext e4Context) {
@@ -51,7 +51,7 @@ public class ContextCLI implements BundleActivator {
 		return Collections.unmodifiableList(CHROMATOGRAMS);
 	}
 
-	public synchronized static ProcessSupplierContext getProcessSupplierContext() {
+	public synchronized static IProcessSupplierContext getProcessSupplierContext() {
 
 		if(processSupplierContext != null) {
 			return processSupplierContext;
@@ -69,7 +69,7 @@ public class ContextCLI implements BundleActivator {
 	@Override
 	public synchronized void start(BundleContext context) throws Exception {
 
-		serviceTracker = new ServiceTracker<>(context, ProcessSupplierContext.class, null);
+		serviceTracker = new ServiceTracker<>(context, IProcessSupplierContext.class, null);
 		serviceTracker.open();
 	}
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,14 +19,14 @@ import java.util.function.Consumer;
 
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
 
-@Component(service = {ProcessSupplierContext.class})
-public class OSGiProcessSupplierContext implements ProcessSupplierContext {
+@Component(service = {IProcessSupplierContext.class})
+public class OSGiProcessSupplierContext implements IProcessSupplierContext {
 
 	private final ConcurrentMap<String, IProcessSupplier<?>> supplierMap = new ConcurrentHashMap<>();
 	private final Set<IProcessTypeSupplier> typeSupplierSet = new ConcurrentHashMap<IProcessTypeSupplier, Boolean>().keySet(Boolean.TRUE);

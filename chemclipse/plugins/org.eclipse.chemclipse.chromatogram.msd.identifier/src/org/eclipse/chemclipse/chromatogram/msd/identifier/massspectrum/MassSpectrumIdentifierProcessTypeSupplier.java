@@ -67,8 +67,7 @@ public class MassSpectrumIdentifierProcessTypeSupplier implements IProcessTypeSu
 		@Override
 		public IChromatogramSelection<?, ?> apply(IChromatogramSelection<?, ?> chromatogramSelection, IMassSpectrumIdentifierSettings processSettings, MessageConsumer messageConsumer, IProgressMonitor monitor) {
 
-			if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-				IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
+			if(chromatogramSelection instanceof IChromatogramSelectionMSD chromatogramSelectionMSD) {
 				if(processSettings instanceof IMassSpectrumIdentifierSettings) {
 					messageConsumer.addMessages(MassSpectrumIdentifier.identify(chromatogramSelectionMSD.getSelectedScan(), processSettings, supplier.getId(), monitor));
 				} else {

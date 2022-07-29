@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,7 +15,7 @@ package org.eclipse.chemclipse.support.ui.processors;
 import java.util.function.BiConsumer;
 
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -25,10 +25,10 @@ public final class EditorToolbarAction extends Action {
 	private static final int MAX_TEXT_LENGTH = 10;
 	//
 	private final Processor processor;
-	private final BiConsumer<IProcessSupplier<?>, ProcessSupplierContext> executionListener;
-	private final ProcessSupplierContext context;
+	private final BiConsumer<IProcessSupplier<?>, IProcessSupplierContext> executionListener;
+	private final IProcessSupplierContext context;
 
-	public EditorToolbarAction(Processor processor, BiConsumer<IProcessSupplier<?>, ProcessSupplierContext> executionListener, ProcessSupplierContext context) {
+	public EditorToolbarAction(Processor processor, BiConsumer<IProcessSupplier<?>, IProcessSupplierContext> executionListener, IProcessSupplierContext context) {
 
 		super(shortenName(processor.getProcessSupplier().getName()));
 		//

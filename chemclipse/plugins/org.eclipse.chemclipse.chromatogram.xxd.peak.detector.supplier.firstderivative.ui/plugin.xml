@@ -28,4 +28,19 @@
             name="WSD">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.firstderivative">
+      </icon>
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.csd.peak.detector.supplier.firstderivative">
+      </icon>
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.wsd.peak.detector.supplier.firstderivative">
+      </icon>
+   </extension>
 </plugin>

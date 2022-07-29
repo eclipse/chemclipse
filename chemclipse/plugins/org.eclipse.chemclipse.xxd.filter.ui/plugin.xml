@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.xxd.filter.ui.icon.DeletePeaksMenuIcon"
+            id="org.eclipse.chemclipse.xxd.filter.peaks.DeletePeaksFilter">
+      </icon>
+      <icon
+            class="org.eclipse.chemclipse.xxd.filter.ui.icon.DeletePeakIntegrationsMenuIcon"
+            id="org.eclipse.chemclipse.xxd.filter.peaks.DeleteIntegrationsFilter">
+      </icon>
+      <icon
+            class="org.eclipse.chemclipse.xxd.filter.ui.icon.DeletePeakIdentficationsMenuIcon"
+            id="org.eclipse.chemclipse.xxd.filter.peaks.DeleteTargetsFilter">
+      </icon>
+   </extension>
+</plugin>

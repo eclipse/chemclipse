@@ -33,7 +33,7 @@ import org.eclipse.chemclipse.processing.Processor;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.filter.Filter;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
-import org.eclipse.chemclipse.xxd.model.filter.peaks.AbstractPeakFilter;
+import org.eclipse.chemclipse.xxd.filter.peaks.AbstractPeakFilter;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
@@ -96,8 +96,8 @@ public class AmbiguousPeakRemoverFilter extends AbstractPeakFilter<AmbiguousPeak
 	public AmbiguousPeakRemoverFilterSettings createConfiguration(Collection<IPeak> items) throws IllegalArgumentException {
 
 		for(IPeak peak : items) {
-			if(peak instanceof IChromatogramPeakMSD) {
-				return new AmbiguousPeakRemoverFilterSettings(((IChromatogramPeakMSD)peak).getChromatogram());
+			if(peak instanceof IChromatogramPeakMSD peakMSD) {
+				return new AmbiguousPeakRemoverFilterSettings((peakMSD).getChromatogram());
 			}
 		}
 		return super.createConfiguration(items);

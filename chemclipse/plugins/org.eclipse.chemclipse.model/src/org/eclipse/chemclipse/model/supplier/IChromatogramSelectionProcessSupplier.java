@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,9 +17,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
-import org.eclipse.chemclipse.processing.supplier.ProcessExecutionConsumer;
+import org.eclipse.chemclipse.processing.supplier.IProcessExecutionConsumer;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
-import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 
 public interface IChromatogramSelectionProcessSupplier<SettingType> extends IProcessSupplier<SettingType> {
 
@@ -36,17 +36,17 @@ public interface IChromatogramSelectionProcessSupplier<SettingType> extends IPro
 	 */
 	IChromatogramSelection<?, ?> apply(IChromatogramSelection<?, ?> chromatogramSelection, SettingType processSettings, ProcessExecutionContext context) throws InterruptedException;
 
-	static ProcessExecutionConsumer<IChromatogramSelection<?, ?>> createConsumer(IChromatogramSelection<?, ?> chromatogramSelection) {
+	static IProcessExecutionConsumer<IChromatogramSelection<?, ?>> createConsumer(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		if(chromatogramSelection == null) {
 			return null;
 		}
-		return new ProcessExecutionConsumer<IChromatogramSelection<?, ?>>() {
+		return new IProcessExecutionConsumer<IChromatogramSelection<?, ?>>() {
 
 			AtomicReference<IChromatogramSelection<?, ?>> result = new AtomicReference<IChromatogramSelection<?, ?>>(chromatogramSelection);
 
 			@Override
-			public <X> void execute(ProcessorPreferences<X> preferences, ProcessExecutionContext context) throws Exception {
+			public <X> void execute(IProcessorPreferences<X> preferences, ProcessExecutionContext context) throws Exception {
 
 				IProcessSupplier<X> supplier = preferences.getSupplier();
 				if(supplier instanceof IChromatogramSelectionProcessSupplier<?>) {
@@ -60,7 +60,7 @@ public interface IChromatogramSelectionProcessSupplier<SettingType> extends IPro
 			}
 
 			@Override
-			public <X> boolean canExecute(ProcessorPreferences<X> preferences) {
+			public <X> boolean canExecute(IProcessorPreferences<X> preferences) {
 
 				IProcessSupplier<X> supplier = preferences.getSupplier();
 				return (supplier instanceof IChromatogramSelectionProcessSupplier<?>) || (supplier instanceof IMeasurementProcessSupplier<?>);
@@ -78,7 +78,7 @@ public interface IChromatogramSelectionProcessSupplier<SettingType> extends IPro
 			}
 
 			@Override
-			public ProcessExecutionConsumer<IChromatogramSelection<?, ?>> withResult(Object initialResult) {
+			public IProcessExecutionConsumer<IChromatogramSelection<?, ?>> withResult(Object initialResult) {
 
 				if(initialResult instanceof IChromatogramSelection<?, ?>) {
 					return IChromatogramSelectionProcessSupplier.createConsumer((IChromatogramSelection<?, ?>)initialResult);

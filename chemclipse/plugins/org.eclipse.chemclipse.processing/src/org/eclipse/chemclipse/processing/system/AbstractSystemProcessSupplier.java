@@ -15,10 +15,10 @@ import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.supplier.AbstractProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
-import org.eclipse.chemclipse.processing.supplier.ProcessExecutor;
-import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.IProcessExecutor;
+import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 
-public abstract class AbstractSystemProcessSupplier<S extends ISystemProcessSettings> extends AbstractProcessSupplier<S> implements ProcessExecutor, SystemExecutor {
+public abstract class AbstractSystemProcessSupplier<S extends ISystemProcessSettings> extends AbstractProcessSupplier<S> implements IProcessExecutor, SystemExecutor {
 
 	public AbstractSystemProcessSupplier(String id, String name, String description, Class<S> settingsClass, IProcessTypeSupplier parent) {
 
@@ -31,7 +31,7 @@ public abstract class AbstractSystemProcessSupplier<S extends ISystemProcessSett
 	}
 
 	@Override
-	public <X> void execute(ProcessorPreferences<X> preferences, ProcessExecutionContext context) throws Exception {
+	public <X> void execute(IProcessorPreferences<X> preferences, ProcessExecutionContext context) throws Exception {
 
 		if(!preferences.isUseSystemDefaults()) {
 			X settings = preferences.getUserSettings();

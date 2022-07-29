@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsUIProvider.SettingsUIControl;
@@ -43,7 +43,7 @@ public class SettingsUI<T> extends Composite {
 
 	private final SettingsUIControl control;
 
-	public SettingsUI(Composite parent, ProcessorPreferences<T> preferences, boolean showProfileToolbar) throws IOException {
+	public SettingsUI(Composite parent, IProcessorPreferences<T> preferences, boolean showProfileToolbar) throws IOException {
 
 		super(parent, SWT.NONE);
 		setLayout(new FillLayout());
@@ -62,7 +62,7 @@ public class SettingsUI<T> extends Composite {
 		return control;
 	}
 
-	private SettingsUIProvider<T> loadSettingsUIProvider(ProcessorPreferences<T> preferences) {
+	private SettingsUIProvider<T> loadSettingsUIProvider(IProcessorPreferences<T> preferences) {
 
 		try {
 			T settings = preferences.getUserSettings();
@@ -89,7 +89,7 @@ public class SettingsUI<T> extends Composite {
 	private static final class DefaultSettingsUIProvider<T> implements SettingsUIProvider<T> {
 
 		@Override
-		public SettingsUIControl createUI(Composite parent, ProcessorPreferences<T> preferences, boolean showProfileToolbar) throws IOException {
+		public SettingsUIControl createUI(Composite parent, IProcessorPreferences<T> preferences, boolean showProfileToolbar) throws IOException {
 
 			return new SettingsUIControlImplementation<T>(parent, preferences, showProfileToolbar);
 		}
@@ -99,10 +99,10 @@ public class SettingsUI<T> extends Composite {
 
 		private final List<WidgetItem> widgetItems = new ArrayList<>();
 		private final List<Label> labels = new ArrayList<>();
-		private final ProcessorPreferences<T> preferences;
+		private final IProcessorPreferences<T> preferences;
 		private final Composite container;
 
-		public SettingsUIControlImplementation(Composite parent, ProcessorPreferences<T> preferences, boolean showProfileToolbar) throws IOException {
+		public SettingsUIControlImplementation(Composite parent, IProcessorPreferences<T> preferences, boolean showProfileToolbar) throws IOException {
 
 			container = createContainer(parent);
 			this.preferences = preferences;

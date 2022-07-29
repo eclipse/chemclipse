@@ -10,4 +10,11 @@
             name="Sumarea Integrator">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.sumarea.chromatogramIntegrator">
+      </icon>
+   </extension>
 </plugin>

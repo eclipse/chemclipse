@@ -29,7 +29,7 @@ import org.eclipse.chemclipse.msd.converter.database.DatabaseConverterSupport;
 import org.eclipse.chemclipse.msd.model.core.ILibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
@@ -81,9 +81,9 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 	private List<Listener> listeners = new ArrayList<>();
 	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-	private ProcessorPreferences<TargetTemplates> preferences = null;
+	private IProcessorPreferences<TargetTemplates> preferences = null;
 
-	public TargetsSettingsEditor(Composite parent, ProcessorPreferences<TargetTemplates> preferences, TargetTemplates targetTemplates) {
+	public TargetsSettingsEditor(Composite parent, IProcessorPreferences<TargetTemplates> preferences, TargetTemplates targetTemplates) {
 
 		/*
 		 * Populate the settings on demand.

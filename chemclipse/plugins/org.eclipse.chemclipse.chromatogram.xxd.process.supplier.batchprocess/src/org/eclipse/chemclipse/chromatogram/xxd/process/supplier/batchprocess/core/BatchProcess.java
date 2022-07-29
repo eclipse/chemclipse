@@ -24,7 +24,7 @@ import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.xxd.process.support.ChromatogramTypeSupport;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -35,7 +35,7 @@ public class BatchProcess {
 	private static final String DESCRIPTION = "Batch Processor";
 	//
 	private final ChromatogramTypeSupport chromatogramTypeSupport;
-	private final ProcessSupplierContext processSupplierContext;
+	private final IProcessSupplierContext processSupplierContext;
 
 	@Deprecated
 	public BatchProcess() {
@@ -43,7 +43,7 @@ public class BatchProcess {
 		this(new DataType[]{DataType.CSD, DataType.MSD, DataType.WSD}, new ProcessTypeSupport());
 	}
 
-	public BatchProcess(DataType[] dataTypes, ProcessSupplierContext processSupplierContext) {
+	public BatchProcess(DataType[] dataTypes, IProcessSupplierContext processSupplierContext) {
 
 		this.processSupplierContext = processSupplierContext;
 		chromatogramTypeSupport = new ChromatogramTypeSupport(dataTypes);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
-import org.eclipse.chemclipse.processing.supplier.ProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsPreferencesEditPage;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
 import org.eclipse.jface.preference.PreferencePage;
@@ -20,9 +20,9 @@ import org.eclipse.swt.widgets.Control;
 
 public class PreferencePageProcessors extends PreferencePage {
 
-	private final ProcessSupplierContext processSupplierContext;
+	private final IProcessSupplierContext processSupplierContext;
 
-	public PreferencePageProcessors(ProcessSupplierContext context) {
+	public PreferencePageProcessors(IProcessSupplierContext context) {
 		this.processSupplierContext = context;
 		setTitle("User Process Settings");
 		setDescription("Below you find all currently stored processor Options, select one to manage or remove the stored state");

@@ -28,4 +28,19 @@
             name="Unknown Identifier">
       </page>                  
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.peak">
+      </icon>
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.msd.identifier.supplier.file.massSpectrum">
+      </icon>
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.xxd.identifier.supplier.file.chromatogram">
+      </icon>
+   </extension>
 </plugin>

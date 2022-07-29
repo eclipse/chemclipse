@@ -10,4 +10,11 @@
             name="PeakMax Peak Integrator">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.peakmax.peakIntegrator">
+      </icon>
+   </extension>
 </plugin>

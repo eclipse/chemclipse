@@ -10,4 +10,15 @@
             name="ZeroSet">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.zeroset.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.csd.filter.supplier.zeroset">
+      </icon>
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.zeroset.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.wsd.filter.supplier.zeroset">
+      </icon>
+   </extension>
 </plugin>

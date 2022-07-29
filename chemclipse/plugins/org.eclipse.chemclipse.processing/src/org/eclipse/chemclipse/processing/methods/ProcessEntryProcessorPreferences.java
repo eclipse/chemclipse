@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,9 +13,9 @@
 package org.eclipse.chemclipse.processing.methods;
 
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
-import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 
-public final class ProcessEntryProcessorPreferences<T> implements ProcessorPreferences<T> {
+public final class ProcessEntryProcessorPreferences<T> implements IProcessorPreferences<T> {
 
 	private final IProcessEntry processEntry;
 	private final IProcessSupplier<T> processSupplier;

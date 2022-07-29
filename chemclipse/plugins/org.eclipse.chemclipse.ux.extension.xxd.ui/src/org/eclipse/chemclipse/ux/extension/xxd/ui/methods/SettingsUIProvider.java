@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.methods;
 
 import java.io.IOException;
 
-import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -22,7 +22,7 @@ import org.eclipse.swt.widgets.Listener;
 
 public interface SettingsUIProvider<SettingType> {
 
-	SettingsUIControl createUI(Composite parent, ProcessorPreferences<SettingType> preferences, boolean showProfileToolbar) throws IOException;
+	SettingsUIControl createUI(Composite parent, IProcessorPreferences<SettingType> preferences, boolean showProfileToolbar) throws IOException;
 
 	interface SettingsUIControl {
 

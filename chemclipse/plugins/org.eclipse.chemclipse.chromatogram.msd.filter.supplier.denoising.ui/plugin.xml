@@ -28,5 +28,12 @@
                type="org.eclipse.jface.viewers.ISelectionChangedListener">
          </adapter>
       </factory>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.msd.filter.supplier.denoising">
+      </icon>
    </extension>   
 </plugin>

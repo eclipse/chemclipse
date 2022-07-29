@@ -10,4 +10,11 @@
             name="Normalizer">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.normalizer">
+      </icon>
+   </extension>
 </plugin>

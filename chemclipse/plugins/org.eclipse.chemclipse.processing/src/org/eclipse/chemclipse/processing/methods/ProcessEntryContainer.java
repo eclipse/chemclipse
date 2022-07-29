@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,9 +18,9 @@ import java.util.function.BiFunction;
 
 import org.eclipse.chemclipse.processing.methods.SubProcessExecutionConsumer.SubProcess;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
-import org.eclipse.chemclipse.processing.supplier.ProcessExecutionConsumer;
+import org.eclipse.chemclipse.processing.supplier.IProcessExecutionConsumer;
 import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
-import org.eclipse.chemclipse.processing.supplier.ProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 
 /**
  * A {@link ProcessEntryContainer} holds some {@link IProcessEntry}s
@@ -125,19 +125,19 @@ public interface ProcessEntryContainer extends Iterable<IProcessEntry> {
 		return true;
 	}
 
-	static <X, T> T applyProcessEntries(ProcessEntryContainer container, ProcessExecutionContext context, ProcessExecutionConsumer<T> consumer) {
+	static <X, T> T applyProcessEntries(ProcessEntryContainer container, ProcessExecutionContext context, IProcessExecutionConsumer<T> consumer) {
 
-		return applyProcessEntries(container, context, new BiFunction<IProcessEntry, IProcessSupplier<X>, ProcessorPreferences<X>>() {
+		return applyProcessEntries(container, context, new BiFunction<IProcessEntry, IProcessSupplier<X>, IProcessorPreferences<X>>() {
 
 			@Override
-			public ProcessorPreferences<X> apply(IProcessEntry processEntry, IProcessSupplier<X> processSupplier) {
+			public IProcessorPreferences<X> apply(IProcessEntry processEntry, IProcessSupplier<X> processSupplier) {
 
 				return processEntry.getPreferences(processSupplier);
 			}
 		}, consumer);
 	}
 
-	static <X, T> T applyProcessEntries(ProcessEntryContainer container, ProcessExecutionContext context, BiFunction<IProcessEntry, IProcessSupplier<X>, ProcessorPreferences<X>> preferenceSupplier, ProcessExecutionConsumer<T> consumer) {
+	static <X, T> T applyProcessEntries(ProcessEntryContainer container, ProcessExecutionContext context, BiFunction<IProcessEntry, IProcessSupplier<X>, IProcessorPreferences<X>> preferenceSupplier, IProcessExecutionConsumer<T> consumer) {
 
 		int resumeIndex = container.isSupportResume() ? container.getResumeIndex() : DEFAULT_RESUME_INDEX;
 		context.setWorkRemaining(container.getNumberOfEntries());
@@ -163,11 +163,11 @@ public interface ProcessEntryContainer extends Iterable<IProcessEntry> {
 			 * Process
 			 */
 			try {
-				ProcessorPreferences<X> processorPreferences = preferenceSupplier.apply(processEntry, processor);
+				IProcessorPreferences<X> processorPreferences = preferenceSupplier.apply(processEntry, processor);
 				context.setContextObject(IProcessEntry.class, processEntry);
 				context.setContextObject(IProcessSupplier.class, processor);
-				context.setContextObject(ProcessExecutionConsumer.class, consumer);
-				context.setContextObject(ProcessorPreferences.class, processorPreferences);
+				context.setContextObject(IProcessExecutionConsumer.class, consumer);
+				context.setContextObject(IProcessorPreferences.class, processorPreferences);
 				ProcessExecutionContext entryContext = context.split(processor.getContext());
 				//
 				try {
@@ -178,7 +178,7 @@ public interface ProcessEntryContainer extends Iterable<IProcessEntry> {
 						IProcessSupplier.applyProcessor(processorPreferences, new SubProcessExecutionConsumer<T>(consumer, new SubProcess<T>() {
 
 							@Override
-							public <SubX> void execute(ProcessorPreferences<SubX> preferences, ProcessExecutionConsumer<T> parent, ProcessExecutionContext subcontext) {
+							public <SubX> void execute(IProcessorPreferences<SubX> preferences, IProcessExecutionConsumer<T> parent, ProcessExecutionContext subcontext) {
 
 								applyProcessEntries(processEntry, subcontext, preferenceSupplier, parent);
 							}
@@ -192,8 +192,8 @@ public interface ProcessEntryContainer extends Iterable<IProcessEntry> {
 				} finally {
 					context.setContextObject(IProcessSupplier.class, null);
 					context.setContextObject(IProcessEntry.class, null);
-					context.setContextObject(ProcessExecutionConsumer.class, null);
-					context.setContextObject(ProcessorPreferences.class, null);
+					context.setContextObject(IProcessExecutionConsumer.class, null);
+					context.setContextObject(IProcessorPreferences.class, null);
 				}
 			} catch(RuntimeException e) {
 				context.addErrorMessage(processEntry.getName(), "Internal error when running the process method.", e);
