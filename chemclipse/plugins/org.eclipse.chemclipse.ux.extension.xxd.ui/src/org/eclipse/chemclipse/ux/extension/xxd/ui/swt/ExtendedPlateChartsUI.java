@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.pcr.model.core.IWell;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
@@ -91,12 +92,13 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 			comboChannels.setItems(plate.getActiveChannels().toArray(new String[activeChannels.size()]));
 			comboChannels.select(plate.getActiveChannel());
 		} else {
-			comboChannels.setItems(new String[]{""});
+			comboChannels.setItems("");
 		}
 	}
 
 	private void updateChartData() {
 
+		chartControl.get().updatePlate(plate);
 		if(plate != null) {
 			updateChart();
 		} else {
@@ -153,7 +155,7 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Reset the Chart");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -169,14 +171,14 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Toggle Color Compensation");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_BAR_CHART, IApplicationImage.SIZE_16x16, colorCompensation));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_BAR_CHART, IApplicationImageProvider.SIZE_16x16, colorCompensation));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				colorCompensation = !colorCompensation;
-				button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_BAR_CHART, IApplicationImage.SIZE_16x16, colorCompensation));
+				button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_BAR_CHART, IApplicationImageProvider.SIZE_16x16, colorCompensation));
 				updateChart();
 			}
 		});
@@ -226,7 +228,7 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 		if(plate != null) {
 			ColorCodes colorCodes = new ColorCodes();
 			colorCodes.load(preferenceStore.getString(PreferenceConstants.P_PCR_PLATE_COLOR_CODES));
-			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 			//
 			for(IWell well : plate.getWells()) {
 				try {

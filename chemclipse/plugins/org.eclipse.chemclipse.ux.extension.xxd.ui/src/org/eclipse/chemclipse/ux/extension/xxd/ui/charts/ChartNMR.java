@@ -125,7 +125,7 @@ public class ChartNMR extends LineChart {
 								processingInfo.addErrorMessage("NMR Export", "Export failed", e.getCause());
 								ProcessingInfoPartSupport.getInstance().update(processingInfo);
 							} catch(InterruptedException e) {
-								// nothing to do
+								Thread.currentThread().interrupt();
 							}
 						}
 					}

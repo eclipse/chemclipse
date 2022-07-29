@@ -190,9 +190,7 @@ public class PCRFileSupport {
 			 */
 			if(isDirectory) {
 				if(!folderExists) {
-					if(plateFolder != null) {
-						plateFolder.mkdir();
-					}
+					plateFolder.mkdir();
 				}
 			} else {
 				String fileExtension = selectedSupplier.getFileExtension();
