@@ -244,7 +244,7 @@ public class PeakDetectorMSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 					peaks.add(peak);
 				}
 			} catch(Exception e) {
-				logger.debug(e.getLocalizedMessage());
+				logger.error(e);
 			}
 		}
 		//

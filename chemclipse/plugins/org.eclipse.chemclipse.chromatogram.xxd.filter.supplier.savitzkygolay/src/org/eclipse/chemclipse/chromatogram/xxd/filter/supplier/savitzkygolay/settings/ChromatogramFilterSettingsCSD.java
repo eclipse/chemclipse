@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2020 Lablicate GmbH.
+ * Copyright (c) 2015, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -41,7 +41,7 @@ public class ChromatogramFilterSettingsCSD extends ChromatogramFilterSettings {
 	public void setDerivative(int derivative) {
 
 		if(derivative != 0) {
-			logger.debug("Derivative is not supported");
+			logger.warn("Derivative is not supported");
 		}
 	}
 
