@@ -9,5 +9,24 @@
             id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.ui.preferences.preferencePage"
             name="ChemClipse Report">
       </page>
+   </extension>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.ui.icon.PeakIdentificationMenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.peaksidentifications">
+      </icon>
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.ui.icon.AreaPercentMenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.areapercent">
+      </icon>
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.ui.icon.QuantitationMenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.quantitation">
+      </icon>
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.ui.icon.PeakTableMenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.peaktable">
+      </icon>
    </extension> 
 </plugin>
