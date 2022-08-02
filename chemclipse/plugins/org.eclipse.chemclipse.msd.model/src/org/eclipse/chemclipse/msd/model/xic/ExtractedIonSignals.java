@@ -153,9 +153,9 @@ public class ExtractedIonSignals implements IExtractedIonSignals {
 				extractedIonSignal.setAbundance(ion, abundance, removePreviousAbundance);
 			}
 		} catch(ChromatogramIsNullException e) {
-			logger.error(e.getLocalizedMessage(), e);
+			logger.error(e);
 		} catch(NoExtractedIonSignalStoredException e) {
-			logger.debug(e.getLocalizedMessage());
+			logger.error(e);
 		}
 	}
 
@@ -337,7 +337,7 @@ public class ExtractedIonSignals implements IExtractedIonSignals {
 				totalIonSignal = new TotalScanSignal(retentionTime, retentionIndex, signal);
 				totalIonSignals.add(totalIonSignal);
 			} catch(NoExtractedIonSignalStoredException e) {
-				logger.debug(e.getLocalizedMessage(), e);
+				logger.warn(e);
 			}
 		}
 		return totalIonSignals;

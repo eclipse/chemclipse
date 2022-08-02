@@ -183,7 +183,7 @@ public class ScanTableUI extends ExtendedTableViewer {
 			/*
 			 * Lazy (Virtual)
 			 */
-			logger.trace("Lazy (Virtual) Modus");
+			logger.info("Lazy (Virtual) Modus");
 			setContentProvider(contentProvider);
 			setUseHashlookup(true);
 			setComparator(null);
@@ -191,7 +191,7 @@ public class ScanTableUI extends ExtendedTableViewer {
 			/*
 			 * Normal
 			 */
-			logger.trace("Normal Modus");
+			logger.info("Normal Modus");
 			setContentProvider(contentProvider);
 			setUseHashlookup(false);
 			ViewerComparator viewerComparator = getViewerComparator(dataType);

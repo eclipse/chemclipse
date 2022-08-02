@@ -27,8 +27,8 @@ import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
-import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.rcp.app.cli.AbstractCommandLineProcessor;
 import org.eclipse.chemclipse.rcp.app.cli.ICommandLineProcessor;
 import org.eclipse.chemclipse.ui.cli.ContextCLI;
@@ -121,7 +121,7 @@ public class MethodProcessor extends AbstractCommandLineProcessor implements ICo
 							LOG.info(message);
 							break;
 						default:
-							LOG.debug(message);
+							LOG.info(message);
 							break;
 					}
 				}

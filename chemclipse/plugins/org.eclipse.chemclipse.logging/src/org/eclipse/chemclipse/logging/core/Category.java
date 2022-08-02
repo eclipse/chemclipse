@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,75 +11,66 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.logging.core;
 
-import org.apache.log4j.Level;
-import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.ILog;
+import org.eclipse.core.runtime.Platform;
 
 public class Category {
 
-	private final Logger logger;
+	private final ILog logger;
 
 	@SuppressWarnings("rawtypes")
 	public Category(final Class clazz) {
-		logger = Logger.getLogger(clazz);
+
+		logger = Platform.getLog(clazz);
 	}
 
-	public void debug(final Object message) {
+	public void error(final String message) {
 
-		logger.log(Category.class.getName(), Level.DEBUG, message, null);
+		logger.error(message);
 	}
 
-	public void debug(final Object message, Throwable t) {
+	public void error(Throwable t) {
 
-		logger.log(Category.class.getName(), Level.DEBUG, message, t);
+		logger.error(t.getMessage(), t);
 	}
 
-	public void error(final Object message) {
+	public void error(final String message, Throwable t) {
 
-		logger.log(Category.class.getName(), Level.ERROR, message, null);
+		logger.error(message, t);
 	}
 
-	public void error(final Object message, Throwable t) {
+	public void info(Object object) {
 
-		logger.log(Category.class.getName(), Level.ERROR, message, t);
+		logger.info(object.toString());
 	}
 
-	public void fatal(final Object message) {
+	public void info(final String message) {
 
-		logger.log(Category.class.getName(), Level.FATAL, message, null);
+		logger.info(message);
 	}
 
-	public void fatal(final Object message, Throwable t) {
+	public void info(Throwable t) {
 
-		logger.log(Category.class.getName(), Level.FATAL, message, t);
+		logger.info(t.getMessage(), t);
 	}
 
-	public void info(final Object message) {
+	public void info(final String message, Throwable t) {
 
-		logger.log(Category.class.getName(), Level.INFO, message, null);
+		logger.info(message, t);
 	}
 
-	public void info(final Object message, Throwable t) {
+	public void warn(final String message) {
 
-		logger.log(Category.class.getName(), Level.INFO, message, t);
+		logger.warn(message);
 	}
 
-	public void trace(final Object message) {
+	public void warn(final String message, Throwable t) {
 
-		logger.log(Category.class.getName(), Level.TRACE, message, null);
+		logger.warn(message, t);
 	}
 
-	public void trace(final Object message, Throwable t) {
+	public void warn(Throwable t) {
 
-		logger.log(Category.class.getName(), Level.TRACE, message, t);
-	}
-
-	public void warn(final Object message) {
-
-		logger.log(Category.class.getName(), Level.WARN, message, null);
-	}
-
-	public void warn(final Object message, Throwable t) {
-
-		logger.log(Category.class.getName(), Level.WARN, message, t);
+		logger.warn(t.getMessage(), t);
 	}
 }

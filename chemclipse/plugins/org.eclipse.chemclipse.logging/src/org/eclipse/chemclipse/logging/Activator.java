@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.logging;
 
-import org.apache.log4j.PropertyConfigurator;
-import org.eclipse.chemclipse.logging.support.PropertiesUtil;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
@@ -32,14 +30,6 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext bundleContext) throws Exception {
 
 		Activator.context = bundleContext;
-		try {
-			/*
-			 * Try to initialize the logger properties.
-			 */
-			initLogger();
-		} catch(Exception e) {
-			System.out.println(e);
-		}
 	}
 
 	/*
@@ -49,16 +39,5 @@ public class Activator implements BundleActivator {
 	public void stop(BundleContext bundleContext) throws Exception {
 
 		Activator.context = null;
-	}
-
-	/**
-	 * Reading the log4j properties.
-	 */
-	private void initLogger() {
-
-		/*
-		 * Load the properties.
-		 */
-		PropertyConfigurator.configure(PropertiesUtil.getLog4jProperties());
 	}
 }

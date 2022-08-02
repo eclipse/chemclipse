@@ -44,7 +44,7 @@ public class ChromatogramFilterSettingsMSD extends ChromatogramFilterSettings {
 	public void setDerivative(int derivative) {
 
 		if(derivative != 0) {
-			logger.debug("Derivative is not supported");
+			logger.warn("Derivative is not supported");
 		}
 	}
 

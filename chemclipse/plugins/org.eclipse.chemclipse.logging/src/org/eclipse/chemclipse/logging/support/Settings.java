@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2020 Lablicate GmbH.
+ * Copyright (c) 2011, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,7 +30,7 @@ public class Settings {
 	public static final String D_APPLICATION_VERSION = "application.version";
 	//
 	private static final String DEFAULT_APPLICATION_NAME = "Chromatography_Application";
-	private static final String DEFAULT_APPLICATION_VERSION = "0.7.x";
+	private static final String DEFAULT_APPLICATION_VERSION = "0.8.x";
 	//
 	private static final String D_OSGI_INSTANCE_AREA = "osgi.instance.area";
 	private static final String D_OSGI_USER_AREA = "osgi.user.area";
