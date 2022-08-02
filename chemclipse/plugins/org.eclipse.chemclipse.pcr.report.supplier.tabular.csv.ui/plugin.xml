@@ -10,4 +10,11 @@
             name="CSV PCR Export Converter">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.pcr.report.supplier.tabular.csv.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.pcr.report.supplier.tabular.csv">
+      </icon>
+   </extension>
 </plugin>
