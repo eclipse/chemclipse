@@ -10,4 +10,15 @@
             name="CSV Converter">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.chemclipse.xxd.process.ui.menu.icon">
+      <icon
+            class="org.eclipse.chemclipse.msd.converter.supplier.csv.ui.icon.MenuIcon"
+            id="org.eclipse.chemclipse.msd.converter.supplier.csv">
+      </icon>
+      <icon
+            class="org.eclipse.chemclipse.msd.converter.supplier.csv.ui.icon.HeatMapMenuIcon"
+            id="org.eclipse.chemclipse.msd.converter.supplier.csv.heatmap">
+      </icon>
+   </extension>
 </plugin>

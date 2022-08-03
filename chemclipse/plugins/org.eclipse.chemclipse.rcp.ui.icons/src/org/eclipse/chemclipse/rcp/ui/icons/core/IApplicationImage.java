@@ -309,6 +309,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_EXCEL = PATH_PREFIX + "excel.gif";
 	String IMAGE_PDF = PATH_PREFIX + "pdf.gif";
 	String IMAGE_TXT = PATH_PREFIX + "txt.gif";
+	String IMAGE_CSV = PATH_PREFIX + "csv.gif";
 	String IMAGE_CALCULATE = PATH_PREFIX + "calculate.gif";
 	String IMAGE_CHECK = PATH_PREFIX + "check.gif";
 	String IMAGE_SELECT_ROWS = PATH_PREFIX + "select-rows.gif";

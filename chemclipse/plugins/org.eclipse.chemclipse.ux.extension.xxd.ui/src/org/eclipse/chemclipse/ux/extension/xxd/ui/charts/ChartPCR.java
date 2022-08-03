@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.eclipse.chemclipse.converter.scan.IScanConverterSupport;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.pcr.converter.core.PlateConverterPCR;
 import org.eclipse.chemclipse.pcr.model.core.IPlate;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
@@ -27,10 +28,16 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.chemclipse.xxd.process.ui.menu.IMenuIcon;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
@@ -43,6 +50,9 @@ import org.eclipse.swtchart.extensions.menu.IChartMenuEntry;
 
 public class ChartPCR extends LineChart {
 
+	private static final String MENU_ICON = "org.eclipse.chemclipse.xxd.process.ui.menu.icon";
+	private static final Logger logger = Logger.getLogger(ChartPCR.class);
+	//
 	private IPlate plate;
 
 	public ChartPCR() {
@@ -116,6 +126,28 @@ public class ChartPCR extends LineChart {
 				public String getToolTipText() {
 
 					return supplier.getDescription();
+				}
+
+				@Override
+				public Image getIcon() {
+
+					IExtensionRegistry registry = Platform.getExtensionRegistry();
+					IConfigurationElement[] config = registry.getConfigurationElementsFor(MENU_ICON);
+					try {
+						for(IConfigurationElement element : config) {
+							final String id = element.getAttribute("id");
+							if(!(supplier.getId().equals(id))) {
+								continue;
+							}
+							final Object object = element.createExecutableExtension("class");
+							if(object instanceof IMenuIcon menuIcon) {
+								return menuIcon.getImage();
+							}
+						}
+					} catch(CoreException e) {
+						logger.warn(e);
+					}
+					return null;
 				}
 
 				@Override
