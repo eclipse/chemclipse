@@ -75,10 +75,6 @@ http://www.eclipse.org/legal/epl-v10.html
          version="0.0.0"/>
 
    <includes
-         id="org.eclipse.platform"
-         version="0.0.0"/>
-
-   <includes
          id="org.eclipse.swtchart.feature"
          version="0.0.0"/>
 
@@ -769,20 +765,6 @@ http://www.eclipse.org/legal/epl-v10.html
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.ltk.core.refactoring"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.ltk.ui.refactoring"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.osgi"
          download-size="0"
          install-size="0"
@@ -854,27 +836,6 @@ http://www.eclipse.org/legal/epl-v10.html
 
    <plugin
          id="org.eclipse.ui.forms"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.ui.ide"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.ui.intro"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.ui.intro.universal"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -1100,29 +1061,6 @@ http://www.eclipse.org/legal/epl-v10.html
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.jdt.compiler.apt"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         fragment="true"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.jdt.compiler.tool"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         fragment="true"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.jdt.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.osgi.compatibility.state"
          download-size="0"
          install-size="0"
@@ -1139,40 +1077,6 @@ http://www.eclipse.org/legal/epl-v10.html
 
    <plugin
          id="org.w3c.dom.events"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.debug.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.debug.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.ant"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"/>
-
-   <plugin
-         id="org.eclipse.core.externaltools"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.ui.externaltools"
          download-size="0"
          install-size="0"
          version="0.0.0"
