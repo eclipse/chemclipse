@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,7 +18,7 @@ import java.io.OutputStream;
 
 import org.eclipse.chemclipse.converter.core.AbstractExportConverter;
 import org.eclipse.chemclipse.converter.methods.IMethodExportConverter;
-import org.eclipse.chemclipse.processing.core.MessageConsumer;
+import org.eclipse.chemclipse.processing.core.IMessageConsumer;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods.IMethodWriter;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.methods.MethodReaderWriter_1003;
@@ -33,14 +33,14 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class MethodExportConverter extends AbstractExportConverter implements IMethodExportConverter {
 
 	@Override
-	public void convert(File file, IProcessMethod processMethod, MessageConsumer messages, IProgressMonitor monitor) throws IOException {
+	public void convert(File file, IProcessMethod processMethod, IMessageConsumer messages, IProgressMonitor monitor) throws IOException {
 
 		IMethodWriter methodWriter = getMethodWriter();
 		methodWriter.convert(file, processMethod, messages, monitor);
 	}
 
 	@Override
-	public void convert(OutputStream stream, String nameHint, IProcessMethod processMethod, MessageConsumer messages, IProgressMonitor monitor) throws IOException {
+	public void convert(OutputStream stream, String nameHint, IProcessMethod processMethod, IMessageConsumer messages, IProgressMonitor monitor) throws IOException {
 
 		IMethodWriter methodWriter = getMethodWriter();
 		methodWriter.convert(stream, nameHint, processMethod, messages, monitor);

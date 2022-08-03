@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,12 +14,12 @@ package org.eclipse.chemclipse.processing.core;
 import java.util.Collection;
 
 /**
- * A {@link MessageProvider} can provide Messages, this is the counterpart for {@link MessageConsumer}
+ * A {@link IMessageProvider} can provide Messages, this is the counterpart for {@link IMessageConsumer}
  * 
  * @author Christoph Läubrich
  *
  */
-public interface MessageProvider {
+public interface IMessageProvider {
 
 	/**
 	 * Returns the list of messages.

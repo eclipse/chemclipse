@@ -13,12 +13,12 @@
 package org.eclipse.chemclipse.processing.core;
 
 /**
- * A {@link MessageConsumer} consumes messages from a processing or computation method to give feedback to the caller in a very detailed way
+ * A {@link IMessageConsumer} consumes messages from a processing or computation method to give feedback to the caller in a very detailed way
  * 
  * @author Christoph Läubrich
  *
  */
-public interface MessageConsumer {
+public interface IMessageConsumer {
 
 	default void addErrorMessage(final String description, final String message) {
 
@@ -67,7 +67,7 @@ public interface MessageConsumer {
 
 	void addMessage(final String description, final String message, final String details, final String proposedSolution, Throwable t, final MessageType type);
 
-	default void addMessages(MessageProvider messageProvider) {
+	default void addMessages(IMessageProvider messageProvider) {
 
 		if(messageProvider != null) {
 			for(IProcessingMessage message : messageProvider.getMessages()) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,7 +14,7 @@ package org.eclipse.chemclipse.processing.core;
 
 import java.util.List;
 
-public interface IProcessingResult<T> extends MessageConsumer, MessageProvider {
+public interface IProcessingResult<T> extends IMessageConsumer, IMessageProvider {
 
 	void addMessage(IProcessingMessage processingMessage);
 

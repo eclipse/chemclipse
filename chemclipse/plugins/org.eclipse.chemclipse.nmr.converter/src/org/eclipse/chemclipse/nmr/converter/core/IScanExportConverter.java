@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -20,12 +20,12 @@ import java.io.OutputStream;
 
 import org.eclipse.chemclipse.converter.core.IExportConverter;
 import org.eclipse.chemclipse.model.core.IComplexSignalMeasurement;
-import org.eclipse.chemclipse.processing.core.MessageConsumer;
+import org.eclipse.chemclipse.processing.core.IMessageConsumer;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IScanExportConverter extends IExportConverter {
 
-	default void convert(File file, IComplexSignalMeasurement<?> measurement, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IOException {
+	default void convert(File file, IComplexSignalMeasurement<?> measurement, IMessageConsumer messageConsumer, IProgressMonitor monitor) throws IOException {
 
 		try (FileOutputStream fout = new FileOutputStream(file)) {
 			convert(fout, measurement, messageConsumer, monitor);
@@ -40,11 +40,11 @@ public interface IScanExportConverter extends IExportConverter {
 	 * @param measurement
 	 *            the measurement to write
 	 * @param messageConsumer
-	 *            a {@link MessageConsumer} that can be used to inform the caller about info/warning/errors
+	 *            a {@link IMessageConsumer} that can be used to inform the caller about info/warning/errors
 	 * @param monitor
 	 *            a {@link IProgressMonitor} to use for reporting progress or <code>null</code> if no progress is desired
 	 * @throws IOException
-	 *             if any {@link IOException} occurs while writing to the stream, other errors/problems should be reported to the {@link MessageConsumer}
+	 *             if any {@link IOException} occurs while writing to the stream, other errors/problems should be reported to the {@link IMessageConsumer}
 	 */
-	void convert(OutputStream stream, IComplexSignalMeasurement<?> measurement, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IOException;
+	void convert(OutputStream stream, IComplexSignalMeasurement<?> measurement, IMessageConsumer messageConsumer, IProgressMonitor monitor) throws IOException;
 }

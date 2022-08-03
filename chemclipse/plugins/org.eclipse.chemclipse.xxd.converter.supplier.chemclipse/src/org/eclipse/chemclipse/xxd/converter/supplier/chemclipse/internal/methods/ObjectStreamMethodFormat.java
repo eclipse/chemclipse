@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,7 +23,7 @@ import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-import org.eclipse.chemclipse.processing.core.MessageConsumer;
+import org.eclipse.chemclipse.processing.core.IMessageConsumer;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -34,7 +34,7 @@ public abstract class ObjectStreamMethodFormat extends GenericStreamMethodFormat
 	}
 
 	@Override
-	protected final IProcessMethod deserialize(InputStream stream, MessageConsumer consumer, IProgressMonitor monitor) throws IOException {
+	protected final IProcessMethod deserialize(InputStream stream, IMessageConsumer consumer, IProgressMonitor monitor) throws IOException {
 
 		try {
 			return readObjectFromStream(new ObjectInputStream(stream), consumer, monitor);
@@ -44,16 +44,16 @@ public abstract class ObjectStreamMethodFormat extends GenericStreamMethodFormat
 	}
 
 	@Override
-	protected final void serialize(OutputStream stream, IProcessMethod processMethod, MessageConsumer consumer, IProgressMonitor monitor) throws IOException {
+	protected final void serialize(OutputStream stream, IProcessMethod processMethod, IMessageConsumer consumer, IProgressMonitor monitor) throws IOException {
 
 		ObjectOutputStream objectStream = new ObjectOutputStream(stream);
 		writeObjectToStream(objectStream, processMethod, consumer, monitor);
 		objectStream.flush();
 	}
 
-	protected abstract void writeObjectToStream(ObjectOutputStream stream, IProcessMethod processMethod, MessageConsumer consumer, IProgressMonitor monitor) throws IOException;
+	protected abstract void writeObjectToStream(ObjectOutputStream stream, IProcessMethod processMethod, IMessageConsumer consumer, IProgressMonitor monitor) throws IOException;
 
-	protected abstract IProcessMethod readObjectFromStream(ObjectInputStream stream, MessageConsumer consumer, IProgressMonitor monitor) throws IOException, ClassNotFoundException;
+	protected abstract IProcessMethod readObjectFromStream(ObjectInputStream stream, IMessageConsumer consumer, IProgressMonitor monitor) throws IOException, ClassNotFoundException;
 
 	public static interface ObjectOutputStreamSerializer<T> {
 

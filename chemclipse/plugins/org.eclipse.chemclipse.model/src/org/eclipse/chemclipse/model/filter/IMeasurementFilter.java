@@ -1,10 +1,22 @@
+/*******************************************************************************
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
+ *
+ * All rights reserved.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ * Christoph Läubrich - initial API and implementation
+ *******************************************************************************/
+
 package org.eclipse.chemclipse.model.filter;
 
 import java.util.Collection;
 import java.util.function.Function;
 
 import org.eclipse.chemclipse.model.core.IMeasurement;
-import org.eclipse.chemclipse.processing.core.MessageConsumer;
+import org.eclipse.chemclipse.processing.core.IMessageConsumer;
 import org.eclipse.chemclipse.processing.filter.Filter;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -28,14 +40,14 @@ public interface IMeasurementFilter<ConfigType> extends Filter<ConfigType> {
 	 * @param resultTransformer
 	 *            the transformer to invoke for producing the desired output result, filter might use this to produce results and then take some more actions with it or even produce alternative results or in msot cases simply return the result as is
 	 * @param messageConsumer
-	 *            Filters are meant to not throwing checked exceptions nor return no result if something goes wrong but report problems to the {@link MessageConsumer} this allows the upstream caller to decide what to do
+	 *            Filters are meant to not throwing checked exceptions nor return no result if something goes wrong but report problems to the {@link IMessageConsumer} this allows the upstream caller to decide what to do
 	 * @param monitor
 	 *            a {@link IProgressMonitor} to report progress of the filtering or <code>null</code> if no progress is desired
 	 * @return the result of the processing or <code>null</code> if processing was canceled
 	 * @throws IllegalArgumentException
 	 *             if the given {@link IMeasurement}s are incompatible with this filter ({@link #acceptsIMeasurements(IMeasurement)} returns <code>false</code>)
 	 */
-	<ResultType> ResultType filterIMeasurements(Collection<? extends IMeasurement> filterItems, ConfigType configuration, Function<? super Collection<? extends IMeasurement>, ResultType> resultTransformer, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException;
+	<ResultType> ResultType filterIMeasurements(Collection<? extends IMeasurement> filterItems, ConfigType configuration, Function<? super Collection<? extends IMeasurement>, ResultType> resultTransformer, IMessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException;
 
 	/**
 	 * Checks if the given {@link IMeasurement} is compatible with this filter, that means that this filter can be applied without throwing an {@link IllegalArgumentException}

@@ -8,13 +8,13 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
- * Christoph Läubrich - use {@link MessageProvider} interface, add support for E4 DI
+ * Christoph Läubrich - use {@link IMessageProvider} interface, add support for E4 DI
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.ui.support;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.processing.core.IMessageProvider;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
-import org.eclipse.chemclipse.processing.core.MessageProvider;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.ui.Activator;
 import org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart;
@@ -56,7 +56,7 @@ public class ProcessingInfoPartSupport {
 		return Activator.getDefault().getProcessingInfoPartSupport();
 	}
 
-	public void update(final MessageProvider messageProvider, final boolean focusProcessingInfoPart) {
+	public void update(final IMessageProvider messageProvider, final boolean focusProcessingInfoPart) {
 
 		update(messageProvider, true, focusProcessingInfoPart);
 	}
@@ -67,7 +67,7 @@ public class ProcessingInfoPartSupport {
 	 * @param messageProvider
 	 * @param focusProcessingInfoPart
 	 */
-	public void update(final MessageProvider messageProvider, final boolean displayDialogOnError, final boolean focusProcessingInfoPart) {
+	public void update(final IMessageProvider messageProvider, final boolean displayDialogOnError, final boolean focusProcessingInfoPart) {
 
 		if(messageProvider == null) {
 			return;
@@ -149,7 +149,7 @@ public class ProcessingInfoPartSupport {
 	 * 
 	 * @param messageProvider
 	 */
-	public void update(final MessageProvider messageProvider) {
+	public void update(final IMessageProvider messageProvider) {
 
 		if(messageProvider == null) {
 			return;

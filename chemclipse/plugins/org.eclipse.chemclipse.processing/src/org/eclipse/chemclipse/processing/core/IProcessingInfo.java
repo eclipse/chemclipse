@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2020 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,7 +17,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.processing.core.exceptions.TypeCastException;
 
-public interface IProcessingInfo<T> extends MessageConsumer, MessageProvider {
+public interface IProcessingInfo<T> extends IMessageConsumer, IMessageProvider {
 
 	/**
 	 * Adds all message from {@link IProcessingInfo} to this processing info

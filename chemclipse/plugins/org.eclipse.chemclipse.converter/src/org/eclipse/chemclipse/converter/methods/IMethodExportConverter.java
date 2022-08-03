@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,13 +19,13 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.eclipse.chemclipse.converter.core.IExportConverter;
-import org.eclipse.chemclipse.processing.core.MessageConsumer;
+import org.eclipse.chemclipse.processing.core.IMessageConsumer;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public interface IMethodExportConverter extends IExportConverter {
 
-	default void convert(File file, IProcessMethod processMethod, MessageConsumer messages, IProgressMonitor monitor) throws IOException {
+	default void convert(File file, IProcessMethod processMethod, IMessageConsumer messages, IProgressMonitor monitor) throws IOException {
 
 		try (FileOutputStream stream = new FileOutputStream(file)) {
 			convert(stream, file.getName(), processMethod, messages, monitor);
@@ -41,5 +41,5 @@ public interface IMethodExportConverter extends IExportConverter {
 	 * @throws IOException
 	 *             in case of an IOError while reading streams
 	 */
-	void convert(OutputStream stream, String nameHint, IProcessMethod processMethod, MessageConsumer messages, IProgressMonitor monitor) throws IOException;
+	void convert(OutputStream stream, String nameHint, IProcessMethod processMethod, IMessageConsumer messages, IProgressMonitor monitor) throws IOException;
 }
