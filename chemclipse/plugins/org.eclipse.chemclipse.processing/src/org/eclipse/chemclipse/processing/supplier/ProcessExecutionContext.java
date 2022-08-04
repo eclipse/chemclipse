@@ -18,28 +18,28 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import org.eclipse.chemclipse.processing.core.MessageConsumer;
+import org.eclipse.chemclipse.processing.core.IMessageConsumer;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 
-public class ProcessExecutionContext implements IProcessSupplierContext, MessageConsumer {
+public class ProcessExecutionContext implements IProcessSupplierContext, IMessageConsumer {
 
 	private static final int WORK_UNIT = 100;
 	//
 	private final SubMonitor subMonitor;
 	private final IProcessSupplierContext context;
-	private final MessageConsumer consumer;
+	private final IMessageConsumer consumer;
 	private ProcessExecutionContext parent;
 	//
 	private final Map<Class<?>, Object> contextMap = new IdentityHashMap<>();
 
-	public ProcessExecutionContext(IProgressMonitor monitor, MessageConsumer rootConsumer, IProcessSupplierContext rootContext) {
+	public ProcessExecutionContext(IProgressMonitor monitor, IMessageConsumer rootConsumer, IProcessSupplierContext rootContext) {
 
 		this(monitor, rootConsumer, rootContext, null);
 	}
 
-	private ProcessExecutionContext(IProgressMonitor monitor, MessageConsumer rootConsumer, IProcessSupplierContext rootContext, ProcessExecutionContext parent) {
+	private ProcessExecutionContext(IProgressMonitor monitor, IMessageConsumer rootConsumer, IProcessSupplierContext rootContext, ProcessExecutionContext parent) {
 
 		this.consumer = rootConsumer;
 		this.context = rootContext;

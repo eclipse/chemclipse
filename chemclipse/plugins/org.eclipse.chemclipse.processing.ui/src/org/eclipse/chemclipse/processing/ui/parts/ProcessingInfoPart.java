@@ -18,7 +18,7 @@ import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
-import org.eclipse.chemclipse.processing.core.MessageProvider;
+import org.eclipse.chemclipse.processing.core.IMessageProvider;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoUpdateNotifier;
 import org.eclipse.chemclipse.processing.ui.swt.ProcessingInfoUI;
@@ -123,7 +123,7 @@ public class ProcessingInfoPart {
 	}
 
 	@Inject
-	public void update(@Optional @UIEventTopic(IChemClipseEvents.TOPIC_PROCESSING_INFO_UPDATE) MessageProvider data) {
+	public void update(@Optional @UIEventTopic(IChemClipseEvents.TOPIC_PROCESSING_INFO_UPDATE) IMessageProvider data) {
 
 		if(processingInfoUI != null) {
 			processingInfoUI.update(data);

@@ -23,7 +23,7 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.ChromatogramSelectionProcessorSupplier;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.chemclipse.processing.core.MessageConsumer;
+import org.eclipse.chemclipse.processing.core.IMessageConsumer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -76,7 +76,7 @@ public abstract class AbstractMassspectrumFilterProcessTypeSupplier implements I
 		}
 
 		@Override
-		public IChromatogramSelection<?, ?> apply(IChromatogramSelection<?, ?> chromatogramSelection, IMassSpectrumFilterSettings processSettings, MessageConsumer messageConsumer, IProgressMonitor monitor) {
+		public IChromatogramSelection<?, ?> apply(IChromatogramSelection<?, ?> chromatogramSelection, IMassSpectrumFilterSettings processSettings, IMessageConsumer messageConsumer, IProgressMonitor monitor) {
 
 			List<IScanMSD> massspectras = extractionFunction.apply(chromatogramSelection);
 			messageConsumer.addMessages(MassSpectrumFilter.applyFilter(massspectras, processSettings, supplier.getId(), monitor));

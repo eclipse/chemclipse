@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -37,7 +37,7 @@ import org.eclipse.chemclipse.nmr.model.core.SpectrumMeasurement;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
 import org.eclipse.chemclipse.numeric.equations.Equations;
-import org.eclipse.chemclipse.processing.core.MessageConsumer;
+import org.eclipse.chemclipse.processing.core.IMessageConsumer;
 import org.eclipse.chemclipse.processing.detector.Detector;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.core.selection.ChromatogramSelectionWSD;
@@ -63,7 +63,7 @@ public class FirstDerivativePeakDetector implements IMeasurementPeakDetector<Fir
 	}
 
 	@Override
-	public <T extends IMeasurement> Map<T, PeakList> detectIMeasurementPeaks(Collection<T> detectorInputItems, FirstDerivativePeakDetectorSettings globalConfiguration, MessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
+	public <T extends IMeasurement> Map<T, PeakList> detectIMeasurementPeaks(Collection<T> detectorInputItems, FirstDerivativePeakDetectorSettings globalConfiguration, IMessageConsumer messageConsumer, IProgressMonitor monitor) throws IllegalArgumentException {
 
 		LinkedHashMap<T, PeakList> result = new LinkedHashMap<>();
 		SubMonitor convert = SubMonitor.convert(monitor, getName(), detectorInputItems.size() * 100);

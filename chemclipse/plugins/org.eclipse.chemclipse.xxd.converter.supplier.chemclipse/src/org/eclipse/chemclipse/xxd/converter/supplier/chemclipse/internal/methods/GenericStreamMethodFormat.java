@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,7 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import org.eclipse.chemclipse.processing.core.MessageConsumer;
+import org.eclipse.chemclipse.processing.core.IMessageConsumer;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -32,7 +32,7 @@ public abstract class GenericStreamMethodFormat implements IMethodWriter, IMetho
 	}
 
 	@Override
-	public IProcessMethod convert(InputStream stream, String nameHint, MessageConsumer consumer, IProgressMonitor monitor) throws IOException {
+	public IProcessMethod convert(InputStream stream, String nameHint, IMessageConsumer consumer, IProgressMonitor monitor) throws IOException {
 
 		stream.mark(identifier.length);
 		for(int i = 0; i < identifier.length; i++) {
@@ -47,12 +47,12 @@ public abstract class GenericStreamMethodFormat implements IMethodWriter, IMetho
 		return deserialize(new GZIPInputStream(stream), consumer, monitor);
 	}
 
-	protected abstract IProcessMethod deserialize(InputStream stream, MessageConsumer consumer, IProgressMonitor monitor) throws IOException;
+	protected abstract IProcessMethod deserialize(InputStream stream, IMessageConsumer consumer, IProgressMonitor monitor) throws IOException;
 
-	protected abstract void serialize(OutputStream stream, IProcessMethod processMethod, MessageConsumer consumer, IProgressMonitor monitor) throws IOException;
+	protected abstract void serialize(OutputStream stream, IProcessMethod processMethod, IMessageConsumer consumer, IProgressMonitor monitor) throws IOException;
 
 	@Override
-	public void convert(OutputStream stream, String nameHint, IProcessMethod processMethod, MessageConsumer messages, IProgressMonitor monitor) throws IOException {
+	public void convert(OutputStream stream, String nameHint, IProcessMethod processMethod, IMessageConsumer messages, IProgressMonitor monitor) throws IOException {
 
 		// write the identifier
 		stream.write(identifier);

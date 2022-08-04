@@ -31,7 +31,9 @@ public class Category {
 
 	public void error(Throwable t) {
 
-		logger.error(t.getMessage(), t);
+		if(t != null) {
+			logger.error(t.getMessage(), t);
+		}
 	}
 
 	public void error(final String message, Throwable t) {
@@ -51,7 +53,9 @@ public class Category {
 
 	public void info(Throwable t) {
 
-		logger.info(t.getMessage(), t);
+		if(t != null) {
+			logger.info(t.getMessage(), t);
+		}
 	}
 
 	public void info(final String message, Throwable t) {
@@ -71,6 +75,8 @@ public class Category {
 
 	public void warn(Throwable t) {
 
-		logger.warn(t.getMessage(), t);
+		if(t != null) {
+			logger.warn(t.getMessage(), t);
+		}
 	}
 }

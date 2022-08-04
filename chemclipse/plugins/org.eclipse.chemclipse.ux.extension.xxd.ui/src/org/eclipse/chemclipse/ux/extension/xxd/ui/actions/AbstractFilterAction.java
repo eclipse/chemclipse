@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 
 import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.MessageConsumer;
+import org.eclipse.chemclipse.processing.core.IMessageConsumer;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.filter.Filter;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
@@ -90,5 +90,5 @@ public abstract class AbstractFilterAction<FilterType extends Filter<?>, ResultT
 		}
 	}
 
-	protected abstract ResultType computeResult(MessageConsumer messageConsumer, IProgressMonitor progressMonitor);
+	protected abstract ResultType computeResult(IMessageConsumer messageConsumer, IProgressMonitor progressMonitor);
 }

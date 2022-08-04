@@ -22,7 +22,7 @@ import org.eclipse.chemclipse.model.core.IMeasurement;
 import org.eclipse.chemclipse.model.filter.IMeasurementFilter;
 import org.eclipse.chemclipse.model.supplier.IMeasurementFilterProcessTypeSupplier;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.MessageConsumer;
+import org.eclipse.chemclipse.processing.core.IMessageConsumer;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
@@ -81,7 +81,7 @@ public class IMeasurementFilterAction extends AbstractFilterAction<IMeasurementF
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
-	protected Collection<? extends IMeasurement> computeResult(MessageConsumer messageConsumer, IProgressMonitor progressMonitor) {
+	protected Collection<? extends IMeasurement> computeResult(IMessageConsumer messageConsumer, IProgressMonitor progressMonitor) {
 
 		return (Collection<? extends IMeasurement>)((IMeasurementFilter)filter).filterIMeasurements(measurements, settings, Function.identity(), messageConsumer, progressMonitor);
 	}

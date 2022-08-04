@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,7 +20,7 @@ import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import org.eclipse.chemclipse.processing.core.MessageConsumer;
+import org.eclipse.chemclipse.processing.core.IMessageConsumer;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -34,7 +34,7 @@ public abstract class AbstractMethodReader implements IMethodReader {
 	}
 
 	@Override
-	public IProcessMethod convert(File file, MessageConsumer consumer, IProgressMonitor monitor) throws IOException {
+	public IProcessMethod convert(File file, IMessageConsumer consumer, IProgressMonitor monitor) throws IOException {
 
 		try (ZipFile zipFile = new ZipFile(file)) {
 			if(isValidFileFormat(zipFile)) {
@@ -94,7 +94,7 @@ public abstract class AbstractMethodReader implements IMethodReader {
 	protected abstract IProcessMethod deserialize(DataInputStream dataInputStream, File file) throws IOException;
 
 	@Override
-	public IProcessMethod convert(InputStream stream, String nameHint, MessageConsumer consumer, IProgressMonitor monitor) throws IOException {
+	public IProcessMethod convert(InputStream stream, String nameHint, IMessageConsumer consumer, IProgressMonitor monitor) throws IOException {
 
 		// not supported yet by this kind of reader
 		return null;

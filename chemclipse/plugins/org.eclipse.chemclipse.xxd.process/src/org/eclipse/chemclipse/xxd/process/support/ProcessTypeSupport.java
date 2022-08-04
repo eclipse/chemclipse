@@ -26,7 +26,7 @@ import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSuppli
 import org.eclipse.chemclipse.model.supplier.IMeasurementProcessSupplier;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.MessageConsumer;
+import org.eclipse.chemclipse.processing.core.IMessageConsumer;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
@@ -149,7 +149,7 @@ public class ProcessTypeSupport implements IProcessSupplierContext {
 	}
 
 	@Deprecated
-	public <X> Collection<? extends IMeasurement> applyProcessor(Collection<? extends IMeasurement> measurements, IProcessMethod processMethod, MessageConsumer messageConsumer, IProgressMonitor monitor) {
+	public <X> Collection<? extends IMeasurement> applyProcessor(Collection<? extends IMeasurement> measurements, IProcessMethod processMethod, IMessageConsumer messageConsumer, IProgressMonitor monitor) {
 
 		return ProcessEntryContainer.applyProcessEntries(processMethod, new ProcessExecutionContext(monitor, messageConsumer, this), IMeasurementProcessSupplier.createConsumer(measurements));
 	}

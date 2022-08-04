@@ -25,7 +25,7 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.IChromatogramSelectionProcessSupplier;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.MessageProvider;
+import org.eclipse.chemclipse.processing.core.IMessageProvider;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
@@ -210,7 +210,7 @@ public class ExtendedSequenceListUI extends Composite implements IExtendedPartUI
 		return methodSupportUI;
 	}
 
-	public void updateResult(MessageProvider processingInfo) {
+	public void updateResult(IMessageProvider processingInfo) {
 
 		getDisplay().asyncExec(new Runnable() {
 

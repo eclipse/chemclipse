@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,7 +27,7 @@ import org.eclipse.chemclipse.converter.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.MessageConsumer;
+import org.eclipse.chemclipse.processing.core.IMessageConsumer;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.core.runtime.Adapters;
@@ -137,12 +137,12 @@ public class MethodConverter {
 		return errors;
 	}
 
-	public static void store(OutputStream stream, String nameHint, IProcessMethod processMethod, MessageConsumer consumer, IProgressMonitor monitor) throws IOException {
+	public static void store(OutputStream stream, String nameHint, IProcessMethod processMethod, IMessageConsumer consumer, IProgressMonitor monitor) throws IOException {
 
 		store(stream, nameHint, processMethod, DEFAULT_METHOD_CONVERTER_ID, consumer, monitor);
 	}
 
-	public static void store(OutputStream stream, String nameHint, IProcessMethod processMethod, String converterId, MessageConsumer consumer, IProgressMonitor monitor) throws IOException {
+	public static void store(OutputStream stream, String nameHint, IProcessMethod processMethod, String converterId, IMessageConsumer consumer, IProgressMonitor monitor) throws IOException {
 
 		MethodConverterSupport converterSupport = getMethodConverterSupport();
 		for(ISupplier supplier : converterSupport.getSupplier()) {

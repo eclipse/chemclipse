@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,7 +21,7 @@ import java.util.Set;
 import org.eclipse.chemclipse.model.methods.ProcessEntry;
 import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.processing.DataCategory;
-import org.eclipse.chemclipse.processing.core.MessageConsumer;
+import org.eclipse.chemclipse.processing.core.IMessageConsumer;
 import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
@@ -36,7 +36,7 @@ public class MethodReaderWriter_1003 extends ObjectStreamMethodFormat {
 	}
 
 	@Override
-	protected void writeObjectToStream(ObjectOutputStream stream, IProcessMethod processMethod, MessageConsumer consumer, IProgressMonitor monitor) throws IOException {
+	protected void writeObjectToStream(ObjectOutputStream stream, IProcessMethod processMethod, IMessageConsumer consumer, IProgressMonitor monitor) throws IOException {
 
 		writeIterable(processMethod.getDataCategories(), stream, ObjectStreamMethodFormat::writeEnum);
 		writeString(processMethod.getUUID(), stream);
@@ -50,7 +50,7 @@ public class MethodReaderWriter_1003 extends ObjectStreamMethodFormat {
 	}
 
 	@Override
-	protected IProcessMethod readObjectFromStream(ObjectInputStream stream, MessageConsumer consumer, IProgressMonitor monitor) throws IOException, ClassNotFoundException {
+	protected IProcessMethod readObjectFromStream(ObjectInputStream stream, IMessageConsumer consumer, IProgressMonitor monitor) throws IOException, ClassNotFoundException {
 
 		Set<DataCategory> categories = new LinkedHashSet<>();
 		readItems(stream, enumDeserialization(DataCategory.class, DataCategory.AUTO_DETECT), categories::add);

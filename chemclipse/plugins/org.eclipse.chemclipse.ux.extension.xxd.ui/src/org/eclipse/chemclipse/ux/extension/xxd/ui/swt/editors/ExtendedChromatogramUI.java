@@ -53,7 +53,7 @@ import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
-import org.eclipse.chemclipse.processing.core.MessageProvider;
+import org.eclipse.chemclipse.processing.core.IMessageProvider;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
@@ -602,7 +602,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		});
 	}
 
-	public void updateResult(MessageProvider processingInfo) {
+	public void updateResult(IMessageProvider processingInfo) {
 
 		getDisplay().asyncExec(new Runnable() {
 
