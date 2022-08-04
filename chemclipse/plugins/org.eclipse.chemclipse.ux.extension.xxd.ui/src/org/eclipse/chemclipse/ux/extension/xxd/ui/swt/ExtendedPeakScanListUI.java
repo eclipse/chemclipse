@@ -60,6 +60,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.IUpdateListener;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.ClassifierDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.InternalStandardDialog;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.help.HelpContext;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.TableConfigSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.operations.DeletePeaksOperation;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.operations.DeleteScansOperation;
@@ -92,6 +93,7 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swtchart.extensions.core.IKeyboardSupport;
+import org.eclipse.ui.PlatformUI;
 
 @SuppressWarnings("rawtypes")
 public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI, ConfigurableUI<PeakScanListUIConfig> {
@@ -258,6 +260,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		buttonMerge.setEnabled(false);
 		buttonDelete.setEnabled(false);
 		scanIdentifierUI.setEnabled(false);
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(this, HelpContext.PEAK_SCAN_LIST);
 	}
 
 	private void createToolbarMain(Composite parent) {

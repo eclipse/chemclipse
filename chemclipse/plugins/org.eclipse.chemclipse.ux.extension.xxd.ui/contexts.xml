@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?NLS TYPE="org.eclipse.help.contexts"?>
+<contexts>
+   <context id="chromatogram_overlay" title="Chromatogram Overlay">
+      <description>The chromatogram overlay can stack multiple opened chromatograms in one view.</description>
+      <topic label="Controls" href="html/controls/chromatogram_overlay.html"/>
+   </context>
+   <context id="chromatogram_editor" title="Chromatogram Editor">
+      <description>This is the main editor. Right-click on it to choose chemometric operations.</description>
+      <topic label="Controls" href="html/controls/chromatogram_editor.html"/>
+   </context>
+   <context id="peak_scan_list" title="Peak/Scan List">
+   	 <description>The peak/scan list can be used to manage the peaks or scans shown in the current selection.</description>
+  	 <topic label="Controls" href="html/controls/peak_scan_list.html"/>
+   </context>
+</contexts>
