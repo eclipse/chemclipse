@@ -291,8 +291,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof Derivative) {
-					Derivative derivative = (Derivative)element;
+				if(element instanceof Derivative derivative) {
 					return derivative.label();
 				}
 				return null;
@@ -564,12 +563,10 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 						appendXWC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
 					} else if(displayType.equals(DisplayType.MPC)) {
 						appendMPC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
+					} else if(displayType.equals(DisplayType.BPC) || displayType.equals(DisplayType.XIC) || displayType.equals(DisplayType.TSC)) {
+						appendXXC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
 					} else {
-						if(displayType.equals(DisplayType.BPC) || displayType.equals(DisplayType.XIC) || displayType.equals(DisplayType.TSC)) {
-							appendXXC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
-						} else {
-							appendTIC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
-						}
+						appendTIC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
 					}
 				}
 				i++;

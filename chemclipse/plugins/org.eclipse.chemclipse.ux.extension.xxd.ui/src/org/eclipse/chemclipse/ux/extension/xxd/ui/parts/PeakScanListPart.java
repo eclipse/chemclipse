@@ -48,8 +48,7 @@ public class PeakScanListPart extends AbstractPart<ExtendedPeakScanListUI> {
 		void execute(MPart part, MDirectToolItem toolItem) {
 
 			Object object = part.getObject();
-			if(object instanceof PeakScanListPart) {
-				PeakScanListPart listPart = (PeakScanListPart)object;
+			if(object instanceof PeakScanListPart listPart) {
 				listPart.linkWithEditor = toolItem.isSelected();
 				listPart.updatePeakSelection(null);
 			}
@@ -89,21 +88,19 @@ public class PeakScanListPart extends AbstractPart<ExtendedPeakScanListUI> {
 				getControl().updateChromatogramSelection(null);
 				unloadData();
 				return false;
-			} else {
-				if(isChromatogramEvent(topic)) {
-					if(object instanceof IChromatogramSelection) {
-						IChromatogramSelection<?, ?> chromatogramSelection = (IChromatogramSelection<?, ?>)object;
-						getControl().updateChromatogramSelection(chromatogramSelection);
-						return true;
-					}
-				} else if(isUpdateEditorEvent(topic)) {
-					logger.info(object);
-					getControl().refreshTableViewer();
+			} else if(isChromatogramEvent(topic)) {
+				if(object instanceof IChromatogramSelection) {
+					IChromatogramSelection<?, ?> chromatogramSelection = (IChromatogramSelection<?, ?>)object;
+					getControl().updateChromatogramSelection(chromatogramSelection);
 					return true;
-				} else if(isIdentificationTopic(topic)) {
-					getControl().updateChromatogramSelection();
-					linkWithEditor = false; // TODO Workaround: This otherwise breaks the table selection after undo.
 				}
+			} else if(isUpdateEditorEvent(topic)) {
+				logger.info(object);
+				getControl().refreshTableViewer();
+				return true;
+			} else if(isIdentificationTopic(topic)) {
+				getControl().updateChromatogramSelection();
+				linkWithEditor = false; // TODO Workaround: This otherwise breaks the table selection after undo.
 			}
 		}
 		//

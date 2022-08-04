@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -43,8 +43,7 @@ public class ChromatogramOverlayPart extends AbstractPart<ExtendedChromatogramOv
 		public void execute(MPart part, MDirectToolItem toolItem) {
 
 			Object object = part.getObject();
-			if(object instanceof ChromatogramOverlayPart) {
-				ChromatogramOverlayPart overlayPart = (ChromatogramOverlayPart)object;
+			if(object instanceof ChromatogramOverlayPart overlayPart) {
 				overlayPart.getControl().setZoomLocked(toolItem.isSelected());
 			}
 		}
@@ -56,6 +55,7 @@ public class ChromatogramOverlayPart extends AbstractPart<ExtendedChromatogramOv
 		return new ExtendedChromatogramOverlayUI(parent, SWT.BORDER);
 	}
 
+	@Override
 	@Focus
 	public void setFocus() {
 

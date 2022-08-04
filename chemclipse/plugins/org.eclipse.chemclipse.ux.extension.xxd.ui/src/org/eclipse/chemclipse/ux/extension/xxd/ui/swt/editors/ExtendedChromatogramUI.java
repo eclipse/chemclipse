@@ -52,8 +52,8 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
-import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IMessageProvider;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
@@ -310,7 +310,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		if(chromatogramSelection != null && eventBroker != null) {
 			UpdateNotifierUI.update(display, chromatogramSelection);
 		}
-		return chromatogramSelection != null ? true : false;
+		return chromatogramSelection != null;
 	}
 
 	public boolean fireUpdatePeak(Display display) {
