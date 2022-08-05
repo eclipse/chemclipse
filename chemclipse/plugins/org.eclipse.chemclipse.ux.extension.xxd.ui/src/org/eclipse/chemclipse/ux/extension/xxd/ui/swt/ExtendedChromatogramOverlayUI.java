@@ -49,6 +49,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramRulerChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.IRulerUpdateNotifier;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.RulerEvent;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.help.HelpContext;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.OverlayChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageChromatogram;
@@ -104,6 +105,7 @@ import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
 import org.eclipse.swtchart.extensions.preferences.PreferencePage;
+import org.eclipse.ui.PlatformUI;
 
 public class ExtendedChromatogramOverlayUI extends Composite implements IExtendedPartUI {
 
@@ -183,6 +185,8 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		 * This is needed to layout both combo boxes accordingly.
 		 */
 		this.layout(true);
+		//
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(this, HelpContext.CHROMATOGRAM_OVERLAY);
 	}
 
 	private Composite createToolbarMain(Composite parent) {
@@ -287,8 +291,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof Derivative) {
-					Derivative derivative = (Derivative)element;
+				if(element instanceof Derivative derivative) {
 					return derivative.label();
 				}
 				return null;
@@ -560,12 +563,10 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 						appendXWC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
 					} else if(displayType.equals(DisplayType.MPC)) {
 						appendMPC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
+					} else if(displayType.equals(DisplayType.BPC) || displayType.equals(DisplayType.XIC) || displayType.equals(DisplayType.TSC)) {
+						appendXXC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
 					} else {
-						if(displayType.equals(DisplayType.BPC) || displayType.equals(DisplayType.XIC) || displayType.equals(DisplayType.TSC)) {
-							appendXXC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
-						} else {
-							appendTIC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
-						}
+						appendTIC(availableSeriesIds, selectionSeries, lineSeriesDataList, chromatogram, displayType, chromatogramName);
 					}
 				}
 				i++;

@@ -52,8 +52,8 @@ import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
-import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IMessageProvider;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
@@ -86,6 +86,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.RetentionIndexUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.charts.ChromatogramChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.editors.EditorProcessTypeSupplier;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.help.HelpContext;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts.TargetReferenceLabelMarker;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.handlers.DynamicHandler;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodCancelException;
@@ -309,7 +310,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		if(chromatogramSelection != null && eventBroker != null) {
 			UpdateNotifierUI.update(display, chromatogramSelection);
 		}
-		return chromatogramSelection != null ? true : false;
+		return chromatogramSelection != null;
 	}
 
 	public boolean fireUpdatePeak(Display display) {
@@ -1021,6 +1022,8 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_CHROMATOGRAM_ALIGNMENT), false);
 		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_METHOD), preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_SHOW_METHODS_TOOLBAR));
 		PartSupport.setCompositeVisibility(toolbars.get(TOOLBAR_RETENTION_INDICES), false);
+		//
+		PlatformUI.getWorkbench().getHelpSystem().setHelp(this, HelpContext.CHROMATOGRAM_EDITOR);
 		//
 		chromatogramReferencesUI.setComboVisible(preferenceStore.getBoolean(PreferenceConstants.P_CHROMATOGRAM_SHOW_REFERENCES_COMBO));
 		chromatogramReferencesUI.setUpdateListener(new IUpdateListener() {

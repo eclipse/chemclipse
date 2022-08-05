@@ -32,8 +32,10 @@
         <children xsi:type="menu:HandledMenuItem" xmi:id="_nz0_UDiVEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.preferences" label="Preferences" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/preferences.gif" command="_XevnQDiVEeKDEdWQrkwLnQ"/>
       </children>
       <children xsi:type="menu:Menu" xmi:id="_h0BcRjLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.help" label="Help">
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_h0BcRzLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.item.about" label="About" iconURI="platform:/plugin/org.eclipse.jface/icons/full/message_info.png" command="_h0A1RDLzEeKMEOdllHiEaA"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_-y9BQCaJEeOrR5M2kqmSOQ" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.item.help" label="Documentation" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/help_contents.png" command="_zeEzsCaJEeOrR5M2kqmSOQ"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_h0BcRzLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.item.about" label="About" iconURI="platform:/plugin/org.eclipse.jface/icons/full/message_info.png" tooltip="Show versions and licenses" command="_h0A1RDLzEeKMEOdllHiEaA"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_-y9BQCaJEeOrR5M2kqmSOQ" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.item.help.contents" label="Contents" iconURI="platform:/plugin/org.eclipse.help.ui/icons/etool16/help.png" tooltip="Show the table of contents" command="_zeEzsCaJEeOrR5M2kqmSOQ"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_RIofcBQIEe2TEsI5wKibaA" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.item.help.search" label="Search" iconURI="platform:/plugin/org.eclipse.help.ui/icons/etool16/helpsearch_co.png" tooltip="Search through the help" command="_WfrxwBQKEe2TEsI5wKibaA"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_PwyGQBQJEe2TEsI5wKibaA" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.item.help.context" label="Context" iconURI="platform:/plugin/org.eclipse.help.ui/icons/view16/help_view.png" tooltip="Show context sensitive help" command="_bDq6UBQKEe2TEsI5wKibaA"/>
       </children>
     </mainMenu>
     <sharedElements xsi:type="basic:Part" xmi:id="_Sq1foEd4EeKhRMzT2OpX0g" elementId="org.eclipse.ui.console.ConsoleView" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Console" iconURI="platform:/plugin/org.eclipse.ui.console/icons/full/cview16/console_view.png">
@@ -136,11 +138,13 @@
   <handlers xmi:id="_E4KTYDilEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.selectView" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.SelectViewHandler" command="_ASbeYDilEeKDEdWQrkwLnQ"/>
   <handlers xmi:id="_2GedcEaqEeKL9t3RgmYB_g" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.import" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.ImportHandler" command="_w-HcgEaqEeKL9t3RgmYB_g"/>
   <handlers xmi:id="_53gfEEaqEeKL9t3RgmYB_g" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.export" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.ExportHandler" command="_zmfM8EaqEeKL9t3RgmYB_g"/>
-  <handlers xmi:id="_wRrJICaJEeOrR5M2kqmSOQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.help" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.HelpHandler" command="_zeEzsCaJEeOrR5M2kqmSOQ"/>
+  <handlers xmi:id="_wRrJICaJEeOrR5M2kqmSOQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.help.contents" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.HelpContentsHandler" command="_zeEzsCaJEeOrR5M2kqmSOQ"/>
   <handlers xmi:id="_NeEKMIgsEemJaOKd7Cy7Ww" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.opensnippet" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.OpenSnippetHandler" command="_-eZF4IgrEemJaOKd7Cy7Ww"/>
   <handlers xmi:id="_XLWkMLgWEemNgNx3khJk0g" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.opentoolmenu" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.OpenMenuHandler" command="_mZc7gLgVEemNgNx3khJk0g"/>
   <handlers xmi:id="_-CiPIMzGEeqoZ6zANnMIXQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.installassets" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.InstallAssetsHandler" command="_wrYAwMzGEeqoZ6zANnMIXQ"/>
   <handlers xmi:id="_b_Jt8KzhEeu9gOO-5hThuA" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.resetperspective" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.ResetPerspectiveHandler" command="_X4T0YKzhEeu9gOO-5hThuA"/>
+  <handlers xmi:id="_havKEBQKEe2TEsI5wKibaA" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.help.search" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.SearchHelpHandler" command="_WfrxwBQKEe2TEsI5wKibaA"/>
+  <handlers xmi:id="_l9XAsBQKEe2TEsI5wKibaA" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.help.context" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.DynamicHelpHandler" command="_bDq6UBQKEe2TEsI5wKibaA"/>
   <bindingTables xmi:id="_h0A1PDLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.bindingtable" bindingContext="_h0A1MTLzEeKMEOdllHiEaA">
     <bindings xmi:id="_h0A1PTLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.keybinding.quit" keySequence="M1+Q" command="_h0A1OjLzEeKMEOdllHiEaA"/>
     <bindings xmi:id="_h0A1RjLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.keybinding.about" keySequence="M1+A" command="_h0A1RDLzEeKMEOdllHiEaA"/>
@@ -159,13 +163,15 @@
   <commands xmi:id="_ASbeYDilEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.command.selectView" commandName="Select View"/>
   <commands xmi:id="_w-HcgEaqEeKL9t3RgmYB_g" elementId="org.eclipse.chemclipse.rcp.app.ui.command.import" commandName="Import"/>
   <commands xmi:id="_zmfM8EaqEeKL9t3RgmYB_g" elementId="org.eclipse.chemclipse.rcp.app.ui.command.export" commandName="Export"/>
-  <commands xmi:id="_zeEzsCaJEeOrR5M2kqmSOQ" elementId="org.eclipse.chemclipse.rcp.app.ui.command.help" commandName="Help"/>
+  <commands xmi:id="_zeEzsCaJEeOrR5M2kqmSOQ" elementId="org.eclipse.chemclipse.rcp.app.ui.command.help.contents" commandName="Help Contents"/>
   <commands xmi:id="_-eZF4IgrEemJaOKd7Cy7Ww" elementId="org.eclipse.chemclipse.rcp.app.ui.command.opensnippet" commandName="Open Snippet" description="Open the given Snippet in the editor area">
     <parameters xmi:id="_-eZF4YgrEemJaOKd7Cy7Ww" elementId="org.eclipse.chemclipse.rcp.app.ui.commandparameter.opensnippet.snippetid" name="snippetid" optional="false"/>
   </commands>
   <commands xmi:id="_mZc7gLgVEemNgNx3khJk0g" elementId="chemclipse.command.opentoolmenu" commandName="Open Tool Menu" description="Open the Tool menu"/>
   <commands xmi:id="_wrYAwMzGEeqoZ6zANnMIXQ" elementId="org.eclipse.chemclipse.rcp.app.ui.command.installassets" commandName="Install Assets" description="Installs additional assets"/>
   <commands xmi:id="_X4T0YKzhEeu9gOO-5hThuA" elementId="org.eclipse.chemclipse.rcp.app.ui.command.resetperspective" commandName="Reset Perspective"/>
+  <commands xmi:id="_WfrxwBQKEe2TEsI5wKibaA" elementId="org.eclipse.chemclipse.rcp.app.ui.command.help.search" commandName="Search Help"/>
+  <commands xmi:id="_bDq6UBQKEe2TEsI5wKibaA" elementId="org.eclipse.chemclipse.rcp.app.ui.command.help.context" commandName="Help context" description="Context sensitive help"/>
   <addons xmi:id="_h0A1NDLzEeKMEOdllHiEaA" elementId="org.eclipse.e4.core.commands.service" contributionURI="bundleclass://org.eclipse.e4.core.commands/org.eclipse.e4.core.commands.CommandServiceAddon"/>
   <addons xmi:id="_h0A1NTLzEeKMEOdllHiEaA" elementId="org.eclipse.e4.ui.contexts.service" contributionURI="bundleclass://org.eclipse.e4.ui.services/org.eclipse.e4.ui.services.ContextServiceAddon"/>
   <addons xmi:id="_h0A1NjLzEeKMEOdllHiEaA" elementId="org.eclipse.e4.ui.bindings.service" contributionURI="bundleclass://org.eclipse.e4.ui.bindings/org.eclipse.e4.ui.bindings.BindingServiceAddon"/>

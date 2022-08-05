@@ -45,8 +45,8 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
-import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
@@ -111,7 +111,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 	//
 	private final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private final Shell shell;
-	private final ObjectChangedListener<Object> updateMenuListener = new ObjectChangedListener<Object>() {
+	private final ObjectChangedListener<Object> updateMenuListener = new ObjectChangedListener<>() {
 
 		@Override
 		public void objectChanged(ChangeType type, Object newObject, Object oldObject) {
@@ -272,8 +272,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 
 		if(objects.size() == 1) {
 			Object object = objects.get(0);
-			if(object instanceof IChromatogramSelection) {
-				IChromatogramSelection chromatogramSelection = (IChromatogramSelection)object;
+			if(object instanceof IChromatogramSelection chromatogramSelection) {
 				if(extendedChromatogramUI.isActiveChromatogramSelection(chromatogramSelection)) {
 					extendedChromatogramUI.update();
 					IChromatogram chromatogram = chromatogramSelection.getChromatogram();
@@ -353,14 +352,11 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 				/*
 				 * Already available.
 				 */
-				if(object instanceof IChromatogramMSD) {
-					IChromatogramMSD chromatogram = (IChromatogramMSD)object;
+				if(object instanceof IChromatogramMSD chromatogram) {
 					chromatogramSelection = new ChromatogramSelectionMSD(chromatogram);
-				} else if(object instanceof IChromatogramCSD) {
-					IChromatogramCSD chromatogram = (IChromatogramCSD)object;
+				} else if(object instanceof IChromatogramCSD chromatogram) {
 					chromatogramSelection = new ChromatogramSelectionCSD(chromatogram);
-				} else if(object instanceof IChromatogramWSD) {
-					IChromatogramWSD chromatogram = (IChromatogramWSD)object;
+				} else if(object instanceof IChromatogramWSD chromatogram) {
 					chromatogramSelection = new ChromatogramSelectionWSD(chromatogram);
 				}
 				chromatogramFile = null;
@@ -406,14 +402,11 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 				monitor.subTask("Save Chromatogram");
 				//
 				IProcessingInfo processingInfo = null;
-				if(chromatogram instanceof IChromatogramMSD) {
-					IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
+				if(chromatogram instanceof IChromatogramMSD chromatogramMSD) {
 					processingInfo = ChromatogramConverterMSD.getInstance().convert(chromatogramFile, chromatogramMSD, converterId, monitor);
-				} else if(chromatogram instanceof IChromatogramCSD) {
-					IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
+				} else if(chromatogram instanceof IChromatogramCSD chromatogramCSD) {
 					processingInfo = ChromatogramConverterCSD.getInstance().convert(chromatogramFile, chromatogramCSD, converterId, monitor);
-				} else if(chromatogram instanceof IChromatogramWSD) {
-					IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
+				} else if(chromatogram instanceof IChromatogramWSD chromatogramWSD) {
 					processingInfo = ChromatogramConverterWSD.getInstance().convert(chromatogramFile, chromatogramWSD, converterId, monitor);
 				}
 				//

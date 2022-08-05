@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,7 +18,7 @@ import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.core.services.log.Logger;
 
 @SuppressWarnings("restriction")
-public class HelpHandler {
+public class HelpContentsHandler {
 
 	@Execute
 	void execute(ECommandService commandService, EHandlerService handlerService, Logger logger) {
@@ -27,7 +27,7 @@ public class HelpHandler {
 		if(handlerService.canExecute(command)) {
 			handlerService.executeHandler(command);
 		} else {
-			logger.warn("Can't handle to open the help dialog.");
+			logger.warn("Can't handle to open the help contents dialog.");
 		}
 	}
 }
