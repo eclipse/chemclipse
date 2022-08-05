@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,13 +14,11 @@ package org.eclipse.chemclipse.chromatogram.msd.filter.supplier.backfolding;
 /**
  * THIS CLASS IS NOT SUITED FOR PRODUCTIVE USE!<br/>
  * IT IS A TESTCLASS!
- * 
- * @author eselmeister
  */
 public class TestPathHelper extends PathResolver {
 
 	/*
 	 * IMPORT
 	 */
-	public static final String TESTFILE_IMPORT_CHROMATOGRAM_1 = "testData/files/import/Chromatogram1.D/DATA.MS";
+	public static final String TESTFILE_IMPORT_CHROMATOGRAM_1 = "testData/files/import/Chromatogram1.ocb";
 }

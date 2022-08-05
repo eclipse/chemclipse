@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,7 +28,7 @@ public class PcaUtilsTest4 {
 	private Samples samples;
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUp() {
 
 		String[][] samples = {{"Sample1", "Group1"}, //
 				{"Sample2", "Group2"}, //

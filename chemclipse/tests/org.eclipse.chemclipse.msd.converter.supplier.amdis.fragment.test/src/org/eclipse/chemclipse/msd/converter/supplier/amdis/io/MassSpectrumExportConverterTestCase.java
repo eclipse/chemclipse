@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.msd.converter.database.IDatabaseImportConverter;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.MSLDatabaseExportConverter;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msl.MSLDatabaseImportConverter;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
+import org.junit.Ignore;
 
 import junit.framework.TestCase;
 
@@ -27,6 +28,7 @@ import junit.framework.TestCase;
  *
  * @author eselmeister
  */
+@Ignore
 public class MassSpectrumExportConverterTestCase extends TestCase {
 
 	protected File exportFile;

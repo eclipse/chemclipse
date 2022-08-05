@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2021 Lablicate GmbH.
+ * Copyright (c) 2011, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -43,6 +43,6 @@ public class CodaFilter_1_ITest extends ChromatogramImporterTestCase {
 
 		int scan = 1;
 		chromatogramFilter.applyFilter(chromatogramSelection, chromatogramFilterSettings, new NullProgressMonitor());
-		assertEquals("total signal", 2489479.0f, chromatogram.getScan(scan).getTotalSignal());
+		assertEquals("total signal", 180262.0f, chromatogram.getScan(scan).getTotalSignal());
 	}
 }

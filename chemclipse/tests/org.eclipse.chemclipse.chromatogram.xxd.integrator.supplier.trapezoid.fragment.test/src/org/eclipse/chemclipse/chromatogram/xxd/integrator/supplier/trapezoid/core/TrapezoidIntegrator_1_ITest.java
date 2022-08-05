@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -63,7 +63,7 @@ public class TrapezoidIntegrator_1_ITest extends ChromatogramImportTestCase {
 			integrationResult = results.getChromatogramIntegrationResult(0);
 			assertEquals("Ion", AbstractIon.TIC_ION, integrationResult.getIon());
 			assertEquals("BackgroundArea", 0.0d, integrationResult.getBackgroundArea());
-			assertEquals("ChromatogramArea", 7.933076834045009E9, integrationResult.getChromatogramArea());
+			assertEquals("ChromatogramArea", 7.893094987865009E9, integrationResult.getChromatogramArea());
 		} catch(TypeCastException e) {
 			assertTrue("TypeCastException", false);
 		}

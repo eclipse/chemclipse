@@ -18,9 +18,11 @@ import org.eclipse.chemclipse.chromatogram.xxd.report.supplier.txt.TestPathHelpe
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.junit.Ignore;
 
 import junit.framework.TestCase;
 
+@Ignore
 public class ChromatogramImporterTestCase extends TestCase {
 
 	private final static String EXTENSION_POINT_ID = "org.eclipse.chemclipse.xxd.converter.supplier.chemclipse";

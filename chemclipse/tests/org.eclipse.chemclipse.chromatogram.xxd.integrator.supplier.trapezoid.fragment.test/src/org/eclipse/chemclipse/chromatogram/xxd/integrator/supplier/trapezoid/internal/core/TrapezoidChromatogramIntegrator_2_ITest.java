@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -35,6 +35,6 @@ public class TrapezoidChromatogramIntegrator_2_ITest extends ChromatogramImportT
 	public void testIntegrate_1() {
 
 		double area = integrator.integrate(chromatogramSelection);
-		assertEquals("", 7.933076834045009E9, area);
+		assertEquals("", 7.893094987865009E9, area);
 	}
 }

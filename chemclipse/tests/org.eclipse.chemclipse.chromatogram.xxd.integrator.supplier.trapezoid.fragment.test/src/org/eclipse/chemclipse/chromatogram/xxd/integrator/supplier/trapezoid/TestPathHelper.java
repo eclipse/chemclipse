@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -22,6 +22,6 @@ public class TestPathHelper extends PathResolver {
 	/*
 	 * IMPORT
 	 */
-	public static final String TESTFILE_IMPORT_CHROMATOGRAM_1 = "testData/files/import/Chromatogram1.CDF";
+	public static final String TESTFILE_IMPORT_CHROMATOGRAM_1 = "testData/files/import/Chromatogram1.ocb";
 	public static final String TESTFILE_IMPORT_CHROMATOGRAM_2 = "testData/files/import/Chromatogram2.ocb";
 }

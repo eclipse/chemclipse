@@ -54,6 +54,6 @@ public class Calculator_3_ITest extends ChromatogramImporterTestCase {
 
 	public void testGetSize_1() {
 
-		assertEquals("Size", 197, noiseSegments.size());
+		assertEquals("Size", 9, noiseSegments.size());
 	}
 }

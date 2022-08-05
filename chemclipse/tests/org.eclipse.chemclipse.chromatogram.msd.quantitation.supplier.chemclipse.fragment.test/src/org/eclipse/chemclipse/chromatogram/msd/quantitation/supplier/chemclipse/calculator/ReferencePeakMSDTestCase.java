@@ -30,9 +30,11 @@ import org.eclipse.chemclipse.msd.model.implementation.PeakIon;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMSD;
 import org.eclipse.chemclipse.msd.model.implementation.PeakMassSpectrum;
 import org.eclipse.chemclipse.msd.model.implementation.PeakModelMSD;
+import org.junit.Ignore;
 
 import junit.framework.TestCase;
 
+@Ignore
 public class ReferencePeakMSDTestCase extends TestCase {
 
 	private IPeakMSD referencePeakMSD_TIC_1; // 1x Concentration

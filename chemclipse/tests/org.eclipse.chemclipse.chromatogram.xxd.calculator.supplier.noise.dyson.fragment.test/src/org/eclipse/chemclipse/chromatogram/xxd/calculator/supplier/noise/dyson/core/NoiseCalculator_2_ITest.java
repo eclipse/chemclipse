@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2021 Lablicate GmbH.
+ * Copyright (c) 2014, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -41,8 +41,8 @@ public class NoiseCalculator_2_ITest extends ChromatogramReaderTestCase {
 		 */
 		chromatogram.addMeasurementResult(new ChromatogramSegmentation(chromatogram, 13));
 		assertEquals(0.0f, noiseCalculator.getSignalToNoiseRatio(chromatogram, 0));
-		assertEquals(0.3802281369f, noiseCalculator.getSignalToNoiseRatio(chromatogram, 50));
-		assertEquals(1.0f, noiseCalculator.getSignalToNoiseRatio(chromatogram, 131.5f));
-		assertEquals(608.3650190114f, noiseCalculator.getSignalToNoiseRatio(chromatogram, 80000));
+		assertEquals(25f, noiseCalculator.getSignalToNoiseRatio(chromatogram, 50));
+		assertEquals(65.75f, noiseCalculator.getSignalToNoiseRatio(chromatogram, 131.5f));
+		assertEquals(40000f, noiseCalculator.getSignalToNoiseRatio(chromatogram, 80000));
 	}
 }

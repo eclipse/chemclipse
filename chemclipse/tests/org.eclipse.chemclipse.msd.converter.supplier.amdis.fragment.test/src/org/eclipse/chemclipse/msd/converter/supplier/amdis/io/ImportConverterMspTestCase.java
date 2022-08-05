@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,9 +19,11 @@ import org.eclipse.chemclipse.msd.converter.supplier.amdis.converter.msp.MSPData
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.junit.Ignore;
 
 import junit.framework.TestCase;
 
+@Ignore
 public class ImportConverterMspTestCase extends TestCase {
 
 	protected File importFile;

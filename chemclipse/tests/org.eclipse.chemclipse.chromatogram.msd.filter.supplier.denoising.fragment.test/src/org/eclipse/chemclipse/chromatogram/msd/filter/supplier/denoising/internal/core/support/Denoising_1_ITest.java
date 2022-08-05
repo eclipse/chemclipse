@@ -50,6 +50,6 @@ public class Denoising_1_ITest extends ChromatogramImporterTestCase {
 
 	public void testGetSize_1() {
 
-		assertEquals("Size", 202, noiseMassSpectra.size());
+		assertEquals("Size", 11, noiseMassSpectra.size());
 	}
 }

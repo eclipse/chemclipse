@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -32,6 +32,7 @@ import org.eclipse.chemclipse.model.implementation.Scan;
 import org.eclipse.chemclipse.model.statistics.RetentionTime;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
+import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 
 public class TestSupport {
 
@@ -46,7 +47,7 @@ public class TestSupport {
 
 	public static void putPeakDataToMap(String name, String groupName, int[] retentionTimes, double[] integrationArea, Map<IDataInputEntry, IPeaks<?>> map) {
 
-		map.put(createDataInputEntry(name, groupName), cretePeaks(retentionTimes, integrationArea));
+		map.put(createDataInputEntry(name, groupName), createPeaks(retentionTimes, integrationArea));
 	}
 
 	public static Samples createSamples2() {
@@ -90,7 +91,7 @@ public class TestSupport {
 		//
 		Arrays.stream(variables).forEach(v -> samplesOutput.getVariables().add(new RetentionTime(v)));
 		int i = 0;
-		for(double sampleData[] : data) {
+		for(double[] sampleData : data) {
 			final int iFinal = i;
 			IntStream.range(0, variables.length).forEach(variable -> //
 			samplesOutput.getSampleList().get(iFinal).getSampleData().add(new PeakSampleData(sampleData[variable], null)));
@@ -115,17 +116,20 @@ public class TestSupport {
 		return d;
 	}
 
-	private static IPeaks<?> cretePeaks(int[] retentionTimes, double[] integrationArea) {
+	private static IPeaks<?> createPeaks(int[] retentionTimes, double[] integrationArea) {
 
 		IPeaks<?> peaks = new Peaks();
 		for(int i = 0; i < integrationArea.length; i++) {
 			IPeakModelMSD peakModel = EasyMock.createMock(IPeakModelMSD.class);
 			EasyMock.expect(peakModel.getRetentionTimeAtPeakMaximum()).andStubReturn(retentionTimes[i]);
+			IScanMSD scan = EasyMock.createMock(IScanMSD.class);
+			EasyMock.expect(peakModel.getPeakMaximum()).andStubReturn(scan);
 			EasyMock.replay(peakModel);
 			IChromatogramPeakMSD peak = EasyMock.createMock(IChromatogramPeakMSD.class);
 			EasyMock.expect(peak.getPeakModel()).andStubReturn(peakModel);
 			EasyMock.expect(peak.getIntegratedArea()).andStubReturn(integrationArea[i]);
 			EasyMock.expect(peak.getTargets()).andStubReturn(new HashSet<>());
+			EasyMock.expect(peak.getClassifier()).andStubReturn(new HashSet<>());
 			EasyMock.replay(peak);
 			peaks.addPeak(peak);
 		}
