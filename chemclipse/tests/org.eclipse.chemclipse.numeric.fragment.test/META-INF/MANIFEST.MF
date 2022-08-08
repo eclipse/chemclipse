@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Eclipse-ExtensibleAPI: true
 Bundle-ManifestVersion: 2
-Bundle-Name: Test Fragment
+Bundle-Name: Numeric Test
 Bundle-SymbolicName: org.eclipse.chemclipse.numeric.fragment.test
 Bundle-Version: 0.9.0.qualifier
 Fragment-Host: org.eclipse.chemclipse.numeric;bundle-version="0.8.0"

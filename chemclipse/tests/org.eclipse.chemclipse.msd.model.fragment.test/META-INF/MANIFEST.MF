@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.eclipse.chemclipse.msd.model.fragment.test
 Bundle-ManifestVersion: 2
-Bundle-Name: Test Fragment
+Bundle-Name: MSD Model Test
 Bundle-SymbolicName: org.eclipse.chemclipse.msd.model.fragment.test
 Bundle-Version: 0.9.0.qualifier
 Bundle-Vendor: ChemClipse

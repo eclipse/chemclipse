@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.eclipse.chemclipse.rcp.app.test
 Bundle-ManifestVersion: 2
-Bundle-Name: Test
+Bundle-Name: RCP App Test
 Bundle-SymbolicName: org.eclipse.chemclipse.rcp.app.test
 Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.rcp.app.test.Activator

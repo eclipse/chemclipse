@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.fragment.test
 Bundle-ManifestVersion: 2
-Bundle-Name: Test
+Bundle-Name: MATLAB PARAFAC Test
 Bundle-SymbolicName: org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.fragment.test
 Bundle-Version: 0.9.0.qualifier
 Bundle-Vendor: ChemClipse

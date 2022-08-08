@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.dyson
 Bundle-ManifestVersion: 2
-Bundle-Name: Dyson
+Bundle-Name: Noise Dyson
 Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.dyson;singleton:=true
 Bundle-Version: 0.9.0.qualifier
 Bundle-Activator: org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.noise.dyson.Activator
