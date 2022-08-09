@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2021 Lablicate GmbH.
+ * Copyright (c) 2011, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,12 +13,9 @@ package org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac.io;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
@@ -44,7 +41,7 @@ public class MatlabParafacPeakReader implements IPeakReader {
 	private ParseStatus parseStatus;
 
 	@Override
-	public IProcessingInfo<IPeaks<?>> read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IProcessingInfo<IPeaks<?>> read(File file, IProgressMonitor monitor) throws IOException {
 
 		IProcessingInfo<IPeaks<?>> processingInfo = new ProcessingInfo<>();
 		validateContent(file, processingInfo);
@@ -52,7 +49,7 @@ public class MatlabParafacPeakReader implements IPeakReader {
 		return processingInfo;
 	}
 
-	private void validateContent(File file, IProcessingInfo<?> processingInfo) throws FileIsNotReadableException, IOException {
+	private void validateContent(File file, IProcessingInfo<?> processingInfo) throws IOException {
 
 		FileReader fileReader = new FileReader(file);
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -65,7 +62,7 @@ public class MatlabParafacPeakReader implements IPeakReader {
 		}
 	}
 
-	private void readPeaks(File file, IProcessingInfo<IPeaks<?>> processingInfo) throws FileIsNotReadableException, IOException, IllegalArgumentException {
+	private void readPeaks(File file, IProcessingInfo<IPeaks<?>> processingInfo) throws IOException, IllegalArgumentException {
 
 		FileReader fileReader = new FileReader(file);
 		BufferedReader bufferedReader = new BufferedReader(fileReader);
