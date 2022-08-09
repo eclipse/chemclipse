@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2019 Lablicate GmbH.
+ * Copyright (c) 2011, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -32,6 +32,7 @@ public class ChromatogramTestCase extends TestCase {
 
 	IChromatogramMSD chromatogram;
 	IChromatogramSelectionMSD chromatogramSelection;
+	File chromatogramFile;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -41,7 +42,7 @@ public class ChromatogramTestCase extends TestCase {
 		zipInputStream.getNextEntry();
 		String inputChromatogramFile = TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_CHROMATOGRAM_1_FOLDER);
 		inputChromatogramFile += File.separator + TestPathHelper.TESTFILE_IMPORT_CHROMATOGRAM_1_NAME;
-		File chromatogramFile = new File(inputChromatogramFile);
+		chromatogramFile = new File(inputChromatogramFile);
 		if(chromatogramFile.exists()) {
 			chromatogramFile.delete();
 		}
@@ -69,6 +70,7 @@ public class ChromatogramTestCase extends TestCase {
 
 		chromatogram = null;
 		chromatogramSelection = null;
+		chromatogramFile.delete();
 		//
 		System.gc();
 		//

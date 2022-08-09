@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -46,7 +46,7 @@ public class MassSpectrumExportConverterTestCase extends TestCase {
 	@Override
 	protected void tearDown() throws Exception {
 
-		if(exportFile != null) {
+		if(exportFile.exists()) {
 			exportFile.delete();
 		}
 		exportFile = null;
