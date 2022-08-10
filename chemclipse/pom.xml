@@ -108,6 +108,11 @@
 				<groupId>${tycho.groupid}</groupId>
 				<artifactId>tycho-surefire-plugin</artifactId>
 				<version>${tycho.version}</version>
+				<configuration>
+					<excludes>
+						<exclude>**/*TestCase.java</exclude>
+					</excludes>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>${maven.groupid}</groupId>
