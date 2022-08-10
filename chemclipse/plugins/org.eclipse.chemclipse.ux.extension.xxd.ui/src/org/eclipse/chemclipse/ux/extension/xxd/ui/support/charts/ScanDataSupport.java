@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
@@ -89,7 +90,7 @@ public class ScanDataSupport {
 			//
 			builder.append(" | ");
 			builder.append("Signal: ");
-			builder.append((int)scan.getTotalSignal());
+			builder.append(BigDecimal.valueOf(scan.getTotalSignal()).toBigInteger());
 			//
 			if(scan instanceof IScanMSD) {
 				IScanMSD scanMSD = (IScanMSD)scan;
