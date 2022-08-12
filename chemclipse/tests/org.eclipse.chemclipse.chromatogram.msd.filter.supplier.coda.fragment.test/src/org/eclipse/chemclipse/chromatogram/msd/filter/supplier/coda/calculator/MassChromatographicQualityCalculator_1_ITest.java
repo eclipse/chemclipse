@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2021 Lablicate GmbH.
+ * Copyright (c) 2011, 2022 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -64,7 +64,7 @@ public class MassChromatographicQualityCalculator_1_ITest extends TestCase {
 			result = MassChromatographicQualityCalculator.calculate(chromatogramSelection, codaThreshold, windowSize);
 			assertNotNull(result);
 			float drv = result.getDataReductionValue();
-			assertEquals("Data reduction value", 0.8737201f, drv);
+			assertEquals("Data reduction value", 0.87713313f, drv);
 			IMarkedIons exludedIons = result.getExcludedIons();
 			assertNotNull(exludedIons);
 		} catch(CodaCalculatorException e) {

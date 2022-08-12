@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,7 +16,7 @@ import junit.framework.TestCase;
 public class MassSpectrumComparator_4_Test extends TestCase {
 
 	private IMassSpectrumComparator comparator;
-	IMassSpectrumComparisonSupplier supplier;
+	private IMassSpectrumComparisonSupplier supplier;
 
 	@Override
 	protected void setUp() throws Exception {

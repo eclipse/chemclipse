@@ -1,12 +1,13 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.fragment.test
 Bundle-ManifestVersion: 2
-Bundle-Name: Test Fragment
+Bundle-Name: Integrator Trapezoid Test
 Bundle-SymbolicName: org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.fragment.test
 Bundle-Version: 0.9.0.qualifier
 Fragment-Host: org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid;bundle-version="0.8.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: org.junit;bundle-version="4.11.0",
  org.eclipse.chemclipse.msd.converter;bundle-version="0.8.0",
- org.eclipse.chemclipse.converter;bundle-version="0.8.0"
+ org.eclipse.chemclipse.converter;bundle-version="0.8.0",
+ org.eclipse.chemclipse.xxd.converter.supplier.chemclipse;bundle-version="0.9.0"
 Bundle-Vendor: ChemClipse

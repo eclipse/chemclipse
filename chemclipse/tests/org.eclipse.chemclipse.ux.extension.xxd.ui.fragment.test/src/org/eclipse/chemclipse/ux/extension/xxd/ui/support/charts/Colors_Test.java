@@ -13,9 +13,11 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts;
 
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.swt.graphics.Color;
+import org.junit.Ignore;
 
 import junit.framework.TestCase;
 
+@Ignore("SWT is not available in headless builds.")
 public class Colors_Test extends TestCase {
 
 	public void test1() {

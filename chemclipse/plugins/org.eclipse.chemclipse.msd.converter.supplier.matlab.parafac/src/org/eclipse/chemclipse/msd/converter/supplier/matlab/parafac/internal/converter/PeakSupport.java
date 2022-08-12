@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,7 +28,8 @@ public class PeakSupport {
 	private String modelDescription;
 
 	public PeakSupport() {
-		peakIntensityValues = new PeakIntensityValues();
+
+		peakIntensityValues = new PeakIntensityValues(Float.MAX_VALUE);
 		peakMaximum = new PeakMassSpectrum();
 	}
 
@@ -66,7 +67,6 @@ public class PeakSupport {
 
 		peakIntensityValues.normalize();
 		IPeakModelMSD peakModel = new PeakModelMSD(peakMaximum, peakIntensityValues, 0.0f, 0.0f);
-		IPeakMSD peak = new PeakMSD(peakModel, modelDescription);
-		return peak;
+		return new PeakMSD(peakModel, modelDescription);
 	}
 }

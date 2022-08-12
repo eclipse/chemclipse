@@ -1,10 +1,12 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.eclipse.chemclipse.msd.converter.fragment.test
 Bundle-ManifestVersion: 2
-Bundle-Name: Test Fragment
+Bundle-Name: MSD Converter Test
 Bundle-SymbolicName: org.eclipse.chemclipse.msd.converter.fragment.test
 Bundle-Version: 0.9.0.qualifier
 Bundle-Vendor: ChemClipse
 Fragment-Host: org.eclipse.chemclipse.msd.converter;bundle-version="0.8.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
-Require-Bundle: org.junit;bundle-version="4.11.0"
+Require-Bundle: org.junit;bundle-version="4.11.0",
+ org.eclipse.chemclipse.msd.converter.supplier.amdis;bundle-version="0.9.0",
+ org.eclipse.chemclipse.xxd.converter.supplier.chemclipse;bundle-version="0.9.0"

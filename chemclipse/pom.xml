@@ -108,6 +108,11 @@
 				<groupId>${tycho.groupid}</groupId>
 				<artifactId>tycho-surefire-plugin</artifactId>
 				<version>${tycho.version}</version>
+				<configuration>
+					<excludes>
+						<exclude>**/*TestCase.java</exclude>
+					</excludes>
+				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>${maven.groupid}</groupId>
@@ -131,47 +136,47 @@
 				</configuration>
 			</plugin>
 			<plugin>
-			    <groupId>org.apache.maven.plugins</groupId>
-			    <artifactId>maven-resources-plugin</artifactId>
-			    <version>2.6</version>
-			    <executions>
-			      <execution>
-			        <id>process-about.mappings</id>
-			        <phase>prepare-package</phase>
-			        <configuration>
-			          <outputDirectory>${project.build.directory}</outputDirectory>
-			          <overwrite>true</overwrite>
-			          <resources>
-			            <resource>
-			              <directory>${basedir}</directory>
-			              <includes>
-			                <include>about.mappings</include>
-			              </includes>
-			              <filtering>true</filtering>
-			            </resource>
-			          </resources>
-			        </configuration>
-			        <goals>
-			          <goal>copy-resources</goal>
-			        </goals>
-			      </execution>
-			    </executions>
-			  </plugin>
-			  <plugin>
-			    <groupId>org.eclipse.tycho</groupId>
-			    <artifactId>tycho-packaging-plugin</artifactId>
-			    <version>${tycho.version}</version>
-			    <configuration>
-			      <additionalFileSets>
-			        <fileSet>
-			          <directory>${project.build.directory}</directory>
-			          <includes>
-			            <include>about.mappings</include>
-			          </includes>
-			        </fileSet>
-			      </additionalFileSets>
-			    </configuration>
-			  </plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.6</version>
+				<executions>
+					<execution>
+						<id>process-about.mappings</id>
+						<phase>prepare-package</phase>
+						<configuration>
+							<outputDirectory>${project.build.directory}</outputDirectory>
+							<overwrite>true</overwrite>
+							<resources>
+								<resource>
+									<directory>${basedir}</directory>
+									<includes>
+										<include>about.mappings</include>
+									</includes>
+									<filtering>true</filtering>
+								</resource>
+							</resources>
+						</configuration>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-packaging-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<additionalFileSets>
+					<fileSet>
+						<directory>${project.build.directory}</directory>
+						<includes>
+							<include>about.mappings</include>
+						</includes>
+					</fileSet>
+					</additionalFileSets>
+				</configuration>
+			</plugin>
 		</plugins>
 
 		<pluginManagement>
@@ -206,12 +211,14 @@
 							<goals>
 								<goal>materialize-products</goal>
 							</goals>
+							<phase>install</phase>
 						</execution>
 						<execution>
 							<id>archive-products</id>
 							<goals>
 								<goal>archive-products</goal>
 							</goals>
+							<phase>install</phase>
 							<configuration>
 								<formats>
 									<linux>tar.gz</linux>

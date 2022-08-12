@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -42,7 +42,8 @@ public interface IPeakIntensityValues extends Serializable {
 	 * The NavigableMap could consists the following values (from 2.062 min to
 	 * 2.217 min -> milliseconds = min * 60 * 1000)<br/>
 	 * <br/>
-	 * Retention Time - Intensity 123720 - 2.640416908<br/>
+	 * Retention Time - Intensity
+	 * 123720 - 2.640416908<br/>
 	 * 124500 - 1.876085698<br/>
 	 * 125280 - 13.15576144<br/>
 	 * 126060 - 25.52403011<br/>

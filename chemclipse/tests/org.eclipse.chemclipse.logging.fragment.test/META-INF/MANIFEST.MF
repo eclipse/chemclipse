@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Automatic-Module-Name: org.eclipse.chemclipse.logging.fragment.test
 Bundle-ManifestVersion: 2
-Bundle-Name: Test Fragment
+Bundle-Name: Logging Test
 Bundle-SymbolicName: org.eclipse.chemclipse.logging.fragment.test
 Bundle-Version: 0.9.0.qualifier
 Fragment-Host: org.eclipse.chemclipse.logging

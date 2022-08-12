@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,6 +25,7 @@ import org.eclipse.chemclipse.chromatogram.msd.comparison.spectra.ProblemC2;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.spectra.SinapylAlcohol;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.spectra.SinapylAlcoholCis;
 import org.eclipse.chemclipse.chromatogram.msd.comparison.spectra.Syringylacetone;
+import org.junit.Ignore;
 
 import junit.framework.TestCase;
 
@@ -36,6 +37,7 @@ import junit.framework.TestCase;
  * sinapylAclohol vs phenolBenzimidazolyl: 51.5, 57.6
  * 
  */
+@Ignore
 public class MassSpectrumSetTestCase extends TestCase {
 
 	protected ITestMassSpectrum sinapylAclohol;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,13 +13,12 @@ package org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentificat
 
 import java.io.File;
 
-import org.eclipse.core.runtime.NullProgressMonitor;
-
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.TestPathHelper;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakIdentificationBatchJob;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakIdentificationEntry;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakInputEntry;
 import org.eclipse.chemclipse.chromatogram.msd.process.supplier.peakidentification.model.IPeakIntegrationEntry;
+import org.eclipse.core.runtime.NullProgressMonitor;
 
 import junit.framework.TestCase;
 
@@ -86,7 +85,7 @@ public class PeakIdentificationBatchJobReader_1_ITest extends TestCase {
 	public void testGetIntegrationEntry_1() {
 
 		integrationEntry = batchProcessJob.getPeakIntegrationEntry();
-		assertEquals("org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.peakIntegrator", integrationEntry.getProcessorId());
+		assertEquals("org.eclipse.chemclipse.chromatogram.msd.integrator.supplier.chemstation.peakIntegrator", integrationEntry.getProcessorId());
 	}
 
 	public void testGetIdentificationEntry_1() {
@@ -112,6 +111,6 @@ public class PeakIdentificationBatchJobReader_1_ITest extends TestCase {
 	public void testGetOutputEntries_3() {
 
 		String converterId = batchProcessJob.getPeakOutputEntries().get(0).getConverterId();
-		assertEquals("org.eclipse.chemclipse.msd.converter.supplier.matlab.parafac", converterId);
+		assertEquals("org.eclipse.chemclipse.chromatogram.msd.converter.supplier.matlab.parafac", converterId);
 	}
 }

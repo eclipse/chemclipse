@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2021 Lablicate GmbH.
+ * Copyright (c) 2011, 2022 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -60,7 +60,7 @@ public class MassChromatographicQualityResult_1_ITest extends TestCase {
 		try {
 			result = new MassChromatographicQualityResult(chromatogramSelection, 0.7f, 3);
 			float drv = result.getDataReductionValue();
-			assertEquals("Data reduction value", 0.8737201f, drv);
+			assertEquals("Data reduction value", 0.87713313f, drv);
 			IMarkedIons exludedIons = result.getExcludedIons();
 			assertNotNull(exludedIons);
 		} catch(CodaCalculatorException e) {
@@ -73,7 +73,7 @@ public class MassChromatographicQualityResult_1_ITest extends TestCase {
 		try {
 			result = new MassChromatographicQualityResult(chromatogramSelection, 0.7f, 5);
 			float drv = result.getDataReductionValue();
-			assertEquals("Data reduction value", 0.78327644f, drv);
+			assertEquals("Data reduction value", 0.79522187f, drv);
 			IMarkedIons exludedIons = result.getExcludedIons();
 			assertNotNull(exludedIons);
 		} catch(CodaCalculatorException e) {
@@ -86,7 +86,7 @@ public class MassChromatographicQualityResult_1_ITest extends TestCase {
 		try {
 			result = new MassChromatographicQualityResult(chromatogramSelection, 0.7f, 7);
 			float drv = result.getDataReductionValue();
-			assertEquals("Data reduction value", 0.721843f, drv);
+			assertEquals("Data reduction value", 0.7337884f, drv);
 			IMarkedIons exludedIons = result.getExcludedIons();
 			assertNotNull(exludedIons);
 		} catch(CodaCalculatorException e) {

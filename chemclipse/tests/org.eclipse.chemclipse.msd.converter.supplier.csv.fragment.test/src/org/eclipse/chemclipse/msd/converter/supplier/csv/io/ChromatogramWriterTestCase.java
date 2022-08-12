@@ -56,8 +56,6 @@ public class ChromatogramWriterTestCase extends TestCase {
 		chromatogramImport = null;
 		IProcessingInfo<IChromatogramMSD> processingInfo = ChromatogramConverterMSD.getInstance().convert(fileExport, this.extensionPointExportReimport, new NullProgressMonitor());
 		chromatogram = processingInfo.getProcessingResult();
-		//
-		fileExport.delete();
 	}
 
 	@Override
@@ -66,6 +64,7 @@ public class ChromatogramWriterTestCase extends TestCase {
 		pathImport = null;
 		pathExport = null;
 		fileImport = null;
+		fileExport.delete();
 		fileExport = null;
 		chromatogramImport = null;
 		chromatogram = null;
