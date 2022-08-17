@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.model.ScanSelectorOption;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsCleaner;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsDeleteIdentifier;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsDuplicator;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsRemover;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsScanSelector;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
@@ -41,6 +42,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String DEF_SCAN_SELECTOR_OPTION = ScanSelectorOption.RETENTION_TIME_MS.name();
 	public static final String P_SCAN_SELECTOR_VALUE = "scanSelectorValue";
 	public static final double DEF_SCAN_SELECTOR_VALUE = 1000.0d;
+	public static final String P_MERGE_SCANS = "mergeScans";
+	public static final boolean DEF_MERGE_SCANS = true;
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -71,6 +74,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_REMOVER_PATTERN, DEF_REMOVER_PATTERN);
 		defaultValues.put(P_SCAN_SELECTOR_OPTION, DEF_SCAN_SELECTOR_OPTION);
 		defaultValues.put(P_SCAN_SELECTOR_VALUE, Double.toString(DEF_SCAN_SELECTOR_VALUE));
+		defaultValues.put(P_MERGE_SCANS, Boolean.toString(DEF_MERGE_SCANS));
 		return defaultValues;
 	}
 
@@ -91,6 +95,15 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		FilterSettingsRemover filterSettings = new FilterSettingsRemover();
 		filterSettings.setScanRemoverPattern(preferences.get(P_REMOVER_PATTERN, DEF_REMOVER_PATTERN));
 		return filterSettings;
+	}
+
+	public static FilterSettingsDuplicator getDuplicatorFilterSettings() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		FilterSettingsDuplicator settings = new FilterSettingsDuplicator();
+		settings.setMergeScans(preferences.getBoolean(P_MERGE_SCANS, DEF_MERGE_SCANS));
+		//
+		return settings;
 	}
 
 	public static FilterSettingsDeleteIdentifier getDeleteIdentifierFilterSettings() {

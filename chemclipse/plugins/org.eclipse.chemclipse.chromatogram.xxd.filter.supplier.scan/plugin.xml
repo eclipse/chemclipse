@@ -30,7 +30,14 @@
             filterName="Scan Selector"
             filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsScanSelector"
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanselector">
-      </ChromatogramFilterSupplier>      
+      </ChromatogramFilterSupplier>
+      <ChromatogramFilterSupplier
+            description="This filter duplicates series of scans."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.core.FilterDuplicator"
+            filterName="Scan Duplicator"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsDuplicator"
+            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanduplicator">
+      </ChromatogramFilterSupplier>           
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">

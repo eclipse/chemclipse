@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.DoubleFieldEdi
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.StringRegexFieldEditor;
+import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
@@ -48,5 +49,9 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		addField(new LabelFieldEditor("Scan Selector", getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceSupplier.P_SCAN_SELECTOR_OPTION, "Option", ScanSelectorOption.getOptions(), getFieldEditorParent()));
 		addField(new DoubleFieldEditor(PreferenceSupplier.P_SCAN_SELECTOR_VALUE, "Value", PreferenceSupplier.MIN_SCAN_SELECTOR_VALUE, PreferenceSupplier.MAX_SCAN_SELECTOR_VALUE, getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("Scan Duplicator", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceSupplier.P_MERGE_SCANS, "Merge Scans", getFieldEditorParent()));
 	}
 }
