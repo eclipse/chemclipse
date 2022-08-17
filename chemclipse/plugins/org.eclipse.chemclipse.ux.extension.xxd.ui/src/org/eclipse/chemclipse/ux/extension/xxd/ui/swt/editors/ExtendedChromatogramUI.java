@@ -826,7 +826,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	private TargetReference createTargetReference(IPeak peak) {
 
 		IPeakModel peakModel = peak.getPeakModel();
-		String name = FORMAT.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogram.MINUTE_CORRELATION_FACTOR);
+		String name = FORMAT.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 		float retentionIndex = peakModel.getPeakMaximum().getRetentionIndex();
 		return new TargetReference(peak, TargetReferenceType.PEAK, name, retentionIndex);
 	}

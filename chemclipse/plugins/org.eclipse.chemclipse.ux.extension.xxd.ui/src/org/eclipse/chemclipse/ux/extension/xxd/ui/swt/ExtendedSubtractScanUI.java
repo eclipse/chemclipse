@@ -52,7 +52,7 @@ import org.eclipse.swt.widgets.TabItem;
 
 public class ExtendedSubtractScanUI extends Composite implements IExtendedPartUI {
 
-	private static final Logger logger = Logger.getLogger(ExtendedScanChartUI.class);
+	private static final Logger logger = Logger.getLogger(ExtendedSubtractScanUI.class);
 	//
 	private TabFolder tabFolder;
 	private ScanChartUI scanChartUI;

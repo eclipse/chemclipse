@@ -25,6 +25,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import org.eclipse.chemclipse.model.notifier.UpdateNotifier;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.preferences.ToolbarPreferencePage;
@@ -169,10 +170,10 @@ public class EditorToolBar {
 
 	public void setVisible(boolean visible) {
 
-		if(toolBarManager instanceof SubContributionManager) {
-			((SubContributionManager)toolBarManager).setVisible(visible);
-		} else if(toolBarManager instanceof ToolBarManager) {
-			Control control = ((ToolBarManager)toolBarManager).getControl();
+		if(toolBarManager instanceof SubContributionManager toolBarManager) {
+			toolBarManager.setVisible(visible);
+		} else if(toolBarManager instanceof ToolBarManager toolBarManager) {
+			Control control = toolBarManager.getControl();
 			control.setVisible(visible);
 			/*
 			 * Resize the layout.
@@ -349,10 +350,10 @@ public class EditorToolBar {
 
 	public boolean isVisible() {
 
-		if(toolBarManager instanceof SubContributionManager) {
-			return ((SubContributionManager)toolBarManager).isVisible();
-		} else if(toolBarManager instanceof ToolBarManager) {
-			return ((ToolBarManager)toolBarManager).getControl().isVisible();
+		if(toolBarManager instanceof SubContributionManager toolBarManager) {
+			return toolBarManager.isVisible();
+		} else if(toolBarManager instanceof ToolBarManager toolBarManager) {
+			return toolBarManager.getControl().isVisible();
 		} else {
 			return false;
 		}
@@ -373,7 +374,7 @@ public class EditorToolBar {
 		private void addPreferencePageContainer(PreferencePageContainer container) {
 
 			if(configAction == null) {
-				configAction = new Action("Settings", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CONFIGURE, IApplicationImage.SIZE_16x16)) {
+				configAction = new Action("Settings", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CONFIGURE, IApplicationImageProvider.SIZE_16x16)) {
 
 					@Override
 					public void runWithEvent(Event event) {
