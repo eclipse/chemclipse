@@ -28,6 +28,8 @@ import java.util.function.Supplier;
 import org.eclipse.chemclipse.model.notifier.UpdateNotifier;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.preferences.ToolbarPreferencePage;
 import org.eclipse.jface.action.AbstractGroupMarker;
 import org.eclipse.jface.action.Action;
@@ -329,11 +331,10 @@ public class EditorToolBar {
 			if(parent != null) {
 				parent.enableToolbarTextPage(preferenceStore, key);
 			} else {
-				updateShowTextByPreference(preferenceStore, key);
 				config.addPreferencePageContainer(new PreferencePageContainer(() -> {
 					return Collections.singleton(new ToolbarPreferencePage(preferenceStore, key));
 				}, () -> updateShowTextByPreference(preferenceStore, key)));
-				update();
+				fireUpdateEvent();
 			}
 		}
 	}
@@ -344,7 +345,7 @@ public class EditorToolBar {
 			parent.addPreferencePages(pageSupplier, settingsChangedRunnable);
 		} else {
 			config.addPreferencePageContainer(new PreferencePageContainer(pageSupplier, settingsChangedRunnable));
-			update();
+			fireUpdateEvent();
 		}
 	}
 
@@ -425,6 +426,11 @@ public class EditorToolBar {
 			this.supplier = supplier;
 			this.runnable = runnable;
 		}
+	}
+
+	private void fireUpdateEvent() {
+
+		UpdateNotifier.update(IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_TOOLBAR_UPDATE, true);
 	}
 
 	public void clear() {

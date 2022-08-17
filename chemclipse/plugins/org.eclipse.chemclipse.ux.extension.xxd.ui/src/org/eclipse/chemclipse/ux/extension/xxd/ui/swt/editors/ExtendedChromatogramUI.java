@@ -37,6 +37,7 @@ import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
 import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IScan;
@@ -66,6 +67,7 @@ import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.processors.ProcessorToolbar;
@@ -93,6 +95,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodCancelException;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.MethodSupportUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.ResumeMethodSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsWizard;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.ChromatogramAxisIntensity;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.ChromatogramAxisMilliseconds;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.ChromatogramAxisMinutes;
@@ -286,6 +289,13 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		return toolbarMain.isVisible();
 	}
 
+	public void updateToolbar() {
+
+		toolbarMain.setShowText(preferenceStore.getBoolean(PREFERENCE_SHOW_TOOLBAR_TEXT));
+		toolbarMain.update();
+		processorToolbar.update();
+	}
+
 	/**
 	 * Resets the chart ranges 1:1.
 	 */
@@ -422,6 +432,15 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 				setSeparationColumnSelection();
 				updateWavelengths();
 			}
+		}
+	}
+
+	public void checkUpdates() {
+
+		DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
+		List<Object> updates = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_TOOLBAR_UPDATE);
+		if(!updates.isEmpty()) {
+			updateToolbar();
 		}
 	}
 
