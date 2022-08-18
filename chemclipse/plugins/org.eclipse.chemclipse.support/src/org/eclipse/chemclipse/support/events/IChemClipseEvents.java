@@ -96,4 +96,6 @@ public interface IChemClipseEvents {
 	String TOPIC_EDITOR_PCR_CLOSE = "editor/pcr/close";
 	String TOPIC_EDITOR_NMR_CLOSE = "editor/nmr/close";
 	String TOPIC_EDITOR_XIR_CLOSE = "editor/xir/close";
+	//
+	String TOPIC_EDITOR_CHROMATOGRAM_TOOLBAR_UPDATE = "editor/chromatogram/toolbar/update";
 }

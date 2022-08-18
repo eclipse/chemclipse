@@ -18,8 +18,10 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
 
+import org.eclipse.chemclipse.model.notifier.UpdateNotifier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.preferences.ProcessorToolbarPreferencePage;
 import org.eclipse.chemclipse.support.ui.swt.EditorToolBar;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -46,9 +48,14 @@ public class ProcessorToolbar {
 
 		if(preferenceStore != null) {
 			preferencesSupport = new PreferencesSupport(preferenceStore, key, context, isVisible);
-			editorToolBar.addPreferencePages(() -> Collections.singleton(new ProcessorToolbarPreferencePage(preferencesSupport)), () -> update()); // Callback
+			editorToolBar.addPreferencePages(() -> Collections.singleton(new ProcessorToolbarPreferencePage(preferencesSupport)), () -> fireUpdateEvent()); // Callback
 			update(); // Initialize
 		}
+	}
+
+	private void fireUpdateEvent() {
+
+		UpdateNotifier.update(IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_TOOLBAR_UPDATE, true);
 	}
 
 	public void update() {
@@ -80,7 +87,6 @@ public class ProcessorToolbar {
 			toolBar.setVisible(true);
 			toolBar.addSeparator();
 		}
-		//
 		editorToolBar.update();
 	}
 }

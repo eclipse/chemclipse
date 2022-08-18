@@ -99,6 +99,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 	private static final String TOPIC_PEAK = IChemClipseEvents.TOPIC_PEAK_XXD_UPDATE_SELECTION;
 	private static final String TOPIC_EDITOR_UPDATE = IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE;
 	private static final String TOPIC_EDITOR_ADJUST = IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_ADJUST;
+	private static final String TOPIC_TOOLBAR_UPDATE = IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_TOOLBAR_UPDATE;
 	//
 	private final DataType dataType;
 	private final MPart part;
@@ -152,6 +153,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 		if(shell != null) {
 			extendedChromatogramUI.fireUpdate(shell.getDisplay());
 		}
+		extendedChromatogramUI.checkUpdates();
 	}
 
 	@PostConstruct
@@ -296,6 +298,9 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 				logger.info("Adjust the chromatogram editor: " + object);
 				extendedChromatogramUI.adjustChromatogramChart();
 				return true;
+			} else if(TOPIC_TOOLBAR_UPDATE.equals(topic)) {
+				logger.info("Updating processor toolbar");
+				extendedChromatogramUI.updateToolbar();
 			}
 		}
 		//
@@ -305,7 +310,7 @@ public abstract class AbstractChromatogramEditor extends AbstractUpdater<Extende
 	@Override
 	protected boolean isUpdateTopic(String topic) {
 
-		return TOPIC_CHROMATOGRAM.equals(topic) || TOPIC_SCAN.equals(topic) || TOPIC_PEAK.equals(topic) || TOPIC_EDITOR_UPDATE.equals(topic) || TOPIC_EDITOR_ADJUST.equals(topic);
+		return TOPIC_CHROMATOGRAM.equals(topic) || TOPIC_SCAN.equals(topic) || TOPIC_PEAK.equals(topic) || TOPIC_EDITOR_UPDATE.equals(topic) || TOPIC_EDITOR_ADJUST.equals(topic) || TOPIC_TOOLBAR_UPDATE.equals(topic);
 	}
 
 	private void processChromatogram(IChromatogramSelection chromatogramSelection) {
