@@ -14,8 +14,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.ExtractionOption;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Algorithm;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.AnalysisSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.core.databinding.DataBindingContext;
@@ -28,7 +26,6 @@ import org.eclipse.jface.databinding.swt.typed.WidgetProperties;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -40,19 +37,16 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 
-public class PeakSettingsWizardPage extends WizardPage {
+public class PeakSettingsWizardPage extends AbstractAnalysisWizardPage {
 
 	private ExtractionOption extractionOption = ExtractionOption.RETENTION_TIME_MS;
 	private int groupWindow = 1500; // 1.5 sec
-	private IAnalysisSettings analysisSettings = new AnalysisSettings();
 	//
 	private DataBindingContext dataBindingContext = new DataBindingContext();
 	private IObservableValue<Integer> groupValueWindow = new WritableValue<>();
 	//
 	private Label labelGroupValue;
 	private Text textGroupValue;
-	//
-	private Algorithm[] algorithms = Algorithm.getAlgorithms();
 
 	public PeakSettingsWizardPage() {
 
@@ -71,6 +65,9 @@ public class PeakSettingsWizardPage extends WizardPage {
 		//
 		WizardPageSupport.create(this, dataBindingContext);
 		//
+		createLabel(composite, "Title:");
+		createTextTitle(composite, 1);
+		createLabel(composite, "Group By:");
 		createComboViewerExtractionOption(composite);
 		labelGroupValue = createLabel(composite, "Retention Time Window [ms]:");
 		textGroupValue = createVariableSection(composite);
@@ -94,11 +91,6 @@ public class PeakSettingsWizardPage extends WizardPage {
 		return groupValueWindow.getValue();
 	}
 
-	public IAnalysisSettings getAnalysisSettings() {
-
-		return analysisSettings;
-	}
-
 	private ComboViewer createComboViewerExtractionOption(Composite parent) {
 
 		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
@@ -117,9 +109,7 @@ public class PeakSettingsWizardPage extends WizardPage {
 		});
 		//
 		combo.setToolTipText("Select an extraction option.");
-		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 2;
-		combo.setLayoutData(gridData);
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		combo.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -189,9 +179,7 @@ public class PeakSettingsWizardPage extends WizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(analysisSettings != null) {
-					analysisSettings.setNumberOfPrincipalComponents(spinner.getSelection());
-				}
+				analysisSettings.setNumberOfPrincipalComponents(spinner.getSelection());
 			}
 		});
 		//
@@ -225,9 +213,7 @@ public class PeakSettingsWizardPage extends WizardPage {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
 				if(object instanceof Algorithm) {
-					if(analysisSettings != null) {
-						analysisSettings.setAlgorithm((Algorithm)object);
-					}
+					analysisSettings.setAlgorithm((Algorithm)object);
 				}
 			}
 		});

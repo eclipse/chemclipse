@@ -18,9 +18,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaExtractionFiles;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Algorithm;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.AnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.DataInputEntry;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -29,7 +27,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -43,14 +40,13 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 
-public class FileSettingsWizardPage extends WizardPage {
+public class FileSettingsWizardPage extends AbstractAnalysisWizardPage {
 
 	private static final Logger logger = Logger.getLogger(FileSettingsWizardPage.class);
 	//
 	private File file;
 	private Text textFile;
 	//
-	private IAnalysisSettings analysisSettings = new AnalysisSettings();
 	private Algorithm[] algorithms = Algorithm.getAlgorithms();
 
 	public FileSettingsWizardPage() {
@@ -71,6 +67,9 @@ public class FileSettingsWizardPage extends WizardPage {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(3, false));
 		//
+		createLabel(composite, "Title:");
+		createTextTitle(composite, 2);
+		//
 		createLabel(composite, "Number of PCs:");
 		createSpinnerPrincipleComponents(composite);
 		//
@@ -78,17 +77,12 @@ public class FileSettingsWizardPage extends WizardPage {
 		createComboViewerAlgorithm(composite);
 		//
 		createLabel(composite, "File Data Matrix:");
-		textFile = createText(composite);
+		textFile = createTextFile(composite);
 		createButtonSelectFile(composite);
 		//
 		createButtonDemoFile(composite);
 		//
 		setControl(composite);
-	}
-
-	public IAnalysisSettings getAnalysisSettings() {
-
-		return analysisSettings;
 	}
 
 	public List<IDataInputEntry> getDataInputEntries() {
@@ -126,9 +120,7 @@ public class FileSettingsWizardPage extends WizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(analysisSettings != null) {
-					analysisSettings.setNumberOfPrincipalComponents(spinner.getSelection());
-				}
+				analysisSettings.setNumberOfPrincipalComponents(spinner.getSelection());
 			}
 		});
 		//
@@ -164,9 +156,7 @@ public class FileSettingsWizardPage extends WizardPage {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
 				if(object instanceof Algorithm) {
-					if(analysisSettings != null) {
-						analysisSettings.setAlgorithm((Algorithm)object);
-					}
+					analysisSettings.setAlgorithm((Algorithm)object);
 				}
 			}
 		});
@@ -176,7 +166,7 @@ public class FileSettingsWizardPage extends WizardPage {
 		return comboViewer;
 	}
 
-	private Text createText(Composite parent) {
+	private Text createTextFile(Composite parent) {
 
 		Text text = new Text(parent, SWT.BORDER);
 		text.setText("");

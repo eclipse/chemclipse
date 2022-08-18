@@ -15,8 +15,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.extraction.MALDIExtractionSupport.ExtractionType;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Algorithm;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.AnalysisSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.core.databinding.DataBindingContext;
@@ -29,7 +27,6 @@ import org.eclipse.jface.databinding.swt.typed.WidgetProperties;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -42,17 +39,13 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 
-public class MALDISettingsWizardPage extends WizardPage {
+public class MALDISettingsWizardPage extends AbstractAnalysisWizardPage {
 
-	private IAnalysisSettings analysisSettings = new AnalysisSettings();
-	//
 	private DataBindingContext dataBindingContext = new DataBindingContext();
 	private ExtractionType extractionType;
 	private IObservableValue<Integer> maximalNumberPeaks = new WritableValue<>();
 	private IObservableValue<Integer> massWindow = new WritableValue<>();
 	private boolean useDefaultProperties;
-	//
-	private Algorithm[] algorithms = new Algorithm[]{Algorithm.SVD, Algorithm.NIPALS, Algorithm.OPLS};
 
 	public MALDISettingsWizardPage() {
 
@@ -67,11 +60,6 @@ public class MALDISettingsWizardPage extends WizardPage {
 	public int getMassWindow() {
 
 		return massWindow.getValue();
-	}
-
-	public IAnalysisSettings getAnalysisSettings() {
-
-		return analysisSettings;
 	}
 
 	public int getMaximalNumberPeaks() {
@@ -96,6 +84,9 @@ public class MALDISettingsWizardPage extends WizardPage {
 		composite.setLayout(new GridLayout(1, false));
 		//
 		WizardPageSupport.create(this, dataBindingContext);
+		//
+		createLabel(composite, "Title:");
+		createTextTitle(composite, 1);
 		//
 		createLabel(composite, "Mass Window [Da]:");
 		createVariableSection(composite);
@@ -233,9 +224,7 @@ public class MALDISettingsWizardPage extends WizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(analysisSettings != null) {
-					analysisSettings.setNumberOfPrincipalComponents(spinner.getSelection());
-				}
+				analysisSettings.setNumberOfPrincipalComponents(spinner.getSelection());
 			}
 		});
 		//
@@ -269,9 +258,7 @@ public class MALDISettingsWizardPage extends WizardPage {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
 				if(object instanceof Algorithm) {
-					if(analysisSettings != null) {
-						analysisSettings.setAlgorithm((Algorithm)object);
-					}
+					analysisSettings.setAlgorithm((Algorithm)object);
 				}
 			}
 		});

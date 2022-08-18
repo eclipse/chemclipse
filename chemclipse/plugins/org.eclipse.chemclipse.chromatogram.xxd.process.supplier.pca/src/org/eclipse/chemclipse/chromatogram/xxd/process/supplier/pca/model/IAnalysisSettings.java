@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - added a title field
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
@@ -15,6 +16,10 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IFilter
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IPreprocessingSettings;
 
 public interface IAnalysisSettings {
+
+	void setTitle(String title);
+
+	String getTitle();
 
 	void setNumberOfPrincipalComponents(int numberOfPrincipalComponents);
 

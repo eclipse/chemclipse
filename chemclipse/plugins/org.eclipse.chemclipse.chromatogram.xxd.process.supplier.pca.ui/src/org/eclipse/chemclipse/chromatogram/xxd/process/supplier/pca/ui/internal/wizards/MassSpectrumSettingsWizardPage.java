@@ -13,13 +13,10 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Algorithm;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.AnalysisSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -30,22 +27,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 
-public class MassSpectrumSettingsWizardPage extends WizardPage {
-
-	private IAnalysisSettings analysisSettings = new AnalysisSettings();
-	//
-	//
-	private Algorithm[] algorithms = new Algorithm[]{Algorithm.SVD, Algorithm.NIPALS, Algorithm.OPLS};
+public class MassSpectrumSettingsWizardPage extends AbstractAnalysisWizardPage {
 
 	public MassSpectrumSettingsWizardPage() {
 
 		super("Main Parameters");
 		setTitle("Set Main Parameters");
-	}
-
-	public IAnalysisSettings getAnalysisSettings() {
-
-		return analysisSettings;
 	}
 
 	@Override
@@ -54,6 +41,8 @@ public class MassSpectrumSettingsWizardPage extends WizardPage {
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayout(new GridLayout(1, false));
 		//
+		createLabel(composite, "Title:");
+		createTextTitle(composite, 1);
 		createLabel(composite, "Number of PCs:");
 		createSpinnerPrincipleComponents(composite);
 		createLabel(composite, "Algorithm:");
@@ -82,9 +71,7 @@ public class MassSpectrumSettingsWizardPage extends WizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(analysisSettings != null) {
-					analysisSettings.setNumberOfPrincipalComponents(spinner.getSelection());
-				}
+				analysisSettings.setNumberOfPrincipalComponents(spinner.getSelection());
 			}
 		});
 		//
@@ -118,9 +105,7 @@ public class MassSpectrumSettingsWizardPage extends WizardPage {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
 				if(object instanceof Algorithm) {
-					if(analysisSettings != null) {
-						analysisSettings.setAlgorithm((Algorithm)object);
-					}
+					analysisSettings.setAlgorithm((Algorithm)object);
 				}
 			}
 		});

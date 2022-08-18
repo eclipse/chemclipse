@@ -48,6 +48,7 @@ public abstract class WizardTile implements TileDefinition {
 		BatchProcessWizardDialog wizardDialog = new BatchProcessWizardDialog(shell, wizard);
 		wizardDialog.setMinimumPageSize(DEFAULT_WIDTH, DEFAULT_HEIGHT);
 		AtomicReference<ISamplesPCA<?, ?>> evaluation = new AtomicReference<>();
+		String title = null;
 		//
 		if(wizardDialog.open() == Window.OK) {
 			/*
@@ -57,6 +58,7 @@ public abstract class WizardTile implements TileDefinition {
 			analysisSettings.setPreprocessingSettings(wizard.getPreprocessingSettings());
 			analysisSettings.setFilterSettings(wizard.getFilterSettings());
 			IExtractionData extractionData = wizard.getExtractionData();
+			title = analysisSettings.getTitle();
 			//
 			if(extractionData != null) {
 				ProgressMonitorDialog monitorDialog = new ProgressMonitorDialog(wizardDialog.getShell());
@@ -78,7 +80,7 @@ public abstract class WizardTile implements TileDefinition {
 		 */
 		ISamplesPCA<?, ?> samples = evaluation.get();
 		if(samples != null) {
-			CreatePcaEvaluation.createPart(samples, context, null);
+			CreatePcaEvaluation.createPart(samples, context, title);
 		} else {
 			logger.warn("Failed to create PCA analysis.");
 		}

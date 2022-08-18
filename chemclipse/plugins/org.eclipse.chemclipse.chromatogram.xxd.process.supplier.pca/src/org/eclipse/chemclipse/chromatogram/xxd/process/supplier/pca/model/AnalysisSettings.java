@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - added a title
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
@@ -18,6 +19,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.Preproc
 
 public class AnalysisSettings implements IAnalysisSettings {
 
+	private String title = "";
 	private int numberOfPrincipalComponents = 3;
 	private Algorithm algorithm = Algorithm.NIPALS;
 	private boolean removeUselessVariables = true;
@@ -26,15 +28,29 @@ public class AnalysisSettings implements IAnalysisSettings {
 	private IFilterSettings filterSettings = new FilterSettings();
 
 	public AnalysisSettings() {
+
 	}
 
 	public AnalysisSettings(IAnalysisSettings analysisSettings) {
+
 		this.numberOfPrincipalComponents = analysisSettings.getNumberOfPrincipalComponents();
 		this.algorithm = analysisSettings.getAlgorithm();
 		this.removeUselessVariables = analysisSettings.isRemoveUselessVariables();
 		//
 		this.preprocessingSettings = new PreprocessingSettings(analysisSettings.getPreprocessingSettings());
 		this.filterSettings = new FilterSettings(analysisSettings.getFilterSettings());
+	}
+
+	@Override
+	public String getTitle() {
+
+		return title;
+	}
+
+	@Override
+	public void setTitle(String title) {
+
+		this.title = title;
 	}
 
 	@Override

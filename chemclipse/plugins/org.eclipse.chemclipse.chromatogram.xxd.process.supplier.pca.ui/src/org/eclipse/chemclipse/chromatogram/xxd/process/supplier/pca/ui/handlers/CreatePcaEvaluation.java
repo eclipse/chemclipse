@@ -38,7 +38,7 @@ public class CreatePcaEvaluation {
 
 		OpenSnippetHandler.openSnippet(EDITOR_ID, context, PCA_EDITOR_STACK, (eclipseContext, part) -> {
 			eclipseContext.set(ISamplesPCA.class, samples);
-			if(title != null) {
+			if(title != null && !title.isEmpty() && !title.isBlank()) {
 				part.setLabel(title);
 			}
 			return null;

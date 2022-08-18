@@ -14,8 +14,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.extraction.ScanExtractionSupport.ExtractionType;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Algorithm;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.AnalysisSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.core.databinding.DataBindingContext;
@@ -28,7 +26,6 @@ import org.eclipse.jface.databinding.swt.typed.WidgetProperties;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -41,17 +38,13 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Text;
 
-public class ScanSettingsWizardPage extends WizardPage {
+public class ScanSettingsWizardPage extends AbstractAnalysisWizardPage {
 
-	private IAnalysisSettings analysisSettings = new AnalysisSettings();
-	//
 	private DataBindingContext dataBindingContext = new DataBindingContext();
 	private ExtractionType extractionType;
 	private IObservableValue<Integer> maximalNumberScans = new WritableValue<>();
 	private IObservableValue<Integer> retentionTimeWindow = new WritableValue<>();
 	private boolean useDefaultProperties;
-	//
-	private Algorithm[] algorithms = new Algorithm[]{Algorithm.SVD, Algorithm.NIPALS, Algorithm.OPLS};
 
 	public ScanSettingsWizardPage() {
 
@@ -66,11 +59,6 @@ public class ScanSettingsWizardPage extends WizardPage {
 	public int getRetentionTimeWindow() {
 
 		return retentionTimeWindow.getValue();
-	}
-
-	public IAnalysisSettings getAnalysisSettings() {
-
-		return analysisSettings;
 	}
 
 	public ExtractionType getExtractionType() {
@@ -95,6 +83,9 @@ public class ScanSettingsWizardPage extends WizardPage {
 		composite.setLayout(new GridLayout(1, false));
 		//
 		WizardPageSupport.create(this, dataBindingContext);
+		//
+		createLabel(composite, "Title:");
+		createTextTitle(composite, 1);
 		//
 		createLabel(composite, "Retention Time Window [ms]:");
 		createVariableSection(composite);
@@ -232,9 +223,7 @@ public class ScanSettingsWizardPage extends WizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(analysisSettings != null) {
-					analysisSettings.setNumberOfPrincipalComponents(spinner.getSelection());
-				}
+				analysisSettings.setNumberOfPrincipalComponents(spinner.getSelection());
 			}
 		});
 		//
@@ -268,9 +257,7 @@ public class ScanSettingsWizardPage extends WizardPage {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
 				if(object instanceof Algorithm) {
-					if(analysisSettings != null) {
-						analysisSettings.setAlgorithm((Algorithm)object);
-					}
+					analysisSettings.setAlgorithm((Algorithm)object);
 				}
 			}
 		});
