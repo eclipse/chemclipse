@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -26,9 +26,7 @@ public class MSPWriter extends AbstractMassSpectraWriter implements IMassSpectra
 
 		IScanMSD optimizedMassSpectrum = getOptimizedMassSpectrum(massSpectrum);
 		IIdentificationTarget identificationTarget = getIdentificationTarget(optimizedMassSpectrum);
-		if(identificationTarget == null) {
-			identificationTarget = getIdentificationTarget(massSpectrum);
-		} else if("".equals(identificationTarget.getLibraryInformation().getName())) {
+		if(identificationTarget == null || "".equals(identificationTarget.getLibraryInformation().getName())) {
 			identificationTarget = getIdentificationTarget(massSpectrum);
 		}
 		/*

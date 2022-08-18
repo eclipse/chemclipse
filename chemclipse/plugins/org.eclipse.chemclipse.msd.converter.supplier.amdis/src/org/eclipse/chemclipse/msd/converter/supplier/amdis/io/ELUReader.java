@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2021 Lablicate GmbH.
+ * Copyright (c) 2014, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,7 +13,6 @@
 package org.eclipse.chemclipse.msd.converter.supplier.amdis.io;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
@@ -25,10 +24,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
@@ -71,10 +68,10 @@ public class ELUReader implements IPeakReader {
 	private static final String CARRIAGE_RETURN = "\r";
 
 	@Override
-	public IProcessingInfo<IPeaks<?>> read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IProcessingInfo<IPeaks<?>> read(File file, IProgressMonitor monitor) throws IOException {
 
 		Charset charset = PreferenceSupplier.getCharsetImportELU();
-		IProcessingInfo<IPeaks<?>> processingInfo = new ProcessingInfo<IPeaks<?>>();
+		IProcessingInfo<IPeaks<?>> processingInfo = new ProcessingInfo<>();
 		String content = FileUtils.readFileToString(file, charset);
 		int numberOfHits = getNumberOfHits(content);
 		if(numberOfHits <= 0) {
@@ -112,7 +109,7 @@ public class ELUReader implements IPeakReader {
 	 */
 	private int calculateScanIntervalSimple(String content) {
 
-		List<Double> scanIntervals = new ArrayList<Double>();
+		List<Double> scanIntervals = new ArrayList<>();
 		Matcher matcher = NAME_PATTERN.matcher(content);
 		while(matcher.find()) {
 			/*
@@ -121,7 +118,7 @@ public class ELUReader implements IPeakReader {
 			 */
 			try {
 				int scan = Integer.parseInt(matcher.group(4));
-				double retentionTime = Double.parseDouble(matcher.group(12)) * IChromatogram.MINUTE_CORRELATION_FACTOR;
+				double retentionTime = Double.parseDouble(matcher.group(12)) * IChromatogramOverview.MINUTE_CORRELATION_FACTOR;
 				if(scan > 0) {
 					scanIntervals.add(retentionTime / scan);
 				}
@@ -137,8 +134,7 @@ public class ELUReader implements IPeakReader {
 		for(int index = 0; index < size; index++) {
 			values[index] = scanIntervals.get(index);
 		}
-		int scanInterval = (int)Calculations.getMean(values);
-		return scanInterval;
+		return (int)Calculations.getMean(values);
 	}
 
 	/**
@@ -152,7 +148,7 @@ public class ELUReader implements IPeakReader {
 		/*
 		 * Key: Scan, Value: Retention Time
 		 */
-		Map<Integer, Double> scanRetentionTimes = new HashMap<Integer, Double>();
+		Map<Integer, Double> scanRetentionTimes = new HashMap<>();
 		Matcher matcher = NAME_PATTERN.matcher(content);
 		while(matcher.find()) {
 			/*
@@ -161,7 +157,7 @@ public class ELUReader implements IPeakReader {
 			 */
 			try {
 				int scan = Integer.parseInt(matcher.group(4));
-				double retentionTime = Double.parseDouble(matcher.group(12)) * IChromatogram.MINUTE_CORRELATION_FACTOR;
+				double retentionTime = Double.parseDouble(matcher.group(12)) * IChromatogramOverview.MINUTE_CORRELATION_FACTOR;
 				if(scan > 0) {
 					scanRetentionTimes.put(scan, retentionTime);
 				}
@@ -172,7 +168,7 @@ public class ELUReader implements IPeakReader {
 		/*
 		 * The scan interval must be scaled in milliseconds.
 		 */
-		List<Integer> scans = new ArrayList<Integer>(scanRetentionTimes.keySet());
+		List<Integer> scans = new ArrayList<>(scanRetentionTimes.keySet());
 		Collections.sort(scans);
 		int scanIndexFirst = 0;
 		int end = scans.size(); // Size of the list
@@ -182,7 +178,7 @@ public class ELUReader implements IPeakReader {
 		 * The distance between the measured scans should be as big as possible
 		 * to minimize calculation errors.
 		 */
-		List<Double> scanIntervals = new ArrayList<Double>();
+		List<Double> scanIntervals = new ArrayList<>();
 		for(int scanIndexNext = start; scanIndexNext < end; scanIndexNext++) {
 			/*
 			 * Correlate two scans.
@@ -204,8 +200,7 @@ public class ELUReader implements IPeakReader {
 		for(int index = 0; index < size; index++) {
 			values[index] = scanIntervals.get(index);
 		}
-		int scanInterval = (int)Calculations.getMean(values);
-		return scanInterval;
+		return (int)Calculations.getMean(values);
 	}
 
 	/**
@@ -315,7 +310,7 @@ public class ELUReader implements IPeakReader {
 				 */
 				int scan = Integer.parseInt(matcher.group(4));
 				int startScan = Integer.parseInt(matcher.group(7));
-				double retentionTime = (int)(Double.parseDouble(matcher.group(12)) * IChromatogram.MINUTE_CORRELATION_FACTOR);
+				double retentionTime = (int)(Double.parseDouble(matcher.group(12)) * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 				startRetentionTime = (int)(retentionTime - ((scan - startScan - 1) * scanInterval));
 			} catch(NumberFormatException e) {
 				// No warning, default will be returned.
@@ -354,7 +349,7 @@ public class ELUReader implements IPeakReader {
 		IPeakIntensityValues peakIntensityValues = new PeakIntensityValues(Float.MAX_VALUE);
 		Matcher matcher = PROFILE_DATA_PATTERN.matcher(peakData);
 		if(matcher.find()) {
-			String profileData = matcher.group().replaceAll(NEW_LINE, " ").replaceAll(CARRIAGE_RETURN, " ");
+			String profileData = matcher.group().replace(NEW_LINE, " ").replace(CARRIAGE_RETURN, " ");
 			extractProfile(peakIntensityValues, profileData, peakStartRetentionTime, scanInterval);
 		}
 		//
@@ -381,7 +376,7 @@ public class ELUReader implements IPeakReader {
 		IPeakMassSpectrum peakMassSpectrum = new PeakMassSpectrum();
 		Matcher matcher = PEAK_PATTERN.matcher(peakData);
 		if(matcher.find()) {
-			String massSpectrumData = matcher.group().replaceAll(NEW_LINE, " ").replaceAll(CARRIAGE_RETURN, " ");
+			String massSpectrumData = matcher.group().replace(NEW_LINE, " ").replace(CARRIAGE_RETURN, " ");
 			extractPeakIons(massSpectrumData, peakMassSpectrum);
 		}
 		//
@@ -417,7 +412,6 @@ public class ELUReader implements IPeakReader {
 
 		double ion = Double.parseDouble(ions.group(1));
 		float abundance = Float.parseFloat(ions.group(2));
-		IPeakIon peakIon = new PeakIon(ion, abundance);
-		return peakIon;
+		return new PeakIon(ion, abundance);
 	}
 }

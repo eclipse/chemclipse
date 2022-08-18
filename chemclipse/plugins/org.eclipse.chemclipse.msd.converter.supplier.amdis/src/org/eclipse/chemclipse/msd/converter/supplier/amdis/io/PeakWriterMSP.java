@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,27 +15,26 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
-import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakWriterMSP extends AbstractWriter {
 
-	public void write(File file, IPeaks<?> peaks, boolean append, IProgressMonitor monitor) throws FileIsNotWriteableException, IOException {
+	public void write(File file, IPeaks<?> peaks, boolean append) throws IOException {
 
-		FileWriter fileWriter = new FileWriter(file, append);
-		for(IPeak peak : peaks.getPeaks()) {
-			if(peak instanceof IPeakMSD) {
-				writePeak(fileWriter, (IPeakMSD)peak);
+		try (FileWriter fileWriter = new FileWriter(file, append)) {
+			for(IPeak peak : peaks.getPeaks()) {
+				if(peak instanceof IPeakMSD peakMSD) {
+					writePeak(fileWriter, peakMSD);
+				}
 			}
 		}
 	}
 
-	public void write(File file, IPeakMSD peak, boolean append, IProgressMonitor monitor) throws FileIsNotWriteableException, IOException {
+	public void write(File file, IPeakMSD peak, boolean append) throws IOException {
 
 		FileWriter fileWriter = new FileWriter(file, append);
 		writePeak(fileWriter, peak);

@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.msd.converter.supplier.amdis.io;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
@@ -26,10 +25,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
@@ -75,7 +72,7 @@ public class MSPReader extends AbstractMassSpectraReader implements IMassSpectra
 	private static final String RETENTION_INDICES_DELIMITER = ", ";
 
 	@Override
-	public IMassSpectra read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IMassSpectra read(File file, IProgressMonitor monitor) throws IOException {
 
 		List<String> massSpectraData = getMassSpectraData(file);
 		//
@@ -114,7 +111,7 @@ public class MSPReader extends AbstractMassSpectraReader implements IMassSpectra
 	private List<String> getMassSpectraData(File file) throws IOException {
 
 		Charset charset = PreferenceSupplier.getCharsetImportMSP();
-		List<String> massSpectraData = new ArrayList<String>();
+		List<String> massSpectraData = new ArrayList<>();
 		//
 		try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file), charset))) {
 			StringBuilder builder = new StringBuilder();
@@ -324,7 +321,7 @@ public class MSPReader extends AbstractMassSpectraReader implements IMassSpectra
 	 */
 	private Set<String> extractSynonyms(String massSpectrumData, Pattern pattern) {
 
-		Set<String> synonyms = new HashSet<String>();
+		Set<String> synonyms = new HashSet<>();
 		Matcher matcher = pattern.matcher(massSpectrumData);
 		while(matcher.find()) {
 			String synonym = matcher.group(2).trim();
@@ -346,7 +343,7 @@ public class MSPReader extends AbstractMassSpectraReader implements IMassSpectra
 		try {
 			Matcher matcher = pattern.matcher(massSpectrumData);
 			if(matcher.find()) {
-				content = (int)(Double.parseDouble(matcher.group(group).trim()) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+				content = (int)(Double.parseDouble(matcher.group(group).trim()) * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 			}
 		} catch(Exception e) {
 			logger.warn(e);
