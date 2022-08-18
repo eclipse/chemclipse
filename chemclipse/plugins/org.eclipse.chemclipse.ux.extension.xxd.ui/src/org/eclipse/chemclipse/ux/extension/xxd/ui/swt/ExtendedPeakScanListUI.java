@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -676,11 +676,10 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 				 * Only one object.
 				 */
 				Object object = list.size() == 1 ? list.get(0) : null;
-				if(object instanceof IPeak) {
+				if(object instanceof IPeak peak) {
 					/*
 					 * Fire updates
 					 */
-					IPeak peak = (IPeak)object;
 					IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, peak.getPeakModel().getPeakMaximum().getRetentionIndex());
 					IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peak.getTargets(), identificationTargetComparator);
 					if(moveRetentionTimeOnPeakSelection) {
@@ -696,15 +695,13 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 					//
 					UpdateNotifierUI.update(display, peak);
 					UpdateNotifierUI.update(display, identificationTarget);
-					if(peak instanceof IPeakMSD) {
-						IPeakMSD peakMSD = (IPeakMSD)peak;
+					if(peak instanceof IPeakMSD peakMSD) {
 						UpdateNotifierUI.update(display, peakMSD.getPeakModel().getPeakMassSpectrum(), identificationTarget);
 					}
-				} else if(object instanceof IScan) {
+				} else if(object instanceof IScan scan) {
 					/*
 					 * Fire updates
 					 */
-					IScan scan = (IScan)object;
 					IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, scan.getRetentionIndex());
 					IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(scan.getTargets(), identificationTargetComparator);
 					//
@@ -715,8 +712,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 					//
 					UpdateNotifierUI.update(display, scan);
 					UpdateNotifierUI.update(display, identificationTarget);
-					if(scan instanceof IScanMSD) {
-						IScanMSD scanMSD = (IScanMSD)scan;
+					if(scan instanceof IScanMSD scanMSD) {
 						UpdateNotifierUI.update(display, scanMSD, identificationTarget);
 					}
 				}
@@ -769,7 +765,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 
 				List<IChromatogramPeakMSD> peaksToMerge = getSelectedPeaksMSD();
 				if(peaksToMerge.size() >= 2) {
-					if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+					if(chromatogramSelection instanceof IChromatogramSelectionMSD chromatogramSelectionMSD) {
 						/*
 						 * Merge Peaks
 						 */
@@ -779,7 +775,6 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 						/*
 						 * Modify the chromatogram
 						 */
-						IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
 						IChromatogramMSD chromatogramMSD = chromatogramSelectionMSD.getChromatogram();
 						IChromatogramPeakMSD chromatogramPeakMSD = new ChromatogramPeakMSD(peakMSD.getPeakModel(), chromatogramMSD);
 						/*
@@ -857,11 +852,10 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 
 		IScanMSD massSpectrum;
 		//
-		if(object instanceof IPeakMSD) {
-			IPeakMSD peak = (IPeakMSD)object;
+		if(object instanceof IPeakMSD peak) {
 			massSpectrum = peak.getPeakModel().getPeakMassSpectrum();
-		} else if(object instanceof IScanMSD) {
-			massSpectrum = (IScanMSD)object;
+		} else if(object instanceof IScanMSD scanMSD) {
+			massSpectrum = scanMSD;
 		} else {
 			massSpectrum = null;
 		}
@@ -991,8 +985,8 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		List<IPeak> peakList = new ArrayList<>();
 		for(TableItem tableItem : table.getItems()) {
 			Object object = tableItem.getData();
-			if(object instanceof IPeak) {
-				peakList.add((IPeak)object);
+			if(object instanceof IPeak peak) {
+				peakList.add(peak);
 			}
 		}
 		return peakList;
@@ -1004,8 +998,8 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		for(int index : indices) {
 			TableItem tableItem = table.getItem(index);
 			Object object = tableItem.getData();
-			if(object instanceof IPeak) {
-				peakList.add((IPeak)object);
+			if(object instanceof IPeak peak) {
+				peakList.add(peak);
 			}
 		}
 		return peakList;

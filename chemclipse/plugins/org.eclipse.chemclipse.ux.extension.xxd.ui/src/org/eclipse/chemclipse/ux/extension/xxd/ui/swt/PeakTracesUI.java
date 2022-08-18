@@ -61,7 +61,7 @@ import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 
 public class PeakTracesUI extends ScrollableChart {
 
-	private final int NO_TRACE_SELECTION = 0;
+	private static final int NO_TRACE_SELECTION = 0;
 	//
 	private final ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
 	private final PeakChartSupport peakChartSupport = new PeakChartSupport();
@@ -114,10 +114,10 @@ public class PeakTracesUI extends ScrollableChart {
 		//
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 		//
-		if(peak instanceof IChromatogramPeakMSD) {
-			lineSeriesDataList.addAll(extractSIC((IChromatogramPeakMSD)peak));
-		} else if(peak instanceof IChromatogramPeakWSD) {
-			lineSeriesDataList.addAll(extractSWC((IChromatogramPeakWSD)peak));
+		if(peak instanceof IChromatogramPeakMSD chromatogramPeakMSD) {
+			lineSeriesDataList.addAll(extractSIC(chromatogramPeakMSD));
+		} else if(peak instanceof IChromatogramPeakWSD chromatogramPeakWSD) {
+			lineSeriesDataList.addAll(extractSWC(chromatogramPeakWSD));
 		} else if(peak != null) {
 			lineSeriesDataList.add(extractTIC(peak));
 		}
@@ -170,8 +170,7 @@ public class PeakTracesUI extends ScrollableChart {
 		int startRetentionTime = peakModel.getStartRetentionTime() - offsetRetentionTime;
 		int stopRetentionTime = peakModel.getStopRetentionTime() + offsetRetentionTime;
 		IScan peakMaximum = peakModel.getPeakMaximum();
-		if(peakMaximum instanceof IScanWSD) {
-			IScanWSD scanWSD = (IScanWSD)peakMaximum;
+		if(peakMaximum instanceof IScanWSD scanWSD) {
 			IChromatogramSelection<?, ?> chromatogramSelection = new ChromatogramSelection<>(chromatogram);
 			chromatogramSelection.setRangeRetentionTime(startRetentionTime, stopRetentionTime, false);
 			//
@@ -294,7 +293,7 @@ public class PeakTracesUI extends ScrollableChart {
 		/*
 		 * Suspend the update when adding new data to improve the performance.
 		 */
-		if(lineSeriesDataList != null && lineSeriesDataList.size() > 0) {
+		if(lineSeriesDataList != null && !lineSeriesDataList.isEmpty()) {
 			BaseChart baseChart = getBaseChart();
 			baseChart.suspendUpdate(true);
 			for(ILineSeriesData lineSeriesData : lineSeriesDataList) {

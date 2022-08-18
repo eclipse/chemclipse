@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -782,6 +782,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		return isChromatogramActive() ? targetListChromatogram : targetListOther;
 	}
 
+	@SuppressWarnings("rawtypes")
 	private void updateOnFocus() {
 
 		DataUpdateSupport dataUpdateSupport = Activator.getDefault().getDataUpdateSupport();
@@ -789,8 +790,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		//
 		if(!objects.isEmpty()) {
 			Object object = objects.get(0);
-			if(object instanceof IChromatogramSelection) {
-				IChromatogramSelection<?, ?> chromatogramSelection = (IChromatogramSelection<?, ?>)object;
+			if(object instanceof IChromatogramSelection chromatogramSelection) {
 				updateChromatogram(chromatogramSelection);
 			} else {
 				updateOther(object);
