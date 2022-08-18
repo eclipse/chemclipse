@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -34,7 +34,7 @@ public class DatabaseImportConverter extends AbstractDatabaseImportConverter {
 			try {
 				IMassSpectraReader massSpectraReader = new FINReader();
 				IMassSpectra massSpectra = massSpectraReader.read(file, monitor);
-				if(massSpectra != null && massSpectra.size() > 0) {
+				if(massSpectra != null && !massSpectra.isEmpty()) {
 					processingInfo.setProcessingResult(massSpectra);
 				} else {
 					processingInfo.addErrorMessage(DESCRIPTION, "No mass spectra were extracted." + file.getAbsolutePath());

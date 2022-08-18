@@ -481,6 +481,12 @@ public abstract class AbstractScanMSD extends AbstractScan implements IScanMSD {
 	}
 
 	@Override
+	public boolean isEmpty() {
+
+		return ionsList.isEmpty();
+	}
+
+	@Override
 	public IIon getIon(int ion) throws AbundanceLimitExceededException, IonLimitExceededException {
 
 		if(hasIons()) {

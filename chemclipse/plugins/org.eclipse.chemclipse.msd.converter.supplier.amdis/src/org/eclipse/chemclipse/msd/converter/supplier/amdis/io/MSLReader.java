@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -240,7 +240,7 @@ public class MSLReader extends AbstractMassSpectraReader implements IMassSpectra
 		 * fragment.
 		 */
 		IVendorLibraryMassSpectrum massSpectrum = extractMassSpectrum(massSpectrumData, referenceIdentifierMarker, referenceIdentifierPrefix);
-		if(massSpectrum.getNumberOfIons() > 0) {
+		if(!massSpectrum.isEmpty()) {
 			massSpectra.addMassSpectrum(massSpectrum);
 		}
 	}

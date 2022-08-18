@@ -85,6 +85,12 @@ public abstract class AbstractMassSpectra implements IMassSpectra {
 	}
 
 	@Override
+	public boolean isEmpty() {
+
+		return massSpectra.isEmpty();
+	}
+
+	@Override
 	public List<IScanMSD> getList() {
 
 		return massSpectra;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2021 Lablicate GmbH.
+ * Copyright (c) 2013, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -136,7 +136,7 @@ public class SubtractCalculator {
 		/*
 		 * Test if null.
 		 */
-		if(massSpectra == null || massSpectra.size() == 0 || massSpectrumFilterSettings == null) {
+		if(massSpectra == null || massSpectra.isEmpty() || massSpectrumFilterSettings == null) {
 			return;
 		}
 		/*

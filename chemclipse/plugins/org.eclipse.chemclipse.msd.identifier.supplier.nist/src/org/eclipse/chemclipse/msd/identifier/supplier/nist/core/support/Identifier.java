@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -131,7 +131,7 @@ public class Identifier {
 				logger.info("Get the mass spectra.");
 				boolean isUseOptimizedMassSpectrum = searchSettings.isUseOptimizedMassSpectrum();
 				massSpectra = getMassSpectra(massSpectrumList, isUseOptimizedMassSpectrum);
-				if(massSpectra.size() > 0) {
+				if(!massSpectra.isEmpty()) {
 					int numberOfUnknownEntriesToProcess = massSpectra.size();
 					logger.info("Process: " + numberOfUnknownEntriesToProcess);
 					runtimeSupport.getNistSupport().setNumberOfUnknownEntriesToProcess(numberOfUnknownEntriesToProcess);
@@ -210,7 +210,7 @@ public class Identifier {
 				 */
 				boolean isUseOptimizedMassSpectrum = searchSettings.isUseOptimizedMassSpectrum();
 				IMassSpectra massSpectra = getMassSpectraFromPeakList(peaks, isUseOptimizedMassSpectrum);
-				if(massSpectra.size() > 0) {
+				if(!massSpectra.isEmpty()) {
 					int numberOfUnknownEntriesToProcess = massSpectra.size();
 					runtimeSupport.getNistSupport().setNumberOfUnknownEntriesToProcess(numberOfUnknownEntriesToProcess);
 					prepareFiles(runtimeSupport, massSpectra, monitor);

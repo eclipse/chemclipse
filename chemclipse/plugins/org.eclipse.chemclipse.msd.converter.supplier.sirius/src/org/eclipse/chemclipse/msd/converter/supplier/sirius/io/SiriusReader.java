@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -73,9 +73,9 @@ public class SiriusReader extends AbstractMassSpectraReader implements IMassSpec
 						continue;
 					}
 					if(entry.getName().toLowerCase().endsWith(".ms")) {
-						IScanMSD spectrum = readMassSpectrum(zipFile.getInputStream(entry), null);
-						if(spectrum.getNumberOfIons() > 0) {
-							massSpectra.addMassSpectrum(spectrum);
+						IScanMSD massSpectrum = readMassSpectrum(zipFile.getInputStream(entry), null);
+						if(!massSpectrum.isEmpty()) {
+							massSpectra.addMassSpectrum(massSpectrum);
 						}
 					}
 				}
@@ -84,9 +84,9 @@ public class SiriusReader extends AbstractMassSpectraReader implements IMassSpec
 		} else {
 			IMassSpectra massSpectra = new MassSpectra();
 			try (FileInputStream inputStream = new FileInputStream(file)) {
-				IScanMSD spectrum = readMassSpectrum(inputStream, monitor);
-				if(spectrum.getNumberOfIons() > 0) {
-					massSpectra.addMassSpectrum(spectrum);
+				IScanMSD massSpectrum = readMassSpectrum(inputStream, monitor);
+				if(!massSpectrum.isEmpty()) {
+					massSpectra.addMassSpectrum(massSpectrum);
 				}
 			}
 			return massSpectra;

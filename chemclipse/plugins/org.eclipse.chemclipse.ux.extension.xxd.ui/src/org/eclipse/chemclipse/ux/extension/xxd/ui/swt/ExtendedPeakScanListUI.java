@@ -925,7 +925,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 							}
 						}
 						//
-						if(massSpectra.size() > 0) {
+						if(!massSpectra.isEmpty()) {
 							DatabaseFileSupport.saveMassSpectra(e.display.getActiveShell(), massSpectra, chromatogram.getName());
 						}
 					}

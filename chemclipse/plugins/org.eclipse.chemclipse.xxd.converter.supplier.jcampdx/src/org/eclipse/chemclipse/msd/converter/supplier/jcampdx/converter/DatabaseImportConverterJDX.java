@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2020 Lablicate GmbH.
+ * Copyright (c) 2015, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -47,7 +47,7 @@ public class DatabaseImportConverterJDX extends AbstractDatabaseImportConverter 
 				file = SpecificationValidator.validateSpecification(file, "JDX");
 				IMassSpectraReader massSpectraReader = new MassSpectraReader();
 				IMassSpectra massSpectra = massSpectraReader.read(file, monitor);
-				if(massSpectra != null && massSpectra.size() > 0) {
+				if(massSpectra != null && !massSpectra.isEmpty()) {
 					processingInfo.setProcessingResult(massSpectra);
 				} else {
 					processingInfo.addErrorMessage(DESCRIPTION, "No mass spectra are stored." + file.getAbsolutePath());
