@@ -59,6 +59,7 @@ Service-Component: OSGI-INF/org.eclipse.chemclipse.xxd.filter.peaks.AreaFilter.x
  OSGI-INF/org.eclipse.chemclipse.xxd.filter.peaks.DeletePeaksByQuantitationFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.filter.peaks.DeletePeaksByTargetFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.filter.peaks.DeletePeaksFilter.xml,
+ OSGI-INF/org.eclipse.chemclipse.xxd.filter.peaks.DeleteQuantitationReferencesFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.filter.peaks.DeleteQuantitationsFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.filter.peaks.DeleteStandardsFilter.xml,
  OSGI-INF/org.eclipse.chemclipse.xxd.filter.peaks.DeleteTargetsFilter.xml,

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -41,14 +41,19 @@ public class PeakQuantReferencesPart extends AbstractPart<ExtendedPeakQuantRefer
 	protected boolean updateData(List<Object> objects, String topic) {
 
 		if(objects.size() == 1) {
-			IPeak peak = null;
 			if(isUpdateEvent(topic)) {
+				IPeak peak = null;
 				Object object = objects.get(0);
 				if(object instanceof IPeak) {
 					peak = (IPeak)object;
 				}
+				getControl().update(peak);
+			} else if(isChromatogramTopic(topic)) {
+				getControl().update();
+			} else if(isCloseEvent(topic)) {
+				getControl().update(null);
 			}
-			getControl().update(peak);
+			//
 			return true;
 		}
 		//
@@ -58,12 +63,17 @@ public class PeakQuantReferencesPart extends AbstractPart<ExtendedPeakQuantRefer
 	@Override
 	protected boolean isUpdateTopic(String topic) {
 
-		return isUpdateEvent(topic) || isCloseEvent(topic);
+		return isUpdateEvent(topic) || isChromatogramTopic(topic) || isCloseEvent(topic);
 	}
 
 	private boolean isUpdateEvent(String topic) {
 
 		return TOPIC.equals(topic);
+	}
+
+	private boolean isChromatogramTopic(String topic) {
+
+		return IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION.equals(topic);
 	}
 
 	private boolean isCloseEvent(String topic) {

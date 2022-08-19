@@ -74,10 +74,18 @@ public class ExtendedPeakQuantReferencesUI extends Composite implements IExtende
 		createControl();
 	}
 
+	@Override
 	public boolean setFocus() {
 
 		updatePeak();
 		return true;
+	}
+
+	@Override
+	public void update() {
+
+		super.update();
+		updatePeak();
 	}
 
 	public void update(IPeak peak) {
