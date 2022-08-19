@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.msd.converter.supplier.amdis.io;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ public abstract class AbstractMassSpectraWriter extends AbstractWriter implement
 	private static final int MAX_SPECTRA_CHUNK = 65535;
 
 	@Override
-	public void write(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
+	public void write(File file, IScanMSD massSpectrum, boolean append, IProgressMonitor monitor) throws FileIsNotWriteableException, IOException {
 
 		FileWriter fileWriter = new FileWriter(file, append);
 		writeMassSpectrum(fileWriter, massSpectrum, monitor);
@@ -39,7 +38,7 @@ public abstract class AbstractMassSpectraWriter extends AbstractWriter implement
 	}
 
 	@Override
-	public void write(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
+	public void write(File file, IMassSpectra massSpectra, boolean append, IProgressMonitor monitor) throws FileIsNotWriteableException, IOException {
 
 		if(massSpectra.size() > 65535 && PreferenceSupplier.isSplitLibrary()) {
 			/*
@@ -70,7 +69,7 @@ public abstract class AbstractMassSpectraWriter extends AbstractWriter implement
 	private List<IMassSpectra> getSplittedMassSpectra(IMassSpectra massSpectra) {
 
 		IMassSpectra massSpectraChunk;
-		List<IMassSpectra> splittedMassSpectra = new ArrayList<IMassSpectra>();
+		List<IMassSpectra> splittedMassSpectra = new ArrayList<>();
 		//
 		massSpectraChunk = new MassSpectra();
 		int counter = 1;
@@ -110,7 +109,7 @@ public abstract class AbstractMassSpectraWriter extends AbstractWriter implement
 			/*
 			 * There must be at least one ion.
 			 */
-			if(massSpectrum != null && massSpectrum.getNumberOfIons() > 0) {
+			if(massSpectrum != null && !massSpectrum.isEmpty()) {
 				writeMassSpectrum(fileWriter, massSpectrum, monitor);
 			}
 		}

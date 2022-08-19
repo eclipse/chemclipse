@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -84,7 +84,7 @@ public class LibraryServiceRunnable implements IRunnableWithProgress {
 			try {
 				IProcessingInfo<IMassSpectra> processingInfo = libraryService.identify(identificationTarget, subMonitor.split(100));
 				IMassSpectra massSpectra = processingInfo.getProcessingResult();
-				if(massSpectra != null && massSpectra.size() > 0) {
+				if(massSpectra != null && !massSpectra.isEmpty()) {
 					libraryMassSpectrumConsumer.accept(massSpectra.getMassSpectrum(1));
 					return;
 				}

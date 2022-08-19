@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.msd.converter.supplier.amdis.io;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
@@ -24,10 +23,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
@@ -68,7 +65,7 @@ public class MSLReader extends AbstractMassSpectraReader implements IMassSpectra
 	private static final String LINE_DELIMITER = "\r\n";
 
 	@Override
-	public IMassSpectra read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IMassSpectra read(File file, IProgressMonitor monitor) throws IOException {
 
 		List<String> massSpectraData = getMassSpectraData(file);
 		//
@@ -160,7 +157,7 @@ public class MSLReader extends AbstractMassSpectraReader implements IMassSpectra
 	private List<String> getMassSpectraData(File file) throws IOException {
 
 		Charset charset = PreferenceSupplier.getCharsetImportMSL();
-		List<String> massSpectraData = new ArrayList<String>();
+		List<String> massSpectraData = new ArrayList<>();
 		//
 		try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file), charset))) {
 			StringBuilder builder = new StringBuilder();
@@ -240,7 +237,7 @@ public class MSLReader extends AbstractMassSpectraReader implements IMassSpectra
 		 * fragment.
 		 */
 		IVendorLibraryMassSpectrum massSpectrum = extractMassSpectrum(massSpectrumData, referenceIdentifierMarker, referenceIdentifierPrefix);
-		if(massSpectrum.getNumberOfIons() > 0) {
+		if(!massSpectrum.isEmpty()) {
 			massSpectra.addMassSpectrum(massSpectrum);
 		}
 	}
@@ -317,7 +314,7 @@ public class MSLReader extends AbstractMassSpectraReader implements IMassSpectra
 		try {
 			Matcher matcher = pattern.matcher(massSpectrumData);
 			if(matcher.find()) {
-				content = (int)(Double.parseDouble(matcher.group(group).trim()) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+				content = (int)(Double.parseDouble(matcher.group(group).trim()) * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 			}
 		} catch(Exception e) {
 			logger.warn(e);

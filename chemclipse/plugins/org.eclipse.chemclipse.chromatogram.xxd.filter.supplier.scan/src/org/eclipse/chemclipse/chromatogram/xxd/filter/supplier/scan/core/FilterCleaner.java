@@ -77,25 +77,25 @@ public class FilterCleaner extends AbstractChromatogramFilter {
 		 */
 		for(int scan = startScan; scan <= stopScan; scan++) {
 			IScan chromatogramScan = chromatogram.getScan(scan);
-			if(chromatogramScan instanceof IScanMSD) {
+			if(chromatogramScan instanceof IScanMSD scanMSD) {
 				/*
 				 * MSD
 				 */
-				if(((IScanMSD)chromatogramScan).getNumberOfIons() == 0) {
+				if(scanMSD.isEmpty()) {
 					scansToRemove.add(scan);
 				}
-			} else if(chromatogramScan instanceof IScanCSD) {
+			} else if(chromatogramScan instanceof IScanCSD scanCSD) {
 				/*
 				 * CSD
 				 */
-				if(((IScanCSD)chromatogramScan).getTotalSignal() == 0) {
+				if(scanCSD.getTotalSignal() == 0) {
 					scansToRemove.add(scan);
 				}
-			} else if(chromatogramScan instanceof IScanWSD) {
+			} else if(chromatogramScan instanceof IScanWSD scanWSD) {
 				/*
 				 * WSD
 				 */
-				if(((IScanWSD)chromatogramScan).getScanSignals().isEmpty()) {
+				if(scanWSD.getScanSignals().isEmpty()) {
 					scansToRemove.add(scan);
 				}
 			}

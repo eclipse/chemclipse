@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2019 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -41,7 +41,7 @@ public class MSPDatabaseImportConverter extends AbstractDatabaseImportConverter 
 				file = SpecificationValidatorMSP.validateSpecification(file);
 				IMassSpectraReader massSpectraReader = new MSPReader();
 				IMassSpectra massSpectra = massSpectraReader.read(file, monitor);
-				if(massSpectra != null && massSpectra.size() > 0) {
+				if(massSpectra != null && !massSpectra.isEmpty()) {
 					processingInfo.setProcessingResult(massSpectra);
 				} else {
 					processingInfo.addErrorMessage(DESCRIPTION, "No mass spectra are stored." + file.getAbsolutePath());

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,6 +28,7 @@ public class ExtractedIonSignalExtractor implements IExtractedIonSignalExtractor
 	 * @throws ChromatogramIsNullException
 	 */
 	public ExtractedIonSignalExtractor(IChromatogramMSD chromatogram) throws ChromatogramIsNullException {
+
 		if(chromatogram == null) {
 			throw new ChromatogramIsNullException();
 		}
@@ -94,7 +95,7 @@ public class ExtractedIonSignalExtractor implements IExtractedIonSignalExtractor
 		 */
 		exitloop:
 		for(int scan = start; scan <= stop; scan++) {
-			if(chromatogram.getSupplierScan(scan).getNumberOfIons() > 0) {
+			if(!chromatogram.getSupplierScan(scan).isEmpty()) {
 				startScan = scan;
 				break exitloop;
 			}
@@ -103,7 +104,7 @@ public class ExtractedIonSignalExtractor implements IExtractedIonSignalExtractor
 		 * Get the stop without empty scans.
 		 */
 		for(int scan = stop; scan > startScan; scan--) {
-			if(chromatogram.getSupplierScan(scan).getNumberOfIons() == 0) {
+			if(chromatogram.getSupplierScan(scan).isEmpty()) {
 				stopScan = scan - 1;
 			}
 		}
@@ -120,7 +121,7 @@ public class ExtractedIonSignalExtractor implements IExtractedIonSignalExtractor
 
 	private boolean extractSignals(IExtractedIonSignals extractedIonSignals, IScanMSD scanMSD, float startIon, float stopIon) {
 
-		if(scanMSD.getNumberOfIons() > 0) {
+		if(!scanMSD.isEmpty()) {
 			if(startIon == 0 && stopIon == 0) {
 				extractedIonSignals.add(scanMSD.getExtractedIonSignal());
 			} else {

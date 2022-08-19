@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,13 +14,10 @@ package org.eclipse.chemclipse.msd.converter.supplier.amdis.io;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.supplier.amdis.model.IVendorLibraryMassSpectrum;
@@ -38,16 +35,16 @@ public class FINReader extends AbstractMassSpectraReader implements IMassSpectra
 	private static final String UNKNOWN = "Unknown";
 
 	@Override
-	public IMassSpectra read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IMassSpectra read(File file, IProgressMonitor monitor) throws IOException {
 
 		IMassSpectra massSpectra = new MassSpectra();
 		massSpectra.setConverterId("");
 		massSpectra.setName(file.getName());
-		parse(massSpectra, file, monitor);
+		parse(massSpectra, file);
 		return massSpectra;
 	}
 
-	private void parse(IMassSpectra massSpectra, File file, IProgressMonitor monitor) throws FileNotFoundException, IOException {
+	private void parse(IMassSpectra massSpectra, File file) throws IOException {
 
 		/*
 		 * ...

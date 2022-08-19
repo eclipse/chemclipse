@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2021 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -95,7 +95,7 @@ public abstract class AbstractWriter {
 	 */
 	protected void removeIonsWithAnTooLowAbundance(IScanMSD normalizedMassSpectrum, float minimumAbundance) {
 
-		List<IIon> ionsToRemove = new ArrayList<IIon>();
+		List<IIon> ionsToRemove = new ArrayList<>();
 		for(IIon ion : normalizedMassSpectrum.getIons()) {
 			if(ion.getAbundance() < minimumAbundance) {
 				ionsToRemove.add(ion);
@@ -110,10 +110,9 @@ public abstract class AbstractWriter {
 	protected String getSynonyms(IScanMSD massSpectrum) {
 
 		StringBuilder builder = new StringBuilder();
-		if(massSpectrum instanceof ILibraryMassSpectrum) {
-			ILibraryMassSpectrum libraryMassSpectrum = (ILibraryMassSpectrum)massSpectrum;
+		if(massSpectrum instanceof ILibraryMassSpectrum libraryMassSpectrum) {
 			Set<String> synonyms = libraryMassSpectrum.getLibraryInformation().getSynonyms();
-			if(synonyms.size() > 0) {
+			if(!synonyms.isEmpty()) {
 				for(String synonym : synonyms) {
 					/*
 					 * Set the synonym.
@@ -171,11 +170,10 @@ public abstract class AbstractWriter {
 	protected IIdentificationTarget getIdentificationTarget(IScanMSD massSpectrum) {
 
 		IIdentificationTarget identificationTarget = null;
-		if(massSpectrum instanceof IRegularLibraryMassSpectrum) {
+		if(massSpectrum instanceof IRegularLibraryMassSpectrum libraryMassSpectrum) {
 			/*
 			 * Library MS
 			 */
-			IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)massSpectrum;
 			try {
 				identificationTarget = new IdentificationTarget(libraryMassSpectrum.getLibraryInformation(), ComparisonResult.createNoMatchComparisonResult());
 			} catch(ReferenceMustNotBeNullException e) {
@@ -189,7 +187,7 @@ public abstract class AbstractWriter {
 			float retentionIndex = massSpectrum.getRetentionIndex();
 			IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
 			Collections.sort(targets, identificationTargetComparator);
-			if(targets.size() >= 1) {
+			if(!targets.isEmpty()) {
 				identificationTarget = targets.get(0);
 			}
 		}
@@ -203,7 +201,7 @@ public abstract class AbstractWriter {
 		float retentionIndex = peak.getPeakModel().getPeakMaximum().getRetentionIndex();
 		IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
 		Collections.sort(targets, identificationTargetComparator);
-		if(targets.size() >= 1) {
+		if(!targets.isEmpty()) {
 			identificationTarget = targets.get(0);
 		}
 		return identificationTarget;
@@ -248,8 +246,7 @@ public abstract class AbstractWriter {
 	protected String getCommentsField(IScanMSD massSpectrum) {
 
 		String field = COMMENTS;
-		if(massSpectrum instanceof IRegularLibraryMassSpectrum) {
-			IRegularLibraryMassSpectrum regularMassSpectrum = (IRegularLibraryMassSpectrum)massSpectrum;
+		if(massSpectrum instanceof IRegularLibraryMassSpectrum regularMassSpectrum) {
 			field += regularMassSpectrum.getLibraryInformation().getComments();
 		}
 		return field;
@@ -264,8 +261,7 @@ public abstract class AbstractWriter {
 	protected String getSourceField(IScanMSD massSpectrum, IIdentificationTarget identificationTarget) {
 
 		String field = SOURCE;
-		if(massSpectrum instanceof IVendorLibraryMassSpectrum) {
-			IVendorLibraryMassSpectrum amdisMassSpectrum = (IVendorLibraryMassSpectrum)massSpectrum;
+		if(massSpectrum instanceof IVendorLibraryMassSpectrum amdisMassSpectrum) {
 			field += amdisMassSpectrum.getSource();
 		} else {
 			if(identificationTarget != null) {
@@ -284,8 +280,7 @@ public abstract class AbstractWriter {
 	protected String getRetentionTimeField(IScanMSD massSpectrum) {
 
 		String field = RT;
-		if(massSpectrum instanceof IRegularMassSpectrum) {
-			IRegularMassSpectrum regularMassSpectrum = (IRegularMassSpectrum)massSpectrum;
+		if(massSpectrum instanceof IRegularMassSpectrum regularMassSpectrum) {
 			field += decimalFormat.format(regularMassSpectrum.getRetentionTime() / (1000.0d * 60.0d)); // RT in minutes
 		} else {
 			field += decimalFormat.format(0.0d);
@@ -302,8 +297,7 @@ public abstract class AbstractWriter {
 	protected String getRelativeRetentionTimeField(IScanMSD massSpectrum) {
 
 		String field = RRT;
-		if(massSpectrum instanceof IRegularMassSpectrum) {
-			IRegularMassSpectrum regularMassSpectrum = (IRegularMassSpectrum)massSpectrum;
+		if(massSpectrum instanceof IRegularMassSpectrum regularMassSpectrum) {
 			field += decimalFormat.format(regularMassSpectrum.getRelativeRetentionTime() / (1000.0d * 60.0d)); // RRT in minutes
 		} else {
 			field += decimalFormat.format(0.0d);
@@ -320,8 +314,7 @@ public abstract class AbstractWriter {
 	protected String getRetentionIndexField(IScanMSD massSpectrum) {
 
 		String field = RI;
-		if(massSpectrum instanceof IRegularMassSpectrum) {
-			IRegularMassSpectrum regularMassSpectrum = (IRegularMassSpectrum)massSpectrum;
+		if(massSpectrum instanceof IRegularMassSpectrum regularMassSpectrum) {
 			field += decimalFormat.format(regularMassSpectrum.getRetentionIndex());
 		} else {
 			field += decimalFormat.format(0.0d);
@@ -351,8 +344,7 @@ public abstract class AbstractWriter {
 	protected String getFormulaField(IScanMSD massSpectrum) {
 
 		String field = FORMULA;
-		if(massSpectrum instanceof IRegularLibraryMassSpectrum) {
-			IRegularLibraryMassSpectrum regularMassSpectrum = (IRegularLibraryMassSpectrum)massSpectrum;
+		if(massSpectrum instanceof IRegularLibraryMassSpectrum regularMassSpectrum) {
 			field += regularMassSpectrum.getLibraryInformation().getFormula();
 		}
 		return field;
@@ -367,8 +359,7 @@ public abstract class AbstractWriter {
 	protected String getMWField(IScanMSD massSpectrum) {
 
 		String field = MW;
-		if(massSpectrum instanceof IRegularLibraryMassSpectrum) {
-			IRegularLibraryMassSpectrum regularMassSpectrum = (IRegularLibraryMassSpectrum)massSpectrum;
+		if(massSpectrum instanceof IRegularLibraryMassSpectrum regularMassSpectrum) {
 			field += regularMassSpectrum.getLibraryInformation().getMolWeight();
 		}
 		return field;
@@ -443,11 +434,10 @@ public abstract class AbstractWriter {
 		massSpectrumCopy.setRetentionIndex(massSpectrum.getRetentionIndex());
 		//
 		massSpectrumCopy.getTargets().addAll(massSpectrum.getTargets());
-		if(massSpectrum instanceof IRegularLibraryMassSpectrum) {
+		if(massSpectrum instanceof IRegularLibraryMassSpectrum regularMassSpectrum) {
 			/*
 			 * Transfer the library information.
 			 */
-			IRegularLibraryMassSpectrum regularMassSpectrum = (IRegularLibraryMassSpectrum)massSpectrum;
 			massSpectrumCopy.setLibraryInformation(regularMassSpectrum.getLibraryInformation());
 		} else {
 			/*
@@ -555,7 +545,7 @@ public abstract class AbstractWriter {
 
 		StringBuilder builder = new StringBuilder();
 		List<IInternalStandard> internalStandards = peak.getInternalStandards();
-		if(internalStandards.size() > 0) {
+		if(!internalStandards.isEmpty()) {
 			for(IInternalStandard internalStandard : internalStandards) {
 				/*
 				 * Set the synonym.
@@ -579,7 +569,7 @@ public abstract class AbstractWriter {
 
 		StringBuilder builder = new StringBuilder();
 		List<IQuantitationEntry> quanitationEntries = peak.getQuantitationEntries();
-		if(quanitationEntries.size() > 0) {
+		if(!quanitationEntries.isEmpty()) {
 			for(IQuantitationEntry quantitationEntry : quanitationEntries) {
 				/*
 				 * Set the synonym.

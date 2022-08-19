@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2020 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,7 +24,7 @@ public class MSLPeakImportConverter extends AbstractPeakImportConverter {
 	@Override
 	public IProcessingInfo<IPeaks<?>> convert(File file, IProgressMonitor monitor) {
 
-		IProcessingInfo<IPeaks<?>> processingInfo = new ProcessingInfo<IPeaks<?>>();
+		IProcessingInfo<IPeaks<?>> processingInfo = new ProcessingInfo<>();
 		processingInfo.addErrorMessage("AMDIS MSL Peak Import", "The converter supports no *.msl file import.");
 		return processingInfo;
 	}

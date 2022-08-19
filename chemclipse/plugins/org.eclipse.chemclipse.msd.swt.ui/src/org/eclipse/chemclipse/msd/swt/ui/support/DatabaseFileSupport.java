@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2021 Lablicate GmbH.
+ * Copyright (c) 2015, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -187,7 +187,7 @@ public class DatabaseFileSupport {
 		/*
 		 * If the mass spectra is null, exit.
 		 */
-		if(massSpectra == null || massSpectra.size() == 0) {
+		if(massSpectra == null || massSpectra.isEmpty()) {
 			return;
 		}
 		/*

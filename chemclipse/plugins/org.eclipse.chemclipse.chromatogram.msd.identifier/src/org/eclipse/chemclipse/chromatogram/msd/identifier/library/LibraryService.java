@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  *
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -78,7 +78,7 @@ public class LibraryService {
 					 */
 					processingInfo = libraryService.identify(identificationTarget, monitor);
 					massSpectra = processingInfo.getProcessingResult();
-					if(massSpectra != null && massSpectra.size() > 0) {
+					if(massSpectra != null && !massSpectra.isEmpty()) {
 						break exitloop;
 					}
 				}
@@ -86,7 +86,7 @@ public class LibraryService {
 			/*
 			 * Post check.
 			 */
-			if(massSpectra == null || massSpectra.size() == 0) {
+			if(massSpectra == null || massSpectra.isEmpty()) {
 				processingInfo = getNoIdentifierAvailableProcessingInfo();
 			}
 		} catch(NoIdentifierAvailableException e) {

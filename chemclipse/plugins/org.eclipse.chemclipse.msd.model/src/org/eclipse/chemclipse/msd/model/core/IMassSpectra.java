@@ -60,6 +60,13 @@ public interface IMassSpectra extends IUpdateListener {
 	List<IScanMSD> getList();
 
 	/**
+	 * Returns true if the list is empty.
+	 * 
+	 * @return boolean
+	 */
+	boolean isEmpty();
+
+	/**
 	 * Returns the number of stored mass spectra.
 	 * 
 	 * @return int
