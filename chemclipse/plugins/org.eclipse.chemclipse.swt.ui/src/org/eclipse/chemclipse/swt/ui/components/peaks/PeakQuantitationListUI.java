@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,6 +25,7 @@ public class PeakQuantitationListUI extends ExtendedTableViewer {
 	public static final String TIME = "Time [min]";
 	public static final String NAME = "Name";
 	public static final String CAS = "CAS#";
+	public static final String REFERENCE_ID = "Reference Identifier";
 	public static final String AREA = "Area";
 	public static final String CLASSIFIER = "Classifier";
 	public static final String QUANTIFIER = "Quantifier";
@@ -35,6 +36,7 @@ public class PeakQuantitationListUI extends ExtendedTableViewer {
 			TIME, //
 			NAME, //
 			CAS, //
+			REFERENCE_ID, //
 			AREA, //
 			CLASSIFIER, //
 			QUANTIFIER //
@@ -43,6 +45,7 @@ public class PeakQuantitationListUI extends ExtendedTableViewer {
 	private static final int[] BOUNDS = { //
 			100, //
 			200, //
+			100, //
 			100, //
 			100, //
 			100, //

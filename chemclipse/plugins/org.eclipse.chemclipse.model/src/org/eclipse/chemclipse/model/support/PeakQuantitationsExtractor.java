@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -58,6 +58,7 @@ public class PeakQuantitationsExtractor {
 			peakQuantitations.getTitles().add("Time [min]");
 			peakQuantitations.getTitles().add("Name");
 			peakQuantitations.getTitles().add("CAS#");
+			peakQuantitations.getTitles().add("Reference Identifier");
 			peakQuantitations.getTitles().add("Area");
 			peakQuantitations.getTitles().add("Classifier");
 			peakQuantitations.getTitles().add("Quantifier");
@@ -73,6 +74,7 @@ public class PeakQuantitationsExtractor {
 				peakQuantitation.setRetentionTime(peak.getPeakModel().getRetentionTimeAtPeakMaximum());
 				peakQuantitation.setName(getName(identificationTarget));
 				peakQuantitation.setCasNumber(getCasNumber(identificationTarget));
+				peakQuantitation.setReferenceIdentifier(getReferenceIdentifier(identificationTarget));
 				peakQuantitation.setIntegratedArea(peak.getIntegratedArea());
 				peakQuantitation.setClassifier(Classifiable.asString(peak));
 				peakQuantitation.setQuantifier(getQuantifier(peak));
@@ -115,6 +117,15 @@ public class PeakQuantitationsExtractor {
 			casNumber = identificationTarget.getLibraryInformation().getCasNumber();
 		}
 		return casNumber;
+	}
+
+	private String getReferenceIdentifier(IIdentificationTarget identificationTarget) {
+
+		String referenceIdentifier = "";
+		if(identificationTarget != null) {
+			referenceIdentifier = identificationTarget.getLibraryInformation().getReferenceIdentifier();
+		}
+		return referenceIdentifier;
 	}
 
 	private String getQuantifier(IPeak peak) {

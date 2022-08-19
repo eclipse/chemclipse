@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -55,16 +55,19 @@ public class PeakQuantitationListLabelProvider extends AbstractChemClipseLabelPr
 					text = peakQuantitationEntry.getCasNumber();
 					break;
 				case 3:
-					text = decimalFormat.format(peakQuantitationEntry.getIntegratedArea());
+					text = peakQuantitationEntry.getReferenceIdentifier();
 					break;
 				case 4:
-					text = peakQuantitationEntry.getClassifier();
+					text = decimalFormat.format(peakQuantitationEntry.getIntegratedArea());
 					break;
 				case 5:
+					text = peakQuantitationEntry.getClassifier();
+					break;
+				case 6:
 					text = peakQuantitationEntry.getQuantifier();
 					break;
 				default:
-					int index = columnIndex - 6;
+					int index = columnIndex - 7;
 					if(index < peakQuantitationEntry.getConcentrations().size()) {
 						Double concentration = peakQuantitationEntry.getConcentrations().get(index);
 						if(!Double.isNaN(concentration)) {

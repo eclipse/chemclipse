@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,6 +23,7 @@ public class PeakQuantitation {
 	private double integratedArea = 0;
 	private String name = "";
 	private String casNumber = "";
+	private String referenceIdentifier = "";
 	private String classifier = "";
 	private String quantifier = "";
 	private List<Double> concentrations = new ArrayList<Double>();
@@ -70,6 +71,16 @@ public class PeakQuantitation {
 	public void setCasNumber(String casNumber) {
 
 		this.casNumber = casNumber;
+	}
+
+	public String getReferenceIdentifier() {
+
+		return referenceIdentifier;
+	}
+
+	public void setReferenceIdentifier(String referenceIdentifier) {
+
+		this.referenceIdentifier = referenceIdentifier;
 	}
 
 	public String getClassifier() {
