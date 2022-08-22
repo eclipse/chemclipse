@@ -73,7 +73,6 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 
 	protected static boolean isValidFileSupplier(File file, ISupplier supplier) {
 
-		// FIXME what is the difference to org.eclipse.chemclipse.converter.core.Converter.getSupplierForFile(File, Iterable<? extends ISupplier>) method, can we join the codes?
 		String extension = file.toString().toLowerCase();
 		String supplierExtension = supplier.getFileExtension().toLowerCase();
 		boolean hasExtension = supplierExtension != null && !supplierExtension.isEmpty();

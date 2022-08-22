@@ -77,7 +77,6 @@ public class Converter {
 
 	public static List<ISupplier> getSupplierForFile(final File file, Iterable<? extends ISupplier> suppliers) throws NoConverterAvailableException {
 
-		// FIXME there is a very similar code in org.eclipse.chemclipse.xxd.process.files.AbstractSupplierFileIdentifier we should check if we can join both codes
 		HashMap<String, String> regularExpressions = new HashMap<>();
 		/*
 		 * Test if the suppliers ArrayList is empty.
