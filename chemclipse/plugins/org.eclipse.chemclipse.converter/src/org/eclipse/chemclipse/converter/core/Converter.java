@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -77,8 +77,7 @@ public class Converter {
 
 	public static List<ISupplier> getSupplierForFile(final File file, Iterable<? extends ISupplier> suppliers) throws NoConverterAvailableException {
 
-		// FIXME there is a very similar code in org.eclipse.chemclipse.xxd.process.files.AbstractSupplierFileIdentifier we should check if we can join both codes
-		HashMap<String, String> regularExpressions = new HashMap<String, String>();
+		HashMap<String, String> regularExpressions = new HashMap<>();
 		/*
 		 * Test if the suppliers ArrayList is empty.
 		 */
@@ -91,6 +90,9 @@ public class Converter {
 				 * upper case letters.
 				 */
 				String directoryExtension = supplier.getDirectoryExtension();
+				if(directoryExtension.isEmpty()) {
+					continue;
+				}
 				if(fileName.endsWith(directoryExtension) || fileName.endsWith(directoryExtension.toLowerCase()) || fileName.endsWith(directoryExtension.toUpperCase())) {
 					availableConverters.add(supplier);
 				} else {
