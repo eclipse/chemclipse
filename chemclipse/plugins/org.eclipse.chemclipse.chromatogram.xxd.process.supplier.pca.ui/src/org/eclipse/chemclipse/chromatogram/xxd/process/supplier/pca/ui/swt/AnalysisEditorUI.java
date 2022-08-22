@@ -300,6 +300,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 
 	private void applySettings() {
 
+		sampleListUI.updateColorMap();
 	}
 
 	private void runCalculation(Display display) {

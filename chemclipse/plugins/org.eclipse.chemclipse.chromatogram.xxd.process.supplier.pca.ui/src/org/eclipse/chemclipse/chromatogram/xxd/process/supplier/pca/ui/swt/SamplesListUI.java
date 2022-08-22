@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,6 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +42,8 @@ public class SamplesListUI extends ExtendedTableViewer {
 	private final ViewerComparator comparator = new SamplesComparator();
 	private final SamplesListFilter listFilter = new SamplesListFilter();
 	//
-	private Map<String, Color> colorMap = null;
+	private Map<String, Color> colorMap = new HashMap<>();
+	private List<ISample> sampleList = null;
 
 	public SamplesListUI(Composite parent, int style) {
 
@@ -52,10 +54,16 @@ public class SamplesListUI extends ExtendedTableViewer {
 	public void updateInput(List<ISample> sampleList) {
 
 		super.setInput(sampleList);
+		//
+		this.sampleList = sampleList;
+		updateColorMap();
+	}
+
+	public void updateColorMap() {
+
+		colorMap.clear();
 		if(sampleList != null) {
-			colorMap = ColorSupport.getColorMapSamples(sampleList);
-		} else {
-			colorMap = null;
+			colorMap.putAll(ColorSupport.getColorMapSamples(sampleList));
 		}
 	}
 
@@ -108,13 +116,15 @@ public class SamplesListUI extends ExtendedTableViewer {
 				@Override
 				public void update(ViewerCell cell) {
 
-					if(cell != null && colorMap != null) {
-						Object element = cell.getElement();
-						if(element instanceof ISample) {
-							ISample sample = (ISample)element;
-							cell.setBackground(colorMap.get(sample.getGroupName()));
-							cell.setForeground(Colors.BLACK);
-							cell.setText("");
+					if(cell != null) {
+						if(!colorMap.isEmpty()) {
+							Object element = cell.getElement();
+							if(element instanceof ISample) {
+								ISample sample = (ISample)element;
+								cell.setBackground(colorMap.get(sample.getGroupName()));
+								cell.setForeground(Colors.BLACK);
+								cell.setText("");
+							}
 						}
 						super.update(cell);
 					}
