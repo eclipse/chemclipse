@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -36,5 +36,5 @@ public interface IChromatogramMSDReader extends IChromatogramReader {
 	 * @throws InterruptedException
 	 *             if reading was interrupted/ cancelled
 	 */
-	IChromatogramMSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException, InterruptedException;
+	IChromatogramMSD read(File file, IProgressMonitor monitor) throws IOException, InterruptedException;
 }

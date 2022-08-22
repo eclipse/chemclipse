@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2021 Lablicate GmbH.
+ * Copyright (c) 2013, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -116,7 +116,7 @@ public abstract class AbstractSupplierFileIdentifier implements ISupplierFileIde
 				return isDirectoryPatternMatch(file, directoryParts, 0);
 			} else {
 				directoryExtension = directoryExtension.toUpperCase();
-				if(directoryExtension != "" && directory.endsWith(directoryExtension)) {
+				if(!"".equals(directoryExtension) && directory.endsWith(directoryExtension)) {
 					if(supplier.isImportable()) {
 						return true;
 					}
