@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -91,6 +91,9 @@ public class Converter {
 				 * upper case letters.
 				 */
 				String directoryExtension = supplier.getDirectoryExtension();
+				if(directoryExtension.isEmpty()) {
+					continue;
+				}
 				if(fileName.endsWith(directoryExtension) || fileName.endsWith(directoryExtension.toLowerCase()) || fileName.endsWith(directoryExtension.toUpperCase())) {
 					availableConverters.add(supplier);
 				} else {
