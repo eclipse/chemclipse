@@ -18,6 +18,7 @@
 		<pmd.version>3.16.0</pmd.version>
 		<checkstyle.version>3.1.2</checkstyle.version>
 		<maven-install-plugin.version>2.5.2</maven-install-plugin.version>
+		<cbi-version>1.1.5</cbi-version>
 		<!-- definition of the target to use -->
 		<tycho.target.groupId>org.eclipse.chemclipse</tycho.target.groupId>
 		<tycho.target.artifactId>org.eclipse.chemclipse.targetplatform</tycho.target.artifactId>
@@ -236,6 +237,27 @@
 						<includeAllDependencies>true</includeAllDependencies>
 						<skipArchive>true</skipArchive>
 					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.cbi.maven.plugins</groupId>
+					<artifactId>eclipse-jarsigner-plugin</artifactId>
+					<version>${cbi-version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.cbi.maven.plugins</groupId>
+					<artifactId>eclipse-winsigner-plugin</artifactId>
+					<version>${cbi-version}</version>
+					<configuration>
+					<fileNames>
+						<fileName>chemclipse.exe</fileName>
+						<fileName>chemclipsec.exe</fileName>
+					</fileNames>
+				</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.cbi.maven.plugins</groupId>
+					<artifactId>eclipse-macsigner-plugin</artifactId>
+					<version>${cbi-version}</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
