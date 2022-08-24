@@ -41,7 +41,7 @@ public abstract class AbstractPeak implements IPeak {
 	private final IIntegrationConstraints integrationConstraints = new IntegrationConstraints();
 	private final Set<IQuantitationEntry> quantitationEntries = new HashSet<IQuantitationEntry>();
 	private final List<IInternalStandard> internalStandards = new ArrayList<IInternalStandard>();
-	private final List<String> quantitationReferences = new ArrayList<String>(); // Used to quantify against certain ISTDs or ESTDs
+	private final Set<String> quantitationReferences = new HashSet<String>(); // Used to quantify against certain ISTDs or ESTDs
 	private final Set<String> classifier = new LinkedHashSet<>();
 	/*
 	 * Transient
@@ -313,7 +313,7 @@ public abstract class AbstractPeak implements IPeak {
 	@Override
 	public List<String> getQuantitationReferences() {
 
-		return Collections.unmodifiableList(quantitationReferences);
+		return Collections.unmodifiableList(new ArrayList<>(quantitationReferences));
 	}
 
 	@Override
