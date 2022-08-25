@@ -79,6 +79,7 @@ public class ChromatogramChart extends LineChart {
 		titleRelativeIntensity = preferenceStore.getString(PreferenceConstants.P_TITLE_Y_AXIS_RELATIVE_INTENSITY);
 		//
 		IChartSettings chartSettings = getChartSettings();
+		chartSettings.setTitle("");
 		chartSettings.setOrientation(SWT.HORIZONTAL);
 		chartSettings.setHorizontalSliderVisible(true);
 		chartSettings.setVerticalSliderVisible(false);

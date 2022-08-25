@@ -94,6 +94,7 @@ public class MassSpectrumChartProfile extends LineChart implements IMassSpectrum
 	private void initialize() {
 
 		IChartSettings chartSettings = getChartSettings();
+		chartSettings.setTitle("");
 		chartSettings.setOrientation(SWT.HORIZONTAL);
 		chartSettings.setHorizontalSliderVisible(true);
 		chartSettings.setVerticalSliderVisible(true);

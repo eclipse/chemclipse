@@ -467,6 +467,7 @@ public class ScanChartUI extends ScrollableChart {
 		 * Settings
 		 */
 		IChartSettings chartSettings = getChartSettings();
+		chartSettings.setTitle("");
 		chartSettings.setCreateMenu(true);
 		chartSettings.setEnableCompress(enableCompress);
 		//
