@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -22,7 +22,6 @@ import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.mode
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.model.Sensitivity;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.model.ShapeRequirements;
 import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.model.Threshold;
-import org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.amdis.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty.DialogType;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
@@ -36,11 +35,11 @@ public class SettingsAMDIS extends AbstractProcessSettings {
 	@JsonProperty(value = "AMDIS Folder (AMDIS32)", defaultValue = "")
 	@JsonPropertyDescription("Select the AMDIS folder, called AMDIS32.")
 	@FileSettingProperty(dialogType = DialogType.OPEN_DIALOG, onlyDirectory = true)
-	private File amdisFolder = PreferenceSupplier.getInstallationFolder();
+	private File amdisFolder = null;
 	@JsonProperty(value = "Data Folder (tmp)", defaultValue = "")
 	@JsonPropertyDescription("Select the data folder, normally called tmp.")
 	@FileSettingProperty(dialogType = DialogType.OPEN_DIALOG, onlyDirectory = true)
-	private File tmpFolder = PreferenceSupplier.getDataFolder();
+	private File tmpFolder = null;
 	//
 	@JsonProperty(value = "Autodetect low m/z", defaultValue = "true")
 	private boolean lowMzAuto = true;

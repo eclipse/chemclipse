@@ -13,7 +13,6 @@ package org.eclipse.chemclipse.msd.identifier.supplier.nist.ui.processor;
 
 import java.io.File;
 
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty.DialogType;
 import org.eclipse.chemclipse.support.settings.SystemSettings;
@@ -28,7 +27,7 @@ public class NistProcessSettings {
 	@JsonProperty(value = "NIST Folder (MSSEARCH)", defaultValue = "")
 	@JsonPropertyDescription("Select the NIST-DB folder, called MSSEARCH.")
 	@FileSettingProperty(dialogType = DialogType.OPEN_DIALOG, onlyDirectory = true)
-	private File nistFolder = PreferenceSupplier.getNistInstallationFolder();
+	private File nistFolder = null;
 
 	public File getNistFolder() {
 

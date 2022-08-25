@@ -29,7 +29,7 @@ public class ScanIdentifierSettings extends AbstractScanSearchSettings {
 	@JsonProperty(value = "NIST Folder (MSSEARCH)", defaultValue = "")
 	@JsonPropertyDescription("Select the NIST-DB folder, called MSSEARCH.")
 	@FileSettingProperty(dialogType = DialogType.OPEN_DIALOG, onlyDirectory = true)
-	private File nistFolder = PreferenceSupplier.getNistInstallationFolder();
+	private File nistFolder = null;
 	@JsonProperty(value = "Limit Match Factor", defaultValue = "80.0")
 	@JsonPropertyDescription(value = "Run an identification if no target exists with a Match Factor >= the given limit.")
 	@FloatSettingsProperty(minValue = IIdentifierSettings.MIN_LIMIT_MATCH_FACTOR, maxValue = IIdentifierSettings.MAX_LIMIT_MATCH_FACTOR)

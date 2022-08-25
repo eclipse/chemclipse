@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2020 Lablicate GmbH.
+ * Copyright (c) 2010, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.msd.identifier.supplier.nist.settings;
 
 import java.io.File;
 
-import org.eclipse.chemclipse.msd.identifier.supplier.nist.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty.DialogType;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
@@ -27,7 +26,7 @@ public class ScanDirectIdentifierSettings extends AbstractScanSearchSettings {
 	@JsonProperty(value = "NIST Folder (MSSEARCH)", defaultValue = "")
 	@JsonPropertyDescription("Select the NIST-DB folder, called MSSEARCH.")
 	@FileSettingProperty(dialogType = DialogType.OPEN_DIALOG, onlyDirectory = true)
-	private File nistFolder = PreferenceSupplier.getNistInstallationFolder();
+	private File nistFolder = null;
 	@JsonProperty(value = "Use Optimized Mass Spectrum", defaultValue = "true")
 	@JsonPropertyDescription(value = "If true, the optimized spectrum will be used if available.")
 	private boolean useOptimizedMassSpectrum = true;
