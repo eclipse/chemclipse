@@ -19,7 +19,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String PATH_PREFIX = "org.eclipse.chemclipse.rcp.ui.icons/";
 
 	/**
-	 * platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/info.gif
+	 * platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/empty.png
 	 * 
 	 * @param fileName
 	 * @param size
@@ -30,7 +30,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 		String bundleName = Activator.getDefault().getBundle().getSymbolicName();
 		StringBuilder builder = new StringBuilder();
 		String[] values = fileName.split("/");
-		String imageName = values.length == 2 ? values[1] : "info.gif";
+		String imageName = values.length == 2 ? values[1] : "empty.png";
 		//
 		builder.append("platform:/plugin/");
 		builder.append(bundleName);
@@ -119,11 +119,11 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_PEAK_ADD = PATH_PREFIX + "peakAdd.gif";
 	String IMAGE_PEAK_REPLACE = PATH_PREFIX + "peakReplace.gif";
 	String IMAGE_PEAKS = PATH_PREFIX + "peaks.gif";
-	String IMAGE_ERROR = PATH_PREFIX + "error.gif";
-	String IMAGE_WARN = PATH_PREFIX + "warn.gif";
-	String IMAGE_INFO = PATH_PREFIX + "info.gif";
+	String IMAGE_ERROR = PATH_PREFIX + "error.png";
+	String IMAGE_WARN = PATH_PREFIX + "warn.png";
+	String IMAGE_INFO = PATH_PREFIX + "info.png";
 	String IMAGE_VALID = PATH_PREFIX + "valid.gif";
-	String IMAGE_QUESTION = PATH_PREFIX + "question.gif";
+	String IMAGE_QUESTION = PATH_PREFIX + "question.png";
 	String IMAGE_MASS_SPECTRUM = PATH_PREFIX + "massSpectrum.gif";
 	String IMAGE_MASS_SPECTRUM_FILE = PATH_PREFIX + "massSpectrumFile.gif";
 	String IMAGE_MASS_SPECTRUM_DATABASE = PATH_PREFIX + "massSpectrumDatabase.gif";

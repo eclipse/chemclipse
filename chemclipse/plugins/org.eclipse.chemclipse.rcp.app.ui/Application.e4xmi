@@ -97,14 +97,14 @@
       </menus>
       <toolbar xmi:id="_hl6gQI1zEeKgaYcpx_IhbQ" elementId="org.eclipse.ui.internal.introview" visible="false"/>
     </sharedElements>
-    <sharedElements xsi:type="basic:Part" xmi:id="_T2mREFeKEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart" contributionURI="bundleclass://org.eclipse.chemclipse.processing.ui/org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart" label="Feedback" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/info.gif"/>
-    <sharedElements xsi:type="basic:Part" xmi:id="_W8FzsFuuEeWKQYKM0-fotA" elementId="org.eclipse.chemclipse.rcp.app.ui.part.editHistory" contributionURI="bundleclass://org.eclipse.chemclipse.support.ui/org.eclipse.chemclipse.support.ui.parts.EditHistoryPart" label="Edit History" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/info.gif"/>
+    <sharedElements xsi:type="basic:Part" xmi:id="_T2mREFeKEeWJDdTjy0i2HA" elementId="org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart" contributionURI="bundleclass://org.eclipse.chemclipse.processing.ui/org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart" label="Feedback" iconURI="platform:/plugin/org.eclipse.jface/icons/full/message_info.png"/>
+    <sharedElements xsi:type="basic:Part" xmi:id="_W8FzsFuuEeWKQYKM0-fotA" elementId="org.eclipse.chemclipse.rcp.app.ui.part.editHistory" contributionURI="bundleclass://org.eclipse.chemclipse.support.ui/org.eclipse.chemclipse.support.ui.parts.EditHistoryPart" label="Edit History" iconURI="platform:/plugin/org.eclipse.jface/icons/full/message_info.png"/>
     <sharedElements xsi:type="basic:Part" xmi:id="_V3EBsHb_EeWs9YprkfnL3Q" elementId="org.eclipse.ease.ui.views.scriptShell" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Script Shell" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/script_shell.png"/>
     <trimBars xmi:id="_h0BcTDLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.trimbar.top">
       <children xsi:type="menu:ToolBar" xmi:id="_h0BcTTLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbar.main">
         <children xsi:type="menu:ToolBarSeparator" xmi:id="_nIMLMINGEeOuPY34hxPAxA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbarseparator.3"/>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_tL2EwDgEEeKBGer45Yb2dA" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.save" label="Save" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/save.gif" command="_SkvDQDgEEeKBGer45Yb2dA"/>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_vo3g0DgEEeKBGer45Yb2dA" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.saveAll" label="Save All" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/saveall.gif" command="_ZgJ9QDgEEeKBGer45Yb2dA"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_tL2EwDgEEeKBGer45Yb2dA" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.save" label="Save" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/save_edit.png" command="_SkvDQDgEEeKBGer45Yb2dA"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_vo3g0DgEEeKBGer45Yb2dA" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.saveAll" label="Save All" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/saveall_edit.png" command="_ZgJ9QDgEEeKBGer45Yb2dA"/>
         <children xsi:type="menu:ToolBarSeparator" xmi:id="_rJYIsINGEeOuPY34hxPAxA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbarseparator.4"/>
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_y11CQDiXEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbar.perspectives">
@@ -117,9 +117,9 @@
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_2GIJsMDJEeOKxaD_PtepsA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbar.window">
         <children xsi:type="menu:ToolBarSeparator" xmi:id="_5R6wQMDJEeOKxaD_PtepsA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbarseparator.6"/>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_oQ91EDL0EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.about" label="About" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/info.gif" command="_h0A1RDLzEeKMEOdllHiEaA"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_oQ91EDL0EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.about" label="About" iconURI="platform:/plugin/org.eclipse.jface/icons/full/message_info.png" command="_h0A1RDLzEeKMEOdllHiEaA"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_4hjDQMDJEeOKxaD_PtepsA" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.preferences" label="Preferences" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/preferences.gif" command="_XevnQDiVEeKDEdWQrkwLnQ"/>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_ULurUMDKEeOKxaD_PtepsA" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.help" label="Help" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/question.gif" command="_zeEzsCaJEeOrR5M2kqmSOQ"/>
+        <children xsi:type="menu:HandledToolItem" xmi:id="_ULurUMDKEeOKxaD_PtepsA" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.help" label="Help" iconURI="platform:/plugin/org.eclipse.help.ui/icons/etool16/help.png" command="_zeEzsCaJEeOrR5M2kqmSOQ"/>
       </children>
     </trimBars>
     <trimBars xmi:id="_jEP4kDL0EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.trimbar.bottom" side="Bottom">
