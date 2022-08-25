@@ -20,6 +20,7 @@ import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.identifier.LibraryInformation;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.services.IMoleculeImageService;
@@ -357,8 +358,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof IMoleculeImageService) {
-					IMoleculeImageService moleculeImageService = (IMoleculeImageService)element;
+				if(element instanceof IMoleculeImageService moleculeImageService) {
 					combo.setToolTipText(moleculeImageService.getDescription());
 					return moleculeImageService.getName();
 				}
@@ -391,7 +391,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Reset molecule image.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -410,7 +410,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Export the molecule image");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE_AS, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE_AS, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -453,8 +453,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 		Object[] moleculeImageServices = Activator.getDefault().getMoleculeImageServices();
 		if(moleculeImageServices != null) {
 			for(Object object : moleculeImageServices) {
-				if(object instanceof IMoleculeImageService) {
-					IMoleculeImageService moleculeImageService = (IMoleculeImageService)object;
+				if(object instanceof IMoleculeImageService moleculeImageService) {
 					Class<? extends IWorkbenchPreferencePage> preferencePage = moleculeImageService.getPreferencePage();
 					if(preferencePage != null) {
 						preferencePages.add(preferencePage);
@@ -672,8 +671,8 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 	private IMoleculeImageService getMoleculeImageService() {
 
 		Object object = comboViewerServices.getStructuredSelection().getFirstElement();
-		if(object instanceof IMoleculeImageService) {
-			return (IMoleculeImageService)object;
+		if(object instanceof IMoleculeImageService moleculeImageService) {
+			return moleculeImageService;
 		}
 		//
 		return null;
@@ -682,8 +681,8 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 	private ImageServiceInput getImageInput() {
 
 		Object object = comboViewerInput.getStructuredSelection().getFirstElement();
-		if(object instanceof ImageServiceInput) {
-			return (ImageServiceInput)object;
+		if(object instanceof ImageServiceInput imageServiceInput) {
+			return imageServiceInput;
 		}
 		/*
 		 * Default

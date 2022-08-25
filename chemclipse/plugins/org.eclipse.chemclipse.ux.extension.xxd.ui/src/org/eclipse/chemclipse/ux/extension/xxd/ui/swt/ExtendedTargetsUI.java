@@ -34,6 +34,7 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
@@ -69,6 +70,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
@@ -214,13 +216,13 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Delete all targets");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Targets", "Do you want to delete all targets?")) {
+				if(openQuestion(e.display.getActiveShell(), "Do you want to delete all targets?")) {
 					deleteAllTargets();
 					updateTargets(e.display);
 				}
@@ -228,6 +230,11 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		});
 		//
 		return button;
+	}
+
+	private boolean openQuestion(Shell shell, String text) {
+
+		return MessageDialog.openQuestion(shell, MENU_CATEGORY_TARGETS, text);
 	}
 
 	private void createButtonSettings(Composite parent) {
@@ -308,7 +315,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Add the target.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -328,7 +335,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Delete the selected targets.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -532,8 +539,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		Iterator iterator = targetList.get().getStructuredSelection().iterator();
 		while(iterator.hasNext()) {
 			Object object = iterator.next();
-			if(object instanceof IIdentificationTarget) {
-				IIdentificationTarget identificationTarget = (IIdentificationTarget)object;
+			if(object instanceof IIdentificationTarget identificationTarget) {
 				identificationTarget.setManuallyVerified(verified);
 			}
 		}
@@ -553,8 +559,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		AtomicReference<TargetsListUI> targetList = getActiveTargetList();
 		Object object = getObject();
 		//
-		if(object instanceof ITargetSupplier) {
-			ITargetSupplier targetSupplier = (ITargetSupplier)object;
+		if(object instanceof ITargetSupplier targetSupplier) {
 			List<IIdentificationTarget> identificationTargets = new ArrayList<>(targetSupplier.getTargets());
 			IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
 			Collections.sort(identificationTargets, identificationTargetComparator);
@@ -583,11 +588,10 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		if(object instanceof ITargetSupplier) {
 			if(object instanceof IChromatogram) {
 				targetList.get().updateSourceRange(null, null);
-			} else if(object instanceof IPeak) {
-				IScan scan = ((IPeak)object).getPeakModel().getPeakMaximum();
+			} else if(object instanceof IPeak peak) {
+				IScan scan = peak.getPeakModel().getPeakMaximum();
 				targetList.get().updateSourceRange(scan.getRetentionTime(), scan.getRetentionIndex());
-			} else if(object instanceof IScan) {
-				IScan scan = ((IScan)object);
+			} else if(object instanceof IScan scan) {
 				targetList.get().updateSourceRange(scan.getRetentionTime(), scan.getRetentionIndex());
 			} else {
 				targetList.get().updateSourceRange(null, null);
@@ -601,11 +605,10 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 
 		Object object = getObject();
 		//
-		if(object instanceof IPeak) {
-			IScan scan = ((IPeak)object).getPeakModel().getPeakMaximum();
+		if(object instanceof IPeak peak) {
+			IScan scan = peak.getPeakModel().getPeakMaximum();
 			return scan.getRetentionIndex();
-		} else if(object instanceof IScan) {
-			IScan scan = ((IScan)object);
+		} else if(object instanceof IScan scan) {
 			return scan.getRetentionIndex();
 		} else {
 			return 0.0f;
@@ -620,10 +623,10 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 			String dataDescription;
 			if(object instanceof IChromatogram) {
 				dataDescription = ChromatogramDataSupport.getChromatogramLabel((IChromatogram<?>)object);
-			} else if(object instanceof IPeak) {
-				dataDescription = peakDataSupport.getPeakLabel((IPeak)object);
-			} else if(object instanceof IScan) {
-				dataDescription = scanDataSupport.getScanLabel((IScan)object);
+			} else if(object instanceof IPeak peak) {
+				dataDescription = peakDataSupport.getPeakLabel(peak);
+			} else if(object instanceof IScan scan) {
+				dataDescription = scanDataSupport.getScanLabel(scan);
 			} else {
 				dataDescription = "Target Supplier";
 			}
@@ -642,8 +645,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		buttonAddTarget.setEnabled(enabled);
 		AtomicReference<TargetsListUI> targetList = getActiveTargetList();
 		//
-		if(object instanceof ITargetSupplier) {
-			ITargetSupplier targetSupplier = (ITargetSupplier)object;
+		if(object instanceof ITargetSupplier targetSupplier) {
 			buttonDeleteTarget.setEnabled(targetList.get().getTable().getSelectionIndex() >= 0);
 			buttonDeleteTargets.setEnabled(!targetSupplier.getTargets().isEmpty());
 		} else {
@@ -655,7 +657,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 	@SuppressWarnings("rawtypes")
 	private void deleteTargets(Display display) {
 
-		if(MessageDialog.openQuestion(display.getActiveShell(), "Targets", "Would you like to delete the selected targets?")) {
+		if(openQuestion(display.getActiveShell(), "Would you like to delete the selected targets?")) {
 			/*
 			 * Delete Target
 			 */
@@ -663,8 +665,8 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 			Iterator iterator = targetList.get().getStructuredSelection().iterator();
 			while(iterator.hasNext()) {
 				Object object = iterator.next();
-				if(object instanceof ITarget) {
-					deleteTarget((ITarget)object);
+				if(object instanceof ITarget target) {
+					deleteTarget(target);
 				}
 			}
 			updateTargets(display);
@@ -675,8 +677,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 
 		Object object = getObject();
 		//
-		if(object instanceof ITargetSupplier) {
-			ITargetSupplier targetSupplier = (ITargetSupplier)object;
+		if(object instanceof ITargetSupplier targetSupplier) {
 			targetSupplier.getTargets().remove(target);
 			IChromatogram<?> chromatogram = ((IChromatogram<?>)objectCacheChromatogram);
 			if(chromatogram != null) {
@@ -692,8 +693,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 
 		Object object = getObject();
 		//
-		if(object instanceof ITargetSupplier) {
-			ITargetSupplier targetSupplier = (ITargetSupplier)object;
+		if(object instanceof ITargetSupplier targetSupplier) {
 			targetSupplier.getTargets().clear();
 			IChromatogram<?> chromatogram = ((IChromatogram<?>)objectCacheChromatogram);
 			if(chromatogram != null) {
@@ -706,8 +706,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 
 		Object object = getObject();
 		//
-		if(object instanceof ITargetSupplier) {
-			ITargetSupplier targetSupplier = (ITargetSupplier)object;
+		if(object instanceof ITargetSupplier targetSupplier) {
 			targetSupplier.getTargets().add(identificationTarget);
 			IChromatogram<?> chromatogram = ((IChromatogram<?>)objectCacheChromatogram);
 			if(chromatogram != null) {
@@ -728,10 +727,9 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 
 		Object object = getObject();
 		//
-		if(object instanceof IScanMSD) {
-			return (IScanMSD)object;
-		} else if(object instanceof IPeakMSD) {
-			IPeakMSD peakMSD = (IPeakMSD)object;
+		if(object instanceof IScanMSD scanMSD) {
+			return scanMSD;
+		} else if(object instanceof IPeakMSD peakMSD) {
 			return peakMSD.getExtractedMassSpectrum();
 		} else {
 			return null;
@@ -767,11 +765,10 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		if(index >= 0) {
 			TableItem tableItem = table.getItem(index);
 			Object data = tableItem.getData();
-			if(data instanceof IIdentificationTarget) {
+			if(data instanceof IIdentificationTarget identificationTarget) {
 				/*
 				 * First update the mass spectrum.
 				 */
-				IIdentificationTarget identificationTarget = (IIdentificationTarget)data;
 				IScanMSD massSpectrum = getMassSpectrum();
 				if(massSpectrum != null) {
 					UpdateNotifierUI.update(display, massSpectrum, identificationTarget);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -120,11 +120,7 @@ public abstract class AbtractPlotPCA extends ScatterChart {
 
 	protected boolean isPointVisible(Point point, Rectangle plotAreaBounds) {
 
-		if(point.x >= 0 && point.x <= plotAreaBounds.width && point.y >= 0 && point.y <= plotAreaBounds.height) {
-			return true;
-		} else {
-			return false;
-		}
+		return (point.x >= 0 && point.x <= plotAreaBounds.width && point.y >= 0 && point.y <= plotAreaBounds.height);
 	}
 
 	private void setPrimaryAxisSet(IChartSettings chartSettings) {

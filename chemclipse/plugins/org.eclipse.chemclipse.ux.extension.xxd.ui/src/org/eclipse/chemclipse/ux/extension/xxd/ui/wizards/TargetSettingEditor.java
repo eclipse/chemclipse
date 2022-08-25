@@ -306,8 +306,7 @@ public class TargetSettingEditor {
 
 		for(TableItem item : tableViewer.getTable().getItems()) {
 			Object data = item.getData();
-			if(data instanceof ITargetReference) {
-				ITargetReference targetReference = (ITargetReference)data;
+			if(data instanceof ITargetReference targetReference) {
 				targetDisplaySettings.setVisible(targetReference, visible);
 			}
 		}

@@ -1304,7 +1304,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 
 	private TargetLabelEditAction createLabelsAction() {
 
-		TargetLabelEditAction targetLabelEditAction = new TargetLabelEditAction(new ILabelEditSettings() {
+		return new TargetLabelEditAction(new ILabelEditSettings() {
 
 			@Override
 			public IChromatogramSelection<?, ?> getChromatogramSelection() {
@@ -1318,7 +1318,6 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 				return getExtendedChromatogramUI();
 			}
 		});
-		return targetLabelEditAction;
 	}
 
 	private GridLineEditAction createGridLineAction() {

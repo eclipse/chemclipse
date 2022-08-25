@@ -31,6 +31,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ScanSignalEd
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ScanSignalListFilter;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.ScanTableComparator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
+import org.eclipse.chemclipse.wsd.model.core.IScanSignalWSD;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -82,12 +83,11 @@ public class ScanTableUI extends ExtendedTableViewer {
 	public void setInput(IScan scan) {
 
 		this.scan = scan;
-		if(scan instanceof IScanMSD) {
+		if(scan instanceof IScanMSD scanMSD) {
 			/*
 			 * MSD
 			 */
 			super.setInput(null); // Can only enable the hash look up before input has been set
-			IScanMSD scanMSD = (IScanMSD)scan;
 			IScanMSD optimizedScanMSD = scanMSD.getOptimizedMassSpectrum();
 			//
 			List<IIon> ions;
@@ -110,22 +110,20 @@ public class ScanTableUI extends ExtendedTableViewer {
 			setLabelAndContentProviders(dataType);
 			super.setInput(ions);
 			setItemCount(size);
-		} else if(scan instanceof IScanCSD) {
+		} else if(scan instanceof IScanCSD scanCSD) {
 			/*
 			 * CSD
 			 */
 			super.setInput(null);
-			IScanCSD scanCSD = (IScanCSD)scan;
 			setLabelAndContentProviders(DataType.CSD);
 			List<IScanCSD> list = new ArrayList<>();
 			list.add(scanCSD);
 			super.setInput(list);
-		} else if(scan instanceof IScanWSD) {
+		} else if(scan instanceof IScanWSD scanWSD) {
 			/*
 			 * WSD
 			 */
 			super.setInput(null);
-			IScanWSD scanWSD = (IScanWSD)scan;
 			setLabelAndContentProviders(DataType.WSD);
 			super.setInput(scanWSD.getScanSignals());
 		} else {
@@ -151,9 +149,8 @@ public class ScanTableUI extends ExtendedTableViewer {
 		 */
 		ITableLabelProvider labelProvider = getTableLabelProvider(dataType);
 		setLabelProvider(labelProvider);
-		if(labelProvider instanceof ScanLabelProvider) {
+		if(labelProvider instanceof ScanLabelProvider scanLabelProvider) {
 			//
-			ScanLabelProvider scanLabelProvider = (ScanLabelProvider)labelProvider;
 			double minIntensity = 0.0f;
 			double maxIntensity = 0.0f;
 			//
@@ -166,13 +163,12 @@ public class ScanTableUI extends ExtendedTableViewer {
 					minIntensity = intensity;
 					maxIntensity = 0.0f;
 				}
-			} else if(scan instanceof IScanMSD) {
+			} else if(scan instanceof IScanMSD scanMSD) {
 				minIntensity = 0.0f;
-				maxIntensity = ((IScanMSD)scan).getHighestAbundance().getAbundance();
-			} else if(scan instanceof IScanWSD) {
-				IScanWSD scanWSD = (IScanWSD)scan;
-				minIntensity = scanWSD.getScanSignals().stream().mapToDouble(s -> s.getAbundance()).min().getAsDouble();
-				maxIntensity = scanWSD.getScanSignals().stream().mapToDouble(s -> s.getAbundance()).max().getAsDouble();
+				maxIntensity = scanMSD.getHighestAbundance().getAbundance();
+			} else if(scan instanceof IScanWSD scanWSD) {
+				minIntensity = scanWSD.getScanSignals().stream().mapToDouble(IScanSignalWSD::getAbundance).min().getAsDouble();
+				maxIntensity = scanWSD.getScanSignals().stream().mapToDouble(IScanSignalWSD::getAbundance).max().getAsDouble();
 			}
 			//
 			scanLabelProvider.setTotalIntensity(minIntensity, maxIntensity);
@@ -291,9 +287,8 @@ public class ScanTableUI extends ExtendedTableViewer {
 
 		if(isVirtualTable()) {
 			if(scan != null) {
-				if(scan instanceof IScanMSD) {
+				if(scan instanceof IScanMSD scanMSD) {
 					if(dataType.equals(DataType.MSD_HIGHRES)) {
-						IScanMSD scanMSD = (IScanMSD)scan;
 						int numberIons = scanMSD.getNumberOfIons();
 						if(numberIons > preferenceStore.getInt(PreferenceConstants.P_TRACES_VIRTUAL_TABLE)) {
 							return true;

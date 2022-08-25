@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -107,7 +107,7 @@ public class ExplainedVarianceChart extends BarChart {
 			primaryAxisSettingsX.setCategorySeries(getCategories(resultsPCA));
 			applySettings(chartSettings);
 			//
-			List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
+			List<IBarSeriesData> barSeriesDataList = new ArrayList<>();
 			ISeriesData seriesData = getSeries(resultsPCA);
 			IBarSeriesData barSeriesData = new BarSeriesData(seriesData);
 			IBarSeriesSettings settings = barSeriesData.getSettings();
@@ -138,7 +138,6 @@ public class ExplainedVarianceChart extends BarChart {
 
 		double[] ySeries = pcaResults.getCumulativeExplainedVariances();
 		double[] xSeries = new double[ySeries.length];
-		ISeriesData seriesData = new SeriesData(xSeries, ySeries, "Explained Variances (Cumulative)");
-		return seriesData;
+		return new SeriesData(xSeries, ySeries, "Explained Variances (Cumulative)");
 	}
 }

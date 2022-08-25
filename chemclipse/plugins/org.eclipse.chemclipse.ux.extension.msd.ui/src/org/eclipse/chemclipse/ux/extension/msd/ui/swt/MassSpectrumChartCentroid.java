@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -65,11 +65,13 @@ public class MassSpectrumChartCentroid extends BarChart implements IMassSpectrum
 	private IScanMSD massSpectrum = null;
 
 	public MassSpectrumChartCentroid() {
+
 		super();
 		initialize();
 	}
 
 	public MassSpectrumChartCentroid(Composite parent, int style) {
+
 		super(parent, style);
 		initialize();
 	}
@@ -153,7 +155,7 @@ public class MassSpectrumChartCentroid extends BarChart implements IMassSpectrum
 		/*
 		 * Plot the series name above the entry.
 		 */
-		IPlotArea plotArea = (IPlotArea)getBaseChart().getPlotArea();
+		IPlotArea plotArea = getBaseChart().getPlotArea();
 		plotArea.addCustomPaintListener(new ICustomPaintListener() {
 
 			@Override
@@ -198,7 +200,7 @@ public class MassSpectrumChartCentroid extends BarChart implements IMassSpectrum
 
 		Point point = barSeriesIon.getPoint();
 		String label = getLabel(barSeriesIon.getMz());
-		boolean negative = (barSeriesIon.getIntensity() < 0) ? true : false;
+		boolean negative = (barSeriesIon.getIntensity() < 0);
 		Point labelSize = e.gc.textExtent(label);
 		int x = (int)(point.x + 0.5d - labelSize.x / 2.0d);
 		int y = point.y;
@@ -233,7 +235,7 @@ public class MassSpectrumChartCentroid extends BarChart implements IMassSpectrum
 
 	private List<BarSeriesIon> getBarSeriesIonList() {
 
-		List<BarSeriesIon> barSeriesIons = new ArrayList<BarSeriesIon>();
+		List<BarSeriesIon> barSeriesIons = new ArrayList<>();
 		//
 		int widthPlotArea = getBaseChart().getPlotArea().getSize().x;
 		ISeries<?>[] series = getBaseChart().getSeriesSet().getSeries();

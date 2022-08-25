@@ -57,14 +57,13 @@ public class ScanChartPart extends AbstractPart<ExtendedScanChartUI> {
 				return true;
 			} else {
 				Object object = objects.get(0);
-				IScan scan = null;
-				if(object instanceof IScan) {
-					scan = (IScan)object;
-				} else if(object instanceof IPeak) {
-					IPeak peak = (IPeak)object;
-					scan = peak.getPeakModel().getPeakMaximum();
+				IScan updateScan = null;
+				if(object instanceof IScan scan) {
+					updateScan = scan;
+				} else if(object instanceof IPeak peak) {
+					updateScan = peak.getPeakModel().getPeakMaximum();
 				}
-				getControl().update(scan);
+				getControl().update(updateScan);
 				return true;
 			}
 		}

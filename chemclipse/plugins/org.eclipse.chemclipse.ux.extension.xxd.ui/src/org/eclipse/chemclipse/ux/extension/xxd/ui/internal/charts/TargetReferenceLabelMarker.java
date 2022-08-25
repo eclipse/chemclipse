@@ -85,10 +85,10 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 
 		if(visible && !targetLabels.isEmpty()) {
 			Widget widget = event.widget;
-			if(widget instanceof IPlotArea) {
-				Chart chart = ((IPlotArea)widget).getChart();
-				if(chart instanceof BaseChart) {
-					if(((BaseChart)chart).isBufferActive()) {
+			if(widget instanceof IPlotArea plotArea) {
+				Chart chart = plotArea.getChart();
+				if(chart instanceof BaseChart baseChart) {
+					if(baseChart.isBufferActive()) {
 						return;
 					}
 				}
@@ -126,7 +126,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		Transform transform = new Transform(gc.getDevice());
 		Transform oldTransform = new Transform(gc.getDevice());
 		gc.getTransform(oldTransform);
-		Map<FontData, Font> fontMap = new IdentityHashMap<FontData, Font>();
+		Map<FontData, Font> fontMap = new IdentityHashMap<>();
 		Font oldFont = gc.getFont();
 		gc.setAlpha(NO_ALPHA);
 		float[] identityMatrix = new float[6];

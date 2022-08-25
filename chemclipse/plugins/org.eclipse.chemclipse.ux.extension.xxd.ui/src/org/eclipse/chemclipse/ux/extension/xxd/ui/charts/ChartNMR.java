@@ -20,7 +20,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.eclipse.chemclipse.converter.scan.IScanConverterSupport;
@@ -282,7 +281,7 @@ public class ChartNMR extends LineChart {
 
 	public static ISeriesData createPeakSeries(String id, List<? extends ISignal> signals, Iterable<PeakPosition> iterable, double yOffset, double xOffset) {
 
-		List<PeakPosition> list = StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toList());
+		List<PeakPosition> list = StreamSupport.stream(iterable.spliterator(), false).toList();
 		int size = list.size();
 		double[] xSeries = new double[size];
 		double[] ySeries = new double[size];
