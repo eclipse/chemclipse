@@ -575,6 +575,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_POSITION_X_AXIS_MILLISECONDS = Position.Secondary.toString();
 	public static final String P_COLOR_X_AXIS_MILLISECONDS = "colorXAxisMilliseconds";
 	public static final String DEF_COLOR_X_AXIS_MILLISECONDS = "0,0,0";
+	public static final String P_COLOR_X_AXIS_MILLISECONDS_DARKTHEME = "colorXAxisMillisecondsDarkTheme";
+	public static final String DEF_COLOR_X_AXIS_MILLISECONDS_DARKTHEME = "252,252,247";
 	public static final String P_FONT_NAME_X_AXIS_MILLISECONDS = "fontNameXAxisMilliseconds";
 	public static final String DEF_FONT_NAME_X_AXIS_MILLISECONDS = "Tahoma";
 	public static final String P_FONT_SIZE_X_AXIS_MILLISECONDS = "fontSizeXAxisMilliseconds";
@@ -597,6 +599,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_POSITION_X_AXIS_SECONDS = Position.Primary.toString();
 	public static final String P_COLOR_X_AXIS_SECONDS = "colorXAxisSeconds";
 	public static final String DEF_COLOR_X_AXIS_SECONDS = "0,0,0";
+	public static final String P_COLOR_X_AXIS_SECONDS_DARKTHEME = "colorXAxisSecondsDarkTheme";
+	public static final String DEF_COLOR_X_AXIS_SECONDS_DARKTHEME = "252,252,247";
 	public static final String P_FONT_NAME_X_AXIS_SECONDS = "fontNameXAxisSeconds";
 	public static final String DEF_FONT_NAME_X_AXIS_SECONDS = "Tahoma";
 	public static final String P_FONT_SIZE_X_AXIS_SECONDS = "fontSizeXAxisSeconds";
@@ -619,6 +623,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_POSITION_X_AXIS_MINUTES = Position.Primary.toString();
 	public static final String P_COLOR_X_AXIS_MINUTES = "colorXAxisMinutes";
 	public static final String DEF_COLOR_X_AXIS_MINUTES = "0,0,0";
+	public static final String P_COLOR_X_AXIS_MINUTES_DARKTHEME = "colorXAxisMinutesDarkTheme";
+	public static final String DEF_COLOR_X_AXIS_MINUTES_DARKTHEME = "252,252,247";
 	public static final String P_FONT_NAME_X_AXIS_MINUTES = "fontNameXAxisMinutes";
 	public static final String DEF_FONT_NAME_X_AXIS_MINUTES = "Tahoma";
 	public static final String P_FONT_SIZE_X_AXIS_MINUTES = "fontSizeXAxisMinutes";
@@ -645,6 +651,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_POSITION_X_AXIS_SCANS = Position.Primary.toString();
 	public static final String P_COLOR_X_AXIS_SCANS = "colorXAxisScans";
 	public static final String DEF_COLOR_X_AXIS_SCANS = "0,0,0";
+	public static final String P_COLOR_X_AXIS_SCANS_DARKTHEME = "colorXAxisScansDarkTheme";
+	public static final String DEF_COLOR_X_AXIS_SCANS_DARKTHEME = "252,252,247";
 	public static final String P_FONT_NAME_X_AXIS_SCANS = "fontNameXAxisScans";
 	public static final String DEF_FONT_NAME_X_AXIS_SCANS = "Tahoma";
 	public static final String P_FONT_SIZE_X_AXIS_SCANS = "fontSizeXAxisScans";
@@ -667,6 +675,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_POSITION_Y_AXIS_INTENSITY = Position.Primary.toString();
 	public static final String P_COLOR_Y_AXIS_INTENSITY = "colorYAxisIntensity";
 	public static final String DEF_COLOR_Y_AXIS_INTENSITY = "0,0,0";
+	public static final String P_COLOR_Y_AXIS_INTENSITY_DARKTHEME = "colorYAxisIntensityDarkTheme";
+	public static final String DEF_COLOR_Y_AXIS_INTENSITY_DARKTHEME = "252,252,247";
 	public static final String P_FONT_NAME_Y_AXIS_INTENSITY = "fontNameYAxisIntensity";
 	public static final String DEF_FONT_NAME_Y_AXIS_INTENSITY = "Tahoma";
 	public static final String P_FONT_SIZE_Y_AXIS_INTENSITY = "fontSizeYAxisIntensity";
@@ -689,6 +699,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_POSITION_Y_AXIS_RELATIVE_INTENSITY = Position.Secondary.toString();
 	public static final String P_COLOR_Y_AXIS_RELATIVE_INTENSITY = "colorYAxisRelativeIntensity";
 	public static final String DEF_COLOR_Y_AXIS_RELATIVE_INTENSITY = "0,0,0";
+	public static final String P_COLOR_Y_AXIS_RELATIVE_INTENSITY_DARKTHEME = "colorYAxisRelativeIntensityDarkTheme";
+	public static final String DEF_COLOR_Y_AXIS_RELATIVE_INTENSITY_DARKTHEME = "252,252,247";
 	public static final String P_FONT_NAME_Y_AXIS_RELATIVE_INTENSITY = "fontNameYAxisRelativeIntensity";
 	public static final String DEF_FONT_NAME_Y_AXIS_RELATIVE_INTENSITY = "Tahoma";
 	public static final String P_FONT_SIZE_Y_AXIS_RELATIVE_INTENSITY = "fontSizeYAxisRelativeIntensity";

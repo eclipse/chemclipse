@@ -17,6 +17,7 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultsPCA;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -34,11 +35,13 @@ import org.eclipse.swtchart.extensions.core.SeriesData;
 public class ExplainedVarianceChart extends BarChart {
 
 	public ExplainedVarianceChart() {
+
 		super();
 		createControl();
 	}
 
 	public ExplainedVarianceChart(Composite parent, int style) {
+
 		super(parent, style);
 		createControl();
 	}
@@ -87,12 +90,12 @@ public class ExplainedVarianceChart extends BarChart {
 		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
 		primaryAxisSettingsX.setTitle("Principal Component");
 		primaryAxisSettingsX.setDecimalFormat(ValueFormat.getDecimalFormatEnglish());
-		primaryAxisSettingsX.setColor(Colors.BLACK);
+		primaryAxisSettingsX.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_LIST_FOREGROUND));
 		//
 		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
 		primaryAxisSettingsY.setTitle("Explained Variance (Cumulative)");
 		primaryAxisSettingsY.setDecimalFormat(ValueFormat.getDecimalFormatEnglish());
-		primaryAxisSettingsY.setColor(Colors.BLACK);
+		primaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_LIST_FOREGROUND));
 	}
 
 	@SuppressWarnings("rawtypes")

@@ -46,7 +46,6 @@ import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
-import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
@@ -354,7 +353,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		composite.setLayout(new GridLayout(1, true));
 		//
 		TabFolder tabFolder = new TabFolder(composite, SWT.BOTTOM);
-		tabFolder.setBackground(Colors.WHITE);
+		tabFolder.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 		tabFolder.addSelectionListener(new SelectionAdapter() {
 

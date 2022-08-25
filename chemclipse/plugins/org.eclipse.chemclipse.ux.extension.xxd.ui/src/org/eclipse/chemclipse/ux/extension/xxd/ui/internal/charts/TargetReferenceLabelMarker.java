@@ -132,9 +132,9 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		float[] identityMatrix = new float[6];
 		oldTransform.getElements(identityMatrix);
 		try {
-			Color activeColor = gc.getDevice().getSystemColor(SWT.COLOR_BLACK);
-			Color inactiveColor = gc.getDevice().getSystemColor(SWT.COLOR_GRAY);
-			Color idColor = gc.getDevice().getSystemColor(SWT.COLOR_DARK_GRAY);
+			Color activeColor = gc.getDevice().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND);
+			Color inactiveColor = gc.getDevice().getSystemColor(SWT.COLOR_WIDGET_DISABLED_FOREGROUND);
+			Color idColor = gc.getDevice().getSystemColor(SWT.COLOR_LIST_FOREGROUND);
 			Rectangle clipping = gc.getClipping();
 			TargetLabel lastReference = null;
 			if(DEBUG) {

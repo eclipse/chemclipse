@@ -19,6 +19,7 @@ import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swtchart.extensions.charts.ChartOptions;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -39,7 +40,12 @@ public class ChromatogramAxisMilliseconds extends FieldEditorPreferencePage impl
 		addField(new StringFieldEditor(PreferenceConstants.P_FORMAT_X_AXIS_MILLISECONDS, "Format:", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_MILLISECONDS, "Show ", getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_X_AXIS_MILLISECONDS, "Position:", ChartOptions.POSITIONS, getFieldEditorParent()));
-		addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_X_AXIS_MILLISECONDS, "Color:", getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_X_AXIS_MILLISECONDS, "Position:", PreferenceConstants.POSITIONS, getFieldEditorParent()));
+		if(Display.isSystemDarkTheme()) {
+			addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_X_AXIS_MILLISECONDS_DARKTHEME, "Color:", getFieldEditorParent()));
+		} else {
+			addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_X_AXIS_MILLISECONDS, "Color:", getFieldEditorParent()));
+		}
 		addField(new StringFieldEditor(PreferenceConstants.P_FONT_NAME_X_AXIS_MILLISECONDS, "Font Name:", getFieldEditorParent()));
 		addField(new SpinnerFieldEditor(PreferenceConstants.P_FONT_SIZE_X_AXIS_MILLISECONDS, "Font Size:", PreferenceConstants.MIN_FONT_SIZE, PreferenceConstants.MAX_FONT_SIZE, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_FONT_STYLE_X_AXIS_MILLISECONDS, "Font Style:", ChartOptions.FONT_STYLES, getFieldEditorParent()));

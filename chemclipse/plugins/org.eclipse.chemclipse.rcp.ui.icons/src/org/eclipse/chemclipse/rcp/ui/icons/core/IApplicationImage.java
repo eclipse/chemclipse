@@ -149,7 +149,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_BATCHPROCESS = PATH_PREFIX + "batchprocess.gif";
 	String IMAGE_BATCHPROCESS_PEAKIDENT = PATH_PREFIX + "batchprocessPeakIdent.gif";
 	String IMAGE_CONFIGURE = PATH_PREFIX + "configure.gif";
-	String IMAGE_EXECUTE = PATH_PREFIX + "execute.gif";
+	String IMAGE_EXECUTE = PATH_PREFIX + "execute.png";
 	String IMAGE_EXECUTE_WARNING = PATH_PREFIX + "execute_warning.png";
 	String IMAGE_EXECUTE_ERROR = PATH_PREFIX + "execute_error.png";
 	String IMAGE_EXECUTE_AUTO_UPDATE = PATH_PREFIX + "execute_auto_update.png";

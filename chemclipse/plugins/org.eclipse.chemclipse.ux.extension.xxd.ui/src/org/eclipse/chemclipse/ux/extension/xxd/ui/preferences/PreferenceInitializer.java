@@ -348,6 +348,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_SHOW_X_AXIS_MILLISECONDS);
 		store.setDefault(PreferenceConstants.P_POSITION_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_POSITION_X_AXIS_MILLISECONDS);
 		store.setDefault(PreferenceConstants.P_COLOR_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_COLOR_X_AXIS_MILLISECONDS);
+		store.setDefault(PreferenceConstants.P_COLOR_X_AXIS_MILLISECONDS_DARKTHEME, PreferenceConstants.DEF_COLOR_X_AXIS_MILLISECONDS_DARKTHEME);
 		store.setDefault(PreferenceConstants.P_FONT_NAME_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_FONT_NAME_X_AXIS_MILLISECONDS);
 		store.setDefault(PreferenceConstants.P_FONT_SIZE_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_FONT_SIZE);
 		store.setDefault(PreferenceConstants.P_FONT_STYLE_X_AXIS_MILLISECONDS, PreferenceConstants.DEF_FONT_STYLE_X_AXIS_MILLISECONDS);
@@ -360,6 +361,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_SECONDS, PreferenceConstants.DEF_SHOW_X_AXIS_SECONDS);
 		store.setDefault(PreferenceConstants.P_POSITION_X_AXIS_SECONDS, PreferenceConstants.DEF_POSITION_X_AXIS_SECONDS);
 		store.setDefault(PreferenceConstants.P_COLOR_X_AXIS_SECONDS, PreferenceConstants.DEF_COLOR_X_AXIS_SECONDS);
+		store.setDefault(PreferenceConstants.P_COLOR_X_AXIS_SECONDS_DARKTHEME, PreferenceConstants.DEF_COLOR_X_AXIS_SECONDS_DARKTHEME);
 		store.setDefault(PreferenceConstants.P_FONT_NAME_X_AXIS_SECONDS, PreferenceConstants.DEF_FONT_NAME_X_AXIS_SECONDS);
 		store.setDefault(PreferenceConstants.P_FONT_SIZE_X_AXIS_SECONDS, PreferenceConstants.DEF_FONT_SIZE);
 		store.setDefault(PreferenceConstants.P_FONT_STYLE_X_AXIS_SECONDS, PreferenceConstants.DEF_FONT_STYLE_X_AXIS_SECONDS);
@@ -372,6 +374,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_MINUTES, PreferenceConstants.DEF_SHOW_X_AXIS_MINUTES);
 		store.setDefault(PreferenceConstants.P_POSITION_X_AXIS_MINUTES, PreferenceConstants.DEF_POSITION_X_AXIS_MINUTES);
 		store.setDefault(PreferenceConstants.P_COLOR_X_AXIS_MINUTES, PreferenceConstants.DEF_COLOR_X_AXIS_MINUTES);
+		store.setDefault(PreferenceConstants.P_COLOR_X_AXIS_MINUTES_DARKTHEME, PreferenceConstants.DEF_COLOR_X_AXIS_MINUTES_DARKTHEME);
 		store.setDefault(PreferenceConstants.P_FONT_NAME_X_AXIS_MINUTES, PreferenceConstants.DEF_FONT_NAME_X_AXIS_MINUTES);
 		store.setDefault(PreferenceConstants.P_FONT_SIZE_X_AXIS_MINUTES, PreferenceConstants.DEF_FONT_SIZE);
 		store.setDefault(PreferenceConstants.P_FONT_STYLE_X_AXIS_MINUTES, PreferenceConstants.DEF_FONT_STYLE_X_AXIS_MINUTES);
@@ -386,6 +389,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_SHOW_X_AXIS_SCANS, PreferenceConstants.DEF_SHOW_X_AXIS_SCANS);
 		store.setDefault(PreferenceConstants.P_POSITION_X_AXIS_SCANS, PreferenceConstants.DEF_POSITION_X_AXIS_SCANS);
 		store.setDefault(PreferenceConstants.P_COLOR_X_AXIS_SCANS, PreferenceConstants.DEF_COLOR_X_AXIS_SCANS);
+		store.setDefault(PreferenceConstants.P_COLOR_X_AXIS_SCANS_DARKTHEME, PreferenceConstants.DEF_COLOR_X_AXIS_SCANS_DARKTHEME);
 		store.setDefault(PreferenceConstants.P_FONT_NAME_X_AXIS_SCANS, PreferenceConstants.DEF_FONT_NAME_X_AXIS_SCANS);
 		store.setDefault(PreferenceConstants.P_FONT_SIZE_X_AXIS_SCANS, PreferenceConstants.DEF_FONT_SIZE);
 		store.setDefault(PreferenceConstants.P_FONT_STYLE_X_AXIS_SCANS, PreferenceConstants.DEF_FONT_STYLE_X_AXIS_SCANS);
@@ -398,6 +402,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_SHOW_Y_AXIS_INTENSITY, PreferenceConstants.DEF_SHOW_Y_AXIS_INTENSITY);
 		store.setDefault(PreferenceConstants.P_POSITION_Y_AXIS_INTENSITY, PreferenceConstants.DEF_POSITION_Y_AXIS_INTENSITY);
 		store.setDefault(PreferenceConstants.P_COLOR_Y_AXIS_INTENSITY, PreferenceConstants.DEF_COLOR_Y_AXIS_INTENSITY);
+		store.setDefault(PreferenceConstants.P_COLOR_Y_AXIS_INTENSITY_DARKTHEME, PreferenceConstants.DEF_COLOR_Y_AXIS_INTENSITY_DARKTHEME);
 		store.setDefault(PreferenceConstants.P_FONT_NAME_Y_AXIS_INTENSITY, PreferenceConstants.DEF_FONT_NAME_Y_AXIS_INTENSITY);
 		store.setDefault(PreferenceConstants.P_FONT_SIZE_Y_AXIS_INTENSITY, PreferenceConstants.DEF_FONT_SIZE);
 		store.setDefault(PreferenceConstants.P_FONT_STYLE_Y_AXIS_INTENSITY, PreferenceConstants.DEF_FONT_STYLE_Y_AXIS_INTENSITY);
@@ -410,6 +415,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_SHOW_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.DEF_SHOW_Y_AXIS_RELATIVE_INTENSITY);
 		store.setDefault(PreferenceConstants.P_POSITION_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.DEF_POSITION_Y_AXIS_RELATIVE_INTENSITY);
 		store.setDefault(PreferenceConstants.P_COLOR_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.DEF_COLOR_Y_AXIS_RELATIVE_INTENSITY);
+		store.setDefault(PreferenceConstants.P_COLOR_Y_AXIS_RELATIVE_INTENSITY_DARKTHEME, PreferenceConstants.DEF_COLOR_Y_AXIS_RELATIVE_INTENSITY_DARKTHEME);
 		store.setDefault(PreferenceConstants.P_FONT_NAME_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.DEF_FONT_NAME_Y_AXIS_RELATIVE_INTENSITY);
 		store.setDefault(PreferenceConstants.P_FONT_SIZE_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.DEF_FONT_SIZE);
 		store.setDefault(PreferenceConstants.P_FONT_STYLE_Y_AXIS_RELATIVE_INTENSITY, PreferenceConstants.DEF_FONT_STYLE_Y_AXIS_RELATIVE_INTENSITY);

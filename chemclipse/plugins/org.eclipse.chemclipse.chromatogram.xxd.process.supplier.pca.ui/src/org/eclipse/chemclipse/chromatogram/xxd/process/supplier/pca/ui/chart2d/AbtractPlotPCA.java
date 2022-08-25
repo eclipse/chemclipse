@@ -18,7 +18,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-import org.eclipse.chemclipse.swt.ui.support.Colors;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
@@ -50,14 +50,14 @@ public abstract class AbtractPlotPCA extends ScatterChart {
 		secondaryAxisSettingsX.setTitle("");
 		secondaryAxisSettingsX.setPosition(Position.Secondary);
 		secondaryAxisSettingsX.setDecimalFormat(decimalFormat);
-		secondaryAxisSettingsX.setColor(Colors.BLACK);
+		secondaryAxisSettingsX.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_LIST_FOREGROUND));
 		chartSettings.getSecondaryAxisSettingsListX().add(secondaryAxisSettingsX);
 		//
 		ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings("PC2", new PassThroughConverter());
 		secondaryAxisSettingsY.setTitle("");
 		secondaryAxisSettingsY.setPosition(Position.Secondary);
 		secondaryAxisSettingsY.setDecimalFormat(decimalFormat);
-		secondaryAxisSettingsY.setColor(Colors.BLACK);
+		secondaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_LIST_FOREGROUND));
 		chartSettings.getSecondaryAxisSettingsListY().add(secondaryAxisSettingsY);
 	}
 
@@ -92,7 +92,7 @@ public abstract class AbtractPlotPCA extends ScatterChart {
 		IChartSettings chartSettings = getChartSettings();
 		chartSettings.setTitle(title);
 		chartSettings.setTitleVisible(true);
-		chartSettings.setTitleColor(Colors.BLACK);
+		chartSettings.setTitleColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_LIST_FOREGROUND));
 		chartSettings.setOrientation(SWT.HORIZONTAL);
 		chartSettings.setHorizontalSliderVisible(false);
 		chartSettings.setVerticalSliderVisible(false);
@@ -106,9 +106,9 @@ public abstract class AbtractPlotPCA extends ScatterChart {
 		rangeRestriction.setExtend(0.25d);
 		//
 		chartSettings.setShowAxisZeroMarker(true);
-		chartSettings.setColorAxisZeroMarker(Colors.BLACK);
+		chartSettings.setColorAxisZeroMarker(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_LIST_FOREGROUND));
 		chartSettings.setShowSeriesLabelMarker(true);
-		chartSettings.setColorSeriesLabelMarker(Colors.BLACK);
+		chartSettings.setColorSeriesLabelMarker(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_LIST_FOREGROUND));
 		chartSettings.setCreateMenu(true);
 		chartSettings.setEnableCompress(false);
 		//
@@ -128,12 +128,12 @@ public abstract class AbtractPlotPCA extends ScatterChart {
 		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
 		primaryAxisSettingsX.setTitle("PC1");
 		primaryAxisSettingsX.setDecimalFormat(decimalFormat);
-		primaryAxisSettingsX.setColor(Colors.BLACK);
+		primaryAxisSettingsX.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_LIST_FOREGROUND));
 		//
 		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
 		primaryAxisSettingsY.setTitle("PC2");
 		primaryAxisSettingsY.setDecimalFormat(decimalFormat);
-		primaryAxisSettingsY.setColor(Colors.BLACK);
+		primaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_LIST_FOREGROUND));
 	}
 
 	protected void update(int pcX, int pcY) {

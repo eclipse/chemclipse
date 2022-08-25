@@ -33,7 +33,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
-import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -252,7 +251,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 
 		TabFolder tabFolder = new TabFolder(parent, SWT.TOP);
 		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
-		tabFolder.setBackground(Colors.WHITE);
+		tabFolder.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		//
 		sampleListUI = createSampleListUI(tabFolder);
 		preprocessingSettingsUI = createPreprocessingUI(tabFolder);

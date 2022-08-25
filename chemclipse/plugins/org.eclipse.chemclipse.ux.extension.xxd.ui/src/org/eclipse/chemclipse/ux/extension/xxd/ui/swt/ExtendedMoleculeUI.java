@@ -25,7 +25,6 @@ import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.services.IMoleculeImageService;
 import org.eclipse.chemclipse.swt.ui.services.ImageServiceInput;
-import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageMolecule;
@@ -294,7 +293,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 	private Canvas createCanvasMolecule(Composite parent) {
 
 		Canvas canvas = new Canvas(parent, SWT.FILL);
-		canvas.setBackground(Colors.WHITE);
+		canvas.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		//
 		canvas.addControlListener(new ControlAdapter() {
 
