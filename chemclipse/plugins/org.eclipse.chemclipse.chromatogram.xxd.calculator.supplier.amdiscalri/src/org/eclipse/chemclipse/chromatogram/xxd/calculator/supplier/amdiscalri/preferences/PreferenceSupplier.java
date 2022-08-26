@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2021 Lablicate GmbH.
+ * Copyright (c) 2014, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -71,6 +71,13 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final float MIN_MIN_REVERSE_MATCH_FACTOR = 0.0f;
 	public static final float MAX_MIN_REVERSE_MATCH_FACTOR = 100.0f;
 	//
+	public static final String P_LIST_PATH_IMPORT_FILE = "listPathImportCalibrationFile";
+	public static final String DEF_LIST_PATH_IMPORT_FILE = "";
+	public static final String P_LIST_PATH_IMPORT_TEMPLATE = "listPathImportTemplate";
+	public static final String DEF_LIST_PATH_IMPORT_TEMPLATE = "";
+	public static final String P_LIST_PATH_EXPORT_TEMPLATE = "listPathExportTemplate";
+	public static final String DEF_LIST_PATH_EXPORT_TEMPLATE = "";
+	//
 	private static IPreferenceSupplier preferenceSupplier;
 
 	public static IPreferenceSupplier INSTANCE() {
@@ -107,6 +114,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_NUMBER_OF_TARGETS, Integer.toString(DEF_NUMBER_OF_TARGETS));
 		defaultValues.put(P_MIN_MATCH_FACTOR, Float.toString(DEF_MIN_MATCH_FACTOR));
 		defaultValues.put(P_MIN_REVERSE_MATCH_FACTOR, Float.toString(DEF_MIN_REVERSE_MATCH_FACTOR));
+		defaultValues.put(P_LIST_PATH_IMPORT_FILE, DEF_LIST_PATH_IMPORT_FILE);
+		defaultValues.put(P_LIST_PATH_IMPORT_TEMPLATE, DEF_LIST_PATH_IMPORT_TEMPLATE);
+		defaultValues.put(P_LIST_PATH_EXPORT_TEMPLATE, DEF_LIST_PATH_EXPORT_TEMPLATE);
 		return defaultValues;
 	}
 
@@ -220,6 +230,36 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return preferences.getFloat(P_MIN_REVERSE_MATCH_FACTOR, DEF_MIN_REVERSE_MATCH_FACTOR);
 	}
 
+	public static String getListPathImportFile() {
+
+		return getFilterPath(P_LIST_PATH_IMPORT_FILE, DEF_LIST_PATH_IMPORT_FILE);
+	}
+
+	public static void setListPathImportFile(String filterPath) {
+
+		putString(P_LIST_PATH_IMPORT_FILE, filterPath);
+	}
+
+	public static String getListPathImportTemplate() {
+
+		return getFilterPath(P_LIST_PATH_IMPORT_TEMPLATE, DEF_LIST_PATH_IMPORT_TEMPLATE);
+	}
+
+	public static void setListPathImportTemplate(String filterPath) {
+
+		putString(P_LIST_PATH_IMPORT_TEMPLATE, filterPath);
+	}
+
+	public static String getListPathExportTemplate() {
+
+		return getFilterPath(P_LIST_PATH_EXPORT_TEMPLATE, DEF_LIST_PATH_EXPORT_TEMPLATE);
+	}
+
+	public static void setListPathExportTemplate(String filterPath) {
+
+		putString(P_LIST_PATH_EXPORT_TEMPLATE, filterPath);
+	}
+
 	private static CalculatorStrategy getCalculatorStrategy() {
 
 		IEclipsePreferences preferences = PreferenceSupplier.INSTANCE().getPreferences();
@@ -250,6 +290,17 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 			IEclipsePreferences eclipsePreferences = INSTANCE().getPreferences();
 			eclipsePreferences.put(key, filterPath);
 			eclipsePreferences.flush();
+		} catch(BackingStoreException e) {
+			logger.warn(e);
+		}
+	}
+
+	private static void putString(String key, String value) {
+
+		try {
+			IEclipsePreferences preferences = INSTANCE().getPreferences();
+			preferences.put(key, value);
+			preferences.flush();
 		} catch(BackingStoreException e) {
 			logger.warn(e);
 		}

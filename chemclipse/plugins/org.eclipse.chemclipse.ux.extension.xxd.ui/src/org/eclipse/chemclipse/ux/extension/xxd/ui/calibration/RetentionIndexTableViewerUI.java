@@ -13,34 +13,32 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.calibration;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.RetentionIndexContentProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.RetentionIndexEditingSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.RetentionIndexLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.RetentionIndexListFilter;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.RetentionIndexTableComparator;
+import org.eclipse.jface.viewers.IContentProvider;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
 
 public class RetentionIndexTableViewerUI extends ExtendedTableViewer {
 
-	public static final String NAME = "Name";
-	private String[] titles = {"Retention Time (Minutes)", "Retention Index", NAME};
-	private int[] bounds = {200, 150, 200};
-	private RetentionIndexListFilter retentionIndexListFilter;
+	private static final String[] TITLES = RetentionIndexLabelProvider.TITLES;
+	private static final int[] BOUNDS = RetentionIndexLabelProvider.BOUNDS;
+	//
+	private LabelProvider labelProvider = new RetentionIndexLabelProvider();
+	private IContentProvider contentProvider = new ListContentProvider();
+	private RetentionIndexListFilter retentionIndexListFilter = new RetentionIndexListFilter();
 	private IUpdateListener updateListener;
-
-	public RetentionIndexTableViewerUI(Composite parent) {
-
-		super(parent);
-		createColumns();
-	}
 
 	public RetentionIndexTableViewerUI(Composite parent, int style) {
 
 		super(parent, style);
-		createColumns();
+		initialize();
 	}
 
 	public void setSearchText(String searchText, boolean caseSensitive) {
@@ -49,14 +47,12 @@ public class RetentionIndexTableViewerUI extends ExtendedTableViewer {
 		refresh();
 	}
 
-	private void createColumns() {
+	private void initialize() {
 
-		createColumns(titles, bounds);
-		//
-		setLabelProvider(new RetentionIndexLabelProvider());
-		setContentProvider(new RetentionIndexContentProvider());
+		createColumns(TITLES, BOUNDS);
+		setLabelProvider(labelProvider);
+		setContentProvider(contentProvider);
 		setComparator(new RetentionIndexTableComparator());
-		retentionIndexListFilter = new RetentionIndexListFilter();
 		setFilters(new ViewerFilter[]{retentionIndexListFilter});
 		setEditingSupport();
 	}
@@ -66,7 +62,7 @@ public class RetentionIndexTableViewerUI extends ExtendedTableViewer {
 		List<TableViewerColumn> tableViewerColumns = getTableViewerColumns();
 		for(TableViewerColumn tableViewerColumn : tableViewerColumns) {
 			String columnLabel = tableViewerColumn.getColumn().getText();
-			if(columnLabel.equals(NAME)) {
+			if(columnLabel.equals(RetentionIndexLabelProvider.NAME)) {
 				tableViewerColumn.setEditingSupport(new RetentionIndexEditingSupport(this));
 			}
 		}

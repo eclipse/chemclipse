@@ -23,11 +23,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.CalibrationFileReader;
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.model.RetentionIndexMarker;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.CalculatorSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.settings.ResetterSettings;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
+import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
 import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
@@ -44,12 +47,33 @@ public class RetentionIndexCalculator {
 
 	private static final Logger logger = Logger.getLogger(RetentionIndexCalculator.class);
 	//
-	public static final String ALKANE_REGEX = "(C)(\\d+)";
+	public static final String ALKANE_PREFIX = "C";
+	public static final String ALKANE_REGEX = "(" + ALKANE_PREFIX + ")(\\d+)";
 	public static final int ALKANE_MISSING = 0;
 	public static final int INDEX_MISSING = 0;
 	//
 	private static final Pattern PATTERN_ALKANE = Pattern.compile(ALKANE_REGEX);
 	private static final String DESCRIPTION = "Retention Index Calculator";
+
+	public static void calculateIndex(IChromatogram<? extends IPeak> chromatogram, RetentionIndexMarker retentionIndexMarker, boolean processReferenceChromatograms) {
+
+		/*
+		 * Settings
+		 */
+		ISeparationColumnIndices separationColumnIndices = SeparationColumnFactory.getSeparationColumnIndices(SeparationColumnType.DEFAULT);
+		for(IRetentionIndexEntry retentionIndexEntry : retentionIndexMarker) {
+			separationColumnIndices.put(retentionIndexEntry);
+		}
+		/*
+		 * Calculate
+		 */
+		RetentionIndexCalculator.calculateIndex(chromatogram, separationColumnIndices);
+		if(processReferenceChromatograms) {
+			for(IChromatogram<? extends IPeak> referencedChromatogram : chromatogram.getReferencedChromatograms()) {
+				RetentionIndexCalculator.calculateIndex(referencedChromatogram, separationColumnIndices);
+			}
+		}
+	}
 
 	public static String[] getStandards() {
 
@@ -290,6 +314,45 @@ public class RetentionIndexCalculator {
 		return processingInfo;
 	}
 
+	/**
+	 * Calculates the retention indices for the given chromatogram and peaks.
+	 *
+	 * @param chromatogram
+	 * @param separationColumnIndices
+	 */
+	private static void calculateIndex(IChromatogram<? extends IPeak> chromatogram, ISeparationColumnIndices separationColumnIndices) {
+
+		if(separationColumnIndices != null) {
+			/*
+			 * Scans
+			 */
+			for(IScan scan : chromatogram.getScans()) {
+				int retentionTime = scan.getRetentionTime();
+				float retentionIndex = RetentionIndexMath.calculateRetentionIndex(retentionTime, separationColumnIndices);
+				scan.setRetentionIndex(retentionIndex);
+				/*
+				 * Calculate RI also for the optimized MS.
+				 */
+				if(scan instanceof IScanMSD) {
+					IScanMSD scanMSD = (IScanMSD)scan;
+					IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
+					if(optimizedMassSpectrum != null) {
+						optimizedMassSpectrum.setRetentionIndex(retentionIndex);
+					}
+				}
+			}
+			/*
+			 * Peaks
+			 */
+			for(IPeak peak : chromatogram.getPeaks()) {
+				IScan scan = peak.getPeakModel().getPeakMaximum();
+				int retentionTime = scan.getRetentionTime();
+				float retentionIndex = RetentionIndexMath.calculateRetentionIndex(retentionTime, separationColumnIndices);
+				scan.setRetentionIndex(retentionIndex);
+			}
+		}
+	}
+
 	@SuppressWarnings("rawtypes")
 	private ISeparationColumnIndices getSeparationColumnIndices(IChromatogramSelection chromatogramSelection, CalculatorSettings calculatorSettings) {
 
@@ -403,39 +466,6 @@ public class RetentionIndexCalculator {
 		for(IPeak peak : chromatogram.getPeaks()) {
 			IScan scan = peak.getPeakModel().getPeakMaximum();
 			scan.setRetentionIndex(retentionIndex);
-		}
-	}
-
-	private void calculateIndex(IChromatogram<? extends IPeak> chromatogram, ISeparationColumnIndices separationColumnIndices) {
-
-		if(separationColumnIndices != null) {
-			/*
-			 * Scans
-			 */
-			for(IScan scan : chromatogram.getScans()) {
-				int retentionTime = scan.getRetentionTime();
-				float retentionIndex = RetentionIndexMath.calculateRetentionIndex(retentionTime, separationColumnIndices);
-				scan.setRetentionIndex(retentionIndex);
-				/*
-				 * Calculate RI also for the optimized MS.
-				 */
-				if(scan instanceof IScanMSD) {
-					IScanMSD scanMSD = (IScanMSD)scan;
-					IScanMSD optimizedMassSpectrum = scanMSD.getOptimizedMassSpectrum();
-					if(optimizedMassSpectrum != null) {
-						optimizedMassSpectrum.setRetentionIndex(retentionIndex);
-					}
-				}
-			}
-			/*
-			 * Peaks
-			 */
-			for(IPeak peak : chromatogram.getPeaks()) {
-				IScan scan = peak.getPeakModel().getPeakMaximum();
-				int retentionTime = scan.getRetentionTime();
-				float retentionIndex = RetentionIndexMath.calculateRetentionIndex(retentionTime, separationColumnIndices);
-				scan.setRetentionIndex(retentionIndex);
-			}
 		}
 	}
 }

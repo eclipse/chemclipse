@@ -23,8 +23,8 @@
       <ChromatogramSupplier
             description="Exports RI Calibration Files"
             exportConverter="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core.ChromatogramExportConverter"
-            fileExtension=".CAL"
-            filterName="AMDIS RI Calibration (*.CAL)"
+            fileExtension=".cal"
+            filterName="AMDIS RI Calibration (*.cal)"
             id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.chromatogram.cal"
             importMagicNumberMatcher="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.core.MagicNumberMatcher"
             isExportable="true"

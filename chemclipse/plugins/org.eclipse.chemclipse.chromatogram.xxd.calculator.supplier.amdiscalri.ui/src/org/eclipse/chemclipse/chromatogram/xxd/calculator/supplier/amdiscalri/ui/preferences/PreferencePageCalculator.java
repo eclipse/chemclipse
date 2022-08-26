@@ -1,10 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2020 Lablicate GmbH.
+ * Copyright (c) 2014, 2022 Lablicate GmbH.
  * 
- * All rights reserved. This
- * program and the accompanying materials are made available under the terms of
- * the Eclipse Public License v1.0 which accompanies this distribution, and is
- * available at http://www.eclipse.org/legal/epl-v10.html
+ * All rights reserved.
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License v1.0 which accompanies this distribution,
+ * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
@@ -56,6 +56,12 @@ public class PreferencePageCalculator extends FieldEditorPreferencePage implemen
 		addField(new DirectoryFieldEditor(PreferenceSupplier.P_FILTER_PATH_INDEX_FILES, "Path Index Files:", getFieldEditorParent()));
 		addField(new DirectoryFieldEditor(PreferenceSupplier.P_FILTER_PATH_MODELS_MSD, "Path MSD Index Files:", getFieldEditorParent()));
 		addField(new DirectoryFieldEditor(PreferenceSupplier.P_FILTER_PATH_MODELS_CSD, "Path CSD Index Files:", getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("Retention Index Marker", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_LIST_PATH_IMPORT_FILE, "Import File", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_LIST_PATH_IMPORT_TEMPLATE, "Import Template", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_LIST_PATH_EXPORT_TEMPLATE, "Export Template", getFieldEditorParent()));
 	}
 
 	/*

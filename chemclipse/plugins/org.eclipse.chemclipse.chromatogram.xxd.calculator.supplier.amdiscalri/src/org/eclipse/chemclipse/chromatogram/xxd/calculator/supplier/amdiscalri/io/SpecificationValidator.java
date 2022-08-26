@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,6 +19,7 @@ public class SpecificationValidator {
 	 * Use only static methods.
 	 */
 	private SpecificationValidator() {
+
 	}
 
 	public static File validateSpecification(File file) {
@@ -32,12 +33,12 @@ public class SpecificationValidator {
 		File validFile;
 		String path = file.getAbsolutePath().toUpperCase();
 		if(file.isDirectory()) {
-			validFile = new File(file.getAbsolutePath() + File.separator + "ALKANES.CAL");
+			validFile = new File(file.getAbsolutePath() + File.separator + "ALKANES.cal");
 		} else {
 			if(path.endsWith(".")) {
-				validFile = new File(file.getAbsolutePath() + "CAL");
-			} else if(!path.endsWith(".CAL")) {
-				validFile = new File(file.getAbsolutePath() + ".CAL");
+				validFile = new File(file.getAbsolutePath() + "cal");
+			} else if(!path.endsWith(".cal")) {
+				validFile = new File(file.getAbsolutePath() + ".cal");
 			} else {
 				validFile = file;
 			}

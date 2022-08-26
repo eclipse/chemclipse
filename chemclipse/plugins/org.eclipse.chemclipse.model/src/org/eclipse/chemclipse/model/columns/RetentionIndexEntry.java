@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,9 +18,18 @@ public class RetentionIndexEntry implements IRetentionIndexEntry {
 	private String name;
 
 	public RetentionIndexEntry(int retentionTime, float retentionIndex, String name) {
+
 		this.retentionTime = retentionTime;
 		this.retentionIndex = retentionIndex;
 		this.name = name;
+	}
+
+	@Override
+	public void copyFrom(IRetentionIndexEntry retentionIndexEntry) {
+
+		this.retentionTime = retentionIndexEntry.getRetentionTime();
+		this.retentionIndex = retentionIndexEntry.getRetentionIndex();
+		this.name = retentionIndexEntry.getName();
 	}
 
 	@Override
@@ -51,7 +60,6 @@ public class RetentionIndexEntry implements IRetentionIndexEntry {
 		}
 	}
 
-	// -----------------------------equals, hashCode, toString
 	@Override
 	public boolean equals(Object otherObject) {
 
@@ -88,5 +96,4 @@ public class RetentionIndexEntry implements IRetentionIndexEntry {
 		builder.append("]");
 		return builder.toString();
 	}
-	// -----------------------------equals, hashCode, toString
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -62,9 +62,9 @@ public class CalibrationFileWriter {
 				printWriter.print(IColumnFormat.RI_VALUE_DELIMITER);
 				printWriter.print(retentionIndexEntry.getRetentionIndex());
 				printWriter.print(IColumnFormat.RI_VALUE_DELIMITER);
-				printWriter.print(100);
+				printWriter.print(100); // Fixed
 				printWriter.print(IColumnFormat.RI_VALUE_DELIMITER);
-				printWriter.print(999);
+				printWriter.print(999); // Fixed
 				printWriter.print(IColumnFormat.RI_VALUE_DELIMITER);
 				printWriter.println(retentionIndexEntry.getName());
 			}

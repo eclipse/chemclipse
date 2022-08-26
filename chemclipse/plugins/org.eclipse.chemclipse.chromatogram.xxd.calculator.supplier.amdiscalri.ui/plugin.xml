@@ -57,5 +57,13 @@
             class="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.icon.RetentionIndexMenuIcon"
             id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri">
       </icon>
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.icon.IndexResetMenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.resetri">
+      </icon>
+      <icon
+            class="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.icon.RetentionIndexMenuIcon"
+            id="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.retentionindex">
+      </icon>
    </extension>
 </plugin>

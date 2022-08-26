@@ -1,10 +1,10 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  * 
- * All rights reserved. This
- * program and the accompanying materials are made available under the terms of
- * the Eclipse Public License v1.0 which accompanies this distribution, and is
- * available at http://www.eclipse.org/legal/epl-v10.html
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
@@ -25,6 +25,21 @@ import org.eclipse.swt.graphics.Image;
 
 public class RetentionIndexLabelProvider extends LabelProvider implements ITableLabelProvider {
 
+	public static final String RETENTION_TIME = "Retention Time (Minutes)";
+	public static final String RETENTION_INDEX = "Retention Index";
+	public static final String NAME = "Name";
+	//
+	public static final String[] TITLES = { //
+			RETENTION_TIME, //
+			RETENTION_INDEX, //
+			NAME //
+	};
+	//
+	public static final int[] BOUNDS = { //
+			200, //
+			150, //
+			200 //
+	};
 	private DecimalFormat decimalFormat;
 
 	public RetentionIndexLabelProvider() {
@@ -71,7 +86,6 @@ public class RetentionIndexLabelProvider extends LabelProvider implements ITable
 
 	public Image getImage(Object element) {
 
-		Image image = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAK, IApplicationImage.SIZE_16x16);
-		return image;
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAK, IApplicationImage.SIZE_16x16);
 	}
 }

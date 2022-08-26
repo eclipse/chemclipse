@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,6 +18,12 @@ import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 
 public class CalibrationFile {
 
+	public static final String DESCRIPTION = "AMDIS Calibration File";
+	public static final String FILE_EXTENSION = ".cal";
+	public static final String FILE_NAME = DESCRIPTION.replaceAll("\\s", "") + FILE_EXTENSION;
+	public static final String FILTER_EXTENSION = "*" + FILE_EXTENSION;
+	public static final String FILTER_NAME = DESCRIPTION + " (*" + FILE_EXTENSION + ")";
+	//
 	private File file;
 	private ISeparationColumnIndices separationColumnIndices;
 

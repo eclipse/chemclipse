@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.c
 
 import java.io.File;
 
+import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.CalibrationFile;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.ChromatogramWriter;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.io.SpecificationValidator;
 import org.eclipse.chemclipse.converter.chromatogram.AbstractChromatogramExportConverter;
@@ -26,7 +27,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class ChromatogramExportConverter extends AbstractChromatogramExportConverter implements IChromatogramExportConverter {
 
 	private static final Logger logger = Logger.getLogger(ChromatogramExportConverter.class);
-	private static final String DESCRIPTION = "AMDIS *.cal Export Converter";
 
 	@Override
 	public IProcessingInfo<File> convert(File file, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) {
@@ -40,7 +40,7 @@ public class ChromatogramExportConverter extends AbstractChromatogramExportConve
 				processingInfo.setProcessingResult(file);
 			} catch(Exception e) {
 				logger.warn(e);
-				processingInfo.addErrorMessage(DESCRIPTION, "Something has definitely gone wrong with the file: " + file);
+				processingInfo.addErrorMessage(CalibrationFile.DESCRIPTION, "Something has definitely gone wrong with the file: " + file);
 			}
 		}
 		return processingInfo;
