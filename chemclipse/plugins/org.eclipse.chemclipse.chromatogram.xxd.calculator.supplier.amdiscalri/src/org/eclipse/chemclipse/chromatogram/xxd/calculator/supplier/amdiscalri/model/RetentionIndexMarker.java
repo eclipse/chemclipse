@@ -91,7 +91,10 @@ public class RetentionIndexMarker extends HashSet<IRetentionIndexEntry> {
 	public String extractSettings(Collection<IRetentionIndexEntry> settings) {
 
 		StringBuilder builder = new StringBuilder();
-		Iterator<IRetentionIndexEntry> iterator = settings.iterator();
+		List<IRetentionIndexEntry> indices = new ArrayList<>(settings);
+		Collections.sort(indices, (i1, i2) -> Integer.compare(i1.getRetentionTime(), i2.getRetentionTime()));
+		//
+		Iterator<IRetentionIndexEntry> iterator = indices.iterator();
 		while(iterator.hasNext()) {
 			IRetentionIndexEntry setting = iterator.next();
 			extractSetting(setting, builder);
