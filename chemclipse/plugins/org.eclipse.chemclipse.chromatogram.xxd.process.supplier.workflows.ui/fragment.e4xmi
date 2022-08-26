@@ -7,6 +7,6 @@
     <elements xsi:type="commands:Handler" xmi:id="_aMxJwCvBEeaU8utKPKf5-A" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.handler.sampleQuantReport" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.handlers.SampleQuantReportHandler" command="_TESEICvBEeaU8utKPKf5-A"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_9qR0IOnqEeW0usXcEwjpZw" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.process">
-    <elements xsi:type="menu:HandledMenuItem" xmi:id="_jJa7sCvBEeaU8utKPKf5-A" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.handledmenuitem.samplequantreport" label="Sample Quant Report" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/quantitationResults.gif" command="_TESEICvBEeaU8utKPKf5-A"/>
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_jJa7sCvBEeaU8utKPKf5-A" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.ui.handledmenuitem.samplequantreport" label="%SampleQuantReport" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/quantitationResults.gif" command="_TESEICvBEeaU8utKPKf5-A"/>
   </fragments>
 </fragment:ModelFragments>

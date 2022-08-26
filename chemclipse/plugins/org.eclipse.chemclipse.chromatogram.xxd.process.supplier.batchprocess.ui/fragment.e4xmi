@@ -7,6 +7,6 @@
     <elements xsi:type="commands:Handler" xmi:id="_atcXoECHEeKMcNE1hx3pmQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.ui.handler.batchProcess" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.ui/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.ui.handlers.BatchProcessHandler" command="_QPXPMECHEeKMcNE1hx3pmQ"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_iZxxMECHEeKMcNE1hx3pmQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.process">
-    <elements xsi:type="menu:HandledMenuItem" xmi:id="_rYQvIECHEeKMcNE1hx3pmQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.ui.handledmenuitem.batchProcess" label="Chromatogram Batch Process" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/batchprocess.gif" command="_QPXPMECHEeKMcNE1hx3pmQ"/>
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_rYQvIECHEeKMcNE1hx3pmQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.batchprocess.ui.handledmenuitem.batchProcess" label="%ChromatogramBatchProcess" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/batchprocess.gif" command="_QPXPMECHEeKMcNE1hx3pmQ"/>
   </fragments>
 </fragment:ModelFragments>

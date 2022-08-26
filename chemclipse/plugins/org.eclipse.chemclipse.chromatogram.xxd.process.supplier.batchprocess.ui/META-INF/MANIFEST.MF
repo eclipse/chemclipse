@@ -51,3 +51,4 @@ Require-Bundle: org.eclipse.ui,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-Vendor: ChemClipse
+Bundle-Localization: OSGI-INF/l10n/bundle

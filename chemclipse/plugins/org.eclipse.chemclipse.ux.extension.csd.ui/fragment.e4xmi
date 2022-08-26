@@ -7,6 +7,6 @@
     <elements xsi:type="commands:Handler" xmi:id="_3sbykL7jEeKcwbn54SGPtA" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.handler.openChromatogram" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.handlers.OpenHandlerCSD" command="_wELAsL7jEeKcwbn54SGPtA"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_8TAVEL7jEeKcwbn54SGPtA" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.file" positionInList="after:org.eclipse.chemclipse.rcp.app.ui.menuseparator.openChromatogram">
-    <elements xsi:type="menu:HandledMenuItem" xmi:id="_BNjjgL7kEeKcwbn54SGPtA" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.handledmenuitem.openChromatogram" label="Open Chromatogram (CSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/importChromatogramCSD.gif" command="_wELAsL7jEeKcwbn54SGPtA"/>
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_BNjjgL7kEeKcwbn54SGPtA" elementId="org.eclipse.chemclipse.ux.extension.csd.ui.handledmenuitem.openChromatogram" label="%OpenChromatogramCSD" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/importChromatogramCSD.gif" command="_wELAsL7jEeKcwbn54SGPtA"/>
   </fragments>
 </fragment:ModelFragments>
