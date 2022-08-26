@@ -64,3 +64,4 @@ Service-Component: OSGI-INF/chromatogramTypeXXD.xml,
  OSGI-INF/scanTypeUNLOAD.xml,
  OSGI-INF/peakTypeXXD.xml,
  OSGI-INF/peakTypeUNLOAD.xml
+Bundle-Localization: OSGI-INF/l10n/bundle

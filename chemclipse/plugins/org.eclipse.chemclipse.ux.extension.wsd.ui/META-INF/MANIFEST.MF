@@ -42,3 +42,4 @@ Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.annotation;version="[1.0.0,2.0.0)"
 Export-Package: org.eclipse.chemclipse.ux.extension.wsd.ui.support
+Bundle-Localization: OSGI-INF/l10n/bundle

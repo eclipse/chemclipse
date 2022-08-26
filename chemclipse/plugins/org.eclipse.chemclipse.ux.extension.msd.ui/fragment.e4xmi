@@ -13,11 +13,11 @@
     <elements xsi:type="commands:Handler" xmi:id="_a_b2sD6iEeaZw7wlcv9jBg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handler.resetDatabaseCacheMSD" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.msd.ui/org.eclipse.chemclipse.ux.extension.msd.ui.handlers.ResetDatabaseHandler" command="_R-Nt0D6iEeaZw7wlcv9jBg"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_ABSHADiEEeKLl-NzluZ-Gg" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.identifier" positionInList="before:org.eclipse.chemclipse.ux.extension.ui.menu.identifier.separator.misc">
-    <elements xsi:type="menu:HandledMenuItem" xmi:id="_DnBwYD6jEeaZw7wlcv9jBg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handledmenuitem.resetDatabaseCacheMSD" label="Reset Database Cache (MSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/reset.gif" command="_R-Nt0D6iEeaZw7wlcv9jBg">
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_DnBwYD6jEeaZw7wlcv9jBg" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handledmenuitem.resetDatabaseCacheMSD" label="%ResetDatabaseCacheMSD" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/reset.gif" command="_R-Nt0D6iEeaZw7wlcv9jBg">
       <visibleWhen xsi:type="ui:CoreExpression" xmi:id="_68-0kD6mEeaZw7wlcv9jBg" coreExpressionId="org.eclipse.chemclipse.ux.extension.ui.definitions.isChromatogramTypeXXD"/>
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_uImZ8L7lEeKcwbn54SGPtA" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.file" positionInList="after:org.eclipse.chemclipse.rcp.app.ui.menuseparator.openChromatogram">
-    <elements xsi:type="menu:HandledMenuItem" xmi:id="_eeZ9gL7bEeKcwbn54SGPtA" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handledmenuitem.openChromatogram" label="Open Chromatogram (MSD)" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/importChromatogramMSD.gif" command="_JewTwL7bEeKcwbn54SGPtA"/>
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_eeZ9gL7bEeKcwbn54SGPtA" elementId="org.eclipse.chemclipse.ux.extension.msd.ui.handledmenuitem.openChromatogram" label="%OpenChromatogramMSD" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/importChromatogramMSD.gif" command="_JewTwL7bEeKcwbn54SGPtA"/>
   </fragments>
 </fragment:ModelFragments>

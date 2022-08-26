@@ -7,6 +7,6 @@
     <elements xsi:type="commands:Handler" xmi:id="_Z89E4BklEea9O6zJ5dOHjQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.handler.createRetentionIndexFile" contributionURI="bundleclass://org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui/org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.handlers.CreateRetentionIndexFileHandler" command="_QQgNsBklEea9O6zJ5dOHjQ"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_zyJhQBklEea9O6zJ5dOHjQ" featurename="children" parentElementId="org.eclipse.chemclipse.ux.extension.ui.menu.process">
-    <elements xsi:type="menu:HandledMenuItem" xmi:id="_2f12kBklEea9O6zJ5dOHjQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.handledmenuitem.createRetentionIndexFile" label="Create Retention Index File" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/batchprocess.gif" command="_QQgNsBklEea9O6zJ5dOHjQ"/>
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_2f12kBklEea9O6zJ5dOHjQ" elementId="org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.handledmenuitem.createRetentionIndexFile" label="%CreateRetentionIndexFile" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/batchprocess.gif" command="_QQgNsBklEea9O6zJ5dOHjQ"/>
   </fragments>
 </fragment:ModelFragments>
