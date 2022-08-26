@@ -10,9 +10,6 @@
  *     Dr. Philip Wenig - initial API and implementation
  *     Christoph Läubrich - swt-tab-height is too low
  *******************************************************************************/
-.MWindow {
-	background-color:#F2F1F0;
-}
 
 .MTrimmedWindow {  
 	margin-top:2px;
@@ -30,7 +27,6 @@
 
 .MPartStack {
 	padding:0px 5px 7px;
-	background-color:#FFFFFF;
 }
 
 Composite#org-eclipse-chemclipse-ux-extension-ui-views-welcomeview-background {

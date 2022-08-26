@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,6 +17,7 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultsPCA;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -34,11 +35,13 @@ import org.eclipse.swtchart.extensions.core.SeriesData;
 public class ExplainedVarianceChart extends BarChart {
 
 	public ExplainedVarianceChart() {
+
 		super();
 		createControl();
 	}
 
 	public ExplainedVarianceChart(Composite parent, int style) {
+
 		super(parent, style);
 		createControl();
 	}
@@ -87,12 +90,12 @@ public class ExplainedVarianceChart extends BarChart {
 		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
 		primaryAxisSettingsX.setTitle("Principal Component");
 		primaryAxisSettingsX.setDecimalFormat(ValueFormat.getDecimalFormatEnglish());
-		primaryAxisSettingsX.setColor(Colors.BLACK);
+		primaryAxisSettingsX.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_LIST_FOREGROUND));
 		//
 		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
 		primaryAxisSettingsY.setTitle("Explained Variance (Cumulative)");
 		primaryAxisSettingsY.setDecimalFormat(ValueFormat.getDecimalFormatEnglish());
-		primaryAxisSettingsY.setColor(Colors.BLACK);
+		primaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_LIST_FOREGROUND));
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -107,7 +110,7 @@ public class ExplainedVarianceChart extends BarChart {
 			primaryAxisSettingsX.setCategorySeries(getCategories(resultsPCA));
 			applySettings(chartSettings);
 			//
-			List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
+			List<IBarSeriesData> barSeriesDataList = new ArrayList<>();
 			ISeriesData seriesData = getSeries(resultsPCA);
 			IBarSeriesData barSeriesData = new BarSeriesData(seriesData);
 			IBarSeriesSettings settings = barSeriesData.getSettings();
@@ -138,7 +141,6 @@ public class ExplainedVarianceChart extends BarChart {
 
 		double[] ySeries = pcaResults.getCumulativeExplainedVariances();
 		double[] xSeries = new double[ySeries.length];
-		ISeriesData seriesData = new SeriesData(xSeries, ySeries, "Explained Variances (Cumulative)");
-		return seriesData;
+		return new SeriesData(xSeries, ySeries, "Explained Variances (Cumulative)");
 	}
 }

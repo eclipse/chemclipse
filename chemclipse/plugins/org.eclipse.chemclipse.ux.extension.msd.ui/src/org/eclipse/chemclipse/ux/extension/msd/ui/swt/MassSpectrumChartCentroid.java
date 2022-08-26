@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,6 +22,7 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.provider.BarSeriesIon;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.provider.BarSeriesIonComparator;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.provider.UpdateMenuEntry;
@@ -65,11 +66,13 @@ public class MassSpectrumChartCentroid extends BarChart implements IMassSpectrum
 	private IScanMSD massSpectrum = null;
 
 	public MassSpectrumChartCentroid() {
+
 		super();
 		initialize();
 	}
 
 	public MassSpectrumChartCentroid(Composite parent, int style) {
+
 		super(parent, style);
 		initialize();
 	}
@@ -131,12 +134,12 @@ public class MassSpectrumChartCentroid extends BarChart implements IMassSpectrum
 		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
 		primaryAxisSettingsX.setTitle("m/z");
 		primaryAxisSettingsX.setDecimalFormat(new DecimalFormat(("0.0##"), new DecimalFormatSymbols(Locale.ENGLISH)));
-		primaryAxisSettingsX.setColor(getDisplay().getSystemColor(SWT.COLOR_BLACK));
+		primaryAxisSettingsX.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_LIST_FOREGROUND));
 		//
 		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
 		primaryAxisSettingsY.setTitle("Intensity");
 		primaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.0#E0"), new DecimalFormatSymbols(Locale.ENGLISH)));
-		primaryAxisSettingsY.setColor(getDisplay().getSystemColor(SWT.COLOR_BLACK));
+		primaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_LIST_FOREGROUND));
 	}
 
 	private void addSecondaryAxisSet(IChartSettings chartSettings) {
@@ -144,7 +147,7 @@ public class MassSpectrumChartCentroid extends BarChart implements IMassSpectrum
 		ISecondaryAxisSettings secondaryAxisSettingsY = new SecondaryAxisSettings("Relative Intensity [%]", new PercentageConverter(SWT.VERTICAL, true));
 		secondaryAxisSettingsY.setPosition(Position.Secondary);
 		secondaryAxisSettingsY.setDecimalFormat(new DecimalFormat(("0.00"), new DecimalFormatSymbols(Locale.ENGLISH)));
-		secondaryAxisSettingsY.setColor(getDisplay().getSystemColor(SWT.COLOR_BLACK));
+		secondaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_LIST_FOREGROUND));
 		chartSettings.getSecondaryAxisSettingsListY().add(secondaryAxisSettingsY);
 	}
 
@@ -153,7 +156,7 @@ public class MassSpectrumChartCentroid extends BarChart implements IMassSpectrum
 		/*
 		 * Plot the series name above the entry.
 		 */
-		IPlotArea plotArea = (IPlotArea)getBaseChart().getPlotArea();
+		IPlotArea plotArea = getBaseChart().getPlotArea();
 		plotArea.addCustomPaintListener(new ICustomPaintListener() {
 
 			@Override
@@ -198,7 +201,7 @@ public class MassSpectrumChartCentroid extends BarChart implements IMassSpectrum
 
 		Point point = barSeriesIon.getPoint();
 		String label = getLabel(barSeriesIon.getMz());
-		boolean negative = (barSeriesIon.getIntensity() < 0) ? true : false;
+		boolean negative = (barSeriesIon.getIntensity() < 0);
 		Point labelSize = e.gc.textExtent(label);
 		int x = (int)(point.x + 0.5d - labelSize.x / 2.0d);
 		int y = point.y;
@@ -233,7 +236,7 @@ public class MassSpectrumChartCentroid extends BarChart implements IMassSpectrum
 
 	private List<BarSeriesIon> getBarSeriesIonList() {
 
-		List<BarSeriesIon> barSeriesIons = new ArrayList<BarSeriesIon>();
+		List<BarSeriesIon> barSeriesIons = new ArrayList<>();
 		//
 		int widthPlotArea = getBaseChart().getPlotArea().getSize().x;
 		ISeries<?>[] series = getBaseChart().getSeriesSet().getSeries();

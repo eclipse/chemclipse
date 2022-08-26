@@ -64,21 +64,21 @@
       <children xsi:type="menu:ToolBarSeparator" xmi:id="_blu0oINGEeOuPY34hxPAxA" elementId="org.eclipse.chemclipse.ux.extension.ui.toolbarseparator.1"/>
       <children xsi:type="menu:HandledToolItem" xmi:id="_fX4dUFxGEeOAeeYL1z-yzQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handledtoolitem.1" label="Previous Chromatogram" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/arrowBackward.gif" command="_OfJloFxGEeOAeeYL1z-yzQ"/>
       <children xsi:type="menu:HandledToolItem" xmi:id="_-t6B0FxCEeOAeeYL1z-yzQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handledtoolitem.0" label="Next Chromatogram" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/arrowForward.gif" command="_x1FVQFxCEeOAeeYL1z-yzQ"/>
-      <children xsi:type="menu:HandledToolItem" xmi:id="_qw_0gDhoEeKHL-DfrT7KNQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handledtoolitem.createSnapshot" label="Create Snapshot" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/create_snapshot.png" command="_hheJ4DhoEeKHL-DfrT7KNQ"/>
+      <children xsi:type="menu:HandledToolItem" xmi:id="_qw_0gDhoEeKHL-DfrT7KNQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handledtoolitem.createSnapshot" label="Create Snapshot" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/camera.png" command="_hheJ4DhoEeKHL-DfrT7KNQ"/>
       <children xsi:type="menu:ToolBarSeparator" xmi:id="_LQEasMCEEeOvhYBWy9aiDQ" elementId="org.eclipse.chemclipse.ux.extension.ui.toolbarseparator.15"/>
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_nUgn0NyxEeKWl9EwadOLIw" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.file" positionInList="after:org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.saveAll">
-    <elements xsi:type="menu:HandledMenuItem" xmi:id="_swyDQNyxEeKWl9EwadOLIw" elementId="org.eclipse.chemclipse.ux.extension.ui.handledmenuitem.saveAs" label="Save As..." iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/saveas.gif" command="_Sf8MsNyxEeKWl9EwadOLIw"/>
+    <elements xsi:type="menu:HandledMenuItem" xmi:id="_swyDQNyxEeKWl9EwadOLIw" elementId="org.eclipse.chemclipse.ux.extension.ui.handledmenuitem.saveAs" label="Save As..." iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/saveas_edit.png" command="_Sf8MsNyxEeKWl9EwadOLIw"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_7wPFINyxEeKWl9EwadOLIw" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.toolbar.main">
-    <elements xsi:type="menu:HandledToolItem" xmi:id="__3wUINyxEeKWl9EwadOLIw" elementId="org.eclipse.chemclipse.ux.extension.ui.handledtoolitem.saveAs" label="Save As..." iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/saveas.gif" command="_Sf8MsNyxEeKWl9EwadOLIw"/>
+    <elements xsi:type="menu:HandledToolItem" xmi:id="__3wUINyxEeKWl9EwadOLIw" elementId="org.eclipse.chemclipse.ux.extension.ui.handledtoolitem.saveAs" label="Save As..." iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/saveas_edit.png" command="_Sf8MsNyxEeKWl9EwadOLIw"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_mLKEkMxrEeOp3IEcthiWqQ" featurename="sharedElements" parentElementId="org.eclipse.chemclipse.rcp.app.ui.trimmedwindow.main">
     <elements xsi:type="basic:Part" xmi:id="_sEZv4MxrEeOp3IEcthiWqQ" elementId="org.eclipse.chemclipse.ux.extension.ui.part.welcomeView" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.ui/org.eclipse.chemclipse.ux.extension.ui.views.WelcomeView" label="Welcome" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/log.gif"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_mmvNUMxrEeOp3IEcthiWqQ" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main">
-    <elements xsi:type="advanced:Perspective" xmi:id="_0k-CwMxrEeOp3IEcthiWqQ" elementId="org.eclipse.chemclipse.ux.extension.ui.perspective.welcome" label="Welcome" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/info.gif">
+    <elements xsi:type="advanced:Perspective" xmi:id="_0k-CwMxrEeOp3IEcthiWqQ" elementId="org.eclipse.chemclipse.ux.extension.ui.perspective.welcome" label="Welcome" iconURI="platform:/plugin/org.eclipse.jface/icons/full/message_info.png">
       <children xsi:type="advanced:Placeholder" xmi:id="_BNUDUMxsEeOp3IEcthiWqQ" elementId="org.eclipse.chemclipse.ux.extension.ui.part.welcomeView" ref="_sEZv4MxrEeOp3IEcthiWqQ" closeable="true"/>
     </elements>
   </fragments>

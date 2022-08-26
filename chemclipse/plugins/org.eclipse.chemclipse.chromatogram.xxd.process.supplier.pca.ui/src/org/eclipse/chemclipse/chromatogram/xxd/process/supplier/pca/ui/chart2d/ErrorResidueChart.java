@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Evalua
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultsPCA;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -90,12 +91,12 @@ public class ErrorResidueChart extends BarChart {
 		IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
 		primaryAxisSettingsX.setTitle("Sample Name");
 		primaryAxisSettingsX.setDecimalFormat(ValueFormat.getDecimalFormatEnglish());
-		primaryAxisSettingsX.setColor(Colors.BLACK);
+		primaryAxisSettingsX.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_LIST_FOREGROUND));
 		//
 		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
 		primaryAxisSettingsY.setTitle("Error Values");
 		primaryAxisSettingsY.setDecimalFormat(ValueFormat.getDecimalFormatEnglish());
-		primaryAxisSettingsY.setColor(Colors.BLACK);
+		primaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_LIST_FOREGROUND));
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -152,7 +153,6 @@ public class ErrorResidueChart extends BarChart {
 			ySeries[i] = pcaResult.getErrorMemberShip();
 		}
 		//
-		ISeriesData seriesData = new SeriesData(xSeries, ySeries, "Error Residues");
-		return seriesData;
+		return new SeriesData(xSeries, ySeries, "Error Residues");
 	}
 }

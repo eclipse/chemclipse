@@ -204,14 +204,14 @@ public class ScanChartUI extends ScrollableChart {
 			//
 			if(usedSignalType.equals(SignalType.PROFILE)) {
 				setChartType(ChartType.LINE);
-				List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+				List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 				ILineSeriesData lineSeriesData = scanChartSupport.getLineSeriesData(scan, "", false);
 				lineSeriesData.getSettings().setLineColor(colorScan1);
 				lineSeriesDataList.add(lineSeriesData);
 				addLineSeriesData(lineSeriesDataList);
 			} else {
 				setChartType(ChartType.BAR);
-				List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
+				List<IBarSeriesData> barSeriesDataList = new ArrayList<>();
 				IBarSeriesData barSeriesData = scanChartSupport.getBarSeriesData(scan, "", false);
 				barSeriesData.getSettings().setBarColor(colorScan1);
 				barSeriesDataList.add(barSeriesData);
@@ -247,7 +247,7 @@ public class ScanChartUI extends ScrollableChart {
 			//
 			if(usedSignalType.equals(SignalType.PROFILE)) {
 				setChartType(ChartType.LINE);
-				List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+				List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 				ILineSeriesData lineSeriesDataScan1 = scanChartSupport.getLineSeriesData(scan1, labelScan1, false);
 				ILineSeriesData lineSeriesDataScan2 = scanChartSupport.getLineSeriesData(scan2, labelScan2, mirrored);
 				lineSeriesDataScan1.getSettings().setLineColor(colorScan1);
@@ -257,7 +257,7 @@ public class ScanChartUI extends ScrollableChart {
 				addLineSeriesData(lineSeriesDataList);
 			} else {
 				setChartType(ChartType.BAR);
-				List<IBarSeriesData> barSeriesDataList = new ArrayList<IBarSeriesData>();
+				List<IBarSeriesData> barSeriesDataList = new ArrayList<>();
 				IBarSeriesData barSeriesDataScan1 = scanChartSupport.getBarSeriesData(scan1, labelScan1, false);
 				IBarSeriesData barSeriesDataScan2 = scanChartSupport.getBarSeriesData(scan2, labelScan2, mirrored);
 				IBarSeriesSettings barSeriesSettings1 = barSeriesDataScan1.getSettings();
@@ -311,14 +311,12 @@ public class ScanChartUI extends ScrollableChart {
 	private boolean isForceZeroMinY(IScan scan) {
 
 		boolean forceZeroY = false;
-		if(scan instanceof IScanMSD) {
-			IScanMSD scanMSD = (IScanMSD)scan;
-			forceZeroY = (scanMSD.getNumberOfIons() == 1) ? true : false;
+		if(scan instanceof IScanMSD scanMSD) {
+			forceZeroY = (scanMSD.getNumberOfIons() == 1);
 		} else if(scan instanceof IScanCSD) {
 			forceZeroY = true; // Only 1 signal contained.
-		} else if(scan instanceof IScanWSD) {
-			IScanWSD scanWSD = (IScanWSD)scan;
-			forceZeroY = (scanWSD.getNumberOfScanSignals() == 1) ? true : false;
+		} else if(scan instanceof IScanWSD scanWSD) {
+			forceZeroY = (scanWSD.getNumberOfScanSignals() == 1);
 		}
 		return forceZeroY;
 	}
@@ -327,8 +325,8 @@ public class ScanChartUI extends ScrollableChart {
 
 		IChartSettings chartSettings = getChartSettings();
 		RangeRestriction rangeRestriction = chartSettings.getRangeRestriction();
-		rangeRestriction.setZeroY((mirrored) ? false : true);
-		rangeRestriction.setForceZeroMinY((mirrored) ? true : false);
+		rangeRestriction.setZeroY(!mirrored);
+		rangeRestriction.setForceZeroMinY(mirrored);
 		rangeRestriction.setExtendTypeY(RangeRestriction.ExtendType.RELATIVE);
 		rangeRestriction.setExtendMinY((mirrored) ? 0.25d : 0.0d);
 		rangeRestriction.setExtendMaxY(0.25d);
@@ -356,11 +354,10 @@ public class ScanChartUI extends ScrollableChart {
 
 		DataType usedDataType;
 		if(dataType.equals(DataType.AUTO_DETECT)) {
-			if(scan instanceof IScanMSD) {
+			if(scan instanceof IScanMSD scanMSD) {
 				/*
 				 * MSD
 				 */
-				IScanMSD scanMSD = (IScanMSD)scan;
 				if(scanMSD.isTandemMS()) {
 					usedDataType = DataType.MSD_TANDEM;
 				} else {
@@ -391,13 +388,11 @@ public class ScanChartUI extends ScrollableChart {
 			 * Default is centroid.
 			 */
 			usedSignalType = SignalType.CENTROID;
-			if(scan instanceof IRegularMassSpectrum) {
-				IRegularMassSpectrum massSpectrum = (IRegularMassSpectrum)scan;
+			if(scan instanceof IRegularMassSpectrum massSpectrum) {
 				if(massSpectrum.getMassSpectrumType() == 1) {
 					usedSignalType = SignalType.PROFILE;
 				}
-			} else if(scan instanceof IScanWSD) {
-				IScanWSD scanWSD = (IScanWSD)scan;
+			} else if(scan instanceof IScanWSD scanWSD) {
 				if(scanWSD.getNumberOfScanSignals() > 1) {
 					usedSignalType = SignalType.PROFILE;
 				} else {
@@ -437,11 +432,10 @@ public class ScanChartUI extends ScrollableChart {
 
 	private void extractCustomLabels(IScan scan) {
 
-		if(scan instanceof IScanMSD) {
+		if(scan instanceof IScanMSD scanMSD) {
 			/*
 			 * MSD
 			 */
-			IScanMSD scanMSD = (IScanMSD)scan;
 			if(scanMSD.isTandemMS()) {
 				for(IIon ion : scanMSD.getIons()) {
 					IIonTransition ionTransition = ion.getIonTransition();
@@ -473,6 +467,7 @@ public class ScanChartUI extends ScrollableChart {
 		 * Settings
 		 */
 		IChartSettings chartSettings = getChartSettings();
+		chartSettings.setTitle("");
 		chartSettings.setCreateMenu(true);
 		chartSettings.setEnableCompress(enableCompress);
 		//
@@ -533,7 +528,7 @@ public class ScanChartUI extends ScrollableChart {
 		/*
 		 * Suspend the update when adding new data to improve the performance.
 		 */
-		if(barSeriesDataList != null && barSeriesDataList.size() > 0) {
+		if(barSeriesDataList != null && !barSeriesDataList.isEmpty()) {
 			BaseChart baseChart = getBaseChart();
 			baseChart.suspendUpdate(true);
 			for(IBarSeriesData barSeriesData : barSeriesDataList) {
@@ -572,7 +567,7 @@ public class ScanChartUI extends ScrollableChart {
 		/*
 		 * Suspend the update when adding new data to improve the performance.
 		 */
-		if(lineSeriesDataList != null && lineSeriesDataList.size() > 0) {
+		if(lineSeriesDataList != null && !lineSeriesDataList.isEmpty()) {
 			BaseChart baseChart = getBaseChart();
 			baseChart.suspendUpdate(true);
 			for(ILineSeriesData lineSeriesData : lineSeriesDataList) {
@@ -619,7 +614,7 @@ public class ScanChartUI extends ScrollableChart {
 		//
 		Point point = barSeriesValue.getPoint();
 		String label = (useX) ? getLabel(barSeriesValue.getX()) : getLabel(barSeriesValue.getY());
-		boolean negative = (barSeriesValue.getY() < 0) ? true : false;
+		boolean negative = (barSeriesValue.getY() < 0);
 		Point labelSize = e.gc.textExtent(label);
 		int x = (int)(point.x + 0.5d - labelSize.x / 2.0d);
 		int y = point.y;
@@ -661,7 +656,7 @@ public class ScanChartUI extends ScrollableChart {
 	@SuppressWarnings({"rawtypes"})
 	private List<BarSeriesValue> getBarSeriesValuesList() {
 
-		List<BarSeriesValue> barSeriesIons = new ArrayList<BarSeriesValue>();
+		List<BarSeriesValue> barSeriesIons = new ArrayList<>();
 		//
 		int widthPlotArea = getBaseChart().getPlotArea().getSize().x;
 		ISeries[] series = getBaseChart().getSeriesSet().getSeries();
