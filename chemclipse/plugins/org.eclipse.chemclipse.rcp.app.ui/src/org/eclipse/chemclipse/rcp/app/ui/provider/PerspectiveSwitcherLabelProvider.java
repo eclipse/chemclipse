@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -36,9 +36,6 @@ public class PerspectiveSwitcherLabelProvider extends LabelProvider implements I
 		if(columnIndex == 0 && element instanceof MPerspective) {
 			MPerspective perspective = (MPerspective)element;
 			try {
-				/*
-				 * TODO dispose image
-				 */
 				URL iconURL = new URL(perspective.getIconURI());
 				iconImage = imageMap.get(iconURL);
 				if(iconImage == null) {
@@ -85,9 +82,14 @@ public class PerspectiveSwitcherLabelProvider extends LabelProvider implements I
 					text = perspective.getLabel();
 					if(text == null || text.equals("")) {
 						text = "Nameless perspective";
-					}
-					if(text.startsWith("<") && text.endsWith(">")) {
+					} else if(text.startsWith("<") && text.endsWith(">")) {
 						text = text.substring(1, text.length() - 1);
+						if(text.startsWith("%")) {
+							/*
+							 * TODO - Translate
+							 */
+							text = text.substring(1, text.length());
+						}
 					}
 					break;
 				default:

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -39,10 +39,12 @@ public class PerspectiveChooserDialog extends Dialog {
 	private String preferenceKey;
 
 	public PerspectiveChooserDialog(Shell parentShell, String title, String message) {
+
 		this(parentShell, title, message, Activator.getDefault().getPreferenceStore(), PreferenceConstants.P_CHANGE_PERSPECTIVE_AUTOMATICALLY);
 	}
 
 	public PerspectiveChooserDialog(Shell parentShell, String title, String message, IPreferenceStore preferenceStore, String preferenceKey) {
+
 		super(parentShell);
 		this.preferenceStore = preferenceStore;
 		this.preferenceKey = preferenceKey;
