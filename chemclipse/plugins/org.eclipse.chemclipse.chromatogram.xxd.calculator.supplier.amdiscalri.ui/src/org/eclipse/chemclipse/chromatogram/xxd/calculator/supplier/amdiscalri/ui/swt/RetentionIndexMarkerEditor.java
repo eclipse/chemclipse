@@ -268,8 +268,8 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 
 				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
 				fileDialog.setText(IMPORT_TITLE_FILE);
-				fileDialog.setFilterExtensions(new String[]{CalibrationFile.FILTER_EXTENSION, CalibrationFile.FILTER_EXTENSION.toUpperCase()});
-				fileDialog.setFilterNames(new String[]{CalibrationFile.FILTER_NAME, CalibrationFile.FILTER_NAME});
+				fileDialog.setFilterExtensions(new String[]{CalibrationFile.FILTER_EXTENSION + ";" + CalibrationFile.FILTER_EXTENSION.toUpperCase()});
+				fileDialog.setFilterNames(new String[]{CalibrationFile.FILTER_NAME});
 				fileDialog.setFilterPath(PreferenceSupplier.getListPathImportFile());
 				String path = fileDialog.open();
 				if(path != null) {

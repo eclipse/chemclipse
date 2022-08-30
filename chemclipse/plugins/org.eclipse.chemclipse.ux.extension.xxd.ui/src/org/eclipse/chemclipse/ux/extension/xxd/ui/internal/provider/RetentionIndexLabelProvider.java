@@ -40,12 +40,8 @@ public class RetentionIndexLabelProvider extends LabelProvider implements ITable
 			150, //
 			200 //
 	};
-	private DecimalFormat decimalFormat;
-
-	public RetentionIndexLabelProvider() {
-
-		decimalFormat = ValueFormat.getDecimalFormatEnglish();
-	}
+	//
+	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0000");
 
 	@Override
 	public Image getColumnImage(Object element, int columnIndex) {
