@@ -31,7 +31,7 @@ public class SpecificationValidator {
 		 * Check the extension.
 		 */
 		File validFile;
-		String path = file.getAbsolutePath().toUpperCase();
+		String path = file.getAbsolutePath().toLowerCase();
 		if(file.isDirectory()) {
 			validFile = new File(file.getAbsolutePath() + File.separator + "ALKANES.cal");
 		} else {
