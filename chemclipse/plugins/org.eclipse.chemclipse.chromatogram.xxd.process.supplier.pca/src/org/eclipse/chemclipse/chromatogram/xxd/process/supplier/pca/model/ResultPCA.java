@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2020 Lablicate GmbH.
+ * Copyright (c) 2013, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,8 +23,10 @@ public class ResultPCA implements IResultPCA {
 	private String name;
 	private ISample sample;
 	private double[] sampleData;
+	private String rgb = "255,0,0";
 
 	public ResultPCA(ISample sample) {
+
 		this.isDisplayed = true;
 		this.sample = sample;
 	}
@@ -105,5 +107,15 @@ public class ResultPCA implements IResultPCA {
 	public void setSampleData(double[] sampleData) {
 
 		this.sampleData = sampleData;
+	}
+
+	public String getRGB() {
+
+		return rgb;
+	}
+
+	public void setRGB(String rgb) {
+
+		this.rgb = rgb;
 	}
 }
