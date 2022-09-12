@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,12 +16,16 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -46,9 +50,11 @@ public class ExtendedFeatureListUI extends Composite implements IExtendedPartUI 
 
 	public void setInput(EvaluationPCA evaluationPCA) {
 
-		this.evaluationPCA = evaluationPCA;
-		updateWidgets();
-		updateInfoLabel();
+		if(this.evaluationPCA != evaluationPCA || evaluationPCA == null) {
+			this.evaluationPCA = evaluationPCA;
+			updateWidgets();
+			updateInfoLabel();
+		}
 	}
 
 	private void createControl() {
@@ -75,10 +81,11 @@ public class ExtendedFeatureListUI extends Composite implements IExtendedPartUI 
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(3, false));
+		composite.setLayout(new GridLayout(4, false));
 		//
 		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
 		buttonToolbarSearch = createButtonToggleToolbar(composite, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
+		createButtonReset(composite);
 		createSettingsButton(composite);
 	}
 
@@ -114,6 +121,24 @@ public class ExtendedFeatureListUI extends Composite implements IExtendedPartUI 
 		toolbarInfo.set(informationUI);
 	}
 
+	private Button createButtonReset(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Reset the 3D plot.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				applySettings();
+			}
+		});
+		//
+		return button;
+	}
+
 	private void createSettingsButton(Composite parent) {
 
 		createSettingsButton(parent, Arrays.asList(PreferencePage.class), new ISettingsHandler() {
@@ -129,6 +154,7 @@ public class ExtendedFeatureListUI extends Composite implements IExtendedPartUI 
 	private void applySettings() {
 
 		updateWidgets();
+		updateInfoLabel();
 	}
 
 	private void updateWidgets() {

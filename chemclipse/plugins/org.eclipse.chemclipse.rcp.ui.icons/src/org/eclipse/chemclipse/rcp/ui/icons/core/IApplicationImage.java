@@ -102,6 +102,7 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_SAMPLE_ISTD_QUALIFIER = PATH_PREFIX + "sample-istd-qualifier.gif";
 	String IMAGE_SAMPLE_QC = PATH_PREFIX + "sample-qc.gif";
 	String IMAGE_SAMPLE_QC_QUALIFIER = PATH_PREFIX + "sample-qc-qualifier.gif";
+	String IMAGE_SAMPLE_COLORIZE = PATH_PREFIX + "sample-colorize.gif";
 	//
 	String IMAGE_PREFERENCES = PATH_PREFIX + "preferences.gif";
 	String IMAGE_SETTINGS_PULL = PATH_PREFIX + "settings_pull.png";

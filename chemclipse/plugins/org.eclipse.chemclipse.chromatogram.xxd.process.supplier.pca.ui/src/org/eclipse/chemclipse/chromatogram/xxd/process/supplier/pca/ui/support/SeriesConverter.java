@@ -117,7 +117,6 @@ public class SeriesConverter {
 		 * Group Colors
 		 */
 		List<IResultPCA> resultList = resultsPCA.getPcaResultList();
-		Map<String, Color> colorMap = ColorSupport.getColorMapResults(resultList); // Create a default mapping, when running the process.
 		LabelOptionPCA labelOptionPCA = resultsPCA.getPcaSettings().getLabelOptionPCA();
 		//
 		for(int i = 0; i < resultList.size(); i++) {
@@ -163,7 +162,7 @@ public class SeriesConverter {
 			scatterSeriesSettings.setDescription(description);
 			scatterSeriesSettings.setSymbolType(PlotSymbolType.valueOf(preferenceStore.getString(PreferenceSupplier.P_SCORE_PLOT_2D_SYMBOL_TYPE)));
 			scatterSeriesSettings.setSymbolSize(preferenceStore.getInt(PreferenceSupplier.P_SCORE_PLOT_2D_SYMBOL_SIZE));
-			Color color = colorMap.get(pcaResult.getGroupName());
+			Color color = Colors.getColor(pcaResult.getRGB());
 			if(pcaResult.getSample().isSelected()) {
 				scatterSeriesSettings.setSymbolColor(color);
 			} else {

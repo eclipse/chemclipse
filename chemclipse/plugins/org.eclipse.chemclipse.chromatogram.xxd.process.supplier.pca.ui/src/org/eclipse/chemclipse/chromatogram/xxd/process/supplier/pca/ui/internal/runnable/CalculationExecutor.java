@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -29,10 +29,14 @@ public class CalculationExecutor implements IRunnableWithProgress {
 	private static final Logger logger = Logger.getLogger(CalculationExecutor.class);
 	//
 	private ISamplesPCA<? extends IVariable, ? extends ISample> samples = null;
+	private EvaluationPCA masterEvaluationPCA = null;
+	//
 	private EvaluationPCA evaluationPCA = null;
 
-	public CalculationExecutor(ISamplesPCA<? extends IVariable, ? extends ISample> samples) {
+	public CalculationExecutor(ISamplesPCA<? extends IVariable, ? extends ISample> samples, EvaluationPCA masterEvaluationPCA) {
+
 		this.samples = samples;
+		this.masterEvaluationPCA = masterEvaluationPCA;
 	}
 
 	public EvaluationPCA getEvaluationPCA() {
@@ -46,7 +50,7 @@ public class CalculationExecutor implements IRunnableWithProgress {
 		if(samples != null) {
 			try {
 				ProcessorPCA processorPCA = new ProcessorPCA();
-				ResultsPCA results = processorPCA.process(samples, monitor);
+				ResultsPCA results = processorPCA.process(samples, masterEvaluationPCA, monitor);
 				evaluationPCA = new EvaluationPCA(samples, results);
 			} catch(MathIllegalArgumentException e) {
 				logger.error(e.getLocalizedMessage(), e);

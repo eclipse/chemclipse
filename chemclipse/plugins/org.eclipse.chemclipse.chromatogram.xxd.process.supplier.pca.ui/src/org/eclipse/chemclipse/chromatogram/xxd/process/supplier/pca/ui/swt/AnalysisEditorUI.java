@@ -15,6 +15,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.io.SampleTemplateIO;
@@ -28,6 +30,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePageLoadingPlot;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePageScorePlot;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.ColorSupport;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.model.statistics.IVariable;
@@ -38,6 +41,7 @@ import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
+import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -49,6 +53,7 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -95,7 +100,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 	public void setInput(ISamplesPCA<IVariable, ISample> samples) {
 
 		this.samples = samples;
-		updateSampleList();
+		applyColorScheme();
 		updateControls();
 	}
 
@@ -229,7 +234,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void apply(Display display) {
 
-				applySettings();
+				applySettings(display);
 			}
 		});
 	}
@@ -285,10 +290,11 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(4, false));
+		composite.setLayout(new GridLayout(5, false));
 		//
 		buttonToolbarSearch = createButtonToggleToolbar(composite, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
 		createComboViewerLabelOption(composite);
+		createButtonColorScheme(composite);
 		createButtonImport(composite);
 		createButtonExport(composite);
 	}
@@ -332,6 +338,24 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		comboViewer.setInput(LabelOptionPCA.values());
 		comboViewer.setSelection(new StructuredSelection(LabelOptionPCA.SAMPLE_NAME));
 		labelOptionControl.set(comboViewer);
+	}
+
+	private Button createButtonColorScheme(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Apply color scheme.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAMPLE_COLORIZE, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				applyColorScheme(e.display);
+			}
+		});
+		//
+		return button;
 	}
 
 	private Button createButtonImport(Composite parent) {
@@ -439,8 +463,14 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		filterSettingsControl.set(filterSettingsUI);
 	}
 
-	private void applySettings() {
+	private void applySettings(Display display) {
 
+		if(samples != null) {
+			IAnalysisSettings analysisSettings = samples.getAnalysisSettings();
+			if(!PreferenceSupplier.getColorScheme().equals(analysisSettings.getColorScheme())) {
+				applyColorScheme(display);
+			}
+		}
 		updateSampleList();
 	}
 
@@ -449,7 +479,10 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		if(display != null) {
 			try {
 				if(samples != null) {
-					CalculationExecutor runnable = new CalculationExecutor(samples);
+					/*
+					 * Run with or without dialog.
+					 */
+					CalculationExecutor runnable = new CalculationExecutor(samples, evaluationPCA);
 					Shell shell = display.getActiveShell();
 					if(shell != null) {
 						ProgressMonitorDialog monitor = new ProgressMonitorDialog(shell);
@@ -495,6 +528,29 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		} else {
 			updateWidgets(null);
 		}
+	}
+
+	private void applyColorScheme(Display display) {
+
+		if(samples != null) {
+			if(MessageDialog.openQuestion(display.getActiveShell(), "Color Scheme", "Would like to apply the current color scheme on the samples?")) {
+				applyColorScheme();
+			}
+		}
+	}
+
+	private void applyColorScheme() {
+
+		/*
+		 * Create a default mapping, when running the process.
+		 */
+		List<ISample> sampleList = samples.getSampleList();
+		Map<String, Color> colorMap = ColorSupport.getColorMapSamples(sampleList);
+		for(ISample sample : sampleList) {
+			Color color = colorMap.getOrDefault(sample.getGroupName(), ColorSupport.COLOR_FALLBACK);
+			sample.setRGB(Colors.getColor(color));
+		}
+		updateSampleList();
 	}
 
 	private void updateSampleList() {

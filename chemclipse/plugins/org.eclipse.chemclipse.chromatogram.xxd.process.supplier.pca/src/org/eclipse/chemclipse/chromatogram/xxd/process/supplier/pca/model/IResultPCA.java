@@ -23,6 +23,30 @@ public interface IResultPCA {
 
 	void setGroupName(String groupName);
 
+	String getClassification();
+
+	void setClassification(String classification);
+
+	String getDescription();
+
+	void setDescription(String description);
+
+	/**
+	 * For example red: 255,0,0
+	 * The color will be mapped to an SWT color in the UI.
+	 * This is the model bundle, hence no UI related code is allowed.
+	 * 
+	 * @return String
+	 */
+	String getRGB();
+
+	/**
+	 * For example red: 255,0,0
+	 * 
+	 * @param rgb
+	 */
+	void setRGB(String rgb);
+
 	ISample getSample();
 
 	double[] getSampleData();
@@ -40,20 +64,4 @@ public interface IResultPCA {
 	void setErrorMemberShip(double errorMemberShip);
 
 	void setSampleData(double[] sampleData);
-
-	/**
-	 * For example red: 255,0,0
-	 * The color will be mapped to an SWT color in the UI.
-	 * This is the model bundle, hence no UI related code is allowed.
-	 * 
-	 * @return String
-	 */
-	String getRGB();
-
-	/**
-	 * For example red: 255,0,0
-	 * 
-	 * @param rgb
-	 */
-	void setRGB(String rgb);
 }

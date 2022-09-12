@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,7 +28,10 @@ import org.eclipse.swt.graphics.Color;
 
 public class ColorSupport {
 
-	public static Map<String, Color> getColorMapResults(List<IResultPCA> resultList) {
+	public static final String GROUP_NAME_UNKOWN = "Unknown";
+	public static final Color COLOR_FALLBACK = Colors.DARK_RED;
+
+	public static Map<String, Color> getColorMapResults(List<? extends IResultPCA> resultList) {
 
 		List<String> groupNames = new ArrayList<>();
 		for(IResultPCA pcaResult : resultList) {
@@ -60,15 +63,17 @@ public class ColorSupport {
 		Map<String, Color> colorMap = new HashMap<>();
 		Set<String> groupNameSet = new HashSet<>();
 		//
+		groupNameSet.add(GROUP_NAME_UNKOWN);
 		for(String groupName : groupNames) {
 			if(groupName != null) {
 				groupNameSet.add(groupName);
 			}
 		}
-		//
+		/*
+		 * Assign the colors.
+		 */
 		List<String> groupNameList = new ArrayList<>(groupNameSet);
 		Collections.sort(groupNameList);
-		groupNameList.add(0, null); // Group Name could be null.
 		//
 		for(String groupName : groupNameList) {
 			Color color = colorMap.get(groupName);

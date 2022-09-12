@@ -25,6 +25,7 @@ public class AnalysisSettings implements IAnalysisSettings {
 	private Algorithm algorithm = PreferenceSupplier.getAlgorithm();
 	private boolean removeUselessVariables = PreferenceSupplier.isRemoveUselessVariables();
 	private LabelOptionPCA labelOptionPCA = PreferenceSupplier.getLabelOptionPCA();
+	private String colorScheme = PreferenceSupplier.getColorScheme();
 	//
 	private IPreprocessingSettings preprocessingSettings = new PreprocessingSettings();
 	private IFilterSettings filterSettings = new FilterSettings();
@@ -102,6 +103,18 @@ public class AnalysisSettings implements IAnalysisSettings {
 	public void setLabelOptionPCA(LabelOptionPCA labelOptionPCA) {
 
 		this.labelOptionPCA = labelOptionPCA;
+	}
+
+	@Override
+	public String getColorScheme() {
+
+		return colorScheme;
+	}
+
+	@Override
+	public void setColorScheme(String colorScheme) {
+
+		this.colorScheme = colorScheme;
 	}
 
 	@Override

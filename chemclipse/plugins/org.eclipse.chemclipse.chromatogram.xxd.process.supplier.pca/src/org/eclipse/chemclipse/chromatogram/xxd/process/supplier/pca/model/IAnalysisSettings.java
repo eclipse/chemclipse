@@ -44,4 +44,8 @@ public interface IAnalysisSettings {
 	void setPreprocessingSettings(IPreprocessingSettings preprocessingSettings);
 
 	IPreprocessingSettings getPreprocessingSettings();
+
+	void setColorScheme(String colorScheme);
+
+	String getColorScheme();
 }
