@@ -16,12 +16,12 @@ import org.eclipse.chemclipse.model.statistics.ISample;
 
 public class ResultPCA implements IResultPCA {
 
+	private String name;
+	private String groupName;
+	private ISample sample;
+	private boolean isDisplayed;
 	private double[] scoreVector;
 	private double errorMemberShip;
-	private String groupName;
-	private boolean isDisplayed;
-	private String name;
-	private ISample sample;
 	private double[] sampleData;
 	private String rgb = "255,0,0";
 

@@ -47,7 +47,7 @@ public class FileSettingsWizardPage extends AbstractAnalysisWizardPage {
 	private File file;
 	private Text textFile;
 	//
-	private Algorithm[] algorithms = Algorithm.getAlgorithms();
+	private Algorithm[] algorithms = Algorithm.values();
 
 	public FileSettingsWizardPage() {
 
@@ -138,7 +138,7 @@ public class FileSettingsWizardPage extends AbstractAnalysisWizardPage {
 			public String getText(Object element) {
 
 				if(element instanceof Algorithm) {
-					return ((Algorithm)element).getName();
+					return ((Algorithm)element).label();
 				}
 				return null;
 			}
@@ -194,13 +194,15 @@ public class FileSettingsWizardPage extends AbstractAnalysisWizardPage {
 			public void widgetSelected(SelectionEvent e) {
 
 				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
-				fileDialog.setText("PCA Data Matrix");
-				fileDialog.setFilterExtensions(new String[]{"*.tsv"});
-				fileDialog.setFilterNames(new String[]{"Data Matrix Tab Separated (*.tsv)"});
+				fileDialog.setText(PcaExtractionFiles.DESCRIPTION);
+				fileDialog.setFilterExtensions(new String[]{PcaExtractionFiles.FILTER_EXTENSION});
+				fileDialog.setFilterNames(new String[]{PcaExtractionFiles.FILTER_NAME});
+				fileDialog.setFilterPath(PreferenceSupplier.getPathImportFile());
 				String path = fileDialog.open();
 				if(path != null) {
 					File file = new File(path);
 					if(file.exists()) {
+						PreferenceSupplier.setPathImportFile(fileDialog.getFilterPath());
 						textFile.setText(file.getAbsolutePath());
 					}
 				}
@@ -223,24 +225,27 @@ public class FileSettingsWizardPage extends AbstractAnalysisWizardPage {
 			public void widgetSelected(SelectionEvent e) {
 
 				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
-				fileDialog.setText("PCA Data Matrix");
-				fileDialog.setFilterExtensions(new String[]{"*.tsv"});
-				fileDialog.setFilterNames(new String[]{"Data Matrix Tab Separated (*.tsv)"});
+				fileDialog.setText(PcaExtractionFiles.DESCRIPTION);
+				fileDialog.setFilterExtensions(new String[]{PcaExtractionFiles.FILTER_EXTENSION});
+				fileDialog.setFilterNames(new String[]{PcaExtractionFiles.FILTER_NAME});
 				fileDialog.setOverwrite(true);
+				fileDialog.setFilterPath(PreferenceSupplier.getPathExportFile());
 				String path = fileDialog.open();
 				if(path != null) {
 					/*
 					 * Demo File
 					 */
 					File file = new File(path);
+					//
 					try (PrintWriter printWriter = new PrintWriter(file)) {
 						PcaExtractionFiles.exportDemoContent(printWriter);
 						printWriter.flush();
-					} catch(Exception e2) {
-						logger.warn(e2);
+					} catch(Exception e1) {
+						logger.warn(e1);
 					}
 					//
 					if(file.exists()) {
+						PreferenceSupplier.setPathExportFile(fileDialog.getFilterPath());
 						textFile.setText(file.getAbsolutePath());
 					}
 				}

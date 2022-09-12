@@ -33,6 +33,10 @@ public interface IAnalysisSettings {
 
 	void setRemoveUselessVariables(boolean removeUselessVariables);
 
+	LabelOptionPCA getLabelOptionPCA();
+
+	void setLabelOptionPCA(LabelOptionPCA labelOptionPCA);
+
 	void setFilterSettings(IFilterSettings filterSettings);
 
 	IFilterSettings getFilterSettings();

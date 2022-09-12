@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -7,21 +7,22 @@
  * http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model;
 
 import org.eclipse.chemclipse.support.text.ILabel;
 
-public enum Algorithm implements ILabel {
+public enum LabelOptionPCA implements ILabel {
 
-	SVD("SVD"), //
-	NIPALS("NIPALS"), //
-	OPLS("OPLS");
+	SAMPLE_NAME("Sample Name"), //
+	GROUP_NAME("Group Name"), //
+	CLASSIFICATION("Classification"), //
+	DESCRIPTION("Description"); //
 
 	private String label = "";
 
-	private Algorithm(String label) {
+	private LabelOptionPCA(String label) {
 
 		this.label = label;
 	}

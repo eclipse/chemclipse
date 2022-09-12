@@ -67,6 +67,7 @@ public abstract class AbtractPlotPCA extends ScatterChart {
 		for(String id : set) {
 			selection.remove(id);
 		}
+		//
 		getBaseChart().resetSeriesSettings();
 		for(String id : selection) {
 			getBaseChart().selectSeries(id);
@@ -80,6 +81,7 @@ public abstract class AbtractPlotPCA extends ScatterChart {
 		for(String id : set) {
 			selection.remove(id);
 		}
+		//
 		getBaseChart().resetSeriesSettings();
 		for(String id : selection) {
 			getBaseChart().selectSeries(id);
@@ -109,6 +111,7 @@ public abstract class AbtractPlotPCA extends ScatterChart {
 		chartSettings.setColorAxisZeroMarker(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_LIST_FOREGROUND));
 		chartSettings.setShowSeriesLabelMarker(true);
 		chartSettings.setColorSeriesLabelMarker(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_LIST_FOREGROUND));
+		chartSettings.setUseSeriesLabelDescription(true);
 		chartSettings.setCreateMenu(true);
 		chartSettings.setEnableCompress(false);
 		//

@@ -197,7 +197,7 @@ public class PeakSettingsWizardPage extends AbstractAnalysisWizardPage {
 			public String getText(Object element) {
 
 				if(element instanceof Algorithm) {
-					return ((Algorithm)element).getName();
+					return ((Algorithm)element).label();
 				}
 				return null;
 			}

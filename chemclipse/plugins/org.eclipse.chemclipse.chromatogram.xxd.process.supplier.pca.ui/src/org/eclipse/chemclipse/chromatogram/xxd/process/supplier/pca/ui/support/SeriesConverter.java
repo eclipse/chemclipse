@@ -18,6 +18,7 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultsPCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.LabelOptionPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.model.statistics.IVariable;
@@ -117,6 +118,7 @@ public class SeriesConverter {
 		 */
 		List<IResultPCA> resultList = resultsPCA.getPcaResultList();
 		Map<String, Color> colorMap = ColorSupport.getColorMapResults(resultList); // Create a default mapping, when running the process.
+		LabelOptionPCA labelOptionPCA = resultsPCA.getPcaSettings().getLabelOptionPCA();
 		//
 		for(int i = 0; i < resultList.size(); i++) {
 			IResultPCA pcaResult = resultList.get(i);
@@ -124,6 +126,22 @@ public class SeriesConverter {
 			 * Create the series.
 			 */
 			String name = pcaResult.getName();
+			String description;
+			switch(labelOptionPCA) {
+				case GROUP_NAME:
+					description = pcaResult.getSample().getGroupName();
+					break;
+				case CLASSIFICATION:
+					description = pcaResult.getSample().getClassification();
+					break;
+				case DESCRIPTION:
+					description = pcaResult.getSample().getDescription();
+					break;
+				default:
+					description = name;
+					break;
+			}
+			//
 			extractedPcaResults.put(name, pcaResult);
 			if(!pcaResult.isDisplayed()) {
 				continue;
@@ -142,6 +160,7 @@ public class SeriesConverter {
 			 */
 			IScatterSeriesData scatterSeriesData = new ScatterSeriesData(seriesData);
 			IScatterSeriesSettings scatterSeriesSettings = scatterSeriesData.getSettings();
+			scatterSeriesSettings.setDescription(description);
 			scatterSeriesSettings.setSymbolType(PlotSymbolType.valueOf(preferenceStore.getString(PreferenceSupplier.P_SCORE_PLOT_2D_SYMBOL_TYPE)));
 			scatterSeriesSettings.setSymbolSize(preferenceStore.getInt(PreferenceSupplier.P_SCORE_PLOT_2D_SYMBOL_SIZE));
 			Color color = colorMap.get(pcaResult.getGroupName());

@@ -15,13 +15,13 @@ import org.eclipse.chemclipse.model.statistics.ISample;
 
 public interface IResultPCA {
 
-	double[] getScoreVector();
+	String getName();
 
-	double getErrorMemberShip();
+	void setName(String name);
 
 	String getGroupName();
 
-	String getName();
+	void setGroupName(String groupName);
 
 	ISample getSample();
 
@@ -31,13 +31,13 @@ public interface IResultPCA {
 
 	void setDisplayed(boolean displayed);
 
+	double[] getScoreVector();
+
 	void setScoreVector(double[] eigenSpace);
 
+	double getErrorMemberShip();
+
 	void setErrorMemberShip(double errorMemberShip);
-
-	void setGroupName(String groupName);
-
-	void setName(String name);
 
 	void setSampleData(double[] sampleData);
 

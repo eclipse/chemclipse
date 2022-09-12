@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,27 +18,21 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Algorithm;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.AnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.osgi.service.prefs.BackingStoreException;
 
 public class PreferenceSupplier implements IPreferenceSupplier {
 
-	public static final String N_INPUT_FILE = "INPUT_FILE";
-	/*
-	 * General settings
-	 */
-	public static final String[][] ALGORITHM_TYPES = new String[][]{//
-			{Algorithm.SVD.toString(), Algorithm.SVD.toString()}, //
-			{Algorithm.NIPALS.toString(), Algorithm.NIPALS.toString()}, //
-			{Algorithm.OPLS.toString(), Algorithm.OPLS.toString()}//
-	};
+	private static final Logger logger = Logger.getLogger(PreferenceSupplier.class);
 	//
-	public static final String P_FILES_PATH_IMPORT_CHROMATOGRAMS = "filePathImportChromatograms";
-	public static final String DEF_FILES_PATH_IMPORT_CHROMATOGRAMS = "";
-	public static final String P_ALGORITHM_TYPE = "algorithmType";
-	public static final String DEF_ALGORITHM_TYPE = Algorithm.SVD.toString();
+	public static final String N_INPUT_FILE = "INPUT_FILE";
+	//
+	public static final String P_ALGORITHM = "algorithm";
+	public static final String DEF_ALGORITHM = Algorithm.SVD.toString();
 	public static final String P_REMOVE_USELESS_VARIABLES = "removeUselessVariables";
 	public static final boolean DEF_REMOVE_USELESS_VARIABLES = true;
 	//
@@ -67,6 +61,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_COLOR_SCHEME = "colorScheme";
 	public static final String DEF_COLOR_SCHEME = "Print";
 	//
+	public static final String P_PATH_IMPORT_FILE = "pathImportFile";
+	public static final String DEF_PATH_IMPORT_FILE = "";
+	public static final String P_PATH_EXPORT_FILE = "pathExportFile";
+	public static final String DEF_PATH_EXPORT_FILE = "";
+	//
 	private static IPreferenceSupplier preferenceSupplier;
 
 	public static IPreferenceSupplier INSTANCE() {
@@ -93,8 +92,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public Map<String, String> getDefaultValues() {
 
 		Map<String, String> defaultValues = new HashMap<String, String>();
-		defaultValues.put(P_FILES_PATH_IMPORT_CHROMATOGRAMS, DEF_FILES_PATH_IMPORT_CHROMATOGRAMS);
-		defaultValues.put(P_ALGORITHM_TYPE, DEF_ALGORITHM_TYPE);
+		defaultValues.put(P_ALGORITHM, DEF_ALGORITHM);
 		defaultValues.put(P_REMOVE_USELESS_VARIABLES, Boolean.toString(DEF_REMOVE_USELESS_VARIABLES));
 		defaultValues.put(P_NUMBER_OF_COMPONENTS, Integer.toString(DEF_NUMBER_OF_COMPONENTS));
 		defaultValues.put(P_RETENTION_TIME_WINDOW_PEAKS, Double.toString(DEF_RETENTION_TIME_WINDOW_PEAKS));
@@ -103,6 +101,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_LOADING_PLOT_2D_SYMBOL_SIZE, Integer.toString(DEF_LOADING_PLOT_2D_SYMBOL_SIZE));
 		defaultValues.put(P_LOADING_PLOT_2D_SYMBOL_TYPE, DEF_LOADING_PLOT_2D_SYMBOL_TYPE);
 		defaultValues.put(P_COLOR_SCHEME, DEF_COLOR_SCHEME);
+		defaultValues.put(P_PATH_IMPORT_FILE, DEF_PATH_IMPORT_FILE);
+		defaultValues.put(P_PATH_EXPORT_FILE, DEF_PATH_EXPORT_FILE);
 		return defaultValues;
 	}
 
@@ -111,7 +111,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		IAnalysisSettings analysisSettings = new AnalysisSettings();
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		analysisSettings.setNumberOfPrincipalComponents(preferences.getInt(P_NUMBER_OF_COMPONENTS, DEF_NUMBER_OF_COMPONENTS));
-		analysisSettings.setAlgorithm(Algorithm.valueOf(preferences.get(P_ALGORITHM_TYPE, DEF_ALGORITHM_TYPE)));
+		analysisSettings.setAlgorithm(getAlgorithm());
 		analysisSettings.setRemoveUselessVariables(preferences.getBoolean(P_REMOVE_USELESS_VARIABLES, DEF_REMOVE_USELESS_VARIABLES));
 		return analysisSettings;
 	}
@@ -132,5 +132,52 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.get(P_COLOR_SCHEME, DEF_COLOR_SCHEME);
+	}
+
+	public static String getPathImportFile() {
+
+		return getFilterPath(P_PATH_IMPORT_FILE, DEF_PATH_IMPORT_FILE);
+	}
+
+	public static void setPathImportFile(String filterPath) {
+
+		putString(P_PATH_IMPORT_FILE, filterPath);
+	}
+
+	public static String getPathExportFile() {
+
+		return getFilterPath(P_PATH_EXPORT_FILE, DEF_PATH_EXPORT_FILE);
+	}
+
+	public static void setPathExportFile(String filterPath) {
+
+		putString(P_PATH_EXPORT_FILE, filterPath);
+	}
+
+	private static Algorithm getAlgorithm() {
+
+		try {
+			IEclipsePreferences preferences = INSTANCE().getPreferences();
+			return Algorithm.valueOf(preferences.get(P_ALGORITHM, DEF_ALGORITHM));
+		} catch(Exception e) {
+			return Algorithm.NIPALS;
+		}
+	}
+
+	private static String getFilterPath(String key, String def) {
+
+		IEclipsePreferences eclipsePreferences = INSTANCE().getPreferences();
+		return eclipsePreferences.get(key, def);
+	}
+
+	private static void putString(String key, String value) {
+
+		try {
+			IEclipsePreferences preferences = INSTANCE().getPreferences();
+			preferences.put(key, value);
+			preferences.flush();
+		} catch(BackingStoreException e) {
+			logger.warn(e);
+		}
 	}
 }

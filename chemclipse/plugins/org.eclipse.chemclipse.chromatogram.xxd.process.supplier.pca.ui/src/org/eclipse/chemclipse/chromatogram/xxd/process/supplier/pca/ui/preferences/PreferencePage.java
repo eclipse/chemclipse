@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,11 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Algorithm;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.ExtendedIntegerFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.jface.preference.ComboFieldEditor;
+import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
@@ -38,8 +42,13 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	@Override
 	protected void createFieldEditors() {
 
-		addField(new ComboFieldEditor(PreferenceSupplier.P_ALGORITHM_TYPE, "Algorithm Type:", PreferenceSupplier.ALGORITHM_TYPES, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceSupplier.P_ALGORITHM, "Algorithm:", Algorithm.getOptions(), getFieldEditorParent()));
 		addField(new ExtendedIntegerFieldEditor(PreferenceSupplier.P_NUMBER_OF_COMPONENTS, "Number of Components", PreferenceSupplier.MIN_NUMBER_OF_COMPONENTS, PreferenceSupplier.MAX_NUMBER_OF_COMPONENTS, getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceSupplier.P_COLOR_SCHEME, "Color Scheme", Colors.getAvailableColorSchemes(), getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("PCA File Option", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_PATH_IMPORT_FILE, "Path Import", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceSupplier.P_PATH_IMPORT_FILE, "Path Export", getFieldEditorParent()));
 	}
 }

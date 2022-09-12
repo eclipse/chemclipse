@@ -15,7 +15,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.ProcessorPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt.ExtendedLoadingsPlot;
 import org.eclipse.swt.SWT;
@@ -23,12 +22,10 @@ import org.eclipse.swt.widgets.Composite;
 
 public class LoadingsPlotPart extends AbstractPartPCA<ExtendedLoadingsPlot> {
 
-	private static final String TOPIC = ProcessorPCA.TOPIC_PCA_EVALUATION_LOAD;
-
 	@Inject
 	public LoadingsPlotPart(Composite parent) {
 
-		super(parent, TOPIC);
+		super(parent);
 	}
 
 	@Override
@@ -55,16 +52,5 @@ public class LoadingsPlotPart extends AbstractPartPCA<ExtendedLoadingsPlot> {
 		}
 		//
 		return false;
-	}
-
-	@Override
-	protected boolean isUpdateTopic(String topic) {
-
-		return TOPIC.equals(topic) || isUnloadEvent(topic);
-	}
-
-	private boolean isUnloadEvent(String topic) {
-
-		return topic.equals(ProcessorPCA.TOPIC_PCA_EVALUATION_CLEAR);
 	}
 }

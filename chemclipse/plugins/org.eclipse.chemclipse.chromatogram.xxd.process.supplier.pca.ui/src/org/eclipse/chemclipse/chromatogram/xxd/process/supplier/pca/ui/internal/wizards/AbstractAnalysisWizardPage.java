@@ -24,7 +24,7 @@ import org.eclipse.swt.widgets.Text;
 
 public abstract class AbstractAnalysisWizardPage extends WizardPage {
 
-	protected Algorithm[] algorithms = Algorithm.getAlgorithms();
+	protected Algorithm[] algorithms = Algorithm.values();
 	protected IAnalysisSettings analysisSettings = new AnalysisSettings();
 
 	public AbstractAnalysisWizardPage(String pageName) {

@@ -14,13 +14,12 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.ProcessorPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Algorithm;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamplesPCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.LabelOptionPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable.CalculationExecutor;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePageLoadingPlot;
@@ -30,16 +29,18 @@ import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
+import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -67,11 +68,12 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 	private AtomicReference<SearchSupportUI> toolbarSearch = new AtomicReference<>();
 	private Spinner spinnerPCs;
 	private ComboViewer comboViewerAlgorithm;
-	private SamplesListUI sampleListUI;
+	private AtomicReference<SamplesListUI> sampleListControl = new AtomicReference<>();
+	private AtomicReference<ComboViewer> labelOptionControl = new AtomicReference<>();
 	private PreprocessingSettingsUI preprocessingSettingsUI;
 	private FilterSettingsUI filterSettingsUI;
 	//
-	private Algorithm[] algorithms = Algorithm.getAlgorithms();
+	private Algorithm[] algorithms = Algorithm.values();
 
 	public AnalysisEditorUI(Composite parent, int style) {
 
@@ -98,7 +100,6 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		setLayout(new GridLayout(1, true));
 		//
 		createToolbarMain(this);
-		createToolbarSearch(this);
 		createDataTab(this);
 		//
 		initialize();
@@ -115,9 +116,8 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(7, false));
+		composite.setLayout(new GridLayout(6, false));
 		//
-		buttonToolbarSearch = createButtonToggleToolbar(composite, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
 		createLabel(composite, "Number of PCs:");
 		spinnerPCs = createSpinnerPrincipleComponents(composite);
 		createLabel(composite, "Algorithm:");
@@ -169,7 +169,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 			public String getText(Object element) {
 
 				if(element instanceof Algorithm) {
-					return ((Algorithm)element).getName();
+					return ((Algorithm)element).label();
 				}
 				return null;
 			}
@@ -240,7 +240,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void performSearch(String searchText, boolean caseSensitive) {
 
-				sampleListUI.setSearchText(searchText, caseSensitive);
+				sampleListControl.get().setSearchText(searchText, caseSensitive);
 			}
 		});
 		//
@@ -253,24 +253,125 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 		tabFolder.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		//
-		sampleListUI = createSampleListUI(tabFolder);
+		createSamplesSection(tabFolder);
 		preprocessingSettingsUI = createPreprocessingUI(tabFolder);
 		filterSettingsUI = createFilterUI(tabFolder);
 		//
 		return tabFolder;
 	}
 
-	private SamplesListUI createSampleListUI(TabFolder tabFolder) {
+	private void createSamplesSection(TabFolder tabFolder) {
 
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
-		tabItem.setText("Sample List");
+		tabItem.setText("Samples");
 		//
-		SamplesListUI sampleListUI = new SamplesListUI(tabFolder, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.FULL_SELECTION);
+		Composite composite = new Composite(tabFolder, SWT.NONE);
+		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
+		composite.setLayout(new GridLayout(1, true));
+		//
+		createToolbarSamples(composite);
+		createToolbarSearch(composite);
+		createSampleListUI(composite);
+		//
+		tabItem.setControl(composite);
+	}
+
+	private void createToolbarSamples(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalAlignment = SWT.END;
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(4, false));
+		//
+		buttonToolbarSearch = createButtonToggleToolbar(composite, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
+		createComboViewerLabelOption(composite);
+		createButtonImport(composite);
+		createButtonExport(composite);
+	}
+
+	private void createComboViewerLabelOption(Composite parent) {
+
+		ComboViewer comboViewer = new ComboViewer(parent, SWT.BORDER);
+		Combo combo = comboViewer.getCombo();
+		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
+		comboViewer.setLabelProvider(new AbstractLabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+
+				if(element instanceof LabelOptionPCA labelOptionPCA) {
+					return labelOptionPCA.label();
+				}
+				return null;
+			}
+		});
+		//
+		combo.setToolTipText("Label Option");
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(samples != null) {
+					Object object = comboViewer.getStructuredSelection().getFirstElement();
+					if(object instanceof LabelOptionPCA labelOptionPCA) {
+						IAnalysisSettings analysisSettings = samples.getAnalysisSettings();
+						if(analysisSettings != null) {
+							analysisSettings.setLabelOptionPCA(labelOptionPCA);
+						}
+					}
+				}
+			}
+		});
+		//
+		comboViewer.setInput(LabelOptionPCA.values());
+		comboViewer.setSelection(new StructuredSelection(LabelOptionPCA.SAMPLE_NAME));
+		labelOptionControl.set(comboViewer);
+	}
+
+	private Button createButtonImport(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Import sample settings.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonExport(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Export sample settings.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXPORT, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+			}
+		});
+		//
+		return button;
+	}
+
+	private void createSampleListUI(Composite composite) {
+
+		SamplesListUI sampleListUI = new SamplesListUI(composite, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.FULL_SELECTION);
 		Table table = sampleListUI.getTable();
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
-		tabItem.setControl(table);
-		return sampleListUI;
+		sampleListControl.set(sampleListUI);
 	}
 
 	private PreprocessingSettingsUI createPreprocessingUI(TabFolder tabFolder) {
@@ -299,7 +400,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 
 	private void applySettings() {
 
-		sampleListUI.updateColorMap();
+		sampleListControl.get().updateColorMap();
 	}
 
 	private void runCalculation(Display display) {
@@ -349,27 +450,17 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 
 	private void fireUpdate(Display display, EvaluationPCA evaluationPCA) {
 
-		IEventBroker eventBroker = Activator.getDefault().getEventBroker();
-		if(eventBroker != null) {
-			display.asyncExec(new Runnable() {
-
-				@Override
-				public void run() {
-
-					if(evaluationPCA != null) {
-						eventBroker.send(ProcessorPCA.TOPIC_PCA_EVALUATION_LOAD, evaluationPCA);
-					} else {
-						eventBroker.send(ProcessorPCA.TOPIC_PCA_EVALUATION_CLEAR, new Object());
-					}
-				}
-			});
-		}
+		UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_PCA_UPDATE_SELECTION, evaluationPCA);
 	}
 
 	private void updateControls() {
 
 		if(samples != null) {
-			updateWidgets(samples.getAnalysisSettings());
+			IAnalysisSettings analysisSettings = samples.getAnalysisSettings();
+			updateWidgets(analysisSettings);
+			if(analysisSettings != null) {
+				labelOptionControl.get().setSelection(new StructuredSelection(analysisSettings.getLabelOptionPCA()));
+			}
 		} else {
 			updateWidgets(null);
 		}
@@ -377,6 +468,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 
 	private void updateSampleList() {
 
+		SamplesListUI sampleListUI = sampleListControl.get();
 		if(samples != null) {
 			sampleListUI.updateInput(samples.getSampleList());
 		} else {

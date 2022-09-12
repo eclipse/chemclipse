@@ -11,16 +11,17 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.ProcessorPCA;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.parts.AbstractPart;
 import org.eclipse.swt.widgets.Composite;
 
 public abstract class AbstractPartPCA<T extends Composite> extends AbstractPart<T> {
 
-	public AbstractPartPCA(Composite parent, String topic) {
+	private static final String TOPIC = IChemClipseEvents.TOPIC_PCA_UPDATE_SELECTION;
 
-		super(parent, topic);
+	public AbstractPartPCA(Composite parent) {
+
+		super(parent, TOPIC);
 	}
 
 	/**
@@ -29,7 +30,18 @@ public abstract class AbstractPartPCA<T extends Composite> extends AbstractPart<
 	@Override
 	protected void subscribeAdditionalTopics() {
 
-		subscribeAdditionalTopic(ProcessorPCA.TOPIC_PCA_EVALUATION_LOAD, IChemClipseEvents.EVENT_BROKER_DATA);
-		subscribeAdditionalTopic(ProcessorPCA.TOPIC_PCA_EVALUATION_CLEAR, IChemClipseEvents.EVENT_BROKER_DATA);
+		subscribeAdditionalTopic(TOPIC, IChemClipseEvents.EVENT_BROKER_DATA);
+		subscribeAdditionalTopic(IChemClipseEvents.TOPIC_EDITOR_PCA_CLOSE, IChemClipseEvents.EVENT_BROKER_DATA);
+	}
+
+	@Override
+	protected boolean isUpdateTopic(String topic) {
+
+		return TOPIC.equals(topic) || isUnloadEvent(topic);
+	}
+
+	protected boolean isUnloadEvent(String topic) {
+
+		return topic.equals(IChemClipseEvents.TOPIC_EDITOR_PCA_CLOSE);
 	}
 }

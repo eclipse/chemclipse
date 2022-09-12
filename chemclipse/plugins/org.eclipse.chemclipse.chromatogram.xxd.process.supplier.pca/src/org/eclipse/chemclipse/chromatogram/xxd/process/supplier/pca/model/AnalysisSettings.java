@@ -23,6 +23,7 @@ public class AnalysisSettings implements IAnalysisSettings {
 	private int numberOfPrincipalComponents = 3;
 	private Algorithm algorithm = Algorithm.NIPALS;
 	private boolean removeUselessVariables = true;
+	private LabelOptionPCA labelOptionPCA = LabelOptionPCA.SAMPLE_NAME;
 	//
 	private IPreprocessingSettings preprocessingSettings = new PreprocessingSettings();
 	private IFilterSettings filterSettings = new FilterSettings();
@@ -36,6 +37,7 @@ public class AnalysisSettings implements IAnalysisSettings {
 		this.numberOfPrincipalComponents = analysisSettings.getNumberOfPrincipalComponents();
 		this.algorithm = analysisSettings.getAlgorithm();
 		this.removeUselessVariables = analysisSettings.isRemoveUselessVariables();
+		this.labelOptionPCA = analysisSettings.getLabelOptionPCA();
 		//
 		this.preprocessingSettings = new PreprocessingSettings(analysisSettings.getPreprocessingSettings());
 		this.filterSettings = new FilterSettings(analysisSettings.getFilterSettings());
@@ -77,31 +79,49 @@ public class AnalysisSettings implements IAnalysisSettings {
 		this.algorithm = algorithm;
 	}
 
+	@Override
 	public boolean isRemoveUselessVariables() {
 
 		return removeUselessVariables;
 	}
 
+	@Override
 	public void setRemoveUselessVariables(boolean removeUselessVariables) {
 
 		this.removeUselessVariables = removeUselessVariables;
 	}
 
+	@Override
+	public LabelOptionPCA getLabelOptionPCA() {
+
+		return labelOptionPCA;
+	}
+
+	@Override
+	public void setLabelOptionPCA(LabelOptionPCA labelOptionPCA) {
+
+		this.labelOptionPCA = labelOptionPCA;
+	}
+
+	@Override
 	public IPreprocessingSettings getPreprocessingSettings() {
 
 		return preprocessingSettings;
 	}
 
+	@Override
 	public void setPreprocessingSettings(IPreprocessingSettings preprocessingSettings) {
 
 		this.preprocessingSettings = preprocessingSettings;
 	}
 
+	@Override
 	public IFilterSettings getFilterSettings() {
 
 		return filterSettings;
 	}
 
+	@Override
 	public void setFilterSettings(IFilterSettings filterSettings) {
 
 		this.filterSettings = filterSettings;

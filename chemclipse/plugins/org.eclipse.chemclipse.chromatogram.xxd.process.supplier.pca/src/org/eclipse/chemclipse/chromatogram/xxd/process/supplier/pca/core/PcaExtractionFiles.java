@@ -39,6 +39,12 @@ public class PcaExtractionFiles implements IExtractionData {
 
 	private static final Logger logger = Logger.getLogger(PcaExtractionFiles.class);
 	//
+	public static final String DESCRIPTION = "PCA Data Matrix";
+	public static final String FILE_EXTENSION = ".pdm";
+	public static final String FILE_NAME = DESCRIPTION.replaceAll("\\s", "") + FILE_EXTENSION;
+	public static final String FILTER_EXTENSION = "*" + FILE_EXTENSION;
+	public static final String FILTER_NAME = DESCRIPTION + " (*" + FILE_EXTENSION + ")";
+	//
 	private static final String DELIMITER = "\t";
 	private final List<IDataInputEntry> dataInputEntries;
 

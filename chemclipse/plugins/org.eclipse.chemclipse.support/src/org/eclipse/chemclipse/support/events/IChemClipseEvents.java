@@ -64,6 +64,8 @@ public interface IChemClipseEvents {
 	String TOPIC_RI_LIBRARY_REMOVE_FROM_PROCESS = "ri/library/remove/process";
 	String TOPIC_RI_LIBRARY_UPDATE = "ri/library/update";
 	//
+	String TOPIC_PCA_UPDATE_SELECTION = "pca/update/selection";
+	//
 	String TOPIC_METHOD_SELECTED = "methods/select";
 	String TOPIC_METHOD_CREATED = "methods/create";
 	String TOPIC_METHOD_UPDATE = "methods/update";
@@ -96,6 +98,7 @@ public interface IChemClipseEvents {
 	String TOPIC_EDITOR_PCR_CLOSE = "editor/pcr/close";
 	String TOPIC_EDITOR_NMR_CLOSE = "editor/nmr/close";
 	String TOPIC_EDITOR_XIR_CLOSE = "editor/xir/close";
+	String TOPIC_EDITOR_PCA_CLOSE = "editor/pca/close";
 	//
 	String TOPIC_EDITOR_CHROMATOGRAM_TOOLBAR_UPDATE = "editor/chromatogram/toolbar/update";
 }

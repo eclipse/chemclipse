@@ -44,9 +44,6 @@ import org.eclipse.core.runtime.SubMonitor;
 
 public class ProcessorPCA {
 
-	public static final String TOPIC_PCA_EVALUATION_LOAD = "pca/evaluation/load";
-	public static final String TOPIC_PCA_EVALUATION_CLEAR = "pca/evaluation/clear";
-
 	public <V extends IVariable, S extends ISample> ResultsPCA process(ISamplesPCA<V, S> samples, IProgressMonitor monitor) throws MathIllegalArgumentException {
 
 		SubMonitor subMonitor = SubMonitor.convert(monitor, "Run PCA", 140);
