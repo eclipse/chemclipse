@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -71,7 +71,7 @@ public class PcaUtils {
 						j++;
 					}
 				}
-				selectedSamples.put(sample.getName(), selectedSampleData);
+				selectedSamples.put(sample.getSampleName(), selectedSampleData);
 			}
 		}
 		return selectedSamples;
@@ -282,7 +282,7 @@ public class PcaUtils {
 	public static void sortPcaResultsByName(List<IResultPCA> samples) {
 
 		Comparator<IResultPCA> comparator = (arg0, arg1) -> {
-			return arg0.getName().compareTo(arg1.getName());
+			return arg0.getSampleName().compareTo(arg1.getSampleName());
 		};
 		Collections.sort(samples, comparator);
 	}
@@ -337,7 +337,7 @@ public class PcaUtils {
 	public static <S extends ISample> void sortSampleListByName(List<S> samples) {
 
 		Comparator<ISample> comparator = (arg0, arg1) -> {
-			return arg0.getName().compareTo(arg1.getName());
+			return arg0.getSampleName().compareTo(arg1.getSampleName());
 		};
 		Collections.sort(samples, comparator);
 	}

@@ -177,7 +177,7 @@ public class PeakRetentionTimeExtractor {
 		//
 		for(Sample sample : samples.getSampleList()) {
 			Iterator<IVariable> it = extractedRetentionTimes.iterator();
-			SortedMap<Integer, IPeak> extractPeak = extractData.get(sample.getName());
+			SortedMap<Integer, IPeak> extractPeak = extractData.get(sample.getSampleName());
 			while(it.hasNext()) {
 				IVariable variable = it.next();
 				if(variable instanceof RetentionTime) {

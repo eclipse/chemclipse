@@ -184,7 +184,7 @@ public class PcaExtractionFiles implements IExtractionData {
 		 * Samples / Variables
 		 */
 		List<Sample> sampleList = new ArrayList<>(sampleMap.values());
-		Collections.sort(sampleList, (s1, s2) -> s1.getName().compareTo(s2.getName()));
+		Collections.sort(sampleList, (s1, s2) -> s1.getSampleName().compareTo(s2.getSampleName()));
 		Samples samples = new Samples(sampleList);
 		List<? extends IVariable> variables = extractVariables(samplesVariablesMap);
 		samples.getVariables().addAll(variables);
@@ -229,7 +229,7 @@ public class PcaExtractionFiles implements IExtractionData {
 		//
 		for(Sample sample : samples.getSampleList()) {
 			Iterator<IVariable> iterator = variables.iterator();
-			Map<String, Target> extractPeak = samplesVariablesMap.get(sample.getName());
+			Map<String, Target> extractPeak = samplesVariablesMap.get(sample.getSampleName());
 			while(iterator.hasNext()) {
 				String variable = iterator.next().getValue();
 				Target target = extractPeak.get(variable);

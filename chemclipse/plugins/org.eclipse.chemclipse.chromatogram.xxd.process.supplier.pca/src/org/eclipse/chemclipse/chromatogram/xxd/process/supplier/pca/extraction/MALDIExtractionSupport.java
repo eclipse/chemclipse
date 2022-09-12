@@ -165,7 +165,7 @@ public class MALDIExtractionSupport {
 
 		for(Sample sample : samples.getSampleList()) {
 			List<PeakSampleData> data = sample.getSampleData();
-			NavigableMap<Double, Float> ions = extractIons.get(sample.getName());
+			NavigableMap<Double, Float> ions = extractIons.get(sample.getSampleName());
 			double[] mz = new double[ions.size()];
 			double[] abundance = new double[ions.size()];
 			int j = 0;
@@ -190,7 +190,7 @@ public class MALDIExtractionSupport {
 
 		for(Sample sample : samples.getSampleList()) {
 			List<PeakSampleData> data = sample.getSampleData();
-			NavigableMap<Double, Float> scans = extractIons.get(sample.getName());
+			NavigableMap<Double, Float> scans = extractIons.get(sample.getSampleName());
 			for(double i = beginMassMax; i <= endMassMin; i += massWindow) {
 				Float value = getClosestMass(scans, i);
 				PeakSampleData d = new PeakSampleData(value, null);
@@ -217,7 +217,7 @@ public class MALDIExtractionSupport {
 		for(Sample sample : samples.getSampleList()) {
 			Iterator<Double> it = massToChargeRatio.iterator();
 			List<PeakSampleData> data = sample.getSampleData();
-			NavigableMap<Double, Float> scans = extractIons.get(sample.getName());
+			NavigableMap<Double, Float> scans = extractIons.get(sample.getSampleName());
 			while(it.hasNext()) {
 				Double mz = it.next();
 				Float abundance = scans.get(mz);

@@ -179,7 +179,7 @@ public class PeakRetentionIndexExtractor {
 		//
 		for(Sample sample : samples.getSampleList()) {
 			Iterator<IVariable> it = extractedRetentionIndices.iterator();
-			SortedMap<Integer, IPeak> extractPeak = extractData.get(sample.getName());
+			SortedMap<Integer, IPeak> extractPeak = extractData.get(sample.getSampleName());
 			if(extractPeak != null) {
 				while(it.hasNext()) {
 					IVariable variable = it.next();

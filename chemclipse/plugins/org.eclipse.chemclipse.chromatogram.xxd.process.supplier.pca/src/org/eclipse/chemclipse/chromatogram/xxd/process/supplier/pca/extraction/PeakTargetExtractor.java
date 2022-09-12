@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -118,7 +118,7 @@ public class PeakTargetExtractor {
 		//
 		for(Sample sample : samples.getSampleList()) {
 			Iterator<IVariable> iterator = extractedTargets.iterator();
-			SortedMap<String, IPeak> extractPeak = extractData.get(sample.getName());
+			SortedMap<String, IPeak> extractPeak = extractData.get(sample.getSampleName());
 			while(iterator.hasNext()) {
 				String target = iterator.next().getValue();
 				IPeak peak = extractPeak.get(target);

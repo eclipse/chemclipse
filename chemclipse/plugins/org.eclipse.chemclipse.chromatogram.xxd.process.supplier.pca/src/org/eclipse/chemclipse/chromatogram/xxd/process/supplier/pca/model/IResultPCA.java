@@ -15,9 +15,9 @@ import org.eclipse.chemclipse.model.statistics.ISample;
 
 public interface IResultPCA {
 
-	String getName();
+	String getSampleName();
 
-	void setName(String name);
+	void setSampleName(String sampleName);
 
 	String getGroupName();
 

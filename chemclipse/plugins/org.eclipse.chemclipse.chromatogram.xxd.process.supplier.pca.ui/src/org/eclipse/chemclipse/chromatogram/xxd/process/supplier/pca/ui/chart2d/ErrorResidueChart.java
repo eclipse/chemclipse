@@ -133,7 +133,7 @@ public class ErrorResidueChart extends BarChart {
 		//
 		for(int i = 0; i < size; i++) {
 			IResultPCA pcaResult = pcaResultList.get(i);
-			categories[i] = pcaResult.getSample().getName();
+			categories[i] = pcaResult.getSample().getSampleName();
 		}
 		//
 		return categories;

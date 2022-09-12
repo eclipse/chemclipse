@@ -71,12 +71,12 @@ public class ProcessorPCA {
 			boolean[] isSelectedVariables = selectedVariables(samples, analysisSettings);
 			Map<ISample, double[]> extractData = extractData(samples, algorithm, analysisSettings, isSelectedVariables);
 			setRetentionTime(pcaResults, samples, isSelectedVariables);
-			int numVars = getNumSampleVars(extractData);
+			int numberVariables = getNumSampleVars(extractData);
 			subMonitor.worked(20);
 			/*
 			 * Prepare PCA Calculation
 			 */
-			IMultivariateCalculator principalComponentAnalysis = setupPCA(extractData, numVars, numberOfPrincipalComponents, algorithm);
+			IMultivariateCalculator principalComponentAnalysis = setupPCA(extractData, numberVariables, numberOfPrincipalComponents, algorithm);
 			subMonitor.worked(20);
 			/*
 			 * Compute PCA
@@ -273,8 +273,9 @@ public class ProcessorPCA {
 			double[] sampleData = entry.getValue();
 			ISample sample = entry.getKey();
 			IResultPCA pcaResult = new ResultPCA(sample);
-			pcaResult.setName(sample.getName());
+			pcaResult.setSampleName(sample.getSampleName());
 			pcaResult.setGroupName(sample.getGroupName());
+			// TODO Use, Color, Classicifation, Description?
 			pcaResult.setScoreVector(principalComponentAnalysis.getScoreVector(sample));
 			pcaResult.setErrorMemberShip(principalComponentAnalysis.getErrorMetric(sampleData));
 			pcaResult.setSampleData(sampleData);

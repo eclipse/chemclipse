@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,8 +28,8 @@ public class SamplesComparator extends AbstractRecordTableComparator implements 
 			//
 			switch(getPropertyIndex()) {
 				case 0:
-					String name1 = sample1.getName() != null ? sample1.getName() : "";
-					String name2 = sample2.getName() != null ? sample2.getName() : "";
+					String name1 = sample1.getSampleName() != null ? sample1.getSampleName() : "";
+					String name2 = sample2.getSampleName() != null ? sample2.getSampleName() : "";
 					sortOrder = name2.compareTo(name1);
 					break;
 				case 1:

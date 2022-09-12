@@ -51,11 +51,11 @@ public class PeakExtractionSupportTest_1_4 {
 		 * check samples
 		 */
 		assertEquals(3, samples.getSampleList().size());
-		assertEquals("Sample1", samples.getSampleList().get(0).getName());
+		assertEquals("Sample1", samples.getSampleList().get(0).getSampleName());
 		assertEquals("Group1", samples.getSampleList().get(0).getGroupName());
-		assertEquals("Sample2", samples.getSampleList().get(1).getName());
+		assertEquals("Sample2", samples.getSampleList().get(1).getSampleName());
 		assertEquals("Group2", samples.getSampleList().get(1).getGroupName());
-		assertEquals("Sample3", samples.getSampleList().get(2).getName());
+		assertEquals("Sample3", samples.getSampleList().get(2).getSampleName());
 		assertEquals(null, samples.getSampleList().get(2).getGroupName());
 	}
 

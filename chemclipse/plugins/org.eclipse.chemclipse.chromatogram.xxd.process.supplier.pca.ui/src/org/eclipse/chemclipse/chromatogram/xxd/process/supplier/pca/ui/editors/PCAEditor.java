@@ -62,7 +62,9 @@ public class PCAEditor {
 	@PreDestroy
 	public void preDestroy() {
 
-		context.remove(ISamplesPCA.class);
+		if(context != null) {
+			context.remove(ISamplesPCA.class);
+		}
 		//
 		List<String> clearTopics = Arrays.asList(IChemClipseEvents.TOPIC_PCA_UPDATE_SELECTION);
 		UpdateNotifierUI.update(Display.getDefault(), IChemClipseEvents.TOPIC_EDITOR_PCA_CLOSE, clearTopics);

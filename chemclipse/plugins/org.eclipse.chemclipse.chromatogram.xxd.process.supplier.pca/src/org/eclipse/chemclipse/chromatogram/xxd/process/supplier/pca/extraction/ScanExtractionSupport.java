@@ -163,7 +163,7 @@ public class ScanExtractionSupport {
 
 		for(Sample sample : samples.getSampleList()) {
 			List<PeakSampleData> data = sample.getSampleData();
-			NavigableMap<Integer, Float> scans = extractScans.get(sample.getName());
+			NavigableMap<Integer, Float> scans = extractScans.get(sample.getSampleName());
 			double[] retentionTime = new double[scans.size()];
 			double[] scanValues = new double[scans.size()];
 			int j = 0;
@@ -188,7 +188,7 @@ public class ScanExtractionSupport {
 
 		for(Sample sample : samples.getSampleList()) {
 			List<PeakSampleData> sampleData = sample.getSampleData();
-			NavigableMap<Integer, Float> scans = extractScans.get(sample.getName());
+			NavigableMap<Integer, Float> scans = extractScans.get(sample.getSampleName());
 			for(int i = beginRetentionTimeMax; i <= endRetentionTimeMin; i += retentionTimeWindow) {
 				Float value = getClosestScans(scans, i);
 				PeakSampleData peakSampleData = new PeakSampleData(value, null);
@@ -215,7 +215,7 @@ public class ScanExtractionSupport {
 		for(Sample sample : samples.getSampleList()) {
 			Iterator<Integer> iterator = retentionTimes.iterator();
 			List<PeakSampleData> data = sample.getSampleData();
-			NavigableMap<Integer, Float> scans = extractScans.get(sample.getName());
+			NavigableMap<Integer, Float> scans = extractScans.get(sample.getSampleName());
 			while(iterator.hasNext()) {
 				Integer time = iterator.next();
 				Float value = scans.get(time);

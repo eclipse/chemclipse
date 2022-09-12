@@ -16,14 +16,15 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.FilterS
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IPreprocessingSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PreprocessingSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 
 public class AnalysisSettings implements IAnalysisSettings {
 
 	private String title = "";
-	private int numberOfPrincipalComponents = 3;
-	private Algorithm algorithm = Algorithm.NIPALS;
-	private boolean removeUselessVariables = true;
-	private LabelOptionPCA labelOptionPCA = LabelOptionPCA.SAMPLE_NAME;
+	private int numberOfPrincipalComponents = PreferenceSupplier.getNumberOfPrincipalComponents();
+	private Algorithm algorithm = PreferenceSupplier.getAlgorithm();
+	private boolean removeUselessVariables = PreferenceSupplier.isRemoveUselessVariables();
+	private LabelOptionPCA labelOptionPCA = PreferenceSupplier.getLabelOptionPCA();
 	//
 	private IPreprocessingSettings preprocessingSettings = new PreprocessingSettings();
 	private IFilterSettings filterSettings = new FilterSettings();

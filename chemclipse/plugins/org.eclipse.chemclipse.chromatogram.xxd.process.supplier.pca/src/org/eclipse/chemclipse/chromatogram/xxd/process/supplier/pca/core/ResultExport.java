@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2020 Lablicate GmbH.
+ * Copyright (c) 2015, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,6 +28,7 @@ public class ResultExport {
 	private DecimalFormat decimalFormat;
 
 	public ResultExport() {
+
 		decimalFormat = ValueFormat.getDecimalFormatEnglish();
 	}
 
@@ -77,8 +78,8 @@ public class ResultExport {
 			 * Data
 			 */
 			for(IResultPCA pcaResult : pcaResults.getPcaResultList()) {
-				String name = pcaResult.getName();
-				printWriter.print(name);
+				String sampleName = pcaResult.getSampleName();
+				printWriter.print(sampleName);
 				printWriter.print(TAB);
 				double[] sampleData = pcaResult.getSampleData();
 				for(double data : sampleData) {
@@ -104,9 +105,9 @@ public class ResultExport {
 				/*
 				 * Print the PCs
 				 */
-				String name = pcaResult.getName();
+				String sampleName = pcaResult.getSampleName();
 				double[] eigenSpace = pcaResult.getScoreVector();
-				printWriter.print(name);
+				printWriter.print(sampleName);
 				printWriter.print(TAB);
 				for(double value : eigenSpace) {
 					printWriter.print(decimalFormat.format(value));

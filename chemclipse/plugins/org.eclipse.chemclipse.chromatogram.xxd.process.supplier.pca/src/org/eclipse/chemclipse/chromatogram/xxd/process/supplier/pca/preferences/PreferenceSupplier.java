@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Algorithm;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.AnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.LabelOptionPCA;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -35,6 +36,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String DEF_ALGORITHM = Algorithm.SVD.toString();
 	public static final String P_REMOVE_USELESS_VARIABLES = "removeUselessVariables";
 	public static final boolean DEF_REMOVE_USELESS_VARIABLES = true;
+	public static final String P_LABEL_OPTION_PCA = "labelOptionPCA";
+	public static final String DEF_LABEL_OPTION_PCA = LabelOptionPCA.SAMPLE_NAME.name();
 	//
 	public static final String P_NUMBER_OF_COMPONENTS = "numberOfComponents";
 	public static final int MIN_NUMBER_OF_COMPONENTS = 3;
@@ -94,6 +97,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		Map<String, String> defaultValues = new HashMap<String, String>();
 		defaultValues.put(P_ALGORITHM, DEF_ALGORITHM);
 		defaultValues.put(P_REMOVE_USELESS_VARIABLES, Boolean.toString(DEF_REMOVE_USELESS_VARIABLES));
+		defaultValues.put(P_LABEL_OPTION_PCA, DEF_LABEL_OPTION_PCA);
 		defaultValues.put(P_NUMBER_OF_COMPONENTS, Integer.toString(DEF_NUMBER_OF_COMPONENTS));
 		defaultValues.put(P_RETENTION_TIME_WINDOW_PEAKS, Double.toString(DEF_RETENTION_TIME_WINDOW_PEAKS));
 		defaultValues.put(P_SCORE_PLOT_2D_SYMBOL_SIZE, Integer.toString(DEF_SCORE_PLOT_2D_SYMBOL_SIZE));
@@ -109,10 +113,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static IAnalysisSettings getPcaSettings() {
 
 		IAnalysisSettings analysisSettings = new AnalysisSettings();
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		analysisSettings.setNumberOfPrincipalComponents(preferences.getInt(P_NUMBER_OF_COMPONENTS, DEF_NUMBER_OF_COMPONENTS));
+		analysisSettings.setNumberOfPrincipalComponents(getNumberOfPrincipalComponents());
 		analysisSettings.setAlgorithm(getAlgorithm());
-		analysisSettings.setRemoveUselessVariables(preferences.getBoolean(P_REMOVE_USELESS_VARIABLES, DEF_REMOVE_USELESS_VARIABLES));
+		analysisSettings.setRemoveUselessVariables(isRemoveUselessVariables());
+		analysisSettings.setLabelOptionPCA(getLabelOptionPCA());
+		//
 		return analysisSettings;
 	}
 
@@ -122,7 +127,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		return getScopeContext().getNode(getPreferenceNode());
 	}
 
-	public static int getNumberOfComponents() {
+	public static int getNumberOfPrincipalComponents() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.getInt(P_NUMBER_OF_COMPONENTS, DEF_NUMBER_OF_COMPONENTS);
@@ -154,13 +159,29 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		putString(P_PATH_EXPORT_FILE, filterPath);
 	}
 
-	private static Algorithm getAlgorithm() {
+	public static boolean isRemoveUselessVariables() {
+
+		IEclipsePreferences preferences = INSTANCE().getPreferences();
+		return preferences.getBoolean(P_REMOVE_USELESS_VARIABLES, DEF_REMOVE_USELESS_VARIABLES);
+	}
+
+	public static Algorithm getAlgorithm() {
 
 		try {
 			IEclipsePreferences preferences = INSTANCE().getPreferences();
 			return Algorithm.valueOf(preferences.get(P_ALGORITHM, DEF_ALGORITHM));
 		} catch(Exception e) {
 			return Algorithm.NIPALS;
+		}
+	}
+
+	public static LabelOptionPCA getLabelOptionPCA() {
+
+		try {
+			IEclipsePreferences preferences = INSTANCE().getPreferences();
+			return LabelOptionPCA.valueOf(preferences.get(P_LABEL_OPTION_PCA, DEF_LABEL_OPTION_PCA));
+		} catch(Exception e) {
+			return LabelOptionPCA.SAMPLE_NAME;
 		}
 	}
 

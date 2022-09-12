@@ -125,7 +125,7 @@ public class SeriesConverter {
 			/*
 			 * Create the series.
 			 */
-			String name = pcaResult.getName();
+			String sampleName = pcaResult.getSampleName();
 			String description;
 			switch(labelOptionPCA) {
 				case GROUP_NAME:
@@ -138,11 +138,11 @@ public class SeriesConverter {
 					description = pcaResult.getSample().getDescription();
 					break;
 				default:
-					description = name;
+					description = sampleName;
 					break;
 			}
 			//
-			extractedPcaResults.put(name, pcaResult);
+			extractedPcaResults.put(sampleName, pcaResult);
 			if(!pcaResult.isDisplayed()) {
 				continue;
 			}
@@ -154,7 +154,7 @@ public class SeriesConverter {
 				x = i;
 			}
 			double y = eigenSpace[pcY - 1]; // e.g. 1 = PC2
-			ISeriesData seriesData = new SeriesData(new double[]{x}, new double[]{y}, name);
+			ISeriesData seriesData = new SeriesData(new double[]{x}, new double[]{y}, sampleName);
 			/*
 			 * Set the color.
 			 */

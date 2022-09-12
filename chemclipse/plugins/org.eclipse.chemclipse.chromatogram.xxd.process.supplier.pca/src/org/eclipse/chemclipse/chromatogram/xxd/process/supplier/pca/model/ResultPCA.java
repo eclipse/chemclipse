@@ -16,7 +16,7 @@ import org.eclipse.chemclipse.model.statistics.ISample;
 
 public class ResultPCA implements IResultPCA {
 
-	private String name;
+	private String sampleName;
 	private String groupName;
 	private ISample sample;
 	private boolean isDisplayed;
@@ -32,15 +32,15 @@ public class ResultPCA implements IResultPCA {
 	}
 
 	@Override
-	public double[] getScoreVector() {
+	public String getSampleName() {
 
-		return scoreVector;
+		return sampleName;
 	}
 
 	@Override
-	public double getErrorMemberShip() {
+	public void setSampleName(String sampleName) {
 
-		return errorMemberShip;
+		this.sampleName = sampleName;
 	}
 
 	@Override
@@ -50,9 +50,21 @@ public class ResultPCA implements IResultPCA {
 	}
 
 	@Override
-	public String getName() {
+	public void setGroupName(String groupName) {
 
-		return name;
+		this.groupName = groupName;
+	}
+
+	@Override
+	public double[] getScoreVector() {
+
+		return scoreVector;
+	}
+
+	@Override
+	public double getErrorMemberShip() {
+
+		return errorMemberShip;
 	}
 
 	@Override
@@ -89,18 +101,6 @@ public class ResultPCA implements IResultPCA {
 	public void setErrorMemberShip(double errorMemberShip) {
 
 		this.errorMemberShip = errorMemberShip;
-	}
-
-	@Override
-	public void setGroupName(String groupName) {
-
-		this.groupName = groupName;
-	}
-
-	@Override
-	public void setName(String name) {
-
-		this.name = name;
 	}
 
 	@Override

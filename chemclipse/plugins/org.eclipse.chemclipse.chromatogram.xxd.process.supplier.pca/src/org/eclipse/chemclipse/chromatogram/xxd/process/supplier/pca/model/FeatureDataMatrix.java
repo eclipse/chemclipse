@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,6 +26,7 @@ public class FeatureDataMatrix {
 
 	@SuppressWarnings("rawtypes")
 	public FeatureDataMatrix(ISamplesPCA<? extends IVariable, ? extends ISample> samples) {
+
 		if(samples != null) {
 			/*
 			 * Data
@@ -36,7 +37,7 @@ public class FeatureDataMatrix {
 			 * Samples
 			 */
 			for(ISample sample : sampleList) {
-				sampleNames.add(sample.getName());
+				sampleNames.add(sample.getSampleName());
 			}
 			/*
 			 * variable.getClassification() // null

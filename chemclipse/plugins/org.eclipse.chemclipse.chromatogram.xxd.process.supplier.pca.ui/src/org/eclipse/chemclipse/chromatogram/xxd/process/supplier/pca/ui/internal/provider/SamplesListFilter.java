@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -35,7 +35,7 @@ public class SamplesListFilter extends ViewerFilter {
 		//
 		if(element instanceof ISample) {
 			ISample sample = (ISample)element;
-			String name = sample.getName();
+			String name = sample.getSampleName();
 			String groupName = (sample.getGroupName() != null) ? sample.getGroupName() : "";
 			String classification = (sample.getClassification() != null) ? sample.getClassification() : "";
 			String description = (sample.getDescription() != null) ? sample.getDescription() : "";

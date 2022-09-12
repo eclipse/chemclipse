@@ -11,9 +11,13 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.io.SampleTemplateIO;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Algorithm;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
@@ -37,6 +41,7 @@ import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
@@ -50,6 +55,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
@@ -70,10 +76,8 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 	private ComboViewer comboViewerAlgorithm;
 	private AtomicReference<SamplesListUI> sampleListControl = new AtomicReference<>();
 	private AtomicReference<ComboViewer> labelOptionControl = new AtomicReference<>();
-	private PreprocessingSettingsUI preprocessingSettingsUI;
-	private FilterSettingsUI filterSettingsUI;
-	//
-	private Algorithm[] algorithms = Algorithm.values();
+	private AtomicReference<PreprocessingSettingsUI> preprocessingSettingsControl = new AtomicReference<>();
+	private AtomicReference<FilterSettingsUI> filterSettingsControl = new AtomicReference<>();
 
 	public AnalysisEditorUI(Composite parent, int style) {
 
@@ -139,7 +143,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		spinner.setToolTipText("Number of Principal Components");
 		spinner.setMinimum(PreferenceSupplier.MIN_NUMBER_OF_COMPONENTS);
 		spinner.setIncrement(1);
-		spinner.setSelection(PreferenceSupplier.getNumberOfComponents());
+		spinner.setSelection(PreferenceSupplier.getNumberOfPrincipalComponents());
 		spinner.setMaximum(PreferenceSupplier.MAX_NUMBER_OF_COMPONENTS);
 		spinner.addSelectionListener(new SelectionAdapter() {
 
@@ -162,7 +166,6 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 
 		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
-		comboViewer.setInput(algorithms);
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {
 
 			@Override
@@ -195,6 +198,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 			}
 		});
 		//
+		comboViewer.setInput(Algorithm.values());
 		combo.select(0);
 		return comboViewer;
 	}
@@ -211,7 +215,6 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				runCalculation(e.display);
-				fireUpdate(e.display, evaluationPCA);
 				updateSampleList();
 			}
 		});
@@ -254,8 +257,8 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		tabFolder.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		//
 		createSamplesSection(tabFolder);
-		preprocessingSettingsUI = createPreprocessingUI(tabFolder);
-		filterSettingsUI = createFilterUI(tabFolder);
+		createPreprocessingUI(tabFolder);
+		createFilterUI(tabFolder);
 		//
 		return tabFolder;
 	}
@@ -292,7 +295,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 
 	private void createComboViewerLabelOption(Composite parent) {
 
-		ComboViewer comboViewer = new ComboViewer(parent, SWT.BORDER);
+		ComboViewer comboViewer = new ComboViewer(parent, SWT.BORDER | SWT.READ_ONLY);
 		Combo combo = comboViewer.getCombo();
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {
@@ -342,6 +345,24 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				if(samples != null) {
+					FileDialog fileDialog = new FileDialog(e.display.getActiveShell(), SWT.READ_ONLY);
+					fileDialog.setText("Import");
+					fileDialog.setFilterExtensions(new String[]{SampleTemplateIO.FILTER_EXTENSION});
+					fileDialog.setFilterNames(new String[]{SampleTemplateIO.FILTER_NAME});
+					fileDialog.setFilterPath(PreferenceSupplier.getPathImportFile());
+					String path = fileDialog.open();
+					if(path != null) {
+						try {
+							PreferenceSupplier.setPathImportFile(fileDialog.getFilterPath());
+							File file = new File(path);
+							SampleTemplateIO.read(file, samples.getSampleList());
+							updateSampleList();
+						} catch(IOException e1) {
+							MessageDialog.openWarning(e.display.getActiveShell(), "Import", "Failed to read the sample template.");
+						}
+					}
+				}
 			}
 		});
 		//
@@ -359,6 +380,26 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				if(samples != null) {
+					FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
+					fileDialog.setOverwrite(true);
+					fileDialog.setText("Export");
+					fileDialog.setFilterExtensions(new String[]{SampleTemplateIO.FILTER_EXTENSION});
+					fileDialog.setFilterNames(new String[]{SampleTemplateIO.FILTER_NAME});
+					fileDialog.setFileName(SampleTemplateIO.FILE_NAME);
+					fileDialog.setFilterPath(PreferenceSupplier.getPathExportFile());
+					String path = fileDialog.open();
+					if(path != null) {
+						try {
+							PreferenceSupplier.setPathExportFile(fileDialog.getFilterPath());
+							File file = new File(path);
+							SampleTemplateIO.write(file, samples.getSampleList());
+							MessageDialog.openInformation(e.display.getActiveShell(), "Export", "The sample template has been exported successfully.");
+						} catch(FileNotFoundException e1) {
+							MessageDialog.openWarning(e.display.getActiveShell(), "Export", "The sample template file couldn't be found.");
+						}
+					}
+				}
 			}
 		});
 		//
@@ -374,7 +415,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		sampleListControl.set(sampleListUI);
 	}
 
-	private PreprocessingSettingsUI createPreprocessingUI(TabFolder tabFolder) {
+	private void createPreprocessingUI(TabFolder tabFolder) {
 
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("Preprocessing");
@@ -383,10 +424,10 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		preprocessingSettingsUI.setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
 		tabItem.setControl(preprocessingSettingsUI);
-		return preprocessingSettingsUI;
+		preprocessingSettingsControl.set(preprocessingSettingsUI);
 	}
 
-	private FilterSettingsUI createFilterUI(TabFolder tabFolder) {
+	private void createFilterUI(TabFolder tabFolder) {
 
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("Filter");
@@ -395,12 +436,12 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		filterSettingsUI.setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
 		tabItem.setControl(filterSettingsUI);
-		return filterSettingsUI;
+		filterSettingsControl.set(filterSettingsUI);
 	}
 
 	private void applySettings() {
 
-		sampleListControl.get().updateColorMap();
+		updateSampleList();
 	}
 
 	private void runCalculation(Display display) {
@@ -421,31 +462,21 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 			} catch(Exception e) {
 				logger.warn(e);
 			}
+			fireUpdate(display, evaluationPCA);
 		}
 	}
 
 	private void updateWidgets(IAnalysisSettings analysisSettings) {
 
 		if(analysisSettings != null) {
-			preprocessingSettingsUI.setInput(analysisSettings.getPreprocessingSettings());
-			filterSettingsUI.setInput(analysisSettings.getFilterSettings());
+			preprocessingSettingsControl.get().setInput(analysisSettings.getPreprocessingSettings());
+			filterSettingsControl.get().setInput(analysisSettings.getFilterSettings());
 			spinnerPCs.setSelection(analysisSettings.getNumberOfPrincipalComponents());
-			comboViewerAlgorithm.getCombo().select(getSelectedAlgorithmIndex(analysisSettings));
+			comboViewerAlgorithm.setSelection(new StructuredSelection(analysisSettings.getAlgorithm()));
 		} else {
-			preprocessingSettingsUI.setInput(null);
-			filterSettingsUI.setInput(null);
+			preprocessingSettingsControl.get().setInput(null);
+			filterSettingsControl.get().setInput(null);
 		}
-	}
-
-	private int getSelectedAlgorithmIndex(IAnalysisSettings analysisSettings) {
-
-		for(int i = 0; i < algorithms.length; i++) {
-			Algorithm algorithm = algorithms[i];
-			if(algorithm.equals(analysisSettings.getAlgorithm())) {
-				return i;
-			}
-		}
-		return -1;
 	}
 
 	private void fireUpdate(Display display, EvaluationPCA evaluationPCA) {
