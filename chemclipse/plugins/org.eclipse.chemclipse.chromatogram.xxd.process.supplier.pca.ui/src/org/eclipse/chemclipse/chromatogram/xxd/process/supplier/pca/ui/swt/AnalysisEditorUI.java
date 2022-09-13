@@ -544,13 +544,21 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		/*
 		 * Create a default mapping, when running the process.
 		 */
-		List<ISample> sampleList = samples.getSampleList();
-		Map<String, Color> colorMap = ColorSupport.getColorMapSamples(sampleList);
-		for(ISample sample : sampleList) {
-			Color color = colorMap.getOrDefault(sample.getGroupName(), ColorSupport.COLOR_FALLBACK);
-			sample.setRGB(Colors.getColor(color));
+		if(samples != null) {
+			/*
+			 * Apply the color scheme
+			 */
+			String colorScheme = PreferenceSupplier.getColorScheme();
+			samples.getAnalysisSettings().setColorScheme(colorScheme);
+			//
+			List<ISample> sampleList = samples.getSampleList();
+			Map<String, Color> colorMap = ColorSupport.getColorMapSamples(sampleList, colorScheme);
+			for(ISample sample : sampleList) {
+				Color color = colorMap.getOrDefault(sample.getGroupName(), ColorSupport.COLOR_FALLBACK);
+				sample.setRGB(Colors.getColor(color));
+			}
+			updateSampleList();
 		}
-		updateSampleList();
 	}
 
 	private void updateSampleList() {

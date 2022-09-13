@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultPCA;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
@@ -31,7 +30,7 @@ public class ColorSupport {
 	public static final String GROUP_NAME_UNKOWN = "Unknown";
 	public static final Color COLOR_FALLBACK = Colors.DARK_RED;
 
-	public static Map<String, Color> getColorMapResults(List<? extends IResultPCA> resultList) {
+	public static Map<String, Color> getColorMapResults(List<? extends IResultPCA> resultList, String colorScheme) {
 
 		List<String> groupNames = new ArrayList<>();
 		for(IResultPCA pcaResult : resultList) {
@@ -41,10 +40,10 @@ public class ColorSupport {
 			}
 		}
 		//
-		return createColorMap(groupNames);
+		return createColorMap(groupNames, colorScheme);
 	}
 
-	public static Map<String, Color> getColorMapSamples(List<ISample> sampleList) {
+	public static Map<String, Color> getColorMapSamples(List<ISample> sampleList, String colorScheme) {
 
 		List<String> groupNames = new ArrayList<>();
 		for(ISample sample : sampleList) {
@@ -54,12 +53,12 @@ public class ColorSupport {
 			}
 		}
 		//
-		return createColorMap(groupNames);
+		return createColorMap(groupNames, colorScheme);
 	}
 
-	private static Map<String, Color> createColorMap(List<String> groupNames) {
+	private static Map<String, Color> createColorMap(List<String> groupNames, String colorSchemeName) {
 
-		IColorScheme colorScheme = Colors.getColorScheme(PreferenceSupplier.getColorScheme());
+		IColorScheme colorScheme = Colors.getColorScheme(colorSchemeName);
 		Map<String, Color> colorMap = new HashMap<>();
 		Set<String> groupNameSet = new HashSet<>();
 		//
