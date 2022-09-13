@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="MS Subtract Filter" link_to="../org.eclipse.chemclipse.rcp.app.ui/toc.xml#filter">
+<toc label="MS Subtract Filter" link_to="../org.eclipse.chemclipse.rcp.app.ui/toc.xml#functionality">
 	<topic label="MS Substract Filter"  href="html/plugin/main.html"/>
 </toc>
