@@ -16,7 +16,6 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preproc
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.INormalization;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.IReplacer;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.ITransformation;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.MeanValuesReplacer;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.SmallValuesReplacer;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.model.statistics.ISamples;
@@ -107,7 +106,7 @@ public class PreprocessingSettings implements IPreprocessingSettings {
 		if(replacer != null) {
 			this.replacer = replacer;
 		} else {
-			this.replacer = new MeanValuesReplacer();
+			this.replacer = new SmallValuesReplacer();
 		}
 	}
 

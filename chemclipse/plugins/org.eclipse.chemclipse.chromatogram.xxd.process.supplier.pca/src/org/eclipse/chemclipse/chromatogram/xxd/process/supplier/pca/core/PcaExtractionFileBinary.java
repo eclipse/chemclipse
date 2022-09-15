@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PeakSa
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Sample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.statistics.IRetentionIndex;
 import org.eclipse.chemclipse.model.statistics.IRetentionTime;
 import org.eclipse.chemclipse.model.statistics.IVariable;
@@ -137,9 +138,12 @@ public class PcaExtractionFileBinary implements IExtractionData {
 					//
 					IVariable variable = null;
 					if(type.equals(IRetentionTime.TYPE)) {
-						variable = new RetentionTime(Integer.parseInt(value));
+						double retentionTimeMinutes = Double.parseDouble(value);
+						int retentionTime = (int)Math.round(retentionTimeMinutes * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
+						variable = new RetentionTime(retentionTime);
 					} else if(type.equals(IRetentionIndex.TYPE)) {
-						variable = new RetentionIndex(Integer.parseInt(value));
+						int retentionIndex = (int)Math.round(Double.parseDouble(value));
+						variable = new RetentionIndex(retentionIndex);
 					}
 					//
 					if(variable != null) {

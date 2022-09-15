@@ -33,7 +33,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String N_INPUT_FILE = "INPUT_FILE";
 	//
 	public static final String P_ALGORITHM = "algorithm";
-	public static final String DEF_ALGORITHM = Algorithm.SVD.toString();
+	public static final String DEF_ALGORITHM = Algorithm.NIPALS.toString();
 	public static final String P_REMOVE_USELESS_VARIABLES = "removeUselessVariables";
 	public static final boolean DEF_REMOVE_USELESS_VARIABLES = true;
 	public static final String P_LABEL_OPTION_PCA = "labelOptionPCA";
