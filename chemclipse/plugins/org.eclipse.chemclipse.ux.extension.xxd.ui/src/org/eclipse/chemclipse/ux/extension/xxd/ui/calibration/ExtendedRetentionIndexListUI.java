@@ -27,7 +27,6 @@ import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
-import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
@@ -139,7 +138,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 	private void createToolbarMain(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(Colors.WHITE);
+		composite.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataStatus.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridDataStatus);
@@ -185,8 +184,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof ISeparationColumn) {
-					ISeparationColumn separationColumn = (ISeparationColumn)element;
+				if(element instanceof ISeparationColumn separationColumn) {
 					return SeparationColumnFactory.getColumnLabel(separationColumn, 25);
 				}
 				return null;
@@ -201,8 +199,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof ISeparationColumn && separationColumnIndices != null) {
-					ISeparationColumn separationColumn = (ISeparationColumn)object;
+				if(object instanceof ISeparationColumn separationColumn && separationColumnIndices != null) {
 					separationColumnIndices.setSeparationColumn(separationColumn);
 					updateLabel();
 				}
@@ -327,13 +324,13 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 	private Composite createToolbarInfoTop(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(Colors.WHITE);
+		composite.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(1, false));
 		//
 		labelInfoTop = new Label(composite, SWT.NONE);
-		labelInfoTop.setBackground(Colors.WHITE);
+		labelInfoTop.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		labelInfoTop.setText("");
 		labelInfoTop.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
@@ -358,13 +355,13 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 	private Composite createToolbarInfoBottom(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(Colors.WHITE);
+		composite.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(1, false));
 		//
 		labelInfoBottom = new Label(composite, SWT.NONE);
-		labelInfoBottom.setBackground(Colors.WHITE);
+		labelInfoBottom.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		labelInfoBottom.setText("");
 		labelInfoBottom.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
@@ -375,8 +372,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 
 		Object object = comboViewerSeparationColumn.getStructuredSelection().getFirstElement();
 		StringBuilder builder = new StringBuilder();
-		if(object instanceof ISeparationColumn) {
-			ISeparationColumn separationColumn = (ISeparationColumn)object;
+		if(object instanceof ISeparationColumn separationColumn) {
 			builder.append(separationColumn.getName());
 			builder.append(" ");
 			builder.append(separationColumn.getSeparationColumnType().label());

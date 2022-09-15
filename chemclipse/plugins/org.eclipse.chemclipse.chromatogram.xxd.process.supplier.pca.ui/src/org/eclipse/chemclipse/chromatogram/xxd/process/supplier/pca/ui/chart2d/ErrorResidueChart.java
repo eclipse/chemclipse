@@ -64,7 +64,7 @@ public class ErrorResidueChart extends BarChart {
 		//
 		chartSettings.setTitle("Error Residues");
 		chartSettings.setTitleVisible(true);
-		chartSettings.setTitleColor(Colors.BLACK);
+		chartSettings.setTitleColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_LIST_FOREGROUND));
 		chartSettings.setOrientation(SWT.HORIZONTAL);
 		chartSettings.setHorizontalSliderVisible(false);
 		chartSettings.setVerticalSliderVisible(false);
@@ -76,7 +76,7 @@ public class ErrorResidueChart extends BarChart {
 		rangeRestriction.setRestrictFrame(true);
 		//
 		chartSettings.setShowAxisZeroMarker(true);
-		chartSettings.setColorAxisZeroMarker(Colors.BLACK);
+		chartSettings.setColorAxisZeroMarker(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_LIST_FOREGROUND));
 		chartSettings.setShowSeriesLabelMarker(false);
 		chartSettings.setCreateMenu(true);
 		chartSettings.setEnableCompress(false);

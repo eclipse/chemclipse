@@ -176,7 +176,7 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 		composite.setLayout(new GridLayout(1, true));
 		//
 		tabFolder = new TabFolder(composite, SWT.BOTTOM);
-		tabFolder.setBackground(Colors.WHITE);
+		tabFolder.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 		tabFolder.addSelectionListener(new SelectionAdapter() {
 
@@ -209,7 +209,7 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("Table");
 		Composite composite = new Composite(tabFolder, SWT.NONE);
-		composite.setBackground(Colors.WHITE);
+		composite.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		composite.setLayout(new GridLayout(1, true));
 		tabItem.setControl(composite);
 		//
@@ -222,7 +222,7 @@ public class ExtendedCombinedScanUI extends Composite implements IExtendedPartUI
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("Targets");
 		Composite composite = new Composite(tabFolder, SWT.NONE);
-		composite.setBackground(Colors.WHITE);
+		composite.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		composite.setLayout(new GridLayout(1, true));
 		tabItem.setControl(composite);
 		//

@@ -35,7 +35,6 @@ import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
-import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferencePage;
@@ -89,7 +88,7 @@ public class MassSpectrumLibraryUI extends Composite {
 	private void createControl() {
 
 		Composite composite = new Composite(this, SWT.NONE);
-		composite.setBackground(Colors.WHITE);
+		composite.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		composite.setLayout(new GridLayout(1, true));
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
@@ -109,7 +108,7 @@ public class MassSpectrumLibraryUI extends Composite {
 	private void createToolbarMain(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(Colors.WHITE);
+		composite.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataStatus.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridDataStatus);
@@ -280,13 +279,13 @@ public class MassSpectrumLibraryUI extends Composite {
 	private Composite createToolbarInfo(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(Colors.WHITE);
+		composite.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(1, true));
 		//
 		labelInfo = new Label(composite, SWT.NONE);
-		labelInfo.setBackground(Colors.WHITE);
+		labelInfo.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		labelInfo.setText("");
 		labelInfo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
@@ -296,7 +295,7 @@ public class MassSpectrumLibraryUI extends Composite {
 	private Composite createToolbarSearch(Composite parent) {
 
 		searchSupportUI = new SearchSupportUI(parent, SWT.NONE);
-		searchSupportUI.setBackground(Colors.WHITE);
+		searchSupportUI.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		searchSupportUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		searchSupportUI.setSearchListener(new ISearchListener() {
 
@@ -314,7 +313,7 @@ public class MassSpectrumLibraryUI extends Composite {
 	private Composite createToolbarModify(Composite parent) {
 
 		libraryModifySupportUI = new LibraryModifySupportUI(parent, SWT.NONE);
-		libraryModifySupportUI.setBackground(Colors.WHITE);
+		libraryModifySupportUI.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		libraryModifySupportUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		return libraryModifySupportUI;

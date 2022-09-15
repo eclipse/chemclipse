@@ -30,7 +30,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
-import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageSubtract;
 import org.eclipse.e4.ui.di.Focus;
@@ -131,7 +130,7 @@ public class ExtendedSubtractScanUI extends Composite implements IExtendedPartUI
 		composite.setLayout(new GridLayout(1, true));
 		//
 		tabFolder = new TabFolder(composite, SWT.BOTTOM);
-		tabFolder.setBackground(Colors.WHITE);
+		tabFolder.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		tabFolder.setLayoutData(new GridData(GridData.FILL_BOTH));
 		tabFolder.addSelectionListener(new SelectionAdapter() {
 
@@ -163,7 +162,7 @@ public class ExtendedSubtractScanUI extends Composite implements IExtendedPartUI
 		TabItem tabItem = new TabItem(tabFolder, SWT.NONE);
 		tabItem.setText("Table");
 		Composite composite = new Composite(tabFolder, SWT.NONE);
-		composite.setBackground(Colors.WHITE);
+		composite.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		composite.setLayout(new GridLayout(1, true));
 		tabItem.setControl(composite);
 		//
