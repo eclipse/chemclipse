@@ -44,8 +44,8 @@ public class LoadingsPlotPart extends AbstractPartPCA<ExtendedLoadingsPlot> {
 				return false;
 			} else {
 				Object object = objects.get(0);
-				if(object instanceof EvaluationPCA) {
-					getControl().setInput((EvaluationPCA)object);
+				if(object instanceof EvaluationPCA evaluationPCA) {
+					getControl().setInput(evaluationPCA);
 					return true;
 				}
 			}

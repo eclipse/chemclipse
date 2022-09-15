@@ -47,8 +47,8 @@ public class ScorePlot2DPart extends AbstractPartPCA<ExtendedScorePlot2D> {
 				return false;
 			} else {
 				Object object = objects.get(0);
-				if(object instanceof EvaluationPCA) {
-					getControl().setInput((EvaluationPCA)object);
+				if(object instanceof EvaluationPCA evaluationPCA) {
+					getControl().setInput(evaluationPCA);
 					return true;
 				} else {
 					getControl().setInput(null);

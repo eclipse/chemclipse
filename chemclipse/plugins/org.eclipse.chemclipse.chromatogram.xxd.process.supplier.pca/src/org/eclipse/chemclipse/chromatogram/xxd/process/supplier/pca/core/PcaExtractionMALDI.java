@@ -62,7 +62,7 @@ public class PcaExtractionMALDI implements IExtractionData {
 			if(massSpectrum == null)
 				continue;
 			List<IIon> ions = massSpectrum.getIons();
-			if(ions.size() > 0)
+			if(!ions.isEmpty())
 				inputData.put(input, ions);
 		}
 		return spectraExtractionSupport.process(inputData, monitor);

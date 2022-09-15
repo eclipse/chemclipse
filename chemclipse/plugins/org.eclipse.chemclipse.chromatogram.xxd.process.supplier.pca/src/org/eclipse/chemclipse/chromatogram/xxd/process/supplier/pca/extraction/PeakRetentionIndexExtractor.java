@@ -183,9 +183,8 @@ public class PeakRetentionIndexExtractor {
 			if(extractPeak != null) {
 				while(it.hasNext()) {
 					IVariable variable = it.next();
-					if(variable instanceof RetentionIndex) {
-						int retentionIndex = ((RetentionIndex)variable).getRetentionIndex();
-						IPeak peak = extractPeak.get(retentionIndex);
+					if(variable instanceof RetentionIndex retentionIndex) {
+						IPeak peak = extractPeak.get(retentionIndex.getRetentionIndex());
 						if(peak != null) {
 							PeakSampleData sampleData = new PeakSampleData(peak.getIntegratedArea(), peak);
 							sampleData.setPeak(peak);

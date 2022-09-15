@@ -45,9 +45,8 @@ public class MassSpectrumExtractionSupport {
 		//
 		for(IMassSpectra massSpectra : dataInput.values()) {
 			for(IScanMSD scanMSD : massSpectra.getList()) {
-				if(scanMSD instanceof ILibraryMassSpectrum) {
+				if(scanMSD instanceof ILibraryMassSpectrum libraryMassSpectrum) {
 					//
-					ILibraryMassSpectrum libraryMassSpectrum = (ILibraryMassSpectrum)scanMSD;
 					IExtractedIonSignal extractedIonSignal = scanMSD.getExtractedIonSignal();
 					int startMZ = extractedIonSignal.getStartIon();
 					int stopMZ = extractedIonSignal.getStopIon();

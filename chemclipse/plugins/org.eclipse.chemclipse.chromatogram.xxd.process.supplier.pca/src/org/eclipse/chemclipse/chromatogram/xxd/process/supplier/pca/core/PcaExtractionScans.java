@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -38,6 +38,7 @@ public class PcaExtractionScans implements IExtractionData {
 	private boolean useDefaultProperties;
 
 	public PcaExtractionScans(int retentionTimeWindow, int maximalNumberScans, List<IDataInputEntry> dataInputEntries, ExtractionType scanAlignment, boolean useDefaultProperties) {
+
 		this.retentionTimeWindow = retentionTimeWindow;
 		this.dataInputEntries = dataInputEntries;
 		this.extractionType = scanAlignment;

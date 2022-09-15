@@ -180,9 +180,8 @@ public class PeakRetentionTimeExtractor {
 			SortedMap<Integer, IPeak> extractPeak = extractData.get(sample.getSampleName());
 			while(it.hasNext()) {
 				IVariable variable = it.next();
-				if(variable instanceof RetentionTime) {
-					int retentionTime = ((RetentionTime)variable).getRetentionTime();
-					IPeak peak = extractPeak.get(retentionTime);
+				if(variable instanceof RetentionTime retentionTime) {
+					IPeak peak = extractPeak.get(retentionTime.getRetentionTime());
 					if(peak != null) {
 						PeakSampleData sampleData = new PeakSampleData(peak.getIntegratedArea(), peak);
 						sampleData.setPeak(peak);

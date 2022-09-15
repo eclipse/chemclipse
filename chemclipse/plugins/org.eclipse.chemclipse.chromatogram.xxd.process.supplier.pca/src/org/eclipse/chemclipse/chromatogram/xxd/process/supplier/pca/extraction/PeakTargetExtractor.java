@@ -29,7 +29,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.PeakSa
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Sample;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Samples;
 import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
-import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IPeaks;
@@ -151,7 +151,7 @@ public class PeakTargetExtractor {
 					IPeak peakX = peak.get();
 					IPeakModel peakModel = peakX.getPeakModel();
 					classifier.addAll(peakX.getClassifier());
-					descriptions.add(decimalFormat.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogram.MINUTE_CORRELATION_FACTOR));
+					descriptions.add(decimalFormat.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
 				}
 			});
 			/*

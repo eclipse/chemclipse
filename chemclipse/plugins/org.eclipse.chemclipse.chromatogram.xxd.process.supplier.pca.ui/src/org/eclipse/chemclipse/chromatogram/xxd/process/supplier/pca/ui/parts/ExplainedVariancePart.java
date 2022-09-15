@@ -45,8 +45,8 @@ public class ExplainedVariancePart extends AbstractPartPCA<ExplainedVarianceChar
 				return false;
 			} else {
 				Object object = objects.get(0);
-				if(object instanceof EvaluationPCA) {
-					getControl().setInput((EvaluationPCA)object);
+				if(object instanceof EvaluationPCA evaluationPCA) {
+					getControl().setInput(evaluationPCA);
 					return true;
 				}
 			}

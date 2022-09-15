@@ -219,7 +219,7 @@ public class PcaUtils {
 						Optional<IPeak> peak = sample.getSampleData().get(j).getPeak();
 						if(peak.isPresent()) {
 							List<IIdentificationTarget> target = new ArrayList<>(peak.get().getTargets());
-							if(target.size() > 0) {
+							if(!target.isEmpty()) {
 								map.get(j).add(target.get(0).getLibraryInformation().getName());
 							}
 						}
