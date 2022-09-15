@@ -22,7 +22,7 @@ public class FileTileDefinition extends WizardTile {
 	@Override
 	public String getTitle() {
 
-		return "Files";
+		return "Files (Text/Binary)";
 	}
 
 	@Override

@@ -35,9 +35,9 @@ import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.chemclipse.model.statistics.Target;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-public class PcaExtractionFiles implements IExtractionData {
+public class PcaExtractionFileText implements IExtractionData {
 
-	private static final Logger logger = Logger.getLogger(PcaExtractionFiles.class);
+	private static final Logger logger = Logger.getLogger(PcaExtractionFileText.class);
 	//
 	public static final String DESCRIPTION = "PCA Data Matrix";
 	public static final String FILE_EXTENSION = ".pdm";
@@ -48,7 +48,7 @@ public class PcaExtractionFiles implements IExtractionData {
 	private static final String DELIMITER = "\t";
 	private final List<IDataInputEntry> dataInputEntries;
 
-	public PcaExtractionFiles(List<IDataInputEntry> dataInputEntries) {
+	public PcaExtractionFileText(List<IDataInputEntry> dataInputEntries) {
 
 		this.dataInputEntries = dataInputEntries;
 	}

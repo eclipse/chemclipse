@@ -17,7 +17,8 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IExtractionData;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IFilterSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.IPreprocessingSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaExtractionFiles;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaExtractionFileBinary;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaExtractionFileText;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.jface.wizard.Wizard;
@@ -30,7 +31,7 @@ public class FilesInputWizard extends Wizard implements IInputWizard {
 	/*
 	 * Will be created when finishing the report.
 	 */
-	private PcaExtractionFiles pcaExtractionData;
+	private IExtractionData extractionData;
 	private File file;
 
 	public FilesInputWizard() {
@@ -56,7 +57,7 @@ public class FilesInputWizard extends Wizard implements IInputWizard {
 	@Override
 	public IExtractionData getExtractionData() {
 
-		return pcaExtractionData;
+		return extractionData;
 	}
 
 	@Override
@@ -86,8 +87,26 @@ public class FilesInputWizard extends Wizard implements IInputWizard {
 	@Override
 	public boolean performFinish() {
 
-		List<IDataInputEntry> dataInputs = getDataInputEntries();
-		pcaExtractionData = new PcaExtractionFiles(dataInputs);
+		List<IDataInputEntry> dataInputEntries = getDataInputEntries();
+		File file = getFile(dataInputEntries);
+		if(file != null && file.getName().endsWith(PcaExtractionFileBinary.FILE_EXTENSION)) {
+			extractionData = new PcaExtractionFileBinary(file);
+		} else {
+			extractionData = new PcaExtractionFileText(dataInputEntries);
+		}
 		return true;
+	}
+
+	private File getFile(List<IDataInputEntry> dataInputEntries) {
+
+		for(IDataInputEntry dataInputEntry : dataInputEntries) {
+			String inputFile = dataInputEntry.getInputFile();
+			File file = new File(inputFile);
+			if(file.exists()) {
+				return file;
+			}
+		}
+		//
+		return null;
 	}
 }

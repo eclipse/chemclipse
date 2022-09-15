@@ -16,7 +16,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaExtractionFiles;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaExtractionFileBinary;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.PcaExtractionFileText;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Algorithm;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.DataInputEntry;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IDataInputEntry;
@@ -194,9 +195,9 @@ public class FileSettingsWizardPage extends AbstractAnalysisWizardPage {
 			public void widgetSelected(SelectionEvent e) {
 
 				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
-				fileDialog.setText(PcaExtractionFiles.DESCRIPTION);
-				fileDialog.setFilterExtensions(new String[]{PcaExtractionFiles.FILTER_EXTENSION});
-				fileDialog.setFilterNames(new String[]{PcaExtractionFiles.FILTER_NAME});
+				fileDialog.setText("Import");
+				fileDialog.setFilterExtensions(new String[]{PcaExtractionFileText.FILTER_EXTENSION, PcaExtractionFileBinary.FILTER_EXTENSION});
+				fileDialog.setFilterNames(new String[]{PcaExtractionFileText.FILTER_NAME, PcaExtractionFileBinary.FILTER_NAME});
 				fileDialog.setFilterPath(PreferenceSupplier.getPathImportFile());
 				String path = fileDialog.open();
 				if(path != null) {
@@ -213,7 +214,7 @@ public class FileSettingsWizardPage extends AbstractAnalysisWizardPage {
 	private void createButtonDemoFile(Composite parent) {
 
 		Button button = new Button(parent, SWT.PUSH);
-		button.setText("Demo Data Matrix");
+		button.setText("Demo Data Matrix (*.pdm)");
 		button.setToolTipText("Save a demo data matrix.");
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 3;
@@ -225,9 +226,9 @@ public class FileSettingsWizardPage extends AbstractAnalysisWizardPage {
 			public void widgetSelected(SelectionEvent e) {
 
 				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
-				fileDialog.setText(PcaExtractionFiles.DESCRIPTION);
-				fileDialog.setFilterExtensions(new String[]{PcaExtractionFiles.FILTER_EXTENSION});
-				fileDialog.setFilterNames(new String[]{PcaExtractionFiles.FILTER_NAME});
+				fileDialog.setText(PcaExtractionFileText.DESCRIPTION);
+				fileDialog.setFilterExtensions(new String[]{PcaExtractionFileText.FILTER_EXTENSION});
+				fileDialog.setFilterNames(new String[]{PcaExtractionFileText.FILTER_NAME});
 				fileDialog.setOverwrite(true);
 				fileDialog.setFilterPath(PreferenceSupplier.getPathExportFile());
 				String path = fileDialog.open();
@@ -238,7 +239,7 @@ public class FileSettingsWizardPage extends AbstractAnalysisWizardPage {
 					File file = new File(path);
 					//
 					try (PrintWriter printWriter = new PrintWriter(file)) {
-						PcaExtractionFiles.exportDemoContent(printWriter);
+						PcaExtractionFileText.exportDemoContent(printWriter);
 						printWriter.flush();
 					} catch(Exception e1) {
 						logger.warn(e1);
