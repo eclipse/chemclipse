@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -42,6 +42,7 @@ public abstract class DataInputPageWizard extends WizardPage {
 	private Label countFiles;
 
 	public DataInputPageWizard(String pageName) {
+
 		super(pageName);
 		setPageComplete(false);
 	}
@@ -49,8 +50,8 @@ public abstract class DataInputPageWizard extends WizardPage {
 	public void addInputFiles(List<IDataInputEntry> addInput) {
 
 		Map<String, IDataInputEntry> uniqueInputs = new HashMap<>();
-		dataInputEntries.forEach(e -> uniqueInputs.put(e.getName(), e));
-		addInput.forEach(e -> uniqueInputs.put(e.getName(), e));
+		dataInputEntries.forEach(e -> uniqueInputs.put(e.getSampleName(), e));
+		addInput.forEach(e -> uniqueInputs.put(e.getSampleName(), e));
 		dataInputEntries.clear();
 		dataInputEntries.addAll(uniqueInputs.values());
 		update();

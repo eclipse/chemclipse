@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2020 Lablicate GmbH.
+ * Copyright (c) 2015, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,15 +15,15 @@ import org.eclipse.chemclipse.model.statistics.AbstractSample;
 
 public class Sample extends AbstractSample<PeakSampleData> {
 
-	public Sample(String name, String groupName) {
+	public Sample(String sampleName, String groupName) {
 
-		super(name);
+		super(sampleName);
 		setGroupName(groupName);
 	}
 
-	public Sample(String name, String groupName, String classification, String description) {
+	public Sample(String sampleName, String groupName, String classification, String description) {
 
-		super(name);
+		super(sampleName);
 		setGroupName(groupName);
 		setClassification(classification);
 		setDescription(description);

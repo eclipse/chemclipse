@@ -42,7 +42,7 @@ public class ScorePlot2DPart extends AbstractPartPCA<ExtendedScorePlot2D> {
 				getControl().setInput(null);
 				unloadData();
 				return false;
-			} else if(isUpdateColorSchemeEvent(topic)) {
+			} else if(isUpdateColorSchemeEvent(topic) || isUpdateLabelsEvent(topic)) {
 				getControl().updatePlot();
 				return false;
 			} else {

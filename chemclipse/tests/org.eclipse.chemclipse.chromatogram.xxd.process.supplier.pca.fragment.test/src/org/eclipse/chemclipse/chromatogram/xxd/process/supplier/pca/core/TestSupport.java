@@ -86,7 +86,7 @@ public class TestSupport {
 		}
 		//
 		List<Sample> samplesList = new ArrayList<>();
-		dataInputEntries.forEach(d -> samplesList.add(new Sample(d.getName(), d.getGroupName())));
+		dataInputEntries.forEach(d -> samplesList.add(new Sample(d.getSampleName(), d.getGroupName())));
 		Samples samplesOutput = new Samples(samplesList);
 		//
 		Arrays.stream(variables).forEach(v -> samplesOutput.getVariables().add(new RetentionTime(v)));

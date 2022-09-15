@@ -65,7 +65,7 @@ public class MALDIExtractionSupport {
 		 * Initialize PCA Results
 		 */
 		List<Sample> samplesList = new ArrayList<>();
-		dataInput.keySet().forEach(d -> samplesList.add(new Sample(d.getName(), d.getGroupName())));
+		dataInput.keySet().forEach(d -> samplesList.add(new Sample(d.getSampleName(), d.getGroupName())));
 		Samples samples = new Samples(samplesList);
 		/*
 		 * Extract data
@@ -138,7 +138,7 @@ public class MALDIExtractionSupport {
 			if(lastMass < endMassMin) {
 				endMassMin = lastMass;
 			}
-			scanMap.put(input.getKey().getName(), extractPeaks);
+			scanMap.put(input.getKey().getSampleName(), extractPeaks);
 		}
 		return scanMap;
 	}

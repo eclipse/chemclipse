@@ -63,7 +63,7 @@ public class ScanExtractionSupport {
 		 * Initialize PCA Results
 		 */
 		List<Sample> samplesList = new ArrayList<>();
-		dataInput.keySet().forEach(d -> samplesList.add(new Sample(d.getName(), d.getGroupName())));
+		dataInput.keySet().forEach(d -> samplesList.add(new Sample(d.getSampleName(), d.getGroupName())));
 		Samples samples = new Samples(samplesList);
 		/*
 		 * Extract data
@@ -136,7 +136,7 @@ public class ScanExtractionSupport {
 			if(lastRetetnionTime < endRetentionTimeMin) {
 				endRetentionTimeMin = lastRetetnionTime;
 			}
-			scanMap.put(input.getKey().getName(), extractScans);
+			scanMap.put(input.getKey().getSampleName(), extractScans);
 		}
 		return scanMap;
 	}

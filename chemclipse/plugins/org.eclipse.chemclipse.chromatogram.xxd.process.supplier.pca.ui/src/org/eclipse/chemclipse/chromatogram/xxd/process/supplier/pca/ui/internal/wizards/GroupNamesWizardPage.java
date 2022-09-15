@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -48,6 +48,7 @@ public class GroupNamesWizardPage extends WizardPage {
 	private Text textSelectNames;
 
 	public GroupNamesWizardPage() {
+
 		super("Sample Grouping");
 		setTitle("Set Group Name");
 		setDescription("Set mass group name according to name");
@@ -207,28 +208,28 @@ public class GroupNamesWizardPage extends WizardPage {
 		switch(selectNames) {
 			case CONTAINS_STRING:
 				if(!caseSensitive.getSelection()) {
-					inputWizard.getDataInputEntries().stream().filter(i -> i.getName().toLowerCase().contains(s.toLowerCase())).forEach(filterInput::add);
+					inputWizard.getDataInputEntries().stream().filter(i -> i.getSampleName().toLowerCase().contains(s.toLowerCase())).forEach(filterInput::add);
 				} else {
-					inputWizard.getDataInputEntries().stream().filter(i -> i.getName().contains(s)).forEach(filterInput::add);
+					inputWizard.getDataInputEntries().stream().filter(i -> i.getSampleName().contains(s)).forEach(filterInput::add);
 				}
 				break;
 			case STARTS_WITH_STRING:
 				if(!caseSensitive.getSelection()) {
-					inputWizard.getDataInputEntries().stream().filter(i -> i.getName().toLowerCase().startsWith(s.toLowerCase())).forEach(filterInput::add);
+					inputWizard.getDataInputEntries().stream().filter(i -> i.getSampleName().toLowerCase().startsWith(s.toLowerCase())).forEach(filterInput::add);
 				} else {
-					inputWizard.getDataInputEntries().stream().filter(i -> i.getName().startsWith(s)).forEach(filterInput::add);
+					inputWizard.getDataInputEntries().stream().filter(i -> i.getSampleName().startsWith(s)).forEach(filterInput::add);
 				}
 				break;
 			case ENDS_WITH_STRING:
 				if(!caseSensitive.getSelection()) {
-					inputWizard.getDataInputEntries().stream().filter(i -> i.getName().toLowerCase().endsWith(s.toLowerCase())).forEach(filterInput::add);
+					inputWizard.getDataInputEntries().stream().filter(i -> i.getSampleName().toLowerCase().endsWith(s.toLowerCase())).forEach(filterInput::add);
 				} else {
-					inputWizard.getDataInputEntries().stream().filter(i -> i.getName().endsWith(s)).forEach(filterInput::add);
+					inputWizard.getDataInputEntries().stream().filter(i -> i.getSampleName().endsWith(s)).forEach(filterInput::add);
 				}
 				break;
 			case REGEXP:
 				Pattern p = Pattern.compile(s);
-				inputWizard.getDataInputEntries().stream().filter(i -> p.matcher(i.getName()).find()).forEach(filterInput::add);
+				inputWizard.getDataInputEntries().stream().filter(i -> p.matcher(i.getSampleName()).find()).forEach(filterInput::add);
 				break;
 			default:
 				break;

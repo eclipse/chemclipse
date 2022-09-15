@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - refactoring model
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support;
 
@@ -34,6 +35,7 @@ public class InputFilesTable {
 	private TableViewer tableViewer;
 
 	public InputFilesTable(Composite composite, Object layoutData) {
+
 		createTable(composite, layoutData);
 	}
 
@@ -49,7 +51,7 @@ public class InputFilesTable {
 			public String getText(Object element) {
 
 				IDataInputEntry inputData = (IDataInputEntry)element;
-				return inputData.getName();
+				return inputData.getSampleName();
 			}
 		});
 		col = createTableViewerColumn(titles[1], bounds[1], 1);

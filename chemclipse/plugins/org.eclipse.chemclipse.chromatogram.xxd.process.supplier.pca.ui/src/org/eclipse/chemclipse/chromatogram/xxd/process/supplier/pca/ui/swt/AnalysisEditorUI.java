@@ -329,6 +329,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 						IAnalysisSettings analysisSettings = samples.getAnalysisSettings();
 						if(analysisSettings != null) {
 							analysisSettings.setLabelOptionPCA(labelOptionPCA);
+							UpdateNotifierUI.update(e.display, IChemClipseEvents.TOPIC_PCA_UPDATE_LABELS, labelOptionPCA);
 						}
 					}
 				}

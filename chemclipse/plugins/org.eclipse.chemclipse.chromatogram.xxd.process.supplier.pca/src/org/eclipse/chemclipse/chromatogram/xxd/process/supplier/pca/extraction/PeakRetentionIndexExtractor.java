@@ -45,12 +45,12 @@ public class PeakRetentionIndexExtractor {
 	public Samples extractPeakData(Map<IDataInputEntry, IPeaks<?>> peaks, int retentionIndexWindow, IProgressMonitor monitor) {
 
 		List<Sample> samplesList = new ArrayList<>();
-		peaks.keySet().forEach(d -> samplesList.add(new Sample(d.getName(), d.getGroupName())));
+		peaks.keySet().forEach(d -> samplesList.add(new Sample(d.getSampleName(), d.getGroupName())));
 		Samples samples = new Samples(samplesList);
 		//
 		Map<String, IPeaks<?>> peakMap = new LinkedHashMap<>();
 		peaks.forEach((dataInputEntry, peaksInput) -> {
-			peakMap.put(dataInputEntry.getName(), peaksInput);
+			peakMap.put(dataInputEntry.getSampleName(), peaksInput);
 		});
 		//
 		Map<String, SortedMap<Integer, IPeak>> extractPeaks = exctractPcaPeakMap(peakMap, retentionIndexWindow);
