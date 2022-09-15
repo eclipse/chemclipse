@@ -50,39 +50,43 @@ public abstract class WizardTile implements TileDefinition {
 		AtomicReference<ISamplesPCA<?, ?>> evaluation = new AtomicReference<>();
 		String title = null;
 		//
-		if(wizardDialog.open() == Window.OK) {
-			/*
-			 * Settings
-			 */
-			IAnalysisSettings analysisSettings = wizard.getAnalysisSettings();
-			analysisSettings.setPreprocessingSettings(wizard.getPreprocessingSettings());
-			analysisSettings.setFilterSettings(wizard.getFilterSettings());
-			IExtractionData extractionData = wizard.getExtractionData();
-			title = analysisSettings.getTitle();
-			//
-			if(extractionData != null) {
-				ProgressMonitorDialog monitorDialog = new ProgressMonitorDialog(wizardDialog.getShell());
-				monitorDialog.setCancelable(true);
-				monitorDialog.run(true, true, new IRunnableWithProgress() {
+		try {
+			if(wizardDialog.open() == Window.OK) {
+				/*
+				 * Settings
+				 */
+				IAnalysisSettings analysisSettings = wizard.getAnalysisSettings();
+				analysisSettings.setPreprocessingSettings(wizard.getPreprocessingSettings());
+				analysisSettings.setFilterSettings(wizard.getFilterSettings());
+				IExtractionData extractionData = wizard.getExtractionData();
+				title = analysisSettings.getTitle();
+				//
+				if(extractionData != null) {
+					ProgressMonitorDialog monitorDialog = new ProgressMonitorDialog(wizardDialog.getShell());
+					monitorDialog.setCancelable(true);
+					monitorDialog.run(true, true, new IRunnableWithProgress() {
 
-					@Override
-					public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
+						@Override
+						public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-						ISamplesPCA<?, ?> samples = extractionData.process(monitor);
-						samples.setAnalysisSettings(analysisSettings);
-						evaluation.set(samples);
-					}
-				});
+							ISamplesPCA<?, ?> samples = extractionData.process(monitor);
+							samples.setAnalysisSettings(analysisSettings);
+							evaluation.set(samples);
+						}
+					});
+				}
 			}
-		}
-		/*
-		 * Open the editor.
-		 */
-		ISamplesPCA<?, ?> samples = evaluation.get();
-		if(samples != null) {
-			CreatePcaEvaluation.createPart(samples, context, title);
-		} else {
-			logger.warn("Failed to create PCA analysis.");
+			/*
+			 * Open the editor.
+			 */
+			ISamplesPCA<?, ?> samples = evaluation.get();
+			if(samples != null) {
+				CreatePcaEvaluation.createPart(samples, context, title);
+			} else {
+				logger.warn("Failed to create PCA analysis.");
+			}
+		} finally {
+			wizard.dispose();
 		}
 	}
 

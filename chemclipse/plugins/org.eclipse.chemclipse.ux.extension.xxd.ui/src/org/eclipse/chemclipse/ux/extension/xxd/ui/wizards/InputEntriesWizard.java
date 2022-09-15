@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2020 Lablicate GmbH.
+ * Copyright (c) 2011, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,6 +18,7 @@ import java.util.Map;
 
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
+import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
@@ -60,11 +61,14 @@ public class InputEntriesWizard extends Wizard {
 		WizardDialog wizardDialog = new WizardDialog(shell, inputWizard);
 		wizardDialog.setPageSize(InputWizardSettings.DEFAULT_WIDTH, InputWizardSettings.DEFAULT_HEIGHT);
 		wizardDialog.create();
-		//
-		if(wizardDialog.open() == WizardDialog.OK) {
-			return inputWizard.inputEntriesPage.getSelectedItems();
-		} else {
-			return Collections.emptyMap();
+		try {
+			if(wizardDialog.open() == Window.OK) {
+				return inputWizard.inputEntriesPage.getSelectedItems();
+			} else {
+				return Collections.emptyMap();
+			}
+		} finally {
+			inputWizard.dispose();
 		}
 	}
 }
