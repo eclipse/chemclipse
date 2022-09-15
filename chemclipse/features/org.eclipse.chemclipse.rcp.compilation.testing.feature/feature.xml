@@ -32,13 +32,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.hamcrest.library"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.chemclipse.rcp.app.test"
          download-size="0"
          install-size="0"
@@ -47,13 +40,6 @@
 
    <plugin
          id="org.easymock"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.mockito"
          download-size="0"
          install-size="0"
          version="0.0.0"
