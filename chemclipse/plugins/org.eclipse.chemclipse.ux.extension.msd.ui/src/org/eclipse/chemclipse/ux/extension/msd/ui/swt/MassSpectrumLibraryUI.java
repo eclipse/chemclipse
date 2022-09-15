@@ -330,11 +330,10 @@ public class MassSpectrumLibraryUI extends Composite {
 			public void selectionChanged(SelectionChangedEvent event) {
 
 				Object firstElement = ((IStructuredSelection)event.getSelection()).getFirstElement();
-				if(firstElement != null && firstElement instanceof IScanMSD) {
+				if(firstElement != null && firstElement instanceof IScanMSD massSpectrum) {
 					/*
 					 * Fire an update if an identified scan has been selected.
 					 */
-					IScanMSD massSpectrum = (IScanMSD)firstElement;
 					IIdentificationTarget identificationTarget = getIdentificationTarget(massSpectrum);
 					//
 					UpdateNotifier.update(massSpectrum);
@@ -362,8 +361,7 @@ public class MassSpectrumLibraryUI extends Composite {
 		IIdentificationTarget identificationTarget = null;
 		//
 		ILibraryInformation libraryInformation = null;
-		if(scanMSD instanceof IRegularLibraryMassSpectrum) {
-			IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)scanMSD;
+		if(scanMSD instanceof IRegularLibraryMassSpectrum libraryMassSpectrum) {
 			libraryInformation = libraryMassSpectrum.getLibraryInformation();
 			if(libraryInformation != null) {
 				try {

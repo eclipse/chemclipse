@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -56,11 +56,7 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 	@Override
 	public boolean canFinish() {
 
-		if(wizardElements.isRetentionIndexDataValidated()) {
-			return true;
-		} else {
-			return false;
-		}
+		return wizardElements.isRetentionIndexDataValidated();
 	}
 
 	@Override
@@ -143,8 +139,7 @@ public class PageCalibrationTable extends AbstractExtendedWizardPage {
 				int index = table.getSelectionIndex();
 				TableItem tableItem = table.getItem(index);
 				Object object = tableItem.getData();
-				if(object instanceof IRetentionIndexEntry) {
-					IRetentionIndexEntry retentionIndexEntry = (IRetentionIndexEntry)object;
+				if(object instanceof IRetentionIndexEntry retentionIndexEntry) {
 					int retentionTime = retentionIndexEntry.getRetentionTime();
 					IChromatogramSelection chromatogramSelection = wizardElements.getChromatogramSelection();
 					if(chromatogramSelection != null && chromatogramSelection.getChromatogram() != null) {

@@ -161,8 +161,7 @@ public class RetentionIndexUI extends Composite {
 							TableItem[] tableItems = table.getSelection();
 							for(TableItem tableItem : tableItems) {
 								Object object = tableItem.getData();
-								if(object instanceof IRetentionIndexEntry) {
-									IRetentionIndexEntry retentionIndexEntry = (IRetentionIndexEntry)object;
+								if(object instanceof IRetentionIndexEntry retentionIndexEntry) {
 									keysToRemove.add(retentionIndexEntry.getRetentionTime());
 								}
 							}
