@@ -81,6 +81,7 @@ public class MALDIExtractionSupport {
 			for(NavigableMap<Double, Float> data : dataSet) {
 				if(isFirst) {
 					massRange.addAll(data.keySet());
+					isFirst = false;
 				} else {
 					if(data.size() != massRange.size()) {
 						similarMassSpectrum = false;
