@@ -34,7 +34,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
-import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.SWT;
@@ -121,7 +120,7 @@ public class LibraryModifySupportUI extends Composite {
 		setLayout(new FillLayout());
 		//
 		Composite composite = new Composite(this, SWT.NONE);
-		composite.setBackground(Colors.WHITE);
+		composite.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		GridLayout gridLayout = new GridLayout(8, false);
 		gridLayout.marginLeft = 0;
 		gridLayout.marginRight = 0;

@@ -22,11 +22,11 @@ import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
 import org.eclipse.chemclipse.msd.swt.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
-import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
@@ -138,7 +138,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 	private void createToolbarMain(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(Colors.WHITE);
+		composite.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		GridData gridDataStatus = new GridData(GridData.FILL_HORIZONTAL);
 		gridDataStatus.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridDataStatus);
@@ -159,7 +159,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Toggle info toolbar.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -167,7 +167,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 
 				PartSupport.toggleCompositeVisibility(toolbarInfoTop);
 				boolean visible = PartSupport.toggleCompositeVisibility(toolbarInfoBottom);
-				button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImage.SIZE_16x16, visible));
+				button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INFO, IApplicationImageProvider.SIZE_16x16, visible));
 			}
 		});
 		//
@@ -184,8 +184,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof ISeparationColumn) {
-					ISeparationColumn separationColumn = (ISeparationColumn)element;
+				if(element instanceof ISeparationColumn separationColumn) {
 					return SeparationColumnFactory.getColumnLabel(separationColumn, 25);
 				}
 				return null;
@@ -200,8 +199,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof ISeparationColumn && separationColumnIndices != null) {
-					ISeparationColumn separationColumn = (ISeparationColumn)object;
+				if(object instanceof ISeparationColumn separationColumn && separationColumnIndices != null) {
 					separationColumnIndices.setSeparationColumn(separationColumn);
 					updateLabel();
 				}
@@ -216,14 +214,14 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Toggle search toolbar.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				boolean visible = retentionIndexUI.toggleSearchVisibility();
-				button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImage.SIZE_16x16, visible));
+				button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEARCH, IApplicationImageProvider.SIZE_16x16, visible));
 			}
 		});
 		//
@@ -235,7 +233,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Toggle modify toolbar.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DEFAULT, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DEFAULT, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -243,9 +241,9 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 
 				boolean visible = retentionIndexUI.toggleEditVisibility();
 				if(visible) {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ACTIVE, IApplicationImage.SIZE_16x16));
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ACTIVE, IApplicationImageProvider.SIZE_16x16));
 				} else {
-					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DEFAULT, IApplicationImage.SIZE_16x16));
+					button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_DEFAULT, IApplicationImageProvider.SIZE_16x16));
 				}
 			}
 		});
@@ -258,14 +256,14 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Enable/disable to edit the table.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ENTRY_DEFAULT, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT_ENTRY_DEFAULT, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				retentionIndexUI.toggleTableEdit();
-				button.setImage(ApplicationImageFactory.getInstance().getImage((retentionIndexUI.isEnabled()) ? IApplicationImage.IMAGE_EDIT_ENTRY_ACTIVE : IApplicationImage.IMAGE_EDIT_ENTRY, IApplicationImage.SIZE_16x16));
+				button.setImage(ApplicationImageFactory.getInstance().getImage((retentionIndexUI.isEnabled()) ? IApplicationImage.IMAGE_EDIT_ENTRY_ACTIVE : IApplicationImage.IMAGE_EDIT_ENTRY, IApplicationImageProvider.SIZE_16x16));
 				updateLabel();
 			}
 		});
@@ -278,7 +276,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Add the library to the list of searched databases.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -297,7 +295,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Remove the library from the list of searched databases.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_REMOVE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_REMOVE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -326,13 +324,13 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 	private Composite createToolbarInfoTop(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(Colors.WHITE);
+		composite.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(1, false));
 		//
 		labelInfoTop = new Label(composite, SWT.NONE);
-		labelInfoTop.setBackground(Colors.WHITE);
+		labelInfoTop.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		labelInfoTop.setText("");
 		labelInfoTop.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
@@ -357,13 +355,13 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 	private Composite createToolbarInfoBottom(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setBackground(Colors.WHITE);
+		composite.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		composite.setLayoutData(gridData);
 		composite.setLayout(new GridLayout(1, false));
 		//
 		labelInfoBottom = new Label(composite, SWT.NONE);
-		labelInfoBottom.setBackground(Colors.WHITE);
+		labelInfoBottom.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		labelInfoBottom.setText("");
 		labelInfoBottom.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
@@ -374,8 +372,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 
 		Object object = comboViewerSeparationColumn.getStructuredSelection().getFirstElement();
 		StringBuilder builder = new StringBuilder();
-		if(object instanceof ISeparationColumn) {
-			ISeparationColumn separationColumn = (ISeparationColumn)object;
+		if(object instanceof ISeparationColumn separationColumn) {
 			builder.append(separationColumn.getName());
 			builder.append(" ");
 			builder.append(separationColumn.getSeparationColumnType().label());

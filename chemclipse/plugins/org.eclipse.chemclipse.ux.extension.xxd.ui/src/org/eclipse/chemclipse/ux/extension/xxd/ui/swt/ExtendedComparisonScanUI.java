@@ -41,7 +41,6 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
-import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageScans;
@@ -434,7 +433,7 @@ public class ExtendedComparisonScanUI extends Composite implements IExtendedPart
 	private void createUpdateGroup(Composite parent) {
 
 		Group group = new Group(parent, SWT.NONE);
-		group.setBackground(Colors.WHITE);
+		group.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		group.setText("");
 		group.setToolTipText("Select the display option.");
 		group.setLayout(new RowLayout(SWT.HORIZONTAL));
@@ -485,7 +484,7 @@ public class ExtendedComparisonScanUI extends Composite implements IExtendedPart
 		Group group = new Group(parent, SWT.NONE);
 		group.setText("");
 		group.setToolTipText("Select the display pre-processing.");
-		group.setBackground(Colors.WHITE);
+		group.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		group.setText("");
 		group.setLayout(new RowLayout(SWT.HORIZONTAL));
 		group.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));

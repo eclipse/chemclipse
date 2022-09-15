@@ -19,7 +19,6 @@ import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
-import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.e4.core.services.events.IEventBroker;
@@ -125,7 +124,7 @@ public class RetentionIndexUI extends Composite {
 	private SearchSupportUI createToolbarSearch(Composite parent) {
 
 		SearchSupportUI searchSupportUI = new SearchSupportUI(parent, SWT.NONE);
-		searchSupportUI.setBackground(Colors.WHITE);
+		searchSupportUI.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		searchSupportUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		searchSupportUI.setSearchListener(new ISearchListener() {
 
@@ -161,8 +160,7 @@ public class RetentionIndexUI extends Composite {
 							TableItem[] tableItems = table.getSelection();
 							for(TableItem tableItem : tableItems) {
 								Object object = tableItem.getData();
-								if(object instanceof IRetentionIndexEntry) {
-									IRetentionIndexEntry retentionIndexEntry = (IRetentionIndexEntry)object;
+								if(object instanceof IRetentionIndexEntry retentionIndexEntry) {
 									keysToRemove.add(retentionIndexEntry.getRetentionTime());
 								}
 							}

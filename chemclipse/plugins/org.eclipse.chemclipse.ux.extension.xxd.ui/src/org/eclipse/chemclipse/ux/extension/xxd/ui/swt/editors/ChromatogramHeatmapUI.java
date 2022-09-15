@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2021 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,9 +18,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.preferences.PreferencePageSystem;
-import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.tsd.model.core.IChromatogramTSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.ChromatogramHeatmapData;
@@ -210,7 +210,7 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 
 		Canvas canvas = new Canvas(parent, SWT.FILL | SWT.BORDER);
 		canvas.setLayoutData(new GridData(GridData.FILL_BOTH));
-		canvas.setBackground(Colors.WHITE);
+		canvas.setBackground(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		//
 		lightweightSystem = createLightweightSystem(canvas);
 		intensityGraphFigure = createIntensityGraphFigure();
@@ -221,7 +221,7 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 	private LightweightSystem createLightweightSystem(Canvas canvas) {
 
 		LightweightSystem lightweightSystem = new LightweightSystem(canvas);
-		lightweightSystem.getRootFigure().setBackgroundColor(Colors.WHITE);
+		lightweightSystem.getRootFigure().setBackgroundColor(getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
 		//
 		return lightweightSystem;
 	}
@@ -229,7 +229,7 @@ public class ChromatogramHeatmapUI extends Composite implements IExtendedPartUI 
 	private IntensityGraphFigure createIntensityGraphFigure() {
 
 		IntensityGraphFigure intensityGraphFigure = new IntensityGraphFigure();
-		intensityGraphFigure.setForegroundColor(Colors.BLACK);
+		intensityGraphFigure.setForegroundColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_LIST_FOREGROUND));
 		intensityGraphFigure.getXAxis().setTitle(LABEL_AXIS_X);
 		intensityGraphFigure.getYAxis().setTitle(LABEL_AXIS_Y);
 		//
