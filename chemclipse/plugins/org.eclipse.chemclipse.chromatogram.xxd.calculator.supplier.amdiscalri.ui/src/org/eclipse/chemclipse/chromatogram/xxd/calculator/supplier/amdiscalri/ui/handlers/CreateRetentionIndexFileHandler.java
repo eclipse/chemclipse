@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,8 +21,13 @@ public class CreateRetentionIndexFileHandler {
 	@Execute
 	public void execute() {
 
-		WizardDialog wizardDialog = new WizardDialog(Display.getCurrent().getActiveShell(), new WizardCreateRetentionIndexFile());
+		WizardCreateRetentionIndexFile wizard = new WizardCreateRetentionIndexFile();
+		WizardDialog wizardDialog = new WizardDialog(Display.getCurrent().getActiveShell(), wizard);
 		wizardDialog.setPageSize(WizardCreateRetentionIndexFile.PREFERRED_WIDTH, WizardCreateRetentionIndexFile.PREFERRED_HEIGHT);
-		wizardDialog.open();
+		try {
+			wizardDialog.open();
+		} finally {
+			wizard.dispose();
+		}
 	}
 }
