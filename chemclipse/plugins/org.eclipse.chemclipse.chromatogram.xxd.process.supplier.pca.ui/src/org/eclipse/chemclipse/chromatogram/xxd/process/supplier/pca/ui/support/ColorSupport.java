@@ -20,6 +20,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultPCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.LabelOptionPCA;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
 import org.eclipse.chemclipse.swt.ui.support.IColorScheme;
@@ -27,57 +28,93 @@ import org.eclipse.swt.graphics.Color;
 
 public class ColorSupport {
 
-	public static final String GROUP_NAME_UNKOWN = "Unknown";
+	public static final String COLOR_GROUP_DEFAULT = "Unknown";
 	public static final Color COLOR_FALLBACK = Colors.DARK_RED;
 
-	public static Map<String, Color> getColorMapResults(List<? extends IResultPCA> resultList, String colorScheme) {
+	public static Map<String, Color> getColorMapResults(List<? extends IResultPCA> resultList, LabelOptionPCA labelOptionPCA, String colorScheme) {
 
-		List<String> groupNames = new ArrayList<>();
+		Set<String> colorGroups = new HashSet<>();
 		for(IResultPCA pcaResult : resultList) {
-			String groupName = pcaResult.getGroupName();
-			if(groupName != null) {
-				groupNames.add(groupName);
+			String colorGroup = getColorGroup(pcaResult.getSample(), labelOptionPCA);
+			if(colorGroup != null) {
+				colorGroups.add(colorGroup);
 			}
 		}
 		//
-		return createColorMap(groupNames, colorScheme);
+		return createColorMap(colorGroups, colorScheme);
 	}
 
-	public static Map<String, Color> getColorMapSamples(List<ISample> sampleList, String colorScheme) {
+	public static Map<String, Color> getColorMapSamples(List<ISample> sampleList, LabelOptionPCA labelOptionPCA, String colorScheme) {
 
-		List<String> groupNames = new ArrayList<>();
+		Set<String> colorGroups = new HashSet<>();
 		for(ISample sample : sampleList) {
-			String groupName = sample.getGroupName();
-			if(groupName != null) {
-				groupNames.add(groupName);
+			String colorGroup = getColorGroup(sample, labelOptionPCA);
+			if(colorGroup != null) {
+				colorGroups.add(colorGroup);
 			}
 		}
 		//
-		return createColorMap(groupNames, colorScheme);
+		return createColorMap(colorGroups, colorScheme);
 	}
 
-	private static Map<String, Color> createColorMap(List<String> groupNames, String colorSchemeName) {
+	public static String getColorGroup(ISample sample, LabelOptionPCA labelOptionPCA) {
+
+		String colorGroup;
+		switch(labelOptionPCA) {
+			case SAMPLE_NAME:
+				colorGroup = sample.getSampleName();
+				break;
+			case CLASSIFICATION:
+				colorGroup = sample.getClassification();
+				break;
+			case DESCRIPTION:
+				colorGroup = sample.getDescription();
+				break;
+			default:
+				/*
+				 * Group Name is the default.
+				 */
+				colorGroup = sample.getGroupName();
+				break;
+		}
+		//
+		return validateColorGroup(colorGroup);
+	}
+
+	private static String validateColorGroup(String colorGroup) {
+
+		/*
+		 * Validate the group.
+		 */
+		if(colorGroup == null) {
+			colorGroup = ColorSupport.COLOR_GROUP_DEFAULT;
+		} else {
+			colorGroup = colorGroup.trim().replace(" ", "_");
+			if(colorGroup.isEmpty()) {
+				colorGroup = ColorSupport.COLOR_GROUP_DEFAULT;
+			}
+		}
+		//
+		return colorGroup;
+	}
+
+	private static Map<String, Color> createColorMap(Set<String> colorGroups, String colorSchemeName) {
 
 		IColorScheme colorScheme = Colors.getColorScheme(colorSchemeName);
 		Map<String, Color> colorMap = new HashMap<>();
-		Set<String> groupNameSet = new HashSet<>();
-		//
-		groupNameSet.add(GROUP_NAME_UNKOWN);
-		for(String groupName : groupNames) {
-			if(groupName != null) {
-				groupNameSet.add(groupName);
-			}
-		}
 		/*
 		 * Assign the colors.
+		 * Add the default marker at the end of the sorted list.
 		 */
-		List<String> groupNameList = new ArrayList<>(groupNameSet);
-		Collections.sort(groupNameList);
+		colorGroups.remove(COLOR_GROUP_DEFAULT);
+		List<String> colorGroupList = new ArrayList<>(colorGroups);
+		Collections.sort(colorGroupList);
+		colorGroupList.add(COLOR_GROUP_DEFAULT);
 		//
-		for(String groupName : groupNameList) {
-			Color color = colorMap.get(groupName);
+		for(String colorGroup : colorGroupList) {
+			Color color = colorMap.get(colorGroup);
 			if(color == null) {
-				colorMap.put(groupName, colorScheme.getColor());
+				colorMap.put(colorGroup, colorScheme.getColor());
 				colorScheme.incrementColor();
 			}
 		}

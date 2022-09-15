@@ -549,12 +549,15 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 			 * Apply the color scheme
 			 */
 			String colorScheme = PreferenceSupplier.getColorScheme();
-			samples.getAnalysisSettings().setColorScheme(colorScheme);
+			IAnalysisSettings analysisSettings = samples.getAnalysisSettings();
+			analysisSettings.setColorScheme(colorScheme);
+			LabelOptionPCA labelOptionPCA = analysisSettings.getLabelOptionPCA();
 			//
 			List<ISample> sampleList = samples.getSampleList();
-			Map<String, Color> colorMap = ColorSupport.getColorMapSamples(sampleList, colorScheme);
+			Map<String, Color> colorMap = ColorSupport.getColorMapSamples(sampleList, labelOptionPCA, colorScheme);
 			for(ISample sample : sampleList) {
-				Color color = colorMap.getOrDefault(sample.getGroupName(), ColorSupport.COLOR_FALLBACK);
+				String colorGroup = ColorSupport.getColorGroup(sample, labelOptionPCA);
+				Color color = colorMap.getOrDefault(colorGroup, ColorSupport.COLOR_FALLBACK);
 				sample.setRGB(Colors.getColor(color));
 			}
 			updateSampleList();

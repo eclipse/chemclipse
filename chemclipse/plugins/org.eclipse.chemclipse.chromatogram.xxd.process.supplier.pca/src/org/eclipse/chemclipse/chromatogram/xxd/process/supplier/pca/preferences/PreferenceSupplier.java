@@ -37,7 +37,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static final String P_REMOVE_USELESS_VARIABLES = "removeUselessVariables";
 	public static final boolean DEF_REMOVE_USELESS_VARIABLES = true;
 	public static final String P_LABEL_OPTION_PCA = "labelOptionPCA";
-	public static final String DEF_LABEL_OPTION_PCA = LabelOptionPCA.SAMPLE_NAME.name();
+	public static final String DEF_LABEL_OPTION_PCA = LabelOptionPCA.GROUP_NAME.name();
 	//
 	public static final String P_NUMBER_OF_COMPONENTS = "numberOfComponents";
 	public static final int MIN_NUMBER_OF_COMPONENTS = 3;

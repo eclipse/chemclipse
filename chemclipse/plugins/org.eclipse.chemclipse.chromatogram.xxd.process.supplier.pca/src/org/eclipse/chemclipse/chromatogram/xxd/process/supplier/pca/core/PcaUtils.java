@@ -124,7 +124,7 @@ public class PcaUtils {
 
 		Set<String> groupNames = new HashSet<>();
 		for(IResultPCA pcaResult : pcaResults) {
-			String groupName = pcaResult.getGroupName();
+			String groupName = pcaResult.getSample().getGroupName();
 			groupNames.add(groupName);
 		}
 		return groupNames;
@@ -259,8 +259,8 @@ public class PcaUtils {
 	public static void sortPcaResultsByGroup(List<IResultPCA> pcaResults) {
 
 		Comparator<IResultPCA> comparator = (arg0, arg1) -> {
-			String name0 = arg0.getGroupName();
-			String name1 = arg1.getGroupName();
+			String name0 = arg0.getSample().getGroupName();
+			String name1 = arg1.getSample().getGroupName();
 			if(name0 == null && name1 == null) {
 				return 0;
 			}
@@ -282,7 +282,7 @@ public class PcaUtils {
 	public static void sortPcaResultsByName(List<IResultPCA> samples) {
 
 		Comparator<IResultPCA> comparator = (arg0, arg1) -> {
-			return arg0.getSampleName().compareTo(arg1.getSampleName());
+			return arg0.getSample().getSampleName().compareTo(arg1.getSample().getSampleName());
 		};
 		Collections.sort(samples, comparator);
 	}

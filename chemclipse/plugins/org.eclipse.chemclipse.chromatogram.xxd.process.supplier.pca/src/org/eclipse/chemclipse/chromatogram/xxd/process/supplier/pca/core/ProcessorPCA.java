@@ -278,11 +278,6 @@ public class ProcessorPCA {
 			double[] sampleData = entry.getValue();
 			ISample sample = entry.getKey();
 			IResultPCA pcaResult = new ResultPCA(sample);
-			pcaResult.setSampleName(sample.getSampleName());
-			pcaResult.setGroupName(sample.getGroupName());
-			pcaResult.setClassification(sample.getClassification());
-			pcaResult.setDescription(sample.getDescription());
-			pcaResult.setRGB(sample.getRGB());
 			pcaResult.setScoreVector(principalComponentAnalysis.getScoreVector(sample));
 			pcaResult.setErrorMemberShip(principalComponentAnalysis.getErrorMetric(sampleData));
 			pcaResult.setSampleData(sampleData);

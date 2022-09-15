@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,6 +17,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preproc
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.IReplacer;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.ITransformation;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.MeanValuesReplacer;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.preprocessing.SmallValuesReplacer;
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.model.statistics.ISamples;
 import org.eclipse.chemclipse.model.statistics.IVariable;
@@ -29,17 +30,20 @@ public class PreprocessingSettings implements IPreprocessingSettings {
 	private ITransformation transformation = null;
 	/*
 	 * Replace must be set.
+	 * By default, the small values replace is the most robust choice.
 	 */
-	private IReplacer replacer = new MeanValuesReplacer();
+	private IReplacer replacer = new SmallValuesReplacer();
 	//
 	private boolean onlySelected = false;
 	private boolean removeUselessVariables = true;
 	private boolean modifyOnlySelectedVariable = false;
 
 	public PreprocessingSettings() {
+
 	}
 
 	public PreprocessingSettings(IPreprocessingSettings preprocessingSettings) {
+
 		setCentering(preprocessingSettings.getCentering());
 		setNormalization(preprocessingSettings.getNormalization());
 		setTransformation(preprocessingSettings.getTransformation());

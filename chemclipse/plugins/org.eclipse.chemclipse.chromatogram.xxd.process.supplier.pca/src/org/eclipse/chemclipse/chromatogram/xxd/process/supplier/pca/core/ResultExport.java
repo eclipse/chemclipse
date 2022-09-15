@@ -78,7 +78,7 @@ public class ResultExport {
 			 * Data
 			 */
 			for(IResultPCA pcaResult : pcaResults.getPcaResultList()) {
-				String sampleName = pcaResult.getSampleName();
+				String sampleName = pcaResult.getSample().getSampleName();
 				printWriter.print(sampleName);
 				printWriter.print(TAB);
 				double[] sampleData = pcaResult.getSampleData();
@@ -105,7 +105,7 @@ public class ResultExport {
 				/*
 				 * Print the PCs
 				 */
-				String sampleName = pcaResult.getSampleName();
+				String sampleName = pcaResult.getSample().getSampleName();
 				double[] eigenSpace = pcaResult.getScoreVector();
 				printWriter.print(sampleName);
 				printWriter.print(TAB);

@@ -16,11 +16,6 @@ import org.eclipse.chemclipse.model.statistics.ISample;
 
 public class ResultPCA implements IResultPCA {
 
-	private String sampleName = "";
-	private String groupName = "";
-	private String classification = "";
-	private String description = "";
-	private String rgb = "255,0,0";
 	private ISample sample;
 	private boolean isDisplayed;
 	private double[] scoreVector;
@@ -31,66 +26,6 @@ public class ResultPCA implements IResultPCA {
 
 		this.isDisplayed = true;
 		this.sample = sample;
-	}
-
-	@Override
-	public String getSampleName() {
-
-		return sampleName;
-	}
-
-	@Override
-	public void setSampleName(String sampleName) {
-
-		this.sampleName = sampleName;
-	}
-
-	@Override
-	public String getGroupName() {
-
-		return groupName;
-	}
-
-	@Override
-	public void setGroupName(String groupName) {
-
-		this.groupName = groupName;
-	}
-
-	@Override
-	public String getClassification() {
-
-		return classification;
-	}
-
-	@Override
-	public void setClassification(String classification) {
-
-		this.classification = classification;
-	}
-
-	@Override
-	public String getDescription() {
-
-		return description;
-	}
-
-	@Override
-	public void setDescription(String description) {
-
-		this.description = description;
-	}
-
-	@Override
-	public String getRGB() {
-
-		return rgb;
-	}
-
-	@Override
-	public void setRGB(String rgb) {
-
-		this.rgb = rgb;
 	}
 
 	@Override

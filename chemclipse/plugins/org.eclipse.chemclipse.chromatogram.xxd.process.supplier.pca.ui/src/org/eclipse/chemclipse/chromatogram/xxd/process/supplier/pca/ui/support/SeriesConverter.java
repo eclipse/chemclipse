@@ -124,7 +124,7 @@ public class SeriesConverter {
 			/*
 			 * Create the series.
 			 */
-			String sampleName = pcaResult.getSampleName();
+			String sampleName = pcaResult.getSample().getSampleName();
 			String description;
 			switch(labelOptionPCA) {
 				case GROUP_NAME:
@@ -162,7 +162,7 @@ public class SeriesConverter {
 			scatterSeriesSettings.setDescription(description);
 			scatterSeriesSettings.setSymbolType(PlotSymbolType.valueOf(preferenceStore.getString(PreferenceSupplier.P_SCORE_PLOT_2D_SYMBOL_TYPE)));
 			scatterSeriesSettings.setSymbolSize(preferenceStore.getInt(PreferenceSupplier.P_SCORE_PLOT_2D_SYMBOL_SIZE));
-			Color color = Colors.getColor(pcaResult.getRGB());
+			Color color = Colors.getColor(pcaResult.getSample().getRGB());
 			if(pcaResult.getSample().isSelected()) {
 				scatterSeriesSettings.setSymbolColor(color);
 			} else {
