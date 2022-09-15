@@ -79,6 +79,7 @@ public class ScanExtractionSupport {
 			for(NavigableMap<Integer, Float> data : dataSet) {
 				if(isFirst) {
 					retentionTimes.addAll(data.keySet());
+					isFirst = false;
 				} else {
 					if(data.size() != retentionTimes.size()) {
 						similarChromatogram = false;
