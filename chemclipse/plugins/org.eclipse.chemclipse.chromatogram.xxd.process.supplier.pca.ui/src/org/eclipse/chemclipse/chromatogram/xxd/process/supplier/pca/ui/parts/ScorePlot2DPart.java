@@ -42,6 +42,9 @@ public class ScorePlot2DPart extends AbstractPartPCA<ExtendedScorePlot2D> {
 				getControl().setInput(null);
 				unloadData();
 				return false;
+			} else if(isUpdateColorSchemeEvent(topic)) {
+				getControl().updatePlot();
+				return false;
 			} else {
 				Object object = objects.get(0);
 				if(object instanceof EvaluationPCA) {

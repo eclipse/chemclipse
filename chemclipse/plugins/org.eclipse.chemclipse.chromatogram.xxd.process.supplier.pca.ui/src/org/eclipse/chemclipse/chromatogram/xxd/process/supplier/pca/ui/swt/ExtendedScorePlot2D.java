@@ -47,6 +47,11 @@ public class ExtendedScorePlot2D extends Composite implements IExtendedPartUI {
 	public void setInput(EvaluationPCA evaluationPCA) {
 
 		this.evaluationPCA = evaluationPCA;
+		updatePlot();
+	}
+
+	public void updatePlot() {
+
 		updateWidgets();
 		applySettings();
 	}

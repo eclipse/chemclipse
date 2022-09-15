@@ -31,13 +31,19 @@ public abstract class AbstractPartPCA<T extends Composite> extends AbstractPart<
 	protected void subscribeAdditionalTopics() {
 
 		subscribeAdditionalTopic(TOPIC, IChemClipseEvents.EVENT_BROKER_DATA);
+		subscribeAdditionalTopic(IChemClipseEvents.TOPIC_PCA_UPDATE_COLORSCHEME, IChemClipseEvents.EVENT_BROKER_DATA);
 		subscribeAdditionalTopic(IChemClipseEvents.TOPIC_EDITOR_PCA_CLOSE, IChemClipseEvents.EVENT_BROKER_DATA);
 	}
 
 	@Override
 	protected boolean isUpdateTopic(String topic) {
 
-		return TOPIC.equals(topic) || isUnloadEvent(topic);
+		return TOPIC.equals(topic) || isUpdateColorSchemeEvent(topic) || isUnloadEvent(topic);
+	}
+
+	protected boolean isUpdateColorSchemeEvent(String topic) {
+
+		return topic.equals(IChemClipseEvents.TOPIC_PCA_UPDATE_COLORSCHEME);
 	}
 
 	protected boolean isUnloadEvent(String topic) {

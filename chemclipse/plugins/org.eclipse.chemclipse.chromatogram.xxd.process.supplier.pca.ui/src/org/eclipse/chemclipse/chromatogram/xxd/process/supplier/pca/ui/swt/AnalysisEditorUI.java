@@ -534,21 +534,25 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 
 		if(samples != null) {
 			if(MessageDialog.openQuestion(display.getActiveShell(), "Color Scheme", "Would like to apply the current color scheme on the samples?")) {
-				applyColorScheme();
+				String colorScheme = applyColorScheme();
+				if(colorScheme != null) {
+					UpdateNotifierUI.update(getDisplay(), IChemClipseEvents.TOPIC_PCA_UPDATE_COLORSCHEME, colorScheme);
+				}
 			}
 		}
 	}
 
-	private void applyColorScheme() {
+	private String applyColorScheme() {
 
 		/*
 		 * Create a default mapping, when running the process.
 		 */
+		String colorScheme = null;
 		if(samples != null) {
 			/*
 			 * Apply the color scheme
 			 */
-			String colorScheme = PreferenceSupplier.getColorScheme();
+			colorScheme = PreferenceSupplier.getColorScheme();
 			IAnalysisSettings analysisSettings = samples.getAnalysisSettings();
 			analysisSettings.setColorScheme(colorScheme);
 			LabelOptionPCA labelOptionPCA = analysisSettings.getLabelOptionPCA();
@@ -562,6 +566,8 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 			}
 			updateSampleList();
 		}
+		//
+		return colorScheme;
 	}
 
 	private void updateSampleList() {
