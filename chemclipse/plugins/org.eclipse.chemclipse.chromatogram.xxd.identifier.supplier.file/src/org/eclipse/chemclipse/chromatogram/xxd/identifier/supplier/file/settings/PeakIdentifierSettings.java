@@ -32,7 +32,7 @@ public class PeakIdentifierSettings extends AbstractPeakIdentifierSettingsMSD im
 
 	@JsonProperty(value = "Library File", defaultValue = "")
 	@JsonPropertyDescription("Select the library file.")
-	@FileSettingProperty(dialogType = DialogType.OPEN_DIALOG, extensionNames = {"AMDIS (*.msl)", "AMDIS (*.MSL)", "NIST (*.msp)", "NIST (*.MSP)", "MassBank (.zip)", "MassBank (.ZIP)"}, validExtensions = {"*.msl", "*.MSL", "*.msp", "*.MSP", "*.zip", "*.ZIP"}, onlyDirectory = false)
+	@FileSettingProperty(dialogType = DialogType.OPEN_DIALOG, extensionNames = {"AMDIS (*.msl)", "NIST (*.msp)", "MassBank (.zip)"}, validExtensions = {"*.msl;*.MSL", "*.msp;*.MSP", "*.zip;*.ZIP"}, onlyDirectory = false)
 	private File libraryFile;
 	@JsonProperty(value = "Pre-Optimization", defaultValue = "false")
 	private boolean usePreOptimization = false;

@@ -52,7 +52,7 @@ public class IdentifierSettings extends ChromatogramIdentifierAdapterSettings im
 	private float limitMatchFactor = IIdentifierSettings.DEF_LIMIT_MATCH_FACTOR;
 	@JsonProperty(value = "Library File", defaultValue = "")
 	@JsonPropertyDescription("Select the library file.")
-	@FileSettingProperty(dialogType = DialogType.OPEN_DIALOG, extensionNames = {"AMDIS (*.msl)", "AMDIS (*.MSL)"}, validExtensions = {"*.msl", "*.MSL"}, onlyDirectory = false)
+	@FileSettingProperty(dialogType = DialogType.OPEN_DIALOG, extensionNames = {"AMDIS (*.msl)"}, validExtensions = {"*.msl;*.MSL"}, onlyDirectory = false)
 	private File libraryFile;
 	@JsonProperty(value = "Mass Spectrum Comparator", defaultValue = DEFAULT_COMPARATOR_ID)
 	@JsonPropertyDescription(value = "Select the algorithm used for mass spectrum comparison calculation.")
