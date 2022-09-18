@@ -481,4 +481,6 @@ public interface IApplicationImage extends IApplicationImageProvider {
 	String IMAGE_LOCK_UPDATE = PATH_PREFIX + "lockUpdate.gif";
 	String IMAGE_SORT_ALPHA_ASC = PATH_PREFIX + "sort_alpha_asc.png";
 	String IMAGE_SORT_ALPHA_DESC = PATH_PREFIX + "sort_alpha_desc.png";
+	//
+	String IMAGE_EXTERNAL_BROWSER = PATH_PREFIX + "external_browser.png";
 }
