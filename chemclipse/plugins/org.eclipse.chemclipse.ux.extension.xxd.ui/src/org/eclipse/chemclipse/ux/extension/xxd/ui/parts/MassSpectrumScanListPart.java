@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2021 Lablicate GmbH.
+ * Copyright (c) 2014, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -22,12 +22,12 @@ import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class MassSpectrumPeakListPart extends AbstractPart<ExtendedMassSpectrumIonsListUI> {
+public class MassSpectrumScanListPart extends AbstractPart<ExtendedMassSpectrumIonsListUI> {
 
 	private static final String TOPIC = IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION;
 
 	@Inject
-	public MassSpectrumPeakListPart(Composite parent) {
+	public MassSpectrumScanListPart(Composite parent) {
 
 		super(parent, TOPIC);
 	}
@@ -43,8 +43,8 @@ public class MassSpectrumPeakListPart extends AbstractPart<ExtendedMassSpectrumI
 
 		if(objects.size() == 1) {
 			Object object = objects.get(0);
-			if(object instanceof IScanMSD) {
-				getControl().update((IScanMSD)object);
+			if(object instanceof IScanMSD scanMSD) {
+				getControl().update(scanMSD);
 				return true;
 			}
 		}
