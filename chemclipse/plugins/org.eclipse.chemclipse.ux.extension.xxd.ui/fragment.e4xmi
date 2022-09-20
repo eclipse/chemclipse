@@ -91,7 +91,7 @@
             </children>
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_F-avMJRlEeW3h-K0O5zQFg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.maldi.partstack.1" containerData="2500">
-            <children xsi:type="basic:Part" xmi:id="_OTuAUOMCEeeFk6MNh27L1g" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.MassSpectrumPeakList" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.parts.MassSpectrumPeakListPart" label="Mass Spectrum Peak List" iconURI="platform:/plugin/org.eclipse.chemclipse.support.ui/icons/16x16/file.gif"/>
+            <children xsi:type="basic:Part" xmi:id="_OTuAUOMCEeeFk6MNh27L1g" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.MassSpectrumScanList" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.parts.MassSpectrumScanListPart" label="Mass Spectrum Scan List" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/selectedScansDefault.gif"/>
           </children>
         </children>
       </children>
