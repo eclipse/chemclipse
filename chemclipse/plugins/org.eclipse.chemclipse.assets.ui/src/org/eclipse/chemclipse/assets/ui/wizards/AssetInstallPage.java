@@ -10,7 +10,7 @@
  * Christoph Läubrich - initial API and implementation
  * Philip Wenig - initial API and implementation
  *******************************************************************************/
-package org.eclipse.chemclipse.rcp.app.ui.wizards;
+package org.eclipse.chemclipse.assets.ui.wizards;
 
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createColumn;
 import static org.eclipse.chemclipse.support.ui.swt.ControlBuilder.createDefault;
@@ -33,9 +33,9 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 
+import org.eclipse.chemclipse.assets.core.AssetItem;
+import org.eclipse.chemclipse.assets.core.AssetType;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.rcp.app.assets.AssetItem;
-import org.eclipse.chemclipse.rcp.app.assets.AssetType;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.settings.ApplicationSettings;

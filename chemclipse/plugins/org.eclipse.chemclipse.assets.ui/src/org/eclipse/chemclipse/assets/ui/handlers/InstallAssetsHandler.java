@@ -10,7 +10,7 @@
  * Christoph Läubrich - initial API and implementation
  * Philip Wenig - code refactoring
  *******************************************************************************/
-package org.eclipse.chemclipse.rcp.app.ui.handlers;
+package org.eclipse.chemclipse.assets.ui.handlers;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,8 +19,8 @@ import java.util.List;
 
 import javax.inject.Named;
 
-import org.eclipse.chemclipse.rcp.app.assets.AssetItem;
-import org.eclipse.chemclipse.rcp.app.ui.wizards.AssetInstallPage;
+import org.eclipse.chemclipse.assets.core.AssetItem;
+import org.eclipse.chemclipse.assets.ui.wizards.AssetInstallPage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.wizards.SinglePageWizard;
 import org.eclipse.e4.core.di.annotations.CanExecute;
@@ -30,10 +30,10 @@ import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.core.di.extensions.Service;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.e4.ui.services.IServiceConstants;
-import org.eclipse.e4.ui.workbench.IWorkbench;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbench;
 
 public class InstallAssetsHandler {
 

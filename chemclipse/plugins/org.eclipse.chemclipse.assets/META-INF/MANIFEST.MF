@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Assets
+Bundle-SymbolicName: org.eclipse.chemclipse.assets
+Bundle-Version: 0.9.0.qualifier
+Bundle-Activator: org.eclipse.chemclipse.assets.Activator
+Bundle-Vendor: ChemClipse
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.chemclipse.logging;bundle-version="0.9.0",
+ org.eclipse.chemclipse.support;bundle-version="0.9.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Automatic-Module-Name: org.eclipse.chemclipse.assets
+Bundle-ActivationPolicy: lazy
+Export-Package: org.eclipse.chemclipse.assets.core

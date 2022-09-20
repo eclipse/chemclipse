@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmlns:ui="http://www.eclipse.org/ui/2010/UIModel/application/ui" xmi:id="_h0A1MDLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.ide.application" bindingContexts="_h0A1MTLzEeKMEOdllHiEaA">
+<application:Application xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:advanced="http://www.eclipse.org/ui/2010/UIModel/application/ui/advanced" xmlns:application="http://www.eclipse.org/ui/2010/UIModel/application" xmlns:basic="http://www.eclipse.org/ui/2010/UIModel/application/ui/basic" xmlns:menu="http://www.eclipse.org/ui/2010/UIModel/application/ui/menu" xmi:id="_h0A1MDLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.ide.application" bindingContexts="_h0A1MTLzEeKMEOdllHiEaA">
   <children xsi:type="basic:TrimmedWindow" xmi:id="_h0BcQDLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.trimmedwindow.main" selectedElement="_6h3_kDPDEeKN2qL8NSaklg" label="org.eclipse.chemclipse.rcp.app.ui" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/32x32/logo.png" width="800" height="600">
     <tags>shellMaximized</tags>
     <children xsi:type="advanced:PerspectiveStack" xmi:id="_6h3_kDPDEeKN2qL8NSaklg" elementId="org.eclipse.chemclipse.rcp.app.ui.perspectivestack.main"/>
@@ -21,9 +21,6 @@
       </children>
       <children xsi:type="menu:Menu" xmi:id="_QrQhQDiVEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.plugins" label="%Plugins">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_WAg5QDiWEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.updates" label="%CheckUpdates" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/updates.gif" command="_LrC6QDiWEeKDEdWQrkwLnQ"/>
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_WfC2wMzGEeqoZ6zANnMIXQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.installassets" label="%InstallAssets" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/import_wiz.png" tooltip="Installs additional assets" command="_wrYAwMzGEeqoZ6zANnMIXQ">
-          <visibleWhen xsi:type="ui:ImperativeExpression" xmi:id="_EUZ18M2wEeqf4utQxRr8zw" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.InstallAssetsHandler$VisibleWhen"/>
-        </children>
       </children>
       <children xsi:type="menu:Menu" xmi:id="_DSko4DiVEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.window" label="%Window">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_lA-LQDiXEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.perspectiveSwitcher" label="%PerspectiveSwitcher" iconURI="platform:/plugin/org.eclipse.ui/icons/full/eview16/new_persp.png" tooltip="" mnemonics="" command="_XUgbQDiXEeKDEdWQrkwLnQ"/>
@@ -141,7 +138,6 @@
   <handlers xmi:id="_wRrJICaJEeOrR5M2kqmSOQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.help.contents" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.HelpContentsHandler" command="_zeEzsCaJEeOrR5M2kqmSOQ"/>
   <handlers xmi:id="_NeEKMIgsEemJaOKd7Cy7Ww" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.opensnippet" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.OpenSnippetHandler" command="_-eZF4IgrEemJaOKd7Cy7Ww"/>
   <handlers xmi:id="_XLWkMLgWEemNgNx3khJk0g" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.opentoolmenu" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.OpenMenuHandler" command="_mZc7gLgVEemNgNx3khJk0g"/>
-  <handlers xmi:id="_-CiPIMzGEeqoZ6zANnMIXQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.installassets" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.InstallAssetsHandler" command="_wrYAwMzGEeqoZ6zANnMIXQ"/>
   <handlers xmi:id="_b_Jt8KzhEeu9gOO-5hThuA" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.resetperspective" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.ResetPerspectiveHandler" command="_X4T0YKzhEeu9gOO-5hThuA"/>
   <handlers xmi:id="_havKEBQKEe2TEsI5wKibaA" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.help.search" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.SearchHelpHandler" command="_WfrxwBQKEe2TEsI5wKibaA"/>
   <handlers xmi:id="_l9XAsBQKEe2TEsI5wKibaA" elementId="org.eclipse.chemclipse.rcp.app.ui.handler.help.context" contributionURI="bundleclass://org.eclipse.chemclipse.rcp.app.ui/org.eclipse.chemclipse.rcp.app.ui.handlers.DynamicHelpHandler" command="_bDq6UBQKEe2TEsI5wKibaA"/>
@@ -168,7 +164,6 @@
     <parameters xmi:id="_-eZF4YgrEemJaOKd7Cy7Ww" elementId="org.eclipse.chemclipse.rcp.app.ui.commandparameter.opensnippet.snippetid" name="snippetid" optional="false"/>
   </commands>
   <commands xmi:id="_mZc7gLgVEemNgNx3khJk0g" elementId="chemclipse.command.opentoolmenu" commandName="Open Tool Menu" description="Open the Tool menu"/>
-  <commands xmi:id="_wrYAwMzGEeqoZ6zANnMIXQ" elementId="org.eclipse.chemclipse.rcp.app.ui.command.installassets" commandName="Install Assets" description="Installs additional assets"/>
   <commands xmi:id="_X4T0YKzhEeu9gOO-5hThuA" elementId="org.eclipse.chemclipse.rcp.app.ui.command.resetperspective" commandName="Reset Perspective"/>
   <commands xmi:id="_WfrxwBQKEe2TEsI5wKibaA" elementId="org.eclipse.chemclipse.rcp.app.ui.command.help.search" commandName="Search Help"/>
   <commands xmi:id="_bDq6UBQKEe2TEsI5wKibaA" elementId="org.eclipse.chemclipse.rcp.app.ui.command.help.context" commandName="Help context" description="Context sensitive help"/>
