@@ -51,7 +51,9 @@ public class TimeRangesUI extends Composite implements IExtendedPartUI {
 	 */
 	private static final String NO_SELECTION = "--";
 	//
+	private Button buttonPrevious;
 	private ComboViewer comboViewer;
+	private Button buttonNext;
 	private TimeRangeUI timeRangeUI;
 	private Button buttonAdd;
 	private Button buttonDelete;
@@ -111,13 +113,15 @@ public class TimeRangesUI extends Composite implements IExtendedPartUI {
 
 	private void createControl() {
 
-		GridLayout gridLayout = new GridLayout(6, false);
+		GridLayout gridLayout = new GridLayout(8, false);
 		gridLayout.marginWidth = 0;
 		gridLayout.marginLeft = 0;
 		gridLayout.marginRight = 0;
 		setLayout(gridLayout);
 		//
+		buttonPrevious = createButtonPrevious(this);
 		comboViewer = createComboViewer(this);
+		buttonNext = createButtonNext(this);
 		timeRangeUI = createTimeRangeUI(this);
 		createSeparator(this);
 		buttonAdd = createButtonAdd(this);
@@ -130,6 +134,49 @@ public class TimeRangesUI extends Composite implements IExtendedPartUI {
 	private void initialize() {
 
 		updateComboViewer();
+	}
+
+	private Button createButtonPrevious(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Previous time range.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_BACKWARD, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(timeRanges != null) {
+					List<TimeRange> timeRangeList = new ArrayList<>(timeRanges.values());
+					Collections.sort(timeRangeList, (t1, t2) -> Integer.compare(t1.getStart(), t2.getStart()));
+					if(!timeRangeList.isEmpty()) {
+						if(timeRange == null) {
+							/*
+							 * No selection yet
+							 */
+							timeRange = timeRangeList.get(0);
+						} else {
+							/*
+							 * Previous or first
+							 */
+							int index = timeRangeList.indexOf(timeRange) - 1;
+							if(index >= 0 && index < timeRangeList.size()) {
+								timeRange = timeRangeList.get(index);
+							} else {
+								timeRange = timeRangeList.get(0);
+							}
+						}
+						/*
+						 * Update
+						 */
+						updateTimeRange(timeRange, true);
+					}
+				}
+			}
+		});
+		//
+		return button;
 	}
 
 	private ComboViewer createComboViewer(Composite composite) {
@@ -182,6 +229,53 @@ public class TimeRangesUI extends Composite implements IExtendedPartUI {
 		});
 		//
 		return comboViewer;
+	}
+
+	private Button createButtonNext(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Next time range.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_FORWARD, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(timeRanges != null) {
+					List<TimeRange> timeRangeList = new ArrayList<>(timeRanges.values());
+					Collections.sort(timeRangeList, (t1, t2) -> Integer.compare(t1.getStart(), t2.getStart()));
+					if(!timeRangeList.isEmpty()) {
+						if(timeRange == null) {
+							/*
+							 * No selection yet
+							 */
+							int last = timeRangeList.size() - 1;
+							last = (last < 0) ? 0 : last;
+							timeRange = timeRangeList.get(last);
+						} else {
+							/*
+							 * Previous or first
+							 */
+							int index = timeRangeList.indexOf(timeRange) + 1;
+							if(index >= 0 && index < timeRangeList.size()) {
+								timeRange = timeRangeList.get(index);
+							} else {
+								int last = timeRangeList.size() - 1;
+								last = (last < 0) ? 0 : last;
+								timeRange = timeRangeList.get(last);
+							}
+						}
+						/*
+						 * Update
+						 */
+						updateTimeRange(timeRange, true);
+					}
+				}
+			}
+		});
+		//
+		return button;
 	}
 
 	private TimeRangeUI createTimeRangeUI(Composite parent) {
@@ -308,7 +402,9 @@ public class TimeRangesUI extends Composite implements IExtendedPartUI {
 			/*
 			 * Sort
 			 */
+			buttonPrevious.setEnabled(true);
 			buttonAdd.setEnabled(true);
+			buttonNext.setEnabled(true);
 			/*
 			 * Create the sorted ranges and add the no selection
 			 * entry at the beginning.
@@ -338,6 +434,8 @@ public class TimeRangesUI extends Composite implements IExtendedPartUI {
 			}
 			combo.select(index);
 		} else {
+			buttonPrevious.setEnabled(false);
+			buttonNext.setEnabled(false);
 			buttonAdd.setEnabled(false);
 			buttonDelete.setEnabled(false);
 			comboViewer.setInput(null);
