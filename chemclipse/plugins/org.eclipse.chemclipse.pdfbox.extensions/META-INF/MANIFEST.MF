@@ -8,11 +8,7 @@ Bundle-Activator: org.eclipse.chemclipse.pdfbox.extensions.Activator
 Bundle-Vendor: ChemClipse
 Require-Bundle: org.eclipse.core.runtime,
  org.apache.commons.logging;bundle-version="1.2.0",
- org.eclipse.chemclipse.logging;bundle-version="0.8.0",
- org.bouncycastle.bcpg;bundle-version="1.69.0",
- org.bouncycastle.bcpkix;bundle-version="1.69.0",
- org.bouncycastle.bcprov;bundle-version="1.69.0",
- org.bouncycastle.bcutil;bundle-version="1.69.0"
+ org.eclipse.chemclipse.logging;bundle-version="0.8.0"
 Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: libraries/javax.activation_1.1.0.v201211130549.jar,
