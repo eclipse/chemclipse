@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -55,10 +55,8 @@ public class CalculatorOPLS extends AbstractMultivariateCalculator {
 		DMatrixRMaj t_ortho = new DMatrixRMaj(numberOfSamples, 1);
 		DMatrixRMaj p_ortho = new DMatrixRMaj(1, numberOfVariables);
 		DMatrixRMaj w_ortho = new DMatrixRMaj(1, numberOfVariables);
-		DMatrixRMaj X = new DMatrixRMaj(1, 1);
-		X.set(getSampleData());
-		DMatrixRMaj y = new DMatrixRMaj(1, 1);
-		y.set(getYVector());
+		DMatrixRMaj X = new DMatrixRMaj(getSampleData());
+		DMatrixRMaj y = new DMatrixRMaj(getYVector());
 		// DenseMatrix64F y_avg = getAvgYVector();
 		// DenseMatrix64F x_avg = getAvgXVector();
 		// DenseMatrix64F x_sd = getSDXVector();
