@@ -1,5 +1,0 @@
-Bundles from Eclipse Orbit
-https://download.eclipse.org/tools/orbit/downloads/drops/S20190726194335/
-
-EJML causes problems. That's why it is included via a bundle.
-org/ejml/ops/CommonOps can not be resolved even though it is available in org.ejml.dense64.
