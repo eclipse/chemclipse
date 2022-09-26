@@ -25,7 +25,6 @@
 	<unit id="org.apache.poi" version="0.0.0"/>
 	<unit id="org.apache.poi.ooxml.schemas" version="0.0.0"/>
 	<unit id="org.apache.poi.ooxml" version="0.0.0"/>
-	<unit id="org.apache.commons.lang" version="0.0.0"/>
 	<unit id="com.fasterxml.jackson.core.jackson-databind" version="0.0.0"/>
 	<unit id="javax.activation" version="0.0.0"/>
 	<unit id="javax.annotation" version="0.0.0"/>
