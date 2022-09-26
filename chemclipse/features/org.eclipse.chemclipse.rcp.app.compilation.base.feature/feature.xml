@@ -31,7 +31,29 @@ http://www.eclipse.org/legal/epl-v10.html
          version="0.0.0"/>
 
    <includes
+         id="org.eclipse.epp.mpc"
+         version="0.0.0"/>
+
+   <includes
+         id="org.eclipse.userstorage"
+         version="0.0.0"/>
+
+   <includes
          id="org.eclipse.rcp"
          version="0.0.0"/>
+
+   <plugin
+         id="org.apache.httpcomponents.httpclient"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.httpcomponents.httpcore"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
 
 </feature>
