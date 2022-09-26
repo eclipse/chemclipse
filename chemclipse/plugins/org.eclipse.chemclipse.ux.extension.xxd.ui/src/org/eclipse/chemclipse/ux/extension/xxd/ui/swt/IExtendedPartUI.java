@@ -11,9 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.logging.core.Logger;
@@ -216,13 +217,18 @@ public interface IExtendedPartUI {
 
 	default Button createSettingsButton(Composite parent, List<Class<? extends IPreferencePage>> preferencePages, ISettingsHandler settingsHandler) {
 
+		return createSettingsButton(parent, preferencePages, settingsHandler, true);
+	}
+
+	default Button createSettingsButton(Composite parent, List<Class<? extends IPreferencePage>> preferencePages, ISettingsHandler settingsHandler, boolean sortByTitle) {
+
 		Button button = createSettingsButtonBasic(parent);
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent event) {
 
-				showPreferencesDialog(event, preferencePages, settingsHandler);
+				showPreferencesDialog(event, preferencePages, settingsHandler, sortByTitle);
 			}
 		});
 		//
@@ -239,32 +245,35 @@ public interface IExtendedPartUI {
 		return button;
 	}
 
-	default void showPreferencesDialog(SelectionEvent event, List<Class<? extends IPreferencePage>> preferencePages, ISettingsHandler settingsHandler) {
+	default void showPreferencesDialog(SelectionEvent event, List<Class<? extends IPreferencePage>> preferencePages, ISettingsHandler settingsHandler, boolean sortByTitle) {
 
 		if(!preferencePages.isEmpty()) {
 			/*
 			 * Collect the pages
 			 */
-			TreeMap<String, IPreferencePage> preferencePageMap = new TreeMap<>();
-			for(int i = 0; i < preferencePages.size(); i++) {
+			List<IPreferencePage> pages = new ArrayList<>();
+			for(Class<? extends IPreferencePage> page : preferencePages) {
 				try {
-					Class<? extends IPreferencePage> page = preferencePages.get(i);
 					IPreferencePage preferencePage = page.getConstructor().newInstance();
 					String title = preferencePage.getTitle();
 					if(title == null || title.isEmpty() || title.isBlank()) {
-						title = "--";
+						preferencePage.setTitle("--");
 					}
-					preferencePageMap.put(title, preferencePage);
+					pages.add(preferencePage);
 				} catch(Exception exception) {
 					logger.warn(exception);
 				}
 			}
 			/*
-			 * Add the pages sorted by title.
+			 * Add the pages.
 			 */
 			PreferenceManager preferenceManager = new PreferenceManager();
+			if(sortByTitle) {
+				Collections.sort(pages, (p1, p2) -> p1.getTitle().compareTo(p2.getTitle()));
+			}
+			//
 			int i = 1;
-			for(IPreferencePage preferencePage : preferencePageMap.values()) {
+			for(IPreferencePage preferencePage : pages) {
 				preferenceManager.addToRoot(new PreferenceNode(Integer.toString(i++), preferencePage));
 			}
 			/*
