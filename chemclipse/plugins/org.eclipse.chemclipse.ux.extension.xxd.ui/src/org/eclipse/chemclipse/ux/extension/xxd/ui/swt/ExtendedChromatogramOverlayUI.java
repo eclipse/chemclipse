@@ -193,7 +193,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		composite.setLayout(new GridLayout(10, false));
+		composite.setLayout(new GridLayout(11, false));
 		//
 		labelStatus = createLabelStatus(composite);
 		comboOverlayType = createOverlayTypeCombo(composite);
@@ -204,6 +204,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		createResetButton(composite);
 		createNewOverlayPartButton(composite);
 		buttonChartGrid = createButtonToggleChartGrid(composite, chartControl, IMAGE_CHART_GRID, chartGridSupport);
+		createButtonHelp(composite);
 		createSettingsButton(composite);
 		//
 		return composite;

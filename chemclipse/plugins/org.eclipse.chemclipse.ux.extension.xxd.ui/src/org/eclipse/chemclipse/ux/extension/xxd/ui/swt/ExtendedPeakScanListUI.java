@@ -110,6 +110,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 	private AtomicReference<InformationUI> toolbarInfoBottom = new AtomicReference<>();
 	private Button buttonToolbarSearch;
 	private AtomicReference<SearchSupportUI> toolbarSearch = new AtomicReference<>();
+	private Button buttonHelp;
 	private Button buttonSave;
 	private Button buttonComparison;
 	private Button buttonMerge;
@@ -269,7 +270,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(10, false));
+		composite.setLayout(new GridLayout(11, false));
 		//
 		buttonToolbarInfo = createButtonToggleToolbar(composite, Arrays.asList(toolbarInfoTop, toolbarInfoBottom), IMAGE_INFO, TOOLTIP_INFO);
 		buttonToolbarSearch = createButtonToggleToolbar(composite, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
@@ -280,6 +281,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		scanIdentifierUI = createScanIdentifierUI(composite);
 		createButtonReset(composite);
 		buttonSave = createButtonSave(composite);
+		buttonHelp = createButtonHelp(composite);
 		createButtonSettings(composite);
 		//
 		toolbarMain.set(composite);
