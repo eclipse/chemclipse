@@ -110,7 +110,6 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 	private AtomicReference<InformationUI> toolbarInfoBottom = new AtomicReference<>();
 	private Button buttonToolbarSearch;
 	private AtomicReference<SearchSupportUI> toolbarSearch = new AtomicReference<>();
-	private Button buttonHelp;
 	private Button buttonSave;
 	private Button buttonComparison;
 	private Button buttonMerge;
@@ -281,7 +280,7 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		scanIdentifierUI = createScanIdentifierUI(composite);
 		createButtonReset(composite);
 		buttonSave = createButtonSave(composite);
-		buttonHelp = createButtonHelp(composite);
+		createButtonHelp(composite);
 		createButtonSettings(composite);
 		//
 		toolbarMain.set(composite);
