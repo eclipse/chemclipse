@@ -1071,6 +1071,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		editorToolBar.enableToolbarTextPage(preferenceStore, PREFERENCE_SHOW_TOOLBAR_TEXT);
 		processorToolbar.enablePreferencePage(preferenceStore, PreferenceConstants.P_CHROMATOGRAM_PROCESSOR_TOOLBAR);
 		editorToolBar.addAction(createGridLineAction());
+		createHelpButton(editorToolBar);
 		editorToolBar.addPreferencePages(new Supplier<Collection<? extends IPreferencePage>>() {
 
 			@Override
@@ -1443,6 +1444,22 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 			public void run() {
 
 				reset(true);
+			}
+		});
+	}
+
+	private void createHelpButton(EditorToolBar editorToolBar) {
+
+		editorToolBar.addAction(new Action("Help", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_QUESTION, IApplicationImage.SIZE_16x16)) {
+
+			{
+				setToolTipText("Show context sensentive help.");
+			}
+
+			@Override
+			public void run() {
+
+				PlatformUI.getWorkbench().getHelpSystem().displayDynamicHelp();
 			}
 		});
 	}

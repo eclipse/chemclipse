@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2019 Lablicate GmbH.
+ * Copyright (c) 2013, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -32,7 +32,6 @@ public interface IPerspectiveAndViewIds {
 	 * Perspectives
 	 */
 	String PERSPECTIVE_WELCOME = "org.eclipse.chemclipse.ux.extension.ui.perspective.welcome";
-	String PERSPECTIVE_LOGGING = "org.eclipse.chemclipse.logging.ui.perspective.main";
 	/*
 	 * Parts
 	 */

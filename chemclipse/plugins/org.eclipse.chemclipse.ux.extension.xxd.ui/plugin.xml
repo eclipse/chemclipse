@@ -288,5 +288,5 @@
             file="contexts.xml"
             plugin="org.eclipse.chemclipse.ux.extension.xxd.ui">
       </contexts>
-   </extension>   
+   </extension>
 </plugin>
