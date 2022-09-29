@@ -119,8 +119,8 @@ public class PerspectiveSwitcherDialog extends Dialog implements ISelectionChang
 		int index = table.getSelectionIndex();
 		if(index >= 0) {
 			TableItem item = table.getItem(index);
-			if(item.getData() instanceof MPerspective) {
-				selectedPerspective = (MPerspective)item.getData();
+			if(item.getData() instanceof MPerspective perspective) {
+				selectedPerspective = perspective;
 			}
 		}
 		validateSelection();

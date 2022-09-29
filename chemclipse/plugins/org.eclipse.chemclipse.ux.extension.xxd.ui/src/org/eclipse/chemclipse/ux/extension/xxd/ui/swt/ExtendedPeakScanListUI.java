@@ -153,8 +153,8 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 		List<Object> objects = dataUpdateSupport.getUpdates(IChemClipseEvents.TOPIC_CHROMATOGRAM_XXD_UPDATE_SELECTION);
 		if(!objects.isEmpty()) {
 			Object last = objects.get(0);
-			if(last instanceof IChromatogramSelection) {
-				updateChromatogramSelection((IChromatogramSelection)last);
+			if(last instanceof IChromatogramSelection chromatogramSelection) {
+				updateChromatogramSelection(chromatogramSelection);
 			}
 		}
 		return true;
@@ -920,8 +920,8 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 						//
 						MassSpectra massSpectra = new MassSpectra();
 						for(IScan scan : scans) {
-							if(scan instanceof IScanMSD) {
-								massSpectra.addMassSpectrum((IScanMSD)scan);
+							if(scan instanceof IScanMSD scanMSD) {
+								massSpectra.addMassSpectrum(scanMSD);
 							}
 						}
 						//

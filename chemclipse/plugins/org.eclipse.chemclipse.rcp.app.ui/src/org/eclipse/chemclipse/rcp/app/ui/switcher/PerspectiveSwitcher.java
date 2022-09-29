@@ -46,8 +46,8 @@ public class PerspectiveSwitcher {
 	 */
 	public void changePerspective(String perspectiveId) {
 
-		List<MPerspective> pespectives = modelService.findElements(application, null, MPerspective.class, null);
-		for(MPerspective mPerspective : pespectives) {
+		List<MPerspective> perspectives = modelService.findElements(application, null, MPerspective.class, null);
+		for(MPerspective mPerspective : perspectives) {
 			String elementId = mPerspective.getElementId();
 			String elementLabel = mPerspective.getLabel();
 			if(elementId.equals(perspectiveId) || elementId.equals(perspectiveId + "." + elementLabel)) {
@@ -68,8 +68,7 @@ public class PerspectiveSwitcher {
 	public void focusView(String viewId) {
 
 		MUIElement element = modelService.find(viewId, application);
-		if(element instanceof MPart) {
-			MPart part = (MPart)element;
+		if(element instanceof MPart part) {
 			if(!partService.getParts().contains(part)) {
 				partService.createPart(part.getElementId());
 			}
