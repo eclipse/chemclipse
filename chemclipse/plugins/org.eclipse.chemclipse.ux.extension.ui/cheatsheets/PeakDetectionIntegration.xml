@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<cheatsheet title="Peak Detection and Integration">
+
+   <intro href="/org.eclipse.platform.doc.user/reference/ref-cheatsheets.htm">
+      <description>
+         This cheat sheet will demonstrate how to first detect and then integrate peaks.
+         In OpenChrom these are two distinct processes.
+         <br/>
+         <br/>
+         To learn more about using cheat sheets, click the help (?) button in the top right corner. 
+      </description>
+   </intro>
+
+	<item title="Select Data Analysis"
+		 href="/org.eclipse.pde.doc.user/guide/tools/views/views.htm"
+		 dialog="false">
+		<description>
+			Switch to correct perspective if you haven't already.
+		</description>			
+		<subitem label="Select &quot;Window-&gt;Switch Perspective&quot; from the main menu and choose &quot;Data Analysis (Main)&quot; in order to open the general chromatography perspective" 
+        	     skip="false">
+		</subitem>
+   </item>
+   
+   <item title="Open File"
+		 dialog="true"
+		 skip="false">
+		<description>
+			Use the <b>Data Explorer</b> on the left to navigate to your files. Double click to open one.
+			<br/>
+			<br/>
+			This example assumes you have a mass selective detector (MSD) but the procedure is similar for others.
+		</description>
+   </item> 
+
+   <item title="Peak Detection"
+         dialog="true"
+         skip="false">
+      <description>
+         To detect peaks in your chromatogram with MSD signals:
+      </description>
+      <subitem label="Right-click in the chromatogram and select &quot;Peak Detector-&gt;First Derivative&quot;." 
+               skip="false">
+         	   <command serialization="PeakDetectorMSD.org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.firstderivative"/>
+      </subitem>
+      <subitem label="You can use (default) system options for this example. Click &quot;Complete&quot; to execute the operation." 
+               skip="false">
+      </subitem>
+   </item>
+
+   <item title="Peak Integration"
+         dialog="true"
+         skip="false">
+      <description>
+         To get the area below the peaks:
+      </description>
+      <subitem label="Right-click in the chromatogram and select &quot;Peak Integrator-&gt;Peak Integrator Trapezoid&quot;." 
+               skip="false">
+         	   <command serialization="org.eclipse.chemclipse.chromatogram.xxd.integrator.supplier.trapezoid.peakIntegrator"/>
+      </subitem>
+      <subitem label="You can use (default) system options for this example. Click &quot;Complete&quot; to execute the operation." 
+               skip="false">
+      </subitem>
+   </item>
+
+   <item title="Show Peak List"
+         dialog="true"
+         skip="false">
+      <description>
+         To display the integrated peaks:
+      </description>
+      <subitem label="In the main toolbar choose &quot;Peaks-&gt;Peak/Scan List&quot;." 
+               skip="false">
+      </subitem>
+   </item>
+
+   <item title="Summary"
+		 dialog="true"
+		 skip="false">
+		<description>
+			Notice how both peak detection and integration offer multiple choices. You can recombine and compare them individually.
+		</description>			
+   </item>
+
+</cheatsheet>

@@ -241,5 +241,21 @@
             Description="If your data can&apos;t be loaded, please contact us."
             Section="Data Formats">
       </WelcomeTile>
-   </extension>   
+   </extension>
+   <extension
+         point="org.eclipse.ui.cheatsheets.cheatSheetContent">
+      <category
+            name="Basics"
+            id="org.eclipse.chemclipse.ux.extension.ui.cheatsheet.basics">
+      </category>
+      <cheatsheet
+            name="Basic Peak Detection and Integration"
+            category="org.eclipse.chemclipse.ux.extension.ui.cheatsheet.basics"
+            contentFile="cheatsheets/PeakDetectionIntegration.xml"
+            id="org.eclipse.chemclipse.ux.extension.ui.cheatsheet.PeakDetectionIntegration">
+         <description>
+            This cheat sheet will guide you through basic peak detection and integration.
+         </description>
+      </cheatsheet>
+   </extension>
 </plugin>
