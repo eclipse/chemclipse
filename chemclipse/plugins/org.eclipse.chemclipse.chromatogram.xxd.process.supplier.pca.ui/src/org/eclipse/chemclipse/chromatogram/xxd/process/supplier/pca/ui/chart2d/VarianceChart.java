@@ -16,6 +16,7 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultsPCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Variance;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
@@ -32,36 +33,40 @@ import org.eclipse.swtchart.extensions.core.ISeriesData;
 import org.eclipse.swtchart.extensions.core.RangeRestriction;
 import org.eclipse.swtchart.extensions.core.SeriesData;
 
-public class ExplainedVarianceChart extends BarChart {
+public class VarianceChart extends BarChart {
 
-	public ExplainedVarianceChart() {
+	private Variance variance = Variance.EXPLAINED;
+	private EvaluationPCA evaluationPCA;
+
+	public VarianceChart() {
 
 		super();
 		createControl();
 	}
 
-	public ExplainedVarianceChart(Composite parent, int style) {
+	public VarianceChart(Composite parent, int style) {
 
 		super(parent, style);
 		createControl();
 	}
 
-	@SuppressWarnings("rawtypes")
+	public void setVariance(Variance variance) {
+
+		this.variance = variance;
+		updateChart();
+	}
+
 	public void setInput(EvaluationPCA evaluationPCA) {
 
-		if(evaluationPCA != null) {
-			IResultsPCA resultsPCA = evaluationPCA.getResults();
-			updateChart(resultsPCA);
-		} else {
-			updateChart(null);
-		}
+		this.evaluationPCA = evaluationPCA;
+		updateChart();
 	}
 
 	private void createControl() {
 
 		IChartSettings chartSettings = getChartSettings();
 		//
-		chartSettings.setTitle("Explained Variance");
+		chartSettings.setTitle("Variance");
 		chartSettings.setTitleVisible(true);
 		chartSettings.setTitleColor(Colors.BLACK);
 		chartSettings.setOrientation(SWT.HORIZONTAL);
@@ -93,16 +98,18 @@ public class ExplainedVarianceChart extends BarChart {
 		primaryAxisSettingsX.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_LIST_FOREGROUND));
 		//
 		IPrimaryAxisSettings primaryAxisSettingsY = chartSettings.getPrimaryAxisSettingsY();
-		primaryAxisSettingsY.setTitle("Explained Variance (Cumulative)");
+		primaryAxisSettingsY.setTitle("Variance");
 		primaryAxisSettingsY.setDecimalFormat(ValueFormat.getDecimalFormatEnglish());
 		primaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_LIST_FOREGROUND));
 	}
 
 	@SuppressWarnings("rawtypes")
-	private void updateChart(IResultsPCA resultsPCA) {
+	private void updateChart() {
 
 		deleteSeries();
-		if(resultsPCA != null) {
+		if(evaluationPCA != null) {
+			//
+			IResultsPCA resultsPCA = evaluationPCA.getResults();
 			//
 			IChartSettings chartSettings = getChartSettings();
 			IPrimaryAxisSettings primaryAxisSettingsX = chartSettings.getPrimaryAxisSettingsX();
@@ -139,8 +146,23 @@ public class ExplainedVarianceChart extends BarChart {
 	@SuppressWarnings("rawtypes")
 	private ISeriesData getSeries(IResultsPCA pcaResults) {
 
-		double[] ySeries = pcaResults.getCumulativeExplainedVariances();
+		double[] ySeries;
+		String label;
+		//
+		switch(variance) {
+			case CUMULATIVE:
+				ySeries = pcaResults.getCumulativeExplainedVariances();
+				label = "Cumulative Variances";
+				break;
+			default:
+				ySeries = pcaResults.getExplainedVariances();
+				label = "Explained Variances";
+				break;
+		}
+		//
+		getChartSettings().getPrimaryAxisSettingsY().setTitle(label);
+		applySettings(getChartSettings());
 		double[] xSeries = new double[ySeries.length];
-		return new SeriesData(xSeries, ySeries, "Explained Variances (Cumulative)");
+		return new SeriesData(xSeries, ySeries, label);
 	}
 }

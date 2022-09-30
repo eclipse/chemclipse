@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,12 +15,9 @@ import java.util.Arrays;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultPCA;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultsPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.LoadingsPlot;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePageLoadingPlot;
-import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
 import org.eclipse.swt.SWT;
@@ -124,8 +121,7 @@ public class ExtendedLoadingsPlot extends Composite implements IExtendedPartUI {
 
 		plot.deleteSeries();
 		if(evaluationPCA != null) {
-			IResultsPCA<? extends IResultPCA, ? extends IVariable> resultsPCA = evaluationPCA.getResults();
-			plot.setInput(resultsPCA, pcX, pcY);
+			plot.setInput(evaluationPCA, pcX, pcY);
 		} else {
 			plot.setInput(null, pcX, pcY);
 		}

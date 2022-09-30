@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
@@ -139,11 +140,34 @@ public abstract class AbtractPlotPCA extends ScatterChart {
 		primaryAxisSettingsY.setColor(DisplayUtils.getDisplay().getSystemColor(SWT.COLOR_LIST_FOREGROUND));
 	}
 
-	protected void update(int pcX, int pcY) {
+	protected void update(int pcX, int pcY, double[] explainedVariances) {
 
-		getChartSettings().getPrimaryAxisSettingsX().setTitle("PC" + pcX);
-		getChartSettings().getPrimaryAxisSettingsY().setTitle("PC" + pcY);
+		getChartSettings().getPrimaryAxisSettingsX().setTitle(getTitlePC(pcX, explainedVariances[pcX - 1]));
+		getChartSettings().getPrimaryAxisSettingsY().setTitle(getTitlePC(pcY, explainedVariances[pcY - 1]));
 		applySettings(getChartSettings());
 		getBaseChart().redraw();
+	}
+
+	private String getTitlePC(int pc, double explainedVariance) {
+
+		double variance = explainedVariance * 100.0d;
+		DecimalFormat decimalFormat;
+		if(variance > 1.0d) {
+			decimalFormat = ValueFormat.getDecimalFormatEnglish("0.00");
+		} else {
+			decimalFormat = ValueFormat.getDecimalFormatEnglish("0.0000");
+		}
+		StringBuilder builder = new StringBuilder();
+		//
+		builder.append("PC");
+		builder.append(" ");
+		builder.append(pc);
+		builder.append(" ");
+		builder.append("(");
+		builder.append(decimalFormat.format(variance));
+		builder.append("%");
+		builder.append(")");
+		//
+		return builder.toString();
 	}
 }

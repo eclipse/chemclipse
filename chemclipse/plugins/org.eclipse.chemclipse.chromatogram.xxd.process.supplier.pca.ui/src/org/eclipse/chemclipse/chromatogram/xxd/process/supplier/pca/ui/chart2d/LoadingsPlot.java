@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IResultsPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support.SeriesConverter;
@@ -29,6 +30,7 @@ public class LoadingsPlot extends AbtractPlotPCA {
 	private int labelType = LABEL_RETENTION_TIME_MINUTES;
 
 	public LoadingsPlot(Composite parent, int style) {
+
 		super(parent, style, "Loadings Plot");
 	}
 
@@ -44,18 +46,20 @@ public class LoadingsPlot extends AbtractPlotPCA {
 		}
 	}
 
-	public void setInput(IResultsPCA<? extends IResultPCA, ? extends IVariable> pcaResults, int pcX, int pcY) {
+	public void setInput(EvaluationPCA evaluationPCA, int pcX, int pcY) {
 
 		deleteSeries();
-		if(pcaResults != null) {
+		if(evaluationPCA != null) {
+			IResultsPCA<? extends IResultPCA, ? extends IVariable> resultsPCA = evaluationPCA.getResults();
 			List<IScatterSeriesData> series;
 			if(labelType == LABEL_RETENTION_TIME_MINUTES) {
-				series = SeriesConverter.basisVectorsToSeries(pcaResults, pcX, pcY);
+				series = SeriesConverter.basisVectorsToSeries(resultsPCA, pcX, pcY);
 			} else {
-				series = SeriesConverter.basisVectorsToSeriesDescription(pcaResults, pcX, pcY);
+				series = SeriesConverter.basisVectorsToSeriesDescription(resultsPCA, pcX, pcY);
 			}
+			//
 			addSeriesData(series);
-			update(pcX, pcY);
+			update(pcX, pcY, resultsPCA.getExplainedVariances());
 		}
 		redraw();
 	}

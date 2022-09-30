@@ -17,22 +17,22 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d.ExplainedVarianceChart;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt.ExtendedVarianceUI;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class ExplainedVariancePart extends AbstractPartPCA<ExplainedVarianceChart> {
+public class VariancePart extends AbstractPartPCA<ExtendedVarianceUI> {
 
 	@Inject
-	public ExplainedVariancePart(Composite parent) {
+	public VariancePart(Composite parent) {
 
 		super(parent);
 	}
 
 	@Override
-	protected ExplainedVarianceChart createControl(Composite parent) {
+	protected ExtendedVarianceUI createControl(Composite parent) {
 
-		return new ExplainedVarianceChart(parent, SWT.NONE);
+		return new ExtendedVarianceUI(parent, SWT.NONE);
 	}
 
 	@Override
