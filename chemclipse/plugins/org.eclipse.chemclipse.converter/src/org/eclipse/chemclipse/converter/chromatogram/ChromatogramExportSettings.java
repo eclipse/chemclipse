@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactoring to dynamic export name
  *******************************************************************************/
 package org.eclipse.chemclipse.converter.chromatogram;
 
@@ -23,16 +24,23 @@ import org.eclipse.chemclipse.support.settings.SystemSettingsStrategy;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 @SystemSettings(value = SystemSettingsStrategy.DYNAMIC, dynamicCheckMethod = "getSystemSettingsStrategy")
 public class ChromatogramExportSettings extends AbstractProcessSettings implements IProcessSettings {
 
-	public static final String VARIABLE_CHROMATOGRAM_NAME = "{chromatogram_name}";
-	public static final String VARIABLE_EXTENSION = "{extension}";
 	@JsonProperty(value = "Export Folder", defaultValue = "")
 	@FileSettingProperty(onlyDirectory = true)
 	private File exportFolder;
-	@JsonProperty(value = "Filename", defaultValue = VARIABLE_CHROMATOGRAM_NAME + VARIABLE_EXTENSION)
+	@JsonProperty(value = "File Name", defaultValue = VARIABLE_CHROMATOGRAM_NAME + VARIABLE_EXTENSION)
+	@JsonPropertyDescription("Set a specific name or use the variables or a combination.\n" + //
+			"Variables:\n" + //
+			VARIABLE_CHROMATOGRAM_NAME + "\n" + //
+			VARIABLE_CHROMATOGRAM_DATANAME + "\n" + //
+			VARIABLE_CHROMATOGRAM_SAMPLEGROUP + "\n" + //
+			VARIABLE_CHROMATOGRAM_SHORTINFO + "\n" + //
+			VARIABLE_EXTENSION //
+	)
 	private String filenamePattern = VARIABLE_CHROMATOGRAM_NAME + VARIABLE_EXTENSION;
 
 	public File getExportFolder() {
@@ -53,15 +61,23 @@ public class ChromatogramExportSettings extends AbstractProcessSettings implemen
 
 	public String getFileNamePattern() {
 
+		/*
+		 * Check to enable backward compatibility
+		 */
 		if(filenamePattern == null) {
-			// for backward compatibility
-			return VARIABLE_CHROMATOGRAM_NAME;
+			return VARIABLE_CHROMATOGRAM_NAME + VARIABLE_EXTENSION;
 		}
+		//
 		return filenamePattern;
 	}
 
+	public void setFilenamePattern(String filenamePattern) {
+
+		this.filenamePattern = filenamePattern;
+	}
+
 	/**
-	 * Method that check if systemsettings are available, this is used in conjunction with the SystemSettings annotation but can also be called by user code
+	 * Method that check if system settings are available, this is used in conjunction with the SystemSettings annotation but can also be called by user code.
 	 * 
 	 * @return
 	 */
@@ -76,8 +92,10 @@ public class ChromatogramExportSettings extends AbstractProcessSettings implemen
 	}
 
 	@JsonIgnore
-	public File getExportFileName(String extension, IChromatogram<?> chromatogram) {
+	public File getExportFile(String extension, IChromatogram<?> chromatogram) {
 
-		return new File(getExportFolder(), getFileNamePattern().replace(ChromatogramExportSettings.VARIABLE_CHROMATOGRAM_NAME, chromatogram.getName()).replace(ChromatogramExportSettings.VARIABLE_EXTENSION, extension));
+		File exportFolder = getExportFolder();
+		String fileName = getFileName(chromatogram, getFileNamePattern(), extension);
+		return new File(exportFolder, fileName);
 	}
 }

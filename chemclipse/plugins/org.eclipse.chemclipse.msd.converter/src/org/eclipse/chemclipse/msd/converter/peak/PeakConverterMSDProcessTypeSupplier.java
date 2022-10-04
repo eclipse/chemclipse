@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactoring to dynamic export name
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.peak;
 
@@ -57,6 +58,7 @@ public class PeakConverterMSDProcessTypeSupplier implements IProcessTypeSupplier
 		private final ISupplier supplier;
 
 		public PeakConverterMSDProcessSupplier(ISupplier supplier, IPeakExportConverter converter, IProcessTypeSupplier parent) {
+
 			super("PeakConverterMSD." + supplier.getId(), supplier.getFilterName(), supplier.getDescription(), PeakExportSettings.class, parent, DataCategory.MSD);
 			this.supplier = supplier;
 			this.converter = converter;
@@ -68,7 +70,7 @@ public class PeakConverterMSDProcessTypeSupplier implements IProcessTypeSupplier
 			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			if(chromatogram instanceof IChromatogramMSD) {
 				IChromatogramMSD msd = (IChromatogramMSD)chromatogram;
-				IProcessingInfo<?> info = converter.convert(processSettings.getExportFileName(supplier.getFileExtension(), chromatogram), msd.toPeaks(msd.getName(), chromatogramSelection), false, context.getProgressMonitor());
+				IProcessingInfo<?> info = converter.convert(processSettings.getExportFile(supplier.getFileExtension(), chromatogram), msd.toPeaks(msd.getName(), chromatogramSelection), false, context.getProgressMonitor());
 				context.addMessages(info);
 			} else {
 				context.addWarnMessage(getName(), "Can only export MSD Data, skipping...");

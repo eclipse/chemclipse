@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,19 +12,18 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.converter.supplier.chemclipse;
 
+import org.eclipse.chemclipse.model.settings.IProcessSettings;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ChromatogramProcedureSettings {
+public class ChromatogramProcedureSettings implements IProcessSettings {
 
-	public static final String PARAM_CHROMATOGRAM_NAME = "${chromatogram_name}";
-	private static final String DEFAULT_NAME = "Copy of " + PARAM_CHROMATOGRAM_NAME;
-	//
 	@JsonProperty(value = "Copy Chromatogram Selection Range", defaultValue = "false")
 	private boolean copyChromatogramSelectionRange;
 	@JsonProperty(value = "Add as Reference to Chromatogram", defaultValue = "false")
 	private boolean addAsReferenceChromatogram;
-	@JsonProperty(value = "Name of Chromatogram", defaultValue = DEFAULT_NAME)
-	private String name = DEFAULT_NAME;
+	@JsonProperty(value = "Chromatogram Name", defaultValue = VARIABLE_CHROMATOGRAM_NAME)
+	private String name = VARIABLE_CHROMATOGRAM_NAME;
 
 	public boolean isCopyChromatogramSelectionRange() {
 

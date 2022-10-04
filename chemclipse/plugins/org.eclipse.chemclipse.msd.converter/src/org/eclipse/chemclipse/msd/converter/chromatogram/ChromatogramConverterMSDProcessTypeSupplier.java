@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactoring to dynamic export name
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.chromatogram;
 
@@ -24,8 +25,8 @@ import org.eclipse.chemclipse.model.supplier.ChromatogramSelectionProcessorSuppl
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
-import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IMessageConsumer;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -75,7 +76,7 @@ public class ChromatogramConverterMSDProcessTypeSupplier implements IProcessType
 			if(exportFolder.exists() || exportFolder.mkdirs()) {
 				IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 				if(chromatogram instanceof IChromatogramMSD) {
-					File file = processSettings.getExportFileName(supplier.getFileExtension(), chromatogram);
+					File file = processSettings.getExportFile(supplier.getFileExtension(), chromatogram);
 					IProcessingInfo<File> info = ChromatogramConverterMSD.getInstance().convert(file, (IChromatogramMSD)chromatogram, supplier.getId(), monitor);
 					messageConsumer.addMessages(info);
 					if(info != null && info.getProcessingResult() != null) {

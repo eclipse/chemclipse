@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,6 +12,12 @@
 package org.eclipse.chemclipse.model.settings;
 
 public interface IProcessSettings {
+
+	public static final String VARIABLE_CHROMATOGRAM_NAME = "{chromatogram_name}";
+	public static final String VARIABLE_CHROMATOGRAM_DATANAME = "{chromatogram_dataname}";
+	public static final String VARIABLE_CHROMATOGRAM_SAMPLEGROUP = "{chromatogram_samplegroup}";
+	public static final String VARIABLE_CHROMATOGRAM_SHORTINFO = "{chromatogram_shortinfo}";
+	public static final String VARIABLE_EXTENSION = "{extension}";
 
 	/**
 	 * Use this method to set specific system settings.

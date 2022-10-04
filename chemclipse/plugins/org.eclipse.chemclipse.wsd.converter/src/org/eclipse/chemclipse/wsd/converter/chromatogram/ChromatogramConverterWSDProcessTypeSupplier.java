@@ -24,8 +24,8 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.model.supplier.ChromatogramSelectionProcessorSupplier;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
-import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IMessageConsumer;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
@@ -76,7 +76,7 @@ public class ChromatogramConverterWSDProcessTypeSupplier implements IProcessType
 			if(exportFolder.exists() || exportFolder.mkdirs()) {
 				IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 				if(chromatogram instanceof IChromatogramWSD) {
-					File file = processSettings.getExportFileName(supplier.getFileExtension(), chromatogram);
+					File file = processSettings.getExportFile(supplier.getFileExtension(), chromatogram);
 					IProcessingInfo<File> info = ChromatogramConverterWSD.getInstance().convert(file, (IChromatogramWSD)chromatogram, supplier.getId(), monitor);
 					messageConsumer.addMessages(info);
 					if(info != null && info.getProcessingResult() != null) {
