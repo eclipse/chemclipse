@@ -34,6 +34,7 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
@@ -520,6 +521,12 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 	private Combo createDataType(Composite parent) {
 
 		Combo combo = new Combo(parent, SWT.READ_ONLY);
+		/*
+		 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=567652
+		 */
+		if(OperatingSystemUtils.isLinux()) {
+			combo.setBackground(combo.getBackground());
+		}
 		combo.setToolTipText("Data Type (MS, MS/MS, FID, DAD, ...)");
 		combo.setItems(ScanDataSupport.DATA_TYPES_DEFAULT);
 		combo.select(0);
@@ -539,6 +546,12 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 	private Combo createSignalType(Composite parent) {
 
 		Combo combo = new Combo(parent, SWT.READ_ONLY);
+		/*
+		 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=567652
+		 */
+		if(OperatingSystemUtils.isLinux()) {
+			combo.setBackground(combo.getBackground());
+		}
 		combo.setToolTipText("Signal Type (Centroid: Bar Series, Profile: Line Series)");
 		combo.setItems(ScanDataSupport.SIGNAL_TYPES_DEFAULT);
 		combo.select(0);
