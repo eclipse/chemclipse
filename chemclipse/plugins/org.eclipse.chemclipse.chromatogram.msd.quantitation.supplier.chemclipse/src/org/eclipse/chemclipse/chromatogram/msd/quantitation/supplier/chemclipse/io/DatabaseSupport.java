@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -38,8 +38,7 @@ public class DatabaseSupport {
 		IQuantitationDatabase quantitationDatabase = null;
 		File file = new File(PreferenceSupplier.getSelectedQuantitationDatabase());
 		//
-		if(file != null && file.exists()) {
-
+		if(file.exists()) {
 			IProcessingInfo<IQuantitationDatabase> processingInfo = QuantDBConverter.convert(file, new NullProgressMonitor());
 			quantitationDatabase = processingInfo.getProcessingResult();
 		}

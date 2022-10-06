@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,8 +24,7 @@ public class FileExplorerContentProvider implements ITreeContentProvider {
 	@Override
 	public Object[] getChildren(Object parentElement) {
 
-		if(parentElement instanceof File) {
-			File file = (File)parentElement;
+		if(parentElement instanceof File file) {
 			return getFiles(file);
 		}
 		return File.listRoots();
@@ -34,8 +33,7 @@ public class FileExplorerContentProvider implements ITreeContentProvider {
 	@Override
 	public Object getParent(Object element) {
 
-		if(element instanceof File) {
-			File file = (File)element;
+		if(element instanceof File file) {
 			File parentFile = file.getParentFile();
 			if(parentFile != null && parentFile.canRead() && !parentFile.isHidden()) {
 				return parentFile;
@@ -47,8 +45,7 @@ public class FileExplorerContentProvider implements ITreeContentProvider {
 	@Override
 	public boolean hasChildren(Object element) {
 
-		if(element instanceof File) {
-			File file = (File)element;
+		if(element instanceof File file) {
 			return hasChildren(file);
 		}
 		return false;
@@ -78,7 +75,7 @@ public class FileExplorerContentProvider implements ITreeContentProvider {
 	 */
 	public File[] getFiles(File parentFile) {
 
-		List<File> files = new ArrayList<File>();
+		List<File> files = new ArrayList<>();
 		if(parentFile.isDirectory() && parentFile.canRead()) {
 			/*
 			 * I have found no method to monitor file system changes outside the
@@ -115,7 +112,7 @@ public class FileExplorerContentProvider implements ITreeContentProvider {
 	 */
 	public boolean hasChildren(File parentFile) {
 
-		ArrayList<File> files = new ArrayList<File>();
+		ArrayList<File> files = new ArrayList<>();
 		if(parentFile.isDirectory() && parentFile.canRead()) {
 			/*
 			 * Check if the parent file is a chromatogram.
@@ -127,7 +124,7 @@ public class FileExplorerContentProvider implements ITreeContentProvider {
 						files.add(file);
 					}
 				}
-				return (files.size() > 0) ? true : false;
+				return (!files.isEmpty());
 			} else {
 				return false;
 			}

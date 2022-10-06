@@ -55,21 +55,19 @@ public class LazyFileExplorerContentProvider implements ILazyTreeContentProvider
 			return;
 		}
 		Object child = null;
-		if(parent instanceof Object[]) {
-			Object[] objects = (Object[])parent;
+		if(parent instanceof Object[] objects) {
 			if(index < objects.length) {
 				child = objects[index];
 			}
 		}
-		if(parent instanceof File) {
-			File[] childs = getChilds((File)parent);
+		if(parent instanceof File file) {
+			File[] childs = getChilds(file);
 			if(index < childs.length) {
 				child = childs[index];
 			}
 		}
-		if(child instanceof File) {
+		if(child instanceof File file) {
 			viewer.replace(parent, index, child);
-			File file = (File)child;
 			if(file.isDirectory()) {
 				viewer.setHasChildren(file, true);
 				// remove the file from the cache to allow updates to the underlying file system
@@ -83,14 +81,13 @@ public class LazyFileExplorerContentProvider implements ILazyTreeContentProvider
 	@Override
 	public void inputChanged(Viewer newViewer, Object oldInput, Object newInput) {
 
-		if(newViewer instanceof TreeViewer) {
-			TreeViewer treeViewer = (TreeViewer)newViewer;
+		if(newViewer instanceof TreeViewer treeViewer) {
 			if((treeViewer.getTree().getStyle() & SWT.VIRTUAL) == 0) {
 				throw new IllegalArgumentException("Treeviewer must be constructed with SWT.VIRTUAL flag!");
 			}
-			if(newInput instanceof File) {
+			if(newInput instanceof File file) {
 				// convert single file input to array
-				newInput = new File[]{(File)newInput};
+				newInput = new File[]{file};
 			}
 			if(newInput == null || newInput instanceof File[]) {
 				roots = (File[])newInput;
@@ -124,21 +121,18 @@ public class LazyFileExplorerContentProvider implements ILazyTreeContentProvider
 		if(viewer == null) {
 			return;
 		}
-		if(element instanceof File) {
-			File file = (File)element;
+		if(element instanceof File file) {
 			int childs = getChilds(file).length;
 			if(currentChildCount != childs) {
 				viewer.setChildCount(element, childs);
 			}
 			return;
 		}
-		if(element instanceof Object[]) {
-			Object[] objects = (Object[])element;
+		if(element instanceof Object[] objects) {
 			int childs = objects.length;
 			if(currentChildCount != childs) {
 				viewer.setChildCount(element, childs);
 			}
-			return;
 		}
 	}
 
@@ -173,8 +167,7 @@ public class LazyFileExplorerContentProvider implements ILazyTreeContentProvider
 	@Override
 	public Object getParent(Object element) {
 
-		if(element instanceof File) {
-			File file = (File)element;
+		if(element instanceof File file) {
 			File parentFile = file.getParentFile();
 			if(parentFile == null) {
 				return roots;

@@ -29,6 +29,7 @@ import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.ui.preferences.PreferenceConstants;
@@ -128,9 +129,9 @@ public class MultiDataExplorerTreeUI {
 		int index = tabFolder.getSelectionIndex();
 		preferenceStore.setValue(getSelectedTabPreferenceKey(), index);
 		if(preferenceStore.needsSaving()) {
-			if(preferenceStore instanceof IPersistentPreferenceStore) {
+			if(preferenceStore instanceof IPersistentPreferenceStore persistentPreferenceStore) {
 				try {
-					((IPersistentPreferenceStore)preferenceStore).save();
+					persistentPreferenceStore.save();
 				} catch(IOException e) {
 					Activator.getDefault().getLog().log(new Status(IStatus.ERROR, Activator.getDefault().getBundle().getSymbolicName(), "Storing preferences failed", e));
 				}
@@ -145,7 +146,7 @@ public class MultiDataExplorerTreeUI {
 
 	protected void handleDoubleClick(File file, DataExplorerTreeUI treeUI) {
 
-		openEditor(file, treeUI);
+		openEditor(file);
 	}
 
 	protected void handleSelection(File[] files, DataExplorerTreeUI treeUI) {
@@ -249,7 +250,7 @@ public class MultiDataExplorerTreeUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("Select User Location");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_FOLDER_OPENED, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_FOLDER_OPENED, IApplicationImageProvider.SIZE_16x16));
 		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -292,8 +293,7 @@ public class MultiDataExplorerTreeUI {
 				});
 				//
 				for(Object object : selection) {
-					if(object instanceof File) {
-						File file = (File)object;
+					if(object instanceof File file) {
 						Map<ISupplierFileIdentifier, Collection<ISupplier>> map = getIdentifierSupplier().apply(file);
 						converterSupplier.put(file, map);
 						for(Collection<ISupplier> s : map.values()) {
@@ -301,7 +301,7 @@ public class MultiDataExplorerTreeUI {
 						}
 					}
 				}
-				contextMenu.add(new Action("Scan for file and folder updates", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_REFRESH, IApplicationImage.SIZE_16x16)) {
+				contextMenu.add(new Action("Scan for file and folder updates", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_REFRESH, IApplicationImageProvider.SIZE_16x16)) {
 
 					@Override
 					public void run() {
@@ -311,22 +311,21 @@ public class MultiDataExplorerTreeUI {
 				});
 				//
 				for(ISupplier activeFileSupplier : supplierSet) {
-					contextMenu.add(new Action("Open as: " + activeFileSupplier.getFilterName(), ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FILE, IApplicationImage.SIZE_16x16)) {
+					contextMenu.add(new Action("Open as: " + activeFileSupplier.getFilterName(), ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FILE, IApplicationImageProvider.SIZE_16x16)) {
 
 						@Override
 						public void run() {
 
 							outer:
 							for(Object object : selection) {
-								if(object instanceof File) {
-									File file = (File)object;
+								if(object instanceof File file) {
 									Map<ISupplierFileIdentifier, Collection<ISupplier>> map = converterSupplier.get(file);
 									for(Entry<ISupplierFileIdentifier, Collection<ISupplier>> entry : map.entrySet()) {
 										ISupplierFileIdentifier identifier = entry.getKey();
-										if(identifier instanceof ISupplierFileEditorSupport) {
+										if(identifier instanceof ISupplierFileEditorSupport supplierFileEditorSupport) {
 											for(ISupplier supplier : entry.getValue()) {
 												if(activeFileSupplier.getId().equals(supplier.getId())) {
-													openEditorWithSupplier(file, (ISupplierFileEditorSupport)identifier, supplier);
+													openEditorWithSupplier(file, supplierFileEditorSupport, supplier);
 													continue outer;
 												}
 											}
@@ -344,8 +343,8 @@ public class MultiDataExplorerTreeUI {
 					});
 				}
 				//
-				if(selection.length == 1 && selection[0] instanceof File && ((File)selection[0]).isDirectory()) {
-					contextMenu.add(new Action("Open all contained measurements in this folder", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FOLDER, IApplicationImage.SIZE_16x16)) {
+				if(selection.length == 1 && selection[0] instanceof File file && file.isDirectory()) {
+					contextMenu.add(new Action("Open all contained measurements in this folder", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FOLDER, IApplicationImageProvider.SIZE_16x16)) {
 
 						@Override
 						public void run() {
@@ -367,7 +366,7 @@ public class MultiDataExplorerTreeUI {
 		File[] listFiles = file.listFiles();
 		if(listFiles != null) {
 			for(File f : listFiles) {
-				opened |= openEditor(f, treeUI);
+				opened |= openEditor(f);
 			}
 			if(!opened) {
 				for(File f : listFiles) {
@@ -379,14 +378,14 @@ public class MultiDataExplorerTreeUI {
 			}
 		}
 		return opened;
-	};
+	}
 
 	private void addBatchOpenButton(Composite parent, DataExplorerTreeUI treeUI) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("Open Selected Measurements");
 		button.setToolTipText("Try to open all selected files. Handle with care.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImageProvider.SIZE_16x16));
 		button.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -398,14 +397,13 @@ public class MultiDataExplorerTreeUI {
 				Iterator iterator = structuredSelection.iterator();
 				while(iterator.hasNext()) {
 					Object object = iterator.next();
-					if(object instanceof File) {
+					if(object instanceof File file) {
 						e.display.asyncExec(new Runnable() {
 
 							@Override
 							public void run() {
 
-								File file = (File)object;
-								openEditor(file, treeUI);
+								openEditor(file);
 							}
 						});
 					}
@@ -430,8 +428,7 @@ public class MultiDataExplorerTreeUI {
 			//
 			Collection<ISupplierFileIdentifier> identifiers = getIdentifierSupplier().apply(file).keySet();
 			for(ISupplierFileIdentifier identifier : identifiers) {
-				if(identifier instanceof ISupplierFileEditorSupport) {
-					ISupplierFileEditorSupport fileEditorSupport = (ISupplierFileEditorSupport)identifier;
+				if(identifier instanceof ISupplierFileEditorSupport fileEditorSupport) {
 					fileEditorSupport.openOverview(file);
 					return;
 				}
@@ -441,7 +438,7 @@ public class MultiDataExplorerTreeUI {
 		}
 	}
 
-	private boolean openEditor(File file, DataExplorerTreeUI treeUI) {
+	private boolean openEditor(File file) {
 
 		boolean success = false;
 		if(file != null) {
@@ -449,9 +446,9 @@ public class MultiDataExplorerTreeUI {
 			Map<ISupplierFileIdentifier, Collection<ISupplier>> identifiers = getIdentifierSupplier().apply(file);
 			for(Entry<ISupplierFileIdentifier, Collection<ISupplier>> entry : identifiers.entrySet()) {
 				ISupplierFileIdentifier identifier = entry.getKey();
-				if(identifier instanceof ISupplierFileEditorSupport) {
+				if(identifier instanceof ISupplierFileEditorSupport supplierFileEditorSupport) {
 					for(ISupplier converter : entry.getValue()) {
-						success = success | openEditorWithSupplier(file, (ISupplierFileEditorSupport)identifier, converter);
+						success = success | openEditorWithSupplier(file, supplierFileEditorSupport, converter);
 						if(success && openFirstDataMatchOnly) {
 							return true;
 						}
