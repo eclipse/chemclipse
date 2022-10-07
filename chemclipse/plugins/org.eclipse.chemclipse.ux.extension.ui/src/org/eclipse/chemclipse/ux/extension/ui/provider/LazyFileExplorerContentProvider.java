@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,16 +9,21 @@
  * Contributors:
  * Christoph Läubrich - initial API and implementation
  * Philip Wenig - refactoring
+ * Matthias Mailänder - file containers
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.provider;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.eclipse.chemclipse.container.definition.IFileContentProvider;
+import org.eclipse.chemclipse.container.support.FileContainerSupport;
 import org.eclipse.jface.viewers.ILazyTreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
@@ -72,8 +77,8 @@ public class LazyFileExplorerContentProvider implements ILazyTreeContentProvider
 				viewer.setHasChildren(file, true);
 				// remove the file from the cache to allow updates to the underlying file system
 				cache.remove(file);
-			} else {
-				viewer.setChildCount(file, 0);
+			} else if(hasContainerContents(file)) {
+				viewer.setHasChildren(file, true);
 			}
 		}
 	}
@@ -138,11 +143,11 @@ public class LazyFileExplorerContentProvider implements ILazyTreeContentProvider
 
 	private File[] getChilds(File file) {
 
+		File[] cached = cache.get(file);
+		if(cached != null) {
+			return cached;
+		}
 		if(file.isDirectory()) {
-			File[] cached = cache.get(file);
-			if(cached != null) {
-				return cached;
-			}
 			Display display = viewer.getControl().getDisplay();
 			BusyIndicator.showWhile(display, new Runnable() {
 
@@ -160,6 +165,38 @@ public class LazyFileExplorerContentProvider implements ILazyTreeContentProvider
 				}
 			});
 			return cache.get(file);
+		} else {
+			File[] childs = getContainerContents(file);
+			Arrays.sort(childs);
+			cache.put(file, unfoldDirectories(childs));
+			return cache.get(file);
+		}
+	}
+
+	// To avoid duplicates
+	private File[] unfoldDirectories(File[] childs) {
+
+		List<File> unfoldedChilds = new ArrayList<>();
+		for(File child : childs) {
+			unfoldedChilds.add(child);
+			if(child.isDirectory()) {
+				return unfoldedChilds.toArray(new File[0]);
+			}
+		}
+		return unfoldedChilds.toArray(childs);
+	}
+
+	private boolean hasContainerContents(File file) {
+
+		IFileContentProvider fileContentProvider = FileContainerSupport.getCache().getFileContentProvider(file);
+		return fileContentProvider != null && fileContentProvider.getContentSize(file) > 0;
+	}
+
+	private File[] getContainerContents(File file) {
+
+		IFileContentProvider fileContentProvider = FileContainerSupport.getCache().getFileContentProvider(file);
+		if(fileContentProvider != null) {
+			return fileContentProvider.getContents(file);
 		}
 		return NO_CHILD;
 	}

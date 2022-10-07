@@ -17,12 +17,12 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.eclipse.chemclipse.container.support.FileContainerSupport;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
-import org.eclipse.chemclipse.ux.extension.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.ui.editors.EditorDescriptor;
 import org.eclipse.chemclipse.ux.extension.ui.swt.IdentifierCacheSupport;
 import org.eclipse.core.runtime.Adapters;
@@ -111,6 +111,8 @@ public class DataExplorerLabelProvider extends LabelProvider implements ILabelPr
 				if(descriptor == null) {
 					if(file.isDirectory()) {
 						descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FOLDER_OPENED, IApplicationImageProvider.SIZE_16x16);
+					} else if(FileContainerSupport.getCache().getFileContentProvider(file) != null) {
+						descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_ZIP_FILE, IApplicationImageProvider.SIZE_16x16);
 					} else {
 						descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FILE, IApplicationImageProvider.SIZE_16x16);
 					}

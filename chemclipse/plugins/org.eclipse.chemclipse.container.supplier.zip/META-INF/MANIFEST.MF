@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.chemclipse.xxd.converter.supplier.zip
+Eclipse-RegisterBuddy: org.eclipse.chemclipse.model, org.eclipse.chemclipse.msd.model
+Bundle-ManifestVersion: 2
+Bundle-Name: Zip
+Bundle-SymbolicName: org.eclipse.chemclipse.container.supplier.zip;singleton:=true
+Bundle-Version: 0.9.0.qualifier
+Bundle-Activator: org.eclipse.chemclipse.container.supplier.zip.Activator
+Bundle-Vendor: Chemclipse
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.chemclipse.processing,
+ org.eclipse.chemclipse.converter,
+ org.eclipse.chemclipse.container;bundle-version="0.9.0",
+ org.eclipse.chemclipse.logging,
+ org.eclipse.chemclipse.support
+Bundle-RequiredExecutionEnvironment: JavaSE-17
+Bundle-ActivationPolicy: lazy
