@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="org.eclipse.chemclipse.container" xmlns="http://www.w3.org/2001/XMLSchema">
+<annotation>
+      <appinfo>
+         <meta.schema plugin="org.eclipse.chemclipse.container" id="org.eclipse.chemclipse.container" name="Container"/>
+      </appinfo>
+      <documentation>
+         A file that contains other files to be opened in the Data Explorer.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <annotation>
+         <appinfo>
+            <meta.element />
+         </appinfo>
+      </annotation>
+      <complexType>
+         <choice minOccurs="1" maxOccurs="unbounded">
+            <element ref="container"/>
+         </choice>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="container">
+      <complexType>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  Set a unique suppliers id, e.g. &quot;org.eclipse.chemclipse.container.zip&quot;.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="magicNumberMatcher" type="string">
+            <annotation>
+               <documentation>
+                  The first few bytes to parse to identify a file format like e.g. PK\x03\x04
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn="org.eclipse.chemclipse.converter.core.AbstractMagicNumberMatcher:org.eclipse.chemclipse.converter.core.IMagicNumberMatcher"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="getContents" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appinfo>
+                  <meta.attribute kind="java" basedOn=":org.eclipse.chemclipse.container.definition.IFileContentProvider"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appinfo>
+         <meta.section type="since"/>
+      </appinfo>
+      <documentation>
+         0.9.0
+      </documentation>
+   </annotation>
+
+
+
+
+
+</schema>

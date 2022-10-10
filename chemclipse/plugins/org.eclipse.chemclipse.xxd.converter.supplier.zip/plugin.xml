@@ -9,10 +9,9 @@
             fileExtension=".zip"
             filterName="ZIP Chromatogram (*.zip)"
             id="org.eclipse.chemclipse.xxd.converter.supplier.zip"
-            importConverter="org.eclipse.chemclipse.xxd.converter.supplier.zip.converter.ChromatogramImportConverter"
             importMagicNumberMatcher="org.eclipse.chemclipse.xxd.converter.supplier.zip.converter.MagicNumberMatcher"
             isExportable="true"
-            isImportable="true">
+            isImportable="false">
       </ChromatogramSupplier>
    </extension>
    <extension

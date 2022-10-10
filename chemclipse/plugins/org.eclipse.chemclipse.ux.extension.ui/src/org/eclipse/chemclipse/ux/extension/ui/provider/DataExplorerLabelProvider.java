@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,10 +17,12 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.eclipse.chemclipse.container.support.FileContainerSupport;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.ux.extension.ui.editors.EditorDescriptor;
 import org.eclipse.chemclipse.ux.extension.ui.swt.IdentifierCacheSupport;
 import org.eclipse.core.runtime.Adapters;
@@ -55,10 +57,9 @@ public class DataExplorerLabelProvider extends LabelProvider implements ILabelPr
 	}
 
 	@Override
-	public String getDescription(Object anElement) {
+	public String getDescription(Object element) {
 
-		if(anElement instanceof File) {
-			File file = (File)anElement;
+		if(element instanceof File file) {
 			String name;
 			if(file.getName().equals("")) {
 				name = file.getAbsolutePath();
@@ -73,12 +74,11 @@ public class DataExplorerLabelProvider extends LabelProvider implements ILabelPr
 	@Override
 	public Image getImage(Object element) {
 
-		if(element instanceof File) {
-			File file = (File)element;
+		if(element instanceof File file) {
 			ImageDescriptor descriptor = null;
 			//
 			if(file.getName().equals("") || file.getParent() == null) {
-				descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DRIVE, IApplicationImage.SIZE_16x16);
+				descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DRIVE, IApplicationImageProvider.SIZE_16x16);
 			} else {
 				Map<ISupplierFileIdentifier, Collection<ISupplier>> map = supplierFunction.apply(file);
 				for(Collection<ISupplier> suppliers : map.values()) {
@@ -110,9 +110,11 @@ public class DataExplorerLabelProvider extends LabelProvider implements ILabelPr
 				 */
 				if(descriptor == null) {
 					if(file.isDirectory()) {
-						descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FOLDER_OPENED, IApplicationImage.SIZE_16x16);
+						descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FOLDER_OPENED, IApplicationImageProvider.SIZE_16x16);
+					} else if(FileContainerSupport.getCache().getFileContentProvider(file) != null) {
+						descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_ZIP_FILE, IApplicationImageProvider.SIZE_16x16);
 					} else {
-						descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FILE, IApplicationImage.SIZE_16x16);
+						descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FILE, IApplicationImageProvider.SIZE_16x16);
 					}
 				}
 			}
@@ -132,48 +134,48 @@ public class DataExplorerLabelProvider extends LabelProvider implements ILabelPr
 		if(supplierFileIdentifier != null) {
 			switch(supplierFileIdentifier.getType()) {
 				case ISupplierFileIdentifier.TYPE_MSD:
-					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CHROMATOGRAM_MSD, IApplicationImage.SIZE_16x16);
+					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CHROMATOGRAM_MSD, IApplicationImageProvider.SIZE_16x16);
 					break;
 				case ISupplierFileIdentifier.TYPE_SCAN_MSD:
-					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_MASS_SPECTRUM_FILE, IApplicationImage.SIZE_16x16);
+					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_MASS_SPECTRUM_FILE, IApplicationImageProvider.SIZE_16x16);
 					break;
 				case ISupplierFileIdentifier.TYPE_DATABASE_MSD:
-					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_MASS_SPECTRUM_DATABASE, IApplicationImage.SIZE_16x16);
+					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_MASS_SPECTRUM_DATABASE, IApplicationImageProvider.SIZE_16x16);
 					break;
 				case ISupplierFileIdentifier.TYPE_CSD:
-					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CHROMATOGRAM_CSD, IApplicationImage.SIZE_16x16);
+					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CHROMATOGRAM_CSD, IApplicationImageProvider.SIZE_16x16);
 					break;
 				case ISupplierFileIdentifier.TYPE_WSD:
-					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CHROMATOGRAM_WSD, IApplicationImage.SIZE_16x16);
+					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CHROMATOGRAM_WSD, IApplicationImageProvider.SIZE_16x16);
 					break;
 				case ISupplierFileIdentifier.TYPE_TSD:
-					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CHROMATOGRAM_TSD, IApplicationImage.SIZE_16x16);
+					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_CHROMATOGRAM_TSD, IApplicationImageProvider.SIZE_16x16);
 					break;
 				case ISupplierFileIdentifier.TYPE_NMR:
-					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_SCAN_NMR, IApplicationImage.SIZE_16x16);
+					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_SCAN_NMR, IApplicationImageProvider.SIZE_16x16);
 					break;
 				case ISupplierFileIdentifier.TYPE_XIR:
-					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_SCAN_XIR, IApplicationImage.SIZE_16x16);
+					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_SCAN_XIR, IApplicationImageProvider.SIZE_16x16);
 					break;
 				case ISupplierFileIdentifier.TYPE_PCR:
-					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_PLATE_PCR, IApplicationImage.SIZE_16x16);
+					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_PLATE_PCR, IApplicationImageProvider.SIZE_16x16);
 					break;
 				case ISupplierFileIdentifier.TYPE_SEQ:
-					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_SEQUENCE_LIST, IApplicationImage.SIZE_16x16);
+					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_SEQUENCE_LIST, IApplicationImageProvider.SIZE_16x16);
 					break;
 				case ISupplierFileIdentifier.TYPE_MTH:
-					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_METHOD, IApplicationImage.SIZE_16x16);
+					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_METHOD, IApplicationImageProvider.SIZE_16x16);
 					break;
 				case ISupplierFileIdentifier.TYPE_QDB:
-					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DATABASE, IApplicationImage.SIZE_16x16);
+					descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DATABASE, IApplicationImageProvider.SIZE_16x16);
 					break;
 				default:
 					if(file.isDirectory()) {
-						descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FOLDER_OPENED, IApplicationImage.SIZE_16x16);
+						descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FOLDER_OPENED, IApplicationImageProvider.SIZE_16x16);
 					} else if(file.isFile()) {
-						descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FILE, IApplicationImage.SIZE_16x16);
+						descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_FILE, IApplicationImageProvider.SIZE_16x16);
 					} else {
-						descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_QUESTION, IApplicationImage.SIZE_16x16);
+						descriptor = ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_QUESTION, IApplicationImageProvider.SIZE_16x16);
 					}
 			}
 		}
@@ -183,8 +185,7 @@ public class DataExplorerLabelProvider extends LabelProvider implements ILabelPr
 	@Override
 	public String getText(Object element) {
 
-		if(element instanceof File) {
-			File file = (File)element;
+		if(element instanceof File file) {
 			String name;
 			if(file.getName().equals("")) {
 				name = file.getAbsolutePath();

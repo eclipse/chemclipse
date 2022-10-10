@@ -276,7 +276,7 @@ public class DatabaseConverter {
 	 * It can be used to get more information about the registered converters
 	 * such like filter names, file extensions.
 	 *
-	 * @return ChromatogramConverterSupport
+	 * @return DatabaseConverterSupport
 	 */
 	public static DatabaseConverterSupport getDatabaseConverterSupport() {
 

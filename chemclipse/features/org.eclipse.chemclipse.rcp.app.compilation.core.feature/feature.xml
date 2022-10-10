@@ -278,4 +278,8 @@ http://www.eclipse.org/legal/epl-v10.html
          id="org.eclipse.chemclipse.pcr.report.supplier.tabular.feature"
          version="0.0.0"/>
 
+   <includes
+         id="org.eclipse.chemclipse.container.zip.feature"
+         version="0.0.0"/>
+
 </feature>

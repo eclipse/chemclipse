@@ -232,7 +232,7 @@ public abstract class AbstractConverterSupport implements IConverterSupportSette
 	@Override
 	public List<ISupplier> getExportSupplier() {
 
-		List<ISupplier> exportSupplier = new ArrayList<ISupplier>();
+		List<ISupplier> exportSupplier = new ArrayList<>();
 		/*
 		 * See also: getExportableFilterNames
 		 */
@@ -252,7 +252,7 @@ public abstract class AbstractConverterSupport implements IConverterSupportSette
 	 */
 	private void areConvertersStored() throws NoConverterAvailableException {
 
-		if(suppliers.size() < 1) {
+		if(suppliers.isEmpty()) {
 			throw new NoConverterAvailableException();
 		}
 	}

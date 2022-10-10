@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2020 Lablicate GmbH.
+ * Copyright (c) 2013, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,6 +17,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.eclipse.chemclipse.container.support.FileContainerSupport;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.processing.converter.ISupplierFileIdentifier;
 import org.eclipse.chemclipse.ux.extension.ui.swt.IdentifierCacheSupport;
@@ -40,6 +41,8 @@ public class DataExplorerContentProvider extends LazyFileExplorerContentProvider
 
 		if(super.accept(file)) {
 			if(file.isDirectory()) {
+				return true;
+			} else if(FileContainerSupport.getCache().getFileContentProvider(file) != null) {
 				return true;
 			}
 			return !supplierFunction.apply(file).isEmpty();
