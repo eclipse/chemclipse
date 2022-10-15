@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2019 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.model.settings.AbstractProcessSettings;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public abstract class AbstractChromatogramReportSettings extends AbstractProcessSettings implements IChromatogramReportSettings {
 
@@ -25,8 +26,16 @@ public abstract class AbstractChromatogramReportSettings extends AbstractProcess
 	@FileSettingProperty(onlyDirectory = true)
 	private File exportFolder;
 	@JsonProperty(value = "Append", defaultValue = "false")
-	private boolean append;
-	@JsonProperty(value = "Filename", defaultValue = VARIABLE_CHROMATOGRAM_NAME + VARIABLE_EXTENSION)
+	private boolean append = false;
+	@JsonProperty(value = "File Name", defaultValue = VARIABLE_CHROMATOGRAM_NAME + VARIABLE_EXTENSION)
+	@JsonPropertyDescription("Set a specific name or use the variables or a combination.\n" + //
+			"Variables:\n" + //
+			VARIABLE_CHROMATOGRAM_NAME + "\n" + //
+			VARIABLE_CHROMATOGRAM_DATANAME + "\n" + //
+			VARIABLE_CHROMATOGRAM_SAMPLEGROUP + "\n" + //
+			VARIABLE_CHROMATOGRAM_SHORTINFO + "\n" + //
+			VARIABLE_EXTENSION //
+	)
 	private String filenamePattern = VARIABLE_CHROMATOGRAM_NAME + VARIABLE_EXTENSION;
 
 	@Override
