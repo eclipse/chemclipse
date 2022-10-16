@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactoring settings preference page
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.preferences;
 
@@ -23,9 +24,10 @@ public class PreferencePageProcessors extends PreferencePage {
 	private final IProcessSupplierContext processSupplierContext;
 
 	public PreferencePageProcessors(IProcessSupplierContext context) {
+
 		this.processSupplierContext = context;
 		setTitle("User Process Settings");
-		setDescription("Below you find all currently stored processor Options, select one to manage or remove the stored state");
+		setDescription("Currently stored processor options, manage or remove the stored state.");
 		noDefaultAndApplyButton();
 	}
 
