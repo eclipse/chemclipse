@@ -9,7 +9,7 @@
  * Contributors:
  * Jan Holy - initial API and implementation
  * Lorenz Gerber - PCA adapter, algorithm
- * Philip Wenig - get rid of JavaFX
+ * Philip Wenig - get rid of JavaFX, feature selection
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core;
 
@@ -46,6 +46,42 @@ import org.eclipse.core.runtime.SubMonitor;
 
 public class ProcessorPCA {
 
+	public <V extends IVariable, S extends ISample> void cleanUselessVariables(EvaluationPCA evaluationPCA, IProgressMonitor monitor) {
+
+		if(evaluationPCA != null) {
+			ISamplesPCA<? extends IVariable, ? extends ISample> samples = evaluationPCA.getSamples();
+			if(samples != null) {
+				/*
+				 * Collect
+				 */
+				List<Integer> removeIndices = new ArrayList<>();
+				List<? extends IVariable> variables = samples.getVariables();
+				List<? extends ISample> sampleList = samples.getSampleList();
+				//
+				for(int i = 0; i < variables.size(); i++) {
+					if(isUselessVariable(samples, i)) {
+						removeIndices.add(i);
+					}
+				}
+				/*
+				 * Remove
+				 */
+				int offset = 0;
+				for(int removeIndex : removeIndices) {
+					/*
+					 * Remove Variables/Samples
+					 */
+					int index = removeIndex - offset;
+					samples.getVariables().remove(index);
+					for(ISample sample : sampleList) {
+						sample.getSampleData().remove(index);
+					}
+					offset++;
+				}
+			}
+		}
+	}
+
 	public <V extends IVariable, S extends ISample> ResultsPCA process(ISamplesPCA<V, S> samples, EvaluationPCA masterEvaluationPCA, IProgressMonitor monitor) throws MathIllegalArgumentException {
 
 		SubMonitor subMonitor = SubMonitor.convert(monitor, "Run PCA", 140);
@@ -53,6 +89,10 @@ public class ProcessorPCA {
 		ResultsPCA pcaResults = new ResultsPCA(analysisSettings);
 		//
 		try {
+			/*
+			 * Template Map
+			 */
+			Map<String, Boolean> variablesSelectionMap = getVariablesSelectionMap(masterEvaluationPCA != null ? masterEvaluationPCA.getSamples().getVariables() : Collections.emptyList());
 			/*
 			 * Preprocessing
 			 */
@@ -68,12 +108,11 @@ public class ProcessorPCA {
 			/*
 			 * Variable Extraction
 			 */
-			List<? extends IVariable> templateVariables = masterEvaluationPCA != null ? masterEvaluationPCA.getSamples().getVariables() : Collections.emptyList();
 			int numberOfPrincipalComponents = analysisSettings.getNumberOfPrincipalComponents();
 			Algorithm algorithm = analysisSettings.getAlgorithm();
-			boolean[] selectedVariables = getSelectedVariables(samples, analysisSettings);
+			boolean[] selectedVariables = getSelectedVariables(samples, analysisSettings, variablesSelectionMap);
 			Map<ISample, double[]> extractData = extractData(samples, algorithm, analysisSettings, selectedVariables);
-			assignVariables(pcaResults, samples, selectedVariables, templateVariables);
+			assignVariables(pcaResults, samples, selectedVariables, variablesSelectionMap);
 			int numberVariables = getNumSampleVars(extractData);
 			subMonitor.worked(20);
 			/*
@@ -115,24 +154,20 @@ public class ProcessorPCA {
 		Map<ISample, double[]> selectedSamples = new HashMap<>();
 		List<? extends IVariable> variables = samples.getVariables();
 		/*
-		 * get variables
+		 * Variables
 		 */
 		for(int i = 0; i < isSelectedVariable.length; i++) {
-			isSelectedVariable[i] = isSelectedVariable[i] & variables.get(i).isSelected();
+			IVariable variable = variables.get(i);
+			isSelectedVariable[i] = isSelectedVariable[i] & variable.isSelected();
 			if(settings.isRemoveUselessVariables()) {
-				int numEmptyValues = 0;
-				for(ISample sample : samples.getSampleList()) {
-					if(!sample.getSampleData().get(i).isEmpty()) {
-						numEmptyValues++;
-					}
-				}
-				if(numEmptyValues <= 1) {
+				if(isUselessVariable(samples, i)) {
 					isSelectedVariable[i] = false;
+					variable.setSelected(false);
 				}
 			}
 		}
 		/*
-		 * collect variables
+		 * Collect
 		 */
 		int numSelected = 0;
 		for(boolean b : isSelectedVariable) {
@@ -140,6 +175,7 @@ public class ProcessorPCA {
 				numSelected++;
 			}
 		}
+		//
 		final Set<String> groups = samples.getSampleList().stream().map(s -> s.getGroupName()).distinct().collect(Collectors.toList()).stream().limit(2).collect(Collectors.toSet());
 		for(ISample sample : samples.getSampleList()) {
 			double[] selectedSampleData = null;
@@ -165,30 +201,47 @@ public class ProcessorPCA {
 		return selectedSamples;
 	}
 
-	private <V extends IVariable, S extends ISample> boolean[] getSelectedVariables(ISamples<V, S> samples, IAnalysisSettings settings) {
+	private <V extends IVariable, S extends ISample> boolean[] getSelectedVariables(ISamples<V, S> samples, IAnalysisSettings settings, Map<String, Boolean> variablesSelectionMap) {
 
 		List<? extends IVariable> variables = samples.getVariables();
 		boolean[] selectedVariables = new boolean[variables.size()];
 		Arrays.fill(selectedVariables, true);
 		//
 		for(int i = 0; i < selectedVariables.length; i++) {
-			selectedVariables[i] = selectedVariables[i] && variables.get(i).isSelected();
-			if(settings.isRemoveUselessVariables()) {
-				int numEmptyValues = 0;
-				for(ISample sample : samples.getSampleList()) {
-					if(sample.isSelected()) {
-						if(!sample.getSampleData().get(i).isEmpty()) {
-							numEmptyValues++;
-						}
+			/*
+			 * Variable
+			 */
+			IVariable variable = variables.get(i);
+			variable.setSelected(true);
+			//
+			if(isVariableSelected(variable, variablesSelectionMap)) {
+				if(settings.isRemoveUselessVariables()) {
+					if(isUselessVariable(samples, i)) {
+						selectedVariables[i] = false;
+						variable.setSelected(false);
 					}
 				}
-				if(numEmptyValues <= 1) {
-					selectedVariables[i] = false;
-				}
+			} else {
+				selectedVariables[i] = false;
+				variable.setSelected(false);
 			}
 		}
 		//
 		return selectedVariables;
+	}
+
+	private <V extends IVariable, S extends ISample> boolean isUselessVariable(ISamples<V, S> samples, int i) {
+
+		int numEmptyValues = 0;
+		for(ISample sample : samples.getSampleList()) {
+			if(sample.isSelected()) {
+				if(!sample.getSampleData().get(i).isEmpty()) {
+					numEmptyValues++;
+				}
+			}
+		}
+		//
+		return numEmptyValues <= 1;
 	}
 
 	private List<double[]> getLoadingVectors(IMultivariateCalculator principalComponentAnalysis, int numberOfPrincipalComponents) {
@@ -283,47 +336,46 @@ public class ProcessorPCA {
 			pcaResult.setSampleData(sampleData);
 			resultsList.add(pcaResult);
 		}
+		//
 		pcaResults.getPcaResultList().clear();
 		pcaResults.getPcaResultList().addAll(resultsList);
 	}
 
-	private void assignVariables(IResultsPCA<IResultPCA, IVariable> pcaResults, ISamples<? extends IVariable, ? extends ISample> samples, boolean[] isSelectedVariables, List<? extends IVariable> templateVariables) {
+	private void assignVariables(IResultsPCA<IResultPCA, IVariable> pcaResults, ISamples<? extends IVariable, ? extends ISample> samples, boolean[] isSelectedVariables, Map<String, Boolean> variablesSelectionMap) {
 
 		/*
 		 * Clear the variables.
 		 */
 		pcaResults.getExtractedVariables().clear();
 		/*
-		 * Map existing variables. They have been probably deactivated.
-		 */
-		Map<String, IVariable> templateVariablesMap = new HashMap<>();
-		for(IVariable variable : templateVariables) {
-			templateVariablesMap.put(variable.getValue(), variable);
-		}
-		/*
 		 * Assign and validate the variables again.
 		 */
 		for(int i = 0; i < samples.getVariables().size(); i++) {
 			if(isSelectedVariables[i]) {
 				IVariable variable = samples.getVariables().get(i);
-				variable.setSelected(isVariableSelected(variable, templateVariablesMap));
+				variable.setSelected(isVariableSelected(variable, variablesSelectionMap));
 				pcaResults.getExtractedVariables().add(variable);
 			}
 		}
 	}
 
-	/*
-	 * TODO
-	 */
-	private boolean isVariableSelected(IVariable variable, Map<String, IVariable> templateVariablesMap) {
+	private Map<String, Boolean> getVariablesSelectionMap(List<? extends IVariable> templateVariables) {
+
+		/*
+		 * Map existing variables. They have been probably deactivated.
+		 */
+		Map<String, Boolean> variablesSelectionMap = new HashMap<>();
+		for(IVariable variable : templateVariables) {
+			variablesSelectionMap.put(variable.getValue(), variable.isSelected());
+		}
+		//
+		return variablesSelectionMap;
+	}
+
+	private boolean isVariableSelected(IVariable variable, Map<String, Boolean> variablesSelectionMap) {
 
 		if(variable.isSelected()) {
-			IVariable templateVariable = templateVariablesMap.get(variable.getValue());
-			if(templateVariable != null) {
-				return templateVariable.isSelected();
-			} else {
-				return true;
-			}
+			return variablesSelectionMap.getOrDefault(variable.getValue(), true);
 		}
 		//
 		return false;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2018 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
+ * Philip Wenig - feature selection
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.filters;
 
@@ -23,6 +24,7 @@ import org.eclipse.chemclipse.model.statistics.IVariable;
 public interface IFilter extends IPreprocessing {
 
 	enum DataTypeProcessing {
+
 		RAW_DATA("Raw Data"), //
 		MODIFIED_DATA("Modified Data"), //
 		VARIABLES("Variables");
@@ -74,7 +76,6 @@ public interface IFilter extends IPreprocessing {
 		List<Boolean> result = filter(samples);
 		List<V> variables = samples.getVariables();
 		for(int j = 0; j < result.size(); j++) {
-			System.out.println(variables.get(j).isSelected() + " " + result.get(j));
 			variables.get(j).setSelected(variables.get(j).isSelected() && result.get(j));
 		}
 	}

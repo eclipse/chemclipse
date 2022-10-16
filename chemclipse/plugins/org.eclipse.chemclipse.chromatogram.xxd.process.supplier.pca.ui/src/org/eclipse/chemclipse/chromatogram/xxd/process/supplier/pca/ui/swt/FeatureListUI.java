@@ -16,13 +16,11 @@ import java.util.List;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.FeatureDataMatrix;
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.ISamplesPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.provider.FeatureComparator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.provider.FeatureEditingSupport;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.provider.FeatureLabelProvider;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.provider.FeatureListFilter;
-import org.eclipse.chemclipse.model.statistics.ISample;
-import org.eclipse.chemclipse.model.statistics.IVariable;
+import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -39,11 +37,33 @@ public class FeatureListUI extends ExtendedTableViewer {
 	private final ITableLabelProvider labelProvider = new FeatureLabelProvider();
 	private final ViewerComparator comparator = new FeatureComparator();
 	private final FeatureListFilter listFilter = new FeatureListFilter();
+	//
+	private IUpdateListener updateListener = null;
 
 	public FeatureListUI(Composite parent, int style) {
 
 		super(parent, style);
 		createColumnsDefault();
+	}
+
+	public void setUpdateListener(IUpdateListener updateListener) {
+
+		this.updateListener = updateListener;
+	}
+
+	/**
+	 * Fires and update if the listener is != null.
+	 */
+	public void updateContent() {
+
+		if(updateListener != null) {
+			updateListener.update();
+		}
+	}
+
+	public void clear() {
+
+		setInput(null);
 	}
 
 	public void setSearchText(String searchText, boolean caseSensitive) {
@@ -54,18 +74,11 @@ public class FeatureListUI extends ExtendedTableViewer {
 
 	public void setInput(EvaluationPCA evaluationPCA) {
 
-		boolean createDefault = true;
 		if(evaluationPCA != null) {
-			ISamplesPCA<? extends IVariable, ? extends ISample> samples = evaluationPCA.getSamples();
-			if(samples != null) {
-				createDefault = false;
-				FeatureDataMatrix featureDataMatrix = new FeatureDataMatrix(samples);
-				createColumnsSpecific(featureDataMatrix);
-				super.setInput(featureDataMatrix.getFeatures());
-			}
-		}
-		//
-		if(createDefault) {
+			FeatureDataMatrix featureDataMatrix = new FeatureDataMatrix(evaluationPCA);
+			createColumnsSpecific(featureDataMatrix);
+			super.setInput(featureDataMatrix.getFeatures());
+		} else {
 			super.setInput(null);
 			createColumnsDefault();
 		}

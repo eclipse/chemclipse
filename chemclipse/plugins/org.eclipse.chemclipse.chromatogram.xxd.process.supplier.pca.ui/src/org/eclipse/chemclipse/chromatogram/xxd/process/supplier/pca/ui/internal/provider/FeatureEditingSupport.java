@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,8 +12,8 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.provider;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.Feature;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt.FeatureListUI;
 import org.eclipse.chemclipse.model.statistics.IVariable;
-import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
@@ -22,10 +22,11 @@ import org.eclipse.jface.viewers.TextCellEditor;
 public class FeatureEditingSupport extends EditingSupport {
 
 	private CellEditor cellEditor;
-	private final ExtendedTableViewer tableViewer;
+	private final FeatureListUI tableViewer;
 	private final String column;
 
-	public FeatureEditingSupport(ExtendedTableViewer tableViewer, String column) {
+	public FeatureEditingSupport(FeatureListUI tableViewer, String column) {
+
 		super(tableViewer);
 		this.column = column;
 		if(FeatureLabelProvider.USE.equals(column)) {
@@ -101,7 +102,9 @@ public class FeatureEditingSupport extends EditingSupport {
 					}
 					break;
 			}
+			//
 			tableViewer.refresh(element);
+			tableViewer.updateContent();
 		}
 	}
 }

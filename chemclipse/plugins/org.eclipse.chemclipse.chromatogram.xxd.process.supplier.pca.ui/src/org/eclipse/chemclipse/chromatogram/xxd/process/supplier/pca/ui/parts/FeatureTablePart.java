@@ -8,7 +8,7 @@
  *
  * Contributors:
  * Jan Holy - initial API and implementation
- * Philip Wenig - get rid of JavaFX
+ * Philip Wenig - get rid of JavaFX, feature selection
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts;
 
@@ -43,7 +43,7 @@ public class FeatureTablePart extends AbstractPartPCA<ExtendedFeatureListUI> {
 				getControl().setInput(null);
 				unloadData();
 				return false;
-			} else {
+			} else if(isUpdateSelection(topic)) {
 				Object object = objects.get(0);
 				if(object instanceof EvaluationPCA evaluationPCA) {
 					getControl().setInput(evaluationPCA);

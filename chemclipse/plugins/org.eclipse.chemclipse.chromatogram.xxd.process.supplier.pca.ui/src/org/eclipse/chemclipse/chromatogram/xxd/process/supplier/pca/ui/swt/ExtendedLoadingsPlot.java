@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt;
 
 import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.IAnalysisSettings;
@@ -28,7 +29,7 @@ import org.eclipse.swt.widgets.Display;
 
 public class ExtendedLoadingsPlot extends Composite implements IExtendedPartUI {
 
-	private LoadingsPlot plot;
+	private AtomicReference<LoadingsPlot> plotControl = new AtomicReference<>();
 	private PrincipalComponentUI principalComponentUI;
 	//
 	private EvaluationPCA evaluationPCA = null;
@@ -42,6 +43,11 @@ public class ExtendedLoadingsPlot extends Composite implements IExtendedPartUI {
 	public void setInput(EvaluationPCA evaluationPCA) {
 
 		this.evaluationPCA = evaluationPCA;
+		updateInput();
+	}
+
+	public void updateInput() {
+
 		updateWidgets();
 		applySettings();
 	}
@@ -51,7 +57,7 @@ public class ExtendedLoadingsPlot extends Composite implements IExtendedPartUI {
 		setLayout(new GridLayout(1, true));
 		//
 		createToolbarMain(this);
-		plot = createPlot(this);
+		createPlot(this);
 	}
 
 	private void createToolbarMain(Composite parent) {
@@ -66,11 +72,12 @@ public class ExtendedLoadingsPlot extends Composite implements IExtendedPartUI {
 		createSettingsButton(composite);
 	}
 
-	private LoadingsPlot createPlot(Composite parent) {
+	private void createPlot(Composite parent) {
 
 		LoadingsPlot plot = new LoadingsPlot(parent, SWT.BORDER);
 		plot.setLayoutData(new GridData(GridData.FILL_BOTH));
-		return plot;
+		//
+		plotControl.set(plot);
 	}
 
 	private PrincipalComponentUI createPrincipalComponentUI(Composite parent) {
@@ -119,7 +126,9 @@ public class ExtendedLoadingsPlot extends Composite implements IExtendedPartUI {
 
 	private void updatePlot(int pcX, int pcY) {
 
+		LoadingsPlot plot = plotControl.get();
 		plot.deleteSeries();
+		//
 		if(evaluationPCA != null) {
 			plot.setInput(evaluationPCA, pcX, pcY);
 		} else {

@@ -25,42 +25,48 @@ public class FeatureDataMatrix {
 	private List<Feature> features = new ArrayList<>();
 
 	@SuppressWarnings("rawtypes")
-	public FeatureDataMatrix(ISamplesPCA<? extends IVariable, ? extends ISample> samples) {
+	public FeatureDataMatrix(EvaluationPCA evaluationPCA) {
 
-		if(samples != null) {
+		if(evaluationPCA != null) {
 			/*
-			 * Data
+			 * 
 			 */
-			List<? extends IVariable> variableList = samples.getVariables();
-			List<? extends ISample> sampleList = samples.getSampleList();
-			/*
-			 * Samples
-			 */
-			for(ISample sample : sampleList) {
-				sampleNames.add(sample.getSampleName());
-			}
-			/*
-			 * variable.getClassification() // null
-			 * variable.getDescription() // null
-			 * variable.getType() // Retention time (min)
-			 * variable.getValue() // 3.466
-			 */
-			for(IVariable variable : variableList) {
-				features.add(new Feature(variable));
-			}
-			//
-			for(int i = 0; i < sampleList.size(); i++) {
-				ISample sample = sampleList.get(i);
+			ISamplesPCA<? extends IVariable, ? extends ISample> samples = evaluationPCA.getSamples();
+			if(samples != null) {
 				/*
-				 * sampleData.getData() // 50327.8
-				 * sampleData.getModifiedData() // 0.524298283655198
-				 * sampleData.isEmpty() // false
-				 * sampleData.getData2() // e.g. PeakMSD
+				 * Data
 				 */
-				List<? extends ISampleData> sampleDataList = sample.getSampleData();
-				for(int j = 0; j < sampleDataList.size(); j++) {
-					ISampleData<?> sampleData = sampleDataList.get(j);
-					features.get(j).getSampleData().add(sampleData);
+				List<? extends IVariable> variableList = samples.getVariables();
+				List<? extends ISample> sampleList = samples.getSampleList();
+				/*
+				 * Samples
+				 */
+				for(ISample sample : sampleList) {
+					sampleNames.add(sample.getSampleName());
+				}
+				/*
+				 * variable.getClassification() // null
+				 * variable.getDescription() // null
+				 * variable.getType() // Retention time (min)
+				 * variable.getValue() // 3.466
+				 */
+				for(IVariable variable : variableList) {
+					features.add(new Feature(variable));
+				}
+				//
+				for(int i = 0; i < sampleList.size(); i++) {
+					/*
+					 * sampleData.getData() // 50327.8
+					 * sampleData.getModifiedData() // 0.524298283655198
+					 * sampleData.isEmpty() // false
+					 * sampleData.getData2() // e.g. PeakMSD
+					 */
+					ISample sample = sampleList.get(i);
+					List<? extends ISampleData> sampleDataList = sample.getSampleData();
+					for(int j = 0; j < sampleDataList.size(); j++) {
+						ISampleData<?> sampleData = sampleDataList.get(j);
+						features.get(j).getSampleData().add(sampleData);
+					}
 				}
 			}
 		}

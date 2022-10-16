@@ -196,8 +196,8 @@ public class FileSettingsWizardPage extends AbstractAnalysisWizardPage {
 
 				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
 				fileDialog.setText("Import");
-				fileDialog.setFilterExtensions(new String[]{PcaExtractionFileText.FILTER_EXTENSION, PcaExtractionFileBinary.FILTER_EXTENSION});
-				fileDialog.setFilterNames(new String[]{PcaExtractionFileText.FILTER_NAME, PcaExtractionFileBinary.FILTER_NAME});
+				fileDialog.setFilterExtensions(new String[]{PcaExtractionFileText.FILTER_EXTENSION + ";" + PcaExtractionFileBinary.FILTER_EXTENSION});
+				fileDialog.setFilterNames(new String[]{PcaExtractionFileText.FILTER_NAME + ";" + PcaExtractionFileBinary.FILTER_NAME});
 				fileDialog.setFilterPath(PreferenceSupplier.getPathImportFile());
 				String path = fileDialog.open();
 				if(path != null) {

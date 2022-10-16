@@ -42,6 +42,9 @@ public class LoadingsPlotPart extends AbstractPartPCA<ExtendedLoadingsPlot> {
 				getControl().setInput(null);
 				unloadData();
 				return false;
+			} else if(isUpdateFeaturesEvent(topic)) {
+				getControl().updateInput();
+				return true;
 			} else {
 				Object object = objects.get(0);
 				if(object instanceof EvaluationPCA evaluationPCA) {
