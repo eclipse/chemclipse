@@ -11,11 +11,18 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.core.ProcessorPCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.io.FeatureDataMatrixIO;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.FeatureDataMatrix;
+import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePage;
 import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
@@ -37,6 +44,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.FileDialog;
 
 public class ExtendedFeatureListUI extends Composite implements IExtendedPartUI {
 
@@ -47,6 +55,7 @@ public class ExtendedFeatureListUI extends Composite implements IExtendedPartUI 
 	private AtomicReference<InformationUI> toolbarInfo = new AtomicReference<>();
 	//
 	private EvaluationPCA evaluationPCA = null;
+	private FeatureDataMatrix featureDataMatrix = null;
 
 	public ExtendedFeatureListUI(Composite parent, int style) {
 
@@ -58,7 +67,7 @@ public class ExtendedFeatureListUI extends Composite implements IExtendedPartUI 
 
 		if(doUpdate(evaluationPCA)) {
 			this.evaluationPCA = evaluationPCA;
-			updateInput();
+			updateInput(true);
 		}
 	}
 
@@ -91,12 +100,13 @@ public class ExtendedFeatureListUI extends Composite implements IExtendedPartUI 
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalAlignment = SWT.END;
 		composite.setLayoutData(gridData);
-		composite.setLayout(new GridLayout(5, false));
+		composite.setLayout(new GridLayout(6, false));
 		//
 		buttonToolbarInfo = createButtonToggleToolbar(composite, toolbarInfo, IMAGE_INFO, TOOLTIP_INFO);
 		buttonToolbarSearch = createButtonToggleToolbar(composite, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
 		createButtonCleanVariables(composite);
 		createButtonReset(composite);
+		createButtonExport(composite);
 		createSettingsButton(composite);
 	}
 
@@ -156,7 +166,7 @@ public class ExtendedFeatureListUI extends Composite implements IExtendedPartUI 
 				if(MessageDialog.openConfirm(e.display.getActiveShell(), "Variables", "Remove all useless variables?")) {
 					ProcessorPCA processorPCA = new ProcessorPCA();
 					processorPCA.cleanUselessVariables(evaluationPCA, new NullProgressMonitor());
-					updateInput();
+					updateInput(true);
 				}
 			}
 		});
@@ -175,7 +185,46 @@ public class ExtendedFeatureListUI extends Composite implements IExtendedPartUI 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				updateInput();
+				updateInput(false);
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createButtonExport(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		button.setToolTipText("Export the feature table.");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXPORT, IApplicationImage.SIZE_16x16));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				if(featureDataMatrix != null) {
+					FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
+					fileDialog.setOverwrite(true);
+					fileDialog.setText("Export");
+					fileDialog.setFilterExtensions(new String[]{FeatureDataMatrixIO.FILTER_EXTENSION});
+					fileDialog.setFilterNames(new String[]{FeatureDataMatrixIO.FILTER_NAME});
+					fileDialog.setFileName(FeatureDataMatrixIO.FILE_NAME);
+					fileDialog.setFilterPath(PreferenceSupplier.getPathExportFile());
+					String path = fileDialog.open();
+					if(path != null) {
+						try {
+							PreferenceSupplier.setPathExportFile(fileDialog.getFilterPath());
+							File file = new File(path);
+							FeatureDataMatrixIO.write(file, featureDataMatrix);
+							Desktop.getDesktop().open(file);
+						} catch(FileNotFoundException e1) {
+							MessageDialog.openWarning(e.display.getActiveShell(), "Export", "The feature data matrix file couldn't be found.");
+						} catch(IOException e1) {
+							logger.warn(e1);
+						}
+					}
+				}
 			}
 		});
 		//
@@ -196,11 +245,19 @@ public class ExtendedFeatureListUI extends Composite implements IExtendedPartUI 
 
 	private void applySettings() {
 
-		updateInput();
+		updateInput(false);
 	}
 
-	private void updateInput() {
+	private void updateInput(boolean createDataMatrix) {
 
+		if(createDataMatrix) {
+			if(evaluationPCA != null) {
+				featureDataMatrix = new FeatureDataMatrix(evaluationPCA);
+			} else {
+				featureDataMatrix = null;
+			}
+		}
+		//
 		updateWidgets();
 		updateInfoLabel();
 	}
@@ -209,7 +266,7 @@ public class ExtendedFeatureListUI extends Composite implements IExtendedPartUI 
 
 		FeatureListUI featureListUI = listControl.get();
 		featureListUI.clearColumns();
-		featureListUI.setInput(evaluationPCA);
+		featureListUI.setInput(featureDataMatrix);
 	}
 
 	private void updateInfoLabel() {

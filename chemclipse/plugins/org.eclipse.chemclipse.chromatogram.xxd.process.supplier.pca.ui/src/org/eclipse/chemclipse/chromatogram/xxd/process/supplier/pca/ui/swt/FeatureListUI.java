@@ -14,7 +14,6 @@ package org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.EvaluationPCA;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.model.FeatureDataMatrix;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.provider.FeatureComparator;
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.provider.FeatureEditingSupport;
@@ -72,10 +71,9 @@ public class FeatureListUI extends ExtendedTableViewer {
 		refresh();
 	}
 
-	public void setInput(EvaluationPCA evaluationPCA) {
+	public void setInput(FeatureDataMatrix featureDataMatrix) {
 
-		if(evaluationPCA != null) {
-			FeatureDataMatrix featureDataMatrix = new FeatureDataMatrix(evaluationPCA);
+		if(featureDataMatrix != null) {
 			createColumnsSpecific(featureDataMatrix);
 			super.setInput(featureDataMatrix.getFeatures());
 		} else {
