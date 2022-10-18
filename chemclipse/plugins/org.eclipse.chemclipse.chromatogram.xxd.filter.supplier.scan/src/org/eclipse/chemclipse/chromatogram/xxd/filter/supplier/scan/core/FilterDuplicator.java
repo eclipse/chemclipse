@@ -79,7 +79,7 @@ public class FilterDuplicator extends AbstractChromatogramFilter {
 			 * The complete range of the chromatogram must be processed.
 			 */
 			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
-			int scanInterval = chromatogram.getScanInterval();
+			int newScanInterval = (int)Math.round(chromatogram.getScanInterval() / 2.0d);
 			/*
 			 * Map the scans.
 			 */
@@ -157,11 +157,14 @@ public class FilterDuplicator extends AbstractChromatogramFilter {
 					}
 				}
 			}
-			//
+			/*
+			 * Don't recalculate the retention times
+			 * chromatogram.recalculateRetentionTimes();
+			 */
 			chromatogram.replaceAllScans(scansToReplace);
-			chromatogram.setScanInterval((int)(scanInterval / 2.0d));
+			chromatogram.setScanDelay(chromatogram.getStartRetentionTime());
+			chromatogram.setScanInterval(newScanInterval);
 			chromatogram.recalculateScanNumbers();
-			chromatogram.recalculateRetentionTimes();
 			chromatogram.recalculateTheNoiseFactor();
 			chromatogramSelection.reset();
 		}

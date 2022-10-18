@@ -18,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 
 public class FilterSettingsDuplicator extends AbstractChromatogramFilterSettings {
 
-	@JsonProperty(value = "Merge Scans", defaultValue = "true")
+	@JsonProperty(value = "Duplicated Scan (Merge Traces)", defaultValue = "true")
 	@JsonPropertyDescription(value = "The traces of both start and stop scan shall be merged.")
 	private boolean mergeScans = true;
 
