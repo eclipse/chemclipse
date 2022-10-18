@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,13 +11,49 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.quantitation;
 
-public enum CalibrationMethod {
+import org.eclipse.chemclipse.support.text.ILabel;
+
+public enum CalibrationMethod implements ILabel {
+
 	/*
 	 * ISTD is used for internal standards only.
 	 * All other are used for external calibration.
 	 */
-	LINEAR, //
-	QUADRATIC, //
-	AVERAGE, //
-	ISTD;
+	LINEAR("Linear"), //
+	QUADRATIC("Quadratic"), //
+	AVERAGE("Average"), //
+	ISTD("Internal Standard");
+
+	private String label = "";
+
+	private CalibrationMethod(String label) {
+
+		this.label = label;
+	}
+
+	public String label() {
+
+		return label;
+	}
+
+	public static String[][] getOptions() {
+
+		return ILabel.getOptions(values());
+	}
+
+	public static final CalibrationMethod[] getInternalCalibrationOptions() {
+
+		return new CalibrationMethod[]{ //
+				CalibrationMethod.ISTD //
+		};
+	}
+
+	public static final CalibrationMethod[] getExternalCalibrationOptions() {
+
+		return new CalibrationMethod[]{ //
+				CalibrationMethod.AVERAGE, //
+				CalibrationMethod.LINEAR, //
+				CalibrationMethod.QUADRATIC //
+		};
+	}
 }
