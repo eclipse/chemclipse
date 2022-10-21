@@ -186,25 +186,29 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 		/*
 		 * Checks
 		 */
-		IProcessorPreferences<?> processorPreferences = preferencesSupplier.apply(processEntry, processTypeSupport);
-		//
-		if(processorPreferences == null) {
-			return ValidationStatus.error("The processor " + processEntry.getName() + " preferences are not available.");
-		}
-		//
-		if(processorPreferences.getSupplier().getSettingsClass() == null) {
-			return ValidationStatus.warning("The processor " + processEntry.getName() + " has no settings class.");
-		}
-		//
-		if(processorPreferences.isUseSystemDefaults()) {
-			return ValidationStatus.info("The processor " + processEntry.getName() + " uses system default settings.");
-		} else {
-			try {
-				processorPreferences.getUserSettings();
-				return ValidationStatus.ok();
-			} catch(Exception e) {
-				return ValidationStatus.error("The processor " + processEntry.getName() + " settings can't be parsed.", e);
+		if(!processEntry.isSkipValidation()) {
+			IProcessorPreferences<?> processorPreferences = preferencesSupplier.apply(processEntry, processTypeSupport);
+			//
+			if(processorPreferences == null) {
+				return ValidationStatus.error("The processor " + processEntry.getName() + " preferences are not available.");
 			}
+			//
+			if(processorPreferences.getSupplier().getSettingsClass() == null) {
+				return ValidationStatus.warning("The processor " + processEntry.getName() + " has no settings class.");
+			}
+			//
+			if(processorPreferences.isUseSystemDefaults()) {
+				return ValidationStatus.info("The processor " + processEntry.getName() + " uses system default settings.");
+			} else {
+				try {
+					processorPreferences.getUserSettings();
+					return ValidationStatus.ok();
+				} catch(Exception e) {
+					return ValidationStatus.error("The processor " + processEntry.getName() + " settings can't be parsed.", e);
+				}
+			}
+		} else {
+			return ValidationStatus.info("The processor " + processEntry.getName() + " skip validation option is set.");
 		}
 	}
 }

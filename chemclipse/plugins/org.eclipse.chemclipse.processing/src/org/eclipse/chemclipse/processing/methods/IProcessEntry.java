@@ -56,6 +56,15 @@ public interface IProcessEntry extends ProcessEntryContainer {
 	 */
 	void setActiveProfile(String activeProfile);
 
+	boolean isSkipValidation();
+
+	/**
+	 * Only use skip validation = true if you know exactly what you're doing.
+	 * 
+	 * @param skipValidation
+	 */
+	void setSkipValidation(boolean skipValidation);
+
 	/**
 	 * Deletes the profile.
 	 * 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -30,6 +30,7 @@ public final class ProcessEntry extends ListProcessEntryContainer implements IPr
 	//
 	private String processorId;
 	private String activeProfile = DEFAULT_PROFILE;
+	private boolean skipValidation = false;
 
 	public ProcessEntry(ProcessEntryContainer parent) {
 
@@ -81,6 +82,18 @@ public final class ProcessEntry extends ListProcessEntryContainer implements IPr
 	public void setActiveProfile(String activeProfile) {
 
 		this.activeProfile = (activeProfile == null) ? DEFAULT_PROFILE : activeProfile;
+	}
+
+	@Override
+	public boolean isSkipValidation() {
+
+		return skipValidation;
+	}
+
+	@Override
+	public void setSkipValidation(boolean skipValidation) {
+
+		this.skipValidation = skipValidation;
 	}
 
 	@Override
