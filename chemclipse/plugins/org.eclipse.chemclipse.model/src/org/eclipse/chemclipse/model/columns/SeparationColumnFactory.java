@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,21 +21,17 @@ public class SeparationColumnFactory {
 
 	private static final Logger logger = Logger.getLogger(SeparationColumnType.class);
 
-	public static String getColumnLabel(ISeparationColumn separationColumn, int nameLength) {
+	public static String getColumnLabel(ISeparationColumn separationColumn, int labelLength) {
 
-		StringBuilder builder = new StringBuilder();
 		if(separationColumn != null) {
-			String name = separationColumn.getName();
-			if(name.length() > nameLength) {
-				name = name.substring(0, nameLength) + "...";
+			String label = separationColumn.getSeparationColumnType().label();
+			if(label.length() > labelLength) {
+				label = label.substring(0, labelLength) + "...";
 			}
-			builder.append(name);
-			builder.append(" (");
-			builder.append(separationColumn.getSeparationColumnType().label());
-			builder.append(")");
+			return label;
 		}
 		//
-		return builder.toString().trim();
+		return "";
 	}
 
 	public static List<ISeparationColumn> getSeparationColumns() {
