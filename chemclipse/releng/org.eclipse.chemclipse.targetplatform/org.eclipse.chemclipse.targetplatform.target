@@ -85,7 +85,7 @@
 			</dependency>
 		</dependencies>
 	</location>
-	<location includeDependencyDepth="none" includeSource="true" missingManifest="generate" type="Maven">
+	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
 		<dependencies>
 			<dependency>
 				<groupId>org.apache.pdfbox</groupId>
@@ -112,7 +112,7 @@
 				<artifactId>ejml-ddense</artifactId>
 				<version>0.41</version>
 				<type>jar</type>
-				</dependency>
+			</dependency>
 		</dependencies>
 	</location>
 	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
@@ -145,12 +145,38 @@
 			</dependency>
 		</dependencies>
 	</location>
-	<location includeDependencyDepth="none" includeSource="true" missingManifest="generate" type="Maven">
+	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
 		<dependencies>
 			<dependency>
 				<groupId>org.ejml</groupId>
 				<artifactId>ejml-fdense</artifactId>
 				<version>0.41</version>
+				<type>jar</type>
+			</dependency>
+		</dependencies>
+	</location>
+	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+		<dependencies>
+			<dependency>
+				<groupId>org.glassfish.hk2</groupId>
+				<artifactId>osgi-resource-locator</artifactId>
+				<version>1.0.3</version>
+				<type>jar</type>
+			</dependency>
+		</dependencies>
+	</location>
+	<location includeDependencyDepth="direct" includeDependencyScopes="compile,runtime" includeSource="true" missingManifest="generate" type="Maven">
+		<dependencies>
+			<dependency>
+				<groupId>com.sun.xml.bind</groupId>
+				<artifactId>jaxb-impl</artifactId>
+				<version>4.0.1</version>
+				<type>jar</type>
+			</dependency>
+			<dependency>
+				<groupId>jakarta.xml.bind</groupId>
+				<artifactId>jakarta.xml.bind-api</artifactId>
+				<version>4.0.0</version>
 				<type>jar</type>
 			</dependency>
 		</dependencies>
