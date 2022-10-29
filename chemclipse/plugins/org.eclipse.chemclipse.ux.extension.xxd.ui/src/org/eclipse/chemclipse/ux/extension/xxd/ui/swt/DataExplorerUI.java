@@ -87,6 +87,7 @@ public class DataExplorerUI extends MultiDataExplorerTreeUI {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				setSupplierFileEditorSupport();
 				expandLastDirectoryPath();
 			}
 		});
