@@ -20,7 +20,7 @@ import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.model.support.IIntegrationConstraints;
 
-public interface IPeak extends ITargetSupplier, PeakPosition, Classifiable, ISignal {
+public interface IPeak extends ITargetSupplier, PeakPosition, IClassifier, ISignal {
 
 	/**
 	 * This comparator compares peaks based on the RT at the maximum of the intensity of the peak model

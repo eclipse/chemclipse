@@ -19,7 +19,7 @@ import java.util.Set;
 
 import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.comparator.PeakRetentionTimeComparator;
-import org.eclipse.chemclipse.model.core.Classifiable;
+import org.eclipse.chemclipse.model.core.IClassifier;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
@@ -76,7 +76,7 @@ public class PeakQuantitationsExtractor {
 				peakQuantitation.setCasNumber(getCasNumber(identificationTarget));
 				peakQuantitation.setReferenceIdentifier(getReferenceIdentifier(identificationTarget));
 				peakQuantitation.setIntegratedArea(peak.getIntegratedArea());
-				peakQuantitation.setClassifier(Classifiable.asString(peak));
+				peakQuantitation.setClassifier(IClassifier.asString(peak));
 				peakQuantitation.setQuantifier(getQuantifier(peak));
 				//
 				for(String quantitationColumn : quantitationColumns) {

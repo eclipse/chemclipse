@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,9 +21,9 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.function.Function;
 
-import org.eclipse.chemclipse.model.core.Classifiable;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramPeak;
+import org.eclipse.chemclipse.model.core.IClassifier;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinition;
 import org.eclipse.chemclipse.support.ui.swt.columns.ColumnDefinitionProvider;
@@ -43,11 +43,11 @@ import org.eclipse.swt.widgets.Shell;
 
 public final class ClassifierDialog extends Dialog implements ColumnDefinitionProvider, IContentProposalProvider {
 
-	private final Classifiable classifiable;
+	private final IClassifier classifiable;
 	private ListEdit<String> listEdit;
 	private IContentProposal[] proposals;
 
-	public ClassifierDialog(Shell parentShell, Classifiable classifiable) {
+	public ClassifierDialog(Shell parentShell, IClassifier classifiable) {
 
 		super(parentShell);
 		this.classifiable = classifiable;
