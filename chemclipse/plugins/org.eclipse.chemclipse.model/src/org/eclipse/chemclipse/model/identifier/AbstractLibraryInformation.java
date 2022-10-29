@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2021 Lablicate GmbH.
+ * Copyright (c) 2010, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -17,6 +17,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
+
+import org.eclipse.chemclipse.model.columns.ISeparationColumn;
+import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
+import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 
 public abstract class AbstractLibraryInformation implements ILibraryInformation {
 
@@ -39,13 +43,18 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	private String contributor = "";
 	private String hit;
 	private final Set<String> classification = new LinkedHashSet<>();
-	private int retentionTime = 0;
-	private float retentionIndex = 0.0f;
+	private final Set<IColumnPositionMarker> columnPositionMarkers = new LinkedHashSet<>();
 	private String moleculeStructure = "";
+	/*
+	 * Default Column Position Marker
+	 */
+	private ISeparationColumn separationColumn = SeparationColumnFactory.getSeparationColumn(SeparationColumnType.DEFAULT);
+	private ColumnPositionMarker columnPositionMarker = new ColumnPositionMarker(separationColumn);
 
 	public AbstractLibraryInformation() {
 
 		this(null);
+		columnPositionMarkers.add(columnPositionMarker);
 	}
 
 	/**
@@ -55,6 +64,7 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	 */
 	public AbstractLibraryInformation(ILibraryInformation libraryInformation) {
 
+		columnPositionMarkers.add(columnPositionMarker);
 		if(libraryInformation != null) {
 			name = libraryInformation.getName();
 			synonyms.addAll(libraryInformation.getSynonyms());
@@ -70,8 +80,8 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 			contributor = libraryInformation.getContributor();
 			hit = libraryInformation.getHit();
 			classification.addAll(libraryInformation.getClassifier());
-			retentionTime = libraryInformation.getRetentionTime();
-			retentionIndex = libraryInformation.getRetentionIndex();
+			columnPositionMarker.setRetentionTime(libraryInformation.getRetentionTime());
+			columnPositionMarker.setRetentionIndex(libraryInformation.getRetentionIndex());
 			moleculeStructure = libraryInformation.getMoleculeStructure();
 		}
 	}
@@ -273,27 +283,58 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	}
 
 	@Override
+	public Set<IColumnPositionMarker> getColumnPositionMarkers() {
+
+		return Collections.unmodifiableSet(columnPositionMarkers);
+	}
+
+	@Override
+	public void add(IColumnPositionMarker columnPositionMarker) {
+
+		if(columnPositionMarker != null) {
+			if(isDefaultColumnPositionMarker(columnPositionMarker)) {
+				this.columnPositionMarker.setRetentionTime(columnPositionMarker.getRetentionTime());
+				this.columnPositionMarker.setRetentionIndex(columnPositionMarker.getRetentionIndex());
+			} else {
+				columnPositionMarkers.add(columnPositionMarker);
+			}
+		}
+	}
+
+	@Override
+	public void delete(IColumnPositionMarker columnPositionMarker) {
+
+		if(columnPositionMarker != null) {
+			if(isDefaultColumnPositionMarker(columnPositionMarker)) {
+				this.columnPositionMarker.clear();
+			} else {
+				columnPositionMarkers.remove(columnPositionMarker);
+			}
+		}
+	}
+
+	@Override
 	public int getRetentionTime() {
 
-		return retentionTime;
+		return columnPositionMarker.getRetentionTime();
 	}
 
 	@Override
 	public void setRetentionTime(int retentionTime) {
 
-		this.retentionTime = retentionTime;
+		columnPositionMarker.setRetentionTime(retentionTime);
 	}
 
 	@Override
 	public float getRetentionIndex() {
 
-		return retentionIndex;
+		return columnPositionMarker.getRetentionIndex();
 	}
 
 	@Override
 	public void setRetentionIndex(float retentionIndex) {
 
-		this.retentionIndex = retentionIndex;
+		this.columnPositionMarker.setRetentionIndex(retentionIndex);
 	}
 
 	@Override
@@ -306,6 +347,11 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	public void setMoleculeStructure(String moleculeStructure) {
 
 		this.moleculeStructure = moleculeStructure;
+	}
+
+	private boolean isDefaultColumnPositionMarker(IColumnPositionMarker columnPositionMarker) {
+
+		return this.columnPositionMarker.equals(columnPositionMarker);
 	}
 
 	@Override

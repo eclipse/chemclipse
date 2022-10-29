@@ -11,13 +11,18 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.columns;
 
+import java.util.Objects;
+
 public abstract class AbstractSeparationColumn implements ISeparationColumn {
 
 	private String name = "";
 	private SeparationColumnType separationColumnType = SeparationColumnType.DEFAULT;
+	private SeparationColumnPackaging separationColumnPackaging = SeparationColumnPackaging.CAPILLARY;
+	private String calculationType = ""; // Kovats RI, Lee RI, ...
 	private String length = "";
 	private String diameter = "";
 	private String phase = "";
+	private String thickness = "";
 
 	@Override
 	public void copyFrom(ISeparationColumn separationColumn) {
@@ -25,9 +30,12 @@ public abstract class AbstractSeparationColumn implements ISeparationColumn {
 		if(separationColumn != null) {
 			this.name = separationColumn.getName();
 			this.separationColumnType = separationColumn.getSeparationColumnType();
+			this.separationColumnPackaging = separationColumn.getSeparationColumnPackaging();
+			this.calculationType = separationColumn.getCalculationType();
 			this.length = separationColumn.getLength();
 			this.diameter = separationColumn.getDiameter();
 			this.phase = separationColumn.getPhase();
+			this.thickness = separationColumn.getThickness();
 		}
 	}
 
@@ -53,6 +61,30 @@ public abstract class AbstractSeparationColumn implements ISeparationColumn {
 	public void setSeparationColumnType(SeparationColumnType separationColumnType) {
 
 		this.separationColumnType = separationColumnType;
+	}
+
+	@Override
+	public SeparationColumnPackaging getSeparationColumnPackaging() {
+
+		return separationColumnPackaging;
+	}
+
+	@Override
+	public void setSeparationColumnPackaging(SeparationColumnPackaging separationColumnPackaging) {
+
+		this.separationColumnPackaging = separationColumnPackaging;
+	}
+
+	@Override
+	public String getCalculationType() {
+
+		return calculationType;
+	}
+
+	@Override
+	public void setCalculationType(String calculationType) {
+
+		this.calculationType = calculationType;
 	}
 
 	@Override
@@ -92,64 +124,39 @@ public abstract class AbstractSeparationColumn implements ISeparationColumn {
 	}
 
 	@Override
+	public String getThickness() {
+
+		return thickness;
+	}
+
+	@Override
+	public void setThickness(String thickness) {
+
+		this.thickness = thickness;
+	}
+
+	@Override
 	public int hashCode() {
 
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((diameter == null) ? 0 : diameter.hashCode());
-		result = prime * result + ((length == null) ? 0 : length.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((phase == null) ? 0 : phase.hashCode());
-		return result;
+		return Objects.hash(calculationType, diameter, length, name, phase, separationColumnPackaging, separationColumnType, thickness);
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 
-		if(this == obj) {
+		if(this == obj)
 			return true;
-		}
-		if(obj == null) {
+		if(obj == null)
 			return false;
-		}
-		if(getClass() != obj.getClass()) {
+		if(getClass() != obj.getClass())
 			return false;
-		}
 		AbstractSeparationColumn other = (AbstractSeparationColumn)obj;
-		if(diameter == null) {
-			if(other.diameter != null) {
-				return false;
-			}
-		} else if(!diameter.equals(other.diameter)) {
-			return false;
-		}
-		if(length == null) {
-			if(other.length != null) {
-				return false;
-			}
-		} else if(!length.equals(other.length)) {
-			return false;
-		}
-		if(name == null) {
-			if(other.name != null) {
-				return false;
-			}
-		} else if(!name.equals(other.name)) {
-			return false;
-		}
-		if(phase == null) {
-			if(other.phase != null) {
-				return false;
-			}
-		} else if(!phase.equals(other.phase)) {
-			return false;
-		}
-		return true;
+		return Objects.equals(calculationType, other.calculationType) && Objects.equals(diameter, other.diameter) && Objects.equals(length, other.length) && Objects.equals(name, other.name) && Objects.equals(phase, other.phase) && separationColumnPackaging == other.separationColumnPackaging && separationColumnType == other.separationColumnType && Objects.equals(thickness, other.thickness);
 	}
 
 	@Override
 	public String toString() {
 
-		return "AbstractSeparationColumn [name=" + name + ", length=" + length + ", diameter=" + diameter + ", phase=" + phase + "]";
+		return "AbstractSeparationColumn [name=" + name + ", separationColumnType=" + separationColumnType + ", separationColumnPackaging=" + separationColumnPackaging + ", calculationType=" + calculationType + ", length=" + length + ", diameter=" + diameter + ", phase=" + phase + ", thickness=" + thickness + "]";
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2020 Lablicate GmbH.
+ * Copyright (c) 2010, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -15,9 +15,9 @@ package org.eclipse.chemclipse.model.identifier;
 import java.io.Serializable;
 import java.util.Set;
 
-import org.eclipse.chemclipse.model.core.Classifiable;
+import org.eclipse.chemclipse.model.core.IClassifier;
 
-public interface ILibraryInformation extends Serializable, Classifiable {
+public interface ILibraryInformation extends IClassifier, Serializable {
 
 	/**
 	 * Returns the name of the library mass spectrum.
@@ -175,6 +175,18 @@ public interface ILibraryInformation extends Serializable, Classifiable {
 	void setContributor(String contributor);
 
 	String getHit();
+
+	/**
+	 * Returns an unmodifiable set of the available column
+	 * position markers.
+	 * 
+	 * @return {@link Set}
+	 */
+	Set<IColumnPositionMarker> getColumnPositionMarkers();
+
+	void add(IColumnPositionMarker columnPositionMarker);
+
+	void delete(IColumnPositionMarker columnPositionMarker);
 
 	int getRetentionTime();
 
