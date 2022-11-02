@@ -14,4 +14,16 @@ package org.eclipse.chemclipse.model.identifier;
 public interface IFlavorMarker {
 
 	void clear();
+
+	public String getOdor();
+
+	public void setOdor(String odor);
+
+	public String getMatrix();
+
+	public void setMatrix(String matrix);
+
+	public String getSolvent();
+
+	public void setSolvent(String solvent);
 }

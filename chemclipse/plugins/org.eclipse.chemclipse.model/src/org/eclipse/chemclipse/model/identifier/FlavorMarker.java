@@ -18,7 +18,7 @@ import java.util.Set;
 
 public class FlavorMarker implements IFlavorMarker {
 
-	private String odorQuality = "";
+	private String odor = "";
 	private Set<FlavorThreshold> flavorThresholds = new HashSet<>();
 	private String matrix = "";
 	private String solvent = "";
@@ -28,7 +28,7 @@ public class FlavorMarker implements IFlavorMarker {
 	@Override
 	public void clear() {
 
-		odorQuality = "";
+		odor = "";
 		flavorThresholds.clear();
 		matrix = "";
 		solvent = "";
@@ -36,14 +36,16 @@ public class FlavorMarker implements IFlavorMarker {
 		literatureReference = "";
 	}
 
-	public String getOdorQuality() {
+	@Override
+	public String getOdor() {
 
-		return odorQuality;
+		return odor;
 	}
 
-	public void setOdorQuality(String odorQuality) {
+	@Override
+	public void setOdor(String odor) {
 
-		this.odorQuality = odorQuality;
+		this.odor = odor;
 	}
 
 	public void add(FlavorThreshold flavorThreshold) {
@@ -66,21 +68,25 @@ public class FlavorMarker implements IFlavorMarker {
 		return Collections.unmodifiableSet(flavorThresholds);
 	}
 
+	@Override
 	public String getMatrix() {
 
 		return matrix;
 	}
 
+	@Override
 	public void setMatrix(String matrix) {
 
 		this.matrix = matrix;
 	}
 
+	@Override
 	public String getSolvent() {
 
 		return solvent;
 	}
 
+	@Override
 	public void setSolvent(String solvent) {
 
 		this.solvent = solvent;
@@ -109,7 +115,7 @@ public class FlavorMarker implements IFlavorMarker {
 	@Override
 	public int hashCode() {
 
-		return Objects.hash(matrix, odorQuality, solvent);
+		return Objects.hash(matrix, odor, solvent);
 	}
 
 	@Override
@@ -122,12 +128,12 @@ public class FlavorMarker implements IFlavorMarker {
 		if(getClass() != obj.getClass())
 			return false;
 		FlavorMarker other = (FlavorMarker)obj;
-		return Objects.equals(matrix, other.matrix) && Objects.equals(odorQuality, other.odorQuality) && Objects.equals(solvent, other.solvent);
+		return Objects.equals(matrix, other.matrix) && Objects.equals(odor, other.odor) && Objects.equals(solvent, other.solvent);
 	}
 
 	@Override
 	public String toString() {
 
-		return "FlavorMarker [odorQuality=" + odorQuality + ", matrix=" + matrix + ", solvent=" + solvent + "]";
+		return "FlavorMarker [odorQuality=" + odor + ", matrix=" + matrix + ", solvent=" + solvent + "]";
 	}
 }

@@ -19,24 +19,24 @@ import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.msd.model.core.ILibraryMassSpectrum;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedSynonymsUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedFlavorMarkerUI;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class SynonymsPart extends AbstractPart<ExtendedSynonymsUI> {
+public class FlavorMarkerPart extends AbstractPart<ExtendedFlavorMarkerUI> {
 
 	private static final String TOPIC = IChemClipseEvents.TOPIC_SCAN_XXD_UPDATE_SELECTION;
 
 	@Inject
-	public SynonymsPart(Composite parent) {
+	public FlavorMarkerPart(Composite parent) {
 
 		super(parent, TOPIC);
 	}
 
 	@Override
-	protected ExtendedSynonymsUI createControl(Composite parent) {
+	protected ExtendedFlavorMarkerUI createControl(Composite parent) {
 
-		return new ExtendedSynonymsUI(parent, SWT.NONE);
+		return new ExtendedFlavorMarkerUI(parent, SWT.NONE);
 	}
 
 	@Override

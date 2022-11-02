@@ -11,17 +11,19 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import org.eclipse.chemclipse.model.columns.ISeparationColumn;
+import org.eclipse.chemclipse.model.identifier.IColumnIndexMarker;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 
-public class ExtendedSynonymsUI extends Composite {
+public class ExtendedColumnIndicesUI extends Composite {
 
 	private Text text;
 
-	public ExtendedSynonymsUI(Composite parent, int style) {
+	public ExtendedColumnIndicesUI(Composite parent, int style) {
 
 		super(parent, style);
 		createControl();
@@ -31,8 +33,12 @@ public class ExtendedSynonymsUI extends Composite {
 
 		if(libraryInformation != null) {
 			StringBuilder builder = new StringBuilder();
-			for(String synonym : libraryInformation.getSynonyms()) {
-				builder.append(synonym);
+			for(IColumnIndexMarker columnIndexMarker : libraryInformation.getColumnIndexMarkers()) {
+				ISeparationColumn separationColumn = columnIndexMarker.getSeparationColumn();
+				builder.append(separationColumn.getName());
+				builder.append(":");
+				builder.append(" ");
+				builder.append(columnIndexMarker.getRetentionIndex());
 				builder.append("\n");
 			}
 			text.setText(builder.toString());
@@ -51,7 +57,7 @@ public class ExtendedSynonymsUI extends Composite {
 
 		Text text = new Text(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
 		text.setText("");
-		text.setToolTipText("Synonyms");
+		text.setToolTipText("Column Indices");
 		//
 		return text;
 	}

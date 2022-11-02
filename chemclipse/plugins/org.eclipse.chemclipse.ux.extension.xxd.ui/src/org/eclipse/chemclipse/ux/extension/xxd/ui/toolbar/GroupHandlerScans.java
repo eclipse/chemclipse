@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -55,6 +55,8 @@ public class GroupHandlerScans extends AbstractGroupHandler {
 		partHandler.add(new PartHandler("Molecule", PartSupport.PARTDESCRIPTOR_MOLECULE, PreferenceConstants.P_STACK_POSITION_MOLECULE));
 		partHandler.add(new PartHandler("Scan Browse", PartSupport.PARTDESCRIPTOR_SCAN_BROWSE, PreferenceConstants.P_STACK_POSITION_SCAN_BROWSE));
 		partHandler.add(new PartHandler("Synonyms", PartSupport.PARTDESCRIPTOR_SYNONYMS, PreferenceConstants.P_STACK_POSITION_SYNONYMS));
+		partHandler.add(new PartHandler("Column Indices", PartSupport.PARTDESCRIPTOR_COLUMN_INDICES, PreferenceConstants.P_STACK_POSITION_COLUMN_INDICES));
+		partHandler.add(new PartHandler("Flavor Marker", PartSupport.PARTDESCRIPTOR_FLAVOR_MARKER, PreferenceConstants.P_STACK_POSITION_FLAVOR_MARKER));
 		partHandler.add(new PartHandler("Scan List", PartSupport.PARTDESCRIPTOR_PEAK_SCAN_LIST, PreferenceConstants.P_STACK_POSITION_PEAK_SCAN_LIST));
 		partHandler.add(new PartHandler("Scan Subtract", PartSupport.PARTDESCRIPTOR_SUBTRACT_SCAN, PreferenceConstants.P_STACK_POSITION_SUBTRACT_SCAN_PART));
 		partHandler.add(new PartHandler("Scan Combined", PartSupport.PARTDESCRIPTOR_COMBINED_SCAN, PreferenceConstants.P_STACK_POSITION_COMBINED_SCAN_PART));
