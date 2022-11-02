@@ -39,7 +39,7 @@ public class SeparationColumnFactory {
 		List<ISeparationColumn> separationColumns = new ArrayList<>();
 		separationColumns.add(getSeparationColumn(SeparationColumnType.DEFAULT));
 		separationColumns.add(getSeparationColumn(SeparationColumnType.POLAR));
-		separationColumns.add(getSeparationColumn(SeparationColumnType.APOLAR));
+		separationColumns.add(getSeparationColumn(SeparationColumnType.NON_POLAR));
 		separationColumns.add(getSeparationColumn(SeparationColumnType.SEMI_POLAR));
 		return separationColumns;
 	}
@@ -78,7 +78,7 @@ public class SeparationColumnFactory {
 		SeparationColumnMapping columnMappings = new SeparationColumnMapping();
 		columnMappings.load(PreferenceSupplier.getSeparationColumnMappings());
 		columnMappings.put(SeparationColumnType.POLAR.name(), SeparationColumnType.POLAR.name());
-		columnMappings.put(SeparationColumnType.APOLAR.name(), SeparationColumnType.APOLAR.name());
+		columnMappings.put(SeparationColumnType.NON_POLAR.name(), SeparationColumnType.NON_POLAR.name());
 		columnMappings.put(SeparationColumnType.SEMI_POLAR.name(), SeparationColumnType.SEMI_POLAR.name());
 		/*
 		 * If no mapping is available or the value can't be parsed
@@ -88,7 +88,15 @@ public class SeparationColumnFactory {
 		String value = columnMappings.get(name);
 		if(value != null) {
 			try {
-				separationColumnType = SeparationColumnType.valueOf(value);
+				/*
+				 * Backward compatibility.
+				 * APOLAR has been replace by the more common name NON_POLAR.
+				 */
+				if("APOLAR".equals(name)) {
+					separationColumnType = SeparationColumnType.NON_POLAR;
+				} else {
+					separationColumnType = SeparationColumnType.valueOf(value);
+				}
 			} catch(Exception e) {
 				logger.warn(e);
 			}

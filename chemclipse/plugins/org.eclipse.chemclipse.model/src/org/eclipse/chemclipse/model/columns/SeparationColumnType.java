@@ -25,9 +25,9 @@ public enum SeparationColumnType implements ILabel {
 	 * be mapped to either one of these 4 types.
 	 */
 	DEFAULT("Default"), //
-	POLAR("Polar"), //
-	APOLAR("Nonpolar"), //
-	SEMI_POLAR("Semipolar");
+	POLAR("polar"), //
+	NON_POLAR("non-polar"), // Replacement for APOLAR("non-polar")
+	SEMI_POLAR("semi-polar");
 
 	private String label = "";
 
@@ -40,6 +40,11 @@ public enum SeparationColumnType implements ILabel {
 	public String label() {
 
 		return label;
+	}
+
+	public static String[] getItems() {
+
+		return ILabel.getItems(values());
 	}
 
 	public static String[][] getOptions() {

@@ -15,33 +15,25 @@ import java.util.Objects;
 
 import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 
-public class ColumnPositionMarker extends AbstractColumnMarker implements IColumnPositionMarker {
+public class ColumnIndexMarker extends AbstractColumnMarker implements IColumnIndexMarker {
 
-	private int retentionTime = 0;
 	private float retentionIndex = 0.0f;
 
-	public ColumnPositionMarker(ISeparationColumn separationColumn) {
+	public ColumnIndexMarker(ISeparationColumn separationColumn) {
+
+		this(separationColumn, 0.0f);
+	}
+
+	public ColumnIndexMarker(ISeparationColumn separationColumn, float retentionIndex) {
 
 		super(separationColumn);
+		this.retentionIndex = retentionIndex;
 	}
 
 	@Override
 	public void clear() {
 
-		retentionTime = 0;
 		retentionIndex = 0.0f;
-	}
-
-	@Override
-	public int getRetentionTime() {
-
-		return retentionTime;
-	}
-
-	@Override
-	public void setRetentionTime(int retentionTime) {
-
-		this.retentionTime = retentionTime;
 	}
 
 	@Override
@@ -59,7 +51,7 @@ public class ColumnPositionMarker extends AbstractColumnMarker implements IColum
 	@Override
 	public int hashCode() {
 
-		return Objects.hash(retentionIndex, retentionTime, getSeparationColumn().hashCode());
+		return Objects.hash(retentionIndex, getSeparationColumn().hashCode());
 	}
 
 	@Override
@@ -71,13 +63,13 @@ public class ColumnPositionMarker extends AbstractColumnMarker implements IColum
 			return false;
 		if(getClass() != obj.getClass())
 			return false;
-		ColumnPositionMarker other = (ColumnPositionMarker)obj;
-		return Float.floatToIntBits(retentionIndex) == Float.floatToIntBits(other.retentionIndex) && retentionTime == other.retentionTime && Objects.equals(getSeparationColumn(), other.getSeparationColumn());
+		ColumnIndexMarker other = (ColumnIndexMarker)obj;
+		return Float.floatToIntBits(retentionIndex) == Float.floatToIntBits(other.retentionIndex) && Objects.equals(getSeparationColumn(), other.getSeparationColumn());
 	}
 
 	@Override
 	public String toString() {
 
-		return "SpecificPositionMarker [separationColumn=" + getSeparationColumn() + ", retentionTime=" + retentionTime + ", retentionIndex=" + retentionIndex + "]";
+		return "ColumnIndexMarker [separationColumn=" + getSeparationColumn() + ", retentionIndex=" + retentionIndex + "]";
 	}
 }

@@ -13,6 +13,7 @@
 package org.eclipse.chemclipse.model.identifier;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.chemclipse.model.core.IClassifier;
@@ -57,6 +58,27 @@ public interface ILibraryInformation extends IClassifier, Serializable {
 	 * Sets the CAS number of the library mass spectrum.
 	 */
 	void setCasNumber(String casNumber);
+
+	/**
+	 * Add an additional CAS numbers.
+	 * 
+	 * @param casNumber
+	 */
+	void addCasNumber(String casNumber);
+
+	void deleteCasNumber(String casNumber);
+
+	/**
+	 * Returns an unmodifiable list of the CAS numbers.
+	 * 
+	 * @return List<String>
+	 */
+	List<String> getCasNumbers();
+
+	/**
+	 * Clear cas numbers.
+	 */
+	void clearCasNumbers();
 
 	/**
 	 * Returns the formula of the library mass spectrum.
@@ -176,18 +198,6 @@ public interface ILibraryInformation extends IClassifier, Serializable {
 
 	String getHit();
 
-	/**
-	 * Returns an unmodifiable set of the available column
-	 * position markers.
-	 * 
-	 * @return {@link Set}
-	 */
-	Set<IColumnPositionMarker> getColumnPositionMarkers();
-
-	void add(IColumnPositionMarker columnPositionMarker);
-
-	void delete(IColumnPositionMarker columnPositionMarker);
-
 	int getRetentionTime();
 
 	void setRetentionTime(int retentionTime);
@@ -195,6 +205,20 @@ public interface ILibraryInformation extends IClassifier, Serializable {
 	float getRetentionIndex();
 
 	void setRetentionIndex(float retentionIndex);
+
+	/**
+	 * Returns an unmodifiable set of the available column
+	 * index markers.
+	 * 
+	 * @return {@link Set}
+	 */
+	Set<IColumnIndexMarker> getColumnIndexMarkers();
+
+	void add(IColumnIndexMarker columnIndexMarker);
+
+	void delete(IColumnIndexMarker columnIndexMarker);
+
+	Set<FlavorMarker> getFlavorMarkers();
 
 	String getMoleculeStructure();
 

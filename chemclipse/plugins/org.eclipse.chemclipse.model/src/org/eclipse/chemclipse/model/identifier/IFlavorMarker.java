@@ -11,5 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
-public interface IColumnFlavorMarker extends IColumnMarker {
+public interface IFlavorMarker {
+
+	void clear();
 }

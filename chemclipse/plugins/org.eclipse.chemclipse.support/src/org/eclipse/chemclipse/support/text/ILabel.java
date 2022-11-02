@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,12 +8,21 @@
  * 
  * Contributors:
  * Matthias Mailänder - initial API and implementation
+ * Philip Wenig - String[] items support has been added
  *******************************************************************************/
 package org.eclipse.chemclipse.support.text;
+
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public interface ILabel {
 
 	String label();
+
+	static String[] getItems(Enum<?>[] values) {
+
+		return Arrays.stream(values).map(Enum::name).collect(Collectors.toList()).toArray(new String[values.length]);
+	}
 
 	static String[][] getOptions(Enum<?>[] values) {
 

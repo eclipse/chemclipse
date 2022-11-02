@@ -11,11 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
-public interface IColumnPositionMarker extends IColumnMarker {
-
-	void setRetentionTime(int retentionTime);
-
-	int getRetentionTime();
+public interface IColumnIndexMarker extends IColumnMarker {
 
 	float getRetentionIndex();
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2018 Lablicate GmbH.
+ * Copyright (c) 2010, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -13,16 +13,15 @@ package org.eclipse.chemclipse.model.identifier;
 
 public class LibraryInformation extends AbstractLibraryInformation implements ILibraryInformation {
 
-	/**
-	 * Renew the UUID on change.
-	 */
 	private static final long serialVersionUID = 3490941060312888706L;
 
 	public LibraryInformation() {
+
 		super();
 	}
 
 	public LibraryInformation(ILibraryInformation libraryInformation) {
+
 		super(libraryInformation);
 	}
 }

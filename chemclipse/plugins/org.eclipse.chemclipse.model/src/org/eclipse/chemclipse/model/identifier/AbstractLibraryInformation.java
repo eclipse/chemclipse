@@ -13,9 +13,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.eclipse.chemclipse.model.columns.ISeparationColumn;
@@ -31,7 +34,7 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	//
 	private String name = "";
 	private final Set<String> synonyms = new LinkedHashSet<>();
-	private String casNumber = "";
+	private final List<String> casNumbers = new ArrayList<>();
 	private String comments = "";
 	private String referenceIdentifier = "";
 	private String miscellaneous = "";
@@ -43,18 +46,20 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	private String contributor = "";
 	private String hit;
 	private final Set<String> classification = new LinkedHashSet<>();
-	private final Set<IColumnPositionMarker> columnPositionMarkers = new LinkedHashSet<>();
+	private int retentionTime = 0;
+	private final Set<IColumnIndexMarker> columnIndexMarkers = new LinkedHashSet<>();
+	private final Set<FlavorMarker> flavorMarkers = new HashSet<>();
 	private String moleculeStructure = "";
 	/*
 	 * Default Column Position Marker
 	 */
 	private ISeparationColumn separationColumn = SeparationColumnFactory.getSeparationColumn(SeparationColumnType.DEFAULT);
-	private ColumnPositionMarker columnPositionMarker = new ColumnPositionMarker(separationColumn);
+	private ColumnIndexMarker columnIndexMarker = new ColumnIndexMarker(separationColumn);
 
 	public AbstractLibraryInformation() {
 
 		this(null);
-		columnPositionMarkers.add(columnPositionMarker);
+		columnIndexMarkers.add(columnIndexMarker);
 	}
 
 	/**
@@ -64,11 +69,11 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	 */
 	public AbstractLibraryInformation(ILibraryInformation libraryInformation) {
 
-		columnPositionMarkers.add(columnPositionMarker);
+		columnIndexMarkers.add(columnIndexMarker);
 		if(libraryInformation != null) {
 			name = libraryInformation.getName();
 			synonyms.addAll(libraryInformation.getSynonyms());
-			casNumber = libraryInformation.getCasNumber();
+			casNumbers.addAll(libraryInformation.getCasNumbers());
 			comments = libraryInformation.getComments();
 			referenceIdentifier = libraryInformation.getReferenceIdentifier();
 			miscellaneous = libraryInformation.getMiscellaneous();
@@ -80,8 +85,10 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 			contributor = libraryInformation.getContributor();
 			hit = libraryInformation.getHit();
 			classification.addAll(libraryInformation.getClassifier());
-			columnPositionMarker.setRetentionTime(libraryInformation.getRetentionTime());
-			columnPositionMarker.setRetentionIndex(libraryInformation.getRetentionIndex());
+			retentionTime = libraryInformation.getRetentionTime();
+			columnIndexMarkers.addAll(libraryInformation.getColumnIndexMarkers());
+			columnIndexMarker.setRetentionIndex(libraryInformation.getRetentionIndex());
+			flavorMarkers.addAll(libraryInformation.getFlavorMarkers());
 			moleculeStructure = libraryInformation.getMoleculeStructure();
 		}
 	}
@@ -118,15 +125,50 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	@Override
 	public String getCasNumber() {
 
-		return casNumber;
+		return casNumbers.isEmpty() ? "" : casNumbers.get(0);
 	}
 
 	@Override
 	public void setCasNumber(String casNumber) {
 
 		if(casNumber != null) {
-			this.casNumber = casNumber;
+			if(!casNumbers.isEmpty()) {
+				casNumbers.remove(0);
+				casNumbers.add(0, casNumber);
+			} else {
+				casNumbers.add(casNumber);
+			}
 		}
+	}
+
+	@Override
+	public void addCasNumber(String casNumber) {
+
+		if(casNumber != null) {
+			if(!casNumbers.contains(casNumber)) {
+				casNumbers.add(casNumber);
+			}
+		}
+	}
+
+	@Override
+	public void deleteCasNumber(String casNumber) {
+
+		if(casNumber != null) {
+			casNumbers.remove(casNumber);
+		}
+	}
+
+	@Override
+	public List<String> getCasNumbers() {
+
+		return Collections.unmodifiableList(casNumbers);
+	}
+
+	@Override
+	public void clearCasNumbers() {
+
+		casNumbers.clear();
 	}
 
 	@Override
@@ -283,32 +325,31 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	}
 
 	@Override
-	public Set<IColumnPositionMarker> getColumnPositionMarkers() {
+	public Set<IColumnIndexMarker> getColumnIndexMarkers() {
 
-		return Collections.unmodifiableSet(columnPositionMarkers);
+		return Collections.unmodifiableSet(columnIndexMarkers);
 	}
 
 	@Override
-	public void add(IColumnPositionMarker columnPositionMarker) {
+	public void add(IColumnIndexMarker columnIndexMarker) {
 
-		if(columnPositionMarker != null) {
-			if(isDefaultColumnPositionMarker(columnPositionMarker)) {
-				this.columnPositionMarker.setRetentionTime(columnPositionMarker.getRetentionTime());
-				this.columnPositionMarker.setRetentionIndex(columnPositionMarker.getRetentionIndex());
+		if(columnIndexMarker != null) {
+			if(isDefaultColumnIndexMarker(columnIndexMarker)) {
+				this.columnIndexMarker.setRetentionIndex(columnIndexMarker.getRetentionIndex());
 			} else {
-				columnPositionMarkers.add(columnPositionMarker);
+				columnIndexMarkers.add(columnIndexMarker);
 			}
 		}
 	}
 
 	@Override
-	public void delete(IColumnPositionMarker columnPositionMarker) {
+	public void delete(IColumnIndexMarker columnIndexMarker) {
 
-		if(columnPositionMarker != null) {
-			if(isDefaultColumnPositionMarker(columnPositionMarker)) {
-				this.columnPositionMarker.clear();
+		if(columnIndexMarker != null) {
+			if(isDefaultColumnIndexMarker(columnIndexMarker)) {
+				this.columnIndexMarker.clear();
 			} else {
-				columnPositionMarkers.remove(columnPositionMarker);
+				columnIndexMarkers.remove(columnIndexMarker);
 			}
 		}
 	}
@@ -316,25 +357,31 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	@Override
 	public int getRetentionTime() {
 
-		return columnPositionMarker.getRetentionTime();
+		return retentionTime;
 	}
 
 	@Override
 	public void setRetentionTime(int retentionTime) {
 
-		columnPositionMarker.setRetentionTime(retentionTime);
+		this.retentionTime = retentionTime;
 	}
 
 	@Override
 	public float getRetentionIndex() {
 
-		return columnPositionMarker.getRetentionIndex();
+		return columnIndexMarker.getRetentionIndex();
 	}
 
 	@Override
 	public void setRetentionIndex(float retentionIndex) {
 
-		this.columnPositionMarker.setRetentionIndex(retentionIndex);
+		this.columnIndexMarker.setRetentionIndex(retentionIndex);
+	}
+
+	@Override
+	public Set<FlavorMarker> getFlavorMarkers() {
+
+		return flavorMarkers;
 	}
 
 	@Override
@@ -349,9 +396,9 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 		this.moleculeStructure = moleculeStructure;
 	}
 
-	private boolean isDefaultColumnPositionMarker(IColumnPositionMarker columnPositionMarker) {
+	private boolean isDefaultColumnIndexMarker(IColumnIndexMarker columnIndexMarker) {
 
-		return this.columnPositionMarker.equals(columnPositionMarker);
+		return this.columnIndexMarker.equals(columnIndexMarker);
 	}
 
 	@Override
@@ -373,7 +420,7 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	@Override
 	public int hashCode() {
 
-		return 7 * name.hashCode() + 11 * casNumber.hashCode() + 13 * comments.hashCode() + 11 * miscellaneous.hashCode() + 7 * formula.hashCode() + 11 * Double.valueOf(molWeight).hashCode();
+		return 7 * name.hashCode() + 11 * getCasNumber().hashCode() + 13 * comments.hashCode() + 11 * miscellaneous.hashCode() + 7 * formula.hashCode() + 11 * Double.valueOf(molWeight).hashCode();
 	}
 
 	@Override
@@ -384,7 +431,7 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 		builder.append("[");
 		builder.append("name=" + name);
 		builder.append(",");
-		builder.append("casNumber=" + casNumber);
+		builder.append("casNumber=" + getCasNumber());
 		builder.append(",");
 		builder.append("comments=" + comments);
 		builder.append(",");

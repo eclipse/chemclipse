@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,9 +23,10 @@ package org.eclipse.chemclipse.model.cas;
 public class CasSupport {
 
 	public static final int MAX_ID = 1000000000;
+	public static final String CAS_DEFAULT = "0-00-0";
+	//
 	private static final String SEPARATOR = "-";
 	private static final char SEPARATOR_CHAR = '-';
-	private static final String CAS_DEFAULT = "0-00-0";
 
 	public static boolean verifyChecksum(String cas) {
 

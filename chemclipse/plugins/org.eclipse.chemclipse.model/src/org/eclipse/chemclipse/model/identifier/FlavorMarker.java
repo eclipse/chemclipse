@@ -11,28 +11,28 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
-import org.eclipse.chemclipse.model.columns.ISeparationColumn;
-
-public class ColumnFlavorMarker extends AbstractColumnMarker implements IColumnFlavorMarker {
+public class FlavorMarker implements IFlavorMarker {
 
 	private String odorQuality = "";
+	private Set<FlavorThreshold> flavorThresholds = new HashSet<>();
 	private String matrix = "";
 	private String solvent = "";
-	private String literatureReference = "";
-
-	public ColumnFlavorMarker(ISeparationColumn separationColumn) {
-
-		super(separationColumn);
-	}
+	private String samplePreparation = "";
+	private String literatureReference = ""; // if possible, DOI
 
 	@Override
 	public void clear() {
 
 		odorQuality = "";
+		flavorThresholds.clear();
 		matrix = "";
 		solvent = "";
+		samplePreparation = "";
 		literatureReference = "";
 	}
 
@@ -44,6 +44,26 @@ public class ColumnFlavorMarker extends AbstractColumnMarker implements IColumnF
 	public void setOdorQuality(String odorQuality) {
 
 		this.odorQuality = odorQuality;
+	}
+
+	public void add(FlavorThreshold flavorThreshold) {
+
+		flavorThresholds.add(flavorThreshold);
+	}
+
+	public void remove(FlavorThreshold flavorThreshold) {
+
+		flavorThresholds.remove(flavorThreshold);
+	}
+
+	/**
+	 * Returns an unmodifiable set.
+	 * 
+	 * @return
+	 */
+	public Set<FlavorThreshold> getFlavorThresholds() {
+
+		return Collections.unmodifiableSet(flavorThresholds);
 	}
 
 	public String getMatrix() {
@@ -66,6 +86,16 @@ public class ColumnFlavorMarker extends AbstractColumnMarker implements IColumnF
 		this.solvent = solvent;
 	}
 
+	public String getSamplePreparation() {
+
+		return samplePreparation;
+	}
+
+	public void setSamplePreparation(String samplePreparation) {
+
+		this.samplePreparation = samplePreparation;
+	}
+
 	public String getLiteratureReference() {
 
 		return literatureReference;
@@ -79,7 +109,7 @@ public class ColumnFlavorMarker extends AbstractColumnMarker implements IColumnF
 	@Override
 	public int hashCode() {
 
-		return Objects.hash(matrix, odorQuality, solvent, getSeparationColumn().hashCode());
+		return Objects.hash(matrix, odorQuality, solvent);
 	}
 
 	@Override
@@ -91,13 +121,13 @@ public class ColumnFlavorMarker extends AbstractColumnMarker implements IColumnF
 			return false;
 		if(getClass() != obj.getClass())
 			return false;
-		ColumnFlavorMarker other = (ColumnFlavorMarker)obj;
-		return Objects.equals(matrix, other.matrix) && Objects.equals(odorQuality, other.odorQuality) && Objects.equals(solvent, other.solvent) && Objects.equals(getSeparationColumn(), other.getSeparationColumn());
+		FlavorMarker other = (FlavorMarker)obj;
+		return Objects.equals(matrix, other.matrix) && Objects.equals(odorQuality, other.odorQuality) && Objects.equals(solvent, other.solvent);
 	}
 
 	@Override
 	public String toString() {
 
-		return "ColumnFlavorMarker [separationColumn=" + getSeparationColumn() + ", odorQuality=" + odorQuality + ", matrix=" + matrix + ", solvent=" + solvent + "]";
+		return "FlavorMarker [odorQuality=" + odorQuality + ", matrix=" + matrix + ", solvent=" + solvent + "]";
 	}
 }

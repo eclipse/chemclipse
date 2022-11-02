@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,19 +26,14 @@ public class ColumMappingEditingSupport extends EditingSupport {
 	private CellEditor cellEditor;
 	private ExtendedTableViewer tableViewer;
 	private String column;
-	private static final String[] ITEMS = new String[]{ //
-			SeparationColumnType.DEFAULT.name(), //
-			SeparationColumnType.APOLAR.name(), //
-			SeparationColumnType.SEMI_POLAR.name(), //
-			SeparationColumnType.POLAR.name() //
-	};
+	private String[] columnTypes = SeparationColumnType.getItems();
 
 	public ColumMappingEditingSupport(ExtendedTableViewer tableViewer, String column) {
 
 		super(tableViewer);
 		this.column = column;
 		if(column.equals(ColumMappingLabelProvider.SEPRATION_COLUMN)) {
-			this.cellEditor = new ComboBoxCellEditor(tableViewer.getTable(), ITEMS, SWT.READ_ONLY);
+			this.cellEditor = new ComboBoxCellEditor(tableViewer.getTable(), columnTypes, SWT.READ_ONLY);
 		} else {
 			this.cellEditor = new TextCellEditor(tableViewer.getTable());
 		}
@@ -65,8 +60,8 @@ public class ColumMappingEditingSupport extends EditingSupport {
 			Map.Entry setting = (Map.Entry)element;
 			switch(column) {
 				case ColumMappingLabelProvider.SEPRATION_COLUMN:
-					for(int i = 0; i < ITEMS.length; i++) {
-						if(ITEMS[i].equals(setting.getValue())) {
+					for(int i = 0; i < columnTypes.length; i++) {
+						if(columnTypes[i].equals(setting.getValue())) {
 							return i;
 						}
 					}
@@ -84,7 +79,7 @@ public class ColumMappingEditingSupport extends EditingSupport {
 			Map.Entry setting = (Map.Entry)element;
 			switch(column) {
 				case ColumMappingLabelProvider.SEPRATION_COLUMN:
-					setting.setValue(ITEMS[(int)value]);
+					setting.setValue(columnTypes[(int)value]);
 					break;
 			}
 			tableViewer.refresh();
