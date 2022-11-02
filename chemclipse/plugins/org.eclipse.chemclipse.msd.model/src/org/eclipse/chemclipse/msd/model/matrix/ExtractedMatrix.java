@@ -7,7 +7,7 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Lorenz Gerber - initial API and implementation
+ * Lorenz Gerber - initial API and implementation, IonRange
  * Philip Wenig - add ion round call
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.model.matrix;
@@ -24,13 +24,13 @@ import org.eclipse.chemclipse.msd.model.core.IIonBounds;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.core.selection.IChromatogramSelectionMSD;
 import org.eclipse.chemclipse.msd.model.implementation.Ion;
+import org.eclipse.chemclipse.msd.model.xic.IonRange;
 
 public class ExtractedMatrix {
 
 	private IChromatogramSelectionMSD selection;
 	private List<IScanMSD> scans;
-	private int startIon;
-	private int stopIon;
+	private IonRange minMaxIon;
 	private double[][] signal;
 
 	public ExtractedMatrix(IChromatogramSelectionMSD chromatogramSelection) {
@@ -40,17 +40,15 @@ public class ExtractedMatrix {
 		if(checkHighRes(10)) {
 			throw new IllegalArgumentException("HighRes MSD is currently not suported");
 		} else {
-			int[] minMaxMz = getMinMaxMz();
-			this.startIon = minMaxMz[0];
-			this.stopIon = minMaxMz[1];
+			minMaxIon = getMinMaxMz();
 			int numberOfScans = selection.getStopScan() - selection.getStartScan() + 1;
-			int numberOfIons = this.stopIon - this.startIon + 1;
+			int numberOfIons = this.minMaxIon.getStopIon() - this.minMaxIon.getStartIon() + 1;
 			signal = new double[numberOfScans][numberOfIons];
 			List<IIon> currentIons;
 			for(int scanIndex = 0; scanIndex < numberOfScans; scanIndex++) {
 				currentIons = scans.get(scanIndex).getIons();
 				for(IIon ion : currentIons) {
-					signal[scanIndex][AbstractIon.getIon(ion.getIon() - this.startIon)] = ion.getAbundance();
+					signal[scanIndex][AbstractIon.getIon(ion.getIon() - this.minMaxIon.getStartIon())] = ion.getAbundance();
 				}
 			}
 		}
@@ -90,16 +88,13 @@ public class ExtractedMatrix {
 		return (scans);
 	}
 
-	private int[] getMinMaxMz() {
+	private IonRange getMinMaxMz() {
 
-		int[] minMaxMz = new int[2];
 		Stream<Double> s = scans.stream() //
 				.flatMap(scan -> scan.getIons().stream()) //
 				.map(x -> (Double)x.getIon());
 		DoubleSummaryStatistics d = s.collect(Collectors.summarizingDouble(value -> value));
-		minMaxMz[0] = AbstractIon.getIon(d.getMin());
-		minMaxMz[1] = AbstractIon.getIon(d.getMax());
-		return (minMaxMz);
+		return new IonRange(AbstractIon.getIon(d.getMin()), AbstractIon.getIon(d.getMax()));
 	}
 
 	/**
@@ -123,9 +118,9 @@ public class ExtractedMatrix {
 			for(int i = startScan; i <= stopScan; i++) {
 				currentScan = (IScanMSD)selection.getChromatogram().getScan(i);
 				currentScan.removeAllIons();
-				for(int j = startIon; j <= stopIon; j++) {
-					if(signal[i - startScan][j - startIon] != 0.0) {
-						currentIon = new Ion(j, (float)signal[i - startScan][j - startIon]);
+				for(int j = minMaxIon.getStartIon(); j <= minMaxIon.getStopIon(); j++) {
+					if(signal[i - startScan][j - minMaxIon.getStartIon()] != 0.0) {
+						currentIon = new Ion(j, (float)signal[i - startScan][j - minMaxIon.getStartIon()]);
 						currentScan.addIon(currentIon);
 					}
 				}
@@ -143,5 +138,10 @@ public class ExtractedMatrix {
 	public int[] getRetentionTimes() {
 
 		return scans.stream().mapToInt(IScan::getRetentionTime).toArray();
+	}
+
+	public IonRange getMinMaxIon() {
+
+		return minMaxIon;
 	}
 }
