@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,16 +11,19 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support.ui.preferences.fieldeditors;
 
+import org.eclipse.chemclipse.support.ui.messages.SupportMessages;
 import org.eclipse.swt.widgets.Composite;
 
 public class SpinnerFieldEditorOddNumber extends SpinnerFieldEditorBounded {
 
 	public SpinnerFieldEditorOddNumber(String name, String labelText, int min, int max, Composite parent) {
+
 		super(name, labelText, min, max, parent);
 		setIncrement(2);
 	}
 
 	public SpinnerFieldEditorOddNumber(String name, String labelText, int min, int max, int strategy, Composite parent) {
+
 		super(name, labelText, min, max, strategy, parent);
 		setIncrement(2);
 	}
@@ -30,7 +33,7 @@ public class SpinnerFieldEditorOddNumber extends SpinnerFieldEditorBounded {
 
 		int value = getIntValue();
 		if(value % 2 == 0) {
-			setErrorMessage("Value must be odd");
+			setErrorMessage(SupportMessages.INSTANCE().getMessage("SpinnerFieldEditorOddNumber.errorMessage"));
 			return false;
 		}
 		return super.doCheckState();

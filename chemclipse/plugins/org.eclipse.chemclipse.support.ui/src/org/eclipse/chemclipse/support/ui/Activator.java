@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2018 Lablicate GmbH.
+ * Copyright (c) 2011, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -27,6 +27,12 @@ public class Activator extends AbstractActivatorUI {
 	 * Instance
 	 */
 	private static Activator plugin;
+	private static BundleContext context;
+
+	public static BundleContext getContext() {
+
+		return context;
+	}
 
 	/*
 	 * (non-Javadoc)
@@ -35,6 +41,7 @@ public class Activator extends AbstractActivatorUI {
 	public void start(BundleContext context) throws Exception {
 
 		super.start(context);
+		Activator.context = context;
 		plugin = this;
 		initializePreferenceStore(SupportPreferences.INSTANCE());
 		/*

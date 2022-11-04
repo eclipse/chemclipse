@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2021 Lablicate GmbH.
+ * Copyright (c) 2014, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -70,9 +70,9 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	@Override
 	public Map<String, String> getDefaultValues() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
+		Map<String, String> defaultValues = new HashMap<>();
 		defaultValues.put(P_NOISE_CALCULATOR_ID, DEF_NOISE_CALCULATOR_ID);
-		defaultValues.put(DEF_SEGMENT_WIDTH, DEF_SEGMENT_WIDTH);
+		defaultValues.put(P_SEGMENT_WIDTH, DEF_SEGMENT_WIDTH);
 		return defaultValues;
 	}
 
@@ -102,7 +102,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static int getSelectedSegmentWidth() {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		int segmentWidth = SegmentWidth.getAdjustedSetting(preferences.get(P_SEGMENT_WIDTH, DEF_SEGMENT_WIDTH));
-		return segmentWidth;
+		return SegmentWidth.getAdjustedSetting(preferences.get(P_SEGMENT_WIDTH, DEF_SEGMENT_WIDTH));
 	}
 }
