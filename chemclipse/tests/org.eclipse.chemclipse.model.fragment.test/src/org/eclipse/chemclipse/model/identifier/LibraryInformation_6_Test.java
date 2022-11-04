@@ -66,7 +66,8 @@ public class LibraryInformation_6_Test extends TestCase {
 
 	public void test_5() {
 
-		libraryInformation.delete(null);
+		IColumnIndexMarker columnIndexMarker = null;
+		libraryInformation.delete(columnIndexMarker);
 		assertEquals(1, libraryInformation.getColumnIndexMarkers().size());
 	}
 

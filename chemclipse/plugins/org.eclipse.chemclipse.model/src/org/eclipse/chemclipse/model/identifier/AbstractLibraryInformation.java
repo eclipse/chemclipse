@@ -27,10 +27,7 @@ import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 
 public abstract class AbstractLibraryInformation implements ILibraryInformation {
 
-	/**
-	 * Renew the UUID on change.
-	 */
-	private static final long serialVersionUID = -7091140092667283293L;
+	private static final long serialVersionUID = 3604067975171089730L;
 	//
 	private String name = "";
 	private final Set<String> synonyms = new LinkedHashSet<>();
@@ -48,7 +45,7 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	private final Set<String> classification = new LinkedHashSet<>();
 	private int retentionTime = 0;
 	private final Set<IColumnIndexMarker> columnIndexMarkers = new LinkedHashSet<>();
-	private final Set<FlavorMarker> flavorMarkers = new HashSet<>();
+	private final Set<IFlavorMarker> flavorMarkers = new HashSet<>();
 	private String moleculeStructure = "";
 	/*
 	 * Default Column Position Marker
@@ -325,9 +322,9 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	}
 
 	@Override
-	public Set<IColumnIndexMarker> getColumnIndexMarkers() {
+	public List<IColumnIndexMarker> getColumnIndexMarkers() {
 
-		return Collections.unmodifiableSet(columnIndexMarkers);
+		return Collections.unmodifiableList(new ArrayList<>(columnIndexMarkers));
 	}
 
 	@Override
@@ -379,9 +376,27 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	}
 
 	@Override
-	public Set<FlavorMarker> getFlavorMarkers() {
+	public List<IFlavorMarker> getFlavorMarkers() {
 
-		return flavorMarkers;
+		return Collections.unmodifiableList(new ArrayList<>(flavorMarkers));
+	}
+
+	@Override
+	public void add(IFlavorMarker flavorMarker) {
+
+		flavorMarkers.add(flavorMarker);
+	}
+
+	@Override
+	public void delete(IFlavorMarker flavorMarker) {
+
+		flavorMarkers.remove(flavorMarker);
+	}
+
+	@Override
+	public void clearFlavorMarker() {
+
+		flavorMarkers.clear();
 	}
 
 	@Override

@@ -207,18 +207,30 @@ public interface ILibraryInformation extends IClassifier, Serializable {
 	void setRetentionIndex(float retentionIndex);
 
 	/**
-	 * Returns an unmodifiable set of the available column
-	 * index markers.
+	 * Returns an unmodifiable list of the available column
+	 * index markers in the correct sort order.
 	 * 
-	 * @return {@link Set}
+	 * @return {@link List}
 	 */
-	Set<IColumnIndexMarker> getColumnIndexMarkers();
+	List<IColumnIndexMarker> getColumnIndexMarkers();
 
 	void add(IColumnIndexMarker columnIndexMarker);
 
 	void delete(IColumnIndexMarker columnIndexMarker);
 
-	Set<FlavorMarker> getFlavorMarkers();
+	void clearFlavorMarker();
+
+	/**
+	 * Returns an unmodifiable list of the available
+	 * flavor markers.
+	 * 
+	 * @return {@link List}
+	 */
+	List<IFlavorMarker> getFlavorMarkers();
+
+	void add(IFlavorMarker flavorMarker);
+
+	void delete(IFlavorMarker flavorMarker);
 
 	String getMoleculeStructure();
 

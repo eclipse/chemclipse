@@ -26,7 +26,7 @@ public enum SeparationColumnType implements ILabel {
 	 */
 	DEFAULT("Default"), //
 	POLAR("polar"), //
-	NON_POLAR("non-polar"), // Replacement for APOLAR("non-polar")
+	NON_POLAR("non-polar (apolar)"), // Replacement for APOLAR("non-polar")
 	SEMI_POLAR("semi-polar");
 
 	private String label = "";

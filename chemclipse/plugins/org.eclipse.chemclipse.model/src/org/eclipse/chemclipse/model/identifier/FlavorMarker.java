@@ -19,21 +19,28 @@ import java.util.Set;
 public class FlavorMarker implements IFlavorMarker {
 
 	private String odor = "";
-	private Set<FlavorThreshold> flavorThresholds = new HashSet<>();
 	private String matrix = "";
 	private String solvent = "";
 	private String samplePreparation = "";
 	private String literatureReference = ""; // if possible, DOI
+	private Set<IOdorThreshold> odorThresholds = new HashSet<>();
+
+	public FlavorMarker(String odor, String matrix, String solvent) {
+
+		this.odor = odor;
+		this.matrix = matrix;
+		this.solvent = solvent;
+	}
 
 	@Override
 	public void clear() {
 
 		odor = "";
-		flavorThresholds.clear();
 		matrix = "";
 		solvent = "";
 		samplePreparation = "";
 		literatureReference = "";
+		odorThresholds.clear();
 	}
 
 	@Override
@@ -43,41 +50,9 @@ public class FlavorMarker implements IFlavorMarker {
 	}
 
 	@Override
-	public void setOdor(String odor) {
-
-		this.odor = odor;
-	}
-
-	public void add(FlavorThreshold flavorThreshold) {
-
-		flavorThresholds.add(flavorThreshold);
-	}
-
-	public void remove(FlavorThreshold flavorThreshold) {
-
-		flavorThresholds.remove(flavorThreshold);
-	}
-
-	/**
-	 * Returns an unmodifiable set.
-	 * 
-	 * @return
-	 */
-	public Set<FlavorThreshold> getFlavorThresholds() {
-
-		return Collections.unmodifiableSet(flavorThresholds);
-	}
-
-	@Override
 	public String getMatrix() {
 
 		return matrix;
-	}
-
-	@Override
-	public void setMatrix(String matrix) {
-
-		this.matrix = matrix;
 	}
 
 	@Override
@@ -87,29 +62,51 @@ public class FlavorMarker implements IFlavorMarker {
 	}
 
 	@Override
-	public void setSolvent(String solvent) {
-
-		this.solvent = solvent;
-	}
-
 	public String getSamplePreparation() {
 
 		return samplePreparation;
 	}
 
+	@Override
 	public void setSamplePreparation(String samplePreparation) {
 
 		this.samplePreparation = samplePreparation;
 	}
 
+	@Override
 	public String getLiteratureReference() {
 
 		return literatureReference;
 	}
 
+	@Override
 	public void setLiteratureReference(String literatureReference) {
 
 		this.literatureReference = literatureReference;
+	}
+
+	@Override
+	public void add(IOdorThreshold flavorThreshold) {
+
+		odorThresholds.add(flavorThreshold);
+	}
+
+	@Override
+	public void remove(IOdorThreshold flavorThreshold) {
+
+		odorThresholds.remove(flavorThreshold);
+	}
+
+	@Override
+	public void clearOdorThresholds() {
+
+		odorThresholds.clear();
+	}
+
+	@Override
+	public Set<IOdorThreshold> getOdorThresholds() {
+
+		return Collections.unmodifiableSet(odorThresholds);
 	}
 
 	@Override

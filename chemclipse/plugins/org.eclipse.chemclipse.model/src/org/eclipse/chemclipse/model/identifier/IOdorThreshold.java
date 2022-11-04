@@ -11,36 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
-import java.util.Set;
+public interface IOdorThreshold {
 
-public interface IFlavorMarker {
+	String getContent();
 
-	void clear();
-
-	String getOdor();
-
-	String getMatrix();
-
-	String getSolvent();
-
-	String getSamplePreparation();
-
-	void setSamplePreparation(String samplePreparation);
-
-	String getLiteratureReference();
-
-	void setLiteratureReference(String literatureReference);
-
-	/**
-	 * Returns an unmodifiable set.
-	 * 
-	 * @return
-	 */
-	Set<IOdorThreshold> getOdorThresholds();
-
-	void add(IOdorThreshold odorThreshold);
-
-	void remove(IOdorThreshold odorThreshold);
-
-	void clearOdorThresholds();
+	String getUnit();
 }
