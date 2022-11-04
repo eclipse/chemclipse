@@ -8,7 +8,6 @@
 </location>
 <location includeAllPlatforms="false" includeConfigurePhase="false" includeMode="planner" includeSource="true" type="InstallableUnit">
 	<unit id="org.eclipse.equinox.sdk.feature.group" version="0.0.0"/>
-	<unit id="org.eclipse.epp.mpc.feature.group" version="0.0.0"/>
 	<unit id="org.eclipse.sdk.feature.group" version="0.0.0"/>
 	<repository location="https://download.eclipse.org/releases/2022-09/"/>
 </location>
@@ -63,30 +62,18 @@
 				<version>2.0.26</version>
 				<type>jar</type>
 			</dependency>
-		</dependencies>
-	</location>
-	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-		<dependencies>
 			<dependency>
 				<groupId>org.apache.pdfbox</groupId>
 				<artifactId>preflight</artifactId>
 				<version>2.0.26</version>
 				<type>jar</type>
 			</dependency>
-		</dependencies>
-	</location>
-	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-		<dependencies>
 			<dependency>
 				<groupId>org.apache.pdfbox</groupId>
 				<artifactId>fontbox</artifactId>
 				<version>2.0.26</version>
 				<type>jar</type>
 			</dependency>
-		</dependencies>
-	</location>
-	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-		<dependencies>
 			<dependency>
 				<groupId>org.apache.pdfbox</groupId>
 				<artifactId>pdfbox</artifactId>
@@ -103,50 +90,30 @@
 				<version>0.41</version>
 				<type>jar</type>
 			</dependency>
-		</dependencies>
-	</location>
-	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-		<dependencies>
 			<dependency>
 				<groupId>org.ejml</groupId>
 				<artifactId>ejml-ddense</artifactId>
 				<version>0.41</version>
 				<type>jar</type>
 			</dependency>
-		</dependencies>
-	</location>
-	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-		<dependencies>
 			<dependency>
 				<groupId>org.ejml</groupId>
 				<artifactId>ejml-fdense</artifactId>
 				<version>0.41</version>
 				<type>jar</type>
 			</dependency>
-		</dependencies>
-	</location>
-	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-		<dependencies>
 			<dependency>
 				<groupId>org.ejml</groupId>
 				<artifactId>ejml-experimental</artifactId>
 				<version>0.41</version>
 				<type>jar</type>
 			</dependency>
-		</dependencies>
-	</location>
-	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-		<dependencies>
 			<dependency>
 				<groupId>org.ejml</groupId>
 				<artifactId>ejml-simple</artifactId>
 				<version>0.41</version>
 				<type>jar</type>
 			</dependency>
-		</dependencies>
-	</location>
-	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
-		<dependencies>
 			<dependency>
 				<groupId>org.ejml</groupId>
 				<artifactId>ejml-fdense</artifactId>
