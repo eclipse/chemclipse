@@ -21,14 +21,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsUIProvider.SettingsUIControl;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -41,6 +40,7 @@ import org.eclipse.swt.widgets.Listener;
 
 public class SettingsUI<T> extends Composite {
 
+	private static final Logger logger = Logger.getLogger(SettingsUI.class);
 	private final SettingsUIControl control;
 
 	public SettingsUI(Composite parent, IProcessorPreferences<T> preferences, boolean showProfileToolbar) throws IOException {
@@ -67,10 +67,12 @@ public class SettingsUI<T> extends Composite {
 		try {
 			T settings = preferences.getUserSettings();
 			if(settings == null) {
-				// check if there are system settings
+				/*
+				 * Check the available system settings.
+				 * If it fails, try to create default settings.
+				 */
 				settings = preferences.getSystemSettings();
 				if(settings == null) {
-					// last resort, create a new instance instead
 					settings = preferences.getSupplier().getSettingsParser().createDefaultInstance();
 				}
 			}
@@ -80,8 +82,10 @@ public class SettingsUI<T> extends Composite {
 				return uiProvider;
 			}
 		} catch(IOException e) {
-			// can't use it then ... must use default provider
-			Activator.getDefault().getLog().log(new Status(IStatus.ERROR, "SettingsUI", "can't get user-settings for processor " + preferences.getSupplier().getId() + " with settingsclass " + preferences.getSupplier().getSettingsClass(), e));
+			/*
+			 * The settings provider is not available.
+			 */
+			logger.error("Can't get user-settings for processor " + preferences.getSupplier().getId() + " with settingsclass " + preferences.getSupplier().getSettingsClass());
 		}
 		return new DefaultSettingsUIProvider<T>();
 	}

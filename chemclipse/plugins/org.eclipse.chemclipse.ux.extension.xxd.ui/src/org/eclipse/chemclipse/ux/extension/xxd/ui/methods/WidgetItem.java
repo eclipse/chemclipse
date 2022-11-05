@@ -168,11 +168,13 @@ public class WidgetItem {
 				Button button = (Button)control;
 				return button.getSelection();
 			} else if(control instanceof Combo) {
+				/*
+				 * Combo
+				 */
 				ComboSupplier<?> comboSupplier = inputValue.getComboSupplier();
 				if(comboSupplier != null) {
 					return getValueAsString(comboSupplier);
-				}
-				if(rawType.isEnum()) {
+				} else if(rawType.isEnum()) {
 					return currentSelection.toString();
 				}
 			} else {
@@ -209,10 +211,12 @@ public class WidgetItem {
 		Class<?> rawType = inputValue.getRawType();
 		if(rawType != null) {
 			if(inputValue.getComboSupplier() != null) {
+				/*
+				 * Combo Supplier
+				 */
 				ComboViewer viewer = createGenericCombo(parent, inputValue.getComboSupplier());
 				return viewer.getControl();
-			}
-			if(rawType == long.class || rawType == Long.class) {
+			} else if(rawType == long.class || rawType == Long.class) {
 				return createTextWidgetNormal(parent);
 			} else if(rawType == int.class || rawType == Integer.class) {
 				return createTextWidgetNormal(parent);
@@ -227,8 +231,14 @@ public class WidgetItem {
 					return createTextWidgetNormal(parent);
 				}
 			} else if(rawType == boolean.class || rawType == Boolean.class) {
+				/*
+				 * Checkbox
+				 */
 				return createCheckboxWidget(parent);
 			} else if(rawType.isEnum()) {
+				/*
+				 * Combo
+				 */
 				Enum[] enums = (Enum[])rawType.getEnumConstants();
 				ComboViewer viewer = createLabeledEnumComboViewerWidget(parent, enums);
 				return viewer.getControl();
