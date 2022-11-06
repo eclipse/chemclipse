@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,13 +26,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 
-public class ExtendedFlavorMarkerUI extends LibraryInformationComposite {
+public class ExtendedCasNumbersUI extends LibraryInformationComposite {
 
 	private Button buttonToolbarSearch;
 	private AtomicReference<SearchSupportUI> toolbarSearch = new AtomicReference<>();
-	private AtomicReference<FlavorMarkerListUI> listControl = new AtomicReference<>();
+	private AtomicReference<CasNumbersListUI> listControl = new AtomicReference<>();
 
-	public ExtendedFlavorMarkerUI(Composite parent, int style) {
+	public ExtendedCasNumbersUI(Composite parent, int style) {
 
 		super(parent, style);
 		createControl();
@@ -43,7 +43,7 @@ public class ExtendedFlavorMarkerUI extends LibraryInformationComposite {
 
 		ILibraryInformation libraryInformation = getLibraryInformation();
 		if(libraryInformation != null) {
-			listControl.get().setInput(libraryInformation.getFlavorMarkers());
+			listControl.get().setInput(libraryInformation.getCasNumbers());
 		} else {
 			listControl.get().clear();
 		}
@@ -104,7 +104,7 @@ public class ExtendedFlavorMarkerUI extends LibraryInformationComposite {
 
 	private void createTableSection(Composite parent) {
 
-		FlavorMarkerListUI listUI = new FlavorMarkerListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		CasNumbersListUI listUI = new CasNumbersListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		Table table = listUI.getTable();
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
 		//

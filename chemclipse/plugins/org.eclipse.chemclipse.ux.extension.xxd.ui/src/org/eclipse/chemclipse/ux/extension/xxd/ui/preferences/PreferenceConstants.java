@@ -114,6 +114,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_STACK_POSITION_COLUMN_INDICES = PartSupport.PARTSTACK_NONE;
 	public static final String P_STACK_POSITION_FLAVOR_MARKER = "stackPositionFlavorMarker";
 	public static final String DEF_STACK_POSITION_FLAVOR_MARKER = PartSupport.PARTSTACK_NONE;
+	public static final String P_STACK_POSITION_CAS_NUMBERS = "stackPositionCasNumbers";
+	public static final String DEF_STACK_POSITION_CAS_NUMBERS = PartSupport.PARTSTACK_NONE;
 	public static final String P_STACK_POSITION_MOLECULE = "stackPositionMolecule";
 	public static final String DEF_STACK_POSITION_MOLECULE = PartSupport.PARTSTACK_BOTTOM_RIGHT;
 	public static final String P_STACK_POSITION_PEAK_CHART = "stackPositionPeakChart";

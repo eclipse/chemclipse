@@ -13,21 +13,21 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.parts;
 
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedColumnIndicesUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedCasNumbersUI;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class ColumnIndicesPart extends AbstractLibraryInformationPart<ExtendedColumnIndicesUI> {
+public class CasNumbersPart extends AbstractLibraryInformationPart<ExtendedCasNumbersUI> {
 
 	@Inject
-	public ColumnIndicesPart(Composite parent) {
+	public CasNumbersPart(Composite parent) {
 
 		super(parent);
 	}
 
 	@Override
-	protected ExtendedColumnIndicesUI createControl(Composite parent) {
+	protected ExtendedCasNumbersUI createControl(Composite parent) {
 
-		return new ExtendedColumnIndicesUI(parent, SWT.NONE);
+		return new ExtendedCasNumbersUI(parent, SWT.NONE);
 	}
 }

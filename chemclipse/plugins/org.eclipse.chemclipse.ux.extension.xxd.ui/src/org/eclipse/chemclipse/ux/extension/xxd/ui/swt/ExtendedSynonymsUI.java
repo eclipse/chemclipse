@@ -11,15 +11,26 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.util.Arrays;
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
+import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
+import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Table;
 
-public class ExtendedSynonymsUI extends Composite {
+public class ExtendedSynonymsUI extends LibraryInformationComposite implements IExtendedPartUI {
 
-	private Text text;
+	private Button buttonToolbarSearch;
+	private AtomicReference<SearchSupportUI> toolbarSearch = new AtomicReference<>();
+	private AtomicReference<SynonymsListUI> listControl = new AtomicReference<>();
 
 	public ExtendedSynonymsUI(Composite parent, int style) {
 
@@ -27,32 +38,93 @@ public class ExtendedSynonymsUI extends Composite {
 		createControl();
 	}
 
-	public void setInput(ILibraryInformation libraryInformation) {
+	@Override
+	public void updateInput() {
 
+		ILibraryInformation libraryInformation = getLibraryInformation();
 		if(libraryInformation != null) {
-			StringBuilder builder = new StringBuilder();
-			for(String synonym : libraryInformation.getSynonyms()) {
-				builder.append(synonym);
-				builder.append("\n");
-			}
-			text.setText(builder.toString());
+			listControl.get().setInput(libraryInformation.getSynonyms());
 		} else {
-			text.setText("");
+			listControl.get().clear();
 		}
 	}
 
 	private void createControl() {
 
-		setLayout(new FillLayout());
-		text = createTextMolecule(this);
+		GridLayout gridLayout = new GridLayout(1, true);
+		gridLayout.marginWidth = 0;
+		gridLayout.marginLeft = 0;
+		gridLayout.marginRight = 0;
+		setLayout(gridLayout);
+		//
+		createToolbarMain(this);
+		createToolbarInfo(this);
+		createToolbarSearch(this);
+		createTableSection(this);
+		//
+		initialize();
 	}
 
-	private Text createTextMolecule(Composite parent) {
+	private void initialize() {
 
-		Text text = new Text(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
-		text.setText("");
-		text.setToolTipText("Synonyms");
+		initializeToolbarInfo();
+		enableToolbar(toolbarSearch, buttonToolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH, false);
 		//
-		return text;
+		applySettings();
+	}
+
+	private void createToolbarMain(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
+		gridData.horizontalAlignment = SWT.END;
+		composite.setLayoutData(gridData);
+		composite.setLayout(new GridLayout(3, false));
+		//
+		createButtonToolbarInfo(composite);
+		buttonToolbarSearch = createButtonToggleToolbar(composite, toolbarSearch, IMAGE_SEARCH, TOOLTIP_SEARCH);
+		createButtonSettings(composite);
+	}
+
+	private void createToolbarSearch(Composite parent) {
+
+		SearchSupportUI searchSupportUI = new SearchSupportUI(parent, SWT.NONE);
+		searchSupportUI.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		searchSupportUI.setSearchListener(new ISearchListener() {
+
+			@Override
+			public void performSearch(String searchText, boolean caseSensitive) {
+
+				listControl.get().setSearchText(searchText, caseSensitive);
+			}
+		});
+		//
+		toolbarSearch.set(searchSupportUI);
+	}
+
+	private void createTableSection(Composite parent) {
+
+		SynonymsListUI listUI = new SynonymsListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		Table table = listUI.getTable();
+		table.setLayoutData(new GridData(GridData.FILL_BOTH));
+		//
+		listControl.set(listUI);
+	}
+
+	private void createButtonSettings(Composite parent) {
+
+		createSettingsButton(parent, Arrays.asList(PreferencePage.class), new ISettingsHandler() {
+
+			@Override
+			public void apply(Display display) {
+
+				applySettings();
+			}
+		});
+	}
+
+	private void applySettings() {
+
+		updateInput();
 	}
 }
