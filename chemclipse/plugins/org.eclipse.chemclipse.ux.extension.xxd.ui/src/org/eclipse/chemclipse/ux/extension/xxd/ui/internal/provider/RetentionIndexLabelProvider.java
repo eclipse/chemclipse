@@ -12,6 +12,7 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import java.text.DecimalFormat;
+import java.util.Map;
 
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.core.AbstractChromatogram;
@@ -57,6 +58,14 @@ public class RetentionIndexLabelProvider extends LabelProvider implements ITable
 	public String getColumnText(Object element, int columnIndex) {
 
 		String text = "";
+		/*
+		 * Retention Time
+		 * Map<Integer, IRetentionIndexEntry>
+		 */
+		if(element instanceof Map.Entry<?, ?> entry) {
+			element = entry.getValue();
+		}
+		//
 		if(element instanceof IRetentionIndexEntry) {
 			IRetentionIndexEntry retentionIndexEntry = (IRetentionIndexEntry)element;
 			switch(columnIndex) {

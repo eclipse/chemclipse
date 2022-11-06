@@ -33,6 +33,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ISettingsHandler;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -66,7 +67,7 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 	public ExtendedRetentionIndexListUI(Composite parent, int style) {
 
 		super(parent, style);
-		initialize();
+		createControl();
 	}
 
 	public void setInput(List<IRetentionIndexEntry> retentionIndexEntries) {
@@ -106,13 +107,13 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 				separationColumns.add(0, separationColumn);
 			}
 			comboViewerSeparationColumn.setInput(separationColumns);
-			comboViewerSeparationColumn.getCombo().select(0);
+			comboViewerSeparationColumn.setSelection(new StructuredSelection(separationColumn));
 		} else {
 			comboViewerSeparationColumn.getCombo().setItems(new String[]{});
 		}
 	}
 
-	private void initialize() {
+	private void createControl() {
 
 		setLayout(new FillLayout());
 		Composite composite = new Composite(this, SWT.NONE);
@@ -123,6 +124,11 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 		retentionIndexUI = createRetentionIndexUI(composite);
 		toolbarInfoBottom = createToolbarInfoBottom(composite);
 		//
+		initialize();
+	}
+
+	private void initialize() {
+
 		comboViewerSeparationColumn.setInput(separationColumns);
 		buttonAddLibrary.setEnabled(false);
 		buttonRemoveLibrary.setEnabled(false);
@@ -370,24 +376,41 @@ public class ExtendedRetentionIndexListUI extends Composite implements IExtended
 
 	private void updateLabel() {
 
+		/*
+		 * Separation Column Details
+		 */
 		Object object = comboViewerSeparationColumn.getStructuredSelection().getFirstElement();
 		StringBuilder builder = new StringBuilder();
 		if(object instanceof ISeparationColumn separationColumn) {
+			builder.append("Separation Column: ");
 			builder.append(separationColumn.getName());
 			builder.append(" ");
-			builder.append(separationColumn.getSeparationColumnType().label());
-			builder.append(" ");
-			builder.append(separationColumn.getLength());
-			builder.append(" ");
-			builder.append(separationColumn.getDiameter());
-			builder.append(" ");
-			builder.append(separationColumn.getPhase());
+			builder.append("[");
+			builder.append(getSeparationColumnDetails(separationColumn));
+			builder.append("]");
 		}
-		//
+		/*
+		 * Top/Bottom Label
+		 */
 		RetentionIndexTableViewerUI tableViewer = getRetentionIndexTableViewerUI();
-		labelInfoTop.setText("Separation Column: " + builder.toString());
+		labelInfoTop.setText(builder.toString());
 		String editInformation = getRetentionIndexTableViewerUI().isEditEnabled() ? "Edit is enabled." : "Edit is disabled.";
 		labelInfoBottom.setText("Retention Indices: " + tableViewer.getTable().getItemCount() + " [" + retentionIndexUI.getSearchText() + "] - " + editInformation);
+	}
+
+	private String getSeparationColumnDetails(ISeparationColumn separationColumn) {
+
+		StringBuilder builder = new StringBuilder();
+		//
+		builder.append(separationColumn.getSeparationColumnType().label());
+		builder.append(" ");
+		builder.append(separationColumn.getLength());
+		builder.append(" ");
+		builder.append(separationColumn.getDiameter());
+		builder.append(" ");
+		builder.append(separationColumn.getPhase());
+		//
+		return builder.toString().trim();
 	}
 
 	private void applySettings() {

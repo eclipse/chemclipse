@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 
 public class SeparationColumnFactory {
@@ -72,36 +73,47 @@ public class SeparationColumnFactory {
 	private static SeparationColumnType mapNameToColumnType(String name) {
 
 		/*
-		 * Load the user defined column mappings and
-		 * add the default mappings to match the basic 3 column types.
+		 * Load the user defined column mappings
+		 * Add the default mappings to match basic column types on demand.
 		 */
-		SeparationColumnMapping columnMappings = new SeparationColumnMapping();
-		columnMappings.load(PreferenceSupplier.getSeparationColumnMappings());
-		columnMappings.put(SeparationColumnType.POLAR.name(), SeparationColumnType.POLAR.name());
-		columnMappings.put(SeparationColumnType.NON_POLAR.name(), SeparationColumnType.NON_POLAR.name());
-		columnMappings.put(SeparationColumnType.SEMI_POLAR.name(), SeparationColumnType.SEMI_POLAR.name());
+		SeparationColumnMapping separationColumnMapping = new SeparationColumnMapping();
+		separationColumnMapping.load(PreferenceSupplier.getSeparationColumnMappings());
+		/*
+		 * Backward compatibility (RetentionIndexType)
+		 */
+		addColumnMapping(separationColumnMapping, RetentionIndexType.POLAR.name(), SeparationColumnType.POLAR);
+		addColumnMapping(separationColumnMapping, RetentionIndexType.SEMIPOLAR.name(), SeparationColumnType.SEMI_POLAR);
+		addColumnMapping(separationColumnMapping, RetentionIndexType.APOLAR.name(), SeparationColumnType.NON_POLAR);
+		/*
+		 * Standards
+		 */
+		addColumnMapping(separationColumnMapping, SeparationColumnType.POLAR.name(), SeparationColumnType.POLAR);
+		addColumnMapping(separationColumnMapping, SeparationColumnType.SEMI_POLAR.name(), SeparationColumnType.SEMI_POLAR);
+		addColumnMapping(separationColumnMapping, SeparationColumnType.NON_POLAR.name(), SeparationColumnType.NON_POLAR);
+		/*
+		 * Additionally map the values of RetentionIndexType
+		 */
 		/*
 		 * If no mapping is available or the value can't be parsed
 		 * by SeparationColumnType, then DEFAULT is returned.
 		 */
 		SeparationColumnType separationColumnType = SeparationColumnType.DEFAULT;
-		String value = columnMappings.get(name);
+		String value = separationColumnMapping.get(name);
 		if(value != null) {
 			try {
-				/*
-				 * Backward compatibility.
-				 * APOLAR has been replace by the more common name NON_POLAR.
-				 */
-				if("APOLAR".equals(name)) {
-					separationColumnType = SeparationColumnType.NON_POLAR;
-				} else {
-					separationColumnType = SeparationColumnType.valueOf(value);
-				}
+				separationColumnType = SeparationColumnType.valueOf(value);
 			} catch(Exception e) {
 				logger.warn(e);
 			}
 		}
 		//
 		return separationColumnType;
+	}
+
+	private static void addColumnMapping(SeparationColumnMapping separationColumnMapping, String name, SeparationColumnType separationColumnType) {
+
+		if(!separationColumnMapping.containsKey(name)) {
+			separationColumnMapping.put(name, separationColumnType.name());
+		}
 	}
 }
