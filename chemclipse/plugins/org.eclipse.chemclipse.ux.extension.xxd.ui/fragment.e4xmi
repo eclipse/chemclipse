@@ -216,8 +216,8 @@
     <elements xsi:type="menu:HandledMenuItem" xmi:id="_JUb5cDCZEeuREPdzMrDpOQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.handledmenuitem.createProcessMethod" label="%CreateProcessMethod" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/batchprocess.gif" command="_y4XVADCYEeuREPdzMrDpOQ"/>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_Jtia4DOXEeuREPdzMrDpOQ" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.toolbar.main">
+    <elements xsi:type="menu:ToolBarSeparator" xmi:id="_Mz2EgDOXEeuREPdzMrDpOQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.toolbarseparator.0"/>
     <elements xsi:type="menu:HandledToolItem" xmi:id="_L8rzADOXEeuREPdzMrDpOQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.handledtoolitem.undo" label="Undo" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/undo_edit.png" command="_9e0bQDOWEeuREPdzMrDpOQ"/>
     <elements xsi:type="menu:HandledToolItem" xmi:id="_MROfoDOXEeuREPdzMrDpOQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.handledtoolitem.redo" label="Redo" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/redo_edit.png" command="_9wG_kDOWEeuREPdzMrDpOQ"/>
-    <elements xsi:type="menu:ToolBarSeparator" xmi:id="_Mz2EgDOXEeuREPdzMrDpOQ" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.toolbarseparator.0"/>
   </fragments>
 </fragment:ModelFragments>
