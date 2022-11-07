@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -7,12 +7,14 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  * 
  * Contributors:
- * Dr. Philip Wenig - initial API and implementation
+ * Philip Wenig - initial API and implementation
  *******************************************************************************/
 package org.eclipse.chemclipse.model.support;
 
+import java.util.List;
 import java.util.Set;
 
+import org.eclipse.chemclipse.model.identifier.IFlavorMarker;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 
 public class LibraryInformationSupport {
@@ -22,81 +24,104 @@ public class LibraryInformationSupport {
 		if(libraryInformation == null || searchText == null) {
 			return false;
 		} else {
-			String name = libraryInformation.getName();
-			String referenceIdentifier = libraryInformation.getReferenceIdentifier();
-			String formula = libraryInformation.getFormula();
-			String smiles = libraryInformation.getSmiles();
-			String inchi = libraryInformation.getInChI();
-			String casNumber = libraryInformation.getCasNumber();
-			String comments = libraryInformation.getComments();
-			//
-			if(!caseSensitive) {
-				searchText = searchText.toLowerCase();
-				name = name.toLowerCase();
-				referenceIdentifier = referenceIdentifier.toLowerCase();
-				formula = formula.toLowerCase();
-				casNumber = casNumber.toLowerCase();
-				smiles = smiles.toLowerCase();
-				inchi = inchi.toLowerCase();
-				comments = comments.toLowerCase();
-			}
+			/*
+			 * Searh Text
+			 */
+			searchText = caseSensitive ? searchText : searchText.toLowerCase();
 			/*
 			 * Name
 			 */
+			String name = libraryInformation.getName();
+			name = caseSensitive ? name : name.toLowerCase();
 			if(name.contains(searchText)) {
 				return true;
 			}
 			/*
 			 * Reference Identifier
 			 */
+			String referenceIdentifier = libraryInformation.getReferenceIdentifier();
+			referenceIdentifier = caseSensitive ? referenceIdentifier : referenceIdentifier.toLowerCase();
 			if(referenceIdentifier.contains(searchText)) {
 				return true;
 			}
 			/*
 			 * Formula
 			 */
+			String formula = libraryInformation.getFormula();
+			formula = caseSensitive ? formula : formula.toLowerCase();
 			if(formula.contains(searchText)) {
 				return true;
 			}
 			/*
 			 * SMILES
 			 */
+			String smiles = libraryInformation.getSmiles();
+			smiles = caseSensitive ? smiles : smiles.toLowerCase();
 			if(smiles.contains(searchText)) {
 				return true;
 			}
 			/*
 			 * InChI
 			 */
+			String inchi = libraryInformation.getInChI();
+			inchi = caseSensitive ? inchi : inchi.toLowerCase();
 			if(inchi.contains(searchText)) {
 				return true;
 			}
 			/*
-			 * CAS
+			 * CAS Numbers
 			 */
-			if(casNumber.contains(searchText)) {
-				return true;
+			List<String> casNumbers = libraryInformation.getCasNumbers();
+			for(String casNumber : casNumbers) {
+				casNumber = caseSensitive ? casNumber : casNumber.toLowerCase();
+				if(casNumber.contains(searchText)) {
+					return true;
+				}
 			}
 			/*
 			 * Comments
 			 */
+			String comments = libraryInformation.getComments();
+			comments = caseSensitive ? comments : comments.toLowerCase();
 			if(comments.contains(searchText)) {
 				return true;
 			}
 			/*
-			 * Search the synonyms.
+			 * Synonyms
 			 */
 			Set<String> synonyms = libraryInformation.getSynonyms();
 			for(String synonym : synonyms) {
+				synonym = caseSensitive ? synonym : synonym.toLowerCase();
+				if(synonym.contains(searchText)) {
+					return true;
+				}
+			}
+			/*
+			 * Flavor Marker
+			 */
+			for(IFlavorMarker flavorMarker : libraryInformation.getFlavorMarkers()) {
 				/*
-				 * Pre-check
+				 * Odor
 				 */
-				if(!caseSensitive) {
-					synonym = synonym.toLowerCase();
+				String odor = flavorMarker.getOdor();
+				odor = caseSensitive ? odor : odor.toLowerCase();
+				if(odor.contains(searchText)) {
+					return true;
 				}
 				/*
-				 * Search
+				 * Matrix
 				 */
-				if(synonym.contains(searchText)) {
+				String matrix = flavorMarker.getMatrix();
+				matrix = caseSensitive ? matrix : matrix.toLowerCase();
+				if(matrix.contains(searchText)) {
+					return true;
+				}
+				/*
+				 * Solvent
+				 */
+				String solvent = flavorMarker.getOdor();
+				solvent = caseSensitive ? solvent : solvent.toLowerCase();
+				if(solvent.contains(searchText)) {
 					return true;
 				}
 			}
