@@ -64,8 +64,8 @@
       <children xsi:type="menu:ToolBarSeparator" xmi:id="_blu0oINGEeOuPY34hxPAxA" elementId="org.eclipse.chemclipse.ux.extension.ui.toolbarseparator.1"/>
       <children xsi:type="menu:HandledToolItem" xmi:id="_fX4dUFxGEeOAeeYL1z-yzQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handledtoolitem.1" label="%PreviousChromatogram" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/arrowBackward.gif" command="_OfJloFxGEeOAeeYL1z-yzQ"/>
       <children xsi:type="menu:HandledToolItem" xmi:id="_-t6B0FxCEeOAeeYL1z-yzQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handledtoolitem.0" label="%NextChromatogram" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/arrowForward.gif" command="_x1FVQFxCEeOAeeYL1z-yzQ"/>
-      <children xsi:type="menu:HandledToolItem" xmi:id="_qw_0gDhoEeKHL-DfrT7KNQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handledtoolitem.createSnapshot" label="%CreateSnapshot" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/camera.png" command="_hheJ4DhoEeKHL-DfrT7KNQ"/>
       <children xsi:type="menu:ToolBarSeparator" xmi:id="_LQEasMCEEeOvhYBWy9aiDQ" elementId="org.eclipse.chemclipse.ux.extension.ui.toolbarseparator.15"/>
+      <children xsi:type="menu:HandledToolItem" xmi:id="_qw_0gDhoEeKHL-DfrT7KNQ" elementId="org.eclipse.chemclipse.ux.extension.ui.handledtoolitem.createSnapshot" label="%CreateSnapshot" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/camera.png" command="_hheJ4DhoEeKHL-DfrT7KNQ"/>
     </elements>
   </fragments>
   <fragments xsi:type="fragment:StringModelFragment" xmi:id="_nUgn0NyxEeKWl9EwadOLIw" featurename="children" parentElementId="org.eclipse.chemclipse.rcp.app.ui.menu.file" positionInList="after:org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.saveAll">
