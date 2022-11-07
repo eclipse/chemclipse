@@ -20,7 +20,7 @@
         <children xsi:type="menu:HandledMenuItem" xmi:id="_h0BcRTLzEeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.item.quit" label="%Quit" iconURI="platform:/plugin/org.eclipse.ui/icons/full/etool16/delete.png" command="_h0A1OjLzEeKMEOdllHiEaA"/>
       </children>
       <children xsi:type="menu:Menu" xmi:id="_QrQhQDiVEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.plugins" label="%Plugins">
-        <children xsi:type="menu:HandledMenuItem" xmi:id="_WAg5QDiWEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.updates" label="%CheckUpdates" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/updates.gif" command="_LrC6QDiWEeKDEdWQrkwLnQ"/>
+        <children xsi:type="menu:HandledMenuItem" xmi:id="_WAg5QDiWEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.updates" visible="false" label="%CheckUpdates" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/updates.gif" enabled="false" command="_LrC6QDiWEeKDEdWQrkwLnQ"/>
       </children>
       <children xsi:type="menu:Menu" xmi:id="_DSko4DiVEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.menu.window" label="%Window">
         <children xsi:type="menu:HandledMenuItem" xmi:id="_lA-LQDiXEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledmenuitem.perspectiveSwitcher" label="%PerspectiveSwitcher" iconURI="platform:/plugin/org.eclipse.ui/icons/full/eview16/new_persp.png" tooltip="" mnemonics="" command="_XUgbQDiXEeKDEdWQrkwLnQ"/>
@@ -107,7 +107,6 @@
       </children>
       <children xsi:type="menu:ToolBar" xmi:id="_y11CQDiXEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbar.perspectives">
         <children xsi:type="menu:ToolBarSeparator" xmi:id="_lwvQEINGEeOuPY34hxPAxA" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbarseparator.1"/>
-        <children xsi:type="menu:HandledToolItem" xmi:id="_G9eogOToEeK3p9M57zVYqQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.updates" label="Updates" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/updates.gif" command="_LrC6QDiWEeKDEdWQrkwLnQ"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_0oR3UDiXEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.perspectiveSwitcher" label="Perspective Switcher" iconURI="platform:/plugin/org.eclipse.ui/icons/full/eview16/new_persp.png" command="_XUgbQDiXEeKDEdWQrkwLnQ"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_dnrPMDinEeKDEdWQrkwLnQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.selectView" label="Select View" iconURI="platform:/plugin/org.eclipse.ui.views/icons/full/elcl16/new.png" command="_ASbeYDilEeKDEdWQrkwLnQ"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_tLbzwKzhEeu9gOO-5hThuA" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.resetperspective" label="Reset Perspective" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/reset.gif" tooltip="" command="_X4T0YKzhEeu9gOO-5hThuA"/>
@@ -118,6 +117,9 @@
         <children xsi:type="menu:HandledToolItem" xmi:id="_oQ91EDL0EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.about" label="About" iconURI="platform:/plugin/org.eclipse.jface/icons/full/message_info.png" command="_h0A1RDLzEeKMEOdllHiEaA"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_4hjDQMDJEeOKxaD_PtepsA" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.preferences" label="Preferences" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/preferences.gif" command="_XevnQDiVEeKDEdWQrkwLnQ"/>
         <children xsi:type="menu:HandledToolItem" xmi:id="_ULurUMDKEeOKxaD_PtepsA" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.help" visible="false" label="Help" iconURI="platform:/plugin/org.eclipse.help.ui/icons/etool16/help.png" enabled="false" command="_zeEzsCaJEeOrR5M2kqmSOQ"/>
+      </children>
+      <children xsi:type="menu:ToolBar" xmi:id="_dz9NIF6nEe2sw_cXqaBWMw" elementId="org.eclipse.chemclipse.rcp.app.ui.toolbar.plugins">
+        <children xsi:type="menu:HandledToolItem" xmi:id="_G9eogOToEeK3p9M57zVYqQ" elementId="org.eclipse.chemclipse.rcp.app.ui.handledtoolitem.updates" visible="false" label="Updates" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/updates.gif" enabled="false" command="_LrC6QDiWEeKDEdWQrkwLnQ"/>
       </children>
     </trimBars>
     <trimBars xmi:id="_jEP4kDL0EeKMEOdllHiEaA" elementId="org.eclipse.chemclipse.rcp.app.ui.trimbar.bottom" side="Bottom">
