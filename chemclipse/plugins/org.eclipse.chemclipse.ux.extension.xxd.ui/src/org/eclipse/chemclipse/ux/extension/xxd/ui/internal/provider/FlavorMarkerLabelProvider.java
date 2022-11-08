@@ -30,8 +30,8 @@ public class FlavorMarkerLabelProvider extends AbstractChemClipseLabelProvider {
 	};
 	//
 	public static final int[] BOUNDS = { //
-			100, //
-			100, //
+			250, //
+			250, //
 			100 //
 	};
 
