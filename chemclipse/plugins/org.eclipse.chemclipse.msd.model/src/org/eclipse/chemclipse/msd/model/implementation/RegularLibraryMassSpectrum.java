@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,23 +14,15 @@ package org.eclipse.chemclipse.msd.model.implementation;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.model.core.AbstractRegularLibraryMassSpectrum;
-import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IIon;
+import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 
-/**
- * @author eselmeister
- */
 public class RegularLibraryMassSpectrum extends AbstractRegularLibraryMassSpectrum {
 
 	private static final Logger logger = Logger.getLogger(RegularLibraryMassSpectrum.class);
-	/**
-	 * Renew the serialVersionUID any time you have changed some fields or
-	 * methods.
-	 */
 	private static final long serialVersionUID = 5138492745628996885L;
 
-	// -------------------------------IMassSpectrumCloneable
 	/**
 	 * Keep in mind, it is a covariant return.<br/>
 	 * IMassSpectrum is needed. ILibraryMassSpectrum is a subtype of
@@ -72,5 +64,4 @@ public class RegularLibraryMassSpectrum extends AbstractRegularLibraryMassSpectr
 
 		return makeDeepCopy();
 	}
-	// -------------------------------IMassSpectrumCloneable
 }

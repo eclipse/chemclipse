@@ -334,7 +334,7 @@ public class MassSpectrumLibraryUI extends Composite {
 					 * Fire an update if an identified scan has been selected.
 					 */
 					IIdentificationTarget identificationTarget = getIdentificationTarget(massSpectrum);
-					//
+					massSpectrum.getTargets().add(identificationTarget);
 					UpdateNotifier.update(massSpectrum);
 					UpdateNotifier.update(identificationTarget);
 					/*
@@ -388,5 +388,6 @@ public class MassSpectrumLibraryUI extends Composite {
 
 	private void applySettings() {
 
+		updateLabel();
 	}
 }
