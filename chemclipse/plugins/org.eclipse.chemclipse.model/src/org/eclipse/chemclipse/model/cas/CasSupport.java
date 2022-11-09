@@ -28,6 +28,32 @@ public class CasSupport {
 	private static final String SEPARATOR = "-";
 	private static final char SEPARATOR_CHAR = '-';
 
+	/**
+	 * Calculates the checksum for a given CAS prefix.
+	 * E.g.:
+	 * ---
+	 * 100-42-5: 100-42- => 5
+	 * 71-43-2: 71-43- => 2
+	 * ---
+	 * If the casPrefix doesn't end with "-", then "" is returned.
+	 * 
+	 * @param cas
+	 * @return String
+	 */
+	public static String calculateChecksum(String casPrefix) {
+
+		String checksumValue = "";
+		if(casPrefix != null && casPrefix.endsWith(SEPARATOR)) {
+			String[] parts = casPrefix.split(SEPARATOR);
+			if(parts.length == 2) {
+				int checksum = calculateChecksumFromPrefix(casPrefix.replace(SEPARATOR, ""));
+				checksumValue = Integer.toString(checksum);
+			}
+		}
+		//
+		return checksumValue;
+	}
+
 	public static boolean verifyChecksum(String cas) {
 
 		/*
@@ -56,19 +82,13 @@ public class CasSupport {
 	public static boolean verifyChecksum(int cas) {
 
 		if(cas >= 0 && cas <= MAX_ID) {
+			/*
+			 * The last char is the checksum.
+			 */
 			String casNumber = Integer.toString(cas);
-			int length = casNumber.length() - 1; // The last char is the checksum.
-			int factor = length;
-			int sum = 0;
-			for(int i = 0; i < length; i++) {
-				char character = casNumber.charAt(i);
-				if(Character.isDigit(character)) {
-					int value = Integer.parseInt(Character.toString(character));
-					sum += value * factor;
-					factor--;
-				}
-			}
-			int checksum = (sum % 10);
+			int length = casNumber.length() - 1;
+			int checksum = calculateChecksumFromPrefix(casNumber.substring(0, length));
+			//
 			char character = casNumber.charAt(length);
 			if(Character.isDigit(character)) {
 				int casChecksum = Integer.parseInt(Character.toString(character));
@@ -77,6 +97,23 @@ public class CasSupport {
 		}
 		//
 		return false;
+	}
+
+	private static int calculateChecksumFromPrefix(String casPrefix) {
+
+		int length = casPrefix.length();
+		int factor = length;
+		int sum = 0;
+		for(int i = 0; i < length; i++) {
+			char character = casPrefix.charAt(i);
+			if(Character.isDigit(character)) {
+				int value = Integer.parseInt(Character.toString(character));
+				sum += value * factor;
+				factor--;
+			}
+		}
+		//
+		return (sum % 10);
 	}
 
 	/**
