@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2021 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -37,6 +37,7 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 	public static final String REVERSE_MATCH_FACTOR_DIRECT = "Reverse Match Factor Direct";
 	public static final String PROBABILITY = "Probability";
 	public static final String MOL_WEIGHT = "Mol Weight";
+	public static final String EXACT_MASS = "Excact Mass";
 	public static final String ADVISE = "Advise";
 	public static final String IDENTIFIER = "Identifier";
 	public static final String MISCELLANEOUS = "Miscellaneous";
@@ -47,13 +48,14 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 	public static final String FORMULA = "Formula";
 	public static final String SMILES = "SMILES";
 	public static final String INCHI = "InChI";
+	public static final String INCHI_KEY = "InChI Key";
 	public static final String CONTRIBUTOR = "Contributor";
 	public static final String RETENTION_TIME = "Retention Time";
 	public static final String RETENTION_INDEX = "Retention Index";
 	public static final String REFERENCE_ID = "Reference ID";
 	//
-	public static final int INDEX_RETENTION_TIME = 20;
-	public static final int INDEX_RETENTION_INDEX = 21;
+	public static final int INDEX_RETENTION_TIME = 22;
+	public static final int INDEX_RETENTION_INDEX = 23;
 	//
 	private static final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	//
@@ -70,7 +72,9 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 			FORMULA, //
 			SMILES, //
 			INCHI, //
+			INCHI_KEY, //
 			MOL_WEIGHT, //
+			EXACT_MASS, //
 			ADVISE, //
 			IDENTIFIER, //
 			MISCELLANEOUS, //
@@ -85,6 +89,8 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 	public static final int[] BOUNDS = { //
 			30, //
 			30, //
+			100, //
+			100, //
 			100, //
 			100, //
 			100, //
@@ -241,34 +247,40 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 				case 11: // InChI
 					text = libraryInformation.getInChI();
 					break;
-				case 12: // Mol Weight
+				case 12: // InChI Key
+					text = libraryInformation.getInChIKey();
+					break;
+				case 13: // Mol Weight
 					text = decimalFormat.format(libraryInformation.getMolWeight());
 					break;
-				case 13: // Advise
+				case 14: // Exact Mass
+					text = decimalFormat.format(libraryInformation.getExactMass());
+					break;
+				case 15: // Advise
 					text = comparisonResult.getAdvise();
 					break;
-				case 14: // Identifier
+				case 16: // Identifier
 					text = identificationTarget.getIdentifier();
 					break;
-				case 15: // Miscellaneous
+				case 17: // Miscellaneous
 					text = libraryInformation.getMiscellaneous();
 					break;
-				case 16: // Comments
+				case 18: // Comments
 					text = libraryInformation.getComments();
 					break;
-				case 17:
+				case 19:
 					text = libraryInformation.getDatabase();
 					break;
-				case 18:
+				case 20:
 					text = libraryInformation.getContributor();
 					break;
-				case 19:
+				case 21:
 					text = libraryInformation.getReferenceIdentifier();
 					break;
-				case 20:
+				case 22:
 					text = getRetentionIndexText(libraryInformation, null);
 					break;
-				case 21:
+				case 23:
 					text = getRetentionIndexText(libraryInformation, null);
 					break;
 				default:

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -76,38 +76,44 @@ public class TargetsComparator extends AbstractRecordTableComparator implements 
 				case 11: // InChI
 					sortOrder = libraryInformation2.getInChI().compareTo(libraryInformation1.getInChI());
 					break;
-				case 12: // Mol Weight
+				case 12: // InChI Key
+					sortOrder = libraryInformation2.getInChI().compareTo(libraryInformation1.getInChI());
+					break;
+				case 13: // Mol Weight
 					sortOrder = Double.compare(libraryInformation2.getMolWeight(), libraryInformation1.getMolWeight());
 					break;
-				case 13: // Advise
+				case 14: // Exact Mass
+					sortOrder = Double.compare(libraryInformation2.getExactMass(), libraryInformation1.getExactMass());
+					break;
+				case 15: // Advise
 					String advise2 = comparisonResult2.getAdvise();
 					String advise1 = comparisonResult1.getAdvise();
 					if(advise2 != null && advise1 != null) {
 						sortOrder = comparisonResult2.getAdvise().compareTo(comparisonResult1.getAdvise());
 					}
 					break;
-				case 14: // Identifier
+				case 16: // Identifier
 					sortOrder = entry2.getIdentifier().compareTo(entry1.getIdentifier());
 					break;
-				case 15: // Miscellaneous
+				case 17: // Miscellaneous
 					sortOrder = libraryInformation2.getMiscellaneous().compareTo(libraryInformation1.getMiscellaneous());
 					break;
-				case 16: // Comments
+				case 18: // Comments
 					sortOrder = libraryInformation2.getComments().compareTo(libraryInformation1.getComments());
 					break;
-				case 17:
+				case 19:
 					sortOrder = libraryInformation2.getDatabase().compareTo(libraryInformation1.getDatabase());
 					break;
-				case 18:
+				case 20:
 					sortOrder = libraryInformation2.getContributor().compareTo(libraryInformation1.getContributor());
 					break;
-				case 19:
+				case 21:
 					sortOrder = libraryInformation2.getReferenceIdentifier().compareTo(libraryInformation1.getReferenceIdentifier());
 					break;
-				case 20:
+				case 22:
 					sortOrder = Integer.compare(libraryInformation2.getRetentionTime(), libraryInformation1.getRetentionTime());
 					break;
-				case 21:
+				case 23:
 					sortOrder = Float.compare(libraryInformation2.getRetentionIndex(), libraryInformation1.getRetentionIndex());
 					break;
 				default:

@@ -116,6 +116,10 @@ public interface ILibraryInformation extends IClassifier, Serializable {
 	 */
 	void setInChI(String inChI);
 
+	String getInChIKey();
+
+	void setInChIKey(String inChIKey);
+
 	/**
 	 * Returns the mol weight of the library mass spectrum.
 	 * 
@@ -127,6 +131,18 @@ public interface ILibraryInformation extends IClassifier, Serializable {
 	 * Sets the mol weight of the library mass spectrum.
 	 */
 	void setMolWeight(double molWeight);
+
+	/**
+	 * Returns the exact mass of the library mass spectrum.
+	 * 
+	 * @return String
+	 */
+	double getExactMass();
+
+	/**
+	 * Sets the exact mass of the library mass spectrum.
+	 */
+	void setExactMass(double exactMass);
 
 	/**
 	 * Returns comments of the library mass spectrum.

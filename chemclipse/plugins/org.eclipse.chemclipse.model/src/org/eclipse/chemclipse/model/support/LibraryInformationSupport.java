@@ -69,6 +69,14 @@ public class LibraryInformationSupport {
 				return true;
 			}
 			/*
+			 * InChI Key
+			 */
+			String inchiKey = libraryInformation.getInChIKey();
+			inchiKey = caseSensitive ? inchiKey : inchiKey.toLowerCase();
+			if(inchiKey.contains(searchText)) {
+				return true;
+			}
+			/*
 			 * CAS Numbers
 			 */
 			List<String> casNumbers = libraryInformation.getCasNumbers();

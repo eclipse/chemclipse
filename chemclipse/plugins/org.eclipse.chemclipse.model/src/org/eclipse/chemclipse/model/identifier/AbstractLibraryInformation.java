@@ -37,8 +37,10 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	private String miscellaneous = "";
 	private String formula = "";
 	private String inChI = "";
+	private String inChIKey = "";
 	private String smiles = "";
-	private double molWeight = 0;
+	private double molWeight = 0.0d;
+	private double exactMass = 0.0d;
 	private String database = "";
 	private String contributor = "";
 	private String hit;
@@ -76,8 +78,10 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 			miscellaneous = libraryInformation.getMiscellaneous();
 			formula = libraryInformation.getFormula();
 			inChI = libraryInformation.getInChI();
+			inChIKey = libraryInformation.getInChIKey();
 			smiles = libraryInformation.getSmiles();
 			molWeight = libraryInformation.getMolWeight();
+			exactMass = libraryInformation.getExactMass();
 			database = libraryInformation.getDatabase();
 			contributor = libraryInformation.getContributor();
 			hit = libraryInformation.getHit();
@@ -211,6 +215,20 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	}
 
 	@Override
+	public String getInChIKey() {
+
+		return inChIKey;
+	}
+
+	@Override
+	public void setInChIKey(String inChIKey) {
+
+		if(inChIKey != null) {
+			this.inChIKey = inChIKey;
+		}
+	}
+
+	@Override
 	public double getMolWeight() {
 
 		return molWeight;
@@ -220,6 +238,18 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	public void setMolWeight(double molWeight) {
 
 		this.molWeight = molWeight;
+	}
+
+	@Override
+	public double getExactMass() {
+
+		return exactMass;
+	}
+
+	@Override
+	public void setExactMass(double exactMass) {
+
+		this.exactMass = exactMass;
 	}
 
 	@Override
