@@ -35,12 +35,6 @@
             id="org.eclipse.chemclipse.rcp.app.ui.preferences.overlayPreferencePage"
             name="Overlay">
       </page>      
-      <page
-            category="org.eclipse.chemclipse.rcp.app.ui.preferences.settingsPreferencePage"
-            class="org.eclipse.chemclipse.rcp.app.ui.preferences.AdditionalUpdateSitesPreferencePage"
-            id="org.eclipse.chemclipse.rcp.app.ui.preferences.additionalUpdateSitesPreferencePage"
-            name="Additional Update Sites">
-      </page> 
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
