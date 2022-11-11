@@ -47,10 +47,4 @@
             splashId="org.eclipse.chemclipse.rcp.compilation.community.ui.splash.enhancedSplashHandler">
       </splashHandlerProductBinding>
    </extension>
-   <extension
-         point="org.eclipse.ui.startup">
-      <startup
-            class="org.eclipse.chemclipse.rcp.compilation.community.ui.PluginStartup"></startup>
-   </extension>
-
 </plugin>
