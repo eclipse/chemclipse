@@ -19,15 +19,16 @@ public class DeltaCalculationSupport {
 	public static boolean useTarget(IScan scanUnknown, IScan scanReference, IIdentifierSettings identifierSettings) {
 
 		int retentionTimeUnknown = scanUnknown.getRetentionTime();
-		float retentionIndexUnknown = scanUnknown.getRetentionIndex();
+		double retentionIndexUnknown = Math.round(scanUnknown.getRetentionIndex());
 		int retentionTimeReference = scanReference.getRetentionTime();
-		float retentionIndexReference = scanReference.getRetentionIndex();
-		return useTarget(retentionTimeUnknown, retentionIndexUnknown, retentionTimeReference, retentionIndexReference, identifierSettings);
+		double[] retentionIndicesReference = new double[]{scanReference.getRetentionIndex()};
+		//
+		return useTarget(retentionTimeUnknown, retentionIndexUnknown, retentionTimeReference, retentionIndicesReference, identifierSettings);
 	}
 
-	public static boolean useTarget(int retentionTimeUnknown, float retentionIndexUnknown, int retentionTimeReference, float retentionIndexReference, IIdentifierSettings identifierSettings) {
+	public static boolean useTarget(int retentionTimeUnknown, double retentionIndexUnknown, int retentionTimeReference, double[] retentionIndicesReference, IIdentifierSettings identifierSettings) {
 
-		final boolean useTarget;
+		boolean useTarget = false;
 		switch(identifierSettings.getDeltaCalculation()) {
 			case RETENTION_TIME_MS:
 				useTarget = useTarget(retentionTimeUnknown, retentionTimeReference, identifierSettings.getDeltaWindow());
@@ -36,7 +37,13 @@ public class DeltaCalculationSupport {
 				useTarget = useTarget(retentionTimeUnknown / IChromatogram.MINUTE_CORRELATION_FACTOR, retentionTimeReference / IChromatogram.MINUTE_CORRELATION_FACTOR, identifierSettings.getDeltaWindow());
 				break;
 			case RETENTION_INDEX:
-				useTarget = useTarget(retentionIndexUnknown, retentionIndexReference, identifierSettings.getDeltaWindow());
+				exitloop:
+				for(double retentionIndexReference : retentionIndicesReference) {
+					if(useTarget(retentionIndexUnknown, retentionIndexReference, identifierSettings.getDeltaWindow())) {
+						useTarget = true;
+						break exitloop;
+					}
+				}
 				break;
 			default:
 				useTarget = true;

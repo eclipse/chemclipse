@@ -443,7 +443,12 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 
 	private boolean isDefaultColumnIndexMarker(IColumnIndexMarker columnIndexMarker) {
 
-		return this.columnIndexMarker.equals(columnIndexMarker);
+		/*
+		 * Compare the identity of the separation column and not of the index marker.
+		 * Because, the index marker additionally contains the Retention Index, which is
+		 * part of the equals method.
+		 */
+		return this.columnIndexMarker.getSeparationColumn().equals(columnIndexMarker.getSeparationColumn());
 	}
 
 	@Override
