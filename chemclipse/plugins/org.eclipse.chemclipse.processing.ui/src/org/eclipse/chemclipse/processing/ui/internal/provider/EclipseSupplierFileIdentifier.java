@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Christoph Läubrich - initial API and implementation
+ * Philip Wenig - refactoring Windows local file support
  *******************************************************************************/
 package org.eclipse.chemclipse.processing.ui.internal.provider;
 
@@ -47,7 +48,9 @@ public class EclipseSupplierFileIdentifier implements SupplierContext {
 				IEditorDescriptor[] editors = editorMapping.getEditors();
 				for(IEditorDescriptor editorDescriptor : editors) {
 					if(editorDescriptor.isOpenExternal()) {
-						// skip external editors..
+						/*
+						 * Skip external editors..
+						 */
 						continue;
 					}
 					items.add(new EclipseEditorSupplier(editorMapping, editorDescriptor));
@@ -64,6 +67,7 @@ public class EclipseSupplierFileIdentifier implements SupplierContext {
 		private final IEditorDescriptor editorDescriptor;
 
 		public EclipseEditorSupplier(IFileEditorMapping editorMapping, IEditorDescriptor editorDescriptor) {
+
 			this.editorMapping = editorMapping;
 			this.editorDescriptor = editorDescriptor;
 		}

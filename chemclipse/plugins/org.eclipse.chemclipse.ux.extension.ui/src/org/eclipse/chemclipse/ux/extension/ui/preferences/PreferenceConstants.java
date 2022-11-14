@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -26,9 +26,17 @@ public class PreferenceConstants {
 	public static final String DEF_SELECTED_WORKSPACE_PATH = "";
 	public static final String P_SELECTED_USER_LOCATION_PATH = "selectedUserLocationPath";
 	public static final String DEF_SELECTED_USER_LOCATION_PATH = "";
-	//
+	/*
+	 * There have been too many complaints, that OpenChrom starts slowly if many
+	 * network attached drives are connected on Windows.
+	 * Hence, the user has to activate this manually.
+	 */
 	public static final String P_USER_LOCATION_PATH = "userLocation";
 	public static final String DEF_USER_LOCATION_PATH = UserManagement.getUserHome();
+	public static final String P_WINDOWS_LIST_DRIVES_BY_TYPE = "windowsListDrivesByType";
+	public static final boolean DEF_WINDOWS_LIST_DRIVES_BY_TYPE = true;
+	public static final String P_WINDOWS_DRIVE_TYPE = "windowsDriveType";
+	public static final String DEF_WINDOWS_DRIVE_TYPE = "local";
 	//
 	public static final String P_OPEN_FIRST_DATA_MATCH_ONLY = "openFirstDataMatchOnly";
 	public static final boolean DEF_OPEN_FIRST_DATA_MATCH_ONLY = true;

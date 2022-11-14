@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -81,6 +81,18 @@ public class PreferenceSupplier {
 
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		store.setValue(PreferenceConstants.P_USER_LOCATION_PATH, directoryPath);
+	}
+
+	public static boolean isWindowsListDrivesByType() {
+
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		return store.getBoolean(PreferenceConstants.P_WINDOWS_LIST_DRIVES_BY_TYPE);
+	}
+
+	public static String getWindowsDriveType() {
+
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		return store.getString(PreferenceConstants.P_WINDOWS_DRIVE_TYPE);
 	}
 
 	public static boolean isOpenFirstDataMatchOnly() {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -11,11 +11,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.ui.preferences;
 
+import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.chemclipse.ux.extension.ui.Activator;
 import org.eclipse.jface.preference.BooleanFieldEditor;
+import org.eclipse.jface.preference.DirectoryFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
-import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -25,7 +26,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setTitle("Data Settings");
+		setTitle("Drive Settings");
 		setDescription("");
 	}
 
@@ -37,12 +38,17 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 	public void createFieldEditors() {
 
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.P_SELECTED_DRIVE_PATH, "Selected Drive Path", getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.P_SELECTED_HOME_PATH, "Selected Home Path", getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.P_SELECTED_WORKSPACE_PATH, "Selected Workspace Path", getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.P_SELECTED_USER_LOCATION_PATH, "Selected User Location Path", getFieldEditorParent()));
-		addField(new StringFieldEditor(PreferenceConstants.P_USER_LOCATION_PATH, "User Location", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceConstants.P_SELECTED_DRIVE_PATH, "Selected Drive Path", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceConstants.P_SELECTED_HOME_PATH, "Selected Home Path", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceConstants.P_SELECTED_WORKSPACE_PATH, "Selected Workspace Path", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceConstants.P_SELECTED_USER_LOCATION_PATH, "Selected User Location Path", getFieldEditorParent()));
+		addField(new DirectoryFieldEditor(PreferenceConstants.P_USER_LOCATION_PATH, "User Location", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_OPEN_FIRST_DATA_MATCH_ONLY, "Open First Data Match Only", getFieldEditorParent()));
+		//
+		addField(new SpacerFieldEditor(getFieldEditorParent()));
+		addField(new LabelFieldEditor("Microsoft Windows", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_WINDOWS_LIST_DRIVES_BY_TYPE, "List Drives By Type", getFieldEditorParent()));
+		addField(new DriveTypeFieldEditor(PreferenceConstants.P_WINDOWS_DRIVE_TYPE, "Drive Type", getFieldEditorParent()));
 	}
 
 	/*

@@ -349,7 +349,7 @@ public class MultiDataExplorerTreeUI {
 						@Override
 						public void run() {
 
-							openRecurse((File)selection[0], treeUI);
+							openRecursively((File)selection[0], treeUI);
 						}
 					});
 				}
@@ -360,7 +360,7 @@ public class MultiDataExplorerTreeUI {
 		treeViewer.getControl().setMenu(menu);
 	}
 
-	private boolean openRecurse(File file, DataExplorerTreeUI treeUI) {
+	private boolean openRecursively(File file, DataExplorerTreeUI treeUI) {
 
 		boolean opened = false;
 		File[] listFiles = file.listFiles();
@@ -372,7 +372,7 @@ public class MultiDataExplorerTreeUI {
 				for(File f : listFiles) {
 					if(f.isDirectory()) {
 						// recurse into sub-directory...
-						opened |= openRecurse(f, treeUI);
+						opened |= openRecursively(f, treeUI);
 					}
 				}
 			}

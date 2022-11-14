@@ -218,7 +218,7 @@
             category="org.eclipse.chemclipse.rcp.app.ui.preferences.settingsPreferencePage"
             class="org.eclipse.chemclipse.ux.extension.ui.preferences.PreferencePage"
             id="org.eclipse.chemclipse.ux.extension.ui.preferencePage"
-            name="File Supplier">
+            name="Drive Settings">
       </page>
    </extension>
    <extension
