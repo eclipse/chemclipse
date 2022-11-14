@@ -33,8 +33,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_SELECTED_WORKSPACE_PATH, PreferenceConstants.DEF_SELECTED_WORKSPACE_PATH);
 		store.setDefault(PreferenceConstants.P_SELECTED_USER_LOCATION_PATH, PreferenceConstants.DEF_SELECTED_USER_LOCATION_PATH);
 		store.setDefault(PreferenceConstants.P_USER_LOCATION_PATH, PreferenceConstants.DEF_USER_LOCATION_PATH);
-		store.setDefault(PreferenceConstants.P_WINDOWS_LIST_DRIVES_BY_TYPE, PreferenceConstants.DEF_WINDOWS_LIST_DRIVES_BY_TYPE);
-		store.setDefault(PreferenceConstants.P_WINDOWS_DRIVE_TYPE, PreferenceConstants.DEF_WINDOWS_DRIVE_TYPE);
+		store.setDefault(PreferenceConstants.P_SHOW_NETWORK_SHARES, PreferenceConstants.DEF_SHOW_NETWORK_SHARES);
 		store.setDefault(PreferenceConstants.P_OPEN_FIRST_DATA_MATCH_ONLY, PreferenceConstants.DEF_OPEN_FIRST_DATA_MATCH_ONLY);
 	}
 }

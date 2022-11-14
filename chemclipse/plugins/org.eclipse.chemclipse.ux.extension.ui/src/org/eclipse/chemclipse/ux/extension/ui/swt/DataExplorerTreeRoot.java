@@ -13,12 +13,11 @@
 package org.eclipse.chemclipse.ux.extension.ui.swt;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.FileStore;
-import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.settings.ApplicationSettings;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.settings.UserManagement;
@@ -37,6 +36,8 @@ public enum DataExplorerTreeRoot {
 	WORKSPACE("Workspace"), //
 	USER_LOCATION("User Location");
 
+	private static final Logger logger = Logger.getLogger(DataExplorerTreeRoot.class);
+	//
 	private String label;
 
 	private DataExplorerTreeRoot(String label) {
@@ -72,22 +73,7 @@ public enum DataExplorerTreeRoot {
 		File[] roots;
 		switch(this) {
 			case DRIVES:
-				if(OperatingSystemUtils.isWindows()) {
-					/*
-					 * Windows
-					 */
-					if(PreferenceSupplier.isWindowsListDrivesByType()) {
-						String windowsDriveType = PreferenceSupplier.getWindowsDriveType();
-						roots = listRootWindowsByDriveType(windowsDriveType);
-					} else {
-						roots = File.listRoots();
-					}
-				} else {
-					/*
-					 * macOS, Linux
-					 */
-					roots = File.listRoots();
-				}
+				roots = filterRoots(File.listRoots());
 				break;
 			case HOME:
 				roots = new File[]{new File(UserManagement.getUserHome())};
@@ -130,41 +116,36 @@ public enum DataExplorerTreeRoot {
 		return userLocation;
 	}
 
-	private static File[] listRootWindowsByDriveType(String driveType) {
+	private static File[] filterRoots(File[] roots) {
 
 		List<File> rootFiles = new ArrayList<>();
-		File[] roots = File.listRoots();
-		/*
-		 * Check, if the drive is a local root.
-		 */
-		File rootDriveC = null;
 		for(File root : roots) {
-			try {
-				/*
-				 * Default C:
-				 */
-				if(root.toString().toLowerCase().startsWith("c:\\")) {
-					rootDriveC = root;
-				}
-				/*
-				 * Collect matching types.
-				 */
-				FileStore fileStore = Files.getFileStore(root.toPath());
-				String type = (fileStore != null) ? fileStore.type() : "";
-				if(type.contains(driveType)) {
-					rootFiles.add(root);
-				}
-			} catch(IOException e) {
-			}
+			if((!PreferenceSupplier.showNetworkShares()) && isWindowsNetworkDriveRoot(root))
+				continue;
+			rootFiles.add(root);
 		}
-		/*
-		 * If the list is of selected drives is empty,
-		 * add C:\ by default if available.
-		 */
-		if(rootFiles.isEmpty() && rootDriveC != null) {
-			rootFiles.add(rootDriveC);
-		}
-		//
 		return rootFiles.toArray(new File[rootFiles.size()]);
+	}
+
+	private static boolean isWindowsNetworkDriveRoot(File file) {
+
+		if(!OperatingSystemUtils.isWindows()) {
+			return false;
+		}
+		String path = file.getPath();
+		if(path.length() > 3) {
+			return false;
+		}
+		String driveLetter = path.substring(0, 2);
+		List<String> cmd = Arrays.asList("cmd", "/c", "net", "use", driveLetter);
+		try {
+			Process process = new ProcessBuilder(cmd).redirectErrorStream(true).start();
+			process.getOutputStream().close();
+			int exitCode = process.waitFor();
+			return exitCode == 0;
+		} catch(Exception e) {
+			logger.error("Failed to detect network drive status for " + driveLetter, e);
+		}
+		return false;
 	}
 }
