@@ -23,7 +23,7 @@ public class MassSpectrumTileDefinition extends WizardTile {
 	@Override
 	public String getTitle() {
 
-		return "m/z (nominal)";
+		return "Mass Spectra\nDatabases";
 	}
 
 	@Override
