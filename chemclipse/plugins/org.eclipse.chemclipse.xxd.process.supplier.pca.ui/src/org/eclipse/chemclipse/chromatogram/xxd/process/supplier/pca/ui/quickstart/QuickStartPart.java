@@ -31,14 +31,13 @@ public class QuickStartPart {
 	@PostConstruct
 	public void create(Composite parent) {
 
-		TaskTileContainer tileContainer = new TaskTileContainer(parent, 4, () -> context);
+		TaskTileContainer tileContainer = new TaskTileContainer(parent, 3, () -> context);
 		/*
 		 * Default
 		 */
 		tileContainer.addTaskTile(new PeakTileDefinition());
 		tileContainer.addTaskTile(new ScanTileDefinition());
 		tileContainer.addTaskTile(new FileTileDefinition());
-		tileContainer.addTaskTile(new MALDITileDefinition());
 		tileContainer.addTaskTile(new MassSpectrumTileDefinition());
 		/*
 		 * Additional
