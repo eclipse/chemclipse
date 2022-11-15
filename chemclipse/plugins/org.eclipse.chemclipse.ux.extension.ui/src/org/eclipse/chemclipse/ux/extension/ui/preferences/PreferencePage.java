@@ -47,8 +47,7 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new LabelFieldEditor("Microsoft Windows", getFieldEditorParent()));
-		addField(new BooleanFieldEditor(PreferenceConstants.P_WINDOWS_LIST_DRIVES_BY_TYPE, "List Drives By Type", getFieldEditorParent()));
-		addField(new DriveTypeFieldEditor(PreferenceConstants.P_WINDOWS_DRIVE_TYPE, "Drive Type", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_NETWORK_SHARES, "Show Network Shares (requires restart)", getFieldEditorParent()));
 	}
 
 	/*

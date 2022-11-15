@@ -83,21 +83,15 @@ public class PreferenceSupplier {
 		store.setValue(PreferenceConstants.P_USER_LOCATION_PATH, directoryPath);
 	}
 
-	public static boolean isWindowsListDrivesByType() {
-
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		return store.getBoolean(PreferenceConstants.P_WINDOWS_LIST_DRIVES_BY_TYPE);
-	}
-
-	public static String getWindowsDriveType() {
-
-		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
-		return store.getString(PreferenceConstants.P_WINDOWS_DRIVE_TYPE);
-	}
-
 	public static boolean isOpenFirstDataMatchOnly() {
 
 		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 		return store.getBoolean(PreferenceConstants.P_OPEN_FIRST_DATA_MATCH_ONLY);
+	}
+
+	public static boolean showNetworkShares() {
+
+		IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+		return store.getBoolean(PreferenceConstants.P_SHOW_NETWORK_SHARES);
 	}
 }
