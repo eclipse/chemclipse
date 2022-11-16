@@ -184,19 +184,13 @@ public interface ILibraryInformation extends IClassifier, Serializable {
 	 */
 	void setMiscellaneous(String miscellaneous);
 
-	/**
-	 * Returns the database information.
-	 * 
-	 * @return String
-	 */
 	String getDatabase();
 
-	/**
-	 * Sets the database information.
-	 * 
-	 * @return String
-	 */
 	void setDatabase(String database);
+
+	int getDatabaseIndex();
+
+	void setDatabaseIndex(int databaseIndex);
 
 	/**
 	 * Returns the contributor information.

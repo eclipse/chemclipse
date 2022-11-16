@@ -42,6 +42,7 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 	private double molWeight = 0.0d;
 	private double exactMass = 0.0d;
 	private String database = "";
+	private int databaseIndex = -1;
 	private String contributor = "";
 	private String hit;
 	private final Set<String> classification = new LinkedHashSet<>();
@@ -83,6 +84,7 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 			molWeight = libraryInformation.getMolWeight();
 			exactMass = libraryInformation.getExactMass();
 			database = libraryInformation.getDatabase();
+			databaseIndex = libraryInformation.getDatabaseIndex();
 			contributor = libraryInformation.getContributor();
 			hit = libraryInformation.getHit();
 			classification.addAll(libraryInformation.getClassifier());
@@ -306,6 +308,18 @@ public abstract class AbstractLibraryInformation implements ILibraryInformation 
 		if(database != null) {
 			this.database = database;
 		}
+	}
+
+	@Override
+	public int getDatabaseIndex() {
+
+		return databaseIndex;
+	}
+
+	@Override
+	public void setDatabaseIndex(int databaseIndex) {
+
+		this.databaseIndex = databaseIndex;
 	}
 
 	@Override
