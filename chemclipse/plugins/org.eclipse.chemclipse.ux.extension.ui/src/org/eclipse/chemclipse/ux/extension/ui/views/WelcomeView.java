@@ -37,7 +37,7 @@ public class WelcomeView {
 	private static final String PERSPECTIVE_DAD = "org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.wsd";
 	private static final String PERSPECTIVE_MALDI = "org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.maldi";
 	//
-	private static final String PERSPECTIVE_PCA = "org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.perspective";
+	private static final String PERSPECTIVE_PCA = "org.eclipse.chemclipse.xxd.process.supplier.pca.perspective";
 	private static final int DEFAULT_NUMBER_OF_COLUMNS = Integer.getInteger("chemclipse.welcome.columns", 4);
 
 	private class Component implements TileDefinition {

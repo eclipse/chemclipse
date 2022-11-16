@@ -1,20 +1,20 @@
 Manifest-Version: 1.0
-Automatic-Module-Name: org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui
+Automatic-Module-Name: org.eclipse.chemclipse.xxd.process.supplier.pca.ui
 Bundle-ManifestVersion: 2
 Bundle-Name: PCA UI
 Bundle-SymbolicName: org.eclipse.chemclipse.xxd.process.supplier.pca.ui;singleton:=true
 Bundle-Version: 0.9.0.qualifier
-Bundle-Activator: org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.Activator
+Bundle-Activator: org.eclipse.chemclipse.xxd.process.supplier.pca.ui.Activator
 Bundle-Vendor: ChemClipse
-Export-Package: org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.chart2d,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.handlers,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.runnable,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.internal.wizards,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.parts,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.support,
- org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.swt
+Export-Package: org.eclipse.chemclipse.xxd.process.supplier.pca.ui,
+ org.eclipse.chemclipse.xxd.process.supplier.pca.ui.chart2d,
+ org.eclipse.chemclipse.xxd.process.supplier.pca.ui.handlers,
+ org.eclipse.chemclipse.xxd.process.supplier.pca.ui.internal.runnable,
+ org.eclipse.chemclipse.xxd.process.supplier.pca.ui.internal.wizards,
+ org.eclipse.chemclipse.xxd.process.supplier.pca.ui.parts,
+ org.eclipse.chemclipse.xxd.process.supplier.pca.ui.preferences,
+ org.eclipse.chemclipse.xxd.process.supplier.pca.ui.support,
+ org.eclipse.chemclipse.xxd.process.supplier.pca.ui.swt
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.chemclipse.xxd.process.supplier.pca;bundle-version="0.8.0",
@@ -61,7 +61,7 @@ Import-Package: javax.annotation;version="1.0.0";resolution:=optional,
  javax.inject;version="1.0.0",
  org.osgi.service.component.annotations;version="1.2.0"
 Bundle-ActivationPolicy: lazy
-Service-Component: OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.quickstart.FileTileDefinition.xml,
- OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.quickstart.MassSpectrumTileDefinition.xml,
- OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.quickstart.PeakTileDefinition.xml,
- OSGI-INF/org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.quickstart.ScanTileDefinition.xml
+Service-Component: OSGI-INF/org.eclipse.chemclipse.xxd.process.supplier.pca.ui.quickstart.FileTileDefinition.xml,
+ OSGI-INF/org.eclipse.chemclipse.xxd.process.supplier.pca.ui.quickstart.MassSpectrumTileDefinition.xml,
+ OSGI-INF/org.eclipse.chemclipse.xxd.process.supplier.pca.ui.quickstart.PeakTileDefinition.xml,
+ OSGI-INF/org.eclipse.chemclipse.xxd.process.supplier.pca.ui.quickstart.ScanTileDefinition.xml

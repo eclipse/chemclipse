@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.eclipse.chemclipse.xxd.process.supplier.pca.ui.quickstart.PeakTileDefinition">
+   <service>
+      <provide interface="org.eclipse.chemclipse.ux.extension.ui.definitions.TileDefinition"/>
+   </service>
+   <implementation class="org.eclipse.chemclipse.xxd.process.supplier.pca.ui.quickstart.PeakTileDefinition"/>
+</scr:component>

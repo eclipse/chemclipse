@@ -2,7 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.modelContribution"
+         id="org.eclipse.chemclipse.xxd.process.supplier.pca.ui.modelContribution"
          point="org.eclipse.e4.workbench.model">
       <fragment
             uri="fragment.e4xmi">
@@ -12,20 +12,20 @@
          point="org.eclipse.ui.preferencePages">
       <page
       		category="org.eclipse.chemclipse.xxd.process.ui.preferences.processPreferencePage"
-            class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePage"
-            id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.xxd.process.supplier.pca.ui.preferences.PreferencePage"
+            id="org.eclipse.chemclipse.xxd.process.supplier.pca.ui.preferences.preferencePage"
             name="PCA">
       </page> 
       <page
-      		category="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.preferencePage"
-            class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePageScorePlot"
-            id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.preferencePageScorePlot"
+      		category="org.eclipse.chemclipse.xxd.process.supplier.pca.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.xxd.process.supplier.pca.ui.preferences.PreferencePageScorePlot"
+            id="org.eclipse.chemclipse.xxd.process.supplier.pca.ui.preferences.preferencePageScorePlot"
             name="Score Plot">
       </page>
       <page
-      		category="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.preferencePage"
-            class="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.PreferencePageLoadingPlot"
-            id="org.eclipse.chemclipse.chromatogram.xxd.process.supplier.pca.ui.preferences.preferencePageLoadingPlot"
+      		category="org.eclipse.chemclipse.xxd.process.supplier.pca.ui.preferences.preferencePage"
+            class="org.eclipse.chemclipse.xxd.process.supplier.pca.ui.preferences.PreferencePageLoadingPlot"
+            id="org.eclipse.chemclipse.xxd.process.supplier.pca.ui.preferences.preferencePageLoadingPlot"
             name="Loading Plot">
       </page>
       </extension>
