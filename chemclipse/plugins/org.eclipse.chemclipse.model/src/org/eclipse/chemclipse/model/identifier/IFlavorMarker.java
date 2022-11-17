@@ -17,6 +17,10 @@ public interface IFlavorMarker {
 
 	void clear();
 
+	boolean isManuallyVerified();
+
+	void setManuallyVerified(boolean manuallyVerified);
+
 	String getOdor();
 
 	String getMatrix();

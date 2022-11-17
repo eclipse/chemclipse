@@ -11,11 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
+import java.util.List;
+
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.FlavorMarkerComparator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.FlavorMarkerEditingSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.FlavorMarkerLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider.FlavorMarkerListFilter;
+import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
 
@@ -53,5 +57,18 @@ public class FlavorMarkerListUI extends ExtendedTableViewer {
 		setContentProvider(new ListContentProvider());
 		setComparator(comparator);
 		setFilters(new ViewerFilter[]{listFilter});
+		setEditingSupport();
+	}
+
+	private void setEditingSupport() {
+
+		List<TableViewerColumn> tableViewerColumns = getTableViewerColumns();
+		for(int i = 0; i < tableViewerColumns.size(); i++) {
+			TableViewerColumn tableViewerColumn = tableViewerColumns.get(i);
+			String label = tableViewerColumn.getColumn().getText();
+			if(label.equals(FlavorMarkerLabelProvider.VERIFIED_MANUALLY)) {
+				tableViewerColumn.setEditingSupport(new FlavorMarkerEditingSupport(this, label));
+			}
+		}
 	}
 }

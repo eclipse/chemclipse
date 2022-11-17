@@ -28,12 +28,18 @@ public class FlavorMarkerComparator extends AbstractRecordTableComparator implem
 			//
 			switch(getPropertyIndex()) {
 				case 0:
-					sortOrder = marker1.getOdor().compareTo(marker2.getOdor());
+					/*
+					 * Checked is ranked higher than unchecked, hence reverse order here.
+					 */
+					sortOrder = Boolean.compare(marker2.isManuallyVerified(), marker1.isManuallyVerified());
 					break;
 				case 1:
-					sortOrder = marker1.getMatrix().compareTo(marker2.getMatrix());
+					sortOrder = marker1.getOdor().compareTo(marker2.getOdor());
 					break;
 				case 2:
+					sortOrder = marker1.getMatrix().compareTo(marker2.getMatrix());
+					break;
+				case 3:
 					sortOrder = marker1.getSolvent().compareTo(marker2.getSolvent());
 					break;
 				default:

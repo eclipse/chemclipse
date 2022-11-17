@@ -18,6 +18,7 @@ import java.util.Set;
 
 public class FlavorMarker implements IFlavorMarker {
 
+	private boolean manuallyVerified = false;
 	private String odor = "";
 	private String matrix = "";
 	private String solvent = "";
@@ -35,12 +36,23 @@ public class FlavorMarker implements IFlavorMarker {
 	@Override
 	public void clear() {
 
+		manuallyVerified = false;
 		odor = "";
 		matrix = "";
 		solvent = "";
 		samplePreparation = "";
 		literatureReference = "";
 		odorThresholds.clear();
+	}
+
+	public boolean isManuallyVerified() {
+
+		return manuallyVerified;
+	}
+
+	public void setManuallyVerified(boolean manuallyVerified) {
+
+		this.manuallyVerified = manuallyVerified;
 	}
 
 	@Override

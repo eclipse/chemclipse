@@ -19,17 +19,20 @@ import org.eclipse.swt.graphics.Image;
 
 public class FlavorMarkerLabelProvider extends AbstractChemClipseLabelProvider {
 
+	public static final String VERIFIED_MANUALLY = "Verified (manually)";
 	public static final String ODOR = "Odor";
 	public static final String MATRIX = "Matrix";
 	public static final String SOLVENT = "Solvent";
 	//
 	public static final String[] TITLES = { //
+			VERIFIED_MANUALLY, //
 			ODOR, //
 			MATRIX, //
 			SOLVENT //
 	};
 	//
 	public static final int[] BOUNDS = { //
+			30, //
 			250, //
 			250, //
 			100 //
@@ -39,7 +42,16 @@ public class FlavorMarkerLabelProvider extends AbstractChemClipseLabelProvider {
 	public Image getColumnImage(Object element, int columnIndex) {
 
 		if(columnIndex == 0) {
-			return getImage(element);
+			/*
+			 * CheckBox
+			 */
+			if(element instanceof IFlavorMarker flavorMarker) {
+				if(flavorMarker.isManuallyVerified()) {
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED, IApplicationImage.SIZE_16x16);
+				} else {
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DESELECTED, IApplicationImage.SIZE_16x16);
+				}
+			}
 		}
 		return null;
 	}
@@ -51,12 +63,15 @@ public class FlavorMarkerLabelProvider extends AbstractChemClipseLabelProvider {
 		if(element instanceof IFlavorMarker flavorMarker) {
 			switch(columnIndex) {
 				case 0:
-					text = flavorMarker.getOdor();
+					text = ""; //
 					break;
 				case 1:
-					text = flavorMarker.getMatrix();
+					text = flavorMarker.getOdor();
 					break;
 				case 2:
+					text = flavorMarker.getMatrix();
+					break;
+				case 3:
 					text = flavorMarker.getSolvent();
 					break;
 				default:

@@ -105,6 +105,14 @@ public class LibraryInformationSupport {
 				}
 			}
 			/*
+			 * Database
+			 */
+			String database = libraryInformation.getDatabase();
+			database = caseSensitive ? database : database.toLowerCase();
+			if(database.contains(searchText)) {
+				return true;
+			}
+			/*
 			 * Flavor Marker
 			 */
 			for(IFlavorMarker flavorMarker : libraryInformation.getFlavorMarkers()) {

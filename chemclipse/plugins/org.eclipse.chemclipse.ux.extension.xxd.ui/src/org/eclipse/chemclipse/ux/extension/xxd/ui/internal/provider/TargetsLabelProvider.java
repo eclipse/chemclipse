@@ -42,6 +42,7 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 	public static final String IDENTIFIER = "Identifier";
 	public static final String MISCELLANEOUS = "Miscellaneous";
 	public static final String DATABASE = "Database";
+	public static final String DATABASE_INDEX = "Database Index";
 	public static final String RATING = "Rating";
 	public static final String CAS = "CAS";
 	public static final String COMMENTS = "Comments";
@@ -54,8 +55,8 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 	public static final String RETENTION_INDEX = "Retention Index";
 	public static final String REFERENCE_ID = "Reference ID";
 	//
-	public static final int INDEX_RETENTION_TIME = 22;
-	public static final int INDEX_RETENTION_INDEX = 23;
+	public static final int INDEX_RETENTION_TIME = 23;
+	public static final int INDEX_RETENTION_INDEX = 24;
 	//
 	private static final IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	//
@@ -80,6 +81,7 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 			MISCELLANEOUS, //
 			COMMENTS, //
 			DATABASE, //
+			DATABASE_INDEX, //
 			CONTRIBUTOR, //
 			REFERENCE_ID, //
 			RETENTION_TIME, //
@@ -89,6 +91,7 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 	public static final int[] BOUNDS = { //
 			30, //
 			30, //
+			100, //
 			100, //
 			100, //
 			100, //
@@ -272,15 +275,18 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 					text = libraryInformation.getDatabase();
 					break;
 				case 20:
-					text = libraryInformation.getContributor();
+					text = Integer.toString(libraryInformation.getDatabaseIndex());
 					break;
 				case 21:
-					text = libraryInformation.getReferenceIdentifier();
+					text = libraryInformation.getContributor();
 					break;
 				case 22:
-					text = getRetentionIndexText(libraryInformation, null);
+					text = libraryInformation.getReferenceIdentifier();
 					break;
 				case 23:
+					text = getRetentionIndexText(libraryInformation, null);
+					break;
+				case 24:
 					text = getRetentionIndexText(libraryInformation, null);
 					break;
 				default:
