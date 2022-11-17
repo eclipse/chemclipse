@@ -18,7 +18,7 @@
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.removeemptyscans">
       </ChromatogramFilterSupplier> 
       <ChromatogramFilterSupplier
-            description="This filters deletes scan identifications."
+            description="This filter deletes scan identifications."
             filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.core.FilterDeleteIdentifier"
             filterName="Scan Targets (Delete)"
             filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsDeleteIdentifier"
@@ -37,7 +37,14 @@
             filterName="Scan Duplicator"
             filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsDuplicator"
             id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scanduplicator">
-      </ChromatogramFilterSupplier>           
+      </ChromatogramFilterSupplier>
+      <ChromatogramFilterSupplier
+            description="This filters selects the retention index given by a specific column."
+            filter="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.core.FilterRetentionIndexSelector"
+            filterName="Retention Index Selector"
+            filterSettings="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsRetentionIndexSelector"
+            id="org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.retentionindexselector">
+      </ChromatogramFilterSupplier>              
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">

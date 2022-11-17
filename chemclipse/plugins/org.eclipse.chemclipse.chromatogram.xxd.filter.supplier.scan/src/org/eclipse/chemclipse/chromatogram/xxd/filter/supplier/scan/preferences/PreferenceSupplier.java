@@ -20,6 +20,7 @@ import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.Fil
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsDeleteIdentifier;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsDuplicator;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsRemover;
+import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsRetentionIndexSelector;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsScanSelector;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
@@ -118,6 +119,11 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		settings.setScanSelectorValue(getScanSelectorValue());
 		//
 		return settings;
+	}
+
+	public static FilterSettingsRetentionIndexSelector getFilterSettingsRetentionIndexSelector() {
+
+		return new FilterSettingsRetentionIndexSelector();
 	}
 
 	/**
