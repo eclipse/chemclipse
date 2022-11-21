@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -23,13 +23,13 @@ public class PreferencePageTimeRanges extends FieldEditorPreferencePage implemen
 
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setTitle("Time Range(s)");
+		setTitle("Time Ranges");
 		setDescription("");
 	}
 
 	public void createFieldEditors() {
 
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_TIME_RANGE_SPINNER_LABEL, "Show the time range label(s)", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_TIME_RANGE_SPINNER_LABEL, "Show the time range labels", getFieldEditorParent()));
 	}
 
 	public void init(IWorkbench workbench) {

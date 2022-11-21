@@ -50,6 +50,12 @@ public class TimeRangesChromatogramUI extends Composite implements IExtendedPart
 		rangesControl.get().setInput(timeRanges);
 	}
 
+	public void setTimeRangeLabels(TimeRangeLabels timeRangeLabels) {
+
+		rangesControl.get().setTimeRangeLabels(timeRangeLabels);
+		chartControl.get().setTimeRangeLabels(timeRangeLabels);
+	}
+
 	public void setUpdateListener(ITimeRangeUpdateListener updateListener) {
 
 		this.updateListener = updateListener;

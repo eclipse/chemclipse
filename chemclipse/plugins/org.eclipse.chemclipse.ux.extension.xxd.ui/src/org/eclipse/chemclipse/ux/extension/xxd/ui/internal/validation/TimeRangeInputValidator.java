@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.eclipse.chemclipse.ux.extension.xxd.ui.ranges.TimeRangeLabels;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.ranges.TimeRangeValidator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IInputValidator;
@@ -22,11 +23,16 @@ public class TimeRangeInputValidator implements IInputValidator {
 
 	private TimeRangeValidator validator = new TimeRangeValidator();
 	private Set<String> identifier = new HashSet<>();
+	private TimeRangeLabels timeRangeLabels = new TimeRangeLabels();
 
-	public TimeRangeInputValidator(Set<String> identifier) {
+	public TimeRangeInputValidator(Set<String> identifier, TimeRangeLabels timeRangeLabels) {
 
 		if(identifier != null) {
 			this.identifier = identifier;
+		}
+		//
+		if(timeRangeLabels != null) {
+			this.timeRangeLabels = timeRangeLabels;
 		}
 	}
 
@@ -37,11 +43,12 @@ public class TimeRangeInputValidator implements IInputValidator {
 		if(status.isOK()) {
 			String name = validator.getIdentifier();
 			if(identifier.contains(name)) {
-				return "The time range already exists.";
+				return timeRangeLabels.getAddExists();
 			}
 		} else {
 			return status.getMessage();
 		}
+		//
 		return null;
 	}
 }

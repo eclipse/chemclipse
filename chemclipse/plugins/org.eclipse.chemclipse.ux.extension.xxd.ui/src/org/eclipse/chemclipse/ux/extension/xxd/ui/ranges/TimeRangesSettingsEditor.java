@@ -58,6 +58,8 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 	private AtomicReference<SearchSupportUI> toolbarSearch = new AtomicReference<>();
 	//
 	private TimeRanges settings = new TimeRanges();
+	private TimeRangeLabels timeRangeLabels = new TimeRangeLabels();
+	//
 	private TimeRangesListUI listUI;
 	//
 	private List<Listener> listeners = new ArrayList<>();
@@ -65,7 +67,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 	private IProcessorPreferences<TimeRanges> preferences = null;
 
-	public TimeRangesSettingsEditor(Composite parent, IProcessorPreferences<TimeRanges> preferences, TimeRanges timeRanges) {
+	public TimeRangesSettingsEditor(Composite parent, IProcessorPreferences<TimeRanges> preferences, TimeRanges timeRanges, TimeRangeLabels timeRangeLabels) {
 
 		/*
 		 * Populate the settings on demand.
@@ -73,6 +75,10 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 		this.preferences = preferences;
 		if(timeRanges != null) {
 			this.settings.load(timeRanges.save());
+		}
+		//
+		if(timeRangeLabels != null) {
+			this.timeRangeLabels = timeRangeLabels;
 		}
 		//
 		control = createControl(parent);
@@ -195,13 +201,13 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Add a new time range.");
+		button.setToolTipText("Add");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
 
-				InputDialog dialog = new InputDialog(e.display.getActiveShell(), "Time Range", "Create a new time range.", "C10 | 10.2 | 10.4 | 10.6", new TimeRangeInputValidator(settings.keySet()));
+				InputDialog dialog = new InputDialog(e.display.getActiveShell(), timeRangeLabels.getTitle(), timeRangeLabels.getCreateMessage(), timeRangeLabels.getCreateInitialValue(), new TimeRangeInputValidator(settings.keySet(), timeRangeLabels));
 				if(IDialogConstants.OK_ID == dialog.open()) {
 					String item = dialog.getValue();
 					TimeRange timeRange = settings.extractTimeRange(item);
@@ -220,7 +226,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Edit the selected time range.");
+		button.setToolTipText("Edit");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -233,7 +239,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 					keySetEdit.addAll(settings.keySet());
 					TimeRange timeRange = (TimeRange)object;
 					keySetEdit.remove(timeRange.getIdentifier());
-					InputDialog dialog = new InputDialog(e.display.getActiveShell(), "Time Range", "Edit the selected time range.", settings.extractTimeRange(timeRange), new TimeRangeInputValidator(keySetEdit));
+					InputDialog dialog = new InputDialog(e.display.getActiveShell(), timeRangeLabels.getTitle(), timeRangeLabels.getEditMessage(), settings.extractTimeRange(timeRange), new TimeRangeInputValidator(keySetEdit, timeRangeLabels));
 					if(IDialogConstants.OK_ID == dialog.open()) {
 						String item = dialog.getValue();
 						TimeRange timeRangeNew = settings.extractTimeRange(item);
@@ -254,13 +260,13 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Remove the selected time range(s).");
+		button.setToolTipText("Remove Selected");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
 
-				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Time Range(s)", "Do you want to delete the selected time range(s)?")) {
+				if(MessageDialog.openQuestion(e.display.getActiveShell(), timeRangeLabels.getTitle(), timeRangeLabels.getDeleteMessage())) {
 					IStructuredSelection structuredSelection = (IStructuredSelection)listUI.getSelection();
 					for(Object object : structuredSelection.toArray()) {
 						if(object instanceof TimeRange) {
@@ -279,13 +285,13 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Remove all time range(s).");
+		button.setToolTipText("Remove All");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
 
-				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Time Range(s)", "Do you want to delete all time range(s)?")) {
+				if(MessageDialog.openQuestion(e.display.getActiveShell(), timeRangeLabels.getTitle(), timeRangeLabels.getClearMessage())) {
 					settings.clear();
 					setTableViewerInput();
 				}
@@ -299,14 +305,14 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Import a time range list.");
+		button.setToolTipText("Import");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
 
 				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
-				fileDialog.setText("Time Range List");
+				fileDialog.setText(timeRangeLabels.getTitle());
 				fileDialog.setFilterExtensions(new String[]{TimeRanges.FILTER_EXTENSION});
 				fileDialog.setFilterNames(new String[]{TimeRanges.FILTER_NAME});
 				fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_TIME_RANGE_TEMPLATE_FOLDER));
@@ -328,7 +334,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Export the time range list.");
+		button.setToolTipText("Export");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXPORT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -336,7 +342,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 
 				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
 				fileDialog.setOverwrite(true);
-				fileDialog.setText("Time Range List");
+				fileDialog.setText(timeRangeLabels.getTitle());
 				fileDialog.setFilterExtensions(new String[]{TimeRanges.FILTER_EXTENSION});
 				fileDialog.setFilterNames(new String[]{TimeRanges.FILTER_NAME});
 				fileDialog.setFileName(TimeRanges.FILE_NAME);
@@ -347,9 +353,9 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 					String path = file.getParentFile().getAbsolutePath();
 					preferenceStore.putValue(PreferenceConstants.P_TIME_RANGE_TEMPLATE_FOLDER, path);
 					if(settings.exportItems(file)) {
-						MessageDialog.openInformation(button.getShell(), "Time Range List", "The time range list has been exported successfully.");
+						MessageDialog.openInformation(button.getShell(), timeRangeLabels.getTitle(), "Exported Successful");
 					} else {
-						MessageDialog.openWarning(button.getShell(), "Time Range List", "Something went wrong to export the time range list.");
+						MessageDialog.openWarning(button.getShell(), timeRangeLabels.getTitle(), "Export Failed");
 					}
 				}
 			}
@@ -362,7 +368,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Save the time ranges list.");
+		button.setToolTipText("Save");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 

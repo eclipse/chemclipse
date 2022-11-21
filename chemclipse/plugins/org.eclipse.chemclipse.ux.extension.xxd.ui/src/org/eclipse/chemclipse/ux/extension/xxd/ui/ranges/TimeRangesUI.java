@@ -63,6 +63,7 @@ public class TimeRangesUI extends Composite implements IExtendedPartUI {
 	 */
 	private TimeRanges timeRanges = null;
 	private TimeRange timeRange = null;
+	private TimeRangeLabels timeRangeLabels = new TimeRangeLabels();
 	//
 	private ITimeRangeUpdateListener updateListener = null;
 
@@ -77,6 +78,11 @@ public class TimeRangesUI extends Composite implements IExtendedPartUI {
 
 		super.update();
 		updateInput();
+	}
+
+	public void setTimeRangeLabels(TimeRangeLabels timeRangeLabels) {
+
+		this.timeRangeLabels = timeRangeLabels;
 	}
 
 	public void setInput(TimeRanges timeRanges) {
@@ -140,7 +146,7 @@ public class TimeRangesUI extends Composite implements IExtendedPartUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Previous time range.");
+		button.setToolTipText("Previous");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_BACKWARD, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -208,7 +214,7 @@ public class TimeRangesUI extends Composite implements IExtendedPartUI {
 		/*
 		 * Select the item.
 		 */
-		combo.setToolTipText("Select a time range.");
+		combo.setToolTipText("Select");
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.widthHint = 150;
 		combo.setLayoutData(gridData);
@@ -235,7 +241,7 @@ public class TimeRangesUI extends Composite implements IExtendedPartUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Next time range.");
+		button.setToolTipText("Next");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_FORWARD, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -298,7 +304,7 @@ public class TimeRangesUI extends Composite implements IExtendedPartUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Add a new time range.");
+		button.setToolTipText("Add");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -306,7 +312,7 @@ public class TimeRangesUI extends Composite implements IExtendedPartUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(timeRanges != null) {
-					InputDialog dialog = new InputDialog(e.display.getActiveShell(), "Time Range", "Create a new time range.", "C10 | 10.2 | 10.4 | 10.6", new TimeRangeInputValidator(timeRanges.keySet()));
+					InputDialog dialog = new InputDialog(e.display.getActiveShell(), timeRangeLabels.getTitle(), timeRangeLabels.getCreateMessage(), timeRangeLabels.getCreateInitialValue(), new TimeRangeInputValidator(timeRanges.keySet(), timeRangeLabels));
 					if(IDialogConstants.OK_ID == dialog.open()) {
 						String item = dialog.getValue();
 						TimeRange timeRangeNew = timeRanges.extractTimeRange(item);
@@ -337,14 +343,14 @@ public class TimeRangesUI extends Composite implements IExtendedPartUI {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Delete the selected time range.");
+		button.setToolTipText("Delete");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				if(MessageDialog.openQuestion(e.display.getActiveShell(), "Time Range", "Would you like to delete the selected time range?")) {
+				if(MessageDialog.openQuestion(e.display.getActiveShell(), timeRangeLabels.getTitle(), timeRangeLabels.getDeleteMessage())) {
 					Object object = comboViewer.getStructuredSelection().getFirstElement();
 					if(object instanceof TimeRange) {
 						timeRanges.remove((TimeRange)object);

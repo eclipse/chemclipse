@@ -60,12 +60,19 @@ public class TimeRangesEditor extends Composite {
 	private String clipStartIdentifier = "";
 	//
 	private TimeRanges timeRanges;
+	private TimeRangeLabels timeRangeLabels = new TimeRangeLabels();
+	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public TimeRangesEditor(Composite parent, int style) {
 
 		super(parent, style);
 		createControl();
+	}
+
+	public void setTimeRangeLabels(TimeRangeLabels timeRangeLabels) {
+
+		this.timeRangeLabels = timeRangeLabels;
 	}
 
 	public void setClipStartIdentifier(String clipStartIdentifier) {
@@ -110,7 +117,7 @@ public class TimeRangesEditor extends Composite {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Import time range(s).");
+		button.setToolTipText("Import");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -141,7 +148,7 @@ public class TimeRangesEditor extends Composite {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Import time range(s) from a *.ocb file.");
+		button.setToolTipText("Import from (*.ocb)");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT_CHROMATOGRAM, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -174,7 +181,7 @@ public class TimeRangesEditor extends Composite {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Export time range(s).");
+		button.setToolTipText("Export");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXPORT, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -195,9 +202,9 @@ public class TimeRangesEditor extends Composite {
 						String path = file.getParentFile().getAbsolutePath();
 						preferenceStore.putValue(PreferenceConstants.P_TIME_RANGE_TEMPLATE_FOLDER, path);
 						if(timeRanges.exportItems(file)) {
-							MessageDialog.openInformation(button.getShell(), TimeRanges.DESCRIPTION, "The time ranges have been exported successfully.");
+							MessageDialog.openInformation(button.getShell(), TimeRanges.DESCRIPTION, "Export Successful");
 						} else {
-							MessageDialog.openWarning(button.getShell(), TimeRanges.DESCRIPTION, "Something went wrong to export the time ranges.");
+							MessageDialog.openWarning(button.getShell(), TimeRanges.DESCRIPTION, "Export Failed");
 						}
 					}
 				}
@@ -210,7 +217,7 @@ public class TimeRangesEditor extends Composite {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Delete all time range(s).");
+		button.setToolTipText("Delete");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -218,7 +225,7 @@ public class TimeRangesEditor extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(timeRanges != null) {
-					if(MessageDialog.openQuestion(e.display.getActiveShell(), "Delete Time Range(s)", "Would you like to delete all time range(s)?")) {
+					if(MessageDialog.openQuestion(e.display.getActiveShell(), timeRangeLabels.getTitle(), timeRangeLabels.getDeleteMessage())) {
 						timeRanges.clear();
 						updateTimeRanges();
 					}
@@ -232,7 +239,7 @@ public class TimeRangesEditor extends Composite {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Reset the time ranges to the default values.");
+		button.setToolTipText("Reset");
 		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -240,7 +247,7 @@ public class TimeRangesEditor extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(timeRanges != null) {
-					if(MessageDialog.openQuestion(e.display.getActiveShell(), "Reset Time Range(s)", "Would you like to reset the time range(s)?")) {
+					if(MessageDialog.openQuestion(e.display.getActiveShell(), timeRangeLabels.getTitle(), timeRangeLabels.getResetMessage())) {
 						for(TimeRange timeRange : timeRanges.values()) {
 							timeRange.update(0, 0, 0);
 						}
@@ -302,8 +309,8 @@ public class TimeRangesEditor extends Composite {
 				if(timeRanges != null) {
 					if(e.keyCode == SWT.DEL) {
 						MessageBox messageBox = new MessageBox(e.display.getActiveShell(), SWT.ICON_QUESTION | SWT.YES | SWT.NO);
-						messageBox.setText("Delete time range(s)");
-						messageBox.setMessage("Would you like to delete the selected time range(s)?");
+						messageBox.setText("Delete");
+						messageBox.setMessage(timeRangeLabels.getDeleteMessage());
 						if(messageBox.open() == SWT.YES) {
 							/*
 							 * Collect

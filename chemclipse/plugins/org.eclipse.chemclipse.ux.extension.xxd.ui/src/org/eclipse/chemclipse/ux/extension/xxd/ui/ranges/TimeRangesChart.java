@@ -41,6 +41,7 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 	private int yStop;
 	//
 	private TimeRanges timeRanges;
+	private TimeRangeLabels timeRangeLabels = new TimeRangeLabels();
 	//
 	private ITimeRangeUpdateListener updateListener;
 
@@ -48,6 +49,11 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 
 		super(parent, style);
 		createControl();
+	}
+
+	public void setTimeRangeLabels(TimeRangeLabels timeRangeLabels) {
+
+		this.timeRangeLabels = timeRangeLabels;
 	}
 
 	public void setUpdateListener(ITimeRangeUpdateListener updateListener) {
@@ -128,17 +134,17 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 			 * Add a new TimeRange
 			 */
 			if(timeRanges != null && !getBaseChart().getSeriesIds().isEmpty()) {
-				InputDialog inputDialog = new InputDialog(event.display.getActiveShell(), "Time Range", "Add a new time range.", "", new IInputValidator() {
+				InputDialog inputDialog = new InputDialog(event.display.getActiveShell(), timeRangeLabels.getTitle(), timeRangeLabels.getAddMessage(), timeRangeLabels.getAddInitialValue(), new IInputValidator() {
 
 					@Override
 					public String isValid(String newText) {
 
 						if(newText == null || newText.isEmpty() || newText.isBlank()) {
-							return "Please define a new time range ID.";
+							return timeRangeLabels.getAddError();
 						} else {
 							for(TimeRange timeRangeX : timeRanges.values()) {
 								if(timeRangeX.getIdentifier().equals(newText)) {
-									return "The time range ID exists already.";
+									return timeRangeLabels.getAddExists();
 								}
 							}
 						}
