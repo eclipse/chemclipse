@@ -30,16 +30,15 @@ public class ListContentProvider implements IStructuredContentProvider {
 	@Override
 	public Object[] getElements(Object inputElement) {
 
-		if(inputElement instanceof List) {
-			return ((List<?>)inputElement).toArray();
-		} else if(inputElement instanceof Set) {
-			return ((Set<?>)inputElement).toArray();
-		} else if(inputElement instanceof Collection) {
-			return ((Collection<?>)inputElement).toArray();
-		} else if(inputElement instanceof Map) {
-			return ((Map<?, ?>)inputElement).entrySet().toArray();
-		} else if(inputElement instanceof Iterable<?>) {
-			Iterable<?> iterable = (Iterable<?>)inputElement;
+		if(inputElement instanceof List<?> list) {
+			return list.toArray();
+		} else if(inputElement instanceof Set<?> set) {
+			return set.toArray();
+		} else if(inputElement instanceof Collection<?> collection) {
+			return collection.toArray();
+		} else if(inputElement instanceof Map<?, ?> map) {
+			return map.entrySet().toArray();
+		} else if(inputElement instanceof Iterable<?> iterable) {
 			List<Object> list = new ArrayList<>();
 			iterable.forEach(list::add);
 			return list.toArray();
