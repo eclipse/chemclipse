@@ -54,20 +54,8 @@
 			</dependency>
 		</dependencies>
 	</location>
-	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" label="org.apache.pdfbox" missingManifest="generate" type="Maven">
 		<dependencies>
-			<dependency>
-				<groupId>org.apache.pdfbox</groupId>
-				<artifactId>xmpbox</artifactId>
-				<version>2.0.26</version>
-				<type>jar</type>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.pdfbox</groupId>
-				<artifactId>preflight</artifactId>
-				<version>2.0.26</version>
-				<type>jar</type>
-			</dependency>
 			<dependency>
 				<groupId>org.apache.pdfbox</groupId>
 				<artifactId>fontbox</artifactId>
@@ -80,9 +68,21 @@
 				<version>2.0.26</version>
 				<type>jar</type>
 			</dependency>
+			<dependency>
+				<groupId>org.apache.pdfbox</groupId>
+				<artifactId>preflight</artifactId>
+				<version>2.0.26</version>
+				<type>jar</type>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.pdfbox</groupId>
+				<artifactId>xmpbox</artifactId>
+				<version>2.0.26</version>
+				<type>jar</type>
+			</dependency>
 		</dependencies>
 	</location>
-	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" missingManifest="generate" type="Maven">
+	<location includeDependencyDepth="none" includeDependencyScopes="compile" includeSource="true" label="org.ejml" missingManifest="generate" type="Maven">
 		<dependencies>
 			<dependency>
 				<groupId>org.ejml</groupId>
@@ -98,25 +98,25 @@
 			</dependency>
 			<dependency>
 				<groupId>org.ejml</groupId>
-				<artifactId>ejml-fdense</artifactId>
-				<version>0.41</version>
-				<type>jar</type>
-			</dependency>
-			<dependency>
-				<groupId>org.ejml</groupId>
 				<artifactId>ejml-experimental</artifactId>
 				<version>0.41</version>
 				<type>jar</type>
 			</dependency>
 			<dependency>
 				<groupId>org.ejml</groupId>
-				<artifactId>ejml-simple</artifactId>
+				<artifactId>ejml-fdense</artifactId>
 				<version>0.41</version>
 				<type>jar</type>
 			</dependency>
 			<dependency>
 				<groupId>org.ejml</groupId>
 				<artifactId>ejml-fdense</artifactId>
+				<version>0.41</version>
+				<type>jar</type>
+			</dependency>
+			<dependency>
+				<groupId>org.ejml</groupId>
+				<artifactId>ejml-simple</artifactId>
 				<version>0.41</version>
 				<type>jar</type>
 			</dependency>
@@ -132,7 +132,7 @@
 			</dependency>
 		</dependencies>
 	</location>
-	<location includeDependencyDepth="direct" includeDependencyScopes="compile,runtime" includeSource="true" missingManifest="generate" type="Maven">
+	<location includeDependencyDepth="direct" includeDependencyScopes="compile,runtime" includeSource="true" label="xml.bind" missingManifest="generate" type="Maven">
 		<dependencies>
 			<dependency>
 				<groupId>com.sun.xml.bind</groupId>
