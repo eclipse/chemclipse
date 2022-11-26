@@ -16,7 +16,6 @@ import org.eclipse.chemclipse.model.ranges.TimeRanges;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.custom.ChromatogramPeakChart;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.BaselineSelectionPaintListener;
 import org.eclipse.jface.dialogs.IInputValidator;
-import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Cursor;
@@ -134,13 +133,15 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 			 * Add a new TimeRange
 			 */
 			if(timeRanges != null && !getBaseChart().getSeriesIds().isEmpty()) {
-				InputDialog inputDialog = new InputDialog(event.display.getActiveShell(), timeRangeLabels.getTitle(), timeRangeLabels.getAddMessage(), timeRangeLabels.getAddInitialValue(), new IInputValidator() {
+				TimeRangeDialog timeRangeDialog = new TimeRangeDialog(event.display.getActiveShell(), timeRangeLabels, new IInputValidator() {
 
 					@Override
 					public String isValid(String newText) {
 
 						if(newText == null || newText.isEmpty() || newText.isBlank()) {
 							return timeRangeLabels.getAddError();
+						} else if(newText.contains(TimeRangeLabels.DELIMITER)) {
+							return timeRangeLabels.getErrorDelimiter();
 						} else {
 							for(TimeRange timeRangeX : timeRanges.values()) {
 								if(timeRangeX.getIdentifier().equals(newText)) {
@@ -154,8 +155,8 @@ public class TimeRangesChart extends ChromatogramPeakChart {
 				/*
 				 * Add a new time range.
 				 */
-				if(inputDialog.open() == Window.OK) {
-					String identifier = inputDialog.getValue().trim();
+				if(timeRangeDialog.open() == Window.OK) {
+					String identifier = timeRangeDialog.getIdentifier();
 					TimeRange timeRangeAdd = new TimeRange(identifier, 0, 0);
 					timeRanges.add(timeRangeAdd);
 					updateTimeRange(timeRangeAdd);

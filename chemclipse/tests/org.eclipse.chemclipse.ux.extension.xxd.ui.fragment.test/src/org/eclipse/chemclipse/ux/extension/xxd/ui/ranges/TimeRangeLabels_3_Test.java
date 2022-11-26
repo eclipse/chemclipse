@@ -79,4 +79,19 @@ public class TimeRangeLabels_3_Test extends TestCase {
 
 		assertEquals("Would you like to delete the all Some Ranges?", timeRangeLabels.getClearMessage());
 	}
+
+	public void test11() {
+
+		assertEquals("The Some Range must not contain the following delimiter '|'.", timeRangeLabels.getErrorDelimiter());
+	}
+
+	public void test12() {
+
+		assertEquals(1, timeRangeLabels.getProposals().length);
+	}
+
+	public void test13() {
+
+		assertEquals("TestValue", timeRangeLabels.getProposals()[0]);
+	}
 }

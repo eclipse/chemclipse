@@ -79,4 +79,29 @@ public class TimeRangeLabels_1_Test extends TestCase {
 
 		assertEquals("Would you like to delete the all Time Ranges?", timeRangeLabels.getClearMessage());
 	}
+
+	public void test11() {
+
+		assertEquals("The Time Range must not contain the following delimiter '|'.", timeRangeLabels.getErrorDelimiter());
+	}
+
+	public void test12() {
+
+		assertEquals(3, timeRangeLabels.getProposals().length);
+	}
+
+	public void test13() {
+
+		assertEquals("C10", timeRangeLabels.getProposals()[0]);
+	}
+
+	public void test14() {
+
+		assertEquals("C11", timeRangeLabels.getProposals()[1]);
+	}
+
+	public void test15() {
+
+		assertEquals("C12", timeRangeLabels.getProposals()[2]);
+	}
 }

@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.ranges;
 
 import junit.framework.TestCase;
 
-public class TimeRangeLabels_2_Test extends TestCase {
+public class TimeRangeLabels_4_Test extends TestCase {
 
 	private TimeRangeLabels timeRangeLabels;
 
@@ -21,7 +21,7 @@ public class TimeRangeLabels_2_Test extends TestCase {
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		timeRangeLabels = new TimeRangeLabels("Alkane", "C20");
+		timeRangeLabels = new TimeRangeLabels("Alkane", "C20", new String[]{"C10", "C20", "C30"});
 	}
 
 	@Override
@@ -87,11 +87,21 @@ public class TimeRangeLabels_2_Test extends TestCase {
 
 	public void test12() {
 
-		assertEquals(1, timeRangeLabels.getProposals().length);
+		assertEquals(3, timeRangeLabels.getProposals().length);
 	}
 
 	public void test13() {
 
-		assertEquals("C20", timeRangeLabels.getProposals()[0]);
+		assertEquals("C10", timeRangeLabels.getProposals()[0]);
+	}
+
+	public void test14() {
+
+		assertEquals("C20", timeRangeLabels.getProposals()[1]);
+	}
+
+	public void test15() {
+
+		assertEquals("C30", timeRangeLabels.getProposals()[2]);
 	}
 }
