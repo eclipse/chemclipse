@@ -13,8 +13,8 @@ package org.eclipse.chemclipse.support.events;
 
 /**
  * This interface contains the perspective and view
- * ids stored in the fragment.e4xmi file.
- * It neccessary to keep both ids in sync.
+ * IDs stored in the fragment.e4xmi file.
+ * It necessary to keep both IDs in sync.
  */
 public interface IPerspectiveAndViewIds {
 
@@ -35,6 +35,6 @@ public interface IPerspectiveAndViewIds {
 	/*
 	 * Parts
 	 */
-	String VIEW_PROCESSING_INFO = "org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart";
+	String VIEW_FEEDBACK = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.processinginfo";
 	String VIEW_CONSOLE = "org.eclipse.ui.console.ConsoleView";
 }

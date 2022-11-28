@@ -17,20 +17,16 @@ import org.eclipse.chemclipse.processing.core.IMessageProvider;
 import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.ui.Activator;
-import org.eclipse.chemclipse.processing.ui.parts.ProcessingInfoPart;
+import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.e4.core.di.annotations.Creatable;
 import org.eclipse.e4.ui.di.UISynchronize;
-import org.eclipse.e4.ui.model.application.MApplication;
-import org.eclipse.e4.ui.model.application.ui.MUIElement;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.e4.ui.workbench.modeling.EModelService;
-import org.eclipse.e4.ui.workbench.modeling.EPartService;
-import org.eclipse.e4.ui.workbench.modeling.EPartService.PartState;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 
 @Creatable
 public class ProcessingInfoPartSupport {
@@ -112,30 +108,9 @@ public class ProcessingInfoPartSupport {
 						 */
 						if(focusProcessingInfoPart) {
 							try {
-								EModelService modelService = Activator.getDefault().getModelService();
-								MApplication application = Activator.getDefault().getApplication();
-								EPartService partService = Activator.getDefault().getPartService();
-								//
-								if(modelService != null && application != null && partService != null) {
-									MUIElement element = modelService.find(ProcessingInfoPart.ID, application);
-									if(element instanceof MPart) {
-										MPart part = (MPart)element;
-										/*
-										 * Prevent the error by using asyncExcec
-										 * "Application does not have an active window"
-										 */
-										Display.getDefault().asyncExec(new Runnable() {
-
-											@Override
-											public void run() {
-
-												partService.showPart(part, PartState.ACTIVATE);
-											}
-										});
-									}
-								}
-							} catch(RuntimeException e) {
-								logErrorMessage(ProcessingInfoPartSupport.class.getName(), "Failed to focus on part.", e);
+								PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(IPerspectiveAndViewIds.VIEW_FEEDBACK);
+							} catch(PartInitException e) {
+								logger.warn(e);
 							}
 						}
 					}
