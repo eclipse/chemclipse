@@ -15,6 +15,8 @@ import java.util.Objects;
 
 public abstract class AbstractSeparationColumn implements ISeparationColumn {
 
+	private static final long serialVersionUID = -49804898484216859L;
+	//
 	private String name = "";
 	private SeparationColumnType separationColumnType = SeparationColumnType.DEFAULT;
 	private SeparationColumnPackaging separationColumnPackaging = SeparationColumnPackaging.CAPILLARY;

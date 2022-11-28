@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.columns;
 
-public interface ISeparationColumn {
+import java.io.Serializable;
+
+public interface ISeparationColumn extends Serializable {
 
 	void copyFrom(ISeparationColumn separationColumn);
 

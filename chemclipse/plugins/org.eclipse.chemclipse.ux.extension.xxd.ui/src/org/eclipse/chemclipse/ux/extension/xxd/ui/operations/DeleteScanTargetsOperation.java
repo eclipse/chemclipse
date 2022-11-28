@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Matthias Mailänder - initial API and implementation
+ * Philip Wenig - renamed to make the purpose more clear
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.operations;
 
@@ -28,14 +29,14 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.swt.widgets.Display;
 
 @SuppressWarnings("rawtypes")
-public class DeleteScansOperation extends AbstractOperation {
+public class DeleteScanTargetsOperation extends AbstractOperation {
 
 	private IChromatogramSelection<?, ?> chromatogramSelection;
 	private Display display;
 	private List<IScan> scansToClear;
 	private List<IScan> backupScans;
 
-	public DeleteScansOperation(Display display, IChromatogramSelection chromatogramSelection, List<IScan> scansToClear) {
+	public DeleteScanTargetsOperation(Display display, IChromatogramSelection chromatogramSelection, List<IScan> scansToClear) {
 
 		super("Delete Scans");
 		this.display = display;
@@ -78,18 +79,18 @@ public class DeleteScansOperation extends AbstractOperation {
 	private void update() {
 
 		if(chromatogramSelection != null) {
-			chromatogramSelection.setSelectedPeak(null);
+			chromatogramSelection.setSelectedIdentifiedScan(null);
 			chromatogramSelection.update(true);
 			//
 			UpdateNotifierUI.update(display, chromatogramSelection);
 		}
-		UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION, "Peaks were deleted.");
+		UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_IDENTIFICATION_TARGETS_UPDATE_SELECTION, "Scan Targets were deleted.");
 	}
 
 	@Override
 	public String getLabel() {
 
-		return "Delete Scans";
+		return "Delete Scan Targets";
 	}
 
 	@Override

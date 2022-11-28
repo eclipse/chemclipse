@@ -63,7 +63,7 @@ import org.eclipse.chemclipse.ux.extension.xxd.ui.dialogs.InternalStandardDialog
 import org.eclipse.chemclipse.ux.extension.xxd.ui.help.HelpContext;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.support.TableConfigSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.operations.DeletePeaksOperation;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.operations.DeleteScansOperation;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.operations.DeleteScanTargetsOperation;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.DataUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageLists;
@@ -510,40 +510,44 @@ public class ExtendedPeakScanListUI extends Composite implements IExtendedPartUI
 			 * Selected Items.
 			 */
 			Iterator iterator = tableViewer.get().getStructuredSelection().iterator();
-			List<IScan> scansToClear = new ArrayList<>();
+			List<IScan> scanTargetsToClear = new ArrayList<>();
 			List<IPeak> peaksToDelete = new ArrayList<>();
 			/*
 			 * Collect
 			 */
 			while(iterator.hasNext()) {
 				Object object = iterator.next();
-				if(object instanceof IPeak) {
-					peaksToDelete.add((IPeak)object);
-				} else if(object instanceof IScan) {
-					scansToClear.add((IScan)object);
+				if(object instanceof IPeak peak) {
+					peaksToDelete.add(peak);
+				} else if(object instanceof IScan scan) {
+					scanTargetsToClear.add(scan);
 				}
 			}
 			/*
-			 * Clear scan(s) / peaks
+			 * Clear scans
 			 */
-			if(!scansToClear.isEmpty()) {
-				DeleteScansOperation deleteScans = new DeleteScansOperation(display, chromatogramSelection, scansToClear);
-				deleteScans.addContext(UndoContextFactory.getUndoContext());
+			if(!scanTargetsToClear.isEmpty()) {
+				DeleteScanTargetsOperation deleteScanTargetsOperation = new DeleteScanTargetsOperation(display, chromatogramSelection, scanTargetsToClear);
+				deleteScanTargetsOperation.addContext(UndoContextFactory.getUndoContext());
 				try {
-					getOperationHistory().execute(deleteScans, null, null);
+					getOperationHistory().execute(deleteScanTargetsOperation, null, null);
 				} catch(ExecutionException e) {
 					logger.warn(e);
 				}
 			}
+			/*
+			 * Clear peaks
+			 */
 			if(!peaksToDelete.isEmpty()) {
-				DeletePeaksOperation deletePeaks = new DeletePeaksOperation(display, chromatogramSelection, peaksToDelete);
-				deletePeaks.addContext(UndoContextFactory.getUndoContext());
+				DeletePeaksOperation deletePeaksOperation = new DeletePeaksOperation(display, chromatogramSelection, peaksToDelete);
+				deletePeaksOperation.addContext(UndoContextFactory.getUndoContext());
 				try {
-					getOperationHistory().execute(deletePeaks, null, null);
+					getOperationHistory().execute(deletePeaksOperation, null, null);
 				} catch(ExecutionException e) {
 					logger.warn(e);
 				}
 			}
+			//
 			updateChromatogramSelection();
 		}
 	}

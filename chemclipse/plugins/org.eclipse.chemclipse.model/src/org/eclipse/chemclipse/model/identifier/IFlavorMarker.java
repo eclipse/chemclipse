@@ -11,9 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
+import java.io.Serializable;
 import java.util.Set;
 
-public interface IFlavorMarker {
+public interface IFlavorMarker extends Serializable {
 
 	void clear();
 

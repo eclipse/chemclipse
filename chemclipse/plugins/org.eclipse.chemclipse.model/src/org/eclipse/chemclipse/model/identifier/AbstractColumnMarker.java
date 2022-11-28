@@ -15,6 +15,8 @@ import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 
 public abstract class AbstractColumnMarker implements IColumnMarker {
 
+	private static final long serialVersionUID = 8169933704424369728L;
+	//
 	private ISeparationColumn separationColumn;
 
 	public AbstractColumnMarker(ISeparationColumn separationColumn) {

@@ -11,9 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
+import java.io.Serializable;
+
 import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 
-public interface IColumnMarker {
+public interface IColumnMarker extends Serializable {
 
 	ISeparationColumn getSeparationColumn();
 

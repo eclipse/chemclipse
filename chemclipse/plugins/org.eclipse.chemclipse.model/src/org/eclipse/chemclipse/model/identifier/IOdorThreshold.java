@@ -11,7 +11,9 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.identifier;
 
-public interface IOdorThreshold {
+import java.io.Serializable;
+
+public interface IOdorThreshold extends Serializable {
 
 	String getContent();
 

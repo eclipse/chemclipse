@@ -15,6 +15,8 @@ import java.util.Objects;
 
 public class OdorThreshold implements IOdorThreshold {
 
+	private static final long serialVersionUID = -426496543275664637L;
+	//
 	private String content = "";
 	private String unit = "";
 

@@ -18,6 +18,8 @@ import java.util.Set;
 
 public class FlavorMarker implements IFlavorMarker {
 
+	private static final long serialVersionUID = -2057882168172746294L;
+	//
 	private boolean manuallyVerified = false;
 	private String odor = "";
 	private String matrix = "";
