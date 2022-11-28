@@ -17,15 +17,14 @@ package org.eclipse.chemclipse.processing.ui.parts;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 
-import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.IMessageProvider;
+import org.eclipse.chemclipse.processing.core.IProcessingMessage;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoUpdateNotifier;
 import org.eclipse.chemclipse.processing.ui.swt.ProcessingInfoUI;
 import org.eclipse.chemclipse.progress.core.InfoType;
 import org.eclipse.chemclipse.progress.core.StatusLineLogger;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
-import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.e4.core.di.annotations.Optional;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.UIEventTopic;
@@ -44,8 +43,6 @@ import org.eclipse.swt.widgets.Menu;
 
 public class ProcessingInfoPart {
 
-	public static String ID = IPerspectiveAndViewIds.VIEW_PROCESSING_INFO;
-	//
 	private static final String POPUP_MENU_ID = "#PopUpMenu"; // $NON-NLS-1$
 	private static final String POPUP_MENU_POSTFIX = "PopUpMenu"; // $NON-NLS-1$
 	//

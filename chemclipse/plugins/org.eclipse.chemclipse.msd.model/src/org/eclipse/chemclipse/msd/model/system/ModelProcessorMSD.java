@@ -46,8 +46,7 @@ public class ModelProcessorMSD extends AbstractSystemProcessSettings {
 		@Override
 		public void executeUserSettings(ISystemProcessSettings settings, ProcessExecutionContext context) throws Exception {
 
-			if(settings instanceof ModelSettingsMSD) {
-				ModelSettingsMSD processSettings = (ModelSettingsMSD)settings;
+			if(settings instanceof ModelSettingsMSD processSettings) {
 				PreferenceSupplier.setUseNominalMZ(processSettings.isUseNominalMZ());
 				PreferenceSupplier.setUseNormalizedScan(processSettings.isUseNormalizedScan());
 				PreferenceSupplier.setCalculationType(processSettings.getCalculationType());

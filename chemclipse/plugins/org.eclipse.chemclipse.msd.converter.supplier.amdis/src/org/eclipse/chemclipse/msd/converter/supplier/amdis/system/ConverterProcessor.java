@@ -47,8 +47,7 @@ public class ConverterProcessor extends AbstractSystemProcessSettings {
 		@Override
 		public void executeUserSettings(ISystemProcessSettings settings, ProcessExecutionContext context) throws Exception {
 
-			if(settings instanceof ConverterSettings) {
-				ConverterSettings processSettings = (ConverterSettings)settings;
+			if(settings instanceof ConverterSettings processSettings) {
 				PreferenceSupplier.setCharsetImportMSL(processSettings.getCharsetImportMSL());
 				PreferenceSupplier.setCharsetImportMSP(processSettings.getCharsetImportMSP());
 				PreferenceSupplier.setCharsetImportFIN(processSettings.getCharsetImportFIN());

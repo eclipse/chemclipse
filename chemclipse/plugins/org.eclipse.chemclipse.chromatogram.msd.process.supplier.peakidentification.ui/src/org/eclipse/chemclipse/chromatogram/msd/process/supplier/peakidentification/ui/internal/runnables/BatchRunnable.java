@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2021 Lablicate GmbH.
+ * Copyright (c) 2011, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -35,9 +35,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 public class BatchRunnable implements IRunnableWithProgress {
 
 	private static final Logger logger = Logger.getLogger(BatchRunnable.class);
-	private File file;
 	private String filePath;
-	private PeakIdentificationBatchJobReader reader;
 
 	public BatchRunnable(String filePath) {
 
@@ -47,24 +45,14 @@ public class BatchRunnable implements IRunnableWithProgress {
 	@Override
 	public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-		reader = new PeakIdentificationBatchJobReader();
-		file = new File(filePath);
+		PeakIdentificationBatchJobReader reader = new PeakIdentificationBatchJobReader();
+		File file = new File(filePath);
 		try {
 			monitor.beginTask("Peak Identification Batch Process", IProgressMonitor.UNKNOWN);
 			IPeakIdentificationBatchJob peakIdentificationBatchJob = reader.read(file, monitor);
 			PeakIdentificationBatchProcess batchProcess = new PeakIdentificationBatchProcess();
 			final IProcessingInfo<IPeakIdentificationBatchProcessReport> processingInfo = batchProcess.execute(peakIdentificationBatchJob, monitor);
-			try {
-				final IPeakIdentificationBatchProcessReport report = processingInfo.getProcessingResult();
-				ProcessingInfoPartSupport.getInstance().update(processingInfo, false);
-				/*
-				 * Update the peak results page
-				 */
-				SelectionUpdateListener selectionUpdateListener = new ResultsPage.SelectionUpdateListener();
-				selectionUpdateListener.update(report.getPeaks(), true);
-			} catch(TypeCastException e) {
-				logger.warn(e);
-			}
+			process(processingInfo);
 		} catch(FileNotFoundException e) {
 			logger.warn(e);
 		} catch(FileIsNotReadableException e) {
@@ -72,6 +60,21 @@ public class BatchRunnable implements IRunnableWithProgress {
 		} catch(FileIsEmptyException e) {
 			logger.warn(e);
 		} catch(IOException e) {
+			logger.warn(e);
+		}
+	}
+
+	private void process(IProcessingInfo<IPeakIdentificationBatchProcessReport> processingInfo) {
+
+		try {
+			final IPeakIdentificationBatchProcessReport report = processingInfo.getProcessingResult();
+			ProcessingInfoPartSupport.getInstance().update(processingInfo, false);
+			/*
+			 * Update the peak results page
+			 */
+			SelectionUpdateListener selectionUpdateListener = new ResultsPage.SelectionUpdateListener();
+			selectionUpdateListener.update(report.getPeaks(), true);
+		} catch(TypeCastException e) {
 			logger.warn(e);
 		}
 	}

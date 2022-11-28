@@ -46,8 +46,7 @@ public class ConverterProcessor extends AbstractSystemProcessSettings {
 		@Override
 		public void executeUserSettings(ISystemProcessSettings settings, ProcessExecutionContext context) throws Exception {
 
-			if(settings instanceof ConverterSettings) {
-				ConverterSettings processSettings = (ConverterSettings)settings;
+			if(settings instanceof ConverterSettings processSettings) {
 				PreferenceSupplier.setImportDelimiter(processSettings.getImportDelimiter());
 				PreferenceSupplier.setImportZeroMarker(processSettings.getImportZeroMarker());
 				PreferenceSupplier.setExportUseTic(processSettings.isExportUseTic());
