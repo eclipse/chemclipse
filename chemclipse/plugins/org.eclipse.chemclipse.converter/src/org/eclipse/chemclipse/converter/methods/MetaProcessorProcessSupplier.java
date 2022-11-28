@@ -18,11 +18,11 @@ import org.eclipse.chemclipse.processing.methods.IProcessEntry;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.processing.supplier.AbstractProcessSupplier;
-import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessExecutionConsumer;
-import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.processing.supplier.IProcessExecutor;
+import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 
 public final class MetaProcessorProcessSupplier extends AbstractProcessSupplier<MetaProcessorSettings> implements IProcessExecutor {
 
@@ -49,8 +49,7 @@ public final class MetaProcessorProcessSupplier extends AbstractProcessSupplier<
 	public <X> void execute(IProcessorPreferences<X> preferences, ProcessExecutionContext context) throws Exception {
 
 		X settings = preferences.getSettings();
-		if(settings instanceof MetaProcessorSettings) {
-			MetaProcessorSettings processorSettings = (MetaProcessorSettings)settings;
+		if(settings instanceof MetaProcessorSettings processorSettings) {
 			IProcessExecutionConsumer<?> callerDelegate = context.getContextObject(IProcessExecutionConsumer.class);
 			if(callerDelegate != null) {
 				ProcessEntryContainer.applyProcessEntries(processMethod, context, new BiFunction<IProcessEntry, IProcessSupplier<X>, IProcessorPreferences<X>>() {

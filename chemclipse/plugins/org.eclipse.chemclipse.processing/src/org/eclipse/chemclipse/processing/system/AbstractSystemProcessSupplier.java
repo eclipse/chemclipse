@@ -13,10 +13,10 @@ package org.eclipse.chemclipse.processing.system;
 
 import org.eclipse.chemclipse.processing.DataCategory;
 import org.eclipse.chemclipse.processing.supplier.AbstractProcessSupplier;
-import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
-import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 import org.eclipse.chemclipse.processing.supplier.IProcessExecutor;
+import org.eclipse.chemclipse.processing.supplier.IProcessTypeSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
+import org.eclipse.chemclipse.processing.supplier.ProcessExecutionContext;
 
 public abstract class AbstractSystemProcessSupplier<S extends ISystemProcessSettings> extends AbstractProcessSupplier<S> implements IProcessExecutor, SystemExecutor {
 
@@ -35,8 +35,8 @@ public abstract class AbstractSystemProcessSupplier<S extends ISystemProcessSett
 
 		if(!preferences.isUseSystemDefaults()) {
 			X settings = preferences.getUserSettings();
-			if(settings instanceof ISystemProcessSettings) {
-				executeUserSettings((ISystemProcessSettings)settings, context);
+			if(settings instanceof ISystemProcessSettings processSettings) {
+				executeUserSettings(processSettings, context);
 			}
 		}
 	}

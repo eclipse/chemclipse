@@ -37,8 +37,7 @@ public class Report2 extends AbstractReport {
 		IProcessingInfo<File> processingInfo = super.validate(file);
 		//
 		if(!processingInfo.hasErrorMessages()) {
-			if(settings instanceof ReportSettings2) {
-				ReportSettings2 reportSettings = (ReportSettings2)settings;
+			if(settings instanceof ReportSettings2 reportSettings) {
 				ReportWriter2 chromatogramReport = new ReportWriter2();
 				try {
 					chromatogramReport.generate(file, append, chromatograms, reportSettings, monitor);

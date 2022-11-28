@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -45,8 +45,7 @@ public class FilterRetentionIndexQC extends AbstractSystemProcessSettings {
 		@Override
 		public void executeUserSettings(ISystemProcessSettings settings, ProcessExecutionContext context) throws Exception {
 
-			if(settings instanceof SettingsRetentionIndexQC) {
-				SettingsRetentionIndexQC processSettings = (SettingsRetentionIndexQC)settings;
+			if(settings instanceof SettingsRetentionIndexQC processSettings) {
 				org.eclipse.chemclipse.model.preferences.PreferenceSupplier.setUseRetentionIndexQC(processSettings.isUseRetentionIndexQC());
 			}
 		}
