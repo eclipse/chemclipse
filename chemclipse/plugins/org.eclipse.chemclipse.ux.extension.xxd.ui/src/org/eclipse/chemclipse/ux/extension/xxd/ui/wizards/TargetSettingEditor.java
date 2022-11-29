@@ -19,6 +19,7 @@ import org.eclipse.chemclipse.model.targets.ITargetReference;
 import org.eclipse.chemclipse.model.targets.LibraryField;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -179,8 +180,13 @@ public class TargetSettingEditor {
 				fireUpdate();
 			}
 		});
-		//
+		/*
+		 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=567652
+		 */
 		Combo combo = comboViewer.getCombo();
+		if(OperatingSystemUtils.isLinux()) {
+			combo.setBackground(combo.getBackground());
+		}
 		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		return comboViewer;
@@ -201,6 +207,13 @@ public class TargetSettingEditor {
 				fireUpdate();
 			}
 		});
+		/*
+		 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=567652
+		 */
+		Combo combo = comboViewer.getCombo();
+		if(OperatingSystemUtils.isLinux()) {
+			combo.setBackground(combo.getBackground());
+		}
 		//
 		return comboViewer;
 	}
