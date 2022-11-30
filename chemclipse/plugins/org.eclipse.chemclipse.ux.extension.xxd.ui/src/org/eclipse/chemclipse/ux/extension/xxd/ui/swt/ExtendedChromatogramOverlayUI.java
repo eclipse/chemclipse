@@ -155,19 +155,17 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 	public void update(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		if(chromatogramSelection != null) {
-			if(!preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_LOCK_ZOOM)) {
-				if(preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_FOCUS_SELECTION)) {
-					ChromatogramChart chromatogramChart = chartControl.get();
-					IAxisSet axisSet = chromatogramChart.getBaseChart().getAxisSet();
-					Range xrange = axisSet.getXAxis(BaseChart.ID_PRIMARY_X_AXIS).getRange();
-					Range yrange = axisSet.getYAxis(BaseChart.ID_PRIMARY_Y_AXIS).getRange();
-					xrange.lower = chromatogramSelection.getStartRetentionTime();
-					xrange.upper = chromatogramSelection.getStopRetentionTime();
-					yrange.lower = chromatogramSelection.getStartAbundance();
-					yrange.upper = chromatogramSelection.getStopAbundance();
-					chromatogramChart.setRange(IExtendedChart.X_AXIS, xrange);
-					chromatogramChart.setRange(IExtendedChart.Y_AXIS, yrange);
-				}
+			if(preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_FOCUS_SELECTION)) {
+				ChromatogramChart chromatogramChart = chartControl.get();
+				IAxisSet axisSet = chromatogramChart.getBaseChart().getAxisSet();
+				Range xrange = axisSet.getXAxis(BaseChart.ID_PRIMARY_X_AXIS).getRange();
+				Range yrange = axisSet.getYAxis(BaseChart.ID_PRIMARY_Y_AXIS).getRange();
+				xrange.lower = chromatogramSelection.getStartRetentionTime();
+				xrange.upper = chromatogramSelection.getStopRetentionTime();
+				yrange.lower = chromatogramSelection.getStartAbundance();
+				yrange.upper = chromatogramSelection.getStopAbundance();
+				chromatogramChart.setRange(IExtendedChart.X_AXIS, xrange);
+				chromatogramChart.setRange(IExtendedChart.Y_AXIS, yrange);
 			}
 		}
 	}
