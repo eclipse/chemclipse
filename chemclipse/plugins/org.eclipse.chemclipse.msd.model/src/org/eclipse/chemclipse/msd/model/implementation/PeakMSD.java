@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,14 +18,17 @@ import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 public class PeakMSD extends AbstractPeakMSD implements IPeakMSD {
 
 	public PeakMSD(IPeakModelMSD peakModel, String modelDescription) throws IllegalArgumentException {
+
 		super(peakModel, modelDescription);
 	}
 
 	public PeakMSD(IPeakModelMSD peakModel) throws IllegalArgumentException {
+
 		super(peakModel);
 	}
 
 	public PeakMSD(IPeakMSD template) {
+
 		this(template.getPeakModel());
 		setActiveForAnalysis(template.isActiveForAnalysis());
 		setDetectorDescription(template.getDetectorDescription());

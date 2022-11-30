@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,12 +19,15 @@ import org.eclipse.chemclipse.model.exceptions.PeakException;
 
 public class PeakModelCSD extends AbstractPeakModelCSD implements IPeakModelCSD {
 
-	/**
-	 * Renew the UUID on change.
-	 */
 	private static final long serialVersionUID = 9110628073033467778L;
 
+	public PeakModelCSD(IScan peakMaximum, IPeakIntensityValues peakIntensityValues) throws IllegalArgumentException, PeakException {
+
+		this(peakMaximum, peakIntensityValues, 0.0f, 0.0f);
+	}
+
 	public PeakModelCSD(IScan peakMaximum, IPeakIntensityValues peakIntensityValues, float startBackgroundAbundance, float stopBackgroundAbundance) throws IllegalArgumentException, PeakException {
+
 		super(peakMaximum, peakIntensityValues, startBackgroundAbundance, stopBackgroundAbundance);
 	}
 }
