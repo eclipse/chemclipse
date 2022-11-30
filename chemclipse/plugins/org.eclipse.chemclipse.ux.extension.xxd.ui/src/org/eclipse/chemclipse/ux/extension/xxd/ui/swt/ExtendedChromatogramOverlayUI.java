@@ -113,11 +113,17 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 	private static final String TOOLTIP_SHIFT = "the shift toolbar.";
 	private static final String IMAGE_RULER = IApplicationImage.IMAGE_RULER;
 	private static final String TOOLTIP_RULER = "the ruler toolbar.";
+	private static final String IMAGE_ZOOM_LOCKED = IApplicationImage.IMAGE_ZOOM_LOCKED;
+	private static final String TOOLTIP_ZOOM_LOCKED = "the zoom lock functionality.";
+	private static final String IMAGE_FOCUS_SELECTION = IApplicationImage.IMAGE_CHROMATOGRAM_SELECTION;
+	private static final String TOOLTIP_FOCUS_SELECTION = "the focus chromatogram selection functionality.";
 	//
 	private static final String MPC_LABEL = "Max Plot";
 	//
 	// The traces toolbar is controlled by the combo overlay type.
 	//
+	private AtomicReference<Button> buttonLockControl = new AtomicReference<>();
+	private AtomicReference<Button> buttonFocusControl = new AtomicReference<>();
 	private AtomicReference<NamedTracesUI> toolbarNamedTraces = new AtomicReference<>();
 	private Button buttonToolbarDataShift;
 	private AtomicReference<DataShiftControllerUI> toolbarDataShift = new AtomicReference<>();
@@ -139,7 +145,6 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 	//
 	@SuppressWarnings("rawtypes")
 	private final Map<IChromatogramSelection, List<String>> chromatogramSelections = new LinkedHashMap<>();
-	private boolean lockZoom = false;
 
 	public ExtendedChromatogramOverlayUI(Composite parent, int style) {
 
@@ -147,11 +152,31 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		createControl();
 	}
 
+	public void update(IChromatogramSelection<?, ?> chromatogramSelection) {
+
+		if(chromatogramSelection != null) {
+			if(!preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_LOCK_ZOOM)) {
+				if(preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_FOCUS_SELECTION)) {
+					ChromatogramChart chromatogramChart = chartControl.get();
+					IAxisSet axisSet = chromatogramChart.getBaseChart().getAxisSet();
+					Range xrange = axisSet.getXAxis(BaseChart.ID_PRIMARY_X_AXIS).getRange();
+					Range yrange = axisSet.getYAxis(BaseChart.ID_PRIMARY_Y_AXIS).getRange();
+					xrange.lower = chromatogramSelection.getStartRetentionTime();
+					xrange.upper = chromatogramSelection.getStopRetentionTime();
+					yrange.lower = chromatogramSelection.getStartAbundance();
+					yrange.upper = chromatogramSelection.getStopAbundance();
+					chromatogramChart.setRange(IExtendedChart.X_AXIS, xrange);
+					chromatogramChart.setRange(IExtendedChart.Y_AXIS, yrange);
+				}
+			}
+		}
+	}
+
 	@SuppressWarnings("rawtypes")
 	public void update(List<IChromatogramSelection> chromatogramSelections) {
 
 		this.chromatogramSelections.clear();
-		for(IChromatogramSelection selection : chromatogramSelections) {
+		for(IChromatogramSelection<?, ?> selection : chromatogramSelections) {
 			this.chromatogramSelections.put(selection, new ArrayList<>());
 		}
 		refreshUpdateOverlayChart();
@@ -193,9 +218,11 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		composite.setLayout(new GridLayout(11, false));
+		composite.setLayout(new GridLayout(13, false));
 		//
 		labelStatus = createLabelStatus(composite);
+		createButtonZoomLock(composite);
+		createButtonFocusSelection(composite);
 		comboOverlayType = createOverlayTypeCombo(composite);
 		comboViewerDerivative = createDerivativeComboViewer(composite);
 		buttonToolbarDataShift = createButtonToggleToolbar(composite, toolbarDataShift, IMAGE_SHIFT, TOOLTIP_SHIFT);
@@ -256,6 +283,44 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		return label;
+	}
+
+	private void createButtonZoomLock(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		setButtonImage(button, IMAGE_ZOOM_LOCKED, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_ZOOM_LOCKED, preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_LOCK_ZOOM));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean active = !preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_LOCK_ZOOM);
+				preferenceStore.setValue(PreferenceConstants.P_OVERLAY_LOCK_ZOOM, active);
+				setButtonImage(button, IMAGE_ZOOM_LOCKED, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_ZOOM_LOCKED, active);
+			}
+		});
+		//
+		buttonLockControl.set(button);
+	}
+
+	private void createButtonFocusSelection(Composite parent) {
+
+		Button button = new Button(parent, SWT.PUSH);
+		button.setText("");
+		setButtonImage(button, IMAGE_FOCUS_SELECTION, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_FOCUS_SELECTION, preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_FOCUS_SELECTION));
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				boolean active = !preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_FOCUS_SELECTION);
+				preferenceStore.setValue(PreferenceConstants.P_OVERLAY_FOCUS_SELECTION, active);
+				setButtonImage(button, IMAGE_FOCUS_SELECTION, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_FOCUS_SELECTION, active);
+			}
+		});
+		//
+		buttonFocusControl.set(button);
 	}
 
 	private Combo createOverlayTypeCombo(Composite parent) {
@@ -409,6 +474,12 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		}
 	}
 
+	private void modifyButtons() {
+
+		setButtonImage(buttonLockControl.get(), IMAGE_ZOOM_LOCKED, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_ZOOM_LOCKED, preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_LOCK_ZOOM));
+		setButtonImage(buttonFocusControl.get(), IMAGE_FOCUS_SELECTION, PREFIX_ENABLE, PREFIX_DISABLE, TOOLTIP_FOCUS_SELECTION, preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_FOCUS_SELECTION));
+	}
+
 	private void modifyWidgetStatus() {
 
 		/*
@@ -454,6 +525,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		refreshUpdateOverlayChart();
 		modifyWidgetStatus();
 		modifyDataStatusLabel();
+		modifyButtons();
 	}
 
 	private void updateNamedTraces() {
@@ -514,13 +586,15 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			rangeRestriction.setExtendMaxY(0.0d);
 			chromatogramChart.applySettings(chartSettings);
 			//
+			BaseChart baseChart = chromatogramChart.getBaseChart();
+			boolean isEmpty = baseChart.getSeriesIds().isEmpty();
 			IAxisSet axisSet = chromatogramChart.getBaseChart().getAxisSet();
 			Range xrange = axisSet.getXAxis(BaseChart.ID_PRIMARY_X_AXIS).getRange();
 			Range yrange = axisSet.getYAxis(BaseChart.ID_PRIMARY_Y_AXIS).getRange();
 			Set<String> availableSeriesIds = new HashSet<>();
-			BaseChart baseChart = chromatogramChart.getBaseChart();
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 			LinkedHashSet<String> usefulTypes = new LinkedHashSet<String>();
+			//
 			int i = 0;
 			for(Entry<IChromatogramSelection, List<String>> entry : chromatogramSelections.entrySet()) {
 				IChromatogramSelection<?, ?> chromatogramSelection = entry.getKey();
@@ -572,6 +646,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 				}
 				i++;
 			}
+			//
 			if(previousChromatograms != chromatogramSelections.size()) {
 				comboOverlayType.setItems(usefulTypes.toArray(new String[usefulTypes.size()]));
 				comboOverlayType.select(0);
@@ -598,9 +673,12 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			toolbarDataShift.get().reset();
 			modifyDataStatusLabel();
 			chromatogramChart.adjustRange(true);
-			if(lockZoom) {
-				chromatogramChart.setRange(IExtendedChart.X_AXIS, xrange);
-				chromatogramChart.setRange(IExtendedChart.Y_AXIS, yrange);
+			//
+			if(!isEmpty) {
+				if(preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_LOCK_ZOOM)) {
+					chromatogramChart.setRange(IExtendedChart.X_AXIS, xrange);
+					chromatogramChart.setRange(IExtendedChart.Y_AXIS, yrange);
+				}
 			}
 		}
 	}
@@ -1109,11 +1187,6 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 	private boolean isExtractedWavelengthsModusEnabled() {
 
 		return getDisplayType().contains(DisplayType.SWC);
-	}
-
-	public void setZoomLocked(boolean lockZoom) {
-
-		this.lockZoom = lockZoom;
 	}
 
 	@Override

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -48,6 +48,8 @@ public class PreferencePageOverlay extends FieldEditorPreferencePage implements 
 		addField(new BooleanFieldEditor(PreferenceConstants.P_OVERLAY_AUTOFOCUS_PROFILE_SETTINGS, "Overlay Autofocus Profile Settings", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_OVERLAY_AUTOFOCUS_SHIFT_SETTINGS, "Overlay Autofocus Shift Settings", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_OPTIMIZED_CHROMATOGRAM_XWC, "Show Optimized Chromatogram XWC", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_OVERLAY_LOCK_ZOOM, "Overlay Lock Zoom", getFieldEditorParent()));
+		addField(new BooleanFieldEditor(PreferenceConstants.P_OVERLAY_FOCUS_SELECTION, "Overlay Focus Selection", getFieldEditorParent()));
 		//
 		addField(new SpacerFieldEditor(getFieldEditorParent()));
 		addField(new DoubleFieldEditor(PreferenceConstants.P_OVERLAY_SHIFT_X, "Overlay Shift X:", PreferenceConstants.MIN_OVERLAY_SHIFT_X, PreferenceConstants.MAX_OVERLAY_SHIFT_X, getFieldEditorParent()));

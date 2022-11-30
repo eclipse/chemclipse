@@ -16,13 +16,11 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.EditorUpdateSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.ExtendedChromatogramOverlayUI;
-import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.e4.ui.di.Focus;
-import org.eclipse.e4.ui.model.application.ui.basic.MPart;
-import org.eclipse.e4.ui.model.application.ui.menu.MDirectToolItem;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
@@ -35,18 +33,6 @@ public class ChromatogramOverlayPart extends AbstractPart<ExtendedChromatogramOv
 	public ChromatogramOverlayPart(Composite parent) {
 
 		super(parent, TOPIC);
-	}
-
-	public static class LockZoomHandler {
-
-		@Execute
-		public void execute(MPart part, MDirectToolItem toolItem) {
-
-			Object object = part.getObject();
-			if(object instanceof ChromatogramOverlayPart overlayPart) {
-				overlayPart.getControl().setZoomLocked(toolItem.isSelected());
-			}
-		}
 	}
 
 	@Override
@@ -65,14 +51,27 @@ public class ChromatogramOverlayPart extends AbstractPart<ExtendedChromatogramOv
 	@Override
 	protected boolean updateData(List<Object> objects, String topic) {
 
-		// No action required. Action on Focus.
-		return true;
+		if(objects.size() == 1) {
+			Object object = objects.get(0);
+			if(isUpdateEvent(topic)) {
+				if(object instanceof IChromatogramSelection<?, ?> chromatogramSelection) {
+					getControl().update(chromatogramSelection);
+					return true;
+				}
+			}
+		}
+		//
+		return false;
 	}
 
 	@Override
 	protected boolean isUpdateTopic(String topic) {
 
-		// No action required. Action on Focus.
-		return false;
+		return isUpdateEvent(topic);
+	}
+
+	private boolean isUpdateEvent(String topic) {
+
+		return TOPIC.equals(topic);
 	}
 }

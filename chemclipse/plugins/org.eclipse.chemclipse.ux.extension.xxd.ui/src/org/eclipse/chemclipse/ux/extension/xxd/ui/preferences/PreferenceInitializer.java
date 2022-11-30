@@ -480,6 +480,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_OVERLAY_SHOW_AREA, PreferenceConstants.DEF_OVERLAY_SHOW_AREA);
 		store.setDefault(PreferenceConstants.P_OVERLAY_AUTOFOCUS_PROFILE_SETTINGS, PreferenceConstants.DEF_OVERLAY_AUTOFOCUS_PROFILE_SETTINGS);
 		store.setDefault(PreferenceConstants.P_OVERLAY_AUTOFOCUS_SHIFT_SETTINGS, PreferenceConstants.DEF_OVERLAY_AUTOFOCUS_SHIFT_SETTINGS);
+		store.setDefault(PreferenceConstants.P_OVERLAY_LOCK_ZOOM, PreferenceConstants.DEF_OVERLAY_LOCK_ZOOM);
+		store.setDefault(PreferenceConstants.P_OVERLAY_FOCUS_SELECTION, PreferenceConstants.DEF_OVERLAY_FOCUS_SELECTION);
 		//
 		return store;
 	}

@@ -210,6 +210,10 @@ public class PreferenceConstants extends ChartOptions {
 	public static final boolean DEF_OVERLAY_AUTOFOCUS_PROFILE_SETTINGS = true;
 	public static final String P_OVERLAY_AUTOFOCUS_SHIFT_SETTINGS = "overlayAutofocusShiftSettings";
 	public static final boolean DEF_OVERLAY_AUTOFOCUS_SHIFT_SETTINGS = true;
+	public static final String P_OVERLAY_LOCK_ZOOM = "overlayLockZoom";
+	public static final boolean DEF_OVERLAY_LOCK_ZOOM = false;
+	public static final String P_OVERLAY_FOCUS_SELECTION = "overlayFocusSelection";
+	public static final boolean DEF_OVERLAY_FOCUS_SELECTION = false;
 	/*
 	 * Scans
 	 */
