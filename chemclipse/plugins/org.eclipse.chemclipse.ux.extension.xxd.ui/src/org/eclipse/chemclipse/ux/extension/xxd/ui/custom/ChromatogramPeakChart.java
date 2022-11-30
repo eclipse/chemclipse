@@ -117,7 +117,7 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 
 		this.chromatogramSelection = chromatogramSelection;
 		//
-		clearChromatogramSeries();
+		clearSeries();
 		clearSelectedPeakSeries();
 		clearPeakLabelMarker();
 		targetDisplaySettings = null;
@@ -142,11 +142,26 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 
 	public void updatePeaks(List<IPeak> peaks) {
 
+		updatePeaks(peaks, false);
+	}
+
+	public void updatePeaks(List<IPeak> peaks, boolean clearPeakSeries) {
+
+		/*
+		 * Clear the existing peak series on demand.
+		 */
+		if(clearPeakSeries) {
+			clearPeakSeries();
+			clearPeakLabelMarker();
+		}
+		/*
+		 * Clear and add the selected peaks.
+		 */
 		clearSelectedPeakSeries();
-		//
 		if(peaks != null && peaks.size() > 0) {
 			int index = 1;
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
+			addPeakData(peaks, lineSeriesDataList);
 			for(IPeak peak : peaks) {
 				addPeak(peak, lineSeriesDataList, index++);
 			}
@@ -156,10 +171,7 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 
 	public void updateSelectedScan() {
 
-		deleteSeries(SERIES_ID_SELECTED_SCAN);
-		deleteSeries(SERIES_ID_IDENTIFIED_SCANS);
-		deleteSeries(SERIES_ID_IDENTIFIED_SCAN_SELECTED);
-		//
+		clearScanSeries();
 		assignCurrentRangeSelection();
 		List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 		addIdentifiedScansData(lineSeriesDataList, targetDisplaySettings);
@@ -560,16 +572,31 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 		return id + " (" + index + ")";
 	}
 
+	private void clearSeries() {
+
+		clearChromatogramSeries();
+		clearPeakSeries();
+		clearScanSeries();
+	}
+
 	private void clearChromatogramSeries() {
 
 		deleteSeries(SERIES_ID_CHROMATOGRAM_TIC);
 		deleteSeries(SERIES_ID_CHROMATOGRAM_XIC);
 		deleteSeries(SERIES_ID_CHROMATOGRAM_SWC);
 		deleteSeries(SERIES_ID_BASELINE);
+	}
+
+	private void clearPeakSeries() {
+
 		deleteSeries(SERIES_ID_PEAKS_NORMAL_ACTIVE);
 		deleteSeries(SERIES_ID_PEAKS_NORMAL_INACTIVE);
 		deleteSeries(SERIES_ID_PEAKS_ISTD_ACTIVE);
 		deleteSeries(SERIES_ID_PEAKS_ISTD_INACTIVE);
+	}
+
+	private void clearScanSeries() {
+
 		deleteSeries(SERIES_ID_SELECTED_SCAN);
 		deleteSeries(SERIES_ID_IDENTIFIED_SCANS);
 		deleteSeries(SERIES_ID_IDENTIFIED_SCAN_SELECTED);
