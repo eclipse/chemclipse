@@ -12,7 +12,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.wizards;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import org.eclipse.chemclipse.model.targets.ITargetDisplaySettings;
 import org.eclipse.chemclipse.model.targets.ITargetReference;
@@ -27,8 +30,9 @@ import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -38,8 +42,8 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Scale;
+import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableItem;
 
 public class TargetSettingEditor {
 
@@ -248,14 +252,15 @@ public class TargetSettingEditor {
 	private void createSectionTableEdit(Composite parent) {
 
 		Composite composite = new Composite(parent, SWT.NONE);
-		composite.setBackgroundMode(SWT.INHERIT_FORCE);
-		composite.setLayout(new GridLayout(3, false));
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.horizontalSpan = 7;
 		composite.setLayoutData(gridData);
+		composite.setBackgroundMode(SWT.INHERIT_FORCE);
+		composite.setLayout(new GridLayout(4, false));
 		//
-		createButtonCheckAll(composite);
-		createButtonUncheckAll(composite);
+		createButtonCheckOperation(composite, true);
+		createButtonCheckOperation(composite, false);
+		createSpinnerSelectHighestPeaks(composite);
 		createSearchSupportUI(composite);
 	}
 
@@ -275,18 +280,18 @@ public class TargetSettingEditor {
 		return searchSupportUI;
 	}
 
-	private Button createButtonCheckAll(Composite parent) {
+	private Button createButtonCheckOperation(Composite parent, boolean setVisible) {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Set all target reference(s) visible.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_CHECK_ALL, IApplicationImage.SIZE_16x16));
+		button.setToolTipText("Set all target references " + (setVisible ? "visible" : "invisible") + ".");
+		button.setImage(ApplicationImageFactory.getInstance().getImage(setVisible ? IApplicationImage.IMAGE_CHECK_ALL : IApplicationImage.IMAGE_UNCHECK_ALL, IApplicationImage.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				modifyTargetVisibility(targetReferenceListUI, true);
+				setTargetVisibility(setVisible);
 				targetReferenceListUI.refresh();
 				fireUpdate();
 			}
@@ -295,33 +300,48 @@ public class TargetSettingEditor {
 		return button;
 	}
 
-	private Button createButtonUncheckAll(Composite parent) {
+	private Spinner createSpinnerSelectHighestPeaks(Composite parent) {
 
-		Button button = new Button(parent, SWT.PUSH);
-		button.setText("");
-		button.setToolTipText("Set all target reference(s) invisible.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_UNCHECK_ALL, IApplicationImage.SIZE_16x16));
-		button.addSelectionListener(new SelectionAdapter() {
+		Spinner spinner = new Spinner(parent, SWT.BORDER);
+		spinner.setMinimum(1);
+		spinner.setMaximum(Integer.MAX_VALUE);
+		spinner.setPageIncrement(1);
+		spinner.setSelection(10);
+		spinner.setToolTipText("Select the n-highest peaks.");
+		GridData gridData = new GridData();
+		gridData.widthHint = 80;
+		spinner.setLayoutData(gridData);
+		//
+		spinner.addModifyListener(new ModifyListener() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void modifyText(ModifyEvent e) {
 
-				modifyTargetVisibility(targetReferenceListUI, false);
+				selectHighestTargets(spinner.getSelection());
 				targetReferenceListUI.refresh();
 				fireUpdate();
 			}
 		});
 		//
-		return button;
+		return spinner;
 	}
 
-	private void modifyTargetVisibility(TableViewer tableViewer, boolean visible) {
+	private void selectHighestTargets(int selection) {
 
-		for(TableItem item : tableViewer.getTable().getItems()) {
-			Object data = item.getData();
-			if(data instanceof ITargetReference targetReference) {
-				targetDisplaySettings.setVisible(targetReference, visible);
-			}
+		setTargetVisibility(false);
+		List<ITargetReference> targetReferencesSorted = new ArrayList<>(targetReferences);
+		Collections.sort(targetReferencesSorted, (r1, r2) -> Double.compare(r2.getSignal().getY(), r1.getSignal().getY()));
+		//
+		for(int i = 0; i < selection; i++) {
+			ITargetReference targetReference = targetReferencesSorted.get(i);
+			targetDisplaySettings.setVisible(targetReference, true);
+		}
+	}
+
+	private void setTargetVisibility(boolean visible) {
+
+		for(ITargetReference targetReference : targetReferences) {
+			targetDisplaySettings.setVisible(targetReference, visible);
 		}
 	}
 
