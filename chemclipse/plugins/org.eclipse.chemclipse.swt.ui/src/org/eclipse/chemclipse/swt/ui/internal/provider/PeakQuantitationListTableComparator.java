@@ -11,6 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.swt.ui.internal.provider;
 
+import java.util.List;
+
 import org.eclipse.chemclipse.model.support.PeakQuantitation;
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
@@ -23,10 +25,12 @@ public class PeakQuantitationListTableComparator extends AbstractRecordTableComp
 
 		int sortOrder = 0;
 		if(e1 instanceof PeakQuantitation && e2 instanceof PeakQuantitation) {
+			//
 			PeakQuantitation peakQuantitation1 = (PeakQuantitation)e1;
 			PeakQuantitation peakQuantitation2 = (PeakQuantitation)e2;
 			//
-			switch(getPropertyIndex()) {
+			int indexColumn = getPropertyIndex();
+			switch(indexColumn) {
 				case 0:
 					sortOrder = Integer.compare(peakQuantitation2.getRetentionTime(), peakQuantitation1.getRetentionTime());
 					break;
@@ -49,7 +53,20 @@ public class PeakQuantitationListTableComparator extends AbstractRecordTableComp
 					sortOrder = peakQuantitation2.getQuantifier().compareTo(peakQuantitation1.getQuantifier());
 					break;
 				default:
+					/*
+					 * The concentrations are added dynamically.
+					 */
 					sortOrder = 0;
+					if(indexColumn > 6) {
+						List<Double> concentrations1 = peakQuantitation1.getConcentrations();
+						List<Double> concentrations2 = peakQuantitation2.getConcentrations();
+						if(!concentrations1.isEmpty() && !concentrations2.isEmpty()) {
+							if(concentrations1.size() == concentrations2.size()) {
+								int index = indexColumn - 7;
+								sortOrder = Double.compare(concentrations2.get(index), concentrations1.get(index));
+							}
+						}
+					}
 			}
 		}
 		if(getDirection() == ASCENDING) {

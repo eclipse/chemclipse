@@ -26,7 +26,7 @@ public class PeakQuantitation {
 	private String referenceIdentifier = "";
 	private String classifier = "";
 	private String quantifier = "";
-	private List<Double> concentrations = new ArrayList<Double>();
+	private List<Double> concentrations = new ArrayList<>();
 	/*
 	 * Used as a reference
 	 */
