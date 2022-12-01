@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -42,6 +42,7 @@ public class GroupHandlerOverview extends AbstractGroupHandler {
 		//
 		partHandler.add(new PartHandler("Header", PartSupport.PARTDESCRIPTOR_HEADER_DATA, PreferenceConstants.P_STACK_POSITION_HEADER_DATA));
 		partHandler.add(new PartHandler("Overview (Chromatogram)", PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_OVERVIEW, PreferenceConstants.P_STACK_POSITION_CHROMATOGRAM_OVERVIEW));
+		partHandler.add(new PartHandler("Statistics (Chromatogram)", PartSupport.PARTDESCRIPTOR_CHROMATOGRAM_STATISTICS, PreferenceConstants.P_STACK_POSITION_CHROMATOGRAM_STATISTICS));
 		//
 		return partHandler;
 	}

@@ -88,6 +88,8 @@ public class PreferenceConstants extends ChartOptions {
 	public static final String DEF_STACK_POSITION_MEASUREMENT_HEADER = PartSupport.PARTSTACK_BOTTOM_LEFT;
 	public static final String P_STACK_POSITION_CHROMATOGRAM_OVERVIEW = "stackPositionChromatogramOverview";
 	public static final String DEF_STACK_POSITION_CHROMATOGRAM_OVERVIEW = PartSupport.PARTSTACK_LEFT_CENTER;
+	public static final String P_STACK_POSITION_CHROMATOGRAM_STATISTICS = "stackPositionChromatogramStatistics";
+	public static final String DEF_STACK_POSITION_CHROMATOGRAM_STATISTICS = PartSupport.PARTSTACK_BOTTOM_LEFT;
 	public static final String P_STACK_POSITION_CHROMATOGRAM_SCAN_INFO = "stackPositionChromatogramScanInfo";
 	public static final String DEF_STACK_POSITION_CHROMATOGRAM_SCAN_INFO = PartSupport.PARTSTACK_NONE;
 	public static final String P_STACK_POSITION_OVERLAY_CHROMATOGRAM_DEFAULT = "stackPositionOverlayChromatogramDefault";
