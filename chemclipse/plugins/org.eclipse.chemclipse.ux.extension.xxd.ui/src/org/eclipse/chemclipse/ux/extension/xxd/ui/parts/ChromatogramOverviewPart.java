@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -73,12 +73,11 @@ public class ChromatogramOverviewPart extends AbstractPart<OverviewChartUI> {
 	private void updateChart(Object object) {
 
 		getControl().deleteSeries();
-		if(object instanceof IChromatogramOverview) {
+		if(object instanceof IChromatogramOverview chromatogramOverview) {
 			/*
 			 * Create series.
 			 */
-			IChromatogramOverview chromatogramOverview = (IChromatogramOverview)object;
-			List<ILineSeriesData> lineSeriesDataList = new ArrayList<ILineSeriesData>();
+			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 			ISeriesData seriesData = getSeriesData(chromatogramOverview);
 			ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
