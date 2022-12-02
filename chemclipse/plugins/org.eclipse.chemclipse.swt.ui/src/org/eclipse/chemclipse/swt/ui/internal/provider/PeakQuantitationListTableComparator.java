@@ -16,6 +16,7 @@ import java.util.List;
 import org.eclipse.chemclipse.model.support.PeakQuantitation;
 import org.eclipse.chemclipse.support.ui.swt.AbstractRecordTableComparator;
 import org.eclipse.chemclipse.support.ui.swt.IRecordTableComparator;
+import org.eclipse.chemclipse.swt.ui.components.peaks.PeakQuantitationListUI;
 import org.eclipse.jface.viewers.Viewer;
 
 public class PeakQuantitationListTableComparator extends AbstractRecordTableComparator implements IRecordTableComparator {
@@ -57,12 +58,12 @@ public class PeakQuantitationListTableComparator extends AbstractRecordTableComp
 					 * The concentrations are added dynamically.
 					 */
 					sortOrder = 0;
-					if(indexColumn > 6) {
+					if(indexColumn >= PeakQuantitationListUI.INDEX_QUANTITATIONS) {
 						List<Double> concentrations1 = peakQuantitation1.getConcentrations();
 						List<Double> concentrations2 = peakQuantitation2.getConcentrations();
 						if(!concentrations1.isEmpty() && !concentrations2.isEmpty()) {
 							if(concentrations1.size() == concentrations2.size()) {
-								int index = indexColumn - 7;
+								int index = indexColumn - PeakQuantitationListUI.INDEX_QUANTITATIONS;
 								sortOrder = Double.compare(concentrations2.get(index), concentrations1.get(index));
 							}
 						}

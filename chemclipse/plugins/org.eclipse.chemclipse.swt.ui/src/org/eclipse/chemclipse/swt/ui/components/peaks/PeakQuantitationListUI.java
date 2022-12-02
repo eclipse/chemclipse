@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.swt.ui.components.peaks;
 
 import java.util.List;
 
+import org.eclipse.chemclipse.model.support.PeakQuantitation;
 import org.eclipse.chemclipse.model.support.PeakQuantitations;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
@@ -29,7 +30,10 @@ public class PeakQuantitationListUI extends ExtendedTableViewer {
 	public static final String AREA = "Area";
 	public static final String CLASSIFIER = "Classifier";
 	public static final String QUANTIFIER = "Quantifier";
-	//
+	/*
+	 * This is a reminder to adjust the header columns correctly.
+	 */
+	public static final int INDEX_QUANTITATIONS = PeakQuantitation.INDEX_QUANTITATIONS;
 	private static final int DEFAULT_COLUMN_WIDTH = 100;
 	//
 	private static final String[] TITLES = { //

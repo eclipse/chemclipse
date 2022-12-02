@@ -19,6 +19,8 @@ import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 
 public class PeakQuantitation {
 
+	public static final int INDEX_QUANTITATIONS = 7;
+	//
 	private int retentionTime = 0;
 	private double integratedArea = 0;
 	private String name = "";

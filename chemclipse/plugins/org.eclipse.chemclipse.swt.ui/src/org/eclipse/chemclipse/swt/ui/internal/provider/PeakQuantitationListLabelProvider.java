@@ -18,6 +18,7 @@ import org.eclipse.chemclipse.model.support.PeakQuantitation;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
+import org.eclipse.chemclipse.swt.ui.components.peaks.PeakQuantitationListUI;
 import org.eclipse.swt.graphics.Image;
 
 public class PeakQuantitationListLabelProvider extends AbstractChemClipseLabelProvider {
@@ -67,7 +68,7 @@ public class PeakQuantitationListLabelProvider extends AbstractChemClipseLabelPr
 					text = peakQuantitationEntry.getQuantifier();
 					break;
 				default:
-					int index = columnIndex - 7;
+					int index = columnIndex - PeakQuantitationListUI.INDEX_QUANTITATIONS;
 					if(index < peakQuantitationEntry.getConcentrations().size()) {
 						Double concentration = peakQuantitationEntry.getConcentrations().get(index);
 						if(!Double.isNaN(concentration)) {

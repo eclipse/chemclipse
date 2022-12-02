@@ -12,7 +12,9 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,7 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.support.PeakQuantitations;
 import org.eclipse.chemclipse.model.support.PeakQuantitationsExtractor;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.components.InformationUI;
@@ -128,47 +131,72 @@ public class ExtendedChromatogramStatisticsUI extends Composite implements IExte
 		Map<String, String> dataMap = new LinkedHashMap<>();
 		if(chromatogramSelection != null) {
 			/*
-			 * Chromatogram
-			 */
-			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
-			info = ChromatogramDataSupport.getChromatogramLabel(chromatogram);
-			/*
 			 * Map
 			 */
-			dataMap.put("Start (Minutes)", decimalFormat.format(chromatogram.getStartRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
-			dataMap.put("Stop (Minutes)", decimalFormat.format(chromatogram.getStopRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
-			dataMap.put("Scans", Integer.toString(chromatogram.getNumberOfScans()));
-			dataMap.put("Peaks", Integer.toString(chromatogram.getNumberOfPeaks()));
+			addTimeData(chromatogramSelection, dataMap);
+			addScanData(chromatogramSelection, dataMap);
 			addPeakData(chromatogramSelection, dataMap);
+			//
+			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
+			info = ChromatogramDataSupport.getChromatogramLabel(chromatogram);
 		}
 		//
 		toolbarInfo.get().setText(info);
 		tableControl.get().setInput(dataMap);
 	}
 
+	private void addTimeData(IChromatogramSelection<?, ?> chromatogramSelection, Map<String, String> dataMap) {
+
+		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
+		dataMap.put("Start Total [min]", decimalFormat.format(chromatogram.getStartRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
+		dataMap.put("Stop Total [min]", decimalFormat.format(chromatogram.getStopRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
+		dataMap.put("Start Selection [min]", decimalFormat.format(chromatogramSelection.getStartRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
+		dataMap.put("Stop Selection [min]", decimalFormat.format(chromatogramSelection.getStopRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
+	}
+
+	private void addScanData(IChromatogramSelection<?, ?> chromatogramSelection, Map<String, String> dataMap) {
+
+		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
+		int scanStart = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
+		int scanStop = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
+		dataMap.put("Scans Total", Integer.toString(chromatogram.getNumberOfScans()));
+		dataMap.put("Scans Delay [ms]", Integer.toString(chromatogram.getScanDelay()));
+		dataMap.put("Scan Interval [ms]", Integer.toString(chromatogram.getScanInterval()));
+		dataMap.put("Scans Selection", Integer.toString(scanStop - scanStart + 1));
+		dataMap.put("Scan Selection Start", Integer.toString(scanStart));
+		dataMap.put("Scan Selection Stop", Integer.toString(scanStop));
+	}
+
 	private void addPeakData(IChromatogramSelection<?, ?> chromatogramSelection, Map<String, String> dataMap) {
 
+		IChromatogram<? extends IPeak> chromatogram = chromatogramSelection.getChromatogram();
 		List<? extends IPeak> peaks = ChromatogramDataSupport.extractPeaks(chromatogramSelection);
 		/*
 		 * Peak Area
 		 */
+		dataMap.put("Peaks Total", Integer.toString(chromatogram.getNumberOfPeaks()));
+		dataMap.put("Peak Area Sum Total", Double.toString(getSummedPeakArea(chromatogram.getPeaks())));
+		dataMap.put("Peaks Selection", Integer.toString(peaks.size()));
+		dataMap.put("Peak Area Sum Selection", Double.toString(getSummedPeakArea(peaks)));
+		/*
+		 * Quantitations
+		 */
+		PeakQuantitations peakQuantitations = peakQuantitationsExtractor.extract(peaks, chromatogramSelection);
+		Map<String, Double> summedQuantitations = peakQuantitations.getSummedQuantitations();
+		List<String> entries = new ArrayList<>(summedQuantitations.keySet());
+		Collections.sort(entries);
+		for(String entry : entries) {
+			dataMap.put(entry, Double.toString(summedQuantitations.get(entry)));
+		}
+	}
+
+	private double getSummedPeakArea(List<? extends IPeak> peaks) {
+
 		double peakArea = 0.0d;
 		for(IPeak peak : peaks) {
 			peakArea += peak.getIntegratedArea();
 		}
-		dataMap.put("Peak Area", Double.toString(peakArea));
-		/*
-		 * Quantitations
-		 */
-		// PeakQuantitations peakQuantitations = peakQuantitationsExtractor.extract(peaks, chromatogramSelection);
-		// List<String> titles = peakQuantitations.getTitles();
-		// for(int i = 0; i < titles.size(); i++) {
-		// String title = titles.get(i);
-		// double quantitation = 0.0d;
-		// for(PeakQuantitation peakQuantitation : peakQuantitations.getQuantitationEntries()) {
-		// quantitation += peakQuantitation.getConcentrations().get(i);
-		// }
-		// dataMap.put(title, Double.toString(quantitation));
-		// }
+		//
+		return peakArea;
 	}
 }
