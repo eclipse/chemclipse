@@ -45,7 +45,7 @@ public class OverviewChartUI extends LineChart {
 		}
 	}
 
-	private void initialize() throws Exception {
+	private void initialize() {
 
 		IChartSettings chartSettings = getChartSettings();
 		chartSettings.setOrientation(SWT.HORIZONTAL);
