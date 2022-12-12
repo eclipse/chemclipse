@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,12 +13,12 @@ package org.eclipse.chemclipse.support.util;
 
 public class ValueParserSupport {
 
-	protected boolean parseBoolean(String[] values, int index) {
+	public boolean parseBoolean(String[] values, int index) {
 
 		return parseBoolean(values, index, false);
 	}
 
-	protected boolean parseBoolean(String[] values, int index, boolean def) {
+	public boolean parseBoolean(String[] values, int index, boolean def) {
 
 		boolean result = def;
 		String value = parseString(values, index, "");
@@ -30,22 +30,22 @@ public class ValueParserSupport {
 		return result;
 	}
 
-	protected String parseString(String[] values, int index) {
+	public String parseString(String[] values, int index) {
 
 		return parseString(values, index, "");
 	}
 
-	protected String parseString(String[] values, int index, String def) {
+	public String parseString(String[] values, int index, String def) {
 
 		return (values.length > index) ? values[index].trim() : def;
 	}
 
-	protected int parseInteger(String[] values, int index) {
+	public int parseInteger(String[] values, int index) {
 
 		return parseInteger(values, index, 0);
 	}
 
-	protected int parseInteger(String[] values, int index, int def) {
+	public int parseInteger(String[] values, int index, int def) {
 
 		int result = def;
 		String value = parseString(values, index, "");
@@ -59,12 +59,12 @@ public class ValueParserSupport {
 		return result;
 	}
 
-	protected float parseFloat(String[] values, int index) {
+	public float parseFloat(String[] values, int index) {
 
 		return parseFloat(values, index, 0.0f);
 	}
 
-	protected float parseFloat(String[] values, int index, float def) {
+	public float parseFloat(String[] values, int index, float def) {
 
 		float result = def;
 		String value = parseString(values, index, "");
@@ -78,12 +78,12 @@ public class ValueParserSupport {
 		return result;
 	}
 
-	protected double parseDouble(String[] values, int index) {
+	public double parseDouble(String[] values, int index) {
 
 		return parseDouble(values, index, 0.0d);
 	}
 
-	protected double parseDouble(String[] values, int index, double def) {
+	public double parseDouble(String[] values, int index, double def) {
 
 		double result = def;
 		String value = parseString(values, index, "");

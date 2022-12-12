@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.model.statistics.ISample;
+import org.eclipse.chemclipse.support.util.ValueParserSupport;
 
 public class SampleTemplateIO {
 
@@ -73,6 +74,7 @@ public class SampleTemplateIO {
 
 	public static void read(File file, List<ISample> samples) throws IOException {
 
+		ValueParserSupport valueParserSupport = new ValueParserSupport();
 		try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
 			/*
 			 * Map the data
@@ -92,15 +94,15 @@ public class SampleTemplateIO {
 				 */
 				if(row > 0) {
 					String[] values = line.trim().split(VALUE_DELIMITER);
-					if(values.length >= 6) {
-						String sampleName = values[0].trim();
+					if(values.length >= 3) {
+						String sampleName = valueParserSupport.parseString(values, 0);
 						ISample sample = sampleMap.get(sampleName);
 						if(sample != null) {
-							sample.setSelected(Boolean.valueOf(values[1].trim()));
-							sample.setRGB(values[2].trim());
-							sample.setGroupName(values[3].trim());
-							sample.setClassification(values[4].trim());
-							sample.setDescription(values[5].trim());
+							sample.setSelected(valueParserSupport.parseBoolean(values, 1));
+							sample.setRGB(valueParserSupport.parseString(values, 2));
+							sample.setGroupName(valueParserSupport.parseString(values, 3));
+							sample.setClassification(valueParserSupport.parseString(values, 4));
+							sample.setDescription(valueParserSupport.parseString(values, 5));
 						}
 					}
 				}
