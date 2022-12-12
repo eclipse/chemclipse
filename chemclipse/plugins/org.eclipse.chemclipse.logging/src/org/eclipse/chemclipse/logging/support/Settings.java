@@ -29,7 +29,7 @@ public class Settings {
 	public static final String D_APPLICATION_NAME = "application.name";
 	public static final String D_APPLICATION_VERSION = "application.version";
 	//
-	private static final String DEFAULT_APPLICATION_NAME = "Chromatography_Application";
+	private static final String DEFAULT_APPLICATION_NAME = "ChemClipse";
 	private static final String DEFAULT_APPLICATION_VERSION = "0.9.x";
 	//
 	private static final String D_OSGI_INSTANCE_AREA = "osgi.instance.area";
