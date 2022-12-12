@@ -113,17 +113,17 @@ public class Settings {
 		String applicationVersion;
 		//
 		Properties properties = System.getProperties();
-		Object name = properties.get(D_APPLICATION_VERSION);
-		if(name != null && name instanceof String) {
-			applicationVersion = (String)name;
+		Object version = properties.get(D_APPLICATION_VERSION);
+		if(version != null && version instanceof String setVersion) {
+			applicationVersion = setVersion;
 		} else {
 			applicationVersion = DEFAULT_APPLICATION_VERSION;
 			try {
-				Version version = Activator.getContext().getBundle().getVersion();
+				Version bundleVersion = Activator.getContext().getBundle().getVersion();
 				StringBuilder builder = new StringBuilder();
-				builder.append(version.getMajor());
+				builder.append(bundleVersion.getMajor());
 				builder.append(".");
-				builder.append(version.getMinor());
+				builder.append(bundleVersion.getMinor());
 				builder.append(".");
 				builder.append("x"); // version.getMicro()
 				applicationVersion = builder.toString();
@@ -174,8 +174,8 @@ public class Settings {
 		 */
 		Properties properties = System.getProperties();
 		Object name = properties.get(D_APPLICATION_NAME);
-		if(name != null && name instanceof String) {
-			applicationName = (String)name;
+		if(name != null && name instanceof String setName) {
+			applicationName = setName;
 		} else {
 			applicationName = DEFAULT_APPLICATION_NAME;
 		}
@@ -184,11 +184,11 @@ public class Settings {
 		 * White space and others are not allowed.
 		 */
 		if(!applicationName.equals("")) {
-			applicationName = applicationName.replaceAll("-", "");
-			applicationName = applicationName.replaceAll("\\.", "");
-			applicationName = applicationName.replaceAll(":", "");
-			applicationName = applicationName.replaceAll(" ", "");
-			applicationName = applicationName.replaceAll("_", "");
+			applicationName = applicationName.replace("-", "");
+			applicationName = applicationName.replace("\\.", "");
+			applicationName = applicationName.replace(":", "");
+			applicationName = applicationName.replace(" ", "");
+			applicationName = applicationName.replace("_", "");
 		}
 		return applicationName;
 	}
