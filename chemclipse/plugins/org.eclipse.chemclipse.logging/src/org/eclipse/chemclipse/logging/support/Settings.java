@@ -30,7 +30,7 @@ public class Settings {
 	public static final String D_APPLICATION_VERSION = "application.version";
 	//
 	private static final String DEFAULT_APPLICATION_NAME = "Chromatography_Application";
-	private static final String DEFAULT_APPLICATION_VERSION = "0.8.x";
+	private static final String DEFAULT_APPLICATION_VERSION = "0.9.x";
 	//
 	private static final String D_OSGI_INSTANCE_AREA = "osgi.instance.area";
 	private static final String D_OSGI_USER_AREA = "osgi.user.area";
