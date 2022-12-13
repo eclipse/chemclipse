@@ -30,23 +30,23 @@ public class TargetSupport {
 	 */
 	public static String getBestTargetLibraryField(Object object) {
 
-		if(object instanceof ITargetSupplier) {
+		if(object instanceof ITargetSupplier targetSupplier) {
 			/*
 			 * Is Retention Index used for QC?
 			 */
 			float retentionIndex = 0;
 			if(PreferenceSupplier.isUseRetentionIndexQC()) {
-				if(object instanceof IPeak) {
-					retentionIndex = ((IPeak)object).getPeakModel().getPeakMaximum().getRetentionIndex();
-				} else if(object instanceof IScan) {
-					retentionIndex = ((IScan)object).getRetentionIndex();
+				if(object instanceof IPeak peak) {
+					retentionIndex = peak.getPeakModel().getPeakMaximum().getRetentionIndex();
+				} else if(object instanceof IScan scan) {
+					retentionIndex = scan.getRetentionIndex();
 				}
 			}
 			IdentificationTargetComparator comparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
 			/*
 			 * Best Match
 			 */
-			IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(((ITargetSupplier)object).getTargets(), comparator);
+			IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(targetSupplier.getTargets(), comparator);
 			LibraryField libraryField = PreferenceSupplier.getBestTargetLibraryField();
 			String name = libraryField.getTransformer().apply(identificationTarget);
 			if(name != null) {

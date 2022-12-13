@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,12 +13,9 @@ package org.eclipse.chemclipse.csd.converter.supplier.jcampdx.io;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.csd.converter.io.AbstractChromatogramCSDReader;
 import org.eclipse.chemclipse.csd.converter.supplier.jcampdx.model.IVendorChromatogram;
 import org.eclipse.chemclipse.csd.converter.supplier.jcampdx.model.IVendorScan;
@@ -26,7 +23,6 @@ import org.eclipse.chemclipse.csd.converter.supplier.jcampdx.model.VendorChromat
 import org.eclipse.chemclipse.csd.converter.supplier.jcampdx.model.VendorScan;
 import org.eclipse.chemclipse.csd.model.core.IChromatogramCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.core.AbstractChromatogram;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
@@ -57,147 +53,138 @@ public class ChromatogramReader extends AbstractChromatogramCSDReader {
 	private static final String HEADER_MARKER = "##";
 
 	@Override
-	public IChromatogramCSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramCSD read(File file, IProgressMonitor monitor) throws IOException {
 
 		if(isValidFileFormat(file)) {
-			return readChromatogram(file, monitor);
+			return readChromatogram(file);
 		}
 		return null;
 	}
 
 	@Override
-	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws IOException {
 
-		if(isValidFileFormat(file)) {
-			return readChromatogram(file, monitor);
-		}
-		return null;
+		return read(file, monitor);
 	}
 
-	private IChromatogramCSD readChromatogram(File file, IProgressMonitor monitor) throws IOException {
+	private IChromatogramCSD readChromatogram(File file) throws IOException {
 
 		IVendorChromatogram chromatogram = new VendorChromatogram();
 		//
-		FileReader fileReader = new FileReader(file);
-		BufferedReader bufferedReader = new BufferedReader(fileReader);
-		String line;
-		/*
-		 * Parse each line
-		 */
-		String name = "";
-		while((line = bufferedReader.readLine()) != null) {
-			/*
-			 * Each scan starts with the marker:
-			 * [##NAME=Acetoin (Butanon-2, 3-hydroxy-)]
-			 * ##TIC=27243
-			 * ##SCAN=1
-			 * ##TIME=102.3358
-			 * ##NPOINTS=0
-			 * ##XYDATA=(X,Y)
-			 * ...
-			 * [##HIT=90]
-			 */
-			if(line.startsWith(NAME_MARKER)) {
-				name = line.trim().replace(NAME_MARKER, "");
-			} else if(line.startsWith(TIC_MARKER)) {
-				float abundance = 0;
-				try {
-					String value = line.replace(TIC_MARKER, "").trim();
-					abundance = Float.parseFloat(value); // TIC
-				} catch(NumberFormatException e) {
-					logger.warn(e);
-				}
+		try (FileReader fileReader = new FileReader(file)) {
+			try (BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+				String line;
 				/*
-				 * Read until
-				 * RETENTION_TIME_MARKER
-				 * or
-				 * TIME_MARKER
-				 * is reached.
+				 * Parse each line
 				 */
-				boolean searchForRetentionTime = true;
-				while(searchForRetentionTime) {
-					if((line = bufferedReader.readLine()) != null) {
-						if(isRetentionTimeMarker(line)) {
-							searchForRetentionTime = false;
+				String name = "";
+				while((line = bufferedReader.readLine()) != null) {
+					/*
+					 * Each scan starts with the marker:
+					 * [##NAME=Acetoin (Butanon-2, 3-hydroxy-)]
+					 * ##TIC=27243
+					 * ##SCAN=1
+					 * ##TIME=102.3358
+					 * ##NPOINTS=0
+					 * ##XYDATA=(X,Y)
+					 * ...
+					 * [##HIT=90]
+					 */
+					if(line.startsWith(NAME_MARKER)) {
+						name = line.trim().replace(NAME_MARKER, "");
+					} else if(line.startsWith(TIC_MARKER)) {
+						float abundance = 0;
+						try {
+							String value = line.replace(TIC_MARKER, "").trim();
+							abundance = Float.parseFloat(value); // TIC
+						} catch(NumberFormatException e) {
+							logger.warn(e);
 						}
-					}
-				}
-				//
-				if(line != null) {
-					int retentionTime = getRetentionTime(line);
-					if(retentionTime >= 0 && abundance > 0) {
-						IVendorScan scan = new VendorScan(abundance);
-						scan.setRetentionTime(retentionTime);
-						chromatogram.addScan(scan);
 						/*
-						 * Add the identification
+						 * Read until
+						 * RETENTION_TIME_MARKER
+						 * or
+						 * TIME_MARKER
+						 * is reached.
 						 */
-						if(!name.equals("")) {
-							/*
-							 * Find the hit value and set it.
-							 */
-							boolean findHitMarker = true;
-							float matchFactor = 100.0f;
-							while((line = bufferedReader.readLine()) != null && findHitMarker) {
-								if(line.startsWith(HIT_MARKER)) {
-									try {
-										String hitValue = line.replace(HIT_MARKER, "").trim();
-										matchFactor = Float.parseFloat(hitValue);
-										findHitMarker = false;
-									} catch(NumberFormatException e) {
-										logger.warn(e);
-									}
-								} else if(line.startsWith(NAME_MARKER) || line.startsWith(TIC_MARKER)) {
-									findHitMarker = false;
+						boolean searchForRetentionTime = true;
+						while(searchForRetentionTime) {
+							if((line = bufferedReader.readLine()) != null) {
+								if(isRetentionTimeMarker(line)) {
+									searchForRetentionTime = false;
 								}
 							}
-							/*
-							 * Add the target.
-							 */
-							try {
-								ILibraryInformation libraryInformation = new LibraryInformation();
-								libraryInformation.setName(name);
-								IComparisonResult comparisonResult = new ComparisonResult(matchFactor, matchFactor, 0.0f, 0.0f);
-								IIdentificationTarget scanTargetCSD = new IdentificationTarget(libraryInformation, comparisonResult);
-								scan.getTargets().add(scanTargetCSD);
-							} catch(ReferenceMustNotBeNullException e) {
-								logger.warn(e);
+						}
+						//
+						if(line != null) {
+							int retentionTime = getRetentionTime(line);
+							if(retentionTime >= 0 && abundance > 0) {
+								IVendorScan scan = new VendorScan(abundance);
+								scan.setRetentionTime(retentionTime);
+								chromatogram.addScan(scan);
+								/*
+								 * Add the identification
+								 */
+								if(!name.equals("")) {
+									/*
+									 * Find the hit value and set it.
+									 */
+									boolean findHitMarker = true;
+									float matchFactor = 100.0f;
+									while((line = bufferedReader.readLine()) != null && findHitMarker) {
+										if(line.startsWith(HIT_MARKER)) {
+											try {
+												String hitValue = line.replace(HIT_MARKER, "").trim();
+												matchFactor = Float.parseFloat(hitValue);
+												findHitMarker = false;
+											} catch(NumberFormatException e) {
+												logger.warn(e);
+											}
+										} else if(line.startsWith(NAME_MARKER) || line.startsWith(TIC_MARKER)) {
+											findHitMarker = false;
+										}
+									}
+									/*
+									 * Add the target.
+									 */
+									try {
+										ILibraryInformation libraryInformation = new LibraryInformation();
+										libraryInformation.setName(name);
+										IComparisonResult comparisonResult = new ComparisonResult(matchFactor, matchFactor, 0.0f, 0.0f);
+										IIdentificationTarget scanTargetCSD = new IdentificationTarget(libraryInformation, comparisonResult);
+										scan.getTargets().add(scanTargetCSD);
+									} catch(ReferenceMustNotBeNullException e) {
+										logger.warn(e);
+									}
+								}
 							}
 						}
+						/*
+						 * Set name to ""
+						 */
+						name = "";
 					}
 				}
 				/*
-				 * Set name to ""
+				 * Set the scan delay and interval
+				 * file and converter id.
 				 */
-				name = "";
+				int scanDelay = chromatogram.getScan(1).getRetentionTime();
+				chromatogram.setScanDelay(scanDelay);
+				int scanInterval = chromatogram.getStartRetentionTime() / chromatogram.getNumberOfScans();
+				chromatogram.setScanInterval(scanInterval);
+				//
+				chromatogram.setFile(file);
+				chromatogram.setConverterId(IConstants.CONVERTER_ID_CSD);
 			}
 		}
-		/*
-		 * Set the scan delay and interval
-		 * file and converter id.
-		 */
-		int scanDelay = chromatogram.getScan(1).getRetentionTime();
-		chromatogram.setScanDelay(scanDelay);
-		int scanInterval = chromatogram.getStartRetentionTime() / chromatogram.getNumberOfScans();
-		chromatogram.setScanInterval(scanInterval);
-		//
-		chromatogram.setFile(file);
-		chromatogram.setConverterId(IConstants.CONVERTER_ID_CSD);
-		/*
-		 * Close the streams
-		 */
-		bufferedReader.close();
-		fileReader.close();
 		//
 		return chromatogram;
 	}
 
 	private boolean isRetentionTimeMarker(String line) {
 
-		if(line.startsWith(RETENTION_TIME_MARKER) || line.startsWith(TIME_MARKER)) {
-			return true;
-		}
-		return false;
+		return line.startsWith(RETENTION_TIME_MARKER) || line.startsWith(TIME_MARKER);
 	}
 
 	private int getRetentionTime(String line) {
@@ -213,7 +200,7 @@ public class ChromatogramReader extends AbstractChromatogramCSDReader {
 				retentionTime = (int)(Double.parseDouble(value) * 1000.0d);
 			} else if(line.startsWith(TIME_MARKER)) {
 				String value = line.replace(TIME_MARKER, "").trim();
-				retentionTime = (int)(Double.parseDouble(value) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+				retentionTime = (int)(Double.parseDouble(value) * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 			}
 		} catch(NumberFormatException e) {
 			logger.warn(e);
@@ -224,28 +211,26 @@ public class ChromatogramReader extends AbstractChromatogramCSDReader {
 	private boolean isValidFileFormat(File file) throws IOException {
 
 		boolean isValidFormat = true;
-		FileReader fileReader = new FileReader(file);
-		BufferedReader bufferedReader = new BufferedReader(fileReader);
-		String line = bufferedReader.readLine();
-		/*
-		 * Check the first column header.
-		 */
-		if(line.startsWith(HEADER_TITLE) || line.startsWith(HEADER_PROGRAM)) {
-			boolean readIons = false;
-			exitloop:
-			while((line = bufferedReader.readLine()) != null) {
-				if(line.startsWith(XYDATA_MARKER_SPACE) || line.startsWith(XYDATA_MARKER_SHORT)) {
-					readIons = true;
-				} else if(!line.startsWith(HEADER_MARKER) && readIons) {
-					isValidFormat = false;
-					break exitloop;
+		try (FileReader fileReader = new FileReader(file)) {
+			try (BufferedReader bufferedReader = new BufferedReader(fileReader)) {
+				String line = bufferedReader.readLine();
+				/*
+				 * Check the first column header.
+				 */
+				if(line.startsWith(HEADER_TITLE) || line.startsWith(HEADER_PROGRAM)) {
+					boolean readIons = false;
+					exitloop:
+					while((line = bufferedReader.readLine()) != null) {
+						if(line.startsWith(XYDATA_MARKER_SPACE) || line.startsWith(XYDATA_MARKER_SHORT)) {
+							readIons = true;
+						} else if(!line.startsWith(HEADER_MARKER) && readIons) {
+							isValidFormat = false;
+							break exitloop;
+						}
+					}
 				}
 			}
 		}
-		//
-		bufferedReader.close();
-		fileReader.close();
-		//
 		return isValidFormat;
 	}
 }

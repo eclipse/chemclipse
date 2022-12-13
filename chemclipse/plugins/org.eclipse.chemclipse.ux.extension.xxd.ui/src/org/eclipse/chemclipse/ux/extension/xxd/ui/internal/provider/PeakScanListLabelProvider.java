@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.model.targets.TargetSupport;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramPeakMSD;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
@@ -123,13 +124,11 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 	@Override
 	public Color getBackground(final Object element) {
 
-		if(element instanceof IPeak) {
-			IPeak peak = (IPeak)element;
+		if(element instanceof IPeak peak) {
 			Set<IIdentificationTarget> peakTargets = peak.getTargets();
 			for(IIdentificationTarget peakTarget : peakTargets) {
 				IComparisonResult comparisonResult = peakTarget.getComparisonResult();
-				if(comparisonResult instanceof IPeakComparisonResult) {
-					IPeakComparisonResult peakComparisonResult = (IPeakComparisonResult)comparisonResult;
+				if(comparisonResult instanceof IPeakComparisonResult peakComparisonResult) {
 					if(peakComparisonResult.isMarkerPeak()) {
 						return new Color(DisplayUtils.getDisplay(), 255, 140, 0);
 					}
@@ -143,15 +142,14 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 	public Image getColumnImage(Object element, int columnIndex) {
 
 		if(columnIndex == 0) {
-			if(element instanceof IPeak) {
-				IPeak peak = (IPeak)element;
+			if(element instanceof IPeak peak) {
 				if(peak.isActiveForAnalysis()) {
-					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED, IApplicationImage.SIZE_16x16);
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED, IApplicationImageProvider.SIZE_16x16);
 				} else {
-					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DESELECTED, IApplicationImage.SIZE_16x16);
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DESELECTED, IApplicationImageProvider.SIZE_16x16);
 				}
 			} else if(element instanceof IScan) {
-				return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DESELECTED_INACTIVE, IApplicationImage.SIZE_16x16);
+				return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DESELECTED_INACTIVE, IApplicationImageProvider.SIZE_16x16);
 			}
 		} else if(columnIndex == 1) {
 			return getImage(element);
@@ -167,11 +165,9 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 			/*
 			 * Show peak and scan data.
 			 */
-			if(element instanceof IPeak) {
-				IPeak peak = (IPeak)element;
+			if(element instanceof IPeak peak) {
 				text = getPeakText(peak, columnIndex);
-			} else if(element instanceof IScan) {
-				IScan scan = (IScan)element;
+			} else if(element instanceof IScan scan) {
 				text = getScanText(scan, columnIndex);
 			}
 		}
@@ -224,8 +220,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 				break;
 			case 9:
 			case 10:
-				if(peak instanceof IChromatogramPeakMSD) {
-					IChromatogramPeakMSD chromatogramPeak = (IChromatogramPeakMSD)peak;
+				if(peak instanceof IChromatogramPeakMSD chromatogramPeak) {
 					switch(columnIndex) {
 						case 9:
 							text = Integer.toString(chromatogramPeak.getScanMax());
@@ -234,8 +229,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 							text = decimalFormat.format(chromatogramPeak.getSignalToNoiseRatio());
 							break;
 					}
-				} else if(peak instanceof IChromatogramPeakCSD) {
-					IChromatogramPeakCSD chromatogramPeak = (IChromatogramPeakCSD)peak;
+				} else if(peak instanceof IChromatogramPeakCSD chromatogramPeak) {
 					switch(columnIndex) {
 						case 9:
 							text = Integer.toString(chromatogramPeak.getScanMax());
@@ -244,8 +238,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 							text = decimalFormat.format(chromatogramPeak.getSignalToNoiseRatio());
 							break;
 					}
-				} else if(peak instanceof IChromatogramPeakWSD) {
-					IChromatogramPeakWSD chromatogramPeak = (IChromatogramPeakWSD)peak;
+				} else if(peak instanceof IChromatogramPeakWSD chromatogramPeak) {
 					switch(columnIndex) {
 						case 9:
 							text = Integer.toString(chromatogramPeak.getScanMax());
@@ -364,7 +357,6 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 	@Override
 	public Image getImage(Object element) {
 
-		Image image = ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAK, IApplicationImage.SIZE_16x16);
-		return image;
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAK, IApplicationImage.SIZE_16x16);
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2010, 2021 Lablicate GmbH.
+ * Copyright (c) 2010, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -50,7 +50,7 @@ public interface IIdentificationTarget extends ITarget {
 	static IIdentificationTarget getBestIdentificationTarget(Set<IIdentificationTarget> targets, Comparator<IIdentificationTarget> comparator) {
 
 		IIdentificationTarget identificationTarget = null;
-		if(targets != null && targets.size() > 0) {
+		if(targets != null && !targets.isEmpty()) {
 			if(targets.size() == 1) {
 				identificationTarget = targets.iterator().next();
 			} else {

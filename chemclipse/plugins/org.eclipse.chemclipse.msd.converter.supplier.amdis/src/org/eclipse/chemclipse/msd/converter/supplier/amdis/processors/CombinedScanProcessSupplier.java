@@ -70,8 +70,7 @@ public class CombinedScanProcessSupplier implements IProcessTypeSupplier {
 		public IChromatogramSelection<?, ?> apply(IChromatogramSelection<?, ?> chromatogramSelection, CombinedScanSettings processSettings, ProcessExecutionContext context) throws InterruptedException {
 
 			try {
-				if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-					IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
+				if(chromatogramSelection instanceof IChromatogramSelectionMSD chromatogramSelectionMSD) {
 					/*
 					 * Create the combined scan.
 					 */
