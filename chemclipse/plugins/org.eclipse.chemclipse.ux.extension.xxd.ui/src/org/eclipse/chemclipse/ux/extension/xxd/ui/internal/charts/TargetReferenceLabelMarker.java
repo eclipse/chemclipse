@@ -60,6 +60,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 	//
 	private final int offset;
 	private final List<TargetLabel> targetLabels = new ArrayList<>();
+	private ITargetDisplaySettings targetDisplaySettings;
 	private boolean visible = true;
 	private final boolean showReferenceId;
 	private int rotation;
@@ -77,7 +78,8 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 
 		this.showReferenceId = false;
 		this.offset = offset;
-		setTargetReferences(targetReferences, targetDisplaySettings);
+		this.targetDisplaySettings = targetDisplaySettings;
+		setTargetReferences(targetReferences);
 	}
 
 	@Override
@@ -278,9 +280,15 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		this.rotation = rotation;
 		this.detectionDepth = detectionDepth;
 		targetLabels.clear();
+		int number = 1;
 		for(X generic : data) {
 			if(visibilityFilter.test(generic)) {
-				String label = labelSupplier.apply(generic);
+				String label = null;
+				if(targetDisplaySettings.isShowNumbersInstead()) {
+					label = String.valueOf(number++);
+				} else {
+					label = labelSupplier.apply(generic);
+				}
 				if(label == null || label.isEmpty()) {
 					continue;
 				}
@@ -292,12 +300,12 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		Collections.sort(targetLabels, (o1, o2) -> Double.compare(o1.getX(), o2.getX()));
 	}
 
-	public Predicate<ITargetReference> setTargetReferences(Collection<? extends TargetReference> targetReferences, ITargetDisplaySettings targetDisplaySettings) {
+	public Predicate<ITargetReference> setTargetReferences(Collection<? extends TargetReference> targetReferences) {
 
-		return setTargetReferences(targetReferences, targetDisplaySettings, always -> true);
+		return setTargetReferences(targetReferences, always -> true);
 	}
 
-	private Predicate<ITargetReference> setTargetReferences(Collection<? extends TargetReference> targetReferences, ITargetDisplaySettings targetDisplaySettings, Predicate<ITargetReference> activeFilter) {
+	private Predicate<ITargetReference> setTargetReferences(Collection<? extends TargetReference> targetReferences, Predicate<ITargetReference> activeFilter) {
 
 		targetLabels.clear();
 		Predicate<ITargetReference> visibilityFilter = TargetReference.createVisibilityFilter(targetDisplaySettings);
@@ -312,14 +320,20 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 			FontData peakFontData = getPeakFontData(preferenceStore);
 			FontData scanFontData = getScanFontData(preferenceStore);
 			//
+			int number = 1;
 			for(ITargetReference targetReference : targetReferences) {
 				if(visibilityFilter.test(targetReference)) {
 					/*
 					 * Get the label.
 					 */
-					String label = targetReference.getTargetLabel(libraryField);
-					if(label == null || label.isEmpty()) {
-						continue;
+					String label = null;
+					if(targetDisplaySettings.isShowNumbersInstead()) {
+						label = String.valueOf(number++);
+					} else {
+						label = targetReference.getTargetLabel(libraryField);
+						if(label == null || label.isEmpty()) {
+							continue;
+						}
 					}
 					boolean isPeakLabel = TargetReferenceType.PEAK.equals(targetReference.getType());
 					boolean isScanLabel = TargetReferenceType.SCAN.equals(targetReference.getType());

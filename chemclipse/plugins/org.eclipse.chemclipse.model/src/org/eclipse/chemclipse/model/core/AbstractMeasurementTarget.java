@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,6 +26,7 @@ public class AbstractMeasurementTarget extends AbstractMeasurement implements IT
 	//
 	private boolean showPeakLabels = true;
 	private boolean showScanLabels = true;
+	private boolean showNumbersInstead = false;
 	private LibraryField libraryField = LibraryField.NAME;
 	private int rotation = 90;
 	private int collisionDepth = 0;
@@ -53,6 +54,18 @@ public class AbstractMeasurementTarget extends AbstractMeasurement implements IT
 	public void setShowScanLabels(boolean showScanLabels) {
 
 		this.showScanLabels = showScanLabels;
+	}
+
+	@Override
+	public boolean isShowNumbersInstead() {
+
+		return showNumbersInstead;
+	}
+
+	@Override
+	public void setShowNumbersInstead(boolean showNumbers) {
+
+		this.showNumbersInstead = showNumbers;
 	}
 
 	@Override

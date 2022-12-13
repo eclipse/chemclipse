@@ -49,6 +49,7 @@ public class TargetSettingEditor {
 
 	private Button checkBoxPeaks;
 	private Button checkBoxScans;
+	private Button checkBoxNumbers;
 	private ComboViewer libraryFieldComboViewer;
 	private Label labelRotation;
 	private TargetReferenceListUI targetReferenceListUI;
@@ -70,14 +71,15 @@ public class TargetSettingEditor {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setBackgroundMode(SWT.INHERIT_FORCE);
-		composite.setLayout(new GridLayout(7, false));
+		composite.setLayout(new GridLayout(8, false));
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		/*
 		 * Section
 		 */
 		checkBoxPeaks = createCheckBoxPeaks(composite);
 		checkBoxScans = createCheckBoxScans(composite);
-		createLabel(composite, " | ");
+		checkBoxNumbers = createCheckBoxNumbers(composite);
+		new Label(composite, SWT.SEPARATOR | SWT.VERTICAL);
 		createLabel(composite, "Display Field: ");
 		libraryFieldComboViewer = createComboViewerLibraryField(composite);
 		createLabel(composite, "Collision Detection Depth: ");
@@ -127,8 +129,8 @@ public class TargetSettingEditor {
 	private Button createCheckBoxPeaks(Composite parent) {
 
 		Button button = new Button(parent, SWT.CHECK);
-		button.setText("Show Peak Labels");
-		button.setToolTipText("Show the best target of the identified peaks.");
+		button.setText("Peaks");
+		button.setToolTipText("Show peak labels.");
 		button.setSelection(targetDisplaySettings.isShowPeakLabels());
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -146,8 +148,8 @@ public class TargetSettingEditor {
 	private Button createCheckBoxScans(Composite parent) {
 
 		Button button = new Button(parent, SWT.CHECK);
-		button.setText("Show Scan Labels");
-		button.setToolTipText("Show the best target of the identified scan(s).");
+		button.setText("Scans");
+		button.setToolTipText("Show scan labels");
 		button.setSelection(targetDisplaySettings.isShowScanLabels());
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -155,6 +157,29 @@ public class TargetSettingEditor {
 			public void widgetSelected(SelectionEvent e) {
 
 				targetDisplaySettings.setShowScanLabels(checkBoxScans.getSelection());
+				fireUpdate();
+			}
+		});
+		//
+		return button;
+	}
+
+	private Button createCheckBoxNumbers(Composite parent) {
+
+		Button button = new Button(parent, SWT.CHECK);
+		button.setText("Numbers only");
+		GridData gridData = new GridData();
+		gridData.widthHint = 140;
+		button.setLayoutData(gridData);
+		button.setToolTipText("Enumerate peaks and scans instead.");
+		button.setSelection(targetDisplaySettings.isShowNumbersInstead());
+		button.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				libraryFieldComboViewer.getControl().setEnabled(!checkBoxNumbers.getSelection());
+				targetDisplaySettings.setShowNumbersInstead(checkBoxNumbers.getSelection());
 				fireUpdate();
 			}
 		});
