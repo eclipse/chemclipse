@@ -101,7 +101,7 @@ public class ClassificationAssigner_2_Test extends TestCase {
 		ClassifierAssignFilterSettings settings = createSettings(false, false, false, rule);
 		ClassificationAssigner.apply(peak, settings);
 		//
-		assertTrue(peak.getClassifier().size() == 1);
+		assertEquals(peak.getClassifier().size(), 1);
 		assertTrue(peak.getClassifier().contains(CLASSIFICATION));
 	}
 
@@ -111,7 +111,7 @@ public class ClassificationAssigner_2_Test extends TestCase {
 		ClassifierAssignFilterSettings settings = createSettings(false, false, false, rule);
 		ClassificationAssigner.apply(peak, settings);
 		//
-		assertTrue(peak.getClassifier().size() == 1);
+		assertEquals(peak.getClassifier().size(), 1);
 		assertTrue(peak.getClassifier().contains(CLASSIFICATION));
 	}
 
@@ -121,7 +121,7 @@ public class ClassificationAssigner_2_Test extends TestCase {
 		ClassifierAssignFilterSettings settings = createSettings(true, false, false, rule);
 		ClassificationAssigner.apply(peak, settings);
 		//
-		assertTrue(peak.getClassifier().size() == 1);
+		assertEquals(peak.getClassifier().size(), 1);
 		assertTrue(peak.getClassifier().contains(CLASSIFICATION));
 	}
 
@@ -131,7 +131,7 @@ public class ClassificationAssigner_2_Test extends TestCase {
 		ClassifierAssignFilterSettings settings = createSettings(true, true, false, rule);
 		ClassificationAssigner.apply(peak, settings);
 		//
-		assertTrue(peak.getClassifier().size() == 1);
+		assertEquals(peak.getClassifier().size(), 1);
 		assertTrue(peak.getClassifier().contains(CLASSIFICATION));
 	}
 
@@ -141,7 +141,7 @@ public class ClassificationAssigner_2_Test extends TestCase {
 		ClassifierAssignFilterSettings settings = createSettings(true, true, true, rule);
 		ClassificationAssigner.apply(peak, settings);
 		//
-		assertTrue(peak.getClassifier().size() == 1);
+		assertEquals(peak.getClassifier().size(), 1);
 		assertTrue(peak.getClassifier().contains(CLASSIFICATION));
 	}
 
@@ -169,7 +169,7 @@ public class ClassificationAssigner_2_Test extends TestCase {
 		ClassifierAssignFilterSettings settings = createSettings(false, true, false, rule);
 		ClassificationAssigner.apply(peak, settings);
 		//
-		assertTrue(peak.getClassifier().size() == 1);
+		assertEquals(peak.getClassifier().size(), 1);
 		assertTrue(peak.getClassifier().contains(CLASSIFICATION));
 	}
 
@@ -179,7 +179,7 @@ public class ClassificationAssigner_2_Test extends TestCase {
 		ClassifierAssignFilterSettings settings = createSettings(false, true, false, rule);
 		ClassificationAssigner.apply(peak, settings);
 		//
-		assertTrue(peak.getClassifier().size() == 1);
+		assertEquals(peak.getClassifier().size(), 1);
 		assertTrue(peak.getClassifier().contains(CLASSIFICATION));
 	}
 
@@ -189,7 +189,7 @@ public class ClassificationAssigner_2_Test extends TestCase {
 		ClassifierAssignFilterSettings settings = createSettings(true, true, false, rule);
 		ClassificationAssigner.apply(peak, settings);
 		//
-		assertTrue(peak.getClassifier().size() == 1);
+		assertEquals(peak.getClassifier().size(), 1);
 		assertTrue(peak.getClassifier().contains(CLASSIFICATION));
 	}
 
@@ -199,7 +199,7 @@ public class ClassificationAssigner_2_Test extends TestCase {
 		ClassifierAssignFilterSettings settings = createSettings(true, false, true, rule);
 		ClassificationAssigner.apply(peak, settings);
 		//
-		assertTrue(peak.getClassifier().size() == 1);
+		assertEquals(peak.getClassifier().size(), 1);
 		assertTrue(peak.getClassifier().contains(CLASSIFICATION));
 	}
 
@@ -218,7 +218,7 @@ public class ClassificationAssigner_2_Test extends TestCase {
 		ClassifierAssignFilterSettings settings = createSettings(true, true, true, rule);
 		ClassificationAssigner.apply(peak, settings);
 		//
-		assertTrue(peak.getClassifier().size() == 1);
+		assertEquals(peak.getClassifier().size(), 1);
 		assertTrue(peak.getClassifier().contains(CLASSIFICATION));
 	}
 
@@ -228,7 +228,7 @@ public class ClassificationAssigner_2_Test extends TestCase {
 		ClassifierAssignFilterSettings settings = createSettings(false, false, true, rule);
 		ClassificationAssigner.apply(peak, settings);
 		//
-		assertTrue(peak.getClassifier().size() == 1);
+		assertEquals(peak.getClassifier().size(), 1);
 		assertTrue(peak.getClassifier().contains(CLASSIFICATION));
 	}
 
@@ -247,7 +247,7 @@ public class ClassificationAssigner_2_Test extends TestCase {
 		ClassifierAssignFilterSettings settings = createSettings(false, true, true, rule);
 		ClassificationAssigner.apply(peak, settings);
 		//
-		assertTrue(peak.getClassifier().size() == 1);
+		assertEquals(peak.getClassifier().size(), 1);
 		assertTrue(peak.getClassifier().contains(CLASSIFICATION));
 	}
 

@@ -66,8 +66,7 @@ public class PeakScanListEditingSupport extends EditingSupport {
 	@Override
 	protected Object getValue(Object element) {
 
-		if(element instanceof IPeak) {
-			IPeak peak = (IPeak)element;
+		if(element instanceof IPeak peak) {
 			IPeakModel peakModel = peak.getPeakModel();
 			switch(column) {
 				case PeakScanListLabelProvider.ACTIVE_FOR_ANALYSIS:
@@ -102,8 +101,7 @@ public class PeakScanListEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 
-		if(element instanceof IPeak) {
-			IPeak peak = (IPeak)element;
+		if(element instanceof IPeak peak) {
 			switch(column) {
 				case PeakScanListLabelProvider.ACTIVE_FOR_ANALYSIS:
 					peak.setActiveForAnalysis((boolean)value);

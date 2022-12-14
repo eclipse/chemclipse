@@ -92,9 +92,7 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 				break;
 			case 9:
 			case 10:
-				if(object1 instanceof IChromatogramPeakMSD && object2 instanceof IChromatogramPeakMSD) {
-					IChromatogramPeakMSD chromatogramPeak1 = (IChromatogramPeakMSD)object1;
-					IChromatogramPeakMSD chromatogramPeak2 = (IChromatogramPeakMSD)object2;
+				if(object1 instanceof IChromatogramPeakMSD chromatogramPeak1 && object2 instanceof IChromatogramPeakMSD chromatogramPeak2) {
 					switch(getPropertyIndex()) {
 						case 9:
 							sortOrder = chromatogramPeak2.getScanMax() - chromatogramPeak1.getScanMax();
@@ -103,9 +101,7 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 							sortOrder = Float.compare(chromatogramPeak2.getSignalToNoiseRatio(), chromatogramPeak1.getSignalToNoiseRatio());
 							break;
 					}
-				} else if(object1 instanceof IChromatogramPeakCSD && object2 instanceof IChromatogramPeakCSD) {
-					IChromatogramPeakCSD chromatogramPeak1 = (IChromatogramPeakCSD)object1;
-					IChromatogramPeakCSD chromatogramPeak2 = (IChromatogramPeakCSD)object2;
+				} else if(object1 instanceof IChromatogramPeakCSD chromatogramPeak1 && object2 instanceof IChromatogramPeakCSD chromatogramPeak2) {
 					switch(getPropertyIndex()) {
 						case 9:
 							sortOrder = chromatogramPeak2.getScanMax() - chromatogramPeak1.getScanMax();
@@ -114,9 +110,7 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 							sortOrder = Float.compare(chromatogramPeak2.getSignalToNoiseRatio(), chromatogramPeak1.getSignalToNoiseRatio());
 							break;
 					}
-				} else if(object1 instanceof IChromatogramPeakWSD && object2 instanceof IChromatogramPeakWSD) {
-					IChromatogramPeakWSD chromatogramPeak1 = (IChromatogramPeakWSD)object1;
-					IChromatogramPeakWSD chromatogramPeak2 = (IChromatogramPeakWSD)object2;
+				} else if(object1 instanceof IChromatogramPeakWSD chromatogramPeak1 && object2 instanceof IChromatogramPeakWSD chromatogramPeak2) {
 					switch(getPropertyIndex()) {
 						case 9:
 							sortOrder = chromatogramPeak2.getScanMax() - chromatogramPeak1.getScanMax();
@@ -175,8 +169,8 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 
 	private boolean isActiveForAnalysis(Object object) {
 
-		if(object instanceof IPeak) {
-			return ((IPeak)object).isActiveForAnalysis();
+		if(object instanceof IPeak peak) {
+			return peak.isActiveForAnalysis();
 		} else {
 			return false;
 		}
@@ -193,35 +187,38 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 
 	private int getRetentionTime(Object object) {
 
-		if(object instanceof IPeak) {
-			return ((IPeak)object).getPeakModel().getPeakMaximum().getRetentionTime();
-		} else {
-			return ((IScan)object).getRetentionTime();
+		if(object instanceof IPeak peak) {
+			return peak.getPeakModel().getPeakMaximum().getRetentionTime();
+		} else if(object instanceof IScan scan) {
+			return scan.getRetentionTime();
 		}
+		return 0;
 	}
 
 	private int getRelativeRetentionTime(Object object) {
 
-		if(object instanceof IPeak) {
-			return ((IPeak)object).getPeakModel().getPeakMaximum().getRelativeRetentionTime();
-		} else {
-			return ((IScan)object).getRelativeRetentionTime();
+		if(object instanceof IPeak peak) {
+			return peak.getPeakModel().getPeakMaximum().getRelativeRetentionTime();
+		} else if(object instanceof IScan scan) {
+			return scan.getRelativeRetentionTime();
 		}
+		return 0;
 	}
 
 	private float getRetentionIndex(Object object) {
 
-		if(object instanceof IPeak) {
-			return ((IPeak)object).getPeakModel().getPeakMaximum().getRetentionIndex();
-		} else {
-			return ((IScan)object).getRetentionIndex();
+		if(object instanceof IPeak peak) {
+			return peak.getPeakModel().getPeakMaximum().getRetentionIndex();
+		} else if(object instanceof IScan scan) {
+			return scan.getRetentionIndex();
 		}
+		return 0;
 	}
 
 	private double getIntegratedArea(Object object) {
 
-		if(object instanceof IPeak) {
-			return ((IPeak)object).getIntegratedArea();
+		if(object instanceof IPeak peak) {
+			return peak.getIntegratedArea();
 		} else {
 			return 0.0d;
 		}
@@ -229,8 +226,8 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 
 	private int getStartRetentionTime(Object object) {
 
-		if(object instanceof IPeak) {
-			return ((IPeak)object).getPeakModel().getStartRetentionTime();
+		if(object instanceof IPeak peak) {
+			return peak.getPeakModel().getStartRetentionTime();
 		} else {
 			return 0;
 		}
@@ -238,8 +235,8 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 
 	private int getStopRetentionTime(Object object) {
 
-		if(object instanceof IPeak) {
-			return ((IPeak)object).getPeakModel().getStopRetentionTime();
+		if(object instanceof IPeak peak) {
+			return peak.getPeakModel().getStopRetentionTime();
 		} else {
 			return 0;
 		}
@@ -247,8 +244,8 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 
 	private int getWidth(Object object) {
 
-		if(object instanceof IPeak) {
-			return ((IPeak)object).getPeakModel().getWidthBaselineByInflectionPoints();
+		if(object instanceof IPeak peak) {
+			return peak.getPeakModel().getWidthBaselineByInflectionPoints();
 		} else {
 			return 0;
 		}
@@ -256,8 +253,8 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 
 	private float getLeading(Object object) {
 
-		if(object instanceof IPeak) {
-			return ((IPeak)object).getPeakModel().getLeading();
+		if(object instanceof IPeak peak) {
+			return peak.getPeakModel().getLeading();
 		} else {
 			return 0;
 		}
@@ -265,8 +262,8 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 
 	private float getTailing(Object object) {
 
-		if(object instanceof IPeak) {
-			return ((IPeak)object).getPeakModel().getTailing();
+		if(object instanceof IPeak peak) {
+			return peak.getPeakModel().getTailing();
 		} else {
 			return 0;
 		}
@@ -274,8 +271,8 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 
 	private String getModelDescription(Object object) {
 
-		if(object instanceof IPeak) {
-			return ((IPeak)object).getModelDescription();
+		if(object instanceof IPeak peak) {
+			return peak.getModelDescription();
 		} else {
 			return "";
 		}
@@ -283,8 +280,8 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 
 	private String getDetectorDescription(Object object) {
 
-		if(object instanceof IPeak) {
-			return ((IPeak)object).getDetectorDescription();
+		if(object instanceof IPeak peak) {
+			return peak.getDetectorDescription();
 		} else {
 			return "";
 		}
@@ -292,8 +289,8 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 
 	private String getIntegratorDescription(Object object) {
 
-		if(object instanceof IPeak) {
-			return ((IPeak)object).getIntegratorDescription();
+		if(object instanceof IPeak peak) {
+			return peak.getIntegratorDescription();
 		} else {
 			return "";
 		}
@@ -301,8 +298,8 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 
 	private int getSuggestedNumberOfComponents(Object object) {
 
-		if(object instanceof IPeak) {
-			return ((IPeak)object).getSuggestedNumberOfComponents();
+		if(object instanceof IPeak peak) {
+			return peak.getSuggestedNumberOfComponents();
 		} else {
 			return 0;
 		}
@@ -310,8 +307,8 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 
 	private int getInternalStandards(Object object) {
 
-		if(object instanceof IPeak) {
-			return ((IPeak)object).getInternalStandards().size();
+		if(object instanceof IPeak peak) {
+			return peak.getInternalStandards().size();
 		} else {
 			return 0;
 		}

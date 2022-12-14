@@ -43,9 +43,8 @@ public class ChromatogramExportConverter extends AbstractChromatogramExportConve
 	public IProcessingInfo<File> convert(File file, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) {
 
 		IProcessingInfo<File> processingInfo = super.validate(file);
-		if(!processingInfo.hasErrorMessages() && chromatogram instanceof IChromatogramMSD) {
+		if(!processingInfo.hasErrorMessages() && chromatogram instanceof IChromatogramMSD chromatogramMSD) {
 			try {
-				IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
 				ChromatogramSelectionMSD chromatogramSelectionMSD = new ChromatogramSelectionMSD(chromatogramMSD);
 				/*
 				 * Create the combined scan.

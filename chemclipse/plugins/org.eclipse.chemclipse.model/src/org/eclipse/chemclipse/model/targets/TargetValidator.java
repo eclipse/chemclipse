@@ -50,8 +50,8 @@ public class TargetValidator implements IValidator<Object> {
 		if(value == null) {
 			message = ERROR_TARGET;
 		} else {
-			if(value instanceof String) {
-				String text = ((String)value).trim();
+			if(value instanceof String text) {
+				text = text.trim();
 				if(text.contains(TargetListUtil.SEPARATOR_TOKEN)) {
 					message = ERROR_TOKEN;
 				} else if("".equals(text.trim())) {

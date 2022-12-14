@@ -124,8 +124,7 @@ public class TargetBuilderMSD {
 
 	private void initializeLibraryInformation(ILibraryInformation libraryInformation, IScanMSD reference) {
 
-		if(reference instanceof IRegularLibraryMassSpectrum) {
-			IRegularLibraryMassSpectrum libraryMassSpectrum = (IRegularLibraryMassSpectrum)reference;
+		if(reference instanceof IRegularLibraryMassSpectrum libraryMassSpectrum) {
 			ILibraryInformation libraryInformationReference = libraryMassSpectrum.getLibraryInformation();
 			/*
 			 * Reference
