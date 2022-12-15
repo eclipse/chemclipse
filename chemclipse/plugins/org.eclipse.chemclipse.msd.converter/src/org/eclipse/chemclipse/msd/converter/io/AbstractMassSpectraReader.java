@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2021 Lablicate GmbH.
+ * Copyright (c) 2015, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,7 +13,7 @@ package org.eclipse.chemclipse.msd.converter.io;
 
 import org.eclipse.chemclipse.converter.io.AbstractFileHelper;
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.core.RetentionIndexType;
+import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.support.LibraryInformationSupport;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
@@ -47,8 +47,8 @@ public abstract class AbstractMassSpectraReader extends AbstractFileHelper imple
 					/*
 					 * Extra values.
 					 */
-					massSpectrum.setRetentionIndex(RetentionIndexType.APOLAR, retentionIndex);
-					massSpectrum.setRetentionIndex(RetentionIndexType.POLAR, parseFloat(values[1]));
+					massSpectrum.setRetentionIndex(SeparationColumnType.NON_POLAR, retentionIndex);
+					massSpectrum.setRetentionIndex(SeparationColumnType.POLAR, parseFloat(values[1]));
 				}
 			}
 			//

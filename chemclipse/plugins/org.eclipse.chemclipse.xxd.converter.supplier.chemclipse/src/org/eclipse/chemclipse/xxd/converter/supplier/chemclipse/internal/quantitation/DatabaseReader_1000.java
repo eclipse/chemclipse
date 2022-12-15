@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,10 +22,11 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
+import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.core.PeakType;
-import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
@@ -330,9 +331,9 @@ public class DatabaseReader_1000 extends AbstractDatabaseReader implements IData
 		if(dataInputStream.readBoolean()) {
 			int size = dataInputStream.readInt();
 			for(int i = 0; i < size; i++) {
-				RetentionIndexType retentionIndexType = RetentionIndexType.valueOf(readString(dataInputStream));
+				SeparationColumnType separationColumnType = SeparationColumnFactory.getSeparationColumnType(readString(dataInputStream));
 				float retentionIndexAdditional = dataInputStream.readFloat();
-				massSpectrum.setRetentionIndex(retentionIndexType, retentionIndexAdditional);
+				massSpectrum.setRetentionIndex(separationColumnType, retentionIndexAdditional);
 			}
 		}
 		int timeSegmentId = dataInputStream.readInt();

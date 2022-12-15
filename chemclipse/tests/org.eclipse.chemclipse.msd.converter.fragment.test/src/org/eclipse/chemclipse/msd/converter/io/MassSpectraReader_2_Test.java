@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.io;
 
-import org.eclipse.chemclipse.model.core.RetentionIndexType;
+import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 import org.eclipse.chemclipse.msd.model.core.IRegularLibraryMassSpectrum;
 
 import junit.framework.TestCase;
@@ -83,7 +83,7 @@ public class MassSpectraReader_2_Test extends TestCase {
 		massSpectraReader.extractRetentionIndices(massSpectrum, value, delimiter);
 		assertEquals(1160.0f, massSpectrum.getRetentionIndex());
 		assertTrue(massSpectrum.hasAdditionalRetentionIndices());
-		assertEquals(1160.0f, massSpectrum.getRetentionIndex(RetentionIndexType.APOLAR));
+		assertEquals(1160.0f, massSpectrum.getRetentionIndex(SeparationColumnType.NON_POLAR));
 	}
 
 	public void test6() {
@@ -94,8 +94,8 @@ public class MassSpectraReader_2_Test extends TestCase {
 		massSpectraReader.extractRetentionIndices(massSpectrum, value, delimiter);
 		assertEquals(1160.0f, massSpectrum.getRetentionIndex());
 		assertTrue(massSpectrum.hasAdditionalRetentionIndices());
-		assertEquals(1160.0f, massSpectrum.getRetentionIndex(RetentionIndexType.APOLAR));
-		assertEquals(1632.0f, massSpectrum.getRetentionIndex(RetentionIndexType.POLAR));
+		assertEquals(1160.0f, massSpectrum.getRetentionIndex(SeparationColumnType.NON_POLAR));
+		assertEquals(1632.0f, massSpectrum.getRetentionIndex(SeparationColumnType.POLAR));
 	}
 
 	public void test7() {

@@ -19,7 +19,8 @@ import java.util.Set;
 import java.util.zip.ZipFile;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.core.RetentionIndexType;
+import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
+import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.ComparisonResult;
@@ -94,9 +95,9 @@ public class ReaderProxy_1500 extends AbstractZipReader implements IReaderProxy 
 		if(dataInputStream.readBoolean()) {
 			int size = dataInputStream.readInt();
 			for(int i = 0; i < size; i++) {
-				RetentionIndexType retentionIndexType = RetentionIndexType.valueOf(readString(dataInputStream));
+				SeparationColumnType separationColumnType = SeparationColumnFactory.getSeparationColumnType(readString(dataInputStream));
 				float retentionIndexAdditional = dataInputStream.readFloat();
-				massSpectrum.setRetentionIndex(retentionIndexType, retentionIndexAdditional);
+				massSpectrum.setRetentionIndex(separationColumnType, retentionIndexAdditional);
 			}
 		}
 		int timeSegmentId = dataInputStream.readInt(); // Time Segment Id

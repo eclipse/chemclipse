@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,9 +24,10 @@ import java.util.zip.ZipInputStream;
 import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
+import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
+import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IMethod;
-import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.support.history.EditInformation;
 import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
@@ -229,9 +230,9 @@ public class ChromatogramReader_1007 extends AbstractChromatogramReader implemen
 			if(dataInputStream.readBoolean()) {
 				int size = dataInputStream.readInt();
 				for(int i = 0; i < size; i++) {
-					RetentionIndexType retentionIndexType = RetentionIndexType.valueOf(readString(dataInputStream));
+					SeparationColumnType separationColumnType = SeparationColumnFactory.getSeparationColumnType(readString(dataInputStream));
 					float retentionIndexAdditional = dataInputStream.readFloat();
-					scanWSD.setRetentionIndex(retentionIndexType, retentionIndexAdditional);
+					scanWSD.setRetentionIndex(separationColumnType, retentionIndexAdditional);
 				}
 			}
 			float totalSignal = dataInputStream.readFloat();

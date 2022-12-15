@@ -14,9 +14,6 @@ package org.eclipse.chemclipse.model.columns;
 
 import org.eclipse.chemclipse.support.text.ILabel;
 
-/*
- * List a few examples here.
- */
 public enum SeparationColumnType implements ILabel {
 
 	/*
@@ -26,8 +23,8 @@ public enum SeparationColumnType implements ILabel {
 	 */
 	DEFAULT("Default"), //
 	POLAR("polar"), //
-	NON_POLAR("non-polar (apolar)"), // Replacement for APOLAR("non-polar")
-	SEMI_POLAR("semi-polar");
+	NON_POLAR("non-polar (apolar)"), // Replacement for RetentionIndexType.APOLAR and APOLAR("non-polar")
+	SEMI_POLAR("semi-polar"); // Replacement for RetentionIndexType.SEMIPOLAR
 
 	private String label = "";
 

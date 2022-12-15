@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -35,13 +35,13 @@ import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
 import org.eclipse.chemclipse.model.columns.RetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
+import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IMethod;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.core.ISignal;
 import org.eclipse.chemclipse.model.core.PeakType;
-import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
 import org.eclipse.chemclipse.model.identifier.ChromatogramComparisonResult;
@@ -281,9 +281,9 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 			if(dataInputStream.readBoolean()) {
 				int size = dataInputStream.readInt();
 				for(int i = 0; i < size; i++) {
-					RetentionIndexType retentionIndexType = RetentionIndexType.valueOf(readString(dataInputStream));
+					SeparationColumnType separationColumnType = SeparationColumnFactory.getSeparationColumnType(readString(dataInputStream));
 					float retentionIndexAdditional = dataInputStream.readFloat();
-					scanWSD.setRetentionIndex(retentionIndexType, retentionIndexAdditional);
+					scanWSD.setRetentionIndex(separationColumnType, retentionIndexAdditional);
 				}
 			}
 			float totalSignal = dataInputStream.readFloat();
@@ -393,9 +393,9 @@ public class ChromatogramReader_1300 extends AbstractChromatogramReader implemen
 		if(dataInputStream.readBoolean()) {
 			int size = dataInputStream.readInt();
 			for(int i = 0; i < size; i++) {
-				RetentionIndexType retentionIndexType = RetentionIndexType.valueOf(readString(dataInputStream));
+				SeparationColumnType separationColumnType = SeparationColumnFactory.getSeparationColumnType(readString(dataInputStream));
 				float retentionIndexAdditional = dataInputStream.readFloat();
-				peakMaximum.setRetentionIndex(retentionIndexType, retentionIndexAdditional);
+				peakMaximum.setRetentionIndex(separationColumnType, retentionIndexAdditional);
 			}
 		}
 		//

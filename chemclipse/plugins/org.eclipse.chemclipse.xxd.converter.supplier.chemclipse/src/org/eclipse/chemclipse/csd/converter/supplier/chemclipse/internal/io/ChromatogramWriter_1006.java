@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -31,11 +31,12 @@ import org.eclipse.chemclipse.csd.model.core.IPeakCSD;
 import org.eclipse.chemclipse.csd.model.core.IPeakModelCSD;
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
+import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IMethod;
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
+import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.RetentionIndexTypeSupport;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -160,10 +161,10 @@ public class ChromatogramWriter_1006 extends AbstractChromatogramWriter implemen
 			dataOutputStream.writeFloat(scanFID.getRetentionIndex()); // Retention Index
 			dataOutputStream.writeBoolean(scanFID.hasAdditionalRetentionIndices());
 			if(scanFID.hasAdditionalRetentionIndices()) {
-				Map<RetentionIndexType, Float> retentionIndicesTyped = scanFID.getRetentionIndicesTyped();
+				Map<SeparationColumnType, Float> retentionIndicesTyped = scanFID.getRetentionIndicesTyped();
 				dataOutputStream.writeInt(retentionIndicesTyped.size());
-				for(Map.Entry<RetentionIndexType, Float> retentionIndexTyped : retentionIndicesTyped.entrySet()) {
-					writeString(dataOutputStream, retentionIndexTyped.getKey().toString());
+				for(Map.Entry<SeparationColumnType, Float> retentionIndexTyped : retentionIndicesTyped.entrySet()) {
+					writeString(dataOutputStream, RetentionIndexTypeSupport.getBackwardCompatibleName(retentionIndexTyped.getKey()));
 					dataOutputStream.writeFloat(retentionIndexTyped.getValue());
 				}
 			}
@@ -271,10 +272,10 @@ public class ChromatogramWriter_1006 extends AbstractChromatogramWriter implemen
 		dataOutputStream.writeFloat(scan.getRetentionIndex()); // Retention Index
 		dataOutputStream.writeBoolean(scan.hasAdditionalRetentionIndices());
 		if(scan.hasAdditionalRetentionIndices()) {
-			Map<RetentionIndexType, Float> retentionIndicesTyped = scan.getRetentionIndicesTyped();
+			Map<SeparationColumnType, Float> retentionIndicesTyped = scan.getRetentionIndicesTyped();
 			dataOutputStream.writeInt(retentionIndicesTyped.size());
-			for(Map.Entry<RetentionIndexType, Float> retentionIndexTyped : retentionIndicesTyped.entrySet()) {
-				writeString(dataOutputStream, retentionIndexTyped.getKey().toString());
+			for(Map.Entry<SeparationColumnType, Float> retentionIndexTyped : retentionIndicesTyped.entrySet()) {
+				writeString(dataOutputStream, RetentionIndexTypeSupport.getBackwardCompatibleName(retentionIndexTyped.getKey()));
 				dataOutputStream.writeFloat(retentionIndexTyped.getValue());
 			}
 		}

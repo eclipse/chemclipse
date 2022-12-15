@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2020 Lablicate GmbH.
+ * Copyright (c) 2012, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.core.runtime.Platform;
 
@@ -42,7 +43,7 @@ public abstract class AbstractScan extends AbstractSignal implements IScan {
 	 * The map is loaded lazily. Normally it is not used.
 	 */
 	private float retentionIndex = 0;
-	private Map<RetentionIndexType, Float> additionalRetentionIndices = null;
+	private Map<SeparationColumnType, Float> additionalRetentionIndices = null;
 	//
 	private int scanNumber = 0;
 	private int timeSegmentId = 1; // Default 1
@@ -196,20 +197,20 @@ public abstract class AbstractScan extends AbstractSignal implements IScan {
 	}
 
 	@Override
-	public float getRetentionIndex(RetentionIndexType retentionIndexType) {
+	public float getRetentionIndex(SeparationColumnType separationColumnType) {
 
-		if(additionalRetentionIndices != null && additionalRetentionIndices.containsKey(retentionIndexType)) {
-			return additionalRetentionIndices.get(retentionIndexType);
+		if(additionalRetentionIndices != null && additionalRetentionIndices.containsKey(separationColumnType)) {
+			return additionalRetentionIndices.get(separationColumnType);
 		} else {
 			return 0.0f;
 		}
 	}
 
 	@Override
-	public void setRetentionIndex(RetentionIndexType retentionIndexType, float retentionIndex) {
+	public void setRetentionIndex(SeparationColumnType separationColumnType, float retentionIndex) {
 
 		if(additionalRetentionIndices == null) {
-			additionalRetentionIndices = new HashMap<RetentionIndexType, Float>();
+			additionalRetentionIndices = new HashMap<SeparationColumnType, Float>();
 		}
 		/*
 		 * Add the index.
@@ -220,16 +221,16 @@ public abstract class AbstractScan extends AbstractSignal implements IScan {
 			retentionIndex = 0.0f;
 		}
 		//
-		additionalRetentionIndices.put(retentionIndexType, retentionIndex);
+		additionalRetentionIndices.put(separationColumnType, retentionIndex);
 	}
 
 	@Override
-	public Map<RetentionIndexType, Float> getRetentionIndicesTyped() {
+	public Map<SeparationColumnType, Float> getRetentionIndicesTyped() {
 
 		if(additionalRetentionIndices == null) {
-			return new HashMap<RetentionIndexType, Float>();
+			return new HashMap<SeparationColumnType, Float>();
 		} else {
-			return new HashMap<RetentionIndexType, Float>(additionalRetentionIndices);
+			return new HashMap<SeparationColumnType, Float>(additionalRetentionIndices);
 		}
 	}
 

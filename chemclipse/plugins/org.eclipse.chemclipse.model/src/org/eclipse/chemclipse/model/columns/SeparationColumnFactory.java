@@ -15,12 +15,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.chemclipse.logging.core.Logger;
-import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 
 public class SeparationColumnFactory {
 
 	private static final Logger logger = Logger.getLogger(SeparationColumnType.class);
+	//
+	private static List<ISeparationColumn> separationColumns;
+	private static SeparationColumnMapping separationColumnMapping;
 
 	public static String getColumnLabel(ISeparationColumn separationColumn, int labelLength) {
 
@@ -37,12 +39,20 @@ public class SeparationColumnFactory {
 
 	public static List<ISeparationColumn> getSeparationColumns() {
 
-		List<ISeparationColumn> separationColumns = new ArrayList<>();
-		separationColumns.add(getSeparationColumn(SeparationColumnType.DEFAULT));
-		separationColumns.add(getSeparationColumn(SeparationColumnType.POLAR));
-		separationColumns.add(getSeparationColumn(SeparationColumnType.NON_POLAR));
-		separationColumns.add(getSeparationColumn(SeparationColumnType.SEMI_POLAR));
+		if(separationColumns == null) {
+			separationColumns = new ArrayList<>();
+			separationColumns.add(getSeparationColumn(SeparationColumnType.DEFAULT));
+			separationColumns.add(getSeparationColumn(SeparationColumnType.POLAR));
+			separationColumns.add(getSeparationColumn(SeparationColumnType.NON_POLAR));
+			separationColumns.add(getSeparationColumn(SeparationColumnType.SEMI_POLAR));
+		}
+		//
 		return separationColumns;
+	}
+
+	public static SeparationColumnType getSeparationColumnType(String name) {
+
+		return getSeparationColumnType(getSeparationColumnMappingDefault(), name);
 	}
 
 	public static ISeparationColumn getSeparationColumn(String name) {
@@ -78,36 +88,54 @@ public class SeparationColumnFactory {
 		 */
 		SeparationColumnMapping separationColumnMapping = new SeparationColumnMapping();
 		separationColumnMapping.load(PreferenceSupplier.getSeparationColumnMappings());
-		/*
-		 * Backward compatibility (RetentionIndexType)
-		 */
-		addColumnMapping(separationColumnMapping, RetentionIndexType.POLAR.name(), SeparationColumnType.POLAR);
-		addColumnMapping(separationColumnMapping, RetentionIndexType.SEMIPOLAR.name(), SeparationColumnType.SEMI_POLAR);
-		addColumnMapping(separationColumnMapping, RetentionIndexType.APOLAR.name(), SeparationColumnType.NON_POLAR);
-		/*
-		 * Standards
-		 */
-		addColumnMapping(separationColumnMapping, SeparationColumnType.POLAR.name(), SeparationColumnType.POLAR);
-		addColumnMapping(separationColumnMapping, SeparationColumnType.SEMI_POLAR.name(), SeparationColumnType.SEMI_POLAR);
-		addColumnMapping(separationColumnMapping, SeparationColumnType.NON_POLAR.name(), SeparationColumnType.NON_POLAR);
-		/*
-		 * Additionally map the values of RetentionIndexType
-		 */
+		separationColumnMapping.putAll(getSeparationColumnMappingDefault());
+		//
+		return getSeparationColumnType(separationColumnMapping, name);
+	}
+
+	private static SeparationColumnType getSeparationColumnType(SeparationColumnMapping separationColumnMapping, String name) {
+
 		/*
 		 * If no mapping is available or the value can't be parsed
 		 * by SeparationColumnType, then DEFAULT is returned.
 		 */
 		SeparationColumnType separationColumnType = SeparationColumnType.DEFAULT;
-		String value = separationColumnMapping.get(name);
-		if(value != null) {
-			try {
-				separationColumnType = SeparationColumnType.valueOf(value);
-			} catch(Exception e) {
-				logger.warn(e);
+		if(name != null) {
+			String value = separationColumnMapping.get(name);
+			if(value != null) {
+				try {
+					separationColumnType = SeparationColumnType.valueOf(value);
+				} catch(Exception e) {
+					logger.warn(e);
+				}
 			}
 		}
 		//
 		return separationColumnType;
+	}
+
+	private static SeparationColumnMapping getSeparationColumnMappingDefault() {
+
+		if(separationColumnMapping == null) {
+			/*
+			 * Create the mapping.
+			 */
+			separationColumnMapping = new SeparationColumnMapping();
+			/*
+			 * Backward compatibility (RetentionIndexType)
+			 */
+			addColumnMapping(separationColumnMapping, "POLAR", SeparationColumnType.POLAR);
+			addColumnMapping(separationColumnMapping, "SEMIPOLAR", SeparationColumnType.SEMI_POLAR);
+			addColumnMapping(separationColumnMapping, "APOLAR", SeparationColumnType.NON_POLAR);
+			/*
+			 * Standards
+			 */
+			addColumnMapping(separationColumnMapping, SeparationColumnType.POLAR.name(), SeparationColumnType.POLAR);
+			addColumnMapping(separationColumnMapping, SeparationColumnType.SEMI_POLAR.name(), SeparationColumnType.SEMI_POLAR);
+			addColumnMapping(separationColumnMapping, SeparationColumnType.NON_POLAR.name(), SeparationColumnType.NON_POLAR);
+		}
+		//
+		return separationColumnMapping;
 	}
 
 	private static void addColumnMapping(SeparationColumnMapping separationColumnMapping, String name, SeparationColumnType separationColumnType) {

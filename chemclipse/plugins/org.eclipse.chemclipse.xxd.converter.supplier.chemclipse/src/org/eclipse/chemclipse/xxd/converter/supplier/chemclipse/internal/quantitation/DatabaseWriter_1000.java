@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2022 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,9 +22,9 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
@@ -46,6 +46,7 @@ import org.eclipse.chemclipse.msd.model.core.IPeakModelMSD;
 import org.eclipse.chemclipse.msd.model.core.IRegularMassSpectrum;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
+import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.RetentionIndexTypeSupport;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
@@ -285,10 +286,10 @@ public class DatabaseWriter_1000 implements IDatabaseWriter {
 		dataOutputStream.writeFloat(massSpectrum.getRetentionIndex());
 		dataOutputStream.writeBoolean(massSpectrum.hasAdditionalRetentionIndices());
 		if(massSpectrum.hasAdditionalRetentionIndices()) {
-			Map<RetentionIndexType, Float> retentionIndicesTyped = massSpectrum.getRetentionIndicesTyped();
+			Map<SeparationColumnType, Float> retentionIndicesTyped = massSpectrum.getRetentionIndicesTyped();
 			dataOutputStream.writeInt(retentionIndicesTyped.size());
-			for(Map.Entry<RetentionIndexType, Float> retentionIndexTyped : retentionIndicesTyped.entrySet()) {
-				writeString(dataOutputStream, retentionIndexTyped.getKey().toString());
+			for(Map.Entry<SeparationColumnType, Float> retentionIndexTyped : retentionIndicesTyped.entrySet()) {
+				writeString(dataOutputStream, RetentionIndexTypeSupport.getBackwardCompatibleName(retentionIndexTyped.getKey()));
 				dataOutputStream.writeFloat(retentionIndexTyped.getValue());
 			}
 		}

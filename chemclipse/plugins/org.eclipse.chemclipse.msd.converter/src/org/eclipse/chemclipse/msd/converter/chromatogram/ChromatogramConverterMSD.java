@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2022 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -186,13 +186,15 @@ public final class ChromatogramConverterMSD extends AbstractChromatogramConverte
 	private void parseSeparationColumn(IChromatogramMSD chromatogramMSD) {
 
 		if(PreferenceSupplier.isParseSeparationColumnFromHeader()) {
-			//
-			SeparationColumnMapping mapping = new SeparationColumnMapping();
-			mapping.load(PreferenceSupplier.getSeparationColumnKeywords());
+			/*
+			 * The mappings are stored system wide.
+			 */
+			SeparationColumnMapping separationColumnMapping = new SeparationColumnMapping();
+			separationColumnMapping.load(org.eclipse.chemclipse.model.preferences.PreferenceSupplier.getSeparationColumnMappings());
 			//
 			String miscInfo = chromatogramMSD.getMiscInfo();
 			exitloop:
-			for(Map.Entry<String, String> column : mapping.entrySet()) {
+			for(Map.Entry<String, String> column : separationColumnMapping.entrySet()) {
 				if(miscInfo.contains(column.getKey())) {
 					ISeparationColumn separationColumn = SeparationColumnFactory.getSeparationColumn(column.getValue());
 					chromatogramMSD.getSeparationColumnIndices().setSeparationColumn(separationColumn);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -34,12 +34,13 @@ import org.eclipse.chemclipse.csd.model.implementation.ChromatogramPeakCSD;
 import org.eclipse.chemclipse.csd.model.implementation.PeakModelCSD;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
+import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
+import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IMethod;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.core.PeakType;
-import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.implementation.IntegrationEntry;
 import org.eclipse.chemclipse.model.implementation.PeakIntensityValues;
@@ -179,9 +180,9 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 			if(dataInputStream.readBoolean()) {
 				int size = dataInputStream.readInt();
 				for(int i = 0; i < size; i++) {
-					RetentionIndexType retentionIndexType = RetentionIndexType.valueOf(readString(dataInputStream));
+					SeparationColumnType separationColumnType = SeparationColumnFactory.getSeparationColumnType(readString(dataInputStream));
 					float retentionIndexAdditional = dataInputStream.readFloat();
-					scanFID.setRetentionIndex(retentionIndexType, retentionIndexAdditional);
+					scanFID.setRetentionIndex(separationColumnType, retentionIndexAdditional);
 				}
 			}
 			int timeSegmentId = dataInputStream.readInt();
@@ -276,9 +277,9 @@ public class ChromatogramReader_1006 extends AbstractChromatogramReader implemen
 		if(dataInputStream.readBoolean()) {
 			int size = dataInputStream.readInt();
 			for(int i = 0; i < size; i++) {
-				RetentionIndexType retentionIndexType = RetentionIndexType.valueOf(readString(dataInputStream));
+				SeparationColumnType separationColumnType = SeparationColumnFactory.getSeparationColumnType(readString(dataInputStream));
 				float retentionIndexAdditional = dataInputStream.readFloat();
-				peakMaximum.setRetentionIndex(retentionIndexType, retentionIndexAdditional);
+				peakMaximum.setRetentionIndex(separationColumnType, retentionIndexAdditional);
 			}
 		}
 		int timeSegmentId = dataInputStream.readInt();

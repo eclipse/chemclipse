@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -27,10 +27,10 @@ import java.util.zip.ZipOutputStream;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.io.AbstractChromatogramWriter;
 import org.eclipse.chemclipse.model.baseline.IBaselineModel;
+import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IMethod;
 import org.eclipse.chemclipse.model.core.ISignal;
-import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
@@ -51,6 +51,7 @@ import org.eclipse.chemclipse.support.history.IEditHistory;
 import org.eclipse.chemclipse.support.history.IEditInformation;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IScanProxy;
+import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.RetentionIndexTypeSupport;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.ScanProxy;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -422,10 +423,10 @@ public class ChromatogramWriter_1007 extends AbstractChromatogramWriter implemen
 		dataOutputStream.writeFloat(massSpectrum.getRetentionIndex()); // Retention Index
 		dataOutputStream.writeBoolean(massSpectrum.hasAdditionalRetentionIndices());
 		if(massSpectrum.hasAdditionalRetentionIndices()) {
-			Map<RetentionIndexType, Float> retentionIndicesTyped = massSpectrum.getRetentionIndicesTyped();
+			Map<SeparationColumnType, Float> retentionIndicesTyped = massSpectrum.getRetentionIndicesTyped();
 			dataOutputStream.writeInt(retentionIndicesTyped.size());
-			for(Map.Entry<RetentionIndexType, Float> retentionIndexTyped : retentionIndicesTyped.entrySet()) {
-				writeString(dataOutputStream, retentionIndexTyped.getKey().toString());
+			for(Map.Entry<SeparationColumnType, Float> retentionIndexTyped : retentionIndicesTyped.entrySet()) {
+				writeString(dataOutputStream, RetentionIndexTypeSupport.getBackwardCompatibleName(retentionIndexTyped.getKey()));
 				dataOutputStream.writeFloat(retentionIndexTyped.getValue());
 			}
 		}

@@ -25,11 +25,12 @@ import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
 import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.converter.io.IFileHelper;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.model.columns.SeparationColumnFactory;
+import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IPeakIntensityValues;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.core.PeakType;
-import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.model.exceptions.PeakException;
 import org.eclipse.chemclipse.model.exceptions.ReferenceMustNotBeNullException;
@@ -251,9 +252,9 @@ public class PeakReader_1500 extends AbstractZipReader implements IPeakReader {
 		if(dataInputStream.readBoolean()) {
 			int size = dataInputStream.readInt();
 			for(int i = 0; i < size; i++) {
-				RetentionIndexType retentionIndexType = RetentionIndexType.valueOf(readString(dataInputStream));
+				SeparationColumnType separationColumnType = SeparationColumnFactory.getSeparationColumnType(readString(dataInputStream));
 				float retentionIndexAdditional = dataInputStream.readFloat();
-				massSpectrum.setRetentionIndex(retentionIndexType, retentionIndexAdditional);
+				massSpectrum.setRetentionIndex(separationColumnType, retentionIndexAdditional);
 			}
 		}
 		int timeSegmentId = dataInputStream.readInt(); // Time Segment Id

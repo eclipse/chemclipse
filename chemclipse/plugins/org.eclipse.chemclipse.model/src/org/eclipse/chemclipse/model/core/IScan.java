@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.model.core;
 import java.io.Serializable;
 import java.util.Map;
 
+import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 import org.eclipse.core.runtime.IAdaptable;
 
 /**
@@ -158,21 +159,21 @@ public interface IScan extends ISignal, IAdaptable, Serializable, ITargetSupplie
 	 * Returns the retention index given by the RetentionIndexType.
 	 * If none is available, 0 will be returned.
 	 * 
-	 * @param retentionIndexType
+	 * @param separationColumnType
 	 * @return float
 	 */
-	float getRetentionIndex(RetentionIndexType retentionIndexType);
+	float getRetentionIndex(SeparationColumnType separationColumnType);
 
-	Map<RetentionIndexType, Float> getRetentionIndicesTyped();
+	Map<SeparationColumnType, Float> getRetentionIndicesTyped();
 
 	/**
 	 * Sets the retention index. Only values >= 0 are allowed.<br/>
 	 * Set a retention index for a certain column type.
 	 * 
-	 * @param retentionIndexType
+	 * @param separationColumnType
 	 * @param retentionIndex
 	 */
-	void setRetentionIndex(RetentionIndexType retentionIndexType, float retentionIndex);
+	void setRetentionIndex(SeparationColumnType separationColumnType, float retentionIndex);
 
 	/**
 	 * Returns the total signal.<br/>

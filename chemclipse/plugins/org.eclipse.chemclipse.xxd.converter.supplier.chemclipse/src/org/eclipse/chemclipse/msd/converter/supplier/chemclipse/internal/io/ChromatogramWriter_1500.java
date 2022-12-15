@@ -36,10 +36,10 @@ import org.eclipse.chemclipse.model.baseline.IBaselineModel;
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.columns.ISeparationColumnIndices;
+import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IIntegrationEntry;
 import org.eclipse.chemclipse.model.core.IMethod;
-import org.eclipse.chemclipse.model.core.RetentionIndexType;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
@@ -65,6 +65,7 @@ import org.eclipse.chemclipse.wsd.converter.supplier.chemclipse.io.ChromatogramW
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IFormat;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.IScanProxy;
+import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.RetentionIndexTypeSupport;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.internal.support.ScanProxy;
 import org.eclipse.chemclipse.xxd.converter.supplier.chemclipse.preferences.PreferenceSupplier;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -479,10 +480,10 @@ public class ChromatogramWriter_1500 extends AbstractChromatogramWriter implemen
 		dataOutputStream.writeFloat(massSpectrum.getRetentionIndex()); // Retention Index
 		dataOutputStream.writeBoolean(massSpectrum.hasAdditionalRetentionIndices());
 		if(massSpectrum.hasAdditionalRetentionIndices()) {
-			Map<RetentionIndexType, Float> retentionIndicesTyped = massSpectrum.getRetentionIndicesTyped();
+			Map<SeparationColumnType, Float> retentionIndicesTyped = massSpectrum.getRetentionIndicesTyped();
 			dataOutputStream.writeInt(retentionIndicesTyped.size());
-			for(Map.Entry<RetentionIndexType, Float> retentionIndexTyped : retentionIndicesTyped.entrySet()) {
-				writeString(dataOutputStream, retentionIndexTyped.getKey().toString());
+			for(Map.Entry<SeparationColumnType, Float> retentionIndexTyped : retentionIndicesTyped.entrySet()) {
+				writeString(dataOutputStream, RetentionIndexTypeSupport.getBackwardCompatibleName(retentionIndexTyped.getKey()));
 				dataOutputStream.writeFloat(retentionIndexTyped.getValue());
 			}
 		}

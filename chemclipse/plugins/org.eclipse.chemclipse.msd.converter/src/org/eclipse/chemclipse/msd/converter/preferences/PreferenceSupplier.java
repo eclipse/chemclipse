@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2022 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -55,8 +55,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	 */
 	public static final String P_PARSE_SEPARATION_COLUMN_FROM_HEADER = "parseSeparationColumnFromHeader";
 	public static final boolean DEF_PARSE_SEPARATION_COLUMN_FROM_HEADER = true;
-	public static final String P_SEPARATION_COLUMN_KEYWORDS = "separationColumnKeywords";
-	public static final String DEF_SEPARATION_COLUMN_KEYWORDS = "";
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -97,7 +95,6 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 		defaultValues.put(P_PARSE_AMDIS_RETENTION_INDEX_DATA, Boolean.toString(DEF_PARSE_AMDIS_RETENTION_INDEX_DATA));
 		//
 		defaultValues.put(P_PARSE_SEPARATION_COLUMN_FROM_HEADER, Boolean.toString(DEF_PARSE_SEPARATION_COLUMN_FROM_HEADER));
-		defaultValues.put(P_SEPARATION_COLUMN_KEYWORDS, DEF_SEPARATION_COLUMN_KEYWORDS);
 		//
 		return defaultValues;
 	}
@@ -166,11 +163,5 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 
 		IEclipsePreferences preferences = INSTANCE().getPreferences();
 		return preferences.getBoolean(P_PARSE_SEPARATION_COLUMN_FROM_HEADER, DEF_PARSE_SEPARATION_COLUMN_FROM_HEADER);
-	}
-
-	public static String getSeparationColumnKeywords() {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.get(P_SEPARATION_COLUMN_KEYWORDS, DEF_SEPARATION_COLUMN_KEYWORDS);
 	}
 }
