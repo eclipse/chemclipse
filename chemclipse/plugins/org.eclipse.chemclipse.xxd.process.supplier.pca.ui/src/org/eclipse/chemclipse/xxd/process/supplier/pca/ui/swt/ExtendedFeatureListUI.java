@@ -248,18 +248,28 @@ public class ExtendedFeatureListUI extends Composite implements IExtendedPartUI 
 		updateInput(false);
 	}
 
-	private void updateInput(boolean createDataMatrix) {
+	private void updateInput(boolean updateFeatures) {
 
-		if(createDataMatrix) {
-			if(evaluationPCA != null) {
-				featureDataMatrix = new FeatureDataMatrix(evaluationPCA);
-			} else {
-				featureDataMatrix = null;
-			}
+		if(updateFeatures) {
+			featureDataMatrix = evaluationPCA != null ? evaluationPCA.getFeatureDataMatrix() : null;
 		}
+		updateInput();
+	}
+
+	private void updateInput() {
+
+		listControl.get().clear();
+		toolbarInfo.get().setText("Loading...");
 		//
-		updateWidgets();
-		updateInfoLabel();
+		getDisplay().asyncExec(new Runnable() {
+
+			@Override
+			public void run() {
+
+				updateWidgets();
+				updateInfoLabel();
+			}
+		});
 	}
 
 	private void updateWidgets() {

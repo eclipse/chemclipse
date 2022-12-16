@@ -18,6 +18,10 @@ public class EvaluationPCA {
 
 	private ISamplesPCA<? extends IVariable, ? extends ISample> samples = null;
 	private IResultsPCA<? extends IResultPCA, ? extends IVariable> results = null;
+	/*
+	 * The feature data matrix can be calculated after samples and results are set.
+	 */
+	private FeatureDataMatrix featureDataMatrix = null;
 
 	public EvaluationPCA(ISamplesPCA<? extends IVariable, ? extends ISample> samples, IResultsPCA<? extends IResultPCA, ? extends IVariable> results) {
 
@@ -33,5 +37,15 @@ public class EvaluationPCA {
 	public IResultsPCA<? extends IResultPCA, ? extends IVariable> getResults() {
 
 		return results;
+	}
+
+	public FeatureDataMatrix getFeatureDataMatrix() {
+
+		return featureDataMatrix;
+	}
+
+	public void setFeatureDataMatrix(FeatureDataMatrix featureDataMatrix) {
+
+		this.featureDataMatrix = featureDataMatrix;
 	}
 }

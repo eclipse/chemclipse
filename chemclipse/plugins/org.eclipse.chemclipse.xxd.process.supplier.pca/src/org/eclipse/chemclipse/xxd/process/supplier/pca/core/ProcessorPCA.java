@@ -34,6 +34,8 @@ import org.eclipse.chemclipse.xxd.process.supplier.pca.core.algorithms.Calculato
 import org.eclipse.chemclipse.xxd.process.supplier.pca.exception.MathIllegalArgumentException;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.Algorithm;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.EvaluationPCA;
+import org.eclipse.chemclipse.xxd.process.supplier.pca.model.Feature;
+import org.eclipse.chemclipse.xxd.process.supplier.pca.model.FeatureDataMatrix;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.IMultivariateCalculator;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.IResultPCA;
@@ -82,70 +84,119 @@ public class ProcessorPCA {
 		}
 	}
 
-	public <V extends IVariable, S extends ISample> ResultsPCA process(ISamplesPCA<V, S> samples, EvaluationPCA masterEvaluationPCA, IProgressMonitor monitor) throws MathIllegalArgumentException {
+	@SuppressWarnings("rawtypes")
+	public <V extends IVariable, S extends ISample> EvaluationPCA process(ISamplesPCA<V, S> samples, EvaluationPCA masterEvaluationPCA, IProgressMonitor monitor) throws MathIllegalArgumentException {
 
-		SubMonitor subMonitor = SubMonitor.convert(monitor, "Run PCA", 140);
-		IAnalysisSettings analysisSettings = samples.getAnalysisSettings();
-		ResultsPCA pcaResults = new ResultsPCA(analysisSettings);
-		//
-		try {
-			/*
-			 * Template Map
-			 */
-			Map<String, Boolean> variablesSelectionMap = getVariablesSelectionMap(masterEvaluationPCA != null ? masterEvaluationPCA.getSamples().getVariables() : Collections.emptyList());
-			/*
-			 * Preprocessing
-			 */
-			IPreprocessingSettings preprocessingSettings = analysisSettings.getPreprocessingSettings();
-			preprocessingSettings.process(samples, monitor);
-			subMonitor.worked(20);
-			/*
-			 * Filtering
-			 */
-			IFilterSettings filterSettings = analysisSettings.getFilterSettings();
-			filterSettings.process(samples, monitor);
-			subMonitor.worked(20);
-			/*
-			 * Variable Extraction
-			 */
-			int numberOfPrincipalComponents = analysisSettings.getNumberOfPrincipalComponents();
-			Algorithm algorithm = analysisSettings.getAlgorithm();
-			boolean[] selectedVariables = getSelectedVariables(samples, analysisSettings, variablesSelectionMap);
-			Map<ISample, double[]> extractData = extractData(samples, algorithm, analysisSettings, selectedVariables);
-			assignVariables(pcaResults, samples, selectedVariables, variablesSelectionMap);
-			int numberVariables = getNumSampleVars(extractData);
-			subMonitor.worked(20);
-			/*
-			 * Prepare PCA Calculation
-			 */
-			IMultivariateCalculator principalComponentAnalysis = setupPCA(extractData, numberVariables, numberOfPrincipalComponents, algorithm);
-			subMonitor.worked(20);
-			/*
-			 * Compute PCA
-			 */
-			principalComponentAnalysis.compute();
-			subMonitor.worked(20);
-			/*
-			 * Collect PCA results
-			 */
-			if(!principalComponentAnalysis.getComputeStatus()) {
-				return null;
+		EvaluationPCA evaluationPCA = null;
+		if(samples != null) {
+			SubMonitor subMonitor = SubMonitor.convert(monitor, "Run PCA", 180);
+			try {
+				/*
+				 * Settings
+				 */
+				IAnalysisSettings analysisSettings = samples.getAnalysisSettings();
+				ResultsPCA results = new ResultsPCA(analysisSettings);
+				/*
+				 * Template Map
+				 */
+				Map<String, Boolean> variablesSelectionMap = getVariablesSelectionMap(masterEvaluationPCA != null ? masterEvaluationPCA.getSamples().getVariables() : Collections.emptyList());
+				subMonitor.worked(20);
+				/*
+				 * Preprocessing
+				 */
+				IPreprocessingSettings preprocessingSettings = analysisSettings.getPreprocessingSettings();
+				preprocessingSettings.process(samples, monitor);
+				subMonitor.worked(20);
+				/*
+				 * Filtering
+				 */
+				IFilterSettings filterSettings = analysisSettings.getFilterSettings();
+				filterSettings.process(samples, monitor);
+				subMonitor.worked(20);
+				/*
+				 * Variable Extraction
+				 */
+				int numberOfPrincipalComponents = analysisSettings.getNumberOfPrincipalComponents();
+				Algorithm algorithm = analysisSettings.getAlgorithm();
+				boolean[] selectedVariables = getSelectedVariables(samples, analysisSettings, variablesSelectionMap);
+				Map<ISample, double[]> extractData = extractData(samples, algorithm, analysisSettings, selectedVariables);
+				assignVariables(results, samples, selectedVariables, variablesSelectionMap);
+				int numberVariables = getNumSampleVars(extractData);
+				subMonitor.worked(20);
+				/*
+				 * Prepare PCA Calculation
+				 */
+				IMultivariateCalculator principalComponentAnalysis = setupPCA(extractData, numberVariables, numberOfPrincipalComponents, algorithm);
+				subMonitor.worked(20);
+				/*
+				 * Compute PCA
+				 */
+				principalComponentAnalysis.compute();
+				subMonitor.worked(20);
+				/*
+				 * Collect PCA results
+				 */
+				if(!principalComponentAnalysis.getComputeStatus()) {
+					return null;
+				}
+				subMonitor.worked(20);
+				//
+				List<double[]> loadingVectors = getLoadingVectors(principalComponentAnalysis, numberOfPrincipalComponents);
+				double[] explainedVariances = this.getExplainedVariances(principalComponentAnalysis, numberOfPrincipalComponents);
+				double[] cumulativeExplainedVariances = this.getCumulativeExplainedVariances(explainedVariances);
+				results.setLoadingVectors(loadingVectors);
+				results.setExplainedVariances(explainedVariances);
+				results.setCumulativeExplainedVariances(cumulativeExplainedVariances);
+				setEigenSpaceAndErrorValues(principalComponentAnalysis, extractData, results);
+				subMonitor.worked(20);
+				/*
+				 * Feature Data Matrix
+				 */
+				List<String> sampleNames = new ArrayList<>();
+				List<Feature> features = new ArrayList<>();
+				evaluationPCA = new EvaluationPCA(samples, results);
+				List<? extends IVariable> variableList = samples.getVariables();
+				List<? extends ISample> sampleList = samples.getSampleList();
+				/*
+				 * Samples
+				 */
+				for(ISample sample : sampleList) {
+					sampleNames.add(sample.getSampleName());
+				}
+				/*
+				 * variable.getClassification() // null
+				 * variable.getDescription() // null
+				 * variable.getType() // Retention time (min)
+				 * variable.getValue() // 3.466
+				 */
+				for(IVariable variable : variableList) {
+					features.add(new Feature(variable));
+				}
+				//
+				for(int i = 0; i < sampleList.size(); i++) {
+					/*
+					 * sampleData.getData() // 50327.8
+					 * sampleData.getModifiedData() // 0.524298283655198
+					 * sampleData.isEmpty() // false
+					 * sampleData.getData2() // e.g. PeakMSD
+					 */
+					ISample sample = sampleList.get(i);
+					List<? extends ISampleData> sampleDataList = sample.getSampleData();
+					for(int j = 0; j < sampleDataList.size(); j++) {
+						ISampleData<?> sampleData = sampleDataList.get(j);
+						features.get(j).getSampleData().add(sampleData);
+					}
+				}
+				//
+				FeatureDataMatrix featureDataMatrix = new FeatureDataMatrix(sampleNames, features);
+				evaluationPCA.setFeatureDataMatrix(featureDataMatrix);
+				subMonitor.worked(20);
+			} finally {
+				SubMonitor.done(subMonitor);
 			}
-			subMonitor.worked(20);
-			//
-			List<double[]> loadingVectors = getLoadingVectors(principalComponentAnalysis, numberOfPrincipalComponents);
-			double[] explainedVariances = this.getExplainedVariances(principalComponentAnalysis, numberOfPrincipalComponents);
-			double[] cumulativeExplainedVariances = this.getCumulativeExplainedVariances(explainedVariances);
-			pcaResults.setLoadingVectors(loadingVectors);
-			pcaResults.setExplainedVariances(explainedVariances);
-			pcaResults.setCumulativeExplainedVariances(cumulativeExplainedVariances);
-			setEigenSpaceAndErrorValues(principalComponentAnalysis, extractData, pcaResults);
-			subMonitor.worked(20);
-		} finally {
-			SubMonitor.done(subMonitor);
 		}
 		//
-		return pcaResults;
+		return evaluationPCA;
 	}
 
 	@SuppressWarnings("rawtypes")
