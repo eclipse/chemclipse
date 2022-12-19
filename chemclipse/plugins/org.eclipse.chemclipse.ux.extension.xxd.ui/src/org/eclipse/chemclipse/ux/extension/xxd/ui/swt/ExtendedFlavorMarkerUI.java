@@ -14,11 +14,15 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.eclipse.chemclipse.model.identifier.IFlavorMarker;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePage;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -31,6 +35,7 @@ public class ExtendedFlavorMarkerUI extends LibraryInformationComposite {
 	private Button buttonToolbarSearch;
 	private AtomicReference<SearchSupportUI> toolbarSearch = new AtomicReference<>();
 	private AtomicReference<FlavorMarkerListUI> listControl = new AtomicReference<>();
+	private AtomicReference<LiteratureUI> literatureControl = new AtomicReference<>();
 
 	public ExtendedFlavorMarkerUI(Composite parent, int style) {
 
@@ -42,6 +47,8 @@ public class ExtendedFlavorMarkerUI extends LibraryInformationComposite {
 	public void updateInput() {
 
 		ILibraryInformation libraryInformation = getLibraryInformation();
+		updateLiterature(null);
+		//
 		if(libraryInformation != null) {
 			listControl.get().setInput(libraryInformation.getFlavorMarkers());
 		} else {
@@ -60,7 +67,7 @@ public class ExtendedFlavorMarkerUI extends LibraryInformationComposite {
 		createToolbarMain(this);
 		createToolbarInfo(this);
 		createToolbarSearch(this);
-		createTableSection(this);
+		createDataSection(this);
 		//
 		initialize();
 	}
@@ -102,13 +109,64 @@ public class ExtendedFlavorMarkerUI extends LibraryInformationComposite {
 		toolbarSearch.set(searchSupportUI);
 	}
 
+	private void createDataSection(Composite parent) {
+
+		SashForm sashForm = new SashForm(parent, SWT.VERTICAL);
+		sashForm.setLayoutData(new GridData(GridData.FILL_BOTH));
+		createTableSection(sashForm);
+		createLiteratureSection(sashForm);
+		sashForm.setWeights(600, 400);
+	}
+
 	private void createTableSection(Composite parent) {
 
-		FlavorMarkerListUI listUI = new FlavorMarkerListUI(parent, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayout(new GridLayout(1, true));
+		//
+		FlavorMarkerListUI listUI = new FlavorMarkerListUI(composite, SWT.BORDER | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 		Table table = listUI.getTable();
 		table.setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
+		listUI.addSelectionChangedListener(new ISelectionChangedListener() {
+
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+
+				Object object = listUI.getStructuredSelection().getFirstElement();
+				if(object instanceof IFlavorMarker flavorMarker) {
+					updateLiterature(flavorMarker);
+				} else {
+					updateLiterature(null);
+				}
+			}
+		});
+		//
 		listControl.set(listUI);
+	}
+
+	private void createLiteratureSection(Composite parent) {
+
+		Composite composite = new Composite(parent, SWT.NONE);
+		composite.setLayout(new GridLayout(1, true));
+		//
+		LiteratureUI styledText = new LiteratureUI(composite, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
+		styledText.setText("");
+		styledText.setToolTipText("Literature");
+		styledText.setLayoutData(new GridData(GridData.FILL_BOTH));
+		//
+		literatureControl.set(styledText);
+	}
+
+	private void updateLiterature(IFlavorMarker flavorMarker) {
+
+		String content;
+		if(flavorMarker != null) {
+			content = flavorMarker.getLiteratureReference();
+		} else {
+			content = "";
+		}
+		//
+		literatureControl.get().setText(content);
 	}
 
 	private void createButtonSettings(Composite parent) {
