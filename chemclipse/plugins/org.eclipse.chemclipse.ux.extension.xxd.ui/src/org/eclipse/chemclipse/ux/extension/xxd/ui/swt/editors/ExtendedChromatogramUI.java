@@ -845,9 +845,9 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	private TargetReference createTargetReference(IPeak peak) {
 
 		IPeakModel peakModel = peak.getPeakModel();
-		String name = FORMAT.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
+		String retentionTimeMinutes = FORMAT.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 		float retentionIndex = peakModel.getPeakMaximum().getRetentionIndex();
-		return new TargetReference(peak, TargetReferenceType.PEAK, name, retentionIndex);
+		return new TargetReference(peak, TargetReferenceType.PEAK, retentionTimeMinutes, retentionIndex);
 	}
 
 	private void addPeaks(List<ILineSeriesData> lineSeriesDataList, List<? extends IPeak> peaks, PlotSymbolType plotSymbolType, int symbolSize, Color symbolColor, String seriesId, ITargetDisplaySettings displaySettings) {

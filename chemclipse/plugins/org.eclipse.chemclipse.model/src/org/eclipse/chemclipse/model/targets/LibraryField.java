@@ -55,12 +55,6 @@ public enum LibraryField implements ILabel {
 		return transformer;
 	}
 
-	@Override
-	public String toString() {
-
-		return label;
-	}
-
 	public static String[][] getOptions() {
 
 		return ILabel.getOptions(values());

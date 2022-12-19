@@ -16,17 +16,18 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.chemclipse.model.targets.DisplayOption;
 import org.eclipse.chemclipse.model.targets.ITargetDisplaySettings;
 import org.eclipse.chemclipse.model.targets.ITargetReference;
 import org.eclipse.chemclipse.model.targets.LibraryField;
 
 public class AbstractMeasurementTarget extends AbstractMeasurement implements ITargetDisplaySettings {
 
-	private static final long serialVersionUID = -8315576867955378766L;
+	private static final long serialVersionUID = 2812423308522878329L;
 	//
 	private boolean showPeakLabels = true;
 	private boolean showScanLabels = true;
-	private boolean showNumbersInstead = false;
+	private DisplayOption displayOption = DisplayOption.STANDARD;
 	private LibraryField libraryField = LibraryField.NAME;
 	private int rotation = 90;
 	private int collisionDepth = 0;
@@ -57,15 +58,15 @@ public class AbstractMeasurementTarget extends AbstractMeasurement implements IT
 	}
 
 	@Override
-	public boolean isShowNumbersInstead() {
+	public DisplayOption getDisplayOption() {
 
-		return showNumbersInstead;
+		return displayOption;
 	}
 
 	@Override
-	public void setShowNumbersInstead(boolean showNumbers) {
+	public void setDisplayOption(DisplayOption displayOption) {
 
-		this.showNumbersInstead = showNumbers;
+		this.displayOption = displayOption;
 	}
 
 	@Override

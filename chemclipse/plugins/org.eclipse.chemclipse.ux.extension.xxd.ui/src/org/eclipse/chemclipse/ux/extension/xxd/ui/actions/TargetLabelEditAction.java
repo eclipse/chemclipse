@@ -78,14 +78,14 @@ public class TargetLabelEditAction extends Action {
 					Collections.sort(targetReferenceList, new Comparator<TargetReference>() {
 
 						@Override
-						public int compare(TargetReference o1, TargetReference o2) {
+						public int compare(TargetReference targetReference1, TargetReference targetReference2) {
 
-							int compare = Double.compare(o1.getSignal().getX(), o2.getSignal().getX());
+							int compare = Double.compare(targetReference1.getSignal().getX(), targetReference2.getSignal().getX());
 							if(compare == 0) {
-								return o1.getName().compareToIgnoreCase(o2.getName());
-							} else {
-								return compare;
+								compare = targetReference1.getRetentionTimeMinutes().compareToIgnoreCase(targetReference2.getRetentionTimeMinutes());
 							}
+							//
+							return compare;
 						}
 					});
 					return targetReferenceList;

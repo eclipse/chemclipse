@@ -20,13 +20,13 @@ public interface ITargetDisplaySettings {
 
 	boolean isShowScanLabels();
 
-	boolean isShowNumbersInstead();
+	DisplayOption getDisplayOption();
+
+	void setDisplayOption(DisplayOption displayOption);
 
 	void setShowPeakLabels(boolean showPeakLabels);
 
 	void setShowScanLabels(boolean showScanLabels);
-
-	void setShowNumbersInstead(boolean showNumbers);
 
 	int getRotation();
 

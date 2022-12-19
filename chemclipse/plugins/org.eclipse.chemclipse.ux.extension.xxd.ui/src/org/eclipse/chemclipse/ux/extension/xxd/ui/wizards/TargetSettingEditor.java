@@ -16,13 +16,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
+import org.eclipse.chemclipse.model.targets.DisplayOption;
 import org.eclipse.chemclipse.model.targets.ITargetDisplaySettings;
 import org.eclipse.chemclipse.model.targets.ITargetReference;
 import org.eclipse.chemclipse.model.targets.LibraryField;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
+import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -47,12 +50,8 @@ import org.eclipse.swt.widgets.Table;
 
 public class TargetSettingEditor {
 
-	private Button checkBoxPeaks;
-	private Button checkBoxScans;
-	private Button checkBoxNumbers;
-	private ComboViewer libraryFieldComboViewer;
-	private Label labelRotation;
-	private TargetReferenceListUI targetReferenceListUI;
+	private AtomicReference<Label> rotationLabelControl = new AtomicReference<>();
+	private AtomicReference<TargetReferenceListUI> listControl = new AtomicReference<>();
 	//
 	private ITargetDisplaySettings targetDisplaySettings;
 	private TargetDisplaySettingsPage targetDisplaySettingsPage;
@@ -71,62 +70,38 @@ public class TargetSettingEditor {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		composite.setBackgroundMode(SWT.INHERIT_FORCE);
-		composite.setLayout(new GridLayout(8, false));
+		composite.setLayout(new GridLayout(9, false));
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
-		/*
-		 * Section
-		 */
-		checkBoxPeaks = createCheckBoxPeaks(composite);
-		checkBoxScans = createCheckBoxScans(composite);
-		checkBoxNumbers = createCheckBoxNumbers(composite);
+		//
+		createLabel(composite, "Display Option: ");
+		createComboViewerDisplayOption(composite);
+		createCheckBoxPeaks(composite);
+		createCheckBoxScans(composite);
 		new Label(composite, SWT.SEPARATOR | SWT.VERTICAL);
 		createLabel(composite, "Display Field: ");
-		libraryFieldComboViewer = createComboViewerLibraryField(composite);
+		createComboViewerLibraryField(composite);
 		createLabel(composite, "Collision Detection Depth: ");
 		createComboViewerCollision(composite);
-		/*
-		 * Section
-		 */
-		labelRotation = createLabel(composite, getRotationText(targetDisplaySettings.getRotation()));
-		createScaleRotation(composite);
-		/*
-		 * Section
-		 */
+		//
+		createSectionRotation(composite);
+		//
 		createSectionTableEdit(composite);
+		//
+		createSectionListUI(composite);
 		/*
-		 * Section
+		 * Input
 		 */
-		targetReferenceListUI = createTargetReferenceListUI(composite);
-		/*
-		 * Add actions.
-		 */
-		addActions();
+		initialize();
+	}
+
+	private void initialize() {
+
+		TargetReferenceListUI targetReferenceListUI = listControl.get();
 		targetReferenceListUI.setTargetDisplaySettings(targetDisplaySettings);
 		targetReferenceListUI.setInput(targetReferences);
 	}
 
-	private void addActions() {
-
-		ISelectionChangedListener comboListener = new ISelectionChangedListener() {
-
-			private LibraryField currentField;
-
-			@Override
-			public void selectionChanged(SelectionChangedEvent event) {
-
-				LibraryField field = targetDisplaySettings.getLibraryField();
-				if(field != currentField) {
-					currentField = field;
-					targetReferenceListUI.refresh();
-					fireUpdate();
-				}
-			}
-		};
-		//
-		libraryFieldComboViewer.addSelectionChangedListener(comboListener);
-	}
-
-	private Button createCheckBoxPeaks(Composite parent) {
+	private void createCheckBoxPeaks(Composite parent) {
 
 		Button button = new Button(parent, SWT.CHECK);
 		button.setText("Peaks");
@@ -137,15 +112,13 @@ public class TargetSettingEditor {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				targetDisplaySettings.setShowPeakLabels(checkBoxPeaks.getSelection());
+				targetDisplaySettings.setShowPeakLabels(button.getSelection());
 				fireUpdate();
 			}
 		});
-		//
-		return button;
 	}
 
-	private Button createCheckBoxScans(Composite parent) {
+	private void createCheckBoxScans(Composite parent) {
 
 		Button button = new Button(parent, SWT.CHECK);
 		button.setText("Scans");
@@ -156,41 +129,56 @@ public class TargetSettingEditor {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
-				targetDisplaySettings.setShowScanLabels(checkBoxScans.getSelection());
+				targetDisplaySettings.setShowScanLabels(button.getSelection());
 				fireUpdate();
 			}
 		});
-		//
-		return button;
 	}
 
-	private Button createCheckBoxNumbers(Composite parent) {
+	private ComboViewer createComboViewerDisplayOption(Composite parent) {
 
-		Button button = new Button(parent, SWT.CHECK);
-		button.setText("Numbers only");
-		GridData gridData = new GridData();
-		gridData.widthHint = 140;
-		button.setLayoutData(gridData);
-		button.setToolTipText("Enumerate peaks and scans instead.");
-		button.setSelection(targetDisplaySettings.isShowNumbersInstead());
-		button.addSelectionListener(new SelectionAdapter() {
+		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
+		comboViewer.setLabelProvider(new AbstractLabelProvider() {
 
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public String getText(Object element) {
 
-				libraryFieldComboViewer.getControl().setEnabled(!checkBoxNumbers.getSelection());
-				targetDisplaySettings.setShowNumbersInstead(checkBoxNumbers.getSelection());
-				fireUpdate();
+				if(element instanceof DisplayOption displayOption) {
+					return displayOption.label();
+				}
+				return null;
 			}
 		});
 		//
-		return button;
+		comboViewer.setInput(DisplayOption.values());
+		comboViewer.setSelection(new StructuredSelection(targetDisplaySettings.getDisplayOption()));
+		comboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
+
+			@Override
+			public void selectionChanged(SelectionChangedEvent event) {
+
+				targetDisplaySettings.setDisplayOption((DisplayOption)comboViewer.getStructuredSelection().getFirstElement());
+				fireUpdate();
+			}
+		});
+		/*
+		 * https://bugs.eclipse.org/bugs/show_bug.cgi?id=567652
+		 */
+		Combo combo = comboViewer.getCombo();
+		if(OperatingSystemUtils.isLinux()) {
+			combo.setBackground(combo.getBackground());
+		}
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		//
+		return comboViewer;
 	}
 
 	private Label createLabel(Composite parent, String text) {
 
 		Label label = new Label(parent, SWT.NONE);
 		label.setText(text);
+		//
 		return label;
 	}
 
@@ -198,6 +186,18 @@ public class TargetSettingEditor {
 
 		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
+		comboViewer.setLabelProvider(new AbstractLabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+
+				if(element instanceof LibraryField libraryField) {
+					return libraryField.label();
+				}
+				return null;
+			}
+		});
+		//
 		comboViewer.setInput(LibraryField.values());
 		comboViewer.setSelection(new StructuredSelection(targetDisplaySettings.getLibraryField()));
 		comboViewer.addSelectionChangedListener(new ISelectionChangedListener() {
@@ -206,6 +206,7 @@ public class TargetSettingEditor {
 			public void selectionChanged(SelectionChangedEvent event) {
 
 				targetDisplaySettings.setLibraryField((LibraryField)comboViewer.getStructuredSelection().getFirstElement());
+				listControl.get().refresh();
 				fireUpdate();
 			}
 		});
@@ -247,6 +248,12 @@ public class TargetSettingEditor {
 		return comboViewer;
 	}
 
+	private void createSectionRotation(Composite parent) {
+
+		rotationLabelControl.set(createLabel(parent, getRotationText(targetDisplaySettings.getRotation())));
+		createScaleRotation(parent);
+	}
+
 	private Scale createScaleRotation(Composite parent) {
 
 		Scale scale = new Scale(parent, SWT.HORIZONTAL);
@@ -256,7 +263,7 @@ public class TargetSettingEditor {
 		scale.setPageIncrement(15);
 		scale.setSelection(targetDisplaySettings.getRotation());
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 6;
+		gridData.horizontalSpan = 8;
 		scale.setLayoutData(gridData);
 		//
 		scale.addSelectionListener(new SelectionAdapter() {
@@ -266,7 +273,7 @@ public class TargetSettingEditor {
 
 				int selection = scale.getSelection();
 				targetDisplaySettings.setRotation(selection);
-				labelRotation.setText(getRotationText(selection));
+				rotationLabelControl.get().setText(getRotationText(selection));
 				fireUpdate();
 			}
 		});
@@ -278,7 +285,7 @@ public class TargetSettingEditor {
 
 		Composite composite = new Composite(parent, SWT.NONE);
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
-		gridData.horizontalSpan = 7;
+		gridData.horizontalSpan = 9;
 		composite.setLayoutData(gridData);
 		composite.setBackgroundMode(SWT.INHERIT_FORCE);
 		composite.setLayout(new GridLayout(4, false));
@@ -298,7 +305,7 @@ public class TargetSettingEditor {
 			@Override
 			public void performSearch(String searchText, boolean caseSensitive) {
 
-				targetReferenceListUI.setSearchText(searchText, caseSensitive);
+				listControl.get().setSearchText(searchText, caseSensitive);
 			}
 		});
 		//
@@ -317,7 +324,7 @@ public class TargetSettingEditor {
 			public void widgetSelected(SelectionEvent e) {
 
 				setTargetVisibility(setVisible);
-				targetReferenceListUI.refresh();
+				listControl.get().refresh();
 				fireUpdate();
 			}
 		});
@@ -343,7 +350,7 @@ public class TargetSettingEditor {
 			public void modifyText(ModifyEvent e) {
 
 				selectHighestTargets(spinner.getSelection());
-				targetReferenceListUI.refresh();
+				listControl.get().refresh();
 				fireUpdate();
 			}
 		});
@@ -370,11 +377,11 @@ public class TargetSettingEditor {
 		}
 	}
 
-	private TargetReferenceListUI createTargetReferenceListUI(Composite parent) {
+	private void createSectionListUI(Composite parent) {
 
 		TargetReferenceListUI targetReferenceListUI = new TargetReferenceListUI(parent, SWT.BORDER);
 		GridData gridData = new GridData(GridData.FILL_BOTH);
-		gridData.horizontalSpan = 7;
+		gridData.horizontalSpan = 9;
 		Table table = targetReferenceListUI.getTable();
 		table.setLayoutData(gridData);
 		table.addSelectionListener(new SelectionAdapter() {
@@ -386,7 +393,7 @@ public class TargetSettingEditor {
 			}
 		});
 		//
-		return targetReferenceListUI;
+		listControl.set(targetReferenceListUI);
 	}
 
 	private String getRotationText(int value) {

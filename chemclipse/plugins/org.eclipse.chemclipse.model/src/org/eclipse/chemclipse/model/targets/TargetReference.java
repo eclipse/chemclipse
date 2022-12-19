@@ -33,34 +33,34 @@ public class TargetReference implements ITargetReference {
 
 	private static final DecimalFormat FORMAT = ValueFormat.getDecimalFormatEnglish("0.000");
 	//
-	private ISignal signal = null;
-	private String name = "";
 	private String id = "";
+	private String retentionTimeMinutes = "";
 	private float retentionIndex = 0.0f;
 	private TargetReferenceType type = TargetReferenceType.NONE;
+	private ISignal signal = null;
 	//
 	private ITargetSupplier supplier = null;
 
 	public static String createID(TargetReferenceType type, int retentionTime) {
 
-		String name = FORMAT.format(retentionTime / IChromatogram.MINUTE_CORRELATION_FACTOR);
-		return createID(type, name);
+		String retentionTimeMinutes = FORMAT.format(retentionTime / IChromatogram.MINUTE_CORRELATION_FACTOR);
+		return createID(type, retentionTimeMinutes);
 	}
 
-	public static String createID(TargetReferenceType type, String name) {
+	public static String createID(TargetReferenceType type, String retentionTimeMinutes) {
 
-		return type.label() + "." + name;
+		return type.label() + "." + retentionTimeMinutes;
 	}
 
-	public <X extends ISignal & ITargetSupplier> TargetReference(X item, TargetReferenceType type, String name, float retentionIndex) {
+	public <X extends ISignal & ITargetSupplier> TargetReference(X item, TargetReferenceType type, String retentionTimeMinutes, float retentionIndex) {
 
 		this.signal = item;
 		this.supplier = item;
 		this.type = type;
-		this.name = name;
+		this.retentionTimeMinutes = retentionTimeMinutes;
 		this.retentionIndex = retentionIndex;
 		//
-		id = createID(type, name);
+		id = createID(type, retentionTimeMinutes);
 	}
 
 	@Override
@@ -80,9 +80,9 @@ public class TargetReference implements ITargetReference {
 	}
 
 	@Override
-	public String getName() {
+	public String getRetentionTimeMinutes() {
 
-		return name;
+		return retentionTimeMinutes;
 	}
 
 	@Override
@@ -108,8 +108,8 @@ public class TargetReference implements ITargetReference {
 		List<TargetReference> targetReferences = new ArrayList<>();
 		for(IScan scan : scans) {
 			if(scan != null && !scan.getTargets().isEmpty()) {
-				String name = FORMAT.format(scan.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR);
-				TargetReference targetReference = new TargetReference(scan, TargetReferenceType.SCAN, name, scan.getRetentionIndex());
+				String retentionTimeMinutes = FORMAT.format(scan.getRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR);
+				TargetReference targetReference = new TargetReference(scan, TargetReferenceType.SCAN, retentionTimeMinutes, scan.getRetentionIndex());
 				targetReferences.add(targetReference);
 				if(!targetDisplaySettings.isMapped(targetReference)) {
 					targetDisplaySettings.setVisible(targetReference, true);
@@ -126,9 +126,9 @@ public class TargetReference implements ITargetReference {
 			Set<IIdentificationTarget> targets = peak.getTargets();
 			if(peak != null && (targets.size() > 0 || peak.getClassifier().size() > 0)) {
 				IPeakModel peakModel = peak.getPeakModel();
-				String name = FORMAT.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogram.MINUTE_CORRELATION_FACTOR);
+				String retentionTimeMinutes = FORMAT.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogram.MINUTE_CORRELATION_FACTOR);
 				float retentionIndex = peakModel.getPeakMaximum().getRetentionIndex();
-				TargetReference targetReference = new TargetReference(peak, TargetReferenceType.PEAK, name, retentionIndex);
+				TargetReference targetReference = new TargetReference(peak, TargetReferenceType.PEAK, retentionTimeMinutes, retentionIndex);
 				targetReferences.add(targetReference);
 				if(!targetDisplaySettings.isMapped(targetReference)) {
 					targetDisplaySettings.setVisible(targetReference, true);

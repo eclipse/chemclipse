@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.charts;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -19,15 +20,16 @@ import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.eclipse.chemclipse.model.core.ISignal;
+import org.eclipse.chemclipse.model.targets.DisplayOption;
 import org.eclipse.chemclipse.model.targets.ITargetDisplaySettings;
 import org.eclipse.chemclipse.model.targets.ITargetReference;
 import org.eclipse.chemclipse.model.targets.LibraryField;
 import org.eclipse.chemclipse.model.targets.TargetReference;
 import org.eclipse.chemclipse.model.targets.TargetReferenceType;
+import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.swt.ui.support.Fonts;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
@@ -36,12 +38,10 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Path;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.graphics.Transform;
 import org.eclipse.swt.widgets.Widget;
@@ -66,6 +66,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 	private int rotation;
 	private int detectionDepth;
 	//
+	private DecimalFormat decimalFormatRetentionIndex = ValueFormat.getDecimalFormatEnglish("0.00");
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
 
 	public TargetReferenceLabelMarker(boolean showReferenceId, int offset) {
@@ -275,31 +276,6 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		gc.fillOval((int)(cx - ow), (int)(cy - ow), ow * 2, ow * 2);
 	}
 
-	public <X> void setRawData(Collection<X> data, int rotation, int detectionDepth, Predicate<X> visibilityFilter, Function<X, String> labelSupplier, Function<X, FontData> fontSupplier, Function<X, org.eclipse.chemclipse.numeric.core.Point> pointSupplier) {
-
-		this.rotation = rotation;
-		this.detectionDepth = detectionDepth;
-		targetLabels.clear();
-		int number = 1;
-		for(X generic : data) {
-			if(visibilityFilter.test(generic)) {
-				String label = null;
-				if(targetDisplaySettings.isShowNumbersInstead()) {
-					label = String.valueOf(number++);
-				} else {
-					label = labelSupplier.apply(generic);
-				}
-				if(label == null || label.isEmpty()) {
-					continue;
-				}
-				org.eclipse.chemclipse.numeric.core.Point point = pointSupplier.apply(generic);
-				TargetLabel targetLabel = new TargetLabel(label, null, fontSupplier.apply(generic), true, point.getX(), point.getY());
-				targetLabels.add(targetLabel);
-			}
-		}
-		Collections.sort(targetLabels, (o1, o2) -> Double.compare(o1.getX(), o2.getX()));
-	}
-
 	public Predicate<ITargetReference> setTargetReferences(Collection<? extends TargetReference> targetReferences) {
 
 		return setTargetReferences(targetReferences, always -> true);
@@ -316,6 +292,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 			 */
 			rotation = targetDisplaySettings.getRotation();
 			detectionDepth = targetDisplaySettings.getCollisionDetectionDepth();
+			DisplayOption displayOption = targetDisplaySettings.getDisplayOption();
 			LibraryField libraryField = targetDisplaySettings.getLibraryField();
 			FontData peakFontData = getPeakFontData(preferenceStore);
 			FontData scanFontData = getScanFontData(preferenceStore);
@@ -327,14 +304,24 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 					 * Get the label.
 					 */
 					String label = null;
-					if(targetDisplaySettings.isShowNumbersInstead()) {
-						label = String.valueOf(number++);
-					} else {
-						label = targetReference.getTargetLabel(libraryField);
-						if(label == null || label.isEmpty()) {
-							continue;
-						}
+					switch(displayOption) {
+						case NUMBERS:
+							label = String.valueOf(number++);
+							break;
+						case RETENTION_TIME:
+							label = targetReference.getRetentionTimeMinutes();
+							break;
+						case RETENTION_INDEX:
+							label = decimalFormatRetentionIndex.format(targetReference.getRetentionIndex());
+							break;
+						default:
+							label = targetReference.getTargetLabel(libraryField);
+							if(label == null || label.isEmpty()) {
+								continue;
+							}
+							break;
 					}
+					//
 					boolean isPeakLabel = TargetReferenceType.PEAK.equals(targetReference.getType());
 					boolean isScanLabel = TargetReferenceType.SCAN.equals(targetReference.getType());
 					boolean isActive = activeFilter == null || activeFilter.test(targetReference);
@@ -349,7 +336,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 						fontData = null;
 					}
 					//
-					TargetLabel targetLabel = new TargetLabel(label, showReferenceId ? targetReference.getName() : null, fontData, isActive, scan.getX(), scan.getY());
+					TargetLabel targetLabel = new TargetLabel(label, showReferenceId ? targetReference.getRetentionTimeMinutes() : null, fontData, isActive, scan.getX(), scan.getY());
 					targetLabels.add(targetLabel);
 				}
 			}
@@ -359,31 +346,12 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		return visibilityFilter;
 	}
 
-	public static Font createPeakFont(IPreferenceStore preferenceStore, Device device) {
-
-		String name = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_NAME);
-		int height = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE);
-		int style = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_STYLE);
-		Point dpi = device.getDPI();
-		int pointHeight = height * 72 / dpi.y;
-		return new Font(device, name, pointHeight, style);
-	}
-
-	public static Font createScanFont(IPreferenceStore preferenceStore, Device device) {
-
-		String name = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_NAME);
-		int height = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_SIZE);
-		int style = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE);
-		Point dpi = device.getDPI();
-		int pointHeight = height * 72 / dpi.y;
-		return new Font(device, name, pointHeight, style);
-	}
-
 	public static FontData getPeakFontData(IPreferenceStore preferenceStore) {
 
 		String name = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_NAME);
 		int height = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_SIZE);
 		int style = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_PEAK_LABEL_FONT_STYLE);
+		//
 		return new FontData(name, height, style);
 	}
 
@@ -392,6 +360,7 @@ public class TargetReferenceLabelMarker implements ICustomPaintListener {
 		String name = preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_NAME);
 		int height = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_SIZE);
 		int style = preferenceStore.getInt(PreferenceConstants.P_CHROMATOGRAM_SCAN_LABEL_FONT_STYLE);
+		//
 		return new FontData(name, height, style);
 	}
 }
