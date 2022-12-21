@@ -47,7 +47,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 	public static final String AREA_TOTAL = "Area";
 	public static final String START_RETENTION_TIME = "Start RT [min]";
 	public static final String STOP_RETENTION_TIME = "Stop RT [min]";
-	public static final String WIDTH = "Width";
+	public static final String WIDTH = "Width [min]";
 	public static final String SCAN_NUMBER_AT_PEAK_MAX = "Scan# at Peak Maximum";
 	public static final String SIGNAL_TO_NOISE = "S/N";
 	public static final String LEADING = "Leading";
