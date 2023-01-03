@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -96,11 +96,9 @@ import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.IExtendedChart;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
 import org.eclipse.swtchart.extensions.core.ISeriesModificationListener;
-import org.eclipse.swtchart.extensions.core.ISeriesSettings;
 import org.eclipse.swtchart.extensions.core.RangeRestriction;
 import org.eclipse.swtchart.extensions.core.RangeRestriction.ExtendType;
 import org.eclipse.swtchart.extensions.core.SeriesData;
-import org.eclipse.swtchart.extensions.core.SeriesMapper;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
@@ -997,8 +995,6 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 				ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, displayType, derivative, color, markedIons, false);
 				ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 				lineSeriesSettings.setDescription(description);
-				ISeriesSettings seriesSettingsDefault = SeriesMapper.getSeriesSettingsDefault(seriesId, chartControl.get());
-				SeriesMapper.mapSetting(seriesId, lineSeriesSettings, seriesSettingsDefault);
 				lineSeriesDataList.add(lineSeriesData);
 			}
 		}
@@ -1021,8 +1017,6 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 						ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(referencedChromatogram, referenceSeriesId, displayType, derivative, color, markedIons, false);
 						ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 						lineSeriesSettings.setDescription(description);
-						ISeriesSettings seriesSettingsDefault = SeriesMapper.getSeriesSettingsDefault(referenceSeriesId, chartControl.get());
-						SeriesMapper.mapSetting(referenceSeriesId, lineSeriesSettings, seriesSettingsDefault);
 						lineSeriesDataList.add(lineSeriesData);
 					}
 				}
@@ -1055,8 +1049,6 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 				ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(chromatogram, seriesId, displayType, derivative, color, markedWavelengths, false);
 				ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 				lineSeriesSettings.setDescription(MPC_LABEL + " (" + description + ")");
-				ISeriesSettings seriesSettingsDefault = SeriesMapper.getSeriesSettingsDefault(seriesId, chartControl.get());
-				SeriesMapper.mapSetting(seriesId, lineSeriesSettings, seriesSettingsDefault);
 				lineSeriesDataList.add(lineSeriesData);
 			}
 		}
@@ -1079,8 +1071,6 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 						ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(referencedChromatogram, seriesId, displayType, derivative, color, markedWavelengths, false);
 						ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 						lineSeriesSettings.setDescription(MPC_LABEL + " (" + description + ")");
-						ISeriesSettings seriesSettingsDefault = SeriesMapper.getSeriesSettingsDefault(seriesId, chartControl.get());
-						SeriesMapper.mapSetting(seriesId, lineSeriesSettings, seriesSettingsDefault);
 						lineSeriesDataList.add(lineSeriesData);
 					}
 				}
@@ -1104,8 +1094,6 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			String description = ChromatogramDataSupport.getReferenceLabel(chromatogram, 0, true);
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 			lineSeriesSettings.setDescription(description);
-			ISeriesSettings seriesSettingsDefault = SeriesMapper.getSeriesSettingsDefault(seriesId, chartControl.get());
-			SeriesMapper.mapSetting(seriesId, lineSeriesSettings, seriesSettingsDefault);
 			lineSeriesDataList.add(lineSeriesData);
 		}
 		/*
@@ -1126,8 +1114,6 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 						ILineSeriesData lineSeriesData = chromatogramChartSupport.getLineSeriesData(referencedChromatogram, referenceSeriesId, displayType, derivative, color, null, false);
 						ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
 						lineSeriesSettings.setDescription(description);
-						ISeriesSettings seriesSettingsDefault = SeriesMapper.getSeriesSettingsDefault(referenceSeriesId, chartControl.get());
-						SeriesMapper.mapSetting(referenceSeriesId, lineSeriesSettings, seriesSettingsDefault);
 						lineSeriesDataList.add(lineSeriesData);
 					}
 				}

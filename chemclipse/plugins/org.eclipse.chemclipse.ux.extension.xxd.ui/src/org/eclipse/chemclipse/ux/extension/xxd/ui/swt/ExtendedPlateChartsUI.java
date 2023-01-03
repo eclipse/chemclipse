@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -45,9 +45,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
-import org.eclipse.swtchart.extensions.core.ISeriesSettings;
 import org.eclipse.swtchart.extensions.core.SeriesData;
-import org.eclipse.swtchart.extensions.core.SeriesMapper;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
 import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
@@ -281,8 +279,6 @@ public class ExtendedPlateChartsUI extends Composite implements IExtendedPartUI 
 			lineSeriesSettings.setLineColor(color);
 			lineSeriesSettings.setEnableArea(false);
 			lineSeriesSettings.setDescription(well.getLabel());
-			ISeriesSettings seriesSettingsDefault = SeriesMapper.getSeriesSettingsDefault(seriesId, chartControl.get());
-			SeriesMapper.mapSetting(seriesId, lineSeriesSettings, seriesSettingsDefault);
 		}
 		return lineSeriesData;
 	}
