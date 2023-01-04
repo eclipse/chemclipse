@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -41,9 +41,8 @@ public class RetentionIndexListFilter extends ViewerFilter {
 			return true;
 		}
 		//
-		if(element instanceof IRetentionIndexEntry) {
+		if(element instanceof IRetentionIndexEntry retentionIndexEntry) {
 			//
-			IRetentionIndexEntry retentionIndexEntry = (IRetentionIndexEntry)element;
 			String name = (caseSensitive) ? retentionIndexEntry.getName() : retentionIndexEntry.getName().toLowerCase();
 			searchText = (caseSensitive) ? searchText : searchText.toLowerCase();
 			if(name.matches(searchText)) {

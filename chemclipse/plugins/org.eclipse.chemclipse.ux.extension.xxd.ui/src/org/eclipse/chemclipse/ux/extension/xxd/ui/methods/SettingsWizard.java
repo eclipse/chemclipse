@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,13 +19,16 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
-import org.eclipse.chemclipse.processing.supplier.NodeProcessorPreferences;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences.DialogBehavior;
+import org.eclipse.chemclipse.processing.supplier.NodeProcessorPreferences;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Composite;
@@ -61,17 +64,17 @@ public class SettingsWizard extends Wizard {
 	public static <T> boolean openEditPreferencesWizard(Shell shell, IProcessorPreferences<T> preferences, boolean showProfileToolbar) throws IOException {
 
 		IProcessSupplier<T> processorSupplier = preferences.getSupplier();
-		SettingsWizard wizard = new SettingsWizard("Edit Processor Options");
+		SettingsWizard wizard = new SettingsWizard(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.EDIT_PROCESSOR_OPTIONS));
 		//
 		SettingsPreferencesPage<T> page = new SettingsPreferencesPage<>(preferences, showProfileToolbar);
-		page.setTitle("Select the options for " + processorSupplier.getName());
+		page.setTitle(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SELECT_OPTIONS_FOR_PROCESSOR_NAME, processorSupplier.getName()));
 		page.setMessage(processorSupplier.getDescription());
 		wizard.addPage(page);
 		//
 		WizardDialog wizardDialog = new WizardDialog(shell, wizard);
 		wizardDialog.setMinimumPageSize(SettingsWizard.DEFAULT_WIDTH, SettingsWizard.DEFAULT_HEIGHT);
 		//
-		if(wizardDialog.open() == WizardDialog.OK) {
+		if(wizardDialog.open() == Window.OK) {
 			preferences.setAskForSettings(!page.getIsDontAskAgainEdited());
 			boolean useSystem = page.getIsUseSystemDefaultsEdited();
 			if(useSystem) {
@@ -94,10 +97,10 @@ public class SettingsWizard extends Wizard {
 	 */
 	public static void openManagePreferencesWizard(Shell shell, Supplier<Collection<IProcessorPreferences<?>>> preferenceSupplier) {
 
-		SettingsWizard wizard = new SettingsWizard("Manage Processor Options");
+		SettingsWizard wizard = new SettingsWizard(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.MANAGE_PROCESSOR_OPTIONS));
 		SettingsPreferencesEditPage page = new SettingsPreferencesEditPage(preferenceSupplier);
-		page.setTitle("Manage Preferences");
-		page.setDescription("Below you find all currently stored processor Options, select one to manage or remove the stored state");
+		page.setTitle(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.MANAGE_PREFERENCES));
+		page.setDescription(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESSOR_OPTIONS_BELOW_SELECT_TO_MANAGE_REMOVE_STATE));
 		wizard.addPage(page);
 		WizardDialog wizardDialog = new WizardDialog(shell, wizard) {
 

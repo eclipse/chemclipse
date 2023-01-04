@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,6 +20,8 @@ import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.AbstractOperation;
 import org.eclipse.core.runtime.IAdaptable;
@@ -38,7 +40,7 @@ public class DeleteScanTargetsOperation extends AbstractOperation {
 
 	public DeleteScanTargetsOperation(Display display, IChromatogramSelection chromatogramSelection, List<IScan> scansToClear) {
 
-		super("Delete Scans");
+		super(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.DELETE_SCAN_TARGETS));
 		this.display = display;
 		this.chromatogramSelection = chromatogramSelection;
 		this.scansToClear = scansToClear;
@@ -90,7 +92,7 @@ public class DeleteScanTargetsOperation extends AbstractOperation {
 	@Override
 	public String getLabel() {
 
-		return "Delete Scan Targets";
+		return ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.DELETE_SCAN_TARGETS);
 	}
 
 	@Override

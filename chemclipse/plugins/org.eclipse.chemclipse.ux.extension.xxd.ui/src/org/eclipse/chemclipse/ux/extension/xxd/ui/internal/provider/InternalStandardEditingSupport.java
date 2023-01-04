@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,6 +25,7 @@ public class InternalStandardEditingSupport extends EditingSupport {
 	private String column;
 
 	public InternalStandardEditingSupport(ExtendedTableViewer tableViewer, String column) {
+
 		super(tableViewer);
 		this.column = column;
 		this.cellEditor = new TextCellEditor(tableViewer.getTable());
@@ -49,13 +50,11 @@ public class InternalStandardEditingSupport extends EditingSupport {
 		Object object = null;
 		if(element instanceof IInternalStandard) {
 			IInternalStandard internalStandard = (IInternalStandard)element;
-			switch(column) {
-				case InternalStandardsLabelProvider.NAME:
-					object = internalStandard.getName();
-					break;
-				case InternalStandardsLabelProvider.CHEMICAL_CLASS:
-					object = internalStandard.getChemicalClass();
-					break;
+			if(column.equals(InternalStandardsLabelProvider.NAME)) {
+				object = internalStandard.getName();
+			}
+			if(column.equals(InternalStandardsLabelProvider.CHEMICAL_CLASS)) {
+				object = internalStandard.getChemicalClass();
 			}
 		}
 		return object;
@@ -66,17 +65,15 @@ public class InternalStandardEditingSupport extends EditingSupport {
 
 		if(element instanceof IInternalStandard) {
 			IInternalStandard internalStandard = (IInternalStandard)element;
-			switch(column) {
-				case InternalStandardsLabelProvider.NAME:
-					String name = ((String)value).trim();
-					if(isRenameAllowed(name)) {
-						internalStandard.setName(name);
-					}
-					break;
-				case InternalStandardsLabelProvider.CHEMICAL_CLASS:
-					String chemicalClass = ((String)value).trim();
-					internalStandard.setChemicalClass(chemicalClass);
-					break;
+			if(column.equals(InternalStandardsLabelProvider.NAME)) {
+				String name = ((String)value).trim();
+				if(isRenameAllowed(name)) {
+					internalStandard.setName(name);
+				}
+			}
+			if(column.equals(InternalStandardsLabelProvider.CHEMICAL_CLASS)) {
+				String chemicalClass = ((String)value).trim();
+				internalStandard.setChemicalClass(chemicalClass);
 			}
 			tableViewer.refresh();
 		}

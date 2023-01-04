@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -150,9 +150,8 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 					double peakAreaPercent1 = factor * getIntegratedArea(object1);
 					double peakAreaPercent2 = factor * getIntegratedArea(object2);
 					return Double.compare(peakAreaPercent2, peakAreaPercent1);
-				} else {
-					sortOrder = 0;
 				}
+				sortOrder = 0;
 				break;
 			case 19:
 				sortOrder = Integer.compare(getInternalStandards(object2), getInternalStandards(object1));
@@ -171,18 +170,16 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 
 		if(object instanceof IPeak peak) {
 			return peak.isActiveForAnalysis();
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	private String getType(Object object) {
 
 		if(object instanceof IPeak) {
 			return PeakScanListLabelProvider.PEAK;
-		} else {
-			return PeakScanListLabelProvider.SCAN;
 		}
+		return PeakScanListLabelProvider.SCAN;
 	}
 
 	private int getRetentionTime(Object object) {
@@ -219,98 +216,87 @@ public class PeakScanListTableComparator extends AbstractRecordTableComparator i
 
 		if(object instanceof IPeak peak) {
 			return peak.getIntegratedArea();
-		} else {
-			return 0.0d;
 		}
+		return 0.0d;
 	}
 
 	private int getStartRetentionTime(Object object) {
 
 		if(object instanceof IPeak peak) {
 			return peak.getPeakModel().getStartRetentionTime();
-		} else {
-			return 0;
 		}
+		return 0;
 	}
 
 	private int getStopRetentionTime(Object object) {
 
 		if(object instanceof IPeak peak) {
 			return peak.getPeakModel().getStopRetentionTime();
-		} else {
-			return 0;
 		}
+		return 0;
 	}
 
 	private int getWidth(Object object) {
 
 		if(object instanceof IPeak peak) {
 			return peak.getPeakModel().getWidthBaselineByInflectionPoints();
-		} else {
-			return 0;
 		}
+		return 0;
 	}
 
 	private float getLeading(Object object) {
 
 		if(object instanceof IPeak peak) {
 			return peak.getPeakModel().getLeading();
-		} else {
-			return 0;
 		}
+		return 0;
 	}
 
 	private float getTailing(Object object) {
 
 		if(object instanceof IPeak peak) {
 			return peak.getPeakModel().getTailing();
-		} else {
-			return 0;
 		}
+		return 0;
 	}
 
 	private String getModelDescription(Object object) {
 
 		if(object instanceof IPeak peak) {
 			return peak.getModelDescription();
-		} else {
-			return "";
 		}
+		return "";
 	}
 
 	private String getDetectorDescription(Object object) {
 
 		if(object instanceof IPeak peak) {
 			return peak.getDetectorDescription();
-		} else {
-			return "";
 		}
+		return "";
 	}
 
 	private String getIntegratorDescription(Object object) {
 
 		if(object instanceof IPeak peak) {
 			return peak.getIntegratorDescription();
-		} else {
-			return "";
 		}
+		return "";
 	}
 
 	private int getSuggestedNumberOfComponents(Object object) {
 
 		if(object instanceof IPeak peak) {
 			return peak.getSuggestedNumberOfComponents();
-		} else {
-			return 0;
 		}
+		return 0;
 	}
 
 	private int getInternalStandards(Object object) {
 
 		if(object instanceof IPeak peak) {
 			return peak.getInternalStandards().size();
-		} else {
-			return 0;
 		}
+		return 0;
 	}
 }

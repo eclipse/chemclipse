@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -23,13 +23,11 @@ public class QuantitationListContentProvider implements IStructuredContentProvid
 	@Override
 	public Object[] getElements(Object inputElement) {
 
-		if(inputElement instanceof IPeak) {
-			IPeak peak = (IPeak)inputElement;
+		if(inputElement instanceof IPeak peak) {
 			List<? extends IQuantitationEntry> quantitationEntries = peak.getQuantitationEntries();
 			return quantitationEntries.toArray();
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	@Override

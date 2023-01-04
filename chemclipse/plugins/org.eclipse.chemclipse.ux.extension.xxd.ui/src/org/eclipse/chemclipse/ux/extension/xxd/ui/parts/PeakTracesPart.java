@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -49,8 +49,8 @@ public class PeakTracesPart extends AbstractPart<ExtendedPeakTracesUI> {
 		if(objects.size() == 1) {
 			Object object = objects.get(0);
 			if(isUpdateEvent(topic)) {
-				if(object instanceof IPeak) {
-					getControl().update((IPeak)object);
+				if(object instanceof IPeak peak) {
+					getControl().update(peak);
 					return true;
 				}
 			} else if(isCloseEvent(topic)) {

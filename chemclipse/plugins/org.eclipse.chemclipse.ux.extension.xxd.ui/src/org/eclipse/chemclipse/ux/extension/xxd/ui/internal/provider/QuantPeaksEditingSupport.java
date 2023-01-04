@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -27,6 +27,7 @@ public class QuantPeaksEditingSupport extends EditingSupport {
 	private String column;
 
 	public QuantPeaksEditingSupport(ExtendedTableViewer tableViewer, String column) {
+
 		super(tableViewer);
 		this.column = column;
 		this.cellEditor = new TextCellEditor(tableViewer.getTable());
@@ -48,13 +49,12 @@ public class QuantPeaksEditingSupport extends EditingSupport {
 	@Override
 	protected Object getValue(Object element) {
 
-		if(element instanceof IQuantitationPeak) {
-			IQuantitationPeak peak = (IQuantitationPeak)element;
-			switch(column) {
-				case QuantPeaksLabelProvider.CONCENTRATION:
-					return Double.toString(peak.getConcentration());
-				case QuantPeaksLabelProvider.CONCENTRATION_UNIT:
-					return peak.getConcentrationUnit();
+		if(element instanceof IQuantitationPeak peak) {
+			if(column.equals(QuantPeaksLabelProvider.CONCENTRATION)) {
+				return Double.toString(peak.getConcentration());
+			}
+			if(column.equals(QuantPeaksLabelProvider.CONCENTRATION_UNIT)) {
+				return peak.getConcentrationUnit();
 			}
 		}
 		return false;
@@ -63,21 +63,18 @@ public class QuantPeaksEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 
-		if(element instanceof IQuantitationPeak) {
-			IQuantitationPeak peak = (IQuantitationPeak)element;
-			switch(column) {
-				case QuantPeaksLabelProvider.CONCENTRATION:
-					double concentration = parseConcentration((String)value);
-					if(!Double.isNaN(concentration)) {
-						peak.setConcentration(concentration);
-					}
-					break;
-				case QuantPeaksLabelProvider.CONCENTRATION_UNIT:
-					peak.setConcentrationUnit((String)value);
-					break;
+		if(element instanceof IQuantitationPeak peak) {
+			if(column.equals(QuantPeaksLabelProvider.CONCENTRATION)) {
+				double concentration = parseConcentration((String)value);
+				if(!Double.isNaN(concentration)) {
+					peak.setConcentration(concentration);
+				}
 			}
-			tableViewer.refresh();
+			if(column.equals(QuantPeaksLabelProvider.CONCENTRATION_UNIT)) {
+				peak.setConcentrationUnit((String)value);
+			}
 		}
+		tableViewer.refresh();
 	}
 
 	private double parseConcentration(String value) {

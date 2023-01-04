@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -29,6 +29,7 @@ public class TimeRangesEditingSupport extends EditingSupport {
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
 
 	public TimeRangesEditingSupport(ExtendedTableViewer tableViewer, String column) {
+
 		super(tableViewer);
 		this.column = column;
 		this.cellEditor = new TextCellEditor(tableViewer.getTable());
@@ -50,15 +51,15 @@ public class TimeRangesEditingSupport extends EditingSupport {
 	@Override
 	protected Object getValue(Object element) {
 
-		if(element instanceof TimeRange) {
-			TimeRange timeRange = (TimeRange)element;
-			switch(column) {
-				case TimeRangesLabelProvider.START:
-					return formatValue(timeRange.getStart());
-				case TimeRangesLabelProvider.CENTER:
-					return formatValue(timeRange.getCenter());
-				case TimeRangesLabelProvider.STOP:
-					return formatValue(timeRange.getStop());
+		if(element instanceof TimeRange timeRange) {
+			if(column.equals(TimeRangesLabelProvider.START)) {
+				return formatValue(timeRange.getStart());
+			}
+			if(column.equals(TimeRangesLabelProvider.CENTER)) {
+				return formatValue(timeRange.getCenter());
+			}
+			if(column.equals(TimeRangesLabelProvider.STOP)) {
+				return formatValue(timeRange.getStop());
 			}
 		}
 		return false;
@@ -67,18 +68,15 @@ public class TimeRangesEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 
-		if(element instanceof TimeRange) {
-			TimeRange timeRange = (TimeRange)element;
-			switch(column) {
-				case TimeRangesLabelProvider.START:
-					timeRange.updateStart(parseValue(value));
-					break;
-				case TimeRangesLabelProvider.CENTER:
-					timeRange.updateCenter(parseValue(value));
-					break;
-				case TimeRangesLabelProvider.STOP:
-					timeRange.updateStop(parseValue(value));
-					break;
+		if(element instanceof TimeRange timeRange) {
+			if(column.equals(TimeRangesLabelProvider.START)) {
+				timeRange.updateStart(parseValue(value));
+			}
+			if(column.equals(TimeRangesLabelProvider.CENTER)) {
+				timeRange.updateCenter(parseValue(value));
+			}
+			if(column.equals(TimeRangesLabelProvider.STOP)) {
+				timeRange.updateStop(parseValue(value));
 			}
 			tableViewer.refresh();
 		}

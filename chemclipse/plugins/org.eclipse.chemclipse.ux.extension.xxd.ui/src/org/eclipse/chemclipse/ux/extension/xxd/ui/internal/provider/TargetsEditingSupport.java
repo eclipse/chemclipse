@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,6 +15,8 @@ import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.CheckboxCellEditor;
 import org.eclipse.jface.viewers.EditingSupport;
@@ -57,27 +59,33 @@ public class TargetsEditingSupport extends EditingSupport {
 	@Override
 	protected Object getValue(Object element) {
 
-		if(element instanceof IIdentificationTarget) {
-			IIdentificationTarget identificationTarget = (IIdentificationTarget)element;
-			switch(column) {
-				case TargetsLabelProvider.VERIFIED_MANUALLY:
-					return identificationTarget.isManuallyVerified();
-				case TargetsLabelProvider.NAME:
-					return identificationTarget.getLibraryInformation().getName();
-				case TargetsLabelProvider.CAS:
-					return identificationTarget.getLibraryInformation().getCasNumber();
-				case TargetsLabelProvider.COMMENTS:
-					return identificationTarget.getLibraryInformation().getComments();
-				case TargetsLabelProvider.FORMULA:
-					return identificationTarget.getLibraryInformation().getFormula();
-				case TargetsLabelProvider.SMILES:
-					return identificationTarget.getLibraryInformation().getSmiles();
-				case TargetsLabelProvider.INCHI:
-					return identificationTarget.getLibraryInformation().getInChI();
-				case TargetsLabelProvider.CONTRIBUTOR:
-					return identificationTarget.getLibraryInformation().getContributor();
-				case TargetsLabelProvider.REFERENCE_ID:
-					return identificationTarget.getLibraryInformation().getReferenceIdentifier();
+		if(element instanceof IIdentificationTarget identificationTarget) {
+			if(column.equals(TargetsLabelProvider.VERIFIED_MANUALLY)) {
+				return identificationTarget.isManuallyVerified();
+			}
+			if(column.equals(TargetsLabelProvider.NAME)) {
+				return identificationTarget.getLibraryInformation().getName();
+			}
+			if(column.equals(TargetsLabelProvider.CAS)) {
+				return identificationTarget.getLibraryInformation().getCasNumber();
+			}
+			if(column.equals(TargetsLabelProvider.COMMENTS)) {
+				return identificationTarget.getLibraryInformation().getComments();
+			}
+			if(column.equals(TargetsLabelProvider.FORMULA)) {
+				return identificationTarget.getLibraryInformation().getFormula();
+			}
+			if(column.equals(TargetsLabelProvider.SMILES)) {
+				return identificationTarget.getLibraryInformation().getSmiles();
+			}
+			if(column.equals(TargetsLabelProvider.INCHI)) {
+				return identificationTarget.getLibraryInformation().getInChI();
+			}
+			if(column.equals(TargetsLabelProvider.CONTRIBUTOR)) {
+				return identificationTarget.getLibraryInformation().getContributor();
+			}
+			if(column.equals(TargetsLabelProvider.REFERENCE_ID)) {
+				return identificationTarget.getLibraryInformation().getReferenceIdentifier();
 			}
 		}
 		return false;
@@ -86,39 +94,36 @@ public class TargetsEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 
-		if(element instanceof IIdentificationTarget) {
-			IIdentificationTarget identificationTarget = (IIdentificationTarget)element;
-			switch(column) {
-				case TargetsLabelProvider.VERIFIED_MANUALLY:
-					identificationTarget.setManuallyVerified((boolean)value);
-					break;
-				case TargetsLabelProvider.NAME:
-					identificationTarget.getLibraryInformation().setName((String)value);
-					break;
-				case TargetsLabelProvider.CAS:
-					identificationTarget.getLibraryInformation().setCasNumber((String)value);
-					break;
-				case TargetsLabelProvider.COMMENTS:
-					identificationTarget.getLibraryInformation().setComments((String)value);
-					break;
-				case TargetsLabelProvider.FORMULA:
-					identificationTarget.getLibraryInformation().setFormula((String)value);
-					break;
-				case TargetsLabelProvider.SMILES:
-					identificationTarget.getLibraryInformation().setSmiles((String)value);
-					break;
-				case TargetsLabelProvider.INCHI:
-					identificationTarget.getLibraryInformation().setInChI((String)value);
-					break;
-				case TargetsLabelProvider.CONTRIBUTOR:
-					identificationTarget.getLibraryInformation().setContributor((String)value);
-					break;
-				case TargetsLabelProvider.REFERENCE_ID:
-					identificationTarget.getLibraryInformation().setReferenceIdentifier((String)value);
-					break;
+		if(element instanceof IIdentificationTarget identificationTarget) {
+			if(column.equals(TargetsLabelProvider.VERIFIED_MANUALLY)) {
+				identificationTarget.setManuallyVerified((boolean)value);
 			}
-			tableViewer.refresh();
-			UpdateNotifierUI.update(tableViewer.getTable().getDisplay(), IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "The target has been edited.");
+			if(column.equals(TargetsLabelProvider.NAME)) {
+				identificationTarget.getLibraryInformation().setName((String)value);
+			}
+			if(column.equals(TargetsLabelProvider.CAS)) {
+				identificationTarget.getLibraryInformation().setCasNumber((String)value);
+			}
+			if(column.equals(TargetsLabelProvider.COMMENTS)) {
+				identificationTarget.getLibraryInformation().setComments((String)value);
+			}
+			if(column.equals(TargetsLabelProvider.FORMULA)) {
+				identificationTarget.getLibraryInformation().setFormula((String)value);
+			}
+			if(column.equals(TargetsLabelProvider.SMILES)) {
+				identificationTarget.getLibraryInformation().setSmiles((String)value);
+			}
+			if(column.equals(TargetsLabelProvider.INCHI)) {
+				identificationTarget.getLibraryInformation().setInChI((String)value);
+			}
+			if(column.equals(TargetsLabelProvider.CONTRIBUTOR)) {
+				identificationTarget.getLibraryInformation().setContributor((String)value);
+			}
+			if(column.equals(TargetsLabelProvider.REFERENCE_ID)) {
+				identificationTarget.getLibraryInformation().setReferenceIdentifier((String)value);
+			}
 		}
+		tableViewer.refresh();
+		UpdateNotifierUI.update(tableViewer.getTable().getDisplay(), IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.TARGET_HAS_BEEN_EDITED));
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -58,9 +58,8 @@ public class PeakScanListEditingSupport extends EditingSupport {
 
 		if(column.equals(PeakScanListLabelProvider.ACTIVE_FOR_ANALYSIS)) {
 			return (element instanceof IPeak);
-		} else {
-			return tableViewer.isEditEnabled();
 		}
+		return tableViewer.isEditEnabled();
 	}
 
 	@Override
@@ -68,31 +67,35 @@ public class PeakScanListEditingSupport extends EditingSupport {
 
 		if(element instanceof IPeak peak) {
 			IPeakModel peakModel = peak.getPeakModel();
-			switch(column) {
-				case PeakScanListLabelProvider.ACTIVE_FOR_ANALYSIS:
-					return peak.isActiveForAnalysis();
-				case PeakScanListLabelProvider.RETENTION_TIME:
-					return decimalFormat.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
-				case PeakScanListLabelProvider.RELATIVE_RETENTION_TIME:
-					return decimalFormat.format(peakModel.getPeakMaximum().getRelativeRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
-				case PeakScanListLabelProvider.RETENTION_INDEX:
-					if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
-						return integerFormat.format(peakModel.getPeakMaximum().getRetentionIndex());
-					} else {
-						return decimalFormat.format(peakModel.getPeakMaximum().getRetentionIndex());
-					}
-				case PeakScanListLabelProvider.AREA_TOTAL:
-					if(PreferenceSupplier.showAreaWithoutDecimals()) {
-						return integerFormat.format(peak.getIntegratedArea());
-					} else {
-						return decimalFormat.format(peak.getIntegratedArea());
-					}
-				case PeakScanListLabelProvider.START_RETENTION_TIME:
-					return decimalFormat.format(peakModel.getStartRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
-				case PeakScanListLabelProvider.STOP_RETENTION_TIME:
-					return decimalFormat.format(peakModel.getStopRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
-				case PeakScanListLabelProvider.BEST_TARGET:
-					return TargetSupport.getBestTargetLibraryField(peak);
+			if(column.equals(PeakScanListLabelProvider.ACTIVE_FOR_ANALYSIS)) {
+				return peak.isActiveForAnalysis();
+			}
+			if(column.equals(PeakScanListLabelProvider.RETENTION_TIME)) {
+				return decimalFormat.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
+			}
+			if(column.equals(PeakScanListLabelProvider.RELATIVE_RETENTION_TIME)) {
+				return decimalFormat.format(peakModel.getPeakMaximum().getRelativeRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
+			}
+			if(column.equals(PeakScanListLabelProvider.RETENTION_INDEX)) {
+				if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
+					return integerFormat.format(peakModel.getPeakMaximum().getRetentionIndex());
+				}
+				return decimalFormat.format(peakModel.getPeakMaximum().getRetentionIndex());
+			}
+			if(column.equals(PeakScanListLabelProvider.AREA_TOTAL)) {
+				if(PreferenceSupplier.showAreaWithoutDecimals()) {
+					return integerFormat.format(peak.getIntegratedArea());
+				}
+				return decimalFormat.format(peak.getIntegratedArea());
+			}
+			if(column.equals(PeakScanListLabelProvider.START_RETENTION_TIME)) {
+				return decimalFormat.format(peakModel.getStartRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
+			}
+			if(column.equals(PeakScanListLabelProvider.STOP_RETENTION_TIME)) {
+				return decimalFormat.format(peakModel.getStopRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
+			}
+			if(column.equals(PeakScanListLabelProvider.BEST_TARGET)) {
+				return TargetSupport.getBestTargetLibraryField(peak);
 			}
 		}
 		return false;
@@ -102,10 +105,8 @@ public class PeakScanListEditingSupport extends EditingSupport {
 	protected void setValue(Object element, Object value) {
 
 		if(element instanceof IPeak peak) {
-			switch(column) {
-				case PeakScanListLabelProvider.ACTIVE_FOR_ANALYSIS:
-					peak.setActiveForAnalysis((boolean)value);
-					break;
+			if(column.equals(PeakScanListLabelProvider.ACTIVE_FOR_ANALYSIS)) {
+				peak.setActiveForAnalysis((boolean)value);
 			}
 			tableViewer.refresh(element);
 		}

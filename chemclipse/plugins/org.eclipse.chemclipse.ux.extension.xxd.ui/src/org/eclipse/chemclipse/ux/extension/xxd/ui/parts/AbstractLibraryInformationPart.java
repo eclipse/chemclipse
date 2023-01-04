@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -43,11 +43,9 @@ public abstract class AbstractLibraryInformationPart<T extends LibraryInformatio
 				Object object = objects.get(0);
 				ILibraryInformation libraryInformation = null;
 				//
-				if(object instanceof ILibraryMassSpectrum) {
-					ILibraryMassSpectrum libraryMassSpectrum = (ILibraryMassSpectrum)object;
+				if(object instanceof ILibraryMassSpectrum libraryMassSpectrum) {
 					libraryInformation = libraryMassSpectrum.getLibraryInformation();
-				} else if(object instanceof IIdentificationTarget) {
-					IIdentificationTarget identificationTarget = (IIdentificationTarget)object;
+				} else if(object instanceof IIdentificationTarget identificationTarget) {
 					libraryInformation = identificationTarget.getLibraryInformation();
 				}
 				//

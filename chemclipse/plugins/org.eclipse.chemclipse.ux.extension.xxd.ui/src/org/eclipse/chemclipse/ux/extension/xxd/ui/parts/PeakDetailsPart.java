@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -44,8 +44,8 @@ public class PeakDetailsPart extends AbstractPart<ExtendedPeakDetailsUI> {
 			IPeak peak = null;
 			if(isUpdateEvent(topic)) {
 				Object object = objects.get(0);
-				if(object instanceof IPeak) {
-					peak = (IPeak)object;
+				if(object instanceof IPeak newPeak) {
+					peak = newPeak;
 				}
 			}
 			getControl().update(peak);

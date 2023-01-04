@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,6 +19,8 @@ import org.eclipse.chemclipse.converter.quantitation.QuantDBConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
@@ -43,7 +45,7 @@ public class QuantDBImportRunnable implements IRunnableWithProgress {
 	public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		try {
-			monitor.beginTask("Import Quantitation Database", IProgressMonitor.UNKNOWN);
+			monitor.beginTask(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.IMPORT_QUANTITATION_DATABASE), IProgressMonitor.UNKNOWN);
 			IProcessingInfo<IQuantitationDatabase> processingInfo = QuantDBConverter.convert(file, monitor);
 			quantitationDatabase = processingInfo.getProcessingResult();
 		} catch(Exception e) {

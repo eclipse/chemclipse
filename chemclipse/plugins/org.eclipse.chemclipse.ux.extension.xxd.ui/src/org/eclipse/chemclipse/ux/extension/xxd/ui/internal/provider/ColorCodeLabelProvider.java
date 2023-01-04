@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -14,13 +14,15 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.model.ColorCode;
 import org.eclipse.swt.graphics.Image;
 
 public class ColorCodeLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String NAME = "Name";
-	public static final String COLOR = "Color";
+	public static final String NAME = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.NAME);
+	public static final String COLOR = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.COLOR);
 	//
 	public static final int INDEX_COLOR = 1;
 	//

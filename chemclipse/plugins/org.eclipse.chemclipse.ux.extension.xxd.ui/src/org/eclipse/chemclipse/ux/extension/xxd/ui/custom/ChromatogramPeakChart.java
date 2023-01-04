@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -158,7 +158,8 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 		 * Clear and add the selected peaks.
 		 */
 		clearSelectedPeakSeries();
-		if(peaks != null && peaks.size() > 0) {
+		//
+		if(peaks != null && !peaks.isEmpty()) {
 			int index = 1;
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
 			addPeakData(peaks, lineSeriesDataList);
@@ -323,20 +324,20 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 			lineSeriesDataList.add(lineSeriesDataTIC);
 			//
 			if(containsTraces) {
-				if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
+				if(chromatogramSelection instanceof IChromatogramSelectionMSD chromatogramSelectionMSD) {
 					/*
 					 * XIC
 					 */
-					ILineSeriesData lineSeriesDataXIC = chromatogramChartSupport.getLineSeriesData((IChromatogramSelectionMSD)chromatogramSelection, SERIES_ID_CHROMATOGRAM_XIC, DisplayType.XIC, colorActive, false);
+					ILineSeriesData lineSeriesDataXIC = chromatogramChartSupport.getLineSeriesData(chromatogramSelectionMSD, SERIES_ID_CHROMATOGRAM_XIC, DisplayType.XIC, colorActive, false);
 					ILineSeriesSettings settingsXIC = lineSeriesDataXIC.getSettings();
 					settingsXIC.setEnableArea(enableChromatogramArea);
 					settingsXIC.setVisible(peakChartSettings.isShowChromatogramTraces());
 					lineSeriesDataList.add(lineSeriesDataXIC);
-				} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
+				} else if(chromatogramSelection instanceof IChromatogramSelectionWSD chromatogramSelectionWSD) {
 					/*
 					 * SWC
 					 */
-					ILineSeriesData lineSeriesDataSWC = chromatogramChartSupport.getLineSeriesData((IChromatogramSelectionWSD)chromatogramSelection, SERIES_ID_CHROMATOGRAM_SWC, DisplayType.SWC, colorActive, false);
+					ILineSeriesData lineSeriesDataSWC = chromatogramChartSupport.getLineSeriesData(chromatogramSelectionWSD, SERIES_ID_CHROMATOGRAM_SWC, DisplayType.SWC, colorActive, false);
 					ILineSeriesSettings settingsSWC = lineSeriesDataSWC.getSettings();
 					settingsSWC.setEnableArea(enableChromatogramArea);
 					settingsSWC.setVisible(peakChartSettings.isShowChromatogramTraces());
@@ -348,14 +349,12 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 
 	private boolean containsTraces(IChromatogramSelection<?, ?> chromatogramSelection) {
 
-		if(chromatogramSelection instanceof IChromatogramSelectionMSD) {
-			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
-			if(chromatogramSelectionMSD.getSelectedIons().size() > 0) {
+		if(chromatogramSelection instanceof IChromatogramSelectionMSD chromatogramSelectionMSD) {
+			if(!chromatogramSelectionMSD.getSelectedIons().isEmpty()) {
 				return true;
 			}
-		} else if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
-			IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
-			if(chromatogramSelectionWSD.getSelectedWavelengths().size() > 0) {
+		} else if(chromatogramSelection instanceof IChromatogramSelectionWSD chromatogramSelectionWSD) {
+			if(!chromatogramSelectionWSD.getSelectedWavelengths().isEmpty()) {
 				return true;
 			}
 		}
@@ -392,7 +391,7 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 		List<IPeak> peaksInactiveISTD = new ArrayList<>();
 		//
 		for(IPeak peak : peaks) {
-			if(peak.getInternalStandards().size() > 0) {
+			if(!peak.getInternalStandards().isEmpty()) {
 				if(peak.isActiveForAnalysis()) {
 					peaksActiveISTD.add(peak);
 				} else {
@@ -416,7 +415,7 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 
 	private void addPeaks(List<ILineSeriesData> lineSeriesDataList, List<IPeak> peaks, PlotSymbolType plotSymbolType, int symbolSize, Color symbolColor, String seriesId, boolean addLabelMarker) {
 
-		if(peaks.size() > 0) {
+		if(!peaks.isEmpty()) {
 			//
 			Collections.sort(peaks, peakRetentionTimeComparator);
 			ILineSeriesData lineSeriesData = peakChartSupport.getPeaks(peaks, true, false, symbolColor, seriesId);
@@ -510,7 +509,7 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 
 	private void addIdentifiedScansData(IChromatogramSelection<?, ?> chromatogramSelection, List<ILineSeriesData> lineSeriesDataList, List<IScan> scans, PlotSymbolType plotSymbolType, int symbolSize, Color symbolColor, String seriesId) {
 
-		if(scans.size() > 0) {
+		if(!scans.isEmpty()) {
 			ILineSeriesData lineSeriesData = null;
 			lineSeriesData = scanChartSupport.getLineSeriesDataPoint(scans, false, seriesId, displayType, chromatogramSelection);
 			ILineSeriesSettings lineSeriesSettings = lineSeriesData.getSettings();
@@ -545,7 +544,7 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 
 		if(chromatogramSelection != null) {
 			List<IScan> selectedIdentifiedScans = chromatogramSelection.getSelectedIdentifiedScans();
-			if(selectedIdentifiedScans.size() > 0) {
+			if(!selectedIdentifiedScans.isEmpty()) {
 				String seriesId = SERIES_ID_IDENTIFIED_SCAN_SELECTED;
 				Color color = Colors.getColor(preferenceStore.getString(PreferenceConstants.P_COLOR_CHROMATOGRAM_IDENTIFIED_SCAN));
 				PlotSymbolType symbolType = PlotSymbolType.valueOf(preferenceStore.getString(PreferenceConstants.P_CHROMATOGRAM_IDENTIFIED_SCAN_MARKER_TYPE));

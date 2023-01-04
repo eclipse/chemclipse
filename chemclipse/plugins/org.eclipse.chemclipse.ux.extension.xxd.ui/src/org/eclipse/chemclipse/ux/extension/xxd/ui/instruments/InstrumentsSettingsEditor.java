@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,9 +24,12 @@ import org.eclipse.chemclipse.model.instruments.Instruments;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsUIProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
@@ -54,9 +57,16 @@ import org.eclipse.swt.widgets.Listener;
 public class InstrumentsSettingsEditor implements SettingsUIProvider.SettingsUIControl, IExtendedPartUI {
 
 	private static final String FILTER_EXTENSION = "*.txt";
-	private static final String FILTER_NAME = "Instruments (*.txt)";
-	private static final String FILE_NAME = "Instruments.txt";
-	private static final String TITLE = "Instrument";
+	private static final String INSTRUMENTS = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.INSTRUMENTS);
+	private static final String FILTER_NAME = INSTRUMENTS + "(" + FILTER_EXTENSION + ")";
+	private static final String FILE_NAME = INSTRUMENTS + FILTER_EXTENSION;
+	private static final String TITLE = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.INSTRUMENT);
+	private static final String CREATE_NEW_INSTRUMENT = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CREATE_NEW_INSTRUMENT);
+	private static final String EDIT_SELECTED_INSTRUMENT = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.EDIT_SELECTED_INSTRUMENT);
+	private static final String REMOVE_SELECTED_INSTRUMENT = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.REMOVE_SELECTED_INSTRUMENT);
+	private static final String REALLY_DELETE_SELECTED_INSTRUMENT = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.REALLY_DELETE_SELECTED_INSTRUMENT);
+	private static final String REMOVE_ALL_INSTRUMENTS = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.REMOVE_ALL_INSTRUMENTS);
+	private static final String REALLY_REMOVE_ALL_INSTRUMENTS = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.REALLY_REMOVE_ALL_INSTRUMENTS);
 	//
 	private Composite control;
 	//
@@ -201,13 +211,13 @@ public class InstrumentsSettingsEditor implements SettingsUIProvider.SettingsUIC
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Add a new instrument.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImage.SIZE_16x16));
+		button.setToolTipText(CREATE_NEW_INSTRUMENT);
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ADD, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
 
-				InputDialog dialog = new InputDialog(e.display.getActiveShell(), TITLE, "Create a new instrument.", "Instrument1 | GC-MS | Used for research and development.", new InstrumentInputValidator(settings.keySet()));
+				InputDialog dialog = new InputDialog(e.display.getActiveShell(), TITLE, CREATE_NEW_INSTRUMENT, "Instrument1 | GC-MS | Used for research and development.", new InstrumentInputValidator(settings.keySet()));
 				if(IDialogConstants.OK_ID == dialog.open()) {
 					String item = dialog.getValue();
 					Instrument instrument = settings.extractInstrument(item);
@@ -226,20 +236,19 @@ public class InstrumentsSettingsEditor implements SettingsUIProvider.SettingsUIC
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Edit the selected instrument.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImage.SIZE_16x16));
+		button.setToolTipText(EDIT_SELECTED_INSTRUMENT);
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EDIT, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
 
 				IStructuredSelection structuredSelection = (IStructuredSelection)listUI.getSelection();
 				Object object = structuredSelection.getFirstElement();
-				if(object instanceof Instrument) {
+				if(object instanceof Instrument instrument) {
 					Set<String> keySetEdit = new HashSet<>();
 					keySetEdit.addAll(settings.keySet());
-					Instrument instrument = (Instrument)object;
 					keySetEdit.remove(instrument.getIdentifier());
-					InputDialog dialog = new InputDialog(e.display.getActiveShell(), TITLE, "Edit the selected instrument.", settings.extractInstrument(instrument), new InstrumentInputValidator(keySetEdit));
+					InputDialog dialog = new InputDialog(e.display.getActiveShell(), TITLE, EDIT_SELECTED_INSTRUMENT, settings.extractInstrument(instrument), new InstrumentInputValidator(keySetEdit));
 					if(IDialogConstants.OK_ID == dialog.open()) {
 						String item = dialog.getValue();
 						Instrument instrumentNew = settings.extractInstrument(item);
@@ -260,17 +269,17 @@ public class InstrumentsSettingsEditor implements SettingsUIProvider.SettingsUIC
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Remove the selected instrument(s).");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
+		button.setToolTipText(REMOVE_SELECTED_INSTRUMENT);
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
 
-				if(MessageDialog.openQuestion(e.display.getActiveShell(), TITLE, "Do you want to delete the selected instrument(s)?")) {
+				if(MessageDialog.openQuestion(e.display.getActiveShell(), TITLE, REALLY_DELETE_SELECTED_INSTRUMENT)) {
 					IStructuredSelection structuredSelection = (IStructuredSelection)listUI.getSelection();
 					for(Object object : structuredSelection.toArray()) {
-						if(object instanceof Instrument) {
-							settings.remove(((Instrument)object).getIdentifier());
+						if(object instanceof Instrument instrument) {
+							settings.remove(instrument.getIdentifier());
 						}
 					}
 					setTableViewerInput();
@@ -285,13 +294,13 @@ public class InstrumentsSettingsEditor implements SettingsUIProvider.SettingsUIC
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Remove all instrument(s).");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImage.SIZE_16x16));
+		button.setToolTipText(REMOVE_ALL_INSTRUMENTS);
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
 
-				if(MessageDialog.openQuestion(e.display.getActiveShell(), TITLE, "Do you want to delete all instrument(s)?")) {
+				if(MessageDialog.openQuestion(e.display.getActiveShell(), TITLE, REALLY_REMOVE_ALL_INSTRUMENTS)) {
 					settings.clear();
 					setTableViewerInput();
 				}
@@ -305,14 +314,14 @@ public class InstrumentsSettingsEditor implements SettingsUIProvider.SettingsUIC
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Import an instrument list.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImage.SIZE_16x16));
+		button.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.IMPORT_INSTRUMENT_LIST));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_IMPORT, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
 
 				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
-				fileDialog.setText("Instrument List");
+				fileDialog.setText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.INSTRUMENT_LIST));
 				fileDialog.setFilterExtensions(new String[]{FILTER_EXTENSION});
 				fileDialog.setFilterNames(new String[]{FILTER_NAME});
 				fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_INSTRUMENTS_TEMPLATE_FOLDER));
@@ -334,15 +343,15 @@ public class InstrumentsSettingsEditor implements SettingsUIProvider.SettingsUIC
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Export the instrument list.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXPORT, IApplicationImage.SIZE_16x16));
+		button.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.EXPORT_INSTRUMENT_LIST));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXPORT, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {
 
 				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
 				fileDialog.setOverwrite(true);
-				fileDialog.setText("Instrument List");
+				fileDialog.setText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.INSTRUMENT_LIST));
 				fileDialog.setFilterExtensions(new String[]{FILTER_EXTENSION});
 				fileDialog.setFilterNames(new String[]{FILTER_NAME});
 				fileDialog.setFileName(FILE_NAME);
@@ -353,9 +362,9 @@ public class InstrumentsSettingsEditor implements SettingsUIProvider.SettingsUIC
 					String path = file.getParentFile().getAbsolutePath();
 					preferenceStore.putValue(PreferenceConstants.P_INSTRUMENTS_TEMPLATE_FOLDER, path);
 					if(settings.exportItems(file)) {
-						MessageDialog.openInformation(button.getShell(), TITLE, "The instrument list has been exported successfully.");
+						MessageDialog.openInformation(button.getShell(), TITLE, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.INSTRUMENT_LIST_EXPORTED));
 					} else {
-						MessageDialog.openWarning(button.getShell(), TITLE, "Something went wrong to export the instrument list.");
+						MessageDialog.openWarning(button.getShell(), TITLE, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.INSTRUMENT_LIST_EXPORT_FAILED));
 					}
 				}
 			}
@@ -368,8 +377,8 @@ public class InstrumentsSettingsEditor implements SettingsUIProvider.SettingsUIC
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Save the instrument list.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE, IApplicationImage.SIZE_16x16));
+		button.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SAVE_INSTRUMENT_LIST));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SAVE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			public void widgetSelected(SelectionEvent e) {

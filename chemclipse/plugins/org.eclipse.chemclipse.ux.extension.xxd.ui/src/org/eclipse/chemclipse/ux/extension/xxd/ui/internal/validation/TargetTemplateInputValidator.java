@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,6 +15,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.eclipse.chemclipse.model.targets.TargetValidator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.dialogs.IInputValidator;
 
@@ -37,7 +39,7 @@ public class TargetTemplateInputValidator implements IInputValidator {
 		if(status.isOK()) {
 			String name = targetValidator.getName();
 			if(names.contains(name)) {
-				return "The target templates already exists.";
+				return ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.TARGET_TEMPLATE_ALREADY_EXISTS);
 			}
 		} else {
 			return status.getMessage();

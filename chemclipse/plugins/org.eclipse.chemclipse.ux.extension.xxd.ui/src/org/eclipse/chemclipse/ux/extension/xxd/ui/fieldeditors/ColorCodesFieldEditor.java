@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -41,6 +41,7 @@ public class ColorCodesFieldEditor extends FieldEditor {
 	private ColorCodeTableUI colorCodeTableUI;
 
 	public ColorCodesFieldEditor(String name, String labelText, Composite parent) {
+
 		init(name, labelText);
 		createControl(parent);
 	}
@@ -137,8 +138,7 @@ public class ColorCodesFieldEditor extends FieldEditor {
 
 				IStructuredSelection structuredSelection = (IStructuredSelection)colorCodeTableUI.getSelection();
 				Object object = structuredSelection.getFirstElement();
-				if(object instanceof ColorCode) {
-					ColorCode colorCode = (ColorCode)object;
+				if(object instanceof ColorCode colorCode) {
 					ColorCodeDialog dialog = new ColorCodeDialog(e.display.getActiveShell(), colorCode);
 					if(IDialogConstants.OK_ID == dialog.open()) {
 						colorCode = dialog.getColorCode();
@@ -167,8 +167,7 @@ public class ColorCodesFieldEditor extends FieldEditor {
 					List<String> removeKeys = new ArrayList<>();
 					IStructuredSelection structuredSelection = (IStructuredSelection)colorCodeTableUI.getSelection();
 					for(Object object : structuredSelection.toArray()) {
-						if(object instanceof ColorCode) {
-							ColorCode colorCode = (ColorCode)object;
+						if(object instanceof ColorCode colorCode) {
 							removeKeys.add(colorCode.getName());
 						}
 					}

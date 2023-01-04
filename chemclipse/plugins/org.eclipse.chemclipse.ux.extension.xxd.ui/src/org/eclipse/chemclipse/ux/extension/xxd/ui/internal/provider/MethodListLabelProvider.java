@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,6 +24,8 @@ import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.swt.graphics.Image;
@@ -35,11 +37,11 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 	//
 	public static final String[] TITLES = {//
 			"", //
-			"Name", //
-			"Description", //
-			"Type", //
-			"Settings", //
-			"ID" //
+			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.NAME), //
+			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.DESCRIPTION), //
+			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.TYPE), //
+			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SETTINGS), //
+			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.ID) //
 	};
 	//
 	public static final int[] BOUNDS = {//
@@ -70,11 +72,14 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 				//
 				if(status.matches(IStatus.ERROR)) {
 					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_ERROR, IApplicationImage.SIZE_16x16);
-				} else if(status.matches(IStatus.WARNING)) {
+				}
+				if(status.matches(IStatus.WARNING)) {
 					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_WARN, IApplicationImage.SIZE_16x16);
-				} else if(status.matches(IStatus.INFO)) {
+				}
+				if(status.matches(IStatus.INFO)) {
 					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_EMPTY, IApplicationImage.SIZE_16x16);
-				} else if(status.isOK()) {
+				}
+				if(status.isOK()) {
 					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_OK, IApplicationImage.SIZE_16x16);
 				}
 			} else if(element instanceof IProcessMethod) {
@@ -124,21 +129,19 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 					if(processSupplier != null) {
 						if(processSupplier.getSettingsParser().getInputValues().isEmpty() || preferencesSupplier == null) {
 							return "not configurable";
-						} else {
-							IProcessorPreferences<?> preferences = preferencesSupplier.apply(processEntry, supplierContext);
-							if(preferences.isUseSystemDefaults()) {
-								return "defaults";
-							} else {
-								String text = preferences.getUserSettingsAsString();
-								if(text.startsWith("{")) {
-									text = text.substring(1);
-								}
-								if(text.endsWith("}")) {
-									text = text.substring(0, text.length() - 1);
-								}
-								return text.replace("\"", "");
-							}
 						}
+						IProcessorPreferences<?> preferences = preferencesSupplier.apply(processEntry, supplierContext);
+						if(preferences.isUseSystemDefaults()) {
+							return "defaults";
+						}
+						String text = preferences.getUserSettingsAsString();
+						if(text.startsWith("{")) {
+							text = text.substring(1);
+						}
+						if(text.endsWith("}")) {
+							text = text.substring(0, text.length() - 1);
+						}
+						return text.replace("\"", "");
 					}
 					break;
 				case 5:
@@ -173,42 +176,40 @@ public class MethodListLabelProvider extends AbstractChemClipseLabelProvider {
 		 * Validation
 		 */
 		if(processEntry == null) {
-			return ValidationStatus.error("The processor is not available.");
+			return ValidationStatus.error(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESSOR_NOT_AVAILABLE));
 		}
 		//
 		if(preferencesSupplier == null) {
-			return ValidationStatus.error("The preference supplier is not available.");
+			return ValidationStatus.error(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PREFERENCES_SUPPLIER_NOT_AVAILABLE));
 		}
 		//
 		if(processTypeSupport == null) {
-			return ValidationStatus.error("The process type support is not available.");
+			return ValidationStatus.error(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESS_TYPE_SUPPORT_NOT_AVAILABLE));
 		}
 		/*
 		 * Checks
 		 */
-		if(!processEntry.isSkipValidation()) {
-			IProcessorPreferences<?> processorPreferences = preferencesSupplier.apply(processEntry, processTypeSupport);
-			//
-			if(processorPreferences == null) {
-				return ValidationStatus.error("The processor " + processEntry.getName() + " preferences are not available.");
-			}
-			//
-			if(processorPreferences.getSupplier().getSettingsClass() == null) {
-				return ValidationStatus.warning("The processor " + processEntry.getName() + " has no settings class.");
-			}
-			//
-			if(processorPreferences.isUseSystemDefaults()) {
-				return ValidationStatus.info("The processor " + processEntry.getName() + " uses system default settings.");
-			} else {
-				try {
-					processorPreferences.getUserSettings();
-					return ValidationStatus.ok();
-				} catch(Exception e) {
-					return ValidationStatus.error("The processor " + processEntry.getName() + " settings can't be parsed.", e);
-				}
-			}
-		} else {
-			return ValidationStatus.info("The processor " + processEntry.getName() + " skip validation option is set.");
+		if(processEntry.isSkipValidation()) {
+			return ValidationStatus.info(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESSOR_SKIP_VALIDATION_OPTIOIN_SET, processEntry.getName()));
+		}
+		IProcessorPreferences<?> processorPreferences = preferencesSupplier.apply(processEntry, processTypeSupport);
+		//
+		if(processorPreferences == null) {
+			return ValidationStatus.error(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESSOR_PREFERENCES_NOT_AVAILABLE, processEntry.getName()));
+		}
+		//
+		if(processorPreferences.getSupplier().getSettingsClass() == null) {
+			return ValidationStatus.warning(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESSOR_HAS_NO_SETTINGS_CLASS, processEntry.getName()));
+		}
+		//
+		if(processorPreferences.isUseSystemDefaults()) {
+			return ValidationStatus.info(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESSOR_USES_SYSTEM_DEFAULT_SETTINGS, processEntry.getName()));
+		}
+		try {
+			processorPreferences.getUserSettings();
+			return ValidationStatus.ok();
+		} catch(Exception e) {
+			return ValidationStatus.error(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESSOR_SETTINGS_CANNOT_BE_PARSED, processEntry.getName()), e);
 		}
 	}
 }

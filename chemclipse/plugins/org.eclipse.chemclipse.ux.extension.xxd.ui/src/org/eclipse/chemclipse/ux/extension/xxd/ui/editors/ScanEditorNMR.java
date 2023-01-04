@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -47,11 +47,15 @@ import org.eclipse.chemclipse.nmr.model.selection.IDataNMRSelection;
 import org.eclipse.chemclipse.processing.ProcessorFactory;
 import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.processing.core.IProcessingMessage;
+import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.filter.Filter;
 import org.eclipse.chemclipse.processing.filter.FilterContext;
 import org.eclipse.chemclipse.processing.filter.Filtered;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
+import org.eclipse.chemclipse.progress.core.InfoType;
+import org.eclipse.chemclipse.progress.core.StatusLineLogger;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
@@ -61,6 +65,8 @@ import org.eclipse.chemclipse.support.ui.workbench.PartSupport;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorNMR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferencePageProcessors;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.DynamicSettingsUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.NMRMeasurementsUI;
@@ -93,7 +99,7 @@ public class ScanEditorNMR implements IScanEditorNMR {
 	public static final String ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.scanEditorNMR";
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorNMR";
 	public static final String ICON_URI = IApplicationImage.getLocation(IApplicationImage.IMAGE_SCAN_NMR, IApplicationImageProvider.SIZE_16x16);
-	public static final String TOOLTIP = "NMR Editor";
+	public static final String TOOLTIP = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.NMR_EDITOR);
 	//
 	private final ExecutorService executorService = new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<Runnable>(2));
 	//
@@ -222,6 +228,7 @@ public class ScanEditorNMR implements IScanEditorNMR {
 				e.printStackTrace();
 			} catch(InterruptedException e) {
 				e.printStackTrace();
+				Thread.currentThread().interrupt();
 			}
 		}
 		if(object instanceof IComplexSignalMeasurement<?>) {
@@ -287,8 +294,7 @@ public class ScanEditorNMR implements IScanEditorNMR {
 				if(measurement instanceof Filtered) {
 					FilterContext<?, ?> context = ((Filtered<?, ?>)measurement).getFilterContext();
 					Object filteredObject = context.getFilteredObject();
-					if(filteredObject instanceof IComplexSignalMeasurement<?>) {
-						IComplexSignalMeasurement<?> original = (IComplexSignalMeasurement<?>)filteredObject;
+					if(filteredObject instanceof IComplexSignalMeasurement<?> original) {
 						settingsUI.setActiveContext(context, new UpdatingObserver(context, measurement, original));
 						composite.layout();
 						return;
@@ -352,10 +358,8 @@ public class ScanEditorNMR implements IScanEditorNMR {
 								Collection<? extends IMeasurement> filterIMeasurements = measurementFilter.filterIMeasurements(Collections.singleton(originalMeasurement), config, Function.identity(), result, null);
 								if(!filterIMeasurements.isEmpty() && !result.hasErrorMessages()) {
 									for(IMeasurement measurement : filterIMeasurements) {
-										if(measurement instanceof IComplexSignalMeasurement<?>) {
-											IComplexSignalMeasurement<?> signalMeasurement = (IComplexSignalMeasurement<?>)measurement;
-											if(measurement instanceof Filtered<?, ?>) {
-												Filtered<?, ?> filtered = (Filtered<?, ?>)measurement;
+										if(measurement instanceof IComplexSignalMeasurement<?> signalMeasurement) {
+											if(measurement instanceof Filtered<?, ?> filtered) {
 												if(filtered.getFilterContext().getFilteredObject() == originalMeasurement) {
 													copySignals(signalMeasurement, currentMeasurement);
 												}
@@ -364,7 +368,11 @@ public class ScanEditorNMR implements IScanEditorNMR {
 									}
 									Display.getDefault().asyncExec(ScanEditorNMR.this.extendedNMRScanUI::updateScan);
 								} else {
-									// TODO show an error decoration
+									for(IProcessingMessage message : result.getMessages()) {
+										if(message.getMessageType() == MessageType.ERROR) {
+											StatusLineLogger.setInfo(InfoType.ERROR_MESSAGE, message.getMessage());
+										}
+									}
 								}
 							} catch(Exception e) {
 								e.printStackTrace();

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,13 +17,15 @@ import org.eclipse.chemclipse.model.quantitation.IQuantitationPeak;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.support.charts.PeakDataSupport;
 import org.eclipse.swt.graphics.Image;
 
 public class QuantPeaksLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String CONCENTRATION = "Concentration";
-	public static final String CONCENTRATION_UNIT = "Unit";
+	public static final String CONCENTRATION = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CONCENTRATION);
+	public static final String CONCENTRATION_UNIT = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.UNIT);
 	//
 	private PeakDataSupport peakDataSupport = new PeakDataSupport();
 	//
@@ -44,9 +46,8 @@ public class QuantPeaksLabelProvider extends AbstractChemClipseLabelProvider {
 
 		if(columnIndex == 0) {
 			return getImage(element);
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	@Override
@@ -54,8 +55,7 @@ public class QuantPeaksLabelProvider extends AbstractChemClipseLabelProvider {
 
 		DecimalFormat decimalFormat = getDecimalFormat();
 		String text = "";
-		if(element instanceof IQuantitationPeak) {
-			IQuantitationPeak entry = (IQuantitationPeak)element;
+		if(element instanceof IQuantitationPeak entry) {
 			switch(columnIndex) {
 				case 0:
 					text = decimalFormat.format(entry.getConcentration());
@@ -73,6 +73,7 @@ public class QuantPeaksLabelProvider extends AbstractChemClipseLabelProvider {
 		return text;
 	}
 
+	@Override
 	public Image getImage(Object element) {
 
 		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_QUANTIFY_SELECTED_PEAK, IApplicationImage.SIZE_16x16);

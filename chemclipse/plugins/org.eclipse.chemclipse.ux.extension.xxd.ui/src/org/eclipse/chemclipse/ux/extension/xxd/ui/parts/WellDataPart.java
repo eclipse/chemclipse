@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -46,8 +46,8 @@ public class WellDataPart extends AbstractPart<ExtendedWellDataUI> {
 				return false;
 			} else {
 				Object object = objects.get(0);
-				if(object instanceof IWell) {
-					getControl().update((IWell)object);
+				if(object instanceof IWell well) {
+					getControl().update(well);
 					return true;
 				} else {
 					getControl().update(null);

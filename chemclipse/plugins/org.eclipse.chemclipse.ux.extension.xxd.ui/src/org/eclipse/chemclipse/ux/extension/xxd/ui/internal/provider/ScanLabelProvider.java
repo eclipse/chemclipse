@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,12 +14,13 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 import java.text.DecimalFormat;
 
 import org.eclipse.chemclipse.csd.model.core.IScanCSD;
-import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IIonTransition;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
@@ -92,7 +93,7 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 	public Image getColumnImage(Object element, int columnIndex) {
 
 		if(columnIndex == 0) {
-			return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ION, IApplicationImage.SIZE_16x16);
+			return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ION, IApplicationImageProvider.SIZE_16x16);
 		} else {
 			return null;
 		}
@@ -127,8 +128,7 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 	private String getNominalMSD(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof IIon) {
-			IIon ion = (IIon)element;
+		if(element instanceof IIon ion) {
 			switch(columnIndex) {
 				case 0:
 					text = decimalFormatNominalMSD.format(ion.getIon());
@@ -149,8 +149,7 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 	private String getTandemMSD(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof IIon) {
-			IIon ion = (IIon)element;
+		if(element instanceof IIon ion) {
 			IIonTransition ionTransition = ion.getIonTransition();
 			switch(columnIndex) {
 				case 0: // m/z (normal 28.3 or with Transition 128 > 78.4)
@@ -188,8 +187,7 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 	private String getHighResolutionMSD(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof IIon) {
-			IIon ion = (IIon)element;
+		if(element instanceof IIon ion) {
 			switch(columnIndex) {
 				case 0:
 					text = decimalFormatHighResMSD.format(ion.getIon());
@@ -210,11 +208,10 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 	private String getCSD(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof IScanCSD) {
-			IScanCSD scanCSD = (IScanCSD)element;
+		if(element instanceof IScanCSD scanCSD) {
 			switch(columnIndex) {
 				case 0:
-					text = decimalFormatCSD.format(scanCSD.getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+					text = decimalFormatCSD.format(scanCSD.getRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 					break;
 				case 1:
 					text = decimalFormatIntensity.format(scanCSD.getTotalSignal());
@@ -237,8 +234,7 @@ public class ScanLabelProvider extends ColumnLabelProvider implements ITableLabe
 	private String getWSD(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof IScanSignalWSD) {
-			IScanSignalWSD scanSignal = (IScanSignalWSD)element;
+		if(element instanceof IScanSignalWSD scanSignal) {
 			switch(columnIndex) {
 				case 0:
 					text = decimalFormatWSD.format(scanSignal.getWavelength());

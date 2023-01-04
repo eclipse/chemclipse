@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -32,39 +32,42 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramPeakWSD;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 
 public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String BEST_TARGET = "Best Target";
-	public static final String ACTIVE_FOR_ANALYSIS = "Active for Analysis";
-	public static final String TYPE = "Type";
-	public static final String RETENTION_TIME = "RT [min]";
-	public static final String RELATIVE_RETENTION_TIME = "RRT [min]";
-	public static final String RETENTION_INDEX = "RI";
-	public static final String AREA_TOTAL = "Area";
-	public static final String START_RETENTION_TIME = "Start RT [min]";
-	public static final String STOP_RETENTION_TIME = "Stop RT [min]";
-	public static final String WIDTH = "Width [min]";
-	public static final String SCAN_NUMBER_AT_PEAK_MAX = "Scan# at Peak Maximum";
-	public static final String SIGNAL_TO_NOISE = "S/N";
-	public static final String LEADING = "Leading";
-	public static final String TAILING = "Tailing";
-	public static final String MODEL_DESCRIPTION = "Model Description";
-	public static final String DETECTOR = "Detector";
-	public static final String INTEGRATOR = "Integrator";
-	public static final String SUGGESTED_COMPONENTS = "Suggested Components";
-	public static final String AREA_PERCENT = "Area [%]";
-	public static final String QUANTIFIER = "Quantifier";
-	public static final String CLASSIFIER = "Classifier";
+	public static final String BEST_TARGET = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.BEST_TARGET);
+	public static final String ACTIVE_FOR_ANALYSIS = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.ACTIVE_FOR_ANALYSIS);
+	public static final String TYPE = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.TYPE);
+	public static final String RETENTION_TIME = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RT_MIN);
+	public static final String RELATIVE_RETENTION_TIME = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RRT_MIN);
+	public static final String RETENTION_INDEX = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RI);
+	public static final String AREA_TOTAL = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.AREA_TOTAL);
+	public static final String START_RETENTION_TIME = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.START_RETENTION_TIME);
+	public static final String STOP_RETENTION_TIME = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.STOP_RETENTION_TIME);
+	public static final String WIDTH = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.WIDTH);
+	public static final String SCAN_NUMBER_AT_PEAK_MAX = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SCAN_NUMBER_AT_PEAK_MAX);
+	public static final String SIGNAL_TO_NOISE = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SIGNAL_TO_NOISE);
+	public static final String LEADING = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.LEADING);
+	public static final String TAILING = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.TAILING);
+	public static final String MODEL_DESCRIPTION = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.MODEL_DESCRIPTION);
+	public static final String DETECTOR = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.MODEL_DESCRIPTION);
+	public static final String INTEGRATOR = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.INTEGRATOR);
+	public static final String SUGGESTED_COMPONENTS = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SUGGESTED_COMPONENTS);
+	public static final String AREA_PERCENT = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.AREA_PERCENT);
+	public static final String QUANTIFIER = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.QUANTIFIER);
+	public static final String CLASSIFIER = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CLASSIFIER);
 	//
 	public static final String PEAK = "PEAK";
 	public static final String SCAN = "SCAN";
 	//
 	private static final String BLANK = "";
 	private static final String NO_VALUE = "--";
+	private static final String ISTD = "ISTD";
 	//
 	private double chromatogramPeakArea = 0.0d;
 	//
@@ -281,7 +284,7 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 				}
 				break;
 			case 19:
-				text = (!peak.getInternalStandards().isEmpty()) ? "ISTD" : BLANK;
+				text = (!peak.getInternalStandards().isEmpty()) ? ISTD : BLANK;
 				break;
 			case 20: {
 				text = PeakScanListSupport.getClassifier(peak);
@@ -357,6 +360,6 @@ public class PeakScanListLabelProvider extends AbstractChemClipseLabelProvider {
 	@Override
 	public Image getImage(Object element) {
 
-		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAK, IApplicationImage.SIZE_16x16);
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAK, IApplicationImageProvider.SIZE_16x16);
 	}
 }

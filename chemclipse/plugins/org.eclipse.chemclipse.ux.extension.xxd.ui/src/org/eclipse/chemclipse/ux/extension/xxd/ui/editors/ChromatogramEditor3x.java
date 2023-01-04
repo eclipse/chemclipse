@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,6 +24,8 @@ import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IChromatogramEditor;
 import org.eclipse.chemclipse.ux.extension.ui.support.PartSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
 import org.eclipse.chemclipse.xxd.process.files.SupplierFileIdentifier;
 import org.eclipse.chemclipse.xxd.process.support.ProcessTypeSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -95,16 +97,15 @@ public class ChromatogramEditor3x extends EditorPart implements IChromatogramEdi
 		fileName = fileName.substring(0, fileName.length() - 4);
 		setPartName(fileName);
 		//
-		if(input instanceof IFileEditorInput) {
-			IFileEditorInput fileEditorInput = (IFileEditorInput)input;
+		if(input instanceof IFileEditorInput fileEditorInput) {
 			File file = fileEditorInput.getFile().getLocation().toFile();
 			//
-			part.setLabel("Chromatogram");
-			Map<String, Object> map = new HashMap<String, Object>();
+			part.setLabel(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CHROMATOGRAM));
+			Map<String, Object> map = new HashMap<>();
 			map.put(EditorSupport.MAP_FILE, file.getAbsolutePath());
 			map.put(EditorSupport.MAP_BATCH, false);
 			part.setObject(map);
-			part.setTooltip("Chromatogram from Project Explorer");
+			part.setTooltip(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CHROMATOGRAM_FROM_PROJECT_EXPLORER));
 		} else {
 			throw new PartInitException("The file could't be loaded.");
 		}
@@ -152,8 +153,7 @@ public class ChromatogramEditor3x extends EditorPart implements IChromatogramEdi
 		DataType dataType = null;
 		//
 		Object object = part.getObject();
-		if(object instanceof Map) {
-			Map map = (Map)object;
+		if(object instanceof Map map) {
 			String path = (String)map.get(EditorSupport.MAP_FILE);
 			File file = new File(path);
 			//

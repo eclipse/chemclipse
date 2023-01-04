@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -31,6 +31,7 @@ public class ScanSignalEditingSupport extends EditingSupport {
 	private String column;
 
 	public ScanSignalEditingSupport(ExtendedTableViewer tableViewer, String column) {
+
 		super(tableViewer);
 		this.column = column;
 		this.cellEditor = new TextCellEditor(tableViewer.getTable());
@@ -57,14 +58,11 @@ public class ScanSignalEditingSupport extends EditingSupport {
 
 		boolean editIsEnabled = tableViewer.isEditEnabled();
 		if(editIsEnabled && column.equals(ScanLabelProvider.INTENSITY)) {
-			if(element instanceof IIon) {
-				IIon ion = (IIon)element;
+			if(element instanceof IIon ion) {
 				return Float.toString(ion.getAbundance());
-			} else if(element instanceof IScanSignalWSD) {
-				IScanSignalWSD scanSignalWSD = (IScanSignalWSD)element;
+			} else if(element instanceof IScanSignalWSD scanSignalWSD) {
 				return Float.toString(scanSignalWSD.getAbundance());
-			} else if(element instanceof IScanCSD) {
-				IScanCSD scanCSD = (IScanCSD)element;
+			} else if(element instanceof IScanCSD scanCSD) {
 				return Float.toString(scanCSD.getTotalSignal());
 			}
 		}
@@ -77,16 +75,14 @@ public class ScanSignalEditingSupport extends EditingSupport {
 		if(column.equals(ScanLabelProvider.INTENSITY)) {
 			float abundance = parseValue(value);
 			if(abundance > 0.0f) {
-				if(element instanceof IIon) {
-					IIon ion = (IIon)element;
+				if(element instanceof IIon ion) {
 					try {
 						ion.setAbundance(abundance);
 						updateTable();
 					} catch(AbundanceLimitExceededException e) {
 						logger.warn(e);
 					}
-				} else if(element instanceof IScanSignalWSD) {
-					IScanSignalWSD scanSignalWSD = (IScanSignalWSD)element;
+				} else if(element instanceof IScanSignalWSD scanSignalWSD) {
 					scanSignalWSD.setAbundance(abundance);
 					updateTable();
 				} else if(element instanceof IScanCSD) {
@@ -101,8 +97,7 @@ public class ScanSignalEditingSupport extends EditingSupport {
 
 	private void updateTable() {
 
-		if(tableViewer instanceof ScanTableUI) {
-			ScanTableUI scanTableUI = (ScanTableUI)tableViewer;
+		if(tableViewer instanceof ScanTableUI scanTableUI) {
 			scanTableUI.updateScan();
 		}
 	}

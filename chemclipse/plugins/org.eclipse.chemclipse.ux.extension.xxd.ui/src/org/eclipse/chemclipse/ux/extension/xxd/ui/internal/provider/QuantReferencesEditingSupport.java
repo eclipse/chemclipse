@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,6 +23,7 @@ public class QuantReferencesEditingSupport extends EditingSupport {
 	private String column;
 
 	public QuantReferencesEditingSupport(ExtendedTableViewer tableViewer, String column) {
+
 		super(tableViewer);
 		this.column = column;
 		this.cellEditor = new TextCellEditor(tableViewer.getTable());
@@ -48,9 +49,8 @@ public class QuantReferencesEditingSupport extends EditingSupport {
 	protected Object getValue(Object element) {
 
 		if(element instanceof String) {
-			switch(column) {
-				case QuantReferencesLabelProvider.NAME:
-					return (String)element;
+			if(column.equals(QuantReferencesLabelProvider.NAME)) {
+				return element;
 			}
 		}
 		return false;
@@ -60,10 +60,8 @@ public class QuantReferencesEditingSupport extends EditingSupport {
 	protected void setValue(Object element, Object value) {
 
 		if(element instanceof String) {
-			switch(column) {
-				case QuantReferencesLabelProvider.NAME:
-					element = (String)value;
-					break;
+			if(column.equals(QuantReferencesLabelProvider.NAME)) {
+				element = value;
 			}
 			tableViewer.refresh();
 		}

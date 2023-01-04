@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,18 +17,23 @@ import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.swt.graphics.Image;
 
 public class InternalStandardsLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String NAME = "Name";
-	public static final String CHEMICAL_CLASS = "Chemical Class";
+	public static final String NAME = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.NAME);
+	public static final String CONCENTRATION = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CONCENTRATION);
+	public static final String UNIT = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.UNIT);
+	public static final String RESPONSE_FACTOR = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RESPONSE_FACTOR);
+	public static final String CHEMICAL_CLASS = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CHEMICAL_CLASS);
 	//
 	public static final String[] TITLES = {//
 			NAME, //
-			"Concentration (Conc.)", //
-			"Concentration Unit", //
-			"Response Factor (RF)", //
+			CONCENTRATION, //
+			UNIT, //
+			RESPONSE_FACTOR, //
 			CHEMICAL_CLASS //
 	};
 	//
@@ -41,6 +46,7 @@ public class InternalStandardsLabelProvider extends AbstractChemClipseLabelProvi
 	};
 
 	public InternalStandardsLabelProvider() {
+
 		super("0.0##");
 	}
 
@@ -49,9 +55,8 @@ public class InternalStandardsLabelProvider extends AbstractChemClipseLabelProvi
 
 		if(columnIndex == 0) {
 			return getImage(element);
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	@Override
@@ -84,6 +89,7 @@ public class InternalStandardsLabelProvider extends AbstractChemClipseLabelProvi
 		return text;
 	}
 
+	@Override
 	public Image getImage(Object element) {
 
 		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAK, IApplicationImage.SIZE_16x16);

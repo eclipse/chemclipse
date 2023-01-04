@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -59,13 +59,12 @@ public class ComparisonScanChartPart extends AbstractPart<ExtendedComparisonScan
 				if(isPeakUpdateEvent(topic) || isScanUpdateEvent(topic)) {
 					IScanMSD scan = null;
 					IIdentificationTarget identificationTarget = null;
-					if(object instanceof IScanMSD) {
-						scan = (IScanMSD)object;
+					if(object instanceof IScanMSD scanMSD) {
+						scan = scanMSD;
 						float retentionIndex = scan.getRetentionIndex();
 						IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
 						identificationTarget = IIdentificationTarget.getBestIdentificationTarget(scan.getTargets(), identificationTargetComparator);
-					} else if(object instanceof IPeakMSD) {
-						IPeakMSD peakMSD = (IPeakMSD)object;
+					} else if(object instanceof IPeakMSD peakMSD) {
 						scan = peakMSD.getExtractedMassSpectrum();
 						float retentionIndex = scan.getRetentionIndex();
 						IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
@@ -80,26 +79,20 @@ public class ComparisonScanChartPart extends AbstractPart<ExtendedComparisonScan
 						return true;
 					}
 				} else if(isScanTargetComparisonEvent(topic)) {
-					if(object instanceof Object[]) {
-						Object[] values = (Object[])object;
+					if(object instanceof Object[] values) {
 						Object object1 = values[0];
 						Object object2 = values[1];
 						//
-						if(object1 instanceof IScanMSD && object2 instanceof IIdentificationTarget) {
-							IScanMSD unknownMassSpectrum = (IScanMSD)object1;
-							IIdentificationTarget identificationTarget = (IIdentificationTarget)object2;
+						if(object1 instanceof IScanMSD unknownMassSpectrum && object2 instanceof IIdentificationTarget identificationTarget) {
 							getControl().update(unknownMassSpectrum, identificationTarget);
 						}
 					}
 				} else if(isScanReferenceComparisonEvent(topic)) {
-					if(object instanceof Object[]) {
-						Object[] values = (Object[])object;
+					if(object instanceof Object[] values) {
 						Object object1 = values[0];
 						Object object2 = values[1];
 						//
-						if(object1 instanceof IScanMSD && object2 instanceof IScanMSD) {
-							IScanMSD unknownMassSpectrum = (IScanMSD)object1;
-							IScanMSD referenceMassSpectrum = (IScanMSD)object2;
+						if(object1 instanceof IScanMSD unknownMassSpectrum && object2 instanceof IScanMSD referenceMassSpectrum) {
 							getControl().update(unknownMassSpectrum, referenceMassSpectrum);
 						}
 					}

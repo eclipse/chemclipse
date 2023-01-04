@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2022 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,10 +24,8 @@ public class TargetsComparator extends AbstractRecordTableComparator implements 
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof IIdentificationTarget && e2 instanceof IIdentificationTarget) {
+		if(e1 instanceof IIdentificationTarget entry1 && e2 instanceof IIdentificationTarget entry2) {
 			//
-			IIdentificationTarget entry1 = (IIdentificationTarget)e1;
-			IIdentificationTarget entry2 = (IIdentificationTarget)e2;
 			ILibraryInformation libraryInformation1 = entry1.getLibraryInformation();
 			IComparisonResult comparisonResult1 = entry1.getComparisonResult();
 			ILibraryInformation libraryInformation2 = entry2.getLibraryInformation();

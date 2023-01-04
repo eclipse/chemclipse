@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -28,6 +28,7 @@ public class PeakTargetsLabelProvider extends LabelProvider implements ITableLab
 	private DecimalFormat decimalFormat;
 
 	public PeakTargetsLabelProvider() {
+
 		decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
 	}
 
@@ -43,7 +44,8 @@ public class PeakTargetsLabelProvider extends LabelProvider implements ITableLab
 				float rating = identificationTarget.getComparisonResult().getRating();
 				if(rating >= IComparisonResult.RATING_LIMIT_UP) {
 					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_UP, IApplicationImage.SIZE_16x16);
-				} else if(rating >= IComparisonResult.RATING_LIMIT_EQUAL) {
+				}
+				if(rating >= IComparisonResult.RATING_LIMIT_EQUAL) {
 					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_EQUAL, IApplicationImage.SIZE_16x16);
 				} else {
 					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_DOWN, IApplicationImage.SIZE_16x16);
@@ -57,8 +59,7 @@ public class PeakTargetsLabelProvider extends LabelProvider implements ITableLab
 	public String getColumnText(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof IIdentificationTarget) {
-			IIdentificationTarget identificationEntry = (IIdentificationTarget)element;
+		if(element instanceof IIdentificationTarget identificationEntry) {
 			ILibraryInformation libraryInformation = identificationEntry.getLibraryInformation();
 			IComparisonResult comparisonResult = identificationEntry.getComparisonResult();
 			switch(columnIndex) {

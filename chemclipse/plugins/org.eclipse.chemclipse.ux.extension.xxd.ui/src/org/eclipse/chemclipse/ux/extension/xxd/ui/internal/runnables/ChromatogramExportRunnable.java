@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -60,20 +60,17 @@ public class ChromatogramExportRunnable implements IRunnableWithProgress {
 				case MSD_TANDEM:
 				case MSD_HIGHRES:
 				case MSD:
-					if(chromatogram instanceof IChromatogramMSD) {
-						IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
+					if(chromatogram instanceof IChromatogramMSD chromatogramMSD) {
 						processingInfo = ChromatogramConverterMSD.getInstance().convert(file, chromatogramMSD, supplier.getId(), monitor);
 					}
 					break;
 				case CSD:
-					if(chromatogram instanceof IChromatogramCSD) {
-						IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
+					if(chromatogram instanceof IChromatogramCSD chromatogramCSD) {
 						processingInfo = ChromatogramConverterCSD.getInstance().convert(file, chromatogramCSD, supplier.getId(), monitor);
 					}
 					break;
 				case WSD:
-					if(chromatogram instanceof IChromatogramWSD) {
-						IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
+					if(chromatogram instanceof IChromatogramWSD chromatogramWSD) {
 						processingInfo = ChromatogramConverterWSD.getInstance().convert(file, chromatogramWSD, supplier.getId(), monitor);
 					}
 					break;

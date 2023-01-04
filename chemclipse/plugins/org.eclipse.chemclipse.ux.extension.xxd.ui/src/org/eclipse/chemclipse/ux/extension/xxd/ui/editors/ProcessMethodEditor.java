@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -128,12 +128,16 @@ public class ProcessMethodEditor implements IModificationHandler, IChemClipseEdi
 			processMethodFile = new File((String)map.get(EditorSupport.MAP_FILE));
 			currentProcessMethod = Adapters.adapt(processMethodFile, IProcessMethod.class);
 		} else {
-			currentProcessMethod = null;
 			processMethodFile = null;
 		}
 		/*
 		 * Backward compatibility
 		 */
+		if(currentProcessMethod == null) {
+			String message = "The current process method was not adapted correctly.";
+			logger.warn(message);
+			throw new RuntimeException(message);
+		}
 		DataCategory[] categories = currentProcessMethod.getDataCategories().toArray(new DataCategory[]{});
 		if(categories == null || categories.length == 0) {
 			categories = new DataCategory[]{DataCategory.CSD, DataCategory.MSD, DataCategory.WSD};

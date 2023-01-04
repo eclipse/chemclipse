@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,15 +18,18 @@ import org.eclipse.chemclipse.model.targets.ITargetReference;
 import org.eclipse.chemclipse.model.targets.TargetReference;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.swt.graphics.Image;
 
 public class TargetReferenceLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String VISIBLE = "Visible";
-	public static final String ID = "ID";
-	public static final String TYPE = "Type";
-	public static final String LIBRARY_FIELD = "Library Field";
+	public static final String VISIBLE = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.VISIBLE);
+	public static final String ID = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.ID);
+	public static final String TYPE = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.TYPE);
+	public static final String LIBRARY_FIELD = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.LIBRARY_FIELD);
 	//
 	private ITargetDisplaySettings targetDisplaySettings = null;
 	private Predicate<ITargetReference> visibilityFilter = null;
@@ -60,12 +63,11 @@ public class TargetReferenceLabelProvider extends AbstractChemClipseLabelProvide
 	public Image getColumnImage(Object element, int columnIndex) {
 
 		if(columnIndex == 0) {
-			if(element instanceof ITargetReference) {
-				ITargetReference targetReference = (ITargetReference)element;
+			if(element instanceof ITargetReference targetReference) {
 				if(visibilityFilter.test(targetReference)) {
-					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED, IApplicationImage.SIZE_16x16);
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED, IApplicationImageProvider.SIZE_16x16);
 				} else {
-					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DESELECTED, IApplicationImage.SIZE_16x16);
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DESELECTED, IApplicationImageProvider.SIZE_16x16);
 				}
 			}
 		}
@@ -76,8 +78,7 @@ public class TargetReferenceLabelProvider extends AbstractChemClipseLabelProvide
 	public String getColumnText(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof ITargetReference) {
-			ITargetReference targetReference = (ITargetReference)element;
+		if(element instanceof ITargetReference targetReference) {
 			switch(columnIndex) {
 				case 0:
 					text = ""; // Visibility
@@ -103,6 +104,6 @@ public class TargetReferenceLabelProvider extends AbstractChemClipseLabelProvide
 	@Override
 	public Image getImage(Object element) {
 
-		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TARGETS, IApplicationImage.SIZE_16x16);
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TARGETS, IApplicationImageProvider.SIZE_16x16);
 	}
 }

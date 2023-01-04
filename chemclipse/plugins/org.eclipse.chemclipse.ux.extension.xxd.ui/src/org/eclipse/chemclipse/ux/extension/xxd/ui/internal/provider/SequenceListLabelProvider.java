@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,22 +16,25 @@ import java.text.DecimalFormat;
 import org.eclipse.chemclipse.converter.model.reports.ISequenceRecord;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.swt.graphics.Image;
 
 public class SequenceListLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String SAMPLE_NAME = "Sample Name";
-	public static final String DATA_PATH = "Data Path";
-	public static final String DATA_FILE = "Data File";
-	public static final String ADVICE = "Advice";
-	public static final String VIAL = "Vial";
-	public static final String SUBSTANCE = "Substance";
-	public static final String DESCRIPTION = "Description";
-	public static final String PROCESS_METHOD = "Process Method";
-	public static final String MULTIPLIER = "Multiplier";
-	public static final String INJECTION_VOLUME = "Injection Volume";
-	public static final String REPORT_METHOD = "Report Method";
+	public static final String SAMPLE_NAME = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SAMPLE_NAME);
+	public static final String DATA_PATH = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.DATA_PATH);
+	public static final String DATA_FILE = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.DATA_FILE);
+	public static final String ADVICE = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.ADVICE);
+	public static final String VIAL = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.VIAL);
+	public static final String SUBSTANCE = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SUBSTANCE);
+	public static final String DESCRIPTION = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.DESCRIPTION);
+	public static final String PROCESS_METHOD = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESS_METHOD);
+	public static final String MULTIPLIER = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.MULTIPLIER);
+	public static final String INJECTION_VOLUME = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.INJECTION_VOLUME);
+	public static final String REPORT_METHOD = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.REPORT_METHOD);
 	//
 	public static String[] TITLES = {//
 			SAMPLE_NAME, //
@@ -67,8 +70,7 @@ public class SequenceListLabelProvider extends AbstractChemClipseLabelProvider {
 		if(columnIndex == 0) {
 			return getImage(element);
 		} else if(columnIndex == 3) {
-			if(element instanceof ISequenceRecord) {
-				ISequenceRecord sequenceRecord = (ISequenceRecord)element;
+			if(element instanceof ISequenceRecord sequenceRecord) {
 				switch(sequenceRecord.getAdvice()) {
 					case NONE:
 						return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_STATUS_EMPTY, IApplicationImage.SIZE_16x16);
@@ -87,8 +89,7 @@ public class SequenceListLabelProvider extends AbstractChemClipseLabelProvider {
 
 		DecimalFormat decimalFormat = getDecimalFormat();
 		String text = "";
-		if(element instanceof ISequenceRecord) {
-			ISequenceRecord sequenceRecord = (ISequenceRecord)element;
+		if(element instanceof ISequenceRecord sequenceRecord) {
 			//
 			switch(columnIndex) {
 				case 0:
@@ -132,6 +133,6 @@ public class SequenceListLabelProvider extends AbstractChemClipseLabelProvider {
 	@Override
 	public Image getImage(Object element) {
 
-		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAK, IApplicationImage.SIZE_16x16);
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAK, IApplicationImageProvider.SIZE_16x16);
 	}
 }

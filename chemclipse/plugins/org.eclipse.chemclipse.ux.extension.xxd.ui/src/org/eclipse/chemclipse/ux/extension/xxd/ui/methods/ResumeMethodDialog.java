@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,6 +19,8 @@ import org.eclipse.chemclipse.processing.methods.ProcessEntryContainer;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IMessageProvider;
@@ -57,8 +59,8 @@ public class ResumeMethodDialog extends TitleAreaDialog {
 	public void create() {
 
 		super.create();
-		setTitle("Process Method");
-		setMessage("Select to resume the method at the given process entry.", IMessageProvider.INFORMATION);
+		setTitle(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESS_METHOD));
+		setMessage(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RESUME_PROCESS_METHOD_AT_ENTRY), IMessageProvider.INFORMATION);
 		getButton(IDialogConstants.CANCEL_ID).setEnabled(true);
 		getButton(IDialogConstants.OK_ID).setText("Process");
 	}
@@ -76,7 +78,7 @@ public class ResumeMethodDialog extends TitleAreaDialog {
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 		composite.setLayout(new GridLayout(1, true));
 		//
-		createLabel(composite, "Resume processing at the following entry. By default, use the complete method.");
+		createLabel(composite, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RESUME_FOLLOWING_ENTRY_DEFAULT_COMPLETE));
 		comboViewer = createComboViewerProcessEntry(composite);
 		labelDescription = createLabel(composite, "");
 		createButtonResumeMethodOption(composite);
@@ -89,7 +91,7 @@ public class ResumeMethodDialog extends TitleAreaDialog {
 	private void initialize() {
 
 		List<Object> processEntries = new ArrayList<>();
-		processEntries.add("Complete Method");
+		processEntries.add(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.COMPLETE_METHOD));
 		//
 		if(container != null) {
 			for(IProcessEntry processEntry : container) {
@@ -120,10 +122,10 @@ public class ResumeMethodDialog extends TitleAreaDialog {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof IProcessEntry) {
-					return ((IProcessEntry)element).getName();
-				} else if(element instanceof String) {
-					return (String)element;
+				if(element instanceof IProcessEntry processEntry) {
+					return processEntry.getName();
+				} else if(element instanceof String text) {
+					return text;
 				}
 				return null;
 			}
@@ -139,9 +141,9 @@ public class ResumeMethodDialog extends TitleAreaDialog {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object element = comboViewer.getStructuredSelection().getFirstElement();
-				if(element instanceof IProcessEntry) {
+				if(element instanceof IProcessEntry processEntry) {
 					resumeIndex = combo.getSelectionIndex() - 1;
-					labelDescription.setText(((IProcessEntry)element).getDescription());
+					labelDescription.setText(processEntry.getDescription());
 				} else {
 					resumeIndex = ProcessEntryContainer.DEFAULT_RESUME_INDEX;
 					labelDescription.setText("");
@@ -156,8 +158,8 @@ public class ResumeMethodDialog extends TitleAreaDialog {
 
 		Button button = new Button(parent, SWT.CHECK);
 		button.setLayoutData(new GridData(SWT.RIGHT, SWT.BOTTOM, true, false));
-		button.setText("Remember my decision and don't show the dialog again.");
-		button.setToolTipText("You can revert this decision in the settings.");
+		button.setText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.REMEMBER_DECISION_DONT_SHOW_AGAIN));
+		button.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.REVERT_DECISION_IN_SETTINGS));
 		button.setSelection(!Activator.getDefault().getPreferenceStore().getBoolean(PreferenceConstants.P_SHOW_RESUME_METHOD_DIALOG));
 		button.addSelectionListener(new SelectionAdapter() {
 

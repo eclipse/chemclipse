@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2022 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,47 +13,50 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import java.text.DecimalFormat;
 
-import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.identifier.IComparisonResult;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Image;
 
 public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String VERIFIED_MANUALLY = "Verified (manually)";
-	public static final String NAME = "Name";
-	public static final String MATCH_FACTOR = "Match Factor";
-	public static final String REVERSE_MATCH_FACTOR = "Reverse Match Factor";
-	public static final String MATCH_FACTOR_DIRECT = "Match Factor Direct";
-	public static final String REVERSE_MATCH_FACTOR_DIRECT = "Reverse Match Factor Direct";
-	public static final String PROBABILITY = "Probability";
-	public static final String MOL_WEIGHT = "Mol Weight";
-	public static final String EXACT_MASS = "Excact Mass";
-	public static final String ADVISE = "Advise";
-	public static final String IDENTIFIER = "Identifier";
-	public static final String MISCELLANEOUS = "Miscellaneous";
-	public static final String DATABASE = "Database";
-	public static final String DATABASE_INDEX = "Database Index";
-	public static final String RATING = "Rating";
+	public static final String VERIFIED_MANUALLY = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.VERIFIED_MANUALLY);
+	public static final String NAME = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.NAME);
+	public static final String MATCH_FACTOR = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.MATCH_FACTOR);
+	public static final String REVERSE_MATCH_FACTOR = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.REVERSE_MATCH_FACTOR);
+	public static final String MATCH_FACTOR_DIRECT = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.MATCH_FACTOR_DIRECT);
+	public static final String REVERSE_MATCH_FACTOR_DIRECT = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.REVERSE_MATCH_FACTOR_DIRECT);
+	public static final String PROBABILITY = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROBABILITY);
+	public static final String MOL_WEIGHT = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.MOL_WEIGHT);
+	public static final String EXACT_MASS = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.EXACT_MASS);
+	public static final String ADVICE = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.ADVICE);
+	public static final String IDENTIFIER = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.IDENTIFIER);
+	public static final String MISCELLANEOUS = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.MISCELLANEOUS);
+	public static final String DATABASE = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.DATABASE);
+	public static final String DATABASE_INDEX = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.DATABASE_INDEX);
+	public static final String RATING = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RATING);
 	public static final String CAS = "CAS";
-	public static final String COMMENTS = "Comments";
-	public static final String FORMULA = "Formula";
+	public static final String COMMENTS = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.COMMENTS);
+	public static final String FORMULA = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.FORMULA);
 	public static final String SMILES = "SMILES";
 	public static final String INCHI = "InChI";
 	public static final String INCHI_KEY = "InChI Key";
-	public static final String CONTRIBUTOR = "Contributor";
-	public static final String RETENTION_TIME = "Retention Time";
-	public static final String RETENTION_INDEX = "Retention Index";
-	public static final String REFERENCE_ID = "Reference ID";
+	public static final String CONTRIBUTOR = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CONTRIBUTOR);
+	public static final String RETENTION_TIME = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RETENTION_TIME);
+	public static final String RETENTION_INDEX = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RETENTION_INDEX);
+	public static final String REFERENCE_ID = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.REFERENCE_ID);
 	//
 	public static final int INDEX_RETENTION_TIME = 23;
 	public static final int INDEX_RETENTION_INDEX = 24;
@@ -76,7 +79,7 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 			INCHI_KEY, //
 			MOL_WEIGHT, //
 			EXACT_MASS, //
-			ADVISE, //
+			ADVICE, //
 			IDENTIFIER, //
 			MISCELLANEOUS, //
 			COMMENTS, //
@@ -123,13 +126,13 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 		if(retentionTime != null) {
 			if(preferenceStore.getBoolean(PreferenceConstants.P_TARGETS_TABLE_SHOW_DEVIATION_RT)) {
 				int delta = libraryInformation.getRetentionTime() - retentionTime;
-				deltaRetentionTime = " [" + decimalFormat.format(delta / AbstractChromatogram.MINUTE_CORRELATION_FACTOR) + "]";
+				deltaRetentionTime = " [" + decimalFormat.format(delta / IChromatogramOverview.MINUTE_CORRELATION_FACTOR) + "]";
 			}
 		}
 		/*
 		 * Label
 		 */
-		String libraryRetentionTime = decimalFormat.format(libraryInformation.getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+		String libraryRetentionTime = decimalFormat.format(libraryInformation.getRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 		return libraryRetentionTime + deltaRetentionTime;
 	}
 
@@ -170,27 +173,25 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 			/*
 			 * CheckBox
 			 */
-			if(element instanceof IIdentificationTarget) {
-				IIdentificationTarget identificationTarget = (IIdentificationTarget)element;
+			if(element instanceof IIdentificationTarget identificationTarget) {
 				if(identificationTarget.isManuallyVerified()) {
-					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED, IApplicationImage.SIZE_16x16);
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SELECTED, IApplicationImageProvider.SIZE_16x16);
 				} else {
-					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DESELECTED, IApplicationImage.SIZE_16x16);
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DESELECTED, IApplicationImageProvider.SIZE_16x16);
 				}
 			}
 		} else if(columnIndex == 1) {
 			/*
 			 * Rating
 			 */
-			if(element instanceof IIdentificationTarget) {
-				IIdentificationTarget identificationTarget = (IIdentificationTarget)element;
+			if(element instanceof IIdentificationTarget identificationTarget) {
 				float rating = identificationTarget.getComparisonResult().getRating();
 				if(rating >= IComparisonResult.RATING_LIMIT_UP) {
-					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_UP, IApplicationImage.SIZE_16x16);
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_UP, IApplicationImageProvider.SIZE_16x16);
 				} else if(rating >= IComparisonResult.RATING_LIMIT_EQUAL) {
-					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_EQUAL, IApplicationImage.SIZE_16x16);
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_EQUAL, IApplicationImageProvider.SIZE_16x16);
 				} else {
-					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_DOWN, IApplicationImage.SIZE_16x16);
+					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_DOWN, IApplicationImageProvider.SIZE_16x16);
 				}
 			}
 		} else if(columnIndex == 2) {
@@ -208,8 +209,7 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 		DecimalFormat decimalFormat = getDecimalFormat();
 		//
 		String text = "";
-		if(element instanceof IIdentificationTarget) {
-			IIdentificationTarget identificationTarget = (IIdentificationTarget)element;
+		if(element instanceof IIdentificationTarget identificationTarget) {
 			ILibraryInformation libraryInformation = identificationTarget.getLibraryInformation();
 			IComparisonResult comparisonResult = identificationTarget.getComparisonResult();
 			//
@@ -299,6 +299,6 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 	@Override
 	public Image getImage(Object element) {
 
-		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TARGETS, IApplicationImage.SIZE_16x16);
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TARGETS, IApplicationImageProvider.SIZE_16x16);
 	}
 }

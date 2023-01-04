@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -45,8 +45,7 @@ public class RetentionIndexEditingSupport extends EditingSupport {
 	protected Object getValue(Object element) {
 
 		Object object = null;
-		if(element instanceof IRetentionIndexEntry) {
-			IRetentionIndexEntry retentionIndexEntry = (IRetentionIndexEntry)element;
+		if(element instanceof IRetentionIndexEntry retentionIndexEntry) {
 			object = retentionIndexEntry.getName();
 		}
 		return object;
@@ -55,8 +54,7 @@ public class RetentionIndexEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 
-		if(element instanceof IRetentionIndexEntry) {
-			IRetentionIndexEntry retentionIndexEntry = (IRetentionIndexEntry)element;
+		if(element instanceof IRetentionIndexEntry retentionIndexEntry) {
 			retentionIndexEntry.setName(value.toString().trim());
 			tableViewer.refresh();
 			tableViewer.updateContent();

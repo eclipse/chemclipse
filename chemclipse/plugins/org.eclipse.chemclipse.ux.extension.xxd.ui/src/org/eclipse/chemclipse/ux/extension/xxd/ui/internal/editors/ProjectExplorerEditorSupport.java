@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,6 +22,7 @@ import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
 import org.eclipse.chemclipse.ux.extension.ui.provider.AbstractSupplierFileEditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -38,16 +39,17 @@ public class ProjectExplorerEditorSupport extends AbstractSupplierFileEditorSupp
 	private static final Logger logger = Logger.getLogger(ProjectExplorerEditorSupport.class);
 	//
 	private String type = "";
-	private static final String DATA_EXPLORER = "Data Explorer";
+	private static final String DATA_EXPLORER = IExtensionMessages.DATA_EXPLORER;
 
 	public ProjectExplorerEditorSupport(DataType dataType) {
+
 		super(getSupplier(dataType));
 		initialize(dataType);
 	}
 
 	private static List<ISupplier> getSupplier(DataType dataType) {
 
-		List<ISupplier> supplier = new ArrayList<ISupplier>();
+		List<ISupplier> supplier = new ArrayList<>();
 		switch(dataType) {
 			case CAL:
 				supplier.add(new CalibrationFileSupplier());

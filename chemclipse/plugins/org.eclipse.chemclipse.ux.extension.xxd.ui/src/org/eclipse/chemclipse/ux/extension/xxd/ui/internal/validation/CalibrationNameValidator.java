@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,13 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation;
 
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 
 public class CalibrationNameValidator implements IValidator<Object> {
 
-	private static final String ERROR = "Please enter a calibration index name, e.g. Hexane.";
+	private static final String ERROR = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.ENTER_CALIBRATION_INDEX_NAME);
 	//
 	private String name = "";
 
@@ -30,8 +32,8 @@ public class CalibrationNameValidator implements IValidator<Object> {
 		if(value == null) {
 			message = ERROR;
 		} else {
-			if(value instanceof String) {
-				String text = ((String)value).trim();
+			if(value instanceof String text) {
+				text = text.trim();
 				if(text.length() < 1) {
 					message = ERROR;
 				} else {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,10 +22,7 @@ public class TargetTemplateComparator extends AbstractRecordTableComparator impl
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof TargetTemplate && e2 instanceof TargetTemplate) {
-			//
-			TargetTemplate targetTemplate1 = (TargetTemplate)e1;
-			TargetTemplate targetTemplate2 = (TargetTemplate)e2;
+		if(e1 instanceof TargetTemplate targetTemplate1 && e2 instanceof TargetTemplate targetTemplate2) {
 			//
 			switch(getPropertyIndex()) {
 				case 0:

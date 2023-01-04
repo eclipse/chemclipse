@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,6 +25,7 @@ public class QuantSignalsEditingSupport extends EditingSupport {
 	private String column;
 
 	public QuantSignalsEditingSupport(ExtendedTableViewer tableViewer, String column) {
+
 		super(tableViewer);
 		this.column = column;
 		if(column.equals(QuantSignalsLabelProvider.USE)) {
@@ -50,15 +51,15 @@ public class QuantSignalsEditingSupport extends EditingSupport {
 	@Override
 	protected Object getValue(Object element) {
 
-		if(element instanceof IQuantitationSignal) {
-			IQuantitationSignal signal = (IQuantitationSignal)element;
-			switch(column) {
-				case QuantSignalsLabelProvider.RELATIVE_RESPONSE:
-					return Double.toString(signal.getRelativeResponse());
-				case QuantSignalsLabelProvider.UNCERTAINTY:
-					return Double.toString(signal.getUncertainty());
-				case QuantSignalsLabelProvider.USE:
-					return signal.isUse();
+		if(element instanceof IQuantitationSignal signal) {
+			if(column.equals(QuantSignalsLabelProvider.RELATIVE_RESPONSE)) {
+				return Double.toString(signal.getRelativeResponse());
+			}
+			if(column.equals(QuantSignalsLabelProvider.UNCERTAINTY)) {
+				return Double.toString(signal.getUncertainty());
+			}
+			if(column.equals(QuantSignalsLabelProvider.USE)) {
+				return signal.isUse();
 			}
 		}
 		return false;
@@ -67,35 +68,32 @@ public class QuantSignalsEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 
-		if(element instanceof IQuantitationSignal) {
-			IQuantitationSignal signal = (IQuantitationSignal)element;
-			switch(column) {
-				case QuantSignalsLabelProvider.RELATIVE_RESPONSE:
-					double relativeResponse = getValue(value, -1.0f);
-					if(relativeResponse >= 0) {
-						signal.setRelativeResponse(relativeResponse);
-					}
-					break;
-				case QuantSignalsLabelProvider.UNCERTAINTY:
-					double uncertainty = getValue(value, -1.0d);
-					if(uncertainty >= 0) {
-						signal.setUncertainty(uncertainty);
-					}
-					break;
-				case QuantSignalsLabelProvider.USE:
-					signal.setUse((boolean)value);
-					break;
+		if(element instanceof IQuantitationSignal signal) {
+			if(column.equals(QuantSignalsLabelProvider.RELATIVE_RESPONSE)) {
+				double relativeResponse = getValue(value, -1.0f);
+				if(relativeResponse >= 0) {
+					signal.setRelativeResponse(relativeResponse);
+				}
 			}
-			tableViewer.refresh();
+			if(column.equals(QuantSignalsLabelProvider.UNCERTAINTY)) {
+				double uncertainty = getValue(value, -1.0d);
+				if(uncertainty >= 0) {
+					signal.setUncertainty(uncertainty);
+				}
+			}
+			if(column.equals(QuantSignalsLabelProvider.USE)) {
+				signal.setUse((boolean)value);
+			}
 		}
+		tableViewer.refresh();
 	}
 
 	private double getValue(Object value, double def) {
 
 		double result = def;
-		if(value instanceof String) {
+		if(value instanceof String stringValue) {
 			try {
-				result = Double.parseDouble((String)value);
+				result = Double.parseDouble(stringValue);
 			} catch(NumberFormatException e) {
 				//
 			}

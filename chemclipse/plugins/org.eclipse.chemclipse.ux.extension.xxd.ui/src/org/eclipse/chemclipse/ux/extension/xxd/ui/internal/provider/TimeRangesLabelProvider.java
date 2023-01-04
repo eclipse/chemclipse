@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,16 +16,19 @@ import java.text.DecimalFormat;
 import org.eclipse.chemclipse.model.ranges.TimeRange;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.text.ValueFormat;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.swt.graphics.Image;
 
 public class TimeRangesLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String IDENTIFIER = "Identifier";
-	public static final String START = "Start Time [min]";
-	public static final String CENTER = "Center Time [min]";
-	public static final String STOP = "Stop Time [min]";
+	public static final String IDENTIFIER = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.IDENTIFIER);
+	public static final String START = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.START_TIME_MIN);
+	public static final String CENTER = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CENTER_TIME_MIN);
+	public static final String STOP = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.STOP_TIME_MIN);
 	//
 	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
 	//
@@ -55,8 +58,7 @@ public class TimeRangesLabelProvider extends AbstractChemClipseLabelProvider {
 	public String getColumnText(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof TimeRange) {
-			TimeRange timeRange = (TimeRange)element;
+		if(element instanceof TimeRange timeRange) {
 			switch(columnIndex) {
 				case 0:
 					text = timeRange.getIdentifier();
@@ -83,6 +85,6 @@ public class TimeRangesLabelProvider extends AbstractChemClipseLabelProvider {
 	@Override
 	public Image getImage(Object element) {
 
-		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TARGETS, IApplicationImage.SIZE_16x16);
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_TARGETS, IApplicationImageProvider.SIZE_16x16);
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,6 +24,7 @@ public class QuantResponseEditingSupport extends EditingSupport {
 	private String column;
 
 	public QuantResponseEditingSupport(ExtendedTableViewer tableViewer, String column) {
+
 		super(tableViewer);
 		this.column = column;
 		this.cellEditor = new TextCellEditor(tableViewer.getTable());
@@ -45,11 +46,9 @@ public class QuantResponseEditingSupport extends EditingSupport {
 	@Override
 	protected Object getValue(Object element) {
 
-		if(element instanceof IResponseSignal) {
-			IResponseSignal signal = (IResponseSignal)element;
-			switch(column) {
-				case QuantResponseLabelProvider.RESPONSE:
-					return Double.toString(signal.getResponse());
+		if(element instanceof IResponseSignal signal) {
+			if(column.equals(QuantResponseLabelProvider.RESPONSE)) {
+				return Double.toString(signal.getResponse());
 			}
 		}
 		return false;
@@ -58,15 +57,12 @@ public class QuantResponseEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 
-		if(element instanceof IResponseSignal) {
-			IResponseSignal signal = (IResponseSignal)element;
-			switch(column) {
-				case QuantResponseLabelProvider.RESPONSE:
-					double response = getValue(value, -1);
-					if(response >= 0) {
-						signal.setResponse(response);
-					}
-					break;
+		if(element instanceof IResponseSignal signal) {
+			if(column.equals(QuantResponseLabelProvider.RESPONSE)) {
+				double response = getValue(value, -1);
+				if(response >= 0) {
+					signal.setResponse(response);
+				}
 			}
 			tableViewer.refresh();
 		}
@@ -75,9 +71,9 @@ public class QuantResponseEditingSupport extends EditingSupport {
 	private double getValue(Object value, double def) {
 
 		double result = def;
-		if(value instanceof String) {
+		if(value instanceof String stringValue) {
 			try {
-				result = Double.parseDouble((String)value);
+				result = Double.parseDouble(stringValue);
 			} catch(NumberFormatException e) {
 				//
 			}

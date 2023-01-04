@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -15,6 +15,8 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
@@ -37,7 +39,7 @@ public class ChromatogramLengthModifier implements IRunnableWithProgress {
 	public void run(IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		try {
-			monitor.beginTask("Chromatogram Length Modified", IProgressMonitor.UNKNOWN);
+			monitor.beginTask(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CHROMATOGRAM_LENGTH_MODIFIED), IProgressMonitor.UNKNOWN);
 			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 			int scanRange = chromatogram.getNumberOfScans() - 1;
 			if(scanRange > 0) {

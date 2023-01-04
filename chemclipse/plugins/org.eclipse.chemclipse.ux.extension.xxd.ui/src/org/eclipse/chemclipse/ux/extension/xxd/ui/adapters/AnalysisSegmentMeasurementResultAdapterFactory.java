@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -41,8 +41,7 @@ public class AnalysisSegmentMeasurementResultAdapterFactory implements IAdapterF
 	@Override
 	public <T> T getAdapter(Object adaptableObject, Class<T> adapterType) {
 
-		if(adaptableObject instanceof AnalysisSegmentMeasurementResult<?>) {
-			AnalysisSegmentMeasurementResult<?> result = (AnalysisSegmentMeasurementResult<?>)adaptableObject;
+		if(adaptableObject instanceof AnalysisSegmentMeasurementResult<?> result) {
 			if(adapterType.isInstance(this)) {
 				return adapterType.cast(this);
 			}
@@ -110,18 +109,17 @@ public class AnalysisSegmentMeasurementResultAdapterFactory implements IAdapterF
 	@Override
 	public Object[] getChildren(Object parentElement) {
 
-		if(parentElement instanceof TreeNode) {
-			TreeNode parentNode = (TreeNode)parentElement;
+		if(parentElement instanceof TreeNode parentNode) {
 			if(parentNode.getChildren() == null) {
 				Object value = parentNode.getValue();
-				if(value instanceof IAnalysisSegment) {
-					return getTreeNodes(((IAnalysisSegment)value).getChildSegments().toArray(), parentNode);
+				if(value instanceof IAnalysisSegment analysisSegment) {
+					return getTreeNodes(analysisSegment.getChildSegments().toArray(), parentNode);
 				}
 			}
 			return parentNode.getChildren();
 		}
-		if(parentElement instanceof IAnalysisSegment) {
-			return ((IAnalysisSegment)parentElement).getChildSegments().toArray();
+		if(parentElement instanceof IAnalysisSegment analysisSegment) {
+			return analysisSegment.getChildSegments().toArray();
 		}
 		return new Object[0];
 	}
@@ -129,8 +127,8 @@ public class AnalysisSegmentMeasurementResultAdapterFactory implements IAdapterF
 	@Override
 	public Object getParent(Object element) {
 
-		if(element instanceof TreeNode) {
-			return ((TreeNode)element).getParent();
+		if(element instanceof TreeNode treeNode) {
+			return treeNode.getParent();
 		}
 		return null;
 	}
@@ -138,14 +136,13 @@ public class AnalysisSegmentMeasurementResultAdapterFactory implements IAdapterF
 	@Override
 	public boolean hasChildren(Object element) {
 
-		if(element instanceof TreeNode) {
-			TreeNode treeNode = (TreeNode)element;
+		if(element instanceof TreeNode treeNode) {
 			if(treeNode.hasChildren()) {
 				return true;
 			}
 			Object value = treeNode.getValue();
-			if(value instanceof IAnalysisSegment) {
-				Collection<? extends IAnalysisSegment> childSegments = ((IAnalysisSegment)value).getChildSegments();
+			if(value instanceof IAnalysisSegment analysisSegment) {
+				Collection<? extends IAnalysisSegment> childSegments = analysisSegment.getChildSegments();
 				for(IAnalysisSegment segment : childSegments) {
 					if(!(segment instanceof ChromatogramSegment)) {
 						return true;

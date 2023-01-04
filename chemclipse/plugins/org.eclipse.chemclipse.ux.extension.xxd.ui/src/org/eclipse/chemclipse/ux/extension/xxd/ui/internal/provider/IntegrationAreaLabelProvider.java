@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,13 +18,19 @@ import org.eclipse.chemclipse.model.core.SignalSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.swt.graphics.Image;
 
 public class IntegrationAreaLabelProvider extends AbstractChemClipseLabelProvider {
 
+	public static final String AREA = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.AREA);
+	public static final String TRACE = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.TRACE);
+	//
 	public static final String[] TITLES = { //
-			"Area", //
-			"Trace"};
+			AREA, //
+			TRACE //
+	};
 	public static final int[] BOUNDS = { //
 			300, //
 			300 //
@@ -35,9 +41,8 @@ public class IntegrationAreaLabelProvider extends AbstractChemClipseLabelProvide
 
 		if(columnIndex == 0) {
 			return getImage(element);
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	@Override
@@ -61,6 +66,7 @@ public class IntegrationAreaLabelProvider extends AbstractChemClipseLabelProvide
 		return text;
 	}
 
+	@Override
 	public Image getImage(Object element) {
 
 		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_INTEGRATION_RESULTS, IApplicationImage.SIZE_16x16);

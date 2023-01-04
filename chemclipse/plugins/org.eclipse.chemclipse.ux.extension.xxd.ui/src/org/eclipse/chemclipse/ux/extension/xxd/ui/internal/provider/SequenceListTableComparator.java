@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,9 +22,7 @@ public class SequenceListTableComparator extends AbstractRecordTableComparator i
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof ISequenceRecord && e2 instanceof ISequenceRecord) {
-			ISequenceRecord sequenceRecord1 = (ISequenceRecord)e1;
-			ISequenceRecord sequenceRecord2 = (ISequenceRecord)e2;
+		if(e1 instanceof ISequenceRecord sequenceRecord1 && e2 instanceof ISequenceRecord sequenceRecord2) {
 			//
 			switch(getPropertyIndex()) {
 				case 0:

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,12 +16,15 @@ import java.util.List;
 
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.model.columns.RetentionIndexEntry;
-import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.CalibrationNameValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.RetentionIndexValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.RetentionTimeValidator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.fieldassist.ControlDecoration;
@@ -116,7 +119,7 @@ public class CalibrationEditUI extends Composite {
 
 		Text text = new Text(parent, SWT.BORDER);
 		text.setText("");
-		text.setToolTipText("Set the retention time in minutes.");
+		text.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SET_RETENTION_TIME_MINUTES));
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		retentionTimeValidator = new RetentionTimeValidator();
@@ -137,7 +140,7 @@ public class CalibrationEditUI extends Composite {
 
 		Text text = new Text(parent, SWT.BORDER);
 		text.setText("");
-		text.setToolTipText("Set the retention index.");
+		text.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SET_RETENTION_INDEX));
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		//
 		retentionIndexValidator = new RetentionIndexValidator();
@@ -197,7 +200,7 @@ public class CalibrationEditUI extends Composite {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Set the retention index.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE_ADD, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE_ADD, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -357,7 +360,7 @@ public class CalibrationEditUI extends Composite {
 
 		IRetentionIndexEntry retentionIndexEntry = null;
 		if(validate()) {
-			int retentionTime = (int)(retentionTimeValidator.getRetentionTime() * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+			int retentionTime = (int)(retentionTimeValidator.getRetentionTime() * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 			float retentionIndex = retentionIndexValidator.getRetentionIndex();
 			String name = calibrationNameValidator.getName();
 			retentionIndexEntry = new RetentionIndexEntry(retentionTime, retentionIndex, name);

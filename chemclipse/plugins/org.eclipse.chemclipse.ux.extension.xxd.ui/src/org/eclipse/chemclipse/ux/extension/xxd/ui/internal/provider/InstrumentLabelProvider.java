@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,13 +15,15 @@ import org.eclipse.chemclipse.model.instruments.Instrument;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.swt.graphics.Image;
 
 public class InstrumentLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String IDENTIFIER = "Identifier";
-	public static final String NAME = "Name";
-	public static final String DESCRIPTION = "Description";
+	public static final String IDENTIFIER = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.IDENTIFIER);
+	public static final String NAME = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.NAME);
+	public static final String DESCRIPTION = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.DESCRIPTION);
 	//
 	public static final String[] TITLES = { //
 			IDENTIFIER, //

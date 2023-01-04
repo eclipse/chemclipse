@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -84,13 +84,13 @@ public class MassSpectrumRulerChart extends MassSpectrumChartProfile {
 		super.handleMouseUpEvent(event);
 		if(isControlKeyPressed(event)) {
 			stopBaselineSelection(event.x, event.y);
-			calculateDimension(event);
+			calculateDimension();
 			setCursorDefault();
 			resetSelectedRange();
 		}
 	}
 
-	private void calculateDimension(Event event) {
+	private void calculateDimension() {
 
 		BaseChart baseChart = getBaseChart();
 		IAxisSet axisSet = baseChart.getAxisSet();

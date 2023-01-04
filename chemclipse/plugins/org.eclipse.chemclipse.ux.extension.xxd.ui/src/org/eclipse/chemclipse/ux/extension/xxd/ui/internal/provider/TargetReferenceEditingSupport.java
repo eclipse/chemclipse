@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -59,15 +59,13 @@ public class TargetReferenceEditingSupport extends EditingSupport {
 	@Override
 	protected Object getValue(Object element) {
 
-		if(element instanceof ITargetReference) {
-			ITargetReference targetReference = (ITargetReference)element;
-			switch(column) {
-				case TargetReferenceLabelProvider.VISIBLE:
-					if(targetDisplaySettings != null) {
-						return targetDisplaySettings.isVisible(targetReference);
-					} else {
-						return false;
-					}
+		if(element instanceof ITargetReference targetReference) {
+			if(column.equals(TargetReferenceLabelProvider.VISIBLE)) {
+				if(targetDisplaySettings != null) {
+					return targetDisplaySettings.isVisible(targetReference);
+				} else {
+					return false;
+				}
 			}
 		}
 		return false;
@@ -76,15 +74,12 @@ public class TargetReferenceEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 
-		if(element instanceof ITargetReference) {
-			ITargetReference targetReference = (ITargetReference)element;
-			switch(column) {
-				case TargetReferenceLabelProvider.VISIBLE:
-					if(targetDisplaySettings != null) {
-						boolean visible = (boolean)value;
-						targetDisplaySettings.setVisible(targetReference, visible);
-					}
-					break;
+		if(element instanceof ITargetReference targetReference) {
+			if(column.equals(TargetReferenceLabelProvider.VISIBLE)) {
+				if(targetDisplaySettings != null) {
+					boolean visible = (boolean)value;
+					targetDisplaySettings.setVisible(targetReference, visible);
+				}
 			}
 			tableViewer.refresh();
 		}

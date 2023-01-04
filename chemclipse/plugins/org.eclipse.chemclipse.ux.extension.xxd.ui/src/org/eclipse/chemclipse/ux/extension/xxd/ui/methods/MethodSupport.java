@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,11 +24,9 @@ public class MethodSupport {
 	 */
 	public static final ListProcessEntryContainer getContainer(Object object) {
 
-		if(object instanceof IProcessEntry) {
-			IProcessEntry processEntry = (IProcessEntry)object;
+		if(object instanceof IProcessEntry processEntry) {
 			ProcessEntryContainer parent = processEntry.getParent();
-			if(parent instanceof ListProcessEntryContainer) {
-				ListProcessEntryContainer container = (ListProcessEntryContainer)parent;
+			if(parent instanceof ListProcessEntryContainer container) {
 				if(!container.isReadOnly()) {
 					return container;
 				}
