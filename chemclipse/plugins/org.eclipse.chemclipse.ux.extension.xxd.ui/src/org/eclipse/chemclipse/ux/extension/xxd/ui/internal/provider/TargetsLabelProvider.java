@@ -58,6 +58,8 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 	public static final String RETENTION_INDEX = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RETENTION_INDEX);
 	public static final String REFERENCE_ID = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.REFERENCE_ID);
 	//
+	public static final int INDEX_RATING = 1;
+	public static final int INDEX_NAME = 2;
 	public static final int INDEX_RETENTION_TIME = 23;
 	public static final int INDEX_RETENTION_INDEX = 24;
 	//
@@ -180,7 +182,7 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DESELECTED, IApplicationImageProvider.SIZE_16x16);
 				}
 			}
-		} else if(columnIndex == 1) {
+		} else if(columnIndex == INDEX_RATING) {
 			/*
 			 * Rating
 			 */
@@ -194,7 +196,7 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 					return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_ARROW_DOWN, IApplicationImageProvider.SIZE_16x16);
 				}
 			}
-		} else if(columnIndex == 2) {
+		} else if(columnIndex == INDEX_NAME) {
 			/*
 			 * Entry
 			 */
@@ -284,7 +286,7 @@ public class TargetsLabelProvider extends AbstractChemClipseLabelProvider {
 					text = libraryInformation.getReferenceIdentifier();
 					break;
 				case 23:
-					text = getRetentionIndexText(libraryInformation, null);
+					text = getRetentionTimeText(libraryInformation, null);
 					break;
 				case 24:
 					text = getRetentionIndexText(libraryInformation, null);
