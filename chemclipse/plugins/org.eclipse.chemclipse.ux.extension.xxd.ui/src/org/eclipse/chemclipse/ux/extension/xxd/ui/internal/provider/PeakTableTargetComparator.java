@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -44,12 +44,12 @@ public class PeakTableTargetComparator extends AbstractRecordTableComparator imp
 			//
 			List<IIdentificationTarget> peakTargets1 = new ArrayList<>();
 			if(peak1 instanceof ITargetSupplier) {
-				ITargetSupplier targetSupplier = (ITargetSupplier)peak1;
+				ITargetSupplier targetSupplier = peak1;
 				peakTargets1.addAll(targetSupplier.getTargets());
 			}
 			//
 			String peakTarget1 = "";
-			if(peakTargets1 != null && peakTargets1.size() > 0) {
+			if(peakTargets1 != null && !peakTargets1.isEmpty()) {
 				float retentionIndex = peakMaximum1.getRetentionIndex();
 				IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
 				Collections.sort(peakTargets1, identificationTargetComparator);
@@ -64,12 +64,12 @@ public class PeakTableTargetComparator extends AbstractRecordTableComparator imp
 			//
 			List<IIdentificationTarget> peakTargets2 = new ArrayList<>();
 			if(peak2 instanceof ITargetSupplier) {
-				ITargetSupplier targetSupplier = (ITargetSupplier)peak2;
+				ITargetSupplier targetSupplier = peak2;
 				peakTargets2.addAll(targetSupplier.getTargets());
 			}
 			//
 			String peakTarget2 = "";
-			if(peakTargets2 != null && peakTargets2.size() > 0) {
+			if(peakTargets2 != null && !peakTargets2.isEmpty()) {
 				float retentionIndex = peakMaximum2.getRetentionIndex();
 				IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(SortOrder.DESC, retentionIndex);
 				Collections.sort(peakTargets2, identificationTargetComparator);
@@ -84,10 +84,10 @@ public class PeakTableTargetComparator extends AbstractRecordTableComparator imp
 					sortOrder = peakTarget2.compareTo(peakTarget1);
 					break;
 				case 2:
-					if(peak1 instanceof IChromatogramPeakMSD && peak2 instanceof IChromatogramPeakMSD) {
-						sortOrder = Float.compare(((IChromatogramPeakMSD)peak2).getSignalToNoiseRatio(), ((IChromatogramPeakMSD)peak1).getSignalToNoiseRatio());
-					} else if(peak1 instanceof IChromatogramPeakCSD && peak2 instanceof IChromatogramPeakCSD) {
-						sortOrder = Float.compare(((IChromatogramPeakCSD)peak2).getSignalToNoiseRatio(), ((IChromatogramPeakCSD)peak1).getSignalToNoiseRatio());
+					if(peak1 instanceof IChromatogramPeakMSD chromatogramPeakMSD1 && peak2 instanceof IChromatogramPeakMSD chromatogramPeakMSD2) {
+						sortOrder = Float.compare(chromatogramPeakMSD2.getSignalToNoiseRatio(), chromatogramPeakMSD1.getSignalToNoiseRatio());
+					} else if(peak1 instanceof IChromatogramPeakCSD chromatogramPeakCSD1 && peak2 instanceof IChromatogramPeakCSD chromatogramPeakCSD2) {
+						sortOrder = Float.compare(chromatogramPeakCSD2.getSignalToNoiseRatio(), chromatogramPeakCSD1.getSignalToNoiseRatio());
 					}
 					break;
 				case 3:

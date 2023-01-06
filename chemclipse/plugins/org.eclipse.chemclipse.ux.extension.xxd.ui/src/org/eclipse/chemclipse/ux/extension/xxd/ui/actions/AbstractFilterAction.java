@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,11 +15,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.function.Consumer;
 
 import org.eclipse.chemclipse.processing.core.DefaultProcessingResult;
-import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.IMessageConsumer;
+import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.ProcessingInfo;
 import org.eclipse.chemclipse.processing.filter.Filter;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
@@ -52,10 +53,10 @@ public abstract class AbstractFilterAction<FilterType extends Filter<?>, ResultT
 
 		Widget widget = event.widget;
 		Shell shell;
-		if(widget instanceof MenuItem) {
-			shell = ((MenuItem)widget).getParent().getShell();
-		} else if(widget instanceof Control) {
-			shell = ((Control)widget).getShell();
+		if(widget instanceof MenuItem menuItem) {
+			shell = menuItem.getParent().getShell();
+		} else if(widget instanceof Control control) {
+			shell = control.getShell();
 		} else {
 			shell = null;
 		}
@@ -82,7 +83,7 @@ public abstract class AbstractFilterAction<FilterType extends Filter<?>, ResultT
 			ProcessingInfoPartSupport.getInstance().update(consumer);
 		} catch(InvocationTargetException e) {
 			IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
-			processingInfo.addErrorMessage(filter.getName(), "Processing failed", e.getTargetException());
+			processingInfo.addErrorMessage(filter.getName(), IExtensionMessages.PROCESSING_FAILED, e.getTargetException());
 			ProcessingInfoPartSupport.getInstance().update(processingInfo);
 		} catch(InterruptedException e) {
 			// user canceled

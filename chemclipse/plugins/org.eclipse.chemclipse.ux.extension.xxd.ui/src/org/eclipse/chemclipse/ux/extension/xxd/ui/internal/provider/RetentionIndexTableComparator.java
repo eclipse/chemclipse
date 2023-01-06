@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This
  * program and the accompanying materials are made available under the terms of
@@ -22,9 +22,7 @@ public class RetentionIndexTableComparator extends AbstractRecordTableComparator
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof IRetentionIndexEntry && e2 instanceof IRetentionIndexEntry) {
-			IRetentionIndexEntry retentionIndexEntry1 = (IRetentionIndexEntry)e1;
-			IRetentionIndexEntry retentionIndexEntry2 = (IRetentionIndexEntry)e2;
+		if(e1 instanceof IRetentionIndexEntry retentionIndexEntry1 && e2 instanceof IRetentionIndexEntry retentionIndexEntry2) {
 			switch(getPropertyIndex()) {
 				case 0:
 					sortOrder = Integer.compare(retentionIndexEntry2.getRetentionTime(), retentionIndexEntry1.getRetentionTime());

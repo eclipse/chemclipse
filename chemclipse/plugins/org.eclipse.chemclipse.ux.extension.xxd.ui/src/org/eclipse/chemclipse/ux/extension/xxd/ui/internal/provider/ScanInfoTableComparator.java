@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2020 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,9 +22,7 @@ public class ScanInfoTableComparator extends AbstractRecordTableComparator imple
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof IScanMSD && e2 instanceof IScanMSD) {
-			IScanMSD ion1 = (IScanMSD)e1;
-			IScanMSD ion2 = (IScanMSD)e2;
+		if(e1 instanceof IScanMSD ion1 && e2 instanceof IScanMSD ion2) {
 			//
 			switch(getPropertyIndex()) {
 				case 0:

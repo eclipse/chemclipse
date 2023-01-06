@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,12 +24,10 @@ public class QuantCompoundTableComparator extends AbstractRecordTableComparator 
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof IQuantitationCompound && e2 instanceof IQuantitationCompound) {
-			IQuantitationCompound compound1 = (IQuantitationCompound)e1;
+		if(e1 instanceof IQuantitationCompound compound1 && e2 instanceof IQuantitationCompound compound2) {
 			IRetentionTimeWindow retentionTimeWindow1 = compound1.getRetentionTimeWindow();
 			IRetentionIndexWindow retentionIndexWindow1 = compound1.getRetentionIndexWindow();
 			//
-			IQuantitationCompound compound2 = (IQuantitationCompound)e2;
 			IRetentionTimeWindow retentionTimeWindow2 = compound2.getRetentionTimeWindow();
 			IRetentionIndexWindow retentionIndexWindow2 = compound2.getRetentionIndexWindow();
 			//

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2019 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -20,6 +20,8 @@ import org.eclipse.chemclipse.converter.model.reports.ISequenceRecord;
 import org.eclipse.chemclipse.converter.sequence.SequenceConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -44,7 +46,7 @@ public class SequenceImportRunnable implements IRunnableWithProgress {
 	@Override
 	public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
-		SubMonitor subMonitor = SubMonitor.convert(monitor, "Read Sequence", 2);
+		SubMonitor subMonitor = SubMonitor.convert(monitor, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.READ_SEQUENCE), 2);
 		try {
 			subMonitor.worked(1);
 			IProcessingInfo<ISequence<? extends ISequenceRecord>> processingInfo = SequenceConverter.convert(file, monitor);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2021 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -53,8 +53,8 @@ public class EditorUpdateSupport {
 					for(MPart part : parts) {
 						if(part.isVisible()) {
 							Object object = part.getObject();
-							if(object instanceof IChromatogramEditor) {
-								return ((IChromatogramEditor)object).getChromatogramSelection();
+							if(object instanceof IChromatogramEditor chromatogramEditor) {
+								return chromatogramEditor.getChromatogramSelection();
 							}
 						}
 					}
@@ -69,7 +69,7 @@ public class EditorUpdateSupport {
 	@SuppressWarnings("rawtypes")
 	public List<IChromatogramSelection> getChromatogramSelections() {
 
-		List<IChromatogramSelection> chromatogramSelections = new ArrayList<IChromatogramSelection>();
+		List<IChromatogramSelection> chromatogramSelections = new ArrayList<>();
 		if(partService != null) {
 			try {
 				Collection<MPart> parts = partService.getParts();
@@ -91,7 +91,7 @@ public class EditorUpdateSupport {
 						List<MPart> parts = service.findElements(application, null, MPart.class, null);
 						if(parts != null) {
 							for(MPart part : parts) {
-								if(extractChromatogramSelections(part.getObject()).size() > 0) {
+								if(!extractChromatogramSelections(part.getObject()).isEmpty()) {
 									chromatogramSelections.addAll(extractChromatogramSelections(part.getObject()));
 								}
 							}
@@ -109,7 +109,7 @@ public class EditorUpdateSupport {
 
 	public List<IScanMSD> getMassSpectrumSelections() {
 
-		List<IScanMSD> dataSelections = new ArrayList<IScanMSD>();
+		List<IScanMSD> dataSelections = new ArrayList<>();
 		if(partService != null) {
 			/*
 			 * TODO: see message
@@ -123,8 +123,7 @@ public class EditorUpdateSupport {
 						 * MALDI
 						 */
 						IScanMSD selection = null;
-						if(object instanceof IMassSpectrumEditor) {
-							IMassSpectrumEditor editor = (IMassSpectrumEditor)object;
+						if(object instanceof IMassSpectrumEditor editor) {
 							selection = editor.getScanSelection();
 						}
 						//
@@ -146,7 +145,7 @@ public class EditorUpdateSupport {
 
 	public List<IScanXIR> getScanSelectionsXIR() {
 
-		List<IScanXIR> dataNMRSelections = new ArrayList<IScanXIR>();
+		List<IScanXIR> dataNMRSelections = new ArrayList<>();
 		if(partService != null) {
 			/*
 			 * TODO: see message
@@ -160,8 +159,7 @@ public class EditorUpdateSupport {
 						 * XIR
 						 */
 						IScanXIR selection = null;
-						if(object instanceof IScanEditorXIR) {
-							IScanEditorXIR editor = (IScanEditorXIR)object;
+						if(object instanceof IScanEditorXIR editor) {
 							selection = editor.getScanSelection();
 						}
 						//
@@ -183,12 +181,11 @@ public class EditorUpdateSupport {
 
 	public List<IDataNMRSelection> getDataNMRSelections(EPartService partService) {
 
-		List<IDataNMRSelection> scanSelections = new ArrayList<IDataNMRSelection>();
+		List<IDataNMRSelection> scanSelections = new ArrayList<>();
 		Collection<MPart> parts = partService.getParts();
 		for(MPart part : parts) {
 			Object object = part.getObject();
-			if(object instanceof IScanEditorNMR) {
-				IScanEditorNMR editor = (IScanEditorNMR)object;
+			if(object instanceof IScanEditorNMR editor) {
 				IDataNMRSelection selection = editor.getScanSelection();
 				if(selection != null) {
 					scanSelections.add(selection);
@@ -200,7 +197,7 @@ public class EditorUpdateSupport {
 
 	public List<IQuantitationDatabase> getQuantitationDatabases() {
 
-		List<IQuantitationDatabase> quantitationDatabases = new ArrayList<IQuantitationDatabase>();
+		List<IQuantitationDatabase> quantitationDatabases = new ArrayList<>();
 		if(partService != null) {
 			/*
 			 * TODO: see message
@@ -209,8 +206,7 @@ public class EditorUpdateSupport {
 				Collection<MPart> parts = partService.getParts();
 				for(MPart part : parts) {
 					Object object = part.getObject();
-					if(object instanceof IQuantitationDatabaseEditor) {
-						IQuantitationDatabaseEditor editor = (IQuantitationDatabaseEditor)object;
+					if(object instanceof IQuantitationDatabaseEditor editor) {
 						quantitationDatabases.add(editor.getQuantitationDatabase());
 					}
 				}
@@ -236,7 +232,7 @@ public class EditorUpdateSupport {
 	@SuppressWarnings("rawtypes")
 	private void addChromatogramSelections(List<IChromatogramSelection> chromatogramSelections, List<IChromatogramSelection> selections) {
 
-		if(selections != null && selections.size() > 0) {
+		if(selections != null && !selections.isEmpty()) {
 			chromatogramSelections.addAll(selections);
 		}
 	}
@@ -250,20 +246,19 @@ public class EditorUpdateSupport {
 			/*
 			 * MSD/CSD/WSD or specialized Editor
 			 */
-			if(object instanceof IChromatogramEditor) {
-				addChromatogramSelection(chromatogramSelections, ((IChromatogramEditor)object).getChromatogramSelection());
-			} else if(object instanceof IChromatogramProjectEditor) {
-				addChromatogramSelections(chromatogramSelections, ((IChromatogramProjectEditor)object).getChromatogramSelections());
-			} else if(object instanceof CompatibilityEditor) {
+			if(object instanceof IChromatogramEditor chromatogramEditor) {
+				addChromatogramSelection(chromatogramSelections, chromatogramEditor.getChromatogramSelection());
+			} else if(object instanceof IChromatogramProjectEditor chromatogramProjectEditor) {
+				addChromatogramSelections(chromatogramSelections, chromatogramProjectEditor.getChromatogramSelections());
+			} else if(object instanceof CompatibilityEditor compatibilityEditor) {
 				/*
 				 * 3.x compatibility editor.
 				 */
-				CompatibilityEditor compatibilityEditor = (CompatibilityEditor)object;
 				IWorkbenchPart workbenchPart = compatibilityEditor.getPart();
-				if(workbenchPart instanceof IChromatogramEditor) {
-					addChromatogramSelection(chromatogramSelections, ((IChromatogramEditor)workbenchPart).getChromatogramSelection());
-				} else if(workbenchPart instanceof IChromatogramProjectEditor) {
-					addChromatogramSelections(chromatogramSelections, ((IChromatogramProjectEditor)workbenchPart).getChromatogramSelections());
+				if(workbenchPart instanceof IChromatogramEditor chromatogramEditor) {
+					addChromatogramSelection(chromatogramSelections, chromatogramEditor.getChromatogramSelection());
+				} else if(workbenchPart instanceof IChromatogramProjectEditor chromatogramProjectEditor) {
+					addChromatogramSelections(chromatogramSelections, chromatogramProjectEditor.getChromatogramSelections());
 				}
 			}
 		}

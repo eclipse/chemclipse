@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -31,6 +31,8 @@ import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.xxd.process.comparators.NameComparator;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -79,8 +81,8 @@ public class ProcessingWizardPage extends WizardPage {
 			Collections.sort(this.dataCategories, (c1, c2) -> c1.name().compareTo(c2.name()));
 		}
 		processContext = contexts.entrySet().iterator().next().getKey();
-		setTitle("Process Entry");
-		setDescription("Select a chromatogram filter, integrator, identifier ... .");
+		setTitle(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESS_ENTRY));
+		setDescription(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SELECT_PROCESS_ENTRY));
 	}
 
 	@Override
@@ -90,7 +92,7 @@ public class ProcessingWizardPage extends WizardPage {
 		composite.setLayout(new GridLayout(1, false));
 		//
 		if(dataCategories.size() > 1) {
-			createLabel(composite, "Select the data categorie(s) to list processor(s).");
+			createLabel(composite, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SELECT_DATA_CATEGORIES));
 			for(DataCategory dataCategory : dataCategories) {
 				/*
 				 * Set the default visibility.
@@ -110,13 +112,13 @@ public class ProcessingWizardPage extends WizardPage {
 		}
 		//
 		if(processSupplierContextMap.size() > 1) {
-			createLabel(composite, "Context");
+			createLabel(composite, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CONTEXT));
 			createComboViewerContext(composite);
 		}
 		//
-		createLabel(composite, "Category");
+		createLabel(composite, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CATEGROY));
 		comboViewerCategory = createComboViewerCategory(composite);
-		createLabel(composite, "Processor");
+		createLabel(composite, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESSOR));
 		comboViewerProcessor = createComboViewerProcessor(composite);
 		//
 		updateComboDataCategoryItems();
@@ -156,7 +158,7 @@ public class ProcessingWizardPage extends WizardPage {
 		Button button = new Button(parent, SWT.CHECK);
 		button.setData(dataCategory);
 		button.setText(dataCategory.label());
-		button.setToolTipText("Select the " + dataCategory.name() + " processor item(s).");
+		button.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SELECT_CATEGORY_PROCESSOR_ITEMS, dataCategory.name()));
 		button.setSelection(getDataTypeSelection(dataCategory));
 		button.addSelectionListener(new SelectionAdapter() {
 
@@ -199,10 +201,6 @@ public class ProcessingWizardPage extends WizardPage {
 
 	private void updateComboDataCategoryItems() {
 
-		if(dataCategorySelections == null) {
-			return;
-		}
-		//
 		selectedDataTypes.clear();
 		if(dataCategories.size() == 1) {
 			selectedDataTypes.add(dataCategories.get(0));
@@ -261,14 +259,14 @@ public class ProcessingWizardPage extends WizardPage {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof ProcessCategory) {
-					return ((ProcessCategory)element).name;
+				if(element instanceof ProcessCategory processCategory) {
+					return processCategory.name;
 				}
 				return "-";
 			}
 		});
 		//
-		combo.setToolTipText("Select a process category.");
+		combo.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SELECT_CATEGORY));
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.widthHint = 150;
 		combo.setLayoutData(gridData);
@@ -287,8 +285,7 @@ public class ProcessingWizardPage extends WizardPage {
 	private void updateCategory() {
 
 		Object object = comboViewerCategory.getStructuredSelection().getFirstElement();
-		if(object instanceof ProcessCategory) {
-			ProcessCategory category = (ProcessCategory)object;
+		if(object instanceof ProcessCategory category) {
 			List<IProcessSupplier<?>> suppliers = category.processorSuppliers;
 			comboViewerProcessor.setInput(suppliers);
 			if(suppliers.size() == 1) {
@@ -325,7 +322,7 @@ public class ProcessingWizardPage extends WizardPage {
 			}
 		});
 		//
-		combo.setToolTipText("Select a processor.");
+		combo.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SELECT_PROCESSOR));
 		GridData gridData = new GridData(GridData.FILL_HORIZONTAL);
 		gridData.widthHint = 150;
 		combo.setLayoutData(gridData);
@@ -368,20 +365,20 @@ public class ProcessingWizardPage extends WizardPage {
 			}
 			if(selected < 1) {
 				setPageComplete(false);
-				setErrorMessage("Please select at least one data type");
+				setErrorMessage(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SELECT_ONE_DATA_TYPE));
 				return;
 			}
 		}
 		//
 		if(comboViewerCategory.getSelection().isEmpty()) {
 			setPageComplete(false);
-			setErrorMessage("Please select a category");
+			setErrorMessage(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SELECT_CATEGORY));
 			return;
 		}
 		//
 		if(comboViewerProcessor.getSelection().isEmpty()) {
 			setPageComplete(false);
-			setErrorMessage("Please select a processor");
+			setErrorMessage(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SELECT_PROCESSOR));
 			return;
 		}
 		//

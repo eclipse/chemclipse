@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -48,11 +48,11 @@ public class InstrumentEditingSupport extends EditingSupport {
 
 		if(element instanceof Instrument) {
 			Instrument instrument = (Instrument)element;
-			switch(column) {
-				case InstrumentLabelProvider.NAME:
-					return instrument.getName();
-				case InstrumentLabelProvider.DESCRIPTION:
-					return instrument.getDescription();
+			if(column.equals(InstrumentLabelProvider.NAME)) {
+				return instrument.getName();
+			}
+			if(column.equals(InstrumentLabelProvider.DESCRIPTION)) {
+				return instrument.getDescription();
 			}
 		}
 		return false;
@@ -63,13 +63,11 @@ public class InstrumentEditingSupport extends EditingSupport {
 
 		if(element instanceof Instrument) {
 			Instrument instrument = (Instrument)element;
-			switch(column) {
-				case InstrumentLabelProvider.NAME:
-					instrument.setName((String)value);
-					break;
-				case InstrumentLabelProvider.DESCRIPTION:
-					instrument.setDescription((String)value);
-					break;
+			if(column.equals(InstrumentLabelProvider.NAME)) {
+				instrument.setName((String)value);
+			}
+			if(column.equals(InstrumentLabelProvider.DESCRIPTION)) {
+				instrument.setDescription((String)value);
 			}
 			tableViewer.refresh();
 		}

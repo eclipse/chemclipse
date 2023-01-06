@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,6 +24,8 @@ import java.util.Map.Entry;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.support.settings.parser.InputValue;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsUIProvider.SettingsUIControl;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.Adapters;
@@ -95,7 +97,7 @@ public class SettingsUI<T> extends Composite {
 		@Override
 		public SettingsUIControl createUI(Composite parent, IProcessorPreferences<T> preferences, boolean showProfileToolbar) throws IOException {
 
-			return new SettingsUIControlImplementation<T>(parent, preferences, showProfileToolbar);
+			return new SettingsUIControlImplementation<T>(parent, preferences);
 		}
 	}
 
@@ -106,7 +108,7 @@ public class SettingsUI<T> extends Composite {
 		private final IProcessorPreferences<T> preferences;
 		private final Composite container;
 
-		public SettingsUIControlImplementation(Composite parent, IProcessorPreferences<T> preferences, boolean showProfileToolbar) throws IOException {
+		public SettingsUIControlImplementation(Composite parent, IProcessorPreferences<T> preferences) throws IOException {
 
 			container = createContainer(parent);
 			this.preferences = preferences;
@@ -120,7 +122,7 @@ public class SettingsUI<T> extends Composite {
 				}
 			}
 			//
-			if(widgetItems.size() > 0) {
+			if(!widgetItems.isEmpty()) {
 				createOptionWidgets(container);
 			} else {
 				createNoOptionsMessage(container);
@@ -157,7 +159,7 @@ public class SettingsUI<T> extends Composite {
 		private void createNoOptionsMessage(Composite parent) {
 
 			Label label = new Label(parent, SWT.NONE);
-			label.setText("This processor offers no options.");
+			label.setText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESSOR_OFFERS_NO_OPTIONS));
 			label.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		}
 
@@ -195,8 +197,7 @@ public class SettingsUI<T> extends Composite {
 				control.addListener(SWT.MouseUp, listener);
 				control.addListener(SWT.MouseDoubleClick, listener);
 				//
-				if(control instanceof IChangeListener) {
-					IChangeListener changeListener = (IChangeListener)control;
+				if(control instanceof IChangeListener changeListener) {
 					changeListener.addChangeListener(listener);
 				}
 			}

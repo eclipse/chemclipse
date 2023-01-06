@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,6 +30,8 @@ import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IScanEditorXIR;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ScanXIRImportRunnable;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedXIRScanUI;
 import org.eclipse.chemclipse.xir.model.core.IScanXIR;
 import org.eclipse.e4.ui.di.Focus;
@@ -52,7 +54,7 @@ public class ScanEditorXIR implements IScanEditorXIR {
 	public static final String ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.scanEditorXIR";
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ScanEditorXIR";
 	public static final String ICON_URI = IApplicationImage.getLocation(IApplicationImage.IMAGE_SCAN_XIR, IApplicationImageProvider.SIZE_16x16);
-	public static final String TOOLTIP = "FTIR/NIR/MIR Editor";
+	public static final String TOOLTIP = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.XIR_EDITOR);
 	//
 	private final MPart part;
 	private final MDirtyable dirtyable;
@@ -112,6 +114,7 @@ public class ScanEditorXIR implements IScanEditorXIR {
 	@Persist
 	public void save() {
 
+		// TODO
 		System.out.println(scanFile);
 		dirtyable.setDirty(false);
 	}
@@ -166,7 +169,7 @@ public class ScanEditorXIR implements IScanEditorXIR {
 			/*
 			 * No fork, otherwise it might crash when loading the data takes too long.
 			 */
-			boolean fork = (batch) ? false : true;
+			boolean fork = !batch;
 			dialog.run(fork, false, runnable);
 		} catch(InvocationTargetException e) {
 			logger.warn(e);

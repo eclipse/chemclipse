@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -29,6 +29,7 @@ import org.eclipse.chemclipse.wsd.model.core.support.PeakBuilderWSD;
 public class ManualPeakDetector {
 
 	private static final String DETECTOR_DESCRIPTION = "Manual";
+	private static final String CHROMATOGRAM_MUST_NOT_BE_NULL = "The chromatogram instance must be not null.";
 
 	/**
 	 * Returns a peak calculated by the given values.
@@ -38,7 +39,7 @@ public class ManualPeakDetector {
 	public IChromatogramPeakMSD calculatePeak(IChromatogramMSD chromatogram, int startRetentionTime, int stopRetentionTime, float startAbundance, float stopAbundance) throws PeakException {
 
 		if(chromatogram == null) {
-			throw new PeakException("The chromatogram instance must be not null.");
+			throw new PeakException(CHROMATOGRAM_MUST_NOT_BE_NULL);
 		}
 		/*
 		 * Create the peak.
@@ -60,7 +61,7 @@ public class ManualPeakDetector {
 	public IChromatogramPeakCSD calculatePeak(IChromatogramCSD chromatogram, int startRetentionTime, int stopRetentionTime, float startAbundance, float stopAbundance) throws PeakException {
 
 		if(chromatogram == null) {
-			throw new PeakException("The chromatogram instance must be not null.");
+			throw new PeakException(CHROMATOGRAM_MUST_NOT_BE_NULL);
 		}
 		/*
 		 * Create the peak.
@@ -82,7 +83,7 @@ public class ManualPeakDetector {
 	public IChromatogramPeakWSD calculatePeak(IChromatogramWSD chromatogram, int startRetentionTime, int stopRetentionTime, float startAbundance, float stopAbundance) throws PeakException {
 
 		if(chromatogram == null) {
-			throw new PeakException("The chromatogram instance must be not null.");
+			throw new PeakException(CHROMATOGRAM_MUST_NOT_BE_NULL);
 		}
 		/*
 		 * Create the peak.

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,6 +18,8 @@ import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.AbstractOperation;
 import org.eclipse.core.runtime.IAdaptable;
@@ -35,7 +37,7 @@ public class DeletePeaksOperation extends AbstractOperation {
 
 	public DeletePeaksOperation(Display display, IChromatogramSelection chromatogramSelection, List<IPeak> peaksToDelete) {
 
-		super("Delete Peaks");
+		super(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.DELETE_PEAKS));
 		this.display = display;
 		this.chromatogramSelection = chromatogramSelection;
 		this.peaksToDelete = peaksToDelete;
@@ -65,7 +67,7 @@ public class DeletePeaksOperation extends AbstractOperation {
 
 		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
 		chromatogram.removePeaks(peaksToDelete);
-		update("Peaks were deleted.");
+		update(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PEAKS_DELETED));
 		return Status.OK_STATUS;
 	}
 
@@ -79,7 +81,7 @@ public class DeletePeaksOperation extends AbstractOperation {
 	@Override
 	public String getLabel() {
 
-		return "Delete Peaks";
+		return ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.DELETE_PEAKS);
 	}
 
 	@Override
@@ -96,7 +98,7 @@ public class DeletePeaksOperation extends AbstractOperation {
 		for(IPeak peak : peaksToDelete) {
 			chromatogram.addPeak(peak);
 		}
-		update("Peaks were added back again.");
+		update(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PEAKS_UNDELETED));
 		return Status.OK_STATUS;
 	}
 }

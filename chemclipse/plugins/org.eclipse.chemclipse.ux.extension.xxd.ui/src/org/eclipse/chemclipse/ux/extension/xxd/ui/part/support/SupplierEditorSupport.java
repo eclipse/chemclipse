@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -80,7 +80,7 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 
 	private static List<ISupplier> getSupplier(DataType dataType) {
 
-		List<ISupplier> supplier = new ArrayList<ISupplier>();
+		List<ISupplier> supplier = new ArrayList<>();
 		switch(dataType) {
 			case MSD_NOMINAL:
 			case MSD_TANDEM:
@@ -161,8 +161,8 @@ public class SupplierEditorSupport extends AbstractSupplierFileEditorSupport imp
 				}
 				Object invoke = ContextInjectionFactory.invoke(executable, Execute.class, eclipseContext, parameterContext, NO_EXECUTE_METHOD);
 				if(NO_EXECUTE_METHOD != invoke) {
-					if(invoke instanceof Boolean) {
-						return ((Boolean)invoke).booleanValue();
+					if(invoke instanceof Boolean booleanInvoke) {
+						return booleanInvoke.booleanValue();
 					}
 					return true;
 				}

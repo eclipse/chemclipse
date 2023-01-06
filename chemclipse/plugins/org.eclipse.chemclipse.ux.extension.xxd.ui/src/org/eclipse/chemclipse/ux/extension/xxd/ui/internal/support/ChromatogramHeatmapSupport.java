@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2021 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,6 +18,7 @@ import java.util.Optional;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.NoExtractedIonSignalStoredException;
@@ -54,12 +55,12 @@ public class ChromatogramHeatmapSupport {
 			scaleIntensityMin = (scaleIntensityMin < 1.0d) ? 1.0d : scaleIntensityMin;
 			scaleIntensityMax = (scaleIntensityMax < 1.0d) ? 1.0d : scaleIntensityMax;
 			//
-			if(chromatogram instanceof IChromatogramMSD) {
-				return getHeatmap((IChromatogramMSD)chromatogram, scaleIntensityMin, scaleIntensityMax);
-			} else if(chromatogram instanceof IChromatogramWSD) {
-				return getHeatmap((IChromatogramWSD)chromatogram, scaleIntensityMin, scaleIntensityMax);
-			} else if(chromatogram instanceof IChromatogramTSD) {
-				return getHeatmap((IChromatogramTSD)chromatogram, scaleIntensityMin, scaleIntensityMax);
+			if(chromatogram instanceof IChromatogramMSD chromatogramMSD) {
+				return getHeatmap(chromatogramMSD, scaleIntensityMin, scaleIntensityMax);
+			} else if(chromatogram instanceof IChromatogramWSD chromatogramWSD) {
+				return getHeatmap(chromatogramWSD, scaleIntensityMin, scaleIntensityMax);
+			} else if(chromatogram instanceof IChromatogramTSD chromatogramTSD) {
+				return getHeatmap(chromatogramTSD, scaleIntensityMin, scaleIntensityMax);
 			}
 		} catch(Exception e) {
 			logger.warn(e);
@@ -85,8 +86,8 @@ public class ChromatogramHeatmapSupport {
 			int divisor = calculateDivisor(dataWidth, dataHeight);
 			dataHeight /= divisor;
 			//
-			double startRetentionTime = chromatogram.getStartRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR;
-			double stopRetentionTime = chromatogram.getStopRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR;
+			double startRetentionTime = chromatogram.getStartRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR;
+			double stopRetentionTime = chromatogram.getStopRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR;
 			//
 			float[] heatmapData = new float[dataHeight * dataWidth * 2];
 			int j = 0;
@@ -142,8 +143,8 @@ public class ChromatogramHeatmapSupport {
 		int divisor = calculateDivisor(dataHeight, dataWidth);
 		dataWidth /= divisor;
 		//
-		double startRetentionTime = chromatogram.getStartRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR;
-		double stopRetentionTime = chromatogram.getStopRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR;
+		double startRetentionTime = chromatogram.getStartRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR;
+		double stopRetentionTime = chromatogram.getStopRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR;
 		/*
 		 * The data height and width must be >= 1!
 		 */
@@ -215,8 +216,8 @@ public class ChromatogramHeatmapSupport {
 		int divisor = calculateDivisor(dataWidth, dataHeight);
 		dataHeight /= divisor;
 		//
-		double startRetentionTime = chromatogram.getStartRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR;
-		double stopRetentionTime = chromatogram.getStopRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR;
+		double startRetentionTime = chromatogram.getStartRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR;
+		double stopRetentionTime = chromatogram.getStopRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR;
 		/*
 		 * The data height and width must be >= 1!
 		 */
@@ -284,8 +285,8 @@ public class ChromatogramHeatmapSupport {
 		int divisor = calculateDivisor(dataWidth, dataHeight);
 		dataHeight /= divisor;
 		//
-		double startRetentionTime = chromatogram.getStartRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR;
-		double stopRetentionTime = chromatogram.getStopRetentionTime() / IChromatogram.MINUTE_CORRELATION_FACTOR;
+		double startRetentionTime = chromatogram.getStartRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR;
+		double stopRetentionTime = chromatogram.getStopRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR;
 		/*
 		 * The data height and width must be >= 1!
 		 */
@@ -343,8 +344,8 @@ public class ChromatogramHeatmapSupport {
 
 		List<IScanTSD> scansTSD = new ArrayList<>();
 		for(IScan scan : scans) {
-			if(scan instanceof IScanTSD) {
-				scansTSD.add((IScanTSD)scan);
+			if(scan instanceof IScanTSD scanTSD) {
+				scansTSD.add(scanTSD);
 			}
 		}
 		//

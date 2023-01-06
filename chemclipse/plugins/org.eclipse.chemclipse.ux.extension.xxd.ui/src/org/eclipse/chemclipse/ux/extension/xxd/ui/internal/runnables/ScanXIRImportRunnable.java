@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -16,6 +16,8 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.chemclipse.xir.converter.core.ScanConverterXIR;
 import org.eclipse.chemclipse.xir.model.core.IScanXIR;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -42,7 +44,7 @@ public class ScanXIRImportRunnable implements IRunnableWithProgress {
 	public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		try {
-			monitor.beginTask("Import Scan", IProgressMonitor.UNKNOWN);
+			monitor.beginTask(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.IMPORT_SCAN), IProgressMonitor.UNKNOWN);
 			IProcessingInfo<?> processingInfo = ScanConverterXIR.convert(file, monitor);
 			scanXIR = (IScanXIR)processingInfo.getProcessingResult();
 		} catch(Exception e) {

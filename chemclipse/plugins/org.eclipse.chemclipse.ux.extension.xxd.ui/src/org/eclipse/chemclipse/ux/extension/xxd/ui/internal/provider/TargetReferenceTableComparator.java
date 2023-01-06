@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -31,9 +31,7 @@ public class TargetReferenceTableComparator extends AbstractRecordTableComparato
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof ITargetReference && e2 instanceof ITargetReference) {
-			ITargetReference entry1 = (ITargetReference)e1;
-			ITargetReference entry2 = (ITargetReference)e2;
+		if(e1 instanceof ITargetReference entry1 && e2 instanceof ITargetReference entry2) {
 			//
 			switch(getPropertyIndex()) {
 				case 0:

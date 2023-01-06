@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -32,6 +32,8 @@ import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.SequenceImportRunnable;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedSequenceListUI;
 import org.eclipse.e4.ui.di.Focus;
 import org.eclipse.e4.ui.di.Persist;
@@ -52,7 +54,7 @@ public class SequenceEditor {
 	public static final String ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.sequenceEditor";
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.SequenceEditor";
 	public static final String ICON_URI = IApplicationImage.getLocation(IApplicationImage.IMAGE_SEQUENCE_LIST_DEFAULT, IApplicationImageProvider.SIZE_16x16);
-	public static final String TOOLTIP = "Sequence Editor";
+	public static final String TOOLTIP = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SEQUENCE_EDITOR);
 	//
 	private final MPart part;
 	private final MDirtyable dirtyable;
@@ -104,6 +106,7 @@ public class SequenceEditor {
 	@Persist
 	public void save() {
 
+		// TODO
 		System.out.println(sequenceFile);
 		dirtyable.setDirty(false);
 	}
@@ -153,7 +156,7 @@ public class SequenceEditor {
 			/*
 			 * No fork, otherwise it might crash when loading a chromatogram takes too long.
 			 */
-			boolean fork = (batch) ? false : true;
+			boolean fork = !batch;
 			dialog.run(fork, false, runnable);
 			sequence = runnable.getSequence();
 			sequenceFile = file;
@@ -161,6 +164,7 @@ public class SequenceEditor {
 			logger.warn(e);
 		} catch(InterruptedException e) {
 			logger.warn(e);
+			Thread.currentThread().interrupt();
 		}
 		//
 		return sequence;

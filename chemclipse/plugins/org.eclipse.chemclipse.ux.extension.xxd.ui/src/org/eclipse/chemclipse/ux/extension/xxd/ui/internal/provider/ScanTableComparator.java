@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2020 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,6 +25,7 @@ public class ScanTableComparator extends AbstractRecordTableComparator implement
 	private DataType dataType;
 
 	public ScanTableComparator(DataType dataType) {
+
 		this.dataType = dataType;
 	}
 
@@ -57,9 +58,7 @@ public class ScanTableComparator extends AbstractRecordTableComparator implement
 	private int getNominalMSD(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof IIon && e2 instanceof IIon) {
-			IIon ion1 = (IIon)e1;
-			IIon ion2 = (IIon)e2;
+		if(e1 instanceof IIon ion1 && e2 instanceof IIon ion2) {
 			//
 			switch(getPropertyIndex()) {
 				case 0:
@@ -84,9 +83,7 @@ public class ScanTableComparator extends AbstractRecordTableComparator implement
 	private int getTandemMSD(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof IIon && e2 instanceof IIon) {
-			IIon ion1 = (IIon)e1;
-			IIon ion2 = (IIon)e2;
+		if(e1 instanceof IIon ion1 && e2 instanceof IIon ion2) {
 			IIonTransition ionTransition1 = ion1.getIonTransition();
 			IIonTransition ionTransition2 = ion2.getIonTransition();
 			//
@@ -128,9 +125,7 @@ public class ScanTableComparator extends AbstractRecordTableComparator implement
 	private int getHighResolutionMSD(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof IIon && e2 instanceof IIon) {
-			IIon ion1 = (IIon)e1;
-			IIon ion2 = (IIon)e2;
+		if(e1 instanceof IIon ion1 && e2 instanceof IIon ion2) {
 			//
 			switch(getPropertyIndex()) {
 				case 0:
@@ -155,9 +150,7 @@ public class ScanTableComparator extends AbstractRecordTableComparator implement
 	private int getCSD(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof IScanCSD && e2 instanceof IScanCSD) {
-			IScanCSD scanCSD1 = (IScanCSD)e1;
-			IScanCSD scanCSD2 = (IScanCSD)e2;
+		if(e1 instanceof IScanCSD scanCSD1 && e2 instanceof IScanCSD scanCSD2) {
 			//
 			switch(getPropertyIndex()) {
 				case 0:
@@ -182,9 +175,7 @@ public class ScanTableComparator extends AbstractRecordTableComparator implement
 	private int getWSD(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof IScanSignalWSD && e2 instanceof IScanSignalWSD) {
-			IScanSignalWSD scanSignalWSD1 = (IScanSignalWSD)e1;
-			IScanSignalWSD scanSignalWSD2 = (IScanSignalWSD)e2;
+		if(e1 instanceof IScanSignalWSD scanSignalWSD1 && e2 instanceof IScanSignalWSD scanSignalWSD2) {
 			//
 			switch(getPropertyIndex()) {
 				case 0:

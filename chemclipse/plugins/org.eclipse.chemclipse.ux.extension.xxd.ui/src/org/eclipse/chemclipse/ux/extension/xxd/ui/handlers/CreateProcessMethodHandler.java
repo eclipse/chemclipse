@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,6 +21,8 @@ import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.DataCategoryGroup;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.DataTypeTypeSelectionWizard;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -34,17 +36,18 @@ import org.eclipse.swt.widgets.Shell;
 public class CreateProcessMethodHandler {
 
 	private static final String FILTER_EXTENSION = "*.ocm";
-	private static final String FILTER_NAME = "Process Method (*.ocm)";
-	private static final String FILE_NAME = "myprocessmethod.ocm";
+	private static final String PROCESS_METHOD = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESS_METHOD);
+	private static final String FILTER_NAME = PROCESS_METHOD + "(" + FILTER_EXTENSION + ")";
+	private static final String FILE_NAME = PROCESS_METHOD + FILTER_EXTENSION;
 
 	@Execute
 	public void execute(@Named(IServiceConstants.ACTIVE_SHELL) Shell shell, IEclipseContext eclipseContext) {
 
-		DataCategoryGroup dataCategoryGroup = DataTypeTypeSelectionWizard.open(shell, "Please choose the desired categories to create a new method.", Activator.getDefault().getPreferenceStore());
+		DataCategoryGroup dataCategoryGroup = DataTypeTypeSelectionWizard.open(shell, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CHOOSE_DESIRED_CATEGORIES_TO_CREATE_NEW_METHOD), Activator.getDefault().getPreferenceStore());
 		if(dataCategoryGroup != null) {
 			FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
 			fileDialog.setOverwrite(true);
-			fileDialog.setText("Process Method");
+			fileDialog.setText(PROCESS_METHOD);
 			fileDialog.setFilterExtensions(new String[]{FILTER_EXTENSION});
 			fileDialog.setFilterNames(new String[]{FILTER_NAME});
 			fileDialog.setFileName(FILE_NAME);

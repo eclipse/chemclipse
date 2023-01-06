@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,29 +13,32 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.provider;
 
 import java.text.DecimalFormat;
 
-import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.support.ScanSupport;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.graphics.Image;
 
 public class ScanInfoLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String LABEL_EMPTY = "EMPTY";
-	public static final String LABEL_SIM = "SIM";
-	public static final String LABEL_SCAN = "SCAN";
+	public static final String LABEL_EMPTY = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.EMPTY_CAPS);
+	public static final String LABEL_SIM = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SIM);
+	public static final String LABEL_SCAN = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SCAN_CAPS);
 	public static final String LABEL_DOTS = "...";
 	public static final String LABEL_BLANK = "--";
 	//
-	public static final String SCAN = "Scan#";
-	public static final String RETENTION_TIME = "Time [min]";
-	public static final String COUNT_IONS = "Count Ions";
-	public static final String CLASSIFICATION = "SIM/SCAN";
+	public static final String SCAN = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SCAN_HASH);
+	public static final String RETENTION_TIME = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.TIME_MIN);
+	public static final String COUNT_IONS = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.COUNT_IONS);
+	public static final String CLASSIFICATION = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SIM_SCAN);
 	public static final String IONS = "m/z...";
 	//
 	private IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
@@ -77,15 +80,14 @@ public class ScanInfoLabelProvider extends AbstractChemClipseLabelProvider {
 
 		DecimalFormat decimalFormat = getDecimalFormat();
 		String text = "";
-		if(element instanceof IScanMSD) {
-			IScanMSD scanMSD = (IScanMSD)element;
+		if(element instanceof IScanMSD scanMSD) {
 			int numberOfIons = scanMSD.getNumberOfIons();
 			switch(columnIndex) {
 				case 0:
 					text = Integer.toString(scanMSD.getScanNumber());
 					break;
 				case 1:
-					text = decimalFormat.format(scanMSD.getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+					text = decimalFormat.format(scanMSD.getRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 					break;
 				case 2:
 					text = Integer.toString(numberOfIons);
@@ -111,8 +113,9 @@ public class ScanInfoLabelProvider extends AbstractChemClipseLabelProvider {
 		return text;
 	}
 
+	@Override
 	public Image getImage(Object element) {
 
-		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_MASS_SPECTRUM, IApplicationImage.SIZE_16x16);
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_MASS_SPECTRUM, IApplicationImageProvider.SIZE_16x16);
 	}
 }

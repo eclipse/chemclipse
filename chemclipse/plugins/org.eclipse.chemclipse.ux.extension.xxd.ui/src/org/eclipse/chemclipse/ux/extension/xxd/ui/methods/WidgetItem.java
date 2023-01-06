@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -25,6 +25,8 @@ import org.eclipse.chemclipse.support.text.ILabel;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.ui.provider.AdapterLabelProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.fieldassist.ControlDecoration;
@@ -131,11 +133,10 @@ public class WidgetItem {
 			/*
 			 * Text
 			 */
-			if(control instanceof Text) {
+			if(control instanceof Text text) {
 				/*
 				 * Text
 				 */
-				Text text = (Text)control;
 				String textValue = text.getText().trim();
 				//
 				if(rawType == long.class || rawType == Long.class) {
@@ -161,11 +162,10 @@ public class WidgetItem {
 				} else {
 					return textValue;
 				}
-			} else if(control instanceof Button) {
+			} else if(control instanceof Button button) {
 				/*
 				 * Checkbox
 				 */
-				Button button = (Button)control;
 				return button.getSelection();
 			} else if(control instanceof Combo) {
 				/*
@@ -182,8 +182,7 @@ public class WidgetItem {
 				 * Specific controls
 				 */
 				for(Object object : Activator.getDefault().getAnnotationWidgetServices()) {
-					if(object instanceof IAnnotationWidgetService) {
-						IAnnotationWidgetService annotationWidgetService = (IAnnotationWidgetService)object;
+					if(object instanceof IAnnotationWidgetService annotationWidgetService) {
 						Class<?> supportedClass = annotationWidgetService.getSupportedClass();
 						if(supportedClass.equals(rawType)) {
 							return annotationWidgetService.getValue(currentSelection);
@@ -265,8 +264,7 @@ public class WidgetItem {
 
 		Class<?> rawType = inputValue.getRawType();
 		for(Object object : Activator.getDefault().getAnnotationWidgetServices()) {
-			if(object instanceof IAnnotationWidgetService) {
-				IAnnotationWidgetService annotationWidgetService = (IAnnotationWidgetService)object;
+			if(object instanceof IAnnotationWidgetService annotationWidgetService) {
 				Class<?> supportedClass = annotationWidgetService.getSupportedClass();
 				if(supportedClass.equals(rawType)) {
 					return annotationWidgetService.createWidget(parent, inputValue.getDescription(), currentSelection);
@@ -296,8 +294,8 @@ public class WidgetItem {
 		combo.setLayoutData(gridData);
 		comboViewer.setInput(comboSupplier.items());
 		//
-		if(currentSelection instanceof String) {
-			Object currentValue = comboSupplier.fromString((String)currentSelection);
+		if(currentSelection instanceof String stringSelection) {
+			Object currentValue = comboSupplier.fromString(stringSelection);
 			if(currentValue != null) {
 				comboViewer.setSelection(new StructuredSelection(currentValue));
 			} else {
@@ -332,7 +330,7 @@ public class WidgetItem {
 		label.setForeground(parent.getDisplay().getSystemColor(SWT.COLOR_DARK_GRAY));
 		String value = getValueAsString();
 		if(value == null || value.isEmpty()) {
-			label.setText("Please choose a location ...");
+			label.setText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CHOOSE_LOCATION));
 		} else {
 			label.setText(value);
 		}
@@ -439,8 +437,8 @@ public class WidgetItem {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof ILabel) {
-					return ((ILabel)element).label();
+				if(element instanceof ILabel label) {
+					return label.label();
 				}
 				return element.toString();
 			}
@@ -469,12 +467,12 @@ public class WidgetItem {
 
 	private boolean getValueAsBoolean() {
 
-		if(currentSelection instanceof Boolean) {
-			return ((Boolean)currentSelection).booleanValue();
+		if(currentSelection instanceof Boolean booleanSelection) {
+			return booleanSelection.booleanValue();
 		}
 		//
-		if(currentSelection instanceof String) {
-			return Boolean.valueOf((String)currentSelection);
+		if(currentSelection instanceof String stringSelection) {
+			return Boolean.valueOf(stringSelection);
 		}
 		//
 		return false;
@@ -486,8 +484,8 @@ public class WidgetItem {
 			return "";
 		}
 		//
-		if(currentSelection instanceof String) {
-			return (String)currentSelection;
+		if(currentSelection instanceof String stringSelection) {
+			return stringSelection;
 		} else {
 			return currentSelection.toString();
 		}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -57,8 +57,8 @@ public class MeasurementResultsPart extends AbstractPart<ExtendedMeasurementResu
 			public void selectionChanged(SelectionChangedEvent event) {
 
 				ISelection selection = event.getSelection();
-				if(selection instanceof IStructuredSelection) {
-					Object element = ((IStructuredSelection)selection).getFirstElement();
+				if(selection instanceof IStructuredSelection structuredSelection) {
+					Object element = structuredSelection.getFirstElement();
 					if(element instanceof IMeasurementResult<?>) {
 						measurementResultNotification.select((IMeasurementResult<?>)element);
 					} else {
@@ -82,8 +82,7 @@ public class MeasurementResultsPart extends AbstractPart<ExtendedMeasurementResu
 		if(objects.size() == 1) {
 			Object object = objects.get(0);
 			if(isUpdateEvent(topic)) {
-				if(object instanceof IChromatogramSelection<?, ?>) {
-					IChromatogramSelection<?, ?> selection = (IChromatogramSelection<?, ?>)object;
+				if(object instanceof IChromatogramSelection<?, ?> selection) {
 					IChromatogram<?> chromatogram = selection.getChromatogram();
 					results = new ArrayList<>(chromatogram.getMeasurementResults());
 					infoLabel = ChromatogramDataSupport.getChromatogramLabel(chromatogram);

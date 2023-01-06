@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -44,7 +44,7 @@ public class WellDataEditingSupport extends EditingSupport {
 	@Override
 	protected boolean canEdit(Object element) {
 
-		if(column == WellDataLabelProvider.VALUE) {
+		if(column.equals(WellDataLabelProvider.VALUE)) {
 			return tableViewer.isEditEnabled();
 		} else {
 			return false;
@@ -57,9 +57,8 @@ public class WellDataEditingSupport extends EditingSupport {
 
 		if(element instanceof Map.Entry) {
 			Map.Entry<String, String> entry = (Map.Entry<String, String>)element;
-			switch(column) {
-				case WellDataLabelProvider.VALUE:
-					return entry.getValue();
+			if(column.equals(WellDataLabelProvider.VALUE)) {
+				return entry.getValue();
 			}
 		}
 		return false;
@@ -73,10 +72,8 @@ public class WellDataEditingSupport extends EditingSupport {
 			IWell well = tableViewer.getWell();
 			if(well != null) {
 				Map.Entry<String, String> entry = (Map.Entry<String, String>)element;
-				switch(column) {
-					case WellDataLabelProvider.VALUE:
-						well.putData(entry.getKey(), (String)value);
-						break;
+				if(column.equals(WellDataLabelProvider.VALUE)) {
+					well.putData(entry.getKey(), (String)value);
 				}
 				tableViewer.refresh();
 			}

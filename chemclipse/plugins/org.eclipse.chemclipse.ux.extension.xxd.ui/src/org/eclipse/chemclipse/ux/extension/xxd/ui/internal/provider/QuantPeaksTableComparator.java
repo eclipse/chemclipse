@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,9 +25,7 @@ public class QuantPeaksTableComparator extends AbstractRecordTableComparator imp
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof IQuantitationPeak && e2 instanceof IQuantitationPeak) {
-			IQuantitationPeak entry1 = (IQuantitationPeak)e1;
-			IQuantitationPeak entry2 = (IQuantitationPeak)e2;
+		if(e1 instanceof IQuantitationPeak entry1 && e2 instanceof IQuantitationPeak entry2) {
 			//
 			switch(getPropertyIndex()) {
 				case 0:

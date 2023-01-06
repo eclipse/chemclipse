@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,19 +15,22 @@ import java.text.DecimalFormat;
 import java.util.Map;
 
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
-import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
 public class RetentionIndexLabelProvider extends LabelProvider implements ITableLabelProvider {
 
-	public static final String RETENTION_TIME = "Retention Time (Minutes)";
-	public static final String RETENTION_INDEX = "Retention Index";
+	public static final String RETENTION_TIME = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RETENTION_TIME_MINUTES);
+	public static final String RETENTION_INDEX = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RETENTION_INDEX);
 	public static final String NAME = "Name";
 	//
 	public static final String[] TITLES = { //
@@ -66,11 +69,10 @@ public class RetentionIndexLabelProvider extends LabelProvider implements ITable
 			element = entry.getValue();
 		}
 		//
-		if(element instanceof IRetentionIndexEntry) {
-			IRetentionIndexEntry retentionIndexEntry = (IRetentionIndexEntry)element;
+		if(element instanceof IRetentionIndexEntry retentionIndexEntry) {
 			switch(columnIndex) {
 				case 0:
-					text = decimalFormat.format(retentionIndexEntry.getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+					text = decimalFormat.format(retentionIndexEntry.getRetentionTime() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 					break;
 				case 1:
 					if(PreferenceSupplier.showRetentionIndexWithoutDecimals()) {
@@ -89,8 +91,9 @@ public class RetentionIndexLabelProvider extends LabelProvider implements ITable
 		return text;
 	}
 
+	@Override
 	public Image getImage(Object element) {
 
-		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAK, IApplicationImage.SIZE_16x16);
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PEAK, IApplicationImageProvider.SIZE_16x16);
 	}
 }

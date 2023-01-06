@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,7 +25,6 @@ import org.eclipse.swt.widgets.Shell;
 public class InternalStandardDialog extends Dialog {
 
 	private IPeak peak;
-	private ExtendedInternalStandardsUI extendedInternalStandardsUI;
 
 	public InternalStandardDialog(Shell shell, IPeak peak) {
 
@@ -52,7 +51,7 @@ public class InternalStandardDialog extends Dialog {
 		Composite composite = (Composite)super.createDialogArea(parent);
 		composite.setLayout(new GridLayout(1, true));
 		//
-		extendedInternalStandardsUI = createExtendedInternalStandardsUI(composite);
+		ExtendedInternalStandardsUI extendedInternalStandardsUI = createExtendedInternalStandardsUI(composite);
 		extendedInternalStandardsUI.update(peak);
 		//
 		return composite;

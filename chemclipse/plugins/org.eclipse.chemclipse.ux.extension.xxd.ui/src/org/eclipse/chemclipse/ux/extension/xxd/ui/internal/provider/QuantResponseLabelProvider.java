@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2022 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -18,13 +18,15 @@ import org.eclipse.chemclipse.model.quantitation.IResponseSignal;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.swt.graphics.Image;
 
 public class QuantResponseLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String SIGNAL = "Signal";
-	public static final String CONCENTRATION = "Concentration";
-	public static final String RESPONSE = "Response";
+	public static final String SIGNAL = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SIGNAL);
+	public static final String CONCENTRATION = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CONCENTRATION);
+	public static final String RESPONSE = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RESPONSE);
 	//
 	public static final String[] TITLES = { //
 			SIGNAL, //
@@ -43,9 +45,8 @@ public class QuantResponseLabelProvider extends AbstractChemClipseLabelProvider 
 
 		if(columnIndex == 0) {
 			return getImage(element);
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	@Override
@@ -53,8 +54,7 @@ public class QuantResponseLabelProvider extends AbstractChemClipseLabelProvider 
 
 		DecimalFormat decimalFormat = getDecimalFormat();
 		String text = "";
-		if(element instanceof IResponseSignal) {
-			IResponseSignal responseSignal = (IResponseSignal)element;
+		if(element instanceof IResponseSignal responseSignal) {
 			//
 			switch(columnIndex) {
 				case 0:
@@ -73,6 +73,7 @@ public class QuantResponseLabelProvider extends AbstractChemClipseLabelProvider 
 		return text;
 	}
 
+	@Override
 	public Image getImage(Object element) {
 
 		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_QUANTIFY_SELECTED_PEAK, IApplicationImage.SIZE_16x16);

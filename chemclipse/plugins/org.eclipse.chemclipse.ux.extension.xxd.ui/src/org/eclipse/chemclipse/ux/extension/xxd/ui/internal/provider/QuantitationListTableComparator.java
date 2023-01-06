@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -23,9 +23,7 @@ public class QuantitationListTableComparator extends AbstractRecordTableComparat
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof IQuantitationEntry && e2 instanceof IQuantitationEntry) {
-			IQuantitationEntry quantitationEntry1 = (IQuantitationEntry)e1;
-			IQuantitationEntry quantitationEntry2 = (IQuantitationEntry)e2;
+		if(e1 instanceof IQuantitationEntry quantitationEntry1 && e2 instanceof IQuantitationEntry quantitationEntry2) {
 			switch(getPropertyIndex()) {
 				case 0:
 					sortOrder = quantitationEntry2.getName().compareTo(quantitationEntry1.getName());
@@ -49,7 +47,7 @@ public class QuantitationListTableComparator extends AbstractRecordTableComparat
 					sortOrder = quantitationEntry2.getCalibrationMethod().compareTo(quantitationEntry1.getCalibrationMethod());
 					break;
 				case 7:
-					sortOrder = Boolean.valueOf(quantitationEntry2.getUsedCrossZero()).compareTo(quantitationEntry1.getUsedCrossZero());
+					sortOrder = Boolean.compare(quantitationEntry2.getUsedCrossZero(), quantitationEntry1.getUsedCrossZero());
 					break;
 				case 8:
 					sortOrder = quantitationEntry2.getQuantitationFlag().compareTo(quantitationEntry1.getQuantitationFlag());

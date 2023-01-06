@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,6 +24,7 @@ public class ScanSignalListFilter extends ViewerFilter {
 	private boolean caseSensitive;
 
 	public ScanSignalListFilter() {
+
 	}
 
 	public void setSearchText(String searchText, boolean caseSensitive) {
@@ -48,8 +49,7 @@ public class ScanSignalListFilter extends ViewerFilter {
 			searchText = searchText.toLowerCase();
 		}
 		//
-		if(element instanceof IIon) {
-			IIon ion = (IIon)element;
+		if(element instanceof IIon ion) {
 			IIonTransition ionTransition = ion.getIonTransition();
 			if(ionTransition != null) {
 				if(Double.toString(ionTransition.getQ3Ion()).contains(searchText)) {
@@ -60,13 +60,11 @@ public class ScanSignalListFilter extends ViewerFilter {
 			} else if(Double.toString(ion.getIon()).contains(searchText)) {
 				return true;
 			}
-		} else if(element instanceof IScanCSD) {
-			IScanCSD scanCSD = (IScanCSD)element;
+		} else if(element instanceof IScanCSD scanCSD) {
 			if(Float.toString(scanCSD.getTotalSignal()).contains(searchText)) {
 				return true;
 			}
-		} else if(element instanceof IScanSignalWSD) {
-			IScanSignalWSD scanSignalWSD = (IScanSignalWSD)element;
+		} else if(element instanceof IScanSignalWSD scanSignalWSD) {
 			if(Double.toString(scanSignalWSD.getWavelength()).contains(searchText)) {
 				return true;
 			}

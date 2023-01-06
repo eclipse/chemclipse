@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,6 +28,7 @@ public class NamedTracesEditingSupport extends EditingSupport {
 	private TraceValidator traceValidator = new TraceValidator();
 
 	public NamedTracesEditingSupport(ExtendedTableViewer tableViewer, String column) {
+
 		super(tableViewer);
 		this.column = column;
 		this.cellEditor = new TextCellEditor(tableViewer.getTable());
@@ -51,9 +52,8 @@ public class NamedTracesEditingSupport extends EditingSupport {
 
 		if(element instanceof NamedTrace) {
 			NamedTrace namedTrace = (NamedTrace)element;
-			switch(column) {
-				case NamedTracesLabelProvider.TRACES:
-					return namedTrace.getTraces();
+			if(column.equals(NamedTracesLabelProvider.TRACES)) {
+				return namedTrace.getTraces();
 			}
 		}
 		return false;
@@ -64,13 +64,11 @@ public class NamedTracesEditingSupport extends EditingSupport {
 
 		if(element instanceof NamedTrace) {
 			NamedTrace namedTrace = (NamedTrace)element;
-			switch(column) {
-				case NamedTracesLabelProvider.TRACES:
-					IStatus status = traceValidator.validate(value);
-					if(status.isOK()) {
-						namedTrace.setTraces(traceValidator.getTracesAsString());
-					}
-					break;
+			if(column.equals(NamedTracesLabelProvider.TRACES)) {
+				IStatus status = traceValidator.validate(value);
+				if(status.isOK()) {
+					namedTrace.setTraces(traceValidator.getTracesAsString());
+				}
 			}
 			tableViewer.refresh();
 		}

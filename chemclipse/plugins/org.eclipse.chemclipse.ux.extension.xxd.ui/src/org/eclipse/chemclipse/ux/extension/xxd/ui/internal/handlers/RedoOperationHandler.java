@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,6 +19,8 @@ import org.eclipse.chemclipse.progress.core.InfoType;
 import org.eclipse.chemclipse.progress.core.StatusLineLogger;
 import org.eclipse.chemclipse.rcp.app.undo.UndoContextFactory;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.IOperationHistory;
 import org.eclipse.core.commands.operations.IUndoContext;
@@ -62,10 +64,10 @@ public class RedoOperationHandler {
 					operationHistory.redo(undoContext, null, null);
 				} catch(ExecutionException e) {
 					logger.warn(e);
-					StatusLineLogger.setInfo(InfoType.ERROR_MESSAGE, "Redo operation failed");
+					StatusLineLogger.setInfo(InfoType.ERROR_MESSAGE, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.REDO_OPERATION_FAILED));
 				} finally {
 					shell.setCursor(cursor);
-					StatusLineLogger.setInfo(InfoType.MESSAGE, "Redo operation finished");
+					StatusLineLogger.setInfo(InfoType.MESSAGE, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.REDO_OPERATION_FINISHED));
 				}
 			}
 		});

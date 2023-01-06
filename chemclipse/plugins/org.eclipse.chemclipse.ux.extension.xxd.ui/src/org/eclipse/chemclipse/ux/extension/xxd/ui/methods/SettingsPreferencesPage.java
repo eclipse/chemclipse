@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,6 +17,8 @@ import java.io.IOException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences;
 import org.eclipse.chemclipse.processing.supplier.IProcessorPreferences.DialogBehavior;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -77,7 +79,7 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 		return isDontAskAgain;
 	}
 
-	public String getSettingsEdited() throws IOException {
+	public String getSettingsEdited() {
 
 		return jsonSettings;
 	}
@@ -112,10 +114,10 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 	private Button createButtonDefault(Composite parent) {
 
 		Button button = new Button(parent, SWT.RADIO);
-		button.setText("Use System Options");
+		button.setText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.USE_SYSTEM_OPTIONS));
 		if(preferences.requiresUserSettings()) {
 			button.setEnabled(false);
-			button.setToolTipText("This processor does not offer system options or they are not applicable at the moment.");
+			button.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.NO_SYSTEM_OPTIONS_AVAILABLE));
 		}
 		//
 		return button;
@@ -136,7 +138,7 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 	private Button createButtonUser(Composite parent) {
 
 		Button button = new Button(parent, SWT.RADIO);
-		button.setText("Use Specific Options");
+		button.setText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.USE_SPECIFIC_OPTIONS));
 		//
 		return button;
 	}
@@ -148,8 +150,8 @@ public class SettingsPreferencesPage<T> extends WizardPage {
 		try {
 			settingsUI = new SettingsUI<>(parent, preferences, showProfileToolbar);
 			settingsUI.setLayoutData(new GridData(GridData.FILL_BOTH));
-		} catch(IOException e1) {
-			throw new RuntimeException("Reading the settings failed.", e1);
+		} catch(IOException e) {
+			throw new RuntimeException("Reading the settings failed.", e);
 		}
 		//
 		return settingsUI;

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -42,8 +42,8 @@ public class QuantResponseListPart extends AbstractPart<ExtendedQuantResponseLis
 
 		if(objects.size() == 1) {
 			Object object = objects.get(0);
-			if(object instanceof IQuantitationCompound) {
-				getControl().update((IQuantitationCompound)object);
+			if(object instanceof IQuantitationCompound quantitationCompound) {
+				getControl().update(quantitationCompound);
 				return true;
 			} else {
 				getControl().update(null);

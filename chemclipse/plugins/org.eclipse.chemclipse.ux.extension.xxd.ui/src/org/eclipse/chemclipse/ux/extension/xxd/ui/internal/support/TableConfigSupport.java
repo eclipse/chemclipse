@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -29,10 +29,12 @@ public class TableConfigSupport implements TableConfig {
 	private Supplier<Collection<? extends ViewerColumn>> columns;
 
 	public TableConfigSupport(Collection<? extends ViewerColumn> columns) {
+
 		this((Supplier<Collection<? extends ViewerColumn>>)() -> columns);
 	}
 
 	public TableConfigSupport(Supplier<Collection<? extends ViewerColumn>> columns) {
+
 		this.columns = columns;
 	}
 
@@ -53,21 +55,19 @@ public class TableConfigSupport implements TableConfig {
 
 		Object oldWidth = item.getData("OLD_WIDTH");
 		Object oldResizable = item.getData("OLD_RESIZABLE");
-		if(item instanceof TreeColumn) {
-			TreeColumn column = (TreeColumn)item;
-			if(oldWidth instanceof Number) {
-				column.setWidth(((Number)oldWidth).intValue());
+		if(item instanceof TreeColumn column) {
+			if(oldWidth instanceof Number oldWidthNumber) {
+				column.setWidth(oldWidthNumber.intValue());
 			}
-			if(oldResizable instanceof Boolean) {
-				column.setResizable(((Boolean)oldResizable).booleanValue());
+			if(oldResizable instanceof Boolean oldResizableBoolean) {
+				column.setResizable(oldResizableBoolean.booleanValue());
 			}
-		} else if(item instanceof TableColumn) {
-			TableColumn column = (TableColumn)item;
-			if(oldWidth instanceof Number) {
-				column.setWidth(((Number)oldWidth).intValue());
+		} else if(item instanceof TableColumn column) {
+			if(oldWidth instanceof Number oldWidthNumber) {
+				column.setWidth(oldWidthNumber.intValue());
 			}
-			if(oldResizable instanceof Boolean) {
-				column.setResizable(((Boolean)oldResizable).booleanValue());
+			if(oldResizable instanceof Boolean oldResizableBoolean) {
+				column.setResizable(oldResizableBoolean.booleanValue());
 			}
 		}
 	}
@@ -87,14 +87,12 @@ public class TableConfigSupport implements TableConfig {
 
 	private void hideItem(Item item) {
 
-		if(item instanceof TreeColumn) {
-			TreeColumn column = (TreeColumn)item;
+		if(item instanceof TreeColumn column) {
 			item.setData("OLD_WIDTH", column.getWidth());
 			item.setData("OLD_RESIZABLE", column.getResizable());
 			column.setWidth(0);
 			column.setResizable(false);
-		} else if(item instanceof TableColumn) {
-			TableColumn column = (TableColumn)item;
+		} else if(item instanceof TableColumn column) {
 			item.setData("OLD_WIDTH", column.getWidth());
 			item.setData("OLD_RESIZABLE", column.getResizable());
 			column.setWidth(0);
@@ -104,10 +102,10 @@ public class TableConfigSupport implements TableConfig {
 
 	private Item getItem(ViewerColumn column) {
 
-		if(column instanceof TreeViewerColumn) {
-			return ((TreeViewerColumn)column).getColumn();
-		} else if(column instanceof TableViewerColumn) {
-			return ((TableViewerColumn)column).getColumn();
+		if(column instanceof TreeViewerColumn treeViewerColumn) {
+			return treeViewerColumn.getColumn();
+		} else if(column instanceof TableViewerColumn tableViewerColumn) {
+			return tableViewerColumn.getColumn();
 		}
 		return null;
 	}
@@ -118,10 +116,10 @@ public class TableConfigSupport implements TableConfig {
 		for(ViewerColumn column : columns.get()) {
 			Item item = getItem(column);
 			if(item != null && item.getText().equals(columnName)) {
-				if(item instanceof TreeColumn) {
-					return ((TreeColumn)item).getWidth();
-				} else if(item instanceof TableColumn) {
-					return ((TableColumn)item).getWidth();
+				if(item instanceof TreeColumn treeColumn) {
+					return treeColumn.getWidth();
+				} else if(item instanceof TableColumn tableColumn) {
+					return tableColumn.getWidth();
 				}
 			}
 		}
@@ -134,11 +132,11 @@ public class TableConfigSupport implements TableConfig {
 		for(ViewerColumn column : columns.get()) {
 			Item item = getItem(column);
 			if(item != null && item.getText().equals(columnName)) {
-				if(item instanceof TreeColumn) {
-					((TreeColumn)item).setWidth(width);
+				if(item instanceof TreeColumn treeColumn) {
+					treeColumn.setWidth(width);
 					return;
-				} else if(item instanceof TableColumn) {
-					((TableColumn)item).setWidth(width);
+				} else if(item instanceof TableColumn tableColumn) {
+					tableColumn.setWidth(width);
 					return;
 				}
 			}

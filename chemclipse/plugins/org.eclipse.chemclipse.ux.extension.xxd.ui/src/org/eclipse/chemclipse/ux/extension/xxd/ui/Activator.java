@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2022 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -35,6 +35,7 @@ import org.osgi.util.tracker.ServiceTracker;
 public class Activator extends AbstractActivatorUI {
 
 	private static Activator plugin;
+	private static BundleContext context;
 	//
 	private ScopedPreferenceStore preferenceStoreSubtract;
 	private DataUpdateSupport dataUpdateSupport;
@@ -52,6 +53,7 @@ public class Activator extends AbstractActivatorUI {
 	public void start(BundleContext context) throws Exception {
 
 		super.start(context);
+		Activator.context = context;
 		plugin = this;
 		initializePreferenceStoreSubtract(PreferenceSupplier.INSTANCE());
 		startServices(context);
@@ -74,6 +76,7 @@ public class Activator extends AbstractActivatorUI {
 
 		plugin = null;
 		dataUpdateSupport = null;
+		Activator.context = null;
 		stopServices(context);
 		super.stop(context);
 	}
@@ -86,6 +89,11 @@ public class Activator extends AbstractActivatorUI {
 	public static Activator getDefault() {
 
 		return plugin;
+	}
+
+	public static BundleContext getContext() {
+
+		return context;
 	}
 
 	public ScopedPreferenceStore getPreferenceStoreSubtract() {

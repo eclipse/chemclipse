@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,13 +16,16 @@ import java.text.DecimalFormat;
 
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.swt.graphics.Image;
 
 public class SequenceFilesLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String NAME = "Name";
-	public static final String SIZE = "Size (KB)";
+	public static final String NAME = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.NAME);
+	public static final String SIZE = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SIZE_KB);
 	//
 	public static String[] TITLES = {//
 			NAME, //
@@ -48,8 +51,7 @@ public class SequenceFilesLabelProvider extends AbstractChemClipseLabelProvider 
 
 		DecimalFormat decimalFormat = getDecimalFormat();
 		String text = "";
-		if(element instanceof File) {
-			File file = (File)element;
+		if(element instanceof File file) {
 			//
 			switch(columnIndex) {
 				case 0:
@@ -66,6 +68,6 @@ public class SequenceFilesLabelProvider extends AbstractChemClipseLabelProvider 
 	@Override
 	public Image getImage(Object element) {
 
-		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEQUENCE_LIST, IApplicationImage.SIZE_16x16);
+		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SEQUENCE_LIST, IApplicationImageProvider.SIZE_16x16);
 	}
 }

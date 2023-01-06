@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,21 +18,23 @@ import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.swt.graphics.Image;
 
 public class QuantitationListLabelProvider extends AbstractChemClipseLabelProvider {
 
 	public static final String[] TITLES = { //
-			"Name", //
-			"Chemical Class", //
-			"Concentration", //
-			"Concentration Unit", //
-			"Area", //
-			"Trace", //
-			"Calibration Method", //
-			"Cross Zero", //
-			"Flag", //
-			"Description" //
+			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.NAME), //
+			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CHEMICAL_CLASS), //
+			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CONCENTRATION), //
+			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CONCENTRATION_UNIT), //
+			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.AREA), //
+			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.TRACE), //
+			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CALIBRATION_METHOD), //
+			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CROSS_ZERO), //
+			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.FLAG), //
+			ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.DESCRIPTION) //
 	};
 	public static final int[] BOUNDS = { //
 			100, //
@@ -52,9 +54,8 @@ public class QuantitationListLabelProvider extends AbstractChemClipseLabelProvid
 
 		if(columnIndex == 0) {
 			return getImage(element);
-		} else {
-			return null;
 		}
+		return null;
 	}
 
 	@Override
@@ -62,8 +63,7 @@ public class QuantitationListLabelProvider extends AbstractChemClipseLabelProvid
 
 		DecimalFormat decimalFormat = getDecimalFormat();
 		String text = "";
-		if(element instanceof IQuantitationEntry) {
-			IQuantitationEntry quantitationEntry = (IQuantitationEntry)element;
+		if(element instanceof IQuantitationEntry quantitationEntry) {
 			switch(columnIndex) {
 				case 0:
 					text = quantitationEntry.getName();
@@ -102,6 +102,7 @@ public class QuantitationListLabelProvider extends AbstractChemClipseLabelProvid
 		return text;
 	}
 
+	@Override
 	public Image getImage(Object element) {
 
 		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_QUANTITATION_RESULTS, IApplicationImage.SIZE_16x16);

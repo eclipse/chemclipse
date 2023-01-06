@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -34,6 +34,7 @@ public class QuantCompoundEditingSupport extends EditingSupport {
 	};
 
 	public QuantCompoundEditingSupport(QuantCompoundListUI tableViewer, String column) {
+
 		super(tableViewer);
 		this.column = column;
 		this.tableViewer = tableViewer;
@@ -57,37 +58,47 @@ public class QuantCompoundEditingSupport extends EditingSupport {
 
 		if(element instanceof IQuantitationCompound) {
 			IQuantitationCompound compound = (IQuantitationCompound)element;
-			switch(column) {
-				case QuantCompoundLabelProvider.NAME:
-					return compound.getName();
-				case QuantCompoundLabelProvider.CHEMICAL_CLASS:
-					return compound.getChemicalClass();
-				case QuantCompoundLabelProvider.CONCENTRATION_UNIT:
-					return compound.getConcentrationUnit();
-				case QuantCompoundLabelProvider.CALIBRATION_METHOD:
-					String item = compound.getCalibrationMethod().toString();
-					for(int i = 0; i < calibrationMethods.length; i++) {
-						if(calibrationMethods[i].equals(item)) {
-							return i;
-						}
+			if(column.equals(QuantCompoundLabelProvider.NAME)) {
+				return compound.getName();
+			}
+			if(column.equals(QuantCompoundLabelProvider.CHEMICAL_CLASS)) {
+				return compound.getChemicalClass();
+			}
+			if(column.equals(QuantCompoundLabelProvider.CONCENTRATION_UNIT)) {
+				return compound.getConcentrationUnit();
+			}
+			if(column.equals(QuantCompoundLabelProvider.CALIBRATION_METHOD)) {
+				String item = compound.getCalibrationMethod().toString();
+				for(int i = 0; i < calibrationMethods.length; i++) {
+					if(calibrationMethods[i].equals(item)) {
+						return i;
 					}
-					return 0;
-				case QuantCompoundLabelProvider.CROSS_ZERO:
-					return compound.isCrossZero();
-				case QuantCompoundLabelProvider.USE_TIC:
-					return compound.isUseTIC();
-				case QuantCompoundLabelProvider.RETENTION_TIME:
-					return Double.toString(compound.getRetentionTimeWindow().getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
-				case QuantCompoundLabelProvider.RETENTION_TIME_LOWER:
-					return Double.toString(compound.getRetentionTimeWindow().getAllowedNegativeDeviation() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
-				case QuantCompoundLabelProvider.RETENTION_TIME_UPPER:
-					return Double.toString(compound.getRetentionTimeWindow().getAllowedPositiveDeviation() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
-				case QuantCompoundLabelProvider.RETENTION_INDEX:
-					return Float.toString(compound.getRetentionIndexWindow().getRetentionIndex());
-				case QuantCompoundLabelProvider.RETENTION_INDEX_LOWER:
-					return Float.toString(compound.getRetentionIndexWindow().getAllowedNegativeDeviation());
-				case QuantCompoundLabelProvider.RETENTION_INDEX_UPPER:
-					return Float.toString(compound.getRetentionIndexWindow().getAllowedPositiveDeviation());
+				}
+				return 0;
+			}
+			if(column.equals(QuantCompoundLabelProvider.CROSS_ZERO)) {
+				return compound.isCrossZero();
+			}
+			if(column.equals(QuantCompoundLabelProvider.USE_TIC)) {
+				return compound.isUseTIC();
+			}
+			if(column.equals(QuantCompoundLabelProvider.RETENTION_TIME)) {
+				return Double.toString(compound.getRetentionTimeWindow().getRetentionTime() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+			}
+			if(column.equals(QuantCompoundLabelProvider.RETENTION_TIME_LOWER)) {
+				return Double.toString(compound.getRetentionTimeWindow().getAllowedNegativeDeviation() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+			}
+			if(column.equals(QuantCompoundLabelProvider.RETENTION_TIME_UPPER)) {
+				return Double.toString(compound.getRetentionTimeWindow().getAllowedPositiveDeviation() / AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+			}
+			if(column.equals(QuantCompoundLabelProvider.RETENTION_INDEX)) {
+				return Float.toString(compound.getRetentionIndexWindow().getRetentionIndex());
+			}
+			if(column.equals(QuantCompoundLabelProvider.RETENTION_INDEX_LOWER)) {
+				return Float.toString(compound.getRetentionIndexWindow().getAllowedNegativeDeviation());
+			}
+			if(column.equals(QuantCompoundLabelProvider.RETENTION_INDEX_UPPER)) {
+				return Float.toString(compound.getRetentionIndexWindow().getAllowedPositiveDeviation());
 			}
 		}
 		return false;
@@ -98,68 +109,66 @@ public class QuantCompoundEditingSupport extends EditingSupport {
 
 		if(element instanceof IQuantitationCompound) {
 			IQuantitationCompound compound = (IQuantitationCompound)element;
-			switch(column) {
-				case QuantCompoundLabelProvider.NAME:
-					String name = (String)value;
-					if(!tableViewer.containsName(name)) {
-						compound.setName(name);
-					}
-					break;
-				case QuantCompoundLabelProvider.CHEMICAL_CLASS:
-					compound.setChemicalClass((String)value);
-					break;
-				case QuantCompoundLabelProvider.CONCENTRATION_UNIT:
-					compound.setConcentrationUnit((String)value);
-					break;
-				case QuantCompoundLabelProvider.CALIBRATION_METHOD:
-					String calibrationMethod = calibrationMethods[(int)value];
-					compound.setCalibrationMethod(CalibrationMethod.valueOf(calibrationMethod));
-					break;
-				case QuantCompoundLabelProvider.CROSS_ZERO:
-					compound.setUseCrossZero((boolean)value);
-					break;
-				case QuantCompoundLabelProvider.USE_TIC:
-					compound.setUseTIC((boolean)value);
-					break;
-				case QuantCompoundLabelProvider.RETENTION_TIME:
-					double retentionTime = getValue(value, 0.0d);
-					if(retentionTime >= 0) {
-						compound.getRetentionTimeWindow().setRetentionTime((int)(retentionTime * AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
-					}
-					break;
-				case QuantCompoundLabelProvider.RETENTION_TIME_LOWER:
-					double allowedNegativeDeviationRT = getValue(value, 0.0d);
-					if(allowedNegativeDeviationRT >= 0) {
-						compound.getRetentionTimeWindow().setAllowedNegativeDeviation((int)(allowedNegativeDeviationRT * AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
-					}
-					break;
-				case QuantCompoundLabelProvider.RETENTION_TIME_UPPER:
-					double allowedPositiveDeviationRT = getValue(value, 0.0d);
-					if(allowedPositiveDeviationRT >= 0) {
-						compound.getRetentionTimeWindow().setAllowedPositiveDeviation((int)(allowedPositiveDeviationRT * AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
-					}
-					break;
-				case QuantCompoundLabelProvider.RETENTION_INDEX:
-					float retentionIndex = getValue(value, 0.0f);
-					if(retentionIndex >= 0) {
-						compound.getRetentionIndexWindow().setRetentionIndex(retentionIndex);
-					}
-					break;
-				case QuantCompoundLabelProvider.RETENTION_INDEX_LOWER:
-					float allowedNegativeDeviationRI = getValue(value, 0.0f);
-					if(allowedNegativeDeviationRI >= 0) {
-						compound.getRetentionIndexWindow().setAllowedNegativeDeviation(allowedNegativeDeviationRI);
-					}
-					break;
-				case QuantCompoundLabelProvider.RETENTION_INDEX_UPPER:
-					float allowedPositiveDeviationRI = getValue(value, 0.0f);
-					if(allowedPositiveDeviationRI >= 0) {
-						compound.getRetentionIndexWindow().setAllowedPositiveDeviation(allowedPositiveDeviationRI);
-					}
-					break;
+			if(column.equals(QuantCompoundLabelProvider.NAME)) {
+				String name = (String)value;
+				if(!tableViewer.containsName(name)) {
+					compound.setName(name);
+				}
 			}
-			tableViewer.refresh();
+			if(column.equals(QuantCompoundLabelProvider.CHEMICAL_CLASS)) {
+				compound.setChemicalClass((String)value);
+			}
+			if(column.equals(QuantCompoundLabelProvider.CONCENTRATION_UNIT)) {
+				compound.setConcentrationUnit((String)value);
+			}
+			if(column.equals(QuantCompoundLabelProvider.CALIBRATION_METHOD)) {
+				String calibrationMethod = calibrationMethods[(int)value];
+				compound.setCalibrationMethod(CalibrationMethod.valueOf(calibrationMethod));
+			}
+			if(column.equals(QuantCompoundLabelProvider.CROSS_ZERO)) {
+				compound.setUseCrossZero((boolean)value);
+			}
+			if(column.equals(QuantCompoundLabelProvider.USE_TIC)) {
+				compound.setUseTIC((boolean)value);
+			}
+			if(column.equals(QuantCompoundLabelProvider.RETENTION_TIME)) {
+				double retentionTime = getValue(value, 0.0d);
+				if(retentionTime >= 0) {
+					compound.getRetentionTimeWindow().setRetentionTime((int)(retentionTime * AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
+				}
+			}
+			if(column.equals(QuantCompoundLabelProvider.RETENTION_TIME_LOWER)) {
+				double allowedNegativeDeviationRT = getValue(value, 0.0d);
+				if(allowedNegativeDeviationRT >= 0) {
+					compound.getRetentionTimeWindow().setAllowedNegativeDeviation((int)(allowedNegativeDeviationRT * AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
+				}
+			}
+			if(column.equals(QuantCompoundLabelProvider.RETENTION_TIME_UPPER)) {
+				double allowedPositiveDeviationRT = getValue(value, 0.0d);
+				if(allowedPositiveDeviationRT >= 0) {
+					compound.getRetentionTimeWindow().setAllowedPositiveDeviation((int)(allowedPositiveDeviationRT * AbstractChromatogram.MINUTE_CORRELATION_FACTOR));
+				}
+			}
+			if(column.equals(QuantCompoundLabelProvider.RETENTION_INDEX)) {
+				float retentionIndex = getValue(value, 0.0f);
+				if(retentionIndex >= 0) {
+					compound.getRetentionIndexWindow().setRetentionIndex(retentionIndex);
+				}
+			}
+			if(column.equals(QuantCompoundLabelProvider.RETENTION_INDEX_LOWER)) {
+				float allowedNegativeDeviationRI = getValue(value, 0.0f);
+				if(allowedNegativeDeviationRI >= 0) {
+					compound.getRetentionIndexWindow().setAllowedNegativeDeviation(allowedNegativeDeviationRI);
+				}
+			}
+			if(column.equals(QuantCompoundLabelProvider.RETENTION_INDEX_UPPER)) {
+				float allowedPositiveDeviationRI = getValue(value, 0.0f);
+				if(allowedPositiveDeviationRI >= 0) {
+					compound.getRetentionIndexWindow().setAllowedPositiveDeviation(allowedPositiveDeviationRI);
+				}
+			}
 		}
+		tableViewer.refresh();
 	}
 
 	private float getValue(Object value, float def) {
@@ -190,23 +199,19 @@ public class QuantCompoundEditingSupport extends EditingSupport {
 
 	private void setCellEditor(String column) {
 
-		switch(column) {
-			case QuantCompoundLabelProvider.CROSS_ZERO:
-			case QuantCompoundLabelProvider.USE_TIC:
-				this.cellEditor = new CheckboxCellEditor(tableViewer.getTable());
-				break;
-			case QuantCompoundLabelProvider.CALIBRATION_METHOD:
-				this.cellEditor = new ComboBoxCellEditor(tableViewer.getTable(), //
-						new String[]{ //
-								CalibrationMethod.LINEAR.toString(), //
-								CalibrationMethod.QUADRATIC.toString(), //
-								CalibrationMethod.AVERAGE.toString() //
-						}, //
-						SWT.READ_ONLY);
-				break;
-			default:
-				this.cellEditor = new TextCellEditor(tableViewer.getTable());
-				break;
+		if(column.equals(QuantCompoundLabelProvider.CROSS_ZERO) || column.equals(QuantCompoundLabelProvider.USE_TIC)) {
+			this.cellEditor = new CheckboxCellEditor(tableViewer.getTable());
+		}
+		if(column.equals(QuantCompoundLabelProvider.CALIBRATION_METHOD)) {
+			this.cellEditor = new ComboBoxCellEditor(tableViewer.getTable(), //
+					new String[]{ //
+							CalibrationMethod.LINEAR.toString(), //
+							CalibrationMethod.QUADRATIC.toString(), //
+							CalibrationMethod.AVERAGE.toString() //
+					}, //
+					SWT.READ_ONLY);
+		} else {
+			this.cellEditor = new TextCellEditor(tableViewer.getTable());
 		}
 	}
 }

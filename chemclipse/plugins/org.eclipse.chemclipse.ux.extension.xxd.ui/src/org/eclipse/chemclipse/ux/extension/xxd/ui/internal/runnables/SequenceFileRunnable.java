@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -25,6 +25,8 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.ux.extension.ui.provider.ISupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
@@ -52,7 +54,7 @@ public class SequenceFileRunnable implements IRunnableWithProgress {
 	public void run(final IProgressMonitor monitor) throws InvocationTargetException, InterruptedException {
 
 		try (Stream<Path> xFiles = Files.list(Paths.get(file.toString()))) {
-			SubMonitor subMonitor = SubMonitor.convert(monitor, "Import Sequences", 2);
+			SubMonitor subMonitor = SubMonitor.convert(monitor, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.IMPORT_SEQUENCES), 2);
 			try {
 				subMonitor.worked(1);
 				files = getSequenceFiles(file, new ArrayList<>(), subMonitor.split((int)xFiles.count()));

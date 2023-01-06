@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -234,11 +234,9 @@ public class DataUpdateSupport {
 			 */
 			if(properties != null) {
 				Object object = event.getProperty(IChemClipseEvents.EVENT_BROKER_DATA);
-				if(object instanceof List) {
-					List elements = (List)object;
+				if(object instanceof List elements) {
 					for(Object element : elements) {
-						if(element instanceof String) {
-							String topicToBeCleared = (String)element;
+						if(element instanceof String topicToBeCleared) {
 							logger.info("Clear mapped objects of topic: " + topicToBeCleared);
 							objectMap.remove(topicToBeCleared);
 						}

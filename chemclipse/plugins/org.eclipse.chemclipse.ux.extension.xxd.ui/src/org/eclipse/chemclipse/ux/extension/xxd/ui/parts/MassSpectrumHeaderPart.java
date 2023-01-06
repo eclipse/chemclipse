@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2022 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -43,8 +43,8 @@ public class MassSpectrumHeaderPart extends AbstractPart<ExtendedMassSpectrumHea
 
 		if(objects.size() == 1) {
 			Object object = objects.get(0);
-			if(object instanceof IVendorMassSpectrum) {
-				getControl().updateMassSpectrum((IVendorMassSpectrum)object);
+			if(object instanceof IVendorMassSpectrum vendorMassSpectrum) {
+				getControl().updateMassSpectrum(vendorMassSpectrum);
 				return true;
 			} else {
 				getControl().updateMassSpectrum(null);

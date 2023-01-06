@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,6 +16,8 @@ import java.util.List;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.LabelFieldEditor;
 import org.eclipse.chemclipse.support.ui.preferences.fieldeditors.SpacerFieldEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.toolbar.GroupHandler;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.toolbar.IGroupHandler;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.toolbar.IPartHandler;
@@ -33,23 +35,24 @@ public abstract class AbstractPreferencePageTask extends FieldEditorPreferencePa
 		super(GRID);
 		this.groupHandler = groupHandler;
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setTitle(groupHandler != null ? groupHandler.getName() : "n.a.");
+		setTitle(groupHandler != null ? groupHandler.getName() : ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.NA));
 		setDescription("");
 	}
 
+	@Override
 	public void createFieldEditors() {
 
 		if(groupHandler != null) {
-			addField(new LabelFieldEditor("Mandatory", getFieldEditorParent()));
+			addField(new LabelFieldEditor(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.MANDATORY), getFieldEditorParent()));
 			List<IPartHandler> partHandlersMandatory = groupHandler.getPartHandlerMandatory();
 			for(IPartHandler partHandler : partHandlersMandatory) {
 				addField(new ComboFieldEditor(partHandler.getPartStackReference().getStackPositionKey(), partHandler.getName() + ":", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 			}
 			//
 			List<IPartHandler> partHandlersAdditional = groupHandler.getPartHandlerAdditional();
-			if(partHandlersAdditional.size() > 0) {
+			if(!partHandlersAdditional.isEmpty()) {
 				addField(new SpacerFieldEditor(getFieldEditorParent()));
-				addField(new LabelFieldEditor("Additional", getFieldEditorParent()));
+				addField(new LabelFieldEditor(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.ADDITIONAL), getFieldEditorParent()));
 				for(IPartHandler partHandler : partHandlersAdditional) {
 					addField(new ComboFieldEditor(partHandler.getPartStackReference().getStackPositionKey(), partHandler.getName() + ":", PreferenceConstants.PART_STACKS, getFieldEditorParent()));
 				}
@@ -57,6 +60,7 @@ public abstract class AbstractPreferencePageTask extends FieldEditorPreferencePa
 		}
 	}
 
+	@Override
 	public void init(IWorkbench workbench) {
 
 	}

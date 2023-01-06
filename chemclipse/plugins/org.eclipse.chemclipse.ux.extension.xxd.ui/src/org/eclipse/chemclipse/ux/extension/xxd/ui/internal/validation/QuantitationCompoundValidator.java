@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,9 +11,11 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation;
 
-import org.eclipse.chemclipse.model.core.AbstractChromatogram;
+import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationCompound;
 import org.eclipse.chemclipse.support.util.ValueParserSupport;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.chemclipse.xxd.model.quantitation.QuantitationCompound;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
@@ -24,7 +26,7 @@ public class QuantitationCompoundValidator extends ValueParserSupport implements
 	public static final String DEMO = "Styrene | mg/kg | 5.68";
 	//
 	private static final String DELIMITER = "|";
-	private static final String ERROR_TARGET = "Please enter a compound, e.g.: " + DEMO;
+	private static final String ERROR_TARGET = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.ENTER_COMPOUND_EXAMPLE) + ": " + DEMO;
 	//
 	private String name;
 	private String concentrationUnit;
@@ -37,8 +39,8 @@ public class QuantitationCompoundValidator extends ValueParserSupport implements
 		if(value == null) {
 			message = ERROR_TARGET;
 		} else {
-			if(value instanceof String) {
-				String text = ((String)value).trim();
+			if(value instanceof String text) {
+				text = text.trim();
 				if("".equals(text.trim())) {
 					message = ERROR_TARGET;
 				} else {
@@ -46,7 +48,7 @@ public class QuantitationCompoundValidator extends ValueParserSupport implements
 					//
 					name = parseString(values, 0);
 					concentrationUnit = parseString(values, 1);
-					retentionTime = (int)(parseDouble(values, 2, 0.0d) * AbstractChromatogram.MINUTE_CORRELATION_FACTOR);
+					retentionTime = (int)(parseDouble(values, 2, 0.0d) * IChromatogramOverview.MINUTE_CORRELATION_FACTOR);
 				}
 			} else {
 				message = ERROR_TARGET;

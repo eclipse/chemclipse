@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,10 +13,8 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation;
 
 import org.eclipse.jface.dialogs.IInputValidator;
 
-// TODO Is this class used?
 public class QuantInputValidator implements IInputValidator {
 
-	@SuppressWarnings("unused")
 	private String[] items = new String[]{};
 
 	public QuantInputValidator(String[] list) {

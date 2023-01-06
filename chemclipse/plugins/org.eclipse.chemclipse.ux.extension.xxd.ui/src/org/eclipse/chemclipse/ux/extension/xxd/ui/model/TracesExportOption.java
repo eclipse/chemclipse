@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,11 +12,13 @@
 package org.eclipse.chemclipse.ux.extension.xxd.ui.model;
 
 import org.eclipse.chemclipse.support.text.ILabel;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 
 public enum TracesExportOption implements ILabel {
 
-	SIMPLE_TEXT("Text"), //
-	NAMED_TRACE("Named Trace"); //
+	SIMPLE_TEXT(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.TEXT)), //
+	NAMED_TRACE(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.NAMED_TRACE)); //
 
 	private String label = "";
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,9 +23,7 @@ public class SequenceFilesTableComparator extends AbstractRecordTableComparator 
 	public int compare(Viewer viewer, Object e1, Object e2) {
 
 		int sortOrder = 0;
-		if(e1 instanceof File && e2 instanceof File) {
-			File file1 = (File)e1;
-			File file2 = (File)e2;
+		if(e1 instanceof File file1 && e2 instanceof File file2) {
 			//
 			switch(getPropertyIndex()) {
 				case 0:

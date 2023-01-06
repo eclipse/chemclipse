@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -46,8 +46,8 @@ public class PlateChartsPart extends AbstractPart<ExtendedPlateChartsUI> {
 				return false;
 			} else {
 				Object object = objects.get(0);
-				if(object instanceof IPlate) {
-					getControl().update((IPlate)object);
+				if(object instanceof IPlate plate) {
+					getControl().update(plate);
 					return true;
 				} else {
 					getControl().update(null);

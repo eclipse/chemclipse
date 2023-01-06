@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -46,8 +46,7 @@ public class TargetTemplateEditingSupport extends EditingSupport {
 	@Override
 	protected Object getValue(Object element) {
 
-		if(element instanceof TargetTemplate) {
-			TargetTemplate targetTemplate = (TargetTemplate)element;
+		if(element instanceof TargetTemplate targetTemplate) {
 			switch(column) {
 				// case TargetTemplateLabelProvider.NAME:
 				// return targetTemplate.getName();
@@ -67,8 +66,7 @@ public class TargetTemplateEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 
-		if(element instanceof TargetTemplate) {
-			TargetTemplate targetTemplate = (TargetTemplate)element;
+		if(element instanceof TargetTemplate targetTemplate) {
 			switch(column) {
 				// case TargetTemplateLabelProvider.NAME:
 				// targetTemplate.setName((String)value);

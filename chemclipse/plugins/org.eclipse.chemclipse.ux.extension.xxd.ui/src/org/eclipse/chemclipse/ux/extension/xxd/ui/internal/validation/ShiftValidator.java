@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,13 +11,15 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation;
 
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 
 public class ShiftValidator implements IValidator<Object> {
 
-	private static final String ERROR = "Please enter a valid number.";
+	private static final String ERROR = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.ENTER_VALID_NUMBER);
 	private double shift = 0.0d;
 
 	@Override
@@ -27,9 +29,9 @@ public class ShiftValidator implements IValidator<Object> {
 		boolean parseError = true;
 		//
 		if(value != null) {
-			if(value instanceof String) {
+			if(value instanceof String text) {
 				try {
-					shift = Double.parseDouble(((String)value).trim());
+					shift = Double.parseDouble(text.trim());
 					parseError = false;
 				} catch(NumberFormatException e) {
 					// Don't catch it here.

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -37,6 +37,7 @@ import org.eclipse.chemclipse.progress.core.InfoType;
 import org.eclipse.chemclipse.progress.core.StatusLineLogger;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
 import org.eclipse.chemclipse.support.settings.UserManagement;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
@@ -44,6 +45,8 @@ import org.eclipse.chemclipse.support.ui.provider.ListContentProvider;
 import org.eclipse.chemclipse.swt.ui.components.IMethodListener;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.PreferencesConfig;
 import org.eclipse.chemclipse.xxd.process.ui.preferences.PreferencePageChromatogramExport;
@@ -98,9 +101,9 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 	public IPreferencePage[] getPreferencePages() {
 
 		IPreferencePage preferencePageReportExport = new PreferencePageReportExport();
-		preferencePageReportExport.setTitle("Report Export");
+		preferencePageReportExport.setTitle(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.REPORT_EXPORT));
 		IPreferencePage preferencePageChromatogramExport = new PreferencePageChromatogramExport();
-		preferencePageChromatogramExport.setTitle("Chromatogram Export");
+		preferencePageChromatogramExport.setTitle(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CHROMATOGRAM_EXPORT));
 		//
 		return new IPreferencePage[]{preferencePageReportExport, preferencePageChromatogramExport};
 	}
@@ -142,8 +145,8 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof IProcessMethod) {
-					return ((IProcessMethod)element).getName();
+				if(element instanceof IProcessMethod processMethod) {
+					return processMethod.getName();
 				}
 				return null;
 			}
@@ -159,8 +162,8 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof IProcessMethod) {
-					PreferenceSupplier.setSelectedMethodName(((IProcessMethod)object).getName());
+				if(object instanceof IProcessMethod processMethod) {
+					PreferenceSupplier.setSelectedMethodName(processMethod.getName());
 				}
 				enableWidgets();
 			}
@@ -174,7 +177,7 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Creates and adds a new method.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_METHOD_ADD, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_METHOD_ADD, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -187,7 +190,7 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 				} else if(selectMethodDirectory(shell)) {
 					createNewMethod(shell, true);
 				} else {
-					MessageDialog.openError(shell, "Method Editor", "Please select a directory via the settings where your methods are located.");
+					MessageDialog.openError(shell, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.METHOD_EDITOR), ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SELECT_METHODS_DIRECTORY));
 				}
 			}
 		});
@@ -199,8 +202,8 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Edit the selected method.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_METHOD_EDIT, IApplicationImage.SIZE_16x16));
+		button.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.EDIT_SELECTED_METHOD));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_METHOD_EDIT, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -209,7 +212,7 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 				Object object = comboViewerMethods.getStructuredSelection().getFirstElement();
 				File file = getProcessMethodFile(object);
 				if(file != null) {
-					logger.info("Edit Method: " + file.getAbsolutePath());
+					logger.info(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.EDIT_METHOD) + ": " + file.getAbsolutePath());
 					openProcessMethodEditor(file);
 				}
 			}
@@ -223,21 +226,20 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
 		button.setToolTipText("Copy the selected method.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_METHOD_COPY, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_METHOD_COPY, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				Object objectSource = comboViewerMethods.getStructuredSelection().getFirstElement();
-				if(objectSource instanceof IProcessMethod) {
+				if(objectSource instanceof IProcessMethod processMethod) {
 					/*
 					 * Container
 					 */
-					IProcessMethod processMethod = (IProcessMethod)objectSource;
-					if(processMethod instanceof ListProcessEntryContainer) {
-						if(((ListProcessEntryContainer)processMethod).isReadOnly()) {
-							MessageDialog.openInformation(e.display.getActiveShell(), "Copy Method", "You can't copy this method because it is a method container.");
+					if(processMethod instanceof ListProcessEntryContainer processEntryContainer) {
+						if(processEntryContainer.isReadOnly()) {
+							MessageDialog.openInformation(e.display.getActiveShell(), ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.COPY_METHOD), ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CANT_COPY_METHOD_CONTAINER));
 							return;
 						}
 					}
@@ -246,7 +248,7 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 					 */
 					File fileSource = getProcessMethodFile(objectSource);
 					if(fileSource != null && fileSource.exists()) {
-						if(MessageDialog.openQuestion(e.display.getActiveShell(), "Copy Method", "Do you want to copy the method: " + fileSource.getName() + "?")) {
+						if(MessageDialog.openQuestion(e.display.getActiveShell(), ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.COPY_METHOD), ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SHALL_COPY_METHOD, fileSource.getName()))) {
 							/*
 							 * Process Method (Source)
 							 */
@@ -260,11 +262,10 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 								if(fileSink != null && fileSink.exists()) {
 									try (InputStream inputStreamSink = new FileInputStream(fileSink)) {
 										IProcessingInfo<IProcessMethod> processingInfoSink = MethodConverter.load(inputStreamSink, fileSource.getAbsolutePath(), null);
-										if(processingInfoSink.getProcessingResult() instanceof ProcessMethod) {
+										if(processingInfoSink.getProcessingResult() instanceof ProcessMethod processMethodSink) {
 											/*
 											 * Copy the entries.
 											 */
-											ProcessMethod processMethodSink = (ProcessMethod)processingInfoSink.getProcessingResult();
 											for(IProcessEntry processEntry : processMethodSource) {
 												processMethodSink.addProcessEntry(processEntry);
 											}
@@ -292,7 +293,7 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 						return;
 					}
 					//
-					MessageDialog.openInformation(e.display.getActiveShell(), "Copy Method", "Can't determine the file for copying, maybe it was already deleted or you don't have sufficient rights?");
+					MessageDialog.openInformation(e.display.getActiveShell(), ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.COPY_METHOD), ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CANT_COPY_METHOD_FILESYSTEM));
 				}
 			}
 		});
@@ -304,32 +305,31 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Delete the selected method.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_METHOD_DELETE, IApplicationImage.SIZE_16x16));
+		button.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.DELETE_SELECTED_METHOD));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_METHOD_DELETE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewerMethods.getStructuredSelection().getFirstElement();
-				if(object instanceof IProcessMethod) {
-					IProcessMethod processMethod = (IProcessMethod)object;
-					if(processMethod instanceof ListProcessEntryContainer) {
-						if(((ListProcessEntryContainer)processMethod).isReadOnly()) {
-							MessageDialog.openInformation(e.display.getActiveShell(), "Delete Method", "You can't delete this method because it is read only");
+				if(object instanceof IProcessMethod processMethod) {
+					if(processMethod instanceof ListProcessEntryContainer listProcessEntryContainer) {
+						if(listProcessEntryContainer.isReadOnly()) {
+							MessageDialog.openInformation(e.display.getActiveShell(), ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.DELETE_METHOD), ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CANT_DELETE_METHOD_READONLY));
 							return;
 						}
 					}
 					File file = getProcessMethodFile(object);
 					if(file != null && file.exists()) {
-						if(MessageDialog.openQuestion(e.display.getActiveShell(), "Delete Method", "Do you want to delete the method: " + file.getName() + "?")) {
+						if(MessageDialog.openQuestion(e.display.getActiveShell(), ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.DELETE_METHOD), ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SHALL_DELETE_METHOD, file.getName()))) {
 							file.delete();
 							PreferenceSupplier.setSelectedMethodName("");
 							computeMethodComboItems();
 						}
 						return;
 					}
-					MessageDialog.openInformation(e.display.getActiveShell(), "Delete Method", "Can't determine the file for deletion, maybe it was already deleted or you don't have sufficient rights?");
+					MessageDialog.openInformation(e.display.getActiveShell(), ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.DELETE_METHOD), ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CANT_DELETE_METHOD_FILESYSTEM));
 				}
 			}
 		});
@@ -341,16 +341,16 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Apply the method to the selected chromatogram(s).");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
+		button.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.APPLY_METHOD_SELECTED_CHROMATOGRAM));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewerMethods.getStructuredSelection().getFirstElement();
-				if(object instanceof IProcessMethod) {
-					runMethod((IProcessMethod)object, e.display.getActiveShell());
+				if(object instanceof IProcessMethod processMethod) {
+					runMethod(processMethod, e.display.getActiveShell());
 					UpdateNotifierUI.update(e.display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "The process method has been applied.");
 				}
 			}
@@ -363,8 +363,8 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 
 		Button button = new Button(parent, SWT.PUSH);
 		button.setText("");
-		button.setToolTipText("Select the method directory.");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_FOLDER_OPENED, IApplicationImage.SIZE_16x16));
+		button.setToolTipText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SELECT_METHOD_DIRECTORY));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_FOLDER_OPENED, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -381,7 +381,7 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 	private boolean selectMethodDirectory(Shell shell) {
 
 		DirectoryDialog directoryDialog = new DirectoryDialog(shell);
-		directoryDialog.setText("Method Directory");
+		directoryDialog.setText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.METHOD_DIRECTORY));
 		directoryDialog.setFilterPath(MethodConverter.getUserMethodDirectory().getAbsolutePath());
 		//
 		String directoryPath = directoryDialog.open();
@@ -397,7 +397,7 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 
 		FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
 		fileDialog.setOverwrite(true);
-		fileDialog.setText("Process Method");
+		fileDialog.setText(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESS_METHOD));
 		fileDialog.setFileName(MethodConverter.DEFAULT_METHOD_FILE_NAME);
 		fileDialog.setFilterExtensions(MethodConverter.DEFAULT_METHOD_FILE_EXTENSIONS);
 		fileDialog.setFilterNames(MethodConverter.DEFAULT_METHOD_FILE_NAMES);
@@ -412,7 +412,7 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 			file = new File(filePath);
 			ProcessMethod processMethod = new ProcessMethod(ProcessMethod.CHROMATOGRAPHY);
 			processMethod.setOperator(UserManagement.getCurrentUser());
-			processMethod.setDescription("Process Method");
+			processMethod.setDescription(ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESS_METHOD));
 			//
 			IProcessingInfo<?> processingInfo = MethodConverter.convert(file, processMethod, MethodConverter.DEFAULT_METHOD_CONVERTER_ID, new NullProgressMonitor());
 			if(!processingInfo.hasErrorMessages()) {
@@ -494,13 +494,13 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 			} catch(InvocationTargetException e) {
 				IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
 				processingInfo.addErrorMessage(processMethod.getName(), "Execution failed", e.getCause());
-				StatusLineLogger.setInfo(InfoType.ERROR_MESSAGE, "Failed to execute process method. See Feedback for details.");
+				StatusLineLogger.setInfo(InfoType.ERROR_MESSAGE, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESS_METHOD_FAILED_SEE_FEEDBACK));
 				ProcessingInfoPartSupport.getInstance().update(processingInfo);
 			} catch(InterruptedException e) {
 				Thread.currentThread().interrupt();
 			} catch(MethodCancelException e) {
 				IProcessingInfo<?> processingInfo = new ProcessingInfo<>();
-				processingInfo.addWarnMessage(processMethod.getName(), "The process method execution has been cancelled.");
+				processingInfo.addWarnMessage(processMethod.getName(), ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.PROCESS_METHOD_EXECUTION_CANCELED));
 				ProcessingInfoPartSupport.getInstance().update(processingInfo);
 			}
 		}
@@ -527,8 +527,8 @@ public class MethodSupportUI extends Composite implements PreferencesConfig {
 
 	private File getProcessMethodFile(Object object) {
 
-		if(object instanceof ProcessMethod) {
-			return ((ProcessMethod)object).getSourceFile();
+		if(object instanceof ProcessMethod processMethod) {
+			return processMethod.getSourceFile();
 		}
 		return null;
 	}

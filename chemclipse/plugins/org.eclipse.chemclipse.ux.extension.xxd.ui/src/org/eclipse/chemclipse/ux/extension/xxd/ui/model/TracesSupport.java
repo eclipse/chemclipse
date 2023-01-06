@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,6 +19,8 @@ import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.support.ScanSupport;
 import org.eclipse.chemclipse.support.comparator.SortOrder;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.wsd.model.core.IScanWSD;
 import org.eclipse.chemclipse.wsd.model.core.support.WavelengthSupport;
@@ -39,19 +41,17 @@ public class TracesSupport {
 		boolean sortTraces = isSortTraces();
 		IScan scanInstance = null;
 		//
-		if(scan instanceof IScanMSD) {
-			IScanMSD scanMSD = (IScanMSD)scan;
+		if(scan instanceof IScanMSD scanMSD) {
 			traces = ScanSupport.extractTracesText(scanMSD, maxCopyTraces, sortTraces);
 			scanInstance = scanMSD;
-		} else if(scan instanceof IScanWSD) {
-			IScanWSD scanWSD = (IScanWSD)scan;
+		} else if(scan instanceof IScanWSD scanWSD) {
 			traces = WavelengthSupport.extractTracesText(scanWSD, maxCopyTraces, sortTraces);
 			scanInstance = scanWSD;
 		}
 		/*
 		 * Copy to clipboard
 		 */
-		if(traces != null && scanInstance != null) {
+		if(traces != null) {
 			TracesExportOption tracesExportOption = TracesSupport.getTracesExportOption();
 			switch(tracesExportOption) {
 				case NAMED_TRACE:
@@ -63,7 +63,7 @@ public class TracesSupport {
 					if(libraryInformation != null) {
 						traces = libraryInformation.getName() + " | " + traces;
 					} else {
-						traces = "Unknown | " + traces;
+						traces = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.UNKNOWN) + " | " + traces;
 					}
 					break;
 				default:

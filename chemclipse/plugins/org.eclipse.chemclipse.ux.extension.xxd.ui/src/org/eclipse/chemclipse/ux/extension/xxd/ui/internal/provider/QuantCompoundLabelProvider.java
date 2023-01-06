@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,22 +20,24 @@ import org.eclipse.chemclipse.model.quantitation.IRetentionTimeWindow;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.ui.provider.AbstractChemClipseLabelProvider;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.swt.graphics.Image;
 
 public class QuantCompoundLabelProvider extends AbstractChemClipseLabelProvider {
 
-	public static final String NAME = "Name";
-	public static final String CHEMICAL_CLASS = "Chemical Class";
-	public static final String CONCENTRATION_UNIT = "Concentration Unit";
-	public static final String CALIBRATION_METHOD = "Calibration Method";
-	public static final String CROSS_ZERO = "Cross Zero";
-	public static final String USE_TIC = "Use TIC";
-	public static final String RETENTION_TIME = "Retention Time (RT)";
-	public static final String RETENTION_TIME_LOWER = "RT (-)";
-	public static final String RETENTION_TIME_UPPER = "RT (+)";
-	public static final String RETENTION_INDEX = "Retention Index (RI)";
-	public static final String RETENTION_INDEX_LOWER = "RI (-)";
-	public static final String RETENTION_INDEX_UPPER = "RI (+)";
+	public static final String NAME = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.NAME);
+	public static final String CHEMICAL_CLASS = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CHEMICAL_CLASS);
+	public static final String CONCENTRATION_UNIT = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CONCENTRATION_UNIT);
+	public static final String CALIBRATION_METHOD = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CALIBRATION_METHOD);
+	public static final String CROSS_ZERO = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CROSS_ZERO);
+	public static final String USE_TIC = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.USE_TIC);
+	public static final String RETENTION_TIME = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RETENTION_TIME);
+	public static final String RETENTION_TIME_LOWER = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RETENTION_TIME_LOWER);
+	public static final String RETENTION_TIME_UPPER = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RETENTION_TIME_UPPER);
+	public static final String RETENTION_INDEX = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RETENTION_INDEX);
+	public static final String RETENTION_INDEX_LOWER = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RETENTION_INDEX_LOWER);
+	public static final String RETENTION_INDEX_UPPER = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RETENTION_INDEX_UPPER);
 	//
 	public static final String[] TITLES = {//
 			NAME, //
@@ -72,7 +74,8 @@ public class QuantCompoundLabelProvider extends AbstractChemClipseLabelProvider 
 
 		if(columnIndex == 0) {
 			return getImage(element);
-		} else if(columnIndex == 4) {
+		}
+		if(columnIndex == 4) {
 			if(element instanceof IQuantitationCompound) {
 				IQuantitationCompound quantitationCompound = (IQuantitationCompound)element;
 				String fileName = (quantitationCompound.isCrossZero()) ? IApplicationImage.IMAGE_SELECTED : IApplicationImage.IMAGE_DESELECTED;
@@ -143,6 +146,7 @@ public class QuantCompoundLabelProvider extends AbstractChemClipseLabelProvider 
 		return text;
 	}
 
+	@Override
 	public Image getImage(Object element) {
 
 		return ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_QUANTIFY_SELECTED_PEAK, IApplicationImage.SIZE_16x16);

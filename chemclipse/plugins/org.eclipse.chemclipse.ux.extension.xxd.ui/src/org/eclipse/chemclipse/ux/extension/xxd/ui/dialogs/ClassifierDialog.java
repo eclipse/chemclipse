@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -68,9 +68,9 @@ public final class ClassifierDialog extends Dialog implements ColumnDefinitionPr
 	public IContentProposal[] getProposals(String contents, int position) {
 
 		if(proposals == null) {
-			if(classifiable instanceof IChromatogramPeak) {
+			if(classifiable instanceof IChromatogramPeak chromatogramPeak) {
 				Set<String> treeSetClassifier = new TreeSet<>();
-				IChromatogram<?> chromatogram = ((IChromatogramPeak)classifiable).getChromatogram();
+				IChromatogram<?> chromatogram = chromatogramPeak.getChromatogram();
 				for(IPeak peak : chromatogram.getPeaks()) {
 					treeSetClassifier.addAll(peak.getClassifier());
 				}
@@ -111,7 +111,7 @@ public final class ClassifierDialog extends Dialog implements ColumnDefinitionPr
 
 	private ListEdit<String> createListEdit(Composite parent) {
 
-		ListEdit<String> listEdit = new ListEdit<>(parent, this, new ListEditModel<String>() {
+		return new ListEdit<>(parent, this, new ListEditModel<String>() {
 
 			@Override
 			public Collection<? extends String> list() {
@@ -141,7 +141,5 @@ public final class ClassifierDialog extends Dialog implements ColumnDefinitionPr
 				return null;
 			}
 		});
-		//
-		return listEdit;
 	}
 }

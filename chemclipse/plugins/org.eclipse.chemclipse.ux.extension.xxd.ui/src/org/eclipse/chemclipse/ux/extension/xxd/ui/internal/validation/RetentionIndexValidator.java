@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,14 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation;
 
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 
 public class RetentionIndexValidator implements IValidator<Object> {
 
-	private static final String ERROR = "Please enter a correct retention index, e.g. 600";
-	private static final String ERROR_VALUE_RANGE = "The retention index must be not <= 0.";
+	private static final String ERROR = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.ENTER_CORRECT_RETENTION_INDEX_EXAMPLE) + " 600";
+	private static final String ERROR_VALUE_RANGE = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RETENTION_INDEX_MUST_NOT_BE_NEGATIVE);
 	//
 	private float retentionIndex = 0.0f;
 
@@ -31,9 +33,9 @@ public class RetentionIndexValidator implements IValidator<Object> {
 		if(value == null) {
 			message = ERROR;
 		} else {
-			if(value instanceof String) {
+			if(value instanceof String text) {
 				try {
-					float retentionIndex = Float.parseFloat(((String)value).trim());
+					float retentionIndex = Float.parseFloat(text.trim());
 					if(retentionIndex <= 0.0d) {
 						message = ERROR_VALUE_RANGE;
 					} else {

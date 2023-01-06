@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,6 +26,7 @@ public class HeaderDataEditingSupport extends EditingSupport {
 	private String column;
 
 	public HeaderDataEditingSupport(HeaderDataListUI tableViewer, String column) {
+
 		super(tableViewer);
 		this.column = column;
 		if(column.equals(HeaderDataLabelProvider.VALUE)) {
@@ -56,9 +57,8 @@ public class HeaderDataEditingSupport extends EditingSupport {
 
 		if(element instanceof Map.Entry) {
 			Map.Entry<String, String> entry = (Map.Entry<String, String>)element;
-			switch(column) {
-				case HeaderDataLabelProvider.VALUE:
-					return entry.getValue();
+			if(column.equals(HeaderDataLabelProvider.VALUE)) {
+				return entry.getValue();
 			}
 		}
 		return false;
@@ -72,10 +72,9 @@ public class HeaderDataEditingSupport extends EditingSupport {
 			IMeasurementInfo measurementInfo = tableViewer.getMeasurementInfo();
 			if(measurementInfo != null) {
 				Map.Entry<String, String> entry = (Map.Entry<String, String>)element;
-				switch(column) {
-					case HeaderDataLabelProvider.VALUE:
-						measurementInfo.putHeaderData(entry.getKey(), (String)value);
-						break;
+				if(column.equals(HeaderDataLabelProvider.VALUE)) {
+					measurementInfo.putHeaderData(entry.getKey(), (String)value);
+					return;
 				}
 				tableViewer.refresh();
 			}

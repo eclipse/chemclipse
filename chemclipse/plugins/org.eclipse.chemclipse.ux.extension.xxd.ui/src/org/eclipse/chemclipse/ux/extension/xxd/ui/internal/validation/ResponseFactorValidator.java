@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,14 +11,16 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation;
 
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.core.databinding.validation.IValidator;
 import org.eclipse.core.databinding.validation.ValidationStatus;
 import org.eclipse.core.runtime.IStatus;
 
 public class ResponseFactorValidator implements IValidator<Object> {
 
-	private static final String ERROR = "Please enter a correct response factor.";
-	private static final String ERROR_VALUE_RANGE = "The response factor must be not <= 0.";
+	private static final String ERROR = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.ENTER_CORRECT_RESPONSE_FACTOR);
+	private static final String ERROR_VALUE_RANGE = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.RESPONSE_FACTOR_MUST_NOT_BE_NEGATIVE);
 	//
 	private double responseFactor = 0.0d;
 
@@ -31,8 +33,8 @@ public class ResponseFactorValidator implements IValidator<Object> {
 		if(value == null) {
 			message = ERROR;
 		} else {
-			if(value instanceof String) {
-				String text = ((String)value).trim();
+			if(value instanceof String text) {
+				text = text.trim();
 				try {
 					double responseFactor = Double.parseDouble(text);
 					if(responseFactor <= 0.0d) {
