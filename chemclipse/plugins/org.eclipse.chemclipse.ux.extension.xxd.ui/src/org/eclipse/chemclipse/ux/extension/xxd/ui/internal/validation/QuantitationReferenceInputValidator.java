@@ -13,11 +13,11 @@ package org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation;
 
 import org.eclipse.jface.dialogs.IInputValidator;
 
-public class QuantInputValidator implements IInputValidator {
+public class QuantitationReferenceInputValidator implements IInputValidator {
 
 	private String[] items = new String[]{};
 
-	public QuantInputValidator(String[] list) {
+	public QuantitationReferenceInputValidator(String[] list) {
 
 		if(list != null) {
 			items = list;
@@ -29,7 +29,15 @@ public class QuantInputValidator implements IInputValidator {
 	@Override
 	public String isValid(String target) {
 
-		// TODO
+		if(target == null || target.isEmpty()) {
+			return "The quantitation reference must be not empty.";
+		}
+		//
+		for(String item : items) {
+			if(item.equals(target)) {
+				return "The quantitation reference exists already.";
+			}
+		}
 		return null;
 	}
 }

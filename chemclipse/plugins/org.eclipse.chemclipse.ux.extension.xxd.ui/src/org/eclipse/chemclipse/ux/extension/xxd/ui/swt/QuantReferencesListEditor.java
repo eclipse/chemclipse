@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2020 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -15,7 +15,7 @@ import java.util.Arrays;
 
 import org.eclipse.chemclipse.model.targets.TargetListUtil;
 import org.eclipse.chemclipse.support.util.QuantReferencesListUtil;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.QuantInputValidator;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.QuantitationReferenceInputValidator;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -50,11 +50,11 @@ public class QuantReferencesListEditor extends ListEditor {
 	protected String getNewInputObject() {
 
 		List list = getList();
-		InputDialog dialog = new InputDialog(getShell(), "Quantitation Reference", "You can create a new quantitation reference here.", "Styrene", new QuantInputValidator(list.getItems()));
+		InputDialog dialog = new InputDialog(getShell(), "Quantitation Reference", "You can create a new quantitation reference here.", "Styrene", new QuantitationReferenceInputValidator(list.getItems()));
 		dialog.create();
 		if(dialog.open() == Dialog.OK) {
 			String target = dialog.getValue();
-			return addInstrument(target, list);
+			return addItem(target, list);
 		}
 		return null;
 	}
@@ -89,7 +89,7 @@ public class QuantReferencesListEditor extends ListEditor {
 		});
 	}
 
-	private String addInstrument(String target, List list) {
+	private String addItem(String target, List list) {
 
 		String[] items = list.getItems();
 		if(!itemExistsInList(target, items)) {
