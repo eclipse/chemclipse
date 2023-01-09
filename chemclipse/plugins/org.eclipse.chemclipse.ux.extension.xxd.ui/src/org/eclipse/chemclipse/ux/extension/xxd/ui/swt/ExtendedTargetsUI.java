@@ -224,6 +224,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 				if(openQuestion(e.display.getActiveShell(), "Do you want to delete all targets?")) {
 					deleteAllTargets();
 					updateTargets(e.display);
+					UpdateNotifierUI.update(e.display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Targets have been deleted.");
 				}
 			}
 		});
@@ -539,6 +540,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 			Object object = iterator.next();
 			if(object instanceof IIdentificationTarget identificationTarget) {
 				identificationTarget.setManuallyVerified(verified);
+				UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Target has been manually verified.");
 			}
 		}
 		updateTargets(display);
@@ -667,6 +669,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 				}
 			}
 			updateTargets(display);
+			UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Targets have been deleted.");
 		}
 	}
 
@@ -713,6 +716,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		//
 		comboTarget.setText("");
 		updateTargets(display);
+		UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Target has been set.");
 	}
 
 	/**
@@ -750,8 +754,6 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 				propagateTarget(display);
 			}
 		}
-		//
-		UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Targets have been modified (deleted/updated).");
 	}
 
 	private void propagateTarget(Display display) {
