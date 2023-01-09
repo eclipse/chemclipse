@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -130,7 +130,6 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 	public void updateChromatogram(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		if(chromatogramSelection != null) {
-			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			/*
 			 * Update Peak/Scan
 			 */
@@ -142,8 +141,9 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 			/*
 			 * Update Chromatogram
 			 */
+			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			if(objectCacheChromatogram != chromatogram) {
-				this.objectCacheChromatogram = chromatogram;
+				objectCacheChromatogram = chromatogram;
 			}
 			//
 			if(isChromatogramActive()) {
@@ -531,11 +531,10 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		});
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void verifyTargets(boolean verified, Display display) {
 
 		AtomicReference<TargetsListUI> targetList = getActiveTargetList();
-		Iterator iterator = targetList.get().getStructuredSelection().iterator();
+		Iterator<?> iterator = targetList.get().getStructuredSelection().iterator();
 		while(iterator.hasNext()) {
 			Object object = iterator.next();
 			if(object instanceof IIdentificationTarget identificationTarget) {
@@ -653,7 +652,6 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void deleteTargets(Display display) {
 
 		if(openQuestion(display.getActiveShell(), "Would you like to delete the selected targets?")) {
@@ -661,7 +659,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 			 * Delete Target
 			 */
 			AtomicReference<TargetsListUI> targetList = getActiveTargetList();
-			Iterator iterator = targetList.get().getStructuredSelection().iterator();
+			Iterator<?> iterator = targetList.get().getStructuredSelection().iterator();
 			while(iterator.hasNext()) {
 				Object object = iterator.next();
 				if(object instanceof ITarget target) {
