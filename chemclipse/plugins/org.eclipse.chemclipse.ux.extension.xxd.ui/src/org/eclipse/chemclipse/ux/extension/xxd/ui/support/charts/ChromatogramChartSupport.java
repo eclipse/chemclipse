@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -55,9 +55,9 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swtchart.LineStyle;
 import org.eclipse.swtchart.extensions.core.ISeriesData;
 import org.eclipse.swtchart.extensions.core.SeriesData;
+import org.eclipse.swtchart.extensions.linecharts.ICompressionSupport;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
-import org.eclipse.swtchart.extensions.linecharts.LineChart;
 import org.eclipse.swtchart.extensions.linecharts.LineSeriesData;
 
 public class ChromatogramChartSupport {
@@ -112,29 +112,25 @@ public class ChromatogramChartSupport {
 		return color;
 	}
 
-	@SuppressWarnings("rawtypes")
-	public ILineSeriesData getLineSeriesDataChromatogram(IChromatogramSelection chromatogramSelection, String seriesId, Color color) {
+	public ILineSeriesData getLineSeriesDataChromatogram(IChromatogramSelection<?, ?> chromatogramSelection, String seriesId, Color color) {
 
 		DisplayType dataType = DisplayType.TIC;
 		return getLineSeriesData(chromatogramSelection, seriesId, dataType, Derivative.NONE, color, null, false);
 	}
 
-	@SuppressWarnings("rawtypes")
-	public ILineSeriesData getLineSeriesDataChromatogram(IChromatogram chromatogram, String seriesId, Color color) {
+	public ILineSeriesData getLineSeriesDataChromatogram(IChromatogram<?> chromatogram, String seriesId, Color color) {
 
 		DisplayType dataType = DisplayType.TIC;
 		return getLineSeriesData(chromatogram, seriesId, dataType, Derivative.NONE, color, null, false);
 	}
 
-	@SuppressWarnings("rawtypes")
-	public ILineSeriesData getLineSeriesDataBaseline(IChromatogramSelection chromatogramSelection, String seriesId, Color color) {
+	public ILineSeriesData getLineSeriesDataBaseline(IChromatogramSelection<?, ?> chromatogramSelection, String seriesId, Color color) {
 
 		DisplayType dataType = DisplayType.TIC;
 		return getLineSeriesData(chromatogramSelection, seriesId, dataType, Derivative.NONE, color, null, true);
 	}
 
-	@SuppressWarnings("rawtypes")
-	public ILineSeriesData getLineSeriesDataBaseline(IChromatogram chromatogram, String seriesId, Color color) {
+	public ILineSeriesData getLineSeriesDataBaseline(IChromatogram<?> chromatogram, String seriesId, Color color) {
 
 		DisplayType dataType = DisplayType.TIC;
 		return getLineSeriesData(chromatogram, seriesId, dataType, Derivative.NONE, color, null, true);
@@ -150,8 +146,7 @@ public class ChromatogramChartSupport {
 		return getLineSeriesData(chromatogram, seriesId, dataType, Derivative.NONE, color, signals, true);
 	}
 
-	@SuppressWarnings("rawtypes")
-	public ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, DisplayType dataType, Color color, IMarkedTraces<? extends IMarkedTrace> signals) {
+	public ILineSeriesData getLineSeriesData(IChromatogram<?> chromatogram, String seriesId, DisplayType dataType, Color color, IMarkedTraces<? extends IMarkedTrace> signals) {
 
 		return getLineSeriesData(chromatogram, seriesId, dataType, Derivative.NONE, color, signals, false);
 	}
@@ -166,17 +161,15 @@ public class ChromatogramChartSupport {
 		return getLineSeriesData(chromatogramSelection, seriesId, dataType, derivative, color, false, timeIntervalSelection);
 	}
 
-	@SuppressWarnings("rawtypes")
 	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?, ?> chromatogramSelection, String seriesId, DisplayType dataType, Derivative derivative, Color color, IMarkedTraces<? extends IMarkedTrace> signals, boolean baseline) {
 
-		IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 		int startScan = chromatogram.getScanNumber(chromatogramSelection.getStartRetentionTime());
 		int stopScan = chromatogram.getScanNumber(chromatogramSelection.getStopRetentionTime());
 		return getLineSeriesData(chromatogram, startScan, stopScan, seriesId, dataType, derivative, color, signals, baseline);
 	}
 
-	@SuppressWarnings("rawtypes")
-	public ILineSeriesData getLineSeriesData(IChromatogram chromatogram, String seriesId, DisplayType dataType, Derivative derivative, Color color, IMarkedTraces<? extends IMarkedTrace> signals, boolean baseline) {
+	public ILineSeriesData getLineSeriesData(IChromatogram<?> chromatogram, String seriesId, DisplayType dataType, Derivative derivative, Color color, IMarkedTraces<? extends IMarkedTrace> signals, boolean baseline) {
 
 		int startScan = 1;
 		int stopScan = chromatogram.getNumberOfScans();
@@ -220,17 +213,13 @@ public class ChromatogramChartSupport {
 
 		IBaselineModel baselineModel = null;
 		if(baseline) {
-			if(dataType.equals(DisplayType.TIC)) {
-				baselineModel = chromatogram.getBaselineModel();
-			} else if(dataType.equals(DisplayType.SWC)) {
-				if(chromatogram instanceof IChromatogramWSD && signals instanceof IMarkedWavelengths) {
-					IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
-					IMarkedWavelengths markedWavelengths = (IMarkedWavelengths)signals;
-					if(!markedWavelengths.isEmpty()) {
-						double wavelength = markedWavelengths.iterator().next().getTrace();
-						baselineModel = chromatogramWSD.getBaselineModel(wavelength);
-					}
+			if(chromatogram instanceof IChromatogramWSD chromatogramWSD && signals instanceof IMarkedWavelengths markedWavelengths) {
+				if(!markedWavelengths.isEmpty()) {
+					double wavelength = markedWavelengths.iterator().next().getTrace();
+					baselineModel = chromatogramWSD.getBaselineModel(wavelength);
 				}
+			} else {
+				baselineModel = chromatogram.getBaselineModel();
 			}
 		}
 		//
@@ -333,38 +322,38 @@ public class ChromatogramChartSupport {
 
 	public int getCompressionLength(String compressionType, int sizeLineSeries) {
 
-		int compressionToLength = LineChart.LOW_COMPRESSION;
+		int compressionToLength = 0;
 		switch(compressionType) {
-			case LineChart.COMPRESSION_AUTO:
+			case ICompressionSupport.COMPRESSION_AUTO:
 				if(sizeLineSeries >= 15) {
-					compressionToLength = LineChart.EXTREME_COMPRESSION;
+					compressionToLength = ICompressionSupport.EXTREME_COMPRESSION;
 				} else if(sizeLineSeries >= 10) {
-					compressionToLength = LineChart.HIGH_COMPRESSION;
+					compressionToLength = ICompressionSupport.HIGH_COMPRESSION;
 				} else if(sizeLineSeries >= 5) {
-					compressionToLength = LineChart.MEDIUM_COMPRESSION;
+					compressionToLength = ICompressionSupport.MEDIUM_COMPRESSION;
 				}
 				break;
-			case LineChart.COMPRESSION_NONE:
-				compressionToLength = LineChart.NO_COMPRESSION;
+			case ICompressionSupport.COMPRESSION_NONE:
+				compressionToLength = ICompressionSupport.NO_COMPRESSION;
 				break;
-			case LineChart.COMPRESSION_LOW:
-				compressionToLength = LineChart.LOW_COMPRESSION;
+			case ICompressionSupport.COMPRESSION_LOW:
+				compressionToLength = ICompressionSupport.LOW_COMPRESSION;
 				break;
-			case LineChart.COMPRESSION_MEDIUM:
-				compressionToLength = LineChart.MEDIUM_COMPRESSION;
+			case ICompressionSupport.COMPRESSION_MEDIUM:
+				compressionToLength = ICompressionSupport.MEDIUM_COMPRESSION;
 				break;
-			case LineChart.COMPRESSION_HIGH:
-				compressionToLength = LineChart.HIGH_COMPRESSION;
+			case ICompressionSupport.COMPRESSION_HIGH:
+				compressionToLength = ICompressionSupport.HIGH_COMPRESSION;
 				break;
-			case LineChart.COMPRESSION_EXTREME:
-				compressionToLength = LineChart.EXTREME_COMPRESSION;
+			case ICompressionSupport.COMPRESSION_EXTREME:
+				compressionToLength = ICompressionSupport.EXTREME_COMPRESSION;
 				break;
 		}
 		//
 		return compressionToLength;
 	}
 
-	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?, ?> chromatogramSelection, String seriesId, String derivativeType, Color color, boolean baseline, boolean timeIntervalSelection) {
+	public ILineSeriesData getLineSeriesData(IChromatogramSelection<?, ?> chromatogramSelection, String seriesId, Color color, boolean baseline, boolean timeIntervalSelection) {
 
 		DisplayType dataType = null;
 		if(chromatogramSelection instanceof IChromatogramSelectionWSD) {
@@ -389,38 +378,24 @@ public class ChromatogramChartSupport {
 		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 		IMarkedTraces<?> markedSignals = null;
 		//
-		if(dataType.equals(DisplayType.SIC) || dataType.equals(DisplayType.XIC)) {
-			/*
-			 * SIC | XIC
-			 */
-			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
-			markedSignals = chromatogramSelectionMSD.getSelectedIons();
-		} else if(dataType.equals(DisplayType.SWC) || dataType.equals(DisplayType.XWC)) {
-			/*
-			 * SWC
-			 */
-			IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
-			IMarkedWavelengths markedWavelengths = chromatogramSelectionWSD.getSelectedWavelengths();
-			return getLineSeriesData(chromatogram, seriesId, dataType, derivative, color, markedWavelengths, baseline);
-		} else if(dataType.equals(DisplayType.MPC)) {
-			/*
-			 * Max Plot
-			 */
-			IChromatogramSelectionWSD chromatogramSelectionWSD = (IChromatogramSelectionWSD)chromatogramSelection;
-			IMarkedWavelengths markedWavelengths = new MarkedWavelengths();
-			markedWavelengths.add(chromatogramSelectionWSD.getChromatogram().getWavelengths());
-			return getLineSeriesData(chromatogram, seriesId, dataType, derivative, color, markedWavelengths, baseline);
+		if(chromatogramSelection instanceof IChromatogramSelectionMSD chromatogramSelectionMSD) {
+			if(dataType.equals(DisplayType.SIC) || dataType.equals(DisplayType.XIC)) {
+				markedSignals = chromatogramSelectionMSD.getSelectedIons();
+			} else if(dataType.equals(DisplayType.TSC)) {
+				markedSignals = chromatogramSelectionMSD.getExcludedIons();
+			}
+		} else if(chromatogramSelection instanceof IChromatogramSelectionWSD chromatogramSelectionWSD) {
+			if(dataType.equals(DisplayType.SWC) || dataType.equals(DisplayType.XWC)) {
+				IMarkedWavelengths markedWavelengths = chromatogramSelectionWSD.getSelectedWavelengths();
+				return getLineSeriesData(chromatogram, seriesId, dataType, derivative, color, markedWavelengths, baseline);
+			} else if(dataType.equals(DisplayType.MPC)) {
+				IMarkedWavelengths markedWavelengths = new MarkedWavelengths();
+				markedWavelengths.add(chromatogramSelectionWSD.getChromatogram().getWavelengths());
+				return getLineSeriesData(chromatogram, seriesId, dataType, derivative, color, markedWavelengths, baseline);
+			}
 		} else if(dataType.equals(DisplayType.TSC)) {
-			IChromatogramSelectionMSD chromatogramSelectionMSD = (IChromatogramSelectionMSD)chromatogramSelection;
-			markedSignals = chromatogramSelectionMSD.getExcludedIons();
 		} else if(dataType.equals(DisplayType.BPC)) {
-			/*
-			 * BPC
-			 */
 		} else if(dataType.equals(DisplayType.TIC)) {
-			/*
-			 * TIC
-			 */
 		} else {
 			throw new IllegalArgumentException("Type " + dataType + " is not supported");
 		}
@@ -440,81 +415,45 @@ public class ChromatogramChartSupport {
 
 		double intensity = Double.NaN;
 		if(dataType.equals(DisplayType.TIC)) {
-			/*
-			 * TIC
-			 */
 			intensity = scan.getTotalSignal();
 		} else if(dataType.equals(DisplayType.BPC)) {
-			/*
-			 * BPC
-			 */
-			if(scan instanceof IScanMSD) {
-				IScanMSD scanMSD = (IScanMSD)scan;
+			if(scan instanceof IScanMSD scanMSD) {
 				IIon ion = scanMSD.getHighestAbundance();
 				if(ion != null) {
 					intensity = ion.getAbundance();
 				}
 			}
 		} else if(dataType.equals(DisplayType.XIC)) {
-			/*
-			 * XIC
-			 */
-			if(scan instanceof IScanMSD && signals instanceof IMarkedIons) {
-				IScanMSD scanMSD = (IScanMSD)scan;
-				IMarkedIons markedIons = (IMarkedIons)signals;
+			if(scan instanceof IScanMSD scanMSD && signals instanceof IMarkedIons markedIons) {
 				IExtractedIonSignal extractedIonSignal = scanMSD.getExtractedIonSignal();
 				intensity = 0.0d;
-				if(signals != null) {
-					for(IMarkedIon markedIon : markedIons) {
-						intensity += extractedIonSignal.getAbundance(markedIon.castTrace());
-					}
+				for(IMarkedIon markedIon : markedIons) {
+					intensity += extractedIonSignal.getAbundance(markedIon.castTrace());
 				}
 			}
 		} else if(dataType.equals(DisplayType.SIC)) {
-			/*
-			 * SIC
-			 */
-			if(scan instanceof IScanMSD && signals instanceof IMarkedIons) {
-				IScanMSD scanMSD = (IScanMSD)scan;
-				IMarkedIons markedIons = (IMarkedIons)signals;
+			if(scan instanceof IScanMSD scanMSD && signals instanceof IMarkedIons markedIons) {
 				IExtractedIonSignal extractedIonSignal = scanMSD.getExtractedIonSignal();
 				intensity = 0.0d;
-				if(signals != null) {
-					Iterator<IMarkedIon> it = markedIons.iterator();
-					if(it.hasNext()) {
-						intensity = extractedIonSignal.getAbundance(it.next().castTrace());
-					}
+				Iterator<IMarkedIon> it = markedIons.iterator();
+				if(it.hasNext()) {
+					intensity = extractedIonSignal.getAbundance(it.next().castTrace());
 				}
 			}
 		} else if(dataType.equals(DisplayType.TSC)) {
-			/*
-			 * TSC
-			 */
-			if(scan instanceof IScanMSD && signals instanceof IMarkedIons) {
-				IScanMSD scanMSD = (IScanMSD)scan;
-				IMarkedIons markedIons = (IMarkedIons)signals;
+			if(scan instanceof IScanMSD scanMSD && signals instanceof IMarkedIons markedIons) {
 				IExtractedIonSignal extractedIonSignal = scanMSD.getExtractedIonSignal();
 				intensity = scanMSD.getTotalSignal();
-				if(signals != null) {
-					for(IMarkedIon markedIon : markedIons) {
-						intensity -= extractedIonSignal.getAbundance(markedIon.castTrace());
-					}
+				for(IMarkedIon markedIon : markedIons) {
+					intensity -= extractedIonSignal.getAbundance(markedIon.castTrace());
 				}
 			}
 		} else if(dataType.equals(DisplayType.SWC) | dataType.equals(DisplayType.XWC)) {
-			/*
-			 * SWC
-			 */
-			if(scan instanceof IScanWSD && signals instanceof IMarkedWavelengths) {
+			if(scan instanceof IScanWSD scanWSD && signals instanceof IMarkedWavelengths markedWavelengths) {
 				/*
 				 * Get the extracted wavelength map.
 				 */
-				IScanWSD scanWSD = (IScanWSD)scan;
 				IExtractedWavelengthSignal extractedWavelengthSignal = scanWSD.getExtractedWavelengthSignal();
-				IMarkedWavelengths markedWavelengths = (IMarkedWavelengths)signals;
-				/*
-				 * Integer wavelengths
-				 */
 				Set<Integer> wavelengths = new HashSet<>();
 				for(double wavelength : markedWavelengths.getWavelengths()) {
 					wavelengths.add((int)Math.round(wavelength));
@@ -535,9 +474,7 @@ public class ChromatogramChartSupport {
 			/*
 			 * Max Plot: each point plotted at maximum absorbance
 			 */
-			if(scan instanceof IScanWSD && signals instanceof IMarkedWavelengths) {
-				IScanWSD scanWSD = (IScanWSD)scan;
-				IMarkedWavelengths markedWavelengths = (IMarkedWavelengths)signals;
+			if(scan instanceof IScanWSD scanWSD && signals instanceof IMarkedWavelengths markedWavelengths) {
 				float maxIntensity = -Float.MAX_VALUE;
 				for(double wavelength : markedWavelengths.getWavelengths()) {
 					float abundance = scanWSD.getScanSignal(wavelength).get().getAbundance();

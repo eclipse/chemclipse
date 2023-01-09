@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -157,10 +157,10 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 		List<Object> objects = dataUpdateSupport.getUpdates(getLastTopic(dataUpdateSupport.getTopics()));
 		if(!objects.isEmpty()) {
 			Object last = objects.get(0);
-			if(last instanceof IScan) {
-				update((IScan)last);
-			} else if(last instanceof IPeak) {
-				update(((IPeak)last).getPeakModel().getPeakMaximum());
+			if(last instanceof IScan scan) {
+				update(scan);
+			} else if(last instanceof IPeak peak) {
+				update(peak.getPeakModel().getPeakMaximum());
 			}
 		}
 		return focus;
@@ -186,15 +186,13 @@ public class ExtendedScanChartUI extends Composite implements IExtendedPartUI {
 
 		if(editModus) {
 			if(subtractModus) {
-				if(this.scan instanceof IScanMSD) {
-					IScanMSD scanSource = (IScanMSD)this.scan;
-					if(scan instanceof IScanMSD) {
+				if(this.scan instanceof IScanMSD scanSource) {
+					if(scan instanceof IScanMSD scanSubtract) {
 						/*
 						 * Just subtract a mass spectrum once.
 						 * Otherwise, following updates would lead
 						 * to subsequent subtractions.
 						 */
-						IScanMSD scanSubtract = (IScanMSD)scan;
 						int scanNumberSource = scanSource.getScanNumber();
 						int scanNumberSubtract = scanSubtract.getScanNumber();
 						if(scanNumberSubtract > 0 && scanNumberSource != scanNumberSubtract) {
