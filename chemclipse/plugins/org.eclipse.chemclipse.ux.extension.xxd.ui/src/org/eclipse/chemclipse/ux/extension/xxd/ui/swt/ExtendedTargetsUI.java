@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -130,7 +130,6 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 	public void updateChromatogram(IChromatogramSelection<?, ?> chromatogramSelection) {
 
 		if(chromatogramSelection != null) {
-			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			/*
 			 * Update Peak/Scan
 			 */
@@ -142,8 +141,9 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 			/*
 			 * Update Chromatogram
 			 */
+			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			if(objectCacheChromatogram != chromatogram) {
-				this.objectCacheChromatogram = chromatogram;
+				objectCacheChromatogram = chromatogram;
 			}
 			//
 			if(isChromatogramActive()) {
@@ -224,6 +224,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 				if(openQuestion(e.display.getActiveShell(), "Do you want to delete all targets?")) {
 					deleteAllTargets();
 					updateTargets(e.display);
+					UpdateNotifierUI.update(e.display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Targets have been deleted.");
 				}
 			}
 		});
@@ -531,15 +532,15 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		});
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void verifyTargets(boolean verified, Display display) {
 
 		AtomicReference<TargetsListUI> targetList = getActiveTargetList();
-		Iterator iterator = targetList.get().getStructuredSelection().iterator();
+		Iterator<?> iterator = targetList.get().getStructuredSelection().iterator();
 		while(iterator.hasNext()) {
 			Object object = iterator.next();
 			if(object instanceof IIdentificationTarget identificationTarget) {
 				identificationTarget.setManuallyVerified(verified);
+				UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Target has been manually verified.");
 			}
 		}
 		updateTargets(display);
@@ -653,7 +654,6 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		}
 	}
 
-	@SuppressWarnings("rawtypes")
 	private void deleteTargets(Display display) {
 
 		if(openQuestion(display.getActiveShell(), "Would you like to delete the selected targets?")) {
@@ -661,7 +661,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 			 * Delete Target
 			 */
 			AtomicReference<TargetsListUI> targetList = getActiveTargetList();
-			Iterator iterator = targetList.get().getStructuredSelection().iterator();
+			Iterator<?> iterator = targetList.get().getStructuredSelection().iterator();
 			while(iterator.hasNext()) {
 				Object object = iterator.next();
 				if(object instanceof ITarget target) {
@@ -669,6 +669,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 				}
 			}
 			updateTargets(display);
+			UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Targets have been deleted.");
 		}
 	}
 
@@ -715,6 +716,7 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 		//
 		comboTarget.setText("");
 		updateTargets(display);
+		UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Target has been set.");
 	}
 
 	/**
@@ -752,8 +754,6 @@ public class ExtendedTargetsUI extends Composite implements IExtendedPartUI {
 				propagateTarget(display);
 			}
 		}
-		//
-		UpdateNotifierUI.update(display, IChemClipseEvents.TOPIC_EDITOR_CHROMATOGRAM_UPDATE, "Targets have been modified (deleted/updated).");
 	}
 
 	private void propagateTarget(Display display) {

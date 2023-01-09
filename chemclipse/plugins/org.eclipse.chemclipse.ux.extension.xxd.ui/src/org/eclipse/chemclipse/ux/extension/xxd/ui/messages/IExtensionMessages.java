@@ -174,7 +174,6 @@ public interface IExtensionMessages {
 	String FORMULA = "Formula";
 	String CONTRIBUTOR = "Contributor";
 	String REFERENCE_ID = "ReferenceID";
-	String TARGET_HAS_BEEN_EDITED = "TargetHasBeenEdited";
 	String START_TIME_MIN = "StartTimeMin";
 	String CENTER_TIME_MIN = "CenterTimeMin";
 	String STOP_TIME_MIN = "StopTimeMin";
