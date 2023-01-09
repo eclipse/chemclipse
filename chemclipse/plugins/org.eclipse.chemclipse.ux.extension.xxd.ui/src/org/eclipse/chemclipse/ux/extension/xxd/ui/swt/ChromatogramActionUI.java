@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -138,7 +138,7 @@ public class ChromatogramActionUI extends Composite {
 					combo.setToolTipText(extension.getDescription());
 					buttonChromatogramAction.setEnabled(true);
 					String id = extension.getUniqueId();
-					preferenceStore.putValue(PreferenceConstants.P_CHROMATOGRAM_SELECTED_ACTION_ID, id);
+					preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_SELECTED_ACTION_ID, id);
 					selectedActionId = id;
 				}
 			}

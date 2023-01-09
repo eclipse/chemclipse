@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2022 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -121,7 +121,7 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 
 				if(preferenceColumnOrder != null) {
 					String columnOrder = TableSupport.getColumnOrder(table);
-					preferenceStore.putValue(preferenceColumnOrder, columnOrder);
+					preferenceStore.setValue(preferenceColumnOrder, columnOrder);
 				}
 			}
 
@@ -130,7 +130,7 @@ public class ExtendedTableViewer extends TableViewer implements IExtendedTableVi
 
 				if(preferenceColumnWidth != null) {
 					String columnWidth = TableSupport.getColumnWidth(table);
-					preferenceStore.putValue(preferenceColumnWidth, columnWidth);
+					preferenceStore.setValue(preferenceColumnWidth, columnWidth);
 				}
 			}
 		});

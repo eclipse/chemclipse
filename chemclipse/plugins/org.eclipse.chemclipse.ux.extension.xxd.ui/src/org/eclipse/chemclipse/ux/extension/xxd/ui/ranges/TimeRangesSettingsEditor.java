@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -320,7 +320,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 				if(pathname != null) {
 					File file = new File(pathname);
 					String path = file.getParentFile().getAbsolutePath();
-					preferenceStore.putValue(PreferenceConstants.P_TIME_RANGE_TEMPLATE_FOLDER, path);
+					preferenceStore.setValue(PreferenceConstants.P_TIME_RANGE_TEMPLATE_FOLDER, path);
 					settings.importItems(file);
 					setTableViewerInput();
 				}
@@ -351,7 +351,7 @@ public class TimeRangesSettingsEditor implements SettingsUIProvider.SettingsUICo
 				if(pathname != null) {
 					File file = new File(pathname);
 					String path = file.getParentFile().getAbsolutePath();
-					preferenceStore.putValue(PreferenceConstants.P_TIME_RANGE_TEMPLATE_FOLDER, path);
+					preferenceStore.setValue(PreferenceConstants.P_TIME_RANGE_TEMPLATE_FOLDER, path);
 					if(settings.exportItems(file)) {
 						MessageDialog.openInformation(button.getShell(), timeRangeLabels.getTitle(), "Exported Successful");
 					} else {

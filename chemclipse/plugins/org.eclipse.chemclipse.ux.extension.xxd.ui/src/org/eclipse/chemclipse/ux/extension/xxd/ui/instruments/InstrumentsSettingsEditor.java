@@ -28,8 +28,8 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.methods.SettingsUIProvider;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.preferences.PreferenceConstants;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.IExtendedPartUI;
@@ -329,7 +329,7 @@ public class InstrumentsSettingsEditor implements SettingsUIProvider.SettingsUIC
 				if(pathname != null) {
 					File file = new File(pathname);
 					String path = file.getParentFile().getAbsolutePath();
-					preferenceStore.putValue(PreferenceConstants.P_INSTRUMENTS_TEMPLATE_FOLDER, path);
+					preferenceStore.setValue(PreferenceConstants.P_INSTRUMENTS_TEMPLATE_FOLDER, path);
 					settings.importItems(file);
 					setTableViewerInput();
 				}
@@ -360,7 +360,7 @@ public class InstrumentsSettingsEditor implements SettingsUIProvider.SettingsUIC
 				if(pathname != null) {
 					File file = new File(pathname);
 					String path = file.getParentFile().getAbsolutePath();
-					preferenceStore.putValue(PreferenceConstants.P_INSTRUMENTS_TEMPLATE_FOLDER, path);
+					preferenceStore.setValue(PreferenceConstants.P_INSTRUMENTS_TEMPLATE_FOLDER, path);
 					if(settings.exportItems(file)) {
 						MessageDialog.openInformation(button.getShell(), TITLE, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.INSTRUMENT_LIST_EXPORTED));
 					} else {

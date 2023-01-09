@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -426,7 +426,7 @@ public class ExtendedMoleculeUI extends Composite implements IExtendedPartUI {
 					//
 					String pathname = fileDialog.open();
 					if(pathname != null) {
-						preferenceStore.putValue(PreferenceConstants.P_MOLECULE_PATH_EXPORT, fileDialog.getFilterPath());
+						preferenceStore.setValue(PreferenceConstants.P_MOLECULE_PATH_EXPORT, fileDialog.getFilterPath());
 						ImageData data = imageMolecule.getImageData();
 						ImageLoader loader = new ImageLoader();
 						loader.data = new ImageData[]{data};

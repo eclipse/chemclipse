@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -339,7 +339,7 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 						//
 						File file = new File(pathname);
 						String path = file.getParentFile().getAbsolutePath();
-						preferenceStore.putValue(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER, path);
+						preferenceStore.setValue(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER, path);
 						//
 						ProgressMonitorDialog dialog = new ProgressMonitorDialog(e.display.getActiveShell());
 						DatabaseImportRunnable databaseImportRunnable = new DatabaseImportRunnable(file);
@@ -388,7 +388,7 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 				if(pathname != null) {
 					File file = new File(pathname);
 					String path = file.getParentFile().getAbsolutePath();
-					preferenceStore.putValue(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER, path);
+					preferenceStore.setValue(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER, path);
 					settings.importItems(file);
 					setTableViewerInput();
 				}
@@ -419,7 +419,7 @@ public class TargetsSettingsEditor implements SettingsUIProvider.SettingsUIContr
 				if(pathname != null) {
 					File file = new File(pathname);
 					String path = file.getParentFile().getAbsolutePath();
-					preferenceStore.putValue(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER, path);
+					preferenceStore.setValue(PreferenceConstants.P_TARGET_TEMPLATE_LIBRARY_IMPORT_FOLDER, path);
 					if(settings.exportItems(file)) {
 						MessageDialog.openInformation(button.getShell(), "Target List", "The target list has been exported successfully.");
 					} else {

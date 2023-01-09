@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -290,7 +290,7 @@ public class NamedTracesUI extends Composite {
 					fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_NAMED_TRACES_TEMPLATE_FOLDER));
 					String path = fileDialog.open();
 					if(path != null) {
-						preferenceStore.putValue(PreferenceConstants.P_NAMED_TRACES_TEMPLATE_FOLDER, fileDialog.getFilterPath());
+						preferenceStore.setValue(PreferenceConstants.P_NAMED_TRACES_TEMPLATE_FOLDER, fileDialog.getFilterPath());
 						File file = new File(path);
 						namedTraces.importItems(file);
 						MessageDialog.openInformation(e.display.getActiveShell(), IMPORT_TITLE, MESSAGE_IMPORT_SUCCESSFUL);
@@ -324,7 +324,7 @@ public class NamedTracesUI extends Composite {
 					fileDialog.setFilterPath(preferenceStore.getString(PreferenceConstants.P_NAMED_TRACES_TEMPLATE_FOLDER));
 					String path = fileDialog.open();
 					if(path != null) {
-						preferenceStore.putValue(PreferenceConstants.P_NAMED_TRACES_TEMPLATE_FOLDER, fileDialog.getFilterPath());
+						preferenceStore.setValue(PreferenceConstants.P_NAMED_TRACES_TEMPLATE_FOLDER, fileDialog.getFilterPath());
 						File file = new File(path);
 						if(namedTraces.exportItems(file)) {
 							MessageDialog.openInformation(e.display.getActiveShell(), EXPORT_TITLE, MESSAGE_EXPORT_SUCCESSFUL);

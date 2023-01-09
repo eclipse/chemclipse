@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -334,7 +334,7 @@ public class NamedTracesSettingsEditor implements SettingsUIProvider.SettingsUIC
 				if(pathname != null) {
 					File file = new File(pathname);
 					String path = file.getParentFile().getAbsolutePath();
-					preferenceStore.putValue(PreferenceConstants.P_NAMED_TRACES_TEMPLATE_FOLDER, path);
+					preferenceStore.setValue(PreferenceConstants.P_NAMED_TRACES_TEMPLATE_FOLDER, path);
 					settings.importItems(file);
 					setTableViewerInput();
 				}
@@ -365,7 +365,7 @@ public class NamedTracesSettingsEditor implements SettingsUIProvider.SettingsUIC
 				if(pathname != null) {
 					File file = new File(pathname);
 					String path = file.getParentFile().getAbsolutePath();
-					preferenceStore.putValue(PreferenceConstants.P_NAMED_TRACES_TEMPLATE_FOLDER, path);
+					preferenceStore.setValue(PreferenceConstants.P_NAMED_TRACES_TEMPLATE_FOLDER, path);
 					if(settings.exportItems(file)) {
 						MessageDialog.openInformation(button.getShell(), "Named Trace List", "The named trace list has been exported successfully.");
 					} else {

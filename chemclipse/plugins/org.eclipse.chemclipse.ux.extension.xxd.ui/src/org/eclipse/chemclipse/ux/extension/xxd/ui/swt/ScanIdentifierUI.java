@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -290,7 +290,7 @@ public class ScanIdentifierUI extends Composite {
 				public void widgetSelected(SelectionEvent e) {
 
 					button.setToolTipText(identifierSupplier.getIdentifierName());
-					preferenceStore.putValue(PreferenceConstants.P_SCAN_IDENTIFER_MSD, identifierSupplier.getId());
+					preferenceStore.setValue(PreferenceConstants.P_SCAN_IDENTIFER_MSD, identifierSupplier.getId());
 					massSpectrumIdentifierSupplier = identifierSupplier;
 					runIdentification(e.display);
 				}
@@ -317,7 +317,7 @@ public class ScanIdentifierUI extends Composite {
 				public void widgetSelected(SelectionEvent e) {
 
 					button.setToolTipText(identifierSupplier.getIdentifierName());
-					preferenceStore.putValue(PreferenceConstants.P_SCAN_IDENTIFER_WSD, identifierSupplier.getId());
+					preferenceStore.setValue(PreferenceConstants.P_SCAN_IDENTIFER_WSD, identifierSupplier.getId());
 					waveSpectrumIdentifierSupplier = identifierSupplier;
 					runIdentification(e.display);
 				}

@@ -245,7 +245,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 
 				NamedTraces namedTraces = namedTracesUI.getNamedTraces();
 				if(namedTraces != null) {
-					preferenceStore.putValue(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_NAMED_TRACES, namedTraces.save());
+					preferenceStore.setValue(PreferenceConstants.P_CHROMATOGRAM_OVERLAY_NAMED_TRACES, namedTraces.save());
 					chartControl.get().deleteSeries();
 					refreshUpdateOverlayChart();
 				}
