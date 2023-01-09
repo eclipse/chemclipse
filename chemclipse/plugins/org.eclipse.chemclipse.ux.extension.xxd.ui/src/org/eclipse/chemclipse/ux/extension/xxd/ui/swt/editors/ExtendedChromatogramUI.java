@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -236,7 +236,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 	private final ScanChartSupport scanChartSupport = new ScanChartSupport();
 	private final ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
 	//
-	private DisplayType displayType = DisplayType.TIC;
+	private DisplayType displayType;
 	//
 	private boolean suspendUpdate = false;
 	private final IPreferenceStore preferenceStore;
@@ -656,6 +656,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		//
 		if(chromatogramSelection != null) {
 			setRangeRestrictions();
+			displayType = DisplayType.TIC;
 			addChromatogramSeriesData();
 			adjustChromatogramSelectionRange();
 			chromatogramAlignmentUI.update(chromatogramReferencesUI.getChromatogramSelections());
