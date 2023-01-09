@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -118,33 +118,26 @@ public class ExtendedComparisonScanUI extends Composite implements IExtendedPart
 		List<Object> objects = dataUpdateSupport.getUpdates(topic);
 		if(!objects.isEmpty()) {
 			Object last = objects.get(0);
-			if(last instanceof IScanMSD) {
-				IScanMSD scan = (IScanMSD)last;
+			if(last instanceof IScanMSD scan) {
 				float retentionIndex = scan.getRetentionIndex();
 				IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
 				IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(scan.getTargets(), identificationTargetComparator);
 				update(scan, identificationTarget);
-			} else if(last instanceof IPeakMSD) {
-				IPeakMSD peakMSD = (IPeakMSD)last;
+			} else if(last instanceof IPeakMSD peakMSD) {
 				IPeakMassSpectrum scan = peakMSD.getExtractedMassSpectrum();
 				float retentionIndex = scan.getRetentionIndex();
 				IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
 				IIdentificationTarget identificationTarget = IIdentificationTarget.getBestIdentificationTarget(peakMSD.getTargets(), identificationTargetComparator);
 				update(scan, identificationTarget);
-			} else if(last instanceof Object[]) {
-				Object[] values = (Object[])last;
+			} else if(last instanceof Object[] values) {
 				Object first = values[0];
 				Object second = values[1];
 				if(IChemClipseEvents.TOPIC_SCAN_TARGET_UPDATE_COMPARISON.equals(topic)) {
-					if(first instanceof IScanMSD && second instanceof IIdentificationTarget) {
-						IScanMSD unknownMassSpectrum = (IScanMSD)first;
-						IIdentificationTarget identificationTarget = (IIdentificationTarget)second;
+					if(first instanceof IScanMSD unknownMassSpectrum && second instanceof IIdentificationTarget identificationTarget) {
 						update(unknownMassSpectrum, identificationTarget);
 					}
 				} else if(IChemClipseEvents.TOPIC_SCAN_REFERENCE_UPDATE_COMPARISON.equals(topic)) {
-					if(first instanceof IScanMSD && second instanceof IScanMSD) {
-						IScanMSD unknownMassSpectrum = (IScanMSD)first;
-						IScanMSD referenceMassSpectrum = (IScanMSD)second;
+					if(first instanceof IScanMSD unknownMassSpectrum && second instanceof IScanMSD referenceMassSpectrum) {
 						update(unknownMassSpectrum, referenceMassSpectrum);
 					}
 				}
