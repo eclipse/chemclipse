@@ -1135,6 +1135,7 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 				chromatogramSelection.getChromatogram().setDirty(true); // TODO: check each entry
 				updateResult(processingInfo);
 				forceReset(true);
+				UpdateNotifierUI.update(getDisplay(), chromatogramSelection.getSelectedScan());
 			}
 		});
 		toolbarMain.addPreferencePages(() -> Arrays.asList(methodSupportUI.getPreferencePages()), methodSupportUI::applySettings);
