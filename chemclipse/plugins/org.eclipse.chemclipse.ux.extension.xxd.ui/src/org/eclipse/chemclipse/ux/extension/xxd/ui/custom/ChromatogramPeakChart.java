@@ -54,6 +54,7 @@ import org.eclipse.swtchart.Range;
 import org.eclipse.swtchart.extensions.core.BaseChart;
 import org.eclipse.swtchart.extensions.core.IChartSettings;
 import org.eclipse.swtchart.extensions.core.IExtendedChart;
+import org.eclipse.swtchart.extensions.core.ISeriesSettings;
 import org.eclipse.swtchart.extensions.core.RangeRestriction;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesData;
 import org.eclipse.swtchart.extensions.linecharts.ILineSeriesSettings;
@@ -80,7 +81,7 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 	private final ChromatogramChartSupport chromatogramChartSupport = new ChromatogramChartSupport();
 	private final ScanChartSupport scanChartSupport = new ScanChartSupport();
 	//
-	private final Map<String, ICustomPaintListener> peakLabelMarkerMap = new HashMap<>();
+	private final Map<String, TargetReferenceLabelMarker> peakLabelMarkerMap = new HashMap<>();
 	private final Map<String, TargetReferenceLabelMarker> scanLabelMarkerMap = new HashMap<>();
 	private final Set<String> selectedPeakIds = new HashSet<>();
 	//
@@ -145,26 +146,23 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 		updatePeaks(peaks, false);
 	}
 
-	public void updatePeaks(List<IPeak> peaks, boolean clearPeakSeries) {
+	public void updatePeaks(List<IPeak> peaks, boolean hideExistingPeaks) {
 
 		/*
-		 * Clear the existing peak series on demand.
+		 * Hide the existing peak series on demand.
 		 */
-		if(clearPeakSeries) {
-			clearPeakSeries();
-			clearPeakLabelMarker();
-		}
+		boolean visible = !hideExistingPeaks;
+		setPeakSeriesVisibility(visible);
+		setPeakLabelMarkerVisibility(visible);
 		/*
-		 * Clear and add the selected peaks.
+		 * Set the selected peak.
 		 */
 		clearSelectedPeakSeries();
-		//
 		if(peaks != null && !peaks.isEmpty()) {
 			int index = 1;
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
-			addPeakData(peaks, lineSeriesDataList);
 			for(IPeak peak : peaks) {
-				addPeak(peak, lineSeriesDataList, index++);
+				addSelectedPeak(peak, lineSeriesDataList, index++);
 			}
 			addLineSeriesData(lineSeriesDataList);
 		}
@@ -442,7 +440,7 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 		}
 	}
 
-	private void addPeak(IPeak peak, List<ILineSeriesData> lineSeriesDataList, int index) {
+	private void addSelectedPeak(IPeak peak, List<ILineSeriesData> lineSeriesDataList, int index) {
 
 		if(peak != null) {
 			/*
@@ -460,7 +458,7 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 			String peakMarkerId = getSelectedPeakSerieId(SERIES_ID_PEAKS_SELECTED_MARKER, index);
 			List<IPeak> peaks = new ArrayList<>();
 			peaks.add(peak);
-			addPeaks(lineSeriesDataList, peaks, symbolTypePeakMarker, symbolSize, colorPeak, peakMarkerId, false);
+			addPeaks(lineSeriesDataList, peaks, symbolTypePeakMarker, symbolSize, colorPeak, peakMarkerId, true);
 			selectedPeakIds.add(peakMarkerId);
 			/*
 			 * Peak
@@ -558,6 +556,7 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 
 		IPlotArea plotArea = getBaseChart().getPlotArea();
 		ICustomPaintListener labelMarker = markerMap.get(seriesId);
+		markerMap.remove(seriesId);
 		/*
 		 * Remove the label marker.
 		 */
@@ -601,13 +600,22 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 		deleteSeries(SERIES_ID_IDENTIFIED_SCAN_SELECTED);
 	}
 
+	private void setPeakSeriesVisibility(boolean visible) {
+
+		BaseChart baseChart = getBaseChart();
+		setVisibility(baseChart, SERIES_ID_PEAKS_NORMAL_ACTIVE, visible);
+		setVisibility(baseChart, SERIES_ID_PEAKS_NORMAL_ACTIVE, visible);
+		setVisibility(baseChart, SERIES_ID_PEAKS_NORMAL_INACTIVE, visible);
+		setVisibility(baseChart, SERIES_ID_PEAKS_ISTD_ACTIVE, visible);
+		setVisibility(baseChart, SERIES_ID_PEAKS_ISTD_INACTIVE, visible);
+		baseChart.applySeriesSettings();
+	}
+
 	private void clearSelectedPeakSeries() {
 
-		/*
-		 * Clear the peak series.
-		 */
-		for(String id : selectedPeakIds) {
-			deleteSeries(id);
+		for(String seriesId : selectedPeakIds) {
+			deleteSeries(seriesId);
+			removeIdentificationLabelMarker(peakLabelMarkerMap, seriesId);
 		}
 		//
 		selectedPeakIds.clear();
@@ -626,6 +634,21 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 		 * Clear the maps.
 		 */
 		peakLabelMarkerMap.clear();
+	}
+
+	private void setPeakLabelMarkerVisibility(boolean visible) {
+
+		for(TargetReferenceLabelMarker labelMarker : peakLabelMarkerMap.values()) {
+			labelMarker.setVisible(visible);
+		}
+	}
+
+	private void setVisibility(BaseChart baseChart, String seriesId, boolean visibile) {
+
+		ISeriesSettings seriesSettings = baseChart.getSeriesSettings(seriesId);
+		if(seriesSettings != null) {
+			seriesSettings.setVisible(visibile);
+		}
 	}
 
 	private void redrawChart() {
