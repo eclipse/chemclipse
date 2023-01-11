@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2021 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -22,6 +22,8 @@ import org.eclipse.chemclipse.converter.support.FileExtensionCompiler;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverter;
 import org.eclipse.chemclipse.msd.converter.database.DatabaseConverterSupport;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
+import org.eclipse.chemclipse.support.ui.swt.dialogs.WindowsFileDialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.swt.SWT;
@@ -317,6 +319,9 @@ public class IdentifierTableEditor extends FieldEditor {
 
 		IdentifierFile identifierFile = null;
 		//
+		if(OperatingSystemUtils.isWindows()) {
+			WindowsFileDialog.ClearInitialDirectoryWorkaround();
+		}
 		FileDialog fileDialog = new FileDialog(shell, SWT.OPEN);
 		fileDialog.setText("Select a Database");
 		fileDialog.setFilterPath(PreferenceSupplier.getFilterPathIdentifierFiles());

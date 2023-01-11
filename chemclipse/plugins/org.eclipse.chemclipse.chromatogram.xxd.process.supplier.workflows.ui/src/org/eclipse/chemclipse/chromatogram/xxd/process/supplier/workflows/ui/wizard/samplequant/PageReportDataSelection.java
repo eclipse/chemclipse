@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2018 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * 
@@ -12,6 +12,8 @@ import java.io.File;
 
 import org.eclipse.chemclipse.chromatogram.xxd.process.supplier.workflows.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
+import org.eclipse.chemclipse.support.ui.swt.dialogs.WindowsFileDialog;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.swt.SWT;
@@ -39,6 +41,7 @@ public class PageReportDataSelection extends AbstractExtendedWizardPage {
 	private Text textAdditionalReportData;
 
 	public PageReportDataSelection(ISampleQuantWizardElements wizardElements) {
+
 		//
 		super(PageReportDataSelection.class.getName());
 		setTitle("Report Files");
@@ -133,6 +136,9 @@ public class PageReportDataSelection extends AbstractExtendedWizardPage {
 			public void widgetSelected(SelectionEvent e) {
 
 				Shell shell = Display.getCurrent().getActiveShell();
+				if(OperatingSystemUtils.isWindows()) {
+					WindowsFileDialog.ClearInitialDirectoryWorkaround();
+				}
 				FileDialog fileDialog = new FileDialog(shell, SWT.READ_ONLY);
 				fileDialog.setText("Select the peaks area percent report.");
 				fileDialog.setFilterExtensions(new String[]{"*.txt"});
@@ -175,6 +181,9 @@ public class PageReportDataSelection extends AbstractExtendedWizardPage {
 			public void widgetSelected(SelectionEvent e) {
 
 				Shell shell = Display.getCurrent().getActiveShell();
+				if(OperatingSystemUtils.isWindows()) {
+					WindowsFileDialog.ClearInitialDirectoryWorkaround();
+				}
 				FileDialog fileDialog = new FileDialog(shell, SWT.READ_ONLY);
 				fileDialog.setText("Selec the quantitation report.");
 				fileDialog.setFilterExtensions(new String[]{"*.txt"});
@@ -217,6 +226,9 @@ public class PageReportDataSelection extends AbstractExtendedWizardPage {
 			public void widgetSelected(SelectionEvent e) {
 
 				Shell shell = Display.getCurrent().getActiveShell();
+				if(OperatingSystemUtils.isWindows()) {
+					WindowsFileDialog.ClearInitialDirectoryWorkaround();
+				}
 				FileDialog fileDialog = new FileDialog(shell, SWT.READ_ONLY);
 				fileDialog.setText("Selec the additional report data.");
 				fileDialog.setFilterExtensions(new String[]{"*.txt"});

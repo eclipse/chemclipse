@@ -21,7 +21,9 @@ import org.eclipse.chemclipse.model.traces.NamedTraces;
 import org.eclipse.chemclipse.model.updates.IUpdateListener;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.support.ui.swt.dialogs.WindowsFileDialog;
 import org.eclipse.chemclipse.support.validators.TraceValidator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.validation.NamedTraceInputValidator;
@@ -283,6 +285,9 @@ public class NamedTracesUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(namedTraces != null) {
+					if(OperatingSystemUtils.isWindows()) {
+						WindowsFileDialog.ClearInitialDirectoryWorkaround();
+					}
 					FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
 					fileDialog.setText(IMPORT_TITLE);
 					fileDialog.setFilterExtensions(new String[]{NamedTraces.FILTER_EXTENSION});
@@ -315,6 +320,9 @@ public class NamedTracesUI extends Composite {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(namedTraces != null) {
+					if(OperatingSystemUtils.isWindows()) {
+						WindowsFileDialog.ClearInitialDirectoryWorkaround();
+					}
 					FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
 					fileDialog.setOverwrite(true);
 					fileDialog.setText(EXPORT_TITLE);

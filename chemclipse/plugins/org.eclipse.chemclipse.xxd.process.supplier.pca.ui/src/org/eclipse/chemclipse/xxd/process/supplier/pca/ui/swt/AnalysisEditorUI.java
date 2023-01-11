@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -26,7 +26,9 @@ import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
+import org.eclipse.chemclipse.support.ui.swt.dialogs.WindowsFileDialog;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.swt.ui.notifier.UpdateNotifierUI;
@@ -372,6 +374,9 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(samples != null) {
+					if(OperatingSystemUtils.isWindows()) {
+						WindowsFileDialog.ClearInitialDirectoryWorkaround();
+					}
 					FileDialog fileDialog = new FileDialog(e.display.getActiveShell(), SWT.READ_ONLY);
 					fileDialog.setText("Import");
 					fileDialog.setFilterExtensions(new String[]{SampleTemplateIO.FILTER_EXTENSION});
@@ -407,6 +412,9 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 			public void widgetSelected(SelectionEvent e) {
 
 				if(samples != null) {
+					if(OperatingSystemUtils.isWindows()) {
+						WindowsFileDialog.ClearInitialDirectoryWorkaround();
+					}
 					FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
 					fileDialog.setOverwrite(true);
 					fileDialog.setText("Export");

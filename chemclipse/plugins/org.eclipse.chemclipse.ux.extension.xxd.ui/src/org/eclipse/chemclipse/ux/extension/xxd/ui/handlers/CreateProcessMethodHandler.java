@@ -20,9 +20,11 @@ import org.eclipse.chemclipse.model.methods.ProcessMethod;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.processing.DataCategoryGroup;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
+import org.eclipse.chemclipse.support.ui.swt.dialogs.WindowsFileDialog;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.Activator;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.part.support.SupplierEditorSupport;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.wizards.DataTypeTypeSelectionWizard;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -45,6 +47,9 @@ public class CreateProcessMethodHandler {
 
 		DataCategoryGroup dataCategoryGroup = DataTypeTypeSelectionWizard.open(shell, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.CHOOSE_DESIRED_CATEGORIES_TO_CREATE_NEW_METHOD), Activator.getDefault().getPreferenceStore());
 		if(dataCategoryGroup != null) {
+			if(OperatingSystemUtils.isWindows()) {
+				WindowsFileDialog.ClearInitialDirectoryWorkaround();
+			}
 			FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
 			fileDialog.setOverwrite(true);
 			fileDialog.setText(PROCESS_METHOD);

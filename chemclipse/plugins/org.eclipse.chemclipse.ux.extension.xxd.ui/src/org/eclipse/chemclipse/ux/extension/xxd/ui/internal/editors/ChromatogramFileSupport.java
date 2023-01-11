@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -29,7 +29,9 @@ import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.types.DataType;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.settings.UserManagement;
+import org.eclipse.chemclipse.support.ui.swt.dialogs.WindowsFileDialog;
 import org.eclipse.chemclipse.tsd.converter.chromatogram.ChromatogramConverterTSD;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.ChromatogramExportRunnable;
 import org.eclipse.chemclipse.wsd.converter.chromatogram.ChromatogramConverterWSD;
@@ -57,6 +59,9 @@ public class ChromatogramFileSupport {
 
 		if(chromatogram == null || shell == null) {
 			return false;
+		}
+		if(OperatingSystemUtils.isWindows()) {
+			WindowsFileDialog.ClearInitialDirectoryWorkaround();
 		}
 		/*
 		 * Create the dialog.
@@ -219,6 +224,7 @@ public class ChromatogramFileSupport {
 			logger.warn(e);
 		} catch(InterruptedException e) {
 			logger.warn(e);
+			Thread.currentThread().interrupt();
 		}
 		//
 		File data = runnable.getData();
@@ -302,9 +308,7 @@ public class ChromatogramFileSupport {
 				 */
 				if(isDirectory) {
 					if(!folderExists) {
-						if(chromatogramFolder != null) {
-							chromatogramFolder.mkdir();
-						}
+						chromatogramFolder.mkdir();
 					}
 				} else {
 					/*

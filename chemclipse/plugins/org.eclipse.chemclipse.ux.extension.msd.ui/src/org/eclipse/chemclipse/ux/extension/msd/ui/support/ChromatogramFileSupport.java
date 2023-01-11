@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -22,6 +22,8 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.msd.converter.chromatogram.ChromatogramConverterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.processing.converter.ISupplier;
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
+import org.eclipse.chemclipse.support.ui.swt.dialogs.WindowsFileDialog;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.ux.extension.msd.ui.Activator;
 import org.eclipse.chemclipse.ux.extension.msd.ui.internal.support.ChromatogramExportRunnable;
@@ -49,7 +51,7 @@ public class ChromatogramFileSupport {
 	 * @throws NoConverterAvailableException
 	 */
 	@SuppressWarnings("deprecation")
-	public static boolean saveChromatogram(IChromatogramMSD chromatogram) throws NoConverterAvailableException {
+	public static boolean saveChromatogram(IChromatogramMSD chromatogram) {
 
 		/*
 		 * If the chromatogram is null, exit.
@@ -58,9 +60,12 @@ public class ChromatogramFileSupport {
 			return false;
 		}
 		//
+		if(OperatingSystemUtils.isWindows()) {
+			WindowsFileDialog.ClearInitialDirectoryWorkaround();
+		}
 		FileDialog dialog = new FileDialog(DisplayUtils.getShell(), SWT.SAVE);
 		/*
-		 * Create the dialogue.
+		 * Create the dialog.
 		 */
 		dialog.setFilterPath(Activator.getDefault().getSettingsPath());
 		dialog.setFileName(chromatogram.getName());
@@ -81,7 +86,7 @@ public class ChromatogramFileSupport {
 		 */
 		String filename = dialog.open();
 		if(filename != null) {
-			validateFile(dialog, converterSupport.getExportSupplier(), DisplayUtils.getShell(), converterSupport, chromatogram);
+			validateFile(dialog, converterSupport.getExportSupplier(), DisplayUtils.getShell(), chromatogram);
 			return true;
 		} else {
 			return false;
@@ -117,6 +122,7 @@ public class ChromatogramFileSupport {
 			logger.warn(e.getCause());
 		} catch(InterruptedException e) {
 			logger.warn(e);
+			Thread.currentThread().interrupt();
 		}
 		File data = runnable.getData();
 		if(data == null) {
@@ -135,7 +141,7 @@ public class ChromatogramFileSupport {
 	 * @param converterSupport
 	 * @param chromatogram
 	 */
-	private static void validateFile(FileDialog dialog, List<ISupplier> supplier, Shell shell, IChromatogramConverterSupport converterSupport, IChromatogramMSD chromatogram) {
+	private static void validateFile(FileDialog dialog, List<ISupplier> supplier, Shell shell, IChromatogramMSD chromatogram) {
 
 		File chromatogramFolder = null;
 		boolean overwrite = dialog.getOverwrite();
@@ -154,98 +160,94 @@ public class ChromatogramFileSupport {
 		 * Get the file or directory name.
 		 */
 		String filename = dialog.getFilterPath() + File.separator + dialog.getFileName();
-		if(selectedSupplier != null) {
+		/*
+		 * If the chromatogram file is stored in a directory create an
+		 * appropriate directory.
+		 */
+		String directoryExtension = selectedSupplier.getDirectoryExtension();
+		if("".equals(directoryExtension)) {
+			isDirectory = true;
 			/*
-			 * If the chromatogram file is stored in a directory create an
-			 * appropriate directory.
+			 * Remove a possible directory extension.
 			 */
-			String directoryExtension = selectedSupplier.getDirectoryExtension();
-			if(directoryExtension != "") {
-				isDirectory = true;
+			filename = removeFileExtensions(filename, selectedSupplier);
+			filename = filename.concat(selectedSupplier.getDirectoryExtension());
+			/*
+			 * Check if the folder still exists.
+			 */
+			chromatogramFolder = new File(filename);
+			if(chromatogramFolder.exists()) {
+				folderExists = true;
+				if(MessageDialog.openQuestion(shell, "Overwrite", "Would you like to overwrite the chromatogram " + chromatogramFolder.toString() + "?")) {
+					overwrite = true;
+				} else {
+					overwrite = false;
+				}
+			}
+			/*
+			 * Checks if the chromatogram shall be overwritten.
+			 */
+			if(overwrite) {
+				if(!folderExists) {
+					chromatogramFolder.mkdir();
+				}
+			}
+		} else {
+			/*
+			 * Remove a possible file extension.
+			 */
+			filename = removeFileExtensions(filename, selectedSupplier);
+			filename = filename.concat(selectedSupplier.getFileExtension());
+			/*
+			 * Check if the file shall be overwritten.<br/> If the user
+			 * still has answered the dialog question to override with
+			 * "yes", than don't show this message.<br/> How to check it?
+			 * The corrected file name must equal the dialog file name,
+			 * otherwise the dialog would not have asked to override.
+			 */
+			String filenameDialog = dialog.getFilterPath() + File.separator + dialog.getFileName();
+			if(!filename.equals(filenameDialog)) {
 				/*
-				 * Remove a possible directory extension.
+				 * The file name has been modified. Ask for override if it
+				 * still exists.
 				 */
-				filename = removeFileExtensions(filename, selectedSupplier);
-				filename = filename.concat(selectedSupplier.getDirectoryExtension());
-				/*
-				 * Check if the folder still exists.
-				 */
-				chromatogramFolder = new File(filename);
-				if(chromatogramFolder.exists()) {
-					folderExists = true;
-					if(MessageDialog.openQuestion(shell, "Overwrite", "Would you like to overwrite the chromatogram " + chromatogramFolder.toString() + "?")) {
+				File chromatogramFile = new File(filename);
+				if(chromatogramFile.exists()) {
+					if(MessageDialog.openQuestion(shell, "Overwrite", "Would you like to overwrite the chromatogram " + chromatogramFile.toString() + "?")) {
 						overwrite = true;
 					} else {
 						overwrite = false;
 					}
 				}
-				/*
-				 * Checks if the chromatogram shall be overwritten.
-				 */
-				if(overwrite) {
-					if(!folderExists) {
-						chromatogramFolder.mkdir();
-					}
+			}
+		}
+		/*
+		 * Write the chromatogram and check if the folder exists.
+		 */
+		if(overwrite) {
+			/*
+			 * Check the directory and file name and correct them if
+			 * neccessary.
+			 */
+			if(isDirectory) {
+				if(!folderExists) {
+					chromatogramFolder.mkdir();
 				}
 			} else {
 				/*
-				 * Remove a possible file extension.
+				 * If the filename is e.g. /home/user/OP17760, correct it to
+				 * e.g. /home/user/OP17760.chrom if the selected supplier
+				 * supports .chrom files.
 				 */
-				filename = removeFileExtensions(filename, selectedSupplier);
-				filename = filename.concat(selectedSupplier.getFileExtension());
-				/*
-				 * Check if the file shall be overwritten.<br/> If the user
-				 * still has answered the dialog question to override with
-				 * "yes", than don't show this message.<br/> How to check it?
-				 * The corrected file name must equal the dialog file name,
-				 * otherwise the dialog would not have asked to override.
-				 */
-				String filenameDialog = dialog.getFilterPath() + File.separator + dialog.getFileName();
-				if(!filename.equals(filenameDialog)) {
-					/*
-					 * The file name has been modified. Ask for override if it
-					 * still exists.
-					 */
-					File chromatogramFile = new File(filename);
-					if(chromatogramFile.exists()) {
-						if(MessageDialog.openQuestion(shell, "Overwrite", "Would you like to overwrite the chromatogram " + chromatogramFile.toString() + "?")) {
-							overwrite = true;
-						} else {
-							overwrite = false;
-						}
-					}
+				String fileExtension = selectedSupplier.getFileExtension();
+				if(!filename.endsWith(fileExtension)) {
+					filename = filename + fileExtension;
 				}
 			}
 			/*
-			 * Write the chromatogram and check if the folder exists.
+			 * Export the chromatogram.
 			 */
-			if(overwrite) {
-				/*
-				 * Check the directory and file name and correct them if
-				 * neccessary.
-				 */
-				if(isDirectory) {
-					if(!folderExists) {
-						if(chromatogramFolder != null) {
-							chromatogramFolder.mkdir();
-						}
-					}
-				} else {
-					/*
-					 * If the filename is e.g. /home/user/OP17760, correct it to
-					 * e.g. /home/user/OP17760.chrom if the selected supplier
-					 * supports .chrom files.
-					 */
-					String fileExtension = selectedSupplier.getFileExtension();
-					if(!filename.endsWith(fileExtension)) {
-						filename = filename + fileExtension;
-					}
-				}
-				/*
-				 * Export the chromatogram.
-				 */
-				writeFile(new File(filename), chromatogram, selectedSupplier);
-			}
+			writeFile(new File(filename), chromatogram, selectedSupplier);
 		}
 	}
 
