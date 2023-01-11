@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,10 +17,12 @@ import java.util.Map;
 import org.eclipse.chemclipse.model.columns.SeparationColumnMapping;
 import org.eclipse.chemclipse.model.columns.SeparationColumnType;
 import org.eclipse.chemclipse.model.preferences.PreferenceSupplier;
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
+import org.eclipse.chemclipse.support.ui.swt.dialogs.WindowsFileDialog;
 import org.eclipse.chemclipse.swt.ui.columns.ColumExtractorTable;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
@@ -264,6 +266,9 @@ public class ColumnMappingFieldEditor extends FieldEditor {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				if(OperatingSystemUtils.isWindows()) {
+					WindowsFileDialog.ClearInitialDirectoryWorkaround();
+				}
 				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
 				fileDialog.setText(IMPORT_TITLE);
 				fileDialog.setFilterExtensions(new String[]{FILTER_EXTENSION});
@@ -292,6 +297,9 @@ public class ColumnMappingFieldEditor extends FieldEditor {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				if(OperatingSystemUtils.isWindows()) {
+					WindowsFileDialog.ClearInitialDirectoryWorkaround();
+				}
 				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
 				fileDialog.setOverwrite(true);
 				fileDialog.setText(EXPORT_TITLE);

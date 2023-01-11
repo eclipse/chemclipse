@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -32,7 +32,9 @@ import org.eclipse.chemclipse.msd.swt.ui.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.support.ui.swt.dialogs.WindowsFileDialog;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.e4.core.services.events.IEventBroker;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -174,6 +176,9 @@ public class LibraryModifySupportUI extends Composite {
 						}
 						//
 						Shell shell = Display.getCurrent().getActiveShell();
+						if(OperatingSystemUtils.isWindows()) {
+							WindowsFileDialog.ClearInitialDirectoryWorkaround();
+						}
 						FileDialog fileDialog = new FileDialog(shell, SWT.READ_ONLY);
 						fileDialog.setText("Select Library");
 						fileDialog.setFilterExtensions(filterExtensions);

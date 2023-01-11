@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,7 +18,9 @@ import org.eclipse.chemclipse.chromatogram.xxd.quantitation.supplier.chemclipse.
 import org.eclipse.chemclipse.converter.quantitation.QuantDBConverter;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
 import org.eclipse.chemclipse.model.quantitation.QuantitationDatabase;
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.settings.UserManagement;
+import org.eclipse.chemclipse.support.ui.swt.dialogs.WindowsFileDialog;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.core.di.annotations.Execute;
 import org.eclipse.swt.SWT;
@@ -30,6 +32,9 @@ public class CreateDatabaseESTD {
 	@Execute
 	public void execute(Shell shell) {
 
+		if(OperatingSystemUtils.isWindows()) {
+			WindowsFileDialog.ClearInitialDirectoryWorkaround();
+		}
 		FileDialog fileDialog = new FileDialog(shell, SWT.SAVE);
 		fileDialog.setFilterExtensions(QuantDBConverter.DEFAULT_QUANT_DB_FILE_EXTENSIONS);
 		fileDialog.setFilterNames(QuantDBConverter.DEFAULT_QUANT_DB_FILE_NAMES);

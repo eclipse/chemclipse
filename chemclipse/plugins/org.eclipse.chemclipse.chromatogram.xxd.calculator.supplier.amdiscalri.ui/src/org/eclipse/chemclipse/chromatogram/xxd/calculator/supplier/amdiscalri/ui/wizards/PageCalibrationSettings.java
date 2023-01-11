@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2022 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,6 +13,8 @@ package org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.u
 
 import java.io.File;
 
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
+import org.eclipse.chemclipse.support.ui.swt.dialogs.WindowsFileDialog;
 import org.eclipse.chemclipse.support.ui.wizards.AbstractExtendedWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -129,6 +131,9 @@ public class PageCalibrationSettings extends AbstractExtendedWizardPage {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				if(OperatingSystemUtils.isWindows()) {
+					WindowsFileDialog.ClearInitialDirectoryWorkaround();
+				}
 				FileDialog fileDialog = new FileDialog(Display.getCurrent().getActiveShell(), SWT.READ_ONLY);
 				fileDialog.setText("Select an existing *.cal template file.");
 				fileDialog.setFilterExtensions(new String[]{"*.cal;*.CAL"});

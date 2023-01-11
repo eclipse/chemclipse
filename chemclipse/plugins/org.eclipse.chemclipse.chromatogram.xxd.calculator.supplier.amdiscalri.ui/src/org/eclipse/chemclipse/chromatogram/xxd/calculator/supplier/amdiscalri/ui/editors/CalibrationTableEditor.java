@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,6 +18,8 @@ import java.util.List;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.impl.CalibrationFile;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.ui.swt.CalibrationFileListUI;
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
+import org.eclipse.chemclipse.support.ui.swt.dialogs.WindowsFileDialog;
 import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.preference.FieldEditor;
@@ -50,6 +52,7 @@ public class CalibrationTableEditor extends FieldEditor {
 	private CalibrationFileListUtil calibrationFileListUtil = new CalibrationFileListUtil();
 
 	public CalibrationTableEditor(String name, String labelText, Composite parent) {
+
 		init(name, labelText);
 		createControl(parent);
 	}
@@ -250,6 +253,9 @@ public class CalibrationTableEditor extends FieldEditor {
 
 		CalibrationFile calibrationFile = null;
 		//
+		if(OperatingSystemUtils.isWindows()) {
+			WindowsFileDialog.ClearInitialDirectoryWorkaround();
+		}
 		FileDialog fileDialog = new FileDialog(DisplayUtils.getShell(buttonAdd), SWT.OPEN);
 		fileDialog.setText("Select New Calibration File");
 		fileDialog.setFilterPath(PreferenceSupplier.getFilterPathIndexFiles());

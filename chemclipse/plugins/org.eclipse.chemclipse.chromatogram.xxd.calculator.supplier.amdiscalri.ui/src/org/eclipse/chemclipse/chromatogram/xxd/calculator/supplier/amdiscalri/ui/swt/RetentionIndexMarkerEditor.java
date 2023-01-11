@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,10 +24,12 @@ import org.eclipse.chemclipse.chromatogram.xxd.calculator.supplier.amdiscalri.va
 import org.eclipse.chemclipse.model.columns.IRetentionIndexEntry;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.support.settings.OperatingSystemUtils;
 import org.eclipse.chemclipse.support.ui.events.IKeyEventProcessor;
 import org.eclipse.chemclipse.support.ui.menu.ITableMenuEntry;
 import org.eclipse.chemclipse.support.ui.swt.ExtendedTableViewer;
 import org.eclipse.chemclipse.support.ui.swt.ITableSettings;
+import org.eclipse.chemclipse.support.ui.swt.dialogs.WindowsFileDialog;
 import org.eclipse.chemclipse.swt.ui.components.ISearchListener;
 import org.eclipse.chemclipse.swt.ui.components.SearchSupportUI;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.calibration.IUpdateListener;
@@ -266,6 +268,9 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				if(OperatingSystemUtils.isWindows()) {
+					WindowsFileDialog.ClearInitialDirectoryWorkaround();
+				}
 				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
 				fileDialog.setText(IMPORT_TITLE_FILE);
 				fileDialog.setFilterExtensions(new String[]{CalibrationFile.FILTER_EXTENSION + ";" + CalibrationFile.FILTER_EXTENSION.toUpperCase()});
@@ -366,6 +371,9 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				if(OperatingSystemUtils.isWindows()) {
+					WindowsFileDialog.ClearInitialDirectoryWorkaround();
+				}
 				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.READ_ONLY);
 				fileDialog.setText(IMPORT_TITLE);
 				fileDialog.setFilterExtensions(new String[]{RetentionIndexMarker.FILTER_EXTENSION});
@@ -395,6 +403,9 @@ public class RetentionIndexMarkerEditor extends Composite implements IChangeList
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 
+				if(OperatingSystemUtils.isWindows()) {
+					WindowsFileDialog.ClearInitialDirectoryWorkaround();
+				}
 				FileDialog fileDialog = new FileDialog(e.widget.getDisplay().getActiveShell(), SWT.SAVE);
 				fileDialog.setOverwrite(true);
 				fileDialog.setText(EXPORT_TITLE);
