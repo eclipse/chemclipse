@@ -27,11 +27,7 @@ public class QuantCompoundEditingSupport extends EditingSupport {
 	private CellEditor cellEditor;
 	private QuantCompoundListUI tableViewer;
 	private String column;
-	private String[] calibrationMethods = new String[]{ //
-			CalibrationMethod.LINEAR.toString(), //
-			CalibrationMethod.QUADRATIC.toString(), //
-			CalibrationMethod.AVERAGE.toString() //
-	};
+	private String[] calibrationMethods = CalibrationMethod.getExternalCalibrationOptionsArray();
 
 	public QuantCompoundEditingSupport(QuantCompoundListUI tableViewer, String column) {
 
@@ -204,11 +200,7 @@ public class QuantCompoundEditingSupport extends EditingSupport {
 		}
 		if(column.equals(QuantCompoundLabelProvider.CALIBRATION_METHOD)) {
 			this.cellEditor = new ComboBoxCellEditor(tableViewer.getTable(), //
-					new String[]{ //
-							CalibrationMethod.LINEAR.toString(), //
-							CalibrationMethod.QUADRATIC.toString(), //
-							CalibrationMethod.AVERAGE.toString() //
-					}, //
+					CalibrationMethod.getExternalCalibrationOptionsArray(), //
 					SWT.READ_ONLY);
 		} else {
 			this.cellEditor = new TextCellEditor(tableViewer.getTable());

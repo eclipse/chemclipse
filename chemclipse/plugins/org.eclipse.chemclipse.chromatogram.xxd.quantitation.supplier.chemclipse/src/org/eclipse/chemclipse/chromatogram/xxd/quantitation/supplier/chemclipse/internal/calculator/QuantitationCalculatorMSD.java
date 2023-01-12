@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2022 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -209,8 +209,8 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 				 * The quadratic equation could lead to two results.
 				 * Select the result that is closer to the average value.
 				 */
-				double factorAverage = quantitationCompound.getResponseSignals().getAverageFactor(signal, isCrossZero);
-				double concentrationAverage = factorAverage * integratedArea;
+				// double factorAverage = quantitationCompound.getResponseSignals().getAverageFactor(signal, isCrossZero);
+				// double concentrationAverage = factorAverage * integratedArea;
 				/*
 				 * Don't quantify if it's outside min/max response.
 				 */
@@ -220,11 +220,11 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 				} else if(integratedArea > maxResponse) {
 					description = getDescriptionResponse(integratedArea, maxResponse, "> max");
 				} else {
-					double concentration1 = quadraticEquation.calculateX(integratedArea, true);
-					double concentration2 = quadraticEquation.calculateX(integratedArea, false);
-					double delta1 = Math.abs(concentration1 - concentrationAverage);
-					double delta2 = Math.abs(concentration2 - concentrationAverage);
-					concentration = (delta1 < delta2) ? concentration1 : concentration2;
+					concentration = quadraticEquation.calculateX(integratedArea);
+					// double concentration2 = quadraticEquation.calculateX(integratedArea, false);
+					// double delta1 = Math.abs(concentration1 - concentrationAverage);
+					// double delta2 = Math.abs(concentration2 - concentrationAverage);
+					// concentration = (delta1 < delta2) ? concentration1 : concentration2;
 				}
 				break;
 			case AVERAGE:

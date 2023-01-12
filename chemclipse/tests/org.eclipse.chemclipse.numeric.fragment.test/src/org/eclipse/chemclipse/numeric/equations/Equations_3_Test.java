@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2018 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,6 +13,7 @@ package org.eclipse.chemclipse.numeric.equations;
 
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
+
 import junit.framework.TestCase;
 
 /**
@@ -56,13 +57,13 @@ public class Equations_3_Test extends TestCase {
 
 	public void testCreateLinearEquation_3() {
 
-		QuadraticEquation eq = Equations.createQuadraticEquation(points);
-		assertEquals("getApexValueForX Apex.NEGATIVE", 1.9385964912280256d, eq.getApexValueForX(Apex.POSITIVE));
+		QuadraticEquation equation = Equations.createQuadraticEquation(points);
+		assertEquals("getApexValueForX Apex.NEGATIVE", 7.793890860025901d, equation.getApexValueForX(Apex.POSITIVE));
 	}
 
 	public void testCreateLinearEquation_4() {
 
 		QuadraticEquation eq = Equations.createQuadraticEquation(points);
-		assertEquals("getApexValueForX Apex.NEGATIVE", 1.9385964912280256d, eq.getApexValueForX(Apex.NEGATIVE));
+		assertEquals("getApexValueForX Apex.NEGATIVE", -3.9166978775698498d, eq.getApexValueForX(Apex.NEGATIVE));
 	}
 }

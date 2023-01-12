@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2018 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -33,18 +33,6 @@ public class QuadraticEquations_2_Test extends TestCase {
 	public void testCreateLinearEquation_1() {
 
 		double result = eq.calculateX(4192434.278134346d);
-		assertEquals(135.45217944695486d, result);
-	}
-
-	public void testCreateLinearEquation_2() {
-
-		double result = eq.calculateX(4192434.278134346d, true);
-		assertEquals(135.45217944695486d, result);
-	}
-
-	public void testCreateLinearEquation_3() {
-
-		double result = eq.calculateX(4192434.278134346d, false);
-		assertEquals(14.195265251939233d, result);
+		assertEquals(14.195265251939228d, result);
 	}
 }
