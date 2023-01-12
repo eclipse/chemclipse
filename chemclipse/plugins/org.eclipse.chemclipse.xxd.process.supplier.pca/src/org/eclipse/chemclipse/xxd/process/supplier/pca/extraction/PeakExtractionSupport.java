@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,16 +28,16 @@ public class PeakExtractionSupport {
 			case RETENTION_INDEX:
 				PeakRetentionIndexExtractor peakRetentionIndexExtractor = new PeakRetentionIndexExtractor();
 				int retentionIndexWindow = extractionSettings.getGroupValueWindow();
-				samples = peakRetentionIndexExtractor.extractPeakData(peaks, retentionIndexWindow, monitor);
+				samples = peakRetentionIndexExtractor.extractPeakData(peaks, retentionIndexWindow);
 				break;
 			case PEAK_TARGETS:
 				PeakTargetExtractor peakTargetExtractor = new PeakTargetExtractor();
-				samples = peakTargetExtractor.extractPeakData(peaks, monitor);
+				samples = peakTargetExtractor.extractPeakData(peaks);
 				break;
 			default:
 				PeakRetentionTimeExtractor peakRetentionTimeExtractor = new PeakRetentionTimeExtractor();
 				int retentionTimeWindow = extractionSettings.getGroupValueWindow();
-				samples = peakRetentionTimeExtractor.extractPeakData(peaks, retentionTimeWindow, monitor);
+				samples = peakRetentionTimeExtractor.extractPeakData(peaks, retentionTimeWindow);
 				break;
 		}
 		//

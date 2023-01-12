@@ -131,7 +131,7 @@ public class ExtendedFeatureListUI extends Composite implements IExtendedPartUI 
 
 	private void createList(Composite parent) {
 
-		FeatureListUI list = new FeatureListUI(parent, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.FULL_SELECTION);
+		FeatureListUI list = new FeatureListUI(parent, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL | SWT.FULL_SELECTION | SWT.VIRTUAL);
 		list.getTable().setLayoutData(new GridData(GridData.FILL_BOTH));
 		//
 		list.setUpdateListener(new IUpdateListener() {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2022 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,7 +13,6 @@
 package org.eclipse.chemclipse.msd.swt.ui.components.massspectrum;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.chemclipse.msd.model.core.IIon;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
@@ -51,7 +50,7 @@ public class MassSpectrumIonsListUI extends ExtendedTableViewer {
 			super.setInput(null); // Can only enable the hash look up before input has been set
 			setContentProviders(massiveData);
 			if(!massSpectrum.isTandemMS()) {
-				List<TableViewerColumn> columns = getTableViewerColumns().stream().skip(2).collect(Collectors.toList());
+				List<TableViewerColumn> columns = getTableViewerColumns().stream().skip(2).toList();
 				for(TableViewerColumn column : columns) {
 					column.getColumn().setWidth(0);
 				}

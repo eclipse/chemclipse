@@ -77,7 +77,7 @@ public class Activator extends AbstractActivatorUI {
 		plugin = null;
 		dataUpdateSupport = null;
 		Activator.context = null;
-		stopServices(context);
+		stopServices();
 		super.stop(context);
 	}
 
@@ -104,7 +104,7 @@ public class Activator extends AbstractActivatorUI {
 	public String getSettingsPath() {
 
 		Location location = Platform.getUserLocation();
-		return location.getURL().getPath().toString();
+		return location.getURL().getPath();
 	}
 
 	public DataUpdateSupport getDataUpdateSupport() {
@@ -151,7 +151,7 @@ public class Activator extends AbstractActivatorUI {
 		editorServiceTracker.open();
 	}
 
-	private void stopServices(BundleContext context) {
+	private void stopServices() {
 
 		moleculeImageServiceTracker.close();
 		annotationWidgetServiceTracker.close();
