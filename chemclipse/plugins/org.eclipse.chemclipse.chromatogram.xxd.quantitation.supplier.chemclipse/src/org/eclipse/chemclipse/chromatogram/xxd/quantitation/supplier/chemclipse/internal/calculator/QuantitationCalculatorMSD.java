@@ -30,8 +30,8 @@ import org.eclipse.chemclipse.msd.model.core.IPeakMSD;
 import org.eclipse.chemclipse.msd.model.core.IScanMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.EvaluationException;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignal;
+import org.eclipse.chemclipse.numeric.equations.IQuadraticEquation;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
-import org.eclipse.chemclipse.numeric.equations.QuadraticEquation;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
@@ -206,25 +206,15 @@ public class QuantitationCalculatorMSD implements IQuantitationCalculatorMSD {
 				break;
 			case QUADRATIC:
 				/*
-				 * The quadratic equation could lead to two results.
-				 * Select the result that is closer to the average value.
-				 */
-				// double factorAverage = quantitationCompound.getResponseSignals().getAverageFactor(signal, isCrossZero);
-				// double concentrationAverage = factorAverage * integratedArea;
-				/*
 				 * Don't quantify if it's outside min/max response.
 				 */
-				QuadraticEquation quadraticEquation = responseSignals.getQuadraticEquation(signal, isCrossZero);
+				IQuadraticEquation quadraticEquation = responseSignals.getQuadraticEquation(signal, isCrossZero);
 				if(integratedArea < minResponse) {
 					description = getDescriptionResponse(integratedArea, minResponse, "< min");
 				} else if(integratedArea > maxResponse) {
 					description = getDescriptionResponse(integratedArea, maxResponse, "> max");
 				} else {
 					concentration = quadraticEquation.calculateX(integratedArea);
-					// double concentration2 = quadraticEquation.calculateX(integratedArea, false);
-					// double delta1 = Math.abs(concentration1 - concentrationAverage);
-					// double delta2 = Math.abs(concentration2 - concentrationAverage);
-					// concentration = (delta1 < delta2) ? concentration1 : concentration2;
 				}
 				break;
 			case AVERAGE:

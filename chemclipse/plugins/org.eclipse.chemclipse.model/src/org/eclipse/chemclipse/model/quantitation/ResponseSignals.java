@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2019 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,8 +19,8 @@ import java.util.Set;
 import org.eclipse.chemclipse.numeric.core.IPoint;
 import org.eclipse.chemclipse.numeric.core.Point;
 import org.eclipse.chemclipse.numeric.equations.Equations;
+import org.eclipse.chemclipse.numeric.equations.IQuadraticEquation;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
-import org.eclipse.chemclipse.numeric.equations.QuadraticEquation;
 
 public class ResponseSignals extends ArrayList<IResponseSignal> implements IResponseSignals {
 
@@ -39,15 +39,14 @@ public class ResponseSignals extends ArrayList<IResponseSignal> implements IResp
 	}
 
 	@Override
-	public QuadraticEquation getQuadraticEquation(double signal, boolean isCrossZero) {
+	public IQuadraticEquation getQuadraticEquation(double signal, boolean isCrossZero) {
 
 		/*
 		 * Create the equation.
 		 */
 		List<IPoint> points = getPoints(signal, isCrossZero);
 		IPoint[] pointArray = points.toArray(new IPoint[points.size()]);
-		QuadraticEquation quadraticEquation = Equations.createQuadraticEquation(pointArray);
-		return quadraticEquation;
+		return Equations.createQuadraticEquation(pointArray);
 	}
 
 	@Override

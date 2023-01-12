@@ -45,25 +45,25 @@ public class Equations_3_Test extends TestCase {
 
 	public void testCreateLinearEquation_1() {
 
-		QuadraticEquation eq = Equations.createQuadraticEquation(points);
+		IQuadraticEquation eq = Equations.createQuadraticEquation(points);
 		assertEquals("X=0", 4.371859296482454d, eq.calculateY(0));
 	}
 
 	public void testCreateLinearEquation_2() {
 
-		QuadraticEquation eq = Equations.createQuadraticEquation(points);
+		IQuadraticEquation eq = Equations.createQuadraticEquation(points);
 		assertEquals("toString()", "org.eclipse.chemclipse.numeric.equations.QuadraticEquation[f(x)=-0.1432160804020076x^2 + 0.5552763819095254x + 4.371859296482454]", eq.toString());
 	}
 
 	public void testCreateLinearEquation_3() {
 
-		QuadraticEquation equation = Equations.createQuadraticEquation(points);
+		IQuadraticEquation equation = Equations.createQuadraticEquation(points);
 		assertEquals("getApexValueForX Apex.NEGATIVE", 7.793890860025901d, equation.getApexValueForX(Apex.POSITIVE));
 	}
 
 	public void testCreateLinearEquation_4() {
 
-		QuadraticEquation eq = Equations.createQuadraticEquation(points);
+		IQuadraticEquation eq = Equations.createQuadraticEquation(points);
 		assertEquals("getApexValueForX Apex.NEGATIVE", -3.9166978775698498d, eq.getApexValueForX(Apex.NEGATIVE));
 	}
 }

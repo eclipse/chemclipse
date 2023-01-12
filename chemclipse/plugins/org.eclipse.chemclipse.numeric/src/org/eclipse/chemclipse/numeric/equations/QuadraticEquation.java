@@ -15,7 +15,7 @@ package org.eclipse.chemclipse.numeric.equations;
  * This class represents a quadratic equation.<br/>
  * f(x) = ax^2 + bx + c
  */
-public class QuadraticEquation implements IEquation {
+public class QuadraticEquation implements IQuadraticEquation {
 
 	private static final long serialVersionUID = -5348071897593888033L;
 	//
@@ -57,7 +57,7 @@ public class QuadraticEquation implements IEquation {
 	public double calculateX(double y) {
 
 		/*
-		 * x = (c - y) / (-0.5 * (b + SQRT(POWER(b,2) - (4 * a * (c - y)))))
+		 * x = (c - y) / (-0.5 * (b + SQRT(POW(b,2) - (4 * a * (c - y)))))
 		 */
 		double result = 0.0d;
 		double denominator = -0.5d * (b + Math.sqrt(Math.pow(b, 2) - (4 * a * (c - y))));
@@ -74,6 +74,7 @@ public class QuadraticEquation implements IEquation {
 		return (a * Math.pow(x, 2.0)) + (b * x) + c;
 	}
 
+	@Override
 	public double getApexValueForX(Apex result) {
 
 		/*

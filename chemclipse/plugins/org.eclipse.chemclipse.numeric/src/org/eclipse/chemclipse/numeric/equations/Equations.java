@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2019 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -102,13 +102,6 @@ public class Equations {
 	 */
 	public static LinearEquation createLinearEquation(IPoint[] points) {
 
-		/*
-		 * f(x) = ax + b f(x) x ------ 4 4 1 7 3 6 5 2 {1,0} = {7,1} In case for
-		 * a linear equation use for the array a: double[][] valuesA = {{4,1},
-		 * {7,1}, {6,1}, {2,1}}; double[][] valuesB = {{4,0}, {1,0}, {3,0},
-		 * {5,0}}; The result will be: f(x) = -0.73x + 6.71
-		 */
-		// -----------------------------InitializeValues
 		double[][] valuesA = new double[points.length][2];
 		double[][] valuesB = new double[points.length][2];
 		double x = 0.0;
@@ -130,8 +123,7 @@ public class Equations {
 			valuesA[i][1] = 1.0;
 			valuesB[i][0] = y;
 		}
-		// -----------------------------InitializeValues
-		// -----------------------------SolveEquation
+		//
 		GaussJordan gj = new GaussJordan();
 		double[][] a = gj.AtA(valuesA);
 		double[][] b = gj.AtB(valuesA, valuesB);
@@ -142,7 +134,6 @@ public class Equations {
 			logger.warn(e);
 			return null;
 		}
-		// -----------------------------SolveEquation
 	}
 
 	/**
@@ -190,13 +181,6 @@ public class Equations {
 		return new Point(x, y);
 	}
 
-	// TODO implementieren
-	/*
-	 * public static QuadraticEquation createQuadraticEquation(IPoint p1, IPoint
-	 * p2, IPoint p3) { double a = 0, b = 0, c = 0;
-	 * System.out.println("Quadratic implementieren"); return new
-	 * QuadraticEquation(a, b, c); }
-	 */
 	/**
 	 * Returns a quadratic equations which fits best to the given point array.<br/>
 	 * The system will be solved using the gauss jordan algorithm.
@@ -204,32 +188,24 @@ public class Equations {
 	 * @param points
 	 * @return {@link QuadraticEquation}
 	 */
-	public static QuadraticEquation createQuadraticEquation(IPoint[] points) {
+	public static IQuadraticEquation createQuadraticEquation(IPoint[] points) {
 
-		/*
-		 * f(x) = ax^2 + bx + c f(x) x ------ 4 4 1 7 3 6 5 2 {1,0,0} = {49,7,1}
-		 * In case for a linear equation use for the array a: double[][] valuesA
-		 * = {{16,4,1}, {49,7,1}, {36,6,1}, {4,2,1}}; double[][] valuesB =
-		 * {{4,0,0}, {1,0,0}, {3,0,0}, {5,0,0}}; The result will be: f(x) =
-		 * -0.73x + 6.71
-		 */
-		// -----------------------------InitializeValues
 		double[][] valuesA = new double[points.length][3];
 		double[][] valuesB = new double[points.length][3];
 		double x = 0.0;
 		double y = 0.0;
-		IPoint p;
+		IPoint point;
 		for(int i = 0; i < points.length; i++) {
-			p = points[i];
+			point = points[i];
 			/*
 			 * Check whether p is null or not and set the x,y values.
 			 */
-			if(p == null) {
+			if(point == null) {
 				x = 0.0;
 				y = 0.0;
 			} else {
-				x = p.getX();
-				y = p.getY();
+				x = point.getX();
+				y = point.getY();
 			}
 			/*
 			 * f(x) = ax^2 + bx + c
@@ -239,65 +215,17 @@ public class Equations {
 			valuesA[i][2] = 1.0;
 			valuesB[i][0] = y;
 		}
-		// -----------------------------InitializeValues
-		// -----------------------------SolveEquation
-		GaussJordan gj = new GaussJordan();
-		double[][] a = gj.AtA(valuesA);
-		double[][] b = gj.AtB(valuesA, valuesB);
-		// TODO siehe Equations_4_Test (wie kann ich erreichen, dass immer die
-		// Regressiongerade positiv gewölbt ist?
+		//
+		GaussJordan gaussJordan = new GaussJordan();
+		double[][] a = gaussJordan.AtA(valuesA);
+		double[][] b = gaussJordan.AtB(valuesA, valuesB);
+		//
 		try {
-			double[] result = gj.solve(a, b);
+			double[] result = gaussJordan.solve(a, b);
 			return new QuadraticEquation(result[0], result[1], result[2]);
 		} catch(GaussJordanError e) {
 			logger.warn(e);
 			return null;
 		}
-		// -----------------------------SolveEquation
 	}
-	// TODO test
-	/*
-	 * public static PolynomicalEquation9thDegree
-	 * createPolynomicalEquation9thDegree(IPoint[] points) { double[][] valuesA
-	 * = new double[points.length][10]; double[][] valuesB = new
-	 * double[points.length][10]; double x = 0.0; double y = 0.0; IPoint p;
-	 * for(int i = 0; i < points.length; i++) { p = points[i]; Check whether p
-	 * is null or not and set the x,y values. if(p == null) { x = 0.0; y = 0.0;
-	 * } else { x = p.getX(); y = p.getY(); } f(x) = ax^9 + bx8 + ...
-	 * valuesA[i][0] = Math.pow(x, 9); valuesA[i][1] = Math.pow(x, 8);
-	 * valuesA[i][2] = Math.pow(x, 7); valuesA[i][3] = Math.pow(x, 6);
-	 * valuesA[i][4] = Math.pow(x, 5); valuesA[i][5] = Math.pow(x, 4);
-	 * valuesA[i][6] = Math.pow(x, 3); valuesA[i][7] = Math.pow(x, 2);
-	 * valuesA[i][8] = x; valuesA[i][9] = 1.0; valuesB[i][0] = y; }
-	 * //-----------------------------InitializeValues
-	 * //-----------------------------SolveEquation GaussJordan gj = new
-	 * GaussJordan(); double[][] a = gj.AtA(valuesA); double[][] b =
-	 * gj.AtB(valuesA, valuesB); // TODO siehe Equations_4_Test (wie kann ich
-	 * erreichen, dass immer die Regressiongerade positiv gewölbt ist? try {
-	 * double[] result = gj.solve(a, b); return new
-	 * PolynomicalEquation9thDegree(result[0], result[1], result[2], result[3],
-	 * result[4], result[5], result[6], result[7], result[8]); } catch
-	 * (GaussJordanError e) { logger.warn(e); return null; }
-	 * //-----------------------------SolveEquation }
-	 */
-	/*
-	 * public static PolynomicalEquation4thDegree
-	 * createPolynomicalEquation4thDegree(IPoint[] points) { double[][] valuesA
-	 * = new double[points.length][5]; double[][] valuesB = new
-	 * double[points.length][5]; double x = 0.0; double y = 0.0; IPoint p;
-	 * for(int i = 0; i < points.length; i++) { p = points[i]; Check whether p
-	 * is null or not and set the x,y values. if(p == null) { x = 0.0; y = 0.0;
-	 * } else { x = p.getX(); y = p.getY(); } f(x) = ax^9 + bx8 + ...
-	 * valuesA[i][0] = Math.pow(x, 4); valuesA[i][1] = Math.pow(x, 3);
-	 * valuesA[i][2] = Math.pow(x, 2); valuesA[i][3] = x; valuesA[i][4] = 1.0;
-	 * valuesB[i][0] = y; } //-----------------------------InitializeValues
-	 * //-----------------------------SolveEquation GaussJordan gj = new
-	 * GaussJordan(); double[][] a = gj.AtA(valuesA); double[][] b =
-	 * gj.AtB(valuesA, valuesB); // TODO siehe Equations_4_Test (wie kann ich
-	 * erreichen, dass immer die Regressiongerade positiv gewölbt ist? try {
-	 * double[] result = gj.solve(a, b); return new
-	 * PolynomicalEquation4thDegree(result[0], result[1], result[2], result[3]);
-	 * } catch (GaussJordanError e) { logger.warn(e); return null; }
-	 * //-----------------------------SolveEquation }
-	 */
 }

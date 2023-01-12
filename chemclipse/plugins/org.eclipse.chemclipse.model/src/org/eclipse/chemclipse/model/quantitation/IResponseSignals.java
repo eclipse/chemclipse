@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2019 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.chemclipse.numeric.equations.IQuadraticEquation;
 import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 import org.eclipse.chemclipse.numeric.equations.QuadraticEquation;
 
@@ -40,7 +41,7 @@ public interface IResponseSignals extends List<IResponseSignal>, Serializable {
 	 * @param isCrossZero
 	 * @return {@link QuadraticEquation}
 	 */
-	QuadraticEquation getQuadraticEquation(double signal, boolean isCrossZero);
+	IQuadraticEquation getQuadraticEquation(double signal, boolean isCrossZero);
 
 	/**
 	 * Returns the average factor to calculate the unknown concentration
