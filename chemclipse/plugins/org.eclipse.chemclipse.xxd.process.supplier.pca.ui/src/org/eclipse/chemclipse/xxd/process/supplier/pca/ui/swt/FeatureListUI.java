@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,7 +25,6 @@ import org.eclipse.chemclipse.xxd.process.supplier.pca.ui.internal.provider.Feat
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerComparator;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
 
 public class FeatureListUI extends ExtendedTableViewer {
@@ -42,6 +41,7 @@ public class FeatureListUI extends ExtendedTableViewer {
 	public FeatureListUI(Composite parent, int style) {
 
 		super(parent, style);
+		setContentProviders();
 		createColumnsDefault();
 	}
 
@@ -85,6 +85,13 @@ public class FeatureListUI extends ExtendedTableViewer {
 	private void createColumnsDefault() {
 
 		createColumns(TITLES, BOUNDS, labelProvider, comparator);
+	}
+
+	private void setContentProviders() {
+
+		setContentProvider(new ListContentProvider());
+		setUseHashlookup(true);
+		setComparator(null);
 	}
 
 	private void createColumnsSpecific(FeatureDataMatrix featureDataMatrix) {
