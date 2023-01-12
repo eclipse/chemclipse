@@ -15,7 +15,6 @@ import org.eclipse.swt.internal.ole.win32.COM;
 import org.eclipse.swt.internal.ole.win32.IFileDialog;
 import org.eclipse.swt.internal.win32.OS;
 
-@SuppressWarnings("restriction")
 public class WindowsFileDialog {
 	/*
 	 * TODO: This is a workaround for Windows setting the default directory on its own.
