@@ -14,6 +14,7 @@ package org.eclipse.chemclipse.xxd.process.supplier.pca.ui.swt;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -179,8 +180,8 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof Algorithm) {
-					return ((Algorithm)element).label();
+				if(element instanceof Algorithm algorithm) {
+					return algorithm.label();
 				}
 				return null;
 			}
@@ -216,7 +217,7 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Run the PCA analysis.");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_EXECUTE, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -502,8 +503,11 @@ public class AnalysisEditorUI extends Composite implements IExtendedPartUI {
 					}
 					evaluationPCA = runnable.getEvaluationPCA();
 				}
-			} catch(Exception e) {
+			} catch(InterruptedException e) {
 				logger.warn(e);
+				Thread.currentThread().interrupt();
+			} catch(InvocationTargetException e) {
+				logger.warn(e.getCause());
 			}
 			fireUpdate(display, evaluationPCA);
 		}

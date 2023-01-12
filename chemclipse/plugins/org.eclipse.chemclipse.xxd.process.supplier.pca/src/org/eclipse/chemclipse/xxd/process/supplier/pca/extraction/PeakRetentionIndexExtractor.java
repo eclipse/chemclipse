@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -36,13 +36,12 @@ import org.eclipse.chemclipse.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.PeakSampleData;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.Sample;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.Samples;
-import org.eclipse.core.runtime.IProgressMonitor;
 
 public class PeakRetentionIndexExtractor {
 
 	private static final String DELIMITER = ",";
 
-	public Samples extractPeakData(Map<IDataInputEntry, IPeaks<?>> peaks, int retentionIndexWindow, IProgressMonitor monitor) {
+	public Samples extractPeakData(Map<IDataInputEntry, IPeaks<?>> peaks, int retentionIndexWindow) {
 
 		List<Sample> samplesList = new ArrayList<>();
 		peaks.keySet().forEach(d -> samplesList.add(new Sample(d.getSampleName(), d.getGroupName())));

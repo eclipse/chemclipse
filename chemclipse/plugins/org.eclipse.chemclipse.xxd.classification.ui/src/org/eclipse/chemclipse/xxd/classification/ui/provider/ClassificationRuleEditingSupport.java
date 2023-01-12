@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -55,8 +55,7 @@ public class ClassificationRuleEditingSupport extends EditingSupport {
 	@Override
 	protected Object getValue(Object element) {
 
-		if(element instanceof ClassificationRule) {
-			ClassificationRule classificationRule = (ClassificationRule)element;
+		if(element instanceof ClassificationRule classificationRule) {
 			switch(column) {
 				case ClassificationRuleLabelProvider.SEARCH_EXPRESSION:
 					return classificationRule.getSearchExpression();
@@ -72,8 +71,7 @@ public class ClassificationRuleEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 
-		if(element instanceof ClassificationRule) {
-			ClassificationRule classificationRule = (ClassificationRule)element;
+		if(element instanceof ClassificationRule classificationRule) {
 			switch(column) {
 				case ClassificationRuleLabelProvider.SEARCH_EXPRESSION:
 					classificationRule.setSearchExpression((String)value);

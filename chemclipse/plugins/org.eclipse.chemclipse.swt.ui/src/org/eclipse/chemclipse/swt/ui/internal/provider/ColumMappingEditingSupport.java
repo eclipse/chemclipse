@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -56,8 +56,7 @@ public class ColumMappingEditingSupport extends EditingSupport {
 	@Override
 	protected Object getValue(Object element) {
 
-		if(element instanceof Map.Entry) {
-			Map.Entry setting = (Map.Entry)element;
+		if(element instanceof Map.Entry setting) {
 			switch(column) {
 				case ColumMappingLabelProvider.SEPRATION_COLUMN:
 					for(int i = 0; i < columnTypes.length; i++) {
@@ -75,8 +74,7 @@ public class ColumMappingEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(Object element, Object value) {
 
-		if(element instanceof Map.Entry) {
-			Map.Entry setting = (Map.Entry)element;
+		if(element instanceof Map.Entry setting) {
 			switch(column) {
 				case ColumMappingLabelProvider.SEPRATION_COLUMN:
 					setting.setValue(columnTypes[(int)value]);
