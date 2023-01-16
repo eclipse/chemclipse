@@ -28,6 +28,7 @@ import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignalExtractor;
 import org.eclipse.chemclipse.msd.model.xic.IExtractedIonSignals;
 import org.eclipse.chemclipse.tsd.model.core.IChromatogramTSD;
 import org.eclipse.chemclipse.tsd.model.core.IScanTSD;
+import org.eclipse.chemclipse.tsd.model.core.TypeTSD;
 import org.eclipse.chemclipse.wsd.model.core.IChromatogramWSD;
 import org.eclipse.chemclipse.wsd.model.xwc.ExtractedSingleWavelengthSignalExtractor;
 import org.eclipse.chemclipse.wsd.model.xwc.IExtractedSingleWavelengthSignalExtractor;
@@ -195,7 +196,10 @@ public class ChromatogramHeatmapSupport {
 
 	private Optional<ChromatogramHeatmapData> getHeatmap(IChromatogramTSD chromatogram, double scaleIntensityMin, double scaleIntensityMax) {
 
-		if(chromatogram.isType2()) {
+		/*
+		 * TODO
+		 */
+		if(TypeTSD.GCxGC_MS.equals(chromatogram.getTypeTSD())) {
 			return getHeatmapType2(chromatogram, scaleIntensityMin, scaleIntensityMax);
 		} else {
 			return getHeatmapType1(chromatogram, scaleIntensityMin, scaleIntensityMax);

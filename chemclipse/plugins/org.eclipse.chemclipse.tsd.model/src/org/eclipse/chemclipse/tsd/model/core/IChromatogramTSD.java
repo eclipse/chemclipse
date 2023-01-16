@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,10 +19,5 @@ public interface IChromatogramTSD extends IChromatogram<IChromatogramPeakTSD> {
 
 	String getLabelAxisY();
 
-	/*
-	 * This is a workaround to trigger the heatmap.
-	 * It will be adjusted in the future as we have learned more
-	 * how to handle GCxGC data.
-	 */
-	boolean isType2();
+	TypeTSD getTypeTSD();
 }
