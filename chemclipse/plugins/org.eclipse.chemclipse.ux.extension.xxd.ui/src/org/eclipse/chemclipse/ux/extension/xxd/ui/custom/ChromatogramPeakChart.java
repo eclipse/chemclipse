@@ -626,7 +626,7 @@ public class ChromatogramPeakChart extends ChromatogramChart implements IRangeSu
 		/*
 		 * Clear the label marker.
 		 */
-		Set<String> seriesIds = peakLabelMarkerMap.keySet();
+		Set<String> seriesIds = new HashSet<>(peakLabelMarkerMap.keySet());
 		for(String seriesId : seriesIds) {
 			removeIdentificationLabelMarker(peakLabelMarkerMap, seriesId);
 		}
