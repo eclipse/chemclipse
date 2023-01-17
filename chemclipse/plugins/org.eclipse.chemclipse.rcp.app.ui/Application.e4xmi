@@ -52,26 +52,6 @@
       <tags>View</tags>
       <tags>categoryTag:General</tags>
     </sharedElements>
-    <sharedElements xsi:type="basic:Part" xmi:id="_3Ep6kEjnEeKCXsBuXeeyZA" elementId="org.eclipse.ui.views.ContentOutline" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Content Outline" iconURI="platform:/plugin/org.eclipse.ui.views/icons/full/eview16/outline_co.png">
-      <tags>View</tags>
-      <tags>categoryTag:General</tags>
-    </sharedElements>
-    <sharedElements xsi:type="basic:Part" xmi:id="_AZfjAEjoEeKCXsBuXeeyZA" elementId="org.eclipse.ui.views.BookmarkView" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Bookmark View" iconURI="platform:/plugin/org.eclipse.ui.ide/icons/full/eview16/bkmrk_nav.png">
-      <tags>View</tags>
-      <tags>categoryTag:General</tags>
-    </sharedElements>
-    <sharedElements xsi:type="basic:Part" xmi:id="_F-2pAEjoEeKCXsBuXeeyZA" elementId="org.eclipse.ui.views.ProblemView" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Problem View" iconURI="platform:/plugin/org.eclipse.ui.ide/icons/full/eview16/problems_view.png">
-      <tags>View</tags>
-      <tags>categoryTag:General</tags>
-    </sharedElements>
-    <sharedElements xsi:type="basic:Part" xmi:id="_Il8nEEjoEeKCXsBuXeeyZA" elementId="org.eclipse.ui.views.ProgressView" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Progress View" iconURI="platform:/plugin/org.eclipse.ui.ide/icons/full/eview16/pview.png">
-      <tags>View</tags>
-      <tags>categoryTag:General</tags>
-    </sharedElements>
-    <sharedElements xsi:type="basic:Part" xmi:id="_LyVDgEjoEeKCXsBuXeeyZA" elementId="org.eclipse.ui.views.TaskList" contributionURI="bundleclass://org.eclipse.ui.workbench/org.eclipse.ui.internal.e4.compatibility.CompatibilityView" label="Task List" iconURI="platform:/plugin/org.eclipse.ui.ide/icons/full/eview16/tasks_tsk.png">
-      <tags>View</tags>
-      <tags>categoryTag:General</tags>
-    </sharedElements>
     <sharedElements xsi:type="advanced:Area" xmi:id="_Jqg8MEnJEeKP49-EnXatSw" elementId="org.eclipse.chemclipse.rcp.app.ui.editor" selectedElement="_N2AsQEnJEeKP49-EnXatSw" label="">
       <children xsi:type="basic:PartStack" xmi:id="_N2AsQEnJEeKP49-EnXatSw" elementId="org.eclipse.e4.primaryDataStack">
         <tags>newtablook</tags>
