@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -109,9 +109,7 @@ public class PeakReader_1500 extends AbstractZipReader implements IPeakReader {
 					IPeakMSD peak = readPeak(dataInputStream);
 					peaks.addPeak(peak);
 					subMonitor.worked(1);
-				} catch(IllegalArgumentException e) {
-					logger.warn(e);
-				} catch(PeakException e) {
+				} catch(Exception e) {
 					logger.warn(e);
 				}
 			}
@@ -123,7 +121,7 @@ public class PeakReader_1500 extends AbstractZipReader implements IPeakReader {
 		return peaks;
 	}
 
-	private IPeakMSD readPeak(DataInputStream dataInputStream) throws IOException, IllegalArgumentException, PeakException {
+	private IPeakMSD readPeak(DataInputStream dataInputStream) throws IOException, IllegalArgumentException, PeakException, AbundanceLimitExceededException, IonLimitExceededException {
 
 		IIonTransitionSettings ionTransitionSettings = new IonTransitionSettings();
 		//

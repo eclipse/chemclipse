@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -403,9 +403,7 @@ public class ChromatogramReader_1500 extends AbstractChromatogramReader implemen
 			try {
 				IChromatogramPeakMSD peak = readPeak(dataInputStream, chromatogram);
 				chromatogram.addPeak(peak);
-			} catch(IllegalArgumentException e) {
-				logger.warn(e);
-			} catch(PeakException e) {
+			} catch(Exception e) {
 				logger.warn(e);
 			}
 		}
@@ -415,7 +413,7 @@ public class ChromatogramReader_1500 extends AbstractChromatogramReader implemen
 		}
 	}
 
-	private IChromatogramPeakMSD readPeak(DataInputStream dataInputStream, IChromatogramMSD chromatogram) throws IOException, IllegalArgumentException, PeakException {
+	private IChromatogramPeakMSD readPeak(DataInputStream dataInputStream, IChromatogramMSD chromatogram) throws IOException, IllegalArgumentException, PeakException, AbundanceLimitExceededException, IonLimitExceededException {
 
 		IIonTransitionSettings ionTransitionSettings = chromatogram.getIonTransitionSettings();
 		//
@@ -453,8 +451,8 @@ public class ChromatogramReader_1500 extends AbstractChromatogramReader implemen
 		peak.setPeakType(peakType);
 		peak.setSuggestedNumberOfComponents(suggestedNumberOfComponents);
 		//
-		for(String c : classifiers) {
-			peak.addClassifier(c);
+		for(String classifier : classifiers) {
+			peak.addClassifier(classifier);
 		}
 		//
 		List<IIntegrationEntry> integrationEntries = readIntegrationEntries(dataInputStream);

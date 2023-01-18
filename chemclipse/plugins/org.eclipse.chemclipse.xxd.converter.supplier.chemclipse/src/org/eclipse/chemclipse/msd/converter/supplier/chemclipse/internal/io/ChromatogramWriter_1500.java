@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -76,6 +76,8 @@ import org.eclipse.core.runtime.SubMonitor;
  * This is suitable but I know, it's not the best way to achieve long term support for older formats.
  */
 public class ChromatogramWriter_1500 extends AbstractChromatogramWriter implements IChromatogramMSDZipWriter {
+
+	private static final Float LIMIT_AREA_ABUNDANCE = 1.0f;
 
 	@Override
 	public void writeChromatogram(File file, IChromatogramMSD chromatogram, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotWriteableException, IOException {
@@ -343,7 +345,7 @@ public class ChromatogramWriter_1500 extends AbstractChromatogramWriter implemen
 		zipEntry = new ZipEntry(directoryPrefix + IFormat.FILE_PEAKS_MSD);
 		zipOutputStream.putNextEntry(zipEntry);
 		dataOutputStream = new DataOutputStream(zipOutputStream);
-		List<IChromatogramPeakMSD> peaks = chromatogram.getPeaks();
+		List<IChromatogramPeakMSD> peaks = getPeaks(chromatogram);
 		dataOutputStream.writeInt(peaks.size()); // Number of Peaks
 		for(IChromatogramPeakMSD peak : peaks) {
 			writePeak(dataOutputStream, peak);
@@ -351,6 +353,37 @@ public class ChromatogramWriter_1500 extends AbstractChromatogramWriter implemen
 		//
 		dataOutputStream.flush();
 		zipOutputStream.closeEntry();
+	}
+
+	private List<IChromatogramPeakMSD> getPeaks(IChromatogramMSD chromatogram) {
+
+		List<IChromatogramPeakMSD> peaks = new ArrayList<>();
+		for(IChromatogramPeakMSD peak : chromatogram.getPeaks()) {
+			if(isValidPeak(peak)) {
+				peaks.add(peak);
+			}
+		}
+		//
+		return peaks;
+	}
+
+	/*
+	 * It could happen that the intensity of a peak ion is < 1.
+	 * That's in most cases invalid and could lead to errors that
+	 * are hard to detect like failed chromatograms on import.
+	 */
+	private boolean isValidPeak(IChromatogramPeakMSD peak) {
+
+		IPeakModelMSD peakModel = peak.getPeakModel();
+		IPeakMassSpectrum massSpectrum = peakModel.getPeakMassSpectrum();
+		//
+		for(IIon ion : massSpectrum.getIons()) {
+			if(ion.getAbundance() < LIMIT_AREA_ABUNDANCE) {
+				return false;
+			}
+		}
+		//
+		return true;
 	}
 
 	private void writeChromatogramArea(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramMSD chromatogram) throws IOException {
