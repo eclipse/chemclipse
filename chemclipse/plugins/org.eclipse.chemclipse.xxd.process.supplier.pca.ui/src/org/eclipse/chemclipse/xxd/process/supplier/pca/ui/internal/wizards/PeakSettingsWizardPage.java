@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,9 +12,12 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier.pca.ui.internal.wizards;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.ExtractionOption;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.Algorithm;
+import org.eclipse.chemclipse.xxd.process.supplier.pca.model.DescriptionOption;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.preferences.PreferenceSupplier;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.databinding.UpdateValueStrategy;
@@ -26,6 +29,7 @@ import org.eclipse.jface.databinding.swt.typed.WidgetProperties;
 import org.eclipse.jface.databinding.wizard.WizardPageSupport;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ComboViewer;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -39,14 +43,15 @@ import org.eclipse.swt.widgets.Text;
 
 public class PeakSettingsWizardPage extends AbstractAnalysisWizardPage {
 
+	private DescriptionOption descriptionOption = DescriptionOption.NAME;
 	private ExtractionOption extractionOption = ExtractionOption.RETENTION_TIME_MS;
 	private int groupWindow = 1500; // 1.5 sec
 	//
 	private DataBindingContext dataBindingContext = new DataBindingContext();
 	private IObservableValue<Integer> groupValueWindow = new WritableValue<>();
 	//
-	private Label labelGroupValue;
-	private Text textGroupValue;
+	private AtomicReference<Label> labelGroupControl = new AtomicReference<>();
+	private AtomicReference<Text> textGroupControl = new AtomicReference<>();
 
 	public PeakSettingsWizardPage() {
 
@@ -67,10 +72,12 @@ public class PeakSettingsWizardPage extends AbstractAnalysisWizardPage {
 		//
 		createLabel(composite, "Title:");
 		createTextTitle(composite, 1);
+		createLabel(composite, "Description:");
+		createComboViewerDescriptionOption(composite);
 		createLabel(composite, "Group By:");
 		createComboViewerExtractionOption(composite);
-		labelGroupValue = createLabel(composite, "Retention Time Window [ms]:");
-		textGroupValue = createVariableSection(composite);
+		createGroupLabel(composite);
+		createVariableSection(composite);
 		createLabel(composite, "Number of PCs:");
 		createSpinnerPrincipleComponents(composite);
 		createLabel(composite, "Algorithm:");
@@ -79,6 +86,11 @@ public class PeakSettingsWizardPage extends AbstractAnalysisWizardPage {
 		updateWidgets();
 		//
 		setControl(composite);
+	}
+
+	public DescriptionOption getDescriptionOption() {
+
+		return descriptionOption;
 	}
 
 	public ExtractionOption getExtractionOption() {
@@ -91,6 +103,43 @@ public class PeakSettingsWizardPage extends AbstractAnalysisWizardPage {
 		return groupValueWindow.getValue();
 	}
 
+	private ComboViewer createComboViewerDescriptionOption(Composite parent) {
+
+		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
+		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
+		comboViewer.setLabelProvider(new AbstractLabelProvider() {
+
+			@Override
+			public String getText(Object element) {
+
+				if(element instanceof DescriptionOption descriptionOption) {
+					return descriptionOption.label();
+				}
+				return null;
+			}
+		});
+		//
+		Combo combo = comboViewer.getCombo();
+		combo.setToolTipText("Description Option");
+		combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
+		combo.addSelectionListener(new SelectionAdapter() {
+
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+
+				Object object = comboViewer.getStructuredSelection().getFirstElement();
+				if(object instanceof DescriptionOption option) {
+					descriptionOption = option;
+				}
+			}
+		});
+		//
+		comboViewer.setInput(DescriptionOption.values());
+		comboViewer.setSelection(new StructuredSelection(DescriptionOption.NAME));
+		//
+		return comboViewer;
+	}
+
 	private ComboViewer createComboViewerExtractionOption(Composite parent) {
 
 		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
@@ -101,8 +150,8 @@ public class PeakSettingsWizardPage extends AbstractAnalysisWizardPage {
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof ExtractionOption) {
-					return ((ExtractionOption)element).label();
+				if(element instanceof ExtractionOption extractionOption) {
+					return extractionOption.label();
 				}
 				return null;
 			}
@@ -116,27 +165,34 @@ public class PeakSettingsWizardPage extends AbstractAnalysisWizardPage {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof ExtractionOption) {
-					extractionOption = (ExtractionOption)object;
+				if(object instanceof ExtractionOption option) {
+					extractionOption = option;
 					updateWidgets();
 				}
 			}
 		});
 		//
 		comboViewer.setInput(ExtractionOption.values());
-		combo.select(0);
+		comboViewer.setSelection(new StructuredSelection(ExtractionOption.RETENTION_TIME_MS));
 		//
 		return comboViewer;
+	}
+
+	private void createGroupLabel(Composite parent) {
+
+		Label label = createLabel(parent, "Retention Time Window [ms]:");
+		labelGroupControl.set(label);
 	}
 
 	private Label createLabel(Composite parent, String text) {
 
 		Label label = new Label(parent, SWT.NONE);
 		label.setText(text);
+		//
 		return label;
 	}
 
-	private Text createVariableSection(Composite parent) {
+	private void createVariableSection(Composite parent) {
 
 		Text text = new Text(parent, SWT.BORDER);
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
@@ -151,8 +207,7 @@ public class PeakSettingsWizardPage extends AbstractAnalysisWizardPage {
 		}));
 		//
 		widgetToModel.setBeforeSetValidator(o1 -> {
-			if(o1 instanceof Integer) {
-				Integer i = (Integer)o1;
+			if(o1 instanceof Integer i) {
 				if(i > 0) {
 					return ValidationStatus.ok();
 				}
@@ -163,7 +218,7 @@ public class PeakSettingsWizardPage extends AbstractAnalysisWizardPage {
 		UpdateValueStrategy<Integer, String> modelToWidget = UpdateValueStrategy.create(IConverter.create(Integer.class, String.class, o1 -> Integer.toString(((Integer)o1))));
 		dataBindingContext.bindValue(WidgetProperties.text(SWT.Modify).observe(text), groupValueWindow, widgetToModel, modelToWidget);
 		//
-		return text;
+		textGroupControl.set(text);
 	}
 
 	private Spinner createSpinnerPrincipleComponents(Composite parent) {
@@ -190,14 +245,13 @@ public class PeakSettingsWizardPage extends AbstractAnalysisWizardPage {
 
 		ComboViewer comboViewer = new ComboViewer(parent, SWT.READ_ONLY);
 		comboViewer.setContentProvider(ArrayContentProvider.getInstance());
-		comboViewer.setInput(algorithms);
 		comboViewer.setLabelProvider(new AbstractLabelProvider() {
 
 			@Override
 			public String getText(Object element) {
 
-				if(element instanceof Algorithm) {
-					return ((Algorithm)element).label();
+				if(element instanceof Algorithm algorithm) {
+					return algorithm.label();
 				}
 				return null;
 			}
@@ -212,26 +266,16 @@ public class PeakSettingsWizardPage extends AbstractAnalysisWizardPage {
 			public void widgetSelected(SelectionEvent e) {
 
 				Object object = comboViewer.getStructuredSelection().getFirstElement();
-				if(object instanceof Algorithm) {
-					analysisSettings.setAlgorithm((Algorithm)object);
+				if(object instanceof Algorithm algorithm) {
+					analysisSettings.setAlgorithm(algorithm);
 				}
 			}
 		});
 		//
-		combo.select(getSelectedAlgorithmIndex());
+		comboViewer.setInput(algorithms);
+		comboViewer.setSelection(new StructuredSelection(analysisSettings.getAlgorithm()));
 		//
 		return comboViewer;
-	}
-
-	private int getSelectedAlgorithmIndex() {
-
-		for(int i = 0; i < algorithms.length; i++) {
-			Algorithm algorithm = algorithms[i];
-			if(algorithm.equals(analysisSettings.getAlgorithm())) {
-				return i;
-			}
-		}
-		return -1;
 	}
 
 	private void updateWidgets() {
@@ -240,17 +284,17 @@ public class PeakSettingsWizardPage extends AbstractAnalysisWizardPage {
 		switch(extractionOption) {
 			case RETENTION_TIME_MS:
 				enabled = true;
-				labelGroupValue.setText("Retention Time Window [ms]:");
+				labelGroupControl.get().setText("Retention Time Window [ms]:");
 				break;
 			case RETENTION_INDEX:
 				enabled = true;
-				labelGroupValue.setText("Retention Index Window:");
+				labelGroupControl.get().setText("Retention Index Window:");
 				break;
 			default:
 				break;
 		}
 		//
-		labelGroupValue.setEnabled(enabled);
-		textGroupValue.setEnabled(enabled);
+		labelGroupControl.get().setEnabled(enabled);
+		textGroupControl.get().setEnabled(enabled);
 	}
 }

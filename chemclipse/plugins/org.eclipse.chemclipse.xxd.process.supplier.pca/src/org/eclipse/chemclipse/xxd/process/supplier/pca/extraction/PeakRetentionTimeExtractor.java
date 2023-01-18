@@ -13,8 +13,6 @@ package org.eclipse.chemclipse.xxd.process.supplier.pca.extraction;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -25,23 +23,19 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IPeaks;
-import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
-import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.chemclipse.model.statistics.RetentionTime;
+import org.eclipse.chemclipse.xxd.process.supplier.pca.model.DescriptionOption;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.PeakSampleData;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.Sample;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.Samples;
 
-public class PeakRetentionTimeExtractor {
+public class PeakRetentionTimeExtractor extends AbstractClassifierDescriptionExtractor {
 
-	private static final String DELIMITER = ",";
-
-	public Samples extractPeakData(Map<IDataInputEntry, IPeaks<?>> peaks, int retentionTimeWindow) {
+	public Samples extractPeakData(Map<IDataInputEntry, IPeaks<?>> peaks, int retentionTimeWindow, DescriptionOption descriptionOption) {
 
 		List<Sample> samplesList = new ArrayList<>();
 		peaks.keySet().forEach(d -> samplesList.add(new Sample(d.getSampleName(), d.getGroupName())));
@@ -57,7 +51,7 @@ public class PeakRetentionTimeExtractor {
 		samples.getVariables().addAll(RetentionTime.create(extractedRetentionTimes));
 		//
 		setExtractData(extractPeaks, samples);
-		setClassifierAndDescription(samples);
+		setClassifierAndDescription(samples, descriptionOption);
 		//
 		return samples;
 	}
@@ -198,10 +192,12 @@ public class PeakRetentionTimeExtractor {
 
 		Map<Integer, Double> peakSum = new LinkedHashMap<>();
 		int step = 1;
+		//
 		if(retentionTimeWindow > 400) {
 			step = retentionTimeWindow / 400;
 			retentionTimeWindow = (retentionTimeWindow / step / 2) * step * 2;
 		}
+		//
 		for(TreeMap<Integer, IPeak> peaks : pcaPeakRetetntionTimeMap.values()) {
 			for(Integer retentionTime : peaks.keySet()) {
 				retentionTime = (retentionTime / step) * step;
@@ -217,6 +213,7 @@ public class PeakRetentionTimeExtractor {
 				}
 			}
 		}
+		//
 		SortedMap<Double, Collection<Integer>> sortedWeightRetentionTimes = new TreeMap<>((o1, o2) -> -Double.compare(o1, o2));
 		peakSum.forEach((k, v) -> {
 			if(!(v < 1)) {
@@ -230,72 +227,7 @@ public class PeakRetentionTimeExtractor {
 				}
 			}
 		});
+		//
 		return sortedWeightRetentionTimes;
-	}
-
-	private void setClassifierAndDescription(Samples samples) {
-
-		for(int i = 0; i < samples.getVariables().size(); i++) {
-			final int j = i;
-			final Set<String> descriptions = new HashSet<>();
-			final Set<String> classifier = new HashSet<>();
-			/*
-			 * Fetch classifications and descriptions.
-			 */
-			samples.getSampleList().stream().map(s -> s.getSampleData()).map(d -> d.get(j).getPeak()).forEach(peak -> {
-				if(peak.isPresent()) {
-					/*
-					 * Classifier
-					 */
-					classifier.addAll(peak.get().getClassifier());
-					/*
-					 * Descriptions
-					 */
-					float retentionIndex = peak.get().getPeakModel().getPeakMaximum().getRetentionIndex();
-					IdentificationTargetComparator identificationTargetComparator = new IdentificationTargetComparator(retentionIndex);
-					ILibraryInformation libraryInformation = IIdentificationTarget.getBestLibraryInformation(peak.get().getTargets(), identificationTargetComparator);
-					//
-					if(libraryInformation != null) {
-						descriptions.add(libraryInformation.getName());
-					}
-				}
-			});
-			/*
-			 * Classifier
-			 */
-			if(!classifier.isEmpty()) {
-				StringBuilder stringBuilder = new StringBuilder();
-				List<String> list = new ArrayList<>(classifier);
-				Collections.sort(list);
-				Iterator<String> iterator = list.iterator();
-				while(iterator.hasNext()) {
-					stringBuilder.append(iterator.next());
-					if(iterator.hasNext()) {
-						stringBuilder.append(DELIMITER);
-						stringBuilder.append(" ");
-					}
-				}
-				//
-				samples.getVariables().get(i).setClassification(stringBuilder.toString());
-			}
-			/*
-			 * Description -> Best Target
-			 */
-			if(!descriptions.isEmpty()) {
-				StringBuilder stringBuilder = new StringBuilder();
-				List<String> list = new ArrayList<>(descriptions);
-				Collections.sort(list);
-				Iterator<String> iterator = list.iterator();
-				while(iterator.hasNext()) {
-					stringBuilder.append(iterator.next());
-					if(iterator.hasNext()) {
-						stringBuilder.append(DELIMITER);
-						stringBuilder.append(" ");
-					}
-				}
-				//
-				samples.getVariables().get(i).setDescription(stringBuilder.toString());
-			}
-		}
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -20,6 +20,7 @@ import org.eclipse.chemclipse.xxd.process.supplier.pca.core.IFilterSettings;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.IPreprocessingSettings;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.core.PcaExtractionPeaks;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.extraction.ExtractionSettings;
+import org.eclipse.chemclipse.xxd.process.supplier.pca.model.DescriptionOption;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.IAnalysisSettings;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.jface.wizard.Wizard;
@@ -80,9 +81,10 @@ public class PeaksInputWizard extends Wizard implements IInputWizard {
 	public boolean performFinish() {
 
 		List<IDataInputEntry> dataInputs = getDataInputEntries();
+		DescriptionOption descriptionOption = peakSettingsWizardPage.getDescriptionOption();
 		ExtractionOption extractionOption = peakSettingsWizardPage.getExtractionOption();
 		int groupValueWindow = peakSettingsWizardPage.getGroupValueWindow();
-		ExtractionSettings extractionSettings = new ExtractionSettings(extractionOption, groupValueWindow);
+		ExtractionSettings extractionSettings = new ExtractionSettings(descriptionOption, extractionOption, groupValueWindow);
 		pcaExtractionData = new PcaExtractionPeaks(dataInputs, extractionSettings);
 		return true;
 	}

@@ -11,10 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.xxd.process.supplier.pca.extraction;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -25,26 +23,21 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.eclipse.chemclipse.model.comparator.IdentificationTargetComparator;
-import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.model.core.IPeak;
-import org.eclipse.chemclipse.model.core.IPeakModel;
 import org.eclipse.chemclipse.model.core.IPeaks;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.statistics.IVariable;
 import org.eclipse.chemclipse.model.statistics.Target;
-import org.eclipse.chemclipse.support.text.ValueFormat;
+import org.eclipse.chemclipse.xxd.process.supplier.pca.model.DescriptionOption;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.IDataInputEntry;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.PeakSampleData;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.Sample;
 import org.eclipse.chemclipse.xxd.process.supplier.pca.model.Samples;
 
-public class PeakTargetExtractor {
+public class PeakTargetExtractor extends AbstractClassifierDescriptionExtractor {
 
-	private static final String DELIMITER = ",";
-	private DecimalFormat decimalFormat = ValueFormat.getDecimalFormatEnglish("0.000");
-
-	public Samples extractPeakData(Map<IDataInputEntry, IPeaks<?>> peaks) {
+	public Samples extractPeakData(Map<IDataInputEntry, IPeaks<?>> peaks, DescriptionOption descriptionOption) {
 
 		List<Sample> samplesList = new ArrayList<>();
 		peaks.keySet().forEach(d -> samplesList.add(new Sample(d.getSampleName(), d.getGroupName())));
@@ -60,7 +53,7 @@ public class PeakTargetExtractor {
 		samples.getVariables().addAll(Target.create(targets));
 		//
 		setExtractData(extractPeaks, samples);
-		setClassifierAndDescription(samples);
+		setClassifierAndDescription(samples, descriptionOption);
 		//
 		return samples;
 	}
@@ -129,65 +122,6 @@ public class PeakTargetExtractor {
 					PeakSampleData sampleData = new PeakSampleData();
 					sample.getSampleData().add(sampleData);
 				}
-			}
-		}
-	}
-
-	private void setClassifierAndDescription(Samples samples) {
-
-		for(int i = 0; i < samples.getVariables().size(); i++) {
-			final int j = i;
-			final Set<String> descriptions = new HashSet<>();
-			final Set<String> classifier = new HashSet<>();
-			/*
-			 * Fetch classifications and descriptions.
-			 */
-			samples.getSampleList().stream().map(s -> s.getSampleData()).map(d -> d.get(j).getPeak()).forEach(peak -> {
-				if(peak.isPresent()) {
-					/*
-					 * Classifier / Descriptions
-					 */
-					IPeak peakX = peak.get();
-					IPeakModel peakModel = peakX.getPeakModel();
-					classifier.addAll(peakX.getClassifier());
-					descriptions.add(decimalFormat.format(peakModel.getRetentionTimeAtPeakMaximum() / IChromatogramOverview.MINUTE_CORRELATION_FACTOR));
-				}
-			});
-			/*
-			 * Classifier
-			 */
-			if(!classifier.isEmpty()) {
-				StringBuilder stringBuilder = new StringBuilder();
-				List<String> list = new ArrayList<>(classifier);
-				Collections.sort(list);
-				Iterator<String> iterator = list.iterator();
-				while(iterator.hasNext()) {
-					stringBuilder.append(iterator.next());
-					if(iterator.hasNext()) {
-						stringBuilder.append(DELIMITER);
-						stringBuilder.append(" ");
-					}
-				}
-				//
-				samples.getVariables().get(i).setClassification(stringBuilder.toString());
-			}
-			/*
-			 * Description -> Best Target
-			 */
-			if(!descriptions.isEmpty()) {
-				StringBuilder stringBuilder = new StringBuilder();
-				List<String> list = new ArrayList<>(descriptions);
-				Collections.sort(list);
-				Iterator<String> iterator = list.iterator();
-				while(iterator.hasNext()) {
-					stringBuilder.append(iterator.next());
-					if(iterator.hasNext()) {
-						stringBuilder.append(DELIMITER);
-						stringBuilder.append(" ");
-					}
-				}
-				//
-				samples.getVariables().get(i).setDescription(stringBuilder.toString());
 			}
 		}
 	}
