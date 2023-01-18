@@ -199,7 +199,7 @@ public class PeakSettingsWizardPage extends AbstractAnalysisWizardPage {
 		//
 		UpdateValueStrategy<String, Integer> widgetToModel = UpdateValueStrategy.create(IConverter.create(String.class, Integer.class, o1 -> {
 			try {
-				return Integer.parseInt((String)o1);
+				return Integer.parseInt(o1);
 			} catch(NumberFormatException e) {
 				// No message
 			}
@@ -207,15 +207,13 @@ public class PeakSettingsWizardPage extends AbstractAnalysisWizardPage {
 		}));
 		//
 		widgetToModel.setBeforeSetValidator(o1 -> {
-			if(o1 instanceof Integer i) {
-				if(i > 0) {
-					return ValidationStatus.ok();
-				}
+			if(o1 > 0) {
+				return ValidationStatus.ok();
 			}
 			return ValidationStatus.error("Warning: The value must be positive.");
 		});
 		//
-		UpdateValueStrategy<Integer, String> modelToWidget = UpdateValueStrategy.create(IConverter.create(Integer.class, String.class, o1 -> Integer.toString(((Integer)o1))));
+		UpdateValueStrategy<Integer, String> modelToWidget = UpdateValueStrategy.create(IConverter.create(Integer.class, String.class, o1 -> Integer.toString((o1))));
 		dataBindingContext.bindValue(WidgetProperties.text(SWT.Modify).observe(text), groupValueWindow, widgetToModel, modelToWidget);
 		//
 		textGroupControl.set(text);
