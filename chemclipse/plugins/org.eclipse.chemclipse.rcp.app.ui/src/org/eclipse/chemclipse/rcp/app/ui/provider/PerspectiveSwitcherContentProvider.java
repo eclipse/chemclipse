@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2022 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -31,9 +31,7 @@ public class PerspectiveSwitcherContentProvider implements IStructuredContentPro
 	@Override
 	public Object[] getElements(Object inputElement) {
 
-		if(inputElement instanceof List) {
-			@SuppressWarnings("rawtypes")
-			List perspectives = (List)inputElement;
+		if(inputElement instanceof List<?> perspectives) {
 			return perspectives.toArray();
 		} else {
 			return null;

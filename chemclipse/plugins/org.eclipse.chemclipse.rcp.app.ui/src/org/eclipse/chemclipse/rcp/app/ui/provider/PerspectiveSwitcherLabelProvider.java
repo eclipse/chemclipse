@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2022 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,11 +13,15 @@
 package org.eclipse.chemclipse.rcp.app.ui.provider;
 
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.inject.Inject;
+
 import org.eclipse.chemclipse.logging.core.Logger;
+import org.eclipse.e4.core.services.translation.TranslationService;
 import org.eclipse.e4.ui.model.application.ui.advanced.MPerspective;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -27,25 +31,29 @@ import org.eclipse.swt.graphics.Image;
 public class PerspectiveSwitcherLabelProvider extends LabelProvider implements ITableLabelProvider {
 
 	private static final Logger logger = Logger.getLogger(PerspectiveSwitcherLabelProvider.class);
-	private Map<URL, Image> imageMap = new HashMap<URL, Image>();
+	private Map<URI, Image> imageMap = new HashMap<>();
+	//
+	@Inject
+	private TranslationService translationService;
 
 	@Override
 	public Image getColumnImage(Object element, int columnIndex) {
 
 		Image iconImage = null;
-		if(columnIndex == 0 && element instanceof MPerspective) {
-			MPerspective perspective = (MPerspective)element;
+		if(columnIndex == 0 && element instanceof MPerspective perspective) {
 			try {
-				URL iconURL = new URL(perspective.getIconURI());
-				iconImage = imageMap.get(iconURL);
+				URI iconURI = new URI(perspective.getIconURI());
+				iconImage = imageMap.get(iconURI);
 				if(iconImage == null) {
 					/*
 					 * Create and store the image if neccessary.
 					 */
-					iconImage = ImageDescriptor.createFromURL(iconURL).createImage();
-					imageMap.put(iconURL, iconImage);
+					iconImage = ImageDescriptor.createFromURL(iconURI.toURL()).createImage();
+					imageMap.put(iconURI, iconImage);
 				}
 			} catch(MalformedURLException e) {
+				logger.warn(e);
+			} catch(URISyntaxException e) {
 				logger.warn(e);
 			}
 		}
@@ -59,8 +67,8 @@ public class PerspectiveSwitcherLabelProvider extends LabelProvider implements I
 		/*
 		 * Dispose the images and clear the map.
 		 */
-		for(URL iconURL : imageMap.keySet()) {
-			Image iconImage = imageMap.get(iconURL);
+		for(URI iconURI : imageMap.keySet()) {
+			Image iconImage = imageMap.get(iconURI);
 			if(iconImage != null) {
 				iconImage.dispose();
 			}
@@ -75,8 +83,7 @@ public class PerspectiveSwitcherLabelProvider extends LabelProvider implements I
 		 * Returns the label of the perspective
 		 */
 		String text = "";
-		if(element instanceof MPerspective) {
-			MPerspective perspective = (MPerspective)element;
+		if(element instanceof MPerspective perspective) {
 			switch(columnIndex) {
 				case 0: // Perspective Label
 					text = perspective.getLabel();
@@ -84,12 +91,7 @@ public class PerspectiveSwitcherLabelProvider extends LabelProvider implements I
 						text = "Nameless perspective";
 					} else if(text.startsWith("<") && text.endsWith(">")) {
 						text = text.substring(1, text.length() - 1);
-						if(text.startsWith("%")) {
-							/*
-							 * TODO - Translate
-							 */
-							text = text.substring(1, text.length());
-						}
+						text = translationService.translate(text, perspective.getContributorURI());
 					}
 					break;
 				default:
