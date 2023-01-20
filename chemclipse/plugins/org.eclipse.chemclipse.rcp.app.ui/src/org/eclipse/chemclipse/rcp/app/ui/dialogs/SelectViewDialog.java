@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2018 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,6 +16,9 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.eclipse.chemclipse.rcp.app.ui.provider.SelectViewContentProvider;
+import org.eclipse.chemclipse.rcp.app.ui.provider.SelectViewFilter;
+import org.eclipse.chemclipse.rcp.app.ui.provider.SelectViewLabelProvider;
 import org.eclipse.e4.core.contexts.ContextInjectionFactory;
 import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.eclipse.e4.ui.model.application.MApplication;
@@ -45,10 +48,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-
-import org.eclipse.chemclipse.rcp.app.ui.provider.SelectViewContentProvider;
-import org.eclipse.chemclipse.rcp.app.ui.provider.SelectViewFilter;
-import org.eclipse.chemclipse.rcp.app.ui.provider.SelectViewLabelProvider;
 
 public class SelectViewDialog extends Dialog implements ISelectionChangedListener {
 
@@ -82,6 +81,7 @@ public class SelectViewDialog extends Dialog implements ISelectionChangedListene
 
 	@Inject
 	public SelectViewDialog(@Named(IServiceConstants.ACTIVE_SHELL) Shell shell) {
+
 		super(shell);
 		setShellStyle(getShellStyle() | SWT.SHEET);
 	}
@@ -107,8 +107,8 @@ public class SelectViewDialog extends Dialog implements ISelectionChangedListene
 		int index = table.getSelectionIndex();
 		if(index >= 0) {
 			TableItem item = table.getItem(index);
-			if(item.getData() instanceof MPart) {
-				selectedPart = (MPart)item.getData();
+			if(item.getData() instanceof MPart part) {
+				selectedPart = part;
 			}
 		}
 		validateSelection();
