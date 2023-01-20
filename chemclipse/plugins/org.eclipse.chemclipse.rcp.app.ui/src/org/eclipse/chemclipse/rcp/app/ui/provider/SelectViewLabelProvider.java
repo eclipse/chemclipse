@@ -89,6 +89,8 @@ public class SelectViewLabelProvider extends LabelProvider implements ITableLabe
 					text = part.getLabel();
 					if(text == null || text.equals("")) {
 						text = "Nameless Part";
+					} else {
+						text = translationService.translate(text, part.getContributorURI());
 					}
 					break;
 				default:

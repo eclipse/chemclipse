@@ -91,12 +91,7 @@ public class PerspectiveSwitcherLabelProvider extends LabelProvider implements I
 						text = "Nameless perspective";
 					} else if(text.startsWith("<") && text.endsWith(">")) {
 						text = text.substring(1, text.length() - 1);
-						if(text.startsWith("%")) {
-							/*
-							 * TODO - Translate
-							 */
-							text = text.substring(1, text.length());
-						}
+						text = translationService.translate(text, perspective.getContributorURI());
 					}
 					break;
 				default:
