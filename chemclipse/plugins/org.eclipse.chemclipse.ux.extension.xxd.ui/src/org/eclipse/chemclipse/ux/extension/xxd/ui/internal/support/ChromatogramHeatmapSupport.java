@@ -110,18 +110,18 @@ public class ChromatogramHeatmapSupport {
 				}
 			}
 			//
-			float maxAbudance = -Float.MAX_VALUE;
-			float minAbudance = Float.MAX_VALUE;
+			float maxAbundance = -Float.MAX_VALUE;
+			float minAbundance = Float.MAX_VALUE;
 			for(float value : heatmapData) {
-				minAbudance = Float.min(minAbudance, value);
-				maxAbudance = Float.max(maxAbudance, value);
+				minAbundance = Float.min(minAbundance, value);
+				maxAbundance = Float.max(maxAbundance, value);
 			}
 			//
 			IPrimaryArrayWrapper arrayWrapper = new FloatArrayWrapper(heatmapData);
 			Range axisRangeWidth = new Range(startRetentionTime, stopRetentionTime);
 			Range axisRangeHeight = new Range(startWavelength, stopWavelength);
-			double minimum = minAbudance * scaleIntensityMin;
-			double maximum = maxAbudance / scaleIntensityMax;
+			double minimum = minAbundance * scaleIntensityMin;
+			double maximum = maxAbundance / scaleIntensityMax;
 			//
 			return Optional.of(new ChromatogramHeatmapData(arrayWrapper, axisRangeWidth, axisRangeHeight, minimum, maximum, dataWidth, dataHeight));
 		}
@@ -178,18 +178,18 @@ public class ChromatogramHeatmapSupport {
 			}
 		}
 		//
-		float maxAbudance = -Float.MAX_VALUE;
-		float minAbudance = Float.MAX_VALUE;
+		float maxAbundance = -Float.MAX_VALUE;
+		float minAbundance = Float.MAX_VALUE;
 		for(float value : heatmapData) {
-			minAbudance = Float.min(minAbudance, value);
-			maxAbudance = Float.max(maxAbudance, value);
+			minAbundance = Float.min(minAbundance, value);
+			maxAbundance = Float.max(maxAbundance, value);
 		}
 		//
 		IPrimaryArrayWrapper arrayWrapper = new FloatArrayWrapper(heatmapData);
 		Range axisRangeWidth = new Range(startRetentionTime, stopRetentionTime);
 		Range axisRangeHeight = new Range(startIon, stopIon);
-		double minimum = minAbudance * scaleIntensityMin;
-		double maximum = maxAbudance / scaleIntensityMax;
+		double minimum = minAbundance * scaleIntensityMin;
+		double maximum = maxAbundance / scaleIntensityMax;
 		//
 		return Optional.of(new ChromatogramHeatmapData(arrayWrapper, axisRangeWidth, axisRangeHeight, minimum, maximum, dataWidth, dataHeight));
 	}
