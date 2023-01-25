@@ -88,6 +88,7 @@
             <children xsi:type="advanced:Placeholder" xmi:id="_SDGpEJRlEeW3h-K0O5zQFg" elementId="org.eclipse.ui.editorss" ref="_qjvtkCskEeakPPc3RJFSAg"/>
             <children xsi:type="basic:PartStack" xmi:id="_RFJbYNWaEeuLN-OVfSRh5w" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.partstack.5">
               <children xsi:type="basic:Part" xmi:id="_16cJoChgEei4gNjdUMAPPA" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.MassSpectrumOverlayPart" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.parts.MassSpectrumOverlayPart" label="Mass Spectrum Overlay" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/chromatogramOverlay.gif" closeable="true"/>
+              <children xsi:type="basic:Part" xmi:id="_K7xnwJwUEe28_4ZNkASS2g" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.part.chromatogramPseudoGel" contributionURI="bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.parts.MassSpectrumPseudoGelPart" label="Pseudo Gel" iconURI="platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/heatmapDefault.gif"/>
             </children>
           </children>
           <children xsi:type="basic:PartStack" xmi:id="_F-avMJRlEeW3h-K0O5zQFg" elementId="org.eclipse.chemclipse.ux.extension.xxd.ui.perspective.maldi.partstack.1" containerData="2500">

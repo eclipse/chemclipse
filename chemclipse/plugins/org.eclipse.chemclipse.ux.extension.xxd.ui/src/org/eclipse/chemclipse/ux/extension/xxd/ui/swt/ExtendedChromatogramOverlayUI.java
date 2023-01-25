@@ -40,6 +40,7 @@ import org.eclipse.chemclipse.msd.model.core.support.IMarkedIons;
 import org.eclipse.chemclipse.msd.model.core.support.MarkedIons;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.provider.AbstractLabelProvider;
 import org.eclipse.chemclipse.support.validators.TraceValidator;
 import org.eclipse.chemclipse.swt.ui.support.Colors;
@@ -383,7 +384,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Reset the Overlay");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_RESET, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -404,7 +405,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		Button button = new Button(parent, SWT.PUSH);
 		button.setToolTipText("Open a new Overlay");
 		button.setText("");
-		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PLUS, IApplicationImage.SIZE_16x16));
+		button.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_PLUS, IApplicationImageProvider.SIZE_16x16));
 		button.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -589,7 +590,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			Range yrange = axisSet.getYAxis(BaseChart.ID_PRIMARY_Y_AXIS).getRange();
 			Set<String> availableSeriesIds = new HashSet<>();
 			List<ILineSeriesData> lineSeriesDataList = new ArrayList<>();
-			LinkedHashSet<String> usefulTypes = new LinkedHashSet<String>();
+			LinkedHashSet<String> usefulTypes = new LinkedHashSet<>();
 			//
 			int i = 0;
 			for(Entry<IChromatogramSelection, List<String>> entry : chromatogramSelections.entrySet()) {
@@ -832,9 +833,9 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		BaseChart baseChart = chartControl.get().getBaseChart();
 		Derivative derivative = getSelectedDerivative();
 		//
-		if(chromatogram instanceof IChromatogramWSD) {
+		if(chromatogram instanceof IChromatogramWSD chromatogramWSD) {
 			String description = ChromatogramDataSupport.getReferenceLabel(chromatogram, 0, false);
-			for(double wavelength : ((IChromatogramWSD)chromatogram).getWavelengths()) {
+			for(double wavelength : chromatogramWSD.getWavelengths()) {
 				String seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + wavelength + OverlayChartSupport.OVERLAY_STOP_MARKER;
 				availableSeriesIds.add(seriesId);
 				selectionSeries.add(seriesId);
@@ -856,10 +857,10 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		BaseChart baseChart = chartControl.get().getBaseChart();
 		Derivative derivative = getSelectedDerivative();
 		//
-		if(referencedChromatogram instanceof IChromatogramWSD) {
+		if(referencedChromatogram instanceof IChromatogramWSD referencedChromatogramWSD) {
 			String description = ChromatogramDataSupport.getReferenceLabel(referencedChromatogram, j, false);
-			String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j++;
-			for(double wavelength : ((IChromatogramWSD)referencedChromatogram).getWavelengths()) {
+			String referenceChromatogramName = chromatogramName + ChromatogramChartSupport.REFERENCE_MARKER + j + 1;
+			for(double wavelength : referencedChromatogramWSD.getWavelengths()) {
 				//
 				String seriesId = referenceChromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + wavelength + OverlayChartSupport.OVERLAY_STOP_MARKER;
 				availableSeriesIds.add(seriesId);
@@ -884,12 +885,11 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		LineStyle lineStyle = LineStyle.valueOf(preferenceStore.getString(PreferenceConstants.P_LINE_STYLE_DISPLAY_OVERLAY));
 		boolean showArea = preferenceStore.getBoolean(PreferenceConstants.P_OVERLAY_SHOW_AREA);
 		//
-		if(chromatogram instanceof IChromatogramWSD) {
+		if(chromatogram instanceof IChromatogramWSD chromatogramWSD) {
 			/*
 			 * WSD
 			 */
 			String description = ChromatogramDataSupport.getReferenceLabel(chromatogram, index, false);
-			IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
 			/*
 			 * Preselect certain wavelengths if too many are available.
 			 */
@@ -920,8 +920,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 			//
 			for(IScan scan : chromatogramWSD.getScans()) {
 				if(j % modulo == 0) {
-					if(scan instanceof IScanWSD) {
-						IScanWSD scanWSD = (IScanWSD)scan;
+					if(scan instanceof IScanWSD scanWSD) {
 						IExtractedWavelengthSignal extractedWavelengthSignal = scanWSD.getExtractedWavelengthSignal();
 						int retentionTime = scanWSD.getRetentionTime();
 						for(double wavelength : wavelengths) {
@@ -1036,8 +1035,7 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 		/*
 		 * Max Plot
 		 */
-		if(chromatogram instanceof IChromatogramWSD) {
-			IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
+		if(chromatogram instanceof IChromatogramWSD chromatogramWSD) {
 			markedWavelengths.add(chromatogramWSD.getWavelengths());
 			String description = ChromatogramDataSupport.getReferenceLabel(chromatogram, 0, false);
 			seriesId = chromatogramName + OverlayChartSupport.OVERLAY_START_MARKER + displayType + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + derivative + OverlayChartSupport.DELIMITER_SIGNAL_DERIVATIVE + MPC_LABEL + OverlayChartSupport.OVERLAY_STOP_MARKER;
@@ -1129,8 +1127,8 @@ public class ExtendedChromatogramOverlayUI extends Composite implements IExtende
 	private Derivative getSelectedDerivative() {
 
 		Object object = comboViewerDerivative.getStructuredSelection().getFirstElement();
-		if(object instanceof Derivative) {
-			return (Derivative)object;
+		if(object instanceof Derivative derivative) {
+			return derivative;
 		}
 		//
 		return Derivative.NONE;
