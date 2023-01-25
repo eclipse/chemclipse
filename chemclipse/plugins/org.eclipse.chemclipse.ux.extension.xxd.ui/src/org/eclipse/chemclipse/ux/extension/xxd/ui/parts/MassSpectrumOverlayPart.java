@@ -58,4 +58,11 @@ public class MassSpectrumOverlayPart extends AbstractPart<ExtendedMassSpectrumOv
 		// No action required. Action on Focus.
 		return false;
 	}
+
+	@Override
+	protected void preDestroy() {
+
+		getControl().dispose();
+		super.preDestroy();
+	}
 }
