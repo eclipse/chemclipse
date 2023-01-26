@@ -370,7 +370,7 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 		final String KEY = "SORT_DIRECTION";
 		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
 		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_SORT_ALPHA_ASC, IApplicationImage.SIZE_16x16));
-		item.setToolTipText("Sort the item(s).");
+		item.setToolTipText("Sort the items.");
 		item.setData(KEY, true);
 		item.addSelectionListener(new SelectionAdapter() {
 
@@ -447,7 +447,7 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 
 		final ToolItem item = new ToolItem(toolBar, SWT.PUSH);
 		item.setImage(ApplicationImageFactory.getInstance().getImage(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16));
-		item.setToolTipText("Remove the selected item(s).");
+		item.setToolTipText("Remove the selected items.");
 		item.addSelectionListener(new SelectionAdapter() {
 
 			@Override
@@ -477,7 +477,7 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 
 		inputWizardSettings = InputWizardSettings.create(preferenceStore, userPathKey, dataTypes);
 		inputWizardSettings.setTitle("Select files");
-		inputWizardSettings.setDescription("Select items(s) to process.");
+		inputWizardSettings.setDescription("Select items to process.");
 		//
 		return inputWizardSettings;
 	}

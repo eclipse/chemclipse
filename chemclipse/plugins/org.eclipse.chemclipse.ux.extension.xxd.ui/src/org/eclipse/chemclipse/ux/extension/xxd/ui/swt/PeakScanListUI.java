@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -30,7 +30,6 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.widgets.Composite;
 
-@SuppressWarnings("rawtypes")
 public class PeakScanListUI extends ExtendedTableViewer {
 
 	private final String[] titles = PeakScanListLabelProvider.TITLES;
@@ -49,7 +48,7 @@ public class PeakScanListUI extends ExtendedTableViewer {
 	public void setInput(IChromatogramSelection<?, ?> chromatogramSelection, boolean showPeaks, boolean showPeaksInRange, boolean showScans, boolean showScansInRange) {
 
 		if(chromatogramSelection != null) {
-			IChromatogram chromatogram = chromatogramSelection.getChromatogram();
+			IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 			double chromatogramPeakArea = chromatogram.getPeakIntegratedArea();
 			labelProvider.setChromatogramPeakArea(chromatogramPeakArea);
 			tableComparator.setChromatogramPeakArea(chromatogramPeakArea);
