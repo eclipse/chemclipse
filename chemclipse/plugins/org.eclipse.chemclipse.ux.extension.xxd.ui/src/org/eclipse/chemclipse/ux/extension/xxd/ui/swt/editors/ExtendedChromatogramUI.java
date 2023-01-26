@@ -1455,12 +1455,13 @@ public class ExtendedChromatogramUI extends Composite implements ToolbarConfig, 
 		editorToolBar.addAction(new Action("Help", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_QUESTION, IApplicationImage.SIZE_16x16)) {
 
 			{
-				setToolTipText("Show context sensentive help.");
+				setToolTipText("Show context sensitive help.");
 			}
 
 			@Override
 			public void run() {
 
+				chromatogramChart.setFocus();
 				PlatformUI.getWorkbench().getHelpSystem().displayDynamicHelp();
 			}
 		});
