@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -27,6 +27,8 @@ import org.eclipse.chemclipse.chromatogram.peak.detector.exceptions.ValueMustNot
 import org.eclipse.chemclipse.chromatogram.peak.detector.model.Threshold;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IRawPeak;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.NoiseChromatogramClassifier;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.messages.FirstDerivativeMessages;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.messages.IFirstDerivativeMessages;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsMSD;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.FirstDerivativeDetectorSlope;
@@ -91,7 +93,8 @@ public class PeakDetectorMSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 					chromatogram.addPeak(peak);
 				}
 				chromatogram.setDirty(true);
-				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, FirstDerivativePeakDetector.DETECTOR_DESCRIPTION, peaks.size() + " peaks have been detected."));
+				String peakDetectedMessage = FirstDerivativeMessages.INSTANCE().getMessage(IFirstDerivativeMessages.PEAKS_DETECTED, String.valueOf(peaks.size()));
+				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, FirstDerivativePeakDetector.DETECTOR_DESCRIPTION, peakDetectedMessage));
 			} else {
 				logger.warn("Settings is not of type: " + PeakDetectorSettingsMSD.class);
 			}
@@ -354,9 +357,8 @@ public class PeakDetectorMSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 		if(scan instanceof IScanMSD) {
 			IScanMSD scanMSD = (IScanMSD)scan;
 			return scanMSD.getTotalSignal(ions);
-		} else {
-			return scan.getTotalSignal();
 		}
+		return scan.getTotalSignal();
 	}
 
 	private int optimizeRightBaseline(IChromatogramMSD chromatogram, int startScan, int centerScan, int stopScan, IMarkedIons ions) {

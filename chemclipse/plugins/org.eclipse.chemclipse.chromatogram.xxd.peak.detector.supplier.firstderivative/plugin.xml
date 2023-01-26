@@ -4,30 +4,30 @@
    <extension
          point="org.eclipse.chemclipse.chromatogram.msd.peak.detector.peakDetectorSupplier">
       <PeakDetector
-            description="Implementation of a first derivative peak detector."
+            description="%FirstDerivativeDescription"
             id="org.eclipse.chemclipse.chromatogram.msd.peak.detector.supplier.firstderivative"
             peakDetector="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.core.PeakDetectorMSD"
-            peakDetectorName="First Derivative"
+            peakDetectorName="%FirstDerivative"
             peakDetectorSettings="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsMSD">
       </PeakDetector>
    </extension>
    <extension
          point="org.eclipse.chemclipse.chromatogram.csd.peak.detector.peakDetectorSupplier">
       <PeakDetector
-            description="Implementation of a first derivative peak detector."
+            description="%FirstDerivativeDescription"
             id="org.eclipse.chemclipse.chromatogram.csd.peak.detector.supplier.firstderivative"
             peakDetector="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.core.PeakDetectorCSD"
-            peakDetectorName="First Derivative"
+            peakDetectorName="%FirstDerivative"
             peakDetectorSettings="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsCSD">
       </PeakDetector>
    </extension>
    <extension
          point="org.eclipse.chemclipse.chromatogram.wsd.peak.detector.peakDetectorSupplier">
       <PeakDetector
-            description="Implementation of a first derivative peak detector."
+            description="%FirstDerivativeDescription"
             id="org.eclipse.chemclipse.chromatogram.wsd.peak.detector.supplier.firstderivative"
             peakDetector="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.core.PeakDetectorWSD"
-            peakDetectorName="First Derivative"
+            peakDetectorName="%FirstDerivative"
             peakDetectorSettings="org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsWSD">
       </PeakDetector>
    </extension>   

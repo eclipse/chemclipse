@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2022 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -22,6 +22,8 @@ import org.eclipse.chemclipse.chromatogram.peak.detector.exceptions.ValueMustNot
 import org.eclipse.chemclipse.chromatogram.peak.detector.model.Threshold;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IRawPeak;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.NoiseChromatogramClassifier;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.messages.FirstDerivativeMessages;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.messages.IFirstDerivativeMessages;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsCSD;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.FirstDerivativeDetectorSlope;
@@ -85,7 +87,8 @@ public class PeakDetectorCSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 					chromatogram.addPeak(peak);
 				}
 				chromatogramSelection.getChromatogram().setDirty(true);
-				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, FirstDerivativePeakDetector.DETECTOR_DESCRIPTION, "Peaks have been detected successfully."));
+				String peakDetectedMessage = FirstDerivativeMessages.INSTANCE().getMessage(IFirstDerivativeMessages.PEAKS_DETECTED, String.valueOf(peaks.size()));
+				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, FirstDerivativePeakDetector.DETECTOR_DESCRIPTION, peakDetectedMessage));
 			} else {
 				logger.warn("Settings is not of type: " + PeakDetectorSettingsCSD.class);
 			}

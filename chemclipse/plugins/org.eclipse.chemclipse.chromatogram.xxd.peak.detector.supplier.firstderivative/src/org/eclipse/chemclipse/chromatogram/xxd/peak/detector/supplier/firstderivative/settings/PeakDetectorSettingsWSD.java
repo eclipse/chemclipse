@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -25,11 +25,13 @@ import org.apache.commons.lang3.StringUtils;
 import org.eclipse.chemclipse.chromatogram.peak.detector.core.FilterMode;
 import org.eclipse.chemclipse.chromatogram.peak.detector.model.Threshold;
 import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.settings.AbstractPeakDetectorWSDSettings;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.messages.IFirstDerivativeMessages;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.model.core.MarkedTraceModus;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty.Validation;
+import org.eclipse.chemclipse.support.settings.LocalisationSettingsProperty;
 import org.eclipse.chemclipse.support.settings.serialization.WindowSizeDeserializer;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelength;
 import org.eclipse.chemclipse.wsd.model.core.support.IMarkedWavelengths;
@@ -44,29 +46,36 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 public class PeakDetectorSettingsWSD extends AbstractPeakDetectorWSDSettings {
 
 	@JsonProperty(value = "Threshold", defaultValue = "MEDIUM")
+	@LocalisationSettingsProperty(value = IFirstDerivativeMessages.THRESHOLD)
 	private Threshold threshold = Threshold.MEDIUM;
 	@JsonProperty(value = "Include Background", defaultValue = "false")
 	@JsonPropertyDescription("VV: true, BV|VB: false")
+	@LocalisationSettingsProperty(value = IFirstDerivativeMessages.INCLUDE_BACKGROUND, description = IFirstDerivativeMessages.BACKGROUND_DESCRIPTION)
 	private boolean includeBackground = false;
 	@JsonProperty(value = "Min S/N Ratio", defaultValue = "0")
 	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_SN_RATIO_MIN, maxValue = PreferenceSupplier.MIN_SN_RATIO_MAX)
 	private float minimumSignalToNoiseRatio;
 	@JsonProperty(value = "Window Size", defaultValue = "5")
 	@JsonPropertyDescription(value = "Window Size: 3, 5, 7, ..., 45")
+	@LocalisationSettingsProperty(value = IFirstDerivativeMessages.MIN_SN_RATIO)
 	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_WINDOW_SIZE, maxValue = PreferenceSupplier.MAX_WINDOW_SIZE, validation = Validation.ODD_NUMBER_INCLUDING_ZERO)
 	@JsonDeserialize(using = WindowSizeDeserializer.class)
 	private int windowSize;
 	@JsonProperty(value = "Use Noise-Segments", defaultValue = "false")
+	@LocalisationSettingsProperty(value = IFirstDerivativeMessages.WINDOW_SIZE, description = IFirstDerivativeMessages.WINDOW_SIZE_DESCRIPTION)
 	@JsonPropertyDescription(value = "Whether to use noise segments to decide where peaks should be detected. This can improve the sensitivity of the algorithm.")
 	private boolean useNoiseSegments = false;
 	@JsonProperty(value = "Filter Mode", defaultValue = "EXCLUDE")
 	private FilterMode filterMode = FilterMode.EXCLUDE;
 	@JsonProperty(value = "Wavelengths to filter", defaultValue = "")
+	@LocalisationSettingsProperty(value = IFirstDerivativeMessages.FILTER_WAVELENGTHS)
 	private String filterWavelengths;
 	@JsonProperty(value = "Use Individual Wavelengths", defaultValue = "false")
 	@JsonPropertyDescription("Uses each wavelength in the filter-list individualy to detect peaks")
+	@LocalisationSettingsProperty(value = IFirstDerivativeMessages.USE_INDIVIDUAL_WAVELENGTHS, description = IFirstDerivativeMessages.USE_INDIVIDUAL_WAVELENGTHS_DESCRIPTION)
 	private boolean useIndividualWavelengths = false;
 	@JsonProperty(value = "Optimize Baseline (VV)", defaultValue = "false")
+	@LocalisationSettingsProperty(value = IFirstDerivativeMessages.OPTIMIZE_BASELINE_VV)
 	private boolean optimizeBaseline = false;
 
 	public PeakDetectorSettingsWSD() {

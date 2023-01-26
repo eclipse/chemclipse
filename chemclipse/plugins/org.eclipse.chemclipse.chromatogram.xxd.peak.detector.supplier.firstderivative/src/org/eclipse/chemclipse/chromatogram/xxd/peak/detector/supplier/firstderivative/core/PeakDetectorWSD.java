@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -25,6 +25,8 @@ import org.eclipse.chemclipse.chromatogram.peak.detector.support.IRawPeak;
 import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.core.IPeakDetectorWSD;
 import org.eclipse.chemclipse.chromatogram.wsd.peak.detector.settings.IPeakDetectorSettingsWSD;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.NoiseChromatogramClassifier;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.messages.FirstDerivativeMessages;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.messages.IFirstDerivativeMessages;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsWSD;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.FirstDerivativeDetectorSlope;
@@ -92,7 +94,8 @@ public class PeakDetectorWSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 					chromatogram.addPeak(peak);
 				}
 				chromatogram.setDirty(true);
-				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, FirstDerivativePeakDetector.DETECTOR_DESCRIPTION, peaks.size() + " peaks have been detected successfully."));
+				String peakDetectedMessage = FirstDerivativeMessages.INSTANCE().getMessage(IFirstDerivativeMessages.PEAKS_DETECTED, String.valueOf(peaks.size()));
+				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, FirstDerivativePeakDetector.DETECTOR_DESCRIPTION, peakDetectedMessage));
 			} else {
 				logger.warn("Settings is not of type: " + PeakDetectorSettingsWSD.class);
 			}
@@ -326,9 +329,8 @@ public class PeakDetectorWSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 		if(scan instanceof IScanWSD) {
 			IScanWSD scanWSD = (IScanWSD)scan;
 			return scanWSD.getTotalSignal(wavelengths);
-		} else {
-			return scan.getTotalSignal();
 		}
+		return scan.getTotalSignal();
 	}
 
 	private int optimizeRightBaseline(IChromatogramWSD chromatogram, int startScan, int centerScan, int stopScan, IMarkedWavelengths wavelengths) {
