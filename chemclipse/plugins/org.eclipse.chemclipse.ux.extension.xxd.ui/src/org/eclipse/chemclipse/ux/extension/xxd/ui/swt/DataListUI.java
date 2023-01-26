@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -9,7 +9,7 @@
  * Contributors:
  * Christoph Läubrich - initial API and implementation
  * Philip Wenig - improvements file selection
- * Matthias Mailänder - add number of files label
+ * Matthias Mailänder - add number of files label, drag and drop
  *******************************************************************************/
 package org.eclipse.chemclipse.ux.extension.xxd.ui.swt;
 
@@ -42,6 +42,12 @@ import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.DropTarget;
+import org.eclipse.swt.dnd.DropTargetAdapter;
+import org.eclipse.swt.dnd.DropTargetEvent;
+import org.eclipse.swt.dnd.FileTransfer;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -84,6 +90,7 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 		//
 		inputWizardSettings = createInputWizardSettings(dataTypes);
 		control = createControl(parent);
+		addDragAndDropSupport(control);
 	}
 
 	public ExtendedTableViewer getTableViewer() {
@@ -480,5 +487,77 @@ public class DataListUI implements ConfigurableUI<DataListUIConfig> {
 		inputWizardSettings.setDescription("Select items to process.");
 		//
 		return inputWizardSettings;
+	}
+
+	private void addDragAndDropSupport(Control control) {
+
+		/*
+		 * Drag & Drop
+		 */
+		DropTarget dropTarget = new DropTarget(control, DND.DROP_COPY | DND.DROP_DEFAULT);
+		FileTransfer fileTransfer = FileTransfer.getInstance();
+		Transfer[] transfer = new Transfer[]{fileTransfer};
+		dropTarget.setTransfer(transfer);
+		dropTarget.addDropListener(new DropTargetAdapter() {
+
+			@Override
+			public void drop(DropTargetEvent event) {
+
+				if(fileTransfer.isSupportedType(event.currentDataType)) {
+					Collection<File> collection = new ArrayList<File>();
+					String[] files = (String[])event.data;
+					for(int i = 0; i < files.length; i++) {
+						File file = new File(files[i]);
+						collection.add(file);
+					}
+					addFiles(collection);
+					updateList(true);
+				}
+			}
+
+			@Override
+			public void dragOperationChanged(DropTargetEvent event) {
+
+				if(event.detail == DND.DROP_DEFAULT) {
+					if((event.operations & DND.DROP_COPY) != 0) {
+						event.detail = DND.DROP_COPY;
+					} else {
+						event.detail = DND.DROP_NONE;
+					}
+				}
+				/*
+				 * Only copy files.
+				 */
+				if(fileTransfer.isSupportedType(event.currentDataType)) {
+					if(event.detail != DND.DROP_COPY) {
+						event.detail = DND.DROP_NONE;
+					}
+				}
+			}
+
+			@Override
+			public void dragEnter(DropTargetEvent event) {
+
+				if(event.detail == DND.DROP_DEFAULT) {
+					if((event.operations & DND.DROP_COPY) != 0) {
+						event.detail = DND.DROP_COPY;
+					} else {
+						event.detail = DND.DROP_NONE;
+					}
+				}
+				/*
+				 * Files Drop & Copy
+				 */
+				for(int i = 0; i < event.dataTypes.length; i++) {
+					if(fileTransfer.isSupportedType(event.dataTypes[i])) {
+						event.currentDataType = event.dataTypes[i];
+						if(event.detail != DND.DROP_COPY) {
+							event.detail = DND.DROP_NONE;
+						}
+						break;
+					}
+				}
+			}
+		});
 	}
 }
