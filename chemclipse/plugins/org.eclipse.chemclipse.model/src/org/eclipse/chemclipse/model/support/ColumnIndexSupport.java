@@ -25,7 +25,9 @@ public class ColumnIndexSupport {
 		float retentionIndex = 0.0f;
 		List<IColumnIndexMarker> columnIndexMarkersSorted = new ArrayList<>(columnIndexMarkers);
 		Collections.sort(columnIndexMarkersSorted, (c1, c2) -> Float.compare(c1.getRetentionIndex(), c2.getRetentionIndex()));
+		searchColumn = adjustValue(searchColumn, caseSensitive, removeWhiteSpace);
 		//
+		exitloop:
 		for(IColumnIndexMarker columnIndexMarker : columnIndexMarkers) {
 			ISeparationColumn separationColumn = columnIndexMarker.getSeparationColumn();
 			String separationColumnType = adjustValue(separationColumn.getSeparationColumnType().label(), caseSensitive, removeWhiteSpace);
@@ -33,13 +35,14 @@ public class ColumnIndexSupport {
 			//
 			if(separationColumnType.contains(searchColumn) || name.contains(searchColumn)) {
 				retentionIndex = columnIndexMarker.getRetentionIndex();
+				break exitloop;
 			}
 		}
 		//
 		return retentionIndex;
 	}
 
-	public static String adjustValue(String value, boolean caseSensitive, boolean removeWhiteSpace) {
+	protected static String adjustValue(String value, boolean caseSensitive, boolean removeWhiteSpace) {
 
 		value = removeWhiteSpace ? value.replace(" ", "") : value;
 		return caseSensitive ? value : value.toLowerCase();

@@ -77,7 +77,6 @@ public class FilterRetentionIndexSelector extends AbstractChromatogramFilter {
 			if(FilterSettingsRetentionIndexSelector.CHROMATOGRAM_COLUMN_TYPE.equals(searchColumn)) {
 				searchColumn = chromatogram.getSeparationColumnIndices().getSeparationColumn().getSeparationColumnType().label();
 			}
-			searchColumn = ColumnIndexSupport.adjustValue(searchColumn, caseSensitive, removeWhiteSpace);
 			/*
 			 * Scans
 			 */
