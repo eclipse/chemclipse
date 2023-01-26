@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -83,7 +83,7 @@ public class MassSpectrumChartProfile extends LineChart implements IMassSpectrum
 
 		deleteSeries();
 		if(massSpectrum != null) {
-			List<ILineSeriesData> barSeriesDataList = new ArrayList<ILineSeriesData>();
+			List<ILineSeriesData> barSeriesDataList = new ArrayList<>();
 			ISeriesData seriesData = getMassSpectrum(massSpectrum);
 			ILineSeriesData lineSeriesData = new LineSeriesData(seriesData);
 			barSeriesDataList.add(lineSeriesData);
