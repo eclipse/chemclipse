@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,8 +11,6 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.core;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -23,14 +21,13 @@ import org.eclipse.chemclipse.chromatogram.filter.settings.IChromatogramFilterSe
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.exceptions.FilterException;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.filter.supplier.scan.settings.FilterSettingsRetentionIndexSelector;
-import org.eclipse.chemclipse.model.columns.ISeparationColumn;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.model.core.IScan;
-import org.eclipse.chemclipse.model.identifier.IColumnIndexMarker;
 import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.selection.IChromatogramSelection;
+import org.eclipse.chemclipse.model.support.ColumnIndexSupport;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
@@ -80,7 +77,7 @@ public class FilterRetentionIndexSelector extends AbstractChromatogramFilter {
 			if(FilterSettingsRetentionIndexSelector.CHROMATOGRAM_COLUMN_TYPE.equals(searchColumn)) {
 				searchColumn = chromatogram.getSeparationColumnIndices().getSeparationColumn().getSeparationColumnType().label();
 			}
-			searchColumn = adjustValue(searchColumn, caseSensitive, removeWhiteSpace);
+			searchColumn = ColumnIndexSupport.adjustValue(searchColumn, caseSensitive, removeWhiteSpace);
 			/*
 			 * Scans
 			 */
@@ -106,33 +103,8 @@ public class FilterRetentionIndexSelector extends AbstractChromatogramFilter {
 
 		for(IIdentificationTarget identificationTarget : identificationTargets) {
 			ILibraryInformation libraryInformation = identificationTarget.getLibraryInformation();
-			float retentionIndex = getRetentionIndex(libraryInformation.getColumnIndexMarkers(), searchColumn, caseSensitive, removeWhiteSpace);
+			float retentionIndex = ColumnIndexSupport.getRetentionIndex(libraryInformation.getColumnIndexMarkers(), searchColumn, caseSensitive, removeWhiteSpace);
 			libraryInformation.setRetentionIndex(retentionIndex);
 		}
-	}
-
-	private float getRetentionIndex(List<IColumnIndexMarker> columnIndexMarkers, String searchColumn, boolean caseSensitive, boolean removeWhiteSpace) {
-
-		float retentionIndex = 0.0f;
-		List<IColumnIndexMarker> columnIndexMarkersSorted = new ArrayList<>(columnIndexMarkers);
-		Collections.sort(columnIndexMarkersSorted, (c1, c2) -> Float.compare(c1.getRetentionIndex(), c2.getRetentionIndex()));
-		//
-		for(IColumnIndexMarker columnIndexMarker : columnIndexMarkers) {
-			ISeparationColumn separationColumn = columnIndexMarker.getSeparationColumn();
-			String separationColumnType = adjustValue(separationColumn.getSeparationColumnType().label(), caseSensitive, removeWhiteSpace);
-			String name = adjustValue(separationColumn.getName(), caseSensitive, removeWhiteSpace);
-			//
-			if(separationColumnType.contains(searchColumn) || name.contains(searchColumn)) {
-				retentionIndex = columnIndexMarker.getRetentionIndex();
-			}
-		}
-		//
-		return retentionIndex;
-	}
-
-	private String adjustValue(String value, boolean caseSensitive, boolean removeWhiteSpace) {
-
-		value = removeWhiteSpace ? value.replace(" ", "") : value;
-		return caseSensitive ? value : value.toLowerCase();
 	}
 }
