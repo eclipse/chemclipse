@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IRawPeak;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.messages.FirstDerivativeMessages;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.messages.IFirstDerivativeMessages;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.FirstDerivativePeakDetectorSettings;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.FirstDerivativeDetectorSlopes;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.IFirstDerivativeDetectorSlope;
@@ -48,7 +50,7 @@ import org.osgi.service.component.annotations.Component;
 @Component(service = {IMeasurementPeakDetector.class, Detector.class})
 public class FirstDerivativePeakDetector implements IMeasurementPeakDetector<FirstDerivativePeakDetectorSettings> {
 
-	public static final String DETECTOR_DESCRIPTION = "First Derivative";
+	public static final String DETECTOR_DESCRIPTION = FirstDerivativeMessages.INSTANCE().getMessage(IFirstDerivativeMessages.FIRST_DERIVATIVE);
 
 	@Override
 	public String getName() {
@@ -112,7 +114,7 @@ public class FirstDerivativePeakDetector implements IMeasurementPeakDetector<Fir
 	@Override
 	public String getDescription() {
 
-		return "Implementation of a first derivative peak detector.";
+		return FirstDerivativeMessages.INSTANCE().getMessage(IFirstDerivativeMessages.FIRST_DERIVATIVE_DESCRIPTON);
 	}
 
 	private static IFirstDerivativeDetectorSlopes getSignalSlopes(List<? extends ISignal> signals, int windowSize) {
