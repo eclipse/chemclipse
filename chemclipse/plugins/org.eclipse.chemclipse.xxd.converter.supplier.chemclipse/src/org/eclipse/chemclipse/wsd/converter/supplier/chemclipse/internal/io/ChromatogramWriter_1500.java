@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -45,6 +46,7 @@ import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
+import org.eclipse.chemclipse.model.ranges.TimeRange;
 import org.eclipse.chemclipse.model.targets.ITargetDisplaySettings;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.ChromatogramWriterMSD;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -308,7 +310,7 @@ public class ChromatogramWriter_1500 extends AbstractChromatogramWriter implemen
 		zipEntry = new ZipEntry(directoryPrefix + IFormat.FILE_PEAKS_WSD);
 		zipOutputStream.putNextEntry(zipEntry);
 		dataOutputStream = new DataOutputStream(zipOutputStream);
-		List<IChromatogramPeakWSD> peaks = chromatogram.getPeaks();
+		List<IChromatogramPeakWSD> peaks = getPeaks(chromatogram);
 		dataOutputStream.writeInt(peaks.size()); // Number of Peaks
 		for(IChromatogramPeakWSD peak : peaks) {
 			writePeak(dataOutputStream, peak);
@@ -316,6 +318,32 @@ public class ChromatogramWriter_1500 extends AbstractChromatogramWriter implemen
 		//
 		dataOutputStream.flush();
 		zipOutputStream.closeEntry();
+	}
+
+	private List<IChromatogramPeakWSD> getPeaks(IChromatogramWSD chromatogram) {
+
+		TimeRange timeRangeChromatogram = new TimeRange("Chromatogram", chromatogram.getStartRetentionTime(), chromatogram.getStopRetentionTime());
+		List<IChromatogramPeakWSD> peaks = new ArrayList<>();
+		for(IChromatogramPeakWSD peak : chromatogram.getPeaks()) {
+			if(isValidPeak(peak, timeRangeChromatogram)) {
+				peaks.add(peak);
+			}
+		}
+		//
+		return peaks;
+	}
+
+	private boolean isValidPeak(IChromatogramPeakWSD peak, TimeRange timeRangeChromatogram) {
+
+		/*
+		 * If scans of a region have been deleted, peaks shall be not saved, otherwise the import fails.
+		 */
+		IPeakModelWSD peakModel = peak.getPeakModel();
+		if(peakModel.getStartRetentionTime() < timeRangeChromatogram.getStart() || peakModel.getStopRetentionTime() > timeRangeChromatogram.getStop()) {
+			return false;
+		}
+		//
+		return true;
 	}
 
 	private void writeChromatogramArea(ZipOutputStream zipOutputStream, String directoryPrefix, IChromatogramWSD chromatogram) throws IOException {

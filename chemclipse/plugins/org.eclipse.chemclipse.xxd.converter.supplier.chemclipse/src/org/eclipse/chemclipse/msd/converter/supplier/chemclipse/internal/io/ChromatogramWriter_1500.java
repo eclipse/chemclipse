@@ -45,6 +45,7 @@ import org.eclipse.chemclipse.model.identifier.IIdentificationTarget;
 import org.eclipse.chemclipse.model.identifier.ILibraryInformation;
 import org.eclipse.chemclipse.model.quantitation.IInternalStandard;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationEntry;
+import org.eclipse.chemclipse.model.ranges.TimeRange;
 import org.eclipse.chemclipse.model.targets.ITarget;
 import org.eclipse.chemclipse.model.targets.ITargetDisplaySettings;
 import org.eclipse.chemclipse.msd.converter.supplier.chemclipse.io.ChromatogramWriterMSD;
@@ -357,9 +358,10 @@ public class ChromatogramWriter_1500 extends AbstractChromatogramWriter implemen
 
 	private List<IChromatogramPeakMSD> getPeaks(IChromatogramMSD chromatogram) {
 
+		TimeRange timeRangeChromatogram = new TimeRange("Chromatogram", chromatogram.getStartRetentionTime(), chromatogram.getStopRetentionTime());
 		List<IChromatogramPeakMSD> peaks = new ArrayList<>();
 		for(IChromatogramPeakMSD peak : chromatogram.getPeaks()) {
-			if(isValidPeak(peak)) {
+			if(isValidPeak(peak, timeRangeChromatogram)) {
 				peaks.add(peak);
 			}
 		}
@@ -372,14 +374,20 @@ public class ChromatogramWriter_1500 extends AbstractChromatogramWriter implemen
 	 * That's in most cases invalid and could lead to errors that
 	 * are hard to detect like failed chromatograms on import.
 	 */
-	private boolean isValidPeak(IChromatogramPeakMSD peak) {
+	private boolean isValidPeak(IChromatogramPeakMSD peak, TimeRange timeRangeChromatogram) {
 
+		/*
+		 * If scans of a region have been deleted, peaks shall be not saved, otherwise the import fails.
+		 */
 		IPeakModelMSD peakModel = peak.getPeakModel();
 		IPeakMassSpectrum massSpectrum = peakModel.getPeakMassSpectrum();
-		//
-		for(IIon ion : massSpectrum.getIons()) {
-			if(ion.getAbundance() < LIMIT_AREA_ABUNDANCE) {
-				return false;
+		if(peakModel.getStartRetentionTime() < timeRangeChromatogram.getStart() || peakModel.getStopRetentionTime() > timeRangeChromatogram.getStop()) {
+			return false;
+		} else {
+			for(IIon ion : massSpectrum.getIons()) {
+				if(ion.getAbundance() < LIMIT_AREA_ABUNDANCE) {
+					return false;
+				}
 			}
 		}
 		//
