@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2022 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -55,10 +55,6 @@ public class ReaderVersion31 extends AbstractReaderVersion implements IChromatog
 	private static final Logger logger = Logger.getLogger(ReaderVersion31.class);
 	private static final int ION_PRECISION = 4;
 
-	public ReaderVersion31() {
-
-	}
-
 	@Override
 	public IChromatogramMSD read(File file, IProgressMonitor monitor) throws IOException {
 
@@ -92,7 +88,7 @@ public class ReaderVersion31 extends AbstractReaderVersion implements IChromatog
 					 * Compression
 					 */
 					String compressionType = peaks.getCompressionType();
-					if(compressionType != null && compressionType.toLowerCase().equals("zlib")) {
+					if(compressionType != null && compressionType.equalsIgnoreCase("zlib")) {
 						Inflater inflater = new Inflater();
 						inflater.setInput(byteBuffer.array());
 						byte[] byteArray = new byte[byteBuffer.capacity() * 10];
@@ -116,13 +112,13 @@ public class ReaderVersion31 extends AbstractReaderVersion implements IChromatog
 						DoubleBuffer doubleBuffer = byteBuffer.asDoubleBuffer();
 						values = new double[doubleBuffer.capacity()];
 						for(int index = 0; index < doubleBuffer.capacity(); index++) {
-							values[index] = Double.valueOf(doubleBuffer.get(index));
+							values[index] = doubleBuffer.get(index);
 						}
 					} else {
 						FloatBuffer floatBuffer = byteBuffer.asFloatBuffer();
 						values = new double[floatBuffer.capacity()];
 						for(int index = 0; index < floatBuffer.capacity(); index++) {
-							values[index] = Double.valueOf(floatBuffer.get(index));
+							values[index] = floatBuffer.get(index);
 						}
 					}
 					//

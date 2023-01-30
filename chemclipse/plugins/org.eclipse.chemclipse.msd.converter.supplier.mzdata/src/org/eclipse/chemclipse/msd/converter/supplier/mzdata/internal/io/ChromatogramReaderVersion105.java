@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -12,7 +12,6 @@
 package org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.io;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
@@ -20,8 +19,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
@@ -52,12 +49,8 @@ public class ChromatogramReaderVersion105 extends AbstractChromatogramReader imp
 
 	private static final Logger logger = Logger.getLogger(ChromatogramReaderVersion105.class);
 
-	public ChromatogramReaderVersion105() {
-
-	}
-
 	@Override
-	public IChromatogramMSD read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IChromatogramMSD read(File file, IProgressMonitor monitor) throws IOException {
 
 		IVendorChromatogram chromatogram = null;
 		//
@@ -81,10 +74,9 @@ public class ChromatogramReaderVersion105 extends AbstractChromatogramReader imp
 				int retentionTime = 0;
 				List<Object> params = spectrum.getSpectrumDesc().getSpectrumSettings().getSpectrumInstrument().getCvParamOrUserParam();
 				for(Object object : params) {
-					if(object instanceof CvParamType) {
-						CvParamType cvParamType = (CvParamType)object;
+					if(object instanceof CvParamType cvParamType) {
 						if(cvParamType.getName().equals("TimeInSeconds")) {
-							retentionTime = Math.round(Float.parseFloat(cvParamType.getValue()) * 1000); // milliseconds;
+							retentionTime = Math.round(Float.parseFloat(cvParamType.getValue()) * 1000); // milliseconds
 						}
 					}
 				}

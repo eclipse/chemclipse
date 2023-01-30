@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,7 +19,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.chemclipse.converter.core.AbstractMagicNumberMatcher;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.IConstants;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.SpecificationValidator;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -42,11 +41,11 @@ public class ChromatogramMagicNumberMatcher extends AbstractMagicNumberMatcher i
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 			Document document = documentBuilder.parse(file);
-			NodeList root = document.getElementsByTagName(IConstants.NODE_MZML);
+			NodeList root = document.getElementsByTagName("mzML");
 			if(root.getLength() != 1) {
 				return isValidFormat;
 			}
-			NodeList chromatogramList = document.getElementsByTagName(IConstants.NODE_CHROMATOGRAM_LIST);
+			NodeList chromatogramList = document.getElementsByTagName("chromatogramList");
 			if(chromatogramList.getLength() > 0) {
 				Element element = (Element)chromatogramList.item(0);
 				int chromatogramCount = Integer.parseInt(element.getAttribute("count"));

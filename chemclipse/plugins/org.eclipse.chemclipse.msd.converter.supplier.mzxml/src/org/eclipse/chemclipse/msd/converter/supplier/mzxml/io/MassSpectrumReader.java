@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2022 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -18,14 +18,13 @@ import java.io.IOException;
 
 import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.IFormat;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.MassSpectrumReaderVersion20;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.xxd.converter.supplier.io.exception.UnknownVersionException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class MassSpectrumReader extends AbstractMassSpectraReader implements IMassSpectraReader {
-
-	private static final String MZXML_V_200 = "mzXML_2.0";
 
 	@Override
 	public IMassSpectra read(File file, IProgressMonitor monitor) throws IOException {
@@ -37,19 +36,16 @@ public class MassSpectrumReader extends AbstractMassSpectraReader implements IMa
 	public static IMassSpectraReader getReader(final File file) throws IOException {
 
 		IMassSpectraReader massSpectraReader = null;
-		//
+		final char[] charBuffer = new char[350];
 		try (final FileReader fileReader = new FileReader(file)) {
-			final char[] charBuffer = new char[350];
 			fileReader.read(charBuffer);
-			//
-			final String header = new String(charBuffer);
-			if(header.contains(MZXML_V_200)) {
-				massSpectraReader = new MassSpectrumReaderVersion20();
-			} else {
-				throw new UnknownVersionException();
-			}
 		}
-		//
+		final String header = new String(charBuffer);
+		if(header.contains(IFormat.MZXML_V_200)) {
+			massSpectraReader = new MassSpectrumReaderVersion20();
+		} else {
+			throw new UnknownVersionException();
+		}
 		return massSpectraReader;
 	}
 }
