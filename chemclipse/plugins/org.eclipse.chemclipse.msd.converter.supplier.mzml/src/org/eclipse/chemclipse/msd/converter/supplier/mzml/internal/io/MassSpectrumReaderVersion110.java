@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -26,8 +26,8 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.IVendo
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.IVendorMassSpectra;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.VendorMassSpectra;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.BinaryReader;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.XmlReader;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.BinaryReader110;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.XmlReader110;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.BinaryDataArrayType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.CVParamType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.FileDescriptionType;
@@ -49,10 +49,6 @@ public class MassSpectrumReaderVersion110 extends AbstractMassSpectraReader impl
 
 	private static final Logger logger = Logger.getLogger(MassSpectrumReaderVersion110.class);
 
-	public MassSpectrumReaderVersion110() {
-
-	}
-
 	@Override
 	public IMassSpectra read(File file, IProgressMonitor monitor) throws IOException {
 
@@ -64,7 +60,7 @@ public class MassSpectrumReaderVersion110 extends AbstractMassSpectraReader impl
 			massSpectrum.setFile(file);
 			massSpectrum.setIdentifier(file.getName());
 			//
-			MzML mzML = XmlReader.getMzML(file);
+			MzML mzML = (MzML)XmlReader110.getMzML(file);
 			//
 			FileDescriptionType fileDescription = mzML.getFileDescription();
 			if(fileDescription != null) {
@@ -91,7 +87,7 @@ public class MassSpectrumReaderVersion110 extends AbstractMassSpectraReader impl
 					}
 				}
 				for(BinaryDataArrayType binaryDataArrayType : spectrum.getBinaryDataArrayList().getBinaryDataArray()) {
-					Pair<String, double[]> binaryData = BinaryReader.parseBinaryData(binaryDataArrayType);
+					Pair<String, double[]> binaryData = BinaryReader110.parseBinaryData(binaryDataArrayType);
 					if(binaryData.getKey().equals("m/z")) {
 						mzs = binaryData.getValue();
 					} else if(binaryData.getKey().equals("intensity")) {

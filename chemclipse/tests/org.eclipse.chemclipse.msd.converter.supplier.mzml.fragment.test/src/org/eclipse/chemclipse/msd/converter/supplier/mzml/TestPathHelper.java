@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2022 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -20,5 +20,6 @@ public class TestPathHelper extends PathResolver {
 	/*
 	 * IMPORT
 	 */
-	public static final String TESTFILE_IMPORT_TINY_PWIZ_1_1 = "testData/files/import/tiny.pwiz.1.1.mzml";
+	public static final String TESTFILE_IMPORT_TINY_PWIZ_1_0 = "testData/files/import/tiny.pwiz.1.0.mzML";
+	public static final String TESTFILE_IMPORT_TINY_PWIZ_1_1 = "testData/files/import/tiny.pwiz.1.1.mzML";
 }

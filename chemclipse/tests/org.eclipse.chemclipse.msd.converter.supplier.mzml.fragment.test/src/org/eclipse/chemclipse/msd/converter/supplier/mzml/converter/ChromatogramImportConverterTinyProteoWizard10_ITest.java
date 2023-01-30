@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -24,7 +24,7 @@ import org.junit.Test;
 
 import junit.framework.TestCase;
 
-public class ChromatogramImportConverterTinyProteoWizard_ITest extends TestCase {
+public class ChromatogramImportConverterTinyProteoWizard10_ITest extends TestCase {
 
 	private IChromatogramMSD chromatogram;
 
@@ -32,7 +32,7 @@ public class ChromatogramImportConverterTinyProteoWizard_ITest extends TestCase 
 	protected void setUp() throws Exception {
 
 		super.setUp();
-		File importFile = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_TINY_PWIZ_1_1));
+		File importFile = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_TINY_PWIZ_1_0));
 		ChromatogramImportConverter converter = new ChromatogramImportConverter();
 		IProcessingInfo<IChromatogramMSD> processingInfo = converter.convert(importFile, new NullProgressMonitor());
 		chromatogram = processingInfo.getProcessingResult();
@@ -47,7 +47,7 @@ public class ChromatogramImportConverterTinyProteoWizard_ITest extends TestCase 
 	@Test
 	public void testNumberOfScans() {
 
-		assertEquals("NumberOfScans", 4, chromatogram.getNumberOfScans());
+		assertEquals("NumberOfScans", 3, chromatogram.getNumberOfScans());
 	}
 
 	@Test

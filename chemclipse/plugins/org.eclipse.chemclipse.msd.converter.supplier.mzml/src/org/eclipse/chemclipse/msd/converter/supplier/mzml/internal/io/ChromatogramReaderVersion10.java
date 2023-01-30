@@ -28,16 +28,17 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.IVendo
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.VendorChromatogram;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.VendorScan;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.BinaryReader110;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.XmlReader110;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.BinaryDataArrayType;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.CVParamType;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.ChromatogramType;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.ParamGroupType;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.PrecursorType;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.RunType;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.ScanType;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.SpectrumType;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.BinaryReader10;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.XmlReader10;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.BinaryDataArrayType;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.CVParamType;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.ChromatogramType;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.MzML;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.ParamGroupType;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.PrecursorType;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.RunType;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.ScanType;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.SpectrumType;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IIon;
@@ -53,9 +54,9 @@ import org.xml.sax.SAXException;
 
 import jakarta.xml.bind.JAXBException;
 
-public class ChromatogramReaderVersion110 extends AbstractChromatogramReader implements IChromatogramMSDReader {
+public class ChromatogramReaderVersion10 extends AbstractChromatogramReader implements IChromatogramMSDReader {
 
-	private static final Logger logger = Logger.getLogger(ChromatogramReaderVersion110.class);
+	private static final Logger logger = Logger.getLogger(ChromatogramReaderVersion10.class);
 
 	@Override
 	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws IOException {
@@ -67,12 +68,13 @@ public class ChromatogramReaderVersion110 extends AbstractChromatogramReader imp
 		try {
 			chromatogram = new VendorChromatogram();
 			//
-			RunType run = XmlReader110.getMzML(file).getRun();
+			MzML mzML = XmlReader10.getMzMLType(file);
+			RunType run = mzML.getRun();
 			for(ChromatogramType chromatogramType : run.getChromatogramList().getChromatogram()) {
 				if(chromatogramType.getId().equals("TIC")) {
 					if(chromatogramType.getCvParam().stream().anyMatch(n -> n.getAccession().equals("MS:1000235") && n.getName().equals("total ion current chromatogram"))) {
 						for(BinaryDataArrayType binaryDataArrayType : chromatogramType.getBinaryDataArrayList().getBinaryDataArray()) {
-							Pair<String, double[]> binaryData = BinaryReader110.parseBinaryData(binaryDataArrayType);
+							Pair<String, double[]> binaryData = BinaryReader10.parseBinaryData(binaryDataArrayType);
 							if(binaryData.getKey().equals("time")) {
 								retentionTimes = binaryData.getValue();
 							} else if(binaryData.getKey().equals("intensity")) {
@@ -123,7 +125,8 @@ public class ChromatogramReaderVersion110 extends AbstractChromatogramReader imp
 			//
 			double[] mzs = null;
 			//
-			RunType run = XmlReader110.getMzML(file).getRun();
+			MzML mzML = XmlReader10.getMzMLType(file);
+			RunType run = mzML.getRun();
 			for(SpectrumType spectrum : run.getSpectrumList().getSpectrum()) {
 				IVendorMassSpectrum massSpectrum = new VendorMassSpectrum();
 				for(CVParamType cvParam : spectrum.getCvParam()) {
@@ -137,19 +140,21 @@ public class ChromatogramReaderVersion110 extends AbstractChromatogramReader imp
 						massSpectrum.setMassSpectrometer(msLevel);
 					}
 				}
-				for(ScanType scanType : spectrum.getScanList().getScan()) {
-					for(CVParamType cvParam : scanType.getCvParam()) {
-						if(cvParam.getAccession().equals("MS:1000016") && cvParam.getName().equals("scan start time")) {
-							int multiplicator = XmlReader110.getTimeMultiplicator(cvParam);
-							int retentionTime = Math.round(Float.parseFloat(cvParam.getValue()) * multiplicator);
-							massSpectrum.setRetentionTime(retentionTime);
-						}
+				ScanType scanType = spectrum.getSpectrumDescription().getScan();
+				if(scanType == null) {
+					continue;
+				}
+				for(CVParamType cvParam : scanType.getCvParam()) {
+					if(cvParam.getAccession().equals("MS:1000016") && cvParam.getName().equals("scan time")) {
+						int multiplicator = XmlReader10.getTimeMultiplicator(cvParam);
+						int retentionTime = Math.round(Float.parseFloat(cvParam.getValue()) * multiplicator);
+						massSpectrum.setRetentionTime(retentionTime);
 					}
 				}
 				if(massSpectrum.isTandemMS()) {
 					IIonTransitionSettings ionTransitionSettings = chromatogram.getIonTransitionSettings();
 					IIonTransitionGroup ionTransitionGroup = ionTransitionSettings.get(0);
-					for(PrecursorType precursorType : spectrum.getPrecursorList().getPrecursor()) {
+					for(PrecursorType precursorType : spectrum.getSpectrumDescription().getPrecursorList().getPrecursor()) {
 						double selectedIon = 0;
 						double selectedIonPeakIntensity = 0;
 						for(ParamGroupType paramGroupType : precursorType.getSelectedIonList().getSelectedIon()) {
@@ -173,7 +178,7 @@ public class ChromatogramReaderVersion110 extends AbstractChromatogramReader imp
 					}
 				}
 				for(BinaryDataArrayType binaryDataArrayType : spectrum.getBinaryDataArrayList().getBinaryDataArray()) {
-					Pair<String, double[]> binaryData = BinaryReader110.parseBinaryData(binaryDataArrayType);
+					Pair<String, double[]> binaryData = BinaryReader10.parseBinaryData(binaryDataArrayType);
 					if(binaryData.getKey().equals("m/z")) {
 						mzs = binaryData.getValue();
 					} else if(binaryData.getKey().equals("intensity")) {

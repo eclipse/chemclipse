@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -29,14 +29,18 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 
-public class XmlReader {
+public class XmlReader110 {
+
+	private XmlReader110() {
+
+	}
 
 	public static MzML getMzML(File file) throws SAXException, IOException, JAXBException, ParserConfigurationException {
 
 		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 		Document document = documentBuilder.parse(file);
-		NodeList topNode = document.getElementsByTagName(IConstants.NODE_MZML);
+		NodeList topNode = document.getElementsByTagName("mzML");
 		//
 		JAXBContext jaxbContext = JAXBContext.newInstance(ObjectFactory.class);
 		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
