@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,12 +13,12 @@
 package org.eclipse.chemclipse.msd.converter.supplier.mzxml.converter;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.eclipse.chemclipse.converter.chromatogram.AbstractChromatogramImportConverter;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.IConstants;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.SpecificationValidator;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.io.ChromatogramReader;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -29,6 +29,8 @@ public class ChromatogramImportConverter extends AbstractChromatogramImportConve
 
 	private static final Logger logger = Logger.getLogger(ChromatogramImportConverter.class);
 	private static final String DESCRIPTION = "mzXML Chromatogram Import Converter";
+	private static final String IMPORT_CHROMATOGRAM = "Import mzXML Chromatogram";
+	private static final String ERROR = "Error reading file: ";
 
 	@Override
 	public IProcessingInfo<IChromatogramMSD> convert(File file, IProgressMonitor monitor) {
@@ -40,13 +42,17 @@ public class ChromatogramImportConverter extends AbstractChromatogramImportConve
 			 */
 			file = SpecificationValidator.validateSpecification(file);
 			IChromatogramMSDReader reader = new ChromatogramReader();
-			monitor.subTask(IConstants.IMPORT_CHROMATOGRAM);
+			monitor.subTask(IMPORT_CHROMATOGRAM);
 			try {
 				IChromatogramMSD chromatogram = reader.read(file, monitor);
 				processingInfo.setProcessingResult(chromatogram);
-			} catch(Exception e) {
+			} catch(IOException e) {
 				logger.warn(e);
-				processingInfo.addErrorMessage(DESCRIPTION, "Something has definitely gone wrong with the file: " + file.getAbsolutePath());
+				processingInfo.addErrorMessage(DESCRIPTION, ERROR + file.getAbsolutePath());
+			} catch(InterruptedException e) {
+				logger.warn(e);
+				processingInfo.addErrorMessage(DESCRIPTION, ERROR + file.getAbsolutePath());
+				Thread.currentThread().interrupt();
 			}
 		}
 		return processingInfo;
@@ -62,9 +68,9 @@ public class ChromatogramImportConverter extends AbstractChromatogramImportConve
 			try {
 				IChromatogramOverview chromatogramOverview = reader.readOverview(file, monitor);
 				processingInfo.setProcessingResult(chromatogramOverview);
-			} catch(Exception e) {
+			} catch(IOException e) {
 				logger.warn(e);
-				processingInfo.addErrorMessage(DESCRIPTION, "Something has definitely gone wrong with the file: " + file.getAbsolutePath());
+				processingInfo.addErrorMessage(DESCRIPTION, ERROR + file.getAbsolutePath());
 			}
 		}
 		return processingInfo;

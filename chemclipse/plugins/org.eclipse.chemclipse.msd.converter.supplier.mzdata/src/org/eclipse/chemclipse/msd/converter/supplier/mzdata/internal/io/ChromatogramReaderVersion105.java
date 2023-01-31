@@ -22,7 +22,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
-import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.support.IConstants;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.CvParamType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.MzData;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.MzData.SpectrumList.Spectrum;
@@ -47,6 +46,8 @@ import jakarta.xml.bind.Unmarshaller;
 
 public class ChromatogramReaderVersion105 extends AbstractChromatogramReader implements IChromatogramMSDReader {
 
+	public static final String VERSION = "1.05";
+	//
 	private static final Logger logger = Logger.getLogger(ChromatogramReaderVersion105.class);
 
 	@Override
@@ -58,7 +59,7 @@ public class ChromatogramReaderVersion105 extends AbstractChromatogramReader imp
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 			Document document = documentBuilder.parse(file);
-			NodeList nodeList = document.getElementsByTagName(IConstants.NODE_MZ_DATA);
+			NodeList nodeList = document.getElementsByTagName(ReaderVersion105.NODE_MZ_DATA);
 			//
 			JAXBContext jaxbContext = JAXBContext.newInstance(ObjectFactory.class);
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();

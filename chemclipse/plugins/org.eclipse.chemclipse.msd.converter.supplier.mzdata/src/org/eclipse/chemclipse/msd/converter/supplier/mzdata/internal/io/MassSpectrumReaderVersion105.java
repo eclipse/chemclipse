@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -12,20 +12,16 @@
 package org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.io;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
-import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.support.IConstants;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.CvParamType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.MzData;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.MzData.SpectrumList.Spectrum;
@@ -51,14 +47,12 @@ import jakarta.xml.bind.Unmarshaller;
 
 public class MassSpectrumReaderVersion105 extends AbstractMassSpectraReader implements IMassSpectraReader {
 
+	public static final String VERSION = "1.05";
+	//
 	private static final Logger logger = Logger.getLogger(MassSpectrumReaderVersion105.class);
 
-	public MassSpectrumReaderVersion105() {
-
-	}
-
 	@Override
-	public IMassSpectra read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IMassSpectra read(File file, IProgressMonitor monitor) throws IOException {
 
 		IVendorStandaloneMassSpectrum massSpectrum = null;
 		//
@@ -66,7 +60,7 @@ public class MassSpectrumReaderVersion105 extends AbstractMassSpectraReader impl
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 			Document document = documentBuilder.parse(file);
-			NodeList nodeList = document.getElementsByTagName(IConstants.NODE_MZ_DATA);
+			NodeList nodeList = document.getElementsByTagName(ReaderVersion105.NODE_MZ_DATA);
 			//
 			JAXBContext jaxbContext = JAXBContext.newInstance(ObjectFactory.class);
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
@@ -78,8 +72,7 @@ public class MassSpectrumReaderVersion105 extends AbstractMassSpectraReader impl
 			ParamType processingMethod = mzData.getDescription().getDataProcessing().getProcessingMethod();
 			if(processingMethod != null) {
 				for(Object object : processingMethod.getCvParamOrUserParam()) {
-					if(object instanceof CvParamType) {
-						CvParamType cvParamType = (CvParamType)object;
+					if(object instanceof CvParamType cvParamType) {
 						if(cvParamType.getName().equals("peakProcessing")) {
 							massSpectrum.setMassSpectrumType((short)(cvParamType.getValue().equals("centroided") ? 0 : 1));
 						}

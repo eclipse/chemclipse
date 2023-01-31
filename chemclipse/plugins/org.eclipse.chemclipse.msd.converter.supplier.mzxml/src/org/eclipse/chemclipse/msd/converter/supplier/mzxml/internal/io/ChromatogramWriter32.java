@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -46,6 +46,8 @@ import jakarta.xml.bind.Marshaller;
 
 public class ChromatogramWriter32 extends AbstractChromatogramWriter implements IChromatogramMSDWriter {
 
+	public static final String VERSION = "mzXML_3.2";
+	//
 	private static final Logger logger = Logger.getLogger(ChromatogramWriter32.class);
 
 	@Override

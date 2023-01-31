@@ -19,9 +19,9 @@ import java.io.IOException;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.converter.io.AbstractChromatogramMSDReader;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.IFormat;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.ReaderVersion20;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.ReaderVersion21;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.ReaderVersion22;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.ReaderVersion30;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.ReaderVersion31;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.ReaderVersion32;
@@ -39,17 +39,17 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 			fileReader.read(charBuffer);
 		}
 		final String header = new String(charBuffer);
-		if(header.contains(IFormat.MZXML_V_200)) {
+		if(header.contains(ReaderVersion20.VERSION)) {
 			chromatogramReader = new ReaderVersion20();
-		} else if(header.contains(IFormat.MZXML_V_210)) {
+		} else if(header.contains(ReaderVersion21.VERSION)) {
 			chromatogramReader = new ReaderVersion21();
-		} else if(header.contains(IFormat.MZXML_V_220)) {
-			chromatogramReader = new ReaderVersion21();
-		} else if(header.contains(IFormat.MZXML_V_300)) {
+		} else if(header.contains(ReaderVersion22.VERSION)) {
+			chromatogramReader = new ReaderVersion22();
+		} else if(header.contains(ReaderVersion30.VERSION)) {
 			chromatogramReader = new ReaderVersion30();
-		} else if(header.contains(IFormat.MZXML_V_310)) {
+		} else if(header.contains(ReaderVersion31.VERSION)) {
 			chromatogramReader = new ReaderVersion31();
-		} else if(header.contains(IFormat.MZXML_V_320)) {
+		} else if(header.contains(ReaderVersion32.VERSION)) {
 			chromatogramReader = new ReaderVersion32();
 		} else {
 			throw new UnknownVersionException();

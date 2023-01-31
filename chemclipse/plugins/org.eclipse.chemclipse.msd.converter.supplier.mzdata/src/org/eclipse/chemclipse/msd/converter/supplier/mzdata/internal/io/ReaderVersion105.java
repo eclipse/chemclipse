@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,6 +19,13 @@ import java.nio.FloatBuffer;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.SupDataBinaryType.Data;
 
 public class ReaderVersion105 {
+
+	public final static String NODE_MZ_DATA = "mzData";
+	public final static String NODE_SPECTRUM_LIST = "spectrumList";
+
+	private ReaderVersion105() {
+
+	}
 
 	public static double[] parseData(Data data) {
 
@@ -41,13 +48,13 @@ public class ReaderVersion105 {
 			DoubleBuffer doubleBuffer = byteBuffer.asDoubleBuffer();
 			values = new double[doubleBuffer.capacity()];
 			for(int index = 0; index < doubleBuffer.capacity(); index++) {
-				values[index] = Double.valueOf(doubleBuffer.get(index));
+				values[index] = doubleBuffer.get(index);
 			}
 		} else if(precision == 32) {
 			FloatBuffer floatBuffer = byteBuffer.asFloatBuffer();
 			values = new double[floatBuffer.capacity()];
 			for(int index = 0; index < floatBuffer.capacity(); index++) {
-				values[index] = Double.valueOf(floatBuffer.get(index));
+				values[index] = floatBuffer.get(index);
 			}
 		}
 		return values;

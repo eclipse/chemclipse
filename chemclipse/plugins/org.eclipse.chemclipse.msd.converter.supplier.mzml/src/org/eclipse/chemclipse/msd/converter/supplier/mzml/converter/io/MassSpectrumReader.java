@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2022 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -17,6 +17,7 @@ import java.io.IOException;
 
 import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.XmlReader110;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.io.MassSpectrumReaderVersion110;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.xxd.converter.supplier.io.exception.UnknownVersionException;
@@ -39,7 +40,7 @@ public class MassSpectrumReader extends AbstractMassSpectraReader implements IMa
 			final char[] charBuffer = new char[500];
 			fileReader.read(charBuffer);
 			final String header = new String(charBuffer);
-			if(header.contains(IFormat.MZML_V_110)) {
+			if(header.contains(XmlReader110.VERSION)) {
 				massSpectraReader = new MassSpectrumReaderVersion110();
 			} else {
 				throw new UnknownVersionException();

@@ -33,7 +33,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.Xml
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.BinaryDataArrayType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.CVParamType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.ChromatogramType;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.MzML;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.MzMLType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.ParamGroupType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.PrecursorType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.RunType;
@@ -67,8 +67,7 @@ public class ChromatogramReaderVersion10 extends AbstractChromatogramReader impl
 		//
 		try {
 			chromatogram = new VendorChromatogram();
-			//
-			MzML mzML = XmlReader10.getMzMLType(file);
+			MzMLType mzML = XmlReader10.getMzML(file);
 			RunType run = mzML.getRun();
 			for(ChromatogramType chromatogramType : run.getChromatogramList().getChromatogram()) {
 				if(chromatogramType.getId().equals("TIC")) {
@@ -125,7 +124,7 @@ public class ChromatogramReaderVersion10 extends AbstractChromatogramReader impl
 			//
 			double[] mzs = null;
 			//
-			MzML mzML = XmlReader10.getMzMLType(file);
+			MzMLType mzML = XmlReader10.getMzML(file);
 			RunType run = mzML.getRun();
 			for(SpectrumType spectrum : run.getSpectrumList().getSpectrum()) {
 				IVendorMassSpectrum massSpectrum = new VendorMassSpectrum();

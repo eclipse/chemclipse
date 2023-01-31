@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.Activator;
-import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.io.IFormat;
+import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.io.ChromatogramWriter105;
 import org.eclipse.chemclipse.support.preferences.IPreferenceSupplier;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.IScopeContext;
@@ -24,9 +24,10 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 public class PreferenceSupplier implements IPreferenceSupplier {
 
 	public static final String P_CHROMATOGRAM_VERSION_SAVE = "chromatogramVersionSave";
-	public static final String DEF_CHROMATOGRAM_VERSION_SAVE = IFormat.CHROMATOGRAM_VERSION_LATEST;
+	public static final String DEF_CHROMATOGRAM_VERSION_SAVE = ChromatogramWriter105.VERSION;
 	public static final String P_CHROMATOGRAM_SAVE_COMPRESSION = "chromatogramSaveCompression";
 	public static final boolean DEF_CHROMATOGRAM_SAVE_COMPRESSION = true;
+	//
 	private static IPreferenceSupplier preferenceSupplier;
 
 	public static IPreferenceSupplier INSTANCE() {
@@ -52,7 +53,7 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	@Override
 	public Map<String, String> getDefaultValues() {
 
-		Map<String, String> defaultValues = new HashMap<String, String>();
+		Map<String, String> defaultValues = new HashMap<>();
 		defaultValues.put(P_CHROMATOGRAM_VERSION_SAVE, DEF_CHROMATOGRAM_VERSION_SAVE);
 		defaultValues.put(P_CHROMATOGRAM_SAVE_COMPRESSION, Boolean.toString(DEF_CHROMATOGRAM_SAVE_COMPRESSION));
 		return defaultValues;
@@ -73,8 +74,8 @@ public class PreferenceSupplier implements IPreferenceSupplier {
 	public static String[][] getChromatogramVersions() {
 
 		String[][] elements = new String[1][2];
-		elements[0][0] = IFormat.V_105;
-		elements[0][1] = IFormat.V_105;
+		elements[0][0] = ChromatogramWriter105.VERSION;
+		elements[0][1] = ChromatogramWriter105.VERSION;
 		return elements;
 	}
 

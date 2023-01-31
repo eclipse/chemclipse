@@ -24,7 +24,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {"cvList", "fileDescription", "referenceableParamGroupList", "sampleList", "instrumentConfigurationList", "softwareList", "dataProcessingList", "acquisitionSettingsList", "run"})
 @XmlRootElement(name = "mzML")
-public class MzML {
+public class MzMLType {
 
 	@XmlElement(required = true)
 	protected CVListType cvList;
