@@ -38,10 +38,13 @@ public class ChromatogramImportConverterTinyProteoWizard10_ITest extends TestCas
 		chromatogram = processingInfo.getProcessingResult();
 	}
 
-	@Override
-	protected void tearDown() throws Exception {
+	@Test
+	public void testEditHistory() {
 
-		super.tearDown();
+		assertEquals("deisotoping", chromatogram.getEditHistory().get(0).getDescription());
+		assertEquals("charge deconvolution", chromatogram.getEditHistory().get(1).getDescription());
+		assertEquals("peak picking", chromatogram.getEditHistory().get(2).getDescription());
+		assertEquals("Conversion to mzML", chromatogram.getEditHistory().get(3).getDescription());
 	}
 
 	@Test
