@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2021 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Matthias Mailänder - additional header data
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model;
 
@@ -21,5 +22,17 @@ public class VendorChromatogram extends AbstractChromatogramMSD implements IVend
 	public String getName() {
 
 		return extractNameFromFile("mzMLChromatogram");
+	}
+
+	@Override
+	public String getInstrument() {
+
+		return getHeaderDataOrDefault("Instrument", "");
+	}
+
+	@Override
+	public void setInstrument(String instrument) {
+
+		putHeaderData("Instrument", instrument);
 	}
 }

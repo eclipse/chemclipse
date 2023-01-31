@@ -34,6 +34,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.Bi
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.CVParamType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.ChromatogramType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.DataProcessingType;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.InstrumentConfigurationType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.MzMLType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.ParamGroupType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.PrecursorType;
@@ -140,6 +141,13 @@ public class ChromatogramReaderVersion110 extends AbstractChromatogramReader imp
 			}
 			for(SampleType sample : mzML.getSampleList().getSample()) {
 				chromatogram.setDataName(sample.getName());
+			}
+			for(InstrumentConfigurationType instrument : mzML.getInstrumentConfigurationList().getInstrumentConfiguration()) {
+				for(CVParamType cvParam : instrument.getCvParam()) {
+					if(cvParam.getAccession().equals("MS:1000554")) {
+						chromatogram.setInstrument(cvParam.getName());
+					}
+				}
 			}
 			for(DataProcessingType dataProcessing : mzML.getDataProcessingList().getDataProcessing()) {
 				for(ProcessingMethodType processingMethod : dataProcessing.getProcessingMethod()) {

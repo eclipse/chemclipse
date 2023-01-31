@@ -15,6 +15,8 @@ import java.io.File;
 
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.TestPathHelper;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.IVendorChromatogram;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.VendorChromatogram;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
@@ -26,7 +28,7 @@ import junit.framework.TestCase;
 
 public class ChromatogramImportConverterTinyProteoWizard110_ITest extends TestCase {
 
-	private IChromatogramMSD chromatogram;
+	private IVendorChromatogram chromatogram;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -35,7 +37,13 @@ public class ChromatogramImportConverterTinyProteoWizard110_ITest extends TestCa
 		File importFile = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_TINY_PWIZ_1_1));
 		ChromatogramImportConverter converter = new ChromatogramImportConverter();
 		IProcessingInfo<IChromatogramMSD> processingInfo = converter.convert(importFile, new NullProgressMonitor());
-		chromatogram = processingInfo.getProcessingResult();
+		chromatogram = (VendorChromatogram)processingInfo.getProcessingResult();
+	}
+
+	@Test
+	public void testInstrument() {
+
+		assertEquals("LCQ Deca", chromatogram.getInstrument());
 	}
 
 	@Test
