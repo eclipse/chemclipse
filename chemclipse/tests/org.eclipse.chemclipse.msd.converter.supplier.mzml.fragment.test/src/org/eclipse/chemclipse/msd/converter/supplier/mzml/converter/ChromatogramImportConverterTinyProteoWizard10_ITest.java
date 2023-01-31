@@ -39,6 +39,12 @@ public class ChromatogramImportConverterTinyProteoWizard10_ITest extends TestCas
 	}
 
 	@Test
+	public void testSample() {
+
+		assertEquals("Sample1", chromatogram.getDataName());
+	}
+
+	@Test
 	public void testOperator() {
 
 		assertEquals("William Pennington, Higglesworth University, 12 Higglesworth Avenue, 12045, HI, USA, http://www.higglesworth.edu/, wpennington@higglesworth.edu", chromatogram.getOperator());

@@ -39,6 +39,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.Pa
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.PrecursorType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.ProcessingMethodType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.RunType;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.SampleType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.ScanType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.SoftwareType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.SpectrumType;
@@ -136,6 +137,9 @@ public class ChromatogramReaderVersion110 extends AbstractChromatogramReader imp
 						chromatogram.setOperator(String.join(", ", chromatogram.getOperator(), cvParam.getValue()));
 					}
 				}
+			}
+			for(SampleType sample : mzML.getSampleList().getSample()) {
+				chromatogram.setDataName(sample.getName());
 			}
 			for(DataProcessingType dataProcessing : mzML.getDataProcessingList().getDataProcessing()) {
 				for(ProcessingMethodType processingMethod : dataProcessing.getProcessingMethod()) {
