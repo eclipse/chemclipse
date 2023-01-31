@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2020 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -19,7 +19,6 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IChromatogram;
 import org.eclipse.chemclipse.model.core.IPeak;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDWriter;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.IConstants;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.SpecificationValidator;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.io.ChromatogramWriter;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -30,15 +29,15 @@ public class ChromatogramExportConverter extends AbstractChromatogramExportConve
 
 	private static final Logger logger = Logger.getLogger(ChromatogramExportConverter.class);
 	private static final String DESCRIPTION = "mzXML Chromatogram Export Converter";
+	private static final String EXPORT_MZXML_CHROMATOGRAM = "Export mzXML Chromatogram";
 
 	@Override
 	public IProcessingInfo<File> convert(File file, IChromatogram<? extends IPeak> chromatogram, IProgressMonitor monitor) {
 
 		file = SpecificationValidator.validateSpecification(file);
 		IProcessingInfo<File> processingInfo = super.validate(file);
-		if(!processingInfo.hasErrorMessages() && chromatogram instanceof IChromatogramMSD) {
-			IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
-			monitor.subTask(IConstants.EXPORT_MZXML_CHROMATOGRAM);
+		if(!processingInfo.hasErrorMessages() && chromatogram instanceof IChromatogramMSD chromatogramMSD) {
+			monitor.subTask(EXPORT_MZXML_CHROMATOGRAM);
 			IChromatogramMSDWriter writer = new ChromatogramWriter();
 			try {
 				writer.writeChromatogram(file, chromatogramMSD, monitor);

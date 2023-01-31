@@ -50,6 +50,8 @@ import jakarta.xml.bind.Unmarshaller;
 
 public class ReaderVersion20 extends AbstractReaderVersion implements IChromatogramMSDReader {
 
+	public static final String VERSION = "mzXML_2.0";
+	//
 	private static final Logger logger = Logger.getLogger(ReaderVersion20.class);
 	private static final int ION_PRECISION = 4;
 
@@ -62,7 +64,7 @@ public class ReaderVersion20 extends AbstractReaderVersion implements IChromatog
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 			Document document = documentBuilder.parse(file);
-			NodeList nodeList = document.getElementsByTagName(IConstants.NODE_MS_RUN);
+			NodeList nodeList = document.getElementsByTagName(NODE_MS_RUN);
 			//
 			JAXBContext jaxbContext = JAXBContext.newInstance(ObjectFactory.class);
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();

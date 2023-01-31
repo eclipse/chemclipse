@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2022 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -13,7 +13,6 @@
 package org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
@@ -25,8 +24,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.eclipse.chemclipse.converter.exceptions.FileIsEmptyException;
-import org.eclipse.chemclipse.converter.exceptions.FileIsNotReadableException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
@@ -56,14 +53,12 @@ import jakarta.xml.bind.Unmarshaller;
 
 public class MassSpectrumReaderVersion20 extends AbstractMassSpectraReader implements IMassSpectraReader {
 
+	public static final String VERSION = "mzXML_2.0";
+	//
 	private static final Logger logger = Logger.getLogger(MassSpectrumReaderVersion20.class);
 
-	public MassSpectrumReaderVersion20() {
-
-	}
-
 	@Override
-	public IMassSpectra read(File file, IProgressMonitor monitor) throws FileNotFoundException, FileIsNotReadableException, FileIsEmptyException, IOException {
+	public IMassSpectra read(File file, IProgressMonitor monitor) throws IOException {
 
 		IVendorStandaloneMassSpectrum massSpectrum = null;
 		//
@@ -71,7 +66,7 @@ public class MassSpectrumReaderVersion20 extends AbstractMassSpectraReader imple
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 			Document document = documentBuilder.parse(file);
-			NodeList nodeList = document.getElementsByTagName(IConstants.NODE_MS_RUN);
+			NodeList nodeList = document.getElementsByTagName(AbstractReaderVersion.NODE_MS_RUN);
 			//
 			JAXBContext jaxbContext = JAXBContext.newInstance(ObjectFactory.class);
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
@@ -81,7 +76,7 @@ public class MassSpectrumReaderVersion20 extends AbstractMassSpectraReader imple
 			massSpectrum.setFile(file);
 			massSpectrum.setIdentifier(file.getName());
 			for(DataProcessing dataProcessing : msrun.getDataProcessing()) {
-				massSpectrum.setMassSpectrumType((short)(dataProcessing.isCentroided() ? 0 : 1));
+				massSpectrum.setMassSpectrumType((short)(Boolean.TRUE.equals(dataProcessing.isCentroided()) ? 0 : 1));
 			}
 			//
 			for(Scan scan : msrun.getScan()) {
@@ -108,13 +103,13 @@ public class MassSpectrumReaderVersion20 extends AbstractMassSpectraReader imple
 					DoubleBuffer doubleBuffer = byteBuffer.asDoubleBuffer();
 					values = new double[doubleBuffer.capacity()];
 					for(int index = 0; index < doubleBuffer.capacity(); index++) {
-						values[index] = Double.valueOf(doubleBuffer.get(index));
+						values[index] = doubleBuffer.get(index);
 					}
 				} else {
 					FloatBuffer floatBuffer = byteBuffer.asFloatBuffer();
 					values = new double[floatBuffer.capacity()];
 					for(int index = 0; index < floatBuffer.capacity(); index++) {
-						values[index] = Double.valueOf(floatBuffer.get(index));
+						values[index] = floatBuffer.get(index);
 					}
 				}
 				//

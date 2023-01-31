@@ -47,7 +47,7 @@ public class DataProcessingType {
 	public List<ProcessingMethodType> getProcessingMethod() {
 
 		if(processingMethod == null) {
-			processingMethod = new ArrayList<ProcessingMethodType>();
+			processingMethod = new ArrayList<>();
 		}
 		return this.processingMethod;
 	}

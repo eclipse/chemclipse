@@ -19,7 +19,6 @@ import org.eclipse.chemclipse.converter.exceptions.FileIsNotWriteableException;
 import org.eclipse.chemclipse.converter.io.AbstractChromatogramWriter;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDWriter;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.ChromatogramWriter32;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.IFormat;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -38,7 +37,7 @@ public class ChromatogramWriter extends AbstractChromatogramWriter implements IC
 	private IChromatogramMSDWriter getChromatogramWriter() {
 
 		String versionSave = PreferenceSupplier.getChromatogramVersionSave();
-		if(versionSave.equals(IFormat.MZXML_V_320)) {
+		if(versionSave.equals(ChromatogramWriter32.VERSION)) {
 			return new ChromatogramWriter32();
 		}
 		return null;

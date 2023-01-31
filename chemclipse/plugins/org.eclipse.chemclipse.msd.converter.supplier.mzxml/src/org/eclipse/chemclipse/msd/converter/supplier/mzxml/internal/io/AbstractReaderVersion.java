@@ -43,6 +43,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 public abstract class AbstractReaderVersion extends AbstractChromatogramMSDReader implements IChromatogramMSDReader {
 
+	public static final String NODE_MZXML = "mzXML";
+	public static final String NODE_MS_RUN = "msRun";
+	public static final String NODE_SCAN = "scan";
+	//
 	private static final Logger logger = Logger.getLogger(AbstractReaderVersion.class);
 
 	@Override

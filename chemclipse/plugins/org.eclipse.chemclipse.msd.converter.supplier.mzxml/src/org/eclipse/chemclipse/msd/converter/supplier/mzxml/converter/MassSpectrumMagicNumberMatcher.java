@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,7 +19,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.chemclipse.converter.core.AbstractMagicNumberMatcher;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
-import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.IConstants;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.AbstractReaderVersion;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.io.SpecificationValidator;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -41,13 +41,14 @@ public class MassSpectrumMagicNumberMatcher extends AbstractMagicNumberMatcher i
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 			Document document = documentBuilder.parse(file);
-			NodeList root = document.getElementsByTagName(IConstants.NODE_MZXML);
+			NodeList root = document.getElementsByTagName(AbstractReaderVersion.NODE_MZXML);
 			if(root.getLength() != 1) {
 				return isValidFormat;
 			}
-			NodeList scanList = document.getElementsByTagName(IConstants.NODE_SCAN);
-			if(scanList.getLength() == 1)
+			NodeList scanList = document.getElementsByTagName(AbstractReaderVersion.NODE_SCAN);
+			if(scanList.getLength() == 1) {
 				isValidFormat = true;
+			}
 		} catch(Exception e) {
 			// fail silently
 		}

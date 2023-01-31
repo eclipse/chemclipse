@@ -18,7 +18,6 @@ import java.io.IOException;
 
 import org.eclipse.chemclipse.msd.converter.io.AbstractMassSpectraReader;
 import org.eclipse.chemclipse.msd.converter.io.IMassSpectraReader;
-import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.io.IFormat;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.io.MassSpectrumReaderVersion105;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.xxd.converter.supplier.io.exception.UnknownVersionException;
@@ -41,7 +40,7 @@ public class MassSpectrumReader extends AbstractMassSpectraReader implements IMa
 			fileReader.read(charBuffer);
 		}
 		final String header = new String(charBuffer);
-		if(header.contains(IFormat.V_105)) {
+		if(header.contains(MassSpectrumReaderVersion105.VERSION)) {
 			massSpectraReader = new MassSpectrumReaderVersion105();
 		} else {
 			throw new UnknownVersionException();
