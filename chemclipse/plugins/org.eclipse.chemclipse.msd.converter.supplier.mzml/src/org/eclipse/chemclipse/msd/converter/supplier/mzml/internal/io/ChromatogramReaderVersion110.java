@@ -128,6 +128,15 @@ public class ChromatogramReaderVersion110 extends AbstractChromatogramReader imp
 			chromatogram.setFile(file);
 			//
 			MzMLType mzML = XmlReader110.getMzML(file);
+			for(ParamGroupType contact : mzML.getFileDescription().getContact()) {
+				for(CVParamType cvParam : contact.getCvParam()) {
+					if(chromatogram.getOperator().isEmpty()) {
+						chromatogram.setOperator(cvParam.getValue());
+					} else {
+						chromatogram.setOperator(String.join(", ", chromatogram.getOperator(), cvParam.getValue()));
+					}
+				}
+			}
 			for(DataProcessingType dataProcessing : mzML.getDataProcessingList().getDataProcessing()) {
 				for(ProcessingMethodType processingMethod : dataProcessing.getProcessingMethod()) {
 					SoftwareType software = (SoftwareType)processingMethod.getSoftwareRef();

@@ -39,6 +39,12 @@ public class ChromatogramImportConverterTinyProteoWizard110_ITest extends TestCa
 	}
 
 	@Test
+	public void testOperator() {
+
+		assertEquals("William Pennington, Higglesworth University, 12 Higglesworth Avenue, 12045, HI, USA, http://www.higglesworth.edu/, wpennington@higglesworth.edu", chromatogram.getOperator());
+	}
+
+	@Test
 	public void testEditHistory() {
 
 		assertEquals("deisotoping", chromatogram.getEditHistory().get(0).getDescription());
