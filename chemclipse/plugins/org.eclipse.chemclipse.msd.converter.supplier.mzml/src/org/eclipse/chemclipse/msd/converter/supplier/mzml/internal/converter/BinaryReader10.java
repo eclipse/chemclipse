@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,10 +21,14 @@ import java.util.zip.Inflater;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.BinaryDataArrayType;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.CVParamType;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.BinaryDataArrayType;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.CVParamType;
 
-public class BinaryReader {
+public class BinaryReader10 {
+
+	private BinaryReader10() {
+
+	}
 
 	public static Pair<String, double[]> parseBinaryData(BinaryDataArrayType binaryDataArrayType) throws DataFormatException {
 
@@ -65,7 +69,7 @@ public class BinaryReader {
 			if(cvParam.getAccession().equals("MS:1000595")) {
 				if(cvParam.getName().equals("time array")) {
 					content = "time";
-					multiplicator = XmlReader.getTimeMultiplicator(cvParam);
+					multiplicator = XmlReader10.getTimeMultiplicator(cvParam);
 				}
 			}
 		}

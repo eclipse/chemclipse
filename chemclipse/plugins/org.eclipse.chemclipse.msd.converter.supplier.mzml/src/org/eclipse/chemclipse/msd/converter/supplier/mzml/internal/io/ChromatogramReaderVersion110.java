@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,8 +28,8 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.IVendo
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.VendorChromatogram;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.VendorScan;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.BinaryReader;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.XmlReader;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.BinaryReader110;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.XmlReader110;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.BinaryDataArrayType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.CVParamType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.ChromatogramType;
@@ -57,10 +57,6 @@ public class ChromatogramReaderVersion110 extends AbstractChromatogramReader imp
 
 	private static final Logger logger = Logger.getLogger(ChromatogramReaderVersion110.class);
 
-	public ChromatogramReaderVersion110() {
-
-	}
-
 	@Override
 	public IChromatogramOverview readOverview(File file, IProgressMonitor monitor) throws IOException {
 
@@ -71,12 +67,12 @@ public class ChromatogramReaderVersion110 extends AbstractChromatogramReader imp
 		try {
 			chromatogram = new VendorChromatogram();
 			//
-			RunType run = XmlReader.getMzML(file).getRun();
+			RunType run = XmlReader110.getMzML(file).getRun();
 			for(ChromatogramType chromatogramType : run.getChromatogramList().getChromatogram()) {
 				if(chromatogramType.getId().equals("TIC")) {
 					if(chromatogramType.getCvParam().stream().anyMatch(n -> n.getAccession().equals("MS:1000235") && n.getName().equals("total ion current chromatogram"))) {
 						for(BinaryDataArrayType binaryDataArrayType : chromatogramType.getBinaryDataArrayList().getBinaryDataArray()) {
-							Pair<String, double[]> binaryData = BinaryReader.parseBinaryData(binaryDataArrayType);
+							Pair<String, double[]> binaryData = BinaryReader110.parseBinaryData(binaryDataArrayType);
 							if(binaryData.getKey().equals("time")) {
 								retentionTimes = binaryData.getValue();
 							} else if(binaryData.getKey().equals("intensity")) {
@@ -127,7 +123,7 @@ public class ChromatogramReaderVersion110 extends AbstractChromatogramReader imp
 			//
 			double[] mzs = null;
 			//
-			RunType run = XmlReader.getMzML(file).getRun();
+			RunType run = XmlReader110.getMzML(file).getRun();
 			for(SpectrumType spectrum : run.getSpectrumList().getSpectrum()) {
 				IVendorMassSpectrum massSpectrum = new VendorMassSpectrum();
 				for(CVParamType cvParam : spectrum.getCvParam()) {
@@ -144,7 +140,7 @@ public class ChromatogramReaderVersion110 extends AbstractChromatogramReader imp
 				for(ScanType scanType : spectrum.getScanList().getScan()) {
 					for(CVParamType cvParam : scanType.getCvParam()) {
 						if(cvParam.getAccession().equals("MS:1000016") && cvParam.getName().equals("scan start time")) {
-							int multiplicator = XmlReader.getTimeMultiplicator(cvParam);
+							int multiplicator = XmlReader110.getTimeMultiplicator(cvParam);
 							int retentionTime = Math.round(Float.parseFloat(cvParam.getValue()) * multiplicator);
 							massSpectrum.setRetentionTime(retentionTime);
 						}
@@ -177,7 +173,7 @@ public class ChromatogramReaderVersion110 extends AbstractChromatogramReader imp
 					}
 				}
 				for(BinaryDataArrayType binaryDataArrayType : spectrum.getBinaryDataArrayList().getBinaryDataArray()) {
-					Pair<String, double[]> binaryData = BinaryReader.parseBinaryData(binaryDataArrayType);
+					Pair<String, double[]> binaryData = BinaryReader110.parseBinaryData(binaryDataArrayType);
 					if(binaryData.getKey().equals("m/z")) {
 						mzs = binaryData.getValue();
 					} else if(binaryData.getKey().equals("intensity")) {
