@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,8 +8,13 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Matthias Mailänder - exclude unrelated import/export wizards
  *******************************************************************************/
 package org.eclipse.chemclipse.rcp.app.ui;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.chemclipse.support.ui.workbench.WorkbenchAdvisorSupport;
 import org.eclipse.core.resources.IWorkspace;
@@ -19,7 +24,14 @@ import org.eclipse.ui.application.IWorkbenchConfigurer;
 import org.eclipse.ui.application.IWorkbenchWindowConfigurer;
 import org.eclipse.ui.application.WorkbenchAdvisor;
 import org.eclipse.ui.application.WorkbenchWindowAdvisor;
+import org.eclipse.ui.internal.WorkbenchPlugin;
+import org.eclipse.ui.internal.dialogs.WorkbenchWizardElement;
+import org.eclipse.ui.internal.wizards.AbstractExtensionWizardRegistry;
+import org.eclipse.ui.wizards.IWizardCategory;
+import org.eclipse.ui.wizards.IWizardDescriptor;
+import org.eclipse.ui.wizards.IWizardRegistry;
 
+@SuppressWarnings("restriction")
 public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
 	/*
@@ -39,6 +51,10 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 		super.initialize(configurer);
 		configurer.setSaveAndRestore(true);
 		WorkbenchAdvisorSupport.declareProjectExplorerImages(configurer);
+		//
+		WorkbenchPlugin defaultWorkbenchPlugin = WorkbenchPlugin.getDefault();
+		removeWizards(defaultWorkbenchPlugin.getImportWizardRegistry());
+		removeWizards(defaultWorkbenchPlugin.getExportWizardRegistry());
 	}
 
 	@Override
@@ -52,5 +68,31 @@ public class ApplicationWorkbenchAdvisor extends WorkbenchAdvisor {
 
 		IWorkspace workspace = ResourcesPlugin.getWorkspace();
 		return workspace.getRoot();
+	}
+
+	private static final String IMPORT_EXPORT_WIZARDS = "org\\.eclipse\\.ui\\.wizards\\.(import|export)\\.(?!Preferences).*";
+	private static final String EQUINOX_WIZARDS = "org\\.eclipse\\.equinox\\.p2\\.replication.*";
+	private static final String TEAM_E4_WIZARDS = "org\\.eclipse\\.(team|e4)\\.ui.*";
+
+	private void removeWizards(IWizardRegistry wizardRegistry) {
+
+		IWizardCategory[] categories = wizardRegistry.getRootCategory().getCategories();
+		for(IWizardDescriptor wizard : getAllWizards(categories)) {
+			if(wizard.getId().matches(IMPORT_EXPORT_WIZARDS) || wizard.getId().matches(EQUINOX_WIZARDS) || wizard.getId().matches(TEAM_E4_WIZARDS)) {
+				WorkbenchWizardElement wizardElement = (WorkbenchWizardElement)wizard;
+				AbstractExtensionWizardRegistry abstractWizardRegistry = (AbstractExtensionWizardRegistry)wizardRegistry;
+				abstractWizardRegistry.removeExtension(wizardElement.getConfigurationElement().getDeclaringExtension(), new Object[]{wizardElement});
+			}
+		}
+	}
+
+	private IWizardDescriptor[] getAllWizards(IWizardCategory[] categories) {
+
+		List<IWizardDescriptor> results = new ArrayList<>();
+		for(IWizardCategory wizardCategory : categories) {
+			results.addAll(Arrays.asList(wizardCategory.getWizards()));
+			results.addAll(Arrays.asList(getAllWizards(wizardCategory.getCategories())));
+		}
+		return results.toArray(new IWizardDescriptor[0]);
 	}
 }
