@@ -31,6 +31,7 @@ import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.methods.IProcessMethod;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.processing.ui.support.ProcessingInfoPartSupport;
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
@@ -54,7 +55,7 @@ public class ProcessMethodEditor implements IModificationHandler, IChemClipseEdi
 	//
 	public static final String ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.processMethodEditor";
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.ProcessMethodEditor";
-	public static final String ICON_URI = IApplicationImage.getLocation(IApplicationImage.IMAGE_METHOD, IApplicationImageProvider.SIZE_16x16);
+	public static final String ICON_URI = ApplicationImageFactory.getInstance().getURI(IApplicationImage.IMAGE_METHOD, IApplicationImageProvider.SIZE_16x16);
 	public static final String TOOLTIP = "Process Method Editor";
 	//
 	@Inject

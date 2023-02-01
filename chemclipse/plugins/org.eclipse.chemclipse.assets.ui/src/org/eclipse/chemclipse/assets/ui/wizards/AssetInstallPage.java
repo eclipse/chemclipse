@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Christoph Läubrich.
+ * Copyright (c) 2020, 2023 Christoph Läubrich.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -161,7 +161,7 @@ public class AssetInstallPage extends WizardPage {
 
 	private Action createActionAddAsset() {
 
-		Action action = new Action("Add New Asset", ApplicationImageFactory.getInstance().getIcon(IApplicationImage.IMAGE_IMPORT)) {
+		Action action = new Action("Add New Asset", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_IMPORT, IApplicationImage.SIZE_16x16)) {
 
 			@Override
 			public void run() {
@@ -207,7 +207,7 @@ public class AssetInstallPage extends WizardPage {
 
 	private Action createActionAddAssets() {
 
-		Action action = new Action("Add New Assets (ZIP)", ApplicationImageFactory.getInstance().getIcon(IApplicationImage.IMAGE_ZIP_FILE)) {
+		Action action = new Action("Add New Assets (ZIP)", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_ZIP_FILE, IApplicationImage.SIZE_16x16)) {
 
 			@Override
 			public void run() {
@@ -441,7 +441,7 @@ public class AssetInstallPage extends WizardPage {
 
 	private Action createActionDeleteAsset() {
 
-		Action action = new Action("Delete Selected Asset(s)", ApplicationImageFactory.getInstance().getIcon(IApplicationImage.IMAGE_DELETE)) {
+		Action action = new Action("Delete Selected Asset(s)", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DELETE, IApplicationImage.SIZE_16x16)) {
 
 			@Override
 			public void run() {
@@ -471,7 +471,7 @@ public class AssetInstallPage extends WizardPage {
 
 	private Action createActionDeleteAssets() {
 
-		Action action = new Action("Delete All Asset(s)", ApplicationImageFactory.getInstance().getIcon(IApplicationImage.IMAGE_DELETE_ALL)) {
+		Action action = new Action("Delete All Asset(s)", ApplicationImageFactory.getInstance().getImageDescriptor(IApplicationImage.IMAGE_DELETE_ALL, IApplicationImage.SIZE_16x16)) {
 
 			@Override
 			public void run() {

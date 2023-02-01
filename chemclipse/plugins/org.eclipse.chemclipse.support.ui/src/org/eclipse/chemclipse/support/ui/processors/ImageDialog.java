@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -43,7 +43,6 @@ public class ImageDialog extends Dialog {
 	public static final int DEFAULT_HEIGHT = 450;
 	//
 	private static final String FILE_NAME = "FileName";
-	private static final String PATH_PREFIX = IApplicationImage.PATH_PREFIX;
 	private static final String EXTENSION_GIF = ".gif";
 	private static final String EXTENSION_PNG = ".png";
 	//
@@ -228,11 +227,10 @@ public class ImageDialog extends Dialog {
 		for(String image : images) {
 			if(isValidImage(image)) {
 				if(imageMatchesSearch(image, searchTerm)) {
-					String fileName = image.replace(PATH_PREFIX, "");
 					TableItem tableItem = new TableItem(tableImages, SWT.NONE);
-					tableItem.setData(FILE_NAME, fileName);
-					tableItem.setText(fileName.replace(EXTENSION_GIF, "").replace(EXTENSION_PNG, "").toLowerCase());
-					tableItem.setImage(ApplicationImageFactory.getInstance().getImage(PATH_PREFIX + fileName, IApplicationImage.SIZE_16x16));
+					tableItem.setData(FILE_NAME, image);
+					tableItem.setText(image.replace(EXTENSION_GIF, "").replace(EXTENSION_PNG, "").toLowerCase());
+					tableItem.setImage(ApplicationImageFactory.getInstance().getImage(image, IApplicationImage.SIZE_16x16));
 				}
 			}
 		}
@@ -240,7 +238,7 @@ public class ImageDialog extends Dialog {
 
 	private boolean isValidImage(String image) {
 
-		return image.startsWith(PATH_PREFIX) && (image.endsWith(EXTENSION_GIF) || image.endsWith(EXTENSION_PNG));
+		return (image.endsWith(EXTENSION_GIF) || image.endsWith(EXTENSION_PNG));
 	}
 
 	private boolean imageMatchesSearch(String image, String searchTerm) {
@@ -257,7 +255,7 @@ public class ImageDialog extends Dialog {
 		int index = tableImages.getSelectionIndex();
 		TableItem tableItem = tableImages.getItem(index);
 		if(tableItem != null) {
-			imageFileName = PATH_PREFIX + tableItem.getData(FILE_NAME);
+			imageFileName = tableItem.getData(FILE_NAME).toString();
 			return true;
 		} else {
 			imageFileName = null;

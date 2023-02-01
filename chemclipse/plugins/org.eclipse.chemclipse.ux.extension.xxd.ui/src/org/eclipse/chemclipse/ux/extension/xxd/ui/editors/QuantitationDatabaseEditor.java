@@ -23,6 +23,7 @@ import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.handler.IModificationHandler;
 import org.eclipse.chemclipse.model.handler.ISaveHandler;
 import org.eclipse.chemclipse.model.quantitation.IQuantitationDatabase;
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IPerspectiveAndViewIds;
@@ -30,8 +31,8 @@ import org.eclipse.chemclipse.support.ui.workbench.DisplayUtils;
 import org.eclipse.chemclipse.support.ui.workbench.EditorSupport;
 import org.eclipse.chemclipse.ux.extension.ui.editors.IQuantitationDatabaseEditor;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.internal.runnables.QuantDBImportRunnable;
-import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.ExtensionMessages;
+import org.eclipse.chemclipse.ux.extension.xxd.ui.messages.IExtensionMessages;
 import org.eclipse.chemclipse.ux.extension.xxd.ui.swt.editors.ExtendedQuantCompoundListUI;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.e4.ui.di.Focus;
@@ -52,7 +53,7 @@ public class QuantitationDatabaseEditor implements IQuantitationDatabaseEditor {
 	//
 	public static final String ID = "org.eclipse.chemclipse.ux.extension.xxd.ui.part.quantitationDatabaseEditor";
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.ux.extension.xxd.ui/org.eclipse.chemclipse.ux.extension.xxd.ui.editors.QuantitationDatabaseEditor";
-	public static final String ICON_URI = IApplicationImage.getLocation(IApplicationImage.IMAGE_DATABASE, IApplicationImageProvider.SIZE_16x16);
+	public static final String ICON_URI = ApplicationImageFactory.getInstance().getURI(IApplicationImage.IMAGE_DATABASE, IApplicationImageProvider.SIZE_16x16);
 	public static final String TOOLTIP = ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.QUANTITATION_EDITOR);
 	//
 	private final MPart part;

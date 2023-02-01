@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2020 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,12 +21,6 @@ import org.eclipse.swt.graphics.Image;
 
 public interface IApplicationImageProvider {
 
-	/*
-	 * Protocols and paths
-	 */
-	String ICON = "icon";
-	String ICON_PROTOCOL = ICON + "://";
-	String ICON_PATH = "icons/";
 	/*
 	 * Sizes of icons, overlays ...
 	 */
@@ -71,17 +65,11 @@ public interface IApplicationImageProvider {
 	 */
 	ImageDescriptor getImageDescriptor(String fileName, String size);
 
-	default ImageDescriptor getIcon(String fileName) {
-
-		return getImageDescriptor(fileName, SIZE_16x16);
-	}
-
 	/**
-	 * List all icons known to this provider
+	 * Lists the images of this provider.
 	 * 
 	 * @param size
-	 *            the desired size
-	 * @return
+	 * @return {@link Collection}
 	 */
 	Collection<String> listImages(String size);
 
@@ -94,4 +82,13 @@ public interface IApplicationImageProvider {
 	 * @throws IOException
 	 */
 	InputStream getImageAsInputStream(String fileName, String size) throws IOException;
+
+	/**
+	 * platform:/plugin/org.eclipse.chemclipse.rcp.ui.icons/icons/16x16/empty.png
+	 * 
+	 * @param fileName
+	 * @param size
+	 * @return String
+	 */
+	String getURI(String fileName, String size);
 }

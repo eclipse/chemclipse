@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.ui.activator.ContextAddon;
@@ -124,8 +125,8 @@ public abstract class AbstractGroupHandler implements IGroupHandler {
 	private void adjustIcon(MDirectToolItem directToolItem, boolean show) {
 
 		if(directToolItem != null) {
-			String iconHide = IApplicationImage.getLocation(getImageHide(), IApplicationImageProvider.SIZE_16x16);
-			String iconShow = IApplicationImage.getLocation(getImageShow(), IApplicationImageProvider.SIZE_16x16);
+			String iconHide = ApplicationImageFactory.getInstance().getURI(getImageHide(), IApplicationImageProvider.SIZE_16x16);
+			String iconShow = ApplicationImageFactory.getInstance().getURI(getImageShow(), IApplicationImageProvider.SIZE_16x16);
 			directToolItem.setIconURI(show ? iconHide : iconShow);
 		}
 	}
@@ -301,7 +302,7 @@ public abstract class AbstractGroupHandler implements IGroupHandler {
 			menuItem.setElementId(activateElementId);
 			menuItem.setLabel(Action.SHOW.label());
 			menuItem.setTooltip("Activate all mandatory parts.");
-			menuItem.setIconURI(IApplicationImage.getLocation(IApplicationImage.IMAGE_CHECK_ALL, IApplicationImageProvider.SIZE_16x16));
+			menuItem.setIconURI(ApplicationImageFactory.getInstance().getURI(IApplicationImage.IMAGE_CHECK_ALL, IApplicationImageProvider.SIZE_16x16));
 			menuItem.setContributionURI(ACTION_CONTRIBUTION_URI);
 			menuContributions.add(new MenuContribution(menuItem));
 		}
@@ -318,7 +319,7 @@ public abstract class AbstractGroupHandler implements IGroupHandler {
 			menuItem.setElementId(deactivateElementId);
 			menuItem.setLabel(Action.HIDE.label());
 			menuItem.setTooltip("Deactivate all parts.");
-			menuItem.setIconURI(IApplicationImage.getLocation(IApplicationImage.IMAGE_UNCHECK_ALL, IApplicationImageProvider.SIZE_16x16));
+			menuItem.setIconURI(ApplicationImageFactory.getInstance().getURI(IApplicationImage.IMAGE_UNCHECK_ALL, IApplicationImageProvider.SIZE_16x16));
 			menuItem.setContributionURI(ACTION_CONTRIBUTION_URI);
 			menuContributions.add(new MenuContribution(menuItem));
 		}
@@ -342,7 +343,7 @@ public abstract class AbstractGroupHandler implements IGroupHandler {
 			menuItem.setElementId(settingsElementId);
 			menuItem.setLabel("Settings");
 			menuItem.setTooltip("Settings to show/hide parts.");
-			menuItem.setIconURI(IApplicationImage.getLocation(IApplicationImage.IMAGE_PREFERENCES, IApplicationImageProvider.SIZE_16x16));
+			menuItem.setIconURI(ApplicationImageFactory.getInstance().getURI(IApplicationImage.IMAGE_PREFERENCES, IApplicationImageProvider.SIZE_16x16));
 			menuItem.setContributionURI(SETTINGS_CONTRIBUTION_URI);
 			menuContributions.add(new MenuContribution(menuItem));
 		}

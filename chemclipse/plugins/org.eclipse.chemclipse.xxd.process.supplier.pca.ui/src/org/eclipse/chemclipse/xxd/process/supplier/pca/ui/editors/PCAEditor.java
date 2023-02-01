@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2018, 2022 Lablicate GmbH.
+ * Copyright (c) 2018, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,6 +21,7 @@ import javax.inject.Inject;
 
 import org.eclipse.chemclipse.model.statistics.ISample;
 import org.eclipse.chemclipse.model.statistics.IVariable;
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImageProvider;
 import org.eclipse.chemclipse.support.events.IChemClipseEvents;
@@ -36,7 +37,7 @@ import org.eclipse.swt.widgets.Display;
 public class PCAEditor {
 
 	public static final String CONTRIBUTION_URI = "bundleclass://org.eclipse.chemclipse.xxd.process.supplier.pca.ui/org.eclipse.chemclipse.xxd.process.supplier.pca.ui.parts.PCAEditor";
-	public static final String ICON_URI = IApplicationImage.getLocation(IApplicationImage.IMAGE_CHROMATOGRAM, IApplicationImageProvider.SIZE_16x16);
+	public static final String ICON_URI = ApplicationImageFactory.getInstance().getURI(IApplicationImage.IMAGE_CHROMATOGRAM, IApplicationImageProvider.SIZE_16x16);
 	public static final String ID = "org.eclipse.chemclipse.xxd.process.supplier.pca.ui.parts.PCAEditor";
 	public static final String LABEL = "PCA Editor";
 	public static final String TOOL_TIPS = "PCA Editor";

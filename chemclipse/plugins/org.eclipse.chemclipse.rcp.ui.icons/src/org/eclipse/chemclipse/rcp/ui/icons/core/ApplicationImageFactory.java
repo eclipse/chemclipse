@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2020 Lablicate GmbH.
+ * Copyright (c) 2013, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -16,7 +16,10 @@ import org.eclipse.chemclipse.rcp.ui.icons.Activator;
 
 public class ApplicationImageFactory {
 
+	private static IApplicationImage applicationImage = null;
+
 	private ApplicationImageFactory() {
+
 	}
 
 	/**
@@ -26,6 +29,10 @@ public class ApplicationImageFactory {
 	 */
 	public static IApplicationImage getInstance() {
 
-		return Activator.getDefault().getApplicationImage();
+		if(applicationImage == null) {
+			applicationImage = new ApplicationImage(Activator.getDefault().getBundle());
+		}
+		//
+		return applicationImage;
 	}
 }

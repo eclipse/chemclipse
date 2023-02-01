@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -17,6 +17,7 @@ import java.util.function.BiConsumer;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplierContext;
 import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImageFactory;
+import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 
@@ -51,7 +52,7 @@ public final class EditorToolbarAction extends Action {
 	@Override
 	public ImageDescriptor getImageDescriptor() {
 
-		return ApplicationImageFactory.getInstance().getIcon(processor.getImageFileName());
+		return ApplicationImageFactory.getInstance().getImageDescriptor(processor.getImageFileName(), IApplicationImage.SIZE_16x16);
 	}
 
 	@Override
