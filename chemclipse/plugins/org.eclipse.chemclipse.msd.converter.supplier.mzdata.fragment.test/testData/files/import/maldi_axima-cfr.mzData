@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<mzData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://psidev.sourceforge.net/ms/xml/mzdata/mzdata.xsd" version="1.05" accessionNumber="1">
+	<description>
+		<admin>
+			<sampleName/>
+			<contact>
+				<name>Mike Ashton</name>
+				<institution>Kratos Analytical Limited</institution>
+			</contact>
+		</admin>
+		<instrument>
+			<instrumentName>AXIMA-CFR</instrumentName>
+			<source>
+				<cvParam cvLabel="psi" accession="1" name="type" value="MALDI"/>
+			</source>
+			<analyzerList count="1">
+				<analyzer>
+					<cvParam cvLabel="psi" accession="1" name="type" value="TOF"/>
+					<cvParam cvLabel="psi" accession="1" name="resolution" value="10000"/>
+					<cvParam cvLabel="psi" accession="1" name="accuracy" value="0.2"/>
+				</analyzer>
+			</analyzerList>
+			<detector>
+				<cvParam cvLabel="psi" accession="1" name="type" value="MPC"/>
+			</detector>
+		</instrument>
+		<dataProcessing>
+			<software completionTime="2003-10-20T04:07:05+00:00">
+				<name>Kompact</name>
+				<version>2.7.0a1</version>
+			</software>
+			<processingMethod>
+				<cvParam cvLabel="psi" accession="1" name="deisotoped" value="true"/>
+				<cvParam cvLabel="psi" accession="1" name="chargeDeconvolved" value="false"/>
+				<cvParam cvLabel="psi" accession="1" name="peakThreshold" value="0"/>
+				<cvParam cvLabel="psi" accession="1" name="peakProcessing" value="centroided"/>
+			</processingMethod>
+		</dataProcessing>
+	</description>
+	<spectrumList count="1">
+		<spectrum id="1">
+			<spectrumDesc>
+				<spectrumSettings>
+					<acqSpecification methodOfCombination="sum" spectrumType="discrete" count="1">
+						<acquisition acqNumber="1"/>
+					</acqSpecification>
+					<spectrumInstrument msLevel="1">
+						<cvParam cvLabel="psi" accession="1" name="acqType" value="full"/>
+					</spectrumInstrument>
+				</spectrumSettings>
+			</spectrumDesc>
+			<mzArrayBinary>
+				<data precision="32" length="134" endian="little">340vRFMLMESokDBEVxAxRHOQMUQLDDJEQ5IyRLvNMkRjUDNEtdIzRGNRNETg0TREaVA1RJHPNUTXTjZE/s42RN9TN0Rx3jdE2pM4RFcUOUQPkzlELhI6RLGMOkQCHDtEghJAROabQERiDEJE/ZpCRAgRRESKUUVEHthFRNEVRkQb1UZEmFNHRNTZR0RUV0lEWNZJREFXSkSSzkpE2FVLRBiaS0T6EUxEaI9MRFzNTURrFk9EYJhPRM7YT0SMWlBEt89QREaYUkQKS1NE7RVURNRXVUQ1E1dEcIxXRG4YWERCllhEUcxYRAzaWUSK2VpEKk5bRNedXESsWl9Eq91fRCdYYET0WGFEwtFjRPFUZERJ2mVE7VxoRBKbaURQYGtE26JtREIdbkQtG29EyaBvRBvicESZXXNEh95zRKgZdkRbmnpEECd9RPQrgUSwZ4FEtq6BRBbugUQ01YdEchmVRHb4nkR0hp9EMxyqRLCsqkRLEqtEDXmrROxdrERKMq1ERpetRPLerUQARK5Emx2vRA+er0QY3LFEWj20RLPYu0QEYbxESvq8REFAvUT81L1EeN/IRBigyUSJWspE/xPLRKQ7zETYms9EOv3RROk91UQRpd9ERLzgRFTf4UR3/uJEBLzlRFZ+50QPw+dES1npRE6k60S8P+1El2DuRFkk8kQDpfZECcb3RHvD/USUxv5En1IARYPkA0U=</data>
+			</mzArrayBinary>
+			<intenArrayBinary>
+				<data precision="32" length="134" endian="little">5BdVSMDUzkevaQlIWCb5R2RP00cgf+hHJ61yRwwV00fqcp5Hv0vgR7l/jEfzU7NHjjefR466m0cpM2RH2hG9RysQwEf85nZJnrXMR84cu0fW++pH5dCHRxSQQ0f7C/pKmPsJSIniV0mQxQNILDKoR7n9L0dMCYBHjUnVR2HHpkjedcxH2v4/R+5CBEhEPatHpD/sRg8Nl0fd74tHc/6KR2sOZ0hJIfBHMD57RyTqrUeiSnlHCF4VRywWLUgsyoRH4ORVR1zwk0cpSYBInWQpR0XO40dO9fhGB7mkRyYmSUe31jVHwDFHSImyIUdUhXFHF4rMRzchW0c114hH1BUzR65rs0f49T9H7LfrRvbeikes4RpHfid3R0YuhEccRYNJhTj8Rjh2UUf4DoNH+ooeR+LDd0jmGr1G9p2FRz3QQUekPXtHU93hRjwFwUZMuhZHqvvARgQbKkf8tptIdDTgRq48m0lEGElHDqPqSdhT2kddHRRIZtOeRyfodUpeympIkDnRR9ZMhEitRLhH2VtIScwUb0fzqh5IWMTDRwj0wEkeSyZKuSuMR3ZBUEh9OtZI4xoiS/mBhUlyIUlJAVbkSCFJqEcwglVH6t+OR1SLo0f0EZxHrP6yR6L6UUcHAJdKoql1SdKpcEeHG3pKe/+HSDdqQ0thLUBJsZzkSeOPcUrbZ99HoOhISnCLN0frtV9HHde7R3ZrNUo=</data>
+			</intenArrayBinary>
+		</spectrum>
+	</spectrumList>
+</mzData>
