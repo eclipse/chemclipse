@@ -27,6 +27,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.MzData.SpectrumList.Spectrum;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.ObjectFactory;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.ParamType;
+import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.PersonType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.model.IVendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.model.IVendorMassSpectra;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.model.VendorIon;
@@ -35,7 +36,7 @@ import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IMassSpectra;
 import org.eclipse.chemclipse.msd.model.core.IVendorStandaloneMassSpectrum;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
-import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
+import org.eclipse.chemclipse.msd.model.implementation.VendorStandaloneMassSpectrum;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -66,7 +67,22 @@ public class MassSpectrumReaderVersion105 extends AbstractMassSpectraReader impl
 			Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
 			MzData mzData = (MzData)unmarshaller.unmarshal(nodeList.item(0));
 			//
-			massSpectrum = new VendorMassSpectrum();
+			massSpectrum = new VendorStandaloneMassSpectrum();
+			massSpectrum.setSampleName(mzData.getDescription().getAdmin().getSampleName());
+			for(PersonType contact : mzData.getDescription().getAdmin().getContact()) {
+				String contactDetails = "";
+				if(contact.getContactInfo() != null) {
+					contactDetails = String.join(", ", contact.getName(), contact.getInstitution(), contact.getContactInfo());
+				} else {
+					contactDetails = String.join(", ", contact.getName(), contact.getInstitution());
+				}
+				if(massSpectrum.getOperator() == null || massSpectrum.getOperator().isEmpty()) {
+					massSpectrum.setOperator(contactDetails);
+				} else {
+					massSpectrum.setOperator(String.join(", ", massSpectrum.getOperator(), contactDetails));
+				}
+			}
+			massSpectrum.setInstrument(mzData.getDescription().getInstrument().getInstrumentName());
 			massSpectrum.setFile(file);
 			massSpectrum.setIdentifier(file.getName());
 			ParamType processingMethod = mzData.getDescription().getDataProcessing().getProcessingMethod();

@@ -22,10 +22,14 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
+import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.AdminType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.CvParamType;
+import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.DataProcessingType;
+import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.DataProcessingType.Software;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.MzData;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.MzData.SpectrumList.Spectrum;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.ObjectFactory;
+import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.v105.model.PersonType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.io.AbstractChromatogramReader;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.model.IVendorChromatogram;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.model.IVendorIon;
@@ -35,6 +39,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzdata.model.VendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.model.VendorScan;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
+import org.eclipse.chemclipse.support.history.EditInformation;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -67,6 +72,24 @@ public class ChromatogramReaderVersion105 extends AbstractChromatogramReader imp
 			//
 			chromatogram = new VendorChromatogram();
 			//
+			AdminType admin = mzData.getDescription().getAdmin();
+			chromatogram.setDataName(admin.getSampleName());
+			for(PersonType contact : admin.getContact()) {
+				String contactDetails = String.join(", ", contact.getName(), contact.getInstitution(), contact.getContactInfo());
+				if(chromatogram.getOperator().isEmpty()) {
+					chromatogram.setOperator(contactDetails);
+				} else {
+					chromatogram.setOperator(String.join(", ", chromatogram.getOperator(), contactDetails));
+				}
+			}
+			chromatogram.setInstrument(mzData.getDescription().getInstrument().getInstrumentName());
+			DataProcessingType dataProcessing = mzData.getDescription().getDataProcessing();
+			Software software = dataProcessing.getSoftware();
+			for(Object object : dataProcessing.getProcessingMethod().getCvParamOrUserParam()) {
+				if(object instanceof CvParamType cvParamType) {
+					chromatogram.getEditHistory().add(new EditInformation(cvParamType.getName(), software.getName() + " " + software.getVersion()));
+				}
+			}
 			for(Spectrum spectrum : mzData.getSpectrumList().getSpectrum()) {
 				/*
 				 * Get the mass spectra.
