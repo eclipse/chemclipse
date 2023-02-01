@@ -19,6 +19,7 @@ import java.io.IOException;
 import org.eclipse.chemclipse.model.core.IChromatogramOverview;
 import org.eclipse.chemclipse.msd.converter.io.AbstractChromatogramMSDReader;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
+import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.io.ChromatogramReaderVersion104;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.io.ChromatogramReaderVersion105;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.xxd.converter.supplier.io.exception.UnknownVersionException;
@@ -36,6 +37,8 @@ public class ChromatogramReader extends AbstractChromatogramMSDReader implements
 		final String header = new String(charBuffer);
 		if(header.contains(ChromatogramReaderVersion105.VERSION)) {
 			chromatogramReader = new ChromatogramReaderVersion105();
+		} else if(header.contains(ChromatogramReaderVersion104.VERSION)) {
+			chromatogramReader = new ChromatogramReaderVersion104();
 		} else {
 			throw new UnknownVersionException();
 		}
