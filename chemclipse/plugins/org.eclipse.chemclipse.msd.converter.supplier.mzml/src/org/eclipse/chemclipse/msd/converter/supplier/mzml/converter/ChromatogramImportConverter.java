@@ -70,7 +70,7 @@ public class ChromatogramImportConverter extends AbstractChromatogramImportConve
 			try {
 				IChromatogramOverview chromatogramOverview = reader.readOverview(file, monitor);
 				processingInfo.setProcessingResult(chromatogramOverview);
-			} catch(Exception e) {
+			} catch(IOException e) {
 				logger.warn(e);
 				processingInfo.addErrorMessage(DESCRIPTION, ERROR + file.getAbsolutePath());
 			}

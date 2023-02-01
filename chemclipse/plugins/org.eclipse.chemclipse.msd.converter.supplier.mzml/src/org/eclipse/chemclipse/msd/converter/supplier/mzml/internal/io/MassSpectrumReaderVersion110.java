@@ -31,7 +31,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.Xml
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.BinaryDataArrayType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.CVParamType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.FileDescriptionType;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.MzML;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.MzMLType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.ParamGroupType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.RunType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.SpectrumType;
@@ -60,7 +60,7 @@ public class MassSpectrumReaderVersion110 extends AbstractMassSpectraReader impl
 			massSpectrum.setFile(file);
 			massSpectrum.setIdentifier(file.getName());
 			//
-			MzML mzML = (MzML)XmlReader110.getMzML(file);
+			MzMLType mzML = (MzMLType)XmlReader110.getMzML(file);
 			//
 			FileDescriptionType fileDescription = mzML.getFileDescription();
 			if(fileDescription != null) {

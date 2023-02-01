@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017, 2022 Lablicate GmbH.
+ * Copyright (c) 2017, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -80,14 +80,11 @@ public class ChromatogramDataSupport {
 
 		IChromatogram<?> chromatogram = chromatogramSelection.getChromatogram();
 		List<? extends IPeak> peaks = null;
-		if(chromatogram instanceof IChromatogramMSD) {
-			IChromatogramMSD chromatogramMSD = (IChromatogramMSD)chromatogram;
+		if(chromatogram instanceof IChromatogramMSD chromatogramMSD) {
 			peaks = chromatogramMSD.getPeaks(chromatogramSelection);
-		} else if(chromatogram instanceof IChromatogramCSD) {
-			IChromatogramCSD chromatogramCSD = (IChromatogramCSD)chromatogram;
+		} else if(chromatogram instanceof IChromatogramCSD chromatogramCSD) {
 			peaks = chromatogramCSD.getPeaks(chromatogramSelection);
-		} else if(chromatogram instanceof IChromatogramWSD) {
-			IChromatogramWSD chromatogramWSD = (IChromatogramWSD)chromatogram;
+		} else if(chromatogram instanceof IChromatogramWSD chromatogramWSD) {
 			peaks = chromatogramWSD.getPeaks(chromatogramSelection);
 		}
 		//

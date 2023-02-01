@@ -19,7 +19,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.CVParamType;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.MzML;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.MzMLType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.ObjectFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -31,11 +31,13 @@ import jakarta.xml.bind.Unmarshaller;
 
 public class XmlReader10 {
 
+	public static final String VERSION = "1.0";
+
 	private XmlReader10() {
 
 	}
 
-	public static MzML getMzMLType(File file) throws SAXException, IOException, JAXBException, ParserConfigurationException {
+	public static MzMLType getMzML(File file) throws SAXException, IOException, JAXBException, ParserConfigurationException {
 
 		DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
@@ -44,7 +46,7 @@ public class XmlReader10 {
 		//
 		JAXBContext jaxbContext = JAXBContext.newInstance(ObjectFactory.class);
 		Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-		return (MzML)unmarshaller.unmarshal(topNode.item(0));
+		return (MzMLType)unmarshaller.unmarshal(topNode.item(0));
 	}
 
 	public static int getTimeMultiplicator(CVParamType cvParam) {

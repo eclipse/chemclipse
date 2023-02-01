@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2021 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,7 +23,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {"cvList", "fileDescription", "referenceableParamGroupList", "sampleList", "softwareList", "scanSettingsList", "instrumentConfigurationList", "dataProcessingList", "run"})
 @XmlRootElement(name = "mzML") // namespace = "http://psi.hupo.org/ms/mzml"
-public class MzML implements Serializable {
+public class MzMLType implements Serializable {
 
 	private final static long serialVersionUID = 110L;
 	@XmlElement(required = true)

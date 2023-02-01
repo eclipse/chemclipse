@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -26,14 +26,14 @@ import org.eclipse.chemclipse.converter.io.AbstractChromatogramWriter;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.core.IScan;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDWriter;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.io.IFormat;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.BinaryWriter;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.XmlReader110;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.BinaryDataArrayListType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.BinaryDataArrayType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.CVParamType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.ChromatogramListType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.ChromatogramType;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.MzML;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.MzMLType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.ObjectFactory;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.RunType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.ScanListType;
@@ -206,8 +206,8 @@ public class ChromatogramWriterVersion110 extends AbstractChromatogramWriter imp
 				calendar.setTime(date);
 				run.setStartTimeStamp(DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar));
 			}
-			MzML mzML = new MzML();
-			mzML.setVersion(IFormat.MZML_V_110);
+			MzMLType mzML = new MzMLType();
+			mzML.setVersion(XmlReader110.VERSION);
 			mzML.setRun(run);
 			marshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION, "http://psi.hupo.org/ms/mzml http://psidev.info/files/ms/mzML/xsd/mzML1.1.0.xsd");
 			marshaller.marshal(mzML, file);

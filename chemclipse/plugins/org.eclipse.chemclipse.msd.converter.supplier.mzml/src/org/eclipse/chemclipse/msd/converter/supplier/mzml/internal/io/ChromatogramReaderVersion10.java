@@ -33,11 +33,16 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.converter.Xml
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.BinaryDataArrayType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.CVParamType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.ChromatogramType;
-import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.MzML;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.DataProcessingType;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.InstrumentConfigurationType;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.MzMLType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.ParamGroupType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.PrecursorType;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.ProcessingMethodType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.RunType;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.SampleType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.ScanType;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.SoftwareType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v10.model.SpectrumType;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
@@ -49,6 +54,7 @@ import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
 import org.eclipse.chemclipse.msd.model.implementation.IonTransition;
 import org.eclipse.chemclipse.msd.model.implementation.VendorMassSpectrum;
+import org.eclipse.chemclipse.support.history.EditInformation;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.xml.sax.SAXException;
 
@@ -67,8 +73,7 @@ public class ChromatogramReaderVersion10 extends AbstractChromatogramReader impl
 		//
 		try {
 			chromatogram = new VendorChromatogram();
-			//
-			MzML mzML = XmlReader10.getMzMLType(file);
+			MzMLType mzML = XmlReader10.getMzML(file);
 			RunType run = mzML.getRun();
 			for(ChromatogramType chromatogramType : run.getChromatogramList().getChromatogram()) {
 				if(chromatogramType.getId().equals("TIC")) {
@@ -118,14 +123,42 @@ public class ChromatogramReaderVersion10 extends AbstractChromatogramReader impl
 
 		IVendorChromatogram chromatogram = null;
 		double[] intensities = null;
+		double[] mzs = null;
 		//
 		try {
 			chromatogram = new VendorChromatogram();
 			chromatogram.setFile(file);
 			//
-			double[] mzs = null;
-			//
-			MzML mzML = XmlReader10.getMzMLType(file);
+			MzMLType mzML = XmlReader10.getMzML(file);
+			for(ParamGroupType contact : mzML.getFileDescription().getContact()) {
+				for(CVParamType cvParam : contact.getCvParam()) {
+					if(chromatogram.getOperator().isEmpty()) {
+						chromatogram.setOperator(cvParam.getValue());
+					} else {
+						chromatogram.setOperator(String.join(", ", chromatogram.getOperator(), cvParam.getValue()));
+					}
+				}
+			}
+			for(SampleType sample : mzML.getSampleList().getSample()) {
+				chromatogram.setDataName(sample.getName());
+			}
+			for(InstrumentConfigurationType instrument : mzML.getInstrumentConfigurationList().getInstrumentConfiguration()) {
+				for(CVParamType cvParam : instrument.getCvParam()) {
+					if(cvParam.getAccession().equals("MS:1000554")) {
+						chromatogram.setInstrument(cvParam.getName());
+					}
+				}
+			}
+			for(DataProcessingType dataProcessing : mzML.getDataProcessingList().getDataProcessing()) {
+				SoftwareType software = (SoftwareType)dataProcessing.getSoftwareRef();
+				for(ProcessingMethodType processingMethod : dataProcessing.getProcessingMethod()) {
+					for(CVParamType cvParam : processingMethod.getCvParam()) {
+						String operation = cvParam.getName();
+						String editor = software.getId();
+						chromatogram.getEditHistory().add(new EditInformation(operation, editor));
+					}
+				}
+			}
 			RunType run = mzML.getRun();
 			for(SpectrumType spectrum : run.getSpectrumList().getSpectrum()) {
 				IVendorMassSpectrum massSpectrum = new VendorMassSpectrum();

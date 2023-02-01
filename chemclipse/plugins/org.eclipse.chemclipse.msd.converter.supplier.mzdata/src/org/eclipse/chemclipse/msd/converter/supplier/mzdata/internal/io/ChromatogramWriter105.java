@@ -44,6 +44,8 @@ import jakarta.xml.bind.Marshaller;
 
 public class ChromatogramWriter105 extends AbstractChromatogramWriter implements IChromatogramMSDWriter {
 
+	public static final String VERSION = "1.05";
+	//
 	private static final Logger logger = Logger.getLogger(ChromatogramWriter105.class);
 
 	@Override
@@ -90,7 +92,7 @@ public class ChromatogramWriter105 extends AbstractChromatogramWriter implements
 				spectrumList.getSpectrum().add(spectrum);
 			}
 			MzData mzData = new MzData();
-			mzData.setVersion(IFormat.V_105);
+			mzData.setVersion(VERSION);
 			mzData.setSpectrumList(spectrumList);
 			marshaller.marshal(mzData, file);
 		} catch(JAXBException e) {

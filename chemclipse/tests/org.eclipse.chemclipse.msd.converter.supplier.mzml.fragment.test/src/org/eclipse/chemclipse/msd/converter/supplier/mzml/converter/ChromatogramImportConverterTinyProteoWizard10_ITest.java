@@ -15,6 +15,8 @@ import java.io.File;
 
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.TestPathHelper;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.IVendorChromatogram;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.converter.model.VendorChromatogram;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.core.IVendorMassSpectrum;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
@@ -26,7 +28,7 @@ import junit.framework.TestCase;
 
 public class ChromatogramImportConverterTinyProteoWizard10_ITest extends TestCase {
 
-	private IChromatogramMSD chromatogram;
+	private IVendorChromatogram chromatogram;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -35,13 +37,34 @@ public class ChromatogramImportConverterTinyProteoWizard10_ITest extends TestCas
 		File importFile = new File(TestPathHelper.getAbsolutePath(TestPathHelper.TESTFILE_IMPORT_TINY_PWIZ_1_0));
 		ChromatogramImportConverter converter = new ChromatogramImportConverter();
 		IProcessingInfo<IChromatogramMSD> processingInfo = converter.convert(importFile, new NullProgressMonitor());
-		chromatogram = processingInfo.getProcessingResult();
+		chromatogram = (VendorChromatogram)processingInfo.getProcessingResult();
 	}
 
-	@Override
-	protected void tearDown() throws Exception {
+	@Test
+	public void testInstrument() {
 
-		super.tearDown();
+		assertEquals("LCQ Deca", chromatogram.getInstrument());
+	}
+
+	@Test
+	public void testSample() {
+
+		assertEquals("Sample1", chromatogram.getDataName());
+	}
+
+	@Test
+	public void testOperator() {
+
+		assertEquals("William Pennington, Higglesworth University, 12 Higglesworth Avenue, 12045, HI, USA, http://www.higglesworth.edu/, wpennington@higglesworth.edu", chromatogram.getOperator());
+	}
+
+	@Test
+	public void testEditHistory() {
+
+		assertEquals("deisotoping", chromatogram.getEditHistory().get(0).getDescription());
+		assertEquals("charge deconvolution", chromatogram.getEditHistory().get(1).getDescription());
+		assertEquals("peak picking", chromatogram.getEditHistory().get(2).getDescription());
+		assertEquals("Conversion to mzML", chromatogram.getEditHistory().get(3).getDescription());
 	}
 
 	@Test

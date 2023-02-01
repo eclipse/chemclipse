@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 Lablicate GmbH.
+ * Copyright (c) 2016, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,7 +19,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.eclipse.chemclipse.converter.core.AbstractMagicNumberMatcher;
 import org.eclipse.chemclipse.converter.core.IMagicNumberMatcher;
-import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.support.IConstants;
+import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.io.ReaderVersion105;
 import org.eclipse.chemclipse.msd.converter.supplier.mzdata.internal.support.SpecificationValidator;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -42,11 +42,11 @@ public class MassSpectrumMagicNumberMatcher extends AbstractMagicNumberMatcher i
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 			Document document = documentBuilder.parse(file);
-			NodeList root = document.getElementsByTagName(IConstants.NODE_MZ_DATA);
+			NodeList root = document.getElementsByTagName(ReaderVersion105.NODE_MZ_DATA);
 			if(root.getLength() != 1) {
 				return isValidFormat;
 			}
-			NodeList spectrumList = document.getElementsByTagName(IConstants.NODE_SPECTRUM_LIST);
+			NodeList spectrumList = document.getElementsByTagName(ReaderVersion105.NODE_SPECTRUM_LIST);
 			if(spectrumList.getLength() > 0) {
 				Element element = (Element)spectrumList.item(0);
 				int spectrumCount = Integer.parseInt(element.getAttribute("count"));

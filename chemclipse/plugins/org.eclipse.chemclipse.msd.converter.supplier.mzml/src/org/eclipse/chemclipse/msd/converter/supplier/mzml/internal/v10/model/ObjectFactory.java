@@ -29,9 +29,9 @@ public class ObjectFactory {
 
 	}
 
-	public MzML createMzMLType() {
+	public MzMLType createMzMLType() {
 
-		return new MzML();
+		return new MzMLType();
 	}
 
 	public DataProcessingListType createDataProcessingListType() {
@@ -260,9 +260,9 @@ public class ObjectFactory {
 	}
 
 	@XmlElementDecl(namespace = "http://psi.hupo.org/schema_revision/mzML_1.0.0", name = "mzML")
-	public JAXBElement<MzML> createMzML(MzML value) {
+	public JAXBElement<MzMLType> createMzML(MzMLType value) {
 
-		return new JAXBElement<MzML>(_MzML_QNAME, MzML.class, null, value);
+		return new JAXBElement<MzMLType>(_MzML_QNAME, MzMLType.class, null, value);
 	}
 
 	@XmlElementDecl(namespace = "http://psi.hupo.org/schema_revision/mzML_1.0.0", name = "detector", scope = ComponentListType.class)
