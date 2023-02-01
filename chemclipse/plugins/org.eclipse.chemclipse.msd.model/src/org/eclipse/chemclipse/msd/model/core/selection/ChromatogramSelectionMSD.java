@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  *
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -88,12 +88,12 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChr
 	}
 
 	@Override
+	@Deprecated
 	public IChromatogramMSD getChromatogramMSD() {
 
-		@SuppressWarnings("rawtypes")
-		IChromatogram chromatogram = getChromatogram();
-		if(chromatogram instanceof IChromatogramMSD) {
-			return (IChromatogramMSD)chromatogram;
+		IChromatogram<?> chromatogram = getChromatogram();
+		if(chromatogram instanceof IChromatogramMSD chromatogramMSD) {
+			return chromatogramMSD;
 		}
 		return null;
 	}
@@ -141,8 +141,8 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChr
 			/*
 			 * Chromatogram MSD
 			 */
-			if(chromatogram instanceof IChromatogramMSD) {
-				selectedScan = ((IChromatogramMSD)chromatogram).getSupplierScan(1);
+			if(chromatogram instanceof IChromatogramMSD chromatogramMSD) {
+				selectedScan = chromatogramMSD.getSupplierScan(1);
 			}
 		} else {
 			selectedScan = null;
@@ -154,8 +154,8 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChr
 		/*
 		 * Peak
 		 */
-		if(chromatogram instanceof IChromatogramMSD) {
-			List<IChromatogramPeakMSD> peaks = ((IChromatogramMSD)chromatogram).getPeaks();
+		if(chromatogram instanceof IChromatogramMSD chromatogramMSD) {
+			List<IChromatogramPeakMSD> peaks = chromatogramMSD.getPeaks();
 			if(peaks != null && !peaks.isEmpty()) {
 				setSelectedPeak(peaks.get(0));
 			} else {
@@ -173,16 +173,16 @@ public class ChromatogramSelectionMSD extends AbstractChromatogramSelection<IChr
 	@Override
 	public void setSelectedScan(IScan selectedScan) {
 
-		if(selectedScan instanceof IVendorMassSpectrum) {
-			setSelectedScan((IVendorMassSpectrum)selectedScan);
+		if(selectedScan instanceof IVendorMassSpectrum vendorMassSpectrum) {
+			setSelectedScan(vendorMassSpectrum);
 		}
 	}
 
 	@Override
 	public void setSelectedScan(IScan selectedScan, boolean update) {
 
-		if(selectedScan instanceof IVendorMassSpectrum) {
-			setSelectedScan((IVendorMassSpectrum)selectedScan, update);
+		if(selectedScan instanceof IVendorMassSpectrum vendorMassSpectrum) {
+			setSelectedScan(vendorMassSpectrum, update);
 		}
 	}
 

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -154,8 +154,7 @@ public class SelectFileWizardPage extends AbstractExtendedWizardPage {
 					/*
 					 * Is there a report file already?
 					 */
-					if(container instanceof IFolder) {
-						IFolder folder = (IFolder)container;
+					if(container instanceof IFolder folder) {
 						IFile file = folder.getFile(fileName);
 						if(file.exists()) {
 							message = messages.getMessage(ISupportMessages.PROCESSING_FILE_EXISTS);
@@ -165,8 +164,7 @@ public class SelectFileWizardPage extends AbstractExtendedWizardPage {
 							 */
 							wizardElements.setFileName(fileName);
 						}
-					} else if(container instanceof IProject) {
-						IProject project = (IProject)container;
+					} else if(container instanceof IProject project) {
 						/*
 						 * Check whether the project exists or not.
 						 */

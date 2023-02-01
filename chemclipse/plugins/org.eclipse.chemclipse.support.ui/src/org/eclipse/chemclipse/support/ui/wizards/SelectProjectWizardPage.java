@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014, 2018 Lablicate GmbH.
+ * Copyright (c) 2014, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -312,8 +312,7 @@ public class SelectProjectWizardPage extends AbstractExtendedWizardPage {
 		Messages messages = SupportMessages.INSTANCE();
 		String message = null;
 		//
-		if(object instanceof IFolder) {
-			IFolder folder = (IFolder)object;
+		if(object instanceof IFolder folder) {
 			if(!folder.exists()) {
 				message = messages.getMessage(ISupportMessages.PROCESSING_SELECT_VALID_FOLDER);
 			} else {
