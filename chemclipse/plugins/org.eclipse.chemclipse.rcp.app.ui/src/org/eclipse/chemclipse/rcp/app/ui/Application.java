@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -45,8 +45,8 @@ public class Application implements IApplication {
 		 */
 		Properties properties = System.getProperties();
 		Object object = properties.get(D_ENABLE_CLI_SUPPORT);
-		if(object instanceof String) {
-			enableCLISupport = Boolean.parseBoolean((String)object);
+		if(object instanceof String text) {
+			enableCLISupport = Boolean.parseBoolean(text);
 		}
 		/*
 		 * When using the Apache CLI option, RCPTT doesn't work properly.
