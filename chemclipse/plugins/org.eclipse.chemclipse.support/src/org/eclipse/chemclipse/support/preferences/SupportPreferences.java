@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011, 2022 Lablicate GmbH.
+ * Copyright (c) 2011, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -21,22 +21,11 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class SupportPreferences implements IPreferenceSupplier {
 
-	public static final String P_APPLICATION_LANGUAGE = "applicationLanguage";
 	public static final String DEF_APPLICATION_LANGUAGE = "";
 	public static final String P_CLIPBOARD_TABLE_DEFAULT_SORTING = "clipboardTableDefaultSorting";
 	public static final boolean DEF_CLIPBOARD_TABLE_DEFAULT_SORTING = false;
 	public static final String P_UNDO_LIMIT = "undoLimit";
 	public static final int DEF_UNDO_LIMIT = 5;
-	//
-	public static final String LANGUAGE_AUTODETECT = "";
-	public static final String LANGUAGE_EN_GB = "en_GB";
-	public static final String LANGUAGE_DE_DE = "de_DE";
-	/*
-	 * No Selection. Use the language of the system.
-	 * de (ISO 639)
-	 * DE (ISO 3166)
-	 */
-	public static final String[][] AVAILABLE_LANGUAGES = new String[][]{{"Autodetect", LANGUAGE_AUTODETECT}, {"English", LANGUAGE_EN_GB}, {"German", LANGUAGE_DE_DE}};
 	//
 	private static IPreferenceSupplier preferenceSupplier;
 
@@ -64,7 +53,6 @@ public class SupportPreferences implements IPreferenceSupplier {
 	public Map<String, String> getDefaultValues() {
 
 		Map<String, String> defaultValues = new HashMap<>();
-		defaultValues.put(P_APPLICATION_LANGUAGE, DEF_APPLICATION_LANGUAGE);
 		defaultValues.put(P_CLIPBOARD_TABLE_DEFAULT_SORTING, Boolean.toString(DEF_CLIPBOARD_TABLE_DEFAULT_SORTING));
 		defaultValues.put(P_UNDO_LIMIT, Integer.toString(DEF_UNDO_LIMIT));
 		return defaultValues;
@@ -74,12 +62,6 @@ public class SupportPreferences implements IPreferenceSupplier {
 	public IEclipsePreferences getPreferences() {
 
 		return getScopeContext().getNode(getPreferenceNode());
-	}
-
-	public static String getApplicationLanguage() {
-
-		IEclipsePreferences preferences = INSTANCE().getPreferences();
-		return preferences.get(P_APPLICATION_LANGUAGE, DEF_APPLICATION_LANGUAGE);
 	}
 
 	public static boolean isClipboardDefaultSorting() {
