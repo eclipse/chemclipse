@@ -26,10 +26,13 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.model.exceptions.AbundanceLimitExceededException;
 import org.eclipse.chemclipse.msd.converter.io.IChromatogramMSDReader;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v20.model.DataProcessing;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v20.model.MsInstrument;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v20.model.MsRun;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v20.model.ObjectFactory;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v20.model.Peaks;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v20.model.Scan;
+import org.eclipse.chemclipse.msd.converter.supplier.mzxml.internal.v20.model.Software;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.IVendorChromatogram;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.IVendorIon;
 import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.IVendorScan;
@@ -39,6 +42,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzxml.model.VendorScan;
 import org.eclipse.chemclipse.msd.model.core.AbstractIon;
 import org.eclipse.chemclipse.msd.model.core.IChromatogramMSD;
 import org.eclipse.chemclipse.msd.model.exceptions.IonLimitExceededException;
+import org.eclipse.chemclipse.support.history.EditInformation;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
@@ -71,6 +75,22 @@ public class ReaderVersion20 extends AbstractReaderVersion implements IChromatog
 			MsRun msrun = (MsRun)unmarshaller.unmarshal(nodeList.item(0));
 			//
 			chromatogram = new VendorChromatogram();
+			//
+			MsInstrument instrument = msrun.getMsInstrument();
+			if(instrument != null) {
+				chromatogram.setInstrument(instrument.getMsManufacturer().getTheValue() + " " + instrument.getMsModel().getTheValue());
+				chromatogram.setIonisation(instrument.getMsIonisation().getTheValue());
+				chromatogram.setMassAnalyzer(instrument.getMsMassAnalyzer().getTheValue());
+				chromatogram.setMassDetector(instrument.getMsDetector().getTheValue());
+				Software software = instrument.getSoftware();
+				if(software != null) {
+					chromatogram.setSoftware(software.getName() + " " + software.getVersion());
+				}
+			}
+			for(DataProcessing processing : msrun.getDataProcessing()) {
+				Software software = processing.getSoftware();
+				chromatogram.getEditHistory().add(new EditInformation(software.getType(), software.getName() + " " + software.getVersion()));
+			}
 			//
 			for(Scan scan : msrun.getScan()) {
 				/*
