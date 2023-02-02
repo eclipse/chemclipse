@@ -118,46 +118,39 @@ public class SettingsClassParser<SettingType> implements SettingsParser<SettingT
 						 */
 						Iterable<Annotation> annotations = annotatedField.getAllAnnotations().annotations();
 						for(Annotation annotation : annotations) {
-							if(annotation instanceof IntSettingsProperty) {
-								IntSettingsProperty settingsProperty = (IntSettingsProperty)annotation;
-								inputValue.addValidator(new MinMaxValidator<Integer>(property.getName(), settingsProperty.minValue(), settingsProperty.maxValue(), Integer.class));
+							if(annotation instanceof IntSettingsProperty settingsProperty) {
+								inputValue.addValidator(new MinMaxValidator<>(property.getName(), settingsProperty.minValue(), settingsProperty.maxValue(), Integer.class));
 								inputValue.addValidator(new EvenOddValidatorInteger(property.getName(), settingsProperty.validation()));
-							} else if(annotation instanceof LongSettingsProperty) {
-								LongSettingsProperty settingsProperty = (LongSettingsProperty)annotation;
-								inputValue.addValidator(new MinMaxValidator<Long>(property.getName(), settingsProperty.minValue(), settingsProperty.maxValue(), Long.class));
+							} else if(annotation instanceof LongSettingsProperty settingsProperty) {
+								inputValue.addValidator(new MinMaxValidator<>(property.getName(), settingsProperty.minValue(), settingsProperty.maxValue(), Long.class));
 								inputValue.addValidator(new EvenOddValidatorLong(property.getName(), settingsProperty.validation()));
-							} else if(annotation instanceof FloatSettingsProperty) {
-								FloatSettingsProperty settingsProperty = (FloatSettingsProperty)annotation;
-								inputValue.addValidator(new MinMaxValidator<Float>(property.getName(), settingsProperty.minValue(), settingsProperty.maxValue(), Float.class));
-							} else if(annotation instanceof DoubleSettingsProperty) {
-								DoubleSettingsProperty settingsProperty = (DoubleSettingsProperty)annotation;
-								inputValue.addValidator(new MinMaxValidator<Double>(property.getName(), settingsProperty.minValue(), settingsProperty.maxValue(), Double.class));
-							} else if(annotation instanceof StringSettingsProperty) {
-								StringSettingsProperty settingsProperty = (StringSettingsProperty)annotation;
+							} else if(annotation instanceof FloatSettingsProperty settingsProperty) {
+								inputValue.addValidator(new MinMaxValidator<>(property.getName(), settingsProperty.minValue(), settingsProperty.maxValue(), Float.class));
+							} else if(annotation instanceof DoubleSettingsProperty settingsProperty) {
+								inputValue.addValidator(new MinMaxValidator<>(property.getName(), settingsProperty.minValue(), settingsProperty.maxValue(), Double.class));
+							} else if(annotation instanceof StringSettingsProperty settingsProperty) {
 								String regExp = settingsProperty.regExp();
 								if(regExp != null && !regExp.isEmpty()) {
 									inputValue.addValidator(new RegularExpressionValidator(property.getName(), Pattern.compile(regExp), settingsProperty.description(), settingsProperty.isMultiLine(), settingsProperty.allowEmpty()));
 								}
 								inputValue.setMultiLine(settingsProperty.isMultiLine());
-							} else if(annotation instanceof FileSettingProperty) {
-								inputValue.setFileSettingProperty((FileSettingProperty)annotation);
-							} else if(annotation instanceof ComboSettingsProperty) {
+							} else if(annotation instanceof FileSettingProperty fileSettingProperty) {
+								inputValue.setFileSettingProperty(fileSettingProperty);
+							} else if(annotation instanceof ComboSettingsProperty comboSettingsProperty) {
 								try {
-									inputValue.setComboSupplier(((ComboSettingsProperty)annotation).value().getDeclaredConstructor().newInstance());
+									inputValue.setComboSupplier(comboSettingsProperty.value().getDeclaredConstructor().newInstance());
 								} catch(Exception e) {
 									throw new RuntimeException("The specified ComboSupplier can't be created.", e);
 								}
-							} else if(annotation instanceof ValidatorSettingsProperty) {
+							} else if(annotation instanceof ValidatorSettingsProperty validatorSettingsProperty) {
 								try {
-									ValidatorSettingsProperty validatorSettingsProperty = (ValidatorSettingsProperty)annotation;
 									Class<? extends IValidator<Object>> validatorClass = validatorSettingsProperty.validator();
 									IValidator<Object> validator = validatorClass.getDeclaredConstructor().newInstance();
 									inputValue.addValidator(validator);
 								} catch(Exception e) {
 									throw new RuntimeException("The validator can't be instantiated.", e);
 								}
-							} else if(annotation instanceof LocalisationSettingsProperty) {
-								LocalisationSettingsProperty localisationSettingsProperty = (LocalisationSettingsProperty)annotation;
+							} else if(annotation instanceof LocalisationSettingsProperty localisationSettingsProperty) {
 								inputValue.setName(messages.getMessage(localisationSettingsProperty.value()));
 								inputValue.setDescription(messages.getMessage(localisationSettingsProperty.description()));
 							} else {

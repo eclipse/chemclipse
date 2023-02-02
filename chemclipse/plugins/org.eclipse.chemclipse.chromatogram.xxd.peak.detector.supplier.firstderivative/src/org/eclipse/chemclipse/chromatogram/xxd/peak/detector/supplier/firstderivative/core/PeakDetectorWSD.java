@@ -78,9 +78,8 @@ public class PeakDetectorWSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 		 */
 		IProcessingInfo<R> processingInfo = validate(chromatogramSelection, detectorSettings, monitor);
 		if(!processingInfo.hasErrorMessages()) {
-			if(detectorSettings instanceof PeakDetectorSettingsWSD) {
+			if(detectorSettings instanceof PeakDetectorSettingsWSD peakDetectorSettings) {
 				SubMonitor subMonitor = SubMonitor.convert(monitor, 100);
-				PeakDetectorSettingsWSD peakDetectorSettings = (PeakDetectorSettingsWSD)detectorSettings;
 				/*
 				 * Extract the noise segments.
 				 */
@@ -205,7 +204,7 @@ public class PeakDetectorWSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 	private List<IChromatogramPeakWSD> extractPeaks(List<IRawPeak> rawPeaks, IChromatogramWSD chromatogram, PeakDetectorSettingsWSD peakDetectorSettings, IMarkedWavelengths wavelengths) {
 
 		List<IChromatogramPeakWSD> peaks = new ArrayList<>();
-		Set<Integer> traces = wavelengths.getWavelengths().stream().map(e -> e.intValue()).collect(Collectors.toSet());
+		Set<Integer> traces = wavelengths.getWavelengths().stream().map(Double::intValue).collect(Collectors.toSet());
 		boolean includeBackground = peakDetectorSettings.isIncludeBackground();
 		boolean optimizeBaseline = peakDetectorSettings.isOptimizeBaseline();
 		//
@@ -306,10 +305,7 @@ public class PeakDetectorWSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 		/*
 		 * Noise calculation needs to be adjusted for WSD chromatograms.
 		 */
-		if(peak != null) { // && peak.getSignalToNoiseRatio() >= minimumSignalToNoiseRatio
-			return true;
-		}
-		return false;
+		return (peak != null); // && peak.getSignalToNoiseRatio() >= minimumSignalToNoiseRatio
 	}
 
 	protected ScanRange optimizeBaseline(IChromatogramWSD chromatogram, int startScan, int centerScan, int stopScan, IMarkedWavelengths wavelengths) {
@@ -326,8 +322,7 @@ public class PeakDetectorWSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 	protected float getScanSignal(IChromatogramWSD chromatogram, int scanNumber, IMarkedWavelengths wavelengths) {
 
 		IScan scan = chromatogram.getScan(scanNumber);
-		if(scan instanceof IScanWSD) {
-			IScanWSD scanWSD = (IScanWSD)scan;
+		if(scan instanceof IScanWSD scanWSD) {
 			return scanWSD.getTotalSignal(wavelengths);
 		}
 		return scan.getTotalSignal();

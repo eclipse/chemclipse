@@ -74,9 +74,8 @@ public class PeakDetectorMSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 
 		IProcessingInfo<R> processingInfo = validate(chromatogramSelection, detectorSettings, monitor);
 		if(!processingInfo.hasErrorMessages()) {
-			if(detectorSettings instanceof PeakDetectorSettingsMSD) {
+			if(detectorSettings instanceof PeakDetectorSettingsMSD peakDetectorSettings) {
 				SubMonitor subMonitor = SubMonitor.convert(monitor, 100);
-				PeakDetectorSettingsMSD peakDetectorSettings = (PeakDetectorSettingsMSD)detectorSettings;
 				IChromatogramMSD chromatogram = chromatogramSelection.getChromatogram();
 				/*
 				 * Extract the noise segments.
