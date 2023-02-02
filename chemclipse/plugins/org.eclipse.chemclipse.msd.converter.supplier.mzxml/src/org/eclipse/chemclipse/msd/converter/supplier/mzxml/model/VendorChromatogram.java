@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Lablicate GmbH.
+ * Copyright (c) 2008, 2023 Lablicate GmbH.
  * 
  * All rights reserved.
  * This program and the accompanying materials are made available under the
@@ -8,6 +8,7 @@
  * 
  * Contributors:
  * Dr. Philip Wenig - initial API and implementation
+ * Matthias Mailänder - metadata
  *******************************************************************************/
 package org.eclipse.chemclipse.msd.converter.supplier.mzxml.model;
 
@@ -21,5 +22,65 @@ public class VendorChromatogram extends AbstractChromatogramMSD implements IVend
 	public String getName() {
 
 		return extractNameFromFile("mzXMLChromatogram");
+	}
+
+	@Override
+	public String getInstrument() {
+
+		return getHeaderDataOrDefault("Instrument", "");
+	}
+
+	@Override
+	public void setInstrument(String instrument) {
+
+		putHeaderData("Instrument", instrument);
+	}
+
+	@Override
+	public String getIonisation() {
+
+		return getHeaderDataOrDefault("Ionisation", "");
+	}
+
+	@Override
+	public void setIonisation(String ionisation) {
+
+		putHeaderData("Ionisation", ionisation);
+	}
+
+	@Override
+	public String getMassAnalyzer() {
+
+		return getHeaderDataOrDefault("Mass Analyzer", "");
+	}
+
+	@Override
+	public void setMassAnalyzer(String massAnalyzer) {
+
+		putHeaderData("Mass Analyzer", massAnalyzer);
+	}
+
+	@Override
+	public String getMassDetector() {
+
+		return getHeaderDataOrDefault("MS Detector", "");
+	}
+
+	@Override
+	public void setMassDetector(String massDetector) {
+
+		putHeaderData("MS Detector", massDetector);
+	}
+
+	@Override
+	public String getSoftware() {
+
+		return getHeaderDataOrDefault("Acquisition Software", "");
+	}
+
+	@Override
+	public void setSoftware(String software) {
+
+		putHeaderData("Acquisition Software", software);
 	}
 }
