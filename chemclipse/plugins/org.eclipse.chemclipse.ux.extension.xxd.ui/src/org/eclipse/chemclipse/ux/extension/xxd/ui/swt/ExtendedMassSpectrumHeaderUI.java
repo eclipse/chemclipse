@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2022 Lablicate GmbH.
+ * Copyright (c) 2020, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -36,8 +36,7 @@ public class ExtendedMassSpectrumHeaderUI extends Composite {
 			addHeaderLine(builder, "Data", massSpectrum.getMassSpectrumTypeDescription());
 			addHeaderLine(builder, "Technique", "MS" + massSpectrum.getMassSpectrometer());
 			addHeaderLine(builder, "Ions", Integer.toString(massSpectrum.getNumberOfIons()));
-			if(massSpectrum instanceof IVendorStandaloneMassSpectrum) {
-				IVendorStandaloneMassSpectrum standaloneMassSpectrum = (IVendorStandaloneMassSpectrum)massSpectrum;
+			if(massSpectrum instanceof IVendorStandaloneMassSpectrum standaloneMassSpectrum) {
 				addHeaderLine(builder, "Name", standaloneMassSpectrum.getName());
 				addHeaderLine(builder, "File", standaloneMassSpectrum.getFile().getName());
 				addHeaderLine(builder, "Sample", standaloneMassSpectrum.getSampleName());
