@@ -21,7 +21,6 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 
 public class SupportPreferences implements IPreferenceSupplier {
 
-	public static final String DEF_APPLICATION_LANGUAGE = "";
 	public static final String P_CLIPBOARD_TABLE_DEFAULT_SORTING = "clipboardTableDefaultSorting";
 	public static final boolean DEF_CLIPBOARD_TABLE_DEFAULT_SORTING = false;
 	public static final String P_UNDO_LIMIT = "undoLimit";
