@@ -11,7 +11,8 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.model.quantitation;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.chemclipse.support.text.ILabel;
 
@@ -71,6 +72,11 @@ public enum CalibrationMethod implements ILabel {
 
 	private static final String[] getOptionsArray(CalibrationMethod[] calibrationMethods) {
 
-		return Arrays.asList(calibrationMethods).toArray(new String[calibrationMethods.length]);
+		List<String> options = new ArrayList<>();
+		for(CalibrationMethod calibrationMethod : calibrationMethods) {
+			options.add(calibrationMethod.name());
+		}
+		//
+		return options.toArray(new String[options.size()]);
 	}
 }
