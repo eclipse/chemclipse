@@ -53,19 +53,21 @@ public class PeakDetectorSettingsWSD extends AbstractPeakDetectorWSDSettings {
 	@LocalisationSettingsProperty(value = IFirstDerivativeMessages.INCLUDE_BACKGROUND, description = IFirstDerivativeMessages.BACKGROUND_DESCRIPTION)
 	private boolean includeBackground = false;
 	@JsonProperty(value = "Min S/N Ratio", defaultValue = "0")
+	@LocalisationSettingsProperty(value = IFirstDerivativeMessages.MIN_SN_RATIO)
 	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_SN_RATIO_MIN, maxValue = PreferenceSupplier.MIN_SN_RATIO_MAX)
 	private float minimumSignalToNoiseRatio;
 	@JsonProperty(value = "Window Size", defaultValue = "5")
 	@JsonPropertyDescription(value = "Window Size: 3, 5, 7, ..., 45")
-	@LocalisationSettingsProperty(value = IFirstDerivativeMessages.MIN_SN_RATIO)
+	@LocalisationSettingsProperty(value = IFirstDerivativeMessages.WINDOW_SIZE, description = IFirstDerivativeMessages.WINDOW_SIZE_DESCRIPTION)
 	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_WINDOW_SIZE, maxValue = PreferenceSupplier.MAX_WINDOW_SIZE, validation = Validation.ODD_NUMBER_INCLUDING_ZERO)
 	@JsonDeserialize(using = WindowSizeDeserializer.class)
 	private int windowSize;
 	@JsonProperty(value = "Use Noise-Segments", defaultValue = "false")
-	@LocalisationSettingsProperty(value = IFirstDerivativeMessages.WINDOW_SIZE, description = IFirstDerivativeMessages.WINDOW_SIZE_DESCRIPTION)
+	@LocalisationSettingsProperty(value = IFirstDerivativeMessages.USE_NOISE_SEGMENTS, description = IFirstDerivativeMessages.USE_NOISE_SEGMENTS_DESCRIPTION)
 	@JsonPropertyDescription(value = "Whether to use noise segments to decide where peaks should be detected. This can improve the sensitivity of the algorithm.")
 	private boolean useNoiseSegments = false;
 	@JsonProperty(value = "Filter Mode", defaultValue = "EXCLUDE")
+	@LocalisationSettingsProperty(value = IFirstDerivativeMessages.FILTER_MODE)
 	private FilterMode filterMode = FilterMode.EXCLUDE;
 	@JsonProperty(value = "Wavelengths to filter", defaultValue = "")
 	@LocalisationSettingsProperty(value = IFirstDerivativeMessages.FILTER_WAVELENGTHS)
@@ -150,6 +152,7 @@ public class PeakDetectorSettingsWSD extends AbstractPeakDetectorWSDSettings {
 		if(StringUtils.isBlank(input)) {
 			return Collections.emptyList();
 		}
+		//
 		List<Number> waveLengths = new ArrayList<>();
 		String[] split = input.trim().split("[\\s.,;]+");
 		for(String s : split) {
@@ -159,6 +162,7 @@ public class PeakDetectorSettingsWSD extends AbstractPeakDetectorWSDSettings {
 				// invalid or empty string
 			}
 		}
+		//
 		return waveLengths;
 	}
 
@@ -186,6 +190,9 @@ public class PeakDetectorSettingsWSD extends AbstractPeakDetectorWSDSettings {
 			default:
 				throw new IllegalArgumentException("Unsupported filter mode " + getFilterMode());
 		}
+		/*
+		 * Calculate the wavelengths to be used.
+		 */
 		Set<IMarkedWavelength> parsedWavelengths = parseWavelengths(filterWavelengths).stream().map(e -> new MarkedWavelength(e.doubleValue())).collect(Collectors.toSet());
 		if(isIndividualWavelengths()) {
 			List<IMarkedWavelengths> listedWavelengths = new ArrayList<>();
