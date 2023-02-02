@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Automatic-Module-Name: org.eclipse.chemclipse.msd.converter.supplier.mzml.fragment.test
+Automatic-Module-Name: org.eclipse.chemclipse.msd.converter.supplier.mzdata.fragment.test
 Bundle-ManifestVersion: 2
 Bundle-Name: mzData Test
 Bundle-SymbolicName: org.eclipse.chemclipse.msd.converter.supplier.mzdata.fragment.test
