@@ -43,6 +43,8 @@ public class ApplicationImage extends AbstractApplicationImage implements IAppli
 					decoratedImageCache.put(path, decoratedImage);
 					image = decoratedImage;
 				}
+			} else {
+				image = decoratedImage;
 			}
 		}
 		//
