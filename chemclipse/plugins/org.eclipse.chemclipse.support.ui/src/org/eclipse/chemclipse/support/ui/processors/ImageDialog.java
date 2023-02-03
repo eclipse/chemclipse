@@ -238,7 +238,7 @@ public class ImageDialog extends Dialog {
 
 	private boolean isValidImage(String image) {
 
-		return (image.endsWith(EXTENSION_GIF) || image.endsWith(EXTENSION_PNG));
+		return (image.toLowerCase().endsWith(EXTENSION_GIF) || image.toLowerCase().endsWith(EXTENSION_PNG));
 	}
 
 	private boolean imageMatchesSearch(String image, String searchTerm) {
