@@ -20,13 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.eclipse.chemclipse.support.l10n.Messages;
+import org.eclipse.chemclipse.support.l10n.TranslationSupport;
 import org.eclipse.chemclipse.support.settings.ComboSettingsProperty;
 import org.eclipse.chemclipse.support.settings.DoubleSettingsProperty;
 import org.eclipse.chemclipse.support.settings.FileSettingProperty;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
-import org.eclipse.chemclipse.support.settings.LocalisationSettingsProperty;
 import org.eclipse.chemclipse.support.settings.LongSettingsProperty;
 import org.eclipse.chemclipse.support.settings.StringSettingsProperty;
 import org.eclipse.chemclipse.support.settings.SystemSettings;
@@ -37,6 +36,7 @@ import org.eclipse.chemclipse.support.settings.validation.EvenOddValidatorLong;
 import org.eclipse.chemclipse.support.settings.validation.MinMaxValidator;
 import org.eclipse.chemclipse.support.settings.validation.RegularExpressionValidator;
 import org.eclipse.core.databinding.validation.IValidator;
+import org.eclipse.e4.core.services.translation.TranslationService;
 import org.osgi.framework.FrameworkUtil;
 
 import com.fasterxml.jackson.databind.BeanDescription;
@@ -88,7 +88,8 @@ public class SettingsClassParser<SettingType> implements SettingsParser<SettingT
 				JavaType javaType = objectMapper.getSerializationConfig().constructType(clazz);
 				BeanDescription beanDescription = objectMapper.getSerializationConfig().introspect(javaType);
 				List<BeanPropertyDefinition> properties = beanDescription.findProperties();
-				Messages messages = new Messages(FrameworkUtil.getBundle(clazz));
+				String contributorURI = "platform:/plugin/" + FrameworkUtil.getBundle(clazz).getSymbolicName();
+				TranslationService translationService = TranslationSupport.getTranslationService();
 				//
 				for(BeanPropertyDefinition property : properties) {
 					AnnotatedField annotatedField = property.getField();
@@ -96,9 +97,9 @@ public class SettingsClassParser<SettingType> implements SettingsParser<SettingT
 						//
 						InputValue inputValue = new InputValue();
 						inputValue.setRawType(annotatedField.getRawType());
-						inputValue.setName((property.getName() == null) ? "" : property.getName());
+						inputValue.setName((property.getName() == null) ? "" : translationService.translate(property.getName(), contributorURI));
 						PropertyMetadata propertyMetadata = property.getMetadata();
-						inputValue.setDescription((propertyMetadata.getDescription() == null) ? "" : propertyMetadata.getDescription());
+						inputValue.setDescription((propertyMetadata.getDescription() == null) ? "" : translationService.translate(propertyMetadata.getDescription(), contributorURI));
 						Object defaultValue = propertyMetadata.getDefaultValue();
 						if(defaultValue == null) {
 							if(defaultInstance == null) {
@@ -150,9 +151,6 @@ public class SettingsClassParser<SettingType> implements SettingsParser<SettingT
 								} catch(Exception e) {
 									throw new RuntimeException("The validator can't be instantiated.", e);
 								}
-							} else if(annotation instanceof LocalisationSettingsProperty localisationSettingsProperty) {
-								inputValue.setName(messages.getMessage(localisationSettingsProperty.value()));
-								inputValue.setDescription(messages.getMessage(localisationSettingsProperty.description()));
 							} else {
 								/*
 								 * Handle by default without any further action.
@@ -180,8 +178,8 @@ public class SettingsClassParser<SettingType> implements SettingsParser<SettingT
 				try {
 					Method method = clazz.getMethod(checkMethod);
 					Object result = method.invoke(null);
-					if(result instanceof SystemSettingsStrategy) {
-						return (SystemSettingsStrategy)result;
+					if(result instanceof SystemSettingsStrategy systemSettingsStrategy) {
+						return systemSettingsStrategy;
 					}
 				} catch(NoSuchMethodException | SecurityException
 						| IllegalAccessException | IllegalArgumentException

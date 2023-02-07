@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.core;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -22,8 +23,7 @@ import org.eclipse.chemclipse.chromatogram.peak.detector.exceptions.ValueMustNot
 import org.eclipse.chemclipse.chromatogram.peak.detector.model.Threshold;
 import org.eclipse.chemclipse.chromatogram.peak.detector.support.IRawPeak;
 import org.eclipse.chemclipse.chromatogram.xxd.calculator.core.noise.NoiseChromatogramClassifier;
-import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.messages.FirstDerivativeMessages;
-import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.messages.IFirstDerivativeMessages;
+import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.Activator;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.settings.PeakDetectorSettingsCSD;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.support.FirstDerivativeDetectorSlope;
@@ -53,8 +53,10 @@ import org.eclipse.chemclipse.numeric.equations.LinearEquation;
 import org.eclipse.chemclipse.processing.core.IProcessingInfo;
 import org.eclipse.chemclipse.processing.core.MessageType;
 import org.eclipse.chemclipse.processing.core.ProcessingMessage;
+import org.eclipse.chemclipse.support.l10n.TranslationSupport;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubMonitor;
+import org.eclipse.e4.core.services.translation.TranslationService;
 
 public class PeakDetectorCSD<P extends IPeak, C extends IChromatogram<P>, R> extends BasePeakDetector<P, C, R> implements IPeakDetectorCSD<P, C, R> {
 
@@ -87,7 +89,8 @@ public class PeakDetectorCSD<P extends IPeak, C extends IChromatogram<P>, R> ext
 					chromatogram.addPeak(peak);
 				}
 				chromatogramSelection.getChromatogram().setDirty(true);
-				String peakDetectedMessage = FirstDerivativeMessages.INSTANCE().getMessage(IFirstDerivativeMessages.PEAKS_DETECTED, String.valueOf(peaks.size()));
+				TranslationService translationService = TranslationSupport.getTranslationService();
+				String peakDetectedMessage = MessageFormat.format(translationService.translate("%PeaksDetected", Activator.getContributorURI()), String.valueOf(peaks.size()));
 				processingInfo.addMessage(new ProcessingMessage(MessageType.INFO, FirstDerivativePeakDetector.DETECTOR_DESCRIPTION, peakDetectedMessage));
 			} else {
 				logger.warn("Settings is not of type: " + PeakDetectorSettingsCSD.class);

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2021 Lablicate GmbH.
+ * Copyright (c) 2012, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -11,7 +11,10 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.support;
 
+import org.eclipse.chemclipse.logging.core.Logger;
 import org.eclipse.chemclipse.support.settings.serialization.ISerializationService;
+import org.eclipse.e4.core.contexts.EclipseContextFactory;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
@@ -19,7 +22,9 @@ import org.osgi.util.tracker.ServiceTracker;
 public class Activator implements BundleActivator {
 
 	private static Activator plugin;
+	private static final Logger logger = Logger.getLogger(Activator.class);
 	private static BundleContext context;
+	private IEclipseContext eclipseContext = null;
 	private ServiceTracker<ISerializationService, ISerializationService> serializationServiceTracker = null;
 
 	public static BundleContext getContext() {
@@ -31,6 +36,7 @@ public class Activator implements BundleActivator {
 	 * (non-Javadoc)
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void start(BundleContext bundleContext) throws Exception {
 
 		Activator.context = bundleContext;
@@ -43,6 +49,7 @@ public class Activator implements BundleActivator {
 	 * (non-Javadoc)
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
+	@Override
 	public void stop(BundleContext bundleContext) throws Exception {
 
 		Activator.context = null;
@@ -56,5 +63,18 @@ public class Activator implements BundleActivator {
 	public Object[] getSerializationServices() {
 
 		return serializationServiceTracker.getServices();
+	}
+
+	public IEclipseContext getEclipseContext() {
+
+		if(eclipseContext == null) {
+			/*
+			 * Create and initialize the context.
+			 */
+			eclipseContext = EclipseContextFactory.getServiceContext(context);
+			eclipseContext.set(Logger.class, logger);
+		}
+		//
+		return eclipseContext;
 	}
 }
