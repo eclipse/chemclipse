@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Lablicate GmbH.
+ * Copyright (c) 2022, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -157,8 +157,11 @@ public class TimeRangeDialog extends Dialog {
 
 	private void assignIdentifier() {
 
-		this.identifier = comboControl.get().getText();
-		validateInput();
+		Combo combo = comboControl.get();
+		if(combo != null) {
+			this.identifier = combo.getText();
+			validateInput();
+		}
 	}
 
 	private void validateInput() {
