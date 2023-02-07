@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015, 2018 Lablicate GmbH.
+ * Copyright (c) 2015, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -38,10 +38,11 @@ public abstract class AbstractWizard extends Wizard implements IFileWizard {
 	private Set<IExtendedWizardPage> wizardPages;
 
 	public AbstractWizard(IWizardElements wizardElements) {
+
 		super();
 		setNeedsProgressMonitor(true);
 		this.wizardElements = wizardElements;
-		this.wizardPages = new HashSet<IExtendedWizardPage>();
+		this.wizardPages = new HashSet<>();
 	}
 
 	@Override
@@ -58,11 +59,11 @@ public abstract class AbstractWizard extends Wizard implements IFileWizard {
 	@Override
 	public void addPage(IWizardPage page) {
 
-		if(page instanceof IExtendedWizardPage) {
+		if(page instanceof IExtendedWizardPage extendedWizardPage) {
 			/*
 			 * Add the pages to run an automated canFinish check.
 			 */
-			wizardPages.add((IExtendedWizardPage)page);
+			wizardPages.add(extendedWizardPage);
 		}
 		super.addPage(page);
 	}
@@ -121,6 +122,7 @@ public abstract class AbstractWizard extends Wizard implements IFileWizard {
 			getContainer().run(true, false, runnable);
 		} catch(InterruptedException e) {
 			MessageDialog.openError(getShell(), messages.getMessage(ISupportMessages.PROCESSING_ERROR), messages.getMessage(ISupportMessages.PROCESSING_PROCESS_INTERRUPTED));
+			Thread.currentThread().interrupt();
 			return false;
 		} catch(InvocationTargetException e) {
 			MessageDialog.openError(getShell(), messages.getMessage(ISupportMessages.PROCESSING_ERROR), messages.getMessage(ISupportMessages.PROCESSING_SOMETHING_WRONG));
