@@ -20,6 +20,7 @@ public enum DescriptionOption implements ILabel {
 	RETENTION_INDEX("Retention Index"), //
 	NAME("Name"), //
 	CAS("CAS#"), //
+	NAME_CAS("Name (CAS#)"), //
 	REFERENCE_IDENTIFIER("Reference Identifier"); //
 
 	private String label;

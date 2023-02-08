@@ -73,6 +73,15 @@ public abstract class AbstractClassifierDescriptionExtractor {
 							case CAS:
 								value = libraryInformation.getCasNumber();
 								break;
+							case NAME_CAS:
+								StringBuilder builder = new StringBuilder();
+								builder.append(libraryInformation.getName());
+								builder.append(" ");
+								builder.append("(");
+								builder.append(libraryInformation.getCasNumber());
+								builder.append(")");
+								value = builder.toString();
+								break;
 							case REFERENCE_IDENTIFIER:
 								value = libraryInformation.getReferenceIdentifier();
 								break;
