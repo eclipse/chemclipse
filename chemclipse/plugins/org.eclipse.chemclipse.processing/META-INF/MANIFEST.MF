@@ -26,7 +26,8 @@ Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.core.runtime;bundle-version="3.14.0",
  org.eclipse.chemclipse.logging;bundle-version="0.9.0",
  org.eclipse.chemclipse.support,
- org.eclipse.chemclipse.progress
+ org.eclipse.chemclipse.progress,
+ org.eclipse.e4.core.services
 Bundle-Activator: org.eclipse.chemclipse.processing.Activator
 Service-Component: OSGI-INF/org.eclipse.chemclipse.processing.internal.OSGiFilterFactory.xml,
  OSGI-INF/org.eclipse.chemclipse.processing.internal.OSGiProcessSupplierContext.xml,

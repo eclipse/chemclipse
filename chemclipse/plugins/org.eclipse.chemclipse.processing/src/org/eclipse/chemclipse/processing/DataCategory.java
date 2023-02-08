@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2022 Lablicate GmbH.
+ * Copyright (c) 2019, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.chemclipse.processing;
 
+import org.eclipse.chemclipse.support.l10n.TranslationSupport;
 import org.eclipse.chemclipse.support.text.ILabel;
 
 /**
@@ -23,20 +24,20 @@ import org.eclipse.chemclipse.support.text.ILabel;
  */
 public enum DataCategory implements ILabel {
 
-	MSD(Messages.getString("DataCategory.MSD")), //
-	CSD(Messages.getString("DataCategory.CSD")), //
-	WSD(Messages.getString("DataCategory.WSD")), //
-	TSD(Messages.getString("DataCategory.TSD")), //
-	FID(Messages.getString("DataCategory.FID")), //
-	NMR(Messages.getString("DataCategory.NMR")), //
-	XIR(Messages.getString("DataCategory.XIR")), //
-	PCR(Messages.getString("DataCategory.PCR")), //
-	MALDI(Messages.getString("DataCategory.MALDI")), //
-	MSD_DATABASE(Messages.getString("DataCategory.MSD_DATABASE")), //
+	MSD(TranslationSupport.getTranslationService().translate("%DataCategory.MSD", Activator.getContributorURI())), //
+	CSD(TranslationSupport.getTranslationService().translate("%DataCategory.CSD", Activator.getContributorURI())), //
+	WSD(TranslationSupport.getTranslationService().translate("%DataCategory.WSD", Activator.getContributorURI())), //
+	TSD(TranslationSupport.getTranslationService().translate("%DataCategory.TSD", Activator.getContributorURI())), //
+	FID(TranslationSupport.getTranslationService().translate("%DataCategory.FID", Activator.getContributorURI())), //
+	NMR(TranslationSupport.getTranslationService().translate("%DataCategory.NMR", Activator.getContributorURI())), //
+	XIR(TranslationSupport.getTranslationService().translate("%DataCategory.XIR", Activator.getContributorURI())), //
+	PCR(TranslationSupport.getTranslationService().translate("%DataCategory.PCR", Activator.getContributorURI())), //
+	MALDI(TranslationSupport.getTranslationService().translate("%DataCategory.MALDI", Activator.getContributorURI())), //
+	MSD_DATABASE(TranslationSupport.getTranslationService().translate("%DataCategory.MSD_DATABASE", Activator.getContributorURI())), //
 	/**
 	 * Suggests that this Filter can support a wide range of datatypes and content-sensing is the only option to check if the filter, processor or converter can really handle the data or not
 	 */
-	AUTO_DETECT(Messages.getString("DataCategory.AUTO_DETECT")); //$NON-NLS-1$
+	AUTO_DETECT(TranslationSupport.getTranslationService().translate("%DataCategory.AUTO_DETECT", Activator.getContributorURI())); //$NON-NLS-1$
 
 	private String label;
 

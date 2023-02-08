@@ -14,12 +14,10 @@ package org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderi
 
 import org.eclipse.chemclipse.chromatogram.csd.peak.detector.settings.AbstractPeakDetectorCSDSettings;
 import org.eclipse.chemclipse.chromatogram.peak.detector.model.Threshold;
-import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.messages.IFirstDerivativeMessages;
 import org.eclipse.chemclipse.chromatogram.xxd.peak.detector.supplier.firstderivative.preferences.PreferenceSupplier;
 import org.eclipse.chemclipse.support.settings.FloatSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty;
 import org.eclipse.chemclipse.support.settings.IntSettingsProperty.Validation;
-import org.eclipse.chemclipse.support.settings.LocalisationSettingsProperty;
 import org.eclipse.chemclipse.support.settings.serialization.WindowSizeDeserializer;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -28,28 +26,28 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 public class PeakDetectorSettingsCSD extends AbstractPeakDetectorCSDSettings {
 
-	@JsonProperty(value = "Threshold", defaultValue = "MEDIUM")
-	@LocalisationSettingsProperty(value = IFirstDerivativeMessages.THRESHOLD)
+	@JsonProperty(value = "%Threshold", defaultValue = "MEDIUM")
 	private Threshold threshold = Threshold.MEDIUM;
-	@JsonProperty(value = "Include Background", defaultValue = "false")
-	@JsonPropertyDescription("VV: true, BV|VB: false")
-	@LocalisationSettingsProperty(value = IFirstDerivativeMessages.INCLUDE_BACKGROUND, description = IFirstDerivativeMessages.BACKGROUND_DESCRIPTION)
+	//
+	@JsonProperty(value = "%IncludeBackground", defaultValue = "false")
+	@JsonPropertyDescription("%IncludeBackgroundDescription")
 	private boolean includeBackground = false;
-	@JsonProperty(value = "Min S/N Ratio", defaultValue = "0")
-	@LocalisationSettingsProperty(value = IFirstDerivativeMessages.MIN_SN_RATIO)
-	@FloatSettingsProperty(minValue = PreferenceSupplier.MIN_SN_RATIO_MIN, maxValue = PreferenceSupplier.MIN_SN_RATIO_MAX)
+	//
+	@JsonProperty(value = "%MinSignalToNoiseRatio", defaultValue = "0")
+	@FloatSettingsProperty(minValue = 0f, maxValue = Float.MAX_VALUE)
 	private float minimumSignalToNoiseRatio;
-	@JsonProperty(value = "Window Size", defaultValue = "5")
-	@JsonPropertyDescription(value = "Window Size: 3, 5, 7, ..., 45")
-	@LocalisationSettingsProperty(value = IFirstDerivativeMessages.WINDOW_SIZE, description = IFirstDerivativeMessages.WINDOW_SIZE_DESCRIPTION)
-	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_WINDOW_SIZE, maxValue = PreferenceSupplier.MAX_WINDOW_SIZE, validation = Validation.ODD_NUMBER_INCLUDING_ZERO)
+	//
+	@JsonProperty(value = "%WindowSize", defaultValue = "5")
+	@JsonPropertyDescription(value = "%WindowSizeDescription")
 	@JsonDeserialize(using = WindowSizeDeserializer.class)
+	@IntSettingsProperty(minValue = PreferenceSupplier.MIN_WINDOW_SIZE, maxValue = PreferenceSupplier.MAX_WINDOW_SIZE, validation = Validation.ODD_NUMBER_INCLUDING_ZERO)
 	private int windowSize = 5;
-	@JsonProperty(value = "Use Noise-Segments", defaultValue = "false")
-	@JsonPropertyDescription(value = "Whether to use noise segments to decide where peaks should be detected. This can improve the sensitivity of the algorithm.")
+	//
+	@JsonProperty(value = "%UseNoiseSegments", defaultValue = "false")
+	@JsonPropertyDescription(value = "%UseNoiseSegmentsDescription")
 	private boolean useNoiseSegments = false;
-	@JsonProperty(value = "Optimize Baseline (VV)", defaultValue = "false")
-	@LocalisationSettingsProperty(value = IFirstDerivativeMessages.OPTIMIZE_BASELINE_VV)
+	//
+	@JsonProperty(value = "%OptimizeBaselineVV", defaultValue = "false")
 	private boolean optimizeBaseline = false;
 
 	public PeakDetectorSettingsCSD() {
