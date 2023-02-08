@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,6 +13,7 @@
 package org.eclipse.chemclipse.support.ui.processors;
 
 import org.eclipse.chemclipse.processing.supplier.IProcessSupplier;
+import org.eclipse.chemclipse.rcp.ui.icons.core.ApplicationImage;
 import org.eclipse.chemclipse.rcp.ui.icons.core.IApplicationImage;
 
 public class Processor {
@@ -39,7 +40,7 @@ public class Processor {
 
 	public String getImageFileName() {
 
-		return imageFileName;
+		return ApplicationImage.adjustLegacyPath(imageFileName);
 	}
 
 	public void setImageFileName(String imageFileName) {

@@ -15,6 +15,13 @@ package org.eclipse.chemclipse.rcp.ui.icons.core;
 public interface IApplicationImage extends IApplicationImageProvider {
 
 	/*
+	 * Legacy, the path was previously used as a prefix.
+	 * https://github.com/eclipse/chemclipse/issues/1254
+	 * ---
+	 * It must be only used to adjust an existing path.
+	 */
+	String PREFIX_PATH_LEGACY = "org.eclipse.chemclipse.rcp.ui.icons/";
+	/*
 	 * Pictograms
 	 */
 	String PICTOGRAM_SUBTRACT_SCAN_ONE = "subtractScanOne.png";

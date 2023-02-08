@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Lablicate GmbH.
+ * Copyright (c) 2021, 2023 Lablicate GmbH.
  * 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -73,8 +73,7 @@ public class ProcessorLabelProvider extends AbstractChemClipseLabelProvider {
 	public Image getColumnImage(Object element, int columnIndex) {
 
 		if(columnIndex == 0) {
-			if(element instanceof Processor) {
-				Processor processor = (Processor)element;
+			if(element instanceof Processor processor) {
 				return ApplicationImageFactory.getInstance().getImage(processor.getImageFileName(), IApplicationImage.SIZE_16x16);
 			}
 		}
@@ -86,10 +85,8 @@ public class ProcessorLabelProvider extends AbstractChemClipseLabelProvider {
 	public String getColumnText(Object element, int columnIndex) {
 
 		String text = "";
-		if(element instanceof Processor) {
-			Processor processor = (Processor)element;
+		if(element instanceof Processor processor) {
 			IProcessSupplier<?> processSupplier = processor.getProcessSupplier();
-			//
 			switch(columnIndex) {
 				case 0:
 					text = processSupplier.getName();

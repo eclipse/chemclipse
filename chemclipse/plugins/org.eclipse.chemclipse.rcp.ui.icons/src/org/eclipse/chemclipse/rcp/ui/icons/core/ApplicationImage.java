@@ -28,6 +28,21 @@ public class ApplicationImage extends AbstractApplicationImage implements IAppli
 		super(bundle);
 	}
 
+	/**
+	 * Removes the legacy prefix path.
+	 * 
+	 * @param fileName
+	 * @return String
+	 */
+	public static String adjustLegacyPath(String fileName) {
+
+		if(fileName.startsWith(PREFIX_PATH_LEGACY)) {
+			return fileName.replace(PREFIX_PATH_LEGACY, "");
+		} else {
+			return fileName;
+		}
+	}
+
 	@Override
 	public Image getImage(String fileName, String size, boolean active) {
 

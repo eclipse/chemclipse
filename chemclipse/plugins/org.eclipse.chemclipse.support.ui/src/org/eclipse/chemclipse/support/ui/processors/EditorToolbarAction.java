@@ -24,7 +24,6 @@ import org.eclipse.jface.resource.ImageDescriptor;
 public final class EditorToolbarAction extends Action {
 
 	private static final int MAX_TEXT_LENGTH = 10;
-	private static final String PREFIX_PATH_LEGACY = "org.eclipse.chemclipse.rcp.ui.icons/"; // Legacy, the path was previously used as a prefix.
 	//
 	private final Processor processor;
 	private final BiConsumer<IProcessSupplier<?>, IProcessSupplierContext> executionListener;
@@ -53,12 +52,7 @@ public final class EditorToolbarAction extends Action {
 	@Override
 	public ImageDescriptor getImageDescriptor() {
 
-		String imageFileName = processor.getImageFileName();
-		if(imageFileName.startsWith(PREFIX_PATH_LEGACY)) {
-			imageFileName = imageFileName.replace(PREFIX_PATH_LEGACY, "");
-		}
-		//
-		return ApplicationImageFactory.getInstance().getImageDescriptor(imageFileName, IApplicationImage.SIZE_16x16);
+		return ApplicationImageFactory.getInstance().getImageDescriptor(processor.getImageFileName(), IApplicationImage.SIZE_16x16);
 	}
 
 	@Override
