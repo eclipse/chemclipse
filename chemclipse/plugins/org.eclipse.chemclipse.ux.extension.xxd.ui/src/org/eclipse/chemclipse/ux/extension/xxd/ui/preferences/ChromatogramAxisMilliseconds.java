@@ -42,7 +42,7 @@ public class ChromatogramAxisMilliseconds extends FieldEditorPreferencePage impl
 		addField(new StringFieldEditor(PreferenceConstants.P_FORMAT_X_AXIS_MILLISECONDS, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.FORMAT) + ":", getFieldEditorParent()));
 		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_X_AXIS_MILLISECONDS, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.SHOW), getFieldEditorParent()));
 		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_X_AXIS_MILLISECONDS, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.POSITION) + ":", ChartOptions.POSITIONS, getFieldEditorParent()));
-		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_X_AXIS_MILLISECONDS, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.POSITION) + ":", PreferenceConstants.POSITIONS, getFieldEditorParent()));
+		addField(new ComboFieldEditor(PreferenceConstants.P_POSITION_X_AXIS_MILLISECONDS, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.POSITION) + ":", ChartOptions.POSITIONS, getFieldEditorParent()));
 		if(Display.isSystemDarkTheme()) {
 			addField(new ColorFieldEditor(PreferenceConstants.P_COLOR_X_AXIS_MILLISECONDS_DARKTHEME, ExtensionMessages.INSTANCE().getMessage(IExtensionMessages.COLOR) + ":", getFieldEditorParent()));
 		} else {

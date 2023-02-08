@@ -26,10 +26,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swtchart.IAxis.Position;
 import org.eclipse.swtchart.ILineSeries.PlotSymbolType;
 import org.eclipse.swtchart.LineStyle;
-import org.eclipse.swtchart.extensions.charts.ChartOptions;
 import org.eclipse.swtchart.extensions.linecharts.LineChart;
 
-public class PreferenceConstants extends ChartOptions {
+public class PreferenceConstants {
 
 	public static final String[][] PART_STACKS = new String[][]{ //
 			{"--", PartSupport.PARTSTACK_NONE}, //
@@ -895,4 +894,8 @@ public class PreferenceConstants extends ChartOptions {
 	 */
 	public static final String P_EDITOR_TSD = "editorTSD";
 	public static final String DEF_EDITOR_TSD = ChromatogramEditorTSD.CONTRIBUTION_URI;
+
+	private PreferenceConstants() {
+
+	}
 }
