@@ -40,6 +40,7 @@ import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.Pa
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.PrecursorType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.ProcessingMethodType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.RunType;
+import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.SampleListType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.SampleType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.ScanType;
 import org.eclipse.chemclipse.msd.converter.supplier.mzml.internal.v110.model.SoftwareType;
@@ -139,8 +140,11 @@ public class ChromatogramReaderVersion110 extends AbstractChromatogramReader imp
 					}
 				}
 			}
-			for(SampleType sample : mzML.getSampleList().getSample()) {
-				chromatogram.setDataName(sample.getName());
+			SampleListType sampleList = mzML.getSampleList();
+			if(sampleList != null) {
+				for(SampleType sample : sampleList.getSample()) {
+					chromatogram.setDataName(sample.getName());
+				}
 			}
 			for(InstrumentConfigurationType instrument : mzML.getInstrumentConfigurationList().getInstrumentConfiguration()) {
 				for(CVParamType cvParam : instrument.getCvParam()) {
